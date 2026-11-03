@@ -1,0 +1,29 @@
+Initialized native services in: /private/tmp/notes-lifecycle-probe-01/selected-home/native
+Initialized jansi services in: /private/tmp/notes-lifecycle-probe-01/selected-home/native
+
+Welcome to Gradle 9.6.1!
+
+Here are the highlights of this release:
+ - Improved Configuration Cache hit rates
+ - Additional CLI rendering options
+ - Important project hierarchy lookup deprecations
+
+For more details see https://docs.gradle.org/9.6.1/release-notes.html
+
+The current JVM process isn't compatible with build requirement. At least one daemon option is different.
+Wanted: DaemonRequestContext{jvmCriteria=/opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home (no Daemon JVM specified, using current Java home), daemonOpts=[-XX:MaxMetaspaceSize=384m, -XX:+HeapDumpOnOutOfMemoryError, -Xms256m, -Xmx512m, -Dfile.encoding=UTF-8, -Duser.country=CN, -Duser.language=zh, -Duser.variant], applyInstrumentationAgent=true, nativeServicesMode=ENABLED, priority=NORMAL}
+Actual: DefaultDaemonContext[uid=a24abe02-813f-46e2-bd6f-95c2ffb031ed,javaHome=/opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home,javaVersion=17,javaVendor=Homebrew,daemonRegistryDir=null,pid=0,idleTimeout=0,priority=NORMAL,applyInstrumentationAgent=true,nativeServicesMode=ENABLED,daemonOpts=-Xms64m,-Xmx256m,-Dfile.encoding=UTF-8,-Duser.country=CN,-Duser.language=zh,-Duser.variant]
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Gradle could not start your build.
+> Could not create service of type FileLockContentionHandler using BasicGlobalScopeServices.createFileLockContentionHandler().
+   > java.net.SocketException: Operation not permitted
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.

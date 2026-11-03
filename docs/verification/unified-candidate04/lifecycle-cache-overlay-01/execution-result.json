@@ -1,0 +1,80 @@
+{
+  "stage": "isolated-exact-file-key-own-store",
+  "command": [
+    "/Users/water/.gradle/wrapper/dists/gradle-9.6.1-bin/4ticwg1pgcbps2hj28r8so764/gradle-9.6.1/bin/gradle",
+    "--offline",
+    "--info",
+    "--no-daemon",
+    "--no-configuration-cache",
+    "--max-workers=1",
+    "--console=plain",
+    "-p",
+    "/private/tmp/notes-lifecycle-cache-overlay-01/project",
+    "seedExactMissingFileKey"
+  ],
+  "environment": {
+    "GRADLE_USER_HOME": "/private/tmp/notes-lifecycle-cache-overlay-01/home",
+    "GRADLE_RO_DEP_CACHE": "/private/tmp/notes-lifecycle-probe-01/selected-ro",
+    "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+    "GRADLE_OPTS": "-Xmx256m -Dorg.gradle.daemon=false"
+  },
+  "deadlineSeconds": 60,
+  "sourceBefore": [
+    {
+      "path": "/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/metadata-2.107/module-metadata.bin",
+      "bytes": 198564,
+      "sha256": "d27d9b416148a40809d19615b1bebca05afa24b029f3740a545ec8d12d866589"
+    },
+    {
+      "path": "/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/metadata-2.107/resource-at-url.bin",
+      "bytes": 764307,
+      "sha256": "1048322828a4202408675a450b70e8e608ea3e71fecc7fcbeb10d8349f46b993"
+    },
+    {
+      "path": "/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/metadata-2.107/module-artifact.bin",
+      "bytes": 271311,
+      "sha256": "fa0800637c67cc4ea0ff6178928b98f78bb3e0defd8e6ede13e5f27e26594e5c"
+    },
+    {
+      "path": "/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/metadata-2.107/descriptors/androidx.lifecycle/lifecycle-livedata/2.10.0/d4e342018b23d58be902a60e67105aa1/descriptor.bin",
+      "bytes": 10929,
+      "sha256": "e0716b71e566f316afaf27423a8b0ef558a72c418ddc227c6edbfcf57061f880"
+    },
+    {
+      "path": "/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/files-2.1/androidx.lifecycle/lifecycle-livedata/2.10.0/ce0b5f930a64679a621c8bc67c060a7820c0a57b/lifecycle-livedata-2.10.0.aar",
+      "bytes": 55037,
+      "sha256": "3e8c009fc88da1c52e4ed05a81269d5ac9bd405046f300307f5e3a17e201a6df"
+    }
+  ],
+  "exitCode": 0,
+  "stopReason": null,
+  "elapsedSeconds": 2.691513458,
+  "minFreeBytes": 4321685504,
+  "sourceAfter": [
+    {
+      "path": "/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/metadata-2.107/module-metadata.bin",
+      "bytes": 198564,
+      "sha256": "d27d9b416148a40809d19615b1bebca05afa24b029f3740a545ec8d12d866589"
+    },
+    {
+      "path": "/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/metadata-2.107/resource-at-url.bin",
+      "bytes": 764307,
+      "sha256": "1048322828a4202408675a450b70e8e608ea3e71fecc7fcbeb10d8349f46b993"
+    },
+    {
+      "path": "/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/metadata-2.107/module-artifact.bin",
+      "bytes": 271311,
+      "sha256": "fa0800637c67cc4ea0ff6178928b98f78bb3e0defd8e6ede13e5f27e26594e5c"
+    },
+    {
+      "path": "/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/metadata-2.107/descriptors/androidx.lifecycle/lifecycle-livedata/2.10.0/d4e342018b23d58be902a60e67105aa1/descriptor.bin",
+      "bytes": 10929,
+      "sha256": "e0716b71e566f316afaf27423a8b0ef558a72c418ddc227c6edbfcf57061f880"
+    },
+    {
+      "path": "/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/files-2.1/androidx.lifecycle/lifecycle-livedata/2.10.0/ce0b5f930a64679a621c8bc67c060a7820c0a57b/lifecycle-livedata-2.10.0.aar",
+      "bytes": 55037,
+      "sha256": "3e8c009fc88da1c52e4ed05a81269d5ac9bd405046f300307f5e3a17e201a6df"
+    }
+  ]
+}

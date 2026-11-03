@@ -1,0 +1,63 @@
+Initialized native services in: /private/tmp/notes-lifecycle-probe-01/selected-home/native
+Initialized jansi services in: /private/tmp/notes-lifecycle-probe-01/selected-home/native
+The current JVM process isn't compatible with build requirement. At least one daemon option is different.
+Wanted: DaemonRequestContext{jvmCriteria=/opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home (no Daemon JVM specified, using current Java home), daemonOpts=[-XX:MaxMetaspaceSize=384m, -XX:+HeapDumpOnOutOfMemoryError, -Xms256m, -Xmx512m, -Dfile.encoding=UTF-8, -Duser.country=CN, -Duser.language=zh, -Duser.variant], applyInstrumentationAgent=true, nativeServicesMode=ENABLED, priority=NORMAL}
+Actual: DefaultDaemonContext[uid=0352bb46-3694-4573-8699-441fc1e7e3a2,javaHome=/opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home,javaVersion=17,javaVendor=Homebrew,daemonRegistryDir=null,pid=0,idleTimeout=0,priority=NORMAL,applyInstrumentationAgent=true,nativeServicesMode=ENABLED,daemonOpts=-Xms64m,-Xmx256m,-Dfile.encoding=UTF-8,-Duser.country=CN,-Duser.language=zh,-Duser.variant]
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.6.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Starting process 'Gradle build daemon'. Working directory: /private/tmp/notes-lifecycle-probe-01/selected-home/daemon/9.6.1 Command: /opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -XX:MaxMetaspaceSize=384m -XX:+HeapDumpOnOutOfMemoryError -Xms256m -Xmx512m -Dfile.encoding=UTF-8 -Duser.country=CN -Duser.language=zh -Duser.variant -cp /Users/water/.gradle/wrapper/dists/gradle-9.6.1-bin/4ticwg1pgcbps2hj28r8so764/gradle-9.6.1/lib/gradle-daemon-main-9.6.1.jar -javaagent:/Users/water/.gradle/wrapper/dists/gradle-9.6.1-bin/4ticwg1pgcbps2hj28r8so764/gradle-9.6.1/lib/agents/gradle-instrumentation-agent-9.6.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.6.1
+Successfully started process 'Gradle build daemon'
+An attempt to start the daemon took 0.534 secs.
+The client will now receive all logging from the daemon (pid: 50471). The daemon log file: /private/tmp/notes-lifecycle-probe-01/selected-home/daemon/9.6.1/daemon-50471.out.log
+Daemon will be stopped at the end of the build 
+Shared read-only dependency cache is an incubating feature.
+The read-only dependency cache is enabled 
+The GRADLE_RO_DEP_CACHE environment variable was set to /private/tmp/notes-lifecycle-probe-01/selected-ro
+Using 1 worker leases.
+Operational build model parameters: {cachingModelBuilding=false, configurationCache=false, configurationCacheDisabledReason=null, configurationCacheParallelLoad=false, configurationCacheParallelStore=false, configureOnDemand=false, invalidateCoupledProjects=false, isolatedProjects=false, isolatedProjectsDiagnostics=false, modelAsProjectDependency=false, modelBuilding=false, parallelModelBuilding=false, parallelProjectConfiguration=false, parallelProjectExecution=false, resilientModelBuilding=false, vintage=true}
+Received JVM installation metadata from '/opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home': {JAVA_HOME=/opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home, JAVA_VERSION=17.0.19, JAVA_VENDOR=Homebrew, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=17.0.19+0, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=17.0.19+0, VM_VENDOR=Homebrew, OS_ARCH=aarch64}
+Watching the file system is configured to be enabled if available
+Now considering [/private/tmp/notes-lifecycle-probe-01/project] as hierarchies to watch
+File system watching is active
+Starting Build
+Caching disabled for Groovy DSL script compilation (cp_settings) because:
+  Build cache is disabled
+  Not worth caching.
+Compiling settings file '/private/tmp/notes-lifecycle-probe-01/project/settings.gradle' using SubsetScriptTransformer.
+Caching disabled for Groovy DSL script compilation (settings) because:
+  Build cache is disabled
+  Not worth caching.
+Compiling settings file '/private/tmp/notes-lifecycle-probe-01/project/settings.gradle' using BuildScriptTransformer.
+Settings evaluated using settings file '/private/tmp/notes-lifecycle-probe-01/project/settings.gradle'.
+Projects loaded. Root project using build file '/private/tmp/notes-lifecycle-probe-01/project/build.gradle'.
+Included projects: [root project 'notes-lifecycle-offline-probe']
+
+> Configure project :
+Evaluating root project 'notes-lifecycle-offline-probe' using build file '/private/tmp/notes-lifecycle-probe-01/project/build.gradle'.
+Caching disabled for Groovy DSL script compilation (cp_proj) because:
+  Build cache is disabled
+  Not worth caching.
+Compiling build file '/private/tmp/notes-lifecycle-probe-01/project/build.gradle' using SubsetScriptTransformer.
+Caching disabled for Groovy DSL script compilation (proj) because:
+  Build cache is disabled
+  Not worth caching.
+Compiling build file '/private/tmp/notes-lifecycle-probe-01/project/build.gradle' using BuildScriptTransformer.
+All projects evaluated.
+Task name matched 'probe'
+Selected primary task 'probe' from project :
+Tasks to be executed: [task ':probe']
+Tasks that were excluded: []
+Resolve mutations for :probe (Thread[included builds,5,main]) started.
+:probe (Thread[included builds,5,main]) started.
+
+> Task :probe
+Caching disabled for task ':probe' because:
+  Build cache is disabled
+Task ':probe' is not up-to-date because:
+  Task has not declared any outputs despite executing actions.
+NOTES_PROBE_FILE=/private/tmp/notes-lifecycle-probe-01/selected-ro/modules-2/files-2.1/androidx.lifecycle/lifecycle-livedata/2.10.0/ce0b5f930a64679a621c8bc67c060a7820c0a57b/lifecycle-livedata-2.10.0.aar
+NOTES_PROBE_SHA256=3e8c009fc88da1c52e4ed05a81269d5ac9bd405046f300307f5e3a17e201a6df
+
+BUILD SUCCESSFUL in 1s
+1 actionable task: 1 executed
+Watched directory hierarchies: []

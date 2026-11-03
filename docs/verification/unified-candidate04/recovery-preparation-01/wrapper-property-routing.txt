@@ -1,0 +1,29 @@
+202: # Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
+203: DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
+204: 
+205: # Collect all arguments for the java command:
+206: #   * DEFAULT_JVM_OPTS, JAVA_OPTS, and optsEnvironmentVar are not allowed to contain shell fragments,
+207: #     and any embedded shellness will be escaped.
+208: #   * For example: A user cannot expect ${Hostname} to be expanded, as it is an environment variable and will be
+209: #     treated as '${Hostname}' itself on the command line.
+210: 
+211: set -- \
+212:         "-Dorg.gradle.appname=$APP_BASE_NAME" \
+213:         -jar "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" \
+232: # post-process each arg (as a line of input to sed) to backslash-escape any
+233: # character that might be a shell metacharacter, then use eval to reverse
+234: # that process (while maintaining the separation between arguments), and wrap
+235: # the whole thing up as a single "set" statement.
+236: #
+237: # This will of course break if any of these variables contains a newline or
+238: # an unmatched quote.
+239: #
+240: 
+241: eval "set -- $(
+242:         printf '%s\n' "$DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS" |
+243:         xargs -n1 |
+244:         sed ' s~[^-[:alnum:]+,./:=@_]~\\&~g; ' |
+245:         tr '\n' ' '
+246:     )" '"$@"'
+247: 
+248: exec "$JAVACMD" "$@"

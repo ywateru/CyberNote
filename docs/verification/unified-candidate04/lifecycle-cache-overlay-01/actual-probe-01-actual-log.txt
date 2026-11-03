@@ -1,0 +1,56 @@
+Initialized native services in: /private/tmp/notes-scan-gradle-home/native
+Initialized jansi services in: /private/tmp/notes-scan-gradle-home/native
+The current JVM process isn't compatible with build requirement. The maximum heap size is insufficient.
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.6.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Starting process 'Gradle build daemon'. Working directory: /private/tmp/notes-scan-gradle-home/daemon/9.6.1 Command: /opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -Xmx2048m -Dfile.encoding=UTF-8 -Duser.country=CN -Duser.language=zh -Duser.variant -cp /Users/water/.gradle/wrapper/dists/gradle-9.6.1-bin/4ticwg1pgcbps2hj28r8so764/gradle-9.6.1/lib/gradle-daemon-main-9.6.1.jar -javaagent:/Users/water/.gradle/wrapper/dists/gradle-9.6.1-bin/4ticwg1pgcbps2hj28r8so764/gradle-9.6.1/lib/agents/gradle-instrumentation-agent-9.6.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.6.1
+Successfully started process 'Gradle build daemon'
+An attempt to start the daemon took 0.341 secs.
+The client will now receive all logging from the daemon (pid: 50583). The daemon log file: /private/tmp/notes-scan-gradle-home/daemon/9.6.1/daemon-50583.out.log
+Daemon will be stopped at the end of the build 
+Using 1 worker leases.
+Operational build model parameters: {cachingModelBuilding=false, configurationCache=false, configurationCacheDisabledReason=null, configurationCacheParallelLoad=false, configurationCacheParallelStore=false, configureOnDemand=false, invalidateCoupledProjects=false, isolatedProjects=false, isolatedProjectsDiagnostics=false, modelAsProjectDependency=false, modelBuilding=false, parallelModelBuilding=false, parallelProjectConfiguration=false, parallelProjectExecution=false, resilientModelBuilding=false, vintage=true}
+Received JVM installation metadata from '/opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home': {JAVA_HOME=/opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home, JAVA_VERSION=17.0.19, JAVA_VENDOR=Homebrew, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=17.0.19+0, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=17.0.19+0, VM_VENDOR=Homebrew, OS_ARCH=aarch64}
+Watching the file system is configured to be enabled if available
+Now considering [/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android] as hierarchies to watch
+Now considering [/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/buildSrc, /Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android] as hierarchies to watch
+File system watching is active
+Caching disabled for Groovy DSL script compilation (cp_init) because:
+  Build cache is disabled
+  Not worth caching.
+Compiling initialization script '/private/tmp/notes-lifecycle-project-probe-01.init.gradle' using SubsetScriptTransformer.
+Caching disabled for Groovy DSL script compilation (init) because:
+  Build cache is disabled
+  Not worth caching.
+Compiling initialization script '/private/tmp/notes-lifecycle-project-probe-01.init.gradle' using BuildScriptTransformer.
+Starting Build
+Settings evaluated using settings file '/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/settings.gradle'.
+Projects loaded. Root project using build file '/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/build.gradle.kts'.
+Included projects: [root project 'android', project ':app', project ':tauri-android', project ':tauri-plugin-dialog', project ':tauri-plugin-notes-scan']
+
+> Configure project :buildSrc
+Evaluating project ':buildSrc' using build file '/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/buildSrc/build.gradle.kts'.
+Resolved plugin [id: 'org.gradle.kotlin.kotlin-dsl', version: '6.6.4']
+Build b06e6f1b-f3a8-4287-b5a2-f9b0f40720d1 is started
+Using Kotlin Gradle Plugin gradle813 variant
+kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+file or directory '/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/buildSrc/src/main/kotlin', not found
+Build b06e6f1b-f3a8-4287-b5a2-f9b0f40720d1 is closed
+
+FAILURE: Build failed with an exception.
+
+* Where:
+Initialization script '/private/tmp/notes-lifecycle-project-probe-01.init.gradle' line: 4
+
+* What went wrong:
+Project with path ':app' could not be found in project ':buildSrc'.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2s
+Watched directory hierarchies: []

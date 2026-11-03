@@ -1,0 +1,123 @@
+--- run-build-safe-cleanup.py
++++ run-android-recovery.py
+@@ -9,7 +9,9 @@
+ import re
+ import subprocess
+ import stat
+-import common as c
++import signal
++import time
++from recovery_common import c, supplemental
+ 
+ def cleanup_owned_init(path, owned):
+     """Remove only the recorded file; caller must serialize shared-cache users."""
+@@ -49,10 +51,11 @@
+ 
+ 
+ p = argparse.ArgumentParser()
+-p.add_argument('stage', choices=['mac', 'android'])
++p.add_argument('stage', choices=['android'])
+ p.add_argument('expected_head')
+ p.add_argument('run_directory', type=Path)
+ p.add_argument('attempt', help='new identifier; existing attempt directories are never reused')
++p.add_argument('--deadline-seconds', type=int, default=600)
+ p.add_argument('--allow-scoped-gradle-offline-init', action='store_true', help='explicitly authorize one temporary init.d file in the selected existing shared cache')
+ a = p.parse_args()
+ if not re.fullmatch(r'[A-Za-z0-9_-]+', a.attempt):
+@@ -61,13 +64,14 @@
+ before = json.loads((run / 'source-inputs-before.json').read_text())
+ if before['head'] != a.expected_head:
+     raise SystemExit('Frozen SHA differs from authorization')
+-if a.stage == 'android' and not (run / 'mac-sealed-identity.json').is_file():
+-    raise SystemExit('Mac collection/sealing must complete before Android')
++extra_before = json.loads((run / 'recovery-inputs-before.json').read_text())
++if not 1 <= a.deadline_seconds <= 1200:
++    raise SystemExit('Explicit bounded deadline must be between 1 and 1200 seconds')
+ if a.stage == 'android' and not a.allow_scoped_gradle_offline_init:
+     raise SystemExit('Offline Gradle enforcement requires explicitly reviewed scoped init; do not build online')
+ attempt = run / (a.stage + '-' + a.attempt)
+ attempt.mkdir(parents=True, exist_ok=False)
+-result = {'startedAt': c.now(), 'stage': a.stage, 'expectedHead': a.expected_head, 'sourceAggregate': before['aggregate'], 'attempt': str(attempt), 'exitCode': None}
++result = {'recoveryScope': 'Android only; references accepted original Mac, not a shared complete freeze', 'startedAt': c.now(), 'stage': a.stage, 'expectedHead': a.expected_head, 'sourceAggregate': before['aggregate'], 'attempt': str(attempt), 'exitCode': None}
+ init = None
+ init_created = False
+ init_owned = None
+@@ -76,12 +80,19 @@
+         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+         current = c.capture(a.expected_head)
+         c.write_new(attempt / 'inputs-before.json', current)
++        extra_current = supplemental(current)
++        c.write_new(attempt / 'recovery-inputs-before.json', extra_current)
++        if extra_current != extra_before:
++            raise RuntimeError('Supplemental environment/cache/Mac reference changed before build')
++        result['acceptedMacReference'] = extra_current['acceptedMacReference']
+         checks = c.same_inputs(before, current)
+         if not all(checks.values()):
+             raise RuntimeError('Frozen inputs/environment changed: ' + repr(checks))
+         result['diskFreeBefore'] = c.check_space()
+         env = os.environ.copy()
+         env.update(before['effectiveBuildEnvironment'])
++        env.update(extra_before['supplementalBuildEnvironment'])
++        result['supplementalBuildEnvironment'] = extra_before['supplementalBuildEnvironment']
+         result['explicitEnvironmentOverrides'] = before['effectiveBuildEnvironment']
+         if a.stage == 'android':
+             # CLI runner arguments are not assumed to be Gradle arguments. This init executes before settings.
+@@ -99,11 +110,51 @@
+         cmd = {'mac': ['pnpm', 'mac:build'], 'android': ['pnpm', 'android:build', '--debug']}[a.stage]
+         result['command'] = cmd
+         with (attempt / 'build.txt').open('x') as log:
+-            result['exitCode'] = subprocess.run(cmd, cwd=c.ROOT, env=env, stdout=log, stderr=subprocess.STDOUT).returncode
++            process = subprocess.Popen(cmd, cwd=c.ROOT, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
++            started = time.monotonic()
++            minimum_free = result['diskFreeBefore']
++            try:
++                while process.poll() is None:
++                    time.sleep(0.2)
++                    minimum_free = min(minimum_free, __import__('shutil').disk_usage(c.ROOT).free)
++                    content = (attempt / 'build.txt').read_text(errors='replace')
++                    reason = None
++                    if re.search(r'Fetching distribution|Downloading https?://|Download https?://', content):
++                        reason = 'download-prompt'
++                    elif minimum_free < 2 * 1024**3:
++                        reason = 'disk-guard'
++                    elif time.monotonic() - started >= a.deadline_seconds:
++                        reason = 'deadline'
++                    if reason:
++                        result['stopReason'] = reason
++                        os.killpg(process.pid, signal.SIGTERM)
++                        try:
++                            process.wait(timeout=5)
++                        except subprocess.TimeoutExpired:
++                            os.killpg(process.pid, signal.SIGKILL)
++                            process.wait()
++                        break
++            except BaseException:
++                if process.poll() is None:
++                    os.killpg(process.pid, signal.SIGTERM)
++                    try:
++                        process.wait(timeout=5)
++                    except subprocess.TimeoutExpired:
++                        os.killpg(process.pid, signal.SIGKILL)
++                        process.wait()
++                raise
++            result['exitCode'] = process.returncode
++            result['minimumFreeBytes'] = minimum_free
++            result['deadlineSeconds'] = a.deadline_seconds
+         if a.stage == 'android' and 'CANDIDATE04_OFFLINE=true' not in (attempt / 'build.txt').read_text(errors='replace'):
+             result['offlineMarkerMissing'] = True
+         after = c.capture(a.expected_head)
+         c.write_new(attempt / 'inputs-after.json', after)
++        extra_after = supplemental(after)
++        c.write_new(attempt / 'recovery-inputs-after.json', extra_after)
++        result['supplementalInputsUnchanged'] = extra_before == extra_after
++        if not result['supplementalInputsUnchanged']:
++            raise RuntimeError('Supplemental environment/cache/Mac reference changed during build')
+         result['inputComparisons'] = c.same_inputs(before, after)
+         if not all(result['inputComparisons'].values()):
+             result['invalidated'] = 'Listed inputs changed; retain raw changes, do not bless or overwrite freeze'
+@@ -118,4 +169,4 @@
+         result['diskFreeAfter'] = __import__('shutil').disk_usage(c.ROOT).free
+         c.write_new(attempt / 'result.json', result)
+ print(json.dumps(result, ensure_ascii=False, indent=2))
+-raise SystemExit(0 if result.get('exitCode') == 0 and not any(k in result for k in ['error', 'invalidated', 'offlineMarkerMissing', 'cleanupError']) else 1)
++raise SystemExit(0 if result.get('exitCode') == 0 and not any(k in result for k in ['error', 'invalidated', 'offlineMarkerMissing', 'cleanupError', 'stopReason']) else 1)

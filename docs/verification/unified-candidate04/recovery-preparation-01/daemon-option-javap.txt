@@ -1,0 +1,42 @@
+Compiled from "DaemonBuildOptions.java"
+public class org.gradle.launcher.daemon.configuration.DaemonBuildOptions$DaemonOption extends org.gradle.internal.buildoption.BooleanBuildOption<org.gradle.launcher.daemon.configuration.DaemonParameters> {
+  public static final java.lang.String GRADLE_PROPERTY;
+
+  public org.gradle.launcher.daemon.configuration.DaemonBuildOptions$DaemonOption();
+    Code:
+       0: aload_0
+       1: ldc           #3                  // String org.gradle.daemon
+       3: iconst_1
+       4: anewarray     #5                  // class org/gradle/internal/buildoption/BooleanCommandLineOptionConfiguration
+       7: dup
+       8: iconst_0
+       9: ldc           #7                  // String daemon
+      11: ldc           #9                  // String Uses the Gradle daemon to run the build. Starts the daemon if it is not running.
+      13: ldc           #11                 // String Runs the build without the Gradle daemon. Useful occasionally if you have configured Gradle to always run with the daemon by default.
+      15: invokestatic  #13                 // Method org/gradle/internal/buildoption/BooleanCommandLineOptionConfiguration.create:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/gradle/internal/buildoption/BooleanCommandLineOptionConfiguration;
+      18: aastore
+      19: invokespecial #17                 // Method org/gradle/internal/buildoption/BooleanBuildOption."<init>":(Ljava/lang/String;[Lorg/gradle/internal/buildoption/BooleanCommandLineOptionConfiguration;)V
+      22: return
+
+  public void applyTo(boolean, org.gradle.launcher.daemon.configuration.DaemonParameters, org.gradle.internal.buildoption.Origin);
+    Code:
+       0: aload_2
+       1: iload_1
+       2: invokevirtual #23                 // Method org/gradle/launcher/daemon/configuration/DaemonParameters.setEnabled:(Z)V
+       5: return
+
+  protected org.gradle.cli.OptionCategory getCategory();
+    Code:
+       0: getstatic     #29                 // Field org/gradle/cli/OptionCategory.DAEMON:Lorg/gradle/cli/OptionCategory;
+       3: areturn
+
+  public void applyTo(boolean, java.lang.Object, org.gradle.internal.buildoption.Origin);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: aload_2
+       3: checkcast     #24                 // class org/gradle/launcher/daemon/configuration/DaemonParameters
+       6: aload_3
+       7: invokevirtual #35                 // Method applyTo:(ZLorg/gradle/launcher/daemon/configuration/DaemonParameters;Lorg/gradle/internal/buildoption/Origin;)V
+      10: return
+}

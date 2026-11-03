@@ -1,0 +1,81 @@
+{
+  "identity": {
+    "builtUTC": "2026-11-03T21:21:15.541578+00:00",
+    "compiler": {
+      "path": "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "sha256": "f0bce5c648dcd580f0016ebd49c7a4db1cd501fe2b357b75e60dbe5667851e1e",
+      "version": "Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)\nTarget: arm64-apple-macosx26.0\n"
+    },
+    "sdk": {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk",
+      "version": "26.5",
+      "settingsSha256": "f8d005f09381389167f9e0aeaa169bc9e7dff162ef22ca2fd8e98df7ff1acafe",
+      "headers": [
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/ScreenCaptureKit.framework/Headers/SCStream.h",
+          "sha256": "025ce72289d842191571495dfc98ba1f5fec0c00b77ed598ab7cc765a649e9aa"
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/ScreenCaptureKit.framework/Headers/SCShareableContent.h",
+          "sha256": "01ecd6997892d404773d724a3936feffb2ca6f03cdbb8df31950d004e1992a33"
+        },
+        {
+          "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/ScreenCaptureKit.framework/Headers/SCScreenshotManager.h",
+          "sha256": "52b07cfbfb8264b4332b26dc99abc5292f4532719e057f3b68fded0e20186d25"
+        }
+      ]
+    },
+    "sources": [
+      {
+        "path": "/Users/water/work/2026/Apple-Notes-Clone/scripts/window-capture.swift",
+        "sha256": "a2f4561144576ebff856eae71c2e218a56a809452e2d5db8340414bc97c75e3c"
+      },
+      {
+        "path": "/Users/water/work/2026/Apple-Notes-Clone/scripts/build-window-capture.py",
+        "sha256": "2f726c7ea7eaa83b0e20300ece330d1b69afff1352b68af4d89e504010199681"
+      },
+      {
+        "path": "/Users/water/work/2026/Apple-Notes-Clone/scripts/run-window-capture.py",
+        "sha256": "893d77a62dabf19797b865655f4a2830deae79af986aa13048c48f574066b83e"
+      }
+    ],
+    "target": "arm64-apple-macosx14.2",
+    "compileArguments": [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-parse-as-library",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk",
+      "-target",
+      "arm64-apple-macosx14.2",
+      "-module-cache-path",
+      "/private/tmp/notes-window-capture-main-083a8d4/module-cache",
+      "/Users/water/work/2026/Apple-Notes-Clone/scripts/window-capture.swift",
+      "/private/tmp/notes-window-capture-main-083a8d4/BuildIdentity.swift",
+      "-o",
+      "/private/tmp/notes-window-capture-main-083a8d4/window-capture"
+    ]
+  },
+  "checks": [
+    {
+      "name": "observer",
+      "arguments": [
+        "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+        "-parse-as-library",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk",
+        "-target",
+        "arm64-apple-macosx14.2",
+        "-module-cache-path",
+        "/private/tmp/notes-window-capture-main-083a8d4/module-cache",
+        "/Users/water/work/2026/Apple-Notes-Clone/scripts/window-capture.swift",
+        "/private/tmp/notes-window-capture-main-083a8d4/BuildIdentity.swift",
+        "-o",
+        "/private/tmp/notes-window-capture-main-083a8d4/window-capture"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "binarySha256": "a5a4b11e5c74630fadf84d5aba168e5dc419cafb1449c53eefb1cd7d194ea0a4"
+}

@@ -1,0 +1,56 @@
+import groovy.json.JsonOutput
+import java.nio.file.Files
+import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
+import org.gradle.api.internal.artifacts.ivyservice.modulecache.ModuleRepositoryCacheProvider
+import org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey
+import org.gradle.api.internal.artifacts.ivyservice.ivyresolve.ModuleDescriptorHashModuleSource
+import org.gradle.internal.component.external.model.DefaultModuleComponentIdentifier
+import org.gradle.internal.component.external.model.DefaultModuleComponentArtifactIdentifier
+import org.gradle.internal.component.external.model.ModuleComponentFileArtifactIdentifier
+
+repositories { google() }
+tasks.register('seedExactMissingFileKey') {
+ doLast {
+  assert gradle.startParameter.offline
+  def component = DefaultModuleComponentIdentifier.newId(DefaultModuleIdentifier.newId('androidx.lifecycle', 'lifecycle-livedata'), '2.10.0')
+  def resolver = repositories.getByName('Google').createResolver()
+  def caches = services.get(ModuleRepositoryCacheProvider).persistentCaches
+  def cachedMetadata = caches.moduleMetadataCache.getCachedModuleDescriptor(resolver, component)
+  assert cachedMetadata != null && !cachedMetadata.missing : 'Exact descriptor must exist'
+  def metadata = cachedMetadata.metadata
+  def fileName = 'lifecycle-livedata-2.10.0.aar'
+  def files = metadata.variants.collectMany { variant ->
+   variant.files.findAll { it.name == fileName }.collect { [variant:variant.name, name:it.name, uri:it.uri] }
+  }
+  assert files.size() > 0 && files.every { it.name == fileName && it.uri == fileName } : 'Descriptor must name exact AAR'
+  def standardId = new DefaultModuleComponentArtifactIdentifier(component, 'lifecycle-livedata', 'aar', 'aar')
+  def fileId = new ModuleComponentFileArtifactIdentifier(component, fileName)
+  def standardKey = new ArtifactAtRepositoryKey(resolver.id, standardId)
+  def fileKey = new ArtifactAtRepositoryKey(resolver.id, fileId)
+  def standard = caches.moduleArtifactCache.lookup(standardKey)
+  def existingFile = caches.moduleArtifactCache.lookup(fileKey)
+  def hashSource = cachedMetadata.moduleSources.getSource(ModuleDescriptorHashModuleSource).orElse(null)
+  def sourceAar = standard != null && !standard.missing ? standard.cachedFile : null
+  def sha = sourceAar != null && sourceAar.isFile() ? java.security.MessageDigest.getInstance('SHA-256').digest(sourceAar.bytes).encodeHex().toString() : null
+  def report = [repositoryId:resolver.id, repositoryUrl:repositories.getByName('Google').url.toString(), component:component.displayName, descriptorFiles:files, standardIdClass:standardId.class.name, standardId:standardId.displayName, fileIdClass:fileId.class.name, fileId:fileId.displayName, fileKeyPreviouslyPresent:existingFile != null, standardKeyPresent:standard != null, standardMissing:standard?.missing, sourceAar:sourceAar?.absolutePath, sourceSha256:sha, descriptorHash:hashSource?.descriptorHash?.toString(), standardDescriptorHash:standard?.descriptorHash?.toString()]
+  def out = new File(rootDir.parentFile, 'exact-key-before-store.json')
+  out.text = JsonOutput.prettyPrint(JsonOutput.toJson(report)) + '\n'
+  println "NOTES_EXACT_KEY_BEFORE=${JsonOutput.toJson(report)}"
+  assert existingFile == null : 'File key must be absent; no overwrite permitted'
+  assert standard != null && !standard.missing && sourceAar.isFile() : 'Standard AAR key must be positive'
+  assert sha == '3e8c009fc88da1c52e4ed05a81269d5ac9bd405046f300307f5e3a17e201a6df'
+  assert hashSource != null && hashSource.descriptorHash == standard.descriptorHash : 'Descriptor hashes must match'
+  def destination = new File(gradle.gradleUserHomeDir, 'caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-livedata/2.10.0/ce0b5f930a64679a621c8bc67c060a7820c0a57b/' + fileName)
+  assert !destination.exists()
+  destination.parentFile.mkdirs()
+  Files.copy(sourceAar.toPath(), destination.toPath())
+  caches.moduleArtifactCache.store(fileKey, destination, hashSource.descriptorHash)
+  def stored = caches.moduleArtifactCache.lookup(fileKey)
+  assert stored != null && !stored.missing && stored.cachedFile.canonicalFile == destination.canonicalFile
+  report.stored = true
+  report.storedFile = stored.cachedFile.absolutePath
+  report.storedDescriptorHash = stored.descriptorHash.toString()
+  new File(rootDir.parentFile, 'own-store-result.json').text = JsonOutput.prettyPrint(JsonOutput.toJson(report)) + '\n'
+  println "NOTES_OWN_STORE_SUCCESS=${destination}"
+ }
+}

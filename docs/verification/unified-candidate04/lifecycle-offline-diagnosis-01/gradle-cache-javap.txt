@@ -1,0 +1,927 @@
+Compiled from "DefaultModuleArtifactCache.java"
+public class org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.DefaultModuleArtifactCache extends org.gradle.internal.resource.cached.AbstractCachedIndex<org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey, org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.CachedArtifact> implements org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ModuleArtifactCache {
+  private static final org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.DefaultModuleArtifactCache$ArtifactAtRepositoryKeySerializer KEY_SERIALIZER;
+
+  private final org.gradle.util.internal.BuildCommencedTimeProvider timeProvider;
+
+  public org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.DefaultModuleArtifactCache(java.lang.String, org.gradle.util.internal.BuildCommencedTimeProvider, org.gradle.api.internal.artifacts.ivyservice.ArtifactCacheLockingAccessCoordinator, org.gradle.internal.file.FileAccessTracker, java.nio.file.Path);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: getstatic     #1                  // Field KEY_SERIALIZER:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultModuleArtifactCache$ArtifactAtRepositoryKeySerializer;
+       5: new           #7                  // class org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultModuleArtifactCache$CachedArtifactSerializer
+       8: dup
+       9: aload         5
+      11: invokespecial #9                  // Method org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultModuleArtifactCache$CachedArtifactSerializer."<init>":(Ljava/nio/file/Path;)V
+      14: aload_3
+      15: aload         4
+      17: invokespecial #13                 // Method org/gradle/internal/resource/cached/AbstractCachedIndex."<init>":(Ljava/lang/String;Lorg/gradle/internal/serialize/Serializer;Lorg/gradle/internal/serialize/Serializer;Lorg/gradle/api/internal/artifacts/ivyservice/ArtifactCacheLockingAccessCoordinator;Lorg/gradle/internal/file/FileAccessTracker;)V
+      20: aload_0
+      21: aload_2
+      22: putfield      #18                 // Field timeProvider:Lorg/gradle/util/internal/BuildCommencedTimeProvider;
+      25: return
+
+  protected static org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.DefaultModuleArtifactCache$ArtifactAtRepositoryKeySerializer keySerializer();
+    Code:
+       0: new           #22                 // class org/gradle/internal/serialize/DefaultSerializerRegistry
+       3: dup
+       4: invokespecial #24                 // Method org/gradle/internal/serialize/DefaultSerializerRegistry."<init>":()V
+       7: astore_0
+       8: aload_0
+       9: ldc           #27                 // class org/gradle/internal/component/external/model/DefaultModuleComponentArtifactIdentifier
+      11: new           #29                 // class org/gradle/api/internal/artifacts/metadata/ComponentArtifactIdentifierSerializer
+      14: dup
+      15: invokespecial #31                 // Method org/gradle/api/internal/artifacts/metadata/ComponentArtifactIdentifierSerializer."<init>":()V
+      18: invokevirtual #32                 // Method org/gradle/internal/serialize/DefaultSerializerRegistry.register:(Ljava/lang/Class;Lorg/gradle/internal/serialize/Serializer;)V
+      21: aload_0
+      22: ldc           #36                 // class org/gradle/internal/component/external/model/ModuleComponentFileArtifactIdentifier
+      24: new           #38                 // class org/gradle/api/internal/artifacts/metadata/ModuleComponentFileArtifactIdentifierSerializer
+      27: dup
+      28: invokespecial #40                 // Method org/gradle/api/internal/artifacts/metadata/ModuleComponentFileArtifactIdentifierSerializer."<init>":()V
+      31: invokevirtual #32                 // Method org/gradle/internal/serialize/DefaultSerializerRegistry.register:(Ljava/lang/Class;Lorg/gradle/internal/serialize/Serializer;)V
+      34: new           #41                 // class org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultModuleArtifactCache$ArtifactAtRepositoryKeySerializer
+      37: dup
+      38: aload_0
+      39: ldc           #43                 // class org/gradle/api/artifacts/component/ComponentArtifactIdentifier
+      41: invokevirtual #45                 // Method org/gradle/internal/serialize/DefaultSerializerRegistry.build:(Ljava/lang/Class;)Lorg/gradle/internal/serialize/Serializer;
+      44: invokespecial #49                 // Method org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultModuleArtifactCache$ArtifactAtRepositoryKeySerializer."<init>":(Lorg/gradle/internal/serialize/Serializer;)V
+      47: areturn
+
+  public void store(org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey, java.io.File, org.gradle.internal.hash.HashCode);
+    Code:
+       0: aload_0
+       1: aload_2
+       2: invokevirtual #52                 // Method assertArtifactFileNotNull:(Ljava/io/File;)V
+       5: aload_0
+       6: aload_1
+       7: invokevirtual #56                 // Method assertKeyNotNull:(Ljava/lang/Object;)V
+      10: aload_0
+      11: aload_1
+      12: aload_0
+      13: aload_2
+      14: aload_3
+      15: invokevirtual #60                 // Method createEntry:(Ljava/io/File;Lorg/gradle/internal/hash/HashCode;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultCachedArtifact;
+      18: invokevirtual #64                 // Method storeInternal:(Ljava/lang/Object;Lorg/gradle/internal/resource/cached/CachedItem;)V
+      21: return
+
+  private org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.DefaultCachedArtifact createEntry(java.io.File, org.gradle.internal.hash.HashCode);
+    Code:
+       0: new           #68                 // class org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultCachedArtifact
+       3: dup
+       4: aload_1
+       5: aload_0
+       6: getfield      #18                 // Field timeProvider:Lorg/gradle/util/internal/BuildCommencedTimeProvider;
+       9: invokevirtual #70                 // Method org/gradle/util/internal/BuildCommencedTimeProvider.getCurrentTime:()J
+      12: aload_2
+      13: invokespecial #76                 // Method org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultCachedArtifact."<init>":(Ljava/io/File;JLorg/gradle/internal/hash/HashCode;)V
+      16: areturn
+
+  public void storeMissing(org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey, java.util.List<java.lang.String>, org.gradle.internal.hash.HashCode);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_0
+       3: aload_2
+       4: aload_3
+       5: invokevirtual #79                 // Method createMissingEntry:(Ljava/util/List;Lorg/gradle/internal/hash/HashCode;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact;
+       8: invokevirtual #64                 // Method storeInternal:(Ljava/lang/Object;Lorg/gradle/internal/resource/cached/CachedItem;)V
+      11: return
+
+  private org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.CachedArtifact createMissingEntry(java.util.List<java.lang.String>, org.gradle.internal.hash.HashCode);
+    Code:
+       0: new           #68                 // class org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultCachedArtifact
+       3: dup
+       4: aload_1
+       5: aload_0
+       6: getfield      #18                 // Field timeProvider:Lorg/gradle/util/internal/BuildCommencedTimeProvider;
+       9: invokevirtual #70                 // Method org/gradle/util/internal/BuildCommencedTimeProvider.getCurrentTime:()J
+      12: aload_2
+      13: invokespecial #83                 // Method org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultCachedArtifact."<init>":(Ljava/util/List;JLorg/gradle/internal/hash/HashCode;)V
+      16: areturn
+
+  public org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.CachedArtifact lookup(org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #56                 // Method assertKeyNotNull:(Ljava/lang/Object;)V
+       5: aload_0
+       6: aload_1
+       7: invokespecial #86                 // Method org/gradle/internal/resource/cached/AbstractCachedIndex.lookup:(Ljava/lang/Object;)Lorg/gradle/internal/resource/cached/CachedItem;
+      10: checkcast     #90                 // class org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact
+      13: areturn
+
+  public org.gradle.internal.resource.cached.CachedItem lookup(java.lang.Object);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: checkcast     #92                 // class org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey
+       5: invokevirtual #94                 // Method lookup:(Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact;
+       8: areturn
+
+  public void clear(org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokespecial #97                 // Method org/gradle/internal/resource/cached/AbstractCachedIndex.clear:(Ljava/lang/Object;)V
+       5: return
+
+  static {};
+    Code:
+       0: invokestatic  #100                // Method keySerializer:()Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultModuleArtifactCache$ArtifactAtRepositoryKeySerializer;
+       3: putstatic     #1                  // Field KEY_SERIALIZER:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/DefaultModuleArtifactCache$ArtifactAtRepositoryKeySerializer;
+       6: return
+}
+Compiled from "DefaultModuleArtifactCache.java"
+class org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.DefaultModuleArtifactCache$ArtifactAtRepositoryKeySerializer implements org.gradle.internal.serialize.Serializer<org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey> {
+  private final org.gradle.internal.serialize.Serializer<org.gradle.api.artifacts.component.ComponentArtifactIdentifier> artifactIdSerializer;
+
+  public org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.DefaultModuleArtifactCache$ArtifactAtRepositoryKeySerializer(org.gradle.internal.serialize.Serializer<org.gradle.api.artifacts.component.ComponentArtifactIdentifier>);
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: aload_1
+       6: putfield      #7                  // Field artifactIdSerializer:Lorg/gradle/internal/serialize/Serializer;
+       9: return
+
+  public void write(org.gradle.internal.serialize.Encoder, org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey) throws java.lang.Exception;
+    Code:
+       0: aload_1
+       1: aload_2
+       2: invokevirtual #13                 // Method org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey.getRepositoryId:()Ljava/lang/String;
+       5: invokeinterface #19,  2           // InterfaceMethod org/gradle/internal/serialize/Encoder.writeString:(Ljava/lang/CharSequence;)V
+      10: aload_0
+      11: getfield      #7                  // Field artifactIdSerializer:Lorg/gradle/internal/serialize/Serializer;
+      14: aload_1
+      15: aload_2
+      16: invokevirtual #25                 // Method org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey.getArtifactId:()Lorg/gradle/api/artifacts/component/ComponentArtifactIdentifier;
+      19: invokeinterface #29,  3           // InterfaceMethod org/gradle/internal/serialize/Serializer.write:(Lorg/gradle/internal/serialize/Encoder;Ljava/lang/Object;)V
+      24: return
+
+  public org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey read(org.gradle.internal.serialize.Decoder) throws java.lang.Exception;
+    Code:
+       0: aload_1
+       1: invokeinterface #35,  1           // InterfaceMethod org/gradle/internal/serialize/Decoder.readString:()Ljava/lang/String;
+       6: astore_2
+       7: aload_0
+       8: getfield      #7                  // Field artifactIdSerializer:Lorg/gradle/internal/serialize/Serializer;
+      11: aload_1
+      12: invokeinterface #40,  2           // InterfaceMethod org/gradle/internal/serialize/Serializer.read:(Lorg/gradle/internal/serialize/Decoder;)Ljava/lang/Object;
+      17: checkcast     #44                 // class org/gradle/api/artifacts/component/ComponentArtifactIdentifier
+      20: astore_3
+      21: new           #14                 // class org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey
+      24: dup
+      25: aload_2
+      26: aload_3
+      27: invokespecial #46                 // Method org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey."<init>":(Ljava/lang/String;Lorg/gradle/api/artifacts/component/ComponentArtifactIdentifier;)V
+      30: areturn
+
+  public void write(org.gradle.internal.serialize.Encoder, java.lang.Object) throws java.lang.Exception;
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: checkcast     #14                 // class org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey
+       6: invokevirtual #49                 // Method write:(Lorg/gradle/internal/serialize/Encoder;Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey;)V
+       9: return
+
+  public java.lang.Object read(org.gradle.internal.serialize.Decoder) throws java.io.EOFException, java.lang.Exception;
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #52                 // Method read:(Lorg/gradle/internal/serialize/Decoder;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey;
+       5: areturn
+}
+Compiled from "CachingModuleComponentRepository.java"
+class org.gradle.api.internal.artifacts.ivyservice.ivyresolve.CachingModuleComponentRepository$LocateInCacheRepositoryAccess implements org.gradle.api.internal.artifacts.ivyservice.ivyresolve.ModuleComponentRepositoryAccess<org.gradle.internal.component.external.model.ExternalModuleComponentGraphResolveState> {
+  final org.gradle.api.internal.artifacts.ivyservice.ivyresolve.CachingModuleComponentRepository this$0;
+
+  private org.gradle.api.internal.artifacts.ivyservice.ivyresolve.CachingModuleComponentRepository$LocateInCacheRepositoryAccess(org.gradle.api.internal.artifacts.ivyservice.ivyresolve.CachingModuleComponentRepository);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+       5: aload_0
+       6: invokespecial #7                  // Method java/lang/Object."<init>":()V
+       9: return
+
+  public java.lang.String toString();
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+       4: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+       7: invokestatic  #19                 // Method java/lang/String.valueOf:(Ljava/lang/Object;)Ljava/lang/String;
+      10: invokedynamic #25,  0             // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      15: areturn
+
+  public void listModuleVersions(org.gradle.api.artifacts.component.ModuleComponentSelector, org.gradle.internal.component.model.ComponentOverrideMetadata, org.gradle.internal.resolve.result.BuildableModuleVersionListingResolveResult);
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+       4: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+       7: invokeinterface #29,  1           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getLocalAccess:()Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepositoryAccess;
+      12: aload_1
+      13: aload_2
+      14: aload_3
+      15: invokeinterface #35,  4           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepositoryAccess.listModuleVersions:(Lorg/gradle/api/artifacts/component/ModuleComponentSelector;Lorg/gradle/internal/component/model/ComponentOverrideMetadata;Lorg/gradle/internal/resolve/result/BuildableModuleVersionListingResolveResult;)V
+      20: aload_3
+      21: invokeinterface #41,  1           // InterfaceMethod org/gradle/internal/resolve/result/BuildableModuleVersionListingResolveResult.hasResult:()Z
+      26: ifeq          30
+      29: return
+      30: aload_0
+      31: aload_1
+      32: aload_3
+      33: invokevirtual #47                 // Method listModuleVersionsFromCache:(Lorg/gradle/api/artifacts/component/ModuleComponentSelector;Lorg/gradle/internal/resolve/result/BuildableModuleVersionListingResolveResult;)V
+      36: return
+
+  private void listModuleVersionsFromCache(org.gradle.api.artifacts.component.ModuleComponentSelector, org.gradle.internal.resolve.result.BuildableModuleVersionListingResolveResult);
+    Code:
+       0: aload_1
+       1: invokeinterface #51,  1           // InterfaceMethod org/gradle/api/artifacts/component/ModuleComponentSelector.getModuleIdentifier:()Lorg/gradle/api/artifacts/ModuleIdentifier;
+       6: astore_3
+       7: aload_0
+       8: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      11: getfield      #57                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.moduleVersionsCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/dynamicversions/ModuleVersionsCache;
+      14: aload_0
+      15: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      18: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+      21: aload_3
+      22: invokeinterface #61,  3           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/dynamicversions/ModuleVersionsCache.getCachedModuleResolution:(Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;Lorg/gradle/api/artifacts/ModuleIdentifier;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/dynamicversions/ModuleVersionsCache$CachedModuleVersionList;
+      27: astore        4
+      29: aload         4
+      31: ifnull        189
+      34: aload         4
+      36: invokeinterface #67,  1           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/dynamicversions/ModuleVersionsCache$CachedModuleVersionList.getModuleVersions:()Ljava/util/Set;
+      41: astore        5
+      43: aload         5
+      45: invokeinterface #73,  1           // InterfaceMethod java/util/Set.stream:()Ljava/util/stream/Stream;
+      50: aload_3
+      51: invokedynamic #79,  0             // InvokeDynamic #1:apply:(Lorg/gradle/api/artifacts/ModuleIdentifier;)Ljava/util/function/Function;
+      56: invokeinterface #83,  2           // InterfaceMethod java/util/stream/Stream.map:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+      61: invokestatic  #89                 // Method java/util/stream/Collectors.toSet:()Ljava/util/stream/Collector;
+      64: invokeinterface #95,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      69: checkcast     #74                 // class java/util/Set
+      72: astore        6
+      74: aload_0
+      75: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      78: getfield      #99                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheExpirationControl:Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl;
+      81: aload_3
+      82: aload         6
+      84: aload         4
+      86: invokeinterface #103,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/dynamicversions/ModuleVersionsCache$CachedModuleVersionList.getAge:()Ljava/time/Duration;
+      91: invokeinterface #107,  4          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl.versionListExpiry:(Lorg/gradle/api/artifacts/ModuleIdentifier;Ljava/util/Set;Ljava/time/Duration;)Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;
+      96: astore        7
+      98: aload         7
+     100: invokeinterface #113,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry.isMustCheck:()Z
+     105: ifeq          134
+     108: getstatic     #118                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.LOGGER:Lorg/slf4j/Logger;
+     111: ldc           #122                // String Version listing in dynamic revision cache is expired: will perform fresh resolve of \'{}\' in \'{}\'
+     113: aload_1
+     114: aload_0
+     115: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     118: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+     121: invokeinterface #124,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getName:()Ljava/lang/String;
+     126: invokeinterface #128,  4          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
+     131: goto          189
+     134: aload         4
+     136: invokeinterface #103,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/dynamicversions/ModuleVersionsCache$CachedModuleVersionList.getAge:()Ljava/time/Duration;
+     141: invokevirtual #134                // Method java/time/Duration.toMillis:()J
+     144: lconst_0
+     145: lcmp
+     146: ifne          153
+     149: iconst_1
+     150: goto          154
+     153: iconst_0
+     154: istore        8
+     156: aload_2
+     157: aload         5
+     159: invokeinterface #140,  2          // InterfaceMethod org/gradle/internal/resolve/result/BuildableModuleVersionListingResolveResult.listed:(Ljava/util/Collection;)V
+     164: aload_2
+     165: iload         8
+     167: invokeinterface #144,  2          // InterfaceMethod org/gradle/internal/resolve/result/BuildableModuleVersionListingResolveResult.setAuthoritative:(Z)V
+     172: aload_0
+     173: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     176: getfield      #148                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.listener:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ChangingValueDependencyResolutionListener;
+     179: aload_1
+     180: aload         7
+     182: aload         6
+     184: invokeinterface #152,  4          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ChangingValueDependencyResolutionListener.onDynamicVersionSelection:(Lorg/gradle/api/artifacts/component/ModuleComponentSelector;Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;Ljava/util/Set;)V
+     189: return
+
+  public void resolveComponentMetaData(org.gradle.api.artifacts.component.ModuleComponentIdentifier, org.gradle.internal.component.model.ComponentOverrideMetadata, org.gradle.internal.resolve.result.BuildableModuleComponentMetaDataResolveResult<org.gradle.internal.component.external.model.ExternalModuleComponentGraphResolveState>);
+    Code:
+       0: new           #158                // class org/gradle/internal/resolve/result/DefaultBuildableModuleComponentMetaDataResolveResult
+       3: dup
+       4: invokespecial #160                // Method org/gradle/internal/resolve/result/DefaultBuildableModuleComponentMetaDataResolveResult."<init>":()V
+       7: astore        4
+       9: aload_0
+      10: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      13: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+      16: invokeinterface #29,  1           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getLocalAccess:()Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepositoryAccess;
+      21: aload_1
+      22: aload_2
+      23: aload         4
+      25: invokeinterface #161,  4          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepositoryAccess.resolveComponentMetaData:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;Lorg/gradle/internal/component/model/ComponentOverrideMetadata;Lorg/gradle/internal/resolve/result/BuildableModuleComponentMetaDataResolveResult;)V
+      30: aload         4
+      32: invokevirtual #165                // Method org/gradle/internal/resolve/result/DefaultBuildableModuleComponentMetaDataResolveResult.hasResult:()Z
+      35: ifeq          62
+      38: aload         4
+      40: aload_3
+      41: aload_0
+      42: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      45: getfield      #166                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.resolveStateFactory:Lorg/gradle/internal/component/external/model/ModuleComponentGraphResolveStateFactory;
+      48: dup
+      49: invokestatic  #170                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      52: pop
+      53: invokedynamic #176,  0            // InvokeDynamic #2:apply:(Lorg/gradle/internal/component/external/model/ModuleComponentGraphResolveStateFactory;)Ljava/util/function/Function;
+      58: invokevirtual #179                // Method org/gradle/internal/resolve/result/DefaultBuildableModuleComponentMetaDataResolveResult.applyTo:(Lorg/gradle/internal/resolve/result/BuildableModuleComponentMetaDataResolveResult;Ljava/util/function/Function;)V
+      61: return
+      62: aload_0
+      63: aload_1
+      64: aload_2
+      65: aload_3
+      66: invokevirtual #183                // Method resolveComponentMetaDataFromCache:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;Lorg/gradle/internal/component/model/ComponentOverrideMetadata;Lorg/gradle/internal/resolve/result/BuildableModuleComponentMetaDataResolveResult;)V
+      69: return
+
+  private void resolveComponentMetaDataFromCache(org.gradle.api.artifacts.component.ModuleComponentIdentifier, org.gradle.internal.component.model.ComponentOverrideMetadata, org.gradle.internal.resolve.result.BuildableModuleComponentMetaDataResolveResult<org.gradle.internal.component.external.model.ExternalModuleComponentGraphResolveState>);
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+       4: getfield      #186                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.moduleMetadataCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache;
+       7: aload_0
+       8: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      11: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+      14: aload_1
+      15: invokeinterface #190,  3          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache.getCachedModuleDescriptor:(Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata;
+      20: astore        4
+      22: aload         4
+      24: ifnonnull     28
+      27: return
+      28: aload         4
+      30: invokeinterface #196,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.isMissing:()Z
+      35: ifeq          146
+      38: aload_0
+      39: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      42: getfield      #99                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheExpirationControl:Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl;
+      45: aload_1
+      46: aload         4
+      48: invokeinterface #201,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getAge:()Ljava/time/Duration;
+      53: invokeinterface #202,  3          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl.missingModuleExpiry:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;Ljava/time/Duration;)Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;
+      58: invokeinterface #113,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry.isMustCheck:()Z
+      63: ifeq          90
+      66: getstatic     #118                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.LOGGER:Lorg/slf4j/Logger;
+      69: ldc           #206                // String Cached meta-data for missing module is expired: will perform fresh resolve of \'{}\' in \'{}\'
+      71: aload_1
+      72: aload_0
+      73: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      76: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+      79: invokeinterface #124,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getName:()Ljava/lang/String;
+      84: invokeinterface #128,  4          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
+      89: return
+      90: getstatic     #118                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.LOGGER:Lorg/slf4j/Logger;
+      93: ldc           #208                // String Detected non-existence of module \'{}\' in resolver cache \'{}\'
+      95: aload_1
+      96: aload_0
+      97: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     100: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+     103: invokeinterface #124,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getName:()Ljava/lang/String;
+     108: invokeinterface #128,  4          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
+     113: aload_3
+     114: invokeinterface #210,  1          // InterfaceMethod org/gradle/internal/resolve/result/BuildableModuleComponentMetaDataResolveResult.missing:()V
+     119: aload_3
+     120: aload         4
+     122: invokeinterface #201,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getAge:()Ljava/time/Duration;
+     127: invokevirtual #134                // Method java/time/Duration.toMillis:()J
+     130: lconst_0
+     131: lcmp
+     132: ifne          139
+     135: iconst_1
+     136: goto          140
+     139: iconst_0
+     140: invokeinterface #215,  2          // InterfaceMethod org/gradle/internal/resolve/result/BuildableModuleComponentMetaDataResolveResult.setAuthoritative:(Z)V
+     145: return
+     146: aload_0
+     147: aload_0
+     148: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     151: getfield      #216                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.metadataProcessor:Lorg/gradle/api/internal/artifacts/ComponentMetadataProcessor;
+     154: invokeinterface #220,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ComponentMetadataProcessor.getRulesHash:()I
+     159: aload         4
+     161: invokevirtual #226                // Method getProcessedMetadata:(ILorg/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata;)Lorg/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveState;
+     164: astore        5
+     166: aload_2
+     167: invokeinterface #230,  1          // InterfaceMethod org/gradle/internal/component/model/ComponentOverrideMetadata.isChanging:()Z
+     172: ifne          190
+     175: aload         5
+     177: invokeinterface #235,  1          // InterfaceMethod org/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveState.getMetadata:()Lorg/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveMetadata;
+     182: invokeinterface #241,  1          // InterfaceMethod org/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveMetadata.isChanging:()Z
+     187: ifeq          294
+     190: aload_0
+     191: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     194: getfield      #99                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheExpirationControl:Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl;
+     197: aload_1
+     198: aload         4
+     200: invokeinterface #244,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getModuleVersion:()Lorg/gradle/api/artifacts/ResolvedModuleVersion;
+     205: aload         4
+     207: invokeinterface #201,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getAge:()Ljava/time/Duration;
+     212: invokeinterface #248,  4          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl.changingModuleExpiry:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;Lorg/gradle/api/artifacts/ResolvedModuleVersion;Ljava/time/Duration;)Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;
+     217: astore        6
+     219: aload         6
+     221: invokeinterface #113,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry.isMustCheck:()Z
+     226: ifeq          253
+     229: getstatic     #118                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.LOGGER:Lorg/slf4j/Logger;
+     232: ldc           #252                // String Cached meta-data for changing module is expired: will perform fresh resolve of \'{}\' in \'{}\'
+     234: aload_1
+     235: aload_0
+     236: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     239: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+     242: invokeinterface #124,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getName:()Ljava/lang/String;
+     247: invokeinterface #128,  4          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
+     252: return
+     253: getstatic     #118                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.LOGGER:Lorg/slf4j/Logger;
+     256: ldc           #254                // String Found cached version of changing module \'{}\' in \'{}\'
+     258: aload_1
+     259: aload_0
+     260: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     263: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+     266: invokeinterface #124,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getName:()Ljava/lang/String;
+     271: invokeinterface #128,  4          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
+     276: aload_0
+     277: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     280: getfield      #148                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.listener:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ChangingValueDependencyResolutionListener;
+     283: aload_1
+     284: aload         6
+     286: invokeinterface #256,  3          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ChangingValueDependencyResolutionListener.onChangingModuleResolve:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;)V
+     291: goto          354
+     294: aload_0
+     295: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     298: getfield      #99                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheExpirationControl:Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl;
+     301: aload_1
+     302: aload         4
+     304: invokeinterface #244,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getModuleVersion:()Lorg/gradle/api/artifacts/ResolvedModuleVersion;
+     309: aload         4
+     311: invokeinterface #201,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getAge:()Ljava/time/Duration;
+     316: invokeinterface #260,  4          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl.moduleExpiry:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;Lorg/gradle/api/artifacts/ResolvedModuleVersion;Ljava/time/Duration;)Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;
+     321: invokeinterface #113,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry.isMustCheck:()Z
+     326: ifeq          354
+     329: getstatic     #118                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.LOGGER:Lorg/slf4j/Logger;
+     332: ldc_w         #263                // String Cached meta-data for module must be refreshed: will perform fresh resolve of \'{}\' in \'{}\'
+     335: aload_1
+     336: aload_0
+     337: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     340: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+     343: invokeinterface #124,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getName:()Ljava/lang/String;
+     348: invokeinterface #128,  4          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
+     353: return
+     354: getstatic     #118                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.LOGGER:Lorg/slf4j/Logger;
+     357: ldc_w         #265                // String Using cached module metadata for module \'{}\' in \'{}\'
+     360: aload_1
+     361: aload_0
+     362: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     365: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+     368: invokeinterface #124,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getName:()Ljava/lang/String;
+     373: invokeinterface #128,  4          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
+     378: aload_3
+     379: aload         5
+     381: invokeinterface #267,  2          // InterfaceMethod org/gradle/internal/resolve/result/BuildableModuleComponentMetaDataResolveResult.resolved:(Ljava/lang/Object;)V
+     386: aload_3
+     387: aload         4
+     389: invokeinterface #201,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getAge:()Ljava/time/Duration;
+     394: invokevirtual #134                // Method java/time/Duration.toMillis:()J
+     397: lconst_0
+     398: lcmp
+     399: ifne          406
+     402: iconst_1
+     403: goto          407
+     406: iconst_0
+     407: invokeinterface #215,  2          // InterfaceMethod org/gradle/internal/resolve/result/BuildableModuleComponentMetaDataResolveResult.setAuthoritative:(Z)V
+     412: return
+
+  private org.gradle.internal.component.external.model.ExternalModuleComponentGraphResolveState getProcessedMetadata(int, org.gradle.api.internal.artifacts.ivyservice.modulecache.ModuleMetadataCache$CachedMetadata);
+    Code:
+       0: aload_2
+       1: iload_1
+       2: invokeinterface #271,  2          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getProcessedMetadata:(I)Lorg/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveState;
+       7: astore_3
+       8: aload_3
+       9: ifnonnull     64
+      12: aload_0
+      13: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      16: getfield      #216                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.metadataProcessor:Lorg/gradle/api/internal/artifacts/ComponentMetadataProcessor;
+      19: aload_2
+      20: invokeinterface #274,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getMetadata:()Lorg/gradle/internal/component/external/model/ModuleComponentResolveMetadata;
+      25: invokeinterface #277,  2          // InterfaceMethod org/gradle/api/internal/artifacts/ComponentMetadataProcessor.processMetadata:(Lorg/gradle/internal/component/external/model/ModuleComponentResolveMetadata;)Lorg/gradle/internal/component/external/model/ModuleComponentResolveMetadata;
+      30: astore        4
+      32: aload_0
+      33: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      36: aload         4
+      38: invokevirtual #281                // Method org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.attachRepositorySource:(Lorg/gradle/internal/component/external/model/ModuleComponentResolveMetadata;)Lorg/gradle/internal/component/external/model/ModuleComponentResolveMetadata;
+      41: astore        4
+      43: aload_0
+      44: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      47: getfield      #166                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.resolveStateFactory:Lorg/gradle/internal/component/external/model/ModuleComponentGraphResolveStateFactory;
+      50: aload         4
+      52: invokevirtual #284                // Method org/gradle/internal/component/external/model/ModuleComponentGraphResolveStateFactory.stateFor:(Lorg/gradle/internal/component/external/model/ModuleComponentResolveMetadata;)Lorg/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveState;
+      55: astore_3
+      56: aload_2
+      57: iload_1
+      58: aload_3
+      59: invokeinterface #290,  3          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.putProcessedMetadata:(ILorg/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveState;)V
+      64: aload_3
+      65: areturn
+
+  public void resolveArtifactsWithType(org.gradle.internal.component.model.ComponentArtifactResolveMetadata, org.gradle.api.internal.component.ArtifactType, org.gradle.internal.resolve.result.BuildableArtifactSetResolveResult);
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+       4: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+       7: invokeinterface #29,  1           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getLocalAccess:()Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepositoryAccess;
+      12: aload_1
+      13: aload_2
+      14: aload_3
+      15: invokeinterface #294,  4          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepositoryAccess.resolveArtifactsWithType:(Lorg/gradle/internal/component/model/ComponentArtifactResolveMetadata;Lorg/gradle/api/internal/component/ArtifactType;Lorg/gradle/internal/resolve/result/BuildableArtifactSetResolveResult;)V
+      20: aload_3
+      21: invokeinterface #298,  1          // InterfaceMethod org/gradle/internal/resolve/result/BuildableArtifactSetResolveResult.hasResult:()Z
+      26: ifeq          30
+      29: return
+      30: aload_0
+      31: aload_0
+      32: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      35: aload_2
+      36: invokevirtual #301                // Method org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheKey:(Lorg/gradle/api/internal/component/ArtifactType;)Ljava/lang/String;
+      39: aload_1
+      40: aload_3
+      41: invokevirtual #305                // Method resolveModuleArtifactsFromCache:(Ljava/lang/String;Lorg/gradle/internal/component/model/ComponentArtifactResolveMetadata;Lorg/gradle/internal/resolve/result/BuildableArtifactSetResolveResult;)V
+      44: return
+
+  private void resolveModuleArtifactsFromCache(java.lang.String, org.gradle.internal.component.model.ComponentArtifactResolveMetadata, org.gradle.internal.resolve.result.BuildableArtifactSetResolveResult);
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+       4: getfield      #309                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.moduleArtifactsCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactsCache;
+       7: aload_0
+       8: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      11: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+      14: aload_2
+      15: invokeinterface #313,  1          // InterfaceMethod org/gradle/internal/component/model/ComponentArtifactResolveMetadata.getId:()Lorg/gradle/api/artifacts/component/ComponentIdentifier;
+      20: aload_1
+      21: invokeinterface #319,  4          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactsCache.getCachedArtifacts:(Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;Lorg/gradle/api/artifacts/component/ComponentIdentifier;Ljava/lang/String;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifacts;
+      26: astore        4
+      28: aload_2
+      29: invokeinterface #325,  1          // InterfaceMethod org/gradle/internal/component/model/ComponentArtifactResolveMetadata.getSources:()Lorg/gradle/internal/component/model/ModuleSources;
+      34: astore        5
+      36: aload         5
+      38: invokestatic  #329                // Method org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.findCachingModuleSource:(Lorg/gradle/internal/component/model/ModuleSources;)Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleDescriptorHashModuleSource;
+      41: astore        6
+      43: aload         6
+      45: invokevirtual #333                // Method org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleDescriptorHashModuleSource.getDescriptorHash:()Lorg/gradle/internal/hash/HashCode;
+      48: astore        7
+      50: aload         4
+      52: ifnull        166
+      55: aload_0
+      56: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      59: getfield      #99                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheExpirationControl:Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl;
+      62: aload_2
+      63: invokeinterface #339,  1          // InterfaceMethod org/gradle/internal/component/model/ComponentArtifactResolveMetadata.getModuleVersionId:()Lorg/gradle/api/artifacts/ModuleVersionIdentifier;
+      68: aconst_null
+      69: aload         4
+      71: invokeinterface #343,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifacts.getAgeMillis:()J
+      76: invokestatic  #348                // Method java/time/Duration.ofMillis:(J)Ljava/time/Duration;
+      79: aload         6
+      81: invokevirtual #352                // Method org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleDescriptorHashModuleSource.isChangingModule:()Z
+      84: aload         7
+      86: aload         4
+      88: invokeinterface #355,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifacts.getDescriptorHash:()Lorg/gradle/internal/hash/HashCode;
+      93: invokevirtual #356                // Method org/gradle/internal/hash/HashCode.equals:(Ljava/lang/Object;)Z
+      96: invokeinterface #362,  6          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl.moduleArtifactsExpiry:(Lorg/gradle/api/artifacts/ModuleVersionIdentifier;Ljava/util/Set;Ljava/time/Duration;ZZ)Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;
+     101: invokeinterface #113,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry.isMustCheck:()Z
+     106: ifne          123
+     109: aload_3
+     110: aload         4
+     112: invokeinterface #366,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifacts.getArtifacts:()Ljava/util/Set;
+     117: invokeinterface #369,  2          // InterfaceMethod org/gradle/internal/resolve/result/BuildableArtifactSetResolveResult.resolved:(Ljava/lang/Object;)V
+     122: return
+     123: getstatic     #118                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.LOGGER:Lorg/slf4j/Logger;
+     126: ldc_w         #370                // String Artifact listing has expired: will perform fresh resolve of \'{}\' for \'{}\' in \'{}\'
+     129: iconst_3
+     130: anewarray     #8                  // class java/lang/Object
+     133: dup
+     134: iconst_0
+     135: aload_1
+     136: aastore
+     137: dup
+     138: iconst_1
+     139: aload_2
+     140: invokeinterface #339,  1          // InterfaceMethod org/gradle/internal/component/model/ComponentArtifactResolveMetadata.getModuleVersionId:()Lorg/gradle/api/artifacts/ModuleVersionIdentifier;
+     145: aastore
+     146: dup
+     147: iconst_2
+     148: aload_0
+     149: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     152: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+     155: invokeinterface #124,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getName:()Ljava/lang/String;
+     160: aastore
+     161: invokeinterface #372,  3          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;[Ljava/lang/Object;)V
+     166: return
+
+  public void resolveArtifact(org.gradle.internal.component.model.ComponentArtifactMetadata, org.gradle.internal.component.model.ModuleSources, org.gradle.internal.resolve.result.BuildableArtifactFileResolveResult);
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+       4: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+       7: invokeinterface #29,  1           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getLocalAccess:()Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepositoryAccess;
+      12: aload_1
+      13: aload_2
+      14: aload_3
+      15: invokeinterface #375,  4          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepositoryAccess.resolveArtifact:(Lorg/gradle/internal/component/model/ComponentArtifactMetadata;Lorg/gradle/internal/component/model/ModuleSources;Lorg/gradle/internal/resolve/result/BuildableArtifactFileResolveResult;)V
+      20: aload_3
+      21: invokeinterface #379,  1          // InterfaceMethod org/gradle/internal/resolve/result/BuildableArtifactFileResolveResult.hasResult:()Z
+      26: ifeq          30
+      29: return
+      30: aload_0
+      31: aload_1
+      32: aload_2
+      33: aload_3
+      34: invokevirtual #382                // Method resolveArtifactFromCache:(Lorg/gradle/internal/component/model/ComponentArtifactMetadata;Lorg/gradle/internal/component/model/ModuleSources;Lorg/gradle/internal/resolve/result/BuildableArtifactFileResolveResult;)V
+      37: return
+
+  public org.gradle.api.internal.artifacts.repositories.resolver.MetadataFetchingCost estimateMetadataFetchingCost(org.gradle.api.artifacts.component.ModuleComponentIdentifier);
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+       4: getfield      #186                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.moduleMetadataCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache;
+       7: aload_0
+       8: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      11: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+      14: aload_1
+      15: invokeinterface #190,  3          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache.getCachedModuleDescriptor:(Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata;
+      20: astore_2
+      21: aload_2
+      22: ifnonnull     31
+      25: aload_0
+      26: aload_1
+      27: invokevirtual #385                // Method estimateCostViaRemoteAccess:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;)Lorg/gradle/api/internal/artifacts/repositories/resolver/MetadataFetchingCost;
+      30: areturn
+      31: aload_2
+      32: invokeinterface #196,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.isMissing:()Z
+      37: ifeq          77
+      40: aload_0
+      41: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      44: getfield      #99                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheExpirationControl:Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl;
+      47: aload_1
+      48: aload_2
+      49: invokeinterface #201,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getAge:()Ljava/time/Duration;
+      54: invokeinterface #202,  3          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl.missingModuleExpiry:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;Ljava/time/Duration;)Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;
+      59: invokeinterface #113,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry.isMustCheck:()Z
+      64: ifeq          73
+      67: aload_0
+      68: aload_1
+      69: invokevirtual #385                // Method estimateCostViaRemoteAccess:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;)Lorg/gradle/api/internal/artifacts/repositories/resolver/MetadataFetchingCost;
+      72: areturn
+      73: getstatic     #389                // Field org/gradle/api/internal/artifacts/repositories/resolver/MetadataFetchingCost.CHEAP:Lorg/gradle/api/internal/artifacts/repositories/resolver/MetadataFetchingCost;
+      76: areturn
+      77: aload_0
+      78: aload_0
+      79: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      82: getfield      #216                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.metadataProcessor:Lorg/gradle/api/internal/artifacts/ComponentMetadataProcessor;
+      85: invokeinterface #220,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ComponentMetadataProcessor.getRulesHash:()I
+      90: aload_2
+      91: invokevirtual #226                // Method getProcessedMetadata:(ILorg/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata;)Lorg/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveState;
+      94: astore_3
+      95: aload_3
+      96: invokeinterface #235,  1          // InterfaceMethod org/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveState.getMetadata:()Lorg/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveMetadata;
+     101: invokeinterface #241,  1          // InterfaceMethod org/gradle/internal/component/external/model/ExternalModuleComponentGraphResolveMetadata.isChanging:()Z
+     106: ifeq          148
+     109: aload_0
+     110: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     113: getfield      #99                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheExpirationControl:Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl;
+     116: aload_1
+     117: aload_2
+     118: invokeinterface #244,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getModuleVersion:()Lorg/gradle/api/artifacts/ResolvedModuleVersion;
+     123: aload_2
+     124: invokeinterface #201,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getAge:()Ljava/time/Duration;
+     129: invokeinterface #248,  4          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl.changingModuleExpiry:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;Lorg/gradle/api/artifacts/ResolvedModuleVersion;Ljava/time/Duration;)Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;
+     134: invokeinterface #113,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry.isMustCheck:()Z
+     139: ifeq          187
+     142: aload_0
+     143: aload_1
+     144: invokevirtual #385                // Method estimateCostViaRemoteAccess:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;)Lorg/gradle/api/internal/artifacts/repositories/resolver/MetadataFetchingCost;
+     147: areturn
+     148: aload_0
+     149: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     152: getfield      #99                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheExpirationControl:Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl;
+     155: aload_1
+     156: aload_2
+     157: invokeinterface #244,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getModuleVersion:()Lorg/gradle/api/artifacts/ResolvedModuleVersion;
+     162: aload_2
+     163: invokeinterface #201,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/ModuleMetadataCache$CachedMetadata.getAge:()Ljava/time/Duration;
+     168: invokeinterface #260,  4          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl.moduleExpiry:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;Lorg/gradle/api/artifacts/ResolvedModuleVersion;Ljava/time/Duration;)Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;
+     173: invokeinterface #113,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry.isMustCheck:()Z
+     178: ifeq          187
+     181: aload_0
+     182: aload_1
+     183: invokevirtual #385                // Method estimateCostViaRemoteAccess:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;)Lorg/gradle/api/internal/artifacts/repositories/resolver/MetadataFetchingCost;
+     186: areturn
+     187: getstatic     #395                // Field org/gradle/api/internal/artifacts/repositories/resolver/MetadataFetchingCost.FAST:Lorg/gradle/api/internal/artifacts/repositories/resolver/MetadataFetchingCost;
+     190: areturn
+
+  private org.gradle.api.internal.artifacts.repositories.resolver.MetadataFetchingCost estimateCostViaRemoteAccess(org.gradle.api.artifacts.component.ModuleComponentIdentifier);
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+       4: getfield      #13                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.delegate:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository;
+       7: invokeinterface #398,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepository.getRemoteAccess:()Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepositoryAccess;
+      12: aload_1
+      13: invokeinterface #401,  2          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleComponentRepositoryAccess.estimateMetadataFetchingCost:(Lorg/gradle/api/artifacts/component/ModuleComponentIdentifier;)Lorg/gradle/api/internal/artifacts/repositories/resolver/MetadataFetchingCost;
+      18: areturn
+
+  private void resolveArtifactFromCache(org.gradle.internal.component.model.ComponentArtifactMetadata, org.gradle.internal.component.model.ModuleSources, org.gradle.internal.resolve.result.BuildableArtifactFileResolveResult);
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+       4: getfield      #404                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.moduleArtifactCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache;
+       7: aload_0
+       8: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      11: aload_1
+      12: invokeinterface #408,  1          // InterfaceMethod org/gradle/internal/component/model/ComponentArtifactMetadata.getId:()Lorg/gradle/api/artifacts/component/ComponentArtifactIdentifier;
+      17: invokevirtual #413                // Method org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.artifactCacheKey:(Lorg/gradle/api/artifacts/component/ComponentArtifactIdentifier;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey;
+      20: invokeinterface #417,  2          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache.lookup:(Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact;
+      25: astore        4
+      27: aload         4
+      29: ifnull        283
+      32: aload_2
+      33: invokestatic  #329                // Method org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.findCachingModuleSource:(Lorg/gradle/internal/component/model/ModuleSources;)Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleDescriptorHashModuleSource;
+      36: astore        5
+      38: aload         5
+      40: invokevirtual #333                // Method org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleDescriptorHashModuleSource.getDescriptorHash:()Lorg/gradle/internal/hash/HashCode;
+      43: astore        6
+      45: aload_0
+      46: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      49: getfield      #423                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.timeProvider:Lorg/gradle/util/internal/BuildCommencedTimeProvider;
+      52: invokevirtual #427                // Method org/gradle/util/internal/BuildCommencedTimeProvider.getCurrentTime:()J
+      55: aload         4
+      57: invokeinterface #432,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact.getCachedAt:()J
+      62: lsub
+      63: invokestatic  #348                // Method java/time/Duration.ofMillis:(J)Ljava/time/Duration;
+      66: astore        7
+      68: aload         5
+      70: invokevirtual #352                // Method org/gradle/api/internal/artifacts/ivyservice/ivyresolve/ModuleDescriptorHashModuleSource.isChangingModule:()Z
+      73: istore        8
+      75: aload_1
+      76: checkcast     #437                // class org/gradle/internal/component/external/model/ModuleComponentArtifactMetadata
+      79: astore        9
+      81: aload         4
+      83: invokeinterface #439,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact.isMissing:()Z
+      88: ifeq          208
+      91: aload_0
+      92: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+      95: getfield      #99                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheExpirationControl:Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl;
+      98: aload         9
+     100: aconst_null
+     101: aload         7
+     103: iload         8
+     105: aload         6
+     107: aload         4
+     109: invokeinterface #440,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact.getDescriptorHash:()Lorg/gradle/internal/hash/HashCode;
+     114: invokevirtual #356                // Method org/gradle/internal/hash/HashCode.equals:(Ljava/lang/Object;)Z
+     117: invokeinterface #441,  6          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl.artifactExpiry:(Lorg/gradle/internal/component/external/model/ModuleComponentArtifactMetadata;Ljava/io/File;Ljava/time/Duration;ZZ)Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;
+     122: astore        10
+     124: aload         10
+     126: invokeinterface #113,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry.isMustCheck:()Z
+     131: ifne          205
+     134: getstatic     #118                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.LOGGER:Lorg/slf4j/Logger;
+     137: ldc_w         #445                // String Detected non-existence of artifact \'{}\' in resolver cache
+     140: aload_1
+     141: invokeinterface #447,  3          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;Ljava/lang/Object;)V
+     146: aload         4
+     148: invokeinterface #450,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact.attemptedLocations:()Ljava/util/List;
+     153: invokeinterface #454,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+     158: astore        11
+     160: aload         11
+     162: invokeinterface #460,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     167: ifeq          193
+     170: aload         11
+     172: invokeinterface #465,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     177: checkcast     #20                 // class java/lang/String
+     180: astore        12
+     182: aload_3
+     183: aload         12
+     185: invokeinterface #469,  2          // InterfaceMethod org/gradle/internal/resolve/result/BuildableArtifactFileResolveResult.attempted:(Ljava/lang/String;)V
+     190: goto          160
+     193: aload_3
+     194: aload_1
+     195: invokeinterface #408,  1          // InterfaceMethod org/gradle/internal/component/model/ComponentArtifactMetadata.getId:()Lorg/gradle/api/artifacts/component/ComponentArtifactIdentifier;
+     200: invokeinterface #473,  2          // InterfaceMethod org/gradle/internal/resolve/result/BuildableArtifactFileResolveResult.notFound:(Lorg/gradle/api/artifacts/component/ComponentArtifactIdentifier;)V
+     205: goto          283
+     208: aload         4
+     210: invokeinterface #477,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact.getCachedFile:()Ljava/io/File;
+     215: astore        10
+     217: aload_0
+     218: getfield      #1                  // Field this$0:Lorg/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository;
+     221: getfield      #99                 // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.cacheExpirationControl:Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl;
+     224: aload         9
+     226: aload         10
+     228: aload         7
+     230: iload         8
+     232: aload         6
+     234: aload         4
+     236: invokeinterface #440,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact.getDescriptorHash:()Lorg/gradle/internal/hash/HashCode;
+     241: invokevirtual #356                // Method org/gradle/internal/hash/HashCode.equals:(Ljava/lang/Object;)Z
+     244: invokeinterface #441,  6          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl.artifactExpiry:(Lorg/gradle/internal/component/external/model/ModuleComponentArtifactMetadata;Ljava/io/File;Ljava/time/Duration;ZZ)Lorg/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry;
+     249: astore        11
+     251: aload         11
+     253: invokeinterface #113,  1          // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/CacheExpirationControl$Expiry.isMustCheck:()Z
+     258: ifne          283
+     261: getstatic     #118                // Field org/gradle/api/internal/artifacts/ivyservice/ivyresolve/CachingModuleComponentRepository.LOGGER:Lorg/slf4j/Logger;
+     264: ldc_w         #481                // String Found artifact \'{}\' in resolver cache: {}
+     267: aload_1
+     268: aload         10
+     270: invokeinterface #128,  4          // InterfaceMethod org/slf4j/Logger.debug:(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
+     275: aload_3
+     276: aload         10
+     278: invokeinterface #483,  2          // InterfaceMethod org/gradle/internal/resolve/result/BuildableArtifactFileResolveResult.resolved:(Ljava/lang/Object;)V
+     283: return
+
+  private static org.gradle.api.artifacts.ModuleVersionIdentifier lambda$listModuleVersionsFromCache$0(org.gradle.api.artifacts.ModuleIdentifier, java.lang.String);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokestatic  #484                // Method org/gradle/api/internal/artifacts/DefaultModuleVersionIdentifier.newId:(Lorg/gradle/api/artifacts/ModuleIdentifier;Ljava/lang/String;)Lorg/gradle/api/artifacts/ModuleVersionIdentifier;
+       5: areturn
+}
+Compiled from "TwoStageModuleArtifactCache.java"
+public class org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.TwoStageModuleArtifactCache implements org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ModuleArtifactCache {
+  private final org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ModuleArtifactCache readOnlyCache;
+
+  private final org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ModuleArtifactCache writableCache;
+
+  private final java.nio.file.Path readOnlyCachePath;
+
+  public org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.TwoStageModuleArtifactCache(java.nio.file.Path, org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ModuleArtifactCache, org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ModuleArtifactCache);
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: aload_1
+       6: putfield      #7                  // Field readOnlyCachePath:Ljava/nio/file/Path;
+       9: aload_0
+      10: aload_2
+      11: putfield      #13                 // Field readOnlyCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache;
+      14: aload_0
+      15: aload_3
+      16: putfield      #17                 // Field writableCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache;
+      19: return
+
+  public void store(org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey, java.io.File, org.gradle.internal.hash.HashCode);
+    Code:
+       0: aload_2
+       1: invokevirtual #20                 // Method java/io/File.toPath:()Ljava/nio/file/Path;
+       4: aload_0
+       5: getfield      #7                  // Field readOnlyCachePath:Ljava/nio/file/Path;
+       8: invokeinterface #26,  2           // InterfaceMethod java/nio/file/Path.startsWith:(Ljava/nio/file/Path;)Z
+      13: ifeq          17
+      16: return
+      17: aload_0
+      18: getfield      #17                 // Field writableCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache;
+      21: aload_1
+      22: aload_2
+      23: aload_3
+      24: invokeinterface #32,  4           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache.store:(Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey;Ljava/io/File;Lorg/gradle/internal/hash/HashCode;)V
+      29: return
+
+  public void storeMissing(org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey, java.util.List<java.lang.String>, org.gradle.internal.hash.HashCode);
+    Code:
+       0: aload_0
+       1: getfield      #17                 // Field writableCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache;
+       4: aload_1
+       5: aload_2
+       6: aload_3
+       7: invokeinterface #38,  4           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache.storeMissing:(Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey;Ljava/util/List;Lorg/gradle/internal/hash/HashCode;)V
+      12: return
+
+  public org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.CachedArtifact lookup(org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey);
+    Code:
+       0: aload_0
+       1: getfield      #17                 // Field writableCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache;
+       4: aload_1
+       5: invokeinterface #42,  2           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache.lookup:(Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact;
+      10: astore_2
+      11: aload_2
+      12: ifnull        17
+      15: aload_2
+      16: areturn
+      17: aload_0
+      18: getfield      #13                 // Field readOnlyCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache;
+      21: aload_1
+      22: invokeinterface #42,  2           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache.lookup:(Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey;)Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/CachedArtifact;
+      27: areturn
+
+  public void clear(org.gradle.api.internal.artifacts.ivyservice.modulecache.artifacts.ArtifactAtRepositoryKey);
+    Code:
+       0: aload_0
+       1: getfield      #17                 // Field writableCache:Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache;
+       4: aload_1
+       5: invokeinterface #46,  2           // InterfaceMethod org/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ModuleArtifactCache.clear:(Lorg/gradle/api/internal/artifacts/ivyservice/modulecache/artifacts/ArtifactAtRepositoryKey;)V
+      10: return
+}
+
+STDERR

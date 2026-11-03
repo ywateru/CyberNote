@@ -50,3 +50,12 @@ attempt03的AAR实际上在selected和默认cache中都存在，55,037字节、S
 candidate04 Mac尚未启动，Android尚无本批可用APK。录音、暂停回放、真实OCR文字保存与冷启均待本批实际运行。当前窗口工具仍返回Mac锁定，用户的解锁确认并未转化为可操作窗口状态，未继续盲目输入。
 
 历史CUA截图实际编码为JPEG，即使文件后缀写作PNG也不构成无损证据；旧文件与清单保留。新的原生比例PNG取证工具源744a924已经独审SOURCE-READY并合入6428d22，四工具hash保持一致，root核对独审10证据及report hash。实际窗口枚举/取图尚未运行；普通输出只证明PNG与原生比例请求，不保证SCK内部无重采样或原始背板等价。整窗像素一致仍UNKNOWN。
+
+
+## Android离线恢复进度（构建前）
+
+在独立只读快照中，精确`@aar`可解析；原项目真实`universalDebugRuntimeClasspath`仍失败。进一步用既有Gradle自己的缓存API确认：相同坐标/文件名分别有`DefaultModuleComponentArtifactIdentifier`和`ModuleComponentFileArtifactIdentifier`记录，前者正向、后者缺失；真实descriptor的runtime variant需要后者。
+
+只在全新隔离home中，从已存在且SHA匹配的55,037字节AAR建立缺失file key，没有修改原缓存BTree、metadata、依赖或文件内容。随后将新索引和AAR两文件（73,704字节）作为只读补充缓存。原项目真实目标artifactView已解析成功，两种ID文件SHA相同；另一次完整外部依赖lenient解析114项、失败0，无应用编译或下载。它们证明补充缓存可解决已知离线解析阻塞，不等于APK已经构建或运行通过。
+
+后续Android恢复构建将显式冻结新增`GRADLE_RO_DEP_CACHE`路径及两文件身份；原准备common的七类比较不覆盖这个变量，不能默称已覆盖。主源码083a8d4相对原d8应用/插件/配置/依赖字节不变，只增加5个取证工具输入。原Mac包保持其原始冻结身份，不伪造新Mac构建记录。

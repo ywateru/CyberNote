@@ -1,0 +1,11 @@
+# Android recovery runner 有限独立源码审阅01
+
+结论：SOURCE-READY，本轮未发现blocking。审阅对象为recovery-preparation-01下四个脚本、两份minimal diff及原common.py；runner精确SHA-256为 `a37728db27ac462208fe7c8218b28d7e9aa2ed561498e3d871b4d0ab7a0a88c3`。
+
+构建与收集入口仅接受Android；补充输入显式关联真实已接受的旧Mac manifest及d8f832e源码身份，并记录sameCompleteFreezeAsRecovery=false，不伪造同轮Mac完成标记。只读核验原279项输入全部未变，跟踪输入新增恰为5个window-capture工具文件。
+
+RO缓存校验精确文件集合、字节数、SHA并拒绝symlink及可写项；补充环境/缓存/Mac关联在构建前后与收集前后分别比较。非零退出、error、invalidated、offlineMarkerMissing、cleanupError或stopReason均使collector在APK读取/复制之前拒绝，并要求supplementalInputsUnchanged为true。原owned-init清理边界保持。
+
+进程监控只负责本次own process group，不证明parent退出后或escaped daemon全部结束；失败后仍须按既定流程审计并仅停止本次owned进程，不扩张为全部daemon结束的证明。
+
+本轮未执行构建、缓存操作、设备操作或测试，未重复原7组synthetic；未修改工具或产品源。该结论仅为有限源码准备就绪，不代表构建、APK、运行或像素验收通过。
