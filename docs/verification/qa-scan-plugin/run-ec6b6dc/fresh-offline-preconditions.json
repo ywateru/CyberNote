@@ -1,0 +1,77 @@
+[
+  {
+    "at": 1793694403.527074,
+    "args": [
+      "shell",
+      "am",
+      "force-stop",
+      "com.local.notesscan.harness"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": 1793694403.5852082,
+    "args": [
+      "shell",
+      "pm",
+      "clear",
+      "com.local.notesscan.harness"
+    ],
+    "exit": 0,
+    "stdout": "Success\n",
+    "stderr": ""
+  },
+  {
+    "at": 1793694403.622406,
+    "args": [
+      "shell",
+      "run-as",
+      "com.local.notesscan.harness",
+      "ls",
+      "-ld",
+      "files"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "ls: files: No such file or directory\n"
+  },
+  {
+    "at": 1793694403.717813,
+    "args": [
+      "shell",
+      "cmd",
+      "connectivity",
+      "airplane-mode",
+      "enable"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": 1793694403.9069362,
+    "args": [
+      "shell",
+      "svc",
+      "wifi",
+      "disable"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": 1793694404.05355,
+    "args": [
+      "shell",
+      "svc",
+      "data",
+      "disable"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,111 @@
+{
+  "scenario": "ocr-first-offline",
+  "startedAt": 1793694404872,
+  "scope": "Native SessionStore\/MLKit\/Bitmap\/PdfDocument\/PdfRenderer only; no camera, Tauri invoke or main Store",
+  "preconditions": {
+    "airplaneMode": 1,
+    "activeNetwork": null,
+    "gmsInstalled": true
+  },
+  "checks": [
+    {
+      "fixture": "chinese-fixture.png",
+      "sha256": "53e4caa8f5d48a7a3bbb55ba0b72b93a33bf3def9418142edbbe9f8a35facda9",
+      "elapsedMs": 347,
+      "ocr": {
+        "status": "recognized",
+        "text": "离线文字识别\n备忘录扫描测试\n本地保存2026",
+        "lines": [
+          {
+            "text": "离线文字识别",
+            "box": {
+              "x": 0.065,
+              "y": 0.176,
+              "width": 0.26375,
+              "height": 0.068
+            },
+            "elements": [
+              {
+                "text": "离线文字识别",
+                "box": {
+                  "x": 0.065,
+                  "y": 0.176,
+                  "width": 0.26375,
+                  "height": 0.068
+                }
+              }
+            ]
+          },
+          {
+            "text": "备忘录扫描测试",
+            "box": {
+              "x": 0.064375,
+              "y": 0.276,
+              "width": 0.311875,
+              "height": 0.067
+            },
+            "elements": [
+              {
+                "text": "备忘录扫描测试",
+                "box": {
+                  "x": 0.064375,
+                  "y": 0.276,
+                  "width": 0.311875,
+                  "height": 0.067
+                }
+              }
+            ]
+          },
+          {
+            "text": "本地保存2026",
+            "box": {
+              "x": 0.06375,
+              "y": 0.376,
+              "width": 0.29875,
+              "height": 0.068
+            },
+            "elements": [
+              {
+                "text": "本地保存2026",
+                "box": {
+                  "x": 0.06375,
+                  "y": 0.376,
+                  "width": 0.29875,
+                  "height": 0.068
+                }
+              }
+            ]
+          }
+        ],
+        "engine": "mlkit-chinese-bundled-16.0.1",
+        "languages": [
+          "zh",
+          "en"
+        ],
+        "fileToken": "09624643-40c7-4f9d-ad01-6fa513651cd7"
+      },
+      "originalBytesEqual": true,
+      "readyReopened": true
+    },
+    {
+      "fixture": "blank-fixture.png",
+      "sha256": "b9d401f46c8c09f231dae27df7d16f2a1c2719f7730e6ee2ce8ef0779f8918b1",
+      "elapsedMs": 62,
+      "ocr": {
+        "status": "empty",
+        "text": "",
+        "lines": [],
+        "engine": "mlkit-chinese-bundled-16.0.1",
+        "languages": [
+          "zh",
+          "en"
+        ],
+        "fileToken": "21dd8421-0292-4f35-b2e0-09dd9cc72a3b"
+      },
+      "originalBytesEqual": true,
+      "readyReopened": true
+    }
+  ],
+  "status": "pass",
+  "finishedAt": 1793694405423
+}
