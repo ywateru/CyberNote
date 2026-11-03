@@ -18,7 +18,7 @@
 | 位置 | 已观察到的真实代码 | 仍缺的链路 |
 |---|---|---|
 | `src/App.tsx` 的媒体菜单/扫描弹窗 | “拍照或录像”与“扫描文稿”都点击 `capture="environment"` 的图片 input；扫描文稿显示未实现自动裁边提示；扫描文本显示未接 OCR | 没有文稿边界、透视校正、多页或识别结果 |
-| `RecordingPanel` | 进入后请求麦克风并自动开始；选浏览器支持 MIME；真实 MediaRecorder、暂停/继续、结束后 blob、AudioContext 波形 | 录屏初态/暂停后的完成行为尚有差异；平台采集、时长、音轨及权限需要实证 |
+| `RecordingPanel` | 进入后请求麦克风并自动开始；选浏览器支持 MIME；真实 MediaRecorder、暂停/继续、结束后 blob、AudioContext 波形 | 原版开始触发方式未证，不能据此判自动开始为已知差异；本轮读取版本暂停后仍须另行结束才可完成，与原版暂停可完成不同；平台采集、时长、音轨及权限需要实证 |
 | `src/Editor.tsx` 的 AudioPlayer | 从 Rust 读取真实附件并播放，展开后有进度和前后 15 秒 | 冷启动有声播放、设备路由、暂停/拖动和时长边界须独立验证 |
 | `src/bridge.ts`、`src-tauri/src/lib.rs` | 文件整体转 base64，通过 `store_attachment` 传入 Rust | 多页大图不宜继续往返整包 base64；尚无扫描 session/原生 token 导入 |
 | `Store::store_attachment` | 校验笔记存在及锁定状态，附件最大 100MB，生成本地 UUID 文件名，写入附件表 | 扫描页集合、原图/变换参数、OCR 和 PDF 的一致提交未建模 |
@@ -29,11 +29,23 @@
 
 ![录音和扫描入口采样](assets/offline-media-scanning/mobile-recording-scanner.png)
 
-- 28s：录音面板显示 00:00.00、录制按钮、播放与前后 15 秒；不能把进入面板即自动录制当成已与原版相同。
+- 28s：录音面板显示 00:00.00、底部红色图形、播放与前后 15 秒。此帧处于按钮形变过渡，不能单凭零计时或低清图形判定“等待开始”；自动/手动开始未证。
 - 30s：计时 00:02.07，可见暂停控制。32s：计时 00:02.60，底部变成“继续”，右下“完成”可用。34s：相同时长，转写区域显示没有文本。36s：回到笔记，出现约 2 秒的音频卡片。
 - 80s：黑色扫描相机，取消、闪光、滤镜、自动、快门及放置文稿提示。该帧未展示成品页面，不能据此确认自动裁边、多页、OCR 或 PDF 已执行。录屏也没有提供可用于测准确率的实际中文扫描样本。
 
 原版入口和当前相机 input 的行为差距应保留在 F16 验收中，不能以选择图片成功代替扫描成功。
+
+### 录音开始状态勘误复核
+
+后续对 27.0–31.5s 按每3个解码帧（0.1s）密取46帧，原始全画面无缩放；另将计时原尺寸裁剪、底部按钮以最近邻放大2倍。参数、裁剪坐标和结论保存在 `recording-start-review.json`，由 `review-recording-start.py` 复现。
+
+可确证的显示序列为：27.0–27.9s 的采样帧均是 00:00.00 和大实心红圆；28.0s 仍是 00:00.00，底部控件正在由圆形变宽；28.1s 已是 00:00.17 和清晰的红色双竖条，之后计时连续增加至30.5s。30.6s 起采样计时保持在00:02.60，经过按钮动画后出现“继续”，右侧“完成”高亮。32s 暂停态的结论得到前后序列支持。
+
+本段没有可判定的触点标记。它证明界面经历零计时/圆形、递增计时/双竖条、暂停/继续状态，**不能证明开始录制由用户点击还是自动/延迟开始触发**，也没有精确量出转场时长。此前将28s称为“待录制”并据此断定原版进入面板不自动开始，属于证据不足的推测，现予以撤回；不得将“必须主动点开始”写成已确证的原版约束。当前程序暂停不能直接完成等有独立证据的差异保留。
+
+![27–31.5秒计时与按钮密集复核](assets/offline-media-scanning/recording-start-27-31.5-details.png)
+
+完整46帧见 `assets/offline-media-scanning/recording-start-27-31.5-contact.png`。原视频224px宽且有压缩，放大不增加原始细节；28s单帧尤其不能替代连续序列或触点证据。
 
 ## Android 中文识别：模型随包
 
@@ -104,7 +116,7 @@ Android 原生采集备选：确认 RECORD_AUDIO → MediaRecorder 指定 MIC、
 
 Mac 原生采集备选：AVCaptureDevice 查询/申请 audio 权限 → AVAudioRecorder 写本地 AAC/m4a → record/pause/record/stop → 校验媒体 → Rust 附件；SDK 同时提供 currentTime 和 metering。Info.plist 的用途说明已存在；是否授权、拒绝后重试、输入设备缺失、签名/沙盒/强化运行时下资源 entitlement 仍须在实际 .app 验证。强化运行时的音频输入 entitlement 与系统用户授权是两层条件，不能仅添加用途字符串后宣称完成。[Apple 媒体授权](https://developer.apple.com/documentation/bundleresources/requesting-authorization-for-media-capture-on-macos)、[Audio Input entitlement](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.device.audio-input)、[AVAudioRecorder](https://developer.apple.com/documentation/avfaudio/avaudiorecorder)
 
-录音 UI 至少区分准备/可录制、正在录制、暂停、预览播放、保存中、失败。暂停时应支持继续和完成，完成先结束真实媒体并等候成功落盘，再插入卡片；取消释放采集并清理草稿。计时须由媒体/单调时间累计，暂停不累计，不能只依赖界面 setInterval。保存后冷启动播放应有实际声音、正确时长、暂停、拖动和前后15秒，不以 HTML audio 元素出现作为通过。转写是独立 ASR 能力，本研究没有选型或验证离线语音模型；OCR 库不能提供录音转写，“无文本”不能伪装为已转写。
+录音 UI 至少区分权限/采集准备、零计时、正在录制、暂停、预览播放、保存中、失败；这里不预设原版零计时状态由手动还是自动开始触发。暂停时应支持继续和完成，完成先结束真实媒体并等候成功落盘，再插入卡片；取消释放采集并清理草稿。计时须由媒体/单调时间累计，暂停不累计，不能只依赖界面 setInterval。保存后冷启动播放应有实际声音、正确时长、暂停、拖动和前后15秒，不以 HTML audio 元素出现作为通过。转写是独立 ASR 能力，本研究没有选型或验证离线语音模型；OCR 库不能提供录音转写，“无文本”不能伪装为已转写。
 
 ## 离线与功能验收的最小样本
 
