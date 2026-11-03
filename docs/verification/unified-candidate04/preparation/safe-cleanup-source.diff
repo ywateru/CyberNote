@@ -1,0 +1,94 @@
+--- run-build.py
++++ run-build-safe-cleanup.py
+@@ -2,12 +2,51 @@
+ """Explicit future build only. Serial, offline, exact freeze, immutable attempt logs."""
+ import argparse
+ import fcntl
++import hashlib
+ import json
+ import os
+ from pathlib import Path
+ import re
+ import subprocess
++import stat
+ import common as c
++
++def cleanup_owned_init(path, owned):
++    """Remove only the recorded file; caller must serialize shared-cache users."""
++    outcome = {'temporaryGradleInitRemoved': False}
++
++    def inspect():
++        info = path.lstat()
++        row = {'path': str(path), 'device': info.st_dev, 'inode': info.st_ino,
++               'bytes': info.st_size, 'regularFile': stat.S_ISREG(info.st_mode)}
++        if row['regularFile']:
++            row['sha256'] = c.sha_file(path)
++        elif stat.S_ISLNK(info.st_mode):
++            row['symlinkTarget'] = os.readlink(path)
++        return row
++
++    try:
++        current = inspect()
++        outcome['temporaryGradleInitBeforeCleanup'] = current
++        keys = ['device', 'inode', 'bytes', 'sha256']
++        if not owned or not current['regularFile'] or any(current.get(key) != owned.get(key) for key in keys):
++            raise RuntimeError('Temporary init identity changed; preserve it without deletion')
++        # Recheck the name immediately before unlink; this does not replace cache serialization.
++        latest = path.lstat()
++        if (latest.st_dev, latest.st_ino) != (owned['device'], owned['inode']) or not stat.S_ISREG(latest.st_mode):
++            raise RuntimeError('Temporary init was replaced before deletion; preserve it')
++        path.unlink()
++        outcome['temporaryGradleInitRemoved'] = True
++    except BaseException as error:
++        outcome['cleanupError'] = repr(error)
++        try:
++            outcome['temporaryGradleInitRemaining'] = inspect()
++        except FileNotFoundError:
++            outcome['temporaryGradleInitRemaining'] = {'path': str(path), 'exists': False}
++        except BaseException as capture_error:
++            outcome['temporaryGradleInitRemaining'] = {'path': str(path), 'identityCaptureError': repr(capture_error)}
++    return outcome
++
+ 
+ p = argparse.ArgumentParser()
+ p.add_argument('stage', choices=['mac', 'android'])
+@@ -31,6 +70,7 @@
+ result = {'startedAt': c.now(), 'stage': a.stage, 'expectedHead': a.expected_head, 'sourceAggregate': before['aggregate'], 'attempt': str(attempt), 'exitCode': None}
+ init = None
+ init_created = False
++init_owned = None
+ with Path('/private/tmp/notes-unified-candidate04-build.lock').open('a') as lock:
+     try:
+         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+@@ -50,9 +90,12 @@
+             init.parent.mkdir(exist_ok=True)
+             text = 'gradle.startParameter.offline = true\ngradle.startParameter.maxWorkerCount = 2\nprintln("CANDIDATE04_OFFLINE=" + gradle.startParameter.offline)\n'
+             with init.open('x') as stream:
++                init_created = True
++                created = os.fstat(stream.fileno())
++                init_owned = {'path': str(init), 'device': created.st_dev, 'inode': created.st_ino,
++                              'bytes': len(text.encode()), 'sha256': hashlib.sha256(text.encode()).hexdigest()}
+                 stream.write(text)
+-            init_created = True
+-            result['temporaryGradleInit'] = c.identity(init)
++            result['temporaryGradleInit'] = init_owned
+         cmd = {'mac': ['pnpm', 'mac:build'], 'android': ['pnpm', 'android:build', '--debug']}[a.stage]
+         result['command'] = cmd
+         with (attempt / 'build.txt').open('x') as log:
+@@ -67,11 +110,12 @@
+     except BaseException as error:
+         result['error'] = repr(error)
+     finally:
+-        if init_created and init is not None and init.exists():
+-            init.unlink()  # Only this attempt's self-created temporary init, never cache/build cleanup.
+-            result['temporaryGradleInitRemoved'] = True
++        if init_created and init is not None:
++            result.update(cleanup_owned_init(init, init_owned))
++            if result.get('cleanupError'):
++                result.setdefault('error', 'Temporary Gradle init cleanup failed; see cleanupError')
+         result['endedAt'] = c.now()
+         result['diskFreeAfter'] = __import__('shutil').disk_usage(c.ROOT).free
+         c.write_new(attempt / 'result.json', result)
+ print(json.dumps(result, ensure_ascii=False, indent=2))
+-raise SystemExit(0 if result.get('exitCode') == 0 and not any(k in result for k in ['error', 'invalidated', 'offlineMarkerMissing']) else 1)
++raise SystemExit(0 if result.get('exitCode') == 0 and not any(k in result for k in ['error', 'invalidated', 'offlineMarkerMissing', 'cleanupError']) else 1)

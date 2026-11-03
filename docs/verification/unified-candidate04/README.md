@@ -1,6 +1,6 @@
 # candidate04 统一包进度
 
-状态：**正常生成前置通过，尚未最终冻结或构建**。本页记录2026-11-04的阶段结果，不替代准备目录中的原始记录。
+状态：**正常生成前置和零结果文字源码独审通过，尚未最终冻结或构建**。本页记录2026-11-04的阶段结果，不替代准备目录中的原始记录。
 
 ## 正常生成前置
 
@@ -17,6 +17,10 @@ root逐文件复核了01的7份证据和02补充清单的15份证据，字节数
 
 ## 后续门槛
 
-OCR接入及预览明文清理已在主源码独审接受；暂停录音预览亦已合入，但两者都不在candidate03内。搜索零结果文字窄修尚待冻结和独审。完成该项后，root指定最终40位SHA，再按[准备流程](preparation/README.md)冻结输入、串行构建与保存Mac原始包/独立签名副本及Android包。
+OCR接入及预览明文清理已在主源码独审接受；暂停录音预览亦已合入，但两者都不在candidate03内。搜索零结果文字源47d4446已独审SOURCE-READY并主1665dfd合入；root复核22证据及report hash，两产品aggregate仍为c421f6b8…，主合入未改其字节。700字重仅候选，原生像素未知。后续root指定最终40位SHA，再按[准备流程](preparation/README.md)冻结输入、串行构建与保存Mac原始包/独立签名副本及Android包。
+
+正式构建改用[run-build-safe-cleanup.py](preparation/run-build-safe-cleanup.py)，保留原run-build.py/原准备清单不变。root审查了最小差异并逐项重算6个新增工具证据，聚合63b4e89a…一致；实际构建命令和环境不变。它只删除仍匹配本次device/inode/size/hash的临时init，清理异常仍写失败结果并阻止收集。合成六例检查通过不代替真实构建；同缓存仍必须串行。详见[窄修说明](preparation/SAFE-CLEANUP.md)。
+
+截图格式更正：2026-11-04新原版读取已恢复，但CUA原始截图实际为JPEG。candidate03独立目录中17个名为png的历史截图亦经独立文件头检查为JPEG；其旧字节和manifest保持不变，不能用作无损PNG逐像素验收。原版新观察和限制见[补充记录](../../research/mac-zero-original-recapture-20261104-01/README.md)。后续必须先核实真实编码和采样比例。
 
 正式Android构建前另行串行共享Gradle cache使用者，并明确授权已有脚本的临时离线init方案。构建、签名、模型成员核验不代表设备运行、可听录音、真实OCR、冷启或像素验收通过。

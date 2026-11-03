@@ -1,0 +1,189 @@
+{
+  "at": "2026-11-03T20:42:41.794373+00:00",
+  "scope": "Only extracted cleanup/finally/exit AST against newly created synthetic files; no CLI import/build/freeze/cache/target/process/device/GUI/download",
+  "source": {
+    "path": "run-build-safe-cleanup.py",
+    "sha256": "3b7248eea0a7030b0447cf999d6ace3292d3e0287ec41abe6d777451763c7f1e"
+  },
+  "syntheticDirectory": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3",
+  "cases": [
+    {
+      "case": "owned",
+      "passed": true,
+      "exitCode": 0,
+      "resultFile": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/owned/result.json",
+      "resultSha256": "01fca4251ffb9c8b50bc60fd9e94c2c4bf86aca17088c298341d481c4d5d26da",
+      "pathRetained": false,
+      "legacyCaptureBlockedByError": false,
+      "result": {
+        "exitCode": 0,
+        "temporaryGradleInitRemoved": true,
+        "temporaryGradleInitBeforeCleanup": {
+          "path": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/owned/synthetic-init.txt",
+          "device": 16777233,
+          "inode": 27966992,
+          "bytes": 22,
+          "regularFile": true,
+          "sha256": "63ee8418d6ee311bca59b80cf49a08724da9fc551d5d387e2dc5edb6d9f8eb47"
+        },
+        "endedAt": "2026-11-03T20:42:41.791767+00:00",
+        "diskFreeAfter": 4164177920
+      }
+    },
+    {
+      "case": "replaced-inode",
+      "passed": true,
+      "exitCode": 1,
+      "resultFile": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/replaced-inode/result.json",
+      "resultSha256": "cd84a739740f7956714d39487f9ba36a6fe4c6f72ef03c45d49a44304a0bea5d",
+      "pathRetained": true,
+      "legacyCaptureBlockedByError": true,
+      "result": {
+        "exitCode": 0,
+        "temporaryGradleInitRemoved": false,
+        "temporaryGradleInitBeforeCleanup": {
+          "path": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/replaced-inode/synthetic-init.txt",
+          "device": 16777233,
+          "inode": 27966996,
+          "bytes": 22,
+          "regularFile": true,
+          "sha256": "63ee8418d6ee311bca59b80cf49a08724da9fc551d5d387e2dc5edb6d9f8eb47"
+        },
+        "cleanupError": "RuntimeError('Temporary init identity changed; preserve it without deletion')",
+        "temporaryGradleInitRemaining": {
+          "path": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/replaced-inode/synthetic-init.txt",
+          "device": 16777233,
+          "inode": 27966996,
+          "bytes": 22,
+          "regularFile": true,
+          "sha256": "63ee8418d6ee311bca59b80cf49a08724da9fc551d5d387e2dc5edb6d9f8eb47"
+        },
+        "error": "Temporary Gradle init cleanup failed; see cleanupError",
+        "endedAt": "2026-11-03T20:42:41.792360+00:00",
+        "diskFreeAfter": 4164157440
+      }
+    },
+    {
+      "case": "modified-content",
+      "passed": true,
+      "exitCode": 1,
+      "resultFile": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/modified-content/result.json",
+      "resultSha256": "bd219b53246dd44430bd1f4a2a3280f703f077033d5928b82a08df56513d48a0",
+      "pathRetained": true,
+      "legacyCaptureBlockedByError": true,
+      "result": {
+        "exitCode": 0,
+        "temporaryGradleInitRemoved": false,
+        "temporaryGradleInitBeforeCleanup": {
+          "path": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/modified-content/synthetic-init.txt",
+          "device": 16777233,
+          "inode": 27966999,
+          "bytes": 22,
+          "regularFile": true,
+          "sha256": "bebfa4a3d89d54bb206acaec9357bcce5cb83bdb4b01ef9ea6a93c5a287feec6"
+        },
+        "cleanupError": "RuntimeError('Temporary init identity changed; preserve it without deletion')",
+        "temporaryGradleInitRemaining": {
+          "path": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/modified-content/synthetic-init.txt",
+          "device": 16777233,
+          "inode": 27966999,
+          "bytes": 22,
+          "regularFile": true,
+          "sha256": "bebfa4a3d89d54bb206acaec9357bcce5cb83bdb4b01ef9ea6a93c5a287feec6"
+        },
+        "error": "Temporary Gradle init cleanup failed; see cleanupError",
+        "endedAt": "2026-11-03T20:42:41.792794+00:00",
+        "diskFreeAfter": 4164149248
+      }
+    },
+    {
+      "case": "replaced-symlink",
+      "passed": true,
+      "exitCode": 1,
+      "resultFile": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/replaced-symlink/result.json",
+      "resultSha256": "8bad289386fce8af20d5b0a4c6f07eac82c385093e42b1833901a41e18938f37",
+      "pathRetained": true,
+      "legacyCaptureBlockedByError": true,
+      "result": {
+        "exitCode": 0,
+        "temporaryGradleInitRemoved": false,
+        "temporaryGradleInitBeforeCleanup": {
+          "path": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/replaced-symlink/synthetic-init.txt",
+          "device": 16777233,
+          "inode": 27967004,
+          "bytes": 100,
+          "regularFile": false,
+          "symlinkTarget": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/replaced-symlink/synthetic-link-target.txt"
+        },
+        "cleanupError": "RuntimeError('Temporary init identity changed; preserve it without deletion')",
+        "temporaryGradleInitRemaining": {
+          "path": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/replaced-symlink/synthetic-init.txt",
+          "device": 16777233,
+          "inode": 27967004,
+          "bytes": 100,
+          "regularFile": false,
+          "symlinkTarget": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/replaced-symlink/synthetic-link-target.txt"
+        },
+        "error": "Temporary Gradle init cleanup failed; see cleanupError",
+        "endedAt": "2026-11-03T20:42:41.793236+00:00",
+        "diskFreeAfter": 4164136960
+      }
+    },
+    {
+      "case": "missing",
+      "passed": true,
+      "exitCode": 1,
+      "resultFile": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/missing/result.json",
+      "resultSha256": "e3d48d98bb4137896dd2b4692b830a17111baa981dde645ed11723fb7622d71e",
+      "pathRetained": false,
+      "legacyCaptureBlockedByError": true,
+      "result": {
+        "exitCode": 0,
+        "temporaryGradleInitRemoved": false,
+        "cleanupError": "FileNotFoundError(2, 'No such file or directory')",
+        "temporaryGradleInitRemaining": {
+          "path": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/missing/synthetic-init.txt",
+          "exists": false
+        },
+        "error": "Temporary Gradle init cleanup failed; see cleanupError",
+        "endedAt": "2026-11-03T20:42:41.793587+00:00",
+        "diskFreeAfter": 4164132864
+      }
+    },
+    {
+      "case": "unlink-error",
+      "passed": true,
+      "exitCode": 1,
+      "resultFile": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/unlink-error/result.json",
+      "resultSha256": "7228cbab06ec95517e1786b6f6e748d3bf3a6941b15dbbe48e2ed519a5996177",
+      "pathRetained": true,
+      "legacyCaptureBlockedByError": true,
+      "result": {
+        "exitCode": 0,
+        "temporaryGradleInitRemoved": false,
+        "temporaryGradleInitBeforeCleanup": {
+          "path": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/unlink-error/synthetic-init.txt",
+          "device": 16777233,
+          "inode": 27967010,
+          "bytes": 22,
+          "regularFile": true,
+          "sha256": "63ee8418d6ee311bca59b80cf49a08724da9fc551d5d387e2dc5edb6d9f8eb47"
+        },
+        "cleanupError": "PermissionError('synthetic unlink denial')",
+        "temporaryGradleInitRemaining": {
+          "path": "/private/tmp/notes-candidate04-synthetic-cleanup-dg0ph_a3/unlink-error/synthetic-init.txt",
+          "device": 16777233,
+          "inode": 27967010,
+          "bytes": 22,
+          "regularFile": true,
+          "sha256": "63ee8418d6ee311bca59b80cf49a08724da9fc551d5d387e2dc5edb6d9f8eb47"
+        },
+        "error": "Temporary Gradle init cleanup failed; see cleanupError",
+        "endedAt": "2026-11-03T20:42:41.794139+00:00",
+        "diskFreeAfter": 4164116480
+      }
+    }
+  ],
+  "passed": true,
+  "limits": "Filesystem name checks are not atomic conditional unlink; production still requires exclusive cache coordination. OS crash/SIGKILL cannot guarantee finally execution. Result writes require an available writable evidence directory."
+}

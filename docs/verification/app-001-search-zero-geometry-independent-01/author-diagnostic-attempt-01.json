@@ -1,0 +1,11 @@
+{
+  "exitCode": 1,
+  "stage": "diagnostic harness target property allowlist",
+  "actualComputedDifferences": [
+    {"property":"font-weight","before":"600","after":"700"},
+    {"property":"padding-block-start","before":"10px","after":"9px"},
+    {"property":"padding-top","before":"10px","after":"9px"}
+  ],
+  "reason": "Chrome exposes padding-top also as its logical padding-block-start alias. Initial harness omitted that alias; no product change was made for this harness correction.",
+  "nativeOrPixelAcceptance": "UNKNOWN"
+}
