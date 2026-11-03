@@ -34,6 +34,10 @@
 
 采用 Tauri 2 + React/TypeScript + Tiptap + Rust/SQLite。先跑通本地数据闭环及两个平台实际安装，再逐页面/菜单/手势向原版对齐。Mac 系统窗口和菜单优先使用原生能力；Android 在应用内容内重建 iOS 风格。差分不足要改实现，不降低用户要求。
 
+Mac公开原生能力与当前依赖绑定的实证见[原生UI研究](macos-native-ui.md)；1,224个离屏候选的图形校准见[符号校准](macos-symbol-calibration.md)。两项都不是实际原生工具栏像素通过证据，后续FIX-02需真实窗口验证。
+
+2026-11-03后续在线检索重新取得部分官方正文/仓库摘要：Noteflow仓库自述Linux/Tauri2/React/TypeScript，MIT；AxiomHiveNotes仓库自述Tauri v2、SQLite FTS5、Tiptap/ProseMirror、密码学模块。仅核对README架构与声明，未审查其具体实现或复制源码，不以许可证名称和宣传作安全/像素结论。Apple支持站当前搜索会返回mac/27页面，本机参考仍锁定macOS26.4，不随在线默认版本改变。
+
 ## 原生媒体与扫描补充
 
 - Tauri WebviewBuilder 的权限回调资料：https://docs.rs/tauri/latest/tauri/webview/struct.WebviewBuilder.html 。Android 仍可能需要系统运行时授权；必须实际录制并重启播放，不能只测API存在。
