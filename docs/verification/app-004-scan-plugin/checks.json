@@ -1,0 +1,36 @@
+{
+  "rustSessionTests": 2,
+  "androidGeometryTokenTests": 2,
+  "androidLibraryAndHarnessBuild": "pass, cached dependencies --offline",
+  "androidRustTargetCheck": "aarch64-linux-android pass",
+  "guestTypecheck": "pass",
+  "macChineseActualOCR": "pass",
+  "macBlankActualOCR": "empty pass",
+  "deviceInstalled": false,
+  "cameraHardware": "unknown",
+  "androidFirstOfflineOCR": "unknown",
+  "mainAppIntegration": "not connected",
+  "pixelParity": "unknown",
+  "fixtures": [
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-scan-plugin/chinese-fixture.png",
+      "bytes": 70361,
+      "sha256": "53e4caa8f5d48a7a3bbb55ba0b72b93a33bf3def9418142edbbe9f8a35facda9"
+    },
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-scan-plugin/blank-fixture.png",
+      "bytes": 30238,
+      "sha256": "b9d401f46c8c09f231dae27df7d16f2a1c2719f7730e6ee2ce8ef0779f8918b1"
+    }
+  ],
+  "apk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-scan/android/harness/build/outputs/apk/debug/harness-debug.apk",
+    "bytes": 54071535,
+    "sha256": "e9a14e9e177bbe9f04daee7dff9127ad5cf6423bc314777290afdf67adbada4c"
+  },
+  "aar": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-scan/android/build/outputs/aar/notes-scan-standalone-debug.aar",
+    "bytes": 75487,
+    "sha256": "df8784c0940efd85ed76a53393b601b02d0060de788c589ee7e0116742c3da3c"
+  }
+}

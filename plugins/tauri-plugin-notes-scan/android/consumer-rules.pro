@@ -1,0 +1,2 @@
+-keep class com.local.notesscan.NotesScanPlugin { *; }
+-keepattributes RuntimeVisibleAnnotations,AnnotationDefault
