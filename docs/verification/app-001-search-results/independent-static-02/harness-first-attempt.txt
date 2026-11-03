@@ -1,0 +1,4 @@
+Independent harness attempt 1 exited 1 at assert(!f.b.isDestroyed).
+Cause: the installed unmounted headless Tiptap Editor reports isDestroyed=true, including newly constructed B. This was a harness assumption error, not a product failure.
+Corrected the fixture to explicitly model lifecycle and owner identity while retaining the actual headless document state. Positive original nativeAssert is checked before the first invalidation; precise production rejection messages are asserted after invalidation/await, to distinguish a real scope rejection from missing fixture APIs.
+This finite source-boundary harness does not prove mounted Editor/React/native lifecycle or attachment persistence/compensation.

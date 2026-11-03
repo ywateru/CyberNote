@@ -1,0 +1,118 @@
+{
+  "status": "PASS_FINITE_PRODUCTION_SOURCE_BOUNDARIES",
+  "candidate": "b144c6e",
+  "results": [
+    "hidden A change preserves B projection/overlay; exact production tombstone rejects late picker before storage",
+    "active B invalidation closes overlays and tombstone rejects recording completion against latest A",
+    "files: actual production await boundary rejects changed scope before document insertion; stored orphan/compensation not accepted",
+    "recording: actual production await boundary rejects changed scope before document insertion; stored orphan/compensation not accepted"
+  ],
+  "extracted": [
+    {
+      "name": "nativeAssert.current",
+      "line": 2116,
+      "sha256": "9096ad72df73b5e679f25117eab2a6d300bcb1aa3ed91ada2a6e38a6307e27e2"
+    },
+    {
+      "name": "clearSensitive.current",
+      "line": 774,
+      "sha256": "87d8a12e6987b14c510fd036235bdff09af54eea3bd17ea29b098a48d60a45f0"
+    },
+    {
+      "name": "captureSearchAttachmentTarget",
+      "line": 1564,
+      "sha256": "575ad2a4c85e17df140115eb97294142896e6b62bdbae17f338e1a1bf858d963"
+    },
+    {
+      "name": "fileSelected",
+      "line": 1377,
+      "sha256": "a7abefb0a6ac2d7795d24abd9566c29677bbb0151031f7870b9af14bb6312e0f"
+    },
+    {
+      "name": "recordingOnDone",
+      "line": 3433,
+      "sha256": "baa8c77e6fa40783980b843b01164aeff0362db1a2b770fcb5e86102a333e154"
+    },
+    {
+      "name": "nativeAssert.current",
+      "line": 2116,
+      "sha256": "9096ad72df73b5e679f25117eab2a6d300bcb1aa3ed91ada2a6e38a6307e27e2"
+    },
+    {
+      "name": "clearSensitive.current",
+      "line": 774,
+      "sha256": "87d8a12e6987b14c510fd036235bdff09af54eea3bd17ea29b098a48d60a45f0"
+    },
+    {
+      "name": "captureSearchAttachmentTarget",
+      "line": 1564,
+      "sha256": "575ad2a4c85e17df140115eb97294142896e6b62bdbae17f338e1a1bf858d963"
+    },
+    {
+      "name": "fileSelected",
+      "line": 1377,
+      "sha256": "a7abefb0a6ac2d7795d24abd9566c29677bbb0151031f7870b9af14bb6312e0f"
+    },
+    {
+      "name": "recordingOnDone",
+      "line": 3433,
+      "sha256": "baa8c77e6fa40783980b843b01164aeff0362db1a2b770fcb5e86102a333e154"
+    },
+    {
+      "name": "nativeAssert.current",
+      "line": 2116,
+      "sha256": "9096ad72df73b5e679f25117eab2a6d300bcb1aa3ed91ada2a6e38a6307e27e2"
+    },
+    {
+      "name": "clearSensitive.current",
+      "line": 774,
+      "sha256": "87d8a12e6987b14c510fd036235bdff09af54eea3bd17ea29b098a48d60a45f0"
+    },
+    {
+      "name": "captureSearchAttachmentTarget",
+      "line": 1564,
+      "sha256": "575ad2a4c85e17df140115eb97294142896e6b62bdbae17f338e1a1bf858d963"
+    },
+    {
+      "name": "fileSelected",
+      "line": 1377,
+      "sha256": "a7abefb0a6ac2d7795d24abd9566c29677bbb0151031f7870b9af14bb6312e0f"
+    },
+    {
+      "name": "recordingOnDone",
+      "line": 3433,
+      "sha256": "baa8c77e6fa40783980b843b01164aeff0362db1a2b770fcb5e86102a333e154"
+    },
+    {
+      "name": "nativeAssert.current",
+      "line": 2116,
+      "sha256": "9096ad72df73b5e679f25117eab2a6d300bcb1aa3ed91ada2a6e38a6307e27e2"
+    },
+    {
+      "name": "clearSensitive.current",
+      "line": 774,
+      "sha256": "87d8a12e6987b14c510fd036235bdff09af54eea3bd17ea29b098a48d60a45f0"
+    },
+    {
+      "name": "captureSearchAttachmentTarget",
+      "line": 1564,
+      "sha256": "575ad2a4c85e17df140115eb97294142896e6b62bdbae17f338e1a1bf858d963"
+    },
+    {
+      "name": "fileSelected",
+      "line": 1377,
+      "sha256": "a7abefb0a6ac2d7795d24abd9566c29677bbb0151031f7870b9af14bb6312e0f"
+    },
+    {
+      "name": "recordingOnDone",
+      "line": 3433,
+      "sha256": "baa8c77e6fa40783980b843b01164aeff0362db1a2b770fcb5e86102a333e154"
+    }
+  ],
+  "limitations": [
+    "Explicit editor lifecycle fixtures backed by real headless docs; no mounted Editor proof.",
+    "Mocked attachment store; no persistence, operation compensation or native picker lifecycle proof.",
+    "No mounted React or device run."
+  ],
+  "harnessCorrection": "First attempt rejected because unmounted Tiptap reports isDestroyed=true; fixture lifecycle made explicit, not a product failure."
+}

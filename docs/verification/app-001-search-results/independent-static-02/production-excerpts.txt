@@ -1,0 +1,392 @@
+
+src/App.tsx:246-312
+  246   note,
+  247   active,
+  248   blocked,
+  249   gate,
+  250   onChange,
+  251   onReady,
+  252   onFocus,
+  253   onDate,
+  254 }: {
+  255   note: Note;
+  256   active: boolean;
+  257   blocked: boolean;
+  258   gate: SearchEditorGate;
+  259   onChange: (id: string, doc: JSONContent) => void;
+  260   onReady: (id: string, editor: Editor | null) => void;
+  261   onFocus: (focused: boolean) => void;
+  262   onDate: () => void;
+  263 }) {
+  264   const instance = useRef<Editor | null>(null);
+  265   const activeRef = useRef(active);
+  266   const blockedRef = useRef(blocked);
+  267   activeRef.current = active;
+  268   blockedRef.current = blocked;
+  269   const ready = useCallback(
+  270     (editor: Editor | null) => {
+  271       instance.current = editor;
+  272       if (editor && !editor.isDestroyed) {
+  273         if (activeRef.current) gate.activate(editor, blockedRef.current);
+  274         else gate.park(editor);
+  275       }
+  276       onReady(note.id, editor);
+  277     },
+  278     [note.id, onReady, gate],
+  279   );
+  280   useLayoutEffect(
+  281     () => () => {
+  282       const editor = instance.current;
+  283       if (editor && !editor.isDestroyed) gate.park(editor);
+  284     },
+  285     [gate],
+  286   );
+  287   useLayoutEffect(() => {
+  288     const editor = instance.current;
+  289     if (!editor || editor.isDestroyed) return;
+  290     if (active) gate.activate(editor, blocked);
+  291     else {
+  292       gate.park(editor);
+  293       if (editor.isFocused) editor.view.dom.blur();
+  294     }
+  295   });
+  296   return (
+  297     <div
+  298       className="editor-scroll"
+  299       hidden={!active}
+  300       inert={!active}
+  301       aria-hidden={!active || undefined}
+  302       style={active ? undefined : { display: "none" }}
+  303     >
+  304       <button className="note-date" onClick={onDate}>
+  305         {fmtDate(note.updatedAt)}
+  306       </button>
+  307       <NoteEditor
+  308         note={note}
+  309         onChange={onChange}
+  310         onReady={ready}
+  311         onFocus={(focused) => {
+  312           if (activeRef.current) onFocus(focused);
+
+src/App.tsx:479-492
+  479       return next;
+  480     });
+  481   }, []);
+  482   const restoreEditor = useCallback(
+  483     (instance: Editor, editable: boolean) => {
+  484       const owner = nativeEditorOwners.current.get(instance);
+  485       editorGate.restore(
+  486         instance,
+  487         editable,
+  488         !owner || blockedNotes.current.has(owner),
+  489       );
+  490     },
+  491     [editorGate],
+  492   );
+
+src/App.tsx:737-746
+  737           "副本已经保存，但列表同步失败。本窗口内容仍保留，请先重试同步并核对新备忘录。",
+  738         );
+  739       else fail(e);
+  740     } finally {
+  741       blockedNotes.current.delete(id);
+  742       if (frozen && !frozen.isDestroyed && editable !== undefined)
+  743         restoreEditor(frozen, editable);
+  744       setSaving((v) => Math.max(0, v - 1));
+  745     }
+  746   };
+
+src/App.tsx:774-816
+  774   clearSensitive.current = (ids) => {
+  775     if (!ids.length) return;
+  776     nativeToolbar.current?.invalidate((context) => {
+  777       context.editor = null;
+  778       context.bookmark = null;
+  779     });
+  780     const attachmentTarget = nativeAttachmentTarget.current;
+  781     if (attachmentTarget) {
+  782       // Keep an explicitly rejected intent, never turn a late picker return
+  783       // into the ordinary-entry fallback for the newly visible note.
+  784       nativeAttachmentTarget.current = {
+  785         ...attachmentTarget,
+  786         editor: null,
+  787         bookmark: null,
+  788       };
+  789     }
+  790     for (const id of ids) {
+  791       const instance = editorsRef.current.get(id);
+  792       if (instance && !instance.isDestroyed) instance.destroy();
+  793     }
+  794     if (noteId && ids.includes(noteId)) {
+  795       barrierEditor.current = null;
+  796       formatTarget.current = null;
+  797       paperTarget.current = null;
+  798       setMenu(null);
+  799       setModal(null);
+  800       setModalValue("");
+  801       setDraw(null);
+  802       setRecord(false);
+  803       setEditing(false);
+  804       setShowFind(false);
+  805       setFind("");
+  806     }
+  807     // An unrelated parked note changed. Keep the still-valid visible search
+  808     // target and its overlay; clearing here would silently retarget B to A.
+  809     if (shouldClearSearchAfterAccessChange(desktopSearch, noteId, ids)) {
+  810       setQuery("");
+  811       setSearching(false);
+  812     }
+  813     setContextNote(null);
+  814   };
+  815   synchronizeRef.current = () => {
+  816     syncSequence.current++;
+
+src/App.tsx:881-892
+  881       })();
+  882       return;
+  883     }
+  884     if (event.phase === "abort") {
+  885       blockedNotes.current.clear();
+  886       setAccessSuspended([]);
+  887       const frozen = barrierEditor.current;
+  888       if (frozen && !frozen.editor.isDestroyed)
+  889         restoreEditor(frozen.editor, frozen.editable);
+  890       barrierEditor.current = null;
+  891       setWs((prev) => ({ ...prev, access: event.access }));
+  892       fail(Error("锁定未执行：请检查所有窗口是否有未保存的更改，再重试。"));
+
+src/App.tsx:1043-1057
+ 1043       editor.off("transaction", changed);
+ 1044     };
+ 1045   }, [editor, noteId]);
+ 1046   useEffect(() => {
+ 1047     formatTarget.current = null;
+ 1048     setMenu((value) => (value === "format" ? null : value));
+ 1049     const target = paperTarget.current;
+ 1050     if (target && target.noteId !== noteId) {
+ 1051       if (!target.editor.isDestroyed)
+ 1052         restoreEditor(target.editor, target.editable);
+ 1053       paperTarget.current = null;
+ 1054       setModal((value) => (value === "paper" ? null : value));
+ 1055     }
+ 1056   }, [noteId]);
+ 1057   const chooseFolder = (id: string) => {
+
+src/App.tsx:1564-1581
+ 1564   const captureSearchAttachmentTarget = () => {
+ 1565     nativeAttachmentTarget.current = desktopSearch
+ 1566       ? {
+ 1567           noteId,
+ 1568           scope: nativeScope,
+ 1569           stamp: accessGate.stamp(noteId || undefined),
+ 1570           editor,
+ 1571           bookmark: editor?.state.selection.getBookmark() || null,
+ 1572           documentVersion: editor
+ 1573             ? nativeDocumentVersions.current.get(editor) || 0
+ 1574             : 0,
+ 1575         }
+ 1576       : null;
+ 1577   };
+ 1578   const tools = (bottom = false) => (
+ 1579     <div
+ 1580       className={`editor-tools ${bottom ? "bottom-tools" : ""}`}
+ 1581       onMouseDown={(e) => {
+
+src/App.tsx:1734-1791
+ 1734           {menu === "media" && (
+ 1735             <>
+ 1736               <MenuRow
+ 1737                 icon={<FileText size={19} />}
+ 1738                 onClick={() => {
+ 1739                   captureSearchAttachmentTarget();
+ 1740                   fileInput.current?.click();
+ 1741                   setMenu(null);
+ 1742                 }}
+ 1743               >
+ 1744                 附加文件
+ 1745               </MenuRow>
+ 1746               <MenuRow
+ 1747                 icon={<Volume2 size={19} />}
+ 1748                 onClick={() => {
+ 1749                   setMenu(null);
+ 1750                   captureSearchAttachmentTarget();
+ 1751                   setRecord(true);
+ 1752                 }}
+ 1753               >
+ 1754                 录音
+ 1755               </MenuRow>
+ 1756               <div className="menu-divider" />
+ 1757               <MenuRow
+ 1758                 icon={<Image size={19} />}
+ 1759                 onClick={() => {
+ 1760                   if (fileInput.current) {
+ 1761                     fileInput.current.accept = "image/*,video/*";
+ 1762                     captureSearchAttachmentTarget();
+ 1763                     fileInput.current.click();
+ 1764                   }
+ 1765                   setMenu(null);
+ 1766                 }}
+ 1767               >
+ 1768                 选取照片或视频
+ 1769               </MenuRow>
+ 1770               <MenuRow
+ 1771                 icon={<Camera size={19} />}
+ 1772                 onClick={() => {
+ 1773                   captureSearchAttachmentTarget();
+ 1774                   cameraInput.current?.click();
+ 1775                   setMenu(null);
+ 1776                 }}
+ 1777               >
+ 1778                 拍照或录像
+ 1779               </MenuRow>
+ 1780               <MenuRow
+ 1781                 icon={<ScanLine size={19} />}
+ 1782                 onClick={() => {
+ 1783                   setMenu(null);
+ 1784                   setNotice(
+ 1785                     "当前可拍摄并插入文稿照片；自动裁边与扫描归档尚待实现。",
+ 1786                   );
+ 1787                   captureSearchAttachmentTarget();
+ 1788                   cameraInput.current?.click();
+ 1789                 }}
+ 1790               >
+ 1791                 扫描文稿
+
+src/App.tsx:2116-2147
+ 2116   nativeAssert.current = (context, editing = false, overlay = false) => {
+ 2117     const live = accessGate.stamp(context.noteId || undefined);
+ 2118     if (
+ 2119       context.scope !== nativeScope ||
+ 2120       context.noteId !== noteId ||
+ 2121       JSON.stringify(live) !== JSON.stringify(context.stamp) ||
+ 2122       loading ||
+ 2123       synchronizing ||
+ 2124       accessSuspended.length ||
+ 2125       accessGate.state?.operationId ||
+ 2126       (context.noteId &&
+ 2127         (blockedNotes.current.has(context.noteId) ||
+ 2128           accessGate.state?.suspended.includes(context.noteId))) ||
+ 2129       (!overlay && (modal || draw || record))
+ 2130     )
+ 2131       throw new Error("备忘录或授权状态已改变，请重新执行操作");
+ 2132     if (
+ 2133       editing &&
+ 2134       (!current ||
+ 2135         current.deletedAt ||
+ 2136         !context.editor ||
+ 2137         context.editor !== editor ||
+ 2138         nativeEditorOwners.current.get(context.editor) !== context.noteId ||
+ 2139         editor.isDestroyed ||
+ 2140         !editor.isEditable ||
+ 2141         !context.bookmark ||
+ 2142         (current.locked && !accessGate.state?.notes[current.id]?.authorized) ||
+ 2143         (nativeDocumentVersions.current.get(editor) || 0) !==
+ 2144           context.documentVersion)
+ 2145     )
+ 2146       throw new Error("编辑内容或选区已改变，请重新选择后执行操作");
+ 2147   };
+
+src/App.tsx:3426-3465
+ 3426       )}
+ 3427       {record && (
+ 3428         <RecordingPanel
+ 3429           onCancel={() => {
+ 3430             nativeAttachmentTarget.current = null;
+ 3431             setRecord(false);
+ 3432           }}
+ 3433           onDone={async (file) => {
+ 3434             if (!current || !editor) return;
+ 3435             try {
+ 3436               const target = nativeAttachmentTarget.current;
+ 3437               if (target) nativeAssert.current(target, true, true);
+ 3438               const a = await storeAttachment(
+ 3439                 target?.noteId || current.id,
+ 3440                 file,
+ 3441               );
+ 3442               if (target) {
+ 3443                 nativeAssert.current(target, true, true);
+ 3444                 editor.view.dispatch(
+ 3445                   editor.state.tr.setSelection(
+ 3446                     target.bookmark!.resolve(editor.state.doc),
+ 3447                   ),
+ 3448                 );
+ 3449               }
+ 3450               nativeAttachmentTarget.current = null;
+ 3451               editor
+ 3452                 .chain()
+ 3453                 .focus()
+ 3454                 .insertContent({
+ 3455                   type: "attachment",
+ 3456                   attrs: { id: a.id, name: a.displayName, kind: "audio" },
+ 3457                 })
+ 3458                 .run();
+ 3459               setRecord(false);
+ 3460               await refresh();
+ 3461             } catch (e) {
+ 3462               fail(e);
+ 3463             }
+ 3464           }}
+ 3465         />
+
+src/search-editor-gate.ts:1-35
+    1 import type { Editor } from "@tiptap/core";
+    2 
+    3 // Every existing editable restoration passes through this gate. A late access,
+    4 // conflict-copy or paper callback can update a parked editor's desired state,
+    5 // but cannot make it writable before that same instance becomes active again.
+    6 // Callers keep their existing destroyed-instance checks; the gate only owns
+    7 // editability and never changes editor lifetime or authorization.
+    8 export class SearchEditorGate {
+    9   private parked = new WeakMap<Editor, { editable: boolean }>();
+   10 
+   11   park(editor: Editor): void {
+   12     if (!this.parked.has(editor))
+   13       this.parked.set(editor, { editable: editor.isEditable });
+   14     if (editor.isEditable) editor.setEditable(false, false);
+   15   }
+   16 
+   17   activate(editor: Editor, blocked: boolean): void {
+   18     if (blocked) {
+   19       this.park(editor);
+   20       return;
+   21     }
+   22     const desired = this.parked.get(editor);
+   23     if (!desired) return;
+   24     this.parked.delete(editor);
+   25     if (editor.isEditable !== desired.editable)
+   26       editor.setEditable(desired.editable, false);
+   27   }
+   28 
+   29   restore(editor: Editor, editable: boolean, blocked: boolean): void {
+   30     const desired = this.parked.get(editor);
+   31     if (desired) desired.editable = editable;
+   32     const allowed = editable && !desired && !blocked;
+   33     if (editor.isEditable !== allowed) editor.setEditable(allowed, false);
+   34   }
+   35 }
+
+src/search-selection.ts:1-26
+    1 // Search selection is a projection. The real folder/note selection remains
+    2 // untouched so clearing the query restores it, including its mounted editor.
+    3 export function projectSearchNote(input: {
+    4   searching: boolean;
+    5   baseNoteId: string | null;
+    6   searchNoteId: string | null;
+    7   resultIds: readonly string[];
+    8 }): string | null {
+    9   if (!input.searching) return input.baseNoteId;
+   10   if (input.resultIds.length === 1) return input.resultIds[0];
+   11   const selected = input.searchNoteId || input.baseNoteId;
+   12   return selected && input.resultIds.includes(selected) ? selected : null;
+   13 }
+   14 
+   15 // Clearing an unrelated parked note must not silently change the visible
+   16 // search result and retarget an overlay or a pending system picker.
+   17 export function shouldClearSearchAfterAccessChange(
+   18   searching: boolean,
+   19   activeNoteId: string | null,
+   20   changedIds: readonly string[],
+   21 ): boolean {
+   22   return !searching || !activeNoteId || changedIds.includes(activeNoteId);
+   23 }
+   24 
