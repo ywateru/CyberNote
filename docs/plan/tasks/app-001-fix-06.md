@@ -1,7 +1,7 @@
 ---
 id: app-001-fix-06
 scope: android-composition-focus-and-navigation-boundaries
-status: pending
+status: in-progress
 depends-on: [app-001-fix-04]
 ---
 
