@@ -1,0 +1,114 @@
+{
+  "scope": "Actual JSON comparator, real schema/state/history, extracted production create/hydrate/key and existing AccessGate stale response rejection. No React mount, native IPC/device or installed-app acceptance.",
+  "tests": 26,
+  "results": [
+    {
+      "name": "real rich schema document: recursive object key reorder is equal",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: text",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: node type",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: node attribute",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: nested mark attribute",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: nested list attribute",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: boolean attribute",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: content array order",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: mark array order",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: missing content",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: array length",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: missing vs null",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: missing vs explicit undefined",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: null vs empty object",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: number vs string",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: object vs array",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: nested arrays",
+      "status": "pass"
+    },
+    {
+      "name": "actual hydrate: paper-only authoritative refresh preserves production key and real bookmark/history path",
+      "status": "pass"
+    },
+    {
+      "name": "actual hydrate: genuinely changed authoritative document still advances editor key",
+      "status": "pass"
+    },
+    {
+      "name": "actual hydrate: same document cannot exempt new process session",
+      "status": "pass"
+    },
+    {
+      "name": "actual hydrate: same document cannot exempt new note authorization epoch",
+      "status": "pass"
+    },
+    {
+      "name": "actual hydrate: unauthorized authoritative snapshot cannot revive a pending document",
+      "status": "pass"
+    },
+    {
+      "name": "actual create -> first paper hydrate keeps accepted new note epoch and never clears editor",
+      "status": "pass"
+    },
+    {
+      "name": "missing old authorization entry still triggers existing hydrate cleanup",
+      "status": "pass"
+    },
+    {
+      "name": "actual create rejects stale response after newer note/global epoch without replacing updated workspace",
+      "status": "pass"
+    },
+    {
+      "name": "actual create rejects stale response after new process session without replacing updated workspace",
+      "status": "pass"
+    }
+  ],
+  "additionalChecks": {
+    "pnpm typecheck": "pass",
+    "pnpm test:access": "16 production access response boundary cases passed"
+  }
+}

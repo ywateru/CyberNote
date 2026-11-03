@@ -26,6 +26,9 @@ const { documentsEqual } = await importSource(
 const { SaveRevisions } = await importSource(
   await readFile("src/save-revisions.ts", "utf8"),
 );
+const { AccessGate } = await importSource(
+  await readFile("src/access-client.ts", "utf8"),
+);
 await writeFile(
   resolve(out, "editor-schema.mjs"),
   compile(await readFile("src/editor-schema.ts", "utf8")),
@@ -133,10 +136,12 @@ const app = ts.createSourceFile(
   true,
   ts.ScriptKind.TSX,
 );
-let hydrateCallback, editorKey;
+let hydrateCallback, createNoteCallback, editorKey;
 function visit(node) {
   if (ts.isVariableDeclaration(node) && node.name.getText(app) === "hydrate")
     hydrateCallback = node.initializer.arguments[0].getText(app);
+  if (ts.isVariableDeclaration(node) && node.name.getText(app) === "createNote")
+    createNoteCallback = node.initializer.arguments[0].getText(app);
   if (
     ts.isJsxSelfClosingElement(node) &&
     node.tagName.getText(app) === "NoteEditor"
@@ -148,14 +153,20 @@ function visit(node) {
 }
 visit(app);
 assert(
-  hydrateCallback && editorKey,
-  "Production hydrate/NoteEditor key not found",
+  hydrateCallback && createNoteCallback && editorKey,
+  "Production hydrate/createNote/NoteEditor key not found",
 );
-const { bindHydrate, keyFor } = await importSource(`
+const { bindHydrate, bindCreateNote, keyFor } = await importSource(`
   export function bindHydrate(env) {
     const {wsRef, pendingDocs, revisions, externalVersions, clearSensitive,
       setWs, setSettings, documentsEqual} = env;
     return ${hydrateCallback};
+  }
+  export function bindCreateNote(env) {
+    const {flush, folderId, action, revisions, setWs, setNoteId, setPage,
+      setGalleryEditor, setMenu, setQuery, setSearching, setEditing,
+      updateSettings, setTimeout, fail} = env;
+    return ${createNoteCallback};
   }
   export function keyFor(current, ws, externalVersions) { return ${editorKey}; }
 `);
@@ -295,9 +306,133 @@ test("actual hydrate: unauthorized authoritative snapshot cannot revive a pendin
   assert.deepEqual(h.cleared, [["note"]]);
   assert.deepEqual(h.wsRef.current.notes[0].document, next.notes[0].document);
 });
+
+// The installed-app failure was a newly created note whose response access was
+// discarded, not an equality failure. Exercise the actual create callback before
+// its first hydrate, with the existing response gate rejecting stale responses.
+function creationHarness(beforeAccept) {
+  const h = harness();
+  const gate = new AccessGate();
+  gate.invalidate(structuredClone(access));
+  const response = {
+    id: "created",
+    document: structuredClone(document),
+    paperStyle: "plain",
+    revision: 0,
+    access: {
+      ...structuredClone(access),
+      notes: {
+        ...structuredClone(access.notes),
+        created: { epoch: 0, authorized: true },
+      },
+    },
+  };
+  const failures = [],
+    selected = [];
+  const noOp = () => {};
+  const create = bindCreateNote({
+    flush: async () => {},
+    folderId: "default",
+    action: async () => {
+      const stamp = gate.stamp();
+      await beforeAccept?.(gate, h, response);
+      gate.accept(response.access, stamp);
+      return response;
+    },
+    revisions: h.revisions,
+    setWs: (update) => {
+      h.wsRef.current = update(h.wsRef.current);
+    },
+    setNoteId: (id) => selected.push(id),
+    setPage: noOp,
+    setGalleryEditor: noOp,
+    setMenu: noOp,
+    setQuery: noOp,
+    setSearching: noOp,
+    setEditing: noOp,
+    updateSettings: noOp,
+    setTimeout: noOp,
+    fail: (error) => failures.push(error),
+  });
+  return { ...h, gate, response, failures, selected, create };
+}
+async function testAsync(name, fn) {
+  await fn();
+  results.push({ name, status: "pass" });
+}
+await testAsync(
+  "actual create -> first paper hydrate keeps accepted new note epoch and never clears editor",
+  async () => {
+    const h = creationHarness();
+    await h.create();
+    assert.deepEqual(h.failures, []);
+    assert.deepEqual(h.selected, ["created"]);
+    assert.deepEqual(h.wsRef.current.access, h.response.access);
+    const beforeKey = keyFor(
+      h.wsRef.current.notes[0],
+      h.wsRef.current,
+      h.externalVersions,
+    );
+    const next = structuredClone(h.wsRef.current);
+    next.notes[0].document = reorder(next.notes[0].document);
+    next.notes[0].paperStyle = "grid-large";
+    next.notes[0].revision++;
+    h.hydrate(next);
+    assert.deepEqual(h.cleared, []);
+    assert.equal(h.externalVersions.current.size, 0);
+    assert.equal(
+      keyFor(h.wsRef.current.notes[0], h.wsRef.current, h.externalVersions),
+      beforeKey,
+    );
+  },
+);
+test("missing old authorization entry still triggers existing hydrate cleanup", () => {
+  const h = harness(),
+    next = h.snapshot();
+  h.wsRef.current.access = { ...structuredClone(access), notes: {} };
+  h.hydrate(next);
+  assert.deepEqual(h.cleared, [["note"]]);
+});
+for (const [name, change] of [
+  [
+    "newer note/global epoch",
+    (a) => {
+      a.epoch++;
+      a.notes.created = { epoch: 1, authorized: false };
+    },
+  ],
+  [
+    "new process session",
+    (a) => {
+      a.sessionId = "process-B";
+    },
+  ],
+]) {
+  await testAsync(
+    `actual create rejects stale response after ${name} without replacing updated workspace`,
+    async () => {
+      let latest;
+      const h = creationHarness((gate, current) => {
+        latest = structuredClone(current.wsRef.current);
+        change(latest.access);
+        gate.invalidate(latest.access);
+        current.wsRef.current = latest;
+      });
+      await h.create();
+      assert.equal(h.failures.length, 1);
+      assert.equal(h.failures[0].code, "access_changed");
+      assert.deepEqual(h.selected, []);
+      assert.equal(h.wsRef.current, latest);
+      assert.equal(
+        h.wsRef.current.notes.some((n) => n.id === "created"),
+        false,
+      );
+    },
+  );
+}
 const report = {
   scope:
-    "Actual JSON comparator, real schema/state/history and extracted production hydrate/key. No React mount, device, native paper action or runtime root-cause claim.",
+    "Actual JSON comparator, real schema/state/history, extracted production create/hydrate/key and existing AccessGate stale response rejection. No React mount, native IPC/device or installed-app acceptance.",
   tests: results.length,
   results,
 };

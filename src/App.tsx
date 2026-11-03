@@ -849,9 +849,18 @@ function App() {
         validate?.();
         const fid =
           folderId === "all" || folderId === "trash" ? "default" : folderId;
-        const n = await action<Note>({ type: "createNote", folderId: fid });
+        const n = await action<Note & Pick<Workspace, "access">>({
+          type: "createNote",
+          folderId: fid,
+        });
         revisions.current.confirmed(n.id, n.revision);
-        setWs((prev) => ({ ...prev, notes: [n, ...prev.notes] }));
+        // Native action has already accepted this response through AccessGate.
+        // Keep its new note epoch with the note, before the first refresh.
+        setWs((prev) => ({
+          ...prev,
+          access: n.access ?? prev.access,
+          notes: [n, ...prev.notes],
+        }));
         setNoteId(n.id);
         setPage("editor");
         setGalleryEditor(true);
