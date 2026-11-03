@@ -1,8 +1,8 @@
 ---
 id: app-001-fix-01
 scope: core-interaction-parity
-status: pending
-depends-on: [qa-001]
+status: in-progress
+depends-on: [qa-001, app-001-fix-00]
 ---
 
 ## objective

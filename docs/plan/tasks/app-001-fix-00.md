@@ -1,7 +1,7 @@
 ---
 id: app-001-fix-00
 scope: archive-transaction-integrity
-status: in-progress
+status: verified
 depends-on: [qa-001]
 ---
 
@@ -51,3 +51,7 @@ src-tauri/src/store.rs、必要的Rust辅助模块与真实临时目录测试；
 - 归档在写入前校验 root/block/inline、列表首段、任务、表格行/单元格、叶节点内容基数、marks 位置与互斥，以及应用属性类型/预算。默认省略属性与 ProseMirror 接受的 marks 输入顺序保留；不自动改写导入文档。
 - 共享 63 例：7 例合法文档导入、导出/重导入、附件字节及重开通过；35 例实际 schema 非法结构及 21 例额外属性/封装/预算错误在公开归档入口被拒绝，旧状态与源文件保持。原独立三份坏归档只读重跑也全部拒绝，原 QA 正常归档仍可往返。
 - `cargo test --offline` 为 15 passed / 0 failed / 1 专用 worker 默认 ignored；真实六中断点仍通过。TypeScript、前端构建、Cargo check、Clippy all-targets `-D warnings` 及真实 Editor schema 对照通过。证据见 `docs/verification/app-001-fix-00-schema/selfcheck.md`。原 `qa-fix-00/` 与 `qa-001/` 未修改；未重构建 Mac/APK 或开展新 GUI/设备验证。
+
+## independent acceptance — 2026-11-03
+
+独立复核已通过，报告 `docs/plan/reviews/app-001-fix-00-02.md`，提交 `0dd11f09d4645158f4265d78c0b469423bbec186`。原三份非法文档在写入前拒绝，旧工作区/设置/附件完整保持；63例schema跨检、额外5组合法默认值往返、晚期数据库失败及六次真实进程中断恢复通过。FIX-00无剩余阻塞。本结论限归档可靠性，已安装产物尚待后续重构建，APP-001整体及UI像素验收继续进行。
