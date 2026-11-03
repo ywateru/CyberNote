@@ -7,6 +7,8 @@ depends-on: [app-001-fix-01]
 
 ## objective
 
+2026-11-03结果更新：最小createNote access采纳修复5c46536已在保全APK5dd6dfc8上开发与独立实际运行有限通过。独立报告`docs/plan/reviews/app-001-fix-07-android-02.md`与证据`docs/verification/qa-fix-07/run-5dd6dfc8/`确认取消、grid-large保存、重开Back均保持完整正文、原选区与Editor/View/DOM及真实父key；自身保存、Home恢复和COLD完整Runtime/Rust正文及纸张一致。原“不必要销毁导致选纸丢选区”P2在该包的此路径关闭。开发真实Store外部变化仅独立只读复核，Undo首步不改正文原因仍unknown，真实第二窗口/原版单步Undo/完整矩阵未验收，任务整体保持partial。旧失败与以下诊断历史保留。
+
 修复真实选择大网格纸返回后选区31..35变为1..1的现有失败。FIX04 candidate d5c6f59b与旧0aac均在`scripts/android-ime-regression.mjs:285`失败，取消路径均保留选区；不能继续误称取消失败或补丁独有回归。只准备最小源码候选，待设备交接和正式包独立复验后才能关闭实际失败。
 
 初始候选机制：纸张选择await patch→doAction→refresh/hydrate→closePaper；原hydrate用JSON.stringify比较文档以决定externalVersions，Editor key包含该版本，paperTarget握旧Editor。766a810已接入严格JSON语义比较，25efa59有限静态通过，但实际新包e117f929…选择grid-large仍将33..37变为1..1，Editor/View/DOM从4/5/6变为7/8/9，取消路径正常。对象键顺序修正不能视为该实际失败的完整根因或修复。下一步须核真实hydrate的两份文档、pending状态及React key中的session/epoch/externalVersion变化，最小修正真正引起不必要重建的边界；实际授权或外部文档变化仍按既有协议处理。

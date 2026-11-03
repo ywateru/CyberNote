@@ -128,4 +128,4 @@ Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许�
 
 真实运行证据仅覆盖Android11模拟器/WebView91/Trime3.3.13的有限主路径。FIX06独立平台对照显示，未绑定PM/Tiptap/React的普通contenteditable真实失焦后也保留`ni hao‸`；原生EditText按Back隐藏键盘后同样保留且仍有焦点。不能把隐藏键盘等同于明确取消/候选提交，或仅据残留文本、compositionend.isTrusted=false归因应用丢失组字保护。平台同现不证明苹果Notes的精确行为，也不证明宿主存储保全；完整限制见`plan/reviews/app-001-fix-06-platform-01.md`。
 
-应用保全输入法实际交付内容与相邻已确认正文，真实候选应替换对应组字段，明确删除/取消不得复活旧组字。真实失焦、单纯隐藏键盘、后台恢复、切笔记与授权销毁分别核定；没有原版/平台commit-cancel及可靠范围证据时，不猜候选、不按字符删标记、不盲目回滚。后台恢复仍须遵循授权屏障，旧Editor不可写入新笔记。格式/后台的原版一致性与隔离仍未通过；历史可见/保存结果及P1报告保留，当前应用独有归因已不成立。选择纸张并保存后的选区失败由FIX07继续处理，取消路径有限通过。原包与修复包、通过与失败记录均保留在`docs/verification/app-001-fix-04/`，平台新增证据在`docs/verification/app-001-fix-06/platform-baseline/`。
+应用保全输入法实际交付内容与相邻已确认正文，真实候选应替换对应组字段，明确删除/取消不得复活旧组字。真实失焦、单纯隐藏键盘、后台恢复、切笔记与授权销毁分别核定；没有原版/平台commit-cancel及可靠范围证据时，不猜候选、不按字符删标记、不盲目回滚。后台恢复仍须遵循授权屏障，旧Editor不可写入新笔记。格式/后台的原版一致性与隔离仍未通过；历史可见/保存结果及P1报告保留，当前应用独有归因已不成立。FIX07已在5dd6包独立有限复验选择大网格及取消均保留原选区/同Editor，完整矩阵仍partial；证据在`docs/verification/qa-fix-07/run-5dd6dfc8/`。原包与修复包、通过与失败记录均保留在`docs/verification/app-001-fix-04/`，平台新增证据在`docs/verification/app-001-fix-06/platform-baseline/`。
