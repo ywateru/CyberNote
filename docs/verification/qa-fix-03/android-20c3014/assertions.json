@@ -1,0 +1,26 @@
+{
+  "scope": "actual Android limited production UI only",
+  "assertions": {
+    "installedIdentity": true,
+    "oldWebViewFallbackEnvironment": true,
+    "noProofPanel": true,
+    "wrongPasswordRejected": true,
+    "lockUnloadsEditor": true,
+    "closeAllUnloadsEditor": true,
+    "closedNoUndo": true,
+    "lockedShareRejected": true,
+    "coldProcessChanged": true,
+    "coldRemainsLocked": true,
+    "coldDecryptedBodyExact": true,
+    "homeFocusRecoversDocument": true,
+    "backNavigatesList": true,
+    "noWhitePage": true
+  },
+  "notCovered": [
+    "Mac multiwindow",
+    "controlled request timing",
+    "IME composition",
+    "pixel parity"
+  ],
+  "nonblockingObservation": "wrong-password error banner remains after successful unlock until manually closed"
+}
