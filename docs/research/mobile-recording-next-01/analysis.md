@@ -141,3 +141,27 @@ idle 00:00.00 / 红圆 / 完成disabled
 | 逐帧 `mobile-recording-sequence-01/README.md` | `2e009f274d9b7c9b441cabae8b17c0fbf665cd80bd9e6b68ad0963b4edc2250d` |
 
 本次未读取/修改尚未冻结的 attachment-submit 工作区实现，不推测其新 helper 名称或最终接口；这里只依据主 Rust 实际契约与父任务约定。candidate02 构建/设备由 develop、独立实际由 verify 负责，本文不升级其进度。下一项建议先建 A 的纯抽取任务；A 独立通过后，B 与 App/bridge owner 可按上述文件边界分别开展，最终在 C 汇合。
+
+## 7. 暂停时真实回放／±15 的最小接缝准备
+
+2026-11-04 补充。只读主 `ab728ad487c0c9b397fca3f67e57460bbe520e22` 的 `RecordingSession`、`RecordingPanel`、`AudioPlayer`／`audio-playback.ts` 及上述既存录屏报告；未读录音父接线 WIP，未新增取帧、GUI、麦克风、设备、构建或产品改动。第 1–6 节保留各自历史基线；本节不重写已合入的三态规格。
+
+**`pause()`＋`requestData()`＋累计 Blob 只能作为待验证的暂停快照，不能保证它是完整可播放、可定位的文件。** [W3C 2026-03-16 工作草案 §2.3](https://www.w3.org/TR/2026/WD-mediastream-recording-20260316/#dom-mediarecorder-pause) 的 pause 保留当前收集数据以便继续；requestData 发布当前数据并换新 Blob，不是结束编码。草案明确只对“完成录制后的全部 Blob 组合”给出可播放保证，单块没有保证；因而“从起点累计到暂停的非终态前缀也必定可播放”不是该契约的推论。`size>0`、支持 MIME、收到 dataavailable 和有限 UI 活动计时都不足以解除这个边界。
+
+浏览器原始材料支持同样的谨慎结论，但不等于本机版本运行证据：
+
+| 目标 | 已核原始材料 | 对这条接缝的含义 |
+| --- | --- | --- |
+| WKWebView／MP4 | [WebKit 2020-11-23 官方说明](https://webkit.org/blog/11353/mediarecorder-api/) 当时列出 MP4／AAC；示例虽持续收小块，实际在 `onstop` 才组合并 preview。 | 此示例不能作为暂停前缀可播的承诺，也不能断言当前 WK 仍只支持这些格式。实际 OS／WebKit build 的首个极短暂停、后续暂停及前缀尾部完整性仍未知。 |
+| Chromium／WebView 91 的 WebM 路线 | [91.0.4472.77 MediaRecorder 源码](https://raw.githubusercontent.com/chromium/chromium/91.0.4472.77/third_party/blink/renderer/modules/mediarecorder/media_recorder.cc) 中 `requestData` 只使当前 Blob 切片；没有调用 muxer flush。[同版本 WebmMuxer](https://raw.githubusercontent.com/chromium/chromium/91.0.4472.77/media/muxers/webm_muxer.cc) 使用 live 模式、关闭 cues，`Pause` 只记暂停时间，`Seekable()` 为 false。 | requestData 不能强制把编码／muxer 队列全部变成一个独立完整文件。源码中的 writer 不可回写不等于 HTML 元素永远不能 seek；也不能把“有前缀可播放”升级为任意位置 seek 或尾部完整。所查标签未与目标设备每个 patch／vendor build 等同。 |
+
+最小候选仍应先复用现有采集与播放链，而不是暂停时调用当前 `stop()`：主 `RecordingSession.stop()` 会释放 tracks、AudioContext 并终止该实例，无法再以其 `resume()` 继续。可另做一个独立的、可失败的 `snapshot()` 接缝：
+
+1. 每次暂停生成独立代次，等待实际 pause 事件后请求数据；串行接收已排队的 timeslice／requestData 数据并复制截至该次的累计 chunks，使用 recorder 实际 MIME 建快照。**不清空主 chunks，不把快照送给 onStopped／父 onDone，不覆盖最终 File。** snapshot 的响应只表示收到这一前缀；尤其在 91 中仍不表示 encoder 已排空。继续／完成／取消即使先到，也必须让过期快照被忽略。
+2. 面板为本代次快照创建一个 `createRecordingPreview` URL；使用已有 `createAudioPlayback` 控制器和独立 `<audio>`，为原版暂停布局接播放、真实 media 时间和 `skip(±15)`。不直接嵌入 `AudioPlayer` 的正文卡片外观；后续若抽取共享 hook／控制器皮肤，只复用生产播放逻辑，不把整套 Editor／Tiptap 依赖带入录音面板。
+3. 快照加载失败、duration 未知／探测失败、play 拒绝分别显示真实结果；不能把 RecordingClock 值填作播放器 duration。已有控制器可处理这些结果，但它在写入 currentTime 后会乐观发布目标 time，且只按有限 duration 放开 seek；若将其用于非终态快照，需加快照范围内的能力门禁与 seeked／实际 currentTime 确认，不能单靠按钮变黑或 React time 值宣称 ±15 成功。[HTML 媒体规范的 seek 算法](https://html.spec.whatwg.org/multipage/media.html#seeking) 允许按可定位范围调整目标；有限 duration、loadedmetadata 或 canplay 均不证明整段内容已可听或已成功 seek。
+4. 继续前先停播放并 dispose 控制器／时长探测，再 revoke 该代次 URL；替换、完成、取消、卸载也采用相同顺序且幂等。沿用现有控制器对晚 play Promise／media 事件的活性门禁；快照失败只使回放不可用，不销毁仍可继续／最终完成的主录音。保存仍只经原 onstop 收到最终末块后的 File 与父 ACK 链。
+
+这条方案是**最小可验证候选，不是已保证跨端等同原版的交付方案**。若目标 WK MP4 或 WebView91 实际不能可靠播放／定位累计前缀，原 API 没有一个“加 requestData 即可”的标准修复；必须另立范围评估可产出完整快照的录制层（例如保留采集流、暂停时结束片段，再通过真实解码／重封装形成统一可播放资源），不能直接拼多个已结束 MP4／WebM 文件冒充一段录音。本次不选择或实施该较大路线。
+
+后续仅需先解开这几个确实未知项：目标精确 OS／WebView build 与实际 MIME；首个短暂停能否从起点播到快照尾部；继续后再次暂停的累计内容是否完整、暂停间隙是否排除；超过 15 秒的真实前后定位是否落到可定位范围并继续推进；取消／继续／完成交错时是否有旧音频或 URL 泄漏。原录屏只证明暂停控件可见，未观察这些操作；同样，媒体事件推进不证明音轨可听，需要实际试听或音轨检查。未运行任何该能力验证，不增加 candidate03 验收声明。
