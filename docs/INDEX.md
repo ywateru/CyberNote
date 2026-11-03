@@ -32,6 +32,7 @@
 - [Mac搜索结果与零结果恢复](plan/tasks/app-001-search-results-01.md)
 - [Mac零结果列表文案与分组校准](plan/tasks/app-001-search-zero-ui-01.md)
 - [candidate03零结果局部截图测量](research/mac-zero-roi-candidate03-01/README.md)
+- [Mac零结果文字位置与笔画校准任务](plan/tasks/app-001-search-zero-geometry-01.md)
 - [Mac菜单搜索焦点时序审计](research/mac-search-focus-sequence-01/analysis.md)
 - [Mac菜单搜索焦点窄修复](plan/tasks/app-001-search-focus-01.md)
 - [录音父保存与真实正文确认接线](plan/tasks/app-002-recording-submit-01.md)
