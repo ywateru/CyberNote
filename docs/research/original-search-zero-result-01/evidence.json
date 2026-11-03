@@ -1,0 +1,84 @@
+{
+  "date": "2026-11-03",
+  "kind": "one bounded original Notes UI observation; not clone acceptance",
+  "app": {
+    "bundle": "com.apple.Notes",
+    "shortVersion": "4.13",
+    "buildVersion": "3146.101.28"
+  },
+  "ui": "light; Chinese; native AX and raw PNG only",
+  "window_resized": false,
+  "logical_bounds_and_DPR": "not independently measured this run; no scaling or pixel parity claim",
+  "initial_folder": "Notes Clone UI 对照",
+  "initial_selected_note": "每日 TODO",
+  "matched_query": "\"Title Reference\"",
+  "zero_query": "QA-NO-MATCH-20261103-2301-ABCDEFGHIJKLMNOPQRSTUVWXYZ-NEVER-EXISTS-7f62c83e9d4a",
+  "observations": {
+    "unique_result_confirmed": true,
+    "zero_result_confirmed": true,
+    "zero_previous_body_absent": true,
+    "zero_editable_body_absent": true,
+    "clear_restored_folder": true,
+    "clear_original_body_exact_equal": true,
+    "initial_body_sha256": "4feb37fe47307425d4928be5dc69ba5af63a4ce010cd00d9483453be843c5b52",
+    "restored_body_sha256": "4feb37fe47307425d4928be5dc69ba5af63a4ce010cd00d9483453be843c5b52"
+  },
+  "files": [
+    {
+      "path": "01-initial.ax.txt",
+      "bytes": 5293,
+      "sha256": "163a6d5d615e45a0c388a572e6d61528f073323eb6844873d3243b20d2b4f739"
+    },
+    {
+      "path": "01-initial.png",
+      "bytes": 183946,
+      "sha256": "e1a71ebd4e8294169a685b287f692f66e395e9043214e45f6043b471db9a2994",
+      "pixels": [
+        2782,
+        1806
+      ]
+    },
+    {
+      "path": "02-unique-match.ax.txt",
+      "bytes": 4135,
+      "sha256": "65ec01022bda0e04f70a02433593f74a5a097cf88c1b18e69d14276acbc04129"
+    },
+    {
+      "path": "02-unique-match.png",
+      "bytes": 190598,
+      "sha256": "0e4970d0dccecfb604b15c2faa8b11c19efa46ebf60cce792492467b9e85d78b",
+      "pixels": [
+        2782,
+        1806
+      ]
+    },
+    {
+      "path": "03-zero-match.ax.txt",
+      "bytes": 3238,
+      "sha256": "80d3aa895bb3b629c2c12e7334f6084f9f7c033608b872fb957fc255e4193ed0"
+    },
+    {
+      "path": "03-zero-match.png",
+      "bytes": 152685,
+      "sha256": "0e9fcae8b036cd0c28c4a6fa04b2e06d71023118fc82b1422fbb920ac0e17466",
+      "pixels": [
+        2782,
+        1806
+      ]
+    },
+    {
+      "path": "04-clear-restores-original.ax.txt",
+      "bytes": 5117,
+      "sha256": "bfeeb7a2414dac908add8a2f2fe68069fc89a7b5d4e0dff71cb05d8b09ee4c6e"
+    },
+    {
+      "path": "04-clear-restores-original.png",
+      "bytes": 241362,
+      "sha256": "be9010e04f0bc03a0e97ddab04588986538a5a6e808ba32e94e40ce1629711f5",
+      "pixels": [
+        2782,
+        1806
+      ]
+    }
+  ]
+}
