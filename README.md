@@ -64,6 +64,8 @@ ANDROID_SERIAL=emulator-5580 node scripts/android-smoke.mjs
 
 该脚本通过 Android WebView 的本地调试接口执行真实 UI 输入，读取 Rust 工作区作断言，将截图与文档证据保存到 `artifacts/android/smoke/`。不依赖 REA，适用于本机旧 Chrome 91 WebView。
 
+FIX-01 独立验证发现旧 WebView 在真实键盘显示时遮挡格式工具栏；修正 Android 原生 IME insets 后，`node scripts/android-ime-regression.mjs` 使用 adb 原生触摸、系统键盘 Enter 与 Back 回归，调试接口只读取证。新证据见 `docs/verification/app-001-fix-01-ime/`，原 FIX-01 的 DOM 点击脚本不作为工具栏实际可触达的通过证据；本修正仍待独立复验。
+
 ## 已知缺口
 
 - Mac 字形、图标、工具条材质、侧栏间距和画廊卡片仍需逐项像素对照；当前 Lucide 图标尚未替换为原生 SF Symbols。图库双击同窗展开与返回已修正，尚待独立验收。
