@@ -1,0 +1,288 @@
+{
+  "method": "min(R,G,B) < threshold in local text ROI [20,4,160,72) of section crop; no resizing",
+  "thresholds": [
+    128,
+    160,
+    180,
+    200
+  ],
+  "renders": {
+    "original-reference-section": {
+      "path": "original-reference-section.png",
+      "sha256": "1272db5b60ddcbd4037a02d788af9ac8f91124d0009c74a0c025b739eb9648d0",
+      "size": [
+        558,
+        80
+      ],
+      "measurements": {
+        "128": {
+          "inkPixels": 1147,
+          "bbox": [
+            33,
+            26,
+            119,
+            54
+          ]
+        },
+        "160": {
+          "inkPixels": 1260,
+          "bbox": [
+            33,
+            26,
+            119,
+            54
+          ]
+        },
+        "180": {
+          "inkPixels": 1307,
+          "bbox": [
+            33,
+            26,
+            119,
+            54
+          ]
+        },
+        "200": {
+          "inkPixels": 1349,
+          "bbox": [
+            33,
+            26,
+            119,
+            54
+          ]
+        }
+      }
+    },
+    "candidate03-reference-section": {
+      "path": "candidate03-reference-section.png",
+      "sha256": "883a458fafb746406e759858439047d6c01ccd86e6795e9716f768610ea0575f",
+      "size": [
+        558,
+        80
+      ],
+      "measurements": {
+        "128": {
+          "inkPixels": 886,
+          "bbox": [
+            33,
+            28,
+            119,
+            55
+          ]
+        },
+        "160": {
+          "inkPixels": 990,
+          "bbox": [
+            33,
+            28,
+            119,
+            55
+          ]
+        },
+        "180": {
+          "inkPixels": 1030,
+          "bbox": [
+            33,
+            28,
+            119,
+            55
+          ]
+        },
+        "200": {
+          "inkPixels": 1071,
+          "bbox": [
+            33,
+            28,
+            119,
+            55
+          ]
+        }
+      }
+    },
+    "baseline-600": {
+      "path": "baseline-600.png",
+      "sha256": "417f6d67ba784a657a61f293b1f3d9b73e265a8e8bd307c502866ba8930e76a3",
+      "size": [
+        558,
+        80
+      ],
+      "measurements": {
+        "128": {
+          "inkPixels": 991,
+          "bbox": [
+            34,
+            27,
+            120,
+            55
+          ]
+        },
+        "160": {
+          "inkPixels": 1103,
+          "bbox": [
+            34,
+            27,
+            120,
+            55
+          ]
+        },
+        "180": {
+          "inkPixels": 1149,
+          "bbox": [
+            33,
+            27,
+            120,
+            55
+          ]
+        },
+        "200": {
+          "inkPixels": 1215,
+          "bbox": [
+            33,
+            27,
+            120,
+            55
+          ]
+        }
+      }
+    },
+    "candidate-600": {
+      "path": "candidate-600.png",
+      "sha256": "560326b9ad6e818f52430358d0fcfb46f1b2261788334ba6543dcc62fe0a90eb",
+      "size": [
+        558,
+        80
+      ],
+      "measurements": {
+        "128": {
+          "inkPixels": 991,
+          "bbox": [
+            34,
+            25,
+            120,
+            53
+          ]
+        },
+        "160": {
+          "inkPixels": 1103,
+          "bbox": [
+            34,
+            25,
+            120,
+            53
+          ]
+        },
+        "180": {
+          "inkPixels": 1149,
+          "bbox": [
+            33,
+            25,
+            120,
+            53
+          ]
+        },
+        "200": {
+          "inkPixels": 1215,
+          "bbox": [
+            33,
+            25,
+            120,
+            53
+          ]
+        }
+      }
+    },
+    "candidate-650": {
+      "path": "candidate-650.png",
+      "sha256": "560326b9ad6e818f52430358d0fcfb46f1b2261788334ba6543dcc62fe0a90eb",
+      "size": [
+        558,
+        80
+      ],
+      "measurements": {
+        "128": {
+          "inkPixels": 991,
+          "bbox": [
+            34,
+            25,
+            120,
+            53
+          ]
+        },
+        "160": {
+          "inkPixels": 1103,
+          "bbox": [
+            34,
+            25,
+            120,
+            53
+          ]
+        },
+        "180": {
+          "inkPixels": 1149,
+          "bbox": [
+            33,
+            25,
+            120,
+            53
+          ]
+        },
+        "200": {
+          "inkPixels": 1215,
+          "bbox": [
+            33,
+            25,
+            120,
+            53
+          ]
+        }
+      }
+    },
+    "candidate-700": {
+      "path": "candidate-700.png",
+      "sha256": "560326b9ad6e818f52430358d0fcfb46f1b2261788334ba6543dcc62fe0a90eb",
+      "size": [
+        558,
+        80
+      ],
+      "measurements": {
+        "128": {
+          "inkPixels": 991,
+          "bbox": [
+            34,
+            25,
+            120,
+            53
+          ]
+        },
+        "160": {
+          "inkPixels": 1103,
+          "bbox": [
+            34,
+            25,
+            120,
+            53
+          ]
+        },
+        "180": {
+          "inkPixels": 1149,
+          "bbox": [
+            33,
+            25,
+            120,
+            53
+          ]
+        },
+        "200": {
+          "inkPixels": 1215,
+          "bbox": [
+            33,
+            25,
+            120,
+            53
+          ]
+        }
+      }
+    }
+  },
+  "limitation": "Chrome candidate render only; original/candidate03 crops from unequal whole-window geometries; no pixel acceptance."
+}

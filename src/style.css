@@ -341,6 +341,12 @@ a {
   font-weight: 600;
   line-height: 20px;
 }
+/* Only the measured Mac zero-result list with its sidebar visible. */
+.desktop.native-toolbar:not(.sidebar-hidden):not(.gallery-browse):not(.gallery-edit):not(.separate)
+  .search-zero-section {
+  padding-top: 9px;
+  font-weight: 700;
+}
 .date-section {
   font-size: 16px;
   font-weight: 700;

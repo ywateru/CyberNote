@@ -414,7 +414,12 @@ static NSPoint contentOffsetFor(NSString *action) {
     CGFloat titleRight=three?MIN(boundary-50,start-12):start-18;
     CGFloat titleWidth=MAX(0,titleRight-titleX);
     self.title.hidden=self.count.hidden=(!three&&!gallery&&!browse)||titleWidth<24;
-    self.title.frame=NSMakeRect(titleX,9,titleWidth,18);self.count.frame=NSMakeRect(titleX,28,titleWidth,15);
+    BOOL zeroSearchGeometry=three && sidebar && [self.state[@"folderTitle"] isEqual:@"搜索"]
+        && [self.state[@"folderCount"] unsignedLongLongValue]==0 && hasSearch && [self.state[@"search"][@"value"] length]>0;
+    // This root is flipped: the confirmed zero-result title moves down, its subtitle up.
+    CGFloat textX=titleX-(zeroSearchGeometry?1:0);
+    self.title.frame=NSMakeRect(textX,zeroSearchGeometry?11:9,titleWidth,18);
+    self.count.frame=NSMakeRect(textX,zeroSearchGeometry?27:28,titleWidth,15);
 }
 - (NSDictionary *)information {
     [self layout];

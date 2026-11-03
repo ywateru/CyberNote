@@ -1,7 +1,7 @@
 ---
 id: app-001-search-zero-geometry-01
 scope: mac-confirmed-zero-search-local-text-geometry
-status: ready
+status: pending-review
 depends-on: [app-004-ocr-host-01, app-001-search-zero-ui-01]
 ---
 
@@ -44,3 +44,13 @@ typecheck及现有受影响原生顶部/零结果展示检查；检查零态外f
 ## scheduling
 
 OCR源接入5b707ae已独审02接受并主cd7c94e整合，故源码owner前置已满足；OCR平台运行任务仍继续，不由此追认完成。现在可从最新主HEAD建立开发worktree，避免同时拥有App/native-menu/CSS交界文件。先源码检查、不运行native构建或占GUI，统一包由root串行排期。
+
+## 开发实现约束（2026-11-04）
+
+已核对 `NotesUIRoot.isFlipped=YES`，其子视图 frame y 自顶向下；root 自身仍按父视图 flipped 状态锚定窗口顶部52pt。本轮只在 `layout=threeColumn && sidebarVisible` 且沿用当前 folderTitle=搜索、folderCount=0、非空 search.value 的零态条件时，将最终 title frame 的 x/y 从 `titleX/9` 改为 `titleX-1/11`、count 从 `titleX/28` 改为 `titleX-1/27`。保留 titleX、titleWidth、隐藏阈值、工具组排布和原字体，不用截图 ink 坐标冒充 AppKit frame。
+
+CSS 在 desktop + native-toolbar + 可见侧栏 + 非画廊 + 非独立窗的现有 `.search-zero-section` 内覆盖 padding-top=9px；40px border-box 高度、左右16px、20px line-height 与0.5px分隔线均保留。使用系统现有600/650/700三个有限字重进行 Chrome headless 的实际专用分组渲染诊断；按数据选择较粗候选并冻结。该诊断仅解释源码候选和 CSS 守卫边界，不是 WKWebView 或原版字体/像素验收。实际新包观察仍 UNKNOWN，后续由root串行排期。
+
+## 开发源码候选01
+
+已冻结两产品文件，聚合 `c421f6b874e1aff7b8096fa0eedb04b32278702f85cc7f8421e968e1a0a5528e`；49保护文件不变。typecheck、前端build、原零态展示16/启动5/选择7/顶部13组与实际CSS差量8组通过。保留600/650/700专用Chrome渲染：三者中文光栅相同，不能证明700改善笔画，700仅待真包校准候选。首轮诊断因遗漏padding逻辑别名而失败，其摘要与修正后原始结果均保留。没有native构建、共享target、GUI、设备或新包像素验收；详见 [源码候选01](../../verification/app-001-search-zero-geometry-01/source-candidate-01/README.md)。等待root冻结提交独审，再串行新包同条件测量。

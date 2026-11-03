@@ -1,0 +1,223 @@
+{
+  "browser": "156.0.8078.80",
+  "platform": "darwin",
+  "dpr": 2,
+  "viewport": {
+    "width": 1088,
+    "height": 660
+  },
+  "baselineCommit": "87e538c4577483c8756aa49445f47b24badd98ff",
+  "baselineCssSha256": "f62e02264fa449d5a2c44e5b8409672bea58c21ceffc19b28780642ac9d39cac",
+  "candidateCssSha256": "6ec16f5201dd029df68eae85964cce920b9766f50c9147460f6ea52998512359",
+  "boundaries": [
+    {
+      "name": "native-visible-list-zero",
+      "pass": true,
+      "beforeRect": {
+        "x": 228,
+        "y": 52,
+        "width": 279,
+        "height": 40
+      },
+      "afterRect": {
+        "x": 228,
+        "y": 52,
+        "width": 279,
+        "height": 40
+      },
+      "visible": true,
+      "differences": [
+        {
+          "property": "font-weight",
+          "before": "600",
+          "after": "700"
+        },
+        {
+          "property": "padding-block-start",
+          "before": "10px",
+          "after": "9px"
+        },
+        {
+          "property": "padding-top",
+          "before": "10px",
+          "after": "9px"
+        }
+      ]
+    },
+    {
+      "name": "native-hidden-sidebar-zero",
+      "pass": true,
+      "beforeRect": {
+        "x": 0,
+        "y": 52,
+        "width": 279,
+        "height": 40
+      },
+      "afterRect": {
+        "x": 0,
+        "y": 52,
+        "width": 279,
+        "height": 40
+      },
+      "visible": true,
+      "differences": []
+    },
+    {
+      "name": "desktop-fallback-zero",
+      "pass": true,
+      "beforeRect": {
+        "x": 228,
+        "y": 0,
+        "width": 279,
+        "height": 40
+      },
+      "afterRect": {
+        "x": 228,
+        "y": 0,
+        "width": 279,
+        "height": 40
+      },
+      "visible": true,
+      "differences": []
+    },
+    {
+      "name": "mobile-zero-fixture",
+      "pass": true,
+      "beforeRect": {
+        "x": 0,
+        "y": 18,
+        "width": 1087,
+        "height": 40
+      },
+      "afterRect": {
+        "x": 0,
+        "y": 18,
+        "width": 1087,
+        "height": 40
+      },
+      "visible": true,
+      "differences": []
+    },
+    {
+      "name": "gallery-browse-zero-fixture",
+      "pass": true,
+      "beforeRect": {
+        "x": 228,
+        "y": 52,
+        "width": 859,
+        "height": 40
+      },
+      "afterRect": {
+        "x": 228,
+        "y": 52,
+        "width": 859,
+        "height": 40
+      },
+      "visible": true,
+      "differences": []
+    },
+    {
+      "name": "gallery-edit-zero-fixture",
+      "pass": true,
+      "beforeRect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "afterRect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "visible": false,
+      "differences": []
+    },
+    {
+      "name": "independent-zero-fixture",
+      "pass": true,
+      "beforeRect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "afterRect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "visible": false,
+      "differences": []
+    },
+    {
+      "name": "ordinary-list-date-section",
+      "pass": true,
+      "beforeRect": {
+        "x": 228,
+        "y": 52,
+        "width": 279,
+        "height": 39
+      },
+      "afterRect": {
+        "x": 228,
+        "y": 52,
+        "width": 279,
+        "height": 39
+      },
+      "visible": true,
+      "differences": []
+    }
+  ],
+  "weights": [
+    {
+      "weight": 600,
+      "path": "candidate-600.png",
+      "computedFontFamily": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+      "computedWeight": "600",
+      "paddingTop": "9px",
+      "lineHeight": "20px",
+      "rect": {
+        "x": 228,
+        "y": 52,
+        "width": 279,
+        "height": 40
+      }
+    },
+    {
+      "weight": 650,
+      "path": "candidate-650.png",
+      "computedFontFamily": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+      "computedWeight": "650",
+      "paddingTop": "9px",
+      "lineHeight": "20px",
+      "rect": {
+        "x": 228,
+        "y": 52,
+        "width": 279,
+        "height": 40
+      }
+    },
+    {
+      "weight": 700,
+      "path": "candidate-700.png",
+      "computedFontFamily": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+      "computedWeight": "700",
+      "paddingTop": "9px",
+      "lineHeight": "20px",
+      "rect": {
+        "x": 228,
+        "y": 52,
+        "width": 279,
+        "height": 40
+      }
+    }
+  ],
+  "limitations": [
+    "Production CSS and exact zero-section JSX text rendered in a three-column fixture; not a mounted App.",
+    "Headless Chrome typography differs from native AppKit and WKWebView; no original font or pixel acceptance.",
+    "Excluded classes are deliberately given a zero-section fixture to exercise stylesheet scope, not claim that App renders those combinations."
+  ]
+}

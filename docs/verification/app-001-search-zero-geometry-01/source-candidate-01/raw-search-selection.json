@@ -1,0 +1,12 @@
+{
+  "name": "search-selection",
+  "args": [
+    "node",
+    "scripts/check-search-selection.mjs"
+  ],
+  "chunk_id": "4b4e28",
+  "wall_time_seconds": 0.376394916,
+  "exit_code": 0,
+  "original_token_count": 209,
+  "output": "{\n  \"tests\": 7,\n  \"results\": [\n    {\n      \"name\": \"unique result, zero result, clear preserve the base selection\",\n      \"pass\": true\n    },\n    {\n      \"name\": \"explicit result selection is limited to actual matches\",\n      \"pass\": true\n    },\n    {\n      \"name\": \"mobile and independent-note paths keep their real selection\",\n      \"pass\": true\n    },\n    {\n      \"name\": \"zero-result native actions disabled and global new-note/search enabled\",\n      \"pass\": true\n    },\n    {\n      \"name\": \"installed Tiptap parking primitive keeps full document and Undo/Redo\",\n      \"pass\": true\n    },\n    {\n      \"name\": \"unrelated parked-note access change keeps the valid visible target\",\n      \"pass\": true\n    },\n    {\n      \"name\": \"prepare then park then late abort/conflict/paper restore has one writer\",\n      \"pass\": true\n    }\n  ]\n}\n"
+}
