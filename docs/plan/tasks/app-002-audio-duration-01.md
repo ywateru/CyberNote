@@ -27,3 +27,9 @@ depends-on: [app-002-permission-01]
 ## verification
 
 源码候选须穿过真实生产helper/播放器边界覆盖有限metadata、Infinity后有限解析、媒体错误/play拒绝、卸载与晚事件、用户已seek不被回调重置；避免仅复制实现常量。独立静态后统一构建。真实安装使用既有约66秒合成附件，冷启读取、有限duration/显示、播放暂停/中部拖动/±15秒和起止边界分别记录，音轨保持静音。必要Mac smoke核正常路径。未实际跑的行为为unknown，不以ffprobe文件时长冒充HTML播放器已修复。
+
+## source candidate · 2026-11-03
+
+已将独立、静音、一次有限seek、15秒截止的媒体探针接入真实AudioPlayer，正常有限metadata不启用探针。未知时长显示“时长未知”，媒体错误/play拒绝可见并支持手动重试；播放器和探针在src变更/卸载后清理，晚事件/Promise不更新新实例。前端通过生产helper的11组定向检查、真实播放器Chrome156离线检查、typecheck及现有editor回归。记录：`docs/verification/app-002-audio-duration/README.md`。
+
+此状态只表示源码候选。Android91安装/冷启、中部拖动与±15秒、Mac smoke仍待独立统一包验证；不将Chrome离线结果升级为设备验收，不涉及原音频重编码、录音暂停完成、父保存补偿、可听采集或像素一致性。

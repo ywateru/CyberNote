@@ -20,6 +20,11 @@ import {
 } from "lucide-react";
 import { native, readAttachment } from "./bridge";
 import type { Note, DrawingStroke } from "./types";
+import {
+  createAudioPlayback,
+  formatAudioTime,
+  initialAudioPlaybackState,
+} from "./audio-playback";
 
 function MediaView({ node }: NodeViewProps) {
   const { id, name, kind } = node.attrs;
@@ -65,45 +70,43 @@ function MediaView({ node }: NodeViewProps) {
   );
 }
 export function AudioPlayer({ src, name }: { src: string; name: string }) {
+  // Different attachments get different media elements and controller lifetimes.
+  // In-flight events or play promises from the previous source cannot affect it.
+  return <AudioPlayerSession key={src} src={src} name={name} />;
+}
+function AudioPlayerSession({ src, name }: { src: string; name: string }) {
   const audio = useRef<HTMLAudioElement>(null);
-  const [playing, setPlaying] = useState(false);
-  const [time, setTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const controller = useRef<ReturnType<typeof createAudioPlayback> | null>(
+    null,
+  );
+  const [playback, setPlayback] = useState(initialAudioPlaybackState);
   const [expanded, setExpanded] = useState(false);
-  const fmt = (s: number) =>
-    Number.isFinite(s)
-      ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`
-      : "0:00";
+  useEffect(() => {
+    if (!audio.current) return;
+    const player = createAudioPlayback(audio.current, src, setPlayback);
+    controller.current = player;
+    return () => {
+      controller.current = null;
+      player.dispose();
+    };
+  }, [src]);
+  const { playing, duration, time } = playback;
+  const error =
+    playback.mediaError || playback.playError || playback.durationError;
   return (
     <div className="audio-card">
-      <audio
-        ref={audio}
-        src={src}
-        onLoadedMetadata={() => setDuration(audio.current?.duration || 0)}
-        onTimeUpdate={() => setTime(audio.current?.currentTime || 0)}
-        onEnded={() => setPlaying(false)}
-      />
+      <audio ref={audio} />
       <div
         className="audio-summary"
         onDoubleClick={() => setExpanded(!expanded)}
       >
         <span>
           <strong>{name.replace(/\.[^.]+$/, "")}</strong>
-          <small>录音 · {fmt(duration)}</small>
+          <small>录音 · {formatAudioTime(duration)}</small>
         </span>
         <button
-          onClick={() => {
-            const a = audio.current;
-            if (!a) return;
-            if (a.paused)
-              a.play()
-                .then(() => setPlaying(true))
-                .catch(() => {});
-            else {
-              a.pause();
-              setPlaying(false);
-            }
-          }}
+          disabled={!src || !!playback.mediaError}
+          onClick={() => controller.current?.toggle()}
         >
           {playing ? (
             <Pause size={14} fill="currentColor" />
@@ -124,10 +127,8 @@ export function AudioPlayer({ src, name }: { src: string; name: string }) {
         <div className="audio-detail">
           <button
             aria-label="后退15秒"
-            onClick={() => {
-              if (audio.current)
-                audio.current.currentTime = Math.max(0, time - 15);
-            }}
+            disabled={duration === null || !!playback.mediaError}
+            onClick={() => controller.current?.skip(-15)}
           >
             <RotateCcw size={18} />
             <small>15</small>
@@ -136,23 +137,31 @@ export function AudioPlayer({ src, name }: { src: string; name: string }) {
             aria-label="播放进度"
             type="range"
             min={0}
-            max={Number.isFinite(duration) ? duration : 0}
+            max={duration ?? 0}
             step="0.05"
-            value={time}
-            onChange={(e) => {
-              if (audio.current) audio.current.currentTime = +e.target.value;
-            }}
+            value={Math.min(time, duration ?? 0)}
+            disabled={duration === null || !!playback.mediaError}
+            onChange={(e) => controller.current?.seek(+e.target.value)}
           />
-          <span>{fmt(time)}</span>
+          <span>{formatAudioTime(time)}</span>
           <button
             aria-label="前进15秒"
-            onClick={() => {
-              if (audio.current)
-                audio.current.currentTime = Math.min(duration, time + 15);
-            }}
+            disabled={duration === null || !!playback.mediaError}
+            onClick={() => controller.current?.skip(15)}
           >
             <RotateCw size={18} />
             <small>15</small>
+          </button>
+        </div>
+      )}
+      {error && (
+        <div className="inline-error" role="alert">
+          {error}{" "}
+          <button
+            aria-label="重试录音"
+            onClick={() => controller.current?.retry()}
+          >
+            重试
           </button>
         </div>
       )}
