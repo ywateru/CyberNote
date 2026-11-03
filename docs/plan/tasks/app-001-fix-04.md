@@ -21,6 +21,7 @@ depends-on: [app-001-fix-03]
 - docs/INDEX.md、docs/requirements.md F03/F04/F14
 - docs/ui/interaction-matrix.md、docs/ui/android.md
 - docs/research/android-ime-verification.md、docs/research/android-ime-readiness/
+- docs/research/android-ime-diagnosis/analysis.md 与 inputs.json（20源码及锁定PM的只读候选机制，不是根因已证）
 - docs/verification/qa-android-ime/（仅合成内容；独立原始候选/内联/快速/长停留事件与截图）
 - docs/plan/reviews/app-001-fix-03-mac-01.md、app-001-fix-03-android-03.md（已通过有限安全边界不得回退）
 
