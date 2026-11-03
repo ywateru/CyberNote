@@ -1,0 +1,230 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_3c9f36ba3f67b1960d63d56f01a683f7a5bfc47ffd3126d514b20494dcc98416\",\"subject\":null,\"provider\":{\"id\":\"frida\",\"name\":\"Frida\",\"version\":null},\"analysis_profile\":null,\"predicate_type\":\"rea.frida.instrumentation-observation\",\"operation\":\"instrument_with_frida\",\"parameters\":{\"session_id\":\"1c4b4cb8-6886-4542-99df-a69d034d806a\",\"device_id\":\"local\",\"mode\":\"attach\",\"pid\":23532},\"raw_result\":null,\"normalized_result\":{\"session_id\":\"1c4b4cb8-6886-4542-99df-a69d034d806a\",\"device_id\":\"local\",\"state\":\"running\",\"target\":\"备忘录 (pid 23532)\",\"pid\":23532,\"mode\":\"attach\",\"scripts\":[{\"script_id\":\"c64c429e-e278-4628-9c57-ce79bc339d03\",\"name\":\"rea-c64c429e-e278-4628-9c57-ce79bc339d03\"}],\"messages\":[{\"script_id\":\"c64c429e-e278-4628-9c57-ce79bc339d03\",\"type\":\"send\",\"payload\":{\"kind\":\"webview\",\"pid\":23532,\"url\":\"tauri://localhost\",\"loading\":0,\"title\":\"备忘录\",\"bounds\":[0,0,1392,903],\"supportsAsync\":1}},{\"script_id\":\"c64c429e-e278-4628-9c57-ce79bc339d03\",\"type\":\"send\",\"payload\":{\"pid\":23532,\"windows\":[{\"number\":68273,\"title\":\"备忘录\",\"visible\":1,\"key\":1,\"main\":1,\"frame\":[48,0,1392,903],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"TaoWindow\"},{\"number\":68278,\"title\":\"\",\"visible\":0,\"key\":0,\"main\":0,\"frame\":[1036,767,64,64],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"TUINSWindow\"},{\"number\":68396,\"title\":\"Window\",\"visible\":1,\"key\":0,\"main\":0,\"frame\":[54,877,66,20],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"NSLocalWindowSharingWindow\"}],\"errors\":[],\"application\":{\"active\":1,\"hidden\":0,\"appearance\":\"NSAppearanceNameAqua\",\"frontmostBundle\":\"com.openai.codex\",\"frontmostPid\":94949}}},{\"script_id\":\"c64c429e-e278-4628-9c57-ce79bc339d03\",\"type\":\"send\",\"payload\":{\"kind\":\"dom-read\",\"value\":{\"at\":\"2026-11-03T18:23:24.727Z\",\"url\":\"tauri://localhost\",\"title\":\"备忘录\",\"viewport\":{\"width\":1392,\"height\":903,\"dpr\":2},\"activeElement\":\"BODY\",\"documentText\":\"\\n快速备忘录\\n3\\n在我的 Mac 上\\n\\n全部备忘录\\n32\\n\\n备忘录\\n0\\n\\nNotes Clone UI\\n3\\n\\nQA 独立验证\\n12\\n\\nFIX01\\n6\\n\\nFIX03 Session Proof\\n6\\n\\nNotes Clone UI 对照\\n2\\n新建文件夹\\n\\n今天\\n\\nQA F07 MAC C02 A 20261104\\n01:16\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\\n昨天\\n\\nQA MEDIA 56D7 20261103 2232\\n2026/11/3\\nSynthetic local image and PDF roundtrip.\\n\\nQA Rich HTML\\n2026/11/3\\nBold fragment body Existing plain\\n\\nQA Quote\\n2026/11/3\\nQuoted text After quote\\n\\nQA Structure\\n2026/11/3\\nDash paragraph Second dash Quote paragraph\\n\\nQA Checklist\\n2026/11/3\\nFirst task Second task\\n\\nQA Table Boundary\\n2026/11/3\\nA1 A2 C B2\\n\\nQA Table Basic\\n2026/11/3\\n项目 状态 本地保存 待核对\\n\\nQA Typed Title\\n2026/11/3\\nOnly format these words\\n\\nOnly format these words\\n2026/11/3\\n无更多文本\\n\\n纯文本输入对照\\n2026/11/3\\n第二行正文\\n\\nQA Mac 保存 2026-11-03\\n2026/11/3\\n中文正文跨重启 清单内容 表格中文 第二格\\n2026年11月4日 01:16\\nQA F07 MAC C02 A 20261104\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\",\"editors\":[{\"rect\":{\"x\":531,\"y\":82,\"w\":838,\"h\":733},\"connected\":true,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":73,\"head\":73},\"editable\":true,\"focused\":false,\"keys\":[{\"key\":\"996981770\",\"type\":\"Q8\"},{\"key\":\"7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\",\"type\":\"G9\"}]}]},\"error\":null}}],\"messages_truncated\":false,\"source_kind\":\"file\",\"source_path\":\"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-zero-same-geometry-before-01/12-native-read.js\",\"source_sha256\":\"a3a355999b96cbf49d9b6b28d97cf3d9c985f13189dafb730117685d0a7b8293\",\"cleanup_error\":null},\"confidence\":\"observed\",\"authority\":\"external-service\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"The target operating system and architecture were not reported by this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_3c9f36ba3f67b1960d63d56f01a683f7a5bfc47ffd3126d514b20494dcc98416",
+    "subject": null,
+    "provider": {
+      "id": "frida",
+      "name": "Frida",
+      "version": null
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.frida.instrumentation-observation",
+    "operation": "instrument_with_frida",
+    "parameters": {
+      "session_id": "1c4b4cb8-6886-4542-99df-a69d034d806a",
+      "device_id": "local",
+      "mode": "attach",
+      "pid": 23532
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "session_id": "1c4b4cb8-6886-4542-99df-a69d034d806a",
+      "device_id": "local",
+      "state": "running",
+      "target": "备忘录 (pid 23532)",
+      "pid": 23532,
+      "mode": "attach",
+      "scripts": [
+        {
+          "script_id": "c64c429e-e278-4628-9c57-ce79bc339d03",
+          "name": "rea-c64c429e-e278-4628-9c57-ce79bc339d03"
+        }
+      ],
+      "messages": [
+        {
+          "script_id": "c64c429e-e278-4628-9c57-ce79bc339d03",
+          "type": "send",
+          "payload": {
+            "kind": "webview",
+            "pid": 23532,
+            "url": "tauri://localhost",
+            "loading": 0,
+            "title": "备忘录",
+            "bounds": [
+              0,
+              0,
+              1392,
+              903
+            ],
+            "supportsAsync": 1
+          }
+        },
+        {
+          "script_id": "c64c429e-e278-4628-9c57-ce79bc339d03",
+          "type": "send",
+          "payload": {
+            "pid": 23532,
+            "windows": [
+              {
+                "number": 68273,
+                "title": "备忘录",
+                "visible": 1,
+                "key": 1,
+                "main": 1,
+                "frame": [
+                  48,
+                  0,
+                  1392,
+                  903
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "TaoWindow"
+              },
+              {
+                "number": 68278,
+                "title": "",
+                "visible": 0,
+                "key": 0,
+                "main": 0,
+                "frame": [
+                  1036,
+                  767,
+                  64,
+                  64
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "TUINSWindow"
+              },
+              {
+                "number": 68396,
+                "title": "Window",
+                "visible": 1,
+                "key": 0,
+                "main": 0,
+                "frame": [
+                  54,
+                  877,
+                  66,
+                  20
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "NSLocalWindowSharingWindow"
+              }
+            ],
+            "errors": [],
+            "application": {
+              "active": 1,
+              "hidden": 0,
+              "appearance": "NSAppearanceNameAqua",
+              "frontmostBundle": "com.openai.codex",
+              "frontmostPid": 94949
+            }
+          }
+        },
+        {
+          "script_id": "c64c429e-e278-4628-9c57-ce79bc339d03",
+          "type": "send",
+          "payload": {
+            "kind": "dom-read",
+            "value": {
+              "at": "2026-11-03T18:23:24.727Z",
+              "url": "tauri://localhost",
+              "title": "备忘录",
+              "viewport": {
+                "width": 1392,
+                "height": 903,
+                "dpr": 2
+              },
+              "activeElement": "BODY",
+              "documentText": "\n快速备忘录\n3\n在我的 Mac 上\n\n全部备忘录\n32\n\n备忘录\n0\n\nNotes Clone UI\n3\n\nQA 独立验证\n12\n\nFIX01\n6\n\nFIX03 Session Proof\n6\n\nNotes Clone UI 对照\n2\n新建文件夹\n\n今天\n\nQA F07 MAC C02 A 20261104\n01:16\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\n昨天\n\nQA MEDIA 56D7 20261103 2232\n2026/11/3\nSynthetic local image and PDF roundtrip.\n\nQA Rich HTML\n2026/11/3\nBold fragment body Existing plain\n\nQA Quote\n2026/11/3\nQuoted text After quote\n\nQA Structure\n2026/11/3\nDash paragraph Second dash Quote paragraph\n\nQA Checklist\n2026/11/3\nFirst task Second task\n\nQA Table Boundary\n2026/11/3\nA1 A2 C B2\n\nQA Table Basic\n2026/11/3\n项目 状态 本地保存 待核对\n\nQA Typed Title\n2026/11/3\nOnly format these words\n\nOnly format these words\n2026/11/3\n无更多文本\n\n纯文本输入对照\n2026/11/3\n第二行正文\n\nQA Mac 保存 2026-11-03\n2026/11/3\n中文正文跨重启 清单内容 表格中文 第二格\n2026年11月4日 01:16\nQA F07 MAC C02 A 20261104\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY",
+              "editors": [
+                {
+                  "rect": {
+                    "x": 531,
+                    "y": 82,
+                    "w": 838,
+                    "h": 733
+                  },
+                  "connected": true,
+                  "doc": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 1
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "QA F07 MAC C02 A 20261104"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "selection": {
+                    "type": "text",
+                    "anchor": 73,
+                    "head": 73
+                  },
+                  "editable": true,
+                  "focused": false,
+                  "keys": [
+                    {
+                      "key": "996981770",
+                      "type": "Q8"
+                    },
+                    {
+                      "key": "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0",
+                      "type": "G9"
+                    }
+                  ]
+                }
+              ]
+            },
+            "error": null
+          }
+        }
+      ],
+      "messages_truncated": false,
+      "source_kind": "file",
+      "source_path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-zero-same-geometry-before-01/12-native-read.js",
+      "source_sha256": "a3a355999b96cbf49d9b6b28d97cf3d9c985f13189dafb730117685d0a7b8293",
+      "cleanup_error": null
+    },
+    "confidence": "observed",
+    "authority": "external-service",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "The target operating system and architecture were not reported by this observation."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

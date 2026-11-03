@@ -1,0 +1,103 @@
+Window: "Notes Clone UI 对照", App: 备忘录.
+0 标准窗口 Notes Clone UI 对照 – 6个备忘录, Secondary Actions: Raise
+	1 分离组
+		2 滚动区
+			3 外框 文件夹
+				4 row (selectable) Description: 快速备忘录, 2个备忘录
+快速备忘录, 2个备忘录, Value: 快速备忘录
+2
+				5 row (selectable, expanded) Value: iCloud, Secondary Actions: Collapse
+				6 row (selectable) Description: iCloud全部, 110个备忘录
+iCloud全部, 110个备忘录, Value: iCloud全部
+110
+				7 row (selectable) Description: 备忘录, 104个备忘录
+备忘录, 104个备忘录, Value: 备忘录
+104
+				8 row (selected)
+					9 单元格 (selected) Notes Clone UI 对照, 6个备忘录
+						10 未知 Description: Notes Clone UI 对照, 6个备忘录, ID: FolderCell
+							11 文本栏 (settable) Notes Clone UI 对照
+							12 未知 6
+				13 row (selectable, expanded) Value: 标签, Secondary Actions: Collapse
+				14 row (selectable) Description: 所有标签
+UI对照, Value: 所有标签
+#UI对照
+		15 分离器 (disabled, settable, float) 228
+		16 滚动区
+			17 表格 Description: 我的备忘录列表视图, ID: ICMNoteListTableView_asList
+				18 row (selectable)
+					19 单元格
+						20 文本 昨天
+				21 row (selectable) Secondary Actions: 置顶, 共享, 删除
+					22 单元格 Secondary Actions: 置顶, 共享, 删除
+						23 单元格 Help: 按下或选择Return键来打开备忘录。, ID: ICMNoteListCell
+							24 unknown
+							25 unknown
+							26 text Math Mode Reference 2+3+‎ = 54+6 = 10 昨天
+				27 row (selectable) Secondary Actions: 置顶, 共享, 删除
+					28 单元格 Secondary Actions: 置顶, 共享, 删除
+						29 单元格 Help: 按下或选择Return键来打开备忘录。, ID: ICMNoteListCell
+							30 unknown
+							31 unknown
+							32 text 纯文本输入对照 第二行正文 昨天
+				33 row (selectable) Secondary Actions: 置顶, 共享, 删除
+					34 单元格 Secondary Actions: 置顶, 共享, 删除
+						35 单元格 Help: 按下或选择Return键来打开备忘录。, ID: ICMNoteListCell
+							36 unknown
+							37 unknown
+							38 text 表格转换边界 A1 A2 C B2 昨天
+				39 row (selectable) Secondary Actions: 置顶, 共享, 删除
+					40 单元格 Secondary Actions: 置顶, 共享, 删除
+						41 单元格 Help: 按下或选择Return键来打开备忘录。, ID: ICMNoteListCell
+							42 unknown
+							43 unknown
+							44 text 样式与表格对照 输入与保存 昨天
+				45 row (selectable) Secondary Actions: 置顶, 共享, 删除
+					46 单元格 Secondary Actions: 置顶, 共享, 删除
+						47 单元格 Help: 按下或选择Return键来打开备忘录。, ID: ICMNoteListCell
+							48 unknown
+							49 unknown
+							50 text Title Reference 直接键入标题后回车的正文 昨天
+				51 row (selected) Secondary Actions: 置顶, 共享, 删除
+					52 单元格 (selected) Secondary Actions: 置顶, 共享, 删除
+						53 单元格 Help: 按下或选择Return键来打开备忘录。, ID: ICMNoteListCell
+							54 unknown
+							55 unknown
+							56 text 每日 TODO 记录每一个想法 昨天
+		57 分离器 (disabled, settable, float) 280
+		58 文本 Help: 按下以显示创建日期。, Value: 2026年11月3日 10:35
+		59 滚动区 ID: Note Body Scroll View, Secondary Actions: Scroll Up, Scroll Down
+			60 文本输入区 (settable) ID: Note Body Text View, Secondary Actions: 制作核对清单项, Value: 每日 TODO
+记录每一个想法
+今天的计划
+整理需求与交互
+完成本地保存
+			61 滚动条 (disabled, settable, float) 0
+	62 工具栏
+		63 按钮 Description: 添加文件夹, Secondary Actions: 移到下一项
+		64 按钮 Description: 文件夹, Help: 隐藏文件夹, Secondary Actions: 移到下一项
+		65 菜单按钮 Description: 显示选项, Help: 管理备忘录和视图, Secondary Actions: 移到下一项, 从工具栏移除
+		66 按钮 Description: 新建备忘录, Help: 创建备忘录, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除
+		67 按钮 Description: 格式, Help: 选取要应用到文本的样式, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除
+		68 按钮 Description: 核对清单, Help: 制作核对清单, Value: 关, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除
+		69 按钮 Description: 表格, Help: 添加表格, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除
+		70 菜单按钮 Description: 媒体, Help: 添加文件、媒体等, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除
+		71 container Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除
+			72 按钮 共享
+			73 菜单按钮 更多
+		74 搜索文本栏 (settable)
+			75 按钮 (disabled) 搜索
+	76 关闭按钮
+	77 全屏幕按钮 Help: 此按钮也可以执行缩放窗口的操作, Secondary Actions: 缩放窗口
+	78 最小化按钮
+	79 text Notes Clone UI 对照 6个备忘录
+80 menu bar
+	81 备忘录
+	82 文件
+	83 编辑
+	84 格式
+	85 显示
+	86 窗口
+	87 帮助
+
+The focused UI element is 74 搜索文本栏 (settable)
