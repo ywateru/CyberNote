@@ -1,25 +1,25 @@
 # Apple Notes Clone
 
-用 Rust + pnpm 构建的本地备忘录应用，目标为 macOS 与 Android。Tauri 2 提供安装应用与原生窗口，React/Tiptap 提供编辑器，Rust/SQLite 保存笔记与附件。不接入 iCloud。
+用 Rust + pnpm 构建的本地备忘录应用，目标为 macOS 与 Android。Tauri 2提供安装应用与原生窗口，React/Tiptap提供编辑器，Rust/SQLite保存笔记与附件。不接入iCloud。
 
-**当前是可运行开发版，尚未达到原版全部 UI、交互及逐像素一致，完整目标仍在进行。** 功能、源码审查、安装版操作和像素结果分别记录，不以构建成功代替验收。需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，最新细分状态见[交付计划](docs/plan/README.md)。
+**当前是可运行开发版，尚未达到原版全部UI、交互及逐像素一致，完整目标仍在进行。** 需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，细分状态见[交付计划](docs/plan/README.md)。
 
-2026-11-04最近完成双端打包的统一包为candidate03，冻结源码 `c6594dbdfe8ee0313205a4b14bcdfeb37b819088`，232项列明构建输入在两端构建前后相同。该包包括搜索零结果显示与焦点、原目标附件提交、录音初始/暂停/完成状态和真实正文保存确认接线。Mac本地签名及Android debug构建/验签均通过。[Mac独立实测](docs/verification/unified-candidate03-independent-01/README.md)已通过TXT/PNG选择、正文保存确认、owned字节及正常退出冷启恢复；[Android保留数据升级](docs/verification/unified-candidate03-android-independent-01/README.md)已通过确切包替换及指定原数据逐项保全，未启动新包交互。[完整构建记录](docs/verification/unified-candidate03/build/README.md)保留Android首次环境失败和必要权限下原命令重试结果。
+2026-11-04最新双端候选为 **candidate04**，已保存Mac本地完整签名包和Android arm64 debug APK。本批包括暂停录音试听、OCR文字宿主接入及搜索零结果文字位置校准；这些新增能力已经通过源码独审，尚未完成本批安装后的实际运行验收。[构建记录](docs/verification/unified-candidate04/README.md)分别记录构建、签名、模型、运行与像素范围。
 
-Mac真实录音仍在准备阶段，没有录音文件或可听性通过；[只读诊断](docs/verification/candidate03-mic-preparing-diagnosis-01/README.md)已记录当前音频授权尚未决定及历史TCC请求/签名条件不匹配线索，未确诊全部原因。暂停试听、OCR宿主接入和零结果文字校准已通过源码独审并进入candidate04 Mac包，尚未进行该包的实际运行验收。新包与原版的同条件整窗像素仍未通过。原生比例PNG取图工具已通过[独立源码审查](docs/plan/reviews/tools-lossless-window-capture-static-01.md)，尚未进行真实窗口取图；历史CUA截图的JPEG编码更正与原文件均保留。
-
-candidate04冻结源码为 `d8f832e83349c7503b872e0e88853d1ab7b0713a`，279项输入。Mac完整本地签名包已构建并保存为 `artifacts/unified-candidate04/NotesClone-mac.zip`，SHA-256 `6a821684a64406c5febd9dd6f703e84c09459f0fb7acf90ad015e4e4b40b4738`。Android三次尝试均失败，尚无candidate04 APK：最近一次已复用现有Gradle分发包，但离线解析拒绝已有的 `lifecycle-livedata:2.10.0` AAR。第二次曾意外启动分发包下载，停止后保留了部分文件；不能将整批称为完全离线。详见[candidate04构建状态](docs/verification/unified-candidate04/README.md)。
-
-本机安装文件另存于项目的 `artifacts/unified-candidate03/`（未纳入Git）：
-
-| 平台 | 文件 | 构建范围 |
+| 平台 | 本机交付文件（未纳入Git） | 已完成检查 |
 | --- | --- | --- |
-| Mac | `NotesClone-mac.zip` | 解压为.app；完整本地adhoc签名，未做开发者公证 |
-| Android | `NotesClone-android-arm64.apk` | 现有debug签名，仅arm64-v8a |
+| Mac | `artifacts/unified-candidate04/NotesClone-mac.zip` | 完整本地adhoc签名，严格验签通过；未做开发者公证 |
+| Android | `artifacts/unified-candidate04/NotesClone-android-arm64.apk` | debug/v2签名通过；仅arm64-v8a；25个随包OCR模型路径、大小、SHA全部一致 |
 
-文件SHA256及副本核对见[交接记录](docs/verification/unified-candidate03/root-handoff/result.json)。旧候选与失败证据继续保存在各批次验证目录，不能据本次主源码追认旧包行为。
+Mac源码冻结为 `d8f832e83349c7503b872e0e88853d1ab7b0713a`，279项列明输入。Android恢复构建冻结为 `3d55dbaaa7e87e74629bce8dc6f42b6167968e7d`，原279项逐项相同，仅增加五个取图工具输入。两者是不同的完整冻结，应用/插件/配置/依赖字节相同；不声称共用一份完整构建身份。文件SHA与本机保全核对见[交接记录](docs/verification/unified-candidate04/root-handoff/result.json)。
 
-尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音的完整冷启链、暂停录音试听的实际设备验收、绘画及附件完整预览、扫描主App文字识别的实际设备验收、标签/智能文件夹/数学/笔记链接和标准格式导入导出。具体已通过子用例与缺口以交付计划及独立报告为准。
+Android前三次失败原样保留：本地socket限制、wrapper意外分发下载后停止、真实variant缓存键缺失。最终只读补充缓存复用既有相同AAR，通过完整114项外部依赖解析后正式恢复构建成功；未手改原缓存BTree、依赖或产品源码。[恢复构建](docs/verification/unified-candidate04/android-recovery-01/README.md)七类输入及额外RO缓存/环境前后核验通过，无新增下载提示，临时离线配置已安全移除。
+
+实际运行结果仍来自较早candidate03：[Mac附件与正常退出冷启](docs/verification/unified-candidate03-independent-01/README.md)有限通过，[Android保留数据升级](docs/verification/unified-candidate03-android-independent-01/README.md)有限通过，均不能直接追认candidate04。Mac真实录音仍无文件或可听性通过，权限线索见[只读诊断](docs/verification/candidate03-mic-preparing-diagnosis-01/README.md)。
+
+原生比例PNG取图工具已通过[独立源码审查](docs/plan/reviews/tools-lossless-window-capture-static-01.md)，并从主路径编译为独立工具；尚未进行真实窗口取图。窗口通道仍返回Mac锁定；历史CUA截图实际编码JPEG，其旧字节与更正记录保留，不用于无损像素验收。原版与本批的同条件整窗像素仍未通过。
+
+尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音与暂停试听的设备验收、绘画及附件完整预览、真实OCR文字保存与冷启验收、完整文稿扫描主流程、标签/智能文件夹/数学/笔记链接和标准格式导入导出。具体通过子用例和缺口以交付计划与独立报告为准。
 
 ## 运行与构建
 

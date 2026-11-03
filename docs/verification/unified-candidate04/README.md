@@ -1,6 +1,6 @@
 # candidate04 统一包进度
 
-状态：**源码已冻结，Mac已构建并保存，Android三次构建均失败；本批尚未运行验收**。本页记录2026-11-04的阶段结果，不替代准备目录中的原始记录。
+状态：**Mac与Android均已构建并保全，Android独立恢复构建成功；本批尚未运行验收**。本页记录2026-11-04的阶段结果，不替代准备目录中的原始记录。
 
 ## 正常生成前置
 
@@ -59,3 +59,16 @@ candidate04 Mac尚未启动，Android尚无本批可用APK。录音、暂停回�
 只在全新隔离home中，从已存在且SHA匹配的55,037字节AAR建立缺失file key，没有修改原缓存BTree、metadata、依赖或文件内容。随后将新索引和AAR两文件（73,704字节）作为只读补充缓存。原项目真实目标artifactView已解析成功，两种ID文件SHA相同；另一次完整外部依赖lenient解析114项、失败0，无应用编译或下载。它们证明补充缓存可解决已知离线解析阻塞，不等于APK已经构建或运行通过。
 
 后续Android恢复构建将显式冻结新增`GRADLE_RO_DEP_CACHE`路径及两文件身份；原准备common的七类比较不覆盖这个变量，不能默称已覆盖。主源码083a8d4相对原d8应用/插件/配置/依赖字节不变，只增加5个取证工具输入。原Mac包保持其原始冻结身份，不伪造新Mac构建记录。
+
+
+## Android正式恢复构建与本机交付
+
+[android-recovery-01](android-recovery-01/README.md)以`3d55dbaaa7e87e74629bce8dc6f42b6167968e7d`冻结284输入，aggregate `90d10570359f935eb809b0df0d71bcd1e95cad661c332a21cc04c9ccfb5d4076`。原Mac冻结的279项逐项相同，新增恰为五个取图工具。恢复入口经[独立源审](../../plan/reviews/android-recovery-runner-static-01.md)SOURCE-READY后执行，未伪造同轮Mac标记，也未重复构建Mac。
+
+首次正式恢复构建exit0，约33.9秒；七类输入比较全true，额外RO缓存/环境在构建前后和收集前后相同。两个离线标记、无下载提示，无stop/error/invalid/cleanup错误，临时init核身份后移除。最低可用空间3,728,007,168字节。target已释放，本次无遗留新相关构建进程；旧daemon保留。过程快照晚于构建完成的限制原样说明，不宣称抓到了整个运行期进程组。
+
+APK 304,110,831字节，SHA-256 `bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2`，仅arm64-v8a/debug；apksigner exit0、v2有效。25模型共2,490,310字节，每个路径/大小/SHA与既有AAR一致。root核对[阶段清单](android-recovery-01/MANIFEST.json)16文件共522,491字节，全部size/SHA一致，并独占复制及核对本机交付副本。
+
+最新本机文件为`artifacts/unified-candidate04/NotesClone-mac.zip`和`artifacts/unified-candidate04/NotesClone-android-arm64.apk`，完整SHA及Mac/Android不同完整冻结关系见[root交接](root-handoff/result.json)。本节替代前文历史“Android尚无APK”的当前状态，但不覆写失败现场或当时结论。
+
+本次未安装或启动candidate04，没有新的设备OCR/录音/附件冷启或像素通过。完整目标继续active。

@@ -1,0 +1,35 @@
+{
+  "scope": "Durable local package copies only; candidate04 runtime and pixel parity not accepted",
+  "mac": {
+    "artifact": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate04/NotesClone-mac.zip",
+      "bytes": 4750334,
+      "sha256": "6a821684a64406c5febd9dd6f703e84c09459f0fb7acf90ad015e4e4b40b4738"
+    },
+    "sourceHead": "d8f832e83349c7503b872e0e88853d1ab7b0713a",
+    "signature": "previous preserved full local adhoc strict verify exit0; no notarization claim"
+  },
+  "android": {
+    "artifact": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate04/NotesClone-android-arm64.apk",
+      "bytes": 304110831,
+      "sha256": "bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2"
+    },
+    "sourceHead": "3d55dbaaa7e87e74629bce8dc6f42b6167968e7d",
+    "sourceAggregate": "90d10570359f935eb809b0df0d71bcd1e95cad661c332a21cc04c9ccfb5d4076",
+    "signatureExit": 0,
+    "abis": [
+      "arm64-v8a"
+    ],
+    "ocrModels": 25,
+    "ocrModelBytes": 2490310,
+    "ocrModelsExactlyMatchCachedAars": true
+  },
+  "sourceRelation": "Android original279 listed inputs equal Mac original279, plus5 observer tool inputs; different complete freezes",
+  "originalRecording": "references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4",
+  "limitations": [
+    "No candidate04 GUI/runtime/OCR/recording/cold-start validation",
+    "No valid original/clone native PNG pixel pair",
+    "Advanced local features and remaining interaction parity incomplete"
+  ]
+}
