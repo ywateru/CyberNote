@@ -4,6 +4,7 @@ import {
   mergeAttributes,
   type NodeViewRenderer,
 } from "@tiptap/core";
+import { NoteTag } from "./note-tag-extension";
 import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
@@ -71,6 +72,7 @@ export const DrawingNode = Node.create({
 });
 export function createEditorExtensions(
   views: Partial<Record<"attachment" | "drawing", NodeViewRenderer>> = {},
+  options: { allowTags?: boolean } = {},
 ) {
   const withView = (node: Node, view?: NodeViewRenderer) =>
     view ? node.extend({ addNodeView: () => view }) : node;
@@ -80,6 +82,7 @@ export function createEditorExtensions(
       link: { openOnClick: false },
       trailingNode: { notAfter: ["heading", "paragraph"] },
     }),
+    NoteTag.configure({ allowCommit: options.allowTags !== false }),
     ListStyle,
     TaskList,
     TaskItem.configure({ nested: true }),

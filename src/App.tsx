@@ -9,6 +9,11 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { type Editor, type JSONContent } from "@tiptap/react";
+import {
+  documentTags,
+  projectTags,
+  tagSelectionAfterAccess,
+} from "./note-tags";
 import { SaveRevisions } from "./save-revisions";
 import { secureId } from "./secure-id";
 import { enqueueSave, type SaveOutcome } from "./save-queue";
@@ -369,6 +374,8 @@ function App() {
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
   const [filter, setFilter] = useState("");
+  // undefined = physical folder; null = all committed tags; name = exact tag.
+  const [tagFilter, setTagFilter] = useState<string | null | undefined>();
   const [menu, setMenu] = useState<string | null>(null);
   const [modal, setModal] = useState<string | null>(null);
   const [modalValue, setModalValue] = useState("");
@@ -505,9 +512,10 @@ function App() {
   const theme = settings.theme || "system";
   const view = settings.view || "list";
   const sort = settings.sort || "updated";
+  const tags = projectTags(ws, accessSuspended);
   const listed = ws.notes
     .filter((n) => {
-      if (query || filter) {
+      if (query || filter || tagFilter !== undefined) {
         if (n.deletedAt) return false;
       } else if (folderId === "all") {
         if (n.deletedAt) return false;
@@ -525,7 +533,11 @@ function App() {
         !JSON.stringify(n.document).includes("taskItem")
       )
         return false;
-      if (filter === "tags" && !n.plainText.includes("#")) return false;
+      const names = tags.notes.get(n.id) || [];
+      if ((filter === "tags" || tagFilter !== undefined) && !names.length)
+        return false;
+      if (typeof tagFilter === "string" && !names.includes(tagFilter))
+        return false;
       if (
         ["audio", "image", "file", "video"].includes(filter) &&
         !ws.attachments.some((a) => a.noteId === n.id && a.kind === filter)
@@ -542,9 +554,13 @@ function App() {
             ? b.createdAt - a.createdAt
             : b.updatedAt - a.updatedAt),
     );
-  const desktopSearch = !mobile && !separate && !!query;
+  const desktopSearch =
+    !separate &&
+    ((!mobile && !!query) || filter === "tags" || tagFilter !== undefined);
   const desktopSearchZero =
     desktopSearch &&
+    !!query &&
+    !mobile &&
     view === "list" &&
     workspaceLoaded &&
     !loading &&
@@ -596,7 +612,7 @@ function App() {
       setShowFind(false);
       setEditing(false);
     }
-  }, [desktopSearch, query]);
+  }, [desktopSearch, query, filter, tagFilter]);
   const fail = useCallback((e: unknown) => setError(errText(e)), []);
   const hydrate = useCallback((data: Workspace) => {
     const previous = wsRef.current;
@@ -893,6 +909,11 @@ function App() {
   }, [flush, fail]);
   clearSensitive.current = (ids) => {
     if (!ids.length) return;
+    setTagFilter((name) =>
+      name === undefined
+        ? undefined
+        : tagSelectionAfterAccess(name, wsRef.current, ids),
+    );
     nativeToolbar.current?.invalidate((context) => {
       context.editor = null;
       context.bookmark = null;
@@ -924,7 +945,11 @@ function App() {
     }
     // An unrelated parked note changed. Keep the still-valid visible search
     // target and its overlay; clearing here would silently retarget B to A.
-    if (shouldClearSearchAfterAccessChange(desktopSearch, noteId, ids)) {
+    if (
+      tagFilter === undefined &&
+      filter !== "tags" &&
+      shouldClearSearchAfterAccessChange(desktopSearch, noteId, ids)
+    ) {
       setQuery("");
       setSearching(false);
     }
@@ -970,6 +995,11 @@ function App() {
       recordingLifecycle.current.suspend(event.noteIds);
       blockedNotes.current = new Set(event.noteIds);
       setAccessSuspended(event.noteIds);
+      setTagFilter((name) =>
+        name === undefined
+          ? undefined
+          : tagSelectionAfterAccess(name, wsRef.current, event.noteIds),
+      );
       if (
         noteId &&
         blockedNotes.current.has(noteId) &&
@@ -1002,6 +1032,15 @@ function App() {
       if (frozen && !frozen.editor.isDestroyed)
         restoreEditor(frozen.editor, frozen.editable);
       barrierEditor.current = null;
+      setTagFilter((name) =>
+        name === undefined
+          ? undefined
+          : tagSelectionAfterAccess(
+              name,
+              { ...wsRef.current, access: event.access },
+              [],
+            ),
+      );
       setWs((prev) => ({ ...prev, access: event.access }));
       fail(Error("锁定未执行：请检查所有窗口是否有未保存的更改，再重试。"));
       void synchronizeRef.current();
@@ -1169,6 +1208,7 @@ function App() {
     }
   }, [noteId]);
   const chooseFolder = (id: string) => {
+    setTagFilter(undefined);
     setGalleryEditor(false);
     setFolderId(id);
     setPage("notes");
@@ -1179,6 +1219,14 @@ function App() {
     const n = ws.notes.find((n) => n.folderId === id);
     setNoteId(n?.id || null);
     updateSettings({ selectedFolder: id, selectedNote: n?.id || "" });
+  };
+  const chooseTag = (name: string | null) => {
+    setTagFilter(name);
+    setFilter("");
+    setSearchNoteId(null);
+    setGalleryEditor(false);
+    setPage("notes");
+    setMenu(null);
   };
   const chooseNote = (n: Note) => {
     if (!mobile && view === "gallery") setGalleryEditor(true);
@@ -1210,6 +1258,7 @@ function App() {
           access: n.access ?? prev.access,
           notes: [n, ...prev.notes],
         }));
+        setTagFilter(undefined);
         setNoteId(n.id);
         setPage("editor");
         setGalleryEditor(true);
@@ -1230,6 +1279,10 @@ function App() {
   );
   const newNote = useCallback(() => createNote(), [createNote]);
   const openModal = (type: string, value = "") => {
+    if (type === "lock" && selected && documentTags(selected.document).length) {
+      fail(Error("含标签的备忘录不能锁定，请先移除标签。"));
+      return;
+    }
     if (type === "paper" && mobile && editor && noteId) {
       paperTarget.current = {
         noteId,
@@ -1820,7 +1873,13 @@ function App() {
       ? ws.notes.filter((n) => !n.deletedAt).length
       : ws.notes.filter((n) => n.folderId === id).length;
   const folderLabel =
-    folderId === "all" ? "全部备忘录" : currentFolder?.name || "备忘录";
+    tagFilter !== undefined
+      ? tagFilter === null
+        ? "所有标签"
+        : `#${tagFilter}`
+      : folderId === "all"
+        ? "全部备忘录"
+        : currentFolder?.name || "备忘录";
   const listTitle = desktopSearchZero
     ? "搜索"
     : query
@@ -1838,7 +1897,7 @@ function App() {
   const folderRow = (f: FolderData, depth = 0) => (
     <div key={f.id}>
       <button
-        className={`folder-row ${folderId === f.id ? "selected" : ""}`}
+        className={`folder-row ${tagFilter === undefined && folderId === f.id ? "selected" : ""}`}
         style={{ paddingLeft: mobile ? 16 : 16 + depth * 14 }}
         onClick={() => chooseFolder(f.id)}
         onContextMenu={(e) => {
@@ -1882,7 +1941,7 @@ function App() {
         onFocus={() => setSearching(true)}
         onChange={(e) => {
           setQuery(e.target.value);
-          setFilter("");
+          setFilter((value) => (value === "tags" ? value : ""));
         }}
       />
       {query ? (
@@ -2891,7 +2950,7 @@ function App() {
       setNativeSearchAck(sequence);
       setQuery(intent.phase === "cancel" ? "" : intent.value);
       setSearching(intent.phase !== "cancel");
-      setFilter("");
+      setFilter((value) => (value === "tags" ? value : ""));
       return;
     }
     if (intent.kind === "windowActivity") return;
@@ -3376,7 +3435,7 @@ function App() {
             </div>
             <div className="folder-group">
               <button
-                className={`folder-row ${folderId === "all" ? "selected" : ""}`}
+                className={`folder-row ${tagFilter === undefined && folderId === "all" ? "selected" : ""}`}
                 onClick={() => chooseFolder("all")}
               >
                 <FolderOpen />
@@ -3395,6 +3454,42 @@ function App() {
                   .filter((f) => f.kind === "trash")
                   .map((f) => folderRow(f))}
             </div>
+            {(tags.catalog.length > 0 ||
+              tagFilter !== undefined ||
+              filter === "tags") && (
+              <section className="tag-browser" aria-label="标签">
+                <div className="account-title">⌄ 标签</div>
+                <div className="tag-chips">
+                  <button
+                    className={tagFilter === null ? "selected" : ""}
+                    onClick={() => chooseTag(null)}
+                  >
+                    所有标签
+                  </button>
+                  {tags.catalog.map(([name, count]) => (
+                    <button
+                      key={name}
+                      className={tagFilter === name ? "selected" : ""}
+                      title={`${count}个备忘录`}
+                      onClick={() => chooseTag(name)}
+                    >
+                      #{name}
+                    </button>
+                  ))}
+                  {(tagFilter !== undefined || filter === "tags") && (
+                    <button
+                      aria-label="清除标签筛选"
+                      onClick={() => {
+                        setTagFilter(undefined);
+                        setFilter("");
+                      }}
+                    >
+                      清除
+                    </button>
+                  )}
+                </div>
+              </section>
+            )}
           </div>
         )}
         <div className="folder-footer">

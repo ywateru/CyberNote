@@ -249,10 +249,13 @@ export default function NoteEditor({
   const ref = useRef(onChange);
   ref.current = onChange;
   const editor = useEditor({
-    extensions: createEditorExtensions({
-      attachment: ReactNodeViewRenderer(MediaView),
-      drawing: ReactNodeViewRenderer(DrawingView),
-    }),
+    extensions: createEditorExtensions(
+      {
+        attachment: ReactNodeViewRenderer(MediaView),
+        drawing: ReactNodeViewRenderer(DrawingView),
+      },
+      { allowTags: !note.locked },
+    ),
     content: note.document,
     editorProps: {
       // Fixed PM 1.42.9 opt-in: trusted Android preedit survives the idle

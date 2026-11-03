@@ -3255,3 +3255,11 @@ a {
 .desktop.native-toolbar .editor-pane {
   padding-top: var(--native-top);
 }
+
+/* Tag geometry is an engineering candidate pending native reference capture. */
+.note-tag { color: var(--accent, #c69400); }
+.tag-browser { margin-top: 14px; }
+.tag-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 14px 12px; }
+.tag-chips button { border: 0; border-radius: 5px; padding: 4px 7px; font: inherit; font-size: 12px; background: #dedddb; color: inherit; }
+.tag-chips button:hover { background: #cecdca; }
+.tag-chips button.selected { background: #f2ce58; color: #3a2d05; }

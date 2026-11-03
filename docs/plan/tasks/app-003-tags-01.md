@@ -1,7 +1,7 @@
 ---
 id: app-003-tags-01
 scope: committed-document-tags-and-local-tag-browser
-status: ready
+status: pending-review
 depends-on: []
 ---
 
@@ -33,7 +33,7 @@ depends-on: []
 1. 按架构契约实现 `noteTag` mark、文本中真实提交和无效编辑去标记，正文文字不变；共享生产 Editor factory 用于 schema 跨检。不得用样例标签、DOM class 或字符串扫描替代文档身份。
 2. 实现纯文档标签投影，供侧栏、计数、搜索“含标签的备忘录”和单标签筛选共同使用。目录覆盖当前有权限的非最近删除笔记，并受访问 prepare/commit/abort 屏障约束；不新增明文持久索引。多窗、保存失败、未保存文档与最后引用删除必须明确更新。
 3. 接入真实侧栏与导航，保持既有选择/保存/编辑器生命周期。切换普通文件夹或清除标签筛选恢复原有路径；不能把标签键存成 folder ID，不能将其作为实体笔记所属目录。新建仍进入既有可写物理目录。
-4. Rust 对 mark 属性、所在文本和连续跨度做严格验证，旧文档/归档仍可读；导出/导入后的真实 Editor 可打开，锁定正文只在密文内保留 mark。TS/Rust 纯文本投影应逐字相同。
+4. Rust 对 mark 属性、所在文本和连续跨度做严格验证，旧文档/归档仍可读；导出/导入后的真实 Editor 可打开。按官方限制，有已提交标签不能加锁，锁定笔记即使已解锁也不转换为真实标签；保存/解密不接受锁定文档中的 noteTag。TS/Rust 纯文本投影应逐字相同。
 5. 生产输入法路径不得抢占组合输入、选区或其他编辑器；提交与撤销为同一可解释的历史动作，不在只读状态或异步晚事件中写正文。实现若需要细化契约，先回报 root，不自行新增未说明的行为。
 
 ## verification
@@ -43,8 +43,18 @@ depends-on: []
 - 真 Editor 输入与 plain paste `#UI对照` 后真实空格事务，形成 mark；普通 `#`、`a#b`、代码/URL、过长/无效名字不变。
 - Undo/Redo、修改已提交标签内部/删除字符、带其他格式分片、光标在标签前后、组合输入、两 Editor 身份隔离；不丢正文/空格，不让旧目标写入新笔记。
 - 实际 App 目录/单标签筛选，多个引用去重、删最后引用、最近删除/恢复、搜索叠加、无结果、清除/普通目录切换；失败状态不展示“已保存”。
-- 真 Rust 临时 Store save/reopen、合法与恶意 mark 拒绝且旧 revision/正文不变、TS/Rust text 一致；真实 lock/closeLocks/unlock 后无明文派生泄露。
+- 真 Rust 临时 Store save/reopen、合法与恶意 mark 拒绝且旧 revision/正文不变、TS/Rust text 一致；有标签 lock 拒绝、已解锁锁定笔记保留普通 #text、普通文档 closeLocks/unlock 不变；正确密码解密伪造 tag 密文时拒绝且无钥匙/正文/revision/密文变化。访问删除屏障仍需证明仅源标签名清除。
 - 完整归档导出、同 ID 重复导入、旧无标签归档与坏标签归档原子拒绝，使用现有 FIX-00 路径，不能只测试独立解析器。
 - 节制使用已有构建缓存；不下载、不升级、不复制 target，不运行全量平台构建。任何会新增大量输出的 Rust/浏览器检查前确认可用空间 >=2 GiB，低于即停止并保留证据。
 
 提交后交另一代理独立 review；代码与受控检查通过只记 SOURCE-READY。最终安装包 Mac/Android 操作、真实冷启、字体/间距/颜色与 iOS 手机标签页仍需独立实机/原版对比，不能本任务直接宣称像素一致。
+
+## implementation decisions
+
+生产扩展负责空格输入事务和整跨度失效清理，纯投影模块负责 JSON 文档中的合法跨度与授权目录。输入与提交共用一个事务；组合期间不改跨度，实际 compositionend 后只在同一仍存活、可写 Editor 上检查，禁止计时器猜测。link/code 的用户格式优先，由 schema 排他规则和整跨度清理共同去掉旧标签。筛选共用已有 SearchEditorHost 停车逻辑，包括无搜索文字的标签条件；标签选择不持久化。访问 prepare 同步按排除目标后的合法目录降级选择，不保留待 abort 恢复的名称。
+
+## execution candidate01
+
+已实现 mark/整跨度编辑清理、真实授权乐观文档标签投影、侧栏和搜索过滤停车、UI/Rust 标签与锁定互斥、保存与完整归档入口严格校验。证据在 `docs/verification/app-003-tags-01/source-candidate01/`，产品源码哈希及命令结果见其 README/source-sha256.json。依赖未改，无平台构建。
+
+当前为 SOURCE-CANDIDATE、pending-review，不能称 SOURCE-READY：自查发现真实 IME 在既有 tag 内改字的中间状态可能仍经既有 onUpdate 发送非法跨度到 Rust，短暂制造保存错误；受控浏览器仅验证组合期间不提交新标签、实际 compositionend 后再提交。独审须精确复现并决定阻断；不能用最终清理后能重试成功代替中间合法性。本提交按 root 指示先冻结，不擅自改全局保存队列/flush/授权或跳过所有 composing 保存。

@@ -63,6 +63,14 @@ fn span(value: &Value) -> bool {
 fn nullable_string(value: &Value) -> bool {
     value.is_null() || value.is_string()
 }
+fn valid_tag_name(value: &Value) -> bool {
+    value.as_str().is_some_and(|name| {
+        let count = name.chars().count();
+        (1..=64).contains(&count)
+            && name.chars().all(|c| c.is_ascii_alphanumeric() || matches!(c, '_' | '-' | '\u{3400}'..='\u{4dbf}' | '\u{4e00}'..='\u{9fff}'))
+            && name.chars().any(|c| c.is_ascii_alphabetic() || matches!(c, '\u{3400}'..='\u{4dbf}' | '\u{4e00}'..='\u{9fff}'))
+    })
+}
 fn valid_strokes(value: &Value) -> bool {
     value.as_array().is_some_and(|strokes| {
         strokes.iter().all(|stroke| {
@@ -87,6 +95,7 @@ fn valid_strokes(value: &Value) -> bool {
 }
 fn valid_attribute(owner: &str, key: &str, value: &Value, default: &Value) -> bool {
     match (owner, key) {
+        ("noteTag", "name") => valid_tag_name(value),
         ("heading", "level") => value.as_u64().is_some_and(|n| (1..=3).contains(&n)),
         ("taskItem", "checked") => value.is_boolean(),
         ("bulletList", "listStyle") => matches!(value.as_str(), Some("bullet" | "dash")),
@@ -178,6 +187,31 @@ fn marks<'a>(node: &'a Value, schema: &Schema) -> Result<Vec<&'a str>> {
     }
     Ok(seen)
 }
+fn tag_name(node: &Value) -> Option<&str> {
+    node.get("marks")?.as_array()?.iter().find(|mark| mark["type"] == "noteTag")?["attrs"]["name"].as_str()
+}
+fn tag_spans(nodes: &[Value]) -> Result<()> {
+    let mut name: Option<&str> = None;
+    let mut text = String::new();
+    let finish = |name: Option<&str>, text: &str| -> Result<()> {
+        if let Some(name) = name {
+            if text != format!("#{name}") { return Err(invalid("标签完整跨度与名称不符")); }
+        }
+        Ok(())
+    };
+    for node in nodes {
+        let next = tag_name(node);
+        if kind(node)? != "text" || next != name {
+            finish(name, &text)?; name = None; text.clear();
+        }
+        if let Some(next) = next {
+            if kind(node)? != "text" { return Err(invalid("标签只能标记文本")); }
+            name = Some(next);
+            text.push_str(node["text"].as_str().ok_or_else(|| invalid("标签文本无效"))?);
+        }
+    }
+    finish(name, &text)
+}
 fn content(node: &Value, spec: &NodeSpec, schema: &Schema) -> Result<()> {
     let children = children(node)?;
     let kinds = children.iter().map(kind).collect::<Result<Vec<_>>>()?;
@@ -210,6 +244,7 @@ fn content(node: &Value, spec: &NodeSpec, schema: &Schema) -> Result<()> {
             kind(node)?
         )));
     }
+    tag_spans(children)?;
     for child in children {
         for mark in marks(child, schema)? {
             if !spec.marks.iter().any(|name| name == mark) {
@@ -261,7 +296,10 @@ pub(super) fn validate_document(
             .get(name)
             .ok_or_else(|| invalid(format!("不支持的文档节点: {name}")))?;
         attributes(node, name, &spec.attrs)?;
-        marks(node, schema)?;
+        let node_marks = marks(node, schema)?;
+        if node_marks.contains(&"noteTag") && node_marks.contains(&"link") { return Err(invalid("标签不能同时标记链接")); }
+        if note.locked && node_marks.contains(&"noteTag") { return Err(invalid("锁定的备忘录不能含标签")); }
+        if name != "text" && node_marks.contains(&"noteTag") { return Err(invalid("标签只能标记文本")); }
         content(node, spec, schema)?;
         if name == "text" {
             if node["text"].as_str().is_none_or(str::is_empty) {

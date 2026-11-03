@@ -25,6 +25,28 @@ await writeFile(
     },
   }).outputText,
 );
+// Bound production import chain: each module is transpiled from this tree.
+for (const name of ["note-tags", "note-tag-extension"]) {
+  const source = await readFile(resolve(root, `src/${name}.ts`), "utf8");
+  await writeFile(
+    resolve(output, `${name}.mjs`),
+    ts
+      .transpileModule(source, {
+        compilerOptions: {
+          target: ts.ScriptTarget.ES2022,
+          module: ts.ModuleKind.ESNext,
+        },
+      })
+      .outputText.replaceAll('"./note-tags"', '"./note-tags.mjs"'),
+  );
+}
+await writeFile(
+  factoryPath,
+  (await readFile(factoryPath, "utf8")).replaceAll(
+    '"./note-tag-extension"',
+    '"./note-tag-extension.mjs"',
+  ),
+);
 const { createEditorExtensions } = await import(pathToFileURL(factoryPath));
 const nodeView = () => {
   throw new Error("Schema crosscheck must never instantiate DOM node views");
