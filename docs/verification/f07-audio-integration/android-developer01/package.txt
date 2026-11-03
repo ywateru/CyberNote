@@ -1,0 +1,136 @@
+Activity Resolver Table:
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        67be57e com.local.notesclone/.MainActivity filter 214adf
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+          Category: "android.intent.category.LEANBACK_LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        a77032c com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter ff9b5fb
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        a77032c com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter 7abf1f5
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        a77032c com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter 6cdb8a
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        a77032c com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter de72618
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Permissions:
+  Permission [com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (cc66668):
+    sourcePackage=com.local.notesclone
+    uid=10169 gids=null type=0 prot=signature
+    perm=Permission{47ea97b com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  com.local.notesclone/androidx.core.content.FileProvider:
+    Provider{1b3d398 com.local.notesclone/androidx.core.content.FileProvider}
+  com.local.notesclone/androidx.startup.InitializationProvider:
+    Provider{39997f1 com.local.notesclone/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.local.notesclone.androidx-startup]:
+    Provider{39997f1 com.local.notesclone/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{a174fd6 com.local.notesclone}
+  [com.local.notesclone.fileprovider]:
+    Provider{1b3d398 com.local.notesclone/androidx.core.content.FileProvider}
+      applicationInfo=ApplicationInfo{bc46257 com.local.notesclone}
+
+Key Set Manager:
+  [com.local.notesclone]
+      Signing KeySets: 35
+
+Packages:
+  Package [com.local.notesclone] (5460fb2):
+    userId=10169
+    pkg=Package{ede9144 com.local.notesclone}
+    codePath=/data/app/~~zK4WaC1Ql68ohJa01rC0CQ==/com.local.notesclone-l1Hv0ytltdoy_xKHQvlElA==
+    resourcePath=/data/app/~~zK4WaC1Ql68ohJa01rC0CQ==/com.local.notesclone-l1Hv0ytltdoy_xKHQvlElA==
+    legacyNativeLibraryDir=/data/app/~~zK4WaC1Ql68ohJa01rC0CQ==/com.local.notesclone-l1Hv0ytltdoy_xKHQvlElA==/lib
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    versionCode=1000 minSdk=26 targetSdk=36
+    versionName=0.1.0
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=ApplicationInfo{ede9144 com.local.notesclone}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesPackages=[]
+    dataDir=/data/user/0/com.local.notesclone
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-11-04 00:18:53
+    firstInstallTime=2026-11-03 22:09:17
+    lastUpdateTime=2026-11-04 00:18:53
+    signatures=PackageSignatures{c332039 version:2, signatures:[ab2da3b4], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.RECORD_AUDIO
+      android.permission.MODIFY_AUDIO_SETTINGS
+      android.permission.CAMERA
+      com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      android.permission.MODIFY_AUDIO_SETTINGS: granted=true
+      android.permission.INTERNET: granted=true
+    User 0: ceDataInode=123481 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+    overlay paths:
+      /product/overlay/EmulationPixel4/EmulationPixel4Overlay.apk
+      gids=[3003]
+      runtime permissions:
+        android.permission.CAMERA: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+
+Queries:
+  system apps queryable: false
+  queries via package name:
+  queries via intent:
+  queryable via interaction:
+    User 0:
+      [com.android.keychain,com.android.location.fused,com.android.server.telecom,com.android.emulator.multidisplay,com.android.inputdevices,com.android.providers.settings,com.android.wallpaperbackup,android,com.android.settings,com.android.dynsystem,com.android.localtransport]:
+        com.local.notesclone
+      [com.google.android.gms,com.google.android.gsf]:
+        com.local.notesclone
+      com.google.android.inputmethod.latin:
+        com.local.notesclone
+      com.local.notesclone:
+        com.google.android.webview
+
+Package Changes:
+  Sequence number=9
+  User 0:
+    seq=5, package=com.google.android.gms
+    seq=8, package=com.local.notesclone
+
+
+Dexopt state:
+  [com.local.notesclone]
+    path: /data/app/~~zK4WaC1Ql68ohJa01rC0CQ==/com.local.notesclone-l1Hv0ytltdoy_xKHQvlElA==/base.apk
+      arm64: [status=run-from-apk] [reason=unknown]
+
+
+Compiler stats:
+  [com.local.notesclone]
+    (No recorded stats)
+
+APEX session state:
+
+Active APEX packages:
+
+
+Inactive APEX packages:
+
+
+Factory APEX packages:
+
+

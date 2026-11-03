@@ -39,3 +39,9 @@ depends-on: [app-002-permission-01]
 独立审查已通过，报告`../reviews/app-002-audio-duration-static-01.md`，源码ae567ef、身份清单64b59aa、独立报告f4d3a02。独立复跑11组生产helper及真实AudioPlayer离线Chrome156序列；约66秒原WebM由静音探针得到66.004秒，主播放器保持初始0/paused，正常2秒WAV不建立探针。ffprobe packet-end66.064和完整decode66.060不混作平台duration。
 
 统一输入冻结在f4d3a02，216项aggregate `a6b191546c39f2bf1c431e7547228a2714f79e355376a686380c89efd2299939`，Mac与Android构建后均不变，default features，无proof。APK `/private/tmp/notes-f07-audio-android-candidate01-3edc4ad0.apk`，301366970B、SHA256 `3edc4ad07524f630d694c0695cbde34bc4a02aa3c36f1fba0bd44a8de80574bf`。构建证据`../../verification/f07-audio-integration/build-candidate01/`；Mac完整bundle本地adhoc派生包`/private/tmp/notes-f07-audio-mac-candidate01-sealed.app`，strict verify通过、exe SHA256 `11dcbfc41dc28f1917c38804691cdda37c49cbb6022d0c776185fd0ca01fc759`；原始未seal包与失败签名日志保持。安装实际仍待验收，不把该构建状态写作Android91时长或Mac运行通过。
+
+## developer installed subset · 2026-11-04
+
+新APK覆盖安装后实读hash匹配，Android11/API30/WebView91开发有限实际确认：原受管WebM卡片1:06、主metadata仍Infinity但初始time0/paused；真实播放推进0.703411秒、暂停0.921484秒。完整媒体note/revision、受管429547B/SHA不变；共享导航与纸张Beta39..43保留，纸张两次合法保存后恢复grid-large。48项原始证据与manifest在`../../verification/f07-audio-integration/android-developer01/`。
+
+实际也发现旧移动展开入口不可达：audio-expand为display:none，单次原生summary双击未展开而起IME，range/±15没有可操作控件，未测也不通过。专门修复`app-002-audio-controls-01.md`。独立新包复验与Mac仍待完成；不以有限时长显示成功关闭本任务全部交互。
