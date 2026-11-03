@@ -124,4 +124,4 @@ Cmd+N、Cmd+F、Cmd+Shift+F 由 AppKit 菜单处理，以实际聚焦的允许�
 
 无有效节点/焦点或缺少原生活跃信号时仍执行上游回退。可信非组词beforeinput/keydown（排除229、Process、modifier及isComposing）、blur、window失焦、document隐藏使信号失效并沿用20ms收束；程序化end/clear不受阻，destroy移除新增监听。保存、授权、版本冲突和跨笔记协议未改。15项确定性检查只证明这些恢复分支，不证明真实输入法或平台通用性。
 
-真实设备证据仅覆盖Android11/WebView91/Trime3.3.13的有限主路径。程序化DOM blur可能使IME将未选内联预编辑保留为正文，后台恢复还涉及授权屏障及Editor替换；本补丁不猜候选、不按字符删标记、不整文档回滚。格式/后台提交取消边界及纸张取消选区失败仍阻塞完整交付，后续FIX06须先核原生commit/cancel证据。原包与修复包、通过与失败记录均保留在 `docs/verification/app-001-fix-04/`。
+真实设备证据仅覆盖Android11/WebView91/Trime3.3.13的有限主路径。程序化DOM blur可能使IME将未选内联预编辑保留为正文，后台恢复还涉及授权屏障及Editor替换；本补丁不猜候选、不按字符删标记、不整文档回滚。格式/后台提交取消边界及选择纸张并保存后的选区失败仍阻塞完整交付，两包纸张取消均有限通过；后续FIX06须先核原生commit/cancel证据，纸张保存另核刷新与选区链路。原包与修复包、通过与失败记录均保留在 `docs/verification/app-001-fix-04/`。

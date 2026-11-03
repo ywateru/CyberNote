@@ -47,7 +47,7 @@ candidate01 `format-boundary-marked`正在组词；真实格式按钮触摸后�
 
 candidate01 `background-marked`→真实Home→HOT返回：window/document边界释放composition，随后授权确认临时隐藏编辑器，最后Editor14替换为Editor32，`background-restored-settled`本轮预编辑仍残留。该序列没有写入另一个note。只记录实际同周期顺序，未证明后台残留究竟由哪一层commit/cancel或授权重建造成。整个输入目标仍被此失败阻塞，后续任务FIX06。
 
-现有 `scripts/android-ime-regression.mjs`以LatinIME真实长按Beta、打开格式、粗体、X恢复与纸张路径复查。candidate01与原0aac各运行一次，均在纸张cancel返回断言失败：预期选区31..35，实际1..1；`format-paper-candidate01/`和`format-paper-baseline0aac/`保留两次截图/快照，格式选择/粗体/X前序有限通过。没有把整份脚本标成通过，纸张取消选择丢失因果unknown，未扩大修复。
+现有 `scripts/android-ime-regression.mjs`以LatinIME真实长按Beta、打开格式、粗体、X恢复与纸张路径复查。candidate01与原0aac各运行一次，纸张cancel返回均保留31..35并有限通过；随后第二次打开并选择grid-large，在脚本285行assertReturned(chosen)才失败，预期选区31..35，实际1..1。`format-paper-candidate01/`和`format-paper-baseline0aac/`保留两次截图/快照，格式选择/粗体/X及取消前序有限通过。没有把整份脚本标成通过，选择纸张保存后的选区丢失因果unknown，未扩大修复。最初报告误把堆栈对应步骤写成取消，本段已按原始paper-cancel-native与paper-grid-large-native快照更正；原始文件从未改写。
 
 ## 产物恢复、冷启与交接
 
