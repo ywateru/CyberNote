@@ -4,7 +4,9 @@
 
 **当前是可运行开发版，尚未达到原版全部 UI、交互及逐像素一致，完整目标仍在进行。** 功能、源码审查、安装版操作和像素结果分别记录，不以构建成功代替验收。需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，最新细分状态见[交付计划](docs/plan/README.md)。
 
-2026-11-04最新统一包为candidate03，冻结源码 `c6594dbdfe8ee0313205a4b14bcdfeb37b819088`，232项列明构建输入在两端构建前后相同。该包包括搜索零结果显示与焦点、原目标附件提交、录音初始/暂停/完成状态和真实正文保存确认接线。Mac本地签名及Android debug构建/验签均通过，独立安装版操作复验进行中。[完整构建记录](docs/verification/unified-candidate03/build/README.md)保留Android首次环境失败和必要权限下原命令重试结果。
+2026-11-04最新统一包为candidate03，冻结源码 `c6594dbdfe8ee0313205a4b14bcdfeb37b819088`，232项列明构建输入在两端构建前后相同。该包包括搜索零结果显示与焦点、原目标附件提交、录音初始/暂停/完成状态和真实正文保存确认接线。Mac本地签名及Android debug构建/验签均通过。[Mac独立实测](docs/verification/unified-candidate03-independent-01/README.md)已通过TXT/PNG选择、正文保存确认、owned字节及正常退出冷启恢复；[Android保留数据升级](docs/verification/unified-candidate03-android-independent-01/README.md)已通过确切包替换及指定原数据逐项保全，未启动新包交互。[完整构建记录](docs/verification/unified-candidate03/build/README.md)保留Android首次环境失败和必要权限下原命令重试结果。
+
+Mac真实录音仍在准备阶段，没有录音文件或可听性通过；[只读诊断](docs/verification/candidate03-mic-preparing-diagnosis-01/README.md)已记录当前音频授权尚未决定及历史TCC请求/签名条件不匹配线索，未确诊全部原因。暂停试听实现已在源码独审通过但不在candidate03；OCR宿主接入正在独审，尚未进入安装包。新包与原版的同条件整窗像素仍未通过。
 
 本机安装文件另存于项目的 `artifacts/unified-candidate03/`（未纳入Git）：
 

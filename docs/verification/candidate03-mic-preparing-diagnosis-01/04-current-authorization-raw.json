@@ -1,0 +1,113 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_4f446d8b472ae38299ae8be52672c4a70cc02aee8d745391252b526c9f0d0aad\",\"subject\":null,\"provider\":{\"id\":\"frida\",\"name\":\"Frida\",\"version\":null},\"analysis_profile\":null,\"predicate_type\":\"rea.frida.instrumentation-observation\",\"operation\":\"instrument_with_frida\",\"parameters\":{\"session_id\":\"83e8b34a-f59b-4290-b445-2771f8f1f502\",\"device_id\":\"local\",\"mode\":\"attach\",\"pid\":39665},\"raw_result\":null,\"normalized_result\":{\"session_id\":\"83e8b34a-f59b-4290-b445-2771f8f1f502\",\"device_id\":\"local\",\"state\":\"running\",\"target\":\"备忘录 (pid 39665)\",\"pid\":39665,\"mode\":\"attach\",\"scripts\":[{\"script_id\":\"8242b5b8-0786-436e-a3e2-8b57eaaebc93\",\"name\":\"rea-8242b5b8-0786-436e-a3e2-8b57eaaebc93\"}],\"messages\":[{\"script_id\":\"8242b5b8-0786-436e-a3e2-8b57eaaebc93\",\"type\":\"send\",\"payload\":{\"at\":\"2026-11-03T20:00:10.187Z\",\"pid\":39665,\"architecture\":\"arm64\",\"AVCaptureDeviceLoaded\":true,\"audioMediaType\":\"soun\",\"authorizationStatus\":0,\"modules\":[{\"name\":\"CoreAudio\",\"path\":\"/System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio\"},{\"name\":\"AVFoundation\",\"path\":\"/System/Library/Frameworks/AVFoundation.framework/Versions/A/AVFoundation\"},{\"name\":\"libswiftCoreAudio.dylib\",\"path\":\"/usr/lib/swift/libswiftCoreAudio.dylib\"},{\"name\":\"libswiftAVFoundation.dylib\",\"path\":\"/usr/lib/swift/libswiftAVFoundation.dylib\"},{\"name\":\"IsolatedCoreAudioClient\",\"path\":\"/System/Library/PrivateFrameworks/IsolatedCoreAudioClient.framework/Versions/A/IsolatedCoreAudioClient\"},{\"name\":\"CoreAudioOrchestration\",\"path\":\"/System/Library/PrivateFrameworks/CoreAudioOrchestration.framework/Versions/A/CoreAudioOrchestration\"},{\"name\":\"AVFCapture\",\"path\":\"/System/Library/PrivateFrameworks/AVFCapture.framework/Versions/A/AVFCapture\"},{\"name\":\"WebKit\",\"path\":\"/System/Library/Frameworks/WebKit.framework/Versions/A/WebKit\"},{\"name\":\"WebKitLegacy\",\"path\":\"/System/Library/Frameworks/WebKit.framework/Versions/A/Frameworks/WebKitLegacy.framework/Versions/A/WebKitLegacy\"},{\"name\":\"AVFoundationCF\",\"path\":\"/System/Library/PrivateFrameworks/AVFoundationCF.framework/Versions/A/AVFoundationCF\"}],\"limitations\":[]}}],\"messages_truncated\":false,\"source_kind\":\"file\",\"source_path\":\"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/candidate03-mic-preparing-diagnosis-01/03-read-current-authorization.js\",\"source_sha256\":\"08cc09534d3f77e3c555385c9527670a82f6efecdfbf80b0b18450fbc334757b\",\"cleanup_error\":null},\"confidence\":\"observed\",\"authority\":\"external-service\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"The target operating system and architecture were not reported by this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_4f446d8b472ae38299ae8be52672c4a70cc02aee8d745391252b526c9f0d0aad",
+    "subject": null,
+    "provider": {
+      "id": "frida",
+      "name": "Frida",
+      "version": null
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.frida.instrumentation-observation",
+    "operation": "instrument_with_frida",
+    "parameters": {
+      "session_id": "83e8b34a-f59b-4290-b445-2771f8f1f502",
+      "device_id": "local",
+      "mode": "attach",
+      "pid": 39665
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "session_id": "83e8b34a-f59b-4290-b445-2771f8f1f502",
+      "device_id": "local",
+      "state": "running",
+      "target": "备忘录 (pid 39665)",
+      "pid": 39665,
+      "mode": "attach",
+      "scripts": [
+        {
+          "script_id": "8242b5b8-0786-436e-a3e2-8b57eaaebc93",
+          "name": "rea-8242b5b8-0786-436e-a3e2-8b57eaaebc93"
+        }
+      ],
+      "messages": [
+        {
+          "script_id": "8242b5b8-0786-436e-a3e2-8b57eaaebc93",
+          "type": "send",
+          "payload": {
+            "at": "2026-11-03T20:00:10.187Z",
+            "pid": 39665,
+            "architecture": "arm64",
+            "AVCaptureDeviceLoaded": true,
+            "audioMediaType": "soun",
+            "authorizationStatus": 0,
+            "modules": [
+              {
+                "name": "CoreAudio",
+                "path": "/System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio"
+              },
+              {
+                "name": "AVFoundation",
+                "path": "/System/Library/Frameworks/AVFoundation.framework/Versions/A/AVFoundation"
+              },
+              {
+                "name": "libswiftCoreAudio.dylib",
+                "path": "/usr/lib/swift/libswiftCoreAudio.dylib"
+              },
+              {
+                "name": "libswiftAVFoundation.dylib",
+                "path": "/usr/lib/swift/libswiftAVFoundation.dylib"
+              },
+              {
+                "name": "IsolatedCoreAudioClient",
+                "path": "/System/Library/PrivateFrameworks/IsolatedCoreAudioClient.framework/Versions/A/IsolatedCoreAudioClient"
+              },
+              {
+                "name": "CoreAudioOrchestration",
+                "path": "/System/Library/PrivateFrameworks/CoreAudioOrchestration.framework/Versions/A/CoreAudioOrchestration"
+              },
+              {
+                "name": "AVFCapture",
+                "path": "/System/Library/PrivateFrameworks/AVFCapture.framework/Versions/A/AVFCapture"
+              },
+              {
+                "name": "WebKit",
+                "path": "/System/Library/Frameworks/WebKit.framework/Versions/A/WebKit"
+              },
+              {
+                "name": "WebKitLegacy",
+                "path": "/System/Library/Frameworks/WebKit.framework/Versions/A/Frameworks/WebKitLegacy.framework/Versions/A/WebKitLegacy"
+              },
+              {
+                "name": "AVFoundationCF",
+                "path": "/System/Library/PrivateFrameworks/AVFoundationCF.framework/Versions/A/AVFoundationCF"
+              }
+            ],
+            "limitations": []
+          }
+        }
+      ],
+      "messages_truncated": false,
+      "source_kind": "file",
+      "source_path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/candidate03-mic-preparing-diagnosis-01/03-read-current-authorization.js",
+      "source_sha256": "08cc09534d3f77e3c555385c9527670a82f6efecdfbf80b0b18450fbc334757b",
+      "cleanup_error": null
+    },
+    "confidence": "observed",
+    "authority": "external-service",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "The target operating system and architecture were not reported by this observation."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

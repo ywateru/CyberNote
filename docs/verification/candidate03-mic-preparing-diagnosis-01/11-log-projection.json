@@ -1,0 +1,63 @@
+{
+  "at": "2026-11-03T20:04:30.390313+00:00",
+  "parent": "06-limited-persisted-log.json",
+  "rawEventCount": 131,
+  "selected": [
+    {
+      "rawOrdinal": 1,
+      "timestamp": "2026-11-04 03:31:33.010049+0800",
+      "processID": 37803,
+      "eventMessage": "UserMediaPermissionRequestManagerProxy::processUserMediaPermissionRequest(8930303935221432458) 1451, persistent access: false"
+    },
+    {
+      "rawOrdinal": 5,
+      "timestamp": "2026-11-04 03:31:33.032419+0800",
+      "processID": 94003,
+      "eventMessage": "Failed to match existing code requirement for subject com.local.notesclone and service kTCCServiceMicrophone\n\tcdhash H\"f5ada7aca7dbb1c472ce7c7761aac4ccd88b5a98\"\n\tcdhash H\"73012dfbca39e3617d77fce2c167f029129b7ab5\""
+    },
+    {
+      "rawOrdinal": 15,
+      "timestamp": "2026-11-04 03:31:33.053960+0800",
+      "processID": 37803,
+      "eventMessage": "UserMediaPermissionRequestManagerProxy::processUserMediaPermissionValidRequest(8930303935221432458) 1451, video: 0 audio: 1"
+    },
+    {
+      "rawOrdinal": 16,
+      "timestamp": "2026-11-04 03:31:33.053963+0800",
+      "processID": 37803,
+      "eventMessage": "UserMediaPermissionRequestManagerProxy::processUserMediaPermissionValidRequest(8930303935221432458) 1451, action: Prompt"
+    },
+    {
+      "rawOrdinal": 20,
+      "timestamp": "2026-11-04 03:31:33.056338+0800",
+      "processID": 94003,
+      "eventMessage": "Failed to match existing code requirement for subject com.local.notesclone and service kTCCServiceMicrophone\n\tcdhash H\"f5ada7aca7dbb1c472ce7c7761aac4ccd88b5a98\"\n\tcdhash H\"73012dfbca39e3617d77fce2c167f029129b7ab5\""
+    },
+    {
+      "rawOrdinal": 21,
+      "timestamp": "2026-11-04 03:31:33.056934+0800",
+      "processID": 94003,
+      "eventMessage": "AUTHREQ_PROMPTING: msgID=37803.5, service=kTCCServiceMicrophone, subject=Sub:{com.local.notesclone}Resp:{TCCDProcess: identifier=com.local.notesclone, pid=37803, auid=501, euid=501, binary_path=/private/tmp/notes-unified-candidate03-mac-sealed.app/Contents/MacOS/notes-clone},"
+    },
+    {
+      "rawOrdinal": 42,
+      "timestamp": "2026-11-04 03:35:19.526700+0800",
+      "processID": 94003,
+      "eventMessage": "Failed to match existing code requirement for subject com.local.notesclone and service kTCCServiceMicrophone\n\tcdhash H\"f5ada7aca7dbb1c472ce7c7761aac4ccd88b5a98\"\n\tcdhash H\"73012dfbca39e3617d77fce2c167f029129b7ab5\""
+    },
+    {
+      "rawOrdinal": 98,
+      "timestamp": "2026-11-04 03:42:29.138457+0800",
+      "processID": 94003,
+      "eventMessage": "Failed to match existing code requirement for subject com.local.notesclone and service kTCCServiceMicrophone\n\tcdhash H\"f5ada7aca7dbb1c472ce7c7761aac4ccd88b5a98\"\n\tcdhash H\"73012dfbca39e3617d77fce2c167f029129b7ab5\""
+    },
+    {
+      "rawOrdinal": 130,
+      "timestamp": "2026-11-04 03:43:11.974780+0800",
+      "processID": 94003,
+      "eventMessage": "AUTHREQ_PROMPTING: msgID=34715.8, service=kTCCServiceSystemPolicyDownloadsFolder, subject=Sub:{com.local.notesclone}Resp:{TCCDProcess: identifier=com.local.notesclone, pid=39665, auid=501, euid=501, binary_path=/private/tmp/notes-unified-candidate03-mac-sealed.app/Contents/MacOS/notes-clone},"
+    }
+  ],
+  "selection": "Existing raw output only; no additional log query. Select microphone mismatch, historical WebKit permission process events, or observed DownloadsFolder prompt.",
+  "limits": "Subset for readability, not complete TCC transaction. Parent predicate does not include every response message by transaction id; cannot infer no grant/deny response existed."
+}

@@ -1,0 +1,56 @@
+{
+  "at": "2026-11-03T20:02:53.557209+00:00",
+  "results": {
+    "originalLinker": [
+      {
+        "argv": [
+          "/usr/bin/codesign",
+          "-d",
+          "--entitlements",
+          "-",
+          "/private/tmp/notes-unified-candidate03-mac-149d7769.app"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "Executable=/private/tmp/notes-unified-candidate03-mac-149d7769.app/Contents/MacOS/notes-clone\n"
+      },
+      {
+        "argv": [
+          "/usr/bin/codesign",
+          "-d",
+          "-r-",
+          "/private/tmp/notes-unified-candidate03-mac-149d7769.app"
+        ],
+        "exit": 0,
+        "stdout": "# designated => cdhash H\"e3bc365103fcfcacc334c01f8a9950fb26289703\"\n",
+        "stderr": "Executable=/private/tmp/notes-unified-candidate03-mac-149d7769.app/Contents/MacOS/notes-clone\n"
+      }
+    ],
+    "currentSealed": [
+      {
+        "argv": [
+          "/usr/bin/codesign",
+          "-d",
+          "--entitlements",
+          "-",
+          "/private/tmp/notes-unified-candidate03-mac-sealed.app"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "Executable=/private/tmp/notes-unified-candidate03-mac-sealed.app/Contents/MacOS/notes-clone\n"
+      },
+      {
+        "argv": [
+          "/usr/bin/codesign",
+          "-d",
+          "-r-",
+          "/private/tmp/notes-unified-candidate03-mac-sealed.app"
+        ],
+        "exit": 0,
+        "stdout": "# designated => cdhash H\"73012dfbca39e3617d77fce2c167f029129b7ab5\"\n",
+        "stderr": "Executable=/private/tmp/notes-unified-candidate03-mac-sealed.app/Contents/MacOS/notes-clone\n"
+      }
+    ]
+  },
+  "scope": "Separate read-only entitlements and designated-requirement display; no signing/editing."
+}

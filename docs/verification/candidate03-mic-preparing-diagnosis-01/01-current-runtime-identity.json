@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-03T19:58:17.449912+00:00",
+  "app": "/private/tmp/notes-unified-candidate03-mac-sealed.app",
+  "exe": {
+    "bytes": 15575712,
+    "sha256": "f11565151c018ae43173b2f2b1d5b223f0e29b2150fc179a34645a74cb0d3c56"
+  },
+  "plist": {
+    "CFBundleIdentifier": "com.local.notesclone",
+    "CFBundleExecutable": "notes-clone",
+    "CFBundleShortVersionString": "0.1.0",
+    "NSMicrophoneUsageDescription": "将录音添加到本地备忘录。",
+    "NSCameraUsageDescription": "拍摄照片添加到本地备忘录。"
+  },
+  "processCheck": {
+    "command": "ps -axo pid=,command=; filter exact /Contents/MacOS/notes-clone",
+    "exit": 0,
+    "matches": [
+      "39665 /private/tmp/notes-unified-candidate03-mac-sealed.app/Contents/MacOS/notes-clone"
+    ],
+    "stderr": ""
+  },
+  "priorFrozenEvidence": "docs/verification/unified-candidate03-independent-01",
+  "priorKnownPid": 39665,
+  "policy": "Read-only diagnosis; no permission/reset/settings mutation. At most one CUA bind. No original Notes body, Dock or Android interaction."
+}
