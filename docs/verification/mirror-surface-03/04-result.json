@@ -1,0 +1,35 @@
+{
+  "at": "2026-11-03T18:09:13.511984+00:00",
+  "verdict": "BLOCKED_NO_BINDABLE_SURFACE",
+  "cuaCalls": [
+    {
+      "operation": "rewriteDocumentation",
+      "seconds": 0.6105,
+      "returned": true
+    },
+    {
+      "operation": "getState before",
+      "seconds": 0.9563,
+      "returned": true,
+      "filteredMirrorApps": []
+    },
+    {
+      "operation": "getState after direct executable start",
+      "seconds": 1.2648,
+      "returned": true,
+      "filteredMirrorApps": []
+    }
+  ],
+  "getAppAttempted": false,
+  "newBundleActualBinary": true,
+  "viewerPid": 29773,
+  "viewerWindows": [],
+  "viewerLog": "empty",
+  "viewerSession": 37573,
+  "viewerExitCode": 130,
+  "nativeAppActionsExecuted": false,
+  "oldFrozenEvidenceChanged": false,
+  "deviceMetadataUnchanged": true,
+  "cause": "unknown; no window or diagnostic output",
+  "next": "separate future surface route required; do not infer product failure"
+}
