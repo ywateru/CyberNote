@@ -44,3 +44,9 @@
 5. **目标笔记与授权变化。** 录音期间/保存await期间从另一自有窗口锁定/删除目标或切换笔记，分别验证普通菜单及原生顶部入口。失败不插入当前另一篇、不用旧editor，原目标附件不成孤儿；授权边界仍拒绝陈旧token。只用合成测试笔记。
 
 采集/播放未经过上述实证前均保持unknown。UI只记录与原屏同状态差异；原版开始触发仍unknown，不能以当前自动start改写要求。像素、字体、材质、波形形状与动画不因媒体链可用而自动通过。
+
+## 模拟器受控音轨候选（2026-11-03，尚未运行）
+
+为后续Android真实采集避免使用私人谈话，优先检查模拟器自带的音频注入能力，不替换应用的getUserMedia/MediaRecorder。已只读核本机SDK的`/Users/water/Library/Android/sdk/emulator/lib/emulator_controller.proto`，SHA256 `1d62c6bcad5f06621f90ec2bf26c661ba769ccd0f1416b5314d25a68e04eee5f`：`:334–348`定义client-streaming `injectAudio`向Android麦克风送音轨；`:1554–1601`定义PCM U8/S16 little-endian、mono/stereo、采样率、分包和宿主麦克风状态。另有`streamAudio`可观察模拟设备输出。Google官方源码接口也见`https://android.googlesource.com/platform/external/qemu/+/refs/heads/main/android/android-grpc/services/emulator-controller/proto/emulator_controller.proto`；线上版本与本机字节不混同。
+
+本机协议说明注入缓冲约300ms，仅首包格式生效，采样率上限48kHz；默认delivery mode由模拟器需求节流，real-time模式实验性且可能覆盖排队数据。现仅确认接口存在，不证明当前emulator已开放可认证gRPC、能实际注入或本应用能录到；没有连接、配置或设备操作，也未安装额外依赖。后续先做一次有界可用性核查；若可用，以生成的可辨节拍/口令PCM经该真实Android输入路径送入，记录实际权限、非零音轨和输出文件频谱/时长。不能以API存在或JS伪造stream宣称采集通过。不要打印认证token；如需调整宿主麦克风状态须记录原值并恢复。不可用时明确unknown，勿为测试擅自录取私人环境声音或扩建无关平台。
