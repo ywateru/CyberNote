@@ -1,0 +1,9 @@
+{
+  "name": "native-toolbar",
+  "cmd": "pnpm test:native-toolbar",
+  "chunk_id": "ca45bf",
+  "wall_time_seconds": 0.418567291,
+  "exit_code": 0,
+  "original_token_count": 394,
+  "output": "\n> notes-clone@0.1.0 test:native-toolbar /private/tmp/apple-notes-attachment-submit-01\n> node scripts/check-native-toolbar.mjs\n\n{\n  \"tests\": 12,\n  \"results\": [\n    {\n      \"name\": \"listen precedes bind; only own binding early events replay\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"caret context refresh does not update controls or close a menu\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"one update in flight coalesces latest desired state\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"native query arriving during update wins over stale React query\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"missing native search event waits, then resumes with exact acknowledgment\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"composition preserves pending state until actual committed search event\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"old note revision, duplicate sequence, and wrong window are rejected\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"dispose during bind releases the eventual binding and listener\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"unbind rejection still releases listener and rejects late events\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"invalidation clears retained editor targets and refuses old events\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"inconsistent stale search cannot spin forever\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"host projections distinguish browse, open, focused table, and independent window\",\n      \"status\": \"pass\"\n    }\n  ]\n}\n"
+}

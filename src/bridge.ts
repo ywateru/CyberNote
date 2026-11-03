@@ -1,6 +1,7 @@
 import { listen } from "@tauri-apps/api/event";
 import { AccessGate } from "./access-client";
 import { secureId } from "./secure-id";
+import type { AttachmentOperationResult } from "./attachment-submission";
 import type { AccessEvent, AccessState } from "./types";
 import { invoke as nativeInvoke, isTauri } from "@tauri-apps/api/core";
 import { createProofInvoker, proofReceive, proofVerdict } from "./proof-access";
@@ -321,6 +322,62 @@ export async function storeAttachment(
   persist();
   return a;
 }
+export async function storeAttachmentOperation(
+  operationId: string,
+  noteId: string,
+  file: File,
+): Promise<AttachmentOperationResult> {
+  if (!native) throw Error("附件持久提交请在已安装的应用中使用");
+  // Capture before file reading: a focus/access change during FileReader
+  // must reject the result, even if the backend has already stored bytes.
+  const stamp = accessGate.stamp(noteId);
+  const expected = accessGate.expected(noteId);
+  const data = await fileBase64(file);
+  const result = accept<AttachmentOperationResult>(
+    await invoke("store_attachment_operation", {
+      operationId,
+      noteId,
+      name: file.name,
+      mime: file.type || "application/octet-stream",
+      data,
+      expected,
+    }),
+    stamp,
+  );
+  if (result.attachment)
+    attachmentOwners.set(result.attachment.id, result.attachment.noteId);
+  return result;
+}
+async function attachmentOperationCommand(
+  command: "query_attachment_operation" | "cancel_attachment_operation",
+  operationId: string,
+  noteId: string,
+): Promise<AttachmentOperationResult> {
+  if (!native) throw Error("附件持久提交请在已安装的应用中使用");
+  const stamp = accessGate.stamp(noteId);
+  const result = accept<AttachmentOperationResult>(
+    await invoke(command, {
+      operationId,
+      noteId,
+      expected: accessGate.expected(noteId),
+    }),
+    stamp,
+  );
+  if (result.attachment)
+    attachmentOwners.set(result.attachment.id, result.attachment.noteId);
+  return result;
+}
+export const queryAttachmentOperation = (operationId: string, noteId: string) =>
+  attachmentOperationCommand("query_attachment_operation", operationId, noteId);
+export const cancelAttachmentOperation = (
+  operationId: string,
+  noteId: string,
+) =>
+  attachmentOperationCommand(
+    "cancel_attachment_operation",
+    operationId,
+    noteId,
+  );
 export async function readAttachment(
   id: string,
 ): Promise<{ data: string; mime: string; name: string }> {

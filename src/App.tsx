@@ -10,6 +10,27 @@ import {
 } from "react";
 import { type Editor, type JSONContent } from "@tiptap/react";
 import { SaveRevisions } from "./save-revisions";
+import { secureId } from "./secure-id";
+import { enqueueSave, type SaveOutcome } from "./save-queue";
+import {
+  TrustedSynchronization,
+  type SynchronizationResult,
+} from "./trusted-synchronization";
+import {
+  AttachmentSubmission,
+  documentReferencesAttachment,
+} from "./attachment-submission";
+import {
+  rebindAttachmentTarget,
+  type AttachmentTarget,
+} from "./attachment-target";
+type PickerTarget = AttachmentTarget<Editor, SelectionBookmark>;
+type PickerBatch = {
+  target: PickerTarget;
+  operationIds: string[];
+  files?: File[];
+  cancelRequested?: boolean;
+};
 import { exit, onBackButtonPress } from "@tauri-apps/api/app";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
@@ -71,6 +92,9 @@ import {
   loadWorkspace,
   native,
   storeAttachment,
+  storeAttachmentOperation,
+  queryAttachmentOperation,
+  cancelAttachmentOperation,
   readNoteText,
   exportArchive,
   importArchive,
@@ -367,6 +391,25 @@ function App() {
   const nativeEditorOwners = useRef(new WeakMap<Editor, string>());
   const nativeEditorCounter = useRef(0);
   const nativeAttachmentTarget = useRef<NativeContext | null>(null);
+  // Recording retains its existing context. Every picker has an explicit owner.
+  const pickerTargets = useRef(new Map<HTMLInputElement, PickerBatch>());
+  const attachmentSubmissions = useRef(
+    new Map<string, AttachmentSubmission<PickerTarget>>(),
+  );
+  const attachmentBatches = useRef(new Set<PickerBatch>());
+  const pickerRuntime = useRef<{
+    scope: string;
+    noteId: string | null;
+    editor: Editor | null;
+    available: boolean;
+    scanInfoAvailable: boolean;
+  }>({
+    scope: "",
+    noteId: null,
+    editor: null,
+    available: false,
+    scanInfoAvailable: false,
+  });
   const nativeAssert = useRef<
     (context: NativeContext, editing?: boolean, overlay?: boolean) => void
   >(() => {});
@@ -384,9 +427,17 @@ function App() {
   const saveFailures = useRef(new Map<string, unknown>());
   const accessHandler = useRef<(event: AccessEvent) => void>(() => {});
   const clearSensitive = useRef<(ids: string[]) => void>(() => {});
-  const synchronizeRef = useRef<() => Promise<void>>(async () => {});
-  const synchronization = useRef<Promise<void> | null>(null);
-  const syncSequence = useRef(0);
+  const synchronizeRef = useRef<
+    () => Promise<SynchronizationResult<Workspace>>
+  >(async () => ({
+    success: false,
+    sequence: 0,
+    error: Error("同步尚未就绪"),
+  }));
+  const synchronization = useRef(
+    new TrustedSynchronization<Workspace>(),
+  ).current;
+  const synchronizingRef = useRef(false);
   const initializedSelection = useRef(false);
   const barrierEditor = useRef<{ editor: Editor; editable: boolean } | null>(
     null,
@@ -401,7 +452,7 @@ function App() {
   const [record, setRecord] = useState(false);
   const [mobile, setMobile] = useState(window.innerWidth < 700 && !separate);
   const paperOptions = mobile ? mobilePaperOptions : desktopPaperOptions;
-  const queues = useRef(new Map<string, Promise<unknown>>());
+  const queues = useRef(new Map<string, Promise<SaveOutcome>>());
   const revisions = useRef(new SaveRevisions());
   const externalVersions = useRef(new Map<string, number>());
   const pendingDocs = useRef(new Map<string, JSONContent>());
@@ -514,11 +565,7 @@ function App() {
       const pending = pendingDocs.current.get(n.id);
       revisions.current.observe(n.id, n.revision, !!pending);
       const old = previous.notes.find((old) => old.id === n.id);
-      if (
-        !pending &&
-        old &&
-        !documentsEqual(old.document, n.document)
-      )
+      if (!pending && old && !documentsEqual(old.document, n.document))
         externalVersions.current.set(
           n.id,
           (externalVersions.current.get(n.id) || 0) + 1,
@@ -623,14 +670,16 @@ function App() {
   const saveDoc = useCallback(
     (id: string, doc: JSONContent) => {
       if (blockedNotes.current.has(id)) {
-        fail(Error("备忘录正在同步锁定状态"));
-        return;
+        const error = Error("备忘录正在同步锁定状态");
+        fail(error);
+        return Promise.resolve<SaveOutcome>({ saved: false, error });
       }
       const ticket = registerSaveIntent(id);
       void ticket.catch(() => {}); // The queued save handles and retains registration failures.
       pendingDocs.current.set(id, doc);
       const text = documentText(doc);
-      setWs((prev) => ({
+      const updatedAt = Date.now();
+      const optimistic = (prev: Workspace): Workspace => ({
         ...prev,
         notes: prev.notes.map((n) =>
           n.id === id
@@ -639,15 +688,19 @@ function App() {
                 document: doc,
                 plainText: text,
                 title: text.split("\n")[0] || "新备忘录",
-                updatedAt: Date.now(),
+                updatedAt,
               }
             : n,
         ),
-      }));
+      });
+      // A fast local/IPC ACK may precede React's render. Hydration must compare
+      // against this own submitted body rather than invent an external change.
+      wsRef.current = optimistic(wsRef.current);
+      setWs(optimistic);
       setSaving((v) => v + 1);
-      const previous = queues.current.get(id) || Promise.resolve();
-      const next = previous
-        .then(async () => {
+      const next = enqueueSave(
+        queues.current.get(id),
+        async () => {
           const n = await action<Note>({
             type: "saveNote",
             id,
@@ -656,6 +709,8 @@ function App() {
             revision: revisions.current.expected(id),
           });
           revisions.current.confirmed(id, n.revision);
+          for (const submission of attachmentSubmissions.current.values())
+            submission.acknowledge(id, n.document);
           if (pendingDocs.current.get(id) === doc) {
             pendingDocs.current.delete(id);
             saveFailures.current.delete(id);
@@ -666,17 +721,19 @@ function App() {
               old.id === id ? { ...old, revision: n.revision } : old,
             ),
           }));
-        })
-        .catch((e) => {
+        },
+        (e) => {
           saveFailures.current.set(id, e);
           if ((e as { code?: string }).code === "conflict")
             setError(
               "其他窗口已保存新的内容。本窗口更改仍保留，重试不会覆盖已保存版本。普通无附件的备忘录可另存为新备忘录。",
             );
           else fail(e);
-        })
-        .finally(() => setSaving((v) => Math.max(0, v - 1)));
+        },
+        () => setSaving((v) => Math.max(0, v - 1)),
+      );
       queues.current.set(id, next);
+      return next;
     },
     [fail],
   );
@@ -774,6 +831,12 @@ function App() {
       context.editor = null;
       context.bookmark = null;
     });
+    for (const batch of attachmentBatches.current)
+      if (ids.includes(batch.target.noteId)) batch.target.invalidated = true;
+    for (const batch of pickerTargets.current.values())
+      if (ids.includes(batch.target.noteId)) batch.target.invalidated = true;
+    for (const submission of attachmentSubmissions.current.values())
+      if (ids.includes(submission.noteId)) submission.invalidate();
     const attachmentTarget = nativeAttachmentTarget.current;
     if (attachmentTarget) {
       // Keep an explicitly rejected intent, never turn a late picker return
@@ -809,48 +872,41 @@ function App() {
     }
     setContextNote(null);
   };
-  synchronizeRef.current = () => {
-    syncSequence.current++;
-    invalidateAccessRequests();
-    setSynchronizing(true);
-    setSyncError("");
-    if (synchronization.current) return synchronization.current;
-    const task = (async () => {
-      for (;;) {
-        const sequence = syncSequence.current;
-        try {
-          const data = await loadWorkspace();
-          if (sequence !== syncSequence.current) continue;
-          hydrate(data);
-          if (!initializedSelection.current) {
-            initializedSelection.current = true;
-            setFolderId(String(data.settings.selectedFolder || "default"));
-            const selectedId =
-              separate || String(data.settings.selectedNote || "");
-            if (data.notes.some((n) => n.id === selectedId)) {
-              setNoteId(selectedId);
-              if (separate) setPage("editor");
-            }
+  synchronizeRef.current = () =>
+    synchronization.request(
+      () => {
+        invalidateAccessRequests();
+        synchronizingRef.current = true;
+        setSynchronizing(true);
+        setSyncError("");
+      },
+      loadWorkspace,
+      (data) => {
+        hydrate(data);
+        if (!initializedSelection.current) {
+          initializedSelection.current = true;
+          setFolderId(String(data.settings.selectedFolder || "default"));
+          const selectedId =
+            separate || String(data.settings.selectedNote || "");
+          if (data.notes.some((n) => n.id === selectedId)) {
+            setNoteId(selectedId);
+            if (separate) setPage("editor");
           }
-          blockedNotes.current = new Set(data.access?.suspended || []);
-          setAccessSuspended([...blockedNotes.current]);
-          setSynchronizing(false);
-          return;
-        } catch (e) {
-          if (sequence !== syncSequence.current) continue;
-          fail(e);
-          setSyncError(errText(e));
-          return; // Keep cached content covered until a trusted retry succeeds.
         }
-      }
-    })().finally(() => {
-      synchronization.current = null;
-    });
-    synchronization.current = task;
-    return task;
-  };
+        blockedNotes.current = new Set(data.access?.suspended || []);
+        setAccessSuspended([...blockedNotes.current]);
+        synchronizingRef.current = false;
+        setSynchronizing(false);
+      },
+      (e) => {
+        fail(e);
+        setSyncError(errText(e));
+        // Keep cached content covered until a trusted retry succeeds.
+      },
+    );
   accessHandler.current = (event) => {
     if (event.phase === "prepare") {
+      synchronization.invalidate();
       blockedNotes.current = new Set(event.noteIds);
       setAccessSuspended(event.noteIds);
       if (
@@ -1371,38 +1427,191 @@ function App() {
     const t = setTimeout(() => setNotice(""), 3500);
     return () => clearTimeout(t);
   }, [notice]);
-  const fileSelected = async (files: FileList | null) => {
-    const target = nativeAttachmentTarget.current;
-    nativeAttachmentTarget.current = null;
-    if (!files || !current || !editor) return;
-    try {
-      if (target) nativeAssert.current(target, true);
-      for (const file of Array.from(files)) {
-        const a = await storeAttachment(target?.noteId || current.id, file);
-        if (target) {
-          nativeAssert.current(target, true);
-          editor.view.dispatch(
-            editor.state.tr.setSelection(
-              target.bookmark!.resolve(editor.state.doc),
+  const validatePickerTarget = async (target: PickerTarget) => {
+    if (target.invalidated) throw Error("原附件目标已失效，请保持窗口打开");
+    await flush();
+    const synced = await synchronizeRef.current();
+    const live = pickerRuntime.current;
+    const instance = live.editor;
+    const note = wsRef.current.notes.find((n) => n.id === target.noteId);
+    const stamp = rebindAttachmentTarget(target, {
+      noteId: live.noteId,
+      scope: live.scope,
+      stamp: accessGate.stamp(target.noteId),
+      editor: instance,
+      owner: instance ? nativeEditorOwners.current.get(instance) : undefined,
+      documentVersion: instance
+        ? nativeDocumentVersions.current.get(instance) || 0
+        : -1,
+      externalVersion: externalVersions.current.get(target.noteId) || 0,
+      editorDocument:
+        instance && !instance.isDestroyed ? instance.getJSON() : undefined,
+      trustedDocument: synced.success
+        ? synced.snapshot.notes.find((n) => n.id === target.noteId)?.document
+        : undefined,
+      trustedSynchronization: synchronization.current(synced),
+      available:
+        live.available &&
+        !!note &&
+        !note.deletedAt &&
+        !!instance &&
+        !instance.isDestroyed &&
+        instance.isEditable &&
+        !accessGate.state?.operationId &&
+        !blockedNotes.current.has(target.noteId) &&
+        !accessGate.state?.suspended.includes(target.noteId) &&
+        (!note.locked || !!accessGate.state?.notes[target.noteId]?.authorized),
+    });
+    // Resolving the original bookmark is also mandatory; never use current selection.
+    target.bookmark.resolve(target.editor.state.doc);
+    target.stamp = stamp;
+  };
+  const submitAttachmentBatch = async (batch: PickerBatch) => {
+    if (batch.cancelRequested)
+      throw Error("附件取消尚未核定，请重试取消；不会继续插入正文");
+    if (!batch.files) throw Error("附件选择结果尚未提供");
+    const target = batch.target;
+    for (const [index, file] of batch.files.entries()) {
+      if (batch.cancelRequested) throw Error("本次附件已请求取消");
+      const operationId = batch.operationIds[index];
+      let submission = attachmentSubmissions.current.get(operationId);
+      if (!submission) {
+        submission = new AttachmentSubmission(
+          operationId,
+          target.noteId,
+          target,
+          file,
+        );
+        attachmentSubmissions.current.set(operationId, submission);
+      }
+      const operation = submission;
+      await operation.run({
+        validate: () => validatePickerTarget(target),
+        storage: native
+          ? {
+              kind: "journal",
+              store: () =>
+                storeAttachmentOperation(operationId, target.noteId, file),
+              query: () => queryAttachmentOperation(operationId, target.noteId),
+            }
+          : {
+              kind: "preview",
+              store: () => storeAttachment(target.noteId, file),
+            },
+        insert: (attachment) => {
+          const instance = target.editor;
+          instance.view.dispatch(
+            instance.state.tr.setSelection(
+              target.bookmark.resolve(instance.state.doc),
             ),
           );
+          try {
+            const inserted = instance
+              .chain()
+              .focus()
+              .insertContent({
+                type: "attachment",
+                attrs: {
+                  id: attachment.id,
+                  name: attachment.displayName,
+                  kind: attachment.kind,
+                },
+              })
+              .run();
+            if (!inserted)
+              throw Error("编辑器未接受附件插入，已保留原附件；请重试");
+          } finally {
+            if (documentReferencesAttachment(instance.getJSON(), attachment)) {
+              target.bookmark = instance.state.selection.getBookmark();
+              target.documentVersion =
+                nativeDocumentVersions.current.get(instance) || 0;
+              target.document = instance.getJSON();
+              target.trustedDocument = target.document;
+            }
+          }
+        },
+        references: (attachment) =>
+          !target.editor.isDestroyed &&
+          documentReferencesAttachment(target.editor.getJSON(), attachment),
+        awaitDocumentAck: async () => {
+          await queues.current.get(target.noteId);
+          if (!operation.documentAck) {
+            const pending = pendingDocs.current.get(target.noteId);
+            if (
+              !pending ||
+              !operation.attachment ||
+              !documentReferencesAttachment(pending, operation.attachment)
+            )
+              throw Error("附件正文尚未确认保存，请保持窗口打开");
+            const outcome = await saveDoc(target.noteId, pending);
+            if (!outcome.saved) throw outcome.error;
+          }
+        },
+        refresh,
+      });
+    }
+    attachmentBatches.current.delete(batch);
+    for (const operationId of batch.operationIds)
+      attachmentSubmissions.current.delete(operationId);
+    setMenu(null);
+  };
+  const retryAttachments = async () => {
+    for (const [id, doc] of [...pendingDocs.current]) await saveDoc(id, doc);
+    for (const batch of [...attachmentBatches.current])
+      await submitAttachmentBatch(batch);
+  };
+  const discardUninsertedAttachments = async () => {
+    for (const batch of attachmentBatches.current) {
+      await validatePickerTarget(batch.target);
+      const operations = batch.operationIds.map((id) =>
+        attachmentSubmissions.current.get(id),
+      );
+      if (operations.some((op) => op?.inserted))
+        throw Error("附件已在本窗口正文中，须先确认保存；不会删除待保存的附件");
+      // Seal admission before awaiting cancellation. A late storage/query result
+      // can no longer race a safe backend cancellation and insert its old node.
+      batch.cancelRequested = true;
+      for (const op of operations) op?.invalidate();
+      for (const op of operations) {
+        if (!op) continue;
+        if (
+          op.attachment &&
+          documentReferencesAttachment(
+            op.target.editor.getJSON(),
+            op.attachment,
+          )
+        )
+          throw Error("附件已在本窗口正文中，不能取消");
+        if (native && op.storageAttempted) {
+          const result = await cancelAttachmentOperation(
+            op.operationId,
+            op.noteId,
+          );
+          if (result.status !== "aborted" && result.status !== "notPersisted")
+            throw Error(
+              `附件已保留待恢复（${result.reason || result.status}）`,
+            );
         }
-        editor
-          .chain()
-          .focus()
-          .insertContent({
-            type: "attachment",
-            attrs: { id: a.id, name: a.displayName, kind: a.kind },
-          })
-          .run();
-        if (target) {
-          target.bookmark = editor.state.selection.getBookmark();
-          target.documentVersion =
-            nativeDocumentVersions.current.get(editor) || 0;
-        }
+        op.invalidate();
+        attachmentSubmissions.current.delete(op.operationId);
       }
-      await refresh();
-      setMenu(null);
+      batch.target.invalidated = true;
+      attachmentBatches.current.delete(batch);
+    }
+    setError("");
+  };
+  const fileSelected = async (input: HTMLInputElement) => {
+    const files = input.files;
+    const batch = pickerTargets.current.get(input);
+    pickerTargets.current.delete(input);
+    try {
+      if (!files?.length) return; // Picker cancellation has not started storage.
+      if (!batch) throw Error("附件选择缺少原目标，请重新选择");
+      batch.files = Array.from(files);
+      for (let i = 1; i < batch.files.length; i++)
+        batch.operationIds.push(secureId());
+      attachmentBatches.current.add(batch);
+      await submitAttachmentBatch(batch);
     } catch (e) {
       fail(e);
     } finally {
@@ -1558,6 +1767,81 @@ function App() {
       ) : null}
     </div>
   );
+  const capturePickerTarget = (context?: NativeContext, scanInfo = false) => {
+    const live = pickerRuntime.current;
+    const instance = context ? context.editor : live.editor;
+    if (
+      synchronizingRef.current ||
+      !live.noteId ||
+      !instance ||
+      instance.isDestroyed ||
+      !instance.isEditable ||
+      (!live.available && !(scanInfo && live.scanInfoAvailable)) ||
+      blockedNotes.current.has(live.noteId) ||
+      accessGate.state?.operationId
+    )
+      throw Error("当前备忘录不可添加附件，请同步完成后重试");
+    if (context) nativeAssert.current(context, true);
+    const owner = nativeEditorOwners.current.get(instance);
+    if (owner !== live.noteId) throw Error("附件编辑器归属已改变");
+    const original = wsRef.current.notes.find((n) => n.id === live.noteId);
+    if (!original) throw Error("原附件备忘录不存在");
+    const target: PickerTarget = {
+      noteId: live.noteId,
+      scope: live.scope,
+      stamp: accessGate.stamp(live.noteId),
+      editor: instance,
+      owner,
+      bookmark: context?.bookmark || instance.state.selection.getBookmark(),
+      documentVersion: nativeDocumentVersions.current.get(instance) || 0,
+      externalVersion: externalVersions.current.get(live.noteId) || 0,
+      document: instance.getJSON(),
+      // Compare each representation with its own captured original. Schema
+      // defaults in the Editor must neither hide raw changes nor reject an
+      // unchanged imported document that omits an optional default field.
+      trustedDocument:
+        pendingDocs.current.get(live.noteId) || original.document,
+      invalidated: false,
+    };
+    return { target, operationIds: [secureId()] } satisfies PickerBatch;
+  };
+  const openAttachmentPicker = (
+    input: HTMLInputElement | null,
+    accept?: string,
+    context?: NativeContext,
+    scanInfo = false,
+  ) => {
+    try {
+      if (!input) throw Error("附件选择器尚未就绪");
+      const batch = capturePickerTarget(context, scanInfo);
+      const previous = pickerTargets.current.get(input);
+      if (previous) previous.target.invalidated = true;
+      pickerTargets.current.set(input, batch);
+      if (accept !== undefined) input.accept = accept;
+      input.click();
+    } catch (e) {
+      if (input) {
+        const batch = pickerTargets.current.get(input);
+        if (batch) batch.target.invalidated = true;
+        pickerTargets.current.delete(input);
+      }
+      fail(e);
+    }
+  };
+  useEffect(() => {
+    const inputs = [fileInput.current, cameraInput.current];
+    const cancelled = (event: Event) => {
+      const input = event.currentTarget as HTMLInputElement;
+      const batch = pickerTargets.current.get(input);
+      if (batch) batch.target.invalidated = true;
+      pickerTargets.current.delete(input);
+    };
+    for (const input of inputs) input?.addEventListener("cancel", cancelled);
+    return () => {
+      for (const input of inputs)
+        input?.removeEventListener("cancel", cancelled);
+    };
+  }, []);
   const captureSearchAttachmentTarget = () => {
     nativeAttachmentTarget.current = desktopSearch
       ? {
@@ -1733,8 +2017,7 @@ function App() {
               <MenuRow
                 icon={<FileText size={19} />}
                 onClick={() => {
-                  captureSearchAttachmentTarget();
-                  fileInput.current?.click();
+                  openAttachmentPicker(fileInput.current, "");
                   setMenu(null);
                 }}
               >
@@ -1754,11 +2037,7 @@ function App() {
               <MenuRow
                 icon={<Image size={19} />}
                 onClick={() => {
-                  if (fileInput.current) {
-                    fileInput.current.accept = "image/*,video/*";
-                    captureSearchAttachmentTarget();
-                    fileInput.current.click();
-                  }
+                  openAttachmentPicker(fileInput.current, "image/*,video/*");
                   setMenu(null);
                 }}
               >
@@ -1767,8 +2046,7 @@ function App() {
               <MenuRow
                 icon={<Camera size={19} />}
                 onClick={() => {
-                  captureSearchAttachmentTarget();
-                  cameraInput.current?.click();
+                  openAttachmentPicker(cameraInput.current);
                   setMenu(null);
                 }}
               >
@@ -1781,8 +2059,7 @@ function App() {
                   setNotice(
                     "当前可拍摄并插入文稿照片；自动裁边与扫描归档尚待实现。",
                   );
-                  captureSearchAttachmentTarget();
-                  cameraInput.current?.click();
+                  openAttachmentPicker(cameraInput.current);
                 }}
               >
                 扫描文稿
@@ -2110,6 +2387,22 @@ function App() {
     separate,
     query,
   ]);
+  const pickerBaseAvailable =
+    !loading &&
+    !draw &&
+    !record &&
+    !accessSuspended.length &&
+    !!current &&
+    !current.deletedAt &&
+    (!mobile || page === "editor") &&
+    (!current.locked || !!accessGate.state?.notes[current.id]?.authorized);
+  pickerRuntime.current = {
+    scope: JSON.stringify([nativeScope, page]),
+    noteId,
+    editor,
+    available: pickerBaseAvailable && !modal,
+    scanInfoAvailable: pickerBaseAvailable && modal === "scanInfo",
+  };
   nativeAssert.current = (context, editing = false, overlay = false) => {
     const live = accessGate.stamp(context.noteId || undefined);
     if (
@@ -2256,11 +2549,11 @@ function App() {
         case "choosePhotoVideo":
         case "attachFile":
           nativeSelection(context);
-          nativeAttachmentTarget.current = { ...context };
-          if (!fileInput.current) throw new Error("附件选择器尚未就绪");
-          fileInput.current.accept =
-            command === "choosePhotoVideo" ? "image/*,video/*" : "";
-          fileInput.current.click();
+          openAttachmentPicker(
+            fileInput.current,
+            command === "choosePhotoVideo" ? "image/*,video/*" : "",
+            context,
+          );
           return;
         case "recordAudio":
           nativeSelection(context);
@@ -2497,11 +2790,18 @@ function App() {
           <button
             onClick={() => {
               setError("");
-              for (const [id, doc] of pendingDocs.current) saveDoc(id, doc);
+              void retryAttachments().catch(fail);
             }}
           >
             重试
           </button>
+          {attachmentBatches.current.size > 0 && (
+            <button
+              onClick={() => void discardUninsertedAttachments().catch(fail)}
+            >
+              取消未插入的附件
+            </button>
+          )}
           {noteId &&
             pendingDocs.current.has(noteId) &&
             (saveFailures.current.get(noteId) as { code?: string })?.code ===
@@ -2531,7 +2831,7 @@ function App() {
         type="file"
         multiple
         ref={fileInput}
-        onChange={(e) => fileSelected(e.target.files)}
+        onChange={(e) => fileSelected(e.currentTarget)}
       />
       <input
         className="hidden-input"
@@ -2539,7 +2839,7 @@ function App() {
         accept="image/*,video/*"
         capture="environment"
         ref={cameraInput}
-        onChange={(e) => fileSelected(e.target.files)}
+        onChange={(e) => fileSelected(e.currentTarget)}
       />
       <aside className="sidebar">
         {!nativeTop && (
@@ -3386,8 +3686,12 @@ function App() {
                   <button
                     onClick={() => {
                       setModal(null);
-                      captureSearchAttachmentTarget();
-                      cameraInput.current?.click();
+                      openAttachmentPicker(
+                        cameraInput.current,
+                        undefined,
+                        undefined,
+                        true,
+                      );
                     }}
                   >
                     拍摄文稿
