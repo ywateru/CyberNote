@@ -152,3 +152,7 @@ Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许�
 应用保全输入法实际交付内容与相邻已确认正文，真实候选应替换对应组字段，明确删除/取消不得复活旧组字。真实失焦、单纯隐藏键盘、后台恢复、切笔记与授权销毁分别核定；没有原版/平台commit-cancel及可靠范围证据时，不猜候选、不按字符删标记、不盲目回滚。后台恢复仍须遵循授权屏障，旧Editor不可写入新笔记。格式/后台的原版一致性与隔离仍未通过；历史可见/保存结果及P1报告保留，当前应用独有归因已不成立。FIX07已在5dd6包独立有限复验选择大网格及取消均保留原选区/同Editor，完整矩阵仍partial；证据在`docs/verification/qa-fix-07/run-5dd6dfc8/`。原包与修复包、通过与失败记录均保留在`docs/verification/app-001-fix-04/`，平台新增证据在`docs/verification/app-001-fix-06/platform-baseline/`。
 
 2026-11-04搜索焦点源码更新：源d9bc5a4独立SOURCE-READY、主175cd1f在插件精确search MenuEvent回调同步解析真实唯一focused main和当前enabled绑定，直接调用与IPC共用的原生同步focus body；原宿主emit和后续IPC重复focus保持。拒绝无归属/无绑定/disabled，不回落其他窗口。Tauri最初菜单队列及global listener先行仍存在；未在新包实际验证前不声称快捷键立即粘贴异常已修复。
+
+### 暂停回放源码接入状态
+
+2026-11-04：preview源e01c90a独立SOURCE-READY，主e9e426f，复用未改createAudioPlayback；Session等待pause后串行快照且保留累计主chunks，Panel继续/完成/取消先失效代次，dispose播放器/probe后才回收URL。adapter真实loadeddata/canplay取得就绪，媒体错误重载清旧ready/定位等待；±15按实际seekable与seeked/currentTime确认，不采用共享控制器的乐观time。主build/preview16/父20通过。非终态prefix仍是可失败候选，不保证容器完整或WK/Android可播；当前candidate03包仍不含此模块，见preview独审02及后续安装包验证。

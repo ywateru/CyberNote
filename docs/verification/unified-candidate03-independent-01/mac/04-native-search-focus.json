@@ -1,0 +1,85 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_6129e71523a7b2977af8a61488665bf62618e6875c8959bfb111450b7379ec76\",\"subject\":null,\"provider\":{\"id\":\"frida\",\"name\":\"Frida\",\"version\":null},\"analysis_profile\":null,\"predicate_type\":\"rea.frida.instrumentation-observation\",\"operation\":\"instrument_with_frida\",\"parameters\":{\"session_id\":\"b20094a7-b18f-4e21-af2a-c01b10436db8\",\"device_id\":\"local\",\"mode\":\"attach\",\"pid\":37803},\"raw_result\":null,\"normalized_result\":{\"session_id\":\"b20094a7-b18f-4e21-af2a-c01b10436db8\",\"device_id\":\"local\",\"state\":\"running\",\"target\":\"备忘录 (pid 37803)\",\"pid\":37803,\"mode\":\"attach\",\"scripts\":[{\"script_id\":\"ffefc2e7-6dec-4ff0-8d8e-3ddb732db56f\",\"name\":\"rea-ffefc2e7-6dec-4ff0-8d8e-3ddb732db56f\"}],\"messages\":[{\"script_id\":\"ffefc2e7-6dec-4ff0-8d8e-3ddb732db56f\",\"type\":\"send\",\"payload\":{\"pid\":37803,\"at\":\"2026-11-03T19:26:15.997Z\",\"windows\":[{\"number\":68430,\"visible\":1,\"key\":1,\"main\":1,\"firstResponderClass\":\"NSTextView\",\"delegateClass\":\"NotesUISearchField\",\"delegateValue\":\"\",\"responderValue\":\"\"}],\"errors\":[],\"application\":{\"active\":1,\"hidden\":0,\"frontmostBundle\":\"com.local.notesclone\",\"frontmostPid\":37803}}}],\"messages_truncated\":false,\"source_kind\":\"file\",\"source_path\":\"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate03-independent-01/mac/native-search-focus-read.js\",\"source_sha256\":\"1b4a18ba2739a42f88346e2c405bd73a3a3c4d8cb21ba599965b960ac8f92565\",\"cleanup_error\":null},\"confidence\":\"observed\",\"authority\":\"external-service\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"The target operating system and architecture were not reported by this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_6129e71523a7b2977af8a61488665bf62618e6875c8959bfb111450b7379ec76",
+    "subject": null,
+    "provider": {
+      "id": "frida",
+      "name": "Frida",
+      "version": null
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.frida.instrumentation-observation",
+    "operation": "instrument_with_frida",
+    "parameters": {
+      "session_id": "b20094a7-b18f-4e21-af2a-c01b10436db8",
+      "device_id": "local",
+      "mode": "attach",
+      "pid": 37803
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "session_id": "b20094a7-b18f-4e21-af2a-c01b10436db8",
+      "device_id": "local",
+      "state": "running",
+      "target": "备忘录 (pid 37803)",
+      "pid": 37803,
+      "mode": "attach",
+      "scripts": [
+        {
+          "script_id": "ffefc2e7-6dec-4ff0-8d8e-3ddb732db56f",
+          "name": "rea-ffefc2e7-6dec-4ff0-8d8e-3ddb732db56f"
+        }
+      ],
+      "messages": [
+        {
+          "script_id": "ffefc2e7-6dec-4ff0-8d8e-3ddb732db56f",
+          "type": "send",
+          "payload": {
+            "pid": 37803,
+            "at": "2026-11-03T19:26:15.997Z",
+            "windows": [
+              {
+                "number": 68430,
+                "visible": 1,
+                "key": 1,
+                "main": 1,
+                "firstResponderClass": "NSTextView",
+                "delegateClass": "NotesUISearchField",
+                "delegateValue": "",
+                "responderValue": ""
+              }
+            ],
+            "errors": [],
+            "application": {
+              "active": 1,
+              "hidden": 0,
+              "frontmostBundle": "com.local.notesclone",
+              "frontmostPid": 37803
+            }
+          }
+        }
+      ],
+      "messages_truncated": false,
+      "source_kind": "file",
+      "source_path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate03-independent-01/mac/native-search-focus-read.js",
+      "source_sha256": "1b4a18ba2739a42f88346e2c405bd73a3a3c4d8cb21ba599965b960ac8f92565",
+      "cleanup_error": null
+    },
+    "confidence": "observed",
+    "authority": "external-service",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "The target operating system and architecture were not reported by this observation."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

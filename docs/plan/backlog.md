@@ -35,3 +35,5 @@
 - Android真实内联预编辑长停留后出现拼音＋汉字双写，属于实际输入P1，已单列APP-001-FIX-04。0aac正式包已实采空段5000ms timer/end/clear与节点断开后双写；中部34秒轮次同timer但节点保持且正确替换，不能概括所有长停留失败。FIX04候选开发长停留有限通过，独立复验待冻结包；格式失焦/后台仍残留预编辑，转FIX06但手机整体输入继续blocking。纸张页取消在两包均31..35保留；实际失败是选择大网格纸后变1..1，前次误称取消已更正。须保留准确触发与两包对照，不能用部分通过覆盖。
 
 - 录音state源12b94d7独立审查仅非阻塞证据格式：typecheck.txt EOF多空行使baseline..candidate diffcheck exit2，原始日志保留，主整合README已显式更正，不冒称全范围通过。产品三文件字节不变，独立Panel17/Session26与主前端build通过；不据此升级父ACK/设备/像素。
+
+- 2026-11-04，PREVIEW-CHECK-WAIT（non-blocking）：原check-recording-panel-browser在卸载后立即读revoke及ready事件后立即读React按钮，两次独审原样非零；仅等真实条件的独立副本Panel25通过，产品来源hash前后同。以后将同一有界条件等待同步回生产检查脚本，保留原预期和失败日志，勿用固定sleep或吞异常。见app-002-recording-preview-static-02。

@@ -1,0 +1,27 @@
+{
+  "recordedAt": "2026-11-03T19:45:29.790292+00:00",
+  "lastVerifiedRuntimePid": 39665,
+  "lastVerifiedRuntimePath": "/private/tmp/notes-unified-candidate03-mac-sealed.app/Contents/MacOS/notes-clone",
+  "attempts": [
+    {
+      "action": "CUA click fresh AX35 candidate03-picker-proof.txt attachment, followed by getAXStateAndScreenshot",
+      "timeoutMs": 15000,
+      "toolWallSeconds": 15.0229,
+      "result": "js execution timed out; kernel reset, rerun your request",
+      "savedPostActionSnapshot": false
+    },
+    {
+      "action": "CUA getState after kernel reset",
+      "result": "returned application inventory; did not provide an attachment-specific open/save window result",
+      "privateUnrelatedBrowserInventorySaved": false
+    },
+    {
+      "action": "CUA getApp exact known sealed candidate03 path to inspect current window",
+      "timeoutMs": 15000,
+      "toolWallSeconds": 15.0165,
+      "result": "js execution timed out; kernel reset, rerun your request"
+    }
+  ],
+  "conclusion": "Actual text attachment click attempted. External open or save outcome UNKNOWN; no successful post-click snapshot. Image separate open/view NOT EXECUTED. No repeat click or unknown external app binding.",
+  "limits": "The timeout is an observation-tool result, not proof that the app crashed, that an external open succeeded, or that file data was lost."
+}

@@ -1,0 +1,23 @@
+--- frozen-check-recording-panel-browser.mjs
++++ independent-observed-waits.mjs
+@@ -684,6 +684,8 @@
+       path: resolve(output, "mobile-preview-paused.png"),
+     });
+     await page.evaluate(() => window.unmountPanel());
++    // Independent diagnostic: wait for the actual passive cleanup result.
++    await page.waitForFunction(() => window.platform.revoked.length === 1, { timeout: 5000 });
+     assert.equal((await counts()).revoked, 1);
+   });
+   await test("Continue seals late play before revoke and a new pause uses cumulative chunks and a new player", async () => {
+@@ -874,6 +876,11 @@
+         .isDisabled(),
+     );
+     await page.evaluate(() => window.platform.audios[0].ready());
++    // Independent diagnostic: observe the React commit after the new media event.
++    await page.waitForFunction(() => {
++      const play = document.querySelector('[aria-label="播放录音"]');
++      return play && !play.disabled;
++    }, { timeout: 5000 });
+     assert.ok(
+       await page
+         .getByRole("button", { name: "播放录音", exact: true })

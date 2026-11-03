@@ -1,7 +1,7 @@
 ---
 id: app-002-recording-preview-01
 scope: paused-recording-preview-and-skip-controls
-status: pending-review
+status: in-progress
 depends-on: [app-002-recording-state-01]
 ---
 
@@ -44,8 +44,12 @@ MediaRecorder非终态前缀没有标准可播放保证。本任务只能先实�
 
 ## candidate01 review
 
-dc33152独审01为BLOCKED/P2：媒体错误重试沿用旧ready，尚未重新loadeddata/canplay便开放播放。15+26+11/typecheck在冻结时通过；同树跨源修改期间headless24归属INVALID不计通过，原日志保留。下一候选窄修此门禁，root另建独立review树复核。01证据与报告已保全主docs，不合入其产品代码。
+dc33152独审01为BLOCKED/P2：媒体错误重试沿用旧ready，尚未重新loadeddata/canplay便开放播放。15+26+11/typecheck在冻结时通过；同树跨源修改期间headless24归属INVALID不计通过，原日志保留。下一候选窄修此门禁，root另建独立review树复核。01证据与报告已保全主docs；01未单独验收，主整合以修复后的02为最终来源。
 
 ## source candidate 02
 
 候选01独审P2指出媒体错误重载沿用旧ready，01结果BLOCKED保留；候选02仅在录音adapter重载前关ready/清定位等待，并新增真实Panel和模块回归。模块16、Panel25、独审P2原复现及typecheck通过，待新的独立工作树审查。详见[候选02](../../verification/app-002-recording-preview/source-candidate-02/README.md)。候选01 README关于普通AudioPlayer位于App的文字更正为Editor，旧证据保全。
+
+## accepted source and main integration
+
+e01c90a经独审02 SOURCE-READY，以81be2b4/e9e426f合主。原P2复现与独立恢复4组关闭；模块16及有界等待实际提交/cleanup的独立Panel25通过。原样Panel检查两次即时断言失败仍保留为非阻塞稳定性观察，不写成原脚本pass。主6源码hash相同，pnpm build、preview16与父20通过。candidate03安装包不含本预览，真实WK/Android暂停前缀可播/seek/可听与原版像素仍须后包验证，任务保持in-progress。

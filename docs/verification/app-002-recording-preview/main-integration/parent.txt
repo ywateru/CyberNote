@@ -1,0 +1,419 @@
+{
+  "tests": 20,
+  "results": [
+    {
+      "name": "ordinary and native entries capture explicit original note, editor, bookmark and operation before Done",
+      "pass": true,
+      "entries": [
+        {
+          "nativeEntry": false,
+          "counts": {
+            "stores": 1,
+            "queries": 0,
+            "cancels": 0,
+            "saves": 1,
+            "inserts": 1,
+            "batches": 0,
+            "submissions": 0,
+            "journal": 1,
+            "record": false,
+            "active": false
+          }
+        },
+        {
+          "nativeEntry": true,
+          "counts": {
+            "stores": 1,
+            "queries": 0,
+            "cancels": 0,
+            "saves": 1,
+            "inserts": 1,
+            "batches": 0,
+            "submissions": 0,
+            "journal": 1,
+            "record": false,
+            "active": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "actual parent Done remains pending and Panel stays open until real App SaveQueue ACK",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "duplicate Done coalesces and a different final File is rejected without another operation",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "body ACK failure rejects to Panel and same File retry saves the same inserted attachment",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "durable save rejected"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 3,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "ACK then refresh failure resolves, closes Panel and global retry only refreshes",
+      "pass": true,
+      "before": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": false,
+        "active": false
+      },
+      "after": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "insertFalse rejects to Panel and same operation retry inserts at most once",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "编辑器未接受附件插入，已保留原附件；请重试"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 2,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "insertThrowBefore rejects to Panel and same operation retry inserts at most once",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "insert failed before dispatch"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 2,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "insertThrowAfter rejects to Panel and same operation retry inserts at most once",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "insert failed after dispatch"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "stored response rejected by actual bridge is recovered by query of the same operation",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 1,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "other overlays and stale ticket cannot obtain the own-recording exemption",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口"
+      },
+      "late": {
+        "success": false,
+        "message": "原录音会话已关闭，不会提交到其他备忘录"
+      },
+      "counts": {
+        "stores": 0,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 0,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "late store after original note changes cannot insert or retarget",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "原录音会话已关闭，不会提交到其他备忘录"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": false,
+        "active": true
+      }
+    },
+    {
+      "name": "late store after original editor changes cannot insert or retarget",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": true,
+        "active": true
+      }
+    },
+    {
+      "name": "late store after original epoch changes cannot insert or retarget",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": true,
+        "active": true
+      }
+    },
+    {
+      "name": "cancel during actual FileReader seals before waiting and retains ownership for store then cancel",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 1,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 0,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "actual Panel cancel callback hides sealed Panel and deferred cancellation stays recoverable",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 2,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 0,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "actual Android Back prevents late store insertion and preserves cancellation identity",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 1,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 0,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "cancel with pending local reference preserves attachment then global retry obtains body ACK",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "录音已进入待保存正文，附件已保留；请使用重试保存，不会删除"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 3,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "access suspension seals admission synchronously; late store cannot insert or cancel under other authority",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": false,
+        "active": true
+      }
+    },
+    {
+      "name": "existing close listener waits for pending recording body ACK and idle window remains unblocked",
+      "pass": true,
+      "prevented": 1,
+      "destroyed": 1,
+      "idlePrevented": 0,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 3,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "existing effect cleanup seals detached recording against late FileReader/store completion",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": true,
+        "active": true
+      }
+    }
+  ],
+  "sourceHashes": {
+    "attachment-submission": "68a412cd73f2303e7c4251933fc79c123a2655472296a6999fba5687107857f3",
+    "trusted-synchronization": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128",
+    "attachment-target": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+    "document-equality": "629d2729ac47626f6618f13d6858c98dc5a0f654a4b53ba70f6ec0731204db7d",
+    "bridge": "693de27d6780e6b1059732df66c0bf9cf37ca438b9176765565593c3d290c9f1",
+    "access-client": "fb3a9a062fbee9b5b68ca5a8bcbd8cb0de49170b5af35f907d95d09a0ba70d10",
+    "secure-id": "04eb982510ffd3b6a6931f3f61ddbf1cc53d981d2e8aac281a5110c7c112c3ab",
+    "proof-access": "64b235d209e03649d340354b1aa187efd2fe872cfbc9e007951306359c3ca3ca",
+    "types": "108c97dcc8879b36830226631c8c590d2be98ba33b148c11699adf694092bcd6",
+    "save-queue": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+    "save-revisions": "3fbf025c8c57cbcc78cdc13d8b62962b0235feb89ea3cd23b5af8547bc940d6a",
+    "App": "3beef1eea93e564e317f81efe30f89c391183a7d47e27d4cb3f954781783b696"
+  },
+  "execution": "AST-extracted actual App ordinary/native entry, Panel callbacks, submit/cancel, original target validation, hydration, saveDoc/SaveQueue, retry/Back/close/unmount; production AttachmentSubmission, bridge, AccessGate, TrustedSynchronization and PM documents/bookmarks.",
+  "limitations": [
+    "No mounted App, native window, microphone, encoded audio, Rust DB or device. FileReader, invoke/backend responses, Editor command host and React setters controlled.",
+    "Final File-shaped fixture and audio payload do not establish recording validity, audibility or media playback. Actual Panel/RecordingSession are unchanged and not mounted in this parent-boundary check."
+  ]
+}

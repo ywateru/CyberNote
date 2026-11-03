@@ -1,0 +1,20 @@
+{
+  "head": "e9e426f",
+  "checks": [
+    {
+      "command": "pnpm build",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/check-recording-preview.mjs",
+      "exitCode": 0,
+      "cases": 16
+    },
+    {
+      "command": "node scripts/check-recording-submit.mjs",
+      "exitCode": 0,
+      "cases": 20
+    }
+  ],
+  "scope": "Main integration build and affected preview/parent controlled checks only. No native candidate04, WK/Android prefix or audible/pixel acceptance."
+}
