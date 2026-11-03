@@ -39,3 +39,5 @@
 保持真实Trime候选选择，分别在最后compositionupdate后小于4秒和大于6秒提交；记录同一editor/view实例身份、compositionstart/update/end、beforeinput/input、PM composing/compositionNode、DOM文本节点身份、DOM/PM选区和doc transaction。额外只读追踪endComposition/clearComposition的调用时刻与栈，可区分5000ms timer、storedMarks与其他路径。记录mount/destroy、hydrate/externalVersion及保存回包时刻，可排除重建与更新混淆。不得用设composing、dispatchEvent或直接插入中文替代真实输入法。
 
 修复任务应先证明哪个边界结束PM composition、是否改变真实预编辑节点，再决定依赖适配或App改动；本诊断没有建议直接删除库超时或把问题笼统修成“保存延迟”。
+
+维护者讨论、相似用户报告和已纳入锁定版本的一个历史修复见[有限上游核查](upstream-notes.md)。这些来源用于约束兜底与候选观察点，不替代本项目真实运行时间线。

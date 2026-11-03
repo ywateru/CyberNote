@@ -26,6 +26,7 @@ e352541已冻结独立报告`docs/plan/reviews/app-001-android-ime-01.md`：长�
 - docs/ui/interaction-matrix.md、docs/ui/android.md
 - docs/research/android-ime-verification.md、docs/research/android-ime-readiness/
 - docs/research/android-ime-diagnosis/analysis.md 与 inputs.json（20源码及锁定PM的只读候选机制，不是根因已证）
+- docs/research/android-ime-diagnosis/upstream-notes.md（维护者闲置兜底历史、相似用户报告及已包含的单个历史修复；不构成当前根因或升级解法）
 - docs/verification/qa-android-ime/（仅合成内容；独立原始候选/内联/快速/长停留事件与截图）
 - docs/plan/reviews/app-001-android-ime-01.md（e352541独立实际P1与有限通过边界）
 - docs/plan/reviews/app-001-fix-03-mac-01.md、app-001-fix-03-android-03.md（已通过有限安全边界不得回退）
