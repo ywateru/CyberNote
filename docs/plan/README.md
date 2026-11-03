@@ -9,10 +9,12 @@
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |
 | APP-001-FIX-00 归档完整性 | verified，独立pass | 原失败、schema跨检、设置/附件保全与六次进程中断恢复通过；见fix-00-02报告 |
 | APP-001-FIX-01 编辑与导航修复 | 本轮P1/P2关闭，完整矩阵partial | 最终0d8b245纸张入口、恢复输入与一次冷启独立通过；未覆盖行为与像素继续保留，不标整项verified |
-| APP-001-FIX-02 Mac顶部校准 | in-progress，34223af候选已冻结，独立复验中 | 正式宿主单一原生顶部/52pt留白、窗口定向菜单、搜索ACK与选区/布局接入；Mac4118f77f…/APK0aac2d73…；开发有限自测不替代独立结果，公共失活ROI像素fail（74.57%，不同屏幕背景限制），全矩阵仍未完成 |
+| APP-001-FIX-02 Mac顶部校准 | in-progress，217133a独立blocked/有限功能通过 | 34223af正式Mac4118f77f…/APK0aac2d73…；搜索续输/Undo归属/格式选区/多窗/基本锁态隔离/画廊分栏及Android冷启有限通过；CmdW和公共失活像素仍P2 blocking（独立74.55%），同位置焦点unknown，完整任务未通过 |
 | APP-001 原生顶部模块 | 9f4d61b历史有限静态pass，34223af正式宿主已接入 | 当前插件锁对齐2.7.2，并修正搜索祖先临时隐藏导致丢焦；4a16a6a不覆盖新增输入。正式生命周期/焦点/窗口路由由本轮独立复验，Mac真marked composition及完整像素状态仍unknown |
 | APP-001-FIX-03 锁定跨窗失效 | 本轮双端有限安全门槛pass，完整矩阵partial | e5fcdc4 Android14断言关闭UUID P1；835751d真实Mac生产Q1/Q7与同源proof15断言，含旧基线冲突/副本冷启/Q2排空/Q3abort/Q4拒绝及恢复，无新P1；S3/四fixtureGUI/对象identity/全矩阵仍unknown，允许FIX02接入 |
-| APP-001-FIX-04 Android长停留中文组字 | in-progress，e352541独立实际P1 | FIX02已冻结，0aac2d73…新包独立ASCII保存/冷启smoke有限通过后Android交develop；先真实干净长/短停留与调用边界诊断，原20失败APK及事件保留；Mac4118包仍由verify复验，长IME未通过 |
+| APP-001-FIX-04 Android长停留中文组字 | in-progress，e352541独立实际P1待新包修复复验 | 0aac新空段真实timer/end/clear及node替换双写已记录；中部34s长停保持同node并正确提交，真实ACK本轮未重建；固定PM版本仅Android有效原生组字opt-in适配构建中，原失败保留，修复未通过；Mac已交回 |
+| APP-001-FIX-02-VISUAL-01 顶部内部内容 | in-progress，隔离源码准备e8cce09 | 中文格式/按钮内部墨迹/真实搜索排布已在独立worktree编译；未合入宿主、runtime/像素unknown，待FIX04冻结后接入复验 |
+| APP-001-FIX-05 Mac关闭窗口 | in-progress，实际CmdW未通过 | FIX02再次单次保留66795；隔离准备系统关闭角色，保留现有close-request保存守卫，不能直接destroy；正式运行仍待验证 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
