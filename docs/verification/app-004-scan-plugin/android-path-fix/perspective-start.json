@@ -1,0 +1,60 @@
+{
+  "evidence_id": "ev_5b0173fc87c5bbf2c333a7fbdf2ee500d9cafa0990753a32083e28047622d8bf",
+  "subject": null,
+  "provider": {
+    "id": "adb",
+    "name": "Android Debug Bridge",
+    "version": "36.0.0-13206524"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "start_adb_activity",
+  "parameters": {
+    "serial": "emulator-5580",
+    "action": "android.intent.action.MAIN",
+    "component": "com.local.notesscan.harness/com.local.notesscan.DeviceFixtureActivity",
+    "extras": [
+      {
+        "key": "scenario",
+        "type": "string",
+        "value": "perspective-pdf"
+      }
+    ]
+  },
+  "raw_result": {
+    "stdout": "Starting: Intent { act=android.intent.action.MAIN cmp=com.local.notesscan.harness/com.local.notesscan.DeviceFixtureActivity (has extras) }\nStatus: ok\nLaunchState: COLD\nActivity: com.local.notesscan.harness/com.local.notesscan.DeviceFixtureActivity\nTotalTime: 585\nWaitTime: 597\nComplete\n",
+    "stderr": ""
+  },
+  "normalized_result": {
+    "client": {
+      "binary_path": "adb",
+      "path_source": "path",
+      "version": "36.0.0-13206524",
+      "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+    },
+    "serial": "emulator-5580",
+    "action": "android.intent.action.MAIN",
+    "data_uri": null,
+    "component": "com.local.notesscan.harness/com.local.notesscan.DeviceFixtureActivity",
+    "extras": [
+      {
+        "key": "scenario",
+        "type": "string",
+        "value": "perspective-pdf"
+      }
+    ],
+    "started_activity": "act=android.intent.action.MAIN cmp=com.local.notesscan.harness/com.local.notesscan.DeviceFixtureActivity (has extras)",
+    "reported_activity": "com.local.notesscan.harness/com.local.notesscan.DeviceFixtureActivity",
+    "reported_status": "ok"
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Artifact identity is unavailable for this observation.",
+    "Starting an activity changes device state; am start -W waits for launch completion but no lifecycle observation is captured"
+  ],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": []
+}

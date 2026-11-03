@@ -1,0 +1,95 @@
+{
+  "records": [
+    {
+      "args": [
+        "shell",
+        "am",
+        "force-stop",
+        "com.local.notesscan.harness"
+      ],
+      "at": "2026-11-03T08:23:37.702293+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "disable"
+      ],
+      "at": "2026-11-03T08:23:37.789638+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "svc",
+        "wifi",
+        "enable"
+      ],
+      "at": "2026-11-03T08:23:37.953806+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "svc",
+        "data",
+        "enable"
+      ],
+      "at": "2026-11-03T08:23:38.174002+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "at": "2026-11-03T08:23:38.307679+00:00",
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "wifi_on"
+      ],
+      "at": "2026-11-03T08:23:38.566550+00:00",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "mobile_data"
+      ],
+      "at": "2026-11-03T08:23:38.725216+00:00",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    }
+  ],
+  "restoredToBefore": true,
+  "harnessStopped": true,
+  "mainApplicationData": "untouched"
+}

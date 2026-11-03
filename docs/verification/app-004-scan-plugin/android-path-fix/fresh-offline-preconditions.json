@@ -1,0 +1,175 @@
+{
+  "device": "emulator-5580",
+  "records": [
+    {
+      "args": [
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "at": "2026-11-03T08:21:51.047056+00:00",
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "wifi_on"
+      ],
+      "at": "2026-11-03T08:21:51.062182+00:00",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "mobile_data"
+      ],
+      "at": "2026-11-03T08:21:51.078506+00:00",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "am",
+        "force-stop",
+        "com.local.notesscan.harness"
+      ],
+      "at": "2026-11-03T08:21:51.117277+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "pm",
+        "clear",
+        "com.local.notesscan.harness"
+      ],
+      "at": "2026-11-03T08:21:51.325390+00:00",
+      "exit": 0,
+      "stdout": "Success\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "run-as",
+        "com.local.notesscan.harness",
+        "ls",
+        "files"
+      ],
+      "at": "2026-11-03T08:21:51.373776+00:00",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "ls: files: No such file or directory\n"
+    },
+    {
+      "args": [
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "enable"
+      ],
+      "at": "2026-11-03T08:21:51.427112+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "svc",
+        "wifi",
+        "disable"
+      ],
+      "at": "2026-11-03T08:21:51.589064+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "svc",
+        "data",
+        "disable"
+      ],
+      "at": "2026-11-03T08:21:51.658752+00:00",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "at": "2026-11-03T08:21:51.718787+00:00",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "wifi_on"
+      ],
+      "at": "2026-11-03T08:21:51.779079+00:00",
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "mobile_data"
+      ],
+      "at": "2026-11-03T08:21:51.870962+00:00",
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "pm",
+        "path",
+        "com.local.notesscan.harness"
+      ],
+      "at": "2026-11-03T08:21:51.888849+00:00",
+      "exit": 0,
+      "stdout": "package:/data/app/~~8Rp6FaQRh4Eg3g5kYrf9kw==/com.local.notesscan.harness-noK-TCaB93zi_Gv_12Kkeg==/base.apk\n",
+      "stderr": ""
+    }
+  ],
+  "installedApk": {
+    "path": "/data/app/~~8Rp6FaQRh4Eg3g5kYrf9kw==/com.local.notesscan.harness-noK-TCaB93zi_Gv_12Kkeg==/base.apk",
+    "bytes": 54220489,
+    "sha256": "a6942f22e3b1a621513cde16af447b53d0f126c48e881763816b565ebc746b92"
+  },
+  "priorFailuresPreserved": "docs/verification/qa-scan-plugin/host-copy-device-20261103/; diagnostic/boundary evidence exported before clear"
+}

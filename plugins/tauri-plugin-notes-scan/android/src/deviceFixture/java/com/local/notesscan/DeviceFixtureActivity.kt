@@ -32,7 +32,9 @@ class DeviceFixtureActivity : Activity() {
                 when(scenario) {
                     "ocr-first-offline" -> ocr(output,result)
                     "perspective-pdf" -> perspectivePdf(output,result)
-                    else -> error("Specify scenario ocr-first-offline or perspective-pdf")
+                    "path-diagnostic" -> pathDiagnostic(result)
+                    "path-boundary" -> pathBoundary(output,result)
+                    else -> error("Specify scenario ocr-first-offline, perspective-pdf, path-diagnostic or path-boundary")
                 }
                 result.put("status","pass")
             } catch(e:Exception) {
@@ -45,6 +47,68 @@ class DeviceFixtureActivity : Activity() {
         }
     }
     private fun hash(file:File) = MessageDigest.getInstance("SHA-256").digest(file.readBytes()).joinToString("") { "%02x".format(it) }
+    private fun pathInfo(file:File)=JSONObject().put("absolute",file.absolutePath).put("canonical",file.canonicalPath)
+        .put("equal",file.absoluteFile==file.canonicalFile).put("directory",file.isDirectory)
+    private fun pathDiagnostic(result:JSONObject) {
+        result.put("filesDir",pathInfo(filesDir))
+        val root=File(filesDir,"notes-scan-sessions")
+        result.put("rawRoot",pathInfo(root))
+        try { result.put("begin",SessionStore(this).begin("text")) }
+        catch(e:ScanFailure) { result.put("beginError",JSONObject().put("code",e.code).put("message",e.message)) }
+        val entries=JSONArray()
+        for(file in root.listFiles().orEmpty().filter { SessionStore.validId(it.name) }) entries.put(pathInfo(file).put("id",file.name))
+        result.put("sameJavaSessionFiles",entries)
+        check(entries.length()>0)
+    }
+    private fun pathBoundary(output:File,result:JSONObject) {
+        val checks=JSONArray(); result.put("checks",checks).put("filesDir",pathInfo(filesDir))
+        val store=SessionStore(this)
+        val id=store.begin("text").getString("sessionId")
+        val root=File(filesDir.canonicalFile,"notes-scan-sessions")
+        val session=File(root,id)
+        result.put("actualSession",pathInfo(session)).put("aliasSession",pathInfo(File(File(filesDir,"notes-scan-sessions"),id)))
+        check(session.absoluteFile==session.canonicalFile)
+        check(SessionStore(this).get(id).getString("sessionId")==id)
+        checks.put(JSONObject().put("name","trusted OS alias accepted; canonical session reopened").put("pass",true))
+        fun rejected(name:String,code:String,block:()->Unit) {
+            try { block(); error("$name unexpectedly accepted") }
+            catch(e:ScanFailure) { check(e.code==code) { "$name: ${e.code}" }; checks.put(JSONObject().put("name",name).put("code",e.code).put("pass",true)) }
+        }
+        rejected("path traversal token","invalid_token") { store.get("../outside") }
+        val outside=File(output,"outside-sentinel").apply { mkdirs() }
+        val sentinel=File(outside,"keep.txt").apply { writeText("keep outside scan root") }
+        val linkId=SessionStore.newToken(); val link=File(root,linkId)
+        android.system.Os.symlink(outside.canonicalPath,link.absolutePath)
+        try {
+            rejected("session directory symlink read","invalid_token") { store.get(linkId) }
+            rejected("session directory symlink remove","invalid_token") { store.remove(linkId) }
+            link.setLastModified(System.currentTimeMillis()-SessionStore.TTL-1000)
+            store.cleanup(); check(sentinel.readText()=="keep outside scan root")
+            checks.put(JSONObject().put("name","cleanup skips symlink and preserves external sentinel").put("pass",true))
+        } finally { check(link.delete()) }
+        val manifest=File(session,"manifest.json"); val backup=File(session,"manifest.saved")
+        check(manifest.renameTo(backup))
+        android.system.Os.symlink(backup.absolutePath,manifest.absolutePath)
+        try { rejected("manifest symlink","invalid_manifest") { store.get(id) } }
+        finally { check(manifest.delete()); check(backup.renameTo(manifest)) }
+        val resourceToken=SessionStore.newToken(); val resource=File(session,resourceToken)
+        val m=store.get(id); m.getJSONArray("files").put(JSONObject().put("token",resourceToken).put("size",sentinel.length()))
+        store.save(m)
+        android.system.Os.symlink(sentinel.canonicalPath,resource.absolutePath)
+        try { rejected("registered resource symlink","file_missing") { store.file(id,resourceToken) } }
+        finally { check(resource.delete()) }
+        val rootBackup=File(root.parentFile,"notes-scan-sessions-boundary-${SessionStore.newToken()}")
+        check(root.renameTo(rootBackup))
+        android.system.Os.symlink(outside.canonicalPath,root.absolutePath)
+        try {
+            rejected("existing store rejects replaced root","invalid_token") { store.get(id) }
+            rejected("new store rejects root symlink","invalid_token") { SessionStore(this) }
+            rejected("cleanup rejects root symlink","invalid_token") { store.cleanup() }
+            check(sentinel.readText()=="keep outside scan root")
+        } finally { check(root.delete()); check(rootBackup.renameTo(root)) }
+        store.remove(id); check(sentinel.readText()=="keep outside scan root")
+        result.put("outsideSentinelPreserved",true)
+    }
     private fun save(bitmap:Bitmap,file:File) { file.outputStream().use { check(bitmap.compress(Bitmap.CompressFormat.PNG,100,it)); it.fd.sync() } }
     private fun newImage(store:SessionStore,id:String,file:File):String {
         val m=store.ingest(id,file.inputStream()); val files=m.getJSONArray("files")

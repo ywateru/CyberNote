@@ -1,0 +1,76 @@
+{
+  "scenario": "path-boundary",
+  "startedAt": 1793694059111,
+  "scope": "Native SessionStore\/MLKit\/Bitmap\/PdfDocument\/PdfRenderer only; no camera, Tauri invoke or main Store",
+  "checks": [
+    {
+      "name": "trusted OS alias accepted; canonical session reopened",
+      "pass": true
+    },
+    {
+      "name": "path traversal token",
+      "code": "invalid_token",
+      "pass": true
+    },
+    {
+      "name": "session directory symlink read",
+      "code": "invalid_token",
+      "pass": true
+    },
+    {
+      "name": "session directory symlink remove",
+      "code": "invalid_token",
+      "pass": true
+    },
+    {
+      "name": "cleanup skips symlink and preserves external sentinel",
+      "pass": true
+    },
+    {
+      "name": "manifest symlink",
+      "code": "invalid_manifest",
+      "pass": true
+    },
+    {
+      "name": "registered resource symlink",
+      "code": "file_missing",
+      "pass": true
+    },
+    {
+      "name": "existing store rejects replaced root",
+      "code": "invalid_token",
+      "pass": true
+    },
+    {
+      "name": "new store rejects root symlink",
+      "code": "invalid_token",
+      "pass": true
+    },
+    {
+      "name": "cleanup rejects root symlink",
+      "code": "invalid_token",
+      "pass": true
+    }
+  ],
+  "filesDir": {
+    "absolute": "\/data\/user\/0\/com.local.notesscan.harness\/files",
+    "canonical": "\/data\/data\/com.local.notesscan.harness\/files",
+    "equal": false,
+    "directory": true
+  },
+  "actualSession": {
+    "absolute": "\/data\/data\/com.local.notesscan.harness\/files\/notes-scan-sessions\/73d6b0b4-0ff4-4f49-9b3a-3d76ba7af938",
+    "canonical": "\/data\/data\/com.local.notesscan.harness\/files\/notes-scan-sessions\/73d6b0b4-0ff4-4f49-9b3a-3d76ba7af938",
+    "equal": true,
+    "directory": true
+  },
+  "aliasSession": {
+    "absolute": "\/data\/user\/0\/com.local.notesscan.harness\/files\/notes-scan-sessions\/73d6b0b4-0ff4-4f49-9b3a-3d76ba7af938",
+    "canonical": "\/data\/data\/com.local.notesscan.harness\/files\/notes-scan-sessions\/73d6b0b4-0ff4-4f49-9b3a-3d76ba7af938",
+    "equal": false,
+    "directory": true
+  },
+  "outsideSentinelPreserved": true,
+  "status": "pass",
+  "finishedAt": 1793694059137
+}

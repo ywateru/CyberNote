@@ -17,7 +17,11 @@ internal fun fail(code: String, message: String): Nothing = throw ScanFailure(co
 
 /** Only opaque IDs cross IPC. Every resource is under filesDir, never an external content URI. */
 internal class SessionStore(context: Context) {
-    private val root = File(context.filesDir, "notes-scan-sessions").apply { mkdirs() }
+    // Android may return /data/user/0 while Java canonicalizes that OS-owned alias to
+    // /data/data. Normalize only the trusted Context root; never normalize an untrusted
+    // session/resource before comparing it with its expected direct-child path.
+    private val filesRoot = context.filesDir.canonicalFile
+    private val root = File(filesRoot, "notes-scan-sessions")
     companion object {
         const val TTL = 24L * 60 * 60 * 1000
         const val MAX_IMAGE = 20L * 1024 * 1024
@@ -27,11 +31,23 @@ internal class SessionStore(context: Context) {
         fun newToken() = UUID.randomUUID().toString()
         fun validId(value: String) = Regex("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}").matches(value)
     }
+    init {
+        synchronized(lock) {
+            if (!filesRoot.isDirectory) fail("io", "应用私有目录不存在")
+            if (!root.exists() && !root.mkdir()) fail("io", "无法建立扫描根目录")
+            checkedRoot()
+        }
+    }
+    private fun checkedRoot(): File {
+        if (!root.isDirectory || root.canonicalFile != root.absoluteFile || root.canonicalFile.parentFile != filesRoot)
+            fail("invalid_token", "无效扫描根目录")
+        return root
+    }
     private fun dir(id: String): File {
         if (!validId(id)) fail("invalid_token", "无效扫描 token")
-        val f = File(root, id)
+        val f = File(checkedRoot(), id)
         if (!f.isDirectory) fail("session_missing", "扫描会话已过期或不存在")
-        if (f.canonicalFile != f.absoluteFile) fail("invalid_token", "无效会话目录")
+        if (f.canonicalFile != f.absoluteFile || f.canonicalFile.parentFile != root) fail("invalid_token", "无效会话目录")
         return f
     }
     fun get(id: String): JSONObject = synchronized(lock) {
@@ -231,7 +247,7 @@ internal class SessionStore(context: Context) {
     }
     fun cleanup(): Int = synchronized(lock) {
         var removed=0
-        for(f in root.listFiles().orEmpty()) {
+        for(f in checkedRoot().listFiles().orEmpty()) {
             if (!validId(f.name) || !f.isDirectory || f.canonicalFile != f.absoluteFile) continue
             val manifest = File(f,"manifest.json")
             val updated = try { if(manifest.length()>1024*1024) f.lastModified() else JSONObject(manifest.readText()).getLong("updatedAt") }

@@ -1,0 +1,131 @@
+{
+  "scenario": "perspective-pdf",
+  "startedAt": 1793694163430,
+  "scope": "Native SessionStore\/MLKit\/Bitmap\/PdfDocument\/PdfRenderer only; no camera, Tauri invoke or main Store",
+  "perspectiveCornerChecks": [
+    {
+      "x": 0.2,
+      "y": 0.2,
+      "expected": "ffdc2323",
+      "actual": "ffdb2323",
+      "maxChannelError": 1
+    },
+    {
+      "x": 0.8,
+      "y": 0.2,
+      "expected": "ff1ebe2d",
+      "actual": "ff1fbe2c",
+      "maxChannelError": 1
+    },
+    {
+      "x": 0.8,
+      "y": 0.8,
+      "expected": "ff1e37dc",
+      "actual": "ff1e37dc",
+      "maxChannelError": 0
+    },
+    {
+      "x": 0.2,
+      "y": 0.8,
+      "expected": "ffdcbe19",
+      "actual": "ffdbbe18",
+      "maxChannelError": 1
+    }
+  ],
+  "pdfPageChecks": [
+    {
+      "page": 1,
+      "width": 612,
+      "height": 842,
+      "pixelChecks": [
+        {
+          "x": 0.2,
+          "y": 0.2,
+          "expected": "ff14bed2",
+          "actual": "ff13bed2",
+          "maxChannelError": 1
+        },
+        {
+          "x": 0.8,
+          "y": 0.2,
+          "expected": "ff14bed2",
+          "actual": "ff13bed2",
+          "maxChannelError": 1
+        },
+        {
+          "x": 0.8,
+          "y": 0.8,
+          "expected": "ff14bed2",
+          "actual": "ff13bed2",
+          "maxChannelError": 1
+        },
+        {
+          "x": 0.2,
+          "y": 0.8,
+          "expected": "ff14bed2",
+          "actual": "ff13bed2",
+          "maxChannelError": 1
+        }
+      ]
+    },
+    {
+      "page": 2,
+      "width": 842,
+      "height": 645,
+      "pixelChecks": [
+        {
+          "x": 0.2,
+          "y": 0.2,
+          "expected": "ffdcbe19",
+          "actual": "ffdbbe18",
+          "maxChannelError": 1
+        },
+        {
+          "x": 0.8,
+          "y": 0.2,
+          "expected": "ffdc2323",
+          "actual": "ffdb2323",
+          "maxChannelError": 1
+        },
+        {
+          "x": 0.8,
+          "y": 0.8,
+          "expected": "ff1ebe2d",
+          "actual": "ff1fbe2c",
+          "maxChannelError": 1
+        },
+        {
+          "x": 0.2,
+          "y": 0.8,
+          "expected": "ff1e37dc",
+          "actual": "ff1e37dc",
+          "maxChannelError": 0
+        }
+      ]
+    }
+  ],
+  "pdfSha256": "9c0f23061ee20df12d15665e1448847422666c0f198fbae619e38bb1d2021b07",
+  "pdfBytes": 118502,
+  "pageOrderAndRotationVerified": true,
+  "knownQuad": [
+    {
+      "x": 0.18,
+      "y": 0.1
+    },
+    {
+      "x": 0.87,
+      "y": 0.21
+    },
+    {
+      "x": 0.78,
+      "y": 0.9
+    },
+    {
+      "x": 0.09,
+      "y": 0.78
+    }
+  ],
+  "readyReopened": true,
+  "status": "pass",
+  "finishedAt": 1793694164313
+}

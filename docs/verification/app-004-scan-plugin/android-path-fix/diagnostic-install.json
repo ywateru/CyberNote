@@ -1,0 +1,43 @@
+{
+  "evidence_id": "ev_1d2a3af70356e508ebfdd619ac3df071463858874527b0712ffb67b1411e430d",
+  "subject": null,
+  "provider": {
+    "id": "adb",
+    "name": "Android Debug Bridge",
+    "version": "36.0.0-13206524"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "install_adb_package",
+  "parameters": {
+    "serial": "emulator-5580",
+    "apk_path": "/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-scan/android/harness/build/outputs/apk/debug/harness-debug.apk",
+    "replace": true
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "client": {
+      "binary_path": "adb",
+      "path_source": "path",
+      "version": "36.0.0-13206524",
+      "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+    },
+    "serial": "emulator-5580",
+    "apk_path": "/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-scan/android/harness/build/outputs/apk/debug/harness-debug.apk",
+    "bytes": 54217071,
+    "sha256": "8f311ac0b8fe9cf10768e9cf010f5f30cdddda8da27b205f5fb476b6914f7cd1",
+    "replace_requested": true,
+    "replaced": null
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Artifact identity is unavailable for this observation.",
+    "Install changes device state; the installed APK's digest identifies the private host snapshot",
+    "Whether an existing package was replaced is unknown; replace_requested records only the adb install mode"
+  ],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": []
+}
