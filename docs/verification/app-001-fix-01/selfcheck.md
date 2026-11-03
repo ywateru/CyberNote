@@ -50,7 +50,7 @@
 - `pnpm test:editor`：生产扩展 schema 与 Rust manifest 一致，65 个共享文档样例；额外使用真实 ProseMirror schema / state / history 与无 DOM dispatch adapter 验证表格转换精确文本、周围段落、完整选择、一次 Undo / Redo 以及表格外返回 false。它不替代安装版交互测试。
 - Rust 离线测试：16 passed、0 failed、1 个子进程专用 worker 默认 ignored；可靠性父测试实际执行六个子进程退出点。新增七种纸张 + dash + drawing 的保存、重开、导出、导入、再次重开一致性。
 - `cargo fmt --check`、`cargo clippy --offline --all-targets -- -D warnings`、修改文件 Prettier 检查均通过。
-- 暂存差异空白检查对源码与其余文档通过；原始 `mac-table-converted.ax.txt` 的三行末尾 Tab 是待验证表格边界数据，原样保留并在空白检查中单独排除。
+- 源码与说明文档的差异空白检查通过。完整证据差异检查会报告原始 `mac-table-converted.ax.txt` 的三行末尾 Tab，以及三份原始构建/测试日志末尾的空行；这些均为原始取证输出，原样保留。表格 Tab 是待验证边界数据。
 - 完整安装矩阵、七种纸张逐项 UI 选择、更多多选/IME/手势边界交由独立验收；本轮没有重复完整独立 QA 矩阵。
 
 ## 源码与产物
