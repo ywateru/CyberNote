@@ -11,7 +11,9 @@ depends-on: [app-001-fix-02]
 
 2026-11-03新集成宿主默认构建（生产8ecb50a，exe b6bb05d539096f5e2b874e975738cfd9cab9e3047be813bdb794352f48d27af2）再次实际失败：PID89891主窗66908与独立窗66932，独立正文聚焦后单次Cmd+W，界面工具报App quit，CG与ps均确认整个进程及两窗消失。无新增编辑/pending，不能计作只关闭目标窗口通过。原包/前后证据保留于`docs/verification/app-001-fix-02-visual-01/runtime-8ecb50a/`；退出或崩溃原因、与本次菜单/原生生命周期的因果尚待诊断，不能先宣称已知根因或保存守卫通过。
 
-随后同包一次受控重启带stderr/backtrace，再真实Cmd+W复现exit101。`cmdw-reproduction.stderr.log`首栈为tauri-runtime-wry:3643 RefCell already mutably borrowed → Webview.eval/emit_js → plugin macos::event → NotesUIController send → key通知block → tao关闭；关闭持有window map可变借用时原生焦点通知同步重入，后续锁poison。此为本次实际栈，不泛化到所有关闭失败。开发最小修复限定toolbar.m的BecomeKey/ResignKey通知延后主队列、捕获状态并在回调时核weak controller/disposed，销毁后的回调丢弃；无需移除系统关闭角色或绕过保存守卫。新源码/包与真实复验仍待冻结。
+随后同包一次受控重启带stderr/backtrace，再真实Cmd+W复现exit101。`cmdw-reproduction.stderr.txt`首栈为tauri-runtime-wry:3643 RefCell already mutably borrowed → Webview.eval/emit_js → plugin macos::event → NotesUIController send → key通知block → tao关闭；关闭持有window map可变借用时原生焦点通知同步重入，后续锁poison。此为本次实际栈，不泛化到所有关闭失败。开发最小修复限定toolbar.m的BecomeKey/ResignKey通知延后主队列、捕获状态并在回调时核weak controller/disposed，销毁后的回调丢弃；无需移除系统关闭角色或绕过保存守卫。
+
+5874eab已冻结该八行修复，默认features[]新包ec1cf0d…完整保留在`/private/tmp/notes-close-deferred-ec1cf0d.app`。开发三条真实关闭路径通过、stderr空，f11170a有限静态审查通过；独立实际、pending保存/失败/冲突/冷启仍未验。完整记录见`runtime-close-deferred-01/`及`app-001-fix-05-close-panic-static-01.md`。随后搜索布局候选与本修复区分身份，不能用新旧包混合关闭门槛。
 
 1. 正式Mac菜单提供系统关闭窗口入口与Cmd+W，目标为实际聚焦窗口。原生搜索字段或正文获焦时均须关闭所属窗口，另一窗保持，不能由app-wide broadcast关闭全部窗口。
 2. 关闭必须走既有窗口close-request与未保存队列处理；不能从菜单直接destroy、跳过flush或强制丢弃pending。保存失败/冲突时保留窗口和未保存内容并显示实际失败。既有跨窗访问/屏障与窗口消失处理不改。
@@ -26,7 +28,7 @@ depends-on: [app-001-fix-02]
 
 ## path
 
-最小`src-tauri/src/lib.rs`的desktop/Mac菜单定义；任务说明/独立证据。root可派隔离worktree先准备源码，禁止改App/Editor/存储/授权协议、目标产物或当前GUI。固定锁定依赖不升级。合入前等待FIX04源冻结，构建实际Mac宿主后再运行验证。
+最小`src-tauri/src/lib.rs`的desktop/Mac菜单定义与`plugins/tauri-plugin-notes-ui/macos/toolbar.m`关闭期间的焦点通知时序；任务说明/独立证据。root安排隔离源码与实际设备交接，禁止改App/Editor/存储/授权协议。固定锁定依赖不升级，构建实际Mac宿主后再运行验证。
 
 ## verification
 
