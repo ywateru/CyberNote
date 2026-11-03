@@ -1,0 +1,2125 @@
+{
+  "runtime": "Version 26.4 (Build 25E246)",
+  "dpr": 2,
+  "canvasPoints": 40,
+  "unavailable": [],
+  "generatedSamples": 1224,
+  "thresholdOriginalLuminance": "< round((minimum + median)/2); per crop",
+  "thresholdCandidateAlpha": ">= 128",
+  "alignment": "bbox origin plus exhaustive integer translation [-3,3] px in x/y; no resizing",
+  "score": "binary intersection-over-union of glyph masks only; not RGB/pixel parity or application similarity",
+  "results": [
+    {
+      "action": "new",
+      "systemSymbol": "square.and.pencil",
+      "source": "references/desktop/macos26-format.png",
+      "sha256": "e9cea4e4b0431d4b7836e8997d5f0d14001eec77cc83227b1ab009530b7ae755",
+      "sourceSizePx": [
+        2176,
+        1320
+      ],
+      "cropPx": [
+        1046,
+        20,
+        1100,
+        84
+      ],
+      "sourceInkBBoxPx": [
+        11,
+        15,
+        43,
+        47
+      ],
+      "sourceInkGlobalBBoxPx": [
+        1057,
+        35,
+        1089,
+        67
+      ],
+      "sourceInkCenterPt": [
+        536.5,
+        25.5
+      ],
+      "sourceInkSizePx": [
+        32,
+        32
+      ],
+      "sourceForegroundMin": 71,
+      "sourceBackgroundMedian": 255,
+      "sourceThreshold": 163,
+      "examined": 153,
+      "best": {
+        "file": "square.and.pencil-33-regular-medium.png",
+        "logicalHeight": 20,
+        "logicalWidth": 21,
+        "name": "square.and.pencil",
+        "points": 16.5,
+        "scale": "medium",
+        "weight": "regular",
+        "iou": 0.9488636363636364,
+        "bboxPx": [
+          25,
+          26,
+          57,
+          58
+        ],
+        "visibleSizePx": [
+          32,
+          32
+        ],
+        "normalizedTranslationPx": [
+          0,
+          0
+        ]
+      },
+      "top": [
+        {
+          "file": "square.and.pencil-33-regular-medium.png",
+          "logicalHeight": 20,
+          "logicalWidth": 21,
+          "name": "square.and.pencil",
+          "points": 16.5,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.9488636363636364,
+          "bboxPx": [
+            25,
+            26,
+            57,
+            58
+          ],
+          "visibleSizePx": [
+            32,
+            32
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "square.and.pencil-34-regular-medium.png",
+          "logicalHeight": 20,
+          "logicalWidth": 21,
+          "name": "square.and.pencil",
+          "points": 17,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.8792134831460674,
+          "bboxPx": [
+            25,
+            25,
+            58,
+            58
+          ],
+          "visibleSizePx": [
+            33,
+            33
+          ],
+          "normalizedTranslationPx": [
+            0,
+            -1
+          ]
+        },
+        {
+          "file": "square.and.pencil-26-semibold-large.png",
+          "logicalHeight": 20,
+          "logicalWidth": 21,
+          "name": "square.and.pencil",
+          "points": 13,
+          "scale": "large",
+          "weight": "semibold",
+          "iou": 0.8078947368421052,
+          "bboxPx": [
+            25,
+            26,
+            58,
+            57
+          ],
+          "visibleSizePx": [
+            33,
+            31
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "square.and.pencil-26-medium-large.png",
+          "logicalHeight": 20,
+          "logicalWidth": 21,
+          "name": "square.and.pencil",
+          "points": 13,
+          "scale": "large",
+          "weight": "medium",
+          "iou": 0.7553191489361702,
+          "bboxPx": [
+            25,
+            27,
+            57,
+            57
+          ],
+          "visibleSizePx": [
+            32,
+            30
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        },
+        {
+          "file": "square.and.pencil-34-semibold-medium.png",
+          "logicalHeight": 21,
+          "logicalWidth": 22,
+          "name": "square.and.pencil",
+          "points": 17,
+          "scale": "medium",
+          "weight": "semibold",
+          "iou": 0.7529411764705882,
+          "bboxPx": [
+            24,
+            26,
+            57,
+            58
+          ],
+          "visibleSizePx": [
+            33,
+            32
+          ],
+          "normalizedTranslationPx": [
+            -1,
+            0
+          ]
+        },
+        {
+          "file": "square.and.pencil-34-medium-medium.png",
+          "logicalHeight": 20,
+          "logicalWidth": 21,
+          "name": "square.and.pencil",
+          "points": 17,
+          "scale": "medium",
+          "weight": "medium",
+          "iou": 0.7425,
+          "bboxPx": [
+            25,
+            26,
+            58,
+            57
+          ],
+          "visibleSizePx": [
+            33,
+            31
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        }
+      ],
+      "bestThresholdSensitivity": [
+        {
+          "sourceThreshold": 148,
+          "alphaThreshold": 96,
+          "iou": 0.9607843137254902
+        },
+        {
+          "sourceThreshold": 148,
+          "alphaThreshold": 128,
+          "iou": 0.9460227272727273
+        },
+        {
+          "sourceThreshold": 148,
+          "alphaThreshold": 160,
+          "iou": 0.7191977077363897
+        },
+        {
+          "sourceThreshold": 163,
+          "alphaThreshold": 96,
+          "iou": 0.9635854341736695
+        },
+        {
+          "sourceThreshold": 163,
+          "alphaThreshold": 128,
+          "iou": 0.9488636363636364
+        },
+        {
+          "sourceThreshold": 163,
+          "alphaThreshold": 160,
+          "iou": 0.7220630372492837
+        },
+        {
+          "sourceThreshold": 178,
+          "alphaThreshold": 96,
+          "iou": 0.958217270194986
+        },
+        {
+          "sourceThreshold": 178,
+          "alphaThreshold": 128,
+          "iou": 0.943502824858757
+        },
+        {
+          "sourceThreshold": 178,
+          "alphaThreshold": 160,
+          "iou": 0.717948717948718
+        }
+      ],
+      "equalBestConfigurations": [
+        {
+          "points": 16.5,
+          "weight": "regular",
+          "scale": "medium"
+        }
+      ]
+    },
+    {
+      "action": "checklist",
+      "systemSymbol": "checklist",
+      "source": "references/desktop/macos26-format.png",
+      "sha256": "e9cea4e4b0431d4b7836e8997d5f0d14001eec77cc83227b1ab009530b7ae755",
+      "sourceSizePx": [
+        2176,
+        1320
+      ],
+      "cropPx": [
+        1247,
+        20,
+        1301,
+        84
+      ],
+      "sourceInkBBoxPx": [
+        8,
+        16,
+        45,
+        49
+      ],
+      "sourceInkGlobalBBoxPx": [
+        1255,
+        36,
+        1292,
+        69
+      ],
+      "sourceInkCenterPt": [
+        636.75,
+        26.25
+      ],
+      "sourceInkSizePx": [
+        37,
+        33
+      ],
+      "sourceForegroundMin": 70,
+      "sourceBackgroundMedian": 255,
+      "sourceThreshold": 162,
+      "examined": 153,
+      "best": {
+        "file": "checklist-34-regular-medium.png",
+        "logicalHeight": 19,
+        "logicalWidth": 23,
+        "name": "checklist",
+        "points": 17,
+        "scale": "medium",
+        "weight": "regular",
+        "iou": 0.9026548672566371,
+        "bboxPx": [
+          21,
+          24,
+          58,
+          57
+        ],
+        "visibleSizePx": [
+          37,
+          33
+        ],
+        "normalizedTranslationPx": [
+          0,
+          0
+        ]
+      },
+      "top": [
+        {
+          "file": "checklist-34-regular-medium.png",
+          "logicalHeight": 19,
+          "logicalWidth": 23,
+          "name": "checklist",
+          "points": 17,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.9026548672566371,
+          "bboxPx": [
+            21,
+            24,
+            58,
+            57
+          ],
+          "visibleSizePx": [
+            37,
+            33
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "checklist-33-regular-medium.png",
+          "logicalHeight": 19,
+          "logicalWidth": 23,
+          "name": "checklist",
+          "points": 16.5,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.7965116279069767,
+          "bboxPx": [
+            21,
+            24,
+            57,
+            57
+          ],
+          "visibleSizePx": [
+            36,
+            33
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "checklist-35-regular-medium.png",
+          "logicalHeight": 20,
+          "logicalWidth": 24,
+          "name": "checklist",
+          "points": 17.5,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.7611548556430446,
+          "bboxPx": [
+            20,
+            24,
+            58,
+            58
+          ],
+          "visibleSizePx": [
+            38,
+            34
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "checklist-37-regular-medium.png",
+          "logicalHeight": 21,
+          "logicalWidth": 25,
+          "name": "checklist",
+          "points": 18.5,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.7597911227154047,
+          "bboxPx": [
+            20,
+            24,
+            58,
+            58
+          ],
+          "visibleSizePx": [
+            38,
+            34
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "checklist-26-medium-large.png",
+          "logicalHeight": 19,
+          "logicalWidth": 23,
+          "name": "checklist",
+          "points": 13,
+          "scale": "large",
+          "weight": "medium",
+          "iou": 0.7262872628726287,
+          "bboxPx": [
+            21,
+            25,
+            58,
+            56
+          ],
+          "visibleSizePx": [
+            37,
+            31
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        },
+        {
+          "file": "checklist-26-semibold-large.png",
+          "logicalHeight": 19,
+          "logicalWidth": 23,
+          "name": "checklist",
+          "points": 13,
+          "scale": "large",
+          "weight": "semibold",
+          "iou": 0.7203166226912929,
+          "bboxPx": [
+            21,
+            24,
+            59,
+            56
+          ],
+          "visibleSizePx": [
+            38,
+            32
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        }
+      ],
+      "bestThresholdSensitivity": [
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 96,
+          "iou": 0.8123249299719888
+        },
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 128,
+          "iou": 0.8601190476190477
+        },
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 160,
+          "iou": 0.9166666666666666
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 96,
+          "iou": 0.8631284916201117
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 128,
+          "iou": 0.9026548672566371
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 160,
+          "iou": 0.9495268138801262
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 96,
+          "iou": 0.9527777777777777
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 128,
+          "iou": 0.9401709401709402
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 160,
+          "iou": 0.8793103448275862
+        }
+      ],
+      "equalBestConfigurations": [
+        {
+          "points": 17,
+          "weight": "regular",
+          "scale": "medium"
+        }
+      ]
+    },
+    {
+      "action": "table",
+      "systemSymbol": "tablecells",
+      "source": "references/desktop/macos26-format.png",
+      "sha256": "e9cea4e4b0431d4b7836e8997d5f0d14001eec77cc83227b1ab009530b7ae755",
+      "sourceSizePx": [
+        2176,
+        1320
+      ],
+      "cropPx": [
+        1329,
+        20,
+        1383,
+        84
+      ],
+      "sourceInkBBoxPx": [
+        7,
+        17,
+        46,
+        47
+      ],
+      "sourceInkGlobalBBoxPx": [
+        1336,
+        37,
+        1375,
+        67
+      ],
+      "sourceInkCenterPt": [
+        677.75,
+        26.0
+      ],
+      "sourceInkSizePx": [
+        39,
+        30
+      ],
+      "sourceForegroundMin": 70,
+      "sourceBackgroundMedian": 255,
+      "sourceThreshold": 162,
+      "examined": 153,
+      "best": {
+        "file": "tablecells-33-regular-medium.png",
+        "logicalHeight": 17,
+        "logicalWidth": 23,
+        "name": "tablecells",
+        "points": 16.5,
+        "scale": "medium",
+        "weight": "regular",
+        "iou": 0.8950715421303657,
+        "bboxPx": [
+          21,
+          25,
+          59,
+          55
+        ],
+        "visibleSizePx": [
+          38,
+          30
+        ],
+        "normalizedTranslationPx": [
+          0,
+          0
+        ]
+      },
+      "top": [
+        {
+          "file": "tablecells-33-regular-medium.png",
+          "logicalHeight": 17,
+          "logicalWidth": 23,
+          "name": "tablecells",
+          "points": 16.5,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.8950715421303657,
+          "bboxPx": [
+            21,
+            25,
+            59,
+            55
+          ],
+          "visibleSizePx": [
+            38,
+            30
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "tablecells-34-regular-medium.png",
+          "logicalHeight": 18,
+          "logicalWidth": 24,
+          "name": "tablecells",
+          "points": 17,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.8489984591679507,
+          "bboxPx": [
+            20,
+            25,
+            59,
+            56
+          ],
+          "visibleSizePx": [
+            39,
+            31
+          ],
+          "normalizedTranslationPx": [
+            0,
+            -1
+          ]
+        },
+        {
+          "file": "tablecells-26-semibold-large.png",
+          "logicalHeight": 18,
+          "logicalWidth": 24,
+          "name": "tablecells",
+          "points": 13,
+          "scale": "large",
+          "weight": "semibold",
+          "iou": 0.8251533742331288,
+          "bboxPx": [
+            20,
+            26,
+            59,
+            55
+          ],
+          "visibleSizePx": [
+            39,
+            29
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "tablecells-34-semibold-medium.png",
+          "logicalHeight": 18,
+          "logicalWidth": 24,
+          "name": "tablecells",
+          "points": 17,
+          "scale": "medium",
+          "weight": "semibold",
+          "iou": 0.8025210084033614,
+          "bboxPx": [
+            20,
+            26,
+            59,
+            55
+          ],
+          "visibleSizePx": [
+            39,
+            29
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        },
+        {
+          "file": "tablecells-34-medium-medium.png",
+          "logicalHeight": 18,
+          "logicalWidth": 24,
+          "name": "tablecells",
+          "points": 17,
+          "scale": "medium",
+          "weight": "medium",
+          "iou": 0.8005908419497785,
+          "bboxPx": [
+            20,
+            26,
+            59,
+            55
+          ],
+          "visibleSizePx": [
+            39,
+            29
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "tablecells-26-medium-large.png",
+          "logicalHeight": 18,
+          "logicalWidth": 24,
+          "name": "tablecells",
+          "points": 13,
+          "scale": "large",
+          "weight": "medium",
+          "iou": 0.7884914463452566,
+          "bboxPx": [
+            20,
+            27,
+            59,
+            55
+          ],
+          "visibleSizePx": [
+            39,
+            28
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        }
+      ],
+      "bestThresholdSensitivity": [
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 96,
+          "iou": 0.8626198083067093
+        },
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 128,
+          "iou": 0.8621794871794872
+        },
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 160,
+          "iou": 0.7697368421052632
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 96,
+          "iou": 0.8954041204437401
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 128,
+          "iou": 0.8950715421303657
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 160,
+          "iou": 0.8042414355628059
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 96,
+          "iou": 0.8930817610062893
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 128,
+          "iou": 0.8927444794952681
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 160,
+          "iou": 0.7967741935483871
+        }
+      ],
+      "equalBestConfigurations": [
+        {
+          "points": 16.5,
+          "weight": "regular",
+          "scale": "medium"
+        }
+      ]
+    },
+    {
+      "action": "table-active",
+      "systemSymbol": "tablecells.badge.ellipsis",
+      "source": "references/desktop/macos26-table.png",
+      "sha256": "0e63ad747e141d5bd32ee5ce8569c5496886bcb55791539729b7ed569e38ae68",
+      "sourceSizePx": [
+        2176,
+        1320
+      ],
+      "cropPx": [
+        1400,
+        20,
+        1454,
+        84
+      ],
+      "sourceInkBBoxPx": [
+        6,
+        17,
+        51,
+        49
+      ],
+      "sourceInkGlobalBBoxPx": [
+        1406,
+        37,
+        1451,
+        69
+      ],
+      "sourceInkCenterPt": [
+        714.25,
+        26.5
+      ],
+      "sourceInkSizePx": [
+        45,
+        32
+      ],
+      "sourceForegroundMin": 68,
+      "sourceBackgroundMedian": 255,
+      "sourceThreshold": 162,
+      "examined": 153,
+      "best": {
+        "file": "tablecells.badge.ellipsis-33-regular-medium.png",
+        "logicalHeight": 19,
+        "logicalWidth": 26,
+        "name": "tablecells.badge.ellipsis",
+        "points": 16.5,
+        "scale": "medium",
+        "weight": "regular",
+        "iou": 0.9153005464480874,
+        "bboxPx": [
+          18,
+          23,
+          63,
+          55
+        ],
+        "visibleSizePx": [
+          45,
+          32
+        ],
+        "normalizedTranslationPx": [
+          0,
+          0
+        ]
+      },
+      "top": [
+        {
+          "file": "tablecells.badge.ellipsis-33-regular-medium.png",
+          "logicalHeight": 19,
+          "logicalWidth": 26,
+          "name": "tablecells.badge.ellipsis",
+          "points": 16.5,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.9153005464480874,
+          "bboxPx": [
+            18,
+            23,
+            63,
+            55
+          ],
+          "visibleSizePx": [
+            45,
+            32
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "tablecells.badge.ellipsis-26-semibold-large.png",
+          "logicalHeight": 20,
+          "logicalWidth": 26,
+          "name": "tablecells.badge.ellipsis",
+          "points": 13,
+          "scale": "large",
+          "weight": "semibold",
+          "iou": 0.8452685421994884,
+          "bboxPx": [
+            18,
+            24,
+            63,
+            55
+          ],
+          "visibleSizePx": [
+            45,
+            31
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "tablecells.badge.ellipsis-26-medium-large.png",
+          "logicalHeight": 20,
+          "logicalWidth": 26,
+          "name": "tablecells.badge.ellipsis",
+          "points": 13,
+          "scale": "large",
+          "weight": "medium",
+          "iou": 0.8367626886145405,
+          "bboxPx": [
+            18,
+            25,
+            63,
+            55
+          ],
+          "visibleSizePx": [
+            45,
+            30
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        },
+        {
+          "file": "tablecells.badge.ellipsis-34-regular-medium.png",
+          "logicalHeight": 20,
+          "logicalWidth": 27,
+          "name": "tablecells.badge.ellipsis",
+          "points": 17,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.8217948717948718,
+          "bboxPx": [
+            17,
+            23,
+            63,
+            56
+          ],
+          "visibleSizePx": [
+            46,
+            33
+          ],
+          "normalizedTranslationPx": [
+            0,
+            -1
+          ]
+        },
+        {
+          "file": "tablecells.badge.ellipsis-34-medium-medium.png",
+          "logicalHeight": 20,
+          "logicalWidth": 27,
+          "name": "tablecells.badge.ellipsis",
+          "points": 17,
+          "scale": "medium",
+          "weight": "medium",
+          "iou": 0.8103666245259166,
+          "bboxPx": [
+            17,
+            24,
+            63,
+            55
+          ],
+          "visibleSizePx": [
+            46,
+            31
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "tablecells.badge.ellipsis-34-semibold-medium.png",
+          "logicalHeight": 20,
+          "logicalWidth": 27,
+          "name": "tablecells.badge.ellipsis",
+          "points": 17,
+          "scale": "medium",
+          "weight": "semibold",
+          "iou": 0.8026634382566586,
+          "bboxPx": [
+            17,
+            24,
+            63,
+            55
+          ],
+          "visibleSizePx": [
+            46,
+            31
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        }
+      ],
+      "bestThresholdSensitivity": [
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 96,
+          "iou": 0.9092140921409214
+        },
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 128,
+          "iou": 0.9159779614325069
+        },
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 160,
+          "iou": 0.840782122905028
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 96,
+          "iou": 0.9137466307277629
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 128,
+          "iou": 0.9153005464480874
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 160,
+          "iou": 0.835635359116022
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 96,
+          "iou": 0.912751677852349
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 128,
+          "iou": 0.9116847826086957
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 160,
+          "iou": 0.8324175824175825
+        }
+      ],
+      "equalBestConfigurations": [
+        {
+          "points": 16.5,
+          "weight": "regular",
+          "scale": "medium"
+        }
+      ]
+    },
+    {
+      "action": "media",
+      "systemSymbol": "paperclip",
+      "source": "references/desktop/macos26-format.png",
+      "sha256": "e9cea4e4b0431d4b7836e8997d5f0d14001eec77cc83227b1ab009530b7ae755",
+      "sourceSizePx": [
+        2176,
+        1320
+      ],
+      "cropPx": [
+        1403,
+        20,
+        1457,
+        84
+      ],
+      "sourceInkBBoxPx": [
+        11,
+        15,
+        42,
+        50
+      ],
+      "sourceInkGlobalBBoxPx": [
+        1414,
+        35,
+        1445,
+        70
+      ],
+      "sourceInkCenterPt": [
+        714.75,
+        26.25
+      ],
+      "sourceInkSizePx": [
+        31,
+        35
+      ],
+      "sourceForegroundMin": 70,
+      "sourceBackgroundMedian": 255,
+      "sourceThreshold": 162,
+      "examined": 153,
+      "best": {
+        "file": "paperclip-34-regular-medium.png",
+        "logicalHeight": 21,
+        "logicalWidth": 20,
+        "name": "paperclip",
+        "points": 17,
+        "scale": "medium",
+        "weight": "regular",
+        "iou": 0.8632478632478633,
+        "bboxPx": [
+          24,
+          22,
+          56,
+          58
+        ],
+        "visibleSizePx": [
+          32,
+          36
+        ],
+        "normalizedTranslationPx": [
+          0,
+          -1
+        ]
+      },
+      "top": [
+        {
+          "file": "paperclip-34-regular-medium.png",
+          "logicalHeight": 21,
+          "logicalWidth": 20,
+          "name": "paperclip",
+          "points": 17,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.8632478632478633,
+          "bboxPx": [
+            24,
+            22,
+            56,
+            58
+          ],
+          "visibleSizePx": [
+            32,
+            36
+          ],
+          "normalizedTranslationPx": [
+            0,
+            -1
+          ]
+        },
+        {
+          "file": "paperclip-34-medium-medium.png",
+          "logicalHeight": 22,
+          "logicalWidth": 20,
+          "name": "paperclip",
+          "points": 17,
+          "scale": "medium",
+          "weight": "medium",
+          "iou": 0.8436657681940701,
+          "bboxPx": [
+            24,
+            24,
+            54,
+            58
+          ],
+          "visibleSizePx": [
+            30,
+            34
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        },
+        {
+          "file": "paperclip-34-semibold-medium.png",
+          "logicalHeight": 22,
+          "logicalWidth": 20,
+          "name": "paperclip",
+          "points": 17,
+          "scale": "medium",
+          "weight": "semibold",
+          "iou": 0.8397932816537468,
+          "bboxPx": [
+            24,
+            23,
+            55,
+            58
+          ],
+          "visibleSizePx": [
+            31,
+            35
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "paperclip-26-semibold-large.png",
+          "logicalHeight": 21,
+          "logicalWidth": 19,
+          "name": "paperclip",
+          "points": 13,
+          "scale": "large",
+          "weight": "semibold",
+          "iou": 0.7572559366754618,
+          "bboxPx": [
+            25,
+            23,
+            55,
+            57
+          ],
+          "visibleSizePx": [
+            30,
+            34
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        },
+        {
+          "file": "paperclip-35-regular-medium.png",
+          "logicalHeight": 22,
+          "logicalWidth": 21,
+          "name": "paperclip",
+          "points": 17.5,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.7506631299734748,
+          "bboxPx": [
+            23,
+            22,
+            56,
+            59
+          ],
+          "visibleSizePx": [
+            33,
+            37
+          ],
+          "normalizedTranslationPx": [
+            0,
+            -2
+          ]
+        },
+        {
+          "file": "paperclip-33-regular-medium.png",
+          "logicalHeight": 21,
+          "logicalWidth": 19,
+          "name": "paperclip",
+          "points": 16.5,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.7417582417582418,
+          "bboxPx": [
+            25,
+            23,
+            54,
+            58
+          ],
+          "visibleSizePx": [
+            29,
+            35
+          ],
+          "normalizedTranslationPx": [
+            1,
+            0
+          ]
+        }
+      ],
+      "bestThresholdSensitivity": [
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 96,
+          "iou": 0.9157303370786517
+        },
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 128,
+          "iou": 0.8559077809798271
+        },
+        {
+          "sourceThreshold": 147,
+          "alphaThreshold": 160,
+          "iou": 0.8635014836795252
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 96,
+          "iou": 0.938375350140056
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 128,
+          "iou": 0.8632478632478633
+        },
+        {
+          "sourceThreshold": 162,
+          "alphaThreshold": 160,
+          "iou": 0.8546511627906976
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 96,
+          "iou": 0.9441340782122905
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 128,
+          "iou": 0.8693181818181818
+        },
+        {
+          "sourceThreshold": 177,
+          "alphaThreshold": 160,
+          "iou": 0.8448275862068966
+        }
+      ],
+      "equalBestConfigurations": [
+        {
+          "points": 17,
+          "weight": "regular",
+          "scale": "medium"
+        }
+      ]
+    },
+    {
+      "action": "share",
+      "systemSymbol": "square.and.arrow.up",
+      "source": "references/desktop/macos26-format.png",
+      "sha256": "e9cea4e4b0431d4b7836e8997d5f0d14001eec77cc83227b1ab009530b7ae755",
+      "sourceSizePx": [
+        2176,
+        1320
+      ],
+      "cropPx": [
+        1511,
+        20,
+        1565,
+        84
+      ],
+      "sourceInkBBoxPx": [
+        12,
+        12,
+        41,
+        49
+      ],
+      "sourceInkGlobalBBoxPx": [
+        1523,
+        32,
+        1552,
+        69
+      ],
+      "sourceInkCenterPt": [
+        768.75,
+        25.25
+      ],
+      "sourceInkSizePx": [
+        29,
+        37
+      ],
+      "sourceForegroundMin": 72,
+      "sourceBackgroundMedian": 255,
+      "sourceThreshold": 164,
+      "examined": 153,
+      "best": {
+        "file": "square.and.arrow.up-33-regular-medium.png",
+        "logicalHeight": 22,
+        "logicalWidth": 19,
+        "name": "square.and.arrow.up",
+        "points": 16.5,
+        "scale": "medium",
+        "weight": "regular",
+        "iou": 0.8948863636363636,
+        "bboxPx": [
+          25,
+          24,
+          54,
+          60
+        ],
+        "visibleSizePx": [
+          29,
+          36
+        ],
+        "normalizedTranslationPx": [
+          0,
+          1
+        ]
+      },
+      "top": [
+        {
+          "file": "square.and.arrow.up-33-regular-medium.png",
+          "logicalHeight": 22,
+          "logicalWidth": 19,
+          "name": "square.and.arrow.up",
+          "points": 16.5,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.8948863636363636,
+          "bboxPx": [
+            25,
+            24,
+            54,
+            60
+          ],
+          "visibleSizePx": [
+            29,
+            36
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        },
+        {
+          "file": "square.and.arrow.up-34-regular-medium.png",
+          "logicalHeight": 22,
+          "logicalWidth": 19,
+          "name": "square.and.arrow.up",
+          "points": 17,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.8760563380281691,
+          "bboxPx": [
+            25,
+            23,
+            54,
+            60
+          ],
+          "visibleSizePx": [
+            29,
+            37
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "square.and.arrow.up-26-medium-large.png",
+          "logicalHeight": 22,
+          "logicalWidth": 19,
+          "name": "square.and.arrow.up",
+          "points": 13,
+          "scale": "large",
+          "weight": "medium",
+          "iou": 0.7978436657681941,
+          "bboxPx": [
+            25,
+            24,
+            54,
+            59
+          ],
+          "visibleSizePx": [
+            29,
+            35
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        },
+        {
+          "file": "square.and.arrow.up-33-medium-medium.png",
+          "logicalHeight": 22,
+          "logicalWidth": 19,
+          "name": "square.and.arrow.up",
+          "points": 16.5,
+          "scale": "medium",
+          "weight": "medium",
+          "iou": 0.7716535433070866,
+          "bboxPx": [
+            25,
+            24,
+            54,
+            59
+          ],
+          "visibleSizePx": [
+            29,
+            35
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        },
+        {
+          "file": "square.and.arrow.up-26-semibold-large.png",
+          "logicalHeight": 23,
+          "logicalWidth": 19,
+          "name": "square.and.arrow.up",
+          "points": 13,
+          "scale": "large",
+          "weight": "semibold",
+          "iou": 0.7709923664122137,
+          "bboxPx": [
+            25,
+            24,
+            55,
+            60
+          ],
+          "visibleSizePx": [
+            30,
+            36
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "square.and.arrow.up-34-medium-medium.png",
+          "logicalHeight": 23,
+          "logicalWidth": 19,
+          "name": "square.and.arrow.up",
+          "points": 17,
+          "scale": "medium",
+          "weight": "medium",
+          "iou": 0.7605985037406484,
+          "bboxPx": [
+            25,
+            24,
+            55,
+            60
+          ],
+          "visibleSizePx": [
+            30,
+            36
+          ],
+          "normalizedTranslationPx": [
+            0,
+            1
+          ]
+        }
+      ],
+      "bestThresholdSensitivity": [
+        {
+          "sourceThreshold": 149,
+          "alphaThreshold": 96,
+          "iou": 0.8531073446327684
+        },
+        {
+          "sourceThreshold": 149,
+          "alphaThreshold": 128,
+          "iou": 0.8587896253602305
+        },
+        {
+          "sourceThreshold": 149,
+          "alphaThreshold": 160,
+          "iou": 0.6744868035190615
+        },
+        {
+          "sourceThreshold": 164,
+          "alphaThreshold": 96,
+          "iou": 0.8938547486033519
+        },
+        {
+          "sourceThreshold": 164,
+          "alphaThreshold": 128,
+          "iou": 0.8948863636363636
+        },
+        {
+          "sourceThreshold": 164,
+          "alphaThreshold": 160,
+          "iou": 0.6991404011461319
+        },
+        {
+          "sourceThreshold": 179,
+          "alphaThreshold": 96,
+          "iou": 0.8873626373626373
+        },
+        {
+          "sourceThreshold": 179,
+          "alphaThreshold": 128,
+          "iou": 0.888268156424581
+        },
+        {
+          "sourceThreshold": 179,
+          "alphaThreshold": 160,
+          "iou": 0.6957746478873239
+        }
+      ],
+      "equalBestConfigurations": [
+        {
+          "points": 16.5,
+          "weight": "regular",
+          "scale": "medium"
+        }
+      ]
+    },
+    {
+      "action": "more",
+      "systemSymbol": "ellipsis",
+      "source": "references/desktop/macos26-format.png",
+      "sha256": "e9cea4e4b0431d4b7836e8997d5f0d14001eec77cc83227b1ab009530b7ae755",
+      "sourceSizePx": [
+        2176,
+        1320
+      ],
+      "cropPx": [
+        1600,
+        20,
+        1654,
+        84
+      ],
+      "sourceInkBBoxPx": [
+        11,
+        29,
+        41,
+        35
+      ],
+      "sourceInkGlobalBBoxPx": [
+        1611,
+        49,
+        1641,
+        55
+      ],
+      "sourceInkCenterPt": [
+        813.0,
+        26.0
+      ],
+      "sourceInkSizePx": [
+        30,
+        6
+      ],
+      "sourceForegroundMin": 71,
+      "sourceBackgroundMedian": 255,
+      "sourceThreshold": 163,
+      "examined": 153,
+      "best": {
+        "file": "ellipsis-34-regular-medium.png",
+        "logicalHeight": 6,
+        "logicalWidth": 18,
+        "name": "ellipsis",
+        "points": 17,
+        "scale": "medium",
+        "weight": "regular",
+        "iou": 0.8541666666666666,
+        "bboxPx": [
+          25,
+          38,
+          54,
+          44
+        ],
+        "visibleSizePx": [
+          29,
+          6
+        ],
+        "normalizedTranslationPx": [
+          1,
+          0
+        ]
+      },
+      "top": [
+        {
+          "file": "ellipsis-34-regular-medium.png",
+          "logicalHeight": 6,
+          "logicalWidth": 18,
+          "name": "ellipsis",
+          "points": 17,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.8541666666666666,
+          "bboxPx": [
+            25,
+            38,
+            54,
+            44
+          ],
+          "visibleSizePx": [
+            29,
+            6
+          ],
+          "normalizedTranslationPx": [
+            1,
+            0
+          ]
+        },
+        {
+          "file": "ellipsis-33-regular-medium.png",
+          "logicalHeight": 6,
+          "logicalWidth": 18,
+          "name": "ellipsis",
+          "points": 16.5,
+          "scale": "medium",
+          "weight": "regular",
+          "iou": 0.8144329896907216,
+          "bboxPx": [
+            25,
+            38,
+            53,
+            44
+          ],
+          "visibleSizePx": [
+            28,
+            6
+          ],
+          "normalizedTranslationPx": [
+            1,
+            0
+          ]
+        },
+        {
+          "file": "ellipsis-34-semibold-medium.png",
+          "logicalHeight": 6,
+          "logicalWidth": 18,
+          "name": "ellipsis",
+          "points": 17,
+          "scale": "medium",
+          "weight": "semibold",
+          "iou": 0.8105263157894737,
+          "bboxPx": [
+            25,
+            38,
+            55,
+            43
+          ],
+          "visibleSizePx": [
+            30,
+            5
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        },
+        {
+          "file": "ellipsis-33-semibold-medium.png",
+          "logicalHeight": 6,
+          "logicalWidth": 18,
+          "name": "ellipsis",
+          "points": 16.5,
+          "scale": "medium",
+          "weight": "semibold",
+          "iou": 0.81,
+          "bboxPx": [
+            25,
+            37,
+            54,
+            43
+          ],
+          "visibleSizePx": [
+            29,
+            6
+          ],
+          "normalizedTranslationPx": [
+            1,
+            0
+          ]
+        },
+        {
+          "file": "ellipsis-26-semibold-large.png",
+          "logicalHeight": 6,
+          "logicalWidth": 18,
+          "name": "ellipsis",
+          "points": 13,
+          "scale": "large",
+          "weight": "semibold",
+          "iou": 0.7938144329896907,
+          "bboxPx": [
+            25,
+            37,
+            54,
+            43
+          ],
+          "visibleSizePx": [
+            29,
+            6
+          ],
+          "normalizedTranslationPx": [
+            1,
+            0
+          ]
+        },
+        {
+          "file": "ellipsis-34-medium-medium.png",
+          "logicalHeight": 6,
+          "logicalWidth": 18,
+          "name": "ellipsis",
+          "points": 17,
+          "scale": "medium",
+          "weight": "medium",
+          "iou": 0.7857142857142857,
+          "bboxPx": [
+            25,
+            37,
+            54,
+            43
+          ],
+          "visibleSizePx": [
+            29,
+            6
+          ],
+          "normalizedTranslationPx": [
+            0,
+            0
+          ]
+        }
+      ],
+      "bestThresholdSensitivity": [
+        {
+          "sourceThreshold": 148,
+          "alphaThreshold": 96,
+          "iou": 0.85
+        },
+        {
+          "sourceThreshold": 148,
+          "alphaThreshold": 128,
+          "iou": 0.8631578947368421
+        },
+        {
+          "sourceThreshold": 148,
+          "alphaThreshold": 160,
+          "iou": 0.8279569892473119
+        },
+        {
+          "sourceThreshold": 163,
+          "alphaThreshold": 96,
+          "iou": 0.86
+        },
+        {
+          "sourceThreshold": 163,
+          "alphaThreshold": 128,
+          "iou": 0.8541666666666666
+        },
+        {
+          "sourceThreshold": 163,
+          "alphaThreshold": 160,
+          "iou": 0.8191489361702128
+        },
+        {
+          "sourceThreshold": 178,
+          "alphaThreshold": 96,
+          "iou": 0.8365384615384616
+        },
+        {
+          "sourceThreshold": 178,
+          "alphaThreshold": 128,
+          "iou": 0.83
+        },
+        {
+          "sourceThreshold": 178,
+          "alphaThreshold": 160,
+          "iou": 0.7777777777777778
+        }
+      ],
+      "equalBestConfigurations": [
+        {
+          "points": 17,
+          "weight": "regular",
+          "scale": "medium"
+        }
+      ]
+    },
+    {
+      "action": "search",
+      "systemSymbol": "magnifyingglass",
+      "source": "references/desktop/macos26-format.png",
+      "sha256": "e9cea4e4b0431d4b7836e8997d5f0d14001eec77cc83227b1ab009530b7ae755",
+      "sourceSizePx": [
+        2176,
+        1320
+      ],
+      "cropPx": [
+        1703,
+        20,
+        1757,
+        84
+      ],
+      "sourceInkBBoxPx": [
+        14,
+        20,
+        39,
+        45
+      ],
+      "sourceInkGlobalBBoxPx": [
+        1717,
+        40,
+        1742,
+        65
+      ],
+      "sourceInkCenterPt": [
+        864.75,
+        26.25
+      ],
+      "sourceInkSizePx": [
+        25,
+        25
+      ],
+      "sourceForegroundMin": 122,
+      "sourceBackgroundMedian": 255,
+      "sourceThreshold": 188,
+      "examined": 153,
+      "best": {
+        "file": "magnifyingglass-34-regular-small.png",
+        "logicalHeight": 15,
+        "logicalWidth": 15,
+        "name": "magnifyingglass",
+        "points": 17,
+        "scale": "small",
+        "weight": "regular",
+        "iou": 0.766497461928934,
+        "bboxPx": [
+          28,
+          27,
+          52,
+          53
+        ],
+        "visibleSizePx": [
+          24,
+          26
+        ],
+        "normalizedTranslationPx": [
+          1,
+          -1
+        ]
+      },
+      "top": [
+        {
+          "file": "magnifyingglass-34-regular-small.png",
+          "logicalHeight": 15,
+          "logicalWidth": 15,
+          "name": "magnifyingglass",
+          "points": 17,
+          "scale": "small",
+          "weight": "regular",
+          "iou": 0.766497461928934,
+          "bboxPx": [
+            28,
+            27,
+            52,
+            53
+          ],
+          "visibleSizePx": [
+            24,
+            26
+          ],
+          "normalizedTranslationPx": [
+            1,
+            -1
+          ]
+        },
+        {
+          "file": "magnifyingglass-34-medium-small.png",
+          "logicalHeight": 16,
+          "logicalWidth": 15,
+          "name": "magnifyingglass",
+          "points": 17,
+          "scale": "small",
+          "weight": "medium",
+          "iou": 0.7453703703703703,
+          "bboxPx": [
+            28,
+            28,
+            52,
+            54
+          ],
+          "visibleSizePx": [
+            24,
+            26
+          ],
+          "normalizedTranslationPx": [
+            0,
+            -1
+          ]
+        },
+        {
+          "file": "magnifyingglass-34-semibold-small.png",
+          "logicalHeight": 16,
+          "logicalWidth": 16,
+          "name": "magnifyingglass",
+          "points": 17,
+          "scale": "small",
+          "weight": "semibold",
+          "iou": 0.7336244541484717,
+          "bboxPx": [
+            27,
+            28,
+            51,
+            54
+          ],
+          "visibleSizePx": [
+            24,
+            26
+          ],
+          "normalizedTranslationPx": [
+            0,
+            -1
+          ]
+        },
+        {
+          "file": "magnifyingglass-26-medium-medium.png",
+          "logicalHeight": 15,
+          "logicalWidth": 15,
+          "name": "magnifyingglass",
+          "points": 13,
+          "scale": "medium",
+          "weight": "medium",
+          "iou": 0.7303921568627451,
+          "bboxPx": [
+            28,
+            28,
+            51,
+            53
+          ],
+          "visibleSizePx": [
+            23,
+            25
+          ],
+          "normalizedTranslationPx": [
+            1,
+            0
+          ]
+        },
+        {
+          "file": "magnifyingglass-33-medium-small.png",
+          "logicalHeight": 15,
+          "logicalWidth": 15,
+          "name": "magnifyingglass",
+          "points": 16.5,
+          "scale": "small",
+          "weight": "medium",
+          "iou": 0.7069767441860465,
+          "bboxPx": [
+            28,
+            28,
+            51,
+            53
+          ],
+          "visibleSizePx": [
+            23,
+            25
+          ],
+          "normalizedTranslationPx": [
+            1,
+            0
+          ]
+        },
+        {
+          "file": "magnifyingglass-26-semibold-medium.png",
+          "logicalHeight": 15,
+          "logicalWidth": 15,
+          "name": "magnifyingglass",
+          "points": 13,
+          "scale": "medium",
+          "weight": "semibold",
+          "iou": 0.7064220183486238,
+          "bboxPx": [
+            28,
+            28,
+            51,
+            53
+          ],
+          "visibleSizePx": [
+            23,
+            25
+          ],
+          "normalizedTranslationPx": [
+            1,
+            0
+          ]
+        }
+      ],
+      "bestThresholdSensitivity": [
+        {
+          "sourceThreshold": 173,
+          "alphaThreshold": 96,
+          "iou": 0.7537688442211056
+        },
+        {
+          "sourceThreshold": 173,
+          "alphaThreshold": 128,
+          "iou": 0.8
+        },
+        {
+          "sourceThreshold": 173,
+          "alphaThreshold": 160,
+          "iou": 0.7679558011049724
+        },
+        {
+          "sourceThreshold": 188,
+          "alphaThreshold": 96,
+          "iou": 0.7669902912621359
+        },
+        {
+          "sourceThreshold": 188,
+          "alphaThreshold": 128,
+          "iou": 0.766497461928934
+        },
+        {
+          "sourceThreshold": 188,
+          "alphaThreshold": 160,
+          "iou": 0.7268041237113402
+        },
+        {
+          "sourceThreshold": 203,
+          "alphaThreshold": 96,
+          "iou": 0.7570093457943925
+        },
+        {
+          "sourceThreshold": 203,
+          "alphaThreshold": 128,
+          "iou": 0.7475728155339806
+        },
+        {
+          "sourceThreshold": 203,
+          "alphaThreshold": 160,
+          "iou": 0.7093596059113301
+        }
+      ],
+      "equalBestConfigurations": [
+        {
+          "points": 17,
+          "weight": "regular",
+          "scale": "small"
+        }
+      ]
+    }
+  ]
+}
