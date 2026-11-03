@@ -19,12 +19,15 @@ depends-on: [app-001-fix-01]
 - docs/INDEX.md、docs/requirements.md F08–F10/F15/F16
 - docs/ui/macos.md、docs/ui/android.md、docs/ui/interaction-matrix.md
 - docs/research/offline-media-scanning.md（完成研究后读取；无此文档时先等待root交接）
+- docs/research/media-roundtrip-readiness/analysis.md、inputs.json（21份只读输入；静态缺口不等于设备已复现，须按当前交付重新核源码）
 - references/mobile/frames-2s/frame-014.png至019.png（26–36s），frame-022.png至024.png（42–46s）
 - docs/plan/reviews/qa-001-01.md、docs/verification/qa-fix-01/（已完成项只在新改动影响时回归）
 
 ## path
 
 录音/绘画/附件组件及样式、必要的Mac/Android原生权限/桥接配置、Rust附件边界与文档节点。更新真实契约及README。扫描/OCR作为另一最小任务，不在本批顺带做。
+
+首个录音闭环批次先验证现有getUserMedia/MediaRecorder采集，不先替换为新原生插件。依据只读准备审计，先修暂停态完成、保存失败回传并保留可重试录音、准备/错误/取消时立即统一释放采集资源、两步附件落盘后正文插入失败的补偿与重试去重。补齐计时/有效媒体和播放错误仅限真实基线暴露的必要边界；绘画与通用附件后续按本任务分批继续，不让第一批通过升级为APP-002整体完成。
 
 ## verification
 

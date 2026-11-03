@@ -47,3 +47,5 @@ Mac公开原生能力与当前依赖绑定的实证见[原生UI研究](macos-nat
 - Google 官方本地文字识别：https://developers.google.com/ml-kit/vision/text-recognition/v2/android 。有 bundled 中文模型的集成路径，可作为后续真正离线扫描文本候选；当前尚未接入，不声称有OCR。
 
 这里列出的是取证与集成依据，不代表本次实现已验证该能力。
+
+现有录音链的后续有限只读审计见[媒体闭环准备](media-roundtrip-readiness/analysis.md)，21份冻结输入及其与起始HEAD的关系见同目录`inputs.json`。已确认暂停不能直接完成、保存错误未回传面板、准备失败未立即释放采集资源、附件先存后插入缺少失败补偿等静态缺口；实际设备是否触发、音轨/冷启动播放与像素仍unknown。APP-002先验证已有WebView采集路径，再做最小整改，不据此新建原生录音插件。
