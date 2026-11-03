@@ -118,3 +118,10 @@ Mac 条件编译注册本地 `tauri-plugin-notes-ui`，仅 `main` / `note-*` 窗
 原生意图关联对应 revision 的 noteId、窗口范围、授权 stamp、Editor 实例、实例所属笔记、文档版本与 SelectionBookmark。执行前检查实时授权/屏障/覆盖层和实例有效性，编辑动作恢复对应选区；异步 flush、附件保存、正文读取后再次检查目标。输入更新文档版本，单独移动选区不触发无意义原生状态更新。上下文失效时清理书签和 Editor 引用，控制器不持有正文。
 
 Cmd+N、Cmd+F、Cmd+Shift+F 由 AppKit 菜单处理，以实际聚焦的允许窗口发送 `menu-action`，不广播。全局搜索调用当前绑定的 `focusSearch`；独立窗没有全局搜索，Cmd+F 只改变所属笔记窗口的查找状态。未实现菜单动作保持禁用，不用成功提示替代功能。原生系统 API 的使用不代表像素匹配；本轮冻结源码/产物与失败的有限 RGB 比较见 `verification/app-001-fix-02/selfcheck.md`。
+# Android 长候选保护（FIX04 部分修复）
+
+项目固定 `prosemirror-view@1.42.9`，在pnpm补丁内添加默认关闭的 `androidPreserveComposition` 选项，仅 `native && Android userAgent` 的正式编辑器启用。真实可信compositionstart/update在原有初始化后设置当前view的nativeCompositionActive；compositionend、clear、destroy释放。原5000ms闲置回调仅当该信号、view.composing、view.hasFocus、连接且属于该view的compositionNode与DOM focusNode均匹配时保留，不替换为更长固定延时，不推测候选文本。
+
+无有效节点/焦点或缺少原生活跃信号时仍执行上游回退。可信非组词beforeinput/keydown（排除229、Process、modifier及isComposing）、blur、window失焦、document隐藏使信号失效并沿用20ms收束；程序化end/clear不受阻，destroy移除新增监听。保存、授权、版本冲突和跨笔记协议未改。15项确定性检查只证明这些恢复分支，不证明真实输入法或平台通用性。
+
+真实设备证据仅覆盖Android11/WebView91/Trime3.3.13的有限主路径。程序化DOM blur可能使IME将未选内联预编辑保留为正文，后台恢复还涉及授权屏障及Editor替换；本补丁不猜候选、不按字符删标记、不整文档回滚。格式/后台提交取消边界及纸张取消选区失败仍阻塞完整交付，后续FIX06须先核原生commit/cancel证据。原包与修复包、通过与失败记录均保留在 `docs/verification/app-001-fix-04/`。

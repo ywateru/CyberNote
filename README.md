@@ -86,3 +86,8 @@ FIX-02 已把 Mac 主窗和独立窗顶部接入本地 AppKit 插件，使用真
 - Android 仅已测现有模拟器 Android 11 / Chrome 91 / arm64；真机、多尺寸、输入法组合输入与新版 Android 的系统栏仍需覆盖。iOS 未建立可运行产物，不计入已交付平台。
 
 原版参考素材和应用数据请分开管理。原始用户录屏已保存在 `references/mobile/original/`，该目录与构建产物按 `.gitignore` 留在本机，不提交到 Git。
+# FIX04 Android composition status
+
+FIX04 固定 `prosemirror-view@1.42.9` 并通过 `pnpm-workspace.yaml` 应用受控补丁。正式 Android 编辑器才启用真实组词保护：候选停留跨过原 5000ms 闲置回退时，仅在实际焦点、原生组词信号及预编辑文本节点仍有效的情况下保留该节点。默认关闭，Mac/浏览器不启用。恢复契约检查为 `node scripts/check-android-composition.mjs`，使用测试替身，不替代真实输入法验收。
+
+开发实测长候选空正文约199秒、正文中部约20秒、快速候选、逐键取消与连续中英输入有限通过。格式/blur与后台期间仍可能保存未选择的内联预编辑，纸张取消返回选区也存在失败；原0aac包的实际对照复现了格式残留与纸张取消选区失败。详见 `docs/verification/app-001-fix-04/selfcheck.md`。FIX04仅冻结主路径修复供独立复验，整体手机输入与像素一致性仍未验收。

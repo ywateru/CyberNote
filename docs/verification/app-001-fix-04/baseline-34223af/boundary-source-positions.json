@@ -1,0 +1,28 @@
+{
+  "note": "Read-only source positions reconstructed from preserved actual baseline bundle after run; conditions logged actual Error().stack through __probeBoundary and returned false, never paused. Exact interactive CDP request IDs were not retained. Trace is the primary actual runtime record; candidate has no Debugger domain or breakpoints.",
+  "bundleSha256": "dea9905df802b6ad514a6b7ff3f9f66a778146b892ee2c9e133a3414fd60d1ca",
+  "bundleBytes": 875344,
+  "records": [
+    {
+      "symbol": "function JR(",
+      "offset": 496611,
+      "zeroBasedLine": 367,
+      "zeroBasedColumn": 14833,
+      "excerpt": "function JR(t,e){clearTimeout(t.input.composingTimeout),e>-1&&(t.input.composingTimeout=setTimeout(()=>uh(t),e))}function QR(t){for(t.composing&&(t.input.composing=!1,t.input.compositionEndedAt=Date.now());t.input.compositionNodes.length>0;)t.input.compositionNodes.pop().markParentsDirty()}function C5(t){let e=t.domSelectionRange();if(!e.focusNode)return null;let n=pB(e.focusNode,e.focusOffset),r=mB(e.focusNode,e.focusOffset);if(n&&r&&n!=r){let s=r.pmViewDesc,l=t.domObserver.lastChangedTextNode;if(n==l||r==l)return l;if(!s||!s.isText(r.nodeValue))return r;if(t.input.compositionNode==r){let a=n.pmViewDesc;if(!(!a||!a.isText(n.nodeValue)))return r}}return n||r}function uh(t,e=!1){if(!(gs&&t.domObserver.flushingSoon>=0)){if(t.domObserver.forceFlush(),QR(t),e||t.docView&&t.docView.dirty){let n=q1(t),r=t.state.selection;return n&&!n.eq(r)?t.di"
+    },
+    {
+      "symbol": "function QR(",
+      "offset": 496724,
+      "zeroBasedLine": 367,
+      "zeroBasedColumn": 14946,
+      "excerpt": "function QR(t){for(t.composing&&(t.input.composing=!1,t.input.compositionEndedAt=Date.now());t.input.compositionNodes.length>0;)t.input.compositionNodes.pop().markParentsDirty()}function C5(t){let e=t.domSelectionRange();if(!e.focusNode)return null;let n=pB(e.focusNode,e.focusOffset),r=mB(e.focusNode,e.focusOffset);if(n&&r&&n!=r){let s=r.pmViewDesc,l=t.domObserver.lastChangedTextNode;if(n==l||r==l)return l;if(!s||!s.isText(r.nodeValue))return r;if(t.input.compositionNode==r){let a=n.pmViewDesc;if(!(!a||!a.isText(n.nodeValue)))return r}}return n||r}function uh(t,e=!1){if(!(gs&&t.domObserver.flushingSoon>=0)){if(t.domObserver.forceFlush(),QR(t),e||t.docView&&t.docView.dirty){let n=q1(t),r=t.state.selection;return n&&!n.eq(r)?t.dispatch(t.state.tr.setSelection(n)):(t.markCursor||e)&&!r.$from.node(r.$from.sharedDepth(r.to)).inlineContent?t.di"
+    },
+    {
+      "symbol": "function uh(",
+      "offset": 497278,
+      "zeroBasedLine": 367,
+      "zeroBasedColumn": 15500,
+      "excerpt": "function uh(t,e=!1){if(!(gs&&t.domObserver.flushingSoon>=0)){if(t.domObserver.forceFlush(),QR(t),e||t.docView&&t.docView.dirty){let n=q1(t),r=t.state.selection;return n&&!n.eq(r)?t.dispatch(t.state.tr.setSelection(n)):(t.markCursor||e)&&!r.$from.node(r.$from.sharedDepth(r.to)).inlineContent?t.dispatch(t.state.tr.deleteSelection()):t.updateState(t.state),!0}return!1}}function T5(t,e){if(!t.dom.parentNode)return;let n=t.dom.parentNode.appendChild(document.createElement(\"div\"));n.appendChild(e),n.style.cssText=\"position: fixed; left: -10000px; top: 10px\";let r=getSelection(),s=document.createRange();s.selectNodeContents(e),t.dom.blur(),r.removeAllRanges(),r.addRange(s),setTimeout(()=>{n.parentNode&&n.parentNode.removeChild(n),t.focus()},50)}const Lu=gr&&wo<15||Va&&SB<604;nr.copy=rr.cut=(t,e)=>{let n=e,r=t.state.selection,s=n.type==\"cut\";if(r"
+    }
+  ]
+}

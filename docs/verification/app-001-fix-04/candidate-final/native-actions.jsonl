@@ -1,0 +1,12 @@
+{"at":"2026-11-03T12:05:50.833Z","args":["shell","pm","path","com.local.notesclone"]}
+{"at":"2026-11-03T12:05:50.856Z","args":["shell","am","start","-n","com.osfans.trime/.ui.main.MainActivity"]}
+{"at":"2026-11-03T12:06:25.905Z","args":["shell","input","tap","365","337"]}
+{"at":"2026-11-03T12:06:27.049Z","args":["shell","sha256sum","/data/app/~~CDaC3aJQ-9RfsalKTn--ew==/com.local.notesclone-VhirTuzH0CfR0K3ZzVFmUg==/base.apk"]}
+{"at":"2026-11-03T12:06:49.148Z","args":["shell","input","tap","400","971"]}
+{"at":"2026-11-03T12:06:49.813Z","args":["shell","settings","put","secure","default_input_method","com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME"]}
+{"at":"2026-11-03T12:06:49.840Z","args":["shell","settings","put","secure","enabled_input_methods","com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME:com.google.android.googlequicksearchbox/com.google.android.voicesearch.ime.VoiceInputMethodService"]}
+{"at":"2026-11-03T12:06:49.873Z","args":["shell","settings","put","secure","selected_input_method_subtype","-1"]}
+{"at":"2026-11-03T12:06:49.898Z","args":["shell","settings","put","secure","show_ime_with_hard_keyboard","1"]}
+{"at":"2026-11-03T12:07:15.619Z","args":["shell","am","force-stop","com.local.notesclone"]}
+{"at":"2026-11-03T12:07:15.666Z","args":["shell","pidof","com.local.notesclone"]}
+{"at":"2026-11-03T12:07:15.693Z","args":["shell","am","start","-W","-n","com.local.notesclone/.MainActivity"]}

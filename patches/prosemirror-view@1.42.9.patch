@@ -1,0 +1,410 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+index 3182a2c995b6ee655dfff2dd77446d37c6c0b396..5923565b40be06d725eded73d752b07b00bb31bc 100644
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -2981,6 +2981,8 @@ var InputState = _createClass(function InputState() {
+   this.composing = false;
+   this.compositionNode = null;
+   this.composingTimeout = -1;
++  this.nativeCompositionActive = false;
++  this.compositionBoundaryCleanup = null;
+   this.compositionNodes = [];
+   this.compositionEndedAt = -2e8;
+   this.compositionID = 1;
+@@ -3006,12 +3008,25 @@ function initInput(view) {
+     return null;
+   });
+   ensureListeners(view);
++  if (androidCompositionEnabled(view)) {
++    const doc = view.dom.ownerDocument, win = doc.defaultView;
++    const blur = () => finishAndroidComposition(view);
++    const hidden = () => { if (doc.visibilityState == "hidden") finishAndroidComposition(view); };
++    if (win) win.addEventListener("blur", blur);
++    doc.addEventListener("visibilitychange", hidden);
++    view.input.compositionBoundaryCleanup = () => {
++      if (win) win.removeEventListener("blur", blur);
++      doc.removeEventListener("visibilitychange", hidden);
++    };
++  }
+ }
+ function setSelectionOrigin(view, origin) {
+   view.input.lastSelectionOrigin = origin;
+   view.input.lastSelectionTime = Date.now();
+ }
+ function destroyInput(view) {
++  if (view.input.compositionBoundaryCleanup) view.input.compositionBoundaryCleanup();
++  view.input.nativeCompositionActive = false;
+   if (view.input.mouseDown) view.input.mouseDown.done();
+   view.domObserver.stop();
+   for (var type in view.input.eventHandlers) view.dom.removeEventListener(type, view.input.eventHandlers[type]);
+@@ -3051,6 +3066,8 @@ function dispatchKey(view, event) {
+ }
+ editHandlers.keydown = function (view, _event) {
+   var event = _event;
++  if (event.isTrusted && !event.isComposing && event.keyCode != 229 && event.key != "Process" &&
++      !["Shift", "Control", "Alt", "Meta"].includes(event.key)) finishAndroidComposition(view, true);
+   view.input.shiftKey = event.keyCode == 16 || event.shiftKey;
+   if (inOrNearComposition(view)) return;
+   view.input.lastKeyCode = event.keyCode;
+@@ -3417,7 +3434,7 @@ function inOrNearComposition(view, event) {
+   return false;
+ }
+ var timeoutComposition = android ? 5000 : -1;
+-editHandlers.compositionstart = editHandlers.compositionupdate = function (view) {
++editHandlers.compositionstart = editHandlers.compositionupdate = function (view, event) {
+   if (!view.composing) {
+     view.domObserver.flush();
+     var state = view.state,
+@@ -3448,6 +3465,7 @@ editHandlers.compositionstart = editHandlers.compositionupdate = function (view)
+     }
+     view.input.composing = true;
+   }
++  if (event.isTrusted && androidCompositionEnabled(view)) view.input.nativeCompositionActive = true;
+   scheduleComposeEnd(view, timeoutComposition);
+ };
+ function selectionBeforeUneditable(view) {
+@@ -3459,6 +3477,7 @@ function selectionBeforeUneditable(view) {
+   return isElt(next) && next.contentEditable == "false";
+ }
+ editHandlers.compositionend = function (view, event) {
++  view.input.nativeCompositionActive = false;
+   if (view.composing) {
+     view.input.composing = false;
+     view.input.compositionEndedAt = Date.now();
+@@ -3471,13 +3490,31 @@ editHandlers.compositionend = function (view, event) {
+     scheduleComposeEnd(view, 20);
+   }
+ };
++function androidCompositionEnabled(view) {
++  return android && view.someProp("androidPreserveComposition") === true;
++}
++// Native events own a live Android span; no longer fixed timeout is substituted.
++function preserveAndroidComposition(view) {
++  const node = view.input.compositionNode;
++  return androidCompositionEnabled(view) && view.input.nativeCompositionActive && view.composing &&
++    view.hasFocus() && node && node.isConnected && view.dom.contains(node) &&
++    view.domSelectionRange().focusNode == node;
++}
++function finishAndroidComposition(view, immediate = false) {
++  if (!androidCompositionEnabled(view) || !view.input.nativeCompositionActive) return;
++  view.input.nativeCompositionActive = false;
++  if (immediate) endComposition(view);
++  scheduleComposeEnd(view, 20);
++}
+ function scheduleComposeEnd(view, delay) {
+   clearTimeout(view.input.composingTimeout);
+-  if (delay > -1) view.input.composingTimeout = setTimeout(function () {
+-    return endComposition(view);
++  if (delay > -1) view.input.composingTimeout = setTimeout(() => {
++    if (delay == timeoutComposition && preserveAndroidComposition(view)) return;
++    endComposition(view);
+   }, delay);
+ }
+ function clearComposition(view) {
++  view.input.nativeCompositionActive = false;
+   if (view.composing) {
+     view.input.composing = false;
+     view.input.compositionEndedAt = Date.now();
+@@ -3714,6 +3751,7 @@ handlers.focus = function (view) {
+   }
+ };
+ handlers.blur = function (view, _event) {
++  finishAndroidComposition(view);
+   var event = _event;
+   if (view.focused) {
+     view.domObserver.stop();
+@@ -3725,6 +3763,8 @@ handlers.blur = function (view, _event) {
+ };
+ handlers.beforeinput = function (view, _event) {
+   var event = _event;
++  if (event.isTrusted && !event.isComposing && !/composition/i.test(event.inputType))
++    finishAndroidComposition(view, true);
+   if (android && event.inputType == "deleteContentBackward") {
+     view.domObserver.flushSoon();
+     var domChangeCount = view.input.domChangeCount;
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index f738f6876f3fae6b4f055e0c9e8532404f793f73..081ed35d33d5d8b6d5a32b06ab5614e93c37c836 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -648,6 +648,10 @@ functions, and is used to pass in the plugin type when defining a
+ [plugin](https://prosemirror.net/docs/ref/#state.Plugin).
+ */
+ interface EditorProps<P = any> {
++    /** Application opt-in: preserve a trusted live Android preedit span past
++     * the idle watchdog; real end/blur/non-composition input still recover. */
++    androidPreserveComposition?: boolean;
++
+     /**
+     Can be an object mapping DOM event type names to functions that
+     handle them. Such functions will be called before any handling
+diff --git a/dist/index.js b/dist/index.js
+index e7afadb77457943de14e5108aaee7c60f0c590d2..1be99f3c51d1017ca37c25517583add756bce385 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -3149,6 +3149,8 @@ class InputState {
+         this.composing = false;
+         this.compositionNode = null;
+         this.composingTimeout = -1;
++    this.nativeCompositionActive = false;
++    this.compositionBoundaryCleanup = null;
+         this.compositionNodes = [];
+         this.compositionEndedAt = -2e8;
+         this.compositionID = 1;
+@@ -3175,12 +3177,25 @@ function initInput(view) {
+     if (safari)
+         view.dom.addEventListener("input", () => null);
+     ensureListeners(view);
++  if (androidCompositionEnabled(view)) {
++    const doc = view.dom.ownerDocument, win = doc.defaultView;
++    const blur = () => finishAndroidComposition(view);
++    const hidden = () => { if (doc.visibilityState == "hidden") finishAndroidComposition(view); };
++    if (win) win.addEventListener("blur", blur);
++    doc.addEventListener("visibilitychange", hidden);
++    view.input.compositionBoundaryCleanup = () => {
++      if (win) win.removeEventListener("blur", blur);
++      doc.removeEventListener("visibilitychange", hidden);
++    };
++  }
+ }
+ function setSelectionOrigin(view, origin) {
+     view.input.lastSelectionOrigin = origin;
+     view.input.lastSelectionTime = Date.now();
+ }
+ function destroyInput(view) {
++  if (view.input.compositionBoundaryCleanup) view.input.compositionBoundaryCleanup();
++  view.input.nativeCompositionActive = false;
+     if (view.input.mouseDown)
+         view.input.mouseDown.done();
+     view.domObserver.stop();
+@@ -3229,6 +3244,8 @@ function dispatchKey(view, event) {
+ }
+ editHandlers.keydown = (view, _event) => {
+     let event = _event;
++  if (event.isTrusted && !event.isComposing && event.keyCode != 229 && event.key != "Process" &&
++      !["Shift", "Control", "Alt", "Meta"].includes(event.key)) finishAndroidComposition(view, true);
+     view.input.shiftKey = event.keyCode == 16 || event.shiftKey;
+     if (inOrNearComposition(view))
+         return;
+@@ -3606,7 +3623,7 @@ function inOrNearComposition(view, event) {
+ }
+ // Drop active composition after 5 seconds of inactivity on Android
+ const timeoutComposition = android ? 5000 : -1;
+-editHandlers.compositionstart = editHandlers.compositionupdate = view => {
++editHandlers.compositionstart = editHandlers.compositionupdate = (view, event) => {
+     if (!view.composing) {
+         view.domObserver.flush();
+         let { state } = view, $pos = state.selection.$to;
+@@ -3645,6 +3662,7 @@ editHandlers.compositionstart = editHandlers.compositionupdate = view => {
+         }
+         view.input.composing = true;
+     }
++    if (event.isTrusted && androidCompositionEnabled(view)) view.input.nativeCompositionActive = true;
+     scheduleComposeEnd(view, timeoutComposition);
+ };
+ function selectionBeforeUneditable(view) {
+@@ -3655,6 +3673,7 @@ function selectionBeforeUneditable(view) {
+     return isElt(next) && next.contentEditable == "false";
+ }
+ editHandlers.compositionend = (view, event) => {
++  view.input.nativeCompositionActive = false;
+     if (view.composing) {
+         view.input.composing = false;
+         view.input.compositionEndedAt = Date.now();
+@@ -3668,12 +3687,31 @@ editHandlers.compositionend = (view, event) => {
+         scheduleComposeEnd(view, 20);
+     }
+ };
++function androidCompositionEnabled(view) {
++  return android && view.someProp("androidPreserveComposition") === true;
++}
++// Native events own a live Android span; no longer fixed timeout is substituted.
++function preserveAndroidComposition(view) {
++  const node = view.input.compositionNode;
++  return androidCompositionEnabled(view) && view.input.nativeCompositionActive && view.composing &&
++    view.hasFocus() && node && node.isConnected && view.dom.contains(node) &&
++    view.domSelectionRange().focusNode == node;
++}
++function finishAndroidComposition(view, immediate = false) {
++  if (!androidCompositionEnabled(view) || !view.input.nativeCompositionActive) return;
++  view.input.nativeCompositionActive = false;
++  if (immediate) endComposition(view);
++  scheduleComposeEnd(view, 20);
++}
+ function scheduleComposeEnd(view, delay) {
+-    clearTimeout(view.input.composingTimeout);
+-    if (delay > -1)
+-        view.input.composingTimeout = setTimeout(() => endComposition(view), delay);
++  clearTimeout(view.input.composingTimeout);
++  if (delay > -1) view.input.composingTimeout = setTimeout(() => {
++    if (delay == timeoutComposition && preserveAndroidComposition(view)) return;
++    endComposition(view);
++  }, delay);
+ }
+ function clearComposition(view) {
++  view.input.nativeCompositionActive = false;
+     if (view.composing) {
+         view.input.composing = false;
+         view.input.compositionEndedAt = Date.now();
+@@ -3961,6 +3999,7 @@ handlers.focus = view => {
+     }
+ };
+ handlers.blur = (view, _event) => {
++  finishAndroidComposition(view);
+     let event = _event;
+     if (view.focused) {
+         view.domObserver.stop();
+@@ -3973,6 +4012,8 @@ handlers.blur = (view, _event) => {
+ };
+ handlers.beforeinput = (view, _event) => {
+     let event = _event;
++  if (event.isTrusted && !event.isComposing && !/composition/i.test(event.inputType))
++    finishAndroidComposition(view, true);
+     // We should probably do more with beforeinput events, but support
+     // is so spotty that I'm still waiting to see where they are going.
+     // Very specific hack to deal with backspace sometimes failing on
+diff --git a/src/index.ts b/src/index.ts
+index 7d4205736a5533b8c22b2ce9a8ea719f8f52f143..b5fec4269b9aba859dc1b9e190b3511d25033c4b 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -619,6 +619,11 @@ export interface DOMEventMap extends HTMLElementEventMap {
+ /// functions, and is used to pass in the plugin type when defining a
+ /// [plugin](#state.Plugin).
+ export interface EditorProps<P = any> {
++  /// Application opt-in for preserving a trusted live Android composition past
++  /// the idle watchdog. Real end, blur, non-composition input and explicit
++  /// programmatic composition clearing retain their recovery paths.
++  androidPreserveComposition?: boolean
++
+   /// Can be an object mapping DOM event type names to functions that
+   /// handle them. Such functions will be called before any handling
+   /// ProseMirror does of events fired on the editable DOM element.
+diff --git a/src/input.ts b/src/input.ts
+index 69aa7aaf1c4741be2040423d3d29a26fcb63e6d2..7b456e64e8b6f1a477a18d5b0c4d82e0460d57bc 100644
+--- a/src/input.ts
++++ b/src/input.ts
+@@ -33,6 +33,8 @@ export class InputState {
+   composing = false
+   compositionNode: Text | null = null
+   composingTimeout = -1
++  nativeCompositionActive = false
++  compositionBoundaryCleanup: (() => void) | null = null
+   compositionNodes: ViewDesc[] = []
+   compositionEndedAt = -2e8
+   compositionID = 1
+@@ -59,6 +61,17 @@ export function initInput(view: EditorView) {
+   if (browser.safari) view.dom.addEventListener("input", () => null)
+ 
+   ensureListeners(view)
++  if (androidCompositionEnabled(view)) {
++    let doc = view.dom.ownerDocument, win = doc.defaultView
++    let blur = () => finishAndroidComposition(view)
++    let hidden = () => { if (doc.visibilityState == "hidden") finishAndroidComposition(view) }
++    win?.addEventListener("blur", blur)
++    doc.addEventListener("visibilitychange", hidden)
++    view.input.compositionBoundaryCleanup = () => {
++      win?.removeEventListener("blur", blur)
++      doc.removeEventListener("visibilitychange", hidden)
++    }
++  }
+ }
+ 
+ function setSelectionOrigin(view: EditorView, origin: string) {
+@@ -67,6 +80,8 @@ function setSelectionOrigin(view: EditorView, origin: string) {
+ }
+ 
+ export function destroyInput(view: EditorView) {
++  view.input.compositionBoundaryCleanup?.()
++  view.input.nativeCompositionActive = false
+   if (view.input.mouseDown) view.input.mouseDown.done()
+   view.domObserver.stop()
+   for (let type in view.input.eventHandlers)
+@@ -115,6 +130,8 @@ export function dispatchKey(view: EditorView, event: KeyboardEvent | "Backspace"
+ 
+ editHandlers.keydown = (view: EditorView, _event: Event) => {
+   let event = _event as KeyboardEvent
++  if (event.isTrusted && !event.isComposing && event.keyCode != 229 && event.key != "Process" &&
++      !["Shift", "Control", "Alt", "Meta"].includes(event.key)) finishAndroidComposition(view, true)
+   view.input.shiftKey = event.keyCode == 16 || event.shiftKey
+   if (inOrNearComposition(view, event)) return
+   view.input.lastKeyCode = event.keyCode
+@@ -524,7 +541,7 @@ function inOrNearComposition(view: EditorView, event: Event) {
+ // Drop active composition after 5 seconds of inactivity on Android
+ const timeoutComposition = browser.android ? 5000 : -1
+ 
+-editHandlers.compositionstart = editHandlers.compositionupdate = view => {
++editHandlers.compositionstart = editHandlers.compositionupdate = (view, event) => {
+   if (!view.composing) {
+     view.domObserver.flush()
+     let {state} = view, $pos = state.selection.$to
+@@ -559,6 +576,7 @@ editHandlers.compositionstart = editHandlers.compositionupdate = view => {
+     }
+     view.input.composing = true
+   }
++  if (event.isTrusted && androidCompositionEnabled(view)) view.input.nativeCompositionActive = true
+   scheduleComposeEnd(view, timeoutComposition)
+ }
+ 
+@@ -570,6 +588,7 @@ function selectionBeforeUneditable(view: EditorView) {
+ }
+ 
+ editHandlers.compositionend = (view, event) => {
++  view.input.nativeCompositionActive = false
+   if (view.composing) {
+     view.input.composing = false
+     view.input.compositionEndedAt = Date.now()
+@@ -582,12 +601,37 @@ editHandlers.compositionend = (view, event) => {
+   }
+ }
+ 
++function androidCompositionEnabled(view: EditorView) {
++  return browser.android && view.someProp("androidPreserveComposition") === true
++}
++
++// Native events, rather than elapsed time, own a live Android preedit span.
++// Keep the upstream idle recovery when there is no focused, connected span.
++function preserveAndroidComposition(view: EditorView) {
++  let node = view.input.compositionNode
++  return androidCompositionEnabled(view) && view.input.nativeCompositionActive && view.composing &&
++    view.hasFocus() && node && node.isConnected && view.dom.contains(node) &&
++    view.domSelectionRange().focusNode == node
++}
++
++function finishAndroidComposition(view: EditorView, immediate = false) {
++  if (!androidCompositionEnabled(view) || !view.input.nativeCompositionActive) return
++  view.input.nativeCompositionActive = false
++  if (immediate) endComposition(view)
++  // Let the browser deliver its native commit first on blur/background.
++  scheduleComposeEnd(view, 20)
++}
++
+ function scheduleComposeEnd(view: EditorView, delay: number) {
+   clearTimeout(view.input.composingTimeout)
+-  if (delay > -1) view.input.composingTimeout = setTimeout(() => endComposition(view), delay)
++  if (delay > -1) view.input.composingTimeout = setTimeout(() => {
++    if (delay == timeoutComposition && preserveAndroidComposition(view)) return
++    endComposition(view)
++  }, delay)
+ }
+ 
+ export function clearComposition(view: EditorView) {
++  view.input.nativeCompositionActive = false
+   if (view.composing) {
+     view.input.composing = false
+     view.input.compositionEndedAt = Date.now()
+@@ -862,6 +906,7 @@ handlers.focus = view => {
+ }
+ 
+ handlers.blur = (view, _event) => {
++  finishAndroidComposition(view)
+   let event = _event as FocusEvent
+   if (view.focused) {
+     view.domObserver.stop()
+@@ -875,6 +920,8 @@ handlers.blur = (view, _event) => {
+ 
+ handlers.beforeinput = (view, _event: Event) => {
+   let event = _event as InputEvent
++  if (event.isTrusted && !event.isComposing && !/composition/i.test(event.inputType))
++    finishAndroidComposition(view, true)
+   // We should probably do more with beforeinput events, but support
+   // is so spotty that I'm still waiting to see where they are going.
+ 

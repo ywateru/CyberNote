@@ -18,7 +18,7 @@ import {
   RotateCcw,
   RotateCw,
 } from "lucide-react";
-import { readAttachment } from "./bridge";
+import { native, readAttachment } from "./bridge";
 import type { Note, DrawingStroke } from "./types";
 
 function MediaView({ node }: NodeViewProps) {
@@ -212,6 +212,9 @@ export default function NoteEditor({
     }),
     content: note.document,
     editorProps: {
+      // Fixed PM 1.42.9 opt-in: trusted Android preedit survives the idle
+      // watchdog; native end/blur/non-composition input still release it.
+      androidPreserveComposition: native && /Android/.test(navigator.userAgent),
       attributes: {
         "aria-label": "备忘录正文",
         spellcheck: "true",

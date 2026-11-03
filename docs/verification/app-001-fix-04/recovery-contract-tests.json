@@ -1,0 +1,67 @@
+{
+  "kind": "deterministic recovery contract; test doubles, not real IME acceptance",
+  "installedEsm": "/Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.js",
+  "tests": 15,
+  "results": [
+    {
+      "name": "live trusted session keeps same connected preedit past the original 5000ms callback",
+      "status": "pass"
+    },
+    {
+      "name": "upstream watchdog still clears when opt-in disabled",
+      "status": "pass"
+    },
+    {
+      "name": "upstream watchdog still clears when focus lost",
+      "status": "pass"
+    },
+    {
+      "name": "upstream watchdog still clears when node detached",
+      "status": "pass"
+    },
+    {
+      "name": "upstream watchdog still clears when no composition node",
+      "status": "pass"
+    },
+    {
+      "name": "upstream watchdog still clears when DOM focus left composition node",
+      "status": "pass"
+    },
+    {
+      "name": "idle recovery remains for a session with no real active native signal",
+      "status": "pass"
+    },
+    {
+      "name": "explicit programmatic clear remains effective for a valid live span",
+      "status": "pass"
+    },
+    {
+      "name": "trusted non-composition beforeinput releases missing-end state",
+      "status": "pass"
+    },
+    {
+      "name": "composing input and untrusted input do not manufacture a boundary",
+      "status": "pass"
+    },
+    {
+      "name": "IME key 229 stays live; genuine non-composing Enter releases before Android key handling",
+      "status": "pass"
+    },
+    {
+      "name": "blur recovery keeps original 20ms commit opportunity",
+      "status": "pass"
+    },
+    {
+      "name": "real end uses existing end cleanup and clears the retained node",
+      "status": "pass"
+    },
+    {
+      "name": "window/document boundary listeners are removed on destroy",
+      "status": "pass"
+    },
+    {
+      "name": "default-disabled views register no background hooks",
+      "status": "pass"
+    }
+  ]
+}

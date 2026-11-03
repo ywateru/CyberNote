@@ -1,0 +1,12 @@
+{
+  "status": "pass",
+  "note": "Entire synthetic note JSON equality, including known failed boundary preedit residue; no input correctness upgrade.",
+  "before": "candidate-01/candidate-before-boundary-cold-workspace.json",
+  "after": "candidate-final/force-stop-cold-note.json",
+  "forceStop": true,
+  "pidAbsent": true,
+  "launchState": "COLD",
+  "pidAfter": 23291,
+  "firstReadAttempt": "CDP target fetch raced page readiness and failed; reconnected after settled without another app mutation",
+  "wholeNoteEqual": true
+}
