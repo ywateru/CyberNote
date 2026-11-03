@@ -7,7 +7,7 @@ depends-on: [app-001-fix-01]
 
 ## objective
 
-2026-11-03首批已进入隔离准备阶段：`/private/tmp/apple-notes-media-roundtrip-02`基线67ce948。资源清理候选0b29cc0已隔离提交，实际RecordingSession模块26项失败注入及typecheck由开发有限通过，现交独立静态审查，尚未合入或装包。FIX07独立复验已结束并交出Android，当前以原5dd6冻结包开始有界受控音轨/getUserMedia基线；Mac仍归搜索复验。未取得有效音轨、真实保存及冷启播放证据前，不称录音链已验收。
+2026-11-03首批已进入隔离准备阶段：`/private/tmp/apple-notes-media-roundtrip-02`基线67ce948。资源清理候选0b29cc0已独立静态有限通过（真实生产模块26项失败注入/typecheck/12顶部检查），见`../reviews/app-002-recording-cleanup-static-01.md`，尚未合入或装包。FIX07与Mac最小搜索独立复验已结束；Android以原5dd6冻结包检查现有真实getUserMedia流程，Mac以56d7冻结包做真实本地图片/PDF附件基线。当前模拟器公开console明确No active gRPC service，受控音轨注入不可用；仅在公开hostmicoff保证零信号后运行静音流程子集，不开宿主麦克风、不把静音当有效采集/可听播放。有效音轨、真实保存及冷启播放未取证的部分仍unknown，录音链未验收。
 
 设备被前序独立复验占用期间，可在隔离目录先准备已由源码确认的采集资源清理候选，范围仅RecordingPanel准备失败、取消/卸载和错误时的幂等释放与回调活性；必要的实际生产生命周期辅助模块及定向失败注入检查可同行。保留现有挂载/开始/暂停/完成与保存行为，不提前选择平台替代方案或改Rust附件协议。旧冻结APK继续用于现有getUserMedia真实基线；该候选须静态独立审查，并在基线完成后才合入和装包。暂停完成、失败重试/补偿等后续状态修改仍按真实基线及既定契约推进。
 

@@ -7,6 +7,8 @@ depends-on: [app-001-fix-02]
 
 ## objective
 
+2026-11-03最新有限结果：5a5669f公开scrollable属性与444f03b全局搜索快捷键已进入冻结默认包56d7e05。开发与独立实际复验均通过短查询续输、OptionCmdF、旧ShiftCmdF不再触发全局搜索、长查询尾端可见/CmdLeft回头/CmdRight追加尾部及clear；独立7项报告见`../reviews/app-001-search-scroll-runtime-01.md`，证据见`docs/verification/qa-native-search-scroll/run-56d7e05-independent/`。该结论只绑定56d7精确包，不覆盖marked IME、查找替换、全部窗口或完整像素。蓝色焦点环仍实际FAIL；ec1的1392宽同位置公共ROI仍FAIL且保留。零结果时旧正文仍可见为本轮观察，尚未对照原版核定，后续搜索语义需单列确认。
+
 基于34223af已冻结宿主的实际差异，先在隔离worktree准备最小原生内容修正；当前FIX02功能复验和FIX04的Editor/依赖修改继续各自进行。此任务前置候选已冻结，但完整FIX02像素仍fail，不能以源码准备替代宿主接入与独立像素验收。
 
 1. 按`macos-toolbar-host-deltas/analysis.md`把Aa改为真实中文“格式”，校准新建/清单/表格/附件/共享/更多的内部可见内容位置。公共胶囊外锚点、161/80pt组宽与18/18/16pt间距近似已齐，先保持；墨迹中心不是点击框，不直接缩改按钮命中区。
