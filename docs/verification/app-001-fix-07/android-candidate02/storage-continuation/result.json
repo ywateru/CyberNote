@@ -1,0 +1,54 @@
+{
+  "status": "pass",
+  "marker": "FIX07B-1793712769673",
+  "noteId": "b950be24-4058-4c05-8332-038e607e1927",
+  "serial": "emulator-5580",
+  "apkSha256": "5dd6dfc8d31812c2bafcff5115d9946456ff6d37028f2caed174585c91ca0ca2",
+  "scope": "Storage continuation of same paper fixture after separately recorded bounded two Undo/two Redo observation.",
+  "externalMutation": "Targeted existing registered save intent/revision/access protocol on this synthetic note, not a second GUI window; no direct renderer document injection.",
+  "selection": {
+    "type": "text",
+    "anchor": 29,
+    "head": 33
+  },
+  "identityBefore": {
+    "editor": 1,
+    "view": 2,
+    "dom": 3,
+    "keyed": [
+      {
+        "key": "3705047364",
+        "type": "Y8"
+      },
+      {
+        "key": "b950be24-4058-4c05-8332-038e607e1927-545f7def-a4fe-4782-85f8-041fbebc59ab-0-0",
+        "type": "v9"
+      }
+    ]
+  },
+  "identityAfterExternal": {
+    "editor": 4,
+    "view": 5,
+    "dom": 6,
+    "keyed": [
+      {
+        "key": "2055869391",
+        "type": "Y8"
+      },
+      {
+        "key": "b950be24-4058-4c05-8332-038e607e1927-545f7def-a4fe-4782-85f8-041fbebc59ab-0-1",
+        "type": "v9"
+      }
+    ]
+  },
+  "oldKey": "b950be24-4058-4c05-8332-038e607e1927-545f7def-a4fe-4782-85f8-041fbebc59ab-0-0",
+  "newKey": "b950be24-4058-4c05-8332-038e607e1927-545f7def-a4fe-4782-85f8-041fbebc59ab-0-1",
+  "checks": [
+    "bounded two Undo/two Redo observation preserved editor and restored complete bold document; first Undo no document change remains unexplained",
+    "ordinary native save plus foreground refresh retained identity and complete document",
+    "registered real Store save changed authoritative complete document while renderer remained old until refresh",
+    "real foreground refresh adopted new complete document and advanced only external version key 0->1",
+    "cold full document and grid-large persisted",
+    "zero WebView exceptions"
+  ]
+}
