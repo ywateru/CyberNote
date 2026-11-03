@@ -25,6 +25,7 @@
 | APP-002-ATTACHMENT-STORE-01 附件持久操作 | done（仅模块），源4d5898f独立SOURCE-READY、主42b2631 | 独立14项真实附件/六次exit78及Session11通过，原六Rust主整合hash一致；真实窗口incarnation/持久身份/查询去重/窄补偿/冷恢复已提供，旧store入口保持。前端pendingDocs/正文ACK与系统选择器仍由父任务负责；当前统一包不含此模块 |
 | APP-002-AUDIO-DURATION-01 音频卡片时长 | ae567ef独立source-ready，f4d3a02双端已构建、待实际 | f4d3a02独立审查通过生产helper11组及真实AudioPlayer/离线Chrome156：原WebM探针66.004秒、主初始0暂停、有限WAV不建探针、错误/重试/晚事件清理；不重编码原文件。216项输入前后不变，APK3edc4ad0…；Android91既有媒体真实播放/跳转/冷启及Mac仍待新包验证，非可听采集/像素通过 |
 | APP-002-AUDIO-CONTROLS-01 手机播放控件 | ready，新3edc4ad0开发实际暴露可达阻塞 | Android真实卡片已显示1:06/初始0paused，但audio-expand隐藏，原生双击未展开且正文起IME；range/±15未可达。保全该失败后在AudioPlayer/音频CSS窄边界修复触摸入口，不改App附件前端/媒体controller；录屏未展示展开手势，精确原版行为及像素保持unknown |
+| APP-002-MAC-STARTUP-01 Mac入口加载 | ready，sealed11dcbfc4首次导航被Ignore | PID18813真实sealed路径/严格签名通过但WK URL=null/loading=false，CUA白窗、未挂载React；初次navigation26被policyIgnore。原request日志private，锁定Tauri默认无尾slash入口与EntryBoundary空path拒绝是待核源码假说；先隔离修本地入口等价形式，不放宽媒体/来源边界、不把白屏当F07通过 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |
