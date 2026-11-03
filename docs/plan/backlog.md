@@ -26,3 +26,4 @@
 - 手机纸张预览卡片的线条/网格仍需独立像素校准：原版 `references/mobile/frames-2s/frame-044.png` 的纸张内图案四周留白；当前开发证据 `docs/verification/app-001-fix-01-paper/android/paper-picker-native.png` 图案延伸到卡片边缘，线条数量、网格密度与顶部留白也未完成同尺寸差分。FIX-01七项可达/背景持久化通过不等于预览图案外观通过，归PARITY-001按源比例校准。
   d22a393的有限测量与草案已在`docs/research/mobile-paper-calibration/analysis.md`归档，原始坐标、线数与标注图可追溯；只研究未实现，待共享样式串行接入和真装包复验。
 - FIX-01独立真窗口用例中，显式“单独打开”的关闭按钮正常，Cmd+W一次未关闭；不是快捷键通过，后续F13/PARITY-001需修复或复现定位。Android清单/表格/短划线/引用完整原生路径及中文候选组合输入仍有not-run，不能从共享编辑器的Mac用例直接升级为手机全部通过；中文IME候选工具见 `docs/research/android-ime-verification.md`。
+- FIX03静态补审02的P3：普通无附件冲突副本已真实INSERT成功、随后列表同步失败时，前端保留pending且诚实提示先同步核对，但再次另存可产生重复副本。后续按已成功副本ID恢复/去重；不涉及覆盖原笔记或丢pending，不扩大当前安全阻塞。

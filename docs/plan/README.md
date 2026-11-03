@@ -10,8 +10,8 @@
 | APP-001-FIX-00 归档完整性 | verified，独立pass | 原失败、schema跨检、设置/附件保全与六次进程中断恢复通过；见fix-00-02报告 |
 | APP-001-FIX-01 编辑与导航修复 | 本轮P1/P2关闭，完整矩阵partial | 最终0d8b245纸张入口、恢复输入与一次冷启独立通过；未覆盖行为与像素继续保留，不标整项verified |
 | APP-001-FIX-02 Mac顶部校准 | pending，依赖FIX-01/FIX-03 | 运行时系统符号、公开原生控件/材质、分组与平台菜单 |
-| APP-001 原生顶部模块 | b735961补搜索聚焦，待独立/接入 | 原候选编译/有限双窗事件及Android条件编译通过，新增固定focusSearch自检通过；正式主App/焦点/IME/像素仍归FIX-02 |
-| APP-001-FIX-03 锁定跨窗失效 | in-progress，fe10c3a独立P1修复中 | 后端/schema有限检查独立通过；前端pending保存基线被hydrate推进可隐式覆盖另一窗，见static-01；真实多窗最终复核仍待解锁 |
+| APP-001 原生顶部模块 | b735961静态入口补审通过，待接入 | 28d1594关闭focusSearch静态缺口；原候选编译/有限双窗事件及Android条件编译通过；正式主App/焦点/IME/像素仍归FIX-02 |
+| APP-001-FIX-03 锁定跨窗失效 | in-progress，b5dcfa8静态P1关闭，安装版复核中 | 633688e独立确认pending基线与副本链；d9a5be5仅追加固定时序探针；正式Mac/APK已构建，真窗/安装版有限验收继续 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
