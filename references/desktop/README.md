@@ -31,5 +31,7 @@ REA 已验证原程序路径/哈希，但 observe_native_ui 因 Accessibility �
 - macos26-smart-folder.png：未提交的新建智能文件夹对话框。
 - macos26-smart-folder-filter-menu.png 与 .ax.txt：规则种类下拉菜单；界面裁切部分文字时以实际 AX 记录补充。
 - macos26-smart-folder-tags.ax.txt：标签匹配方式菜单。采样后取消对话框，未保存文件夹。
+- smart-folder-conditions/：创建日期、清单、附件类型、文件夹与置顶条件的子菜单AX；创建日期另有截图。这一轮同样取消，未新增文件夹。
+- macos26-file-menu.ax.txt：原版文件菜单含Markdown导入和PDF/Markdown导出入口，未执行导出。
 
 本批主窗截图部分为2176×1322px，设置/表单可有独立窗口尺寸；比较前逐文件读取尺寸，不按本文件首段将全部图片假定为2176×1320。各文件 SHA-256 见 `checksums.sha256`。

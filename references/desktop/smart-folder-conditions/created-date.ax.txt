@@ -1,0 +1,40 @@
+Window: "", App: 备忘录.
+0 表单 Secondary Actions: Raise
+	1 text 新建智能文件夹 名称：
+	2 文本栏 (settable) 新建智能文件夹
+	3 复选框 制作智能文件夹, Value: 1
+	4 text 使用标签和其他过滤方式整理。 包含匹配下列
+	5 弹出式按钮 全部
+	6 文本 过滤条件的备忘录：
+	7 弹出式按钮 创建日期
+	8 弹出式按钮 今天
+		9 菜单 Secondary Actions: Cancel
+			10 今天, ID: todayAction:
+			11 昨天, ID: yesterdayAction:
+			12 最近7天, ID: lastSevenDaysAction:
+			13 最近30天, ID: lastThirtyDaysAction:
+			14 最近3个月, ID: lastThreeMonthsAction:
+			15 最近12个月, ID: lastTwelveMonthsAction:
+			16 特定范围, ID: specificRangeAction:
+			17 相对范围, ID: relativeRangeAction:
+			18 当日, ID: specificDateAction:
+			19 早于日期, ID: beforeDateAction:
+			20 晚于日期, ID: afterDateAction:
+	21 按钮 (disabled) 移除
+	22 按钮 添加
+	23 按钮 取消
+	24 按钮 好
+25 menu bar
+	26 备忘录
+	27 文件
+	28 编辑
+	29 格式
+	30 显示
+	31 窗口
+	32 帮助
+
+Selected text: ```
+新建智能文件夹
+```
+
+Note: Pay special attention to the content selected by the user. If the user asks a question or refers to the content they are looking at on-screen, they might be referring to the selected content (but they might be referring to something else that's visible, too).
