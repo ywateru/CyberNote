@@ -1,7 +1,7 @@
 ---
 id: app-002-audio-controls-01
 scope: mobile-local-audio-transport-touch-reachability
-status: ready
+status: in-progress
 depends-on: []
 ---
 
@@ -31,6 +31,12 @@ depends-on: []
 ## verification
 
 候选typecheck与必要生产事件边界检查；独立复核真实NodeView/React接线，避免只测CSS常量。统一新APK上使用既有66秒受管附件，原生触摸展开→播放暂停→拖动约30秒→±15→两端→收回，核实际main currentTime/paused/range和未自动跳转。完整JSON/revision/原字节SHA保持、IME不误起；不得DOM click/state写入替代触摸。保留原失败及确切新包身份，独立实测前不标done；非移动smoke和pixel结果分别记录。
+
+## source delivery · 2026-11-04
+
+源8a8f995/8893bed由独立审查判SOURCE-READY，无产品blocking；主ae35bc3/41131ae整合后四项输入hash与冻结blob/manifest均相同，见`../../verification/app-002-audio-controls/main-integration.json`。独立typecheck、11组生产helper、真实NoteEditor→ReactNodeView→MediaView→AudioPlayer的Chrome156可信触摸/range/±15/键盘与原WebM/WAV错误/生命周期回归通过。报告`../reviews/app-002-audio-controls-static-01.md`，证据`../../verification/app-002-audio-controls-independent-01/`。
+
+标题/时长区域为真实button，展开状态可读，无永久新增图标；播放、箭头、双击与range事件保持各自语义，触摸不落入正文。该源码及离线浏览器结果不替代Android91/系统IME或Mac安装包，旧3edc4ad0失败保持，统一新包实际尚待。
 
 ## source candidate 01
 

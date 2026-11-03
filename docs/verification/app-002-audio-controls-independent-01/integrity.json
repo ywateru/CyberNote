@@ -1,0 +1,67 @@
+{
+  "head": "8893bede25e725e5b55cb397264c3a8ef9ed53b7",
+  "base": "6fd3bf8",
+  "status": "?? node_modules\n",
+  "sourceFiles": [
+    {
+      "path": "src/Editor.tsx",
+      "bytes": 10532,
+      "sha256": "49ee50032becb30ab92e5c93d7f9b3ce8cc6a738260bcb2d5a03cd38c44f7497",
+      "frozenGitMatches": true,
+      "authorManifestMatches": true
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 64412,
+      "sha256": "1621f32bbe01ae18726f899f639df8bfaa856a8f3c7a517436e78811af9bca19",
+      "frozenGitMatches": true,
+      "authorManifestMatches": true
+    },
+    {
+      "path": "scripts/check-audio-controls-browser.mjs",
+      "bytes": 14120,
+      "sha256": "082f3b1b3bd5be1aea1b39de53215d368443ade3faf3ed64557939eb2d6d68e9",
+      "frozenGitMatches": true,
+      "authorManifestMatches": true
+    },
+    {
+      "path": "scripts/check-audio-playback-browser.mjs",
+      "bytes": 12565,
+      "sha256": "67ee443d3f8f103ac97c1127fb8e544d74944764300e2ef4a45582ecb27e2d83",
+      "frozenGitMatches": true,
+      "authorManifestMatches": true
+    }
+  ],
+  "unchanged": {
+    "src/App.tsx": true,
+    "src/bridge.ts": true,
+    "src/audio-playback.ts": true,
+    "package.json": true,
+    "pnpm-lock.yaml": true,
+    "src-tauri/src/lib.rs": true,
+    "src-tauri/src/store.rs": true,
+    "src-tauri/Cargo.toml": true
+  },
+  "beforeAudioPlayerExceptUseIdUnchanged": true,
+  "fromDrawingViewSuffixUnchanged": true,
+  "wholeProductChanges": [
+    "src/Editor.tsx",
+    "src/style.css"
+  ],
+  "preservedMedia": {
+    "bytes": 429547,
+    "sha256": "cd7ee9692361fb3502775e8b7efc87ba0957ee22835f10e6d7335b09980fdf4f"
+  },
+  "diffChecks": {
+    "all": {
+      "exitCode": 2,
+      "output": "docs/verification/app-002-audio-controls/source-candidate-01/typecheck.log:4: new blank line at EOF.\n"
+    },
+    "productAndScripts": {
+      "exitCode": 0,
+      "output": ""
+    }
+  },
+  "temporaryDependencyLinkRemoved": true,
+  "finalWorktreeStatus": ""
+}

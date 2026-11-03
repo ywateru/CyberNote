@@ -1,0 +1,195 @@
+{
+  "browser": "156.0.8078.80",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+  "media": {
+    "path": "docs/verification/app-002-media/android-candidate01/managed-recording.webm",
+    "bytes": 429547,
+    "sha256": "cd7ee9692361fb3502775e8b7efc87ba0957ee22835f10e6d7335b09980fdf4f"
+  },
+  "loaded": {
+    "label": "录音 · 1:06",
+    "max": 66.004,
+    "progress": 0,
+    "currentTime": 0,
+    "duration": "Infinity",
+    "paused": true,
+    "error": null,
+    "alerts": []
+  },
+  "middle": {
+    "label": "录音 · 1:06",
+    "max": 66.004,
+    "progress": 30,
+    "currentTime": 30,
+    "duration": "Infinity",
+    "paused": true,
+    "error": null,
+    "alerts": []
+  },
+  "lower": {
+    "label": "录音 · 1:06",
+    "max": 66.004,
+    "progress": 0,
+    "currentTime": 0,
+    "duration": "Infinity",
+    "paused": true,
+    "error": null,
+    "alerts": []
+  },
+  "upper": {
+    "label": "录音 · 1:06",
+    "max": 66.004,
+    "progress": 66,
+    "currentTime": 66.004,
+    "duration": "66.004",
+    "paused": true,
+    "error": null,
+    "alerts": []
+  },
+  "rejected": {
+    "label": "录音 · 1:06",
+    "max": 66.004,
+    "progress": 10,
+    "currentTime": 10,
+    "duration": "66.004",
+    "paused": true,
+    "error": null,
+    "alerts": [
+      "无法播放录音，请重试。 重试"
+    ]
+  },
+  "paused": {
+    "label": "录音 · 1:06",
+    "max": 66.004,
+    "progress": 10,
+    "currentTime": 10.140656,
+    "duration": "66.004",
+    "paused": true,
+    "error": null,
+    "alerts": []
+  },
+  "decodeError": {
+    "label": "录音 · 时长未知",
+    "max": null,
+    "progress": null,
+    "currentTime": 0,
+    "duration": "NaN",
+    "paused": true,
+    "error": "PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN: FFmpegDemuxer: open context failed",
+    "alerts": [
+      "当前设备无法播放此录音格式。 重试"
+    ]
+  },
+  "switched": {
+    "label": "录音 · 1:06",
+    "max": null,
+    "progress": null,
+    "currentTime": 0,
+    "duration": "Infinity",
+    "paused": true,
+    "error": null,
+    "alerts": []
+  },
+  "finiteMetadata": {
+    "label": "录音 · 0:02",
+    "max": 2,
+    "progress": 0,
+    "currentTime": 0,
+    "duration": "2",
+    "paused": true,
+    "error": null,
+    "alerts": []
+  },
+  "probes": [
+    {
+      "events": [
+        {
+          "event": "durationchange",
+          "duration": "Infinity",
+          "time": "0",
+          "muted": true,
+          "paused": true
+        },
+        {
+          "event": "loadedmetadata",
+          "duration": "Infinity",
+          "time": "0",
+          "muted": true,
+          "paused": true
+        },
+        {
+          "event": "seeking",
+          "duration": "Infinity",
+          "time": "1000000000",
+          "muted": true,
+          "paused": true
+        },
+        {
+          "event": "durationchange",
+          "duration": "66.004",
+          "time": "66.004",
+          "muted": true,
+          "paused": true
+        }
+      ],
+      "playCalls": 0,
+      "released": true,
+      "paused": true
+    },
+    {
+      "events": [
+        {
+          "event": "durationchange",
+          "duration": "Infinity",
+          "time": "0",
+          "muted": true,
+          "paused": true
+        },
+        {
+          "event": "loadedmetadata",
+          "duration": "Infinity",
+          "time": "0",
+          "muted": true,
+          "paused": true
+        },
+        {
+          "event": "seeking",
+          "duration": "Infinity",
+          "time": "1000000000",
+          "muted": true,
+          "paused": true
+        },
+        {
+          "event": "durationchange",
+          "duration": "66.004",
+          "time": "66.004",
+          "muted": true,
+          "paused": true
+        }
+      ],
+      "playCalls": 0,
+      "released": true,
+      "paused": true
+    }
+  ],
+  "checks": [
+    "actual production AudioPlayer and controller",
+    "ordinary finite WAV metadata creates no probe",
+    "real WebM Infinity → finite platform probe",
+    "no automatic play; probes never play",
+    "range / middle seek / ±15s / both bounds",
+    "injected play rejection visible and explicit muted retry",
+    "actual corrupt media error visible and retryable",
+    "source change and old real DOM events",
+    "unmount cleans probes",
+    "fixture unchanged",
+    "no external browser requests"
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "limitations": [
+    "Headless Chrome desktop only; installed Android WebView91 and macOS app remain unverified",
+    "Host browser output muted; no microphone or audible capture acceptance",
+    "Playback error injection is disclosed; corrupt media error is platform-generated"
+  ]
+}

@@ -24,7 +24,7 @@
 | APP-002-ATTACHMENT-SUBMIT-01 附件提交 | ready，Store已整合、前端待接线 | 42b2631提供真实owner/operation持久边界；系统面板返回原目标重验证、stored/inserted/正文ACK/refreshed分账和pending引用保全仍待App/bridge接线。PDF30956B未被正文引用且冷启保持的旧失败保留，不跳guard、不以文件存在算预览通过 |
 | APP-002-ATTACHMENT-STORE-01 附件持久操作 | done（仅模块），源4d5898f独立SOURCE-READY、主42b2631 | 独立14项真实附件/六次exit78及Session11通过，原六Rust主整合hash一致；真实窗口incarnation/持久身份/查询去重/窄补偿/冷恢复已提供，旧store入口保持。前端pendingDocs/正文ACK与系统选择器仍由父任务负责；当前统一包不含此模块 |
 | APP-002-AUDIO-DURATION-01 音频卡片时长 | 3edc4ad0独立真实1:06/初始暂停/播放暂停有限通过 | f4d3a02独立审查通过生产helper11组及真实AudioPlayer/离线Chrome156：原WebM探针66.004秒、主初始0暂停、有限WAV不建探针、错误/重试/晚事件清理；不重编码原文件。216项输入前后不变，APK3edc4ad0…；Android91独立媒体revision30/429547B原SHA保持，真实1:06/初始0paused与play-pause通过；展开不可达，跳转/冷启/Mac未验，非可听采集/像素通过 |
-| APP-002-AUDIO-CONTROLS-01 手机播放控件 | in-progress，新3edc4ad0开发实际暴露可达阻塞 | Android真实卡片已显示1:06/初始0paused，但audio-expand隐藏，原生双击未展开且正文起IME；range/±15未可达。保全该失败后在AudioPlayer/音频CSS窄边界修复触摸入口，不改App附件前端/媒体controller；录屏未展示展开手势，精确原版行为及像素保持unknown |
+| APP-002-AUDIO-CONTROLS-01 手机播放控件 | 主ae35bc3/41131ae，源8893bed独立SOURCE-READY，待新包 | 旧3edc4ad0卡片1:06但展开隐藏/双击起IME失败保留。真实标题button+NodeView事件、44px移动操作区已接线；四input主hash同冻结，独立Chrome156实际生产NodeView触摸/range/±15/键盘与既有媒体回归通过。Android91/IME与Mac安装未验，原版展开手势及像素unknown |
 | APP-002-MAC-STARTUP-01 Mac入口加载 | in-progress，sealed11dcbfc4首次导航被Ignore | PID18813真实sealed路径/严格签名通过但WK URL=null/loading=false，CUA白窗、未挂载React；初次navigation26被policyIgnore。原request日志private，锁定Tauri默认无尾slash入口与EntryBoundary空path拒绝是待核源码假说；先隔离修本地入口等价形式，不放宽媒体/来源边界、不把白屏当F07通过 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
