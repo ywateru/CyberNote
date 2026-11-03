@@ -1,0 +1,32 @@
+{
+  "at": "2026-11-03T20:30:12.709268+00:00",
+  "headAfter": "87e538c4577483c8756aa49445f47b24badd98ff",
+  "diskFreeAfter": 3287957504,
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "HEAD",
+        "--binary"
+      ],
+      "exitCode": 0,
+      "stdoutFile": "tracked-diff-after.patch",
+      "stdoutBytes": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "exitCode": 0,
+      "stdoutFile": "git-status-after.txt",
+      "stdoutBytes": 55,
+      "stderr": ""
+    }
+  ],
+  "assessment": "Preflight failed at libsqlite3-sys because cc-rs cannot locate aarch64-linux-android-clang. No generated Gradle registration change; stop without command/environment expansion. No product input freeze, full native build, Gradle init, download, clean, GUI/device or data action.",
+  "sharedTarget": "Released after this evidence collection; no subprocess remains from preflight"
+}

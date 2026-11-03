@@ -1,0 +1,37 @@
+{
+  "at": "2026-11-03T20:32:00.980740+00:00",
+  "head": "87e538c4577483c8756aa49445f47b24badd98ff",
+  "exitCode": 0,
+  "scope": "One authorized normal tauri-build generation/check, not a unified candidate build or source freeze",
+  "command": [
+    "cargo",
+    "check",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--target",
+    "aarch64-linux-android",
+    "--locked",
+    "--offline"
+  ],
+  "explicitEnvironment": {
+    "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+    "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+    "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+    "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "2",
+    "TAURI_ANDROID_PROJECT_PATH": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android",
+    "TAURI_CONFIG": "{}"
+  },
+  "freeBefore": 3288649728,
+  "generatedChanged": [
+    "src-tauri/gen/android/tauri.settings.gradle",
+    "src-tauri/gen/android/app/tauri.build.gradle.kts"
+  ],
+  "notesScanSettingsPresent": true,
+  "notesScanDependencyPresent": true,
+  "trackedDiffAfter": [],
+  "headAfter": "87e538c4577483c8756aa49445f47b24badd98ff",
+  "endedAt": "2026-11-03T20:32:05.548617+00:00",
+  "boundary": "Preserve/review generated changes separately. If tracked files changed, root must resolve/commit and authorize the resulting exact SHA before final capture. Never bless preflight inputs as final freeze."
+}

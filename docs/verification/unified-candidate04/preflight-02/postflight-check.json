@@ -1,0 +1,85 @@
+{
+  "at": "2026-11-03T20:32:51.500901+00:00",
+  "headAfter": "87e538c4577483c8756aa49445f47b24badd98ff",
+  "diskFreeAfter": 3265036288,
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "HEAD",
+        "--binary"
+      ],
+      "exitCode": 0,
+      "stdoutFile": "tracked-diff-after.patch",
+      "stdoutBytes": 0,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "exitCode": 0,
+      "stdoutFile": "git-status-after.txt",
+      "stdoutBytes": 110,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "check-ignore",
+        "-v",
+        "src-tauri/gen/android/app/tauri.build.gradle.kts",
+        "src-tauri/gen/android/tauri.settings.gradle"
+      ],
+      "exitCode": 0,
+      "stdoutFile": "generated-ignore-status.txt",
+      "stdoutBytes": 215,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "ls-files",
+        "--",
+        "src-tauri/gen/android/app/tauri.build.gradle.kts",
+        "src-tauri/gen/android/tauri.settings.gradle"
+      ],
+      "exitCode": 0,
+      "stdoutFile": "generated-tracked-status.txt",
+      "stdoutBytes": 0,
+      "stderr": ""
+    }
+  ],
+  "underlyingCompilerIdentities": [
+    {
+      "path": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang",
+      "resolvedPath": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang-18",
+      "isSymlink": true,
+      "symlinkTarget": "clang-18",
+      "bytes": 169477200,
+      "sha256": "1aac7c103794087632c35c35b83c6d6c8fff4cd01737e5dfbd1b4297942189e2"
+    },
+    {
+      "path": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++",
+      "resolvedPath": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang-18",
+      "isSymlink": true,
+      "symlinkTarget": "clang",
+      "bytes": 169477200,
+      "sha256": "1aac7c103794087632c35c35b83c6d6c8fff4cd01737e5dfbd1b4297942189e2"
+    }
+  ],
+  "compilerWrapperText": {
+    "aarch64-linux-android26-clang": "#!/usr/bin/env bash\nbin_dir=`dirname \"$0\"`\nif [ \"$1\" != \"-cc1\" ]; then\n    \"$bin_dir/clang\" --target=aarch64-linux-android26 \"$@\"\nelse\n    # Target is already an argument.\n    \"$bin_dir/clang\" \"$@\"\nfi\n",
+    "aarch64-linux-android26-clang++": "#!/usr/bin/env bash\nbin_dir=`dirname \"$0\"`\nif [ \"$1\" != \"-cc1\" ]; then\n    \"$bin_dir/clang++\" --target=aarch64-linux-android26 \"$@\"\nelse\n    # Target is already an argument.\n    \"$bin_dir/clang++\" \"$@\"\nfi\n"
+  },
+  "generatedChanged": [
+    "src-tauri/gen/android/tauri.settings.gradle",
+    "src-tauri/gen/android/app/tauri.build.gradle.kts"
+  ],
+  "assessment": "Offline locked preflight succeeded. Normal tauri-build added notes-scan include/projectDir and app implementation(project) only. Generated files are ignored, so tracked diff HEAD alone does not represent these generated changes; before/after text and generated-diff.patch preserve them explicitly.",
+  "sharedTarget": "Released after this evidence collection; no preflight subprocess remains",
+  "scope": "No final source freeze, commit, full native build, Gradle init, download, cleanup, GUI/device/data action"
+}

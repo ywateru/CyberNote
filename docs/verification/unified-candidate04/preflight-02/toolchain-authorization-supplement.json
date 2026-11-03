@@ -1,0 +1,101 @@
+{
+  "at": "2026-11-03T20:32:00.390648+00:00",
+  "scope": "Authorized preflight-02 target-tool-path supplement only; no source freeze or full build",
+  "expectedHead": "87e538c4577483c8756aa49445f47b24badd98ff",
+  "minSdkEvidence": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build.gradle.kts",
+    "sha256": "e00129d27a4dc909891e00d069aeee0feb07ef1e2fbd2d449622c0725eafb16f",
+    "matchedText": "minSdk = 26",
+    "value": 26
+  },
+  "additionalParentEnvironment": {
+    "CC_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang",
+    "CXX_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang++",
+    "AR_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar"
+  },
+  "previousSelectedParentEnvironment": {
+    "CC_aarch64_linux_android": null,
+    "CXX_aarch64_linux_android": null,
+    "AR_aarch64_linux_android": null
+  },
+  "effectiveExplicitOverrides": {
+    "CC_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang",
+    "CXX_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang++",
+    "AR_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar",
+    "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+    "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+    "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+    "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "2",
+    "TAURI_ANDROID_PROJECT_PATH": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android",
+    "TAURI_CONFIG": "{}"
+  },
+  "tools": [
+    {
+      "environmentKey": "CC_aarch64_linux_android",
+      "path": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang",
+      "resolvedPath": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang",
+      "bytes": 201,
+      "sha256": "c9ec0ccdc82aede75e6724738b833603707c0990061e05a1484860249f7520d5",
+      "versionCommand": [
+        "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang",
+        "--version"
+      ],
+      "versionExit": 0,
+      "stdout": "Android (12470979, +pgo, -bolt, +lto, -mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\nTarget: aarch64-unknown-linux-android26\nThread model: posix\nInstalledDir: /Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin\n",
+      "stderr": ""
+    },
+    {
+      "environmentKey": "CXX_aarch64_linux_android",
+      "path": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang++",
+      "resolvedPath": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang++",
+      "bytes": 205,
+      "sha256": "58185593b734e3af5204cfa540cd71c9107e85f0f93bcffbe07856b9fc877f78",
+      "versionCommand": [
+        "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang++",
+        "--version"
+      ],
+      "versionExit": 0,
+      "stdout": "Android (12470979, +pgo, -bolt, +lto, -mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\nTarget: aarch64-unknown-linux-android26\nThread model: posix\nInstalledDir: /Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin\n",
+      "stderr": ""
+    },
+    {
+      "environmentKey": "AR_aarch64_linux_android",
+      "path": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar",
+      "resolvedPath": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar",
+      "bytes": 26450256,
+      "sha256": "1693670a49cd709e0e424d00f91a7b757d313b1e76abca8e07a455d3fef958fa",
+      "versionCommand": [
+        "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar",
+        "--version"
+      ],
+      "versionExit": 0,
+      "stdout": "LLVM (http://llvm.org/):\n  LLVM version 18.0.3\n  Optimized build.\n",
+      "stderr": ""
+    }
+  ],
+  "spaceBeforeIndependentCheck": 3288965120,
+  "actualCargoCommand": [
+    "cargo",
+    "check",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--target",
+    "aarch64-linux-android",
+    "--locked",
+    "--offline"
+  ],
+  "driverCommand": [
+    "/Library/Developer/CommandLineTools/usr/bin/python3",
+    "-B",
+    "docs/verification/unified-candidate04/preparation/preflight-generate.py",
+    "87e538c4577483c8756aa49445f47b24badd98ff",
+    "docs/verification/unified-candidate04/preflight-02",
+    "--execute-authorized-preflight"
+  ],
+  "toolPrecheckPassed": true,
+  "driverExitCode": 0,
+  "endedAt": "2026-11-03T20:32:05.552042+00:00",
+  "spaceAfterDriver": 3265953792
+}

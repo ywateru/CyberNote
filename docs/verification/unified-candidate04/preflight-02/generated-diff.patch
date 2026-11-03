@@ -1,0 +1,15 @@
+--- before/src-tauri/gen/android/app/tauri.build.gradle.kts
++++ after/src-tauri/gen/android/app/tauri.build.gradle.kts
+@@ -4,4 +4,5 @@
+   implementation("androidx.lifecycle:lifecycle-process:2.10.0")
+   implementation(project(":tauri-android"))
+   implementation(project(":tauri-plugin-dialog"))
++  implementation(project(":tauri-plugin-notes-scan"))
+ }--- before/src-tauri/gen/android/tauri.settings.gradle
++++ after/src-tauri/gen/android/tauri.settings.gradle
+@@ -3,3 +3,5 @@
+ project(':tauri-android').projectDir = new File("/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/mobile/android")
+ include ':tauri-plugin-dialog'
+ project(':tauri-plugin-dialog').projectDir = new File("/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-plugin-dialog-2.8.4/android")
++include ':tauri-plugin-notes-scan'
++project(':tauri-plugin-notes-scan').projectDir = new File("/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-scan/android")
