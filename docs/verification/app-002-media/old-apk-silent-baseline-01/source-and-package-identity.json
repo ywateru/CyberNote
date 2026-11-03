@@ -1,0 +1,58 @@
+{
+  "kind": "frozen-old-apk-inputs-and-local-diagnosis-source",
+  "apkSha256": "5dd6dfc8d31812c2bafcff5115d9946456ff6d37028f2caed174585c91ca0ca2",
+  "frozenSourceAggregate": "69d6e95156168a3f7eee52b1deacca490f75c3841536ddcc078c4758106310e0",
+  "headAtOriginalCapture": "4d6ae80e7eadaf84452b64046dd119783737dcd4",
+  "fullHeadReproducibilityClaim": false,
+  "frozenManifestReference": "docs/verification/app-001-fix-07/android-candidate02/source-inputs-before.json",
+  "selectedRelevantOriginalProductionInputs": [
+    {
+      "path": "src-tauri/Cargo.lock",
+      "sha256": "99d9e9cd49367cd850d0362f2d9cb38b58e8356aa9cdd9127fb90441a56c666b",
+      "matchesIsolatedProductBase67ce948": true
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "sha256": "b15c0e487e8b4378f0b32f6ca565c075327e12222bcd3a43f36ffd9489f8e2bc",
+      "matchesIsolatedProductBase67ce948": true
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "sha256": "50bb77a8216a102e2b01d8a0ad0b5d69e4ef919e4a82390f10e8d60bc7f87357",
+      "matchesIsolatedProductBase67ce948": true
+    },
+    {
+      "path": "src-tauri/tauri.conf.json",
+      "sha256": "645255e9f10222af55f44f81c56f48ca87a3da59ff85595fec2806922592fad3",
+      "matchesIsolatedProductBase67ce948": true
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "2e70dab621ce51ffa1b56c4e05d7aec424cc384dcc71e6a82c5c7e474136e272",
+      "matchesIsolatedProductBase67ce948": true
+    }
+  ],
+  "installedLockedDiagnosisDependencies": [
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/wry-0.57.1/src/android/binding.rs",
+      "bytes": 16732,
+      "sha256": "79e2b97ece9e28685b385db4466f8ec36df75dc20a43d467676927bd02f0736e"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/wry-0.57.1/src/android/main_pipe.rs",
+      "bytes": 19842,
+      "sha256": "3a9f0ea74a7def2ebef7f1d57d085e721f9e036ce2ec7df212ed1ce5e8c51e9d"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/wry-0.57.1/src/android/mod.rs",
+      "bytes": 15894,
+      "sha256": "57bbd039d526f28b2b43b79b52c1a6b01cc4bb29aab54a263a19c2d92f33f934"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/wry-0.57.1/src/android/kotlin/RustWebChromeClient.kt",
+      "bytes": 17024,
+      "sha256": "5e225fc1a85e769e4a666b7cd47946356e742190060803ecb31a12a68bf1ce06"
+    }
+  ],
+  "cleanupCandidateInstalled": false
+}

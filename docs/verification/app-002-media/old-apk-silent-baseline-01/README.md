@@ -1,0 +1,15 @@
+# APP002 frozen old APK: real silent recording entry FAIL
+
+2026-11-03, Android11/API30 emulator-5580, WebView91.0.4472.114. Installed SHA **5dd6dfc8d31812c2bafcff5115d9946456ff6d37028f2caed174585c91ca0ca2** independently checked from device. Package/source distinctions and selected source hashes are in `source-and-package-identity.json`; no candidate build was installed.
+
+Two real native UI entries into 录音 caused the app to exit before a recording sheet or OS permission prompt appeared. The second attempt ran in a fresh process with `observer:null`, using a native tap; it independently reproduced the same 10-second native failure. No third attempt was made. `app-5197-logcat.txt`, `app-5640-logcat.txt`, crash buffers and the unwrapped before/wait/after PNGs are the primary evidence. Both logs report `main_pipe.rs:420:24`, `SendError(..)` unwrap then SIGABRT. The locked source chain supports the inference that synchronous `webview.url()` inside the Android permission callback blocks its UI pipe, times out, then its queued sender panics; this is a source-supported causal inference, not a per-callback instrumented stack.
+
+The first process had forwarding observation wrappers around actual browser APIs. They forwarded the original calls unchanged, produced no fake stream and did not write editor/store state. The second process had no wrappers. `actions.jsonl` and JSON snapshots preserve real native input and observations. `ui-probe.mjs` is the finite observation helper, not a production implementation or test media provider.
+
+The synthetic note MEDIA02-SILENT-20261103A was created through actual UI. Real Rust `load_workspace` reads after both crashes preserve the entire document, note id and revision25. Final total attachment metadata count is0 and actual app-root `attachments/` is empty, as captured in private-state JSON. RECORD_AUDIO remains granted=false. This is an entry failure baseline; acquisition, pause/resume, stop/save, playback, resource cleanup during a successful session and cold-start audio roundtrip were not reached and remain unknown. No success is inferred from static checks.
+
+The public `hostmicoff` console command returned OK before entry; it sends zeros to the guest microphone. Original host microphone state was unreadable, and authorized OFF is retained. Local emulator gRPC was unavailable (separate audio-availability evidence); no injected audio was substituted.
+
+`unwrapped-entry-screen.mp4` is weak supplemental evidence only: ffprobe reports **one H264 frame, duration0**,1080×2280. Although the screenrecord command was requested for20seconds, this file does not prove an animated crash transition or20seconds of recording. PNGs and timestamped logs establish the failure.
+
+Final cleanup confirmed no observer in reopened pid5890, removed only our tcp9227 forward and two preserved external temp files. Emulator PID3197/parent session73263 remains running; no restart, wipe, reinstall, package build, global microphone permission change or app data clearing occurred. Host microphone stays OFF. The note remains as the authorized synthetic fixture.

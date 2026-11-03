@@ -1,0 +1,51 @@
+{
+  "status": "FAIL_REAL_RECORDING_ENTRY",
+  "installedApkSha256": "5dd6dfc8d31812c2bafcff5115d9946456ff6d37028f2caed174585c91ca0ca2",
+  "device": "emulator-5580",
+  "androidApi": 30,
+  "webview": "91.0.4472.114",
+  "hostMicrophone": "OFF; public hostmicoff returned OK; original setting unknown; deliberately retained OFF",
+  "attempts": [
+    {
+      "pid": 5197,
+      "observationWrappers": true,
+      "mediaWarning": "2026-11-03 22:28:26.551 +08:00",
+      "panic": "2026-11-03 22:28:36.563 +08:00",
+      "sigabrt": "2026-11-03 22:28:36.590 +08:00"
+    },
+    {
+      "pid": 5640,
+      "observationWrappers": false,
+      "mediaWarning": "2026-11-03 22:34:45.414 +08:00",
+      "panic": "2026-11-03 22:34:55.426 +08:00",
+      "sigabrt": "2026-11-03 22:34:55.445 +08:00"
+    }
+  ],
+  "nativeFailure": "wry-0.57.1/src/android/main_pipe.rs:420:24; SendError(..) unwrap; SIGABRT on main thread",
+  "recordAudioGranted": false,
+  "recordingPauseSavePlaybackColdStart": "NOT_REACHED / UNKNOWN",
+  "noteId": "a5a92add-fdb9-4b7f-9836-e7e4a930b2c2",
+  "noteRevision": 25,
+  "noteDocumentUnchangedAfterBothCrashes": true,
+  "attachmentCountTotal": 0,
+  "managedAttachmentDirectoryEmpty": true,
+  "supplementalMp4": {
+    "file": "unwrapped-entry-screen.mp4",
+    "frames": 1,
+    "width": 1080,
+    "height": 2280,
+    "durationSeconds": 0,
+    "limitation": "Not a usable crash-transition video; single frame only. Timestamped native logs and PNGs are primary evidence."
+  },
+  "cleanup": {
+    "observer": "absent confirmed in reopened pid5890",
+    "forwardTcp9227": "removed",
+    "ownedDeviceTemporaryFiles": "removed after preservation",
+    "currentAppPid": 5890,
+    "emulatorPid": 3197,
+    "parentEmulatorSession": 73263,
+    "emulatorUntouched": true,
+    "apkRebuiltOrReinstalled": false,
+    "permissionsGrantedOrRevoked": false
+  }
+}
