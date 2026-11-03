@@ -83,6 +83,14 @@ APP-002-ATTACHMENT-SUBMIT-01已在主源码将同一契约接入系统文件选�
 
 录音票据在打开前固定目标和operation；仅当前同一ticket可窄豁免自己的record遮挡，普通picker/global nativeAssert保持原门禁。Panel onDone的resolve约定为真实saveDoc返回正文已acknowledge，失败reject保留同File；已ACK刷新失败仅重刷。取消先封submit，但保留同ticket窄cancel归属，Panel立即卸载以释放采集，operation等待真实run/FileReader/IPC结束后才核安全取消。Editor/pending引用与已ACK附件保留；deferred/身份失效保留可恢复身份和可见错误。唯一close监听通过同一lifecycle ref等安全取消或真实pending正文确认，不新增竞争监听。源码证据见`plan/reviews/app-002-recording-submit-static-01.md`；暂停快照与±15另由app-002-recording-preview-01负责，不改变最终File/父ACK协议。
 
+### OCR宿主接入（APP-004-OCR-HOST-01待实现）
+
+现成notes-scan插件提供私有暂存会话和真实本地OCR，但尚未注册/接入主App。首批只把实际文字结果接到既有普通段落与保存队列，不新增扫描节点、永久图片或文档schema。主Cargo path插件、Builder和capability显式接入；保持已锁定模型和原生依赖。Mac本地图片识别与不可用连续互通入口分开表达，Android使用插件本地选图/文字相机。
+
+打开前固定原note/Editor/完整文档与版本/bookmark/access/operation；普通与原生入口同一控制器。预览属于未取证的工程界面，明确区分取消、识别中、recognized、empty、failed、确认中、正文已ACK及清理待重试。确认非空实际文字以一次事务插入原选区，重复确认复用同保存Promise；保存失败保留结果/同操作，不能再次插入。目标改变、锁定/删除、关闭/取消封入场，晚到结果不得插当前另一篇。focus可信同步沿用现有严格身份规则，不扩大门禁。
+
+仅真实正文ACK后才acknowledge插件会话；其后暂存清理失败只重试清理，不重插正文或倒退已保存状态。取消等待原生工作终态后按同session取消，ACK过的正文保留；空结果不插假节点。长期扫描集合/多页PDF/复裁另批接入，本文不是已有源码或安装版通过声明。任务与真实链路检查见plan/tasks/app-004-ocr-host-01.md。
+
 ### 进程授权与多窗口保存边界（APP-001-FIX-03）
 
 Rust Session拥有随机进程sessionId、全局epoch与逐笔记epoch，Store.keys是唯一解锁授权。renderer不保留独立unlocked集合。notes-access只广播prepare/commit/abort、操作ID、目标ID、真实参与窗口及access元数据，不带正文/密码/钥匙。设置锁、移除锁、关闭全部锁、删除笔记/文件夹、永久删除和归档导入均先冻结目标，真实窗口集合来自AppHandle.webview_windows，调用窗口身份由Tauri注入，不能通过action自报。
