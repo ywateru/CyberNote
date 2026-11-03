@@ -1,0 +1,564 @@
+{
+  "result": "P2 CONFIRMED",
+  "sourceRoot": "/private/tmp/apple-notes-tags-review01",
+  "method": "Production App + NoteEditor with controlled compositionstart, browser text insertion inside existing tag, compositionend; only preview save transport adapted to actual isolated production Rust Store. Not native IME, not native IPC/Session.",
+  "before": {
+    "doc": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "noteTag",
+                  "attrs": {
+                    "name": "UI对照"
+                  }
+                }
+              ],
+              "text": "#UI对照"
+            },
+            {
+              "type": "text",
+              "text": " "
+            }
+          ]
+        }
+      ]
+    },
+    "selection": {
+      "type": "text",
+      "anchor": 4,
+      "head": 4
+    },
+    "composing": false
+  },
+  "during": {
+    "doc": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "noteTag",
+                  "attrs": {
+                    "name": "UI对照"
+                  }
+                }
+              ],
+              "text": "#UI变对照"
+            },
+            {
+              "type": "text",
+              "text": " "
+            }
+          ]
+        }
+      ]
+    },
+    "selection": {
+      "type": "text",
+      "anchor": 5,
+      "head": 5
+    },
+    "composing": true,
+    "tags": [],
+    "results": [
+      {
+        "error": {
+          "code": "archive_invalid",
+          "message": "标签完整跨度与名称不符"
+        },
+        "ok": false
+      }
+    ],
+    "bodyText": "浏览器预览 · 独立演示数据\n标签完整跨度与名称不符\n重试\n快速备忘录\n0\n在我的 Mac 上\n全部备忘录\n1\n备忘录\n1\n新建文件夹\n备忘录\n1个备忘录\n今天\n#UI变对照\n06:13\n无更多文本\n格式\n2026年11月4日 06:13\n\n#UI变对照 "
+  },
+  "storedAfterRejectedPreedit": {
+    "createdAt": 1793743998177,
+    "deletedAt": null,
+    "document": {
+      "content": [
+        {
+          "content": [
+            {
+              "marks": [
+                {
+                  "attrs": {
+                    "name": "UI对照"
+                  },
+                  "type": "noteTag"
+                }
+              ],
+              "text": "#UI对照",
+              "type": "text"
+            },
+            {
+              "text": " ",
+              "type": "text"
+            }
+          ],
+          "type": "paragraph"
+        }
+      ],
+      "type": "doc"
+    },
+    "folderId": "default",
+    "id": "46072060-1332-4fc4-b163-c5b706cc8789",
+    "locked": false,
+    "originalFolderId": null,
+    "paperStyle": "plain",
+    "pinned": false,
+    "plainText": "#UI对照",
+    "revision": 1,
+    "sealed": null,
+    "title": "#UI对照",
+    "updatedAt": 1793743998181
+  },
+  "after": {
+    "doc": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "#UI变对照 "
+            }
+          ]
+        }
+      ]
+    },
+    "composing": false,
+    "tags": [],
+    "results": [
+      {
+        "error": {
+          "code": "archive_invalid",
+          "message": "标签完整跨度与名称不符"
+        },
+        "ok": false
+      },
+      {
+        "ok": true,
+        "value": {
+          "createdAt": 1793743998177,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "#UI变对照 ",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "46072060-1332-4fc4-b163-c5b706cc8789",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#UI变对照",
+          "revision": 2,
+          "sealed": null,
+          "title": "#UI变对照",
+          "updatedAt": 1793743999993
+        }
+      }
+    ],
+    "bodyText": "浏览器预览 · 独立演示数据\n标签完整跨度与名称不符\n重试\n快速备忘录\n0\n在我的 Mac 上\n全部备忘录\n1\n备忘录\n1\n新建文件夹\n备忘录\n1个备忘录\n今天\n#UI变对照\n06:13\n无更多文本\n格式\n2026年11月4日 06:13\n\n#UI变对照 "
+  },
+  "storeRecords": [
+    {
+      "action": {
+        "type": "createNote"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793743998177,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "attrs": {
+                  "level": 1
+                },
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "46072060-1332-4fc4-b163-c5b706cc8789",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "",
+          "revision": 0,
+          "sealed": null,
+          "title": "新备忘录",
+          "updatedAt": 1793743998177
+        }
+      }
+    },
+    {
+      "action": {
+        "type": "saveNote",
+        "id": "46072060-1332-4fc4-b163-c5b706cc8789",
+        "revision": 0,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "#UI对照",
+                  "marks": [
+                    {
+                      "type": "noteTag",
+                      "attrs": {
+                        "name": "UI对照"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " "
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793743998177,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "attrs": {
+                          "name": "UI对照"
+                        },
+                        "type": "noteTag"
+                      }
+                    ],
+                    "text": "#UI对照",
+                    "type": "text"
+                  },
+                  {
+                    "text": " ",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "46072060-1332-4fc4-b163-c5b706cc8789",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#UI对照",
+          "revision": 1,
+          "sealed": null,
+          "title": "#UI对照",
+          "updatedAt": 1793743998181
+        }
+      }
+    },
+    {
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793743998177,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793743998177,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793743998177,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793743998177,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "attrs": {
+                              "name": "UI对照"
+                            },
+                            "type": "noteTag"
+                          }
+                        ],
+                        "text": "#UI对照",
+                        "type": "text"
+                      },
+                      {
+                        "text": " ",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "46072060-1332-4fc4-b163-c5b706cc8789",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#UI对照",
+              "revision": 1,
+              "sealed": null,
+              "title": "#UI对照",
+              "updatedAt": 1793743998181
+            }
+          ],
+          "settings": {
+            "selectedFolder": "default",
+            "selectedNote": "46072060-1332-4fc4-b163-c5b706cc8789"
+          }
+        }
+      }
+    },
+    {
+      "action": {
+        "type": "saveNote",
+        "id": "46072060-1332-4fc4-b163-c5b706cc8789",
+        "saveIntent": "b2be1c59-608b-495e-8467-11f98faab30a",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "noteTag",
+                      "attrs": {
+                        "name": "UI对照"
+                      }
+                    }
+                  ],
+                  "text": "#UI变对照"
+                },
+                {
+                  "type": "text",
+                  "text": " "
+                }
+              ]
+            }
+          ]
+        },
+        "revision": 1
+      },
+      "response": {
+        "error": {
+          "code": "archive_invalid",
+          "message": "标签完整跨度与名称不符"
+        },
+        "ok": false
+      }
+    },
+    {
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793743998177,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793743998177,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793743998177,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793743998177,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "attrs": {
+                              "name": "UI对照"
+                            },
+                            "type": "noteTag"
+                          }
+                        ],
+                        "text": "#UI对照",
+                        "type": "text"
+                      },
+                      {
+                        "text": " ",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "46072060-1332-4fc4-b163-c5b706cc8789",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#UI对照",
+              "revision": 1,
+              "sealed": null,
+              "title": "#UI对照",
+              "updatedAt": 1793743998181
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "action": {
+        "type": "saveNote",
+        "id": "46072060-1332-4fc4-b163-c5b706cc8789",
+        "saveIntent": "1e562470-aeec-400b-b3e4-b1381bb22272",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "#UI变对照 "
+                }
+              ]
+            }
+          ]
+        },
+        "revision": 1
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793743998177,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "#UI变对照 ",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "46072060-1332-4fc4-b163-c5b706cc8789",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#UI变对照",
+          "revision": 2,
+          "sealed": null,
+          "title": "#UI变对照",
+          "updatedAt": 1793743999993
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "transportInjection": "  if (!native && a.type === \"saveNote\") { const result = await fetch('/__store-action', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(a)}).then(r=>r.json()); (window.__reviewStoreResults ||= []).push(result); if (!result.ok) throw result.error; return result.value as T; }\n",
+  "limitations": [
+    "DOM composition events are controlled and untrusted; no native IME behavior claim.",
+    "The transport adapter leaves production onUpdate/saveDoc/queue/error UI untouched but bypasses native IPC and Session."
+  ]
+}

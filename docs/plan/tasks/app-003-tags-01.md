@@ -40,6 +40,8 @@ depends-on: []
 
 首个源码候选 `96584b74d2356c361e897ed5ad275b15823c21a0` 在真实生产 App/Editor 接真实 Rust Store 的独立检查中，组合输入改动已有标签内部文字时发送了旧 name/新跨度，得到 `archive_invalid` 并显示真实保存错误。输入结束后成功不能关闭这个中间错误。按架构新增的 Editor 出站合法快照契约窄修：保全全部 preedit 文字和其他格式，在副本上移除非法 noteTag，保持活动输入法、Editor、历史、授权与保存队列。检查其他生产 Editor 快照与附件/OCR正文 ACK 的表示关系，外部非法文档继续由 Rust 拒绝。先冻结独审报告，再由开发修复并重新独审；当前不合入产品源码，不标 SOURCE-READY。
 
+独审 [static-01](../reviews/app-003-tags-static-01.md) 另有 P2：搜索建议 `filter=tags` 下新建没有清除此筛选，新空白笔记被排除而旧结果仍可能成为当前目标，属于源码状态推导，首轮未界面复现。同批局部修复并以真实 App 验证新建后目标和首次文字归属；新建失败保全原状态。
+
 ## verification
 
 执行现有依赖下 typecheck、真实 Editor schema crosscheck，以及有意义的生产边界检查。至少覆盖：
