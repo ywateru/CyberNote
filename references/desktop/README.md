@@ -36,5 +36,8 @@ REA 已验证原程序路径/哈希，但 observe_native_ui 因 Accessibility �
 - macos26-table-converted.png与.ax.txt：普通2×2表格转为列Tab/行换行的文本，之后一次撤销恢复。
 - macos26-table-boundary-before.* / macos26-table-boundary-converted.*：含多段单元格和末尾空格的转换前后；转换后一次撤销恢复。输入准备含AX设置，不代表已经验证所有表格粘贴路径。
 - macos26-paste-explicit-text.*：新建空笔记，明确text格式粘贴两段，均为普通正文。
+- macos26-math-mode-before.*：数学续采前的菜单，建议结果带勾，AX悬停项不代表勾选。
+- macos26-math-insert-active.* / macos26-math-insert-checked.*：插入模式有限输入序列和真实勾选。键名/接受路径存在未隔离因素，不能推导通用触发条件。
+- macos26-math-insert-bounded.*：重开后黄色交互结果、普通结果文本与未计算的 `7+8=` 同时存在；详细边界见 `docs/ui/local-features.md`。收尾点击建议结果，恢复后的勾选尚未复核。
 
 本批主窗截图部分为2176×1322px，设置/表单可有独立窗口尺寸；比较前逐文件读取尺寸，不按本文件首段将全部图片假定为2176×1320。各文件 SHA-256 见 `checksums.sha256`。

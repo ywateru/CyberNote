@@ -8,13 +8,13 @@
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |
 | APP-001-FIX-00 归档完整性 | verified，独立pass | 原失败、schema跨检、设置/附件保全与六次进程中断恢复通过；见fix-00-02报告 |
-| APP-001-FIX-01 编辑与导航修复 | in-progress，实现中 | 同窗画廊、手机格式面板、7种纸张、格式/表格/清单行为；完成后重构建与安装版验证 |
+| APP-001-FIX-01 编辑与导航修复 | in-progress，独立复验中 | 候选08f2776已构建并完成关键安装版自测；独立执行同窗画廊、手机格式面板、7种纸张、表格/清单矩阵 |
 | APP-001-FIX-02 Mac顶部校准 | pending，依赖FIX-01/FIX-03 | 运行时系统符号、公开原生控件/材质、分组与平台菜单 |
 | APP-001-FIX-03 锁定跨窗失效 | pending，FIX-01后优先 | 静态审查发现其他窗口缓存未失效；同步授权、清理明文并用真实多窗复核 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
-| APP-004 原生模块 | in-progress，路径隔离 | 独立plugins目录实现，暂未接入；主App集成和安装版验证仍待APP-004 |
+| APP-004 原生模块 | module-checks pass，运行补证中 | 9340dba实现，2358901独立模块审查通过；Android运行与宿主复制/主App集成仍待验收 |
 | PARITY-001 修正差异 | pending，依赖 QA-001 | 按原版补齐功能与像素；重新验证 |
 
 docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，docs/ui 是视觉证据。实现阶段遵循 docs-sprint 的 develop/verify 分离。空仓库先建立 Git 基线，串行实施开发/验证；不要求用户批准已授权的常规设计补全。测试必须覆盖真实持久化边界和 UI 用户路径，不能只测试同实现的常量。
