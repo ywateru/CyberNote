@@ -17,16 +17,29 @@ await toolbar.update(nextState);
 const diagnostic = await toolbar.inspect();
 // 宿主搜索菜单 / Cmd+Shift+F（所属窗口）：
 await toolbar.focusSearch();
-// 窗口组件销毁：先解除绑定，再解除事件监听。
-await toolbar.unbind();
-unlisten();
+// 窗口组件销毁：先停止宿主队列；注销失败也必须解除事件监听。
+try { await toolbar.unbind(); } finally { unlisten(); }
 ```
 
 `routeIntentToThisWindow` 与状态变量由宿主实现；以上不是可单独运行的笔记应用。按钮只产生意图，不绕过原应用保存/编辑/授权命令。宿主应保存当前编辑器 selection bookmark，并在格式命令执行时恢复；原生按钮拒绝 first responder，但本阶段未完成真实编辑器选区回归。
 
-事件 `notes-ui://intent` 明确发送到 `EventTarget::Window { label }`，包含 windowLabel、bindingId、stateRevision、sequence 和类型化 intent。前端使用 `getCurrentWindow().listen`，并再次过滤 label+bindingId。Rust 的 WebviewWindow::listen 目标与 Window::listen 不同，Rust 宿主应监听 Window 或 listen_any 后严格路由。省略动作即隐藏；disabled 动作/菜单不发意图。菜单命令为固定枚举，不接受任意 selector 或 JS。格式菜单目前为标准 NSMenu，尚未复制原版字体按钮横排弹层。
+事件 `notes-ui://intent` 明确发送到 `EventTarget::Window { label }`，包含 windowLabel、bindingId、stateRevision、sequence 和类型化 intent。前端使用 `getCurrentWindow().listen`，并再次过滤 label+bindingId。Rust 的 WebviewWindow::listen 目标与 Window::listen 不同，Rust 宿主应监听 Window 或 listen_any 后严格路由。省略动作即隐藏；disabled 动作/菜单不发意图。菜单命令为固定枚举，不接受任意 selector 或 JS。格式现在使用横排首行的原生 NSPopover，其余菜单仍为 NSMenu；实际主窗和像素验收未运行。
+
+guest `NotesToolbar.listen` 在 bind 响应前尚无 UUID，会过滤早期事件；上面的简短示意不涵盖这个竞态。正式宿主须在 bind 前用当前 Window.listen 做有界缓存，回包后仅重放自身 windowLabel+bindingId 的事件，再按 sequence 去重；还须管理 update 响应前的 revision 上下文。绑定初始活动状态取 `native.active`。不可通过删除身份过滤规避竞态。
 
 搜索字段不保存最近搜索；输入法 marked text 不发查询更新。宿主必须合并最新搜索事件的 value，并把 acknowledgedEvent 设为该 sequence；落后的状态返回 stale_search。组字期间改变文字返回 search_composition。相同文字不调用 setter，以保留选区。并发状态更新须由宿主排队；本阶段未验证中文组字、搜索 Return/Escape 和更新竞态。
+
+## 格式弹层与画廊几何候选
+
+2026-11-03 子步只修改本插件，未接入主应用，也没有启动 demo 或操作 GUI。几何来源为研究提交 `649c24e` 的 `docs/research/macos-toolbar-geometry/analysis.md`、`measurements.json` 与原图。测量是带误差的可见面/文字墨迹，不是 Notes 内部 frame；原图窗口激活未知。
+
+`galleryBrowse` 明确表示没有打开笔记的画廊：只接受 newFolder/toggleSidebar/viewOptions/newNote 四类动作，不能混入返回或编辑动作；宿主同时只保留这些动作所属菜单。其标题从侧栏右边起算，显示选项与新建组成一组，搜索宽度按可用区域变化。`galleryExpanded` 表示打开笔记：提供 backToGallery 时绘制36pt返回圆，标题/计数起点比浏览状态右移44pt，编辑工具整体靠右；不提供返回动作则不留该占位。`threeColumn` 与 independentNote 维持各自语义。按钮可见面的起点为 y8、高36pt；编辑全组161pt、共享全组80pt，常规间距18/18/16pt，搜索右距8pt。画廊浏览的搜索前间距为33pt，不能套用编辑态公式。窄窗仍使用溢出动作，宽度取实际 contentView，不限定1088pt。
+
+`menus.owner = format` 现在只接受固定格式命令。面板首行按粗体/斜体/下划线/删除线/高亮/颜色排列，下方按标题/小标题/副标题/正文/等宽、项目符号/短划线/编号、分隔后的块引用排列。只渲染宿主提供的命令；颜色菜单同样由已有 colorDefault/Purple/Pink/Orange/Mint/Blue 枚举与 enabled/selected 状态驱动，不自动写编辑器或发成功提示。示例 state.json 含完整候选条目。完整菜单内容尺寸起点176×325pt；系统 NSPopover 的实际边框、箭头、内边距、材质与字体必须在正式包另验，不能从 contentSize 声称原图外包络相同。未观测的颜色子菜单外观也未宣称复刻。
+
+格式按钮和颜色项携带创建时 revision；点击再次核对当前 format 动作、条目 enabled、revision，按钮还需属于当前显示的弹层。状态更新及 dispose 强制关闭弹层并取消正在跟踪的颜色菜单，异步溢出入口复核 revision。所有格式动作仍产生 `{kind: 'menu', owner: 'format', command}`，由原有窗口/绑定/版本权限链发送；没有新的 IPC、权限或任意执行入口。
+
+格式按钮拒绝 first responder，代码不调用焦点或选区 setter。宿主须为每个 state revision 保存 noteId、授权 token、Editor 实例及选区 bookmark，在命令返回时重新验证并恢复选区。AppKit 显示浮层本身的焦点、中文组字、键盘导航、菜单选区与 Undo/Redo 行为仍为 not-run；静态代码不能证明实际选区不变。语义相同的宿主状态不应重复 update，因为更新会关闭弹层/菜单。插件定向检查见 `verification/format-gallery/README.md`。
 
 ## 搜索聚焦入口
 

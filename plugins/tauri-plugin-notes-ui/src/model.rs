@@ -101,6 +101,7 @@ pub struct ActionState {
 #[serde(rename_all = "camelCase")]
 pub enum Layout {
     ThreeColumn,
+    GalleryBrowse,
     GalleryExpanded,
     IndependentNote,
 }
@@ -174,6 +175,20 @@ impl ToolbarState {
             if !actions.insert(action.action) {
                 return Err(Error::new("invalid_state", "重复动作"));
             }
+            if matches!(self.layout, Layout::GalleryBrowse)
+                && !matches!(
+                    action.action,
+                    Action::NewFolder
+                        | Action::ToggleSidebar
+                        | Action::ViewOptions
+                        | Action::NewNote
+                )
+            {
+                return Err(Error::new(
+                    "invalid_state",
+                    "画廊浏览顶部不能包含笔记编辑动作",
+                ));
+            }
         }
         let mut owners = HashSet::new();
         let mut commands = HashSet::new();
@@ -183,6 +198,9 @@ impl ToolbarState {
                 return Err(Error::new("invalid_state", "菜单没有唯一对应按钮"));
             }
             validate_entries(&menu.items, 0, &mut count, &mut commands)?;
+            if matches!(menu.owner, Action::Format) && !format_entries_only(&menu.items) {
+                return Err(Error::new("invalid_state", "格式弹层只能包含固定格式命令"));
+            }
         }
         if let Some(s) = &self.search {
             text(&s.value, 4096)?;
@@ -211,6 +229,35 @@ impl ToolbarState {
             Intent::WindowActivity { .. } => true,
         }
     }
+}
+fn format_entries_only(entries: &[MenuEntry]) -> bool {
+    entries.iter().all(|entry| match entry {
+        MenuEntry::Separator => true,
+        MenuEntry::Submenu { items, .. } => format_entries_only(items),
+        MenuEntry::Item { command, .. } => matches!(
+            command,
+            MenuCommand::Bold
+                | MenuCommand::Italic
+                | MenuCommand::Underline
+                | MenuCommand::Strikethrough
+                | MenuCommand::Highlight
+                | MenuCommand::ColorDefault
+                | MenuCommand::ColorPurple
+                | MenuCommand::ColorPink
+                | MenuCommand::ColorOrange
+                | MenuCommand::ColorMint
+                | MenuCommand::ColorBlue
+                | MenuCommand::StyleTitle
+                | MenuCommand::StyleHeading
+                | MenuCommand::StyleSubheading
+                | MenuCommand::StyleBody
+                | MenuCommand::StyleMonospaced
+                | MenuCommand::ListBullet
+                | MenuCommand::ListDash
+                | MenuCommand::ListNumber
+                | MenuCommand::Blockquote
+        ),
+    })
 }
 fn validate_entries(
     entries: &[MenuEntry],

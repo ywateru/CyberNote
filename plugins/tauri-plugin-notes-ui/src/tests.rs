@@ -55,6 +55,69 @@ fn menus_require_unique_owned_commands_and_bounded_nesting() {
     assert!(state.validate().is_err());
 }
 #[test]
+fn gallery_browse_is_explicit_and_rejects_stale_editor_actions() {
+    let mut state = sample();
+    state.layout = Layout::GalleryBrowse;
+    assert!(state.validate().is_err());
+    state.actions.retain(|a| {
+        matches!(
+            a.action,
+            Action::NewFolder | Action::ToggleSidebar | Action::ViewOptions | Action::NewNote
+        )
+    });
+    state.menus.retain(|menu| menu.owner == Action::ViewOptions);
+    state.validate().unwrap();
+    let value = serde_json::to_value(&state).unwrap();
+    assert_eq!(value["layout"], "galleryBrowse");
+    state.actions.push(ActionState {
+        action: Action::BackToGallery,
+        enabled: true,
+        selected: false,
+    });
+    assert_eq!(state.validate().unwrap_err().code, "invalid_state");
+}
+#[test]
+fn format_surface_accepts_only_format_commands_and_disabled_colors_cannot_dispatch() {
+    let mut state = sample();
+    state.validate().unwrap();
+    let menu = state
+        .menus
+        .iter_mut()
+        .find(|menu| menu.owner == Action::Format)
+        .unwrap();
+    menu.items.push(MenuEntry::Item {
+        command: MenuCommand::DeleteNote,
+        label: "删除".into(),
+        enabled: true,
+        selected: false,
+    });
+    assert_eq!(state.validate().unwrap_err().code, "invalid_state");
+    let mut state = sample();
+    let menu = state
+        .menus
+        .iter_mut()
+        .find(|menu| menu.owner == Action::Format)
+        .unwrap();
+    for entry in &mut menu.items {
+        if let MenuEntry::Submenu { items, .. } = entry {
+            for item in items {
+                if let MenuEntry::Item { enabled, .. } = item {
+                    *enabled = false;
+                }
+            }
+        }
+    }
+    state.validate().unwrap();
+    assert!(!state.permits(&Intent::Menu {
+        owner: Action::Format,
+        command: MenuCommand::ColorPurple,
+    }));
+    assert!(state.permits(&Intent::Menu {
+        owner: Action::Format,
+        command: MenuCommand::Bold,
+    }));
+}
+#[test]
 fn events_cannot_cross_windows_bindings_revisions_or_disabled_commands() {
     let state = sample();
     let binding = Binding {

@@ -19,7 +19,7 @@ export type MenuEntry =
   | { kind: 'submenu'; label: string; items: MenuEntry[] };
 export interface ToolbarState {
   revision: number;
-  layout: 'threeColumn' | 'galleryExpanded' | 'independentNote';
+  layout: 'threeColumn' | 'galleryBrowse' | 'galleryExpanded' | 'independentNote';
   columns: { sidebarVisible: boolean; sidebarWidth: number; listWidth: number };
   folderTitle: string;
   folderCount: number;

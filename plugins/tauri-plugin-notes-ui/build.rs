@@ -3,6 +3,7 @@ fn main() {
     if std::env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("macos") {
         cc::Build::new()
             .file("macos/toolbar.m")
+            .file("macos/format.m")
             .flag("-fobjc-arc")
             .flag("-fblocks")
             .flag("-mmacosx-version-min=12.0")
@@ -12,5 +13,7 @@ fn main() {
             println!("cargo:rustc-link-lib=framework={framework}");
         }
         println!("cargo:rerun-if-changed=macos/toolbar.m");
+        println!("cargo:rerun-if-changed=macos/format.m");
+        println!("cargo:rerun-if-changed=macos/format.h");
     }
 }

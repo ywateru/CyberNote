@@ -1,0 +1,42 @@
+{
+  "checks": [
+    {
+      "name": "rust-contract-tests",
+      "exitCode": 0,
+      "passed": 10,
+      "log": "rust-test.txt"
+    },
+    {
+      "name": "guest-strict-types",
+      "exitCode": 0,
+      "log": "guest-typecheck.txt"
+    },
+    {
+      "name": "objc-public-sdk-warning-errors",
+      "exitCode": 0,
+      "log": "objc-syntax.txt"
+    },
+    {
+      "name": "android-conditional-library",
+      "exitCode": 0,
+      "knownNonMacDeadCodeWarnings": 5,
+      "log": "android-check.txt"
+    },
+    {
+      "name": "cargo-fmt-check",
+      "exitCode": 0
+    },
+    {
+      "name": "git-diff-check-plugin-only",
+      "exitCode": 0
+    },
+    {
+      "name": "production-source-isolation",
+      "exitCode": 0,
+      "checkedFiles": 34,
+      "log": "source-isolation.json"
+    }
+  ],
+  "runtime": "not-run; verifier owns all GUI; no demo or main app build",
+  "pixelAcceptance": "unknown"
+}
