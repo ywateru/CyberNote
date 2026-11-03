@@ -1,0 +1,31 @@
+{
+  "scope": "Narrow executable comparison on disposable copies; preserved original and sealed executables unchanged. codesign --remove-signature ran successfully on both temporary copies.",
+  "copies": [
+    "/private/tmp/notes-unified-candidate03-signature-compare-lcsfwjxg/original",
+    "/private/tmp/notes-unified-candidate03-signature-compare-lcsfwjxg/sealed"
+  ],
+  "rawStrippedFilesEqual": false,
+  "rawStrippedSizes": [
+    15527104,
+    15527104
+  ],
+  "rawStrippedSha256": [
+    "7ee3b17d70f4aab0b4d7b292f224a3cb4ab5b52ff9771710f4475d0fdea86d65",
+    "150b87ba0738bf8d5cc8b3cfeaa49569bd2664a70b61bb21983dbb0995996e69"
+  ],
+  "remainingDifferingOffsets": [
+    3313,
+    3314
+  ],
+  "remainingDifferingField": "LC_SEGMENT_64 __LINKEDIT vmsize",
+  "fieldOffset": 3312,
+  "fieldBytes": 8,
+  "fieldValues": [
+    4587520,
+    4505600
+  ],
+  "allOtherBytesIdentical": true,
+  "normalizedSha256": "16c5ddc4019f348d90f13b44a6c922c402f868a49512cb779862230e1bfbfb03",
+  "preservedSourceExecutablesUnchanged": true,
+  "limitation": "Local adhoc signing comparison only; no developer signing or notarization claim."
+}

@@ -57,3 +57,5 @@ depends-on: [app-002-attachment-store-01, app-002-recording-state-01]
 ## 源码与主整合状态
 
 8ee0111经独审01 SOURCE-READY后以6ebacbe主合入。独立20+23+8+26及5项新增生命周期检查通过；主2源码hash相同，pnpm build、父20组、搜索启动5/展示16整合检查通过。Panel/Session/clock/CSS/Rust/依赖未变。报告与原始边界脚本首次路径错误及修正结果均保留于独审目录。任务保持in-progress，统一candidate03真实Mac/Android录制、正文确认、冷启、可听播放与像素仍需分别实测。
+
+统一candidate03已按c6594db成功构建Mac与Android，232列明输入前后相同。构建记录见`../../verification/unified-candidate03/build/README.md`，workspace安装包副本见root-handoff/result.json；这不替代尚在进行的新包正文ACK/真实媒体与像素验证。
