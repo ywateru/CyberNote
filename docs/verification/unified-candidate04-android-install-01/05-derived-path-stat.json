@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-03T22:02:53.900356+00:00",
+  "args": [
+    "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+    "-s",
+    "emulator-5580",
+    "shell",
+    "run-as",
+    "com.local.notesclone",
+    "stat",
+    "-c",
+    "%s",
+    "/data/user/0/com.local.notesclone/notes.sqlite3"
+  ],
+  "exit": 0,
+  "stdout": "4096\n",
+  "stderr": "",
+  "pathBasis": "Current locked Tauri 2.12.5 Android app_data_dir -> getDataDir -> activity.dataDir; lib.rs passes this root to Store::open, which joins notes.sqlite3. Derived this round; not recorded by prior candidate03 evidence."
+}

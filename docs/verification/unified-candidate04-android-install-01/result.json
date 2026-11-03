@@ -1,0 +1,130 @@
+{
+  "at": "2026-11-03T22:08:06.529198+00:00",
+  "status": "PASS_INSTALL_AND_SELECTED_DATA_RETENTION_ONLY",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "checks": {
+    "hostApkIdentity": true,
+    "hostSignatureVerify": true,
+    "hostSignatureMatchesPriorSigner": true,
+    "installedExactApk": true,
+    "oldInstalledExactCandidate03": true,
+    "firstInstallTimeUnchanged": true,
+    "userIdUnchanged": true,
+    "allSpecifiedDataUnchanged": true,
+    "matchesPriorCandidate03SelectedData": true,
+    "noAppProcessAtObservedBoundaries": true
+  },
+  "beforeApk": {
+    "path": "/data/app/~~xZ3YGlziT9Xhqs88hzPS9w==/com.local.notesclone-FC4lI3sTLq1FJBUW7w1T8w==/base.apk",
+    "bytes": 302064554,
+    "sha256": "bd29ae0b526cafa9b491d645587f5ae7b1254f0e56ad7fc7df309b2fed143477"
+  },
+  "afterApk": {
+    "path": "/data/app/~~i7A72UmYyxom3rFlSGHyQg==/com.local.notesclone-ZdbzjPEYGGSNueTsB354DQ==/base.apk",
+    "bytes": 304110831,
+    "sha256": "bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2"
+  },
+  "hostApk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate04/NotesClone-android-arm64.apk",
+    "bytes": 304110831,
+    "sha256": "bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2"
+  },
+  "packageBefore": {
+    "client": {
+      "binary_path": "adb",
+      "path_source": "path",
+      "version": "36.0.0-13206524",
+      "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+    },
+    "serial": "emulator-5580",
+    "package_name": "com.local.notesclone",
+    "version_name": "0.1.0",
+    "version_code": "1000",
+    "first_install_time": "2026-11-03 22:09:17",
+    "last_update_time": "2026-11-04 03:50:54",
+    "installer_package_name": null,
+    "user_id": 10169,
+    "pkg_flags": "[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]",
+    "requested_permissions_count": 5,
+    "coverage": "complete"
+  },
+  "packageAfter": {
+    "client": {
+      "binary_path": "adb",
+      "path_source": "path",
+      "version": "36.0.0-13206524",
+      "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+    },
+    "serial": "emulator-5580",
+    "package_name": "com.local.notesclone",
+    "version_name": "0.1.0",
+    "version_code": "1000",
+    "first_install_time": "2026-11-03 22:09:17",
+    "last_update_time": "2026-11-04 06:06:16",
+    "installer_package_name": null,
+    "user_id": 10169,
+    "pkg_flags": "[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]",
+    "requested_permissions_count": 6,
+    "coverage": "complete"
+  },
+  "dataComparisons": {
+    "syntheticNotes": true,
+    "syntheticAttachments": true,
+    "syntheticAudio": true,
+    "databaseFileChecks": true
+  },
+  "noteIds": [
+    "1a0718dd-c71c-4192-89b6-bd58cb9ba475",
+    "a9d1bbe7-a0ee-4f46-ba3e-e0889085cac3",
+    "a5a92add-fdb9-4b7f-9836-e7e4a930b2c2"
+  ],
+  "revisions": [
+    58,
+    30,
+    25
+  ],
+  "attachment": {
+    "path": "/data/user/0/com.local.notesclone/attachments/cb3fa001-9d73-4580-b959-38481fbba90b.webm",
+    "bytes": 429547,
+    "sha256": "cd7ee9692361fb3502775e8b7efc87ba0957ee22835f10e6d7335b09980fdf4f"
+  },
+  "wholeDatabaseFileIdentitiesUnchanged": true,
+  "dataReadMethod": "Existing /system/bin/sqlite3 -readonly, exact fixed-ID SELECT using SQLite core hex(); only three note rows and one attachment row returned. DB/WAL and audio SHA-256 and byte sizes computed on device. No full DB/WAL, audio or installed APK copied to host.",
+  "installMethod": "REA install_adb_package replace=true; no uninstall, downgrade, data clear or permission reset",
+  "installEvidenceId": "ev_e29fc04ea225136da6d4a0caf74525b1d940428f397b7e994daa4046bc7c5164",
+  "installReplacedFieldPreserved": null,
+  "replacementConclusionBasis": "Before and after exact installed base.apk hash/size, changed code path/update time, unchanged userId/firstInstallTime and unchanged specified data; not the REA replaced=null field.",
+  "signatureBasis": "New host APK independently apksigner-verified. Installed bytes match exact host APK by device SHA-256 and size; prior installed signature inherited only through exact prior candidate03 APK hash and its saved accepted signature evidence. No new installed APK pull.",
+  "requestedPermissionCountBefore": 5,
+  "requestedPermissionCountAfter": 6,
+  "permissionGrantState": "NOT ENUMERATED; manifest request count is not a permission grant. No explicit permission operation was sent.",
+  "space": {
+    "hostBeforeBytes": 2990542848,
+    "hostAfterBytes": 2989805568,
+    "deviceBeforeAvailableBytes": 5323345920,
+    "requiredBytes": 2147483648
+  },
+  "handlingOfRejectedAction": "Automatic approval rejected the unexecuted original whole DB/WAL host-copy script. It was replaced with in-device exact-row queries, never indirectly executed. The first exact-row JSON1 query failed because json_object is unavailable; core hex() queries then passed.",
+  "notExecuted": [
+    "app launch or cold start",
+    "UI/input/force-stop/mirror",
+    "recording/pause/preview/playback",
+    "actual OCR",
+    "host microphone or emulator configuration",
+    "permission grant/revoke/reset",
+    "uninstall/clear data/downgrade",
+    "runtime migrations or editing/saving after startup",
+    "target compilation or build",
+    "full database/WAL/audio/APK transfer from device"
+  ],
+  "deviceOwnership": "released after read-only identity and selected data checks; no GUI work appended",
+  "limitations": [
+    "Only existing emulator-5580 was observed, not physical-device or iOS acceptance.",
+    "Install success and immediate data retention do not establish startup migration or any runtime feature.",
+    "SHA-256 whole APK identity implies exact contained bytes; installed lib/config were not separately extracted or hashed this round.",
+    "Read-only boundary process checks show no app process at those observations, not continuous process monitoring.",
+    "Old candidate03 evidence did not retain data path; this round derived one exact path from locked Tauri code and verified it on device.",
+    "REA generic artifact-identity and replaced=null limitations retained in raw evidence."
+  ]
+}

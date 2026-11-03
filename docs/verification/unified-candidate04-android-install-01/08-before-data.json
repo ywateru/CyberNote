@@ -1,0 +1,52 @@
+{
+  "at": "2026-11-03T22:05:23.206623+00:00",
+  "phase": "before",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "hostFreeBytes": 2990514176,
+  "pidofBefore": {
+    "exit": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "packagePath": {
+    "exit": 0,
+    "stdout": "package:/data/app/~~xZ3YGlziT9Xhqs88hzPS9w==/com.local.notesclone-FC4lI3sTLq1FJBUW7w1T8w==/base.apk\n",
+    "stderr": ""
+  },
+  "installedApk": {
+    "path": "/data/app/~~xZ3YGlziT9Xhqs88hzPS9w==/com.local.notesclone-FC4lI3sTLq1FJBUW7w1T8w==/base.apk",
+    "bytes": 302064554,
+    "sha256": "bd29ae0b526cafa9b491d645587f5ae7b1254f0e56ad7fc7df309b2fed143477"
+  },
+  "dataRoot": "/data/user/0/com.local.notesclone",
+  "dataRootBasis": "Derived this round from locked Tauri 2.12.5 Android app_data_dir/getDataDir/activity.dataDir and Store::open; exact notes.sqlite3 stat succeeded. Not a path supplied by old candidate03 records.",
+  "databaseFileChecks": [
+    {
+      "name": "notes.sqlite3",
+      "path": "/data/user/0/com.local.notesclone/notes.sqlite3",
+      "bytes": 4096,
+      "sha256": "1fe8f6113488865c546d2faa55b21482662ce4be19d4f505eeefa09bc3131489"
+    },
+    {
+      "name": "notes.sqlite3-wal",
+      "path": "/data/user/0/com.local.notesclone/notes.sqlite3-wal",
+      "bytes": 1516192,
+      "sha256": "7a19fc7c631a2d4c5264473a13b626f9c6ba2bd8d1dae3ca1688bb09fd302d39"
+    }
+  ],
+  "syntheticNotes": [],
+  "status": "FAIL_STOP",
+  "error": "{\"args\": [\"shell\", \"run-as com.local.notesclone /system/bin/sqlite3 -readonly /data/user/0/com.local.notesclone/notes.sqlite3 'SELECT json_object('\\\"'\\\"'id'\\\"'\\\"',id,'\\\"'\\\"'folder_id'\\\"'\\\"',folder_id,'\\\"'\\\"'body'\\\"'\\\"',json(body),'\\\"'\\\"'revision'\\\"'\\\"',revision) FROM notes WHERE id='\\\"'\\\"'1a0718dd-c71c-4192-89b6-bd58cb9ba475'\\\"'\\\"';'\"], \"exit\": 1, \"stderr\": \"Error: no such function: json_object\\n\"}",
+  "copyHandling": "Existing device sqlite3 -readonly queried exactly three synthetic note IDs and one attachment ID. No DB/WAL or audio bytes copied to host; whole-file DB/WAL and audio identities computed on device only.",
+  "notExecuted": [
+    "app launch",
+    "UI input",
+    "force-stop",
+    "mirror",
+    "microphone configuration",
+    "permission operation",
+    "uninstall",
+    "clear data"
+  ]
+}

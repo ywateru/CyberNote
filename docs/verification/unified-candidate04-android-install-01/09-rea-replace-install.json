@@ -1,0 +1,51 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_e29fc04ea225136da6d4a0caf74525b1d940428f397b7e994daa4046bc7c5164\",\"subject\":null,\"provider\":{\"id\":\"adb\",\"name\":\"Android Debug Bridge\",\"version\":\"36.0.0-13206524\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis\",\"operation\":\"install_adb_package\",\"parameters\":{\"serial\":\"emulator-5580\",\"apk_path\":\"/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate04/NotesClone-android-arm64.apk\",\"replace\":true},\"raw_result\":null,\"normalized_result\":{\"client\":{\"binary_path\":\"adb\",\"path_source\":\"path\",\"version\":\"36.0.0-13206524\",\"installed_path\":\"/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb\"},\"serial\":\"emulator-5580\",\"apk_path\":\"/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate04/NotesClone-android-arm64.apk\",\"bytes\":304110831,\"sha256\":\"bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2\",\"replace_requested\":true,\"replaced\":null},\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"Install changes device state; the installed APK's digest identifies the private host snapshot\",\"Whether an existing package was replaced is unknown; replace_requested records only the adb install mode\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_e29fc04ea225136da6d4a0caf74525b1d940428f397b7e994daa4046bc7c5164",
+    "subject": null,
+    "provider": {
+      "id": "adb",
+      "name": "Android Debug Bridge",
+      "version": "36.0.0-13206524"
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.analysis",
+    "operation": "install_adb_package",
+    "parameters": {
+      "serial": "emulator-5580",
+      "apk_path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate04/NotesClone-android-arm64.apk",
+      "replace": true
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "client": {
+        "binary_path": "adb",
+        "path_source": "path",
+        "version": "36.0.0-13206524",
+        "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+      },
+      "serial": "emulator-5580",
+      "apk_path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate04/NotesClone-android-arm64.apk",
+      "bytes": 304110831,
+      "sha256": "bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2",
+      "replace_requested": true,
+      "replaced": null
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "Install changes device state; the installed APK's digest identifies the private host snapshot",
+      "Whether an existing package was replaced is unknown; replace_requested records only the adb install mode"
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

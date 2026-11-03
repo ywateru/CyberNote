@@ -17,6 +17,8 @@ Android前三次失败原样保留：本地socket限制、wrapper意外分发下
 
 实际运行结果仍来自较早candidate03：[Mac附件与正常退出冷启](docs/verification/unified-candidate03-independent-01/README.md)有限通过，[Android保留数据升级](docs/verification/unified-candidate03-android-independent-01/README.md)有限通过，均不能直接追认candidate04。Mac真实录音仍无文件或可听性通过，权限线索见[只读诊断](docs/verification/candidate03-mic-preparing-diagnosis-01/README.md)。
 
+candidate04现已完成[Android精确替换安装与指定数据保留核对](docs/verification/unified-candidate04-android-install-01/README.md)：安装字节匹配成品，三条合成笔记、指定附件及数据库校验值保持；新包未启动，不代替真实编辑/冷启/OCR/录音/UI验收。数据核对使用设备内固定ID只读查询，没有复制整份数据库。
+
 原生比例PNG取图工具已通过[独立源码审查](docs/plan/reviews/tools-lossless-window-capture-static-01.md)，并从主路径编译为独立工具。最新[Mac有限观察](docs/verification/candidate04-mac-runtime-01/README.md)已能读取原版窗口，原生取图因缺现有屏幕录制权限明确拒绝；未生成PNG。旧candidate03窗口绑定超时，正常退出未完成，candidate04尚未启动。历史与本轮CUA截图实际编码JPEG，旧字节保持，不用于无损像素验收。原版与本批的同条件整窗像素仍未通过。
 
 尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音与暂停试听的设备验收、绘画及附件完整预览、真实OCR文字保存与冷启验收、完整文稿扫描主流程、标签/智能文件夹/数学/笔记链接和标准格式导入导出。具体通过子用例和缺口以交付计划与独立报告为准。

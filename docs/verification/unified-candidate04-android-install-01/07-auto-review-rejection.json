@@ -1,0 +1,7 @@
+{
+  "action": "Execute original collect-selected-data.py before",
+  "executed": false,
+  "scriptSha256AtRejection": "30002672dd82584abbdf96342d5a1a1570ebcb360663340284b936b06f2f7f19",
+  "review": "Rejected due to unacceptable risk: the original script would transfer the whole private SQLite database and WAL to the host before extracting exact synthetic rows, exceeding the narrow authorized scope. Do not bypass by indirect execution.",
+  "response": "Original script was not executed. Safer alternative uses existing /system/bin/sqlite3 on device with -readonly and exact-ID SELECT queries; only selected synthetic rows are exported. No full database/WAL bytes transferred."
+}

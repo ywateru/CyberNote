@@ -1,0 +1,55 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_deac18ca069d0ca35bc508c923004e02985909502973d76e26b8d1ee4ab3a082\",\"subject\":null,\"provider\":{\"id\":\"adb\",\"name\":\"Android Debug Bridge\",\"version\":\"36.0.0-13206524\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis\",\"operation\":\"list_adb_devices\",\"parameters\":{},\"raw_result\":null,\"normalized_result\":{\"client\":{\"binary_path\":\"adb\",\"path_source\":\"path\",\"version\":\"36.0.0-13206524\",\"installed_path\":\"/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb\"},\"devices\":[{\"serial\":\"emulator-5580\",\"state\":\"device\",\"transport\":\"tcp\",\"product\":\"sdk_gphone_arm64\",\"model\":\"sdk_gphone_arm64\",\"device\":\"emulator_arm64\",\"transport_id\":81,\"kind\":\"emulator\",\"kind_basis\":\"emulator_serial_prefix\"}],\"may_have_started_adb_server\":false},\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"Device kind is inferred from the emulator serial prefix and USB transport metadata, not from device attestation\",\"Kind stays unknown for TCP transports unless the serial is an emulator port\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_deac18ca069d0ca35bc508c923004e02985909502973d76e26b8d1ee4ab3a082",
+    "subject": null,
+    "provider": {
+      "id": "adb",
+      "name": "Android Debug Bridge",
+      "version": "36.0.0-13206524"
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.analysis",
+    "operation": "list_adb_devices",
+    "parameters": {},
+    "raw_result": null,
+    "normalized_result": {
+      "client": {
+        "binary_path": "adb",
+        "path_source": "path",
+        "version": "36.0.0-13206524",
+        "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+      },
+      "devices": [
+        {
+          "serial": "emulator-5580",
+          "state": "device",
+          "transport": "tcp",
+          "product": "sdk_gphone_arm64",
+          "model": "sdk_gphone_arm64",
+          "device": "emulator_arm64",
+          "transport_id": 81,
+          "kind": "emulator",
+          "kind_basis": "emulator_serial_prefix"
+        }
+      ],
+      "may_have_started_adb_server": false
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "Device kind is inferred from the emulator serial prefix and USB transport metadata, not from device attestation",
+      "Kind stays unknown for TCP transports unless the serial is an emulator port"
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

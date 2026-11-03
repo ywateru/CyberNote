@@ -46,6 +46,7 @@
 - [验证与像素比较规则](verification/README.md)
 - [candidate04双端构建与Android离线恢复](verification/unified-candidate04/README.md)
 - [candidate04 Mac有限窗口观察与取图权限阻塞](verification/candidate04-mac-runtime-01/README.md)
+- [candidate04 Android精确安装与指定数据保留](verification/unified-candidate04-android-install-01/README.md)
 - [原生比例PNG窗口取证工具任务](plan/tasks/tools-lossless-window-capture-01.md)
 - [取图工具独立审查（真实窗口未验）](plan/reviews/tools-lossless-window-capture-static-01.md)
 - [candidate03 Android身份及保留数据升级](verification/unified-candidate03-android-independent-01/README.md)

@@ -1,0 +1,56 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_2796d49110d85627d6a0ea8c903f113fd8c6e0f3402d665484e1924ec11aa050\",\"subject\":null,\"provider\":{\"id\":\"adb\",\"name\":\"Android Debug Bridge\",\"version\":\"36.0.0-13206524\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis\",\"operation\":\"inspect_adb_package\",\"parameters\":{\"serial\":\"emulator-5580\",\"package\":\"com.local.notesclone\"},\"raw_result\":null,\"normalized_result\":{\"client\":{\"binary_path\":\"adb\",\"path_source\":\"path\",\"version\":\"36.0.0-13206524\",\"installed_path\":\"/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb\"},\"serial\":\"emulator-5580\",\"package_name\":\"com.local.notesclone\",\"version_name\":\"0.1.0\",\"version_code\":\"1000\",\"first_install_time\":\"2026-11-03 22:09:17\",\"last_update_time\":\"2026-11-04 03:50:54\",\"installer_package_name\":null,\"user_id\":10169,\"pkg_flags\":\"[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]\",\"requested_permissions_count\":5,\"coverage\":\"complete\"},\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"Fields are a fixed projection of dumpsys package output; version-dependent sections are ignored rather than guessed\",\"requested_permissions_count counts the listed requested permissions section; an absent section is zero only when dumpsys confirms a loaded parsed package\",\"A null requested_permissions_count means dumpsys reported pkg=null or did not establish that an omitted permission section is an empty inventory\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_2796d49110d85627d6a0ea8c903f113fd8c6e0f3402d665484e1924ec11aa050",
+    "subject": null,
+    "provider": {
+      "id": "adb",
+      "name": "Android Debug Bridge",
+      "version": "36.0.0-13206524"
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.analysis",
+    "operation": "inspect_adb_package",
+    "parameters": {
+      "serial": "emulator-5580",
+      "package": "com.local.notesclone"
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "client": {
+        "binary_path": "adb",
+        "path_source": "path",
+        "version": "36.0.0-13206524",
+        "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+      },
+      "serial": "emulator-5580",
+      "package_name": "com.local.notesclone",
+      "version_name": "0.1.0",
+      "version_code": "1000",
+      "first_install_time": "2026-11-03 22:09:17",
+      "last_update_time": "2026-11-04 03:50:54",
+      "installer_package_name": null,
+      "user_id": 10169,
+      "pkg_flags": "[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]",
+      "requested_permissions_count": 5,
+      "coverage": "complete"
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "Fields are a fixed projection of dumpsys package output; version-dependent sections are ignored rather than guessed",
+      "requested_permissions_count counts the listed requested permissions section; an absent section is zero only when dumpsys confirms a loaded parsed package",
+      "A null requested_permissions_count means dumpsys reported pkg=null or did not establish that an omitted permission section is an empty inventory"
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

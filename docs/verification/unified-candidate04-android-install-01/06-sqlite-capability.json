@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-03T22:04:33.065839+00:00",
+  "args": [
+    "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+    "-s",
+    "emulator-5580",
+    "shell",
+    "command -v sqlite3"
+  ],
+  "exit": 0,
+  "stdout": "/system/bin/sqlite3\n",
+  "stderr": "",
+  "purpose": "Check in-device SQL availability; no database read or copy."
+}

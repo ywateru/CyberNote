@@ -1,0 +1,15 @@
+{
+  "recordType": "retrospective transcription of returned read-only exec result",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "client": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+  "necessaryExecutionPermissionUsed": true,
+  "pidof": {"exit": 1, "stdout": "", "stderr": ""},
+  "packagePath": {"exit": 0, "stdout": "package:/data/app/~~xZ3YGlziT9Xhqs88hzPS9w==/com.local.notesclone-FC4lI3sTLq1FJBUW7w1T8w==/base.apk\n", "stderr": ""},
+  "deviceDataSpace": {"exit": 0, "availableKiB": 5198580, "availableBytes": 5323345920, "minimumRequiredBytes": 2147483648, "pass": true, "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 741352   5198580  13% /storage/emulated/0/Android/obb\n"},
+  "pathProbe": [
+    {"args": ["shell", "run-as", "com.local.notesclone", "stat", "-c", "%s", "files/notes.sqlite3"], "exit": 1, "stdout": "", "stderr": "stat: 'files/notes.sqlite3': No such file or directory\n"},
+    {"args": ["shell", "run-as", "com.local.notesclone", "stat", "-c", "%s", "files/notes.sqlite3-wal"], "exit": 1, "stdout": "", "stderr": "stat: 'files/notes.sqlite3-wal': No such file or directory\n"}
+  ],
+  "interpretation": "These two candidate relative paths did not exist. No conclusion that baseline app data is absent; no installation performed before exact prior path is supplied. No broader device directory search."
+}

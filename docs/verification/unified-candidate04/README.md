@@ -1,6 +1,6 @@
 # candidate04 统一包进度
 
-状态：**Mac与Android均已构建并保全，Android独立恢复构建成功；本批尚未运行验收**。本页记录2026-11-04的阶段结果，不替代准备目录中的原始记录。
+状态：**Mac与Android均已构建并保全，Android已精确替换安装且指定数据保留通过；本批尚未启动运行验收**。本页记录2026-11-04的阶段结果，不替代准备目录中的原始记录。
 
 ## 正常生成前置
 
@@ -47,7 +47,7 @@ attempt03的AAR实际上在selected和默认cache中都存在，55,037字节、S
 
 ## 运行与像素门槛
 
-candidate04 Mac尚未启动，Android尚无本批可用APK。录音、暂停回放、真实OCR文字保存与冷启均待本批实际运行。当前窗口工具仍返回Mac锁定，用户的解锁确认并未转化为可操作窗口状态，未继续盲目输入。
+本段原先记录构建中的检查点：当时candidate04 Mac尚未启动、Android尚无本批可用APK，窗口工具返回Mac锁定。其后Android恢复构建及替换安装已完成，原版窗口亦能读取，见末节；旧检查点不代表当前APK不存在或Mac仍锁定。录音、暂停回放、真实OCR文字保存与冷启仍待本批实际运行。
 
 历史CUA截图实际编码为JPEG，即使文件后缀写作PNG也不构成无损证据；旧文件与清单保留。新的原生比例PNG取证工具源744a924已经独审SOURCE-READY并合入6428d22，四工具hash保持一致，root核对独审10证据及report hash。实际窗口枚举/取图尚未运行；普通输出只证明PNG与原生比例请求，不保证SCK内部无重采样或原始背板等价。整窗像素一致仍UNKNOWN。
 
@@ -71,4 +71,10 @@ APK 304,110,831字节，SHA-256 `bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405
 
 最新本机文件为`artifacts/unified-candidate04/NotesClone-mac.zip`和`artifacts/unified-candidate04/NotesClone-android-arm64.apk`，完整SHA及Mac/Android不同完整冻结关系见[root交接](root-handoff/result.json)。本节替代前文历史“Android尚无APK”的当前状态，但不覆写失败现场或当时结论。
 
-本次未安装或启动candidate04，没有新的设备OCR/录音/附件冷启或像素通过。完整目标继续active。
+恢复构建阶段未安装或启动candidate04；其后替换安装结果见末节。没有新的设备OCR/录音/附件冷启或像素通过。完整目标继续active。
+
+## 本批替换安装及有限窗口观察（最新）
+
+2026-11-04，[Android独立安装记录](../unified-candidate04-android-install-01/README.md)确认设备从candidate03替换为上述精确candidate04 APK。安装后base.apk的304,110,831字节/SHA完全匹配本机成品；firstInstallTime与userId不变，三条指定合成笔记完整行、附件元数据、指定音频及DB/WAL设备端校验值安装前后一致。root逐项核对清单15文件/52,737字节，aggregate `d60a3a1ed9dde99bbb5f16c9b56cb2e7ce4fbc87449b83bfd81fc47005bf9058`。核对使用设备现有SQLite只读固定ID查询，未传整DB/WAL；原被自动审批拒绝的整库临时副本命令未运行。新包未启动，安装与立即保留数据不覆盖启动迁移、编辑保存、OCR、录音、播放或UI。
+
+[Mac有限观察记录](../candidate04-mac-runtime-01/README.md)已取得原版零结果完整AX与真实JPEG。原生PNG工具明确返回缺现有屏幕录制权限；旧candidate03窗口绑定超时，正常退出未完成，因此candidate04未启动。root核对8证据文件/131,435字节，aggregate `5a50b75d3b6eba77125d6f7363b867034b5ded8ff994c6f8166bc91cb07fff29`。同条件无损整窗pair及像素一致仍UNKNOWN。
