@@ -1,0 +1,530 @@
+{
+  "createdAt": "2026-11-03T07:10:16.741436+00:00",
+  "baseProductionCommit": "7c2d103e67bdc23f1c9d095552d490afcd8daedb",
+  "sourceHashAlgorithm": "sorted path + NUL + file SHA256 hex + LF",
+  "sourceAggregateSha256": "ac0793af16c3cb5cdf631a9699f0564a93c99a820b7bb162dd3e708686f3f2fa",
+  "productionFilesChangedFromImeFix": [
+    "src/App.tsx"
+  ],
+  "sourceFiles": [
+    {
+      "path": "index.html",
+      "sha256": "964b185cd35c991a849114a813c05b55ddb81526b0cbcbbb5737a6ddaa0f7502"
+    },
+    {
+      "path": "package.json",
+      "sha256": "b33d2b396558bbfce5dd19dbdf82a33ba272414a04ed46ac57c34bccc14dda9a"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "0e8feeefc5aebab96ad737ab1325fc856d04335ca1e75753a27d59384c35a6cf"
+    },
+    {
+      "path": "scripts/android.mjs",
+      "sha256": "d36328b4a4266895204c203d6a7259acff7e80058ccbf5dae499ffd495f085c6"
+    },
+    {
+      "path": "src-tauri/Cargo.lock",
+      "sha256": "6769eb1a942563f697fbfc8010d89cbaba90bba1a0789e3d286c04ff80e8522f"
+    },
+    {
+      "path": "src-tauri/Cargo.toml",
+      "sha256": "3554f61a1e1bed92f0a1bc5a6be4516908be608fd7f90635ffa5030451e31131"
+    },
+    {
+      "path": "src-tauri/Info.plist",
+      "sha256": "e18a1bbdded73783f5dc7a7c4cc46d96c39240575132c226e50f09fffd63617d"
+    },
+    {
+      "path": "src-tauri/app-icon.svg",
+      "sha256": "f01ee23976a03457fca3ad9e91a8362f6f5e43540a6821a451e28470cab8bfcc"
+    },
+    {
+      "path": "src-tauri/build.rs",
+      "sha256": "487059eaf8a947b80f20a9aacac038a5047b2ad69d2401b827376c67d6fe847f"
+    },
+    {
+      "path": "src-tauri/capabilities/default.json",
+      "sha256": "ec3686e1a0d746b2e5fdda15bc36b25a923aab9dccfc373bafcd8683e8a19779"
+    },
+    {
+      "path": "src-tauri/gen/android/.editorconfig",
+      "sha256": "d22b394a5a140050065207d160273570edb04200480160e0951df3291dd7848f"
+    },
+    {
+      "path": "src-tauri/gen/android/.gitignore",
+      "sha256": "2d8a4dfb08ea1403e6eab97bc216158328c01ace4027f0dd3b65b2a088994270"
+    },
+    {
+      "path": "src-tauri/gen/android/app/.gitignore",
+      "sha256": "174bfc72691cfd2146e10c4dc930940ae29af4f9c79b7f3f7d1fe87b32689491"
+    },
+    {
+      "path": "src-tauri/gen/android/app/build.gradle.kts",
+      "sha256": "e00129d27a4dc909891e00d069aeee0feb07ef1e2fbd2d449622c0725eafb16f"
+    },
+    {
+      "path": "src-tauri/gen/android/app/proguard-rules.pro",
+      "sha256": "56fd960cf225f6ca40f982b13a5dbb0d8bc3dfde13ff76422825c6070d0a1890"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "sha256": "b15c0e487e8b4378f0b32f6ca565c075327e12222bcd3a43f36ffd9489f8e2bc"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "sha256": "fb78a73cae9aa86fa0e2d0b8be4008a5875671f9f62c8775f1a2bb465023a47b"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "sha256": "01d1a6a6c1234eb7fe270d097eb283d72b9c95ae5118886f1b6573aad280f1f7"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "sha256": "ed423c73a6f40a4d2909f0901e60527b3a807cd59e1b5593bcaae1808b1c6321"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/layout/activity_main.xml",
+      "sha256": "68466a0a3006f183eb3af4e978d52f50a68087a1aac0880bd16eef3760153bcb"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "sha256": "760d4b8a06bf7163dd010c33ad2cac9e4a75fa0177afaba042f83e311eef0c3e"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "sha256": "453ba1f1838d7fcbc2f65becab9f0706b4045a521baee6a69e7e8f4c32bfe709"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "sha256": "b74c50a540e5aa33d9188de693310ad522b2ac1a9ad5275d4176ff859913191d"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "sha256": "2db6264f211ef2385d67e3254ef5fc21dbaa6e92f80552e4b5c6c4b2d88f01f4"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "sha256": "82a5bad2884f5ca27fdfbce8b683adee80203dd69d8b69007e77bfa6a877b5bb"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "sha256": "ac0113f6f17c12b4cf0d256f6c0bba0f81e9c4c118634b9d945a81e859dd0a12"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "sha256": "d775f7b2b09b1e8089c3cc8624af694a4125576829382287bf1e6f6fbeb60d6f"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "sha256": "b4eedb4c3f84e1f3367d7d1d40cff8524c66629fab3e5561153b22adc6f37d7e"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "sha256": "09ae834dcac653459170a40ffef7dddc2b3927eeba099c002513cb4cb161a513"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "sha256": "f0fd9bd711b3e902e227dfc80865799ef9d0115a90a5789b86ff52461a11bb52"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "sha256": "3a0e6b384eec8b9f86cd6a45a88eea7b08d47fcf3f09d7789cb2f13fbf8d5165"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "sha256": "bf95f7d4343e99a7c2f3b7c7a145a04339fb6ab4b1224124d4b9889b2f935d40"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "sha256": "eb38417f718994e282bae5bcfd5391cfa23f39a5cf52a421e241ea346d9716a1"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "sha256": "56cc6166de938ecc0f9985816b1a50b3d2d1b33fd4807a3152f1b8f14b927832"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "sha256": "6c1d2ea018a2dc147af52f183952a4d5ac55d8976e293b0a74d82cb2c81d45af"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "sha256": "8be55021297860fb4675033098a0dcede6869c68c1a066e6bf95b018a7d47ad6"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/values-night/themes.xml",
+      "sha256": "dc729465621c9e80ba2f032734ccc0937bd4f9daf13ab808c716e487d60163d7"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/values/colors.xml",
+      "sha256": "b5626527d503417f0d8e5b1e08f338de7b31173bf0e122815f03e64932adbd88"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/values/ic_launcher_background.xml",
+      "sha256": "b1c42868a1777ed1cf61108b506ffc91d0a826318d8516e36cf8f76fab8c4ced"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/values/strings.xml",
+      "sha256": "652ba55a41e59e2170dab7142455ca3ba206aab2b69ceead8a69aae905689aed"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/values/themes.xml",
+      "sha256": "dc729465621c9e80ba2f032734ccc0937bd4f9daf13ab808c716e487d60163d7"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/res/xml/file_paths.xml",
+      "sha256": "cdb4effab9f579e06f0f49d5fde4b3909fc5f03e978c9ba9ce34cf5b9f4b6902"
+    },
+    {
+      "path": "src-tauri/gen/android/build.gradle.kts",
+      "sha256": "975b86375423d877cfd5a90648bed227bae5665a82fce99e3ebd901419e80bf9"
+    },
+    {
+      "path": "src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "sha256": "e3856dc35370b6f5c3222b981e546c08121bf96629e6a336d0c7f8f8020eb942"
+    },
+    {
+      "path": "src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/BuildTask.kt",
+      "sha256": "69e1850a7c9769e6d8f421370dccd743b54787aed3631acd24c93bc4336b9efb"
+    },
+    {
+      "path": "src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/RustPlugin.kt",
+      "sha256": "ba97577f2cf2b123eddd332662844d2b93a2ee589be65f3843bc7de4ea5b7ba7"
+    },
+    {
+      "path": "src-tauri/gen/android/gradle.properties",
+      "sha256": "02a22057efb36491da460e4ecee89db4961b14c2aa48db9a33108748418a480d"
+    },
+    {
+      "path": "src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+      "sha256": "497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7"
+    },
+    {
+      "path": "src-tauri/gen/android/gradle/wrapper/gradle-wrapper.properties",
+      "sha256": "b347084df5a6747528d85c39c1ec723ac38110c91a4a6a950e4483509f209945"
+    },
+    {
+      "path": "src-tauri/gen/android/gradlew",
+      "sha256": "a5a5c199ba02189ae8c46a334223371a20599d9c298ef65e7540ede4a3f72d59"
+    },
+    {
+      "path": "src-tauri/gen/android/gradlew.bat",
+      "sha256": "59328c7a17f673b1a63040bfb380a0c749e5d6df3406f7f18641060314cd9aa1"
+    },
+    {
+      "path": "src-tauri/gen/android/settings.gradle",
+      "sha256": "99856053f245337d20d308dbeaf9cd7250ad0c186ebbb6866ab46a6e7005ee19"
+    },
+    {
+      "path": "src-tauri/icons/128x128.png",
+      "sha256": "0069dec9be40c331165b5705318951afd02d7f8cc2f2dec00847e9f98a4420cb"
+    },
+    {
+      "path": "src-tauri/icons/128x128@2x.png",
+      "sha256": "d4935167c4b45cf774cb3603b783e168f11c537296b43d076b32873adef104d6"
+    },
+    {
+      "path": "src-tauri/icons/32x32.png",
+      "sha256": "2031f22df0b62b990923e311a6e40e8d11836f96a7eb584e4cadfca6b7b526f1"
+    },
+    {
+      "path": "src-tauri/icons/64x64.png",
+      "sha256": "5058015c28b7cfb5f74fc6ddefd57c4a6b1839afc122b345fd0d6716cd439518"
+    },
+    {
+      "path": "src-tauri/icons/Square107x107Logo.png",
+      "sha256": "f484be31c56db7d844a22ab72117550407725250612c93beff69858938339ac3"
+    },
+    {
+      "path": "src-tauri/icons/Square142x142Logo.png",
+      "sha256": "6c754e6c9281af57c707dd8ce19909b0e93c053fd4dad2894814614d4902fd4e"
+    },
+    {
+      "path": "src-tauri/icons/Square150x150Logo.png",
+      "sha256": "16159ca643adf1614844607c22213240f1da3c40f6ed77653f975b4df69a7d7f"
+    },
+    {
+      "path": "src-tauri/icons/Square284x284Logo.png",
+      "sha256": "abf4390e8ea39baede4d31a289239f5a511ecd8466c36c28df9a05cfc44f0b3c"
+    },
+    {
+      "path": "src-tauri/icons/Square30x30Logo.png",
+      "sha256": "392e96da757b8b74ed0dc07b1788dbb0a7abea74a2a7e032df394df20113c0bd"
+    },
+    {
+      "path": "src-tauri/icons/Square310x310Logo.png",
+      "sha256": "328de74c6e327cba99c05622452f37745735f331cb3249361d385e8e3e2c7d1a"
+    },
+    {
+      "path": "src-tauri/icons/Square44x44Logo.png",
+      "sha256": "41354182d836b4c401b275b1d2d7dfa8875f698063c0e3cac75a055c1ffe7280"
+    },
+    {
+      "path": "src-tauri/icons/Square71x71Logo.png",
+      "sha256": "d23417e536bd708dae2803bed8dcc6bd457935954b6831b11276c8707ed797fa"
+    },
+    {
+      "path": "src-tauri/icons/Square89x89Logo.png",
+      "sha256": "d9f9f1aa60aed7925e02985d135b2db972ea7c21da151b0e4a19e0b77295af43"
+    },
+    {
+      "path": "src-tauri/icons/StoreLogo.png",
+      "sha256": "6a76fd8803bb35e6967ab8c7b1fce3524a7d2b7d4197d72bbf0b05200da6a25d"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-anydpi-v26/ic_launcher.xml",
+      "sha256": "760d4b8a06bf7163dd010c33ad2cac9e4a75fa0177afaba042f83e311eef0c3e"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+      "sha256": "453ba1f1838d7fcbc2f65becab9f0706b4045a521baee6a69e7e8f4c32bfe709"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-hdpi/ic_launcher_foreground.png",
+      "sha256": "b74c50a540e5aa33d9188de693310ad522b2ac1a9ad5275d4176ff859913191d"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+      "sha256": "2db6264f211ef2385d67e3254ef5fc21dbaa6e92f80552e4b5c6c4b2d88f01f4"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+      "sha256": "82a5bad2884f5ca27fdfbce8b683adee80203dd69d8b69007e77bfa6a877b5bb"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-mdpi/ic_launcher_foreground.png",
+      "sha256": "ac0113f6f17c12b4cf0d256f6c0bba0f81e9c4c118634b9d945a81e859dd0a12"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+      "sha256": "d775f7b2b09b1e8089c3cc8624af694a4125576829382287bf1e6f6fbeb60d6f"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+      "sha256": "b4eedb4c3f84e1f3367d7d1d40cff8524c66629fab3e5561153b22adc6f37d7e"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-xhdpi/ic_launcher_foreground.png",
+      "sha256": "09ae834dcac653459170a40ffef7dddc2b3927eeba099c002513cb4cb161a513"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+      "sha256": "f0fd9bd711b3e902e227dfc80865799ef9d0115a90a5789b86ff52461a11bb52"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+      "sha256": "3a0e6b384eec8b9f86cd6a45a88eea7b08d47fcf3f09d7789cb2f13fbf8d5165"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "sha256": "bf95f7d4343e99a7c2f3b7c7a145a04339fb6ab4b1224124d4b9889b2f935d40"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+      "sha256": "eb38417f718994e282bae5bcfd5391cfa23f39a5cf52a421e241ea346d9716a1"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+      "sha256": "56cc6166de938ecc0f9985816b1a50b3d2d1b33fd4807a3152f1b8f14b927832"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "sha256": "6c1d2ea018a2dc147af52f183952a4d5ac55d8976e293b0a74d82cb2c81d45af"
+    },
+    {
+      "path": "src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+      "sha256": "8be55021297860fb4675033098a0dcede6869c68c1a066e6bf95b018a7d47ad6"
+    },
+    {
+      "path": "src-tauri/icons/android/values/ic_launcher_background.xml",
+      "sha256": "b1c42868a1777ed1cf61108b506ffc91d0a826318d8516e36cf8f76fab8c4ced"
+    },
+    {
+      "path": "src-tauri/icons/icon.icns",
+      "sha256": "2da2bf4a154ad4d2a358d8737ad4b92b7bb8118b7cf0f262d964da9beed5280a"
+    },
+    {
+      "path": "src-tauri/icons/icon.ico",
+      "sha256": "29d5209ac6a5e252ba05dd7965f4b7e1173f60211789619626f4bc8c62ae7d74"
+    },
+    {
+      "path": "src-tauri/icons/icon.png",
+      "sha256": "318c59c5ec1fb2147893ea71c6fb4e29cec9c64c67b63e17ebadd0dd0198022a"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-20x20@1x.png",
+      "sha256": "3f4d89871352788055a7f405559c9b43cfc8aa34920c2cceab6a36d9a11dee61"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-20x20@2x-1.png",
+      "sha256": "2dd5e5465535b42d058b1a82d531464e01a2c396d876beba53efe330fbcc6937"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-20x20@2x.png",
+      "sha256": "2dd5e5465535b42d058b1a82d531464e01a2c396d876beba53efe330fbcc6937"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-20x20@3x.png",
+      "sha256": "3d1d22e45bc14fce2f91511b8e6048e76ca5fcad6b0baac369c4bad65edeec8c"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-29x29@1x.png",
+      "sha256": "27007015d521cfb39c3b8f0246ba127bc91b31477e205457881a9e1e176ed846"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-29x29@2x-1.png",
+      "sha256": "8d8077bdbd91a7b96da79f09eb430f02b03790d6dbeeeeffd4807556744fad1e"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-29x29@2x.png",
+      "sha256": "8d8077bdbd91a7b96da79f09eb430f02b03790d6dbeeeeffd4807556744fad1e"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-29x29@3x.png",
+      "sha256": "184b816ad0a02e9ee6c8f93bd0df2311c97d6fecf863ba8ac89cc3f56e9b5a83"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-40x40@1x.png",
+      "sha256": "2dd5e5465535b42d058b1a82d531464e01a2c396d876beba53efe330fbcc6937"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-40x40@2x-1.png",
+      "sha256": "7b740945741ef2a6b44e62e61b309f23025ba32e716b8c044e6a17662c29ecae"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-40x40@2x.png",
+      "sha256": "7b740945741ef2a6b44e62e61b309f23025ba32e716b8c044e6a17662c29ecae"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-40x40@3x.png",
+      "sha256": "ccc9ab9c6df2787455c814718abfed8e3e01a945fdb6d5c3c1b16a926b6311fb"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-512@2x.png",
+      "sha256": "f3c6d13faabbec654e1e672452bdc3ba5ffd17b402bc899307bf2ef6b4cda3d4"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-60x60@2x.png",
+      "sha256": "ccc9ab9c6df2787455c814718abfed8e3e01a945fdb6d5c3c1b16a926b6311fb"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-60x60@3x.png",
+      "sha256": "ec60c0f18a2a53b89245fa43a31d2ad1e61836ae7a10fb65a20de56d249a912d"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-76x76@1x.png",
+      "sha256": "d2be5ff9131e80ae642c432ddefd600beb491e42c73b7d5a26506307909196e7"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-76x76@2x.png",
+      "sha256": "f5a6633352b974f8f06aeae8fca2444b48a2fa2d55b0568e7578ab8b1133b189"
+    },
+    {
+      "path": "src-tauri/icons/ios/AppIcon-83.5x83.5@2x.png",
+      "sha256": "9d2cc31f7755e324356efac8bdfdbffe4977270e73ced6b660d6d9c36439a28a"
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "sha256": "146281e7afa78cfd1fda490e922227f3d998cda1951a2acb7423218823feb740"
+    },
+    {
+      "path": "src-tauri/src/main.rs",
+      "sha256": "63b87d68a89b9c9643ccbb2ec5149ebec8a665f95adf54504bf099e4fc68aceb"
+    },
+    {
+      "path": "src-tauri/src/store.rs",
+      "sha256": "0d765cfa41d67541fea89ba7868971c51003346f87e0ec6d37010d3da39a4822"
+    },
+    {
+      "path": "src-tauri/src/store/archive.rs",
+      "sha256": "cd703c2b3adfd812505928c9b8b8d4a8aec2df648224cc28d0c418d1ebdbc270"
+    },
+    {
+      "path": "src-tauri/src/store/archive/document-cases.json",
+      "sha256": "d960c16d500324bc8dcfa739d758636af0d954ac0321ca37e7edd300ab82495e"
+    },
+    {
+      "path": "src-tauri/src/store/archive/document-schema.json",
+      "sha256": "3a2e8cefd25ddf5438fbb81f3cae3ba7f10ec0d13c61b7ff3810636fcff6199c"
+    },
+    {
+      "path": "src-tauri/src/store/archive/document.rs",
+      "sha256": "ec1f8c79f56d0d871a5bd57be7307833b13b49ef604555cace4ebc993d347e3b"
+    },
+    {
+      "path": "src-tauri/src/store/archive/tests.rs",
+      "sha256": "6d5189fe570ce8d740734c336741ed53dac96748848cc5da4157ea4f12a9b4bf"
+    },
+    {
+      "path": "src-tauri/tauri.conf.json",
+      "sha256": "645255e9f10222af55f44f81c56f48ca87a3da59ff85595fec2806922592fad3"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "7aa0bc049730750062329468d35d3bec5fd7be2e123801a95da292fb145f5cc1"
+    },
+    {
+      "path": "src/Editor.tsx",
+      "sha256": "3c452e42bbd319f43a9f7f19b559180cb752ca6d596315d5eb14e590e64753d1"
+    },
+    {
+      "path": "src/bridge.ts",
+      "sha256": "0fdd427ddb56079ca7f9ac3aef99d6aee458c6bc0f19eb155fcf7535eb004fec"
+    },
+    {
+      "path": "src/editor-actions.ts",
+      "sha256": "de5092e2b9a1304bd013b4198dc577d5f79f8effb52a5743ffe669c41db03e36"
+    },
+    {
+      "path": "src/editor-schema.ts",
+      "sha256": "13c90323b0632d6668e98ca3a24d29fd8db991e881446ba20263bbbf43631252"
+    },
+    {
+      "path": "src/main.tsx",
+      "sha256": "2a05d75ba3bc21a60366dea66f7eca99a90683bb15907b2b75df6ce686e2a7a5"
+    },
+    {
+      "path": "src/style.css",
+      "sha256": "d479356b1c182221551398df0686975e5f31b7a3a89f4245f30ed6f44e623e1c"
+    },
+    {
+      "path": "src/types.ts",
+      "sha256": "a2e0b93707544cf72ef6239b281ff2b3f4d5d683de8b26b25bebf687e90b5a45"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "db2073ec78d9fdaf1a092aa1b29512e3ee282be35d3004c6d6eb0d6b17acfa80"
+    },
+    {
+      "path": "vite.config.ts",
+      "sha256": "6aae2f4c212331e8ca52b61e7ae786e710f1f0164116baa343c52c564236ce30"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app/Contents/MacOS/notes-clone",
+      "bytes": 14432144,
+      "sha256": "239a4214f2f0a6887ad3a6cd4fb0a41185cfe23c452ba55815b8f61b36073714"
+    },
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+      "bytes": 298690090,
+      "sha256": "3852b03a09dcbac02fecf2761ffee110a5d52eb3a487dc8bd386ead17ca04345"
+    }
+  ],
+  "macRebuilt": true,
+  "builds": [
+    "pnpm mac:build",
+    "pnpm android:build --debug"
+  ],
+  "buildLogs": [
+    "checks/mac-build-final.log",
+    "checks/android-build-final.log"
+  ],
+  "regressionScriptSha256": "4b5e0f920f2d8436739c8eb6101f658a17b7e4119e27038349ae5f1b4cdfb568",
+  "finalApkInstalledByDeveloper": false,
+  "nativeRegressionCandidateManifest": "native-regression-manifest.json",
+  "nativeRegressionInstalledApkEvidence": "checks/installed-apk.json",
+  "nativeRegressionEvidence": "android/result.json",
+  "differenceFromNativeRegressionCandidate": "Only src/App.tsx desktop menu label changes from 等宽 to 等宽样式; mobile label was already 等宽样式. No native regression rerun for this desktop text-only change; final artifacts handed to independent verification."
+}

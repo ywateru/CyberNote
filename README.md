@@ -66,6 +66,8 @@ ANDROID_SERIAL=emulator-5580 node scripts/android-smoke.mjs
 
 FIX-01 独立验证发现旧 WebView 在真实键盘显示时遮挡格式工具栏；修正 Android 原生 IME insets 后，`node scripts/android-ime-regression.mjs` 使用 adb 原生触摸、系统键盘 Enter 与 Back 回归，调试接口只读取证。新证据见 `docs/verification/app-001-fix-01-ime/`，原 FIX-01 的 DOM 点击脚本不作为工具栏实际可触达的通过证据；本修正仍待独立复验。
 
+格式面板打开时隐藏键盘附加栏，正文直接接面板自身标题与关闭按钮；X 返回键盘后恢复附加栏。独立 P2 发现与补修取证见 `docs/verification/app-001-fix-01-format/`，该补修仍待独立复验。
+
 ## 已知缺口
 
 - Mac 字形、图标、工具条材质、侧栏间距和画廊卡片仍需逐项像素对照；当前 Lucide 图标尚未替换为原生 SF Symbols。图库双击同窗展开与返回已修正，尚待独立验收。

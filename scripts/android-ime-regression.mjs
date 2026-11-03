@@ -4,7 +4,9 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, writeFileSync, appendFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import path from "node:path";
-const out = path.resolve("artifacts/android/fix01-ime");
+const out = path.resolve(
+  process.env.NOTES_IME_EVIDENCE_DIR || "artifacts/android/fix01-ime",
+);
 const adb = "/Users/water/Library/Android/sdk/platform-tools/adb";
 const pkg = "com.local.notesclone";
 const run = (...a) =>
@@ -58,7 +60,7 @@ async function read(expression) {
   if (r.exceptionDetails) throw Error(r.exceptionDetails.text);
   return r.result.value;
 }
-const inspect = `(()=>{const ed=document.querySelector('.tiptap'), e=ed?.editor;const rect=x=>{const r=x.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height}};return {url:location.href,title:document.title,app:document.querySelector('.app')?.className,active:document.activeElement?.outerHTML?.slice(0,300),viewport:[innerWidth,innerHeight,devicePixelRatio],selection:e?.state.selection.toJSON(),document:e?.getJSON(),focused:e?.isFocused,editor:ed?rect(ed):null,buttons:[...document.querySelectorAll('button')].filter(b=>b.getBoundingClientRect().width>0).map(b=>({label:b.getAttribute('aria-label'),text:b.textContent,cls:b.className,paper:b.dataset.paperStyle,rect:rect(b)})),paper:[...document.querySelectorAll('.paper-option')].map(b=>({style:b.dataset.paperStyle,selected:b.classList.contains('selected'),rect:rect(b)})),drawings:[...document.querySelectorAll('.drawing-surface,.drawing-node')].map(b=>({cls:b.className,style:getComputedStyle(b).backgroundImage,size:getComputedStyle(b).backgroundSize,rect:rect(b)})),text:ed?.innerText,domSelection:window.getSelection()?.toString()}})()`;
+const inspect = `(()=>{const ed=document.querySelector('.tiptap'), e=ed?.editor;const rect=x=>{const r=x.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height}};return {url:location.href,title:document.title,app:document.querySelector('.app')?.className,active:document.activeElement?.outerHTML?.slice(0,300),viewport:[innerWidth,innerHeight,devicePixelRatio],selection:e?.state.selection.toJSON(),document:e?.getJSON(),focused:e?.isFocused,editor:ed?rect(ed):null,toolbars:[...document.querySelectorAll('.editor-tools')].map(b=>({cls:b.className,rect:rect(b)})),formatPanel:document.querySelector('.mobile-format-panel')?rect(document.querySelector('.mobile-format-panel')):null,buttons:[...document.querySelectorAll('button')].filter(b=>b.getBoundingClientRect().width>0).map(b=>({label:b.getAttribute('aria-label'),text:b.textContent,cls:b.className,paper:b.dataset.paperStyle,rect:rect(b)})),paper:[...document.querySelectorAll('.paper-option')].map(b=>({style:b.dataset.paperStyle,selected:b.classList.contains('selected'),rect:rect(b)})),drawings:[...document.querySelectorAll('.drawing-surface,.drawing-node')].map(b=>({cls:b.className,style:getComputedStyle(b).backgroundImage,size:getComputedStyle(b).backgroundSize,rect:rect(b)})),text:ed?.innerText,domSelection:window.getSelection()?.toString()}})()`;
 async function snapshot(name) {
   const state = await read(inspect);
   state.imeShown = /mInputShown=true/.test(
@@ -113,6 +115,19 @@ const back = async (name) => {
 };
 const flat = (n) => [n, ...(n.content || []).flatMap(flat)];
 const isPanel = (s) => s.buttons.some((b) => b.label === "关闭格式");
+const assertPanelStructure = (s) => {
+  assert(isPanel(s), "Format panel's own close button absent");
+  assert.equal(
+    s.toolbars.length,
+    0,
+    "Extra accessory toolbar above format panel",
+  );
+  assert(s.formatPanel, "Format panel absent");
+  assert(
+    Math.abs(s.formatPanel.y + s.formatPanel.h - s.viewport[1]) < 2,
+    "Format panel does not meet the bottom of the viewport",
+  );
+};
 const assertKeyboardReachable = (base, s) => {
   assert(s.imeShown, "Native IME is not displayed");
   assert(s.focused, "Editor not focused");
@@ -122,6 +137,15 @@ const assertKeyboardReachable = (base, s) => {
   );
   const b = s.buttons.find((b) => b.label === "格式");
   assert(b, "Format button absent");
+  assert.equal(
+    s.toolbars.length,
+    1,
+    "Keyboard accessory not restored exactly once",
+  );
+  assert(
+    !s.toolbars[0].cls.includes("bottom-tools"),
+    "Idle footer shown over IME",
+  );
   assert(
     b.rect.y + b.rect.h <= s.viewport[1] + 1,
     "Format toolbar lies outside resized WebView",
@@ -181,6 +205,7 @@ try {
   const selected = before.selection;
   const opened = await tapButton('button[aria-label="格式"]', "format-native");
   assert(isPanel(opened), "Native touch did not open format panel");
+  assertPanelStructure(opened);
   assert(!opened.imeShown, "IME overlaps format panel");
   assert(!opened.focused);
   assert.deepEqual(opened.selection, selected);
@@ -189,6 +214,7 @@ try {
     "bold-native",
   );
   assert(isPanel(bold));
+  assertPanelStructure(bold);
   assert(!bold.imeShown);
   assert(!bold.focused);
   assert.deepEqual(bold.selection, selected);
@@ -206,6 +232,7 @@ try {
     "format-again-native",
   );
   assert(isPanel(openedAgain));
+  assertPanelStructure(openedAgain);
   assert(!openedAgain.imeShown);
   const panelBack = await back("panel-back-native");
   assert(!isPanel(panelBack));
@@ -253,6 +280,7 @@ try {
       "IME resizes native WebView above keyboard",
       "format toolbar visible in screenshot and native hit succeeds with IME displayed",
       "native word selection preserved through panel",
+      "format panel meets viewport bottom with its own X and no accessory toolbar",
       "native bold command retains focus/IME hidden",
       "native X restores same selection and reachable toolbar over IME",
       "native panel Back retains note and no IME",

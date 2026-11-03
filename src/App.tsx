@@ -2012,7 +2012,8 @@ function App() {
             </div>
             {mobile &&
               !current.deletedAt &&
-              (editing || menu === "format" ? tools() : tools(true))}
+              menu !== "format" &&
+              (editing ? tools() : tools(true))}
           </>
         )}
         {saving > 0 && (
@@ -2506,7 +2507,7 @@ function FormatControls({
         { label: "小标题", level: 2 },
         { label: "副标题", level: 3 },
         { label: "正文", level: 0 },
-        { label: mobile ? "等宽样式" : "等宽", level: -1 },
+        { label: "等宽样式", level: -1 },
       ].map(({ label, level }) => {
         const active =
           level > 0

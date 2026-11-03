@@ -31,6 +31,8 @@ ID 由 Rust 生成；时间为 UTC 毫秒，UI 按设备本地时区显示。tit
 
 FIX-01 编辑契约：默认空笔记直接输入从一级标题开始，Enter 后为正文；仅首次、仍为空的一块标题/正文文档，在明确仅有 text/plain 的粘贴时按全部正文插入，已有内容或 HTML 粘贴不走该特判。短划线列表使用真实 bulletList 的 `listStyle: "dash"` 属性，与默认 `"bullet"` 区分，旧文档省略该属性仍有效。表格转换按各单元格内部 LF、列 Tab、行 LF（含末行 LF）生成正文，保留末空格，选中完整转换块，并以一个独立历史事务支持单次 Undo。格式面板保存当前 noteId 和映射后的 ProseMirror SelectionBookmark，面板命令不调用 focus；X 还原选区并恢复键盘，Android Back 关闭面板并保持键盘隐藏，切笔记清除旧 bookmark。Mac 画廊同主窗进入笔记，返回恢复相同文件夹/查询/排序/滚动；独立窗为显式菜单入口。
 
+移动端格式面板与键盘附加栏互斥：`menu === "format"` 时不渲染 `editor-tools`，面板保留自身的圆形关闭按钮；X 恢复编辑焦点后，按编辑状态重新显示附加栏。面板仅依赖原有底部空间与原生 WebView 布局，无额外键盘高度抵扣。补修的真实原生触摸回归见 `docs/verification/app-001-fix-01-format/`。
+
 paperStyle 合法值为 plain、lines-small、lines-medium、lines-large、grid-small、grid-medium、grid-large，依此按空白独占首行、其余两列三行显示。选择立即保存到当前笔记，取消只关闭选择页。纸纹用于绘画/手写区域和选择预览，不给普通键入文字整页铺纹；已有六种值无需迁移。绘画编辑与保存后的绘画节点使用相同样式，切换纸张不改笔画。
 
 ## 命令契约
