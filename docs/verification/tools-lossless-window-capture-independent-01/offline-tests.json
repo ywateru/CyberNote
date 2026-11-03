@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "/private/tmp/notes-window-capture-independent-build01/window-capture-offline-tests"
+  ],
+  "elapsedSeconds": 0.618675167,
+  "exitCode": 0,
+  "stdout": "{\n  \"limitations\" : \"Synthetic CGImage and filesystem/argument tests only; no real list/capture/permission/process or GUI access. Test PID/path strings were never passed to a capture backend.\",\n  \"results\" : [\n    {\n      \"name\" : \"parser accepts complete identity and keeps exact arguments\",\n      \"pass\" : true\n    },\n    {\n      \"name\" : \"parser rejects unrelated bundles and unexpected UI/shell options\",\n      \"pass\" : true\n    },\n    {\n      \"name\" : \"parser rejects missing duplicate mixed and invalid identifier arguments\",\n      \"pass\" : true\n    },\n    {\n      \"name\" : \"parser rejects relative paths and malformed identity tokens\",\n      \"pass\" : true\n    },\n    {\n      \"name\" : \"native dimension calculation preserves integral native extent and rejects ambiguous input\",\n      \"pass\" : true\n    },\n    {\n      \"name\" : \"ImageIO directly encodes synthetic CGImage and PNG validator verifies actual dimensions and bytes\",\n      \"pass\" : true\n    },\n    {\n      \"name\" : \"PNG validator rejects JPEG prefix truncation and incorrect expected dimensions\",\n      \"pass\" : true\n    },\n    {\n      \"name\" : \"exclusive output rejects existing directory file and symlink without changing old bytes\",\n      \"pass\" : true\n    },\n    {\n      \"name\" : \"uncommitted failure removes only owned files and leaves no success manifest\",\n      \"pass\" : true\n    },\n    {\n      \"name\" : \"strict proof rejection happens before output permission process or window access\",\n      \"pass\" : true\n    }\n  ],\n  \"tests\" : 10\n}\n",
+  "stderr": ""
+}

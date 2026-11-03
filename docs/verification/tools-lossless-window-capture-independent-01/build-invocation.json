@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "python3",
+    "scripts/build-window-capture.py",
+    "--output-dir",
+    "/private/tmp/notes-window-capture-independent-build01",
+    "--with-offline-tests"
+  ],
+  "cwd": "/private/tmp/apple-notes-window-capture-review01",
+  "exitCode": 0,
+  "observedToolOutputChunks": [
+    "swift-driver version: 1.148.6 ",
+    "{\"status\": \"compiled_only\", \"outputDirectory\": \"/private/tmp/notes-window-capture-independent-build01\", \"binarySha256\": \"ffb6c5908ef6344dde0e5ef0946b2ea912998a47d8d86c9c8b7cc1572878deea\", \"checks\": [{\"name\": \"observer\", \"exitCode\": 0}, {\"name\": \"offline-tests\", \"exitCode\": 0}]}\n"
+  ],
+  "note": "Tool-stream chunks retained as observed, not relabelled stdout/stderr. Each compilation command and exact stdout/stderr/exit is in independent-build-info.json."
+}

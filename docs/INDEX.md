@@ -44,6 +44,7 @@
 - [验证与像素比较规则](verification/README.md)
 - [candidate04 Mac构建与Android离线解析阻塞](verification/unified-candidate04/README.md)
 - [原生比例PNG窗口取证工具任务](plan/tasks/tools-lossless-window-capture-01.md)
+- [取图工具独立审查（真实窗口未验）](plan/reviews/tools-lossless-window-capture-static-01.md)
 - [candidate03 Android身份及保留数据升级](verification/unified-candidate03-android-independent-01/README.md)
 - [candidate03 Mac录音准备权限路径诊断](verification/candidate03-mic-preparing-diagnosis-01/README.md)
 - [Mac录音请求与锁定WebKit权限源码路径](research/mac-recording-permission-source-01.md)

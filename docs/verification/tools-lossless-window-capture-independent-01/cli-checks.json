@@ -1,0 +1,149 @@
+{
+  "checks": 7,
+  "allPass": true,
+  "results": [
+    {
+      "name": "help",
+      "argv": [
+        "python3",
+        "scripts/run-window-capture.py",
+        "--build-dir",
+        "/private/tmp/notes-window-capture-independent-build01",
+        "--",
+        "--help"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.41701366700000003,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 0,\n    \"stdout\": \"window-capture list --bundle <com.apple.Notes|com.local.notesclone>\\nwindow-capture capture --bundle <allowed bundle> --pid <PID> --window <CGWindowID>\\n  --executable <absolute executable path> --expected-identity <token from list>\\n  --output-dir <new absolute directory> [--require-unscaled]\\nNo UI actions, process launch, audio, permission requests, or full-screen fallback.\\nPNG encoding is lossless; source no-resampling is UNKNOWN. Strict mode rejects.\\n\",\n    \"stderr\": \"\"\n  },\n  \"acceptOutput\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "invalid-bundle",
+      "argv": [
+        "python3",
+        "scripts/run-window-capture.py",
+        "--build-dir",
+        "/private/tmp/notes-window-capture-independent-build01",
+        "--",
+        "list",
+        "--bundle",
+        "com.example.other"
+      ],
+      "exitCode": 2,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.010434208000000004,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"invalid_bundle\\\",\\n  \\\"message\\\" : \\\"Only com.apple.Notes and com.local.notesclone are accepted.\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "missing-identity",
+      "argv": [
+        "python3",
+        "scripts/run-window-capture.py",
+        "--build-dir",
+        "/private/tmp/notes-window-capture-independent-build01",
+        "--",
+        "capture",
+        "--bundle",
+        "com.apple.Notes",
+        "--pid",
+        "123",
+        "--window",
+        "456",
+        "--executable",
+        "/fixture/Notes",
+        "--output-dir",
+        "/private/tmp/window-capture-independent-reject-fixture01"
+      ],
+      "exitCode": 2,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.008731125,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"missing_argument\\\",\\n  \\\"message\\\" : \\\"capture requires all six named options.\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "unknown-action",
+      "argv": [
+        "python3",
+        "scripts/run-window-capture.py",
+        "--build-dir",
+        "/private/tmp/notes-window-capture-independent-build01",
+        "--",
+        "list",
+        "--bundle",
+        "com.apple.Notes",
+        "--activate"
+      ],
+      "exitCode": 2,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.008122416,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"invalid_argument\\\",\\n  \\\"message\\\" : \\\"Unknown option: --activate\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "existing-output-before-backend",
+      "argv": [
+        "python3",
+        "scripts/run-window-capture.py",
+        "--build-dir",
+        "/private/tmp/notes-window-capture-independent-build01",
+        "--",
+        "capture",
+        "--bundle",
+        "com.apple.Notes",
+        "--pid",
+        "123",
+        "--window",
+        "456",
+        "--executable",
+        "/fixture/Notes",
+        "--expected-identity",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "--output-dir",
+        "/private/tmp/window-capture-independent-reject-fixture01"
+      ],
+      "exitCode": 2,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.008316625000000001,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"output_not_new\\\",\\n  \\\"message\\\" : \\\"Output must be a new directory under an existing parent; mkdir errno=17.\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "strict-before-backend",
+      "argv": [
+        "python3",
+        "scripts/run-window-capture.py",
+        "--build-dir",
+        "/private/tmp/notes-window-capture-independent-build01",
+        "--",
+        "capture",
+        "--bundle",
+        "com.apple.Notes",
+        "--pid",
+        "123",
+        "--window",
+        "456",
+        "--executable",
+        "/fixture/Notes",
+        "--expected-identity",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "--output-dir",
+        "/private/tmp/window-capture-independent-strict-output01",
+        "--require-unscaled"
+      ],
+      "exitCode": 2,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.007559291999999999,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"unscaled_proof_unavailable\\\",\\n  \\\"message\\\" : \\\"Public screenshot API does not prove zero internal resampling. Strict mode refuses before accessing windows or permissions.\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "hard-deadline-help-only",
+      "argv": [
+        "python3",
+        "scripts/run-window-capture.py",
+        "--build-dir",
+        "/private/tmp/notes-window-capture-independent-build01",
+        "--timeout-seconds",
+        "0.000001",
+        "--",
+        "--help"
+      ],
+      "exitCode": 124,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 1e-06,\n    \"elapsedSeconds\": 0.0011652499999999996,\n    \"timedOut\": true,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": -9,\n    \"stdout\": \"\",\n    \"stderr\": \"\"\n  },\n  \"acceptOutput\": false,\n  \"limitation\": \"Do not accept any output from this interrupted attempt, including files left by SIGKILL. Preserve it as interrupted evidence; use a new output directory for any later authorized attempt. No automatic retry.\"\n}\n",
+      "stderr": ""
+    }
+  ],
+  "priorEvidenceUnchanged": true,
+  "strictOutputAbsent": true,
+  "limitations": "Only help or pre-backend rejected arguments. No valid list/capture, preflight, process/window observation or GUI. Hard deadline exercised on help only, not SCK."
+}
