@@ -20,6 +20,8 @@
 - [交付计划](plan/README.md)
 - [手机媒体权限入口崩溃修复](plan/tasks/app-002-permission-01.md)
 - [系统文件选择与附件正文提交修复](plan/tasks/app-002-attachment-submit-01.md)
+- [附件持久操作、去重与安全恢复](plan/tasks/app-002-attachment-store-01.md)
+- [本地音频无限时长与播放错误修复](plan/tasks/app-002-audio-duration-01.md)
 - [Mac搜索结果与零结果恢复](plan/tasks/app-001-search-results-01.md)
 - [验证与像素比较规则](verification/README.md)
 
