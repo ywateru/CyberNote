@@ -23,6 +23,7 @@
 | APP-002-PERMISSION-01 手机媒体权限入口 | 主ff6b93a，独立静态有限通过，统一新APK准备 | 998de4b保存88dfee5独立9项及公开hook/API审查，无确定源码阻断；仅修同步URL回调与可信实例来源边界，不放开任意来源、不取消系统授权。同canonical旧Finished无loadID限制明确。新包须实际拒绝/允许、无崩溃及既有录制子集；有效CSP/frame与有效音轨仍unknown，旧5dd6失败保留 |
 | APP-002-ATTACHMENT-SUBMIT-01 附件提交 | pending，最小持久操作/原目标重验证方案已准备 | 依赖权限候选源码交接。系统面板返回后来源/目标失效需精确归因，不跳guard；PDF30956B未被正文引用且冷启保持，须有持久操作身份、安全补偿/去重和正文ACK。旧孤儿保留证据，不能以文件存在算预览通过 |
 | APP-002-ATTACHMENT-STORE-01 附件持久操作 | in-progress，Rust模块隔离实施 | 权限源码已合入；先提供真实窗口/会话归属、稳定操作身份、查询/去重、安全补偿与冷启恢复，和F07 App路径隔离。模块通过后再父任务接线，不算系统选择/预览通过 |
+| APP-002-AUDIO-DURATION-01 音频卡片时长 | pending，dba83641真实Infinity/0:00已观察 | 现有受管约66秒Opus/WebM可有限播放，卡片时长与拖动仍缺口；先核真实媒体metadata后最小修复AudioPlayer。不得以静音当可听采集，权限/保存与时长分别记账 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |
