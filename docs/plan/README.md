@@ -17,10 +17,11 @@
 | APP-001-FIX-05 Mac关闭窗口 | in-progress/partial，ec1cf0d三条关闭与一次编辑冷启独立通过 | f3b8a22记录正确目标关闭且另一窗/同PID保留，真实编辑关闭后完整JSON与冷启持久记录相等；未捕获pending时点，保存失败/冲突、末窗退出原因及全生命周期仍unknown；顶部像素另行阻塞 |
 | APP-001-FIX-06 Android组字失焦/导航 | in-progress，fa1cdb5平台对照/8b9d6af独立复核完成 | 同Trime普通contenteditable失焦、原生EditText藏IME均同现ni hao‸，现证据反对应用盲目回滚/删字符；旧格式/后台观察与历史报告保留，原版精确语义、导航隔离与宿主存储保全仍unknown；输入设置已恢复，未改产品 |
 | APP-001-FIX-07 纸张保存返回选区 | 原选纸P2有限关闭，完整任务partial | 4e2adbd独立复验5c46536/APK5dd6dfc8，取消/grid-large/重开Back均保选区、全文、Editor/View/DOM及父key；自身保存/Home恢复/COLD完整Rust正文与纸张通过。开发真实Store外部变化仅独立只读复核；Undo首步无正文变化unknown，原版/真实第二窗/完整矩阵未通过，旧e117失败保留 |
-| APP-001-PAPER-PREVIEW 手机纸张页 | bab82fb隔离源码ready，独立静态进行中 | FIX07有限门槛已满足；仅手机六SVG预览/成对行序/留白和比例，真实选纸handler与drawing背景规则字节保持。未合入/装包，运行mask/短屏/安全区/选区回归仍unknown，低清录屏不证明高清像素 |
+| APP-001-PAPER-PREVIEW 手机纸张页 | 主1fa9170，独立静态有限通过 | aaa9829保存独立审查；仅手机六SVG预览/成对行序/留白和比例，真实选纸handler与drawing背景规则字节保持。待同权限/资源清理统一新包；运行mask/短屏/安全区/选区回归仍unknown，低清录屏不证明高清像素 |
+| APP-001-SEARCH-RESULTS Mac搜索结果 | in-progress，原版零结果已取证，隔离源码开发 | a2dcde9冻结原版唯一命中/零结果正文清空且动作禁用/clear恢复原folder与note；当前56d7零结果仍留旧正文。候选须保未提交正文、历史和权限守卫，静态审查与新包运行尚未完成 |
 | APP-002 媒体闭环 | in-progress，权限入口P1及真实附件闭环FAIL | 资源清理0b29cc0独立静态26项/typecheck/12顶部检查通过，旧包真实基线FAIL已冻结后接入主2993884，待权限候选审查后统一新包，不能称设备清理通过。旧5dd6两次权限前SIGABRT证据95f6d8d；Mac56d7图片失败/PDF写入未引用且冷启孤儿持久见0004870。有效音轨/可听采集unknown，绘画未验 |
 | APP-002-PERMISSION-01 手机媒体权限入口 | in-progress，旧5dd6重复实际FAIL，最小公开接口候选准备 | Wry0.57.1 GetUrl SendError panic与本App权限回调webview.url同步路径相符，因果由锁定源码/候选进一步确认；不放开任意来源、不取消系统授权。先冻结旧失败、独立静态审查，再新APK复验权限与现有录制流程；有效音轨仍unknown |
-| APP-002-ATTACHMENT-SUBMIT-01 附件提交 | pending，依赖权限候选源码交接，真实PNG/PDF基线FAIL已封存 | 系统面板返回后来源/目标失效候选需精确归因，不跳过guard；PDF30956B已受管但正文未引用且冷启保持，须修正常返回重验证和写入后失败补偿/重试，不能以文件存在算预览通过 |
+| APP-002-ATTACHMENT-SUBMIT-01 附件提交 | pending，最小持久操作/原目标重验证方案已准备 | 依赖权限候选源码交接。系统面板返回后来源/目标失效需精确归因，不跳guard；PDF30956B未被正文引用且冷启保持，须有持久操作身份、安全补偿/去重和正文ACK。旧孤儿保留证据，不能以文件存在算预览通过 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |

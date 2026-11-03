@@ -25,6 +25,18 @@ depends-on: [app-002-permission-01]
 
 先确定真实首次/返回后校验与已有focus同步的时序，再做最小候选。定向检查穿过实际生产边界，覆盖正常相同目标、真实目标变化、写成功后插入失败、响应过期、保存失败重试、正文已持久后刷新失败及引用附件不可补偿。避免复制实现或只测状态常量。
 
+### 已完成只读接入准备（2026-11-03）
+
+普通菜单、照片入口与Mac原生顶部统一捕获一次附件操作：第一次IPC前确定operationId，记录原scope/note、Editor实例和owner、文档版本、SelectionBookmark，以及后端session/global epoch/noteEpoch。未发起、进行中与已失效必须可区分；失效原目标不得以null回落当前笔记。`clearSensitive`作废操作，晚到的系统面板或存储结果不能恢复其写入权。
+
+系统面板返回后的可信同步须提供明确成功结果、同步序号和当前可信snapshot。不能把现有同步promise的resolve或异步React状态当完成证明。只允许原后端授权身份、目标、Editor、文档和书签均一致而renderer generation单独变化时，为本次操作重绑定当前稳定代次；不改变AccessGate/nativeAssert的全局语义。重验证在存储后、正文插入前再次执行。
+
+后端应以实际注入的窗口、授权session、原note与operationId建立可核查的持久提交身份；附件元数据与操作记录同事务提交。相同操作重试复用原附件，响应因bridge.accept失效而拒绝时仍可在新授权下查询真实结果。可使用独立operation表或journal，不改变公开Attachment/归档字段；只有内存map不足以覆盖响应丢失和冷启。文件写入或数据库失败只清理本次创建路径。
+
+前端分别记录stored、inserted、documentAck与refreshed。处理真实insertContent返回false/throw，正文成功以现有saveDoc/flush ACK为准；ACK后刷新失败保留成功身份，不能重复插入或补偿删除。补偿为窄的“取消本次附件操作”接口，Rust检查owner、权威持久正文、尚未完成的SaveIntents与访问屏障；已引用则保留并标记committed，不能安全判定则返回deferred。冷启恢复仅处理有本次journal身份的未引用新文件，保留旧56d7 PDF孤儿作为历史证据。
+
+实施按实际边界分步提交：先持久操作与安全补偿，再前端捕获/重验证/ACK接线；完整候选交独立审查后统一构建。期间不混入录音暂停/计时、绘画或搜索结果修复，也不以模块测试代替系统选择器实际链路。
+
 ## verification
 
 独立静态审查后统一构建冻结包。Mac真实菜单→系统Open选图片/PDF→受管字节→正文节点→自身保存→只移开临时来源→冷启→实际图片/PDF预览或明确未实现结果。取消及一个受控插入/保存失败分别核完整正文、附件表与实际文件，重试不得重复；真实目标失效继续拒绝。Android真实文件选择同链有限复验，不能用DOM注入文件替代用户选择。新包未实测前不得把旧PDF复制成功升级为完整附件通过，像素/系统预览差异与功能结果分别记录。
