@@ -1,0 +1,118 @@
+{
+  "evidence_id": "ev_ef54aebac4e472843855cafc9677574bbded31cd568c1a2a794e9a5e427e1b4f",
+  "subject": {
+    "name": "com.osfans.trime-v3.3.13-0-gb5cad1a4-arm64-v8a-release.apk",
+    "digest": {
+      "sha256": "e7535ea421a25962eb2ea37c46ff867838e69d33ba6d935876ab84d108de5020"
+    },
+    "local_path": "/private/tmp/notes-trime-tool/com.osfans.trime-v3.3.13-0-gb5cad1a4-arm64-v8a-release.apk",
+    "format": "apk",
+    "architecture": null
+  },
+  "provider": {
+    "id": "rea-analysis-view",
+    "name": "REA analysis view projection",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis-view",
+  "operation": "inspect_analysis_view",
+  "parameters": {
+    "parent_evidence_id": "ev_e80fa873097b14373e216071da523ebcbbeb826c4357144032dc701cda5e1d43",
+    "view": {
+      "kind": "summary"
+    }
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "kind": "summary",
+    "view": {
+      "kind": "summary"
+    },
+    "parent_evidence_id": "ev_e80fa873097b14373e216071da523ebcbbeb826c4357144032dc701cda5e1d43",
+    "parent_operation": "inspect_artifact",
+    "parent_digest": "e80fa873097b14373e216071da523ebcbbeb826c4357144032dc701cda5e1d43",
+    "view_digest": "e1761c05c89acb0e973450a996338437e34638bfdc304dd55d1e7a1b02f56d58",
+    "artifact": {
+      "path": "/private/tmp/notes-trime-tool/com.osfans.trime-v3.3.13-0-gb5cad1a4-arm64-v8a-release.apk",
+      "sha256": "e7535ea421a25962eb2ea37c46ff867838e69d33ba6d935876ab84d108de5020"
+    },
+    "coverage": {
+      "status": "complete-within-view",
+      "examined": 1449,
+      "total": 1449,
+      "next_offset": null,
+      "exhausted": true
+    },
+    "limitations": [
+      "Inspection derives bounded static hypotheses and next probes; it does not execute the artifact or claim format-specific semantics.",
+      "Logical archive names collide under English (en-US) Unicode case folding; a case-insensitive destination cannot store both spellings. This comparison is not a filesystem observation.",
+      "ZIP inventory lists central-directory entries only. Non-entry bytes, including an APK Signing Block before the central directory or a ZIP comment after it, are not occurrences."
+    ],
+    "unknowns": [
+      "Inventory does not establish application runtime behavior or complete format-specific analysis."
+    ],
+    "summary": {
+      "manifest": {
+        "manifest_id": "agm_edb42d3ca1874c7f72d449a0da3b18174b0d2a12cd39b7405a575e7c6aa85e50",
+        "root_artifact_id": "art_d1e4eeb71c1be0c2abb012900d8cf8d1cbc8ddb401c9033443045e89c4c292c1",
+        "root_sha256": "e7535ea421a25962eb2ea37c46ff867838e69d33ba6d935876ab84d108de5020",
+        "root_format": "apk",
+        "graph_sha256": "de4c97434668cfa5a287cc954d53b1c187e24623bbf24f860344233990791333",
+        "node_count": 472,
+        "occurrence_count": 489,
+        "edge_count": 488
+      },
+      "available_counts": {
+        "nodes": 472,
+        "occurrences": 489,
+        "edges": 488,
+        "integrity_contradictions": 0
+      },
+      "observed_entry_kind_counts": {
+        "file": 489,
+        "directory": 0,
+        "symlink": 0,
+        "slice": 0
+      },
+      "source_complete": true,
+      "inventory_evidence_ids": [
+        "ev_7adcda46726701bc0827ecf663ddfd89052e9b91892e32b1ff0126e404b3c7af"
+      ],
+      "inspection": {
+        "coverage": {
+          "status": "complete-within-substeps",
+          "substeps_completed": 1,
+          "observations_retained": 1,
+          "observations_omitted": 0,
+          "hypotheses_retained": 0,
+          "hypotheses_omitted": 0,
+          "unexplored_branches_retained": 0,
+          "unexplored_branches_omitted": 0,
+          "next_probes_retained": 0,
+          "next_probes_omitted": 0
+        },
+        "unexplored_branches": []
+      },
+      "limitation_count": 3
+    }
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Inspection derives bounded static hypotheses and next probes; it does not execute the artifact or claim format-specific semantics.",
+    "Logical archive names collide under English (en-US) Unicode case folding; a case-insensitive destination cannot store both spellings. This comparison is not a filesystem observation.",
+    "ZIP inventory lists central-directory entries only. Non-entry bytes, including an APK Signing Block before the central directory or a ZIP comment after it, are not occurrences."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "artifact-path",
+      "path": "/private/tmp/notes-trime-tool/com.osfans.trime-v3.3.13-0-gb5cad1a4-arm64-v8a-release.apk"
+    }
+  ],
+  "evidence_links": [
+    "ev_e80fa873097b14373e216071da523ebcbbeb826c4357144032dc701cda5e1d43"
+  ]
+}
