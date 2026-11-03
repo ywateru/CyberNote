@@ -1,0 +1,2065 @@
+{
+  "devices": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"evidence_id\":\"ev_deac18ca069d0ca35bc508c923004e02985909502973d76e26b8d1ee4ab3a082\",\"subject\":null,\"provider\":{\"id\":\"adb\",\"name\":\"Android Debug Bridge\",\"version\":\"36.0.0-13206524\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis\",\"operation\":\"list_adb_devices\",\"parameters\":{},\"raw_result\":null,\"normalized_result\":{\"client\":{\"binary_path\":\"adb\",\"path_source\":\"path\",\"version\":\"36.0.0-13206524\",\"installed_path\":\"/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb\"},\"devices\":[{\"serial\":\"emulator-5580\",\"state\":\"device\",\"transport\":\"tcp\",\"product\":\"sdk_gphone_arm64\",\"model\":\"sdk_gphone_arm64\",\"device\":\"emulator_arm64\",\"transport_id\":81,\"kind\":\"emulator\",\"kind_basis\":\"emulator_serial_prefix\"}],\"may_have_started_adb_server\":false},\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"Device kind is inferred from the emulator serial prefix and USB transport metadata, not from device attestation\",\"Kind stays unknown for TCP transports unless the serial is an emulator port\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+      }
+    ],
+    "structuredContent": {
+      "evidence_id": "ev_deac18ca069d0ca35bc508c923004e02985909502973d76e26b8d1ee4ab3a082",
+      "subject": null,
+      "provider": {
+        "id": "adb",
+        "name": "Android Debug Bridge",
+        "version": "36.0.0-13206524"
+      },
+      "analysis_profile": null,
+      "predicate_type": "rea.analysis",
+      "operation": "list_adb_devices",
+      "parameters": {},
+      "raw_result": null,
+      "normalized_result": {
+        "client": {
+          "binary_path": "adb",
+          "path_source": "path",
+          "version": "36.0.0-13206524",
+          "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+        },
+        "devices": [
+          {
+            "serial": "emulator-5580",
+            "state": "device",
+            "transport": "tcp",
+            "product": "sdk_gphone_arm64",
+            "model": "sdk_gphone_arm64",
+            "device": "emulator_arm64",
+            "transport_id": 81,
+            "kind": "emulator",
+            "kind_basis": "emulator_serial_prefix"
+          }
+        ],
+        "may_have_started_adb_server": false
+      },
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "environment": null,
+      "limitations": [
+        "Artifact identity is unavailable for this observation.",
+        "Device kind is inferred from the emulator serial prefix and USB transport metadata, not from device attestation",
+        "Kind stays unknown for TCP transports unless the serial is an emulator port"
+      ],
+      "relationship_coverage": null,
+      "locations": [],
+      "evidence_links": []
+    }
+  },
+  "packageBefore": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"evidence_id\":\"ev_6aafbd6d8ec7a7b0c7dc6b481deb18b9bf7f737479b80725c69c3109460e6f3d\",\"subject\":null,\"provider\":{\"id\":\"adb\",\"name\":\"Android Debug Bridge\",\"version\":\"36.0.0-13206524\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis\",\"operation\":\"inspect_adb_package\",\"parameters\":{\"serial\":\"emulator-5580\",\"package\":\"com.local.notesclone\"},\"raw_result\":null,\"normalized_result\":{\"client\":{\"binary_path\":\"adb\",\"path_source\":\"path\",\"version\":\"36.0.0-13206524\",\"installed_path\":\"/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb\"},\"serial\":\"emulator-5580\",\"package_name\":\"com.local.notesclone\",\"version_name\":\"0.1.0\",\"version_code\":\"1000\",\"first_install_time\":\"2026-11-03 22:09:17\",\"last_update_time\":\"2026-11-04 01:07:15\",\"installer_package_name\":null,\"user_id\":10169,\"pkg_flags\":\"[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]\",\"requested_permissions_count\":5,\"coverage\":\"complete\"},\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"Fields are a fixed projection of dumpsys package output; version-dependent sections are ignored rather than guessed\",\"requested_permissions_count counts the listed requested permissions section; an absent section is zero only when dumpsys confirms a loaded parsed package\",\"A null requested_permissions_count means dumpsys reported pkg=null or did not establish that an omitted permission section is an empty inventory\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+      }
+    ],
+    "structuredContent": {
+      "evidence_id": "ev_6aafbd6d8ec7a7b0c7dc6b481deb18b9bf7f737479b80725c69c3109460e6f3d",
+      "subject": null,
+      "provider": {
+        "id": "adb",
+        "name": "Android Debug Bridge",
+        "version": "36.0.0-13206524"
+      },
+      "analysis_profile": null,
+      "predicate_type": "rea.analysis",
+      "operation": "inspect_adb_package",
+      "parameters": {
+        "serial": "emulator-5580",
+        "package": "com.local.notesclone"
+      },
+      "raw_result": null,
+      "normalized_result": {
+        "client": {
+          "binary_path": "adb",
+          "path_source": "path",
+          "version": "36.0.0-13206524",
+          "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+        },
+        "serial": "emulator-5580",
+        "package_name": "com.local.notesclone",
+        "version_name": "0.1.0",
+        "version_code": "1000",
+        "first_install_time": "2026-11-03 22:09:17",
+        "last_update_time": "2026-11-04 01:07:15",
+        "installer_package_name": null,
+        "user_id": 10169,
+        "pkg_flags": "[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]",
+        "requested_permissions_count": 5,
+        "coverage": "complete"
+      },
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "environment": null,
+      "limitations": [
+        "Artifact identity is unavailable for this observation.",
+        "Fields are a fixed projection of dumpsys package output; version-dependent sections are ignored rather than guessed",
+        "requested_permissions_count counts the listed requested permissions section; an absent section is zero only when dumpsys confirms a loaded parsed package",
+        "A null requested_permissions_count means dumpsys reported pkg=null or did not establish that an omitted permission section is an empty inventory"
+      ],
+      "relationship_coverage": null,
+      "locations": [],
+      "evidence_links": []
+    }
+  },
+  "processesBefore": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"evidence_id\":\"ev_59df0b45c3380478451fbc889ef6f6119659e41fcebbd70e00ef79c3513702e6\",\"subject\":null,\"provider\":{\"id\":\"adb\",\"name\":\"Android Debug Bridge\",\"version\":\"36.0.0-13206524\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis\",\"operation\":\"list_adb_processes\",\"parameters\":{\"serial\":\"emulator-5580\"},\"raw_result\":null,\"normalized_result\":{\"client\":{\"binary_path\":\"adb\",\"path_source\":\"path\",\"version\":\"36.0.0-13206524\",\"installed_path\":\"/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb\"},\"serial\":\"emulator-5580\",\"columns\":\"USER            PID   PPID     VSZ    RSS WCHAN            ADDR S NAME\",\"processes\":[{\"user\":\"root\",\"pid\":1,\"ppid\":0,\"rss\":5704,\"state\":\"S\",\"name\":\"init\"},{\"user\":\"root\",\"pid\":2,\"ppid\":0,\"rss\":0,\"state\":\"S\",\"name\":\"[kthreadd]\"},{\"user\":\"root\",\"pid\":3,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[rcu_gp]\"},{\"user\":\"root\",\"pid\":4,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[rcu_par_gp]\"},{\"user\":\"root\",\"pid\":6,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/0:0H-kblockd]\"},{\"user\":\"root\",\"pid\":8,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[mm_percpu_wq]\"},{\"user\":\"root\",\"pid\":9,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[ksoftirqd/0]\"},{\"user\":\"root\",\"pid\":10,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[rcu_preempt]\"},{\"user\":\"root\",\"pid\":11,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[migration/0]\"},{\"user\":\"root\",\"pid\":13,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[cpuhp/0]\"},{\"user\":\"root\",\"pid\":14,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[cpuhp/1]\"},{\"user\":\"root\",\"pid\":15,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[migration/1]\"},{\"user\":\"root\",\"pid\":16,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[ksoftirqd/1]\"},{\"user\":\"root\",\"pid\":18,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/1:0H-kblockd]\"},{\"user\":\"root\",\"pid\":19,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[netns]\"},{\"user\":\"root\",\"pid\":20,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[rcu_tasks_kthre]\"},{\"user\":\"root\",\"pid\":22,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[kauditd]\"},{\"user\":\"root\",\"pid\":23,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[oom_reaper]\"},{\"user\":\"root\",\"pid\":24,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[writeback]\"},{\"user\":\"root\",\"pid\":25,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[kcompactd0]\"},{\"user\":\"root\",\"pid\":42,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[cryptd]\"},{\"user\":\"root\",\"pid\":74,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kblockd]\"},{\"user\":\"root\",\"pid\":76,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[blk_crypto_wq]\"},{\"user\":\"root\",\"pid\":77,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[blkcg_punt_bio]\"},{\"user\":\"root\",\"pid\":78,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[edac-poller]\"},{\"user\":\"root\",\"pid\":79,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[ion_system_heap]\"},{\"user\":\"root\",\"pid\":80,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[devfreq_wq]\"},{\"user\":\"root\",\"pid\":81,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[watchdogd]\"},{\"user\":\"root\",\"pid\":82,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[cfg80211]\"},{\"user\":\"root\",\"pid\":107,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[kswapd0]\"},{\"user\":\"root\",\"pid\":109,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[uas]\"},{\"user\":\"root\",\"pid\":110,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[dm_bufio_cache]\"},{\"user\":\"root\",\"pid\":111,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ipv6_addrconf]\"},{\"user\":\"root\",\"pid\":112,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[krfcommd]\"},{\"user\":\"root\",\"pid\":116,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[sugov:0]\"},{\"user\":\"root\",\"pid\":117,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[sugov:1]\"},{\"user\":\"root\",\"pid\":119,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[md]\"},{\"user\":\"root\",\"pid\":122,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[usbip_event]\"},{\"user\":\"root\",\"pid\":123,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[hwrng]\"},{\"user\":\"root\",\"pid\":125,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/0:1H-kblockd]\"},{\"user\":\"root\",\"pid\":126,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/1:1H-kblockd]\"},{\"user\":\"root\",\"pid\":127,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[jbd2/vdd1-8]\"},{\"user\":\"root\",\"pid\":128,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":129,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kdmflush]\"},{\"user\":\"root\",\"pid\":130,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kdmflush]\"},{\"user\":\"root\",\"pid\":131,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kdmflush]\"},{\"user\":\"root\",\"pid\":132,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kdmflush]\"},{\"user\":\"root\",\"pid\":133,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":134,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":135,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":136,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":138,\"ppid\":1,\"rss\":2524,\"state\":\"S\",\"name\":\"init\"},{\"user\":\"root\",\"pid\":140,\"ppid\":1,\"rss\":3732,\"state\":\"S\",\"name\":\"ueventd\"},{\"user\":\"root\",\"pid\":146,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop0]\"},{\"user\":\"root\",\"pid\":147,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":148,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop1]\"},{\"user\":\"root\",\"pid\":149,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":150,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop2]\"},{\"user\":\"root\",\"pid\":151,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":152,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop3]\"},{\"user\":\"root\",\"pid\":153,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":154,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop4]\"},{\"user\":\"root\",\"pid\":155,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":156,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop5]\"},{\"user\":\"root\",\"pid\":157,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"logd\",\"pid\":161,\"ppid\":1,\"rss\":13436,\"state\":\"S\",\"name\":\"logd\"},{\"user\":\"lmkd\",\"pid\":162,\"ppid\":1,\"rss\":2284,\"state\":\"S\",\"name\":\"lmkd\"},{\"user\":\"system\",\"pid\":163,\"ppid\":1,\"rss\":4036,\"state\":\"S\",\"name\":\"servicemanager\"},{\"user\":\"system\",\"pid\":164,\"ppid\":1,\"rss\":5028,\"state\":\"S\",\"name\":\"hwservicemanager\"},{\"user\":\"root\",\"pid\":165,\"ppid\":1,\"rss\":1632,\"state\":\"S\",\"name\":\"qemu-props\"},{\"user\":\"root\",\"pid\":166,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[psimon]\"},{\"user\":\"root\",\"pid\":171,\"ppid\":1,\"rss\":5236,\"state\":\"S\",\"name\":\"vold\"},{\"user\":\"system\",\"pid\":181,\"ppid\":1,\"rss\":2860,\"state\":\"S\",\"name\":\"android.hardware.keymaster@4.1-service\"},{\"user\":\"root\",\"pid\":183,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kdmflush]\"},{\"user\":\"root\",\"pid\":191,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[jbd2/dm-4-8]\"},{\"user\":\"root\",\"pid\":192,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"system\",\"pid\":195,\"ppid\":1,\"rss\":4140,\"state\":\"S\",\"name\":\"android.system.suspend@1.0-service\"},{\"user\":\"system\",\"pid\":196,\"ppid\":1,\"rss\":1804,\"state\":\"S\",\"name\":\"android.hardware.atrace@1.0-service\"},{\"user\":\"root\",\"pid\":207,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop6]\"},{\"user\":\"root\",\"pid\":209,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":210,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop7]\"},{\"user\":\"root\",\"pid\":211,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":212,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop8]\"},{\"user\":\"root\",\"pid\":213,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":214,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop9]\"},{\"user\":\"root\",\"pid\":215,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":216,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop10]\"},{\"user\":\"root\",\"pid\":217,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":218,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop11]\"},{\"user\":\"root\",\"pid\":219,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":220,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop12]\"},{\"user\":\"root\",\"pid\":221,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":222,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop13]\"},{\"user\":\"root\",\"pid\":223,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":224,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop14]\"},{\"user\":\"root\",\"pid\":225,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":226,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop15]\"},{\"user\":\"root\",\"pid\":227,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":228,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop16]\"},{\"user\":\"root\",\"pid\":229,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":230,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop17]\"},{\"user\":\"root\",\"pid\":231,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":232,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop18]\"},{\"user\":\"root\",\"pid\":233,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":234,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop19]\"},{\"user\":\"root\",\"pid\":235,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":236,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop20]\"},{\"user\":\"root\",\"pid\":237,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":238,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop21]\"},{\"user\":\"root\",\"pid\":239,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":240,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop22]\"},{\"user\":\"root\",\"pid\":241,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":242,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop23]\"},{\"user\":\"root\",\"pid\":243,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":244,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop24]\"},{\"user\":\"root\",\"pid\":245,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":246,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop25]\"},{\"user\":\"root\",\"pid\":247,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":248,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop26]\"},{\"user\":\"root\",\"pid\":249,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":250,\"ppid\":2,\"rss\":0,\"state\":\"S\",\"name\":\"[loop27]\"},{\"user\":\"root\",\"pid\":251,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[ext4-rsv-conver]\"},{\"user\":\"root\",\"pid\":261,\"ppid\":1,\"rss\":1828,\"state\":\"S\",\"name\":\"createns\"},{\"user\":\"tombstoned\",\"pid\":266,\"ppid\":1,\"rss\":1756,\"state\":\"S\",\"name\":\"tombstoned\"},{\"user\":\"statsd\",\"pid\":272,\"ppid\":1,\"rss\":4032,\"state\":\"S\",\"name\":\"statsd\"},{\"user\":\"root\",\"pid\":273,\"ppid\":1,\"rss\":5680,\"state\":\"S\",\"name\":\"netd\"},{\"user\":\"root\",\"pid\":274,\"ppid\":1,\"rss\":68128,\"state\":\"S\",\"name\":\"zygote64\"},{\"user\":\"system\",\"pid\":275,\"ppid\":1,\"rss\":3432,\"state\":\"S\",\"name\":\"android.hidl.allocator@1.0-service\"},{\"user\":\"audioserver\",\"pid\":276,\"ppid\":1,\"rss\":5000,\"state\":\"S\",\"name\":\"android.hardware.audio.service.ranchu\"},{\"user\":\"system\",\"pid\":277,\"ppid\":1,\"rss\":2844,\"state\":\"S\",\"name\":\"android.hardware.authsecret@1.0-service\"},{\"user\":\"bluetooth\",\"pid\":281,\"ppid\":1,\"rss\":3764,\"state\":\"S\",\"name\":\"android.hardware.bluetooth@1.1-service.sim\"},{\"user\":\"cameraserver\",\"pid\":282,\"ppid\":1,\"rss\":5512,\"state\":\"S\",\"name\":\"android.hardware.camera.provider@2.4-service_64\"},{\"user\":\"system\",\"pid\":283,\"ppid\":1,\"rss\":4532,\"state\":\"S\",\"name\":\"android.hardware.camera.provider@2.6-service-google\"},{\"user\":\"context_hub\",\"pid\":284,\"ppid\":1,\"rss\":3020,\"state\":\"S\",\"name\":\"android.hardware.contexthub@1.1-service.mock\"},{\"user\":\"media\",\"pid\":285,\"ppid\":1,\"rss\":3616,\"state\":\"S\",\"name\":\"android.hardware.drm@1.0-service\"},{\"user\":\"media\",\"pid\":286,\"ppid\":1,\"rss\":3316,\"state\":\"S\",\"name\":\"android.hardware.drm@1.3-service.clearkey\"},{\"user\":\"media\",\"pid\":287,\"ppid\":1,\"rss\":3292,\"state\":\"S\",\"name\":\"android.hardware.drm@1.3-service.widevine\"},{\"user\":\"system\",\"pid\":288,\"ppid\":1,\"rss\":2892,\"state\":\"S\",\"name\":\"android.hardware.gatekeeper@1.0-service.software\"},{\"user\":\"system\",\"pid\":289,\"ppid\":1,\"rss\":9044,\"state\":\"S\",\"name\":\"android.hardware.graphics.allocator@3.0-service\"},{\"user\":\"system\",\"pid\":290,\"ppid\":1,\"rss\":18476,\"state\":\"S\",\"name\":\"android.hardware.graphics.composer@2.3-service\"},{\"user\":\"system\",\"pid\":291,\"ppid\":1,\"rss\":3640,\"state\":\"S\",\"name\":\"android.hardware.health@2.1-service\"},{\"user\":\"system\",\"pid\":292,\"ppid\":1,\"rss\":4148,\"state\":\"S\",\"name\":\"android.hardware.neuralnetworks@1.3-service-sample-all\"},{\"user\":\"system\",\"pid\":293,\"ppid\":1,\"rss\":4144,\"state\":\"S\",\"name\":\"android.hardware.neuralnetworks@1.3-service-sample-float-fast\"},{\"user\":\"system\",\"pid\":294,\"ppid\":1,\"rss\":4088,\"state\":\"S\",\"name\":\"android.hardware.neuralnetworks@1.3-service-sample-float-slow\"},{\"user\":\"system\",\"pid\":295,\"ppid\":1,\"rss\":4160,\"state\":\"S\",\"name\":\"android.hardware.neuralnetworks@1.3-service-sample-minimal\"},{\"user\":\"system\",\"pid\":296,\"ppid\":1,\"rss\":4264,\"state\":\"S\",\"name\":\"android.hardware.neuralnetworks@1.3-service-sample-quant\"},{\"user\":\"system\",\"pid\":297,\"ppid\":1,\"rss\":3296,\"state\":\"S\",\"name\":\"android.hardware.power.stats@1.0-service.mock\"},{\"user\":\"system\",\"pid\":298,\"ppid\":1,\"rss\":3540,\"state\":\"S\",\"name\":\"android.hardware.sensors@2.1-service.multihal\"},{\"user\":\"system\",\"pid\":299,\"ppid\":1,\"rss\":3088,\"state\":\"S\",\"name\":\"android.hardware.thermal@2.0-service.mock\"},{\"user\":\"system\",\"pid\":300,\"ppid\":1,\"rss\":3004,\"state\":\"S\",\"name\":\"android.hardware.usb@1.0-service\"},{\"user\":\"wifi\",\"pid\":301,\"ppid\":1,\"rss\":4424,\"state\":\"S\",\"name\":\"android.hardware.wifi@1.0-service\"},{\"user\":\"nobody\",\"pid\":302,\"ppid\":1,\"rss\":3768,\"state\":\"S\",\"name\":\"android.hardware.identity-service.example\"},{\"user\":\"nobody\",\"pid\":303,\"ppid\":1,\"rss\":3156,\"state\":\"S\",\"name\":\"android.hardware.lights-service.example\"},{\"user\":\"nobody\",\"pid\":304,\"ppid\":1,\"rss\":2984,\"state\":\"S\",\"name\":\"android.hardware.power-service.example\"},{\"user\":\"system\",\"pid\":305,\"ppid\":1,\"rss\":3084,\"state\":\"S\",\"name\":\"android.hardware.rebootescrow-service.default\"},{\"user\":\"system\",\"pid\":306,\"ppid\":1,\"rss\":4016,\"state\":\"S\",\"name\":\"android.hardware.vibrator-service.example\"},{\"user\":\"audioserver\",\"pid\":308,\"ppid\":1,\"rss\":6156,\"state\":\"S\",\"name\":\"media.log\"},{\"user\":\"credstore\",\"pid\":309,\"ppid\":1,\"rss\":4296,\"state\":\"S\",\"name\":\"credstore\"},{\"user\":\"root\",\"pid\":310,\"ppid\":273,\"rss\":3036,\"state\":\"S\",\"name\":\"iptables-restore\"},{\"user\":\"root\",\"pid\":311,\"ppid\":273,\"rss\":2928,\"state\":\"S\",\"name\":\"ip6tables-restore\"},{\"user\":\"gpu_service\",\"pid\":313,\"ppid\":1,\"rss\":3972,\"state\":\"S\",\"name\":\"gpuservice\"},{\"user\":\"system\",\"pid\":314,\"ppid\":1,\"rss\":24556,\"state\":\"S\",\"name\":\"surfaceflinger\"},{\"user\":\"logd\",\"pid\":317,\"ppid\":1,\"rss\":2884,\"state\":\"S\",\"name\":\"logcat\"},{\"user\":\"shell\",\"pid\":322,\"ppid\":1,\"rss\":5220,\"state\":\"S\",\"name\":\"adbd\"},{\"user\":\"nobody\",\"pid\":325,\"ppid\":1,\"rss\":6008,\"state\":\"S\",\"name\":\"traced_probes\"},{\"user\":\"nobody\",\"pid\":326,\"ppid\":1,\"rss\":4280,\"state\":\"S\",\"name\":\"traced\"},{\"user\":\"cameraserver\",\"pid\":327,\"ppid\":1,\"rss\":6668,\"state\":\"S\",\"name\":\"cameraserver\"},{\"user\":\"drm\",\"pid\":328,\"ppid\":1,\"rss\":3800,\"state\":\"S\",\"name\":\"drmserver\"},{\"user\":\"incidentd\",\"pid\":332,\"ppid\":1,\"rss\":3504,\"state\":\"S\",\"name\":\"incidentd\"},{\"user\":\"root\",\"pid\":336,\"ppid\":1,\"rss\":4656,\"state\":\"S\",\"name\":\"installd\"},{\"user\":\"iorapd\",\"pid\":337,\"ppid\":1,\"rss\":6920,\"state\":\"S\",\"name\":\"iorapd\"},{\"user\":\"keystore\",\"pid\":338,\"ppid\":1,\"rss\":5024,\"state\":\"S\",\"name\":\"keystore\"},{\"user\":\"mediaex\",\"pid\":339,\"ppid\":1,\"rss\":7880,\"state\":\"S\",\"name\":\"media.extractor\"},{\"user\":\"media\",\"pid\":340,\"ppid\":1,\"rss\":4864,\"state\":\"S\",\"name\":\"media.metrics\"},{\"user\":\"media\",\"pid\":341,\"ppid\":1,\"rss\":9512,\"state\":\"S\",\"name\":\"mediaserver\"},{\"user\":\"root\",\"pid\":342,\"ppid\":1,\"rss\":4692,\"state\":\"S\",\"name\":\"storaged\"},{\"user\":\"wifi\",\"pid\":343,\"ppid\":1,\"rss\":4716,\"state\":\"S\",\"name\":\"wificond\"},{\"user\":\"mediacodec\",\"pid\":345,\"ppid\":1,\"rss\":11764,\"state\":\"S\",\"name\":\"media.codec\"},{\"user\":\"radio\",\"pid\":356,\"ppid\":1,\"rss\":4432,\"state\":\"S\",\"name\":\"libgoldfish-rild\"},{\"user\":\"mediacodec\",\"pid\":357,\"ppid\":1,\"rss\":14840,\"state\":\"S\",\"name\":\"media.swcodec\"},{\"user\":\"system\",\"pid\":360,\"ppid\":1,\"rss\":4000,\"state\":\"S\",\"name\":\"gatekeeperd\"},{\"user\":\"system\",\"pid\":362,\"ppid\":1,\"rss\":3040,\"state\":\"S\",\"name\":\"android.hardware.biometrics.face@1.0-service.example\"},{\"user\":\"system\",\"pid\":363,\"ppid\":1,\"rss\":2916,\"state\":\"S\",\"name\":\"android.hardware.biometrics.fingerprint@2.1-service\"},{\"user\":\"llkd\",\"pid\":366,\"ppid\":1,\"rss\":3376,\"state\":\"S\",\"name\":\"llkd\"},{\"user\":\"root\",\"pid\":368,\"ppid\":1,\"rss\":2620,\"state\":\"S\",\"name\":\"dhcpclient\"},{\"user\":\"mdnsr\",\"pid\":406,\"ppid\":1,\"rss\":380,\"state\":\"S\",\"name\":\"mdnsd\"},{\"user\":\"audioserver\",\"pid\":414,\"ppid\":308,\"rss\":10188,\"state\":\"S\",\"name\":\"audioserver\"},{\"user\":\"root\",\"pid\":421,\"ppid\":1,\"rss\":1860,\"state\":\"S\",\"name\":\"dhcpclient\"},{\"user\":\"system\",\"pid\":478,\"ppid\":274,\"rss\":199848,\"state\":\"S\",\"name\":\"system_server\"},{\"user\":\"nobody\",\"pid\":555,\"ppid\":1,\"rss\":2920,\"state\":\"S\",\"name\":\"android.hardware.input.classifier@1.0-service.default\"},{\"user\":\"wifi\",\"pid\":612,\"ppid\":1,\"rss\":4544,\"state\":\"S\",\"name\":\"wpa_supplicant\"},{\"user\":\"bluetooth\",\"pid\":614,\"ppid\":274,\"rss\":73992,\"state\":\"S\",\"name\":\"com.android.bluetooth\"},{\"user\":\"u0_a156\",\"pid\":663,\"ppid\":274,\"rss\":150736,\"state\":\"S\",\"name\":\"com.android.systemui\"},{\"user\":\"gps\",\"pid\":707,\"ppid\":1,\"rss\":3288,\"state\":\"S\",\"name\":\"android.hardware.gnss@2.0-service.ranchu\"},{\"user\":\"u0_a118\",\"pid\":780,\"ppid\":274,\"rss\":157864,\"state\":\"S\",\"name\":\"com.google.android.gms.persistent\"},{\"user\":\"webview_zygote\",\"pid\":823,\"ppid\":274,\"rss\":59832,\"state\":\"S\",\"name\":\"webview_zygote\"},{\"user\":\"network_stack\",\"pid\":838,\"ppid\":274,\"rss\":78360,\"state\":\"S\",\"name\":\"com.android.networkstack.process\"},{\"user\":\"secure_element\",\"pid\":852,\"ppid\":274,\"rss\":60000,\"state\":\"S\",\"name\":\"com.android.se\"},{\"user\":\"radio\",\"pid\":871,\"ppid\":274,\"rss\":95188,\"state\":\"S\",\"name\":\"com.android.phone\"},{\"user\":\"u0_a161\",\"pid\":911,\"ppid\":274,\"rss\":84200,\"state\":\"S\",\"name\":\"com.google.android.ext.services\"},{\"user\":\"u0_a152\",\"pid\":1013,\"ppid\":274,\"rss\":154024,\"state\":\"S\",\"name\":\"com.google.android.apps.nexuslauncher\"},{\"user\":\"iorapd\",\"pid\":1038,\"ppid\":337,\"rss\":4352,\"state\":\"S\",\"name\":\"iorap.prefetcherd\"},{\"user\":\"u0_a118\",\"pid\":1222,\"ppid\":274,\"rss\":149252,\"state\":\"S\",\"name\":\"com.google.android.gms\"},{\"user\":\"u0_a136\",\"pid\":1317,\"ppid\":274,\"rss\":155600,\"state\":\"S\",\"name\":\"com.google.android.inputmethod.latin\"},{\"user\":\"u0_a123\",\"pid\":1347,\"ppid\":274,\"rss\":81160,\"state\":\"S\",\"name\":\"com.google.android.googlequicksearchbox:interactor\"},{\"user\":\"u0_a164\",\"pid\":1367,\"ppid\":274,\"rss\":89564,\"state\":\"S\",\"name\":\"com.google.android.providers.media.module\"},{\"user\":\"radio\",\"pid\":1400,\"ppid\":274,\"rss\":59040,\"state\":\"S\",\"name\":\"com.android.ims.rcsservice\"},{\"user\":\"system\",\"pid\":1447,\"ppid\":274,\"rss\":60644,\"state\":\"S\",\"name\":\"com.android.emulator.multidisplay\"},{\"user\":\"u0_a118\",\"pid\":1480,\"ppid\":274,\"rss\":67268,\"state\":\"S\",\"name\":\"com.google.process.gservices\"},{\"user\":\"u0_a123\",\"pid\":1532,\"ppid\":274,\"rss\":184684,\"state\":\"S\",\"name\":\"com.google.android.googlequicksearchbox:search\"},{\"user\":\"u0_a121\",\"pid\":2386,\"ppid\":274,\"rss\":93276,\"state\":\"S\",\"name\":\"com.google.android.ims\"},{\"user\":\"shell\",\"pid\":4362,\"ppid\":322,\"rss\":3520,\"state\":\"S\",\"name\":\"abb\"},{\"user\":\"u0_a118\",\"pid\":6500,\"ppid\":274,\"rss\":83320,\"state\":\"S\",\"name\":\"com.google.process.gapps\"},{\"user\":\"u0_a169\",\"pid\":10504,\"ppid\":274,\"rss\":255036,\"state\":\"S\",\"name\":\"com.local.notesclone\"},{\"user\":\"u0_i9007\",\"pid\":10562,\"ppid\":823,\"rss\":199668,\"state\":\"S\",\"name\":\"com.google.android.webview:sandboxed_process0:org.chromium.content.app.Sandbo\"},{\"user\":\"u0_a118\",\"pid\":10630,\"ppid\":274,\"rss\":147688,\"state\":\"S\",\"name\":\"com.google.android.gms.unstable\"},{\"user\":\"u0_a111\",\"pid\":10765,\"ppid\":274,\"rss\":97108,\"state\":\"S\",\"name\":\"com.google.android.partnersetup\"},{\"user\":\"root\",\"pid\":11125,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/1:0-cgroup_destroy]\"},{\"user\":\"root\",\"pid\":11274,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/1:2-mm_percpu_wq]\"},{\"user\":\"root\",\"pid\":11284,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/u5:1-fscrypt_read_queue]\"},{\"user\":\"u0_a135\",\"pid\":11329,\"ppid\":274,\"rss\":160964,\"state\":\"S\",\"name\":\"com.google.android.apps.docs\"},{\"user\":\"u0_a138\",\"pid\":11335,\"ppid\":274,\"rss\":185452,\"state\":\"S\",\"name\":\"com.google.android.apps.messaging\"},{\"user\":\"root\",\"pid\":11366,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/u5:2-blk_crypto_wq]\"},{\"user\":\"root\",\"pid\":11511,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/0:2-cgroup_destroy]\"},{\"user\":\"u0_a115\",\"pid\":11528,\"ppid\":274,\"rss\":119752,\"state\":\"S\",\"name\":\"com.google.android.apps.wellbeing\"},{\"user\":\"u0_a83\",\"pid\":11562,\"ppid\":274,\"rss\":102072,\"state\":\"S\",\"name\":\"com.android.providers.calendar\"},{\"user\":\"root\",\"pid\":11605,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/0:1-events]\"},{\"user\":\"root\",\"pid\":11634,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/u4:1-phy0]\"},{\"user\":\"root\",\"pid\":11648,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/u4:0-phy0]\"},{\"user\":\"root\",\"pid\":11649,\"ppid\":2,\"rss\":0,\"state\":\"I\",\"name\":\"[kworker/u4:2-flush-253:4]\"},{\"user\":\"root\",\"pid\":11654,\"ppid\":1,\"rss\":6708,\"state\":\"S\",\"name\":\"apexd\"},{\"user\":\"shell\",\"pid\":11657,\"ppid\":322,\"rss\":3112,\"state\":\"R\",\"name\":\"ps\"}],\"unparsed_lines\":[],\"coverage\":\"complete\"},\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+      }
+    ],
+    "structuredContent": {
+      "evidence_id": "ev_59df0b45c3380478451fbc889ef6f6119659e41fcebbd70e00ef79c3513702e6",
+      "subject": null,
+      "provider": {
+        "id": "adb",
+        "name": "Android Debug Bridge",
+        "version": "36.0.0-13206524"
+      },
+      "analysis_profile": null,
+      "predicate_type": "rea.analysis",
+      "operation": "list_adb_processes",
+      "parameters": {
+        "serial": "emulator-5580"
+      },
+      "raw_result": null,
+      "normalized_result": {
+        "client": {
+          "binary_path": "adb",
+          "path_source": "path",
+          "version": "36.0.0-13206524",
+          "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+        },
+        "serial": "emulator-5580",
+        "columns": "USER            PID   PPID     VSZ    RSS WCHAN            ADDR S NAME",
+        "processes": [
+          {
+            "user": "root",
+            "pid": 1,
+            "ppid": 0,
+            "rss": 5704,
+            "state": "S",
+            "name": "init"
+          },
+          {
+            "user": "root",
+            "pid": 2,
+            "ppid": 0,
+            "rss": 0,
+            "state": "S",
+            "name": "[kthreadd]"
+          },
+          {
+            "user": "root",
+            "pid": 3,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[rcu_gp]"
+          },
+          {
+            "user": "root",
+            "pid": 4,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[rcu_par_gp]"
+          },
+          {
+            "user": "root",
+            "pid": 6,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/0:0H-kblockd]"
+          },
+          {
+            "user": "root",
+            "pid": 8,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[mm_percpu_wq]"
+          },
+          {
+            "user": "root",
+            "pid": 9,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[ksoftirqd/0]"
+          },
+          {
+            "user": "root",
+            "pid": 10,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[rcu_preempt]"
+          },
+          {
+            "user": "root",
+            "pid": 11,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[migration/0]"
+          },
+          {
+            "user": "root",
+            "pid": 13,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[cpuhp/0]"
+          },
+          {
+            "user": "root",
+            "pid": 14,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[cpuhp/1]"
+          },
+          {
+            "user": "root",
+            "pid": 15,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[migration/1]"
+          },
+          {
+            "user": "root",
+            "pid": 16,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[ksoftirqd/1]"
+          },
+          {
+            "user": "root",
+            "pid": 18,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/1:0H-kblockd]"
+          },
+          {
+            "user": "root",
+            "pid": 19,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[netns]"
+          },
+          {
+            "user": "root",
+            "pid": 20,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[rcu_tasks_kthre]"
+          },
+          {
+            "user": "root",
+            "pid": 22,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[kauditd]"
+          },
+          {
+            "user": "root",
+            "pid": 23,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[oom_reaper]"
+          },
+          {
+            "user": "root",
+            "pid": 24,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[writeback]"
+          },
+          {
+            "user": "root",
+            "pid": 25,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[kcompactd0]"
+          },
+          {
+            "user": "root",
+            "pid": 42,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[cryptd]"
+          },
+          {
+            "user": "root",
+            "pid": 74,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kblockd]"
+          },
+          {
+            "user": "root",
+            "pid": 76,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[blk_crypto_wq]"
+          },
+          {
+            "user": "root",
+            "pid": 77,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[blkcg_punt_bio]"
+          },
+          {
+            "user": "root",
+            "pid": 78,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[edac-poller]"
+          },
+          {
+            "user": "root",
+            "pid": 79,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[ion_system_heap]"
+          },
+          {
+            "user": "root",
+            "pid": 80,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[devfreq_wq]"
+          },
+          {
+            "user": "root",
+            "pid": 81,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[watchdogd]"
+          },
+          {
+            "user": "root",
+            "pid": 82,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[cfg80211]"
+          },
+          {
+            "user": "root",
+            "pid": 107,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[kswapd0]"
+          },
+          {
+            "user": "root",
+            "pid": 109,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[uas]"
+          },
+          {
+            "user": "root",
+            "pid": 110,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[dm_bufio_cache]"
+          },
+          {
+            "user": "root",
+            "pid": 111,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ipv6_addrconf]"
+          },
+          {
+            "user": "root",
+            "pid": 112,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[krfcommd]"
+          },
+          {
+            "user": "root",
+            "pid": 116,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[sugov:0]"
+          },
+          {
+            "user": "root",
+            "pid": 117,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[sugov:1]"
+          },
+          {
+            "user": "root",
+            "pid": 119,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[md]"
+          },
+          {
+            "user": "root",
+            "pid": 122,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[usbip_event]"
+          },
+          {
+            "user": "root",
+            "pid": 123,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[hwrng]"
+          },
+          {
+            "user": "root",
+            "pid": 125,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/0:1H-kblockd]"
+          },
+          {
+            "user": "root",
+            "pid": 126,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/1:1H-kblockd]"
+          },
+          {
+            "user": "root",
+            "pid": 127,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[jbd2/vdd1-8]"
+          },
+          {
+            "user": "root",
+            "pid": 128,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 129,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kdmflush]"
+          },
+          {
+            "user": "root",
+            "pid": 130,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kdmflush]"
+          },
+          {
+            "user": "root",
+            "pid": 131,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kdmflush]"
+          },
+          {
+            "user": "root",
+            "pid": 132,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kdmflush]"
+          },
+          {
+            "user": "root",
+            "pid": 133,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 134,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 135,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 136,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 138,
+            "ppid": 1,
+            "rss": 2524,
+            "state": "S",
+            "name": "init"
+          },
+          {
+            "user": "root",
+            "pid": 140,
+            "ppid": 1,
+            "rss": 3732,
+            "state": "S",
+            "name": "ueventd"
+          },
+          {
+            "user": "root",
+            "pid": 146,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop0]"
+          },
+          {
+            "user": "root",
+            "pid": 147,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 148,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop1]"
+          },
+          {
+            "user": "root",
+            "pid": 149,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 150,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop2]"
+          },
+          {
+            "user": "root",
+            "pid": 151,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 152,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop3]"
+          },
+          {
+            "user": "root",
+            "pid": 153,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 154,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop4]"
+          },
+          {
+            "user": "root",
+            "pid": 155,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 156,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop5]"
+          },
+          {
+            "user": "root",
+            "pid": 157,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "logd",
+            "pid": 161,
+            "ppid": 1,
+            "rss": 13436,
+            "state": "S",
+            "name": "logd"
+          },
+          {
+            "user": "lmkd",
+            "pid": 162,
+            "ppid": 1,
+            "rss": 2284,
+            "state": "S",
+            "name": "lmkd"
+          },
+          {
+            "user": "system",
+            "pid": 163,
+            "ppid": 1,
+            "rss": 4036,
+            "state": "S",
+            "name": "servicemanager"
+          },
+          {
+            "user": "system",
+            "pid": 164,
+            "ppid": 1,
+            "rss": 5028,
+            "state": "S",
+            "name": "hwservicemanager"
+          },
+          {
+            "user": "root",
+            "pid": 165,
+            "ppid": 1,
+            "rss": 1632,
+            "state": "S",
+            "name": "qemu-props"
+          },
+          {
+            "user": "root",
+            "pid": 166,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[psimon]"
+          },
+          {
+            "user": "root",
+            "pid": 171,
+            "ppid": 1,
+            "rss": 5236,
+            "state": "S",
+            "name": "vold"
+          },
+          {
+            "user": "system",
+            "pid": 181,
+            "ppid": 1,
+            "rss": 2860,
+            "state": "S",
+            "name": "android.hardware.keymaster@4.1-service"
+          },
+          {
+            "user": "root",
+            "pid": 183,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kdmflush]"
+          },
+          {
+            "user": "root",
+            "pid": 191,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[jbd2/dm-4-8]"
+          },
+          {
+            "user": "root",
+            "pid": 192,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "system",
+            "pid": 195,
+            "ppid": 1,
+            "rss": 4140,
+            "state": "S",
+            "name": "android.system.suspend@1.0-service"
+          },
+          {
+            "user": "system",
+            "pid": 196,
+            "ppid": 1,
+            "rss": 1804,
+            "state": "S",
+            "name": "android.hardware.atrace@1.0-service"
+          },
+          {
+            "user": "root",
+            "pid": 207,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop6]"
+          },
+          {
+            "user": "root",
+            "pid": 209,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 210,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop7]"
+          },
+          {
+            "user": "root",
+            "pid": 211,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 212,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop8]"
+          },
+          {
+            "user": "root",
+            "pid": 213,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 214,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop9]"
+          },
+          {
+            "user": "root",
+            "pid": 215,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 216,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop10]"
+          },
+          {
+            "user": "root",
+            "pid": 217,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 218,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop11]"
+          },
+          {
+            "user": "root",
+            "pid": 219,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 220,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop12]"
+          },
+          {
+            "user": "root",
+            "pid": 221,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 222,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop13]"
+          },
+          {
+            "user": "root",
+            "pid": 223,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 224,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop14]"
+          },
+          {
+            "user": "root",
+            "pid": 225,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 226,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop15]"
+          },
+          {
+            "user": "root",
+            "pid": 227,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 228,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop16]"
+          },
+          {
+            "user": "root",
+            "pid": 229,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 230,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop17]"
+          },
+          {
+            "user": "root",
+            "pid": 231,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 232,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop18]"
+          },
+          {
+            "user": "root",
+            "pid": 233,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 234,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop19]"
+          },
+          {
+            "user": "root",
+            "pid": 235,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 236,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop20]"
+          },
+          {
+            "user": "root",
+            "pid": 237,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 238,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop21]"
+          },
+          {
+            "user": "root",
+            "pid": 239,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 240,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop22]"
+          },
+          {
+            "user": "root",
+            "pid": 241,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 242,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop23]"
+          },
+          {
+            "user": "root",
+            "pid": 243,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 244,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop24]"
+          },
+          {
+            "user": "root",
+            "pid": 245,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 246,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop25]"
+          },
+          {
+            "user": "root",
+            "pid": 247,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 248,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop26]"
+          },
+          {
+            "user": "root",
+            "pid": 249,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 250,
+            "ppid": 2,
+            "rss": 0,
+            "state": "S",
+            "name": "[loop27]"
+          },
+          {
+            "user": "root",
+            "pid": 251,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[ext4-rsv-conver]"
+          },
+          {
+            "user": "root",
+            "pid": 261,
+            "ppid": 1,
+            "rss": 1828,
+            "state": "S",
+            "name": "createns"
+          },
+          {
+            "user": "tombstoned",
+            "pid": 266,
+            "ppid": 1,
+            "rss": 1756,
+            "state": "S",
+            "name": "tombstoned"
+          },
+          {
+            "user": "statsd",
+            "pid": 272,
+            "ppid": 1,
+            "rss": 4032,
+            "state": "S",
+            "name": "statsd"
+          },
+          {
+            "user": "root",
+            "pid": 273,
+            "ppid": 1,
+            "rss": 5680,
+            "state": "S",
+            "name": "netd"
+          },
+          {
+            "user": "root",
+            "pid": 274,
+            "ppid": 1,
+            "rss": 68128,
+            "state": "S",
+            "name": "zygote64"
+          },
+          {
+            "user": "system",
+            "pid": 275,
+            "ppid": 1,
+            "rss": 3432,
+            "state": "S",
+            "name": "android.hidl.allocator@1.0-service"
+          },
+          {
+            "user": "audioserver",
+            "pid": 276,
+            "ppid": 1,
+            "rss": 5000,
+            "state": "S",
+            "name": "android.hardware.audio.service.ranchu"
+          },
+          {
+            "user": "system",
+            "pid": 277,
+            "ppid": 1,
+            "rss": 2844,
+            "state": "S",
+            "name": "android.hardware.authsecret@1.0-service"
+          },
+          {
+            "user": "bluetooth",
+            "pid": 281,
+            "ppid": 1,
+            "rss": 3764,
+            "state": "S",
+            "name": "android.hardware.bluetooth@1.1-service.sim"
+          },
+          {
+            "user": "cameraserver",
+            "pid": 282,
+            "ppid": 1,
+            "rss": 5512,
+            "state": "S",
+            "name": "android.hardware.camera.provider@2.4-service_64"
+          },
+          {
+            "user": "system",
+            "pid": 283,
+            "ppid": 1,
+            "rss": 4532,
+            "state": "S",
+            "name": "android.hardware.camera.provider@2.6-service-google"
+          },
+          {
+            "user": "context_hub",
+            "pid": 284,
+            "ppid": 1,
+            "rss": 3020,
+            "state": "S",
+            "name": "android.hardware.contexthub@1.1-service.mock"
+          },
+          {
+            "user": "media",
+            "pid": 285,
+            "ppid": 1,
+            "rss": 3616,
+            "state": "S",
+            "name": "android.hardware.drm@1.0-service"
+          },
+          {
+            "user": "media",
+            "pid": 286,
+            "ppid": 1,
+            "rss": 3316,
+            "state": "S",
+            "name": "android.hardware.drm@1.3-service.clearkey"
+          },
+          {
+            "user": "media",
+            "pid": 287,
+            "ppid": 1,
+            "rss": 3292,
+            "state": "S",
+            "name": "android.hardware.drm@1.3-service.widevine"
+          },
+          {
+            "user": "system",
+            "pid": 288,
+            "ppid": 1,
+            "rss": 2892,
+            "state": "S",
+            "name": "android.hardware.gatekeeper@1.0-service.software"
+          },
+          {
+            "user": "system",
+            "pid": 289,
+            "ppid": 1,
+            "rss": 9044,
+            "state": "S",
+            "name": "android.hardware.graphics.allocator@3.0-service"
+          },
+          {
+            "user": "system",
+            "pid": 290,
+            "ppid": 1,
+            "rss": 18476,
+            "state": "S",
+            "name": "android.hardware.graphics.composer@2.3-service"
+          },
+          {
+            "user": "system",
+            "pid": 291,
+            "ppid": 1,
+            "rss": 3640,
+            "state": "S",
+            "name": "android.hardware.health@2.1-service"
+          },
+          {
+            "user": "system",
+            "pid": 292,
+            "ppid": 1,
+            "rss": 4148,
+            "state": "S",
+            "name": "android.hardware.neuralnetworks@1.3-service-sample-all"
+          },
+          {
+            "user": "system",
+            "pid": 293,
+            "ppid": 1,
+            "rss": 4144,
+            "state": "S",
+            "name": "android.hardware.neuralnetworks@1.3-service-sample-float-fast"
+          },
+          {
+            "user": "system",
+            "pid": 294,
+            "ppid": 1,
+            "rss": 4088,
+            "state": "S",
+            "name": "android.hardware.neuralnetworks@1.3-service-sample-float-slow"
+          },
+          {
+            "user": "system",
+            "pid": 295,
+            "ppid": 1,
+            "rss": 4160,
+            "state": "S",
+            "name": "android.hardware.neuralnetworks@1.3-service-sample-minimal"
+          },
+          {
+            "user": "system",
+            "pid": 296,
+            "ppid": 1,
+            "rss": 4264,
+            "state": "S",
+            "name": "android.hardware.neuralnetworks@1.3-service-sample-quant"
+          },
+          {
+            "user": "system",
+            "pid": 297,
+            "ppid": 1,
+            "rss": 3296,
+            "state": "S",
+            "name": "android.hardware.power.stats@1.0-service.mock"
+          },
+          {
+            "user": "system",
+            "pid": 298,
+            "ppid": 1,
+            "rss": 3540,
+            "state": "S",
+            "name": "android.hardware.sensors@2.1-service.multihal"
+          },
+          {
+            "user": "system",
+            "pid": 299,
+            "ppid": 1,
+            "rss": 3088,
+            "state": "S",
+            "name": "android.hardware.thermal@2.0-service.mock"
+          },
+          {
+            "user": "system",
+            "pid": 300,
+            "ppid": 1,
+            "rss": 3004,
+            "state": "S",
+            "name": "android.hardware.usb@1.0-service"
+          },
+          {
+            "user": "wifi",
+            "pid": 301,
+            "ppid": 1,
+            "rss": 4424,
+            "state": "S",
+            "name": "android.hardware.wifi@1.0-service"
+          },
+          {
+            "user": "nobody",
+            "pid": 302,
+            "ppid": 1,
+            "rss": 3768,
+            "state": "S",
+            "name": "android.hardware.identity-service.example"
+          },
+          {
+            "user": "nobody",
+            "pid": 303,
+            "ppid": 1,
+            "rss": 3156,
+            "state": "S",
+            "name": "android.hardware.lights-service.example"
+          },
+          {
+            "user": "nobody",
+            "pid": 304,
+            "ppid": 1,
+            "rss": 2984,
+            "state": "S",
+            "name": "android.hardware.power-service.example"
+          },
+          {
+            "user": "system",
+            "pid": 305,
+            "ppid": 1,
+            "rss": 3084,
+            "state": "S",
+            "name": "android.hardware.rebootescrow-service.default"
+          },
+          {
+            "user": "system",
+            "pid": 306,
+            "ppid": 1,
+            "rss": 4016,
+            "state": "S",
+            "name": "android.hardware.vibrator-service.example"
+          },
+          {
+            "user": "audioserver",
+            "pid": 308,
+            "ppid": 1,
+            "rss": 6156,
+            "state": "S",
+            "name": "media.log"
+          },
+          {
+            "user": "credstore",
+            "pid": 309,
+            "ppid": 1,
+            "rss": 4296,
+            "state": "S",
+            "name": "credstore"
+          },
+          {
+            "user": "root",
+            "pid": 310,
+            "ppid": 273,
+            "rss": 3036,
+            "state": "S",
+            "name": "iptables-restore"
+          },
+          {
+            "user": "root",
+            "pid": 311,
+            "ppid": 273,
+            "rss": 2928,
+            "state": "S",
+            "name": "ip6tables-restore"
+          },
+          {
+            "user": "gpu_service",
+            "pid": 313,
+            "ppid": 1,
+            "rss": 3972,
+            "state": "S",
+            "name": "gpuservice"
+          },
+          {
+            "user": "system",
+            "pid": 314,
+            "ppid": 1,
+            "rss": 24556,
+            "state": "S",
+            "name": "surfaceflinger"
+          },
+          {
+            "user": "logd",
+            "pid": 317,
+            "ppid": 1,
+            "rss": 2884,
+            "state": "S",
+            "name": "logcat"
+          },
+          {
+            "user": "shell",
+            "pid": 322,
+            "ppid": 1,
+            "rss": 5220,
+            "state": "S",
+            "name": "adbd"
+          },
+          {
+            "user": "nobody",
+            "pid": 325,
+            "ppid": 1,
+            "rss": 6008,
+            "state": "S",
+            "name": "traced_probes"
+          },
+          {
+            "user": "nobody",
+            "pid": 326,
+            "ppid": 1,
+            "rss": 4280,
+            "state": "S",
+            "name": "traced"
+          },
+          {
+            "user": "cameraserver",
+            "pid": 327,
+            "ppid": 1,
+            "rss": 6668,
+            "state": "S",
+            "name": "cameraserver"
+          },
+          {
+            "user": "drm",
+            "pid": 328,
+            "ppid": 1,
+            "rss": 3800,
+            "state": "S",
+            "name": "drmserver"
+          },
+          {
+            "user": "incidentd",
+            "pid": 332,
+            "ppid": 1,
+            "rss": 3504,
+            "state": "S",
+            "name": "incidentd"
+          },
+          {
+            "user": "root",
+            "pid": 336,
+            "ppid": 1,
+            "rss": 4656,
+            "state": "S",
+            "name": "installd"
+          },
+          {
+            "user": "iorapd",
+            "pid": 337,
+            "ppid": 1,
+            "rss": 6920,
+            "state": "S",
+            "name": "iorapd"
+          },
+          {
+            "user": "keystore",
+            "pid": 338,
+            "ppid": 1,
+            "rss": 5024,
+            "state": "S",
+            "name": "keystore"
+          },
+          {
+            "user": "mediaex",
+            "pid": 339,
+            "ppid": 1,
+            "rss": 7880,
+            "state": "S",
+            "name": "media.extractor"
+          },
+          {
+            "user": "media",
+            "pid": 340,
+            "ppid": 1,
+            "rss": 4864,
+            "state": "S",
+            "name": "media.metrics"
+          },
+          {
+            "user": "media",
+            "pid": 341,
+            "ppid": 1,
+            "rss": 9512,
+            "state": "S",
+            "name": "mediaserver"
+          },
+          {
+            "user": "root",
+            "pid": 342,
+            "ppid": 1,
+            "rss": 4692,
+            "state": "S",
+            "name": "storaged"
+          },
+          {
+            "user": "wifi",
+            "pid": 343,
+            "ppid": 1,
+            "rss": 4716,
+            "state": "S",
+            "name": "wificond"
+          },
+          {
+            "user": "mediacodec",
+            "pid": 345,
+            "ppid": 1,
+            "rss": 11764,
+            "state": "S",
+            "name": "media.codec"
+          },
+          {
+            "user": "radio",
+            "pid": 356,
+            "ppid": 1,
+            "rss": 4432,
+            "state": "S",
+            "name": "libgoldfish-rild"
+          },
+          {
+            "user": "mediacodec",
+            "pid": 357,
+            "ppid": 1,
+            "rss": 14840,
+            "state": "S",
+            "name": "media.swcodec"
+          },
+          {
+            "user": "system",
+            "pid": 360,
+            "ppid": 1,
+            "rss": 4000,
+            "state": "S",
+            "name": "gatekeeperd"
+          },
+          {
+            "user": "system",
+            "pid": 362,
+            "ppid": 1,
+            "rss": 3040,
+            "state": "S",
+            "name": "android.hardware.biometrics.face@1.0-service.example"
+          },
+          {
+            "user": "system",
+            "pid": 363,
+            "ppid": 1,
+            "rss": 2916,
+            "state": "S",
+            "name": "android.hardware.biometrics.fingerprint@2.1-service"
+          },
+          {
+            "user": "llkd",
+            "pid": 366,
+            "ppid": 1,
+            "rss": 3376,
+            "state": "S",
+            "name": "llkd"
+          },
+          {
+            "user": "root",
+            "pid": 368,
+            "ppid": 1,
+            "rss": 2620,
+            "state": "S",
+            "name": "dhcpclient"
+          },
+          {
+            "user": "mdnsr",
+            "pid": 406,
+            "ppid": 1,
+            "rss": 380,
+            "state": "S",
+            "name": "mdnsd"
+          },
+          {
+            "user": "audioserver",
+            "pid": 414,
+            "ppid": 308,
+            "rss": 10188,
+            "state": "S",
+            "name": "audioserver"
+          },
+          {
+            "user": "root",
+            "pid": 421,
+            "ppid": 1,
+            "rss": 1860,
+            "state": "S",
+            "name": "dhcpclient"
+          },
+          {
+            "user": "system",
+            "pid": 478,
+            "ppid": 274,
+            "rss": 199848,
+            "state": "S",
+            "name": "system_server"
+          },
+          {
+            "user": "nobody",
+            "pid": 555,
+            "ppid": 1,
+            "rss": 2920,
+            "state": "S",
+            "name": "android.hardware.input.classifier@1.0-service.default"
+          },
+          {
+            "user": "wifi",
+            "pid": 612,
+            "ppid": 1,
+            "rss": 4544,
+            "state": "S",
+            "name": "wpa_supplicant"
+          },
+          {
+            "user": "bluetooth",
+            "pid": 614,
+            "ppid": 274,
+            "rss": 73992,
+            "state": "S",
+            "name": "com.android.bluetooth"
+          },
+          {
+            "user": "u0_a156",
+            "pid": 663,
+            "ppid": 274,
+            "rss": 150736,
+            "state": "S",
+            "name": "com.android.systemui"
+          },
+          {
+            "user": "gps",
+            "pid": 707,
+            "ppid": 1,
+            "rss": 3288,
+            "state": "S",
+            "name": "android.hardware.gnss@2.0-service.ranchu"
+          },
+          {
+            "user": "u0_a118",
+            "pid": 780,
+            "ppid": 274,
+            "rss": 157864,
+            "state": "S",
+            "name": "com.google.android.gms.persistent"
+          },
+          {
+            "user": "webview_zygote",
+            "pid": 823,
+            "ppid": 274,
+            "rss": 59832,
+            "state": "S",
+            "name": "webview_zygote"
+          },
+          {
+            "user": "network_stack",
+            "pid": 838,
+            "ppid": 274,
+            "rss": 78360,
+            "state": "S",
+            "name": "com.android.networkstack.process"
+          },
+          {
+            "user": "secure_element",
+            "pid": 852,
+            "ppid": 274,
+            "rss": 60000,
+            "state": "S",
+            "name": "com.android.se"
+          },
+          {
+            "user": "radio",
+            "pid": 871,
+            "ppid": 274,
+            "rss": 95188,
+            "state": "S",
+            "name": "com.android.phone"
+          },
+          {
+            "user": "u0_a161",
+            "pid": 911,
+            "ppid": 274,
+            "rss": 84200,
+            "state": "S",
+            "name": "com.google.android.ext.services"
+          },
+          {
+            "user": "u0_a152",
+            "pid": 1013,
+            "ppid": 274,
+            "rss": 154024,
+            "state": "S",
+            "name": "com.google.android.apps.nexuslauncher"
+          },
+          {
+            "user": "iorapd",
+            "pid": 1038,
+            "ppid": 337,
+            "rss": 4352,
+            "state": "S",
+            "name": "iorap.prefetcherd"
+          },
+          {
+            "user": "u0_a118",
+            "pid": 1222,
+            "ppid": 274,
+            "rss": 149252,
+            "state": "S",
+            "name": "com.google.android.gms"
+          },
+          {
+            "user": "u0_a136",
+            "pid": 1317,
+            "ppid": 274,
+            "rss": 155600,
+            "state": "S",
+            "name": "com.google.android.inputmethod.latin"
+          },
+          {
+            "user": "u0_a123",
+            "pid": 1347,
+            "ppid": 274,
+            "rss": 81160,
+            "state": "S",
+            "name": "com.google.android.googlequicksearchbox:interactor"
+          },
+          {
+            "user": "u0_a164",
+            "pid": 1367,
+            "ppid": 274,
+            "rss": 89564,
+            "state": "S",
+            "name": "com.google.android.providers.media.module"
+          },
+          {
+            "user": "radio",
+            "pid": 1400,
+            "ppid": 274,
+            "rss": 59040,
+            "state": "S",
+            "name": "com.android.ims.rcsservice"
+          },
+          {
+            "user": "system",
+            "pid": 1447,
+            "ppid": 274,
+            "rss": 60644,
+            "state": "S",
+            "name": "com.android.emulator.multidisplay"
+          },
+          {
+            "user": "u0_a118",
+            "pid": 1480,
+            "ppid": 274,
+            "rss": 67268,
+            "state": "S",
+            "name": "com.google.process.gservices"
+          },
+          {
+            "user": "u0_a123",
+            "pid": 1532,
+            "ppid": 274,
+            "rss": 184684,
+            "state": "S",
+            "name": "com.google.android.googlequicksearchbox:search"
+          },
+          {
+            "user": "u0_a121",
+            "pid": 2386,
+            "ppid": 274,
+            "rss": 93276,
+            "state": "S",
+            "name": "com.google.android.ims"
+          },
+          {
+            "user": "shell",
+            "pid": 4362,
+            "ppid": 322,
+            "rss": 3520,
+            "state": "S",
+            "name": "abb"
+          },
+          {
+            "user": "u0_a118",
+            "pid": 6500,
+            "ppid": 274,
+            "rss": 83320,
+            "state": "S",
+            "name": "com.google.process.gapps"
+          },
+          {
+            "user": "u0_a169",
+            "pid": 10504,
+            "ppid": 274,
+            "rss": 255036,
+            "state": "S",
+            "name": "com.local.notesclone"
+          },
+          {
+            "user": "u0_i9007",
+            "pid": 10562,
+            "ppid": 823,
+            "rss": 199668,
+            "state": "S",
+            "name": "com.google.android.webview:sandboxed_process0:org.chromium.content.app.Sandbo"
+          },
+          {
+            "user": "u0_a118",
+            "pid": 10630,
+            "ppid": 274,
+            "rss": 147688,
+            "state": "S",
+            "name": "com.google.android.gms.unstable"
+          },
+          {
+            "user": "u0_a111",
+            "pid": 10765,
+            "ppid": 274,
+            "rss": 97108,
+            "state": "S",
+            "name": "com.google.android.partnersetup"
+          },
+          {
+            "user": "root",
+            "pid": 11125,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/1:0-cgroup_destroy]"
+          },
+          {
+            "user": "root",
+            "pid": 11274,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/1:2-mm_percpu_wq]"
+          },
+          {
+            "user": "root",
+            "pid": 11284,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/u5:1-fscrypt_read_queue]"
+          },
+          {
+            "user": "u0_a135",
+            "pid": 11329,
+            "ppid": 274,
+            "rss": 160964,
+            "state": "S",
+            "name": "com.google.android.apps.docs"
+          },
+          {
+            "user": "u0_a138",
+            "pid": 11335,
+            "ppid": 274,
+            "rss": 185452,
+            "state": "S",
+            "name": "com.google.android.apps.messaging"
+          },
+          {
+            "user": "root",
+            "pid": 11366,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/u5:2-blk_crypto_wq]"
+          },
+          {
+            "user": "root",
+            "pid": 11511,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/0:2-cgroup_destroy]"
+          },
+          {
+            "user": "u0_a115",
+            "pid": 11528,
+            "ppid": 274,
+            "rss": 119752,
+            "state": "S",
+            "name": "com.google.android.apps.wellbeing"
+          },
+          {
+            "user": "u0_a83",
+            "pid": 11562,
+            "ppid": 274,
+            "rss": 102072,
+            "state": "S",
+            "name": "com.android.providers.calendar"
+          },
+          {
+            "user": "root",
+            "pid": 11605,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/0:1-events]"
+          },
+          {
+            "user": "root",
+            "pid": 11634,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/u4:1-phy0]"
+          },
+          {
+            "user": "root",
+            "pid": 11648,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/u4:0-phy0]"
+          },
+          {
+            "user": "root",
+            "pid": 11649,
+            "ppid": 2,
+            "rss": 0,
+            "state": "I",
+            "name": "[kworker/u4:2-flush-253:4]"
+          },
+          {
+            "user": "root",
+            "pid": 11654,
+            "ppid": 1,
+            "rss": 6708,
+            "state": "S",
+            "name": "apexd"
+          },
+          {
+            "user": "shell",
+            "pid": 11657,
+            "ppid": 322,
+            "rss": 3112,
+            "state": "R",
+            "name": "ps"
+          }
+        ],
+        "unparsed_lines": [],
+        "coverage": "complete"
+      },
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "environment": null,
+      "limitations": [
+        "Artifact identity is unavailable for this observation."
+      ],
+      "relationship_coverage": null,
+      "locations": [],
+      "evidence_links": []
+    }
+  },
+  "inputBefore": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"evidence_id\":\"ev_be655f750cc550bf3c3f727fec70a37257d5f666ab2554ed711982d5c48bb107\",\"subject\":null,\"provider\":{\"id\":\"adb\",\"name\":\"Android Debug Bridge\",\"version\":\"36.0.0-13206524\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis\",\"operation\":\"read_adb_setting\",\"parameters\":{\"serial\":\"emulator-5580\",\"namespace\":\"secure\",\"key\":\"default_input_method\"},\"raw_result\":null,\"normalized_result\":{\"client\":{\"binary_path\":\"adb\",\"path_source\":\"path\",\"version\":\"36.0.0-13206524\",\"installed_path\":\"/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb\"},\"serial\":\"emulator-5580\",\"namespace\":\"secure\",\"key\":\"default_input_method\",\"value\":\"com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME\",\"device_reported_null\":false},\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"Android prints the literal string null for absent keys; that is reported as a device-side null observation\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+      }
+    ],
+    "structuredContent": {
+      "evidence_id": "ev_be655f750cc550bf3c3f727fec70a37257d5f666ab2554ed711982d5c48bb107",
+      "subject": null,
+      "provider": {
+        "id": "adb",
+        "name": "Android Debug Bridge",
+        "version": "36.0.0-13206524"
+      },
+      "analysis_profile": null,
+      "predicate_type": "rea.analysis",
+      "operation": "read_adb_setting",
+      "parameters": {
+        "serial": "emulator-5580",
+        "namespace": "secure",
+        "key": "default_input_method"
+      },
+      "raw_result": null,
+      "normalized_result": {
+        "client": {
+          "binary_path": "adb",
+          "path_source": "path",
+          "version": "36.0.0-13206524",
+          "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+        },
+        "serial": "emulator-5580",
+        "namespace": "secure",
+        "key": "default_input_method",
+        "value": "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME",
+        "device_reported_null": false
+      },
+      "confidence": "observed",
+      "authority": "shipped-artifact",
+      "environment": null,
+      "limitations": [
+        "Artifact identity is unavailable for this observation.",
+        "Android prints the literal string null for absent keys; that is reported as a device-side null observation"
+      ],
+      "relationship_coverage": null,
+      "locations": [],
+      "evidence_links": []
+    }
+  }
+}

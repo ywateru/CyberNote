@@ -1,0 +1,85 @@
+{
+  "at": "2026-11-03T19:53:26.347723+00:00",
+  "sourceFreeze": "c6594dbdfe8ee0313205a4b14bcdfeb37b819088",
+  "hostAndInstalledApkMatch": true,
+  "selectedEntriesMatch": true,
+  "beforeApkSha256": "a50dded89fd89e58cc674564bfde5823fce00e6339ccbcfdcbc0c4e1f20b3501",
+  "afterApkSha256": "bd29ae0b526cafa9b491d645587f5ae7b1254f0e56ad7fc7df309b2fed143477",
+  "packageBefore": {
+    "client": {
+      "binary_path": "adb",
+      "path_source": "path",
+      "version": "36.0.0-13206524",
+      "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+    },
+    "serial": "emulator-5580",
+    "package_name": "com.local.notesclone",
+    "version_name": "0.1.0",
+    "version_code": "1000",
+    "first_install_time": "2026-11-03 22:09:17",
+    "last_update_time": "2026-11-04 01:07:15",
+    "installer_package_name": null,
+    "user_id": 10169,
+    "pkg_flags": "[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]",
+    "requested_permissions_count": 5,
+    "coverage": "complete"
+  },
+  "packageAfter": {
+    "client": {
+      "binary_path": "adb",
+      "path_source": "path",
+      "version": "36.0.0-13206524",
+      "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+    },
+    "serial": "emulator-5580",
+    "package_name": "com.local.notesclone",
+    "version_name": "0.1.0",
+    "version_code": "1000",
+    "first_install_time": "2026-11-03 22:09:17",
+    "last_update_time": "2026-11-04 03:50:54",
+    "installer_package_name": null,
+    "user_id": 10169,
+    "pkg_flags": "[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]",
+    "requested_permissions_count": 5,
+    "coverage": "complete"
+  },
+  "firstInstallTimeUnchanged": true,
+  "userIdUnchanged": true,
+  "notescloneProcessesBefore": [
+    {
+      "user": "u0_a169",
+      "pid": 10504,
+      "ppid": 274,
+      "rss": 255036,
+      "state": "S",
+      "name": "com.local.notesclone"
+    }
+  ],
+  "notescloneProcessesAfter": [],
+  "defaultInputMethodBefore": "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME",
+  "defaultInputMethodAfter": "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME",
+  "defaultInputMethodUnchanged": true,
+  "dataComparisons": {
+    "databaseFileChecks": true,
+    "syntheticNotes": true,
+    "syntheticAttachments": true,
+    "syntheticAudio": true
+  },
+  "notExecuted": [
+    "ADB taps or keys",
+    "app launch or cold start",
+    "force-stop",
+    "recording or playback",
+    "mirror/scrcpy attempts",
+    "data clearing/uninstall",
+    "permission reset",
+    "emulator or host microphone configuration",
+    "input-method setting changes"
+  ],
+  "limits": [
+    "Existing environment reports emulator-5580; no physical Android or iOS runtime acceptance.",
+    "Package install evidence replaced=null is preserved; actual replacement conclusion comes from existing baseline, changed installed APK digest, same app user/firstInstallTime and unchanged selected data.",
+    "No current permissions before/after enum was collected; no permission mutation was sent.",
+    "No UI or runtime resource loading verified after installation."
+  ]
+}

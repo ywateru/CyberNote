@@ -1,0 +1,51 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_32da07d4eb24be00b6ca74c783514384a3c8a1db613ec9b82bfb4a4eef3a4a18\",\"subject\":null,\"provider\":{\"id\":\"adb\",\"name\":\"Android Debug Bridge\",\"version\":\"36.0.0-13206524\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis\",\"operation\":\"install_adb_package\",\"parameters\":{\"serial\":\"emulator-5580\",\"apk_path\":\"/private/tmp/notes-unified-candidate03-android-bd29ae0b.apk\",\"replace\":true},\"raw_result\":null,\"normalized_result\":{\"client\":{\"binary_path\":\"adb\",\"path_source\":\"path\",\"version\":\"36.0.0-13206524\",\"installed_path\":\"/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb\"},\"serial\":\"emulator-5580\",\"apk_path\":\"/private/tmp/notes-unified-candidate03-android-bd29ae0b.apk\",\"bytes\":302064554,\"sha256\":\"bd29ae0b526cafa9b491d645587f5ae7b1254f0e56ad7fc7df309b2fed143477\",\"replace_requested\":true,\"replaced\":null},\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"Install changes device state; the installed APK's digest identifies the private host snapshot\",\"Whether an existing package was replaced is unknown; replace_requested records only the adb install mode\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_32da07d4eb24be00b6ca74c783514384a3c8a1db613ec9b82bfb4a4eef3a4a18",
+    "subject": null,
+    "provider": {
+      "id": "adb",
+      "name": "Android Debug Bridge",
+      "version": "36.0.0-13206524"
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.analysis",
+    "operation": "install_adb_package",
+    "parameters": {
+      "serial": "emulator-5580",
+      "apk_path": "/private/tmp/notes-unified-candidate03-android-bd29ae0b.apk",
+      "replace": true
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "client": {
+        "binary_path": "adb",
+        "path_source": "path",
+        "version": "36.0.0-13206524",
+        "installed_path": "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"
+      },
+      "serial": "emulator-5580",
+      "apk_path": "/private/tmp/notes-unified-candidate03-android-bd29ae0b.apk",
+      "bytes": 302064554,
+      "sha256": "bd29ae0b526cafa9b491d645587f5ae7b1254f0e56ad7fc7df309b2fed143477",
+      "replace_requested": true,
+      "replaced": null
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "Install changes device state; the installed APK's digest identifies the private host snapshot",
+      "Whether an existing package was replaced is unknown; replace_requested records only the adb install mode"
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

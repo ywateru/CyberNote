@@ -1,0 +1,427 @@
+{
+  "coordinate_system": "window-only PNG physical px; 2 px = 1 pt; all boxes half-open; no source scaling",
+  "inputs": {
+    "original": {
+      "path": "docs/verification/mac-zero-same-geometry-before-01/08-original-zero.png",
+      "size_px": [
+        2784,
+        1806
+      ],
+      "sha256": "ffb3d46cd1b16766927ba61563b67cdd4ccb10e16dc21390d5b9dac1a4ed2d1b"
+    },
+    "candidate03": {
+      "path": "docs/verification/unified-candidate03-independent-01/mac/05-zero.png",
+      "size_px": [
+        2176,
+        1320
+      ],
+      "sha256": "05bd6174db622d6c1b9e9d41eb0a08468ea5e87c0ae9c34304874a72e98e614b"
+    }
+  },
+  "foreground_method": "min(R,G,B) < threshold; manually bounded uncontaminated text ROIs; threshold sweep 128/160/180/200; not font identification or acceptance metric",
+  "text_roi_px": [
+    480,
+    15,
+    680,
+    168
+  ],
+  "alignment": "No translation: both list left edge x456 and top y0. Right list edge differs (original x1016; candidate03 x1014).",
+  "text_measurements": {
+    "original": {
+      "title": {
+        "128": {
+          "ink_bbox_half_open_px": [
+            497,
+            27,
+            545,
+            50
+          ],
+          "ink_pixels": 615
+        },
+        "160": {
+          "ink_bbox_half_open_px": [
+            497,
+            27,
+            545,
+            51
+          ],
+          "ink_pixels": 677
+        },
+        "180": {
+          "ink_bbox_half_open_px": [
+            497,
+            27,
+            545,
+            51
+          ],
+          "ink_pixels": 734
+        },
+        "200": {
+          "ink_bbox_half_open_px": [
+            497,
+            27,
+            545,
+            51
+          ],
+          "ink_pixels": 793
+        }
+      },
+      "subtitle": {
+        "128": {
+          "ink_bbox_half_open_px": [
+            498,
+            59,
+            557,
+            78
+          ],
+          "ink_pixels": 102
+        },
+        "160": {
+          "ink_bbox_half_open_px": [
+            497,
+            58,
+            560,
+            78
+          ],
+          "ink_pixels": 382
+        },
+        "180": {
+          "ink_bbox_half_open_px": [
+            497,
+            58,
+            560,
+            78
+          ],
+          "ink_pixels": 469
+        },
+        "200": {
+          "ink_bbox_half_open_px": [
+            497,
+            58,
+            560,
+            78
+          ],
+          "ink_pixels": 524
+        }
+      },
+      "section": {
+        "128": {
+          "ink_bbox_half_open_px": [
+            489,
+            130,
+            575,
+            158
+          ],
+          "ink_pixels": 1147
+        },
+        "160": {
+          "ink_bbox_half_open_px": [
+            489,
+            130,
+            575,
+            158
+          ],
+          "ink_pixels": 1260
+        },
+        "180": {
+          "ink_bbox_half_open_px": [
+            489,
+            130,
+            575,
+            158
+          ],
+          "ink_pixels": 1307
+        },
+        "200": {
+          "ink_bbox_half_open_px": [
+            489,
+            130,
+            575,
+            158
+          ],
+          "ink_pixels": 1349
+        }
+      }
+    },
+    "candidate03": {
+      "title": {
+        "128": {
+          "ink_bbox_half_open_px": [
+            499,
+            23,
+            547,
+            47
+          ],
+          "ink_pixels": 607
+        },
+        "160": {
+          "ink_bbox_half_open_px": [
+            499,
+            23,
+            547,
+            47
+          ],
+          "ink_pixels": 670
+        },
+        "180": {
+          "ink_bbox_half_open_px": [
+            499,
+            23,
+            547,
+            47
+          ],
+          "ink_pixels": 694
+        },
+        "200": {
+          "ink_bbox_half_open_px": [
+            499,
+            23,
+            547,
+            47
+          ],
+          "ink_pixels": 746
+        }
+      },
+      "subtitle": {
+        "128": {
+          "ink_bbox_half_open_px": [
+            500,
+            61,
+            561,
+            80
+          ],
+          "ink_pixels": 100
+        },
+        "160": {
+          "ink_bbox_half_open_px": [
+            499,
+            60,
+            562,
+            80
+          ],
+          "ink_pixels": 381
+        },
+        "180": {
+          "ink_bbox_half_open_px": [
+            499,
+            60,
+            562,
+            80
+          ],
+          "ink_pixels": 470
+        },
+        "200": {
+          "ink_bbox_half_open_px": [
+            499,
+            60,
+            562,
+            80
+          ],
+          "ink_pixels": 521
+        }
+      },
+      "section": {
+        "128": {
+          "ink_bbox_half_open_px": [
+            489,
+            132,
+            575,
+            159
+          ],
+          "ink_pixels": 886
+        },
+        "160": {
+          "ink_bbox_half_open_px": [
+            489,
+            132,
+            575,
+            159
+          ],
+          "ink_pixels": 990
+        },
+        "180": {
+          "ink_bbox_half_open_px": [
+            489,
+            132,
+            575,
+            159
+          ],
+          "ink_pixels": 1030
+        },
+        "200": {
+          "ink_bbox_half_open_px": [
+            489,
+            132,
+            575,
+            159
+          ],
+          "ink_pixels": 1071
+        }
+      }
+    }
+  },
+  "list_edges_px": {
+    "original": {
+      "left": 456,
+      "right": 1016
+    },
+    "candidate03": {
+      "left": 456,
+      "right": 1014
+    }
+  },
+  "divider_at_x650_rgb": {
+    "original": {
+      "178": [
+        255,
+        255,
+        255
+      ],
+      "179": [
+        254,
+        254,
+        254
+      ],
+      "180": [
+        255,
+        255,
+        255
+      ],
+      "181": [
+        255,
+        255,
+        255
+      ],
+      "182": [
+        241,
+        241,
+        241
+      ],
+      "183": [
+        221,
+        221,
+        221
+      ],
+      "184": [
+        255,
+        255,
+        255
+      ],
+      "185": [
+        255,
+        255,
+        255
+      ],
+      "186": [
+        255,
+        255,
+        255
+      ],
+      "187": [
+        255,
+        255,
+        255
+      ]
+    },
+    "candidate03": {
+      "178": [
+        254,
+        254,
+        254
+      ],
+      "179": [
+        255,
+        255,
+        255
+      ],
+      "180": [
+        255,
+        255,
+        255
+      ],
+      "181": [
+        255,
+        255,
+        255
+      ],
+      "182": [
+        255,
+        255,
+        255
+      ],
+      "183": [
+        222,
+        222,
+        222
+      ],
+      "184": [
+        255,
+        255,
+        255
+      ],
+      "185": [
+        255,
+        255,
+        255
+      ],
+      "186": [
+        255,
+        255,
+        255
+      ],
+      "187": [
+        255,
+        255,
+        255
+      ]
+    }
+  },
+  "search_ring_outer_bbox_px": {
+    "original": [
+      2112,
+      10,
+      2774,
+      94
+    ],
+    "candidate03": [
+      1686,
+      10,
+      2166,
+      94
+    ]
+  },
+  "magnifier_ink_bbox_px_at_160": {
+    "original": [
+      2141,
+      40,
+      2166,
+      65
+    ],
+    "candidate03": [
+      1715,
+      40,
+      1740,
+      65
+    ]
+  },
+  "magnifier_crop_px": {
+    "original": [
+      2135,
+      30,
+      2180,
+      75
+    ],
+    "candidate03": [
+      1709,
+      30,
+      1754,
+      75
+    ]
+  },
+  "limitations": [
+    "Different whole-window geometry; no whole-window pair, resizing, or pixel PASS.",
+    "Same visible zero-results text is locally comparable; list complete widths differ 2 px.",
+    "Search field widths and visible query scroll differ; pointer/caret contaminate text.",
+    "No material/blur cause, exact font family/weight value, active/accent/theme parity, or whole-control color acceptance inferred."
+  ]
+}
