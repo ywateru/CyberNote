@@ -21,7 +21,9 @@ async function productionModule(name) {
   );
   return import(pathToFileURL(path));
 }
-const { projectSearchNote } = await productionModule("search-selection");
+const { projectSearchNote, shouldClearSearchAfterAccessChange } =
+  await productionModule("search-selection");
+const { SearchEditorGate } = await productionModule("search-editor-gate");
 const { toolbarState } = await productionModule("native-toolbar-state");
 const { createEditorExtensions } = await productionModule("editor-schema");
 const results = [];
@@ -144,8 +146,11 @@ check(
     const pending = new Map([["original", edited]]);
     const state = editor.state;
     assert.equal(updates, 1);
-    editor.setEditable(false, false);
+    const gate = new SearchEditorGate();
+    gate.park(editor);
     assert.equal(editor.isEditable, false);
+    gate.restore(editor, true, false);
+    assert.equal(editor.isEditable, false, "late restore must remain parked");
     assert.equal(projectSearchNote({ ...selection, resultIds: [] }), null);
     assert.equal(editor.state, state);
     assert.deepEqual(editor.getJSON(), edited);
@@ -155,7 +160,13 @@ check(
       projectSearchNote({ ...selection, searching: false }),
       "original",
     );
-    editor.setEditable(true, false);
+    gate.activate(editor, true);
+    assert.equal(
+      editor.isEditable,
+      false,
+      "access freeze wins over visibility",
+    );
+    gate.activate(editor, false);
     assert.equal(editor.isEditable, true);
     assert.equal(editor.state, state);
     assert.equal(updates, 1);
@@ -169,6 +180,64 @@ check(
       true,
     );
     assert.deepEqual(editor.getJSON(), edited);
+  },
+);
+check(
+  "unrelated parked-note access change keeps the valid visible target",
+  () => {
+    assert.equal(shouldClearSearchAfterAccessChange(true, "B", ["A"]), false);
+    assert.equal(shouldClearSearchAfterAccessChange(true, "B", ["B"]), true);
+    assert.equal(shouldClearSearchAfterAccessChange(true, null, ["A"]), true);
+    assert.equal(shouldClearSearchAfterAccessChange(false, "B", ["A"]), true);
+    const querySurvives = !shouldClearSearchAfterAccessChange(true, "B", ["A"]);
+    assert.equal(
+      projectSearchNote({
+        searching: querySurvives,
+        baseNoteId: "A",
+        searchNoteId: null,
+        resultIds: ["B"],
+      }),
+      "B",
+    );
+  },
+);
+check(
+  "prepare then park then late abort/conflict/paper restore has one writer",
+  () => {
+    const create = () =>
+      new Editor({
+        element: null,
+        extensions: createEditorExtensions(),
+        content: { type: "doc", content: [{ type: "paragraph" }] },
+      });
+    for (const reason of [
+      "access-abort",
+      "conflict-copy-finally",
+      "paper-close",
+    ]) {
+      const original = create();
+      const match = create();
+      const gate = new SearchEditorGate();
+      original.setEditable(false, false); // Existing prepare/conflict/paper freeze.
+      gate.park(original);
+      gate.restore(original, true, false); // The actual shared production restore.
+      assert.equal(original.isEditable, false, reason);
+      assert.equal(match.isEditable, true, reason);
+      gate.park(match); // Host layout cleanup freezes a removed result first.
+      gate.activate(original, true);
+      assert.equal(original.isEditable, false, reason);
+      gate.activate(original, false);
+      assert.equal(original.isEditable, true, reason);
+      assert.equal(match.isEditable, false, reason);
+      gate.park(original);
+      gate.restore(original, false, false);
+      gate.activate(original, false);
+      assert.equal(
+        original.isEditable,
+        false,
+        "explicit false is not overridden",
+      );
+    }
   },
 );
 console.log(JSON.stringify({ tests: results.length, results }, null, 2));

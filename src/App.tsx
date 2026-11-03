@@ -95,7 +95,11 @@ import type { BindingInfo } from "../plugins/tauri-plugin-notes-ui/guest-js";
 import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
 import { documentsEqual } from "./document-equality";
-import { projectSearchNote } from "./search-selection";
+import {
+  projectSearchNote,
+  shouldClearSearchAfterAccessChange,
+} from "./search-selection";
+import { SearchEditorGate } from "./search-editor-gate";
 import { RecordingSession, createRecordingPreview } from "./recording-session";
 import linesSmallPreview from "../assets/mobile-paper-previews/lines-small.svg";
 import linesMediumPreview from "../assets/mobile-paper-previews/lines-medium.svg";
@@ -242,6 +246,7 @@ function SearchEditorHost({
   note,
   active,
   blocked,
+  gate,
   onChange,
   onReady,
   onFocus,
@@ -250,37 +255,42 @@ function SearchEditorHost({
   note: Note;
   active: boolean;
   blocked: boolean;
+  gate: SearchEditorGate;
   onChange: (id: string, doc: JSONContent) => void;
   onReady: (id: string, editor: Editor | null) => void;
   onFocus: (focused: boolean) => void;
   onDate: () => void;
 }) {
   const instance = useRef<Editor | null>(null);
-  const parkedEditable = useRef<boolean | null>(null);
   const activeRef = useRef(active);
+  const blockedRef = useRef(blocked);
   activeRef.current = active;
+  blockedRef.current = blocked;
   const ready = useCallback(
     (editor: Editor | null) => {
       instance.current = editor;
-      if (editor && !editor.isDestroyed && !activeRef.current) {
-        parkedEditable.current = editor.isEditable;
-        editor.setEditable(false, false);
+      if (editor && !editor.isDestroyed) {
+        if (activeRef.current) gate.activate(editor, blockedRef.current);
+        else gate.park(editor);
       }
       onReady(note.id, editor);
     },
-    [note.id, onReady],
+    [note.id, onReady, gate],
+  );
+  useLayoutEffect(
+    () => () => {
+      const editor = instance.current;
+      if (editor && !editor.isDestroyed) gate.park(editor);
+    },
+    [gate],
   );
   useLayoutEffect(() => {
     const editor = instance.current;
     if (!editor || editor.isDestroyed) return;
-    if (!active && parkedEditable.current === null) {
-      parkedEditable.current = editor.isEditable;
-      editor.setEditable(false, false);
-      editor.view.dom.blur();
-    } else if (active && !blocked && parkedEditable.current !== null) {
-      // An access-barrier abort may already have restored this same editor.
-      editor.setEditable(editor.isEditable || parkedEditable.current, false);
-      parkedEditable.current = null;
+    if (active) gate.activate(editor, blocked);
+    else {
+      gate.park(editor);
+      if (editor.isFocused) editor.view.dom.blur();
     }
   });
   return (
@@ -327,6 +337,7 @@ function App() {
   const [editors, setEditors] = useState<ReadonlyMap<string, Editor>>(
     new Map(),
   );
+  const editorGate = useRef(new SearchEditorGate()).current;
   const editorsRef = useRef(editors);
   editorsRef.current = editors;
   const [editing, setEditing] = useState(false);
@@ -468,6 +479,17 @@ function App() {
       return next;
     });
   }, []);
+  const restoreEditor = useCallback(
+    (instance: Editor, editable: boolean) => {
+      const owner = nativeEditorOwners.current.get(instance);
+      editorGate.restore(
+        instance,
+        editable,
+        !owner || blockedNotes.current.has(owner),
+      );
+    },
+    [editorGate],
+  );
   useEffect(() => {
     if (!desktopSearch) setSearchNoteId(null);
     else {
@@ -718,7 +740,7 @@ function App() {
     } finally {
       blockedNotes.current.delete(id);
       if (frozen && !frozen.isDestroyed && editable !== undefined)
-        frozen.setEditable(editable, false);
+        restoreEditor(frozen, editable);
       setSaving((v) => Math.max(0, v - 1));
     }
   };
@@ -755,7 +777,16 @@ function App() {
       context.editor = null;
       context.bookmark = null;
     });
-    nativeAttachmentTarget.current = null;
+    const attachmentTarget = nativeAttachmentTarget.current;
+    if (attachmentTarget) {
+      // Keep an explicitly rejected intent, never turn a late picker return
+      // into the ordinary-entry fallback for the newly visible note.
+      nativeAttachmentTarget.current = {
+        ...attachmentTarget,
+        editor: null,
+        bookmark: null,
+      };
+    }
     for (const id of ids) {
       const instance = editorsRef.current.get(id);
       if (instance && !instance.isDestroyed) instance.destroy();
@@ -773,8 +804,12 @@ function App() {
       setShowFind(false);
       setFind("");
     }
-    setQuery("");
-    setSearching(false);
+    // An unrelated parked note changed. Keep the still-valid visible search
+    // target and its overlay; clearing here would silently retarget B to A.
+    if (shouldClearSearchAfterAccessChange(desktopSearch, noteId, ids)) {
+      setQuery("");
+      setSearching(false);
+    }
     setContextNote(null);
   };
   synchronizeRef.current = () => {
@@ -851,7 +886,7 @@ function App() {
       setAccessSuspended([]);
       const frozen = barrierEditor.current;
       if (frozen && !frozen.editor.isDestroyed)
-        frozen.editor.setEditable(frozen.editable, false);
+        restoreEditor(frozen.editor, frozen.editable);
       barrierEditor.current = null;
       setWs((prev) => ({ ...prev, access: event.access }));
       fail(Error("锁定未执行：请检查所有窗口是否有未保存的更改，再重试。"));
@@ -923,7 +958,7 @@ function App() {
     paperTarget.current = null;
     setModal(null);
     if (target && !target.editor.isDestroyed) {
-      target.editor.setEditable(target.editable, false);
+      restoreEditor(target.editor, target.editable);
       if (target.noteId === noteId && target.editor === editor)
         target.editor.view.dispatch(
           target.editor.state.tr.setSelection(
@@ -1014,7 +1049,7 @@ function App() {
     const target = paperTarget.current;
     if (target && target.noteId !== noteId) {
       if (!target.editor.isDestroyed)
-        target.editor.setEditable(target.editable, false);
+        restoreEditor(target.editor, target.editable);
       paperTarget.current = null;
       setModal((value) => (value === "paper" ? null : value));
     }
@@ -1526,6 +1561,20 @@ function App() {
       ) : null}
     </div>
   );
+  const captureSearchAttachmentTarget = () => {
+    nativeAttachmentTarget.current = desktopSearch
+      ? {
+          noteId,
+          scope: nativeScope,
+          stamp: accessGate.stamp(noteId || undefined),
+          editor,
+          bookmark: editor?.state.selection.getBookmark() || null,
+          documentVersion: editor
+            ? nativeDocumentVersions.current.get(editor) || 0
+            : 0,
+        }
+      : null;
+  };
   const tools = (bottom = false) => (
     <div
       className={`editor-tools ${bottom ? "bottom-tools" : ""}`}
@@ -1687,6 +1736,7 @@ function App() {
               <MenuRow
                 icon={<FileText size={19} />}
                 onClick={() => {
+                  captureSearchAttachmentTarget();
                   fileInput.current?.click();
                   setMenu(null);
                 }}
@@ -1697,6 +1747,7 @@ function App() {
                 icon={<Volume2 size={19} />}
                 onClick={() => {
                   setMenu(null);
+                  captureSearchAttachmentTarget();
                   setRecord(true);
                 }}
               >
@@ -1708,6 +1759,7 @@ function App() {
                 onClick={() => {
                   if (fileInput.current) {
                     fileInput.current.accept = "image/*,video/*";
+                    captureSearchAttachmentTarget();
                     fileInput.current.click();
                   }
                   setMenu(null);
@@ -1718,6 +1770,7 @@ function App() {
               <MenuRow
                 icon={<Camera size={19} />}
                 onClick={() => {
+                  captureSearchAttachmentTarget();
                   cameraInput.current?.click();
                   setMenu(null);
                 }}
@@ -1731,6 +1784,7 @@ function App() {
                   setNotice(
                     "当前可拍摄并插入文稿照片；自动裁边与扫描归档尚待实现。",
                   );
+                  captureSearchAttachmentTarget();
                   cameraInput.current?.click();
                 }}
               >
@@ -3037,6 +3091,7 @@ function App() {
                 note={note}
                 active={note.id === noteId}
                 blocked={blockedNotes.current.has(note.id)}
+                gate={editorGate}
                 onChange={saveDoc}
                 onReady={onReady}
                 onDate={() => setNotice(`创建于 ${fmtDate(note.createdAt)}`)}
@@ -3334,6 +3389,7 @@ function App() {
                   <button
                     onClick={() => {
                       setModal(null);
+                      captureSearchAttachmentTarget();
                       cameraInput.current?.click();
                     }}
                   >

@@ -1,0 +1,28 @@
+{
+  "task": "app-001-search-results-01",
+  "baseline_candidate": "c072a93887f0786cbc2fc2853b1f3b1556ceac5e",
+  "revision": 2,
+  "status": "source-candidate-awaiting-independent-review",
+  "source_sha256": {
+    "src/App.tsx": "fec03860e81af5745b7c2f2eefa1f5544d5abec0302918d56dc2fdb13392df2c",
+    "src/search-selection.ts": "243d637f056fe8fadd1a5dc1c47c4689c6b865d82a764b6da1a9e44ec91d3a3a",
+    "src/search-editor-gate.ts": "8601b7da9c89e3620583d912c0454cb1a8d70ead5dbe9bd56df393ec3387f888",
+    "scripts/check-search-selection.mjs": "b4d71d173320f6b356f158b5dd5ada4dbc3c7593d9ab3fe921562504e2e11f7d"
+  },
+  "checks": {
+    "typecheck": "pass",
+    "production_state_and_headless_Tiptap_history_groups": 7,
+    "diff_check": "pass",
+    "gui": "not-run",
+    "build": "not-run",
+    "pixel_parity": "not-verified"
+  },
+  "addressed_findings": [
+    "Parked editor late editable restoration can create second writer.",
+    "Unrelated parked-note invalidation clears search and retargets retained B overlay to A."
+  ],
+  "limits": [
+    "No mounted React lifecycle or native UI run.",
+    "Native/ordinary desktop-search picker intents retain explicit rejecting tombstones; separate attachment transaction/focus revalidation work remains pending."
+  ]
+}
