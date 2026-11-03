@@ -9,6 +9,7 @@ const out = path.resolve(
 );
 const adb = "/Users/water/Library/Android/sdk/platform-tools/adb";
 const pkg = "com.local.notesclone";
+const paperRegression = process.env.NOTES_PAPER_REGRESSION === "1";
 const run = (...a) =>
   execFileSync(adb, ["-s", "emulator-5580", ...a], { encoding: "utf8" });
 const pause = (ms = 350) => new Promise((r) => setTimeout(r, ms));
@@ -60,7 +61,7 @@ async function read(expression) {
   if (r.exceptionDetails) throw Error(r.exceptionDetails.text);
   return r.result.value;
 }
-const inspect = `(()=>{const ed=document.querySelector('.tiptap'), e=ed?.editor;const rect=x=>{const r=x.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height}};return {url:location.href,title:document.title,app:document.querySelector('.app')?.className,active:document.activeElement?.outerHTML?.slice(0,300),viewport:[innerWidth,innerHeight,devicePixelRatio],selection:e?.state.selection.toJSON(),document:e?.getJSON(),focused:e?.isFocused,editor:ed?rect(ed):null,toolbars:[...document.querySelectorAll('.editor-tools')].map(b=>({cls:b.className,rect:rect(b)})),formatPanel:document.querySelector('.mobile-format-panel')?rect(document.querySelector('.mobile-format-panel')):null,buttons:[...document.querySelectorAll('button')].filter(b=>b.getBoundingClientRect().width>0).map(b=>({label:b.getAttribute('aria-label'),text:b.textContent,cls:b.className,paper:b.dataset.paperStyle,rect:rect(b)})),paper:[...document.querySelectorAll('.paper-option')].map(b=>({style:b.dataset.paperStyle,selected:b.classList.contains('selected'),rect:rect(b)})),drawings:[...document.querySelectorAll('.drawing-surface,.drawing-node')].map(b=>({cls:b.className,style:getComputedStyle(b).backgroundImage,size:getComputedStyle(b).backgroundSize,rect:rect(b)})),text:ed?.innerText,domSelection:window.getSelection()?.toString()}})()`;
+const inspect = `(()=>{const ed=document.querySelector('.tiptap'), e=ed?.editor;const rect=x=>{const r=x.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height}};return {url:location.href,title:document.title,app:document.querySelector('.app')?.className,active:document.activeElement?.outerHTML?.slice(0,300),viewport:[innerWidth,innerHeight,devicePixelRatio],selection:e?.state.selection.toJSON(),document:e?.getJSON(),focused:e?.isFocused,editable:e?.isEditable,paperModal:!!document.querySelector('.modal-paper'),editor:ed?rect(ed):null,toolbars:[...document.querySelectorAll('.editor-tools')].map(b=>({cls:b.className,rect:rect(b)})),formatPanel:document.querySelector('.mobile-format-panel')?rect(document.querySelector('.mobile-format-panel')):null,buttons:[...document.querySelectorAll('button')].filter(b=>b.getBoundingClientRect().width>0).map(b=>({label:b.getAttribute('aria-label'),text:b.textContent,cls:b.className,paper:b.dataset.paperStyle,rect:rect(b)})),paper:[...document.querySelectorAll('.paper-option')].map(b=>({style:b.dataset.paperStyle,selected:b.classList.contains('selected'),rect:rect(b)})),drawings:[...document.querySelectorAll('.drawing-surface,.drawing-node')].map(b=>({cls:b.className,style:getComputedStyle(b).backgroundImage,size:getComputedStyle(b).backgroundSize,rect:rect(b)})),text:ed?.innerText,domSelection:window.getSelection()?.toString()}})()`;
 async function snapshot(name) {
   const state = await read(inspect);
   state.imeShown = /mInputShown=true/.test(
@@ -94,9 +95,9 @@ const nativeTap = async (point, name) => {
   run("shell", "input", "tap", ...point.map((n) => String(Math.round(n))));
   await pause(500);
 };
-async function tapButton(selector, name) {
+async function tapButton(selector, name, buttonText) {
   const p = await read(
-    `(()=>{const b=Array.from(document.querySelectorAll(${JSON.stringify(selector)})).find(b=>b.getBoundingClientRect().width>0);if(!b)throw Error('No visible button');const r=b.getBoundingClientRect();return [(r.x+r.width/2)*devicePixelRatio,(r.y+r.height/2)*devicePixelRatio]})()`,
+    `(()=>{const b=Array.from(document.querySelectorAll(${JSON.stringify(selector)})).find(b=>b.getBoundingClientRect().width>0&&(${JSON.stringify(buttonText)}===undefined||b.textContent.trim()===${JSON.stringify(buttonText)}));if(!b)throw Error('No visible button');const r=b.getBoundingClientRect();return [(r.x+r.width/2)*devicePixelRatio,(r.y+r.height/2)*devicePixelRatio]})()`,
   );
   p[1] += webTop;
   await nativeTap(p, name);
@@ -227,34 +228,148 @@ try {
   assert(!isPanel(x));
   assert.deepEqual(x.selection, selected);
   assertKeyboardReachable(base, x);
-  const openedAgain = await tapButton(
-    'button[aria-label="格式"]',
-    "format-again-native",
-  );
-  assert(isPanel(openedAgain));
-  assertPanelStructure(openedAgain);
-  assert(!openedAgain.imeShown);
-  const panelBack = await back("panel-back-native");
-  assert(!isPanel(panelBack));
-  assert(!panelBack.imeShown);
-  assert(panelBack.app.includes("page-editor"));
-  assert(Math.abs(panelBack.viewport[1] - base.viewport[1]) < 2);
-  // Resume native editing and verify ordinary system Back hides the IME, keeping this note open.
-  const ep = await read(
-    `(()=>{const p=document.querySelector('.tiptap p'),r=p.getBoundingClientRect();return [(r.x+r.width-10)*devicePixelRatio,(r.y+r.height/2)*devicePixelRatio]})()`,
-  );
-  ep[1] += webTop;
-  await nativeTap(ep, "resume-native");
-  const resumed = await snapshot("keyboard-resumed-native");
-  assertKeyboardReachable(base, resumed);
-  const imeBack = await back("ime-back-native");
-  assert(!imeBack.imeShown);
-  assert(imeBack.app.includes("page-editor"));
-  assert(Math.abs(imeBack.viewport[1] - base.viewport[1]) < 2);
+  if (paperRegression) {
+    const assertPaper = (s) => {
+      assert(s.paperModal, "Paper picker absent");
+      assert(!s.imeShown, "IME overlaps paper picker");
+      assert(!s.focused, "Underlying editor still focused");
+      assert.equal(s.editable, false, "Underlying editor not frozen");
+      assert(Math.abs(s.viewport[1] - base.viewport[1]) < 2);
+      assert.deepEqual(s.selection, selected);
+      assert.deepEqual(s.document, bold.document);
+      assert.equal(s.paper.length, 7);
+      for (const p of s.paper) {
+        assert(
+          p.rect.y >= 0 && p.rect.y + p.rect.h <= s.viewport[1] + 1,
+          `Paper option ${p.style} extends outside visible viewport`,
+        );
+      }
+    };
+    const assertReturned = (s) => {
+      assert(!s.paperModal);
+      assert(!s.imeShown);
+      assert(!s.focused);
+      assert.equal(s.editable, true);
+      assert.deepEqual(s.selection, selected);
+      assert.deepEqual(s.document, bold.document);
+      assert(s.app.includes("page-editor"));
+    };
+    // Exact independent finding entry: X -> native Back -> More -> paper picker.
+    const hidden = await back("paper-ime-back-native");
+    assert(!hidden.imeShown);
+    assert.deepEqual(hidden.selection, selected);
+    await tapButton('button[aria-label="更多"]', "paper-more-native");
+    const picker = await tapButton(
+      "button.menu-row",
+      "paper-picker-native",
+      "横线与网格",
+    );
+    assertPaper(picker);
+    const cancelled = await tapButton(
+      ".modal-paper .sheet-top button",
+      "paper-cancel-native",
+    );
+    assertReturned(cancelled);
+    await tapButton('button[aria-label="更多"]', "paper-more-select-native");
+    assertPaper(
+      await tapButton(
+        "button.menu-row",
+        "paper-picker-select-native",
+        "横线与网格",
+      ),
+    );
+    const chosen = await tapButton(
+      '.modal-paper [data-paper-style="grid-large"]',
+      "paper-grid-large-native",
+    );
+    assertReturned(chosen);
+    await tapButton('button[aria-label="更多"]', "paper-more-back-native");
+    const reopened = await tapButton(
+      "button.menu-row",
+      "paper-picker-back-native",
+      "横线与网格",
+    );
+    assertPaper(reopened);
+    assert(reopened.paper.find((p) => p.style === "grid-large").selected);
+    assertReturned(await back("paper-back-native"));
+    await tapButton('button[aria-label="更多"]', "paper-more-escape-native");
+    assertPaper(
+      await tapButton(
+        "button.menu-row",
+        "paper-picker-escape-native",
+        "横线与网格",
+      ),
+    );
+    log({ op: "key", key: 111, name: "paper-escape-native" });
+    run("shell", "input", "keyevent", "111");
+    await pause(500);
+    assertReturned(await snapshot("paper-escape-native"));
+    await tapButton('button[aria-label="更多"]', "paper-more-backdrop-native");
+    const forBackdrop = await tapButton(
+      "button.menu-row",
+      "paper-picker-backdrop-native",
+      "横线与网格",
+    );
+    assertPaper(forBackdrop);
+    // The paper sheet begins 20 CSS px below the viewport; tap its exposed backdrop.
+    await nativeTap(
+      [
+        (forBackdrop.viewport[0] * forBackdrop.viewport[2]) / 2,
+        webTop + 8 * forBackdrop.viewport[2],
+      ],
+      "paper-backdrop-native",
+    );
+    assertReturned(await snapshot("paper-backdrop-native"));
+    // Restored editor must remain usable; this native long press keeps Beta selected.
+    log({
+      op: "long-press",
+      point: word,
+      name: "paper-resume-selection-native",
+    });
+    run(
+      "shell",
+      "input",
+      "swipe",
+      ...word.map((n) => String(Math.round(n))),
+      ...word.map((n) => String(Math.round(n))),
+      "650",
+    );
+    await pause(500);
+    const resumed = await snapshot("paper-resumed-native");
+    assertKeyboardReachable(base, resumed);
+    assert.deepEqual(resumed.selection, selected);
+    await back("paper-final-ime-back-native");
+  } else {
+    const openedAgain = await tapButton(
+      'button[aria-label="格式"]',
+      "format-again-native",
+    );
+    assert(isPanel(openedAgain));
+    assertPanelStructure(openedAgain);
+    assert(!openedAgain.imeShown);
+    const panelBack = await back("panel-back-native");
+    assert(!isPanel(panelBack));
+    assert(!panelBack.imeShown);
+    assert(panelBack.app.includes("page-editor"));
+    assert(Math.abs(panelBack.viewport[1] - base.viewport[1]) < 2);
+    // Resume native editing and verify ordinary system Back hides the IME, keeping this note open.
+    const ep = await read(
+      `(()=>{const p=document.querySelector('.tiptap p'),r=p.getBoundingClientRect();return [(r.x+r.width-10)*devicePixelRatio,(r.y+r.height/2)*devicePixelRatio]})()`,
+    );
+    ep[1] += webTop;
+    await nativeTap(ep, "resume-native");
+    const resumed = await snapshot("keyboard-resumed-native");
+    assertKeyboardReachable(base, resumed);
+    const imeBack = await back("ime-back-native");
+    assert(!imeBack.imeShown);
+    assert(imeBack.app.includes("page-editor"));
+    assert(Math.abs(imeBack.viewport[1] - base.viewport[1]) < 2);
+  }
   const note = await read(
     `window.__TAURI_INTERNALS__.invoke('load_workspace').then(w=>w.notes.find(n=>n.title===${JSON.stringify(marker)}))`,
   );
   assert(note);
+  if (paperRegression) assert.equal(note.paperStyle, "grid-large");
   assert(
     flat(note.document).some(
       (n) => n.text === "Beta" && n.marks?.some((m) => m.type === "bold"),
@@ -283,8 +398,18 @@ try {
       "format panel meets viewport bottom with its own X and no accessory toolbar",
       "native bold command retains focus/IME hidden",
       "native X restores same selection and reachable toolbar over IME",
-      "native panel Back retains note and no IME",
-      "native IME Back retains note and restores full viewport",
+      ...(paperRegression
+        ? [
+            "native X then system Back then More reaches full paper picker without IME",
+            "all seven paper choices within visible viewport and underlying editor frozen",
+            "native cancel, Back, Escape and backdrop restore same note selection and editable state without IME",
+            "native bottom grid-large choice persists and is selected on reopen",
+            "native long press resumes editor and IME with same Beta selection",
+          ]
+        : [
+            "native panel Back retains note and no IME",
+            "native IME Back retains note and restores full viewport",
+          ]),
       "Rust saved bold body",
       "zero WebView exceptions",
     ],

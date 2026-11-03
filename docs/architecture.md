@@ -35,6 +35,8 @@ FIX-01 编辑契约：默认空笔记直接输入从一级标题开始，Enter �
 
 paperStyle 合法值为 plain、lines-small、lines-medium、lines-large、grid-small、grid-medium、grid-large，依此按空白独占首行、其余两列三行显示。选择立即保存到当前笔记，取消只关闭选择页。纸纹用于绘画/手写区域和选择预览，不给普通键入文字整页铺纹；已有六种值无需迁移。绘画编辑与保存后的绘画节点使用相同样式，切换纸张不改笔画。
 
+移动端纸张页单独保存 noteId、editor、SelectionBookmark 和原 editable 状态。打开前同步 blur 正文、冻结 editable 并调用原生隐藏键盘，避免 Android 系统 Back 只藏键盘但留下编辑焦点后再唤起 IME。纸张页期间书签随事务映射；取消、选择、Back、Escape 或 backdrop 关闭时恢复同笔记选区与 editable，保持键盘隐藏，切笔记作废旧目标。这是纸张页的项目交互契约，不扩展到其他弹窗或菜单。
+
 ## 命令契约
 
 允许实现阶段调整命名，但必须在源码与本文同步：

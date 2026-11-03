@@ -183,6 +183,12 @@ function App() {
     editor: Editor;
     bookmark: SelectionBookmark;
   } | null>(null);
+  const paperTarget = useRef<{
+    noteId: string;
+    editor: Editor;
+    bookmark: SelectionBookmark;
+    editable: boolean;
+  } | null>(null);
   const viewportHeight = useRef(window.innerHeight);
   const keyboardHeight = useRef(0);
   const [sidebar, setSidebar] = useState(true);
@@ -383,6 +389,23 @@ function App() {
     }
     formatTarget.current = null;
   };
+  const closePaper = () => {
+    const target = paperTarget.current;
+    paperTarget.current = null;
+    setModal(null);
+    if (target && !target.editor.isDestroyed) {
+      target.editor.setEditable(target.editable, false);
+      if (target.noteId === noteId && target.editor === editor)
+        target.editor.view.dispatch(
+          target.editor.state.tr.setSelection(
+            target.bookmark.resolve(target.editor.state.doc),
+          ),
+        );
+      target.editor.view.dom.blur();
+      keyboard(false);
+      setEditing(false);
+    }
+  };
   const openFormat = () => {
     if (!editor || !noteId) return;
     if (menu === "format") {
@@ -428,9 +451,9 @@ function App() {
     }: {
       transaction: import("@tiptap/pm/state").Transaction;
     }) => {
-      const target = formatTarget.current;
-      if (target && target.editor === editor && target.noteId === noteId)
-        target.bookmark = target.bookmark.map(transaction.mapping);
+      for (const target of [formatTarget.current, paperTarget.current])
+        if (target && target.editor === editor && target.noteId === noteId)
+          target.bookmark = target.bookmark.map(transaction.mapping);
       updateFormatState((v) => v + 1);
     };
     editor.on("transaction", changed);
@@ -441,6 +464,13 @@ function App() {
   useEffect(() => {
     formatTarget.current = null;
     setMenu((value) => (value === "format" ? null : value));
+    const target = paperTarget.current;
+    if (target && target.noteId !== noteId) {
+      if (!target.editor.isDestroyed)
+        target.editor.setEditable(target.editable, false);
+      paperTarget.current = null;
+      setModal((value) => (value === "paper" ? null : value));
+    }
   }, [noteId]);
   const chooseFolder = (id: string) => {
     setGalleryEditor(false);
@@ -489,6 +519,20 @@ function App() {
     }
   }, [fail, flush, folderId, updateSettings]);
   const openModal = (type: string, value = "") => {
+    if (type === "paper" && mobile && editor && noteId) {
+      paperTarget.current = {
+        noteId,
+        editor,
+        bookmark: editor.state.selection.getBookmark(),
+        editable: editor.isEditable,
+      };
+      // Android Back can hide the IME while leaving contenteditable focused.
+      // Freeze and blur synchronously before presenting this full-page picker.
+      editor.view.dom.blur();
+      editor.setEditable(false, false);
+      keyboard(false);
+      setEditing(false);
+    }
     setModal(type);
     setModalValue(value);
     setMenu(null);
@@ -509,7 +553,8 @@ function App() {
   };
   const androidBack = useRef<() => void>(() => {});
   androidBack.current = () => {
-    if (modal) setModal(null);
+    if (modal === "paper") closePaper();
+    else if (modal) setModal(null);
     else if (menu === "format") closeFormat(false);
     else if (menu) setMenu(null);
     else if (draw) setDraw(null);
@@ -635,7 +680,8 @@ function App() {
         }
       }
       if (e.key === "Escape") {
-        if (modal) setModal(null);
+        if (modal === "paper") closePaper();
+        else if (modal) setModal(null);
         else if (menu) setMenu(null);
         else if (showFind) setShowFind(false);
         else if (searching) {
@@ -2024,7 +2070,10 @@ function App() {
       </main>
       {renderMenu()}
       {modal && (
-        <div className="modal-backdrop" onClick={() => setModal(null)}>
+        <div
+          className="modal-backdrop"
+          onClick={() => (modal === "paper" ? closePaper() : setModal(null))}
+        >
           <div
             className={`modal modal-${modal}`}
             role="dialog"
@@ -2140,7 +2189,7 @@ function App() {
             {modal === "paper" && (
               <>
                 <div className="sheet-top">
-                  <button onClick={() => setModal(null)}>取消</button>
+                  <button onClick={closePaper}>取消</button>
                   <strong>横线与网格</strong>
                   <span />
                 </div>
@@ -2180,7 +2229,7 @@ function App() {
                           id: current?.id,
                           paperStyle: p,
                         });
-                        setModal(null);
+                        closePaper();
                       }}
                     >
                       {current?.paperStyle === p && (

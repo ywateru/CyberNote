@@ -1,0 +1,31 @@
+{
+  "status": "pass",
+  "marker": "FIX01IME-1793691183362",
+  "noteId": "858e8937-9b94-4ce0-afec-639fae5ce7b2",
+  "package": "com.local.notesclone",
+  "serial": "emulator-5580",
+  "input": "All taps, typing, selection, IME Enter and Back use adb native Android input; CDP read-only.",
+  "webTop": 83,
+  "geometry": {
+    "viewportHeight": 502,
+    "formatTopPhysical": 1352,
+    "formatBottomPhysical": 1456,
+    "visibleAppBottomPhysical": 1464
+  },
+  "checks": [
+    "native new note and IME Enter/body input",
+    "IME resizes native WebView above keyboard",
+    "format toolbar visible in screenshot and native hit succeeds with IME displayed",
+    "native word selection preserved through panel",
+    "format panel meets viewport bottom with its own X and no accessory toolbar",
+    "native bold command retains focus/IME hidden",
+    "native X restores same selection and reachable toolbar over IME",
+    "native X then system Back then More reaches full paper picker without IME",
+    "all seven paper choices within visible viewport and underlying editor frozen",
+    "native cancel, Back, Escape and backdrop restore same note selection and editable state without IME",
+    "native bottom grid-large choice persists and is selected on reopen",
+    "native long press resumes editor and IME with same Beta selection",
+    "Rust saved bold body",
+    "zero WebView exceptions"
+  ]
+}
