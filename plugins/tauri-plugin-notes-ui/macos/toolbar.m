@@ -25,7 +25,7 @@ static NSString *labelFor(NSString *action,BOOL tableFocused) {
 }
 static NSString *symbolFor(NSString *action,BOOL tableFocused) {
     NSDictionary *symbols=@{@"newFolder":@"folder.badge.plus",@"toggleSidebar":@"sidebar.left",@"viewOptions":@"ellipsis",
-        @"backToGallery":@"chevron.left",@"newNote":@"square.and.pencil",@"format":@"textformat",@"checklist":@"checklist",
+        @"backToGallery":@"chevron.left",@"newNote":@"square.and.pencil",@"checklist":@"checklist",
         @"table":tableFocused?@"tablecells.badge.ellipsis":@"tablecells",@"attachment":@"paperclip",@"share":@"square.and.arrow.up",@"more":@"ellipsis"};
     return symbols[action];
 }
@@ -43,12 +43,64 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
 }
 - (void)mouseDown:(NSEvent *)event { [self.window performWindowDragWithEvent:event]; }
 @end
+// These offsets calibrate visible content only; the control frames and menu anchors stay put.
+// Values use the top-left coordinate convention of the retained 2x toolbar measurements.
+static NSPoint contentOffsetFor(NSString *action) {
+    if([action isEqual:@"newNote"])return NSMakePoint(0,-1.5);
+    if([action isEqual:@"format"])return NSMakePoint(2.625,0);
+    if([action isEqual:@"checklist"] || [action isEqual:@"table"])return NSMakePoint(4.75,0);
+    if([action isEqual:@"attachment"])return NSMakePoint(2.25,0);
+    if([action isEqual:@"share"])return NSMakePoint(-2,-1.75);
+    if([action isEqual:@"more"])return NSMakePoint(2.25,-0.5);
+    return NSZeroPoint;
+}
+@interface NotesUIButtonCell : NSButtonCell
+@property NSPoint notesContentOffset;
+@end
+@implementation NotesUIButtonCell
+- (NSRect)contentFrame:(NSRect)frame inView:(NSView *)view {
+    return NSOffsetRect(frame,self.notesContentOffset.x,view.isFlipped?self.notesContentOffset.y:-self.notesContentOffset.y);
+}
+- (void)drawImage:(NSImage *)image withFrame:(NSRect)frame inView:(NSView *)view {
+    [super drawImage:image withFrame:[self contentFrame:frame inView:view] inView:view];
+}
+- (NSRect)drawTitle:(NSAttributedString *)title withFrame:(NSRect)frame inView:(NSView *)view {
+    return [super drawTitle:title withFrame:[self contentFrame:frame inView:view] inView:view];
+}
+@end
 @interface NotesUIButton : NSButton
 @property NSString *notesAction;
 @end
 @implementation NotesUIButton
++ (Class)cellClass {return NotesUIButtonCell.class;}
 - (BOOL)acceptsFirstResponder {return NO;}
 - (BOOL)acceptsFirstMouse:(NSEvent *)event {(void)event;return YES;}
+@end
+
+@interface NotesUISearchFieldCell : NSSearchFieldCell
+@end
+@implementation NotesUISearchFieldCell
+- (NSRect)searchButtonRectForBounds:(NSRect)bounds {
+    return NSOffsetRect([super searchButtonRectForBounds:bounds],-6.5,0);
+}
+- (NSRect)searchTextRectForBounds:(NSRect)bounds {
+    NSRect text=[super searchTextRectForBounds:bounds];
+    // Preserve the system's trailing edge/cancel affordance. The same native text area
+    // lays out the placeholder and the field editor; no extra text view is introduced.
+    text.origin.x-=5.75;text.size.width+=5.75;
+    NSFont *font=self.font;
+    if(font) {
+        CGFloat lineHeight=ceil(font.ascender-font.descender+font.leading);
+        CGFloat inset=MAX(0,(NSHeight(text)-lineHeight)/2);
+        text=NSInsetRect(text,0,inset);
+    }
+    return text;
+}
+@end
+@interface NotesUISearchField : NSSearchField
+@end
+@implementation NotesUISearchField
++ (Class)cellClass {return NotesUISearchFieldCell.class;}
 @end
 
 @interface NotesUISearchFormatter : NSFormatter
@@ -138,6 +190,11 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
     for(NSString *action in membership) {
         NotesUIButton *button=[[NotesUIButton alloc] initWithFrame:NSZeroRect];button.notesAction=action;
         [button setButtonType:NSButtonTypeMomentaryPushIn];button.bordered=NO;button.imagePosition=NSImageOnly;
+        ((NotesUIButtonCell *)button.cell).notesContentOffset=contentOffsetFor(action);
+        if([action isEqual:@"format"]) {
+            button.title=@"格式";button.imagePosition=NSNoImage;
+            button.font=[NSFont systemFontOfSize:14 weight:NSFontWeightRegular];
+        }
         button.refusesFirstResponder=YES;button.focusRingType=NSFocusRingTypeNone;button.target=self;button.action=@selector(buttonClicked:);
         self.buttons[action]=button;[self.contents[membership[action]] addSubview:button];
     }
@@ -147,7 +204,7 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
     self.title.lineBreakMode=NSLineBreakByTruncatingTail;self.title.maximumNumberOfLines=1;
     self.count=[NSTextField labelWithString:@""];self.count.font=[NSFont systemFontOfSize:11];self.count.textColor=NSColor.secondaryLabelColor;
     [self.root addSubview:self.title];[self.root addSubview:self.count];
-    self.search=[[NSSearchField alloc] initWithFrame:NSZeroRect];self.search.delegate=self;
+    self.search=[[NotesUISearchField alloc] initWithFrame:NSZeroRect];self.search.delegate=self;
     self.search.formatter=[NotesUISearchFormatter new];
     self.search.placeholderString=@"搜索";self.search.sendsSearchStringImmediately=YES;self.search.sendsWholeSearchString=NO;
     self.search.recentsAutosaveName=nil;self.search.maximumRecents=0;self.search.searchMenuTemplate=nil;
@@ -194,7 +251,9 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
     // the focused-table badge to tablecells on an older runtime where the badge does not exist.
     NSMutableDictionary *images=[NSMutableDictionary dictionary];NSMutableArray *fallbacks=[NSMutableArray array];
     for(NSDictionary *item in state[@"actions"]) {
-        NSString *action=item[@"action"];NSString *symbol=symbolFor(action,[state[@"tableFocused"] boolValue]);
+        NSString *action=item[@"action"];
+        if([action isEqual:@"format"])continue; // This action is a localized text button, not an SF Symbol.
+        NSString *symbol=symbolFor(action,[state[@"tableFocused"] boolValue]);
         NSString *label=labelFor(action,[state[@"tableFocused"] boolValue]);
         NSImage *image=[NSImage imageWithSystemSymbolName:symbol accessibilityDescription:label];
         if(!image && [symbol isEqual:@"tablecells.badge.ellipsis"]) {image=[NSImage imageWithSystemSymbolName:@"tablecells" accessibilityDescription:label];

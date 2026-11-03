@@ -31,3 +31,9 @@ depends-on: [app-001-fix-02]
 先在隔离目录对真实Objective-C输入执行与build.rs一致的ARC/blocks/minimum12编译检查，避免额外完整Rust/前端构建占用磁盘。记录源码SHA、公开API依据和检查范围。只有原生语法/编译通过不等于运行通过。
 
 宿主接入后必须实际检查原生搜索占位/连续输入/清除/focusSearch/ACK/Undo归属、真实格式选区/Undo、聚焦窗口路由、分栏与画廊状态。新旧源/产物身份清晰分开；同条件公共ROI输出原图/叠图/差分与raw exact/mean/max指标，改善不等于零差异。其他侧栏/正文/菜单/完整材料状态仍按PARITY继续。
+
+## first-stage delivery
+
+2026-11-03：隔离基线09393a3中toolbar SHA与离线delta冻结输入一致。已准备真实中文“格式”标题、按钮内容绘制偏移及公开NSSearchFieldCell内部分别布局，保持原控件frame、胶囊、颜色材质与所有动作/搜索生命周期接口。两个真实Objective-C翻译单元使用ARC/blocks/minimum12与Wall/Wextra编译exit0且无警告，未做完整构建/GUI/设备运行。
+
+第一阶段证据与源码SHA见`docs/verification/app-001-fix-02-visual-01/README.md`及`compile-results.json`。状态仍in-progress：实际field editor/marked、菜单/选区/Undo、窗口路由/布局与所有runtime/pixel均unknown，须root合入正式宿主后独立复验。当前提交只交付可审查候选，不关闭FIX02或像素缺口。

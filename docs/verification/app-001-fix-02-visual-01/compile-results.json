@@ -1,0 +1,134 @@
+{
+  "readAt": "2026-11-03T11:47:10.945466+00:00",
+  "worktree": "/private/tmp/apple-notes-native-toolbar-visual-01",
+  "head": "09393a3ed241a0d775781c71362a9bdd6ff0b816",
+  "compiler": {
+    "argv": [
+      "xcrun",
+      "clang",
+      "--version"
+    ],
+    "exitCode": 0,
+    "stdout": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.4.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+    "stderr": ""
+  },
+  "sdk": {
+    "argv": [
+      "xcrun",
+      "--show-sdk-path"
+    ],
+    "exitCode": 0,
+    "stdout": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk\n",
+    "stderr": ""
+  },
+  "host": {
+    "argv": [
+      "uname",
+      "-ms"
+    ],
+    "exitCode": 0,
+    "stdout": "Darwin arm64\n",
+    "stderr": ""
+  },
+  "inputs": [
+    {
+      "path": "plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "bytes": 39175,
+      "sha256": "cca1fee0c1ef2c412372e6fe8395098332d448bb49eeb761b581cc1d43b479b1"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/macos/format.m",
+      "bytes": 7278,
+      "sha256": "2e8be81037f69061235f2e33381afb91be19e2fac4175e99dd03ea7ca77b4a80"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/macos/format.h",
+      "bytes": 617,
+      "sha256": "c0c3b13ac3ee79a6281ef39015b92173271fbb67a4c3d96933195cbfcd1706b7"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/build.rs",
+      "bytes": 789,
+      "sha256": "f4cec4fe9bf5372803a19de94ecb3f9a7169b1b8a65b3b3b120255411f98f52a"
+    },
+    {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSButtonCell.h",
+      "bytes": 12736,
+      "sha256": "1375340d97f02a67581db1e51f8a313b1e562e41016b82a71fe02554f5e669dd"
+    },
+    {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSSearchFieldCell.h",
+      "bytes": 3093,
+      "sha256": "aa91b927c517a7169279a12986de27c790211ffc6c5a2c2ccc063b3e2a7ac420"
+    },
+    {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSControl.h",
+      "bytes": 8130,
+      "sha256": "2a711fff7a4afb724341fdfe5e51987031df07a04ba996ca8845270f6b41cc47"
+    },
+    {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSFont.h",
+      "bytes": 10711,
+      "sha256": "b9168401a1e5c1ba85043bdd58b3b3baf6fee1f4b9fad2900edf4c61bdafdb29"
+    }
+  ],
+  "inputAggregate": "32bb3afb0186f42facd880af8703a62d8284f2625c353053315a60ab05375af5",
+  "inputsUnchangedAfterCheck": true,
+  "checks": [
+    {
+      "argv": [
+        "xcrun",
+        "clang",
+        "-arch",
+        "arm64",
+        "-isysroot",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-fobjc-arc",
+        "-fblocks",
+        "-mmacosx-version-min=12.0",
+        "-Wall",
+        "-Wextra",
+        "-c",
+        "/private/tmp/apple-notes-native-toolbar-visual-01/plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+        "-o",
+        "/private/tmp/notes-toolbar-visual-01-fob3ne33/toolbar.o"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "temporaryObject": {
+        "path": "/private/tmp/notes-toolbar-visual-01-fob3ne33/toolbar.o",
+        "bytes": 191776,
+        "sha256": "661a44d8c4b5c69a44a61669a38df63588025f9820abfb212e5e9d2a342af216"
+      }
+    },
+    {
+      "argv": [
+        "xcrun",
+        "clang",
+        "-arch",
+        "arm64",
+        "-isysroot",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-fobjc-arc",
+        "-fblocks",
+        "-mmacosx-version-min=12.0",
+        "-Wall",
+        "-Wextra",
+        "-c",
+        "/private/tmp/apple-notes-native-toolbar-visual-01/plugins/tauri-plugin-notes-ui/macos/format.m",
+        "-o",
+        "/private/tmp/notes-toolbar-visual-01-fob3ne33/format.o"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "temporaryObject": {
+        "path": "/private/tmp/notes-toolbar-visual-01-fob3ne33/format.o",
+        "bytes": 33864,
+        "sha256": "67056a5792fb232d7a0b84c89fa5cd3d35151df8cdc1c42ccdf8c4fc874349bf"
+      }
+    }
+  ],
+  "scope": "Compile actual build.rs Objective-C translation units with ARC/blocks/minimum12. No Rust/frontend build, link, app launch, runtime interaction, or pixel validation. Temporary object directory was removed after recording its metadata."
+}
