@@ -22,6 +22,7 @@ depends-on: [qa-001]
 - docs/architecture.md
 - docs/plan/reviews/qa-001-01.md
 - docs/verification/qa-001/（独立探针/复现证据，以正式报告为准）
+- docs/plan/reviews/app-001-fix-00-01.md（原三项已修；唯一剩余P2为文档schema父子/内容结构校验）
 
 ## path
 
@@ -30,6 +31,8 @@ src-tauri/src/store.rs、必要的Rust辅助模块与真实临时目录测试；
 ## verification
 
 独立QA原有失败复现必须修复：合法第一附件覆盖同ID、后续坏Base64→报错→已有附件字节保持；数据库/设置也保持。覆盖坏归档/树循环/缺失引用/重复ID/路径越界/文件发布错误等边界；有效归档进入新工作区和既有工作区后重开保持设置与附件。开发者提交后由独立verify重跑其原探针和新增错误点。不得仅测试实现内部辅助函数或回显输入。
+
+归档文档结构也必须符合当前真实Editor扩展的schema，不仅是节点名称白名单。已知三种坏输入：doc直接含text、paragraph含paragraph、table含paragraph；当前前端schema拒绝但Rust仍接受并持久化。补修后应在写入前拒绝，保留工作区全部原状态；合法复杂文档与默认省略属性仍可用。保留独立qa-fix-00原失败证据，新增复核记录。
 
 ## developer delivery — 2026-11-03
 

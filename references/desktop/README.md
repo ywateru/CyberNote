@@ -33,5 +33,8 @@ REA 已验证原程序路径/哈希，但 observe_native_ui 因 Accessibility �
 - macos26-smart-folder-tags.ax.txt：标签匹配方式菜单。采样后取消对话框，未保存文件夹。
 - smart-folder-conditions/：创建日期、清单、附件类型、文件夹与置顶条件的子菜单AX；创建日期另有截图。这一轮同样取消，未新增文件夹。
 - macos26-file-menu.ax.txt：原版文件菜单含Markdown导入和PDF/Markdown导出入口，未执行导出。
+- macos26-table-converted.png与.ax.txt：普通2×2表格转为列Tab/行换行的文本，之后一次撤销恢复。
+- macos26-table-boundary-before.* / macos26-table-boundary-converted.*：含多段单元格和末尾空格的转换前后；转换后一次撤销恢复。输入准备含AX设置，不代表已经验证所有表格粘贴路径。
+- macos26-paste-explicit-text.*：新建空笔记，明确text格式粘贴两段，均为普通正文。
 
 本批主窗截图部分为2176×1322px，设置/表单可有独立窗口尺寸；比较前逐文件读取尺寸，不按本文件首段将全部图片假定为2176×1320。各文件 SHA-256 见 `checksums.sha256`。
