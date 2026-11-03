@@ -1,0 +1,92 @@
+[
+  {
+    "file": "src/Editor.tsx",
+    "start": 308,
+    "end": 314,
+    "text": "      },\n    },\n    onUpdate: ({ editor: e }) => {\n      untouched.current = false;\n      ref.current(note.id, e.getJSON());\n    },\n    onFocus: () => onFocus(true),"
+  },
+  {
+    "file": "src/note-tag-extension.ts",
+    "start": 102,
+    "end": 110,
+    "text": "        },\n        appendTransaction(transactions, _old, state) {\n          if (\n            !writable() ||\n            editor.view.composing ||\n            !transactions.some((tr) => tr.docChanged || tr.getMeta(key))\n          )\n            return null;\n          const tr = state.tr;"
+  },
+  {
+    "file": "src/App.tsx",
+    "start": 530,
+    "end": 542,
+    "text": "      if (filter === \"locked\" && !n.locked) return false;\n      if (\n        filter === \"checklist\" &&\n        !JSON.stringify(n.document).includes(\"taskItem\")\n      )\n        return false;\n      const names = tags.notes.get(n.id) || [];\n      if ((filter === \"tags\" || tagFilter !== undefined) && !names.length)\n        return false;\n      if (typeof tagFilter === \"string\" && !names.includes(tagFilter))\n        return false;\n      if (\n        [\"audio\", \"image\", \"file\", \"video\"].includes(filter) &&"
+  },
+  {
+    "file": "src/App.tsx",
+    "start": 555,
+    "end": 580,
+    "text": "            : b.updatedAt - a.updatedAt),\n    );\n  const desktopSearch =\n    !separate &&\n    ((!mobile && !!query) || filter === \"tags\" || tagFilter !== undefined);\n  const desktopSearchZero =\n    desktopSearch &&\n    !!query &&\n    !mobile &&\n    view === \"list\" &&\n    workspaceLoaded &&\n    !loading &&\n    !synchronizing &&\n    !syncError &&\n    !accessSuspended.length &&\n    !accessGate.state?.operationId &&\n    listed.length === 0;\n  const noteId = projectSearchNote({\n    searching: desktopSearch,\n    baseNoteId,\n    searchNoteId,\n    resultIds: listed.map((note) => note.id),\n  });\n  const current = ws.notes.find((n) => n.id === noteId);\n  const currentFolder = ws.folders.find((f) => f.id === folderId);\n  const selected = ws.notes.find("
+  },
+  {
+    "file": "src/App.tsx",
+    "start": 1254,
+    "end": 1275,
+    "text": "        // Native action has already accepted this response through AccessGate.\n        // Keep its new note epoch with the note, before the first refresh.\n        setWs((prev) => ({\n          ...prev,\n          access: n.access ?? prev.access,\n          notes: [n, ...prev.notes],\n        }));\n        setTagFilter(undefined);\n        setNoteId(n.id);\n        setPage(\"editor\");\n        setGalleryEditor(true);\n        setMenu(null);\n        setQuery(\"\");\n        setSearching(false);\n        setEditing(true);\n        updateSettings({ selectedNote: n.id });\n        setTimeout(\n          () => document.querySelector<HTMLElement>(\".tiptap\")?.focus(),\n          100,\n        );\n      } catch (e) {\n        fail(e);"
+  },
+  {
+    "file": "src/App.tsx",
+    "start": 1566,
+    "end": 1577,
+    "text": "    if (ocr?.insertedDocument && !ocr.documentAck) {\n      // Only this operation's exact pending body can bypass the generic flush\n      // failure to retry its own ACK. The full trusted target check still follows.\n      const pending = pendingDocs.current.get(target.noteId);\n      if (\n        !pending ||\n        !documentsEqual(pending, ocr.insertedDocument) ||\n        target.editor.isDestroyed ||\n        !documentsEqual(target.editor.getJSON(), ocr.insertedDocument)\n      )\n        throw Error(\"原识别文字的待保存正文已改变，请保持窗口打开\");\n    } else await flush();"
+  },
+  {
+    "file": "src/App.tsx",
+    "start": 1590,
+    "end": 1600,
+    "text": "      documentVersion: instance\n        ? nativeDocumentVersions.current.get(instance) || 0\n        : -1,\n      externalVersion: externalVersions.current.get(target.noteId) || 0,\n      editorDocument:\n        instance && !instance.isDestroyed ? instance.getJSON() : undefined,\n      trustedDocument: synced.success\n        ? synced.snapshot.notes.find((n) => n.id === target.noteId)?.document\n        : undefined,\n      trustedSynchronization: synchronization.current(synced),\n      available:"
+  },
+  {
+    "file": "src/App.tsx",
+    "start": 1691,
+    "end": 1701,
+    "text": "              throw Error(\"编辑器未接受附件插入，已保留原附件；请重试\");\n          } finally {\n            if (documentReferencesAttachment(instance.getJSON(), attachment)) {\n              target.bookmark = instance.state.selection.getBookmark();\n              target.documentVersion =\n                nativeDocumentVersions.current.get(instance) || 0;\n              target.document = instance.getJSON();\n              target.trustedDocument = target.document;\n            }\n          }\n        },"
+  },
+  {
+    "file": "src/App.tsx",
+    "start": 1978,
+    "end": 1992,
+    "text": "      stamp: accessGate.stamp(live.noteId),\n      editor: instance,\n      owner,\n      bookmark: context?.bookmark || instance.state.selection.getBookmark(),\n      documentVersion: nativeDocumentVersions.current.get(instance) || 0,\n      externalVersion: externalVersions.current.get(live.noteId) || 0,\n      document: instance.getJSON(),\n      // Compare each representation with its own captured original. Schema\n      // defaults in the Editor must neither hide raw changes nor reject an\n      // unchanged imported document that omits an optional default field.\n      trustedDocument:\n        pendingDocs.current.get(live.noteId) || original.document,\n      invalidated: false,\n    };\n    return { target, operationIds: [secureId()] } satisfies PickerBatch;"
+  },
+  {
+    "file": "src/App.tsx",
+    "start": 2230,
+    "end": 2240,
+    "text": "    finishOcr(operation);\n  };\n  const awaitOcrDocumentAck = async (operation: OcrHost<PickerTarget>) => {\n    await queues.current.get(operation.target.noteId);\n    if (operation.documentAck) return;\n    await validatePickerTarget(operation.target, undefined, true, operation);\n    const document = operation.insertedDocument;\n    if (!document) throw Error(\"识别文字尚未插入正文\");\n    const outcome = await saveDoc(operation.target.noteId, document);\n    if (!outcome.saved) throw outcome.error;\n  };"
+  },
+  {
+    "file": "src/App.tsx",
+    "start": 2250,
+    "end": 2278,
+    "text": "      target,\n      {\n        native: ocrNative,\n        validate: () =>\n          validatePickerTarget(target, undefined, false, operation),\n        insert: (text, inserted) => {\n          const instance = target.editor;\n          const nodes = ocrParagraphs(text).map((node) =>\n            instance.schema.nodeFromJSON(node),\n          );\n          const transaction = instance.state.tr\n            .setSelection(target.bookmark.resolve(instance.state.doc))\n            .replaceSelection(new Slice(Fragment.fromArray(nodes), 0, 0));\n          const document = transaction.doc.toJSON();\n          try {\n            instance.view.dispatch(transaction);\n          } finally {\n            if (\n              !instance.isDestroyed &&\n              documentsEqual(instance.getJSON(), document)\n            ) {\n              inserted(document);\n              target.document = document;\n              target.bookmark = instance.state.selection.getBookmark();\n              target.documentVersion =\n                nativeDocumentVersions.current.get(instance) || 0;\n              // Keep the captured raw trusted body until ACK. On an own failed\n              // pending save the backend still legitimately contains that body.\n            }"
+  },
+  {
+    "file": "src/App.tsx",
+    "start": 3416,
+    "end": 3427,
+    "text": "            )}\n          </div>\n        )}\n        {mobile && searching ? (\n          <SearchSuggestions\n            onChoose={(f) => {\n              setFilter(f);\n              setPage(\"notes\");\n            }}\n          />\n        ) : (\n          <div className=\"folder-scroll\">"
+  },
+  {
+    "file": "src/search-selection.ts",
+    "start": 1,
+    "end": 14,
+    "text": "// Search selection is a projection. The real folder/note selection remains\n// untouched so clearing the query restores it, including its mounted editor.\nexport function projectSearchNote(input: {\n  searching: boolean;\n  baseNoteId: string | null;\n  searchNoteId: string | null;\n  resultIds: readonly string[];\n}): string | null {\n  if (!input.searching) return input.baseNoteId;\n  if (input.resultIds.length === 1) return input.resultIds[0];\n  const selected = input.searchNoteId || input.baseNoteId;\n  return selected && input.resultIds.includes(selected) ? selected : null;\n}\n"
+  },
+  {
+    "file": "src/attachment-target.ts",
+    "start": 40,
+    "end": 72,
+    "text": "  const stamp = live.stamp;\n  if (\n    target.invalidated ||\n    !live.trustedSynchronization ||\n    !live.available ||\n    !original.sessionId ||\n    original.epoch === undefined ||\n    original.noteEpoch === undefined ||\n    stamp.sessionId !== original.sessionId ||\n    stamp.epoch !== original.epoch ||\n    stamp.noteEpoch !== original.noteEpoch ||\n    stamp.noteId !== target.noteId ||\n    original.noteId !== target.noteId ||\n    live.noteId !== target.noteId ||\n    live.scope !== target.scope ||\n    live.editor !== target.editor ||\n    live.owner !== target.owner ||\n    target.owner !== target.noteId ||\n    live.documentVersion !== target.documentVersion ||\n    live.externalVersion !== target.externalVersion ||\n    !live.editorDocument ||\n    !live.trustedDocument ||\n    !documentsEqual(target.document, live.editorDocument) ||\n    !documentsEqual(target.trustedDocument, live.trustedDocument)\n  )\n    throw Error(\n      \"原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口\",\n    );\n  return { ...stamp };\n}"
+  },
+  {
+    "file": "src/ocr-host.ts",
+    "start": 171,
+    "end": 178,
+    "text": "  }\n  acknowledgeDocument(noteId: string, document: JSONContent) {\n    if (\n      noteId === this.target.noteId &&\n      this.insertedDocument &&\n      documentsEqual(this.insertedDocument, document)\n    )\n      this.documentAck = true;"
+  }
+]

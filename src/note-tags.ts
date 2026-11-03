@@ -11,17 +11,22 @@ export function validTagName(name: unknown): name is string {
 
 // Spans end at every unmarked/non-text child, different name, or parent.
 // Formatting may split one tag over several adjacent text children.
-export function documentTags(doc: JSONContent): string[] {
-  const names = new Set<string>();
+export function visitTagSpans(
+  doc: JSONContent,
+  visit: (nodes: readonly JSONContent[], name: unknown, legal: boolean) => void,
+) {
   const walk = (parent: JSONContent) => {
     let name: unknown,
       text = "",
-      legal = true;
+      legal = true,
+      nodes: JSONContent[] = [];
     const finish = () => {
-      if (legal && validTagName(name) && text === `#${name}`) names.add(name);
+      if (nodes.length)
+        visit(nodes, name, legal && validTagName(name) && text === `#${name}`);
       name = undefined;
       text = "";
       legal = true;
+      nodes = [];
     };
     for (const child of parent.content || []) {
       const tags = child.marks?.filter((m) => m.type === "noteTag") || [];
@@ -29,6 +34,7 @@ export function documentTags(doc: JSONContent): string[] {
       const next = mark?.attrs?.name;
       if (child.type !== "text" || !mark || next !== name) finish();
       if (child.type === "text" && mark) {
+        nodes.push(child);
         name = next;
         text += child.text || "";
         legal =
@@ -37,11 +43,21 @@ export function documentTags(doc: JSONContent): string[] {
           Object.keys(mark.attrs || {}).length === 1 &&
           !child.marks?.some((m) => m.type === "link" || m.type === "code") &&
           parent.type !== "codeBlock";
-      } else walk(child);
+      } else {
+        if (mark) visit([child], next, false);
+        walk(child);
+      }
     }
     finish();
   };
   walk(doc);
+}
+
+export function documentTags(doc: JSONContent): string[] {
+  const names = new Set<string>();
+  visitTagSpans(doc, (_nodes, name, legal) => {
+    if (legal && typeof name === "string") names.add(name);
+  });
   return [...names].sort();
 }
 

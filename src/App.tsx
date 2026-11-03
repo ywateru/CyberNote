@@ -9,6 +9,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { type Editor, type JSONContent } from "@tiptap/react";
+import { editorSaveSnapshot } from "./editor-save-snapshot";
 import {
   documentTags,
   projectTags,
@@ -1259,6 +1260,7 @@ function App() {
           notes: [n, ...prev.notes],
         }));
         setTagFilter(undefined);
+        setFilter("");
         setNoteId(n.id);
         setPage("editor");
         setGalleryEditor(true);
@@ -1571,7 +1573,10 @@ function App() {
         !pending ||
         !documentsEqual(pending, ocr.insertedDocument) ||
         target.editor.isDestroyed ||
-        !documentsEqual(target.editor.getJSON(), ocr.insertedDocument)
+        !documentsEqual(
+          editorSaveSnapshot(target.editor.getJSON()),
+          ocr.insertedDocument,
+        )
       )
         throw Error("原识别文字的待保存正文已改变，请保持窗口打开");
     } else await flush();
@@ -1695,7 +1700,7 @@ function App() {
               target.documentVersion =
                 nativeDocumentVersions.current.get(instance) || 0;
               target.document = instance.getJSON();
-              target.trustedDocument = target.document;
+              target.trustedDocument = editorSaveSnapshot(target.document);
             }
           }
         },
@@ -2260,16 +2265,16 @@ function App() {
           const transaction = instance.state.tr
             .setSelection(target.bookmark.resolve(instance.state.doc))
             .replaceSelection(new Slice(Fragment.fromArray(nodes), 0, 0));
-          const document = transaction.doc.toJSON();
+          const document = editorSaveSnapshot(transaction.doc.toJSON());
           try {
             instance.view.dispatch(transaction);
           } finally {
             if (
               !instance.isDestroyed &&
-              documentsEqual(instance.getJSON(), document)
+              documentsEqual(editorSaveSnapshot(instance.getJSON()), document)
             ) {
               inserted(document);
-              target.document = document;
+              target.document = instance.getJSON();
               target.bookmark = instance.state.selection.getBookmark();
               target.documentVersion =
                 nativeDocumentVersions.current.get(instance) || 0;

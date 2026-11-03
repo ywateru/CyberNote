@@ -9,6 +9,7 @@ import {
   type NodeViewProps,
 } from "@tiptap/react";
 import { createEditorExtensions } from "./editor-schema";
+import { editorSaveSnapshot } from "./editor-save-snapshot";
 export { AttachmentNode, DrawingNode } from "./editor-schema";
 import {
   Play,
@@ -309,7 +310,7 @@ export default function NoteEditor({
     },
     onUpdate: ({ editor: e }) => {
       untouched.current = false;
-      ref.current(note.id, e.getJSON());
+      ref.current(note.id, editorSaveSnapshot(e.getJSON()));
     },
     onFocus: () => onFocus(true),
     onBlur: () => onFocus(false),

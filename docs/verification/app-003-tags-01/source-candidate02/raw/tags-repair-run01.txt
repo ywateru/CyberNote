@@ -1,0 +1,16 @@
+6:28:25 AM [vite] (client) Re-optimizing dependencies because vite config has changed
+[BABEL] Note: The code generator has deoptimised the styling of /private/tmp/apple-notes-tags-01/artifacts/tags-browser-cache/deps/react-dom_client.js?v=506d403c as it exceeds the max of 500KB.
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.evaluate: TypeError: Cannot read properties of undefined (reading 'get')
+    at http://127.0.0.1:62979/__local-boundaries.js:20:52
+    at eval (eval at evaluate (:311:30), <anonymous>:49:5)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at /private/tmp/apple-notes-tags-01/scripts/check-tags-save-boundary.mjs:452:28 {
+  log: []
+}
+
+Node.js v22.16.0

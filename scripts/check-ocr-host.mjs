@@ -69,6 +69,8 @@ const { rebindAttachmentTarget } = await production("src/attachment-target.ts");
 const { enqueueSave } = await production("src/save-queue.ts");
 const { SaveRevisions } = await production("src/save-revisions.ts");
 const { documentsEqual } = await production("src/document-equality.ts");
+const { editorSaveSnapshot } = await production("src/editor-save-snapshot.ts");
+const { tagSelectionAfterAccess } = await production("src/note-tags.ts");
 const { documentText } = await production("src/types.ts");
 const { shouldClearSearchAfterAccessChange } = await production(
   "src/search-selection.ts",
@@ -225,6 +227,8 @@ function fixture(options = {}) {
     rebindAttachmentTarget,
     enqueueSave,
     documentsEqual,
+    editorSaveSnapshot,
+    tagSelectionAfterAccess,
     documentText,
     shouldClearSearchAfterAccessChange,
     editorGate: new SearchEditorGate(),
@@ -248,6 +252,8 @@ function fixture(options = {}) {
     accessHandler: { current: null },
     blankDoc: { type: "doc", content: [{ type: "paragraph" }] },
     desktopSearch: false,
+    filter: "",
+    tagFilter: undefined,
     ocrOperation: { current: null },
     ocr: null,
     ocrState: null,
@@ -333,6 +339,10 @@ function fixture(options = {}) {
     setSearching() {},
     setQuery() {},
     setFilter() {},
+    setTagFilter(value) {
+      env.tagFilter =
+        typeof value === "function" ? value(env.tagFilter) : value;
+    },
     setNativeSearchAck() {},
     setModalValue() {},
     setDraw() {},
