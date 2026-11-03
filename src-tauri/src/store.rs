@@ -311,6 +311,7 @@ impl Store {
                         "lines-medium",
                         "lines-large",
                         "grid-small",
+                        "grid-medium",
                         "grid-large",
                     ]
                     .contains(&p)

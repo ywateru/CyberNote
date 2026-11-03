@@ -14,6 +14,7 @@ pnpm typecheck
 pnpm build
 pnpm test:rust
 pnpm test:schema
+pnpm test:editor
 ```
 
 Mac 安装应用的开发与构建：
@@ -53,7 +54,7 @@ pnpm android:build                # release；正式分发还需配置签名
 
 已编写 Mac 三栏壳、移动端文件夹→列表→编辑器导航、搜索过滤、列表/画廊、置顶、移动、最近删除/恢复、文件夹管理、明暗主题、结构化富文本、清单、表格、媒体附件、手写笔画、录音面板、本地锁定、备份与独立窗口。录音、相机和全部附件平台链路仍需独立验证，不以代码存在作为通过证据。
 
-当前已执行的真实验证包括 Mac `.app` 与 Android APK 构建、Rust 临时 SQLite/附件/加密测试，以及安装后 Android 中文/清单/表格→强制结束→冷启动恢复→重开编辑器→系统返回的自动化回归。首轮结果见 `docs/verification/app-001-selfcheck.md`。归档可靠性修复新增真实坏归档、文件/数据库失败与六个进程退出点回归，原事务机制已由独立 QA 复核。文档 schema 补修后，当前 Rust 测试为 15 通过、1 个子进程专用 worker 默认忽略（测试实际启动六次），另有 63 例真实前端 schema 对照及原三份坏归档复测。开发者证据分别见 `docs/verification/app-001-fix-00/selfcheck.md` 与 `docs/verification/app-001-fix-00-schema/selfcheck.md`；后者仍待独立复核。存储改动尚未重新构建到安装产物，现有应用产物仍为首轮基线。
+当前已执行的真实验证包括 Mac `.app` 与 Android APK 构建、Rust 临时 SQLite/附件/加密测试，以及安装后 Android 中文/清单/表格→强制结束→冷启动恢复→重开编辑器→系统返回的自动化回归。首轮结果见 `docs/verification/app-001-selfcheck.md`。归档可靠性修复新增真实坏归档、文件/数据库失败与六个进程退出点回归，原事务机制已由独立 QA 复核。文档 schema 补修已通过独立复核，冻结证据见 `docs/verification/app-001-fix-00-schema/`。FIX-01 新增同窗图库展开、保留选区的移动端格式面板、七种绘画纸张、短划线列表与块引用、表格转文本及仅新空白笔记的首次纯文本粘贴规则；当前 Rust 测试为 16 通过、1 个子进程专用 worker 默认忽略（可靠性测试实际启动六次），另有 65 例真实前端 schema 对照，以及真实编辑器状态/历史的表格转换边界与一次撤销回归。新 Mac 与 Android 安装产物及开发者证据见 `docs/verification/app-001-fix-01/selfcheck.md`，FIX-01 待独立验收。
 
 安装 debug APK 后，可重跑设备回归（会在克隆应用中新增一条测试笔记，不触碰系统 Notes）：
 
@@ -65,10 +66,10 @@ ANDROID_SERIAL=emulator-5580 node scripts/android-smoke.mjs
 
 ## 已知缺口
 
-- Mac 字形/图标/工具条材质/侧栏间距/粘贴正文样式与原版有差异；当前 Lucide 图标尚未替换为原生 SF Symbols。画廊卡片和双击展开行为尚不一致。
-- 移动端格式面板尚为菜单，需改为原版替代键盘的底部面板；纸张选项数量与排列、键盘/选择菜单、手势动画和图标还需逐帧对照。
+- Mac 字形、图标、工具条材质、侧栏间距和画廊卡片仍需逐项像素对照；当前 Lucide 图标尚未替换为原生 SF Symbols。图库双击同窗展开与返回已修正，尚待独立验收。
+- 移动端格式面板已改为替代键盘的底部面板，并按录屏排列七种纸张；整体尺寸、系统选择菜单、手势动画和图标仍需逐帧对照。X 恢复键盘与 Android Back 关闭面板并收起键盘属于项目交互约定，录屏没有证明这些触点。
 - 扫描自动裁边、OCR、转写、标签、智能文件夹、数学结果、笔记间链接、PDF/Markdown 等格式导入导出尚未实现。相应需求 F17–F19 保持未完成。
-- 清单自动归类/段落折叠、表格转文本、附件浏览器和原版菜单完整性仍有缺口。
+- 清单自动归类/段落折叠、附件浏览器和原版菜单完整性仍有缺口。
 - Android 仅已测现有模拟器 Android 11 / Chrome 91 / arm64；真机、多尺寸、输入法组合输入与新版 Android 的系统栏仍需覆盖。iOS 未建立可运行产物，不计入已交付平台。
 
 原版参考素材和应用数据请分开管理。原始用户录屏已保存在 `references/mobile/original/`，该目录与构建产物按 `.gitignore` 留在本机，不提交到 Git。

@@ -1,4 +1,9 @@
-import { Node, mergeAttributes, type NodeViewRenderer } from "@tiptap/core";
+import {
+  Extension,
+  Node,
+  mergeAttributes,
+  type NodeViewRenderer,
+} from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
@@ -6,6 +11,27 @@ import { TableKit } from "@tiptap/extension-table";
 import Highlight from "@tiptap/extension-highlight";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
 import Placeholder from "@tiptap/extension-placeholder";
+
+const ListStyle = Extension.create({
+  name: "notesListStyle",
+  addGlobalAttributes() {
+    return [
+      {
+        types: ["bulletList"],
+        attributes: {
+          listStyle: {
+            default: "bullet",
+            parseHTML: (element) =>
+              element.getAttribute("data-list-style") === "dash"
+                ? "dash"
+                : "bullet",
+            renderHTML: (attrs) => ({ "data-list-style": attrs.listStyle }),
+          },
+        },
+      },
+    ];
+  },
+});
 
 // This factory is used by the real editor and the archive schema crosscheck.
 // Node-view implementations affect rendering only; their schema is shared.
@@ -52,7 +78,9 @@ export function createEditorExtensions(
     StarterKit.configure({
       heading: { levels: [1, 2, 3] },
       link: { openOnClick: false },
+      trailingNode: { notAfter: ["heading", "paragraph"] },
     }),
+    ListStyle,
     TaskList,
     TaskItem.configure({ nested: true }),
     TableKit.configure({ table: { resizable: true } }),

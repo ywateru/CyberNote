@@ -1801,5 +1801,63 @@
         }
       ]
     }
+  },
+  {
+    "name": "dash-list-valid",
+    "schemaAccepted": true,
+    "importAccepted": true,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "bulletList",
+          "attrs": {
+            "listStyle": "dash"
+          },
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "真实短划线列表"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "dash-list-invalid-attribute",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "bulletList",
+          "attrs": {
+            "listStyle": "fake"
+          },
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 ]

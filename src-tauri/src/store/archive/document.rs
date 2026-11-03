@@ -89,6 +89,7 @@ fn valid_attribute(owner: &str, key: &str, value: &Value, default: &Value) -> bo
     match (owner, key) {
         ("heading", "level") => value.as_u64().is_some_and(|n| (1..=3).contains(&n)),
         ("taskItem", "checked") => value.is_boolean(),
+        ("bulletList", "listStyle") => matches!(value.as_str(), Some("bullet" | "dash")),
         ("orderedList", "start") => safe_integer(value),
         ("orderedList", "type") | ("codeBlock", "language") => nullable_string(value),
         ("tableCell" | "tableHeader", "colspan" | "rowspan") => span(value),

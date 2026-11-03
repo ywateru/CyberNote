@@ -607,6 +607,48 @@ fn shared_editor_schema_corpus_uses_public_import_and_preserves_state_on_rejecti
 }
 
 #[test]
+fn seven_papers_and_dash_lists_preserve_drawings_through_save_reopen_and_archive() {
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path().join("source");
+    let mut store = Store::open(&root).unwrap();
+    let doc = json!({"type":"doc","content":[{"type":"bulletList","attrs":{"listStyle":"dash"},"content":[{"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"短划线"}]}]}]},{"type":"drawing","attrs":{"strokes":[{"tool":"pen","color":"#123456","width":3,"points":[[1,2],[3,4]]}]}}]});
+    let papers = [
+        "plain",
+        "lines-small",
+        "lines-medium",
+        "lines-large",
+        "grid-small",
+        "grid-medium",
+        "grid-large",
+    ];
+    let mut ids = Vec::new();
+    for paper in papers {
+        let note = store.action(json!({"type":"createNote"})).unwrap();
+        store
+            .action(json!({"type":"saveNote","id":note["id"],"revision":0,"document":doc}))
+            .unwrap();
+        store
+            .action(json!({"type":"patchNote","id":note["id"],"paperStyle":paper}))
+            .unwrap();
+        ids.push((note["id"].as_str().unwrap().to_owned(), paper));
+    }
+    drop(store);
+    let store = Store::open(&root).unwrap();
+    let archive = temp.path().join("papers.notesbackup");
+    store.export_archive(&archive).unwrap();
+    let mut fresh = Store::open(temp.path().join("target")).unwrap();
+    fresh.import_archive(&archive).unwrap();
+    drop(fresh);
+    let fresh = Store::open(temp.path().join("target")).unwrap();
+    for (id, paper) in ids {
+        assert_eq!(store.note(&id).unwrap().paper_style, paper);
+        let imported = fresh.note(&id).unwrap();
+        assert_eq!(imported.paper_style, paper);
+        assert_eq!(imported.document, doc);
+    }
+}
+
+#[test]
 fn independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads() {
     let invalid = [
         ("inline-at-doc-root", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/inline-at-doc-root.notesbackup")),

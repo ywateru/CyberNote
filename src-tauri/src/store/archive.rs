@@ -288,6 +288,7 @@ fn validate_graph(folders: &[Folder], notes: &[Note], attachments: &[Attachment]
             "lines-medium",
             "lines-large",
             "grid-small",
+            "grid-medium",
             "grid-large",
         ]
         .contains(&n.paper_style.as_str())

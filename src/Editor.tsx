@@ -200,6 +200,7 @@ export default function NoteEditor({
   onReady: (e: Editor | null) => void;
   onFocus: (focus: boolean) => void;
 }) {
+  const untouched = useRef(note.revision === 0);
   const ref = useRef(onChange);
   ref.current = onChange;
   const editor = useEditor({
@@ -209,7 +210,44 @@ export default function NoteEditor({
     }),
     content: note.document,
     editorProps: {
-      attributes: { "aria-label": "备忘录正文", spellcheck: "true" },
+      attributes: {
+        "aria-label": "备忘录正文",
+        spellcheck: "true",
+        "data-paper-style": note.paperStyle,
+      },
+      handlePaste: (view, event) => {
+        const clipboard = event.clipboardData;
+        const doc = view.state.doc;
+        // The first explicit plain-text paste into an untouched empty note is
+        // body text. Rich HTML and existing documents keep normal paste rules.
+        if (
+          !untouched.current ||
+          !clipboard ||
+          clipboard.getData("text/html") ||
+          !Array.from(clipboard.types).includes("text/plain") ||
+          doc.childCount !== 1 ||
+          !["heading", "paragraph"].includes(doc.firstChild!.type.name) ||
+          doc.firstChild!.content.size
+        )
+          return false;
+        const text = clipboard.getData("text/plain").replace(/\r\n?/g, "\n");
+        if (!text) return false;
+        const nodes = text
+          .split("\n")
+          .map((line) =>
+            view.state.schema.nodes.paragraph.create(
+              null,
+              line ? view.state.schema.text(line) : undefined,
+            ),
+          );
+        untouched.current = false;
+        view.dispatch(
+          view.state.tr
+            .replaceWith(0, doc.content.size, nodes)
+            .scrollIntoView(),
+        );
+        return true;
+      },
       handleKeyDown: (_view, event) => {
         if (event.key === "Escape") {
           (document.activeElement as HTMLElement)?.blur();
@@ -218,7 +256,10 @@ export default function NoteEditor({
         return false;
       },
     },
-    onUpdate: ({ editor: e }) => ref.current(note.id, e.getJSON()),
+    onUpdate: ({ editor: e }) => {
+      untouched.current = false;
+      ref.current(note.id, e.getJSON());
+    },
     onFocus: () => onFocus(true),
     onBlur: () => onFocus(false),
   });
@@ -226,5 +267,22 @@ export default function NoteEditor({
     onReady(editor);
     return () => onReady(null);
   }, [editor, onReady]);
-  return <EditorContent editor={editor} />;
+  useEffect(() => {
+    if (editor)
+      editor.setOptions({
+        editorProps: {
+          ...editor.options.editorProps,
+          attributes: {
+            "aria-label": "备忘录正文",
+            spellcheck: "true",
+            "data-paper-style": note.paperStyle,
+          },
+        },
+      });
+  }, [editor, note.paperStyle]);
+  return (
+    <div className={`note-document paper-context-${note.paperStyle}`}>
+      <EditorContent editor={editor} />
+    </div>
+  );
 }

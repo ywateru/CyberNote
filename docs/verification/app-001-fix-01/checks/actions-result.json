@@ -1,0 +1,22 @@
+{
+  "results": [
+    {
+      "name": "ordinary-2x2",
+      "expected": "项目\t状态\n本地保存\t待核对\n",
+      "exactSelectedText": true,
+      "singleUndoRestoresTable": true,
+      "redoRestoresConversion": true,
+      "surroundingParagraphsPreserved": true,
+      "outsideTableNoop": true
+    },
+    {
+      "name": "internal-LF-and-empty-last-cell",
+      "expected": "A1\nA2\tC\nB2\t\n",
+      "exactSelectedText": true,
+      "singleUndoRestoresTable": true,
+      "redoRestoresConversion": true,
+      "surroundingParagraphsPreserved": true,
+      "outsideTableNoop": true
+    }
+  ]
+}

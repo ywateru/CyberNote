@@ -63,9 +63,15 @@ import {
   Volume2,
   Hash,
   NotebookPen,
+  ListMinus,
+  IndentIncrease,
+  IndentDecrease,
+  Quote,
 } from "lucide-react";
 import { action, loadWorkspace, native, storeAttachment } from "./bridge";
 import NoteEditor from "./Editor";
+import { convertTableToText, toggleListStyle } from "./editor-actions";
+import type { SelectionBookmark } from "@tiptap/pm/state";
 import {
   documentText,
   type DrawingStroke,
@@ -150,6 +156,7 @@ function MenuRow({
   );
 }
 function App() {
+  const separate = new URLSearchParams(location.search).get("note");
   const [ws, setWs] = useState<Workspace>(empty);
   const wsRef = useRef(ws);
   wsRef.current = ws;
@@ -168,6 +175,16 @@ function App() {
   const [contextFolder, setContextFolder] = useState<string | null>(null);
   const [editor, setEditor] = useState<Editor | null>(null);
   const [editing, setEditing] = useState(false);
+  const [galleryEditor, setGalleryEditor] = useState(false);
+  const [, updateFormatState] = useState(0);
+  const [formatHeight, setFormatHeight] = useState(290);
+  const formatTarget = useRef<{
+    noteId: string;
+    editor: Editor;
+    bookmark: SelectionBookmark;
+  } | null>(null);
+  const viewportHeight = useRef(window.innerHeight);
+  const keyboardHeight = useRef(0);
   const [sidebar, setSidebar] = useState(true);
   const [settings, setSettings] = useState<Settings>({});
   const [saving, setSaving] = useState(0);
@@ -180,7 +197,7 @@ function App() {
     pos?: number;
   } | null>(null);
   const [record, setRecord] = useState(false);
-  const [mobile, setMobile] = useState(window.innerWidth < 700);
+  const [mobile, setMobile] = useState(window.innerWidth < 700 && !separate);
   const queues = useRef(new Map<string, Promise<unknown>>());
   const revisions = useRef(new Map<string, number>());
   const pendingDocs = useRef(new Map<string, JSONContent>());
@@ -190,7 +207,6 @@ function App() {
   const swipe = useRef<{ x: number; y: number } | null>(null);
   const [swiped, setSwiped] = useState<string | null>(null);
   const longPress = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const separate = new URLSearchParams(location.search).get("note");
   const current = ws.notes.find((n) => n.id === noteId);
   const currentFolder = ws.folders.find((f) => f.id === folderId);
   const selected = ws.notes.find((n) => n.id === (contextNote || noteId));
@@ -219,7 +235,15 @@ function App() {
       .finally(() => setLoading(false));
   }, [hydrate, fail, separate]);
   useEffect(() => {
-    const resize = () => setMobile(window.innerWidth < 700);
+    const resize = () => {
+      setMobile(window.innerWidth < 700 && !separate);
+      viewportHeight.current = Math.max(
+        viewportHeight.current,
+        window.innerHeight,
+      );
+      const difference = viewportHeight.current - window.innerHeight;
+      if (difference > 120) keyboardHeight.current = difference;
+    };
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
   }, []);
@@ -256,6 +280,7 @@ function App() {
   );
   const updateSettings = useCallback(
     (patch: Settings) => {
+      if (patch.view) setGalleryEditor(false);
       setSettings((prev) => ({ ...prev, ...patch }));
       setWs((prev) => ({ ...prev, settings: { ...prev.settings, ...patch } }));
       action({ type: "settings", settings: patch }).catch(fail);
@@ -330,7 +355,95 @@ function App() {
       unlisten?.();
     };
   }, [flush, fail]);
+  const keyboard = (show: boolean) => {
+    const api = (
+      window as unknown as {
+        NotesKeyboard?: { show: () => void; hide: () => void };
+      }
+    ).NotesKeyboard;
+    if (show) api?.show();
+    else api?.hide();
+  };
+  const closeFormat = (restoreKeyboard = false) => {
+    const target = formatTarget.current;
+    setMenu(null);
+    if (target && target.noteId === noteId && target.editor === editor) {
+      editor.view.dispatch(
+        editor.state.tr.setSelection(target.bookmark.resolve(editor.state.doc)),
+      );
+      if (restoreKeyboard) {
+        editor.commands.focus(undefined, { scrollIntoView: false });
+        keyboard(true);
+        setEditing(true);
+      } else {
+        editor.commands.blur();
+        keyboard(false);
+        setEditing(false);
+      }
+    }
+    formatTarget.current = null;
+  };
+  const openFormat = () => {
+    if (!editor || !noteId) return;
+    if (menu === "format") {
+      closeFormat(mobile);
+      return;
+    }
+    formatTarget.current = {
+      noteId,
+      editor,
+      bookmark: editor.state.selection.getBookmark(),
+    };
+    setFormatHeight(
+      Math.max(
+        260,
+        Math.min(380, keyboardHeight.current || viewportHeight.current * 0.36),
+      ),
+    );
+    setMenu("format");
+    if (mobile) {
+      editor.commands.blur();
+      keyboard(false);
+    }
+  };
+  const formatCommand = (command: (e: Editor) => unknown) => {
+    const target = formatTarget.current;
+    if (!target || target.noteId !== noteId || target.editor !== editor) return;
+    editor.view.dispatch(
+      editor.state.tr.setSelection(target.bookmark.resolve(editor.state.doc)),
+    );
+    command(editor);
+    target.bookmark = editor.state.selection.getBookmark();
+    updateFormatState((v) => v + 1);
+    if (!mobile) {
+      setMenu(null);
+      formatTarget.current = null;
+      editor.commands.focus(undefined, { scrollIntoView: false });
+    }
+  };
+  useEffect(() => {
+    if (!editor) return;
+    const changed = ({
+      transaction,
+    }: {
+      transaction: import("@tiptap/pm/state").Transaction;
+    }) => {
+      const target = formatTarget.current;
+      if (target && target.editor === editor && target.noteId === noteId)
+        target.bookmark = target.bookmark.map(transaction.mapping);
+      updateFormatState((v) => v + 1);
+    };
+    editor.on("transaction", changed);
+    return () => {
+      editor.off("transaction", changed);
+    };
+  }, [editor, noteId]);
+  useEffect(() => {
+    formatTarget.current = null;
+    setMenu((value) => (value === "format" ? null : value));
+  }, [noteId]);
   const chooseFolder = (id: string) => {
+    setGalleryEditor(false);
     setFolderId(id);
     setPage("notes");
     setQuery("");
@@ -342,6 +455,7 @@ function App() {
     updateSettings({ selectedFolder: id, selectedNote: n?.id || "" });
   };
   const chooseNote = (n: Note) => {
+    if (!mobile && view === "gallery") setGalleryEditor(true);
     setNoteId(n.id);
     setPage("editor");
     setMenu(null);
@@ -360,6 +474,7 @@ function App() {
       setWs((prev) => ({ ...prev, notes: [n, ...prev.notes] }));
       setNoteId(n.id);
       setPage("editor");
+      setGalleryEditor(true);
       setMenu(null);
       setQuery("");
       setSearching(false);
@@ -382,7 +497,8 @@ function App() {
     setMenu(null);
     setEditing(false);
     setShowFind(false);
-    if (separate && native) getCurrentWindow().close();
+    if (!mobile && view === "gallery" && galleryEditor) setGalleryEditor(false);
+    else if (separate && native) getCurrentWindow().close();
     else if (page === "editor") setPage("notes");
     else {
       setPage("folders");
@@ -394,6 +510,7 @@ function App() {
   const androidBack = useRef<() => void>(() => {});
   androidBack.current = () => {
     if (modal) setModal(null);
+    else if (menu === "format") closeFormat(false);
     else if (menu) setMenu(null);
     else if (draw) setDraw(null);
     else if (record) setRecord(false);
@@ -401,6 +518,13 @@ function App() {
     else if (searching) {
       setSearching(false);
       setQuery("");
+    } else if (
+      editor?.isFocused &&
+      viewportHeight.current - window.innerHeight > 120
+    ) {
+      editor.commands.blur();
+      keyboard(false);
+      setEditing(false);
     } else if (page !== "folders") back();
     else {
       flush()
@@ -804,7 +928,7 @@ function App() {
           <button
             className="format-button"
             aria-label="格式"
-            onClick={() => setMenu(menu === "format" ? null : "format")}
+            onClick={openFormat}
           >
             {mobile ? "格式" : "格式"}
           </button>
@@ -909,162 +1033,29 @@ function App() {
         <div
           className="menu-scrim"
           onClick={() => {
-            setMenu(null);
+            if (menu === "format") closeFormat(false);
+            else setMenu(null);
             setContextNote(null);
           }}
         />
         <div
-          className={`popover menu-${menu}`}
-          role="menu"
+          className={`popover menu-${menu} ${mobile && menu === "format" ? "mobile-format-panel" : ""}`}
+          role={menu === "format" && mobile ? "dialog" : "menu"}
+          aria-label={menu === "format" ? "格式" : undefined}
+          onPointerDown={(e) => {
+            if ((e.target as HTMLElement).closest("button")) e.preventDefault();
+          }}
           onMouseDown={(e) => {
             if ((e.target as HTMLElement).closest("button")) e.preventDefault();
           }}
         >
           {menu === "format" && (
-            <>
-              <div className="type-styles">
-                {[
-                  { t: "标题", level: 1 },
-                  { t: "大标题", level: 2 },
-                  { t: "小标题", level: 3 },
-                  { t: "正文", level: 0 },
-                ].map((x) => (
-                  <MenuRow
-                    key={x.t}
-                    checked={
-                      x.level
-                        ? editor?.isActive("heading", { level: x.level })
-                        : editor?.isActive("paragraph")
-                    }
-                    onClick={() => {
-                      if (x.level)
-                        editor
-                          ?.chain()
-                          .focus()
-                          .setHeading({ level: x.level as 1 | 2 | 3 })
-                          .run();
-                      else editor?.chain().focus().setParagraph().run();
-                      setMenu(null);
-                    }}
-                  >
-                    <span className={`style-${x.level}`}>{x.t}</span>
-                  </MenuRow>
-                ))}
-                <MenuRow
-                  checked={editor?.isActive("codeBlock")}
-                  onClick={() => {
-                    editor?.chain().focus().toggleCodeBlock().run();
-                    setMenu(null);
-                  }}
-                >
-                  等宽
-                </MenuRow>
-              </div>
-              <div className="format-inline">
-                {[
-                  {
-                    label: "粗体",
-                    icon: <Bold />,
-                    command: () => editor?.chain().focus().toggleBold().run(),
-                  },
-                  {
-                    label: "斜体",
-                    icon: <Italic />,
-                    command: () => editor?.chain().focus().toggleItalic().run(),
-                  },
-                  {
-                    label: "下划线",
-                    icon: <Underline />,
-                    command: () =>
-                      editor?.chain().focus().toggleUnderline().run(),
-                  },
-                  {
-                    label: "删除线",
-                    icon: <Strikethrough />,
-                    command: () => editor?.chain().focus().toggleStrike().run(),
-                  },
-                ].map((x) => (
-                  <IconButton key={x.label} label={x.label} onClick={x.command}>
-                    {x.icon}
-                  </IconButton>
-                ))}
-              </div>
-              <div className="highlight-colors">
-                {["#e8c1f0", "#f6bfd4", "#fac69c", "#fae780", "#b3dfbd"].map(
-                  (c) => (
-                    <button
-                      key={c}
-                      aria-label={`高亮 ${c}`}
-                      style={{ background: c }}
-                      onClick={() =>
-                        editor
-                          ?.chain()
-                          .focus()
-                          .toggleHighlight({ color: c })
-                          .run()
-                      }
-                    />
-                  ),
-                )}
-              </div>
-              <div className="menu-divider" />
-              <MenuRow
-                icon={<List size={18} />}
-                checked={editor?.isActive("bulletList")}
-                onClick={() => {
-                  editor?.chain().focus().toggleBulletList().run();
-                  setMenu(null);
-                }}
-              >
-                项目符号列表
-              </MenuRow>
-              <MenuRow
-                icon={<ListOrdered size={18} />}
-                checked={editor?.isActive("orderedList")}
-                onClick={() => {
-                  editor?.chain().focus().toggleOrderedList().run();
-                  setMenu(null);
-                }}
-              >
-                编号列表
-              </MenuRow>
-              <MenuRow
-                onClick={() => {
-                  editor
-                    ?.chain()
-                    .focus()
-                    .sinkListItem(
-                      editor.isActive("taskItem") ? "taskItem" : "listItem",
-                    )
-                    .run();
-                  setMenu(null);
-                }}
-              >
-                增加缩进
-              </MenuRow>
-              <MenuRow
-                onClick={() => {
-                  editor
-                    ?.chain()
-                    .focus()
-                    .liftListItem(
-                      editor.isActive("taskItem") ? "taskItem" : "listItem",
-                    )
-                    .run();
-                  setMenu(null);
-                }}
-              >
-                减少缩进
-              </MenuRow>
-              <MenuRow
-                onClick={() => {
-                  editor?.chain().focus().unsetAllMarks().clearNodes().run();
-                  setMenu(null);
-                }}
-              >
-                清除格式
-              </MenuRow>
-            </>
+            <FormatControls
+              editor={editor}
+              mobile={mobile}
+              run={formatCommand}
+              onClose={() => closeFormat(true)}
+            />
           )}
           {menu === "media" && (
             <>
@@ -1143,6 +1134,18 @@ function App() {
           )}
           {menu === "table" && (
             <>
+              <MenuRow
+                onClick={() => {
+                  if (editor) {
+                    convertTableToText(editor);
+                    if (!mobile) editor.commands.focus();
+                  }
+                  setMenu(null);
+                }}
+              >
+                转换为文本
+              </MenuRow>
+              <div className="menu-divider" />
               <MenuRow
                 onClick={() => editor?.chain().focus().addRowAfter().run()}
               >
@@ -1422,11 +1425,12 @@ function App() {
   };
   return (
     <div
-      className={`app ${mobile ? "mobile" : "desktop"} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
+      className={`app ${mobile ? "mobile" : "desktop"} ${view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${menu === "format" && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
       style={
         {
           "--sidebar-width": `${settings.sidebarWidth || 228}px`,
           "--list-width": `${settings.listWidth || 280}px`,
+          "--format-height": `${formatHeight}px`,
         } as React.CSSProperties
       }
     >
@@ -1720,10 +1724,13 @@ function App() {
                           setSwiped(null);
                           return;
                         }
-                        chooseNote(n);
+                        if (!mobile && view === "gallery") {
+                          setNoteId(n.id);
+                          updateSettings({ selectedNote: n.id });
+                        } else chooseNote(n);
                       }}
                       onDoubleClick={() => {
-                        if (!mobile) openSeparate(n);
+                        if (!mobile) chooseNote(n);
                       }}
                       onContextMenu={(e) => {
                         e.preventDefault();
@@ -1753,9 +1760,7 @@ function App() {
                       onTouchEnd={stopLong}
                     >
                       {view === "gallery" && (
-                        <div
-                          className={`gallery-preview paper-${n.paperStyle}`}
-                        >
+                        <div className="gallery-preview">
                           <strong>{n.title}</strong>
                           <p>{n.locked ? <Lock size={26} /> : previewText}</p>
                           {JSON.stringify(n.document).includes("table") && (
@@ -1821,7 +1826,7 @@ function App() {
         />
       )}
       <main
-        className={`editor-pane paper-${current?.paperStyle || "plain"}`}
+        className="editor-pane"
         onTouchStart={(e) => {
           if (e.touches[0].clientX < 24)
             swipe.current = {
@@ -1900,6 +1905,15 @@ function App() {
             </>
           ) : (
             <>
+              {view === "gallery" && galleryEditor && !separate && (
+                <IconButton
+                  label="返回画廊"
+                  className="gallery-back"
+                  onClick={back}
+                >
+                  <ChevronLeft />
+                </IconButton>
+              )}
               <IconButton
                 label="新建备忘录"
                 className="new-note-top glass-button"
@@ -1986,11 +2000,19 @@ function App() {
                   note={current}
                   onChange={saveDoc}
                   onReady={onReady}
-                  onFocus={setEditing}
+                  onFocus={(focused) => {
+                    setEditing(focused);
+                    if (focused && mobile && menu === "format") {
+                      setMenu(null);
+                      formatTarget.current = null;
+                    }
+                  }}
                 />
               )}
             </div>
-            {mobile && !current.deletedAt && (editing ? tools() : tools(true))}
+            {mobile &&
+              !current.deletedAt &&
+              (editing || menu === "format" ? tools() : tools(true))}
           </>
         )}
         {saving > 0 && (
@@ -2122,7 +2144,7 @@ function App() {
                   <span />
                 </div>
                 <p className="paper-description">
-                  更改此备忘录中书写和绘图的背景样式。
+                  更改此备忘录中手写输入的横线或网格样式。
                 </p>
                 <div className="paper-options">
                   {[
@@ -2131,12 +2153,26 @@ function App() {
                     "lines-medium",
                     "lines-large",
                     "grid-small",
+                    "grid-medium",
                     "grid-large",
                   ].map((p) => (
                     <button
                       key={p}
-                      aria-label={p}
-                      className={`paper-option paper-${p} ${current?.paperStyle === p ? "selected" : ""}`}
+                      aria-label={
+                        (
+                          {
+                            plain: "空白",
+                            "lines-small": "密横线",
+                            "lines-medium": "中横线",
+                            "lines-large": "疏横线",
+                            "grid-small": "密网格",
+                            "grid-medium": "中网格",
+                            "grid-large": "疏网格",
+                          } as Record<string, string>
+                        )[p]
+                      }
+                      data-paper-style={p}
+                      className={`paper-option ${p === "plain" ? "paper-blank" : ""} paper-${p} ${current?.paperStyle === p ? "selected" : ""}`}
                       onClick={async () => {
                         await patch({
                           type: "patchNote",
@@ -2145,7 +2181,13 @@ function App() {
                         });
                         setModal(null);
                       }}
-                    />
+                    >
+                      {current?.paperStyle === p && (
+                        <span className="paper-check">
+                          <Check size={15} />
+                        </span>
+                      )}
+                    </button>
                   ))}
                 </div>
               </>
@@ -2258,6 +2300,7 @@ function App() {
       {draw && (
         <DrawingPanel
           initial={draw.strokes}
+          paperStyle={current?.paperStyle || "plain"}
           onCancel={() => setDraw(null)}
           onDone={(strokes) => {
             if (draw.pos !== undefined)
@@ -2383,12 +2426,238 @@ function ResizeHandle({
     />
   );
 }
+function FormatControls({
+  editor,
+  mobile,
+  run,
+  onClose,
+}: {
+  editor: Editor | null;
+  mobile: boolean;
+  run: (command: (editor: Editor) => unknown) => void;
+  onClose: () => void;
+}) {
+  const [colors, setColors] = useState(false);
+  const marks = [
+    {
+      label: "粗体",
+      mark: "bold",
+      icon: <Bold />,
+      command: (e: Editor) => e.commands.toggleBold(),
+    },
+    {
+      label: "斜体",
+      mark: "italic",
+      icon: <Italic />,
+      command: (e: Editor) => e.commands.toggleItalic(),
+    },
+    {
+      label: "下划线",
+      mark: "underline",
+      icon: <Underline />,
+      command: (e: Editor) => e.commands.toggleUnderline(),
+    },
+    {
+      label: "删除线",
+      mark: "strike",
+      icon: <Strikethrough />,
+      command: (e: Editor) => e.commands.toggleStrike(),
+    },
+  ];
+  const markRow = (
+    <div className="format-mark-row">
+      <div className="format-control-group">
+        {marks.map((x) => (
+          <IconButton
+            key={x.mark}
+            label={x.label}
+            active={editor?.isActive(x.mark)}
+            onClick={() => run(x.command)}
+          >
+            {x.icon}
+          </IconButton>
+        ))}
+      </div>
+      <div className="format-control-group format-color-group">
+        <IconButton
+          label="高亮"
+          active={editor?.isActive("highlight")}
+          onClick={() =>
+            run((e) => e.commands.toggleHighlight({ color: "#e8c1f0" }))
+          }
+        >
+          <Highlighter />
+        </IconButton>
+        <button
+          className="format-color"
+          aria-label="选择高亮颜色"
+          aria-expanded={colors}
+          onClick={() => setColors(!colors)}
+        >
+          <span />
+        </button>
+      </div>
+    </div>
+  );
+  const styles = (
+    <div className="type-styles">
+      {[
+        { label: "标题", level: 1 },
+        { label: "小标题", level: 2 },
+        { label: "副标题", level: 3 },
+        { label: "正文", level: 0 },
+        { label: mobile ? "等宽样式" : "等宽", level: -1 },
+      ].map(({ label, level }) => {
+        const active =
+          level > 0
+            ? editor?.isActive("heading", { level })
+            : editor?.isActive(level === 0 ? "paragraph" : "codeBlock");
+        return (
+          <button
+            key={label}
+            className={`format-style style-${level} ${active ? "selected" : ""}`}
+            aria-pressed={!!active}
+            onClick={() =>
+              run((e) =>
+                level > 0
+                  ? e.commands.setHeading({ level: level as 1 | 2 | 3 })
+                  : level === 0
+                    ? e.commands.setParagraph()
+                    : e.commands.toggleCodeBlock(),
+              )
+            }
+          >
+            {label}
+            {!mobile && active && <Check size={16} />}
+          </button>
+        );
+      })}
+    </div>
+  );
+  const lists = [
+    {
+      label: "项目符号列表",
+      icon: <List />,
+      active: editor?.isActive("bulletList", { listStyle: "bullet" }),
+      command: (e: Editor) => toggleListStyle(e, "bullet"),
+    },
+    {
+      label: "短划线列表",
+      icon: <ListMinus />,
+      active: editor?.isActive("bulletList", { listStyle: "dash" }),
+      command: (e: Editor) => toggleListStyle(e, "dash"),
+    },
+    {
+      label: "编号列表",
+      icon: <ListOrdered />,
+      active: editor?.isActive("orderedList"),
+      command: (e: Editor) => e.commands.toggleOrderedList(),
+    },
+  ];
+  const indent = (e: Editor, inward: boolean) =>
+    inward
+      ? e.commands.sinkListItem(
+          e.isActive("taskItem") ? "taskItem" : "listItem",
+        )
+      : e.commands.liftListItem(
+          e.isActive("taskItem") ? "taskItem" : "listItem",
+        );
+  return (
+    <div className="format-content">
+      {mobile && (
+        <div className="format-panel-header">
+          <strong>格式</strong>
+          <button aria-label="关闭格式" onClick={onClose}>
+            <X size={18} />
+          </button>
+        </div>
+      )}
+      {!mobile && markRow}
+      {styles}
+      {mobile && markRow}
+      {colors && (
+        <div className="highlight-colors">
+          {["#e8c1f0", "#f6bfd4", "#fac69c", "#fae780", "#b3dfbd"].map(
+            (color) => (
+              <button
+                key={color}
+                aria-label={`高亮 ${color}`}
+                style={{ background: color }}
+                onClick={() =>
+                  run((e) => e.commands.toggleHighlight({ color }))
+                }
+              />
+            ),
+          )}
+        </div>
+      )}
+      <div className="format-list-row">
+        <div className="format-control-group">
+          {lists.map((x) =>
+            mobile ? (
+              <IconButton
+                key={x.label}
+                label={x.label}
+                active={x.active}
+                onClick={() => run(x.command)}
+              >
+                {x.icon}
+              </IconButton>
+            ) : (
+              <MenuRow
+                key={x.label}
+                icon={x.icon}
+                checked={x.active}
+                onClick={() => run(x.command)}
+              >
+                {x.label}
+              </MenuRow>
+            ),
+          )}
+        </div>
+        <div className="format-control-group format-indent-group">
+          <IconButton
+            label="减少缩进"
+            onClick={() => run((e) => indent(e, false))}
+          >
+            <IndentDecrease />
+          </IconButton>
+          <IconButton
+            label="增加缩进"
+            onClick={() => run((e) => indent(e, true))}
+          >
+            <IndentIncrease />
+          </IconButton>
+        </div>
+        {mobile ? (
+          <IconButton
+            label="块引用"
+            active={editor?.isActive("blockquote")}
+            onClick={() => run((e) => e.commands.toggleBlockquote())}
+          >
+            <Quote />
+          </IconButton>
+        ) : (
+          <MenuRow
+            icon={<Quote />}
+            checked={editor?.isActive("blockquote")}
+            onClick={() => run((e) => e.commands.toggleBlockquote())}
+          >
+            块引用
+          </MenuRow>
+        )}
+      </div>
+    </div>
+  );
+}
 function DrawingPanel({
   initial,
+  paperStyle,
   onCancel,
   onDone,
 }: {
   initial: DrawingStroke[];
+  paperStyle: string;
   onCancel: () => void;
   onDone: (s: DrawingStroke[]) => void;
 }) {
@@ -2434,7 +2703,7 @@ function DrawingPanel({
         </div>
         <button onClick={() => onDone(strokes)}>完成</button>
       </header>
-      <div className="drawing-surface">
+      <div className={`drawing-surface paper-${paperStyle}`}>
         <svg
           ref={svg}
           viewBox="0 0 600 300"
