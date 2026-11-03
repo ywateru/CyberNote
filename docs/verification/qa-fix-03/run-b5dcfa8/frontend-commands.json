@@ -1,0 +1,22 @@
+[
+  {
+    "name": "access-baseline",
+    "command": [
+      "pnpm",
+      "test:access"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.5887799263000488,
+    "tail": "\n> notes-clone@0.1.0 test:access /Users/water/work/2026/Apple-Notes-Clone\n> node scripts/check-access-boundary.mjs\n\n16 production access response boundary cases passed.\n"
+  },
+  {
+    "name": "typecheck",
+    "command": [
+      "pnpm",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 1.7866339683532715,
+    "tail": "\n> notes-clone@0.1.0 typecheck /Users/water/work/2026/Apple-Notes-Clone\n> tsc --noEmit\n\n"
+  }
+]

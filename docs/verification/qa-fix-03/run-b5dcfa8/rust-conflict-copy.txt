@@ -1,0 +1,32 @@
+   Compiling objc2-exception-helper v0.1.1
+   Compiling libsqlite3-sys v0.30.1
+   Compiling objc2 v0.6.5
+   Compiling block2 v0.6.2
+   Compiling objc2-core-foundation v0.3.2
+   Compiling dispatch2 v0.3.1
+   Compiling rusqlite v0.32.1
+   Compiling objc2-foundation v0.3.2
+   Compiling objc2-quartz-core v0.3.2
+   Compiling objc2-app-kit v0.3.2
+   Compiling objc2-web-kit v0.3.2
+   Compiling tao v0.37.2
+   Compiling muda v0.20.0
+   Compiling window-vibrancy v0.8.1
+   Compiling rfd v0.17.2
+   Compiling wry v0.57.1
+   Compiling tauri-runtime v2.12.2
+   Compiling tauri-runtime-wry v2.12.3
+   Compiling tauri v2.12.5
+   Compiling tauri-plugin-fs v2.7.1
+   Compiling tauri-plugin-dialog v2.8.4
+   Compiling notes-clone v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/src-tauri)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.31s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/notes_clone_lib-b9ebb6a60dd46121)
+
+running 4 tests
+test store::tests::conflict_copy_sqlite_failure_keeps_source_and_creates_nothing ... ok
+test store::tests::conflict_copy_validates_and_never_changes_the_confirmed_source ... ok
+test session::tests::conflict_copy_obeys_live_session_source_epoch_and_prepare ... ok
+test store::tests::conflict_copy_rejects_locked_and_attachment_sources_without_a_new_note ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 26 filtered out; finished in 0.45s
