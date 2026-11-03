@@ -11,9 +11,12 @@ depends-on: [app-001-fix-01]
 
 初始候选机制：纸张选择await patch→doAction→refresh/hydrate→closePaper；原hydrate用JSON.stringify比较文档以决定externalVersions，Editor key包含该版本，paperTarget握旧Editor。766a810已接入严格JSON语义比较，25efa59有限静态通过，但实际新包e117f929…选择grid-large仍将33..37变为1..1，Editor/View/DOM从4/5/6变为7/8/9，取消路径正常。对象键顺序修正不能视为该实际失败的完整根因或修复。下一步须核真实hydrate的两份文档、pending状态及React key中的session/epoch/externalVersion变化，最小修正真正引起不必要重建的边界；实际授权或外部文档变化仍按既有协议处理。
 
+追加实际诊断：同路径再次复现中，生产比较返回相等、pending=false、externalBefore=0、session及前后真实React key相同；但旧workspace.access缺少新note、首次refresh含epoch=0，hydrate把undefined→0作授权变化并主动clearSensitive/destroy，随后同key编辑器重建。createNote只加入notes、漏采同次已AccessGate验收的access是当前明确修复目标；原动态证据由开发冻结后独立审查，不将诊断当新包已修好。
+
 1. 仅对象键顺序不同但文档语义相同的权威快照不应触发Editor重建、丢失选区或Undo历史。真正文档变化仍被识别，数组顺序、节点类型/属性/标记/文本和缺失值差异不能被宽松忽略。
 2. 纸张选择只更改paperStyle，保留同笔记当前编辑器、有效书签与键盘隐藏状态；取消/Back行为保留。实际外部文档变更、切笔记、授权失效或屏障仍沿既有协议处理，不能为保选区拒绝真实更新、复活旧Editor或跳过FIX03守卫。
 3. 先核最小文档比较边界。若语义比较不足以解释失败，保留原失败并继续有限时序诊断，不以全局阻止hydrate、把所有远端文档当本地文档或强设固定选区掩盖。
+4. createNote在同次workspace更新中采纳已通过现有AccessGate的真实响应access及note。不得合成epoch、把missing当0、忽略真实授权变化或令过期响应覆盖新状态；严格JSON比较保留，不继续放宽。此修复需覆盖新建→首次相同refresh不销毁、真实epoch/session/缺失授权仍失效两侧边界。
 
 ## context
 
@@ -25,7 +28,7 @@ depends-on: [app-001-fix-01]
 
 ## path
 
-在root创建的隔离工作目录准备；只改必要文档语义比较及其调用点、纸张返回边界与定向行为检查。不得改存储/授权/保存revision协议，不升级依赖，不混入FIX06组字/媒体/外观。主目录Mac构建和Android验证同时进行，本阶段不操作GUI/设备、不重建主产物；提交候选后静态独立审查，再由root统一接入与设备验证。
+在root创建的隔离工作目录准备；只改必要文档语义比较及其调用点、createNote响应状态采纳、纸张返回边界与定向行为检查。不得改存储/授权/保存revision协议，不升级依赖，不混入FIX06组字/媒体/外观。07b阶段在`/private/tmp/apple-notes-paper-selection-07b`实施，主目录不改；Android仅开发独占有限动态诊断，Mac归native代理。提交候选后静态独立审查，再由root统一接入与设备验证，构建必须明确共享dist安全点。
 
 ## verification
 

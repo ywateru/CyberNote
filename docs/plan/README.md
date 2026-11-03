@@ -17,6 +17,7 @@
 | APP-001-FIX-05 Mac关闭窗口 | in-progress，5874eab开发三条实际通过/独立实际待验 | b6bb05d关闭时同步激活通知重入Tauri窗口表导致panic已复现；最小异步回调修复ec1cf0d包三条关闭开发通过、f11170a有限静态通过；独立实际、pending保存/失败/冲突/冷启仍unknown，顶部像素另行阻塞 |
 | APP-001-FIX-06 Android组字失焦/导航 | in-progress，fa1cdb5平台对照/8b9d6af独立复核完成 | 同Trime普通contenteditable失焦、原生EditText藏IME均同现ni hao‸，现证据反对应用盲目回滚/删字符；旧格式/后台观察与历史报告保留，原版精确语义、导航隔离与宿主存储保全仍unknown；输入设置已恢复，未改产品 |
 | APP-001-FIX-07 纸张保存返回选区 | in-progress，766a810新APK实际仍FAIL | 严格JSON语义比较已合入、25efa59有限静态通过；APK e117f929…真实grid-large选区33..37→1..1且Editor/View/DOM重建，取消正常；继续核真正React key/hydrate/pending/授权状态，外部更新未测，不能以比较修正关闭失败 |
+| APP-001-PAPER-PREVIEW 手机纸张页 | pending，依赖FIX07 | 六SVG和有限几何研究已准备；选择器专属预览/留白/行列布局待接入，不改真正纸张间距，不冒称低清录屏可证明高清像素 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
