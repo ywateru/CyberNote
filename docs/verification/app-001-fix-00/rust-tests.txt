@@ -1,0 +1,45 @@
+   Compiling notes-clone v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/src-tauri)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.35s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/notes_clone_lib-a59858f7036aafd6)
+
+running 14 tests
+test store::archive::tests::crash_worker ... ignored, subprocess worker; invoked by real_subprocess_interruption_recovers_before_and_after_sqlite_commit
+
+running 1 test
+test store::archive::tests::recovery_refuses_journal_path_that_could_delete_an_old_file ... ok
+test store::archive::tests::stale_selection_defaults_without_losing_other_settings ... ok
+test store::archive::tests::export_failure_preserves_previous_archive_and_cannot_replace_live_store ... ok
+test store::archive::tests::file_publish_failure_preserves_old_bytes_and_recovery_cleans_only_new_paths ... ok
+test store::archive::tests::database_failure_after_files_publish_rolls_back_all_entities_and_settings ... ok
+test store::archive::tests::qa_bad_second_blob_preserves_existing_attachment_database_settings_and_source ... ok
+test store::archive::tests::input_limits_are_explicit_and_leave_workspace_unchanged ... ok
+test store::tests::persistence_conflicts_delete_restore ... ok
+test store::archive::tests::invalid_archive_graphs_and_metadata_never_mutate_existing_workspace ... ok
+test store::archive::tests::valid_import_restores_settings_hierarchy_bytes_and_preserves_colliding_entities ... ok
+test store::tests::archive_attachments_and_cycle_guards ... ok
+
+running 1 test
+
+running 1 test
+
+running 1 test
+
+running 1 test
+
+running 1 test
+test store::archive::tests::real_subprocess_interruption_recovers_before_and_after_sqlite_commit ... ok
+test store::tests::encrypted_data_and_unlock ... ok
+
+test result: ok. 13 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.38s
+
+     Running unittests src/main.rs (src-tauri/target/debug/deps/notes_clone-d397a5e537a32946)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests notes_clone_lib
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

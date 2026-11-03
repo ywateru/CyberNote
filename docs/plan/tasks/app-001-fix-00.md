@@ -30,3 +30,12 @@ src-tauri/src/store.rs、必要的Rust辅助模块与真实临时目录测试；
 ## verification
 
 独立QA原有失败复现必须修复：合法第一附件覆盖同ID、后续坏Base64→报错→已有附件字节保持；数据库/设置也保持。覆盖坏归档/树循环/缺失引用/重复ID/路径越界/文件发布错误等边界；有效归档进入新工作区和既有工作区后重开保持设置与附件。开发者提交后由独立verify重跑其原探针和新增错误点。不得仅测试实现内部辅助函数或回显输入。
+
+## developer delivery — 2026-11-03
+
+实现与开发者自测已完成，等待独立 verify；本任务和完整 APP-001 尚未验收。
+
+- 归档逻辑拆为 `src-tauri/src/store/archive.rs`，启动时恢复未完成导入。校验全部归档后才发布独占新文件，持久化日志配合单 SQLite 事务；同 ID 导入副本，恢复设置与有效选择，错误/中断保留旧数据。契约同步 `docs/architecture.md` 和 README。
+- 真实 Rust 回归 13 passed / 0 failed / 1 子进程专用 worker 默认 ignored；worker 实际被恢复测试启动六次，覆盖提交前后退出。Clippy all-targets、warnings-as-errors 通过。
+- 原 QA 探针复制到 `docs/verification/app-001-fix-00/store-probes/` 后复测：设置相等、失败导入原附件保留、自环拒绝；原失败目录未修改。更强的合法首附件+坏第二 Base64 回归也通过。
+- 开发者证据与边界见 `docs/verification/app-001-fix-00/selfcheck.md`；本轮不改 UI，不触碰系统 Notes，不声称像素一致或全功能通过。按协调计划，独立存储复核通过后再重构建 Mac/Android 产物，当前应用文件仍为首轮基线。

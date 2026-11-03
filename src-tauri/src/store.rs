@@ -15,6 +15,8 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 use uuid::Uuid;
+#[path = "store/archive.rs"]
+mod archive;
 
 #[derive(Debug, Serialize)]
 pub struct AppError {
@@ -110,6 +112,7 @@ impl Store {
             root: root.as_ref().into(),
             keys: HashMap::new(),
         };
+        s.recover_imports()?;
         for (fid, name, kind, order) in [
             ("default", "备忘录", "default", 0),
             ("quick", "快速备忘录", "quick", -1),
@@ -603,63 +606,6 @@ impl Store {
         }
         let bytes = fs::read(self.attachment_path(&a.relative_path)?)?;
         Ok(json!({"data":B64.encode(bytes),"mime":a.mime,"name":a.display_name}))
-    }
-    pub fn export_archive(&self, path: &Path) -> Result<()> {
-        let mut blobs = serde_json::Map::new();
-        for a in self.attachments()? {
-            blobs.insert(
-                a.id.clone(),
-                json!(B64.encode(fs::read(self.attachment_path(&a.relative_path)?)?)),
-            );
-        }
-        let settings: String =
-            self.db
-                .query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
-        let value = json!({"version":1,"folders":self.folders()?,"notes":self.notes()?,"attachments":self.attachments()?,"settings":serde_json::from_str::<Value>(&settings)?,"blobs":blobs});
-        fs::write(path, serde_json::to_vec(&value)?)?;
-        Ok(())
-    }
-    pub fn import_archive(&mut self, path: &Path) -> Result<()> {
-        let v: Value = serde_json::from_slice(&fs::read(path)?)?;
-        if v["version"] != 1 {
-            return Err(err("invalid", "不支持此备份版本"));
-        }
-        let folders: Vec<Folder> = serde_json::from_value(v["folders"].clone())?;
-        let notes: Vec<Note> = serde_json::from_value(v["notes"].clone())?;
-        let attachments: Vec<Attachment> = serde_json::from_value(v["attachments"].clone())?;
-        for a in &attachments {
-            let p = self.attachment_path(&a.relative_path)?;
-            let bytes = B64
-                .decode(
-                    v["blobs"][&a.id]
-                        .as_str()
-                        .ok_or_else(|| err("invalid", "附件内容缺失"))?,
-                )
-                .map_err(|_| err("invalid", "附件内容无效"))?;
-            fs::write(p, bytes)?;
-        }
-        let tx = self.db.transaction()?;
-        for f in folders {
-            tx.execute(
-                "INSERT OR REPLACE INTO folders(id,body)VALUES(?1,?2)",
-                params![f.id, serde_json::to_string(&f)?],
-            )?;
-        }
-        for n in notes {
-            tx.execute(
-                "INSERT OR REPLACE INTO notes(id,folder_id,body,revision)VALUES(?1,?2,?3,?4)",
-                params![n.id, n.folder_id, serde_json::to_string(&n)?, n.revision],
-            )?;
-        }
-        for a in attachments {
-            tx.execute(
-                "INSERT OR REPLACE INTO attachments(id,note_id,body)VALUES(?1,?2,?3)",
-                params![a.id, a.note_id, serde_json::to_string(&a)?],
-            )?;
-        }
-        tx.commit()?;
-        self.keys.clear();
-        Ok(())
     }
 }
 fn str_field<'a>(a: &'a Value, k: &str) -> Result<&'a str> {
