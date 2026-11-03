@@ -19,7 +19,8 @@
     "test:schema": "node scripts/check-editor-schema.mjs",
     "test:editor": "node scripts/check-editor-actions.mjs",
     "test:access": "node scripts/check-access-boundary.mjs",
-    "test:secure-id": "node scripts/check-secure-id.mjs"
+    "test:secure-id": "node scripts/check-secure-id.mjs",
+    "test:native-toolbar": "node scripts/check-native-toolbar.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.9.0",

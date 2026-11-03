@@ -1,0 +1,53 @@
+{
+  "status": "fail: not pixel-identical; limited baseline only",
+  "inputs": {
+    "pair-original.png": {
+      "sha256": "99796aa5bd03e2b0e171ca70e3f7af840964be2b2a18f5e683223a34d01a5fd4"
+    },
+    "pair-clone.png": {
+      "sha256": "72e1b0f319cddb0e11a1e8523eacd49bf90a095f74c8034e10d21c937a6ce7e5"
+    }
+  },
+  "imagePixels": [
+    2176,
+    1322
+  ],
+  "windowPoints": [
+    1088,
+    661
+  ],
+  "scale": 2,
+  "roiPixels": [
+    1096,
+    8,
+    2168,
+    104
+  ],
+  "roiMeaning": "Common new/edit/share/search strip in gallery-expanded note; absolute window pixels, excludes different folder counts/title, sidebar, date, system sharing indicator and body/caret/cursor.",
+  "focus": "Both apps inactive before and after paired passive captures; frontmost com.openai.codex. Last editor target is same synthetic plain-text note; contemporaneous intra-capture key-window flag unavailable.",
+  "content": "每日 TODO\\n记录每一个想法\\n今天的计划\\n整理需求与交互\\n完成本地保存",
+  "theme": "Light appearance as observed in images",
+  "registration": "None; same absolute ROI, no rescale/threshold/color normalization",
+  "masks": [],
+  "pixels": 102912,
+  "maeRGB": 9.132443252487562,
+  "maePerChannel": [
+    9.132443252487562,
+    9.132443252487562,
+    9.132443252487562
+  ],
+  "rmseRGB": 34.24088604816155,
+  "exactChangedPixelRatio": 0.7456856343283582,
+  "maxChannelDeltaOver8PixelRatio": 0.06534709266169154,
+  "maximumChannelDelta": 224,
+  "knownDifferences": [
+    "Original format label is Chinese 格式; clone uses Aa SF symbol.",
+    "Original and clone symbol ink, spacing, foreground and glass RGB differ.",
+    "Shared ROI does not evaluate title/count, sidebar, full-page, active window or open menus."
+  ],
+  "limitations": [
+    "App windows have equal size but different screen positions; glass backdrop and system material can depend on surroundings.",
+    "Inactive pair does not validate active-state parity.",
+    "Original has 6 synthetic notes, clone has 1; count excluded from ROI."
+  ]
+}

@@ -3128,3 +3128,12 @@ a {
   background: var(--paper);
   color: var(--secondary);
 }
+
+/* The native overlay owns this strip; DOM headers are removed, not hidden focus targets. */
+.desktop.native-toolbar .sidebar {
+  padding-top: max(0px, calc(var(--native-top) - 8px));
+}
+.desktop.native-toolbar .notes-pane,
+.desktop.native-toolbar .editor-pane {
+  padding-top: var(--native-top);
+}

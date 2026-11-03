@@ -72,6 +72,7 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
 @property NSDictionary *state;
 @property NotesUIRoot *root;
 @property NSMutableDictionary<NSString *,NSView *> *groups;
+@property NSMutableSet<NSString *> *layoutGroups;
 @property NSMutableDictionary<NSString *,NSView *> *contents;
 @property NSMutableDictionary<NSString *,NotesUIButton *> *buttons;
 @property NSMutableDictionary<NSString *,NSDictionary *> *actionStates;
@@ -237,7 +238,8 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
     [self layout];self.suppress=NO;return nil;
 }
 - (void)placeGroup:(NSString *)name x:(CGFloat)x width:(CGFloat)width actions:(NSArray<NSString *> *)actions {
-    NSView *group=self.groups[name];group.hidden=width<=0;
+    NSView *group=self.groups[name];
+    if(width>0)[self.layoutGroups addObject:name];
     group.frame=NSMakeRect(x,8,MAX(0,width),36);self.contents[name].frame=NSMakeRect(0,0,MAX(0,width),36);
     CGFloat itemWidth=actions.count?width/actions.count:0;
     for(NSUInteger i=0;i<actions.count;i++) {NotesUIButton *button=self.buttons[actions[i]];
@@ -258,7 +260,7 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
     if(self.disposed || !self.window.contentView)return;
     NSView *parent=self.window.contentView;NSRect bounds=parent.bounds;CGFloat w=NSWidth(bounds);
     self.root.frame=NSMakeRect(NSMinX(bounds),parent.flipped?NSMinY(bounds):NSMaxY(bounds)-52,w,52);
-    for(NSView *group in self.groups.allValues)group.hidden=YES;
+    self.layoutGroups=[NSMutableSet set];
     for(NotesUIButton *button in self.buttons.allValues)button.hidden=YES;
     BOOL full=(self.window.styleMask&NSWindowStyleMaskFullSizeContentView)!=0;self.root.reserveTrafficLights=full;
     CGFloat traffic=full?94:12;NSDictionary *columns=self.state[@"columns"];
@@ -325,6 +327,10 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
         if(hasSearch && searchWidth>0){if(any)left+=16;[self placeGroup:@"search" x:left width:searchWidth actions:@[]];
             self.search.frame=NSMakeRect(10,4,MAX(1,searchWidth-20),28);}
     }
+    // Retained search ancestors must stay visible throughout updates/inspection, or AppKit
+    // abandons their field editor (including marked text and caret) even when shown again.
+    for(NSString *name in self.groups)self.groups[name].hidden=![self.layoutGroups containsObject:name];
+    self.layoutGroups=nil;
     self.overflow=hidden;
     CGFloat titleRight=three?MIN(boundary-50,start-12):start-18;
     CGFloat titleWidth=MAX(0,titleRight-titleX);

@@ -108,3 +108,13 @@ Android 11 自带 Chrome 91 缺少 Array.findLast；Tiptap 3 的事务分发使�
 Android WebView 91 即使处于安全上下文也缺少 `crypto.randomUUID`，但支持 `getRandomValues`。保存intent、客户端演示实体与可选proof请求ID统一由 `secureId` 生成：优先原生randomUUID，否则使用平台getRandomValues填充16字节并设置RFC4122 v4版本/variant位。两种安全随机源均不可用时明确拒绝，保存队列保留pending内容；禁止Math.random或可预测计数器降级。Rust仍生成正式实体ID，授权协议和revision基线不变。
 
 锁定使用 Argon2 + AES-GCM，密钥仅保留进程内存；正文从数据库明文记录清除，secure_delete + wal_checkpoint(TRUNCATE) 减少旧正文遗留，标题仍作为元数据可见。当前含附件笔记不支持锁定。归档不依赖跨文件系统的假原子事务；附件引用以 SQLite 提交为准，暂存日志承担中断恢复。
+
+## Mac 原生顶部宿主（APP-001-FIX-02）
+
+Mac 条件编译注册本地 `tauri-plugin-notes-ui`，仅 `main` / `note-*` 窗口拥有对应 capability。成功 bind 后由原生 `reservedTop` 单独提供顶部预留，网页侧栏、列表、编辑器顶部不再渲染；浏览器和移动端沿用各自布局。三栏、画廊浏览、画廊展开及独立窗使用不同状态投影，分栏宽度来自同一实时设置。画廊展开省略浏览选项动作，避免不相关动作被放进溢出菜单。
+
+生产控制器先安装当前窗口的原始事件监听，再 bind 并有界缓存早到事件；取得 bindingId 后仅重放匹配窗口、绑定、已知 revision 与单调 sequence 的事件。状态更新严格串行并合并最新需求，语义相同只刷新当前编辑上下文，不触发原生更新或打断正在追踪的菜单。原生 search 的 value/sequence 在发布 React 状态前同步合并，更新携带最新 ACK；缺失事件等待对应实际事件，composition 期间保留待提交状态，不猜测输入文本。销毁在 unbind 失败时仍 finally 解除监听；切笔记/访问失效销毁旧目标。AppKit 布局只在最终阶段隐藏未使用的组，不能暂时隐藏仍在使用的搜索祖先以致丢失 field editor。
+
+原生意图关联对应 revision 的 noteId、窗口范围、授权 stamp、Editor 实例、实例所属笔记、文档版本与 SelectionBookmark。执行前检查实时授权/屏障/覆盖层和实例有效性，编辑动作恢复对应选区；异步 flush、附件保存、正文读取后再次检查目标。输入更新文档版本，单独移动选区不触发无意义原生状态更新。上下文失效时清理书签和 Editor 引用，控制器不持有正文。
+
+Cmd+N、Cmd+F、Cmd+Shift+F 由 AppKit 菜单处理，以实际聚焦的允许窗口发送 `menu-action`，不广播。全局搜索调用当前绑定的 `focusSearch`；独立窗没有全局搜索，Cmd+F 只改变所属笔记窗口的查找状态。未实现菜单动作保持禁用，不用成功提示替代功能。原生系统 API 的使用不代表像素匹配；本轮冻结源码/产物与失败的有限 RGB 比较见 `verification/app-001-fix-02/selfcheck.md`。

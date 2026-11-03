@@ -1,0 +1,10 @@
+{
+  "artifact": "59c4a48ea09b408bc99b96429df23a63c6c6c9eb7cb112afac6c32b4b324055c",
+  "pid": 78923,
+  "features": [],
+  "window": "main",
+  "observed": "Click native NSSearchField, paste 每日: real list filters to 1 note; after ACK focus is standard window instead of search field. Search menu focus also returns to standard window.",
+  "rootCause": "layout() transiently hides all group ancestors, then shows search again; information() also invokes layout(), including focusSearch response.",
+  "fix": "Compute used groups during layout, then hide only final unused groups. Retained search ancestors never transition hidden during apply/inspect.",
+  "result": "failed; retained as pre-fix runtime evidence, not acceptance"
+}

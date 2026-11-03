@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type ReactNode,
@@ -9,7 +10,6 @@ import {
 import { type Editor, type JSONContent } from "@tiptap/react";
 import { SaveRevisions } from "./save-revisions";
 import { exit, onBackButtonPress } from "@tauri-apps/api/app";
-import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { open, save } from "@tauri-apps/plugin-dialog";
@@ -80,7 +80,18 @@ import {
   acknowledgeAccess,
   subscribeAccess,
   invalidateAccessRequests,
+  accessGate,
 } from "./bridge";
+import {
+  NativeToolbar,
+  nativeToolbarTransport,
+  macNative,
+  type Intent,
+  type MenuCommand,
+} from "./native-toolbar";
+import { toolbarState } from "./native-toolbar-state";
+import type { BindingInfo } from "../plugins/tauri-plugin-notes-ui/guest-js";
+import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
 import { convertTableToText, toggleListStyle } from "./editor-actions";
 import type { SelectionBookmark } from "@tiptap/pm/state";
@@ -114,6 +125,14 @@ const errText = (e: unknown): string =>
   typeof e === "object" && e !== null && "message" in e
     ? String(e.message)
     : String(e);
+interface NativeContext {
+  noteId: string | null;
+  scope: string;
+  stamp: AccessStamp;
+  editor: Editor | null;
+  bookmark: SelectionBookmark | null;
+  documentVersion: number;
+}
 function IconButton({
   label,
   children,
@@ -206,6 +225,21 @@ function App() {
   const viewportHeight = useRef(window.innerHeight);
   const keyboardHeight = useRef(0);
   const [sidebar, setSidebar] = useState(true);
+  const nativeToolbar = useRef<NativeToolbar<NativeContext> | null>(null);
+  const [nativeInfo, setNativeInfo] = useState<BindingInfo | null>(null);
+  const [nativeSearchAck, setNativeSearchAck] = useState(0);
+  const nativeMenuHandler = useRef<(command: string) => void>(() => {});
+  const nativeHandler = useRef<
+    (intent: Intent, context: NativeContext, sequence: number) => void
+  >(() => {});
+  const nativeDocumentVersions = useRef(new WeakMap<Editor, number>());
+  const nativeEditorIds = useRef(new WeakMap<Editor, number>());
+  const nativeEditorOwners = useRef(new WeakMap<Editor, string>());
+  const nativeEditorCounter = useRef(0);
+  const nativeAttachmentTarget = useRef<NativeContext | null>(null);
+  const nativeAssert = useRef<
+    (context: NativeContext, editing?: boolean, overlay?: boolean) => void
+  >(() => {});
   const [settings, setSettings] = useState<Settings>({});
   const [saving, setSaving] = useState(0);
   const unlocked = new Set(
@@ -252,7 +286,13 @@ function App() {
   const theme = settings.theme || "system";
   const view = settings.view || "list";
   const sort = settings.sort || "updated";
-  const onReady = useCallback((e: Editor | null) => setEditor(e), []);
+  const onReady = useCallback(
+    (e: Editor | null) => {
+      if (e && noteId) nativeEditorOwners.current.set(e, noteId);
+      setEditor(e);
+    },
+    [noteId],
+  );
   const fail = useCallback((e: unknown) => setError(errText(e)), []);
   const hydrate = useCallback((data: Workspace) => {
     const previous = wsRef.current;
@@ -357,8 +397,9 @@ function App() {
     hydrate(await loadWorkspace());
   }, [flush, hydrate]);
   const doAction = useCallback(
-    async (a: Record<string, unknown>) => {
+    async (a: Record<string, unknown>, validate?: () => void) => {
       await flush();
+      validate?.();
       const result = await action(a);
       if (result && typeof result === "object" && "notes" in result)
         hydrate(result as Workspace);
@@ -526,6 +567,11 @@ function App() {
   }, [flush, fail]);
   clearSensitive.current = (ids) => {
     if (!ids.length) return;
+    nativeToolbar.current?.invalidate((context) => {
+      context.editor = null;
+      context.bookmark = null;
+    });
+    nativeAttachmentTarget.current = null;
     if (noteId && ids.includes(noteId)) {
       if (editor && !editor.isDestroyed) editor.destroy();
       barrierEditor.current = null;
@@ -747,6 +793,11 @@ function App() {
     }: {
       transaction: import("@tiptap/pm/state").Transaction;
     }) => {
+      if (transaction.docChanged)
+        nativeDocumentVersions.current.set(
+          editor,
+          (nativeDocumentVersions.current.get(editor) || 0) + 1,
+        );
       for (const target of [formatTarget.current, paperTarget.current])
         if (target && target.editor === editor && target.noteId === noteId)
           target.bookmark = target.bookmark.map(transaction.mapping);
@@ -790,30 +841,35 @@ function App() {
     setEditing(false);
     updateSettings({ selectedNote: n.id });
   };
-  const newNote = useCallback(async () => {
-    try {
-      await flush();
-      const fid =
-        folderId === "all" || folderId === "trash" ? "default" : folderId;
-      const n = await action<Note>({ type: "createNote", folderId: fid });
-      revisions.current.confirmed(n.id, n.revision);
-      setWs((prev) => ({ ...prev, notes: [n, ...prev.notes] }));
-      setNoteId(n.id);
-      setPage("editor");
-      setGalleryEditor(true);
-      setMenu(null);
-      setQuery("");
-      setSearching(false);
-      setEditing(true);
-      updateSettings({ selectedNote: n.id });
-      setTimeout(
-        () => document.querySelector<HTMLElement>(".tiptap")?.focus(),
-        100,
-      );
-    } catch (e) {
-      fail(e);
-    }
-  }, [fail, flush, folderId, updateSettings]);
+  const createNote = useCallback(
+    async (validate?: () => void) => {
+      try {
+        await flush();
+        validate?.();
+        const fid =
+          folderId === "all" || folderId === "trash" ? "default" : folderId;
+        const n = await action<Note>({ type: "createNote", folderId: fid });
+        revisions.current.confirmed(n.id, n.revision);
+        setWs((prev) => ({ ...prev, notes: [n, ...prev.notes] }));
+        setNoteId(n.id);
+        setPage("editor");
+        setGalleryEditor(true);
+        setMenu(null);
+        setQuery("");
+        setSearching(false);
+        setEditing(true);
+        updateSettings({ selectedNote: n.id });
+        setTimeout(
+          () => document.querySelector<HTMLElement>(".tiptap")?.focus(),
+          100,
+        );
+      } catch (e) {
+        fail(e);
+      }
+    },
+    [fail, flush, folderId, updateSettings],
+  );
+  const newNote = useCallback(() => createNote(), [createNote]);
   const openModal = (type: string, value = "") => {
     if (type === "paper" && mobile && editor && noteId) {
       paperTarget.current = {
@@ -952,8 +1008,24 @@ function App() {
       fail(e);
     }
   };
+  const focusGlobalSearch = useCallback(() => {
+    setSearching(true);
+    if (native && macNative) {
+      const toolbar = nativeToolbar.current;
+      if (toolbar) void toolbar.focusSearch().catch(fail);
+      else fail(new Error("原生搜索尚未就绪"));
+    } else setTimeout(() => searchInput.current?.focus(), 0);
+  }, [fail]);
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      // AppKit menu accelerators also work while NSSearchField owns first responder.
+      if (
+        native &&
+        macNative &&
+        (e.metaKey || e.ctrlKey) &&
+        ["n", "f"].includes(e.key.toLowerCase())
+      )
+        return;
       if ((e.metaKey || e.ctrlKey) && e.key === "n") {
         e.preventDefault();
         newNote();
@@ -964,8 +1036,7 @@ function App() {
         e.key.toLowerCase() === "f"
       ) {
         e.preventDefault();
-        setSearching(true);
-        setTimeout(() => searchInput.current?.focus(), 0);
+        focusGlobalSearch();
       } else if ((e.metaKey || e.ctrlKey) && e.key === "f") {
         e.preventDefault();
         if (page === "editor" || !mobile) {
@@ -988,38 +1059,63 @@ function App() {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [newNote, page, mobile, modal, menu, showFind, searching]);
+  }, [
+    newNote,
+    page,
+    mobile,
+    modal,
+    menu,
+    showFind,
+    searching,
+    focusGlobalSearch,
+  ]);
   useEffect(() => {
     if (!native) return;
+    let disposed = false;
     let unlisten: (() => void) | undefined;
-    listen<string>("menu-action", (e) => {
-      switch (e.payload) {
-        case "new_note":
-          newNote();
-          break;
-        case "new_folder":
-          openModal("newFolder");
-          break;
-        case "sidebar":
-          setSidebar((v) => !v);
-          break;
-        case "gallery":
-          updateSettings({ view: view === "list" ? "gallery" : "list" });
-          break;
-        case "search":
-          setSearching(true);
-          searchInput.current?.focus();
-          break;
-        case "export":
-          archive("export");
-          break;
-        case "import":
-          archive("import");
-          break;
-      }
-    }).then((fn) => (unlisten = fn));
-    return () => unlisten?.();
-  }, [newNote, view, updateSettings, archive]);
+    getCurrentWindow()
+      .listen<string>("menu-action", (e) => {
+        if (native && macNative) {
+          nativeMenuHandler.current(e.payload);
+          return;
+        }
+        switch (e.payload) {
+          case "new_note":
+            newNote();
+            break;
+          case "new_folder":
+            openModal("newFolder");
+            break;
+          case "sidebar":
+            setSidebar((v) => !v);
+            break;
+          case "gallery":
+            updateSettings({ view: view === "list" ? "gallery" : "list" });
+            break;
+          case "search":
+            focusGlobalSearch();
+            break;
+          case "find_in_note":
+            setShowFind(true);
+            break;
+          case "export":
+            archive("export");
+            break;
+          case "import":
+            archive("import");
+            break;
+        }
+      })
+      .then((fn) => {
+        if (disposed) fn();
+        else unlisten = fn;
+      })
+      .catch(fail);
+    return () => {
+      disposed = true;
+      unlisten?.();
+    };
+  }, [newNote, view, updateSettings, archive, focusGlobalSearch, fail]);
   useEffect(() => {
     const handler = (e: Event) => {
       const d = (e as CustomEvent).detail;
@@ -1034,10 +1130,21 @@ function App() {
     return () => clearTimeout(t);
   }, [notice]);
   const fileSelected = async (files: FileList | null) => {
+    const target = nativeAttachmentTarget.current;
+    nativeAttachmentTarget.current = null;
     if (!files || !current || !editor) return;
     try {
+      if (target) nativeAssert.current(target, true);
       for (const file of Array.from(files)) {
-        const a = await storeAttachment(current.id, file);
+        const a = await storeAttachment(target?.noteId || current.id, file);
+        if (target) {
+          nativeAssert.current(target, true);
+          editor.view.dispatch(
+            editor.state.tr.setSelection(
+              target.bookmark!.resolve(editor.state.doc),
+            ),
+          );
+        }
         editor
           .chain()
           .focus()
@@ -1046,6 +1153,11 @@ function App() {
             attrs: { id: a.id, name: a.displayName, kind: a.kind },
           })
           .run();
+        if (target) {
+          target.bookmark = editor.state.selection.getBookmark();
+          target.documentVersion =
+            nativeDocumentVersions.current.get(editor) || 0;
+        }
       }
       await refresh();
       setMenu(null);
@@ -1056,12 +1168,14 @@ function App() {
       if (cameraInput.current) cameraInput.current.value = "";
     }
   };
-  const shareNote = async () => {
+  const shareTarget = async (target?: NativeContext) => {
     setMenu(null);
     if (!current) return;
     try {
       await flush();
-      const data = await readNoteText(current.id);
+      if (target) nativeAssert.current(target, true);
+      const data = await readNoteText(target?.noteId || current.id);
+      if (target) nativeAssert.current(target, true);
       if (navigator.share) await navigator.share(data);
       else {
         await navigator.clipboard.writeText(data.text);
@@ -1071,6 +1185,7 @@ function App() {
       if (!(e instanceof DOMException && e.name === "AbortError")) fail(e);
     }
   };
+  const shareNote = () => shareTarget();
   const findNext = () => {
     if (!editor || !find) return;
     const text = editor.state.doc.textBetween(
@@ -1763,14 +1878,388 @@ function App() {
       </>
     );
   };
+  const nativeScope = JSON.stringify([
+    folderId,
+    noteId,
+    view,
+    galleryEditor,
+    separate,
+  ]);
+  nativeAssert.current = (context, editing = false, overlay = false) => {
+    const live = accessGate.stamp(context.noteId || undefined);
+    if (
+      context.scope !== nativeScope ||
+      context.noteId !== noteId ||
+      JSON.stringify(live) !== JSON.stringify(context.stamp) ||
+      loading ||
+      synchronizing ||
+      accessSuspended.length ||
+      accessGate.state?.operationId ||
+      (context.noteId &&
+        (blockedNotes.current.has(context.noteId) ||
+          accessGate.state?.suspended.includes(context.noteId))) ||
+      (!overlay && (modal || draw || record))
+    )
+      throw new Error("备忘录或授权状态已改变，请重新执行操作");
+    if (
+      editing &&
+      (!current ||
+        current.deletedAt ||
+        !context.editor ||
+        context.editor !== editor ||
+        nativeEditorOwners.current.get(context.editor) !== context.noteId ||
+        editor.isDestroyed ||
+        !editor.isEditable ||
+        !context.bookmark ||
+        (current.locked && !accessGate.state?.notes[current.id]?.authorized) ||
+        (nativeDocumentVersions.current.get(editor) || 0) !==
+          context.documentVersion)
+    )
+      throw new Error("编辑内容或选区已改变，请重新选择后执行操作");
+  };
+  const nativeSelection = (context: NativeContext) => {
+    nativeAssert.current(context, true);
+    const target = context.editor!;
+    target.view.dispatch(
+      target.state.tr.setSelection(context.bookmark!.resolve(target.state.doc)),
+    );
+    return target;
+  };
+  nativeHandler.current = (intent, context, sequence) => {
+    if (intent.kind === "search") {
+      setNativeSearchAck(sequence);
+      setQuery(intent.phase === "cancel" ? "" : intent.value);
+      setSearching(intent.phase !== "cancel");
+      setFilter("");
+      return;
+    }
+    if (intent.kind === "windowActivity") return;
+    try {
+      nativeAssert.current(context);
+      const command: MenuCommand | undefined =
+        intent.kind === "menu" ? intent.command : undefined;
+      if (intent.kind === "action") {
+        switch (intent.action) {
+          case "newFolder":
+            setContextFolder(null);
+            openModal("newFolder");
+            return;
+          case "toggleSidebar":
+            setSidebar((value) => !value);
+            return;
+          case "backToGallery":
+            back();
+            return;
+          case "newNote":
+            void createNote(() => nativeAssert.current(context));
+            return;
+          case "share":
+            void shareTarget(context);
+            return;
+          case "checklist":
+            nativeSelection(context).chain().focus().toggleTaskList().run();
+            return;
+          case "table":
+            nativeSelection(context)
+              .chain()
+              .focus()
+              .insertTable({ rows: 2, cols: 2, withHeaderRow: false })
+              .run();
+            return;
+          default:
+            throw new Error("原生菜单未提供可执行命令");
+        }
+      }
+      switch (command) {
+        case "viewGallery":
+          updateSettings({ view: "gallery" });
+          return;
+        case "viewList":
+          updateSettings({ view: "list" });
+          return;
+        case "sortDefault":
+        case "sortModified":
+          updateSettings({ sort: "updated" });
+          return;
+        case "sortCreated":
+          updateSettings({ sort: "created" });
+          return;
+        case "sortTitle":
+          updateSettings({ sort: "title" });
+          return;
+        case "groupByDate":
+          updateSettings({ groupDates: settings.groupDates === false });
+          return;
+        case "findInNote":
+          nativeSelection(context);
+          setShowFind(true);
+          return;
+        case "moveNote":
+          nativeSelection(context);
+          setContextNote(null);
+          openModal("move");
+          return;
+        case "pinNote":
+        case "deleteNote":
+        case "lockNote": {
+          nativeSelection(context);
+          const validate = () => nativeAssert.current(context, true);
+          if (command === "lockNote" && !current!.locked) {
+            setContextNote(null);
+            openModal("lock");
+            return;
+          }
+          const action =
+            command === "pinNote"
+              ? {
+                  type: "patchNote",
+                  id: context.noteId,
+                  pinned: !current!.pinned,
+                }
+              : {
+                  type: command === "deleteNote" ? "deleteNote" : "removeLock",
+                  id: context.noteId,
+                };
+          void doAction(action, validate)
+            .then(() => {
+              if (command === "deleteNote")
+                setNoteId((id) => (id === context.noteId ? null : id));
+            })
+            .catch(fail);
+          return;
+        }
+        case "choosePhotoVideo":
+        case "attachFile":
+          nativeSelection(context);
+          nativeAttachmentTarget.current = { ...context };
+          if (!fileInput.current) throw new Error("附件选择器尚未就绪");
+          fileInput.current.accept =
+            command === "choosePhotoVideo" ? "image/*,video/*" : "";
+          fileInput.current.click();
+          return;
+        case "recordAudio":
+          nativeSelection(context);
+          nativeAttachmentTarget.current = { ...context };
+          setRecord(true);
+          return;
+      }
+      const target = nativeSelection(context);
+      const chain = target.chain().focus();
+      const colors: Partial<Record<MenuCommand, string>> = {
+        colorPurple: "#e8c1f0",
+        colorPink: "#f6bfd4",
+        colorOrange: "#fac69c",
+        colorMint: "#b3dfbd",
+        colorBlue: "#bad6f3",
+      };
+      if (command && colors[command]) {
+        chain.setHighlight({ color: colors[command] }).run();
+        return;
+      }
+      switch (command) {
+        case "bold":
+          chain.toggleBold().run();
+          break;
+        case "italic":
+          chain.toggleItalic().run();
+          break;
+        case "underline":
+          chain.toggleUnderline().run();
+          break;
+        case "strikethrough":
+          chain.toggleStrike().run();
+          break;
+        case "highlight":
+          chain.toggleHighlight({ color: "#e8c1f0" }).run();
+          break;
+        case "colorDefault":
+          chain.unsetHighlight().run();
+          break;
+        case "styleTitle":
+          chain.setHeading({ level: 1 }).run();
+          break;
+        case "styleHeading":
+          chain.setHeading({ level: 2 }).run();
+          break;
+        case "styleSubheading":
+          chain.setHeading({ level: 3 }).run();
+          break;
+        case "styleBody":
+          chain.setParagraph().run();
+          break;
+        case "styleMonospaced":
+          chain.toggleCodeBlock().run();
+          break;
+        case "listBullet":
+          toggleListStyle(target, "bullet");
+          break;
+        case "listDash":
+          toggleListStyle(target, "dash");
+          break;
+        case "listNumber":
+          chain.toggleOrderedList().run();
+          break;
+        case "blockquote":
+          chain.toggleBlockquote().run();
+          break;
+        case "convertTableToText":
+          convertTableToText(target);
+          break;
+        default:
+          throw new Error("此原生命令尚未实现");
+      }
+    } catch (error) {
+      fail(error);
+    }
+  };
+  nativeMenuHandler.current = (command) => {
+    const context: NativeContext = {
+      noteId,
+      scope: nativeScope,
+      stamp: accessGate.stamp(noteId || undefined),
+      editor,
+      bookmark:
+        editor && !editor.isDestroyed
+          ? editor.state.selection.getBookmark()
+          : null,
+      documentVersion: editor
+        ? nativeDocumentVersions.current.get(editor) || 0
+        : 0,
+    };
+    try {
+      nativeAssert.current(context);
+      switch (command) {
+        case "new_note":
+          nativeHandler.current(
+            { kind: "action", action: "newNote" },
+            context,
+            0,
+          );
+          break;
+        case "new_folder":
+          nativeHandler.current(
+            { kind: "action", action: "newFolder" },
+            context,
+            0,
+          );
+          break;
+        case "sidebar":
+          nativeHandler.current(
+            { kind: "action", action: "toggleSidebar" },
+            context,
+            0,
+          );
+          break;
+        case "gallery":
+          updateSettings({ view: view === "list" ? "gallery" : "list" });
+          break;
+        case "search":
+          focusGlobalSearch();
+          break;
+        case "find_in_note":
+          nativeSelection(context);
+          setShowFind(true);
+          break;
+        case "export":
+          void archive("export");
+          break;
+        case "import":
+          void archive("import");
+          break;
+      }
+    } catch (error) {
+      fail(error);
+    }
+  };
+  useLayoutEffect(() => {
+    if (!native || !macNative) return;
+    const toolbar = new NativeToolbar<NativeContext>(
+      nativeToolbarTransport(),
+      (intent, context, sequence) =>
+        nativeHandler.current(intent, context, sequence),
+      setNativeInfo,
+      fail,
+    );
+    nativeToolbar.current = toolbar;
+    return () => {
+      toolbar.stop();
+      if (nativeToolbar.current === toolbar) nativeToolbar.current = null;
+    };
+  }, [fail]);
+  useLayoutEffect(() => {
+    if (!native || !macNative || !nativeToolbar.current) return;
+    const liveEditor =
+      editor &&
+      !editor.isDestroyed &&
+      nativeEditorOwners.current.get(editor) === noteId
+        ? editor
+        : null;
+    if (liveEditor && !nativeEditorIds.current.has(liveEditor))
+      nativeEditorIds.current.set(liveEditor, ++nativeEditorCounter.current);
+    const available =
+      !loading &&
+      !synchronizing &&
+      !accessSuspended.length &&
+      !accessGate.state?.operationId &&
+      !modal &&
+      !draw &&
+      !record;
+    const editable =
+      available &&
+      !!current &&
+      !current.deletedAt &&
+      !blockedNotes.current.has(current.id) &&
+      (!current.locked || !!accessGate.state?.notes[current.id]?.authorized) &&
+      !!liveEditor?.isEditable;
+    const stamp = accessGate.stamp(noteId || undefined);
+    nativeToolbar.current.set({
+      key: JSON.stringify([
+        nativeScope,
+        stamp,
+        liveEditor ? nativeEditorIds.current.get(liveEditor) : null,
+        liveEditor ? nativeDocumentVersions.current.get(liveEditor) || 0 : 0,
+      ]),
+      context: {
+        noteId,
+        scope: nativeScope,
+        stamp,
+        editor: liveEditor,
+        bookmark: liveEditor?.state.selection.getBookmark() || null,
+        documentVersion: liveEditor
+          ? nativeDocumentVersions.current.get(liveEditor) || 0
+          : 0,
+      },
+      state: toolbarState({
+        layout: separate
+          ? "independentNote"
+          : view === "gallery"
+            ? galleryEditor
+              ? "galleryExpanded"
+              : "galleryBrowse"
+            : "threeColumn",
+        sidebar,
+        settings,
+        folderTitle: query ? "搜索结果" : folderLabel,
+        folderCount: listed.length,
+        query,
+        searchAck: nativeSearchAck,
+        available,
+        editable,
+        current,
+        editor: liveEditor,
+      }),
+    });
+  });
+  const nativeTop = !mobile && !!nativeInfo;
   return (
     <div
-      className={`app ${synchronizing || accessSuspended.length ? "access-sync" : ""} ${mobile ? "mobile" : "desktop"} ${view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${menu === "format" && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
+      className={`app ${nativeTop ? "native-toolbar" : ""} ${synchronizing || accessSuspended.length ? "access-sync" : ""} ${mobile ? "mobile" : "desktop"} ${view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${menu === "format" && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
       style={
         {
           "--sidebar-width": `${settings.sidebarWidth || 228}px`,
           "--list-width": `${settings.listWidth || 280}px`,
           "--format-height": `${formatHeight}px`,
+          "--native-top": `${nativeInfo?.native.reservedTop || 0}px`,
         } as React.CSSProperties
       }
     >
@@ -1828,32 +2317,34 @@ function App() {
         onChange={(e) => fileSelected(e.target.files)}
       />
       <aside className="sidebar">
-        <div
-          className="sidebar-toolbar"
-          data-tauri-drag-region
-          onDoubleClick={() => {
-            if (native && !mobile) getCurrentWindow().toggleMaximize();
-          }}
-        >
-          {!native && (
-            <div className="preview-lights">
-              <i />
-              <i />
-              <i />
+        {!nativeTop && (
+          <div
+            className="sidebar-toolbar"
+            data-tauri-drag-region
+            onDoubleClick={() => {
+              if (native && !mobile) getCurrentWindow().toggleMaximize();
+            }}
+          >
+            {!native && (
+              <div className="preview-lights">
+                <i />
+                <i />
+                <i />
+              </div>
+            )}
+            <div className="sidebar-actions">
+              <IconButton
+                label="添加文件夹"
+                onClick={() => openModal("newFolder")}
+              >
+                <FolderPlus />
+              </IconButton>
+              <IconButton label="隐藏文件夹" onClick={() => setSidebar(false)}>
+                <PanelLeft />
+              </IconButton>
             </div>
-          )}
-          <div className="sidebar-actions">
-            <IconButton
-              label="添加文件夹"
-              onClick={() => openModal("newFolder")}
-            >
-              <FolderPlus />
-            </IconButton>
-            <IconButton label="隐藏文件夹" onClick={() => setSidebar(false)}>
-              <PanelLeft />
-            </IconButton>
           </div>
-        </div>
+        )}
         <div className="mobile-folder-nav">
           <button onClick={() => setMenu(menu === "app" ? null : "app")}>
             编辑
@@ -1945,40 +2436,45 @@ function App() {
       <section
         className={`notes-pane ${view === "gallery" ? "gallery-pane" : ""}`}
       >
-        <header className="notes-header" data-tauri-drag-region>
-          {mobile ? (
-            <>
-              <button className="back-button" onClick={back}>
-                <ChevronLeft />
-                文件夹
-              </button>
-              <IconButton
-                label="显示选项"
-                onClick={() => setMenu(menu === "view" ? null : "view")}
-              >
-                <MoreHorizontal />
-              </IconButton>
-            </>
-          ) : (
-            <>
-              {!sidebar && (
-                <IconButton label="显示文件夹" onClick={() => setSidebar(true)}>
-                  <PanelLeft />
+        {!nativeTop && (
+          <header className="notes-header" data-tauri-drag-region>
+            {mobile ? (
+              <>
+                <button className="back-button" onClick={back}>
+                  <ChevronLeft />
+                  文件夹
+                </button>
+                <IconButton
+                  label="显示选项"
+                  onClick={() => setMenu(menu === "view" ? null : "view")}
+                >
+                  <MoreHorizontal />
                 </IconButton>
-              )}
-              <div className="folder-heading">
-                <strong>{query ? "搜索结果" : folderLabel}</strong>
-                <span>{listed.length}个备忘录</span>
-              </div>
-              <IconButton
-                label="显示选项"
-                onClick={() => setMenu(menu === "view" ? null : "view")}
-              >
-                <MoreHorizontal />
-              </IconButton>
-            </>
-          )}
-        </header>
+              </>
+            ) : (
+              <>
+                {!sidebar && (
+                  <IconButton
+                    label="显示文件夹"
+                    onClick={() => setSidebar(true)}
+                  >
+                    <PanelLeft />
+                  </IconButton>
+                )}
+                <div className="folder-heading">
+                  <strong>{query ? "搜索结果" : folderLabel}</strong>
+                  <span>{listed.length}个备忘录</span>
+                </div>
+                <IconButton
+                  label="显示选项"
+                  onClick={() => setMenu(menu === "view" ? null : "view")}
+                >
+                  <MoreHorizontal />
+                </IconButton>
+              </>
+            )}
+          </header>
+        )}
         {mobile && (
           <>
             <h1 className="notes-large-title">
@@ -2200,104 +2696,107 @@ function App() {
           swipe.current = null;
         }}
       >
-        <header
-          className="editor-header"
-          data-tauri-drag-region
-          onMouseDown={(e) => {
-            if ((e.target as HTMLElement).closest("button")) e.preventDefault();
-          }}
-        >
-          {mobile ? (
-            <>
-              <button className="back-button" onClick={back}>
-                <ChevronLeft />
-                {searching ? "搜索" : folderLabel}
-              </button>
-              <div className="mobile-header-actions">
-                {editing && (
-                  <>
-                    <IconButton
-                      label="撤销"
-                      disabled={!editor?.can().undo()}
-                      onClick={() => editor?.chain().focus().undo().run()}
-                    >
-                      <Undo2 />
-                    </IconButton>
-                    <IconButton
-                      label="重做"
-                      disabled={!editor?.can().redo()}
-                      onClick={() => editor?.chain().focus().redo().run()}
-                    >
-                      <Redo2 />
-                    </IconButton>
-                  </>
-                )}
-                <IconButton label="共享" onClick={shareNote}>
-                  <Share />
-                </IconButton>
-                <IconButton
-                  label="更多"
-                  onClick={() => {
-                    setContextNote(null);
-                    setMenu(menu === "more" ? null : "more");
-                  }}
-                >
-                  <MoreHorizontal />
-                </IconButton>
-                {editing && (
-                  <button
-                    className="text-button"
+        {!nativeTop && (
+          <header
+            className="editor-header"
+            data-tauri-drag-region
+            onMouseDown={(e) => {
+              if ((e.target as HTMLElement).closest("button"))
+                e.preventDefault();
+            }}
+          >
+            {mobile ? (
+              <>
+                <button className="back-button" onClick={back}>
+                  <ChevronLeft />
+                  {searching ? "搜索" : folderLabel}
+                </button>
+                <div className="mobile-header-actions">
+                  {editing && (
+                    <>
+                      <IconButton
+                        label="撤销"
+                        disabled={!editor?.can().undo()}
+                        onClick={() => editor?.chain().focus().undo().run()}
+                      >
+                        <Undo2 />
+                      </IconButton>
+                      <IconButton
+                        label="重做"
+                        disabled={!editor?.can().redo()}
+                        onClick={() => editor?.chain().focus().redo().run()}
+                      >
+                        <Redo2 />
+                      </IconButton>
+                    </>
+                  )}
+                  <IconButton label="共享" onClick={shareNote}>
+                    <Share />
+                  </IconButton>
+                  <IconButton
+                    label="更多"
                     onClick={() => {
-                      editor?.commands.blur();
-                      setEditing(false);
+                      setContextNote(null);
+                      setMenu(menu === "more" ? null : "more");
                     }}
                   >
-                    完成
-                  </button>
-                )}
-              </div>
-            </>
-          ) : (
-            <>
-              {view === "gallery" && galleryEditor && !separate && (
-                <IconButton
-                  label="返回画廊"
-                  className="gallery-back"
-                  onClick={back}
-                >
-                  <ChevronLeft />
-                </IconButton>
-              )}
-              <IconButton
-                label="新建备忘录"
-                className="new-note-top glass-button"
-                onClick={newNote}
-              >
-                <SquarePen />
-              </IconButton>
-              {current && (
-                <>
-                  <div className="glass-group">{tools()}</div>
-                  <div className="glass-group share-group">
-                    <IconButton label="共享" onClick={shareNote}>
-                      <Share />
-                    </IconButton>
-                    <IconButton
-                      label="更多"
+                    <MoreHorizontal />
+                  </IconButton>
+                  {editing && (
+                    <button
+                      className="text-button"
                       onClick={() => {
-                        setContextNote(null);
-                        setMenu(menu === "more" ? null : "more");
+                        editor?.commands.blur();
+                        setEditing(false);
                       }}
                     >
-                      <MoreHorizontal />
-                    </IconButton>
-                  </div>
-                </>
-              )}
-              <div className="desktop-search">{searchBox}</div>
-            </>
-          )}
-        </header>
+                      完成
+                    </button>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {view === "gallery" && galleryEditor && !separate && (
+                  <IconButton
+                    label="返回画廊"
+                    className="gallery-back"
+                    onClick={back}
+                  >
+                    <ChevronLeft />
+                  </IconButton>
+                )}
+                <IconButton
+                  label="新建备忘录"
+                  className="new-note-top glass-button"
+                  onClick={newNote}
+                >
+                  <SquarePen />
+                </IconButton>
+                {current && (
+                  <>
+                    <div className="glass-group">{tools()}</div>
+                    <div className="glass-group share-group">
+                      <IconButton label="共享" onClick={shareNote}>
+                        <Share />
+                      </IconButton>
+                      <IconButton
+                        label="更多"
+                        onClick={() => {
+                          setContextNote(null);
+                          setMenu(menu === "more" ? null : "more");
+                        }}
+                      >
+                        <MoreHorizontal />
+                      </IconButton>
+                    </div>
+                  </>
+                )}
+                <div className="desktop-search">{searchBox}</div>
+              </>
+            )}
+          </header>
+        )}
         {showFind && (
           <div className="find-bar">
             <input
@@ -2692,11 +3191,28 @@ function App() {
       )}
       {record && (
         <RecordingPanel
-          onCancel={() => setRecord(false)}
+          onCancel={() => {
+            nativeAttachmentTarget.current = null;
+            setRecord(false);
+          }}
           onDone={async (file) => {
             if (!current || !editor) return;
             try {
-              const a = await storeAttachment(current.id, file);
+              const target = nativeAttachmentTarget.current;
+              if (target) nativeAssert.current(target, true, true);
+              const a = await storeAttachment(
+                target?.noteId || current.id,
+                file,
+              );
+              if (target) {
+                nativeAssert.current(target, true, true);
+                editor.view.dispatch(
+                  editor.state.tr.setSelection(
+                    target.bookmark!.resolve(editor.state.doc),
+                  ),
+                );
+              }
+              nativeAttachmentTarget.current = null;
               editor
                 .chain()
                 .focus()

@@ -257,7 +257,9 @@ pub fn run() {
             ))));
             #[cfg(desktop)]
             {
-                use tauri::menu::{MenuBuilder, PredefinedMenuItem, SubmenuBuilder};
+                use tauri::menu::{
+                    MenuBuilder, MenuItemBuilder, PredefinedMenuItem, SubmenuBuilder,
+                };
                 let app_menu = SubmenuBuilder::new(app, "备忘录")
                     .about(None)
                     .separator()
@@ -268,7 +270,11 @@ pub fn run() {
                     .quit()
                     .build()?;
                 let file = SubmenuBuilder::new(app, "文件")
-                    .text("new_note", "新建备忘录")
+                    .item(
+                        &MenuItemBuilder::with_id("new_note", "新建备忘录")
+                            .accelerator("CmdOrCtrl+N")
+                            .build(app)?,
+                    )
                     .text("new_folder", "新建文件夹")
                     .separator()
                     .text("export", "导出本地备份…")
@@ -282,11 +288,21 @@ pub fn run() {
                     .copy()
                     .paste()
                     .select_all()
+                    .separator()
+                    .item(
+                        &MenuItemBuilder::with_id("find_in_note", "在备忘录中查找")
+                            .accelerator("CmdOrCtrl+F")
+                            .build(app)?,
+                    )
                     .build()?;
                 let view = SubmenuBuilder::new(app, "显示")
                     .text("sidebar", "显示/隐藏文件夹")
                     .text("gallery", "切换画廊视图")
-                    .text("search", "搜索备忘录")
+                    .item(
+                        &MenuItemBuilder::with_id("search", "搜索备忘录")
+                            .accelerator("CmdOrCtrl+Shift+F")
+                            .build(app)?,
+                    )
                     .build()?;
                 let window = SubmenuBuilder::with_id(app, tauri::menu::WINDOW_SUBMENU_ID, "窗口")
                     .item(&PredefinedMenuItem::minimize(app, None)?)
@@ -299,11 +315,27 @@ pub fn run() {
                 )?;
                 app.on_menu_event(|app, event| {
                     use tauri::Emitter;
-                    let _ = app.emit("menu-action", event.id().as_ref());
+                    if let Some(window) = app
+                        .webview_windows()
+                        .into_values()
+                        .find(|window| window.is_focused().unwrap_or(false))
+                    {
+                        if window.label() == "main" || window.label().starts_with("note-") {
+                            let _ = window.emit_to(
+                                tauri::EventTarget::Window {
+                                    label: window.label().to_owned(),
+                                },
+                                "menu-action",
+                                event.id().as_ref(),
+                            );
+                        }
+                    }
                 });
             }
             Ok(())
         });
+    #[cfg(target_os = "macos")]
+    let builder = builder.plugin(tauri_plugin_notes_ui::init());
     #[cfg(not(feature = "access-boundary-proof"))]
     let builder = builder.invoke_handler(tauri::generate_handler![
         load_workspace,
