@@ -13,16 +13,16 @@ depends-on: [app-002-recording-extract-01]
 
 ## context
 
-docs/INDEX.md、docs/ui/android.md、docs/architecture.md录音契约、docs/research/mobile-recording-sequence-01/README.md与docs/research/mobile-recording-next-01/analysis.md；app-002-media.md、app-002-recording-extract-01.md与app-002-attachment-submit-01.md。基线须为纯抽取已独立通过并主合入后的HEAD。
+docs/INDEX.md、docs/ui/android.md、docs/ui/recording-mobile.md、docs/architecture.md录音契约、docs/research/mobile-recording-sequence-01/README.md与docs/research/mobile-recording-next-01/analysis.md；app-002-media.md、app-002-recording-extract-01.md与app-002-attachment-submit-01.md。基线须为纯抽取已独立通过并主合入后的HEAD。
 
 ## state and layout
 
 ```text
 ┌────────────── 新录音 ──────────────┐
-│取消          当天/时间         完成│
+│              当天/时间            │
 │            真实采集波形           │
 │              00:00.00             │
-│                 ●                 │ 初始：红圆，完成灰且disabled
+│                 ●             完成│ 初始：红圆，完成灰且disabled
 └───────────────────────────────────┘
        ↓ 显式开始（原触点未知）
 录制中：活动计时 / 红暂停 / 完成disabled
@@ -36,6 +36,7 @@ docs/INDEX.md、docs/ui/android.md、docs/architecture.md录音契约、docs/res
 3. 暂停态Done内部调用真实stop并等待最后dataavailable/onstop，非空且实际MIME有效后构造一次最终File，再await既有onDone。录制中Done维持disabled，不额外要求用户先点stop。finalizing/saving禁止重复提交，失败保留可重试File及实际错误；重试复用同一File，不重录或再stop。
 4. 保留production采集释放、preview URL清理、错误/取消/卸载和晚权限/onstop门禁。cancel/Back局部只负责自身资源与晚组件回调；对父已发送的IPC不能宣称已撤销，父接线仍单列。失败不得提交空Blob/假音频卡片。
 5. props维持onCancel:()=>void和onDone:(File)=>Promise<void>，组件不接note/access/Editor/store。App当前吞错/提前关闭缺口不在此偷修；完整保存语义须后续父ACK接线。暂停回放/±15/转写与完整材料/动画仍另列，不能添加无功能可点按钮或假转写凑图。
+6. 手机已支持控件依recording-mobile.md位置关系布局：标题/日期、波形、计时、中央动作与底部右侧Done；状态切换不跳位。原帧未见顶部取消文字，手机不应把现有顶部取消/Done行当原版；取消使用真实Android Back/既有退出语义，必须保留可达且能释放资源的出口。桌面布局未获本段证据，不以手机测量宣称桌面一致。未实现播放/转写区域仍不计完整像素，原图像素bounds不直接当CSS点数。
 
 ## path
 

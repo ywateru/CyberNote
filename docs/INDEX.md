@@ -14,6 +14,7 @@
 - [Mac正式顶部公共区域差异与校准起点](research/macos-toolbar-host-deltas/analysis.md)
 - [Mac 布局](ui/macos.md)
 - [Android 布局与录屏流程](ui/android.md)
+- [手机录音面板三态布局与坐标](ui/recording-mobile.md)
 - [手机纸张选择页几何测量](research/mobile-paper-calibration/analysis.md)
 - [标签、智能文件夹、数学与笔记链接](ui/local-features.md)
 - [交互状态矩阵](ui/interaction-matrix.md)
