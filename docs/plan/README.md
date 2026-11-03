@@ -36,6 +36,7 @@
 | APP-002-RECORDING-PREVIEW-01 暂停回放 | in-progress，源e01c90a独立SOURCE-READY、主e9e426f | 原P2重载就绪门禁关闭；独立repro/恢复4/模块16/有界提交后Panel25通过，原脚本两次时点失败保留非阻塞。主6源码同/build/preview16/父20通过；candidate03不含此实现。WK/Android真实前缀可播/可定位/可听与像素仍待后包 |
 | APP-001-SEARCH-FOCUS-01 Mac菜单搜索焦点 | in-progress，源d9bc5a4独立SOURCE-READY、主175cd1f | plugin精确MenuEvent同步请求真实唯一focused main当前enabled绑定，与IPC共body；独立与主cargo13/13通过、两产品hash同。无新包快输入/marked text实测，异常原因unknown和Tauri排队仍保留，不承诺已修复 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
+| APP-003-TAGS-01 真实标签 | ready，首批契约已写 | 文档mark/Editor提交/Rust校验/侧栏派生筛选/归档兼容；不关闭智能文件夹及父任务，安装包与像素仍待验 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004-OCR-HOST-01 OCR主App文字接入 | in-progress，源5b707ae独审02 SOURCE-READY、主cd7c94e | 独立原两失败repro/37及typecheck通过，01预览明文P2关闭；未ACK恢复/ACK后cleanup retry/晚回与owner隔离保全。主14源码同/build/OCR37/preview16/父20/toolbar13通过。candidate03不含本实现；真实Vision/Android OCR/正文ACK/冷启/像素待新包，320图unknown保留，完整文稿/PDF另批 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |
