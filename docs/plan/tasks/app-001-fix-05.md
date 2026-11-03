@@ -15,6 +15,8 @@ depends-on: [app-001-fix-02]
 
 5874eab已冻结该八行修复，默认features[]新包ec1cf0d…完整保留在`/private/tmp/notes-close-deferred-ec1cf0d.app`。开发三条真实关闭路径通过、stderr空，f11170a有限静态审查通过；独立实际、pending保存/失败/冲突/冷启仍未验。完整记录见`runtime-close-deferred-01/`及`app-001-fix-05-close-panic-static-01.md`。随后搜索布局候选与本修复区分身份，不能用新旧包混合关闭门槛。
 
+追加独立实际：f3b8a22中的`app-001-fix-05-close-runtime-01.md`及`qa-fix-05/run-ec1cf0d/`记录三条正确目标关闭/另一窗与同进程保留均通过；一次真实合成编辑关闭后冷启完整正文与note记录相等。未捕获关闭瞬间pending，不宣称pending guard动态通过；第四条末窗退出未采stderr/exit原因，也不扩大为正常末窗生命周期通过。保存失败/冲突和像素继续保留。
+
 1. 正式Mac菜单提供系统关闭窗口入口与Cmd+W，目标为实际聚焦窗口。原生搜索字段或正文获焦时均须关闭所属窗口，另一窗保持，不能由app-wide broadcast关闭全部窗口。
 2. 关闭必须走既有窗口close-request与未保存队列处理；不能从菜单直接destroy、跳过flush或强制丢弃pending。保存失败/冲突时保留窗口和未保存内容并显示实际失败。既有跨窗访问/屏障与窗口消失处理不改。
 3. 优先最小公开系统关闭角色，不新增一套JS快捷键与原生菜单同时响应。菜单文字/位置与原版若未实采，继续unknown，不据快捷键通过宣称整个File菜单像素匹配。

@@ -14,11 +14,11 @@
 | APP-001-FIX-03 锁定跨窗失效 | 本轮双端有限安全门槛pass，完整矩阵partial | e5fcdc4 Android14断言关闭UUID P1；835751d真实Mac生产Q1/Q7与同源proof15断言，含旧基线冲突/副本冷启/Q2排空/Q3abort/Q4拒绝及恢复，无新P1；S3/四fixtureGUI/对象identity/全矩阵仍unknown，允许FIX02接入 |
 | APP-001-FIX-04 Android长停留中文组字 | in-progress/partial，4998e2b独立有限主路径通过 | f3071f3/APK d5c6f59b…；独立空段73.53s/中部77.80s、快速/删除/同Trime混输及一次COLD完整JSON六条通过，原设置恢复；历史格式/后台观察及报告保留，当前归因依FIX06新增平台证据调整，选纸P2继续FIX07；未标整项通过 |
 | APP-001-FIX-02-VISUAL-01 顶部内部内容 | in-progress，67ce948编辑范围候选已构建/待运行 | 7c133f1及有限静态审查已合入；ec1包1392宽同位置Fill公共ROI MAE8.1027/变化67.83%仍FAIL，不与历史1088宽ROI作改善比较；已诊断borderless编辑入口仍传全框，改公有edit/select传真实text bounds并构建6c1557d包；蓝色焦点/全部像素仍失败，全局搜索快捷键待纠正 |
-| APP-001-FIX-05 Mac关闭窗口 | in-progress，5874eab开发三条实际通过/独立实际待验 | b6bb05d关闭时同步激活通知重入Tauri窗口表导致panic已复现；最小异步回调修复ec1cf0d包三条关闭开发通过、f11170a有限静态通过；独立实际、pending保存/失败/冲突/冷启仍unknown，顶部像素另行阻塞 |
+| APP-001-FIX-05 Mac关闭窗口 | in-progress/partial，ec1cf0d三条关闭与一次编辑冷启独立通过 | f3b8a22记录正确目标关闭且另一窗/同PID保留，真实编辑关闭后完整JSON与冷启持久记录相等；未捕获pending时点，保存失败/冲突、末窗退出原因及全生命周期仍unknown；顶部像素另行阻塞 |
 | APP-001-FIX-06 Android组字失焦/导航 | in-progress，fa1cdb5平台对照/8b9d6af独立复核完成 | 同Trime普通contenteditable失焦、原生EditText藏IME均同现ni hao‸，现证据反对应用盲目回滚/删字符；旧格式/后台观察与历史报告保留，原版精确语义、导航隔离与宿主存储保全仍unknown；输入设置已恢复，未改产品 |
 | APP-001-FIX-07 纸张保存返回选区 | in-progress，5c46536/APK5dd6dfc8开发有限通过，独立待验 | e117失败已冻结；a50c5df独立归因同key主动destroy，新建note漏access导致missing→0；最小采纳修复独立26定向/16access/typecheck通过，candidate02真实选纸同实例/选区/正文、自身保存、受控真实Store更新、冷启有限通过；Undo首步无正文变化unknown，原版/完整矩阵未通过 |
 | APP-001-PAPER-PREVIEW 手机纸张页 | pending，依赖FIX07 | 六SVG和有限几何研究已准备；选择器专属预览/留白/行列布局待接入，不改真正纸张间距，不冒称低清录屏可证明高清像素 |
-| APP-002 媒体闭环 | in-progress，首批现有录音链准备 | 已备隔离目录，核当前源码差异与受控音轨基线；设备待FIX07独立复验释放，尚未新运行或实现；附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑均未验收 |
+| APP-002 媒体闭环 | in-progress，首批现有录音链准备 | 已核当前源码差异与受控音轨方案；隔离准备资源清理最小候选，设备待FIX07独立复验释放，真实采集基线尚未运行；附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑均未验收 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |
