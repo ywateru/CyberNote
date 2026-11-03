@@ -1,0 +1,318 @@
+[
+  {
+    "fixture": "actual-schema-empty-table-row.notesbackup",
+    "schemaAccepted": true,
+    "normalizedDocument": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "custom-nodes-defaults-and-marker.notesbackup",
+    "schemaAccepted": true,
+    "normalizedDocument": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "attachment",
+          "attrs": {
+            "id": "21251285-b0c1-4e69-95a7-fe591ac913b8",
+            "name": "附件",
+            "kind": "file"
+          }
+        },
+        {
+          "type": "drawing",
+          "attrs": {
+            "strokes": []
+          }
+        },
+        {
+          "type": "drawing",
+          "attrs": {
+            "strokes": [
+              {
+                "tool": "marker",
+                "color": "#ff00ff",
+                "width": 0.5,
+                "points": [
+                  [
+                    -1.5,
+                    0
+                  ],
+                  [
+                    10,
+                    20.25
+                  ]
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "omitted-heading-and-mark-attrs.notesbackup",
+    "schemaAccepted": true,
+    "normalizedDocument": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "level": 1
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "默认标题"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "link",
+                  "attrs": {
+                    "href": null,
+                    "target": "_blank",
+                    "rel": "noopener noreferrer nofollow",
+                    "class": null,
+                    "title": null
+                  }
+                },
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "color": null
+                  }
+                },
+                {
+                  "type": "highlight",
+                  "attrs": {
+                    "color": null
+                  }
+                }
+              ],
+              "text": "默认正文"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "omitted-list-task-code-cell-attrs.notesbackup",
+    "schemaAccepted": true,
+    "normalizedDocument": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "orderedList",
+          "attrs": {
+            "start": 1,
+            "type": null
+          },
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "默认正文"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "taskList",
+          "content": [
+            {
+              "type": "taskItem",
+              "attrs": {
+                "checked": false
+              },
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "默认正文"
+                    }
+                  ]
+                },
+                {
+                  "type": "taskList",
+                  "content": [
+                    {
+                      "type": "taskItem",
+                      "attrs": {
+                        "checked": false
+                      },
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "嵌套默认未勾选"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "codeBlock",
+          "attrs": {
+            "language": null
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "line 1\nline 2"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableHeader",
+                  "attrs": {
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "colwidth": null,
+                    "align": null
+                  },
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "默认正文"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableCell",
+                  "attrs": {
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "colwidth": null,
+                    "align": null
+                  },
+                  "content": [
+                    {
+                      "type": "paragraph"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "fixture": "out-of-order-and-empty-marks.notesbackup",
+    "schemaAccepted": true,
+    "normalizedDocument": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "link",
+                  "attrs": {
+                    "href": null,
+                    "target": "_blank",
+                    "rel": "noopener noreferrer nofollow",
+                    "class": null,
+                    "title": null
+                  }
+                },
+                {
+                  "type": "bold"
+                },
+                {
+                  "type": "italic"
+                },
+                {
+                  "type": "highlight",
+                  "attrs": {
+                    "color": null
+                  }
+                }
+              ],
+              "text": "默认正文"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "显式空标记"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "hardBreak",
+              "marks": [
+                {
+                  "type": "bold"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "换行后"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

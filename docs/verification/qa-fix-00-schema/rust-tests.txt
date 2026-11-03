@@ -1,0 +1,109 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.89s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/notes_clone_lib-a59858f7036aafd6)
+
+running 16 tests
+test store::archive::tests::crash_worker ... ignored, subprocess worker; invoked by real_subprocess_interruption_recovers_before_and_after_sqlite_commit
+
+running 1 test
+test store::archive::tests::recovery_refuses_journal_path_that_could_delete_an_old_file ... ok
+test store::archive::tests::export_failure_preserves_previous_archive_and_cannot_replace_live_store ... ok
+test store::archive::tests::database_failure_after_files_publish_rolls_back_all_entities_and_settings ... ok
+test store::archive::tests::qa_bad_second_blob_preserves_existing_attachment_database_settings_and_source ... ok
+test store::archive::tests::file_publish_failure_preserves_old_bytes_and_recovery_cleans_only_new_paths ... ok
+test store::archive::tests::invalid_archive_graphs_and_metadata_never_mutate_existing_workspace ... ok
+test store::archive::tests::input_limits_are_explicit_and_leave_workspace_unchanged ... ok
+test store::tests::persistence_conflicts_delete_restore ... ok
+public archive corpus: legacy-empty-title: accepted; document unchanged; export/import/bytes/reopen preserved
+
+running 1 test
+test store::tests::archive_attachments_and_cycle_guards ... ok
+test store::archive::tests::independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads ... ok
+test store::archive::tests::stale_selection_defaults_without_losing_other_settings ... ok
+test store::archive::tests::valid_import_restores_settings_hierarchy_bytes_and_preserves_colliding_entities ... ok
+
+running 1 test
+public archive corpus: plain-and-empty-paragraphs: accepted; document unchanged; export/import/bytes/reopen preserved
+
+running 1 test
+public archive corpus: default-heading-attributes: accepted; document unchanged; export/import/bytes/reopen preserved
+
+running 1 test
+
+running 1 test
+public archive corpus: all-supported-nodes-and-marks: accepted; document unchanged; export/import/bytes/reopen preserved
+test store::archive::tests::real_subprocess_interruption_recovers_before_and_after_sqlite_commit ... ok
+public archive corpus: schema-allows-empty-table-row: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: default-attachment-and-drawing: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: inline-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: block-inside-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: paragraph-inside-table: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-doc: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: nested-doc: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: list-item-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: row-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: cell-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-in-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: block-in-heading: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-blockquote: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-bullet-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-ordered-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-task-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: paragraph-directly-in-bullet-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: task-item-in-ordered-list: rejected; workspace/files/settings/reopen unchanged
+test store::tests::encrypted_data_and_unlock ... ok
+public archive corpus: list-item-in-task-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: list-item-needs-leading-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: task-item-needs-leading-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-table: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: paragraph-in-row: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-cell: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: text-directly-in-cell: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-hard-break: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-rule: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-attachment: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-drawing: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: hard-break-in-code-block: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: marked-text-in-code-block: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: marked-block-at-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: duplicate-marks: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: out-of-order-marks: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: code-excludes-other-marks: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: unknown-mark: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-text: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: non-string-text: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: text-node-child-content: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: non-text-node-text-field: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-level-string: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-level-outside-config: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-level-null: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: checked-is-not-boolean: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: ordered-start-is-not-integer: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-colspan-zero: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-rowspan-string: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-colwidth-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-colwidth-count-mismatch: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-align-unknown: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: drawing-strokes-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: drawing-point-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: drawing-tool-unknown: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: link-href-object: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: highlight-color-object: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: attachment-name-object: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: unknown-paragraph-attribute: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: unknown-bold-attribute: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-grid-budget: rejected; workspace/files/settings/reopen unchanged
+test store::archive::tests::shared_editor_schema_corpus_uses_public_import_and_preserves_state_on_rejection ... ok
+
+test result: ok. 15 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 2.43s
+
+     Running unittests src/main.rs (src-tauri/target/debug/deps/notes_clone-d397a5e537a32946)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests notes_clone_lib
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

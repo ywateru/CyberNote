@@ -1,0 +1,198 @@
+{
+  "version": 1,
+  "folders": [
+    {
+      "id": "default",
+      "name": "备忘录",
+      "parentId": null,
+      "kind": "default",
+      "sortOrder": 0,
+      "createdAt": 1793684150191
+    },
+    {
+      "id": "quick",
+      "name": "快速备忘录",
+      "parentId": null,
+      "kind": "quick",
+      "sortOrder": -1,
+      "createdAt": 1793684150191
+    },
+    {
+      "id": "trash",
+      "name": "最近删除",
+      "parentId": null,
+      "kind": "trash",
+      "sortOrder": 9999,
+      "createdAt": 1793684150191
+    },
+    {
+      "id": "433ba6fd-c417-4a15-b4b9-fdb19833717d",
+      "name": "独立父目录",
+      "parentId": null,
+      "kind": "normal",
+      "sortOrder": 1793684150192,
+      "createdAt": 1793684150192
+    },
+    {
+      "id": "e4b029a5-0820-476c-a046-671bb2b0ed32",
+      "name": "独立子目录",
+      "parentId": "433ba6fd-c417-4a15-b4b9-fdb19833717d",
+      "kind": "normal",
+      "sortOrder": 1793684150192,
+      "createdAt": 1793684150192
+    }
+  ],
+  "notes": [
+    {
+      "id": "401596a5-a188-4ebc-bfa3-12b8f64d55ef",
+      "folderId": "e4b029a5-0820-476c-a046-671bb2b0ed32",
+      "document": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "orderedList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "默认正文"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "默认正文"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "taskList",
+                    "content": [
+                      {
+                        "type": "taskItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "嵌套默认未勾选"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "content": [
+              {
+                "type": "text",
+                "text": "line 1\nline 2"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "默认正文"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "title": "独立归档正文",
+      "plainText": "独立归档正文",
+      "createdAt": 1793684150192,
+      "updatedAt": 1793684150192,
+      "pinned": false,
+      "deletedAt": null,
+      "originalFolderId": null,
+      "locked": false,
+      "paperStyle": "plain",
+      "revision": 1,
+      "sealed": null
+    }
+  ],
+  "attachments": [
+    {
+      "id": "1748d5bb-56de-49a9-b348-931a4225c88e",
+      "noteId": "401596a5-a188-4ebc-bfa3-12b8f64d55ef",
+      "kind": "file",
+      "relativePath": "1748d5bb-56de-49a9-b348-931a4225c88e.txt",
+      "mime": "text/plain",
+      "displayName": "first.txt",
+      "size": 14
+    },
+    {
+      "id": "aacbaf8b-bdef-408e-a713-5b10931d80b1",
+      "noteId": "401596a5-a188-4ebc-bfa3-12b8f64d55ef",
+      "kind": "file",
+      "relativePath": "aacbaf8b-bdef-408e-a713-5b10931d80b1.txt",
+      "mime": "text/plain",
+      "displayName": "second.txt",
+      "size": 15
+    }
+  ],
+  "settings": {
+    "custom": {
+      "value": "保留未知设置"
+    },
+    "selectedFolder": "e4b029a5-0820-476c-a046-671bb2b0ed32",
+    "selectedNote": "401596a5-a188-4ebc-bfa3-12b8f64d55ef",
+    "theme": "dark",
+    "view": "gallery"
+  },
+  "blobs": {
+    "1748d5bb-56de-49a9-b348-931a4225c88e": "RklSU1QgT1JJR0lOQUw=",
+    "aacbaf8b-bdef-408e-a713-5b10931d80b1": "U0VDT05EIE9SSUdJTkFM"
+  }
+}
