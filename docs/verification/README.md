@@ -31,7 +31,7 @@
 - 首轮独立报告`docs/plan/reviews/qa-001-01.md`结论为blocked：基础持久化通过，但归档存在附件损坏问题，功能/菜单/画廊/纸张与像素仍有差异。
 - 归档阻塞已由`docs/plan/reviews/app-001-fix-00-02.md`独立关闭：三份非法文档拒绝、63例schema跨检、五组额外合法文档、晚期数据库失败与六次真实进程中断恢复通过。结论仅限FIX-00，不升级为整应用或像素通过。
 - F12后续静态审查见`docs/plan/reviews/lock-boundary-static-01.md`：跨窗锁状态与明文缓存失效存在P1缺口，运行复现仍not-run；安排FIX-03修复并独立验收。
-- FIX-01候选08f2776及72da545证据澄清已交独立安装版复验；最终产物与生产输入指纹见`docs/verification/app-001-fix-01/build-manifest.json`，不能由开发者自测直接记为独立pass。
-- FIX-01独立原生触摸已复现Android键盘遮挡格式工具栏，见`docs/verification/qa-fix-01/run-08f2776/finding-android-ime.md`；DOM点击不证明用户可触达，Android正在修复并需重新安装复核。
+- FIX-01独立安装版报告见`docs/plan/reviews/app-001-fix-01-01.md`：格式栏IME遮挡、重复附加栏、等宽样式标签和纸张页IME遮挡等本轮P1/P2已关闭；最终源码0d8b245与安装内APK指纹独立核对，纸张真触摸/同选区恢复/继续输入/一次冷启14项断言通过。最终产物清单见`app-001-fix-01-paper/build-manifest.json`，未覆盖矩阵partial/not-run及像素unknown仍保留。
+- 初始键盘遮挡实证仍保存在`qa-fix-01/run-08f2776/finding-android-ime.md`、纸张后续发现见`qa-fix-01/run-8124911/finding-paper-ime.md`。DOM点击不证明用户可触达；最后修复由实际原生触摸复验，不以开发者自测代替独立结果。
 - 原生扫描插件9340dba已通过2358901模块审查：真实Mac中文/空图OCR、会话边界、Android离线强制构建与随包模型检查通过。Android首次断网运行、真实相机/透视/PDF、宿主复制和主App集成仍unknown，详见`docs/plan/reviews/app-004-scan-plugin-01.md`。
 - 最终报告由独立verify agent写入；阻塞修复交由develop agent，再复核。

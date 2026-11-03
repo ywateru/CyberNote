@@ -43,3 +43,5 @@ src/App.tsx、src/Editor.tsx、src/style.css、src/types.ts、src-tauri/src/stor
 2026-11-03独立安装版发现：08f2776的真实IME显示后WebView布局高度未缩小，格式工具栏被键盘遮住，原生触摸不能打开面板；Back收键盘后可触摸，X恢复IME后再次遮挡。P1证据见 `docs/verification/qa-fix-01/run-08f2776/finding-android-ime.md`。修复必须用原生触摸/系统键盘走完整入口，DOM `.click()` 或编辑器内部命令只能用于分离的程序边界检查，不能替代可触达性。Android修复中，Mac已提交产物继续独立复验。
 
 后续独立复验：7c2d103原生IME高度修复通过真实触摸入口；8124911移除格式面板上重复附加栏后，格式选择→加粗→X恢复同选区与键盘通过。8124911仍发现纸张页P2：系统Back收键盘→更多→横线与网格会重新唤起IME，遮住底部三项；证据位于 `docs/verification/qa-fix-01/run-8124911/`。本项阻塞FIX-01，须按android.md纸张浮层契约修复完整入口/取消/返回并复验；已完成的纹理/持久化测试可注明候选与复用理由，不必重复无关矩阵。上述结果均不等于整体像素一致。
+
+最终0d8b245已独立复验关闭纸张P2：真实选区入口/7项可达/底部选择/取消及Back同选区/恢复输入/一次冷启正文+笔迹+纸张保持，14项断言通过。见 `docs/plan/reviews/app-001-fix-01-01.md` 与 `docs/verification/qa-fix-01/run-0d8b245/`。本轮发现的P1/P2阻塞关闭，允许FIX-03优先推进；本任务仍保留完整预定矩阵的partial/not-run，不能标整项全功能或像素verified。余项（如手机完整清单/表格/列表路径、中文候选composition、Mac全样式/滚动恢复/快捷键等）随后续接入和PARITY-001实际复核，已通过不受影响用例直接引用。
