@@ -1,0 +1,21 @@
+{
+  "scope": "Exact CUA AX body value representation only; not a database JSON or cold-reopen comparison",
+  "beforeAfterUndoEqual": true,
+  "beforeAfterClearEqual": true,
+  "bodyValueSha256": "d47a06905e34b45d4913c9bf44eb8498235fe605429d9066d5bfb59231edda2d",
+  "bodyValueUtf8Bytes": 136,
+  "inputLossObservation": "Initial same-call focus+type in body context yielded cABC, so that attempt is not a complete-query pass; after independently confirmed focus, Cmd+A replacement yielded full MacABC; Undo restored cABC inside search.",
+  "cases": {
+    "shortcut_short_query": "pass: MacABC separated from magnifier; 1 matching synthetic note",
+    "continuation_after_result_update": "pass: MacABC Beta Gamma after repeated focus",
+    "click_short_query": "pass: separate focused caret/text; no visible double offset",
+    "selection": "pass: short and full long-query text selected by actual Command-A",
+    "clear": "pass: native cancel restores empty field and folder count",
+    "undo_ownership": "pass in bounded observation: query reverted, visible full body AX value unchanged",
+    "long_query_value": "pass: complete value preserved with -TAIL continuation",
+    "long_query_viewport": "fail: end remains offscreen after Command-Right and continuation",
+    "focus_color": "fail: system blue differs from original golden accent",
+    "marked_ime": "not run",
+    "raw_same_geometry_roi": "not run for this package; earlier ec1 Fill pair is separate failed baseline"
+  }
+}
