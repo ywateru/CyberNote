@@ -1,0 +1,18 @@
+{"at":"2026-11-03T06:43:11.256Z","op":"tap","selector":"button[aria-label=\"新建备忘录\"]","name":"and-new"}
+{"at":"2026-11-03T06:43:12.334Z","op":"text","text":"QA FIX01 Independent"}
+{"at":"2026-11-03T06:43:13.386Z","op":"key","key":66}
+{"at":"2026-11-03T06:43:14.430Z","op":"text","text":"Alpha Beta Gamma","name":"and-keyboard-before"}
+{"at":"2026-11-03T06:44:16.948Z","op":"tap","selector":"button[aria-label=\"新建备忘录\"]","name":"and-new-actual"}
+{"at":"2026-11-03T06:44:18.330Z","op":"text","text":"QA FIX01 Independent"}
+{"at":"2026-11-03T06:44:19.342Z","op":"key","key":66}
+{"at":"2026-11-03T06:44:20.257Z","op":"text","text":"Alpha Beta Gamma","name":"and-keyboard-before-actual"}
+{"at":"2026-11-03T06:46:13.112Z","op":"tap","point":[991,2075],"name":"and-real-ime-enter"}
+{"at":"2026-11-03T06:46:14.678Z","op":"tap","point":[540,2075]}
+{"at":"2026-11-03T06:46:15.643Z","op":"snap","name":"and-after-ime-enter-space"}
+{"at":"2026-11-03T06:47:09.942Z","op":"text","text":"Body Alpha Beta Gamma","name":"and-real-body-input"}
+{"at":"2026-11-03T06:47:13.185Z","op":"key","key":4,"name":"and-native-back-keyboard"}
+{"at":"2026-11-03T06:47:14.340Z","op":"tap","selector":"button[aria-label=\"格式\"]","name":"and-format-via-hidden-ime"}
+{"at":"2026-11-03T06:48:40.573Z","op":"tap","selector":"button[aria-label=\"关闭格式\"]","name":"and-format-x"}
+{"at":"2026-11-03T06:48:42.032Z","op":"read","expression":"(()=>{const t=document.querySelector('.tiptap p').firstChild;const r=document.createRange();const i=t.textContent.indexOf('Beta');r.setStart(t,i);r.setEnd(t,i+4);const b=r.getBoundingClientRect();return {rect:{x:b.x,y:b.y,w:b.width,h:b.height},point:[(b.x+b.width/2)*devicePixelRatio,(b.y+b.height/2)*devicePixelRatio+83]}})()"}
+{"at":"2026-11-03T06:49:54.787Z","op":"tap","selector":"button[aria-label=\"格式\"]","name":"and-format-native-occluded"}
+{"at":"2026-11-03T06:49:56.458Z","op":"key","key":4,"name":"and-format-after-system-back"}

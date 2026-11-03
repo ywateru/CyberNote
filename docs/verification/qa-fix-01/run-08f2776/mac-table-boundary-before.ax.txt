@@ -1,0 +1,66 @@
+Window: "备忘录", App: 备忘录.
+0 standard window 备忘录, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost
+			3 container
+				4 button 添加文件夹
+				5 button 隐藏文件夹
+				6 button 快速备忘录 3
+				7 text 在我的 Mac 上
+				8 button 全部备忘录 17
+				9 button 备忘录 0
+				10 button Notes Clone UI 2
+				11 button QA 独立验证 6
+				12 button FIX01 6
+				13 button 新建文件夹
+				14 button 更多设置
+			15 splitter 调整分栏宽度
+			16 container
+				17 button 返回画廊
+				18 button 新建备忘录
+				19 button 格式
+				20 button 核对清单
+				21 button 表格
+				22 button 添加附件
+				23 button 共享
+				24 button 更多
+				25 text field (settable) 搜索备忘录, Placeholder: 搜索
+				26 button 2026年11月3日 14:57
+				27 text entry area (settable) 备忘录正文, Value: **QA Table Boundary**
+A1
+A2
+C
+B2
+
+
+
+					28 heading (settable, integer) QA Table Boundary, Value: 1
+						29 text (settable) QA Table Boundary
+					30 table (settable)
+						31 row (selectable, settable)
+							32 cell (selectable, settable)
+								33 text (settable) A1
+								34 text (settable) A2
+							35 cell (selectable, settable)
+								36 text (settable) C
+						37 row (selectable, settable)
+							38 cell (selectable, settable)
+								39 text (settable) B2
+							40 cell (selectable, settable)
+	41 close button
+	42 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	43 minimize button
+44 menu bar
+	45 备忘录
+	46 文件
+	47 编辑
+	48 显示
+	49 窗口
+
+The focused UI element is 27 text entry area (settable) 备忘录正文, Value: **QA Table Boundary**
+A1
+A2
+C
+B2
+
+

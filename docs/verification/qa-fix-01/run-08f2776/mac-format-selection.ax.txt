@@ -1,0 +1,66 @@
+Window: "备忘录", App: 备忘录.
+0 standard window 备忘录, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost
+			3 container
+				4 button 添加文件夹
+				5 button 隐藏文件夹
+				6 button 快速备忘录 3
+				7 text 在我的 Mac 上
+				8 button 全部备忘录 15
+				9 button 备忘录 0
+				10 button Notes Clone UI 2
+				11 button QA 独立验证 4
+				12 button FIX01 6
+				13 button 新建文件夹
+				14 button 更多设置
+			15 splitter 调整分栏宽度
+			16 container
+				17 button 返回画廊
+				18 button 新建备忘录
+				19 button 格式
+				20 button 核对清单
+				21 button 表格
+				22 button 添加附件
+				23 button 共享
+				24 button 更多
+				25 text field (settable) 搜索备忘录, Placeholder: 搜索
+				26 button 2026年11月3日 14:52
+				27 text entry area (settable) 备忘录正文, Value: **QA Typed Title**
+Only format these words
+					28 heading (settable, integer) QA Typed Title, Value: 1
+						29 text (settable) QA Typed Title
+					30 text (settable) Only format these words
+			31 container 格式
+				32 button 粗体
+				33 button 斜体
+				34 button 下划线
+				35 button 删除线
+				36 button 高亮
+				37 button (collapsed) 选择高亮颜色, Secondary Actions: Expand
+				38 toggle button 标题, Value: off
+				39 toggle button 小标题, Value: off
+				40 toggle button 副标题, Value: off
+				41 toggle button 正文, Value: on
+				42 toggle button 等宽, Value: off
+				43 button 项目符号列表
+				44 button 短划线列表
+				45 button 编号列表
+				46 button 减少缩进
+				47 button 增加缩进
+				48 button 块引用
+	49 close button
+	50 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	51 minimize button
+52 menu bar
+	53 备忘录
+	54 文件
+	55 编辑
+	56 显示
+	57 窗口
+
+Selected text: ```
+format these
+```
+
+Note: Pay special attention to the content selected by the user. If the user asks a question or refers to the content they are looking at on-screen, they might be referring to the selected content (but they might be referring to something else that's visible, too).

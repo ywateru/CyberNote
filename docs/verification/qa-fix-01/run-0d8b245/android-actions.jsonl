@@ -1,0 +1,25 @@
+{"at":"2026-11-03T07:37:38.062Z","op":"tap","selector":"button.back-button","name":"paper-final-list"}
+{"at":"2026-11-03T07:38:00.624Z","op":"tap","selector":"button.note-row","index":1,"name":"paper-final-own-note"}
+{"at":"2026-11-03T07:38:01.646Z","op":"read","expression":"(()=>{const n=document.querySelector('.tiptap > p').firstChild;const r=document.createRange();r.setStart(n,6);r.setEnd(n,11);const b=r.getBoundingClientRect();return {text:r.toString(),physical:[(b.x+b.width/2)*devicePixelRatio,(b.y+b.height/2)*devicePixelRatio+83]}})()"}
+{"at":"2026-11-03T07:38:13.049Z","op":"swipe","points":[253,650,253,650],"duration":1000,"name":"paper-final-selection"}
+{"at":"2026-11-03T07:38:29.542Z","op":"tap","selector":"button[aria-label=\"格式\"]","name":"paper-final-format"}
+{"at":"2026-11-03T07:38:30.585Z","op":"tap","selector":"button[aria-label=\"关闭格式\"]","name":"paper-final-x"}
+{"at":"2026-11-03T07:38:31.665Z","op":"key","key":4,"name":"paper-final-hide-ime"}
+{"at":"2026-11-03T07:38:32.748Z","op":"tap","selector":"button[aria-label=\"更多\"]","name":"paper-final-more"}
+{"at":"2026-11-03T07:38:33.875Z","op":"tap","selector":"button.menu-row","index":2,"name":"paper-final-entry"}
+{"at":"2026-11-03T07:38:55.735Z","op":"tap","selector":"button[data-paper-style=\"grid-medium\"]","name":"paper-final-bottom-applied"}
+{"at":"2026-11-03T07:38:56.725Z","op":"tap","selector":"button[aria-label=\"更多\"]","name":"paper-final-cancel-more"}
+{"at":"2026-11-03T07:38:57.700Z","op":"tap","selector":"button.menu-row","index":2,"name":"paper-final-cancel-before"}
+{"at":"2026-11-03T07:39:35.503Z","op":"tap","selector":".sheet-top button","name":"paper-final-cancel-after"}
+{"at":"2026-11-03T07:39:36.504Z","op":"tap","selector":"button[aria-label=\"更多\"]","name":"paper-final-back-more"}
+{"at":"2026-11-03T07:39:37.474Z","op":"tap","selector":"button.menu-row","index":2,"name":"paper-final-back-before"}
+{"at":"2026-11-03T07:39:38.534Z","op":"key","key":4,"name":"paper-final-back-after"}
+{"at":"2026-11-03T07:40:09.317Z","op":"tap","selector":".tiptap > p","index":0,"name":"paper-final-resume-keyboard"}
+{"at":"2026-11-03T07:41:03.574Z","op":"tap","point":[56,1655],"name":"paper-final-real-q-input"}
+{"at":"2026-11-03T07:41:04.728Z","op":"key","key":4,"name":"paper-final-input-saved"}
+{"at":"2026-11-03T07:41:05.835Z","op":"cold","name":"paper-final-cold"}
+{"at":"2026-11-03T07:41:07.675Z","op":"tap","selector":"button.folder-row.selected","name":"paper-final-cold-folder"}
+{"at":"2026-11-03T07:41:08.933Z","op":"tap","selector":"button.note-row","index":0,"name":"paper-final-cold-note"}
+{"at":"2026-11-03T07:41:09.968Z","op":"tap","selector":"button[aria-label=\"更多\"]","name":"paper-final-cold-more"}
+{"at":"2026-11-03T07:41:10.989Z","op":"tap","selector":"button.menu-row","index":2,"name":"paper-final-cold-picker"}
+{"at":"2026-11-03T07:41:49.562Z","op":"key","key":4,"name":"paper-final-finish"}
