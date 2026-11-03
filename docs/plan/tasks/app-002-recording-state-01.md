@@ -1,7 +1,7 @@
 ---
 id: app-002-recording-state-01
 scope: production-recording-panel-initial-pause-finish-and-clock
-status: pending
+status: ready
 depends-on: [app-002-recording-extract-01]
 ---
 

@@ -1,7 +1,7 @@
 ---
 id: app-002-recording-extract-01
 scope: production-recording-panel-module-seam
-status: ready
+status: done
 depends-on: []
 ---
 
@@ -24,3 +24,7 @@ docs/INDEX.md、docs/architecture.md录音与附件契约、app-002-media.md、a
 ## source candidate 01
 
 基线fabafcf的纯抽取已完成：真实App改为import新RecordingPanel，移动组件主体与错误转文字函数逐字相同，props和父挂载/onCancel/onDone保持。typecheck、既有26组RecordingSession清理检查及diff-check通过。报告`../../verification/app-002-recording-extract/README.md`，源等价与SHA记录在其source-candidate-01目录。等待独立源码审查，保持ready；不修录音状态/保存，未操作设备/target/打包。
+
+## independent source delivery
+
+2026-11-04：独立审查SOURCE-READY，无blocking；实际typecheck和26组production RecordingSession检查通过，完整组件/父挂载/周边字节等价性已核。主63603d1合入，仅任务追加段落add/add冲突保留双方内容，两个产品文件与源966ba7d逐字一致，身份见main-integration.json。报告`../reviews/app-002-recording-extract-static-01.md`及8项独立证据原样保存，审查工具首轮准备失败亦保留。done只限纯模块抽取，不改变录制/父保存缺口，不追认candidate02包已含此新模块。

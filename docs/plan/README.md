@@ -26,8 +26,8 @@
 | APP-002-AUDIO-DURATION-01 音频卡片时长 | 3edc4ad0独立真实1:06/初始暂停/播放暂停有限通过 | f4d3a02独立审查通过生产helper11组及真实AudioPlayer/离线Chrome156：原WebM探针66.004秒、主初始0暂停、有限WAV不建探针、错误/重试/晚事件清理；不重编码原文件。216项输入前后不变，APK3edc4ad0…；Android91独立媒体revision30/429547B原SHA保持，真实1:06/初始0paused与play-pause通过；展开不可达，跳转/冷启/Mac未验，非可听采集/像素通过 |
 | APP-002-AUDIO-CONTROLS-01 手机播放控件 | APK a50dded8开发真实transport通过，独立待执行 | 主ae35bc3/41131ae源8893bed独立SOURCE-READY，candidate02的219输入同；Android91原生标题展开/play-pause/range29→44→29/两端0..66.004/收回无IME通过，全文/revision/附件原SHA保持。54项manifest已冻；末端平台duration由Infinity变66.004/HTMLstep值66分别记账。旧3ed失败保持，原版展开手势及像素unknown |
 | APP-002-MAC-STARTUP-01 Mac入口加载 | sealed5e948ad9开发实际启动通过，独立进行中 | 主ebb05a4/f051307源c4890fc独立Rust12通过，精确custom protocol根入口空path修复；candidate02/fabafcf实际显示tauri://localhost/三栏/原生顶部/合成正文，REA只读URL/loading/title核同。开发F07 unique→zero→clear/禁用/正文UndoRedo及正常退出重开持久有限通过，Editor实例/完整像素未验。旧11dcbfc4白窗/private原request原样保留 |
-| APP-002-RECORDING-EXTRACT-01 录音组件接缝 | 源966ba7d待独立审查 | 实际App中RecordingPanel纯抽取，props/父保存/组件逻辑保持；不修初始自动录制/暂停完成/正文ACK。接缝独立通过后局部状态与App附件接线分开实施 |
-| APP-002-RECORDING-STATE-01 录音面板状态 | pending，依赖纯抽取 | 原录屏已证初始红圆/录制中/暂停继续+完成；显式开始为实现选择、原物理触点unknown。仅局部状态与单调活动计时，父operation/正文ACK另接；完整回放/转写/像素仍未完成 |
+| APP-002-RECORDING-EXTRACT-01 录音组件接缝 | done（仅抽取），源966ba7d独立SOURCE-READY、主63603d1 | 实际App中RecordingPanel纯抽取，完整组件/props/父保存/周边字节等价；独立typecheck/26cleanup通过，主两个产品文件与冻结同。不修初始自动录制/暂停完成/正文ACK，不追认旧包已含此模块 |
+| APP-002-RECORDING-STATE-01 录音面板状态 | ready，纯抽取已通过 | 原录屏已证初始红圆/录制中/暂停继续+完成，recording-mobile.md有限坐标已存；显式开始为实现选择、原物理触点unknown。仅独立组件/局部helper/专用CSS状态与单调活动计时，父operation/正文ACK另接；完整回放/转写/像素仍未完成 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |
