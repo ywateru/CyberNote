@@ -1,0 +1,41 @@
+{
+  "status": "pass",
+  "marker": "QA07-1793715026306",
+  "noteId": "d699e8fb-872e-4420-a7da-f24a513f65ad",
+  "package": "com.local.notesclone",
+  "serial": "emulator-5580",
+  "source": "Independent candidate02 preserved APK replay after same-AVD environment recovery",
+  "scope": "Finite native paper regression through grid-large, re-open/Back and complete saved/cold document. No other old matrix.",
+  "input": "UI actions all native Android input; runtime reads plus WeakMap identity instrumentation, no editor commands.",
+  "selection": {
+    "type": "text",
+    "anchor": 27,
+    "head": 31
+  },
+  "identity": {
+    "editor": 1,
+    "view": 2,
+    "dom": 3,
+    "keyed": [
+      {
+        "key": "2520808682",
+        "type": "Y8"
+      },
+      {
+        "key": "d699e8fb-872e-4420-a7da-f24a513f65ad-73c2f706-b218-4d6c-8703-e5fece46812e-0-0",
+        "type": "v9"
+      }
+    ]
+  },
+  "savedRevision": 45,
+  "checks": [
+    "cancel preserved selection",
+    "grid-large persisted",
+    "same Editor/View/DOM and actual parent React key after equivalent hydration",
+    "complete document preserved",
+    "re-open and Back preserved selection",
+    "ordinary own save and real foreground refresh kept identity/document",
+    "cold restart complete document equal",
+    "zero WebView exceptions"
+  ]
+}
