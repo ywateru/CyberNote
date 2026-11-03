@@ -18,7 +18,7 @@ date: 2026-11-03
 
 `ocr-first-offline-1793692256377/result.json`：airplaneMode=1、activeNetwork=null、GMS=true，status=failed，checks=[]，ScanFailure“无效会话目录”，started/finished差34ms。中文fixture已从assets复制，SessionStore.begin→save→dir先失败，未调用实际ML Kit，**OCR结果/首次离线模型可用性仍未得到验证**。不能把飞行模式或Activity启动成功当OCR通过，也不能在保留此started标记后重试就称新首次。
 
-随后启动 perspective-pdf 时首次am start输出“intent delivered to running top-most instance”，其Activity未重建，该次不是执行证据。独立force-stop仅harness并冷启动正确scenario后，`perspective-pdf-1793692399511/result.json`在425ms同样ScanFailure“无效会话目录”。生成了expected-flat和perspective-source PNG；SessionStore.begin失败，未到correct/PdfDocument/PdfRenderer。两次原始tar和解压内容均保全。
+随后启动 perspective-pdf 时首次am start输出“intent delivered to running top-most instance”，其Activity未重建，该次不是执行证据。独立force-stop仅harness并冷启动正确scenario后，`perspective-pdf-1793692399510/result.json`在425ms同样ScanFailure“无效会话目录”。生成了expected-flat和perspective-source PNG；SessionStore.begin失败，未到correct/PdfDocument/PdfRenderer。两次原始tar和解压内容均保全。
 
 源码失败点 `plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt:34`：`f.canonicalFile != f.absoluteFile`。该检查由真实begin→save调用触发，表示正常系统私有目录被拒绝。只读run-as pwd及readlink均返回`/data/user/0/com.local.notesscan.harness`前缀，尚未获得同一Java File对象的两个路径，**具体差异原因未证实**，不把系统别名假设写作确定根因。修复须保留UUID/受管根/符号链接逃逸检查，处理正常Context私有目录，不能简单删除所有canonical边界。
 
