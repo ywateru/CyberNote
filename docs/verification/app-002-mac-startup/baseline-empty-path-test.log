@@ -1,0 +1,20 @@
+   Compiling tauri-plugin-notes-ui v0.1.0 (/private/tmp/apple-notes-mac-startup-01/plugins/tauri-plugin-notes-ui)
+   Compiling notes-clone v0.1.0 (/private/tmp/apple-notes-mac-startup-01/src-tauri)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.94s
+     Running unittests src/lib.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/notes_clone_lib-96d8ebc868607599)
+
+running 1 test
+
+thread 'media_permission::tests::compiled_macos_boundary_accepts_the_locked_tauri_root_url' (36007451) panicked at src/media_permission.rs:285:9:
+assertion failed: EntryBoundary::current().allows(&root)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test media_permission::tests::compiled_macos_boundary_accepts_the_locked_tauri_root_url ... FAILED
+
+failures:
+
+failures:
+    media_permission::tests::compiled_macos_boundary_accepts_the_locked_tauri_root_url
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 53 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
