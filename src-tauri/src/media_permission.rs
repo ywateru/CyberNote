@@ -35,26 +35,29 @@ impl EntryBoundary {
 
     fn allows(self, url: &Url) -> bool {
         // Only the actual app entry document; query/hash do not select code.
-        if !url.username().is_empty()
-            || url.password().is_some()
-            || !matches!(url.path(), "/" | "/index.html")
-        {
+        if !url.username().is_empty() || url.password().is_some() {
             return false;
         }
+        let entry_path = matches!(url.path(), "/" | "/index.html");
         let bundle = match self.bundle {
             BundleOrigin::CustomProtocol => {
-                url.scheme() == "tauri"
+                // Tauri keeps tauri://localhost (empty path) for index.html.
+                // This root spelling is specific to the custom protocol.
+                (entry_path || url.path().is_empty())
+                    && url.scheme() == "tauri"
                     && url.host_str() == Some("localhost")
                     && url.port().is_none()
             }
             BundleOrigin::HttpWorkaround => {
-                url.scheme() == "http"
+                entry_path
+                    && url.scheme() == "http"
                     && url.host_str() == Some("tauri.localhost")
                     && url.port_or_known_default() == Some(80)
             }
         };
         bundle
             || (self.development
+                && entry_path
                 && url.scheme() == "http"
                 && url.host_str() == Some("localhost")
                 && url.port_or_known_default() == Some(1420))
@@ -274,6 +277,81 @@ mod tests {
         assert!(mac.allows(&url("tauri://localhost/index.html")));
         assert!(!mac.allows(&url("http://tauri.localhost/")));
         assert!(!mac.allows(&url("tauri://localhost:80/")));
+    }
+    #[test]
+    #[cfg(target_os = "macos")]
+    fn compiled_macos_boundary_accepts_the_locked_tauri_root_url() {
+        // Tauri 2.12.5 protocol::origin produces this exact base URL. Its
+        // manager keeps the base unchanged for WebviewUrl::App(index.html).
+        let root = url("tauri://localhost");
+        assert_eq!(root.path(), "");
+        assert!(EntryBoundary::current().allows(&root));
+    }
+    #[test]
+    fn custom_protocol_root_spellings_keep_the_exact_authority_boundary() {
+        let mac = EntryBoundary {
+            bundle: BundleOrigin::CustomProtocol,
+            development: false,
+        };
+        for value in [
+            "tauri://localhost",
+            "tauri://localhost?note=synthetic#x",
+            "tauri://localhost/",
+            "tauri://localhost/index.html",
+        ] {
+            assert!(mac.allows(&url(value)), "{value}");
+        }
+        for value in [
+            "tauri://localhost:80",
+            "tauri://localhost:1420/",
+            "tauri://user@localhost",
+            "tauri://user:password@localhost/",
+            "tauri://localhost.evil",
+            "tauri://127.0.0.1",
+            "tauri://LOCALHOST",
+            "tauri://localhost//",
+            "tauri://localhost/other.html",
+            "tauri://localhost/%69ndex.html",
+            "https://localhost/",
+            "http://tauri.localhost/",
+            "file:///index.html",
+            "data:text/html,x",
+            "about:blank",
+            "blob:tauri://localhost/x",
+        ] {
+            assert!(!mac.allows(&url(value)), "{value}");
+        }
+        // The fix must not grant the custom scheme to the HTTP runtime.
+        assert!(!android(false).allows(&url("tauri://localhost")));
+        assert!(!android(true).allows(&url("tauri://localhost")));
+    }
+    #[test]
+    fn custom_protocol_navigation_still_requires_confirmed_instance_load() {
+        let mac = EntryBoundary {
+            bundle: BundleOrigin::CustomProtocol,
+            development: false,
+        };
+        let root = url("tauri://localhost");
+        let mut policy = PageTrust::default();
+        assert!(policy.navigation(&root, mac));
+        assert!(!policy.allows(PermissionKind::Microphone));
+        policy.page_load(&root, PageLoadEvent::Finished, mac);
+        assert!(!policy.allows(PermissionKind::Microphone));
+        policy.page_load(&root, PageLoadEvent::Started, mac);
+        assert!(!policy.allows(PermissionKind::Microphone));
+        policy.page_load(&root, PageLoadEvent::Finished, mac);
+        assert!(policy.allows(PermissionKind::Microphone));
+        assert!(policy.allows(PermissionKind::Camera));
+        assert!(!policy.allows(PermissionKind::Geolocation));
+        assert!(policy.navigation(&root, mac));
+        assert!(!policy.allows(PermissionKind::Microphone));
+        policy.page_load(&root, PageLoadEvent::Started, mac);
+        policy.page_load(&root, PageLoadEvent::Finished, mac);
+        assert!(policy.allows(PermissionKind::Microphone));
+        assert!(!policy.navigation(&url("tauri://localhost/other.html"), mac));
+        policy.page_load(&root, PageLoadEvent::Started, mac);
+        policy.page_load(&root, PageLoadEvent::Finished, mac);
+        assert!(!policy.allows(PermissionKind::Microphone));
     }
     #[test]
     fn unconfirmed_and_unknown_kinds_are_denied() {

@@ -1,7 +1,7 @@
 ---
 id: app-002-mac-startup-01
 scope: bundled-mac-entry-navigation-and-permission-boundary
-status: ready
+status: implemented
 depends-on: []
 ---
 
@@ -29,3 +29,7 @@ depends-on: []
 ## verification
 
 隔离候选运行必要media_permission定向真实Rust检查与编译，包含锁定框架生成的无尾slash本地入口、显式根/index.html、非入口路径/错误authority和原拒绝生命周期。先冻结源码及独立审查，再统一Mac新包；保存构建输入/包hash/本地签名核验。实际正常启动应加载本地页面、显示三栏和原生工具栏、可读合成note，然后再做F07 unique→zero→clear。需要时有限Android启动smoke，原权限首次流程不重置重跑。源码/导航/媒体许可/React/F07与像素分别记账，不用一个启动通过覆盖其他功能。
+
+## source candidate01（待独立审查）
+
+2026-11-04：仅EntryBoundary的CustomProtocol补充锁定框架根入口空path。新增真实macOS编译分支回归在旧predicate先失败（parser path为空断言通过，allows断言失败），最小修复后media_permission实际12组通过，rustfmt与diff检查通过。框架origin/manager源码精确行及文件hash、基线失败和候选日志见`../../verification/app-002-mac-startup/`。没有重打包/重启/设备动作，不宣称原private request URL已捕获或Mac UI启动/F07通过。

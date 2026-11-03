@@ -1,0 +1,16 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--locked",
+    "--lib",
+    "media_permission::tests::compiled_macos_boundary_accepts_the_locked_tauri_root_url",
+    "--",
+    "--exact",
+    "--nocapture"
+  ],
+  "exit": 101,
+  "expected": "failure on old production path predicate"
+}

@@ -1,0 +1,263 @@
+{
+  "tauriVersion": "2.12.5",
+  "sources": [
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/protocol/mod.rs",
+      "sha256": "4c5bffce1f2b4a493a0a8daca3c84551ccc78a3d06a1c8bbe17dcc1dfd7f31fa",
+      "lines": [
+        {
+          "line": 29,
+          "text": "///"
+        },
+        {
+          "line": 30,
+          "text": "/// On Windows and Android custom protocols are served over `http(s)://{scheme}.localhost`;"
+        },
+        {
+          "line": 31,
+          "text": "/// everywhere else they are served over `{scheme}://localhost`."
+        },
+        {
+          "line": 32,
+          "text": "pub(crate) fn origin(scheme: &str, use_https: bool) -> String {"
+        },
+        {
+          "line": 33,
+          "text": "  if cfg!(windows) || cfg!(target_os = \"android\") {"
+        },
+        {
+          "line": 34,
+          "text": "    let http = if use_https { \"https\" } else { \"http\" };"
+        },
+        {
+          "line": 35,
+          "text": "    format!(\"{http}://{scheme}.localhost\")"
+        },
+        {
+          "line": 36,
+          "text": "  } else {"
+        },
+        {
+          "line": 37,
+          "text": "    format!(\"{scheme}://localhost\")"
+        },
+        {
+          "line": 38,
+          "text": "  }"
+        },
+        {
+          "line": 39,
+          "text": "}"
+        }
+      ]
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/mod.rs",
+      "sha256": "6e39aff7d45d40f163a26f2b9484f1aab6977209762204a0650b9d3ad9636793",
+      "lines": [
+        {
+          "line": 334,
+          "text": "  /// The `tauri` custom protocol URL we use to serve the embedded assets."
+        },
+        {
+          "line": 335,
+          "text": "  /// Returns `tauri://localhost` or its `wry` workaround URL `http://tauri.localhost`/`https://tauri.localhost`"
+        },
+        {
+          "line": 336,
+          "text": "  pub(crate) fn tauri_protocol_url(&self, https: bool) -> Cow<'_, Url> {"
+        },
+        {
+          "line": 337,
+          "text": "    Cow::Owned(Url::parse(&crate::protocol::origin(\"tauri\", https)).unwrap())"
+        },
+        {
+          "line": 338,
+          "text": "  }"
+        },
+        {
+          "line": 339,
+          "text": ""
+        },
+        {
+          "line": 340,
+          "text": "  /// Get the base app URL for [`WebviewUrl::App`](tauri_utils::config::WebviewUrl::App)."
+        },
+        {
+          "line": 341,
+          "text": "  ///"
+        },
+        {
+          "line": 342,
+          "text": "  /// * In dev mode, this is the [`devUrl`](tauri_utils::config::BuildConfig::dev_url) configuration value if it exists."
+        },
+        {
+          "line": 343,
+          "text": "  /// * In production mode, this is the [`frontendDist`](tauri_utils::config::BuildConfig::frontend_dist) configuration value if it's a [`FrontendDist::Url`](tauri_utils::config::FrontendDist::Url)."
+        },
+        {
+          "line": 344,
+          "text": "  /// * Returns [`Self::tauri_protocol_url`] (e.g. `tauri://localhost`) otherwise."
+        },
+        {
+          "line": 345,
+          "text": "  pub(crate) fn get_app_url(&self, https: bool) -> Cow<'_, Url> {"
+        },
+        {
+          "line": 346,
+          "text": "    #[cfg(dev)]"
+        },
+        {
+          "line": 347,
+          "text": "    let url = self.config.build.dev_url.as_ref();"
+        },
+        {
+          "line": 348,
+          "text": "    #[cfg(not(dev))]"
+        },
+        {
+          "line": 349,
+          "text": "    let url = match self.config.build.frontend_dist.as_ref() {"
+        },
+        {
+          "line": 350,
+          "text": "      Some(crate::utils::config::FrontendDist::Url(url)) => Some(url),"
+        },
+        {
+          "line": 351,
+          "text": "      _ => None,"
+        },
+        {
+          "line": 352,
+          "text": "    };"
+        },
+        {
+          "line": 353,
+          "text": ""
+        },
+        {
+          "line": 354,
+          "text": "    if let Some(url) = url {"
+        },
+        {
+          "line": 355,
+          "text": "      Cow::Borrowed(url)"
+        },
+        {
+          "line": 356,
+          "text": "    } else {"
+        },
+        {
+          "line": 357,
+          "text": "      self.tauri_protocol_url(https)"
+        },
+        {
+          "line": 358,
+          "text": "    }"
+        },
+        {
+          "line": 359,
+          "text": "  }"
+        }
+      ]
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/webview.rs",
+      "sha256": "3bfb8bba5dbd61d08ec5ff4ce2fa882997df78666b840a8f13b30aea2c2e7381",
+      "lines": [
+        {
+          "line": 466,
+          "text": ""
+        },
+        {
+          "line": 467,
+          "text": "    #[allow(unused_mut)] // mut url only for the data-url parsing"
+        },
+        {
+          "line": 468,
+          "text": "    let mut url = match &pending.webview_attributes.url {"
+        },
+        {
+          "line": 469,
+          "text": "      WebviewUrl::App(path) => {"
+        },
+        {
+          "line": 470,
+          "text": "        let app_url = app_manager.get_app_url(pending.webview_attributes.use_https_scheme);"
+        },
+        {
+          "line": 471,
+          "text": "        let url = if PROXY_DEV_SERVER && is_local_network_url(&app_url) {"
+        },
+        {
+          "line": 472,
+          "text": "          Cow::Owned(Url::parse(\"tauri://localhost\").unwrap())"
+        },
+        {
+          "line": 473,
+          "text": "        } else {"
+        },
+        {
+          "line": 474,
+          "text": "          app_url"
+        },
+        {
+          "line": 475,
+          "text": "        };"
+        },
+        {
+          "line": 476,
+          "text": "        // ignore \"index.html\" just to simplify the url"
+        },
+        {
+          "line": 477,
+          "text": "        if path.to_str() != Some(\"index.html\") {"
+        },
+        {
+          "line": 478,
+          "text": "          url"
+        },
+        {
+          "line": 479,
+          "text": "            .join(&path.to_string_lossy())"
+        },
+        {
+          "line": 480,
+          "text": "            .map_err(crate::Error::InvalidUrl)"
+        },
+        {
+          "line": 481,
+          "text": "            // this will never fail"
+        },
+        {
+          "line": 482,
+          "text": "            .unwrap()"
+        },
+        {
+          "line": 483,
+          "text": "        } else {"
+        },
+        {
+          "line": 484,
+          "text": "          url.into_owned()"
+        },
+        {
+          "line": 485,
+          "text": "        }"
+        },
+        {
+          "line": 486,
+          "text": "      }"
+        },
+        {
+          "line": 487,
+          "text": "      WebviewUrl::External(url) => {"
+        },
+        {
+          "line": 488,
+          "text": "        let config_url = app_manager.get_app_url(pending.webview_attributes.use_https_scheme);"
+        }
+      ]
+    }
+  ]
+}
