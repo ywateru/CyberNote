@@ -1,7 +1,7 @@
 ---
 id: app-001-fix-04
 scope: android-inline-composition-preservation
-status: pending
+status: in-progress
 depends-on: [app-001-fix-03]
 ---
 
@@ -12,6 +12,8 @@ depends-on: [app-001-fix-03]
 失败基线为20c3014默认APK（44b6b16d…），emulator-5580/API30/WebView91，Trime3.3.13随包luna_pinyin_simp与真正“编辑中文本”内联预编辑。快速约2.8秒输入nihao、选择“你好”有真实composition事件且可正常替换；长停留后观察到view.composing=false、compositionNode仍含`ni hao‸`，选词后出现拼音与汉字并存。原始证据在`docs/verification/qa-android-ime/`，正式独立报告/精确持续时间以verify冻结结果为准。
 
 e352541已冻结独立报告`docs/plan/reviews/app-001-android-ime-01.md`：长停留按实际动作边界估计约35秒，失败残留在真正冷启后仍保存；快速轮次只替换本轮新增后缀，不抹掉旧失败。未捕获长轮完整事件，不声称精确5秒触发或保存重载因果。实际选区/单字粗体/Undo/Redo及JSON冷保全有限通过。原四项系统输入设置已精确恢复LatinIME，Trime模式Disable且不在启用列表中；FIX04开发/复验须显式重新配置与最终恢复，不能假定IME仍启用。
+
+2026-11-03 19:24前后FIX02候选34223af已冻结，旧失败APK另存`/private/tmp/notes-final20-ime-baseline-44b6b16d.apk`保持44b6b16d…。新0aac2d73…APK已由独立verify完成源/安装hash、真实ASCII输入保存及force-stop/COLD后完整文档保全的有限smoke；该路径没有重跑Trime，不覆盖原长停留P1。Android现交develop做本任务，verify只操作冻结Mac4118f77f…；本任务不得覆盖该Mac包。新APK也先保留字节与身份，再构建诊断/修复包。
 
 1. 用真实软键盘拼音和候选保持预编辑生命周期。用户暂停输入、等待自动保存、再选词时，候选应替换同一段预编辑，不残留临时拼音/光标符号，不重复汉字，不跳光标或丢相邻正文。
 2. 原有快速组字、取消/删除预编辑、连续多段中文与中英混输继续可用。不能只增加一个更长固定超时来推迟故障，不能通过伪造候选/输入事件、清空正文或覆盖整份文档来得到通过。
