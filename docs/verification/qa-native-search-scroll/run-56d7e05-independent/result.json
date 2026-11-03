@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-03",
+  "scope": "independent finite Mac search interaction verification; actual CUA keyboard/click input only",
+  "bundle": "/private/tmp/notes-search-scroll-56d7e05.app",
+  "executable_sha256": "56d7e059437690fa000a1e69a01fee24f1595eed69e9acf287c694098a2eff9a",
+  "executable_bytes": 15534976,
+  "pid": 5268,
+  "source_provenance_from_handoff": {
+    "commits": [
+      "5a5669f",
+      "444f03b"
+    ],
+    "input_count": 99,
+    "aggregate": "9d27cd8592fe291e2513961137bca643f71fd9ef5b419056404015bdbb182e7f",
+    "limit": "No rebuild or independent whole-source manifest verification in this runtime round."
+  },
+  "checks": {
+    "old_shift_command_f_preserves_body_focus": "pass",
+    "option_command_f_focuses_native_search": "pass",
+    "short_query_continuation_and_retained_focus": "pass",
+    "long_query_tail_visible_in_actual_screenshot": "pass",
+    "command_left_reveals_head_in_actual_screenshot": "pass",
+    "command_right_append_tail_full_value_and_visible_tail": "pass",
+    "clear_empty_value_placeholder_and_folder_heading": "pass",
+    "visible_synthetic_note_body_equal_across_8_snapshots": "pass"
+  },
+  "long_query_length": 211,
+  "visual_focus_ring": "fail: blue ring still visibly present; original parity not met",
+  "overall_pixel_parity": "unknown; no pixel comparison in this round",
+  "limits": [
+    "No IME, close lifecycle or full matrix regression repeated.",
+    "No original Notes operation, Android operation, product source edit, build or install.",
+    "No user note creation/deletion/edit; only existing synthetic QA note viewed.",
+    "App exited after real CmdQ; process exit code was not captured."
+  ],
+  "handoff": {
+    "mac_gui": "released after CmdQ and readonly process/window check",
+    "android": "untouched; preserved emulator session73263 must not be terminated",
+    "temporary_awake_assertion": "caffeinate -di -t1200, session72395; bounded 20 minutes, no persistent setting change"
+  },
+  "after_quit_ps_exit": 1,
+  "after_quit_clone_absent_from_collector": true
+}
