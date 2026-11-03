@@ -1,0 +1,223 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_0d38d94686e00e9d3e560b78bb8177a08a0db6dc287551dc5a35e2062f659530\",\"subject\":null,\"provider\":{\"id\":\"frida\",\"name\":\"Frida\",\"version\":null},\"analysis_profile\":null,\"predicate_type\":\"rea.frida.instrumentation-observation\",\"operation\":\"instrument_with_frida\",\"parameters\":{\"session_id\":\"6fdb0aa0-d730-45dd-babc-753c250a841d\",\"device_id\":\"local\",\"mode\":\"attach\",\"pid\":23532},\"raw_result\":null,\"normalized_result\":{\"session_id\":\"6fdb0aa0-d730-45dd-babc-753c250a841d\",\"device_id\":\"local\",\"state\":\"running\",\"target\":\"备忘录 (pid 23532)\",\"pid\":23532,\"mode\":\"attach\",\"scripts\":[{\"script_id\":\"e5d66328-6cdd-4e91-86d0-90658b700c68\",\"name\":\"rea-e5d66328-6cdd-4e91-86d0-90658b700c68\"}],\"messages\":[{\"script_id\":\"e5d66328-6cdd-4e91-86d0-90658b700c68\",\"type\":\"send\",\"payload\":{\"kind\":\"webview\",\"pid\":23532,\"url\":\"tauri://localhost\",\"loading\":0,\"title\":\"备忘录\",\"bounds\":[0,0,1088,660],\"supportsAsync\":1}},{\"script_id\":\"e5d66328-6cdd-4e91-86d0-90658b700c68\",\"type\":\"send\",\"payload\":{\"pid\":23532,\"windows\":[{\"number\":68273,\"title\":\"备忘录\",\"visible\":1,\"key\":1,\"main\":1,\"frame\":[200,182,1088,660],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"wry::wkwebview::class::wry_web_view::WryWebView0.57.1\"},{\"number\":68278,\"title\":\"\",\"visible\":0,\"key\":0,\"main\":0,\"frame\":[0,0,500,500],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"TUINSWindow\"},{\"number\":68280,\"title\":\"Window\",\"visible\":1,\"key\":0,\"main\":0,\"frame\":[206,816,66,20],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"NSLocalWindowSharingWindow\"}],\"errors\":[]}},{\"script_id\":\"e5d66328-6cdd-4e91-86d0-90658b700c68\",\"type\":\"send\",\"payload\":{\"kind\":\"dom-read\",\"value\":{\"at\":\"2026-11-03T17:09:21.959Z\",\"url\":\"tauri://localhost\",\"title\":\"备忘录\",\"viewport\":{\"width\":1088,\"height\":660,\"dpr\":2},\"activeElement\":\"BODY\",\"documentText\":\"\\n快速备忘录\\n3\\n在我的 Mac 上\\n\\n全部备忘录\\n32\\n\\n备忘录\\n0\\n\\nNotes Clone UI\\n3\\n\\nQA 独立验证\\n12\\n\\nFIX01\\n6\\n\\nFIX03 Session Proof\\n6\\n\\nNotes Clone UI 对照\\n2\\n新建文件夹\\n\\n今天\\n\\nQA F07 MAC C02 A 20261104\\n01:00\\nAlpha Beta Gamma C02-HISTORY\\n昨天\\n\\nQA MEDIA 56D7 20261103 2232\\n2026/11/3\\nSynthetic local image and PDF roundtrip.\\n\\nQA Rich HTML\\n2026/11/3\\nBold fragment body Existing plain\\n\\nQA Quote\\n2026/11/3\\nQuoted text After quote\\n\\nQA Structure\\n2026/11/3\\nDash paragraph Second dash Quote paragraph\\n\\nQA Checklist\\n2026/11/3\\nFirst task Second task\\n\\nQA Table Boundary\\n2026/11/3\\nA1 A2 C B2\\n\\nQA Table Basic\\n2026/11/3\\n项目 状态 本地保存 待核对\\n\\nQA Typed Title\\n2026/11/3\\nOnly format these words\\n\\nOnly format these words\\n2026/11/3\\n无更多文本\\n\\n纯文本输入对照\\n2026/11/3\\n第二行正文\\n\\nQA Mac 保存 2026-11-03\\n2026/11/3\\n中文正文跨重启 清单内容 表格中文 第二格\\n2026年11月4日 01:00\\nQA F07 MAC C02 A 20261104\\nAlpha Beta Gamma C02-HISTORY\",\"editors\":[{\"rect\":{\"x\":531,\"y\":82,\"w\":534,\"h\":490},\"connected\":true,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":1,\"head\":1},\"editable\":true,\"focused\":false,\"keys\":[{\"key\":\"996981770\",\"type\":\"Q8\"},{\"key\":\"7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\",\"type\":\"G9\"}]}]},\"error\":null}}],\"messages_truncated\":false,\"source_kind\":\"file\",\"source_path\":\"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-fabafcf-independent-02/mac/native-read.js\",\"source_sha256\":\"7e3f2f1ccf474545f321a2bd2607b5d44e8fa3fe60133a6a4dbe3a05ee469f61\",\"cleanup_error\":null},\"confidence\":\"observed\",\"authority\":\"external-service\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"The target operating system and architecture were not reported by this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_0d38d94686e00e9d3e560b78bb8177a08a0db6dc287551dc5a35e2062f659530",
+    "subject": null,
+    "provider": {
+      "id": "frida",
+      "name": "Frida",
+      "version": null
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.frida.instrumentation-observation",
+    "operation": "instrument_with_frida",
+    "parameters": {
+      "session_id": "6fdb0aa0-d730-45dd-babc-753c250a841d",
+      "device_id": "local",
+      "mode": "attach",
+      "pid": 23532
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "session_id": "6fdb0aa0-d730-45dd-babc-753c250a841d",
+      "device_id": "local",
+      "state": "running",
+      "target": "备忘录 (pid 23532)",
+      "pid": 23532,
+      "mode": "attach",
+      "scripts": [
+        {
+          "script_id": "e5d66328-6cdd-4e91-86d0-90658b700c68",
+          "name": "rea-e5d66328-6cdd-4e91-86d0-90658b700c68"
+        }
+      ],
+      "messages": [
+        {
+          "script_id": "e5d66328-6cdd-4e91-86d0-90658b700c68",
+          "type": "send",
+          "payload": {
+            "kind": "webview",
+            "pid": 23532,
+            "url": "tauri://localhost",
+            "loading": 0,
+            "title": "备忘录",
+            "bounds": [
+              0,
+              0,
+              1088,
+              660
+            ],
+            "supportsAsync": 1
+          }
+        },
+        {
+          "script_id": "e5d66328-6cdd-4e91-86d0-90658b700c68",
+          "type": "send",
+          "payload": {
+            "pid": 23532,
+            "windows": [
+              {
+                "number": 68273,
+                "title": "备忘录",
+                "visible": 1,
+                "key": 1,
+                "main": 1,
+                "frame": [
+                  200,
+                  182,
+                  1088,
+                  660
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "wry::wkwebview::class::wry_web_view::WryWebView0.57.1"
+              },
+              {
+                "number": 68278,
+                "title": "",
+                "visible": 0,
+                "key": 0,
+                "main": 0,
+                "frame": [
+                  0,
+                  0,
+                  500,
+                  500
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "TUINSWindow"
+              },
+              {
+                "number": 68280,
+                "title": "Window",
+                "visible": 1,
+                "key": 0,
+                "main": 0,
+                "frame": [
+                  206,
+                  816,
+                  66,
+                  20
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "NSLocalWindowSharingWindow"
+              }
+            ],
+            "errors": []
+          }
+        },
+        {
+          "script_id": "e5d66328-6cdd-4e91-86d0-90658b700c68",
+          "type": "send",
+          "payload": {
+            "kind": "dom-read",
+            "value": {
+              "at": "2026-11-03T17:09:21.959Z",
+              "url": "tauri://localhost",
+              "title": "备忘录",
+              "viewport": {
+                "width": 1088,
+                "height": 660,
+                "dpr": 2
+              },
+              "activeElement": "BODY",
+              "documentText": "\n快速备忘录\n3\n在我的 Mac 上\n\n全部备忘录\n32\n\n备忘录\n0\n\nNotes Clone UI\n3\n\nQA 独立验证\n12\n\nFIX01\n6\n\nFIX03 Session Proof\n6\n\nNotes Clone UI 对照\n2\n新建文件夹\n\n今天\n\nQA F07 MAC C02 A 20261104\n01:00\nAlpha Beta Gamma C02-HISTORY\n昨天\n\nQA MEDIA 56D7 20261103 2232\n2026/11/3\nSynthetic local image and PDF roundtrip.\n\nQA Rich HTML\n2026/11/3\nBold fragment body Existing plain\n\nQA Quote\n2026/11/3\nQuoted text After quote\n\nQA Structure\n2026/11/3\nDash paragraph Second dash Quote paragraph\n\nQA Checklist\n2026/11/3\nFirst task Second task\n\nQA Table Boundary\n2026/11/3\nA1 A2 C B2\n\nQA Table Basic\n2026/11/3\n项目 状态 本地保存 待核对\n\nQA Typed Title\n2026/11/3\nOnly format these words\n\nOnly format these words\n2026/11/3\n无更多文本\n\n纯文本输入对照\n2026/11/3\n第二行正文\n\nQA Mac 保存 2026-11-03\n2026/11/3\n中文正文跨重启 清单内容 表格中文 第二格\n2026年11月4日 01:00\nQA F07 MAC C02 A 20261104\nAlpha Beta Gamma C02-HISTORY",
+              "editors": [
+                {
+                  "rect": {
+                    "x": 531,
+                    "y": 82,
+                    "w": 534,
+                    "h": 490
+                  },
+                  "connected": true,
+                  "doc": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 1
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "QA F07 MAC C02 A 20261104"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Alpha Beta Gamma C02-HISTORY"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "selection": {
+                    "type": "text",
+                    "anchor": 1,
+                    "head": 1
+                  },
+                  "editable": true,
+                  "focused": false,
+                  "keys": [
+                    {
+                      "key": "996981770",
+                      "type": "Q8"
+                    },
+                    {
+                      "key": "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0",
+                      "type": "G9"
+                    }
+                  ]
+                }
+              ]
+            },
+            "error": null
+          }
+        }
+      ],
+      "messages_truncated": false,
+      "source_kind": "file",
+      "source_path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-fabafcf-independent-02/mac/native-read.js",
+      "source_sha256": "7e3f2f1ccf474545f321a2bd2607b5d44e8fa3fe60133a6a4dbe3a05ee469f61",
+      "cleanup_error": null
+    },
+    "confidence": "observed",
+    "authority": "external-service",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "The target operating system and architecture were not reported by this observation."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

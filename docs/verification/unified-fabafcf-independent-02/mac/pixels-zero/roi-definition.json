@@ -1,0 +1,55 @@
+{
+  "registration": "Before metric calculation; fixed native window-local coordinates, no image alignment or optimization",
+  "mapping": "PNG width/WindowServer logical width = 2 for both captures; clone backingScale and JS DPR independently 2. Original mapping inferred from exact 2784/1392 and 1806/903.",
+  "originalWindowLogical": [
+    1392,
+    903
+  ],
+  "cloneWindowLogical": [
+    1088,
+    660
+  ],
+  "limitations": [
+    "Different overall window sizes and global positions; shared logical rectangles only, not whole window parity.",
+    "Original iCloud sidebar and local clone sidebar intentionally excluded from measured ROIs.",
+    "Native glass material and focus color may depend on system/app accent and wallpaper.",
+    "Cursor and dictation overlay are left in raw captures; no pixels masked or tuned."
+  ],
+  "rois": [
+    {
+      "name": "list-common",
+      "logical": [
+        228,
+        0,
+        508,
+        660
+      ]
+    },
+    {
+      "name": "editor-common",
+      "logical": [
+        508,
+        0,
+        1088,
+        660
+      ]
+    },
+    {
+      "name": "empty-editor-body",
+      "logical": [
+        508,
+        96,
+        1088,
+        660
+      ]
+    }
+  ],
+  "operation": {
+    "channels": "RGB, alpha ignored via convert RGB; no resizing or interpolation",
+    "changedPixel": "any RGB channel differs exactly",
+    "mae": "mean absolute difference over all RGB channels",
+    "max": "maximum absolute single-channel difference",
+    "overlay": "50 percent blend",
+    "diff": "raw absolute RGB difference; no amplification"
+  }
+}

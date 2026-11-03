@@ -1,0 +1,603 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_ca7f7d8779949339111f490f7ed9279b2aed2451bac95b41d6dd52057e533d65\",\"subject\":null,\"provider\":{\"id\":\"frida\",\"name\":\"Frida\",\"version\":null},\"analysis_profile\":null,\"predicate_type\":\"rea.frida.instrumentation-observation\",\"operation\":\"instrument_with_frida\",\"parameters\":{\"session_id\":\"d79b24b5-bf9b-470c-8ca0-a1c3a6637dc0\",\"device_id\":\"local\",\"mode\":\"attach\",\"pid\":23532},\"raw_result\":null,\"normalized_result\":{\"session_id\":\"d79b24b5-bf9b-470c-8ca0-a1c3a6637dc0\",\"device_id\":\"local\",\"state\":\"running\",\"target\":\"备忘录 (pid 23532)\",\"pid\":23532,\"mode\":\"attach\",\"scripts\":[{\"script_id\":\"205f57a9-5ecf-4f8e-8cb1-86ae900c6e61\",\"name\":\"rea-205f57a9-5ecf-4f8e-8cb1-86ae900c6e61\"}],\"messages\":[{\"script_id\":\"205f57a9-5ecf-4f8e-8cb1-86ae900c6e61\",\"type\":\"send\",\"payload\":{\"kind\":\"webview\",\"pid\":23532,\"url\":\"tauri://localhost\",\"loading\":0,\"title\":\"备忘录\",\"bounds\":[0,0,1088,660],\"supportsAsync\":1}},{\"script_id\":\"205f57a9-5ecf-4f8e-8cb1-86ae900c6e61\",\"type\":\"send\",\"payload\":{\"kind\":\"witness-ready\",\"pid\":23532}},{\"script_id\":\"205f57a9-5ecf-4f8e-8cb1-86ae900c6e61\",\"type\":\"send\",\"payload\":{\"pid\":23532,\"windows\":[{\"number\":68273,\"title\":\"备忘录\",\"visible\":1,\"key\":1,\"main\":1,\"frame\":[200,182,1088,660],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"wry::wkwebview::class::wry_web_view::WryWebView0.57.1\"},{\"number\":68278,\"title\":\"\",\"visible\":0,\"key\":0,\"main\":0,\"frame\":[0,0,500,500],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"TUINSWindow\"},{\"number\":68280,\"title\":\"Window\",\"visible\":1,\"key\":0,\"main\":0,\"frame\":[206,816,66,20],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"NSLocalWindowSharingWindow\"}],\"errors\":[]}},{\"script_id\":\"205f57a9-5ecf-4f8e-8cb1-86ae900c6e61\",\"type\":\"send\",\"payload\":{\"kind\":\"dom-read\",\"value\":{\"kind\":\"identity-witness\",\"localClosureOnly\":true,\"started\":1793726140841,\"ended\":1793726195872,\"events\":[{\"elapsed\":2,\"text\":\"\\n快速备忘录\\n3\\n在我的 Mac 上\\n\\n全部备忘录\\n32\\n\\n备忘录\\n0\\n\\nNotes Clone UI\\n3\\n\\nQA 独立验证\\n12\\n\\nFIX01\\n6\\n\\nFIX03 Session Proof\\n6\\n\\nNotes Clone UI 对照\\n2\\n新建文件夹\\n\\n今天\\n\\nQA F07 MAC C02 A 20261104\\n01:13\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\\n昨天\\n\\nQA MEDIA 56D7 20261103 2232\\n2026/11/3\\nSynthetic local image and PDF roundtrip.\\n\\nQA Rich HTML\\n2026/11/3\\nBold fragment body Existing plain\\n\\nQA Quote\\n2026/11/3\\nQuoted text After quote\\n\\nQA Structure\\n2026/11/3\\nDash paragraph Second dash Quote paragraph\\n\\nQA Checklist\\n2026/11/3\\nFirst task Second task\\n\\nQA Table Boundary\\n2026/11/3\\nA1 A2 C B2\\n\\nQA Table Basic\\n2026/11/3\\n项目 状态 本地保存 待核对\\n\\nQA Typed Title\\n2026/11/3\\nOnly format these words\\n\\nOnly format these words\\n2026/11/3\\n无更多文本\\n\\n纯文本输入对照\\n2026/11/3\\n第二行正文\\n\\nQA Mac 保存 2026-11-03\\n2026/11/3\\n中文正文跨重启 清单内容 表格中文 第二格\\n2026年11月4日 01:13\\nQA F07 MAC C02 A 20261104\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\",\"activeElement\":\"DIV\",\"editors\":[{\"keys\":[\"996981770\",\"7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\"],\"visible\":true,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":73,\"head\":73},\"editable\":true,\"focused\":true,\"sameDom\":true,\"sameEditor\":true,\"sameView\":true}],\"held\":{\"connected\":true,\"editable\":true,\"destroyed\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":73,\"head\":73}}},{\"elapsed\":17087,\"text\":\"\\n快速备忘录\\n3\\n在我的 Mac 上\\n\\n全部备忘录\\n32\\n\\n备忘录\\n0\\n\\nNotes Clone UI\\n3\\n\\nQA 独立验证\\n12\\n\\nFIX01\\n6\\n\\nFIX03 Session Proof\\n6\\n\\nNotes Clone UI 对照\\n2\\n新建文件夹\\n\\n今天\\n\\nQA F07 MAC C02 A 20261104\\n01:15\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\\n昨天\\n\\nQA MEDIA 56D7 20261103 2232\\n2026/11/3\\nSynthetic local image and PDF roundtrip.\\n\\nQA Rich HTML\\n2026/11/3\\nBold fragment body Existing plain\\n\\nQA Quote\\n2026/11/3\\nQuoted text After quote\\n\\nQA Structure\\n2026/11/3\\nDash paragraph Second dash Quote paragraph\\n\\nQA Checklist\\n2026/11/3\\nFirst task Second task\\n\\nQA Table Boundary\\n2026/11/3\\nA1 A2 C B2\\n\\nQA Table Basic\\n2026/11/3\\n项目 状态 本地保存 待核对\\n\\nQA Typed Title\\n2026/11/3\\nOnly format these words\\n\\nOnly format these words\\n2026/11/3\\n无更多文本\\n\\n纯文本输入对照\\n2026/11/3\\n第二行正文\\n\\nQA Mac 保存 2026-11-03\\n2026/11/3\\n中文正文跨重启 清单内容 表格中文 第二格\\n2026年11月4日 01:15\\nQA F07 MAC C02 A 20261104\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\",\"activeElement\":\"DIV\",\"editors\":[{\"keys\":[\"996981770\",\"7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\"],\"visible\":true,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":81,\"head\":81},\"editable\":true,\"focused\":false,\"sameDom\":true,\"sameEditor\":true,\"sameView\":true}],\"held\":{\"connected\":true,\"editable\":true,\"destroyed\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":81,\"head\":81}}},{\"elapsed\":17708,\"text\":\"\\n快速备忘录\\n3\\n在我的 Mac 上\\n\\n全部备忘录\\n32\\n\\n备忘录\\n0\\n\\nNotes Clone UI\\n3\\n\\nQA 独立验证\\n12\\n\\nFIX01\\n6\\n\\nFIX03 Session Proof\\n6\\n\\nNotes Clone UI 对照\\n2\\n新建文件夹\\n\\n未找到备忘录\\n\",\"activeElement\":\"BODY\",\"editors\":[{\"keys\":[\"996981770\",\"7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\"],\"visible\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":81,\"head\":81},\"editable\":false,\"focused\":false,\"sameDom\":true,\"sameEditor\":true,\"sameView\":true}],\"held\":{\"connected\":true,\"editable\":false,\"destroyed\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":81,\"head\":81}}},{\"elapsed\":18328,\"text\":\"\\n快速备忘录\\n3\\n在我的 Mac 上\\n\\n全部备忘录\\n32\\n\\n备忘录\\n0\\n\\nNotes Clone UI\\n3\\n\\nQA 独立验证\\n12\\n\\nFIX01\\n6\\n\\nFIX03 Session Proof\\n6\\n\\nNotes Clone UI 对照\\n2\\n新建文件夹\\n\\n今天\\n\\nQA F07 MAC C02 A 20261104\\n01:15\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\\n昨天\\n\\nQA MEDIA 56D7 20261103 2232\\n2026/11/3\\nSynthetic local image and PDF roundtrip.\\n\\nQA Rich HTML\\n2026/11/3\\nBold fragment body Existing plain\\n\\nQA Quote\\n2026/11/3\\nQuoted text After quote\\n\\nQA Structure\\n2026/11/3\\nDash paragraph Second dash Quote paragraph\\n\\nQA Checklist\\n2026/11/3\\nFirst task Second task\\n\\nQA Table Boundary\\n2026/11/3\\nA1 A2 C B2\\n\\nQA Table Basic\\n2026/11/3\\n项目 状态 本地保存 待核对\\n\\nQA Typed Title\\n2026/11/3\\nOnly format these words\\n\\nOnly format these words\\n2026/11/3\\n无更多文本\\n\\n纯文本输入对照\\n2026/11/3\\n第二行正文\\n\\nQA Mac 保存 2026-11-03\\n2026/11/3\\n中文正文跨重启 清单内容 表格中文 第二格\\n2026年11月4日 01:15\\nQA F07 MAC C02 A 20261104\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\",\"activeElement\":\"BODY\",\"editors\":[{\"keys\":[\"996981770\",\"7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\"],\"visible\":true,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":81,\"head\":81},\"editable\":true,\"focused\":false,\"sameDom\":true,\"sameEditor\":true,\"sameView\":true}],\"held\":{\"connected\":true,\"editable\":true,\"destroyed\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":81,\"head\":81}}}],\"final\":{\"elapsed\":55031,\"text\":\"\\n快速备忘录\\n3\\n在我的 Mac 上\\n\\n全部备忘录\\n32\\n\\n备忘录\\n0\\n\\nNotes Clone UI\\n3\\n\\nQA 独立验证\\n12\\n\\nFIX01\\n6\\n\\nFIX03 Session Proof\\n6\\n\\nNotes Clone UI 对照\\n2\\n新建文件夹\\n\\n今天\\n\\nQA F07 MAC C02 A 20261104\\n01:15\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\\n昨天\\n\\nQA MEDIA 56D7 20261103 2232\\n2026/11/3\\nSynthetic local image and PDF roundtrip.\\n\\nQA Rich HTML\\n2026/11/3\\nBold fragment body Existing plain\\n\\nQA Quote\\n2026/11/3\\nQuoted text After quote\\n\\nQA Structure\\n2026/11/3\\nDash paragraph Second dash Quote paragraph\\n\\nQA Checklist\\n2026/11/3\\nFirst task Second task\\n\\nQA Table Boundary\\n2026/11/3\\nA1 A2 C B2\\n\\nQA Table Basic\\n2026/11/3\\n项目 状态 本地保存 待核对\\n\\nQA Typed Title\\n2026/11/3\\nOnly format these words\\n\\nOnly format these words\\n2026/11/3\\n无更多文本\\n\\n纯文本输入对照\\n2026/11/3\\n第二行正文\\n\\nQA Mac 保存 2026-11-03\\n2026/11/3\\n中文正文跨重启 清单内容 表格中文 第二格\\n2026年11月4日 01:15\\nQA F07 MAC C02 A 20261104\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\",\"activeElement\":\"BODY\",\"editors\":[{\"keys\":[\"996981770\",\"7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\"],\"visible\":true,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":81,\"head\":81},\"editable\":true,\"focused\":false,\"sameDom\":true,\"sameEditor\":true,\"sameView\":true}],\"held\":{\"connected\":true,\"editable\":true,\"destroyed\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":81,\"head\":81}}}},\"error\":null}}],\"messages_truncated\":false,\"source_kind\":\"file\",\"source_path\":\"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-fabafcf-independent-02/mac/identity-witness-02.js\",\"source_sha256\":\"babe86205a076d9c9dd3bcf31a4c5b4208c7caa51c031b90490952abaac6b3c1\",\"cleanup_error\":null},\"confidence\":\"observed\",\"authority\":\"external-service\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"The target operating system and architecture were not reported by this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_ca7f7d8779949339111f490f7ed9279b2aed2451bac95b41d6dd52057e533d65",
+    "subject": null,
+    "provider": {
+      "id": "frida",
+      "name": "Frida",
+      "version": null
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.frida.instrumentation-observation",
+    "operation": "instrument_with_frida",
+    "parameters": {
+      "session_id": "d79b24b5-bf9b-470c-8ca0-a1c3a6637dc0",
+      "device_id": "local",
+      "mode": "attach",
+      "pid": 23532
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "session_id": "d79b24b5-bf9b-470c-8ca0-a1c3a6637dc0",
+      "device_id": "local",
+      "state": "running",
+      "target": "备忘录 (pid 23532)",
+      "pid": 23532,
+      "mode": "attach",
+      "scripts": [
+        {
+          "script_id": "205f57a9-5ecf-4f8e-8cb1-86ae900c6e61",
+          "name": "rea-205f57a9-5ecf-4f8e-8cb1-86ae900c6e61"
+        }
+      ],
+      "messages": [
+        {
+          "script_id": "205f57a9-5ecf-4f8e-8cb1-86ae900c6e61",
+          "type": "send",
+          "payload": {
+            "kind": "webview",
+            "pid": 23532,
+            "url": "tauri://localhost",
+            "loading": 0,
+            "title": "备忘录",
+            "bounds": [
+              0,
+              0,
+              1088,
+              660
+            ],
+            "supportsAsync": 1
+          }
+        },
+        {
+          "script_id": "205f57a9-5ecf-4f8e-8cb1-86ae900c6e61",
+          "type": "send",
+          "payload": {
+            "kind": "witness-ready",
+            "pid": 23532
+          }
+        },
+        {
+          "script_id": "205f57a9-5ecf-4f8e-8cb1-86ae900c6e61",
+          "type": "send",
+          "payload": {
+            "pid": 23532,
+            "windows": [
+              {
+                "number": 68273,
+                "title": "备忘录",
+                "visible": 1,
+                "key": 1,
+                "main": 1,
+                "frame": [
+                  200,
+                  182,
+                  1088,
+                  660
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "wry::wkwebview::class::wry_web_view::WryWebView0.57.1"
+              },
+              {
+                "number": 68278,
+                "title": "",
+                "visible": 0,
+                "key": 0,
+                "main": 0,
+                "frame": [
+                  0,
+                  0,
+                  500,
+                  500
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "TUINSWindow"
+              },
+              {
+                "number": 68280,
+                "title": "Window",
+                "visible": 1,
+                "key": 0,
+                "main": 0,
+                "frame": [
+                  206,
+                  816,
+                  66,
+                  20
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "NSLocalWindowSharingWindow"
+              }
+            ],
+            "errors": []
+          }
+        },
+        {
+          "script_id": "205f57a9-5ecf-4f8e-8cb1-86ae900c6e61",
+          "type": "send",
+          "payload": {
+            "kind": "dom-read",
+            "value": {
+              "kind": "identity-witness",
+              "localClosureOnly": true,
+              "started": 1793726140841,
+              "ended": 1793726195872,
+              "events": [
+                {
+                  "elapsed": 2,
+                  "text": "\n快速备忘录\n3\n在我的 Mac 上\n\n全部备忘录\n32\n\n备忘录\n0\n\nNotes Clone UI\n3\n\nQA 独立验证\n12\n\nFIX01\n6\n\nFIX03 Session Proof\n6\n\nNotes Clone UI 对照\n2\n新建文件夹\n\n今天\n\nQA F07 MAC C02 A 20261104\n01:13\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\n昨天\n\nQA MEDIA 56D7 20261103 2232\n2026/11/3\nSynthetic local image and PDF roundtrip.\n\nQA Rich HTML\n2026/11/3\nBold fragment body Existing plain\n\nQA Quote\n2026/11/3\nQuoted text After quote\n\nQA Structure\n2026/11/3\nDash paragraph Second dash Quote paragraph\n\nQA Checklist\n2026/11/3\nFirst task Second task\n\nQA Table Boundary\n2026/11/3\nA1 A2 C B2\n\nQA Table Basic\n2026/11/3\n项目 状态 本地保存 待核对\n\nQA Typed Title\n2026/11/3\nOnly format these words\n\nOnly format these words\n2026/11/3\n无更多文本\n\n纯文本输入对照\n2026/11/3\n第二行正文\n\nQA Mac 保存 2026-11-03\n2026/11/3\n中文正文跨重启 清单内容 表格中文 第二格\n2026年11月4日 01:13\nQA F07 MAC C02 A 20261104\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY",
+                  "activeElement": "DIV",
+                  "editors": [
+                    {
+                      "keys": [
+                        "996981770",
+                        "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0"
+                      ],
+                      "visible": true,
+                      "doc": {
+                        "type": "doc",
+                        "content": [
+                          {
+                            "type": "heading",
+                            "attrs": {
+                              "level": 1
+                            },
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "QA F07 MAC C02 A 20261104"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "selection": {
+                        "type": "text",
+                        "anchor": 73,
+                        "head": 73
+                      },
+                      "editable": true,
+                      "focused": true,
+                      "sameDom": true,
+                      "sameEditor": true,
+                      "sameView": true
+                    }
+                  ],
+                  "held": {
+                    "connected": true,
+                    "editable": true,
+                    "destroyed": false,
+                    "doc": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "heading",
+                          "attrs": {
+                            "level": 1
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "QA F07 MAC C02 A 20261104"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "selection": {
+                      "type": "text",
+                      "anchor": 73,
+                      "head": 73
+                    }
+                  }
+                },
+                {
+                  "elapsed": 17087,
+                  "text": "\n快速备忘录\n3\n在我的 Mac 上\n\n全部备忘录\n32\n\n备忘录\n0\n\nNotes Clone UI\n3\n\nQA 独立验证\n12\n\nFIX01\n6\n\nFIX03 Session Proof\n6\n\nNotes Clone UI 对照\n2\n新建文件夹\n\n今天\n\nQA F07 MAC C02 A 20261104\n01:15\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\n昨天\n\nQA MEDIA 56D7 20261103 2232\n2026/11/3\nSynthetic local image and PDF roundtrip.\n\nQA Rich HTML\n2026/11/3\nBold fragment body Existing plain\n\nQA Quote\n2026/11/3\nQuoted text After quote\n\nQA Structure\n2026/11/3\nDash paragraph Second dash Quote paragraph\n\nQA Checklist\n2026/11/3\nFirst task Second task\n\nQA Table Boundary\n2026/11/3\nA1 A2 C B2\n\nQA Table Basic\n2026/11/3\n项目 状态 本地保存 待核对\n\nQA Typed Title\n2026/11/3\nOnly format these words\n\nOnly format these words\n2026/11/3\n无更多文本\n\n纯文本输入对照\n2026/11/3\n第二行正文\n\nQA Mac 保存 2026-11-03\n2026/11/3\n中文正文跨重启 清单内容 表格中文 第二格\n2026年11月4日 01:15\nQA F07 MAC C02 A 20261104\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote",
+                  "activeElement": "DIV",
+                  "editors": [
+                    {
+                      "keys": [
+                        "996981770",
+                        "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0"
+                      ],
+                      "visible": true,
+                      "doc": {
+                        "type": "doc",
+                        "content": [
+                          {
+                            "type": "heading",
+                            "attrs": {
+                              "level": 1
+                            },
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "QA F07 MAC C02 A 20261104"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "selection": {
+                        "type": "text",
+                        "anchor": 81,
+                        "head": 81
+                      },
+                      "editable": true,
+                      "focused": false,
+                      "sameDom": true,
+                      "sameEditor": true,
+                      "sameView": true
+                    }
+                  ],
+                  "held": {
+                    "connected": true,
+                    "editable": true,
+                    "destroyed": false,
+                    "doc": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "heading",
+                          "attrs": {
+                            "level": 1
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "QA F07 MAC C02 A 20261104"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "selection": {
+                      "type": "text",
+                      "anchor": 81,
+                      "head": 81
+                    }
+                  }
+                },
+                {
+                  "elapsed": 17708,
+                  "text": "\n快速备忘录\n3\n在我的 Mac 上\n\n全部备忘录\n32\n\n备忘录\n0\n\nNotes Clone UI\n3\n\nQA 独立验证\n12\n\nFIX01\n6\n\nFIX03 Session Proof\n6\n\nNotes Clone UI 对照\n2\n新建文件夹\n\n未找到备忘录\n",
+                  "activeElement": "BODY",
+                  "editors": [
+                    {
+                      "keys": [
+                        "996981770",
+                        "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0"
+                      ],
+                      "visible": false,
+                      "doc": {
+                        "type": "doc",
+                        "content": [
+                          {
+                            "type": "heading",
+                            "attrs": {
+                              "level": 1
+                            },
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "QA F07 MAC C02 A 20261104"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "selection": {
+                        "type": "text",
+                        "anchor": 81,
+                        "head": 81
+                      },
+                      "editable": false,
+                      "focused": false,
+                      "sameDom": true,
+                      "sameEditor": true,
+                      "sameView": true
+                    }
+                  ],
+                  "held": {
+                    "connected": true,
+                    "editable": false,
+                    "destroyed": false,
+                    "doc": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "heading",
+                          "attrs": {
+                            "level": 1
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "QA F07 MAC C02 A 20261104"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "selection": {
+                      "type": "text",
+                      "anchor": 81,
+                      "head": 81
+                    }
+                  }
+                },
+                {
+                  "elapsed": 18328,
+                  "text": "\n快速备忘录\n3\n在我的 Mac 上\n\n全部备忘录\n32\n\n备忘录\n0\n\nNotes Clone UI\n3\n\nQA 独立验证\n12\n\nFIX01\n6\n\nFIX03 Session Proof\n6\n\nNotes Clone UI 对照\n2\n新建文件夹\n\n今天\n\nQA F07 MAC C02 A 20261104\n01:15\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\n昨天\n\nQA MEDIA 56D7 20261103 2232\n2026/11/3\nSynthetic local image and PDF roundtrip.\n\nQA Rich HTML\n2026/11/3\nBold fragment body Existing plain\n\nQA Quote\n2026/11/3\nQuoted text After quote\n\nQA Structure\n2026/11/3\nDash paragraph Second dash Quote paragraph\n\nQA Checklist\n2026/11/3\nFirst task Second task\n\nQA Table Boundary\n2026/11/3\nA1 A2 C B2\n\nQA Table Basic\n2026/11/3\n项目 状态 本地保存 待核对\n\nQA Typed Title\n2026/11/3\nOnly format these words\n\nOnly format these words\n2026/11/3\n无更多文本\n\n纯文本输入对照\n2026/11/3\n第二行正文\n\nQA Mac 保存 2026-11-03\n2026/11/3\n中文正文跨重启 清单内容 表格中文 第二格\n2026年11月4日 01:15\nQA F07 MAC C02 A 20261104\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote",
+                  "activeElement": "BODY",
+                  "editors": [
+                    {
+                      "keys": [
+                        "996981770",
+                        "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0"
+                      ],
+                      "visible": true,
+                      "doc": {
+                        "type": "doc",
+                        "content": [
+                          {
+                            "type": "heading",
+                            "attrs": {
+                              "level": 1
+                            },
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "QA F07 MAC C02 A 20261104"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "selection": {
+                        "type": "text",
+                        "anchor": 81,
+                        "head": 81
+                      },
+                      "editable": true,
+                      "focused": false,
+                      "sameDom": true,
+                      "sameEditor": true,
+                      "sameView": true
+                    }
+                  ],
+                  "held": {
+                    "connected": true,
+                    "editable": true,
+                    "destroyed": false,
+                    "doc": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "heading",
+                          "attrs": {
+                            "level": 1
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "QA F07 MAC C02 A 20261104"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "selection": {
+                      "type": "text",
+                      "anchor": 81,
+                      "head": 81
+                    }
+                  }
+                }
+              ],
+              "final": {
+                "elapsed": 55031,
+                "text": "\n快速备忘录\n3\n在我的 Mac 上\n\n全部备忘录\n32\n\n备忘录\n0\n\nNotes Clone UI\n3\n\nQA 独立验证\n12\n\nFIX01\n6\n\nFIX03 Session Proof\n6\n\nNotes Clone UI 对照\n2\n新建文件夹\n\n今天\n\nQA F07 MAC C02 A 20261104\n01:15\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote\n昨天\n\nQA MEDIA 56D7 20261103 2232\n2026/11/3\nSynthetic local image and PDF roundtrip.\n\nQA Rich HTML\n2026/11/3\nBold fragment body Existing plain\n\nQA Quote\n2026/11/3\nQuoted text After quote\n\nQA Structure\n2026/11/3\nDash paragraph Second dash Quote paragraph\n\nQA Checklist\n2026/11/3\nFirst task Second task\n\nQA Table Boundary\n2026/11/3\nA1 A2 C B2\n\nQA Table Basic\n2026/11/3\n项目 状态 本地保存 待核对\n\nQA Typed Title\n2026/11/3\nOnly format these words\n\nOnly format these words\n2026/11/3\n无更多文本\n\n纯文本输入对照\n2026/11/3\n第二行正文\n\nQA Mac 保存 2026-11-03\n2026/11/3\n中文正文跨重启 清单内容 表格中文 第二格\n2026年11月4日 01:15\nQA F07 MAC C02 A 20261104\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote",
+                "activeElement": "BODY",
+                "editors": [
+                  {
+                    "keys": [
+                      "996981770",
+                      "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0"
+                    ],
+                    "visible": true,
+                    "doc": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "heading",
+                          "attrs": {
+                            "level": 1
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "QA F07 MAC C02 A 20261104"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "selection": {
+                      "type": "text",
+                      "anchor": 81,
+                      "head": 81
+                    },
+                    "editable": true,
+                    "focused": false,
+                    "sameDom": true,
+                    "sameEditor": true,
+                    "sameView": true
+                  }
+                ],
+                "held": {
+                  "connected": true,
+                  "editable": true,
+                  "destroyed": false,
+                  "doc": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 1
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "QA F07 MAC C02 A 20261104"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORYQA Quote"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "selection": {
+                    "type": "text",
+                    "anchor": 81,
+                    "head": 81
+                  }
+                }
+              }
+            },
+            "error": null
+          }
+        }
+      ],
+      "messages_truncated": false,
+      "source_kind": "file",
+      "source_path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-fabafcf-independent-02/mac/identity-witness-02.js",
+      "source_sha256": "babe86205a076d9c9dd3bcf31a4c5b4208c7caa51c031b90490952abaac6b3c1",
+      "cleanup_error": null
+    },
+    "confidence": "observed",
+    "authority": "external-service",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "The target operating system and architecture were not reported by this observation."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

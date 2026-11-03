@@ -1,0 +1,69 @@
+{
+  "sourceSizes": {
+    "original": [
+      2784,
+      1806
+    ],
+    "clone": [
+      2176,
+      1320
+    ]
+  },
+  "rois": [
+    {
+      "name": "list-common",
+      "rawPixelBox": [
+        456,
+        0,
+        1016,
+        1320
+      ],
+      "size": [
+        560,
+        1320
+      ],
+      "changedPixels": 105708,
+      "pixels": 739200,
+      "changedFraction": 0.14300324675324674,
+      "mae": 1.5737391774891776,
+      "maxChannel": 223
+    },
+    {
+      "name": "editor-common",
+      "rawPixelBox": [
+        1016,
+        0,
+        2176,
+        1320
+      ],
+      "size": [
+        1160,
+        1320
+      ],
+      "changedPixels": 150374,
+      "pixels": 1531200,
+      "changedFraction": 0.09820663531870429,
+      "mae": 1.553628526645768,
+      "maxChannel": 250
+    },
+    {
+      "name": "empty-editor-body",
+      "rawPixelBox": [
+        1016,
+        192,
+        2176,
+        1320
+      ],
+      "size": [
+        1160,
+        1128
+      ],
+      "changedPixels": 3384,
+      "pixels": 1308480,
+      "changedFraction": 0.002586206896551724,
+      "mae": 0.04482758620689655,
+      "maxChannel": 26
+    }
+  ],
+  "verdict": "NOT PIXEL IDENTICAL; finite shared logical ROI evidence only"
+}

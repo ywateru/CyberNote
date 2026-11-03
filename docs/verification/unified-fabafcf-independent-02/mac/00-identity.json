@@ -1,0 +1,47 @@
+{
+  "at": "2026-11-03T17:08:20.988057+00:00",
+  "bundle": "/private/tmp/notes-f07-audio-mac-candidate02-sealed.app",
+  "bundleAggregate": "b7c114ee6d0ee91c121536c5e8cf96a98221ab3188263a01f2b7d8189ff1c163",
+  "files": [
+    {
+      "path": "Contents/Info.plist",
+      "type": "file",
+      "bytes": 1193,
+      "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3"
+    },
+    {
+      "path": "Contents/MacOS/notes-clone",
+      "type": "file",
+      "bytes": 15534288,
+      "sha256": "5e948ad9647a0ff878471dc213b327ca88628608b877b1f38c1ce6d154171e79"
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    }
+  ],
+  "strictVerifyExit": 0,
+  "strictVerifyOutput": "/private/tmp/notes-f07-audio-mac-candidate02-sealed.app: valid on disk\n/private/tmp/notes-f07-audio-mac-candidate02-sealed.app: satisfies its Designated Requirement\n",
+  "actualProcess": "23532     1 06:47 /private/tmp/notes-f07-audio-mac-candidate02-sealed.app/Contents/MacOS/notes-clone",
+  "sourceHead": "fabafcf9723e400c67fd842f870dad9d4ae79d19",
+  "listedSourceCount": 219,
+  "listedSourceAggregate": "5ca8801e643c187fe2aa2ddcae3b8ba512331a2103bb436d7731efbffc9cab69",
+  "sourceAggregateStatus": "Independently checked exact frozen App.tsx via git show fabafcf and other 218 files; aggregate matches. Current tree App.tsx differs due later extraction; see ../identity-inputs-and-devmanifest.json.",
+  "developerRuntimeManifestMatched": [
+    "README.md",
+    "fixtures-after-suffix.json",
+    "fixtures-before.json",
+    "fixtures-cold.json",
+    "fixtures-redo.json",
+    "fixtures-undo.json",
+    "fixtures-zero-result.json",
+    "handoff.json",
+    "native-action-observations.json",
+    "native-read-probe.js",
+    "native-read-result.json"
+  ],
+  "localSigningOnly": true,
+  "harnessNote": "First readonly identity invocation hit ps sandbox EPERM after bundle/signature checks; this authorized read-only process check rerun succeeds. No UI action or source change from failed identity invocation."
+}

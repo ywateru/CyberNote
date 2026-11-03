@@ -1,0 +1,551 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_dc82eef7f468b336fbf70388bb194772057bd304213ec17d0561fcb13b4223c8\",\"subject\":null,\"provider\":{\"id\":\"frida\",\"name\":\"Frida\",\"version\":null},\"analysis_profile\":null,\"predicate_type\":\"rea.frida.instrumentation-observation\",\"operation\":\"instrument_with_frida\",\"parameters\":{\"session_id\":\"d6b19d23-5c9a-40f5-b6e7-9bcb1501928c\",\"device_id\":\"local\",\"mode\":\"attach\",\"pid\":23532},\"raw_result\":null,\"normalized_result\":{\"session_id\":\"d6b19d23-5c9a-40f5-b6e7-9bcb1501928c\",\"device_id\":\"local\",\"state\":\"running\",\"target\":\"备忘录 (pid 23532)\",\"pid\":23532,\"mode\":\"attach\",\"scripts\":[{\"script_id\":\"1106e712-bc08-4718-86dd-b4cfc1cf2378\",\"name\":\"rea-1106e712-bc08-4718-86dd-b4cfc1cf2378\"}],\"messages\":[{\"script_id\":\"1106e712-bc08-4718-86dd-b4cfc1cf2378\",\"type\":\"send\",\"payload\":{\"kind\":\"webview\",\"pid\":23532,\"url\":\"tauri://localhost\",\"loading\":0,\"title\":\"备忘录\",\"bounds\":[0,0,1088,660],\"supportsAsync\":1}},{\"script_id\":\"1106e712-bc08-4718-86dd-b4cfc1cf2378\",\"type\":\"send\",\"payload\":{\"kind\":\"witness-ready\",\"pid\":23532}},{\"script_id\":\"1106e712-bc08-4718-86dd-b4cfc1cf2378\",\"type\":\"send\",\"payload\":{\"pid\":23532,\"windows\":[{\"number\":68273,\"title\":\"备忘录\",\"visible\":1,\"key\":1,\"main\":1,\"frame\":[200,182,1088,660],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"wry::wkwebview::class::wry_web_view::WryWebView0.57.1\"},{\"number\":68278,\"title\":\"\",\"visible\":0,\"key\":0,\"main\":0,\"frame\":[0,0,500,500],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"TUINSWindow\"},{\"number\":68280,\"title\":\"Window\",\"visible\":1,\"key\":0,\"main\":0,\"frame\":[206,816,66,20],\"backingScale\":2,\"screenFrame\":[0,0,1440,932],\"firstResponderClass\":\"NSLocalWindowSharingWindow\"}],\"errors\":[]}},{\"script_id\":\"1106e712-bc08-4718-86dd-b4cfc1cf2378\",\"type\":\"send\",\"payload\":{\"kind\":\"dom-read\",\"value\":{\"kind\":\"identity-witness\",\"localClosureOnly\":true,\"started\":1793725912274,\"ended\":1793725952299,\"events\":[{\"elapsed\":2,\"text\":\"\\n快速备忘录\\n3\\n在我的 Mac 上\\n\\n全部备忘录\\n32\\n\\n备忘录\\n0\\n\\nNotes Clone UI\\n3\\n\\nQA 独立验证\\n12\\n\\nFIX01\\n6\\n\\nFIX03 Session Proof\\n6\\n\\nNotes Clone UI 对照\\n2\\n新建文件夹\\n\\n今天\\n\\nQA F07 MAC C02 A 20261104\\n01:09\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\\n昨天\\n\\nQA MEDIA 56D7 20261103 2232\\n2026/11/3\\nSynthetic local image and PDF roundtrip.\\n\\nQA Rich HTML\\n2026/11/3\\nBold fragment body Existing plain\\n\\nQA Quote\\n2026/11/3\\nQuoted text After quote\\n\\nQA Structure\\n2026/11/3\\nDash paragraph Second dash Quote paragraph\\n\\nQA Checklist\\n2026/11/3\\nFirst task Second task\\n\\nQA Table Boundary\\n2026/11/3\\nA1 A2 C B2\\n\\nQA Table Basic\\n2026/11/3\\n项目 状态 本地保存 待核对\\n\\nQA Typed Title\\n2026/11/3\\nOnly format these words\\n\\nOnly format these words\\n2026/11/3\\n无更多文本\\n\\n纯文本输入对照\\n2026/11/3\\n第二行正文\\n\\nQA Mac 保存 2026-11-03\\n2026/11/3\\n中文正文跨重启 清单内容 表格中文 第二格\\n2026年11月4日 01:09\\nQA F07 MAC C02 A 20261104\\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\",\"activeElement\":\"DIV\",\"editors\":[{\"keys\":[\"996981770\",\"7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\"],\"visible\":true,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":73,\"head\":73},\"editable\":true,\"focused\":true,\"sameDom\":true,\"sameEditor\":true,\"sameView\":true}],\"held\":{\"connected\":true,\"editable\":true,\"destroyed\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":73,\"head\":73}}},{\"elapsed\":25269,\"text\":\"\\n快速备忘录\\n3\\n在我的 Mac 上\\n\\n全部备忘录\\n32\\n\\n备忘录\\n0\\n\\nNotes Clone UI\\n3\\n\\nQA 独立验证\\n12\\n\\nFIX01\\n6\\n\\nFIX03 Session Proof\\n6\\n\\nNotes Clone UI 对照\\n2\\n新建文件夹\\n\\n昨天\\n\\nQA Quote\\n2026/11/3\\nQuoted text After quote\\nQA 独立验证\\n2026年11月3日 15:06\\nQA Quote\\nQuoted text\\nAfter quote\\n\\n\",\"activeElement\":\"BODY\",\"editors\":[{\"keys\":[\"996981770\",\"7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\"],\"visible\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":73,\"head\":73},\"editable\":false,\"focused\":false,\"sameDom\":true,\"sameEditor\":true,\"sameView\":true},{\"keys\":[\"324591155\",\"79444c2b-0ffc-41f5-8067-64c083aee922-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\"],\"visible\":true,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA Quote\"}]},{\"type\":\"blockquote\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Quoted text\"}]}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"After quote\"}]},{\"type\":\"paragraph\"}]},\"selection\":{\"type\":\"text\",\"anchor\":1,\"head\":1},\"editable\":true,\"focused\":false,\"sameDom\":false,\"sameEditor\":false,\"sameView\":false}],\"held\":{\"connected\":true,\"editable\":false,\"destroyed\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":73,\"head\":73}}}],\"final\":{\"elapsed\":40025,\"text\":\"\\n快速备忘录\\n3\\n在我的 Mac 上\\n\\n全部备忘录\\n32\\n\\n备忘录\\n0\\n\\nNotes Clone UI\\n3\\n\\nQA 独立验证\\n12\\n\\nFIX01\\n6\\n\\nFIX03 Session Proof\\n6\\n\\nNotes Clone UI 对照\\n2\\n新建文件夹\\n\\n昨天\\n\\nQA Quote\\n2026/11/3\\nQuoted text After quote\\nQA 独立验证\\n2026年11月3日 15:06\\nQA Quote\\nQuoted text\\nAfter quote\\n\\n\",\"activeElement\":\"BODY\",\"editors\":[{\"keys\":[\"996981770\",\"7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\"],\"visible\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":73,\"head\":73},\"editable\":false,\"focused\":false,\"sameDom\":true,\"sameEditor\":true,\"sameView\":true},{\"keys\":[\"324591155\",\"79444c2b-0ffc-41f5-8067-64c083aee922-6f893418-eb14-4db7-8609-c75c18652bf9-0-0\"],\"visible\":true,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA Quote\"}]},{\"type\":\"blockquote\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Quoted text\"}]}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"After quote\"}]},{\"type\":\"paragraph\"}]},\"selection\":{\"type\":\"text\",\"anchor\":1,\"head\":1},\"editable\":true,\"focused\":false,\"sameDom\":false,\"sameEditor\":false,\"sameView\":false}],\"held\":{\"connected\":true,\"editable\":false,\"destroyed\":false,\"doc\":{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"QA F07 MAC C02 A 20261104\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\"}]}]},\"selection\":{\"type\":\"text\",\"anchor\":73,\"head\":73}}}},\"error\":null}}],\"messages_truncated\":false,\"source_kind\":\"file\",\"source_path\":\"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-fabafcf-independent-02/mac/identity-witness.js\",\"source_sha256\":\"973518aa009181bed06bdf55538d5e5e840d62689770005fc5a56fedcd5a2747\",\"cleanup_error\":null},\"confidence\":\"observed\",\"authority\":\"external-service\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"The target operating system and architecture were not reported by this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_dc82eef7f468b336fbf70388bb194772057bd304213ec17d0561fcb13b4223c8",
+    "subject": null,
+    "provider": {
+      "id": "frida",
+      "name": "Frida",
+      "version": null
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.frida.instrumentation-observation",
+    "operation": "instrument_with_frida",
+    "parameters": {
+      "session_id": "d6b19d23-5c9a-40f5-b6e7-9bcb1501928c",
+      "device_id": "local",
+      "mode": "attach",
+      "pid": 23532
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "session_id": "d6b19d23-5c9a-40f5-b6e7-9bcb1501928c",
+      "device_id": "local",
+      "state": "running",
+      "target": "备忘录 (pid 23532)",
+      "pid": 23532,
+      "mode": "attach",
+      "scripts": [
+        {
+          "script_id": "1106e712-bc08-4718-86dd-b4cfc1cf2378",
+          "name": "rea-1106e712-bc08-4718-86dd-b4cfc1cf2378"
+        }
+      ],
+      "messages": [
+        {
+          "script_id": "1106e712-bc08-4718-86dd-b4cfc1cf2378",
+          "type": "send",
+          "payload": {
+            "kind": "webview",
+            "pid": 23532,
+            "url": "tauri://localhost",
+            "loading": 0,
+            "title": "备忘录",
+            "bounds": [
+              0,
+              0,
+              1088,
+              660
+            ],
+            "supportsAsync": 1
+          }
+        },
+        {
+          "script_id": "1106e712-bc08-4718-86dd-b4cfc1cf2378",
+          "type": "send",
+          "payload": {
+            "kind": "witness-ready",
+            "pid": 23532
+          }
+        },
+        {
+          "script_id": "1106e712-bc08-4718-86dd-b4cfc1cf2378",
+          "type": "send",
+          "payload": {
+            "pid": 23532,
+            "windows": [
+              {
+                "number": 68273,
+                "title": "备忘录",
+                "visible": 1,
+                "key": 1,
+                "main": 1,
+                "frame": [
+                  200,
+                  182,
+                  1088,
+                  660
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "wry::wkwebview::class::wry_web_view::WryWebView0.57.1"
+              },
+              {
+                "number": 68278,
+                "title": "",
+                "visible": 0,
+                "key": 0,
+                "main": 0,
+                "frame": [
+                  0,
+                  0,
+                  500,
+                  500
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "TUINSWindow"
+              },
+              {
+                "number": 68280,
+                "title": "Window",
+                "visible": 1,
+                "key": 0,
+                "main": 0,
+                "frame": [
+                  206,
+                  816,
+                  66,
+                  20
+                ],
+                "backingScale": 2,
+                "screenFrame": [
+                  0,
+                  0,
+                  1440,
+                  932
+                ],
+                "firstResponderClass": "NSLocalWindowSharingWindow"
+              }
+            ],
+            "errors": []
+          }
+        },
+        {
+          "script_id": "1106e712-bc08-4718-86dd-b4cfc1cf2378",
+          "type": "send",
+          "payload": {
+            "kind": "dom-read",
+            "value": {
+              "kind": "identity-witness",
+              "localClosureOnly": true,
+              "started": 1793725912274,
+              "ended": 1793725952299,
+              "events": [
+                {
+                  "elapsed": 2,
+                  "text": "\n快速备忘录\n3\n在我的 Mac 上\n\n全部备忘录\n32\n\n备忘录\n0\n\nNotes Clone UI\n3\n\nQA 独立验证\n12\n\nFIX01\n6\n\nFIX03 Session Proof\n6\n\nNotes Clone UI 对照\n2\n新建文件夹\n\n今天\n\nQA F07 MAC C02 A 20261104\n01:09\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY\n昨天\n\nQA MEDIA 56D7 20261103 2232\n2026/11/3\nSynthetic local image and PDF roundtrip.\n\nQA Rich HTML\n2026/11/3\nBold fragment body Existing plain\n\nQA Quote\n2026/11/3\nQuoted text After quote\n\nQA Structure\n2026/11/3\nDash paragraph Second dash Quote paragraph\n\nQA Checklist\n2026/11/3\nFirst task Second task\n\nQA Table Boundary\n2026/11/3\nA1 A2 C B2\n\nQA Table Basic\n2026/11/3\n项目 状态 本地保存 待核对\n\nQA Typed Title\n2026/11/3\nOnly format these words\n\nOnly format these words\n2026/11/3\n无更多文本\n\n纯文本输入对照\n2026/11/3\n第二行正文\n\nQA Mac 保存 2026-11-03\n2026/11/3\n中文正文跨重启 清单内容 表格中文 第二格\n2026年11月4日 01:09\nQA F07 MAC C02 A 20261104\nAlpha Beta Gamma C02-HISTORY VERIFY02-HISTORY",
+                  "activeElement": "DIV",
+                  "editors": [
+                    {
+                      "keys": [
+                        "996981770",
+                        "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0"
+                      ],
+                      "visible": true,
+                      "doc": {
+                        "type": "doc",
+                        "content": [
+                          {
+                            "type": "heading",
+                            "attrs": {
+                              "level": 1
+                            },
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "QA F07 MAC C02 A 20261104"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "selection": {
+                        "type": "text",
+                        "anchor": 73,
+                        "head": 73
+                      },
+                      "editable": true,
+                      "focused": true,
+                      "sameDom": true,
+                      "sameEditor": true,
+                      "sameView": true
+                    }
+                  ],
+                  "held": {
+                    "connected": true,
+                    "editable": true,
+                    "destroyed": false,
+                    "doc": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "heading",
+                          "attrs": {
+                            "level": 1
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "QA F07 MAC C02 A 20261104"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "selection": {
+                      "type": "text",
+                      "anchor": 73,
+                      "head": 73
+                    }
+                  }
+                },
+                {
+                  "elapsed": 25269,
+                  "text": "\n快速备忘录\n3\n在我的 Mac 上\n\n全部备忘录\n32\n\n备忘录\n0\n\nNotes Clone UI\n3\n\nQA 独立验证\n12\n\nFIX01\n6\n\nFIX03 Session Proof\n6\n\nNotes Clone UI 对照\n2\n新建文件夹\n\n昨天\n\nQA Quote\n2026/11/3\nQuoted text After quote\nQA 独立验证\n2026年11月3日 15:06\nQA Quote\nQuoted text\nAfter quote\n\n",
+                  "activeElement": "BODY",
+                  "editors": [
+                    {
+                      "keys": [
+                        "996981770",
+                        "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0"
+                      ],
+                      "visible": false,
+                      "doc": {
+                        "type": "doc",
+                        "content": [
+                          {
+                            "type": "heading",
+                            "attrs": {
+                              "level": 1
+                            },
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "QA F07 MAC C02 A 20261104"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "selection": {
+                        "type": "text",
+                        "anchor": 73,
+                        "head": 73
+                      },
+                      "editable": false,
+                      "focused": false,
+                      "sameDom": true,
+                      "sameEditor": true,
+                      "sameView": true
+                    },
+                    {
+                      "keys": [
+                        "324591155",
+                        "79444c2b-0ffc-41f5-8067-64c083aee922-6f893418-eb14-4db7-8609-c75c18652bf9-0-0"
+                      ],
+                      "visible": true,
+                      "doc": {
+                        "type": "doc",
+                        "content": [
+                          {
+                            "type": "heading",
+                            "attrs": {
+                              "level": 1
+                            },
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "QA Quote"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "blockquote",
+                            "content": [
+                              {
+                                "type": "paragraph",
+                                "content": [
+                                  {
+                                    "type": "text",
+                                    "text": "Quoted text"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "After quote"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "paragraph"
+                          }
+                        ]
+                      },
+                      "selection": {
+                        "type": "text",
+                        "anchor": 1,
+                        "head": 1
+                      },
+                      "editable": true,
+                      "focused": false,
+                      "sameDom": false,
+                      "sameEditor": false,
+                      "sameView": false
+                    }
+                  ],
+                  "held": {
+                    "connected": true,
+                    "editable": false,
+                    "destroyed": false,
+                    "doc": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "heading",
+                          "attrs": {
+                            "level": 1
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "QA F07 MAC C02 A 20261104"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "selection": {
+                      "type": "text",
+                      "anchor": 73,
+                      "head": 73
+                    }
+                  }
+                }
+              ],
+              "final": {
+                "elapsed": 40025,
+                "text": "\n快速备忘录\n3\n在我的 Mac 上\n\n全部备忘录\n32\n\n备忘录\n0\n\nNotes Clone UI\n3\n\nQA 独立验证\n12\n\nFIX01\n6\n\nFIX03 Session Proof\n6\n\nNotes Clone UI 对照\n2\n新建文件夹\n\n昨天\n\nQA Quote\n2026/11/3\nQuoted text After quote\nQA 独立验证\n2026年11月3日 15:06\nQA Quote\nQuoted text\nAfter quote\n\n",
+                "activeElement": "BODY",
+                "editors": [
+                  {
+                    "keys": [
+                      "996981770",
+                      "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc-6f893418-eb14-4db7-8609-c75c18652bf9-0-0"
+                    ],
+                    "visible": false,
+                    "doc": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "heading",
+                          "attrs": {
+                            "level": 1
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "QA F07 MAC C02 A 20261104"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "selection": {
+                      "type": "text",
+                      "anchor": 73,
+                      "head": 73
+                    },
+                    "editable": false,
+                    "focused": false,
+                    "sameDom": true,
+                    "sameEditor": true,
+                    "sameView": true
+                  },
+                  {
+                    "keys": [
+                      "324591155",
+                      "79444c2b-0ffc-41f5-8067-64c083aee922-6f893418-eb14-4db7-8609-c75c18652bf9-0-0"
+                    ],
+                    "visible": true,
+                    "doc": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "heading",
+                          "attrs": {
+                            "level": 1
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "QA Quote"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "blockquote",
+                          "content": [
+                            {
+                              "type": "paragraph",
+                              "content": [
+                                {
+                                  "type": "text",
+                                  "text": "Quoted text"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "After quote"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "paragraph"
+                        }
+                      ]
+                    },
+                    "selection": {
+                      "type": "text",
+                      "anchor": 1,
+                      "head": 1
+                    },
+                    "editable": true,
+                    "focused": false,
+                    "sameDom": false,
+                    "sameEditor": false,
+                    "sameView": false
+                  }
+                ],
+                "held": {
+                  "connected": true,
+                  "editable": false,
+                  "destroyed": false,
+                  "doc": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 1
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "QA F07 MAC C02 A 20261104"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Alpha Beta Gamma C02-HISTORY VERIFY02-HISTORY"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "selection": {
+                    "type": "text",
+                    "anchor": 73,
+                    "head": 73
+                  }
+                }
+              }
+            },
+            "error": null
+          }
+        }
+      ],
+      "messages_truncated": false,
+      "source_kind": "file",
+      "source_path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-fabafcf-independent-02/mac/identity-witness.js",
+      "source_sha256": "973518aa009181bed06bdf55538d5e5e840d62689770005fc5a56fedcd5a2747",
+      "cleanup_error": null
+    },
+    "confidence": "observed",
+    "authority": "external-service",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "The target operating system and architecture were not reported by this observation."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}
