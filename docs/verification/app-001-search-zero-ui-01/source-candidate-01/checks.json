@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-04",
+  "baseline": "7ef7975c26021051dd1041b40eb8af570b88bd84",
+  "commands": [
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/check-search-zero-ui.mjs",
+      "exitCode": 0,
+      "passed": 14
+    },
+    {
+      "command": "node scripts/check-search-selection.mjs",
+      "exitCode": 0,
+      "passed": 7
+    },
+    {
+      "command": "node scripts/check-native-toolbar.mjs",
+      "exitCode": 0,
+      "passed": 12
+    },
+    {
+      "command": "pnpm exec prettier --check src/App.tsx scripts/check-search-zero-ui.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "nativeCompileOrRustTargetUsed": false,
+  "appBuildExecuted": false,
+  "guiExecuted": false,
+  "deviceExecuted": false,
+  "pixelAcceptance": "not-run",
+  "independentReview": "pending"
+}

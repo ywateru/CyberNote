@@ -301,7 +301,9 @@ static NSPoint contentOffsetFor(NSString *action) {
         button.contentTintColor=[item[@"selected"] boolValue]?NSColor.systemYellowColor:NSColor.labelColor;
     }
     self.title.stringValue=state[@"folderTitle"];[self.title setAccessibilityLabel:state[@"folderTitle"]];
-    self.count.stringValue=[NSString stringWithFormat:@"%@ 个备忘录",state[@"folderCount"]];
+    BOOL zeroSearch=[state[@"folderTitle"] isEqual:@"搜索"] && [state[@"folderCount"] unsignedLongLongValue]==0
+        && hasSearch && [searchState[@"value"] length]>0;
+    self.count.stringValue=zeroSearch?@"无结果":[NSString stringWithFormat:@"%@ 个备忘录",state[@"folderCount"]];
     [self.count setAccessibilityLabel:self.count.stringValue];
     if(hasSearch) {self.search.enabled=[searchState[@"enabled"] boolValue];
         if(![self.search.stringValue isEqual:searchState[@"value"]]) self.search.stringValue=searchState[@"value"];}

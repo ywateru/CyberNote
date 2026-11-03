@@ -1,0 +1,160 @@
+{
+  "source": {
+    "path": "docs/verification/unified-fabafcf-independent-02/mac/pixels-zero/list-common-original.png",
+    "bytes": 24585,
+    "sha256": "0e5df9a70a5cb6a6799b2ec42190b0c5837ee0a42d5bd1bd7365ebfa8931dccf"
+  },
+  "axSource": {
+    "path": "docs/verification/unified-fabafcf-independent-02/mac/pixels-zero/original-zero.ax.txt",
+    "bytes": 3238,
+    "sha256": "80d3aa895bb3b629c2c12e7334f6084f9f7c033608b872fb957fc255e4193ed0"
+  },
+  "registration": "Existing fixed list crop from window logical x=228..508, backing scale=2; no alignment or masking",
+  "threshold": "max RGB < 150, half-open ink bounds; does not recover font metadata",
+  "ink": [
+    {
+      "name": "title",
+      "sampleRoiPixels": [
+        0,
+        0,
+        300,
+        54
+      ],
+      "darkInkBoundingBoxPixels": [
+        41,
+        27,
+        89,
+        51
+      ],
+      "logicalAtScale2": [
+        20.5,
+        13.5,
+        44.5,
+        25.5
+      ]
+    },
+    {
+      "name": "subtitle",
+      "sampleRoiPixels": [
+        0,
+        54,
+        300,
+        90
+      ],
+      "darkInkBoundingBoxPixels": [
+        41,
+        59,
+        104,
+        78
+      ],
+      "logicalAtScale2": [
+        20.5,
+        29.5,
+        52.0,
+        39.0
+      ]
+    },
+    {
+      "name": "section",
+      "sampleRoiPixels": [
+        0,
+        105,
+        350,
+        175
+      ],
+      "darkInkBoundingBoxPixels": [
+        33,
+        130,
+        119,
+        158
+      ],
+      "logicalAtScale2": [
+        16.5,
+        65.0,
+        59.5,
+        79.0
+      ]
+    }
+  ],
+  "separatorSamplesAtX280Pixels": [
+    {
+      "y": 179,
+      "rgb": [
+        254,
+        254,
+        254
+      ]
+    },
+    {
+      "y": 180,
+      "rgb": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "y": 181,
+      "rgb": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "y": 182,
+      "rgb": [
+        241,
+        241,
+        241
+      ]
+    },
+    {
+      "y": 183,
+      "rgb": [
+        221,
+        221,
+        221
+      ]
+    },
+    {
+      "y": 184,
+      "rgb": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "y": 185,
+      "rgb": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "y": 186,
+      "rgb": [
+        255,
+        255,
+        255
+      ]
+    }
+  ],
+  "candidateCss": {
+    "nativeReservedTopLogical": 52,
+    "sectionHeight": 40,
+    "paddingTop": 10,
+    "paddingHorizontal": 16,
+    "fontSize": 15,
+    "fontWeight": 600,
+    "lineHeight": 20,
+    "borderBottom": 0.5
+  },
+  "limitations": [
+    "Image confirms ink extents and separator sample, not exact font/linebox metadata. CSS values are a finite calibration starting point.",
+    "No candidate runtime render or same-geometry pixel result. Native title font/frame unchanged.",
+    "Prior original and clone window sizes differ; existing ROI cannot establish whole-window parity."
+  ]
+}

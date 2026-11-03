@@ -503,6 +503,15 @@ function App() {
             : b.updatedAt - a.updatedAt),
     );
   const desktopSearch = !mobile && !separate && !!query;
+  const desktopSearchZero =
+    desktopSearch &&
+    view === "list" &&
+    !loading &&
+    !synchronizing &&
+    !syncError &&
+    !accessSuspended.length &&
+    !accessGate.state?.operationId &&
+    listed.length === 0;
   const noteId = projectSearchNote({
     searching: desktopSearch,
     baseNoteId,
@@ -1707,6 +1716,14 @@ function App() {
       : ws.notes.filter((n) => n.folderId === id).length;
   const folderLabel =
     folderId === "all" ? "全部备忘录" : currentFolder?.name || "备忘录";
+  const listTitle = desktopSearchZero
+    ? "搜索"
+    : query
+      ? "搜索结果"
+      : folderLabel;
+  const listSubtitle = desktopSearchZero
+    ? "无结果"
+    : `${listed.length}个备忘录`;
   const startLong = (callback: () => void) => {
     longPress.current = setTimeout(callback, 520);
   };
@@ -2762,7 +2779,7 @@ function App() {
             : "threeColumn",
         sidebar,
         settings,
-        folderTitle: query ? "搜索结果" : folderLabel,
+        folderTitle: listTitle,
         folderCount: listed.length,
         query,
         searchAck: nativeSearchAck,
@@ -2992,8 +3009,8 @@ function App() {
                   </IconButton>
                 )}
                 <div className="folder-heading">
-                  <strong>{query ? "搜索结果" : folderLabel}</strong>
-                  <span>{listed.length}个备忘录</span>
+                  <strong>{listTitle}</strong>
+                  <span>{listSubtitle}</span>
                 </div>
                 <IconButton
                   label="显示选项"
@@ -3033,6 +3050,8 @@ function App() {
         >
           {loading ? (
             <div className="empty-state">正在打开备忘录…</div>
+          ) : desktopSearchZero ? (
+            <div className="search-zero-section">备忘录</div>
           ) : listed.length === 0 ? (
             <div className="empty-state">
               {query || filter ? "未找到备忘录" : "无备忘录"}
