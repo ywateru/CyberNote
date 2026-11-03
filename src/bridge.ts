@@ -168,7 +168,11 @@ export async function action<T = Workspace>(
     ].includes(String(a.type));
     const value = await invoke<T>("workspace_action", {
       action: a,
-      expected: accessGate.expected(),
+      expected: accessGate.expected(
+        a.type === "recoverConflictCopy" && typeof a.id === "string"
+          ? a.id
+          : undefined,
+      ),
     });
     return accept(
       value,

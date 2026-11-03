@@ -274,6 +274,59 @@ impl Store {
             .as_str()
             .ok_or_else(|| err("invalid", "缺少操作类型"))?;
         match op {
+            "recoverConflictCopy" => {
+                let source_id = str_field(&a, "id")?;
+                let mut copy = self.note(source_id)?;
+                if copy.locked || self.attachments()?.iter().any(|x| x.note_id == source_id) {
+                    return Err(err(
+                        "unsupported",
+                        "锁定或含附件的备忘录暂不能另存冲突副本；未保存内容仍保留，请保持窗口打开",
+                    ));
+                }
+                if copy.deleted_at.is_some() {
+                    return Err(err("deleted", "此备忘录已移到最近删除，未保存内容仍保留"));
+                }
+                let baseline = a["revision"]
+                    .as_i64()
+                    .ok_or_else(|| err("invalid", "缺少冲突版本"))?;
+                if baseline >= copy.revision {
+                    return Err(err("invalid", "当前没有可另存的旧版本冲突"));
+                }
+                let document = a
+                    .get("document")
+                    .ok_or_else(|| err("invalid", "缺少文档"))?
+                    .clone();
+                self.validate_document(&document, &copy)?;
+                let text = doc_text(&document);
+                copy.id = id();
+                copy.document = document;
+                copy.title = text
+                    .lines()
+                    .next()
+                    .filter(|x| !x.trim().is_empty())
+                    .unwrap_or("新备忘录")
+                    .chars()
+                    .take(150)
+                    .collect();
+                copy.plain_text = text;
+                copy.created_at = now();
+                copy.updated_at = copy.created_at;
+                copy.pinned = false;
+                copy.original_folder_id = None;
+                copy.revision = 1;
+                // One SQLite statement commits the validated new note. The
+                // peer's confirmed source row is never rewritten or rebased.
+                self.db.execute(
+                    "INSERT INTO notes(id,folder_id,body,revision)VALUES(?1,?2,?3,?4)",
+                    params![
+                        copy.id,
+                        copy.folder_id,
+                        serde_json::to_string(&copy)?,
+                        copy.revision
+                    ],
+                )?;
+                return Ok(json!(copy));
+            }
             "createNote" => {
                 let folder_id = a["folderId"].as_str().unwrap_or("default");
                 let f = self.folder(folder_id)?;
@@ -779,6 +832,148 @@ mod tests {
         s.action(json!({"type":"unlockNote","id":nid,"password":"abcdef"}))
             .unwrap();
         assert_eq!(s.visible(s.note(nid).unwrap()).unwrap().document, sample());
+    }
+    #[test]
+    fn conflict_copy_validates_and_never_changes_the_confirmed_source() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(dir.path()).unwrap();
+        let created = store.action(json!({"type":"createNote"})).unwrap();
+        let id = created["id"].as_str().unwrap();
+        store
+            .action(json!({"type":"saveNote","id":id,"revision":0,"document":sample()}))
+            .unwrap();
+        let before = serde_json::to_value(store.note(id).unwrap()).unwrap();
+        let bad =
+            json!({"type":"doc","content":[{"type":"paragraph","content":[{"type":"paragraph"}]}]});
+        assert_eq!(
+            store
+                .action(json!({"type":"recoverConflictCopy","id":id,"revision":0,"document":bad}))
+                .unwrap_err()
+                .code,
+            "archive_invalid"
+        );
+        assert_eq!(
+            store
+                .action(
+                    json!({"type":"recoverConflictCopy","id":id,"revision":1,"document":sample()})
+                )
+                .unwrap_err()
+                .code,
+            "invalid"
+        );
+        assert_eq!(store.notes().unwrap().len(), 1);
+        let pending = json!({"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"PENDING LOCAL COPY"}]}]});
+        let copy = store
+            .action(json!({"type":"recoverConflictCopy","id":id,"revision":0,"document":pending}))
+            .unwrap();
+        assert_ne!(copy["id"], id);
+        assert_eq!(copy["document"], pending);
+        assert_eq!(copy["revision"], 1);
+        assert_eq!(copy["folderId"], before["folderId"]);
+        assert_eq!(
+            serde_json::to_value(store.note(id).unwrap()).unwrap(),
+            before
+        );
+        drop(store);
+        let reopened = Store::open(dir.path()).unwrap();
+        assert_eq!(
+            serde_json::to_value(reopened.note(id).unwrap()).unwrap(),
+            before
+        );
+        assert_eq!(
+            reopened
+                .note(copy["id"].as_str().unwrap())
+                .unwrap()
+                .document,
+            pending
+        );
+    }
+    #[test]
+    fn conflict_copy_rejects_locked_and_attachment_sources_without_a_new_note() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(dir.path()).unwrap();
+        let created = store.action(json!({"type":"createNote"})).unwrap();
+        let id = created["id"].as_str().unwrap();
+        store
+            .action(json!({"type":"saveNote","id":id,"revision":0,"document":sample()}))
+            .unwrap();
+        store
+            .action(json!({"type":"lockNote","id":id,"password":"abcdef"}))
+            .unwrap();
+        // Correct unlock still cannot accidentally downgrade a protected copy.
+        store
+            .action(json!({"type":"unlockNote","id":id,"password":"abcdef"}))
+            .unwrap();
+        let before = serde_json::to_value(store.note(id).unwrap()).unwrap();
+        assert_eq!(
+            store
+                .action(
+                    json!({"type":"recoverConflictCopy","id":id,"revision":0,"document":sample()})
+                )
+                .unwrap_err()
+                .code,
+            "unsupported"
+        );
+        assert_eq!(
+            serde_json::to_value(store.note(id).unwrap()).unwrap(),
+            before
+        );
+        assert_eq!(store.notes().unwrap().len(), 1);
+        let created = store.action(json!({"type":"createNote"})).unwrap();
+        let attachment_id = created["id"].as_str().unwrap();
+        store
+            .action(json!({"type":"saveNote","id":attachment_id,"revision":0,"document":sample()}))
+            .unwrap();
+        store
+            .store_attachment(
+                attachment_id,
+                "test.txt",
+                "text/plain",
+                b"synthetic".to_vec(),
+            )
+            .unwrap();
+        let before = serde_json::to_value(store.note(attachment_id).unwrap()).unwrap();
+        assert_eq!(store.action(json!({"type":"recoverConflictCopy","id":attachment_id,"revision":0,"document":sample()})).unwrap_err().code,"unsupported");
+        assert_eq!(
+            serde_json::to_value(store.note(attachment_id).unwrap()).unwrap(),
+            before
+        );
+        assert_eq!(store.notes().unwrap().len(), 2);
+        assert_eq!(store.attachments().unwrap().len(), 1);
+    }
+    #[test]
+    fn conflict_copy_sqlite_failure_keeps_source_and_creates_nothing() {
+        use rusqlite::hooks::{AuthAction, AuthContext, Authorization};
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(dir.path()).unwrap();
+        let created = store.action(json!({"type":"createNote"})).unwrap();
+        let id = created["id"].as_str().unwrap();
+        store
+            .action(json!({"type":"saveNote","id":id,"revision":0,"document":sample()}))
+            .unwrap();
+        let before = serde_json::to_value(store.note(id).unwrap()).unwrap();
+        store
+            .db
+            .authorizer(Some(|ctx: AuthContext<'_>| match ctx.action {
+                AuthAction::Insert {
+                    table_name: "notes",
+                } => Authorization::Deny,
+                _ => Authorization::Allow,
+            }));
+        assert_eq!(
+            store
+                .action(
+                    json!({"type":"recoverConflictCopy","id":id,"revision":0,"document":sample()})
+                )
+                .unwrap_err()
+                .code,
+            "database"
+        );
+        assert_eq!(
+            serde_json::to_value(store.note(id).unwrap()).unwrap(),
+            before
+        );
+        assert_eq!(store.notes().unwrap().len(), 1);
     }
     #[test]
     fn checkpoint_failure_after_durable_lock_commits_authorization_boundary() {

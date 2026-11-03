@@ -7,6 +7,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { type Editor, type JSONContent } from "@tiptap/react";
+import { SaveRevisions } from "./save-revisions";
 import { exit, onBackButtonPress } from "@tauri-apps/api/app";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
@@ -236,7 +237,7 @@ function App() {
   const [record, setRecord] = useState(false);
   const [mobile, setMobile] = useState(window.innerWidth < 700 && !separate);
   const queues = useRef(new Map<string, Promise<unknown>>());
-  const revisions = useRef(new Map<string, number>());
+  const revisions = useRef(new SaveRevisions());
   const externalVersions = useRef(new Map<string, number>());
   const pendingDocs = useRef(new Map<string, JSONContent>());
   const fileInput = useRef<HTMLInputElement>(null);
@@ -267,8 +268,8 @@ function App() {
       .map((n) => n.id);
     if (changed.length) clearSensitive.current(changed);
     const notes = data.notes.map((n) => {
-      revisions.current.set(n.id, n.revision);
       const pending = pendingDocs.current.get(n.id);
+      revisions.current.observe(n.id, n.revision, !!pending);
       const old = previous.notes.find((old) => old.id === n.id);
       if (
         !pending &&
@@ -408,9 +409,9 @@ function App() {
             id,
             saveIntent: await ticket,
             document: doc,
-            revision: revisions.current.get(id) || 0,
+            revision: revisions.current.expected(id),
           });
-          revisions.current.set(id, n.revision);
+          revisions.current.confirmed(id, n.revision);
           if (pendingDocs.current.get(id) === doc) {
             pendingDocs.current.delete(id);
             saveFailures.current.delete(id);
@@ -424,13 +425,78 @@ function App() {
         })
         .catch((e) => {
           saveFailures.current.set(id, e);
-          fail(e);
+          if ((e as { code?: string }).code === "conflict")
+            setError(
+              "其他窗口已保存新的内容。本窗口更改仍保留，重试不会覆盖已保存版本。普通无附件的备忘录可另存为新备忘录。",
+            );
+          else fail(e);
         })
         .finally(() => setSaving((v) => Math.max(0, v - 1)));
       queues.current.set(id, next);
     },
     [fail],
   );
+  const saveConflictCopy = async () => {
+    const id = noteId;
+    if (!id || blockedNotes.current.has(id)) return;
+    const frozen = editor && !editor.isDestroyed ? editor : null;
+    const editable = frozen?.isEditable;
+    blockedNotes.current.add(id);
+    frozen?.setEditable(false, false);
+    setSaving((v) => v + 1);
+    let copyConfirmed = false;
+    try {
+      await queues.current.get(id);
+      const doc = pendingDocs.current.get(id);
+      const source = wsRef.current.notes.find((n) => n.id === id);
+      if (
+        !doc ||
+        !source ||
+        (saveFailures.current.get(id) as { code?: string })?.code !== "conflict"
+      )
+        throw Error("没有可另存的冲突内容");
+      if (
+        source.locked ||
+        wsRef.current.attachments.some((a) => a.noteId === id)
+      )
+        throw Error(
+          "锁定或含附件的备忘录暂不能另存冲突副本。未保存内容仍保留，请保持此窗口打开。",
+        );
+      const copy = await action<Note>({
+        type: "recoverConflictCopy",
+        id,
+        revision: revisions.current.expected(id),
+        document: doc,
+      });
+      copyConfirmed = true;
+      const data = await loadWorkspace();
+      // Only a confirmed, durable new note releases the original pending body.
+      if (pendingDocs.current.get(id) === doc) {
+        pendingDocs.current.delete(id);
+        saveFailures.current.delete(id);
+      }
+      revisions.current.confirmed(copy.id, copy.revision);
+      hydrate(data);
+      setNoteId(copy.id);
+      setGalleryEditor(true);
+      setPage("editor");
+      setError("");
+      setNotice(
+        "本窗口内容已另存为新备忘录，原备忘录保留其他窗口的已保存内容。",
+      );
+    } catch (e) {
+      if (copyConfirmed)
+        setError(
+          "副本已经保存，但列表同步失败。本窗口内容仍保留，请先重试同步并核对新备忘录。",
+        );
+      else fail(e);
+    } finally {
+      blockedNotes.current.delete(id);
+      if (frozen && !frozen.isDestroyed && editable !== undefined)
+        frozen.setEditable(editable, false);
+      setSaving((v) => Math.max(0, v - 1));
+    }
+  };
   useEffect(() => {
     const hidden = () => {
       if (document.visibilityState === "hidden") {
@@ -730,7 +796,7 @@ function App() {
       const fid =
         folderId === "all" || folderId === "trash" ? "default" : folderId;
       const n = await action<Note>({ type: "createNote", folderId: fid });
-      revisions.current.set(n.id, n.revision);
+      revisions.current.confirmed(n.id, n.revision);
       setWs((prev) => ({ ...prev, notes: [n, ...prev.notes] }));
       setNoteId(n.id);
       setPage("editor");
@@ -1722,6 +1788,20 @@ function App() {
           >
             重试
           </button>
+          {noteId &&
+            pendingDocs.current.has(noteId) &&
+            (saveFailures.current.get(noteId) as { code?: string })?.code ===
+              "conflict" &&
+            (current?.locked ||
+            ws.attachments.some((a) => a.noteId === noteId) ? (
+              <span>
+                锁定或含附件的冲突内容暂不能安全另存，请保持此窗口打开。
+              </span>
+            ) : (
+              <button onClick={() => void saveConflictCopy()}>
+                将本窗口内容另存为新备忘录
+              </button>
+            ))}
           <button aria-label="关闭错误" onClick={() => setError("")}>
             <X size={17} />
           </button>

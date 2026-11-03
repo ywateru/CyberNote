@@ -14,6 +14,17 @@ const compiled = ts.transpileModule(source, {
 const { AccessGate, AccessChanged } = await import(
   `data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`
 );
+const revisionSource = await readFile("src/save-revisions.ts", "utf8");
+const { SaveRevisions } = await import(
+  `data:text/javascript;base64,${Buffer.from(
+    ts.transpileModule(revisionSource, {
+      compilerOptions: {
+        target: ts.ScriptTarget.ES2022,
+        module: ts.ModuleKind.ESNext,
+      },
+    }).outputText,
+  ).toString("base64")}`
+);
 const state = (
   epoch = 1,
   noteEpoch = 0,
@@ -120,6 +131,35 @@ test("authorization token carries process and targeted note epoch", () => {
 });
 test("no snapshot means no authorized action token", () => {
   assert.throws(() => new AccessGate().expected("note"), AccessChanged);
+});
+test("focus snapshot cannot advance an unsaved document baseline", () => {
+  const revisions = new SaveRevisions();
+  revisions.observe("note", 8, false);
+  revisions.observe("note", 9, true);
+  assert.equal(revisions.expected("note"), 8);
+});
+test("a confirmed own save advances the following queued save", () => {
+  const revisions = new SaveRevisions();
+  revisions.observe("note", 8, false);
+  revisions.confirmed("note", 9);
+  revisions.observe("note", 10, true);
+  assert.equal(revisions.expected("note"), 9);
+});
+test("conflict plus another hydrate leaves later queued saves and retry on the old baseline", () => {
+  const revisions = new SaveRevisions();
+  revisions.observe("note", 8, false);
+  // The failed save produces no confirmed revision. Subsequent queued saves
+  // and an explicit ordinary retry must still conflict with backend revision9.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    revisions.observe("note", 9, true);
+    assert.equal(revisions.expected("note"), 8);
+  }
+});
+test("a clean editor can adopt a trusted external revision", () => {
+  const revisions = new SaveRevisions();
+  revisions.observe("note", 8, false);
+  revisions.observe("note", 9, false);
+  assert.equal(revisions.expected("note"), 9);
 });
 await mkdir("artifacts/access-boundary", { recursive: true });
 await writeFile(

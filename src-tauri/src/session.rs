@@ -210,6 +210,9 @@ impl Session {
         }
         let unlock = action["type"] == "unlockNote";
         let id = action["id"].as_str().unwrap_or_default().to_string();
+        if action["type"] == "recoverConflictCopy" {
+            self.sensitive(&id, token)?;
+        }
         let value = self.store.action(action)?;
         let event = if unlock {
             self.bump(std::slice::from_ref(&id));

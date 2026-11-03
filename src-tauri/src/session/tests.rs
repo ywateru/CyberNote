@@ -337,3 +337,36 @@ fn live_schema_rejects_invalid_saves_without_changing_revision_or_body() {
         assert_eq!(s.store.note(&id).unwrap().document,before);
     }
 }
+
+#[test]
+fn conflict_copy_obeys_live_session_source_epoch_and_prepare() {
+    let (_dir, mut s, id) = setup();
+    let action = json!({"type":"recoverConflictCopy","id":id,"revision":0,"document":document("LOCAL PENDING COPY")});
+    let before = s.workspace().unwrap();
+    let mut stale = token(&s, Some(&id));
+    stale.note_epoch = Some(999);
+    assert!(s.ordinary(action.clone(), &stale).is_err());
+    assert_eq!(s.workspace().unwrap(), before);
+    let mut stale = token(&s, Some(&id));
+    stale.epoch = 999;
+    assert!(s.ordinary(action.clone(), &stale).is_err());
+    let op = begin(&mut s, json!({"type":"deleteNote","id":id}));
+    assert!(s.ordinary(action.clone(), &token(&s, Some(&id))).is_err());
+    s.acknowledge(&op, "main", false).unwrap();
+    let (result, event) = s.finish(&op, &windows(), false).unwrap();
+    assert!(result.is_err());
+    assert_eq!(event["phase"], "abort");
+    let copy = s.ordinary(action.clone(), &token(&s, Some(&id))).unwrap().0;
+    assert_ne!(copy["id"], id);
+    assert_eq!(
+        s.store.note(&id).unwrap().document,
+        document("PRIVATE INITIAL")
+    );
+    assert_eq!(copy["document"], document("LOCAL PENDING COPY"));
+    let old = token(&s, Some(&id));
+    commit(&mut s, json!({"type":"deleteNote","id":id}));
+    let count = s.store.notes().unwrap().len();
+    assert!(s.ordinary(action.clone(), &old).is_err());
+    assert!(s.ordinary(action, &token(&s, Some(&id))).is_err());
+    assert_eq!(s.store.notes().unwrap().len(), count);
+}

@@ -46,6 +46,7 @@ paperStyle 合法值为 plain、lines-small、lines-medium、lines-large、grid-
 | `load_workspace` | 无 | 文件夹、已授权文档、附件元数据、设置及 access 快照；屏障目标正文脱敏 |
 | `register_save_intent` | noteId、intent、expected | Rust注入真实调用窗口；保存入队时预登记当前note epoch，prepare后不接受目标新登记 |
 | `workspace_action` | `action: {type, ...}`、expected | 通用变更检查进程会话/全局epoch；saveNote须带登记的saveIntent，按真实窗口及note epoch检查；返回值带access |
+| `workspace_action:recoverConflictCopy` | 源id、本窗旧revision、document、带源noteEpoch的expected | 显式冲突恢复；Session实时权限/屏障检查，Store仅允许未锁、未删、无附件源，完整验证后单INSERT创建新ID，原已确认笔记不改 |
 | `acknowledge_access` | operationId、success | Rust注入真实窗口；未完成的目标保存不得成功ACK |
 | `read_note_text` | id、expected | 执行时检查实时授权与屏障，返回title/text及access；拷贝/分享统一使用 |
 | `store_attachment` | noteId、name、mime、Base64 data、expected | 受管本地附件元数据；100 MB 上限；实时授权/屏障检查 |
@@ -62,6 +63,8 @@ Rust 错误应结构化：code/message，UI 显示错误并保留未保存内容
 Rust Session拥有随机进程sessionId、全局epoch与逐笔记epoch，Store.keys是唯一解锁授权。renderer不保留独立unlocked集合。notes-access只广播prepare/commit/abort、操作ID、目标ID、真实参与窗口及access元数据，不带正文/密码/钥匙。设置锁、移除锁、关闭全部锁、删除笔记/文件夹、永久删除和归档导入均先冻结目标，真实窗口集合来自AppHandle.webview_windows，调用窗口身份由Tauri注入，不能通过action自报。
 
 prepare后新读取脱敏、目标新保存登记拒绝；prepare前登记的保存可以继续执行，窗口严格等待队列且确认pendingDocs与保存失败集合均空后才ACK。Rust也拒绝带未完成intent的成功ACK，保存失败直接使当前屏障失败。异步workspace_action/import_archive将10秒有界Condvar等待放在spawn_blocking中，等待时释放Store mutex且离开GUI线程。任何失败ACK、保存冲突、超时或参与窗口消失均abort，不撤销旧授权、不丢弃pending编辑；已成功排空的保存仍持久保留。abort恢复prepare前editor的editable，包含纸张页冻结状态。
+
+未保存编辑链的revision基线只由自身成功保存确认推进；focus/其他hydrate即使观察到更新revision，只要有pending文档就不能替旧正文重基线。冲突后后续排队保存与普通“重试”仍携带旧基线，由真实Store继续拒绝，保留最新pending内容。显式“将本窗口内容另存为新备忘录”只为普通无附件笔记提供恢复：先冻结本窗Editor并等待自身队列，Rust检查真实源权限/epoch和旧revision，复用文档schema校验，单条INSERT创建新ID，保留源已确认版本。收到持久成功并完成可信列表同步后才清原pending/失败；任一失败保留原编辑器和未保存内容。锁定或含附件源在UI与Rust均拒绝副本恢复，避免解密降级或附件归属变化。这是本项目的工程冲突恢复契约，尚未宣称与原版交互一致。
 
 全部ACK后才执行变更、提升目标epoch、撤销目标钥匙，再从权威Store重新生成响应；commit立即destroy受影响Editor及历史，清正文/预览/搜索/find、纸张/格式书签、绘画/录音/媒体目标。原先进行中的保存响应只确认revision，不回填正文；读取与变更响应经进程、epoch、renderer generation检查，失效结果不进入缓存。启动先订阅事件再取快照，重新聚焦/回前台先遮挡旧内容再同步；同步失败继续遮挡并提供重试，事件丢失后仍以可信快照恢复。系统剪贴板或用户已经明确交给系统分享的副本不在撤销契约中，不读取/清理用户剪贴板，不等待系统分享无限结束。
 
