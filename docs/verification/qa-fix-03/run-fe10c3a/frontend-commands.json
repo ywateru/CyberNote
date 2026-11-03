@@ -1,0 +1,32 @@
+[
+  {
+    "name": "schema",
+    "command": [
+      "pnpm",
+      "test:schema"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.8184728622436523,
+    "tail": "\n> notes-clone@0.1.0 test:schema /Users/water/work/2026/Apple-Notes-Clone\n> node scripts/check-editor-schema.mjs\n\nActual Editor schema matches embedded manifest; 65 document cases checked. Result: /Users/water/work/2026/Apple-Notes-Clone/artifacts/editor-schema/result.json\n"
+  },
+  {
+    "name": "access",
+    "command": [
+      "pnpm",
+      "test:access"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.6885650157928467,
+    "tail": "\n> notes-clone@0.1.0 test:access /Users/water/work/2026/Apple-Notes-Clone\n> node scripts/check-access-boundary.mjs\n\n12 production access response boundary cases passed.\n"
+  },
+  {
+    "name": "editor",
+    "command": [
+      "pnpm",
+      "test:editor"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.8272860050201416,
+    "tail": "\n> notes-clone@0.1.0 test:editor /Users/water/work/2026/Apple-Notes-Clone\n> node scripts/check-editor-actions.mjs\n\nActual Editor schema matches embedded manifest; 65 document cases checked. Result: /Users/water/work/2026/Apple-Notes-Clone/artifacts/editor-schema/result.json\nReal schema/state/history: exact table conversion, selection, one Undo/Redo and outside-table boundary passed.\n"
+  }
+]

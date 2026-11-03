@@ -1,0 +1,119 @@
+{
+  "commit": "fe10c3a",
+  "scope": "Probe completed while developer explicitly held Rust unchanged; verifier then released Rust before collecting this post-run snapshot",
+  "coordination": [
+    "developer: now only App/new SaveRevisions/script edits; Rust not changed; waiting for verifier probe completion",
+    "verifier: probe compile/run completed; developer may now change Rust",
+    "post-release snapshot: Store now changed for recoverConflictCopy; no new probe run against this tree"
+  ],
+  "files": [
+    {
+      "path": "src-tauri/src/session.rs",
+      "frozenSha256": "0e5ae129c71b93f4207bc1b2e55162836b6efd50159710f6ea2118db276e0905",
+      "currentSha256": "0e5ae129c71b93f4207bc1b2e55162836b6efd50159710f6ea2118db276e0905",
+      "matchesNow": true
+    },
+    {
+      "path": "src-tauri/src/store.rs",
+      "frozenSha256": "1e0e71c8de3f95d0a0ad1b59edd7c4fc84c6b96b8aa3b01380a28c4ea934f59f",
+      "currentSha256": "233a6954f82539e496e75f0e2164586062cdd85ff10e558f16be8f1556d584e8",
+      "matchesNow": false
+    },
+    {
+      "path": "src-tauri/src/store/archive.rs",
+      "frozenSha256": "960ad7d72de6ba85214d773876b00778384087a605d847511bee9685a55f1cd1",
+      "currentSha256": "960ad7d72de6ba85214d773876b00778384087a605d847511bee9685a55f1cd1",
+      "matchesNow": true
+    },
+    {
+      "path": "src-tauri/src/store/archive/document.rs",
+      "frozenSha256": "ec1f8c79f56d0d871a5bd57be7307833b13b49ef604555cace4ebc993d347e3b",
+      "currentSha256": "ec1f8c79f56d0d871a5bd57be7307833b13b49ef604555cace4ebc993d347e3b",
+      "matchesNow": true
+    },
+    {
+      "path": "src-tauri/src/store/archive/document-schema.json",
+      "frozenSha256": "3a2e8cefd25ddf5438fbb81f3cae3ba7f10ec0d13c61b7ff3810636fcff6199c",
+      "currentSha256": "3a2e8cefd25ddf5438fbb81f3cae3ba7f10ec0d13c61b7ff3810636fcff6199c",
+      "matchesNow": true
+    },
+    {
+      "path": "src-tauri/Cargo.lock",
+      "frozenSha256": "6769eb1a942563f697fbfc8010d89cbaba90bba1a0789e3d286c04ff80e8522f",
+      "currentSha256": "6769eb1a942563f697fbfc8010d89cbaba90bba1a0789e3d286c04ff80e8522f",
+      "matchesNow": true
+    }
+  ],
+  "directDependencyVersions": {
+    "serde": {
+      "probe": [
+        "1.0.229"
+      ],
+      "production": [
+        "1.0.229"
+      ]
+    },
+    "serde_json": {
+      "probe": [
+        "1.0.154"
+      ],
+      "production": [
+        "1.0.154"
+      ]
+    },
+    "rusqlite": {
+      "probe": [
+        "0.32.1"
+      ],
+      "production": [
+        "0.32.1"
+      ]
+    },
+    "uuid": {
+      "probe": [
+        "1.29.0"
+      ],
+      "production": [
+        "1.29.0"
+      ]
+    },
+    "base64": {
+      "probe": [
+        "0.22.1"
+      ],
+      "production": [
+        "0.21.7",
+        "0.22.1",
+        "0.23.1"
+      ]
+    },
+    "aes-gcm": {
+      "probe": [
+        "0.10.3"
+      ],
+      "production": [
+        "0.10.3"
+      ]
+    },
+    "argon2": {
+      "probe": [
+        "0.5.3"
+      ],
+      "production": [
+        "0.5.3"
+      ]
+    },
+    "rand": {
+      "probe": [
+        "0.8.8"
+      ],
+      "production": [
+        "0.8.8"
+      ]
+    }
+  },
+  "binary": {
+    "bytes": 6422688,
+    "sha256": "cc211ca65f7e8f9b4dc48f27160111e5c6305bc36aa7e68a57a4fdf853a6726b"
+  }
+}

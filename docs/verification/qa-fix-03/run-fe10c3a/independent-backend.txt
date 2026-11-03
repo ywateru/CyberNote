@@ -1,0 +1,98 @@
+     Locking 75 packages to latest compatible versions
+      Adding base64 v0.22.1 (available: v0.23.1)
+      Adding rand v0.8.8 (available: v0.10.3)
+      Adding rusqlite v0.32.1 (available: v0.37.0)
+   Compiling libc v0.2.191
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling once_cell v1.21.4
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling bitflags v2.13.2
+   Compiling memchr v2.8.3
+   Compiling smallvec v1.16.4
+   Compiling ahash v0.8.12
+   Compiling hashbrown v0.14.5
+   Compiling hashlink v0.9.1
+   Compiling rusqlite v0.32.1
+   Compiling getrandom v0.2.17
+   Compiling cpufeatures v0.2.17
+   Compiling getrandom v0.4.3
+   Compiling uuid v1.29.0
+   Compiling rand_core v0.6.4
+   Compiling crypto-common v0.1.7
+   Compiling password-hash v0.5.0
+   Compiling rand_chacha v0.3.1
+   Compiling universal-hash v0.5.1
+   Compiling cipher v0.4.4
+   Compiling digest v0.10.7
+   Compiling aead v0.5.2
+   Compiling rand v0.8.8
+   Compiling polyval v0.6.2
+   Compiling blake2 v0.10.6
+   Compiling aes v0.8.4
+   Compiling ctr v0.9.2
+   Compiling ghash v0.5.1
+   Compiling argon2 v0.5.3
+   Compiling aes-gcm v0.10.3
+   Compiling syn v3.0.9
+   Compiling serde_derive v1.0.229
+   Compiling notes-fix03-independent-probe v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/qa-fix-03/probe)
+warning: fields `window` and `token` are never read
+  --> ../../../../src-tauri/src/session.rs:26:5
+   |
+25 | struct SaveIntent {
+   |        ---------- fields in this struct
+26 |     window: String,
+   |     ^^^^^^
+27 |     note: String,
+28 |     token: Token,
+   |     ^^^^^
+   |
+   = note: `SaveIntent` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `allowed_saves` is never read
+  --> ../../../../src-tauri/src/session.rs:35:5
+   |
+30 | pub struct Pending {
+   |            ------- field in this struct
+...
+35 |     allowed_saves: HashSet<String>,
+   |     ^^^^^^^^^^^^^
+
+warning: methods `save`, `acknowledge`, and `ready` are never used
+   --> ../../../../src-tauri/src/session.rs:146:12
+    |
+ 47 | impl Session {
+    | ------------ methods in this implementation
+...
+146 |     pub fn save(&mut self, window: &str, mut action: Value) -> Result<Value> {
+    |            ^^^^
+...
+290 |     pub fn acknowledge(&mut self, operation: &str, window: &str, success: bool) -> Result<()> {
+    |            ^^^^^^^^^^^
+...
+309 |     pub fn ready(&self) -> bool {
+    |            ^^^^^
+
+warning: methods `attachment_note`, `store_attachment`, and `read_attachment` are never used
+   --> ../../../../src-tauri/src/store.rs:245:19
+    |
+105 | impl Store {
+    | ---------- methods in this implementation
+...
+245 |     pub(crate) fn attachment_note(&self, aid: &str) -> Result<String> {
+    |                   ^^^^^^^^^^^^^^^
+...
+600 |     pub fn store_attachment(
+    |            ^^^^^^^^^^^^^^^^
+...
+653 |     pub fn read_attachment(&self, aid: &str) -> Result<Value> {
+    |            ^^^^^^^^^^^^^^^
+
+warning: `notes-fix03-independent-probe` (bin "notes-fix03-independent-probe") generated 4 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.89s
+     Running `src-tauri/target/debug/notes-fix03-independent-probe /Users/water/work/2026/Apple-Notes-Clone/docs/verification/qa-fix-03/run-fe10c3a`
+6 independent backend checks passed

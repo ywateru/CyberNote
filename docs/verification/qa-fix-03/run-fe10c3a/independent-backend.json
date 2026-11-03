@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "code": "archive_invalid",
+      "name": "invalid-structure: reject before authorization, preserve raw row and other valid authorization",
+      "pass": true
+    },
+    {
+      "code": "archive_invalid",
+      "name": "invalid-drawing-attribute: reject before authorization, preserve raw row and other valid authorization",
+      "pass": true
+    },
+    {
+      "name": "wrong password preserves all existing authorization/workspace",
+      "pass": true
+    },
+    {
+      "name": "archive exports only sealed body even when valid keys loaded",
+      "pass": true
+    },
+    {
+      "name": "closeLocks rejects old/current sensitive access, save registration, plaintext read and removeLock",
+      "pass": true
+    },
+    {
+      "name": "cold Store starts without keys, valid rich/drawing decrypt exact frozen documents",
+      "pass": true
+    }
+  ],
+  "privateRoot": "/private/tmp/qa-fix03-backend-faf02fa2-4658-4d77-8b6a-47ce55d6af59",
+  "scope": "Real production Session/Store/schema/crypto/archive in isolated synthetic root; no GUI/Tauri invoke or barrier scheduling proof",
+  "status": "pass"
+}
