@@ -222,6 +222,7 @@ static NSPoint contentOffsetFor(NSString *action) {
     self.search.placeholderString=@"搜索";self.search.sendsSearchStringImmediately=YES;self.search.sendsWholeSearchString=NO;
     self.search.recentsAutosaveName=nil;self.search.maximumRecents=0;self.search.searchMenuTemplate=nil;
     self.search.bordered=NO;self.search.bezeled=NO;self.search.drawsBackground=NO;
+    [(NSSearchFieldCell *)self.search.cell setScrollable:YES];
     [self.search setAccessibilityLabel:@"搜索备忘录"];self.search.target=self;self.search.action=@selector(searchCommitted:);
     [self.contents[@"search"] addSubview:self.search];
     [self.window.contentView addSubview:self.root positioned:NSWindowAbove relativeTo:nil];
