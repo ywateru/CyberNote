@@ -1,0 +1,42 @@
+{
+  "at": "2026-11-03T22:10:08.288040+00:00",
+  "args": [
+    "/usr/bin/sample",
+    "39665",
+    "1",
+    "10",
+    "-file",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/candidate03-mac-ax-timeout-diagnosis-01/sample.txt"
+  ],
+  "durationRequestedSeconds": 1,
+  "samplingIntervalRequestedMilliseconds": 10,
+  "hardDeadlineSeconds": 20,
+  "immediateBefore": {
+    "at": "2026-11-03T22:10:08.287887+00:00",
+    "psExit": 0,
+    "psStderr": "",
+    "processes": [
+      {
+        "pid": 39665,
+        "start": "Wed Nov 4 03:42:28 2026",
+        "executable": "/private/tmp/notes-unified-candidate03-mac-sealed.app/Contents/MacOS/notes-clone",
+        "executableSha256": "f11565151c018ae43173b2f2b1d5b223f0e29b2150fc179a34645a74cb0d3c56",
+        "executableFileIdentity": {
+          "bytes": 15575712,
+          "inode": 27894846,
+          "mtimeNs": 1793733662370589289
+        }
+      }
+    ]
+  },
+  "timedOut": false,
+  "targetSignalSentBySupervisor": false,
+  "elapsedSeconds": 1.913334625,
+  "exit": 0,
+  "stdout": "",
+  "stderr": "Sampling process 39665 for 1 second with 10 milliseconds of run time between samples\nSampling completed, processing symbols...\nSample analysis of process 39665 written to file /Users/water/work/2026/Apple-Notes-Clone/docs/verification/candidate03-mac-ax-timeout-diagnosis-01/sample.txt\n",
+  "afterIdentityMatches": true,
+  "sampleWritten": true,
+  "sampleBytes": 249889,
+  "sampleSha256": "4a537c56e333828b1e7102e71430f7bfba31cd5961d29e679eea92664b51c3fb"
+}

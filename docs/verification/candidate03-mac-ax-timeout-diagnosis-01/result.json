@@ -1,0 +1,151 @@
+{
+  "at": "2026-11-03T22:11:37.179194+00:00",
+  "status": "PASS_LIMITED_READ_ONLY_DIAGNOSTIC",
+  "identity": {
+    "pid": 39665,
+    "start": "Wed Nov 4 03:42:28 2026",
+    "executable": "/private/tmp/notes-unified-candidate03-mac-sealed.app/Contents/MacOS/notes-clone",
+    "executableSha256": "f11565151c018ae43173b2f2b1d5b223f0e29b2150fc179a34645a74cb0d3c56",
+    "executableFileIdentity": {
+      "bytes": 15575712,
+      "inode": 27894846,
+      "mtimeNs": 1793733662370589289
+    }
+  },
+  "identityMatchesBeforeAfter": true,
+  "sample": {
+    "exit": 0,
+    "requestedSeconds": 1,
+    "intervalMilliseconds": 10,
+    "supervisorElapsedSeconds": 1.913334625,
+    "hardDeadlineSeconds": 20,
+    "timedOut": false,
+    "bytes": 249889,
+    "sha256": "4a537c56e333828b1e7102e71430f7bfba31cd5961d29e679eea92664b51c3fb",
+    "timeLocal": "2026-11-04 06:10:08.336 +0800",
+    "mainThreadSamples": 88,
+    "mainThreadLeafSamples": 88
+  },
+  "observations": [
+    {
+      "source": "sample.txt",
+      "line": 14,
+      "text": "OS Version:      macOS 26.4 (25E246)"
+    },
+    {
+      "source": "sample.txt",
+      "line": 24,
+      "text": "    88 Thread_36210998   DispatchQueue_1: com.apple.main-thread  (serial)"
+    },
+    {
+      "source": "sample.txt",
+      "line": 51,
+      "text": "    +                                                     88 WebKit::NetworkProcessProxy::didReceiveMessage(IPC::Connection&, IPC::Decoder&)  (in WebKit) + 584  [0x1b8b1c1e4]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 53,
+      "text": "    +                                                         88 WebKit::DownloadProxy::didReceiveMessage(IPC::Connection&, IPC::Decoder&)  (in WebKit) + 884  [0x1b8a7ad50]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 54,
+      "text": "    +                                                           88 WebKit::DownloadProxy::decideDestinationWithSuggestedFilename(WebCore::ResourceResponse const&, WTF::String&&, WTF::CompletionHandler<void (WTF::String, WebKit::SandboxExtensionHandle, WebKit::AllowOverwrite, WebKit::UseDownloadPlaceholder, WTF::URL const&, WebKit::SandboxExtensionHandle, std::span<unsigned char const, 18446744073709551615ul>, std::span<unsigned char const, 18446744073709551615ul>)>&&)  (in WebKit) + 460  [0x1b92a4590]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 55,
+      "text": "    +                                                             88 DownloadClient::decideDestinationWithSuggestedFilename(WebKit::DownloadProxy&, WebCore::ResourceResponse const&, WTF::String const&, WTF::CompletionHandler<void (WebKit::AllowOverwrite, WTF::String)>&&)  (in WebKit) + 452  [0x1b8bbe0d8]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 56,
+      "text": "    +                                                               88 _RNvNtNtCsfLRgkOOM9XJ_3wry9wkwebview8download15download_policy  (in notes-clone) + 924  [0x10549ddc0]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 61,
+      "text": "    +                                                                         88 WebKit::SandboxExtension::createHandle(WTF::StringView, WebKit::SandboxExtensionType)  (in WebKit) + 80  [0x1b8b50ec8]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 62,
+      "text": "    +                                                                           88 WebKit::SandboxExtension::createHandleWithoutResolvingPath(WTF::StringView, WebKit::SandboxExtensionType)  (in WebKit) + 116  [0x1b8b50c7c]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 63,
+      "text": "    +                                                                             88 WebKit::SandboxExtensionImpl::create(char const*, WebKit::SandboxExtensionType, std::optional<audit_token_t>, WTF::OptionSet<WebKit::SandboxExtensionFlags, (WTF::ConcurrencyTag)0>)  (in WebKit) + 100  [0x1b8b50438]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 64,
+      "text": "    +                                                                               88 WebKit::SandboxExtensionImpl::sandboxExtensionForType(char const*, WebKit::SandboxExtensionType, std::optional<audit_token_t>, WTF::OptionSet<WebKit::SandboxExtensionFlags, (WTF::ConcurrencyTag)0>)  (in WebKit) + 152  [0x1b8b506c8]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 65,
+      "text": "    +                                                                                 88 _sandbox_extension_issue  (in libsystem_sandbox.dylib) + 136  [0x19bdea03c]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 66,
+      "text": "    +                                                                                   88 __mac_syscall  (in libsystem_kernel.dylib) + 8  [0x18e395730]"
+    },
+    {
+      "source": "sample.txt",
+      "line": 307,
+      "text": "        mach_msg2_trap  (in libsystem_kernel.dylib)        176"
+    },
+    {
+      "source": "sample.txt",
+      "line": 308,
+      "text": "        __mac_syscall  (in libsystem_kernel.dylib)        88"
+    }
+  ],
+  "mainThreadObservedChain": [
+    "AppKit NSApplication event loop",
+    "WTF RunLoop incoming message dispatch",
+    "WebKit NetworkProcessProxy::didReceiveMessage",
+    "WebKit DownloadProxy::decideDestinationWithSuggestedFilename",
+    "DownloadClient::decideDestinationWithSuggestedFilename",
+    "wry::wkwebview::download::download_policy",
+    "WebKit SandboxExtension::createHandle/createHandleWithoutResolvingPath",
+    "WebKit SandboxExtensionImpl::sandboxExtensionForType",
+    "_sandbox_extension_issue",
+    "__mac_syscall"
+  ],
+  "classification": {
+    "observed": "All 88 main-thread sample observations share the download-destination/sandbox-extension syscall stack. The leaf is __mac_syscall, not an idle event-loop receive.",
+    "inference": "This is a narrow clue for a main-thread stall or wait during download destination sandbox-extension handling, consistent with but not proving the earlier binding timeout.",
+    "schedulerWaitingOrRunning": "UNKNOWN; the user-space sample does not identify scheduler state or prove syscall progress.",
+    "deadlock": "NOT ESTABLISHED; no lock ownership/wait cycle is proven.",
+    "fullAXTimeoutCause": "UNKNOWN; no AX request was issued or correlated during this sample.",
+    "TCCOrPermissionCause": "UNKNOWN; no denial/error result or permission state collected. A TCC binary-image inventory entry is not a permission-denial stack.",
+    "downloadURLOrDestinationPath": "UNKNOWN; arguments were not collected.",
+    "relationToHistoricalAttachmentClick": "POSSIBLE INFERENCE ONLY; call names fit download handling, but no causality or exact earlier click linkage proven.",
+    "candidate04SameIssue": "NOT ESTABLISHED; candidate04 was not sampled or launched.",
+    "totalSyscallDuration": "UNKNOWN; sample window and supervisor elapsed time are not total syscall duration.",
+    "allPendingOperationsEmpty": "UNKNOWN; no such completeness check was performed."
+  },
+  "boundaryActions": [
+    "Read-only matching process identity/path/start and executable hash",
+    "One system sample of exact candidate03 process for 1 second",
+    "Read-only identity recheck",
+    "Offline reading and reporting of resulting evidence"
+  ],
+  "notPerformed": [
+    "GUI/CUA/AX binding",
+    "screenshots or screen permission requests",
+    "original Apple Notes attach or observation",
+    "signal/quit/force-stop/kill to target",
+    "new app launch",
+    "debugger or injection fallback",
+    "TCC or permission changes",
+    "app note/database/attachment data file reads",
+    "build/test or host target use"
+  ],
+  "initialProbeLimitation": "Restricted pgrep could not get process list (sysmond service not found); this was UNKNOWN, not target absence. Authorized read-only ps then established exactly one matching target.",
+  "helperDeadline": "Only the sample helper would be killed on 20-second timeout. Timeout did not occur and neither helper nor target received a supervisor termination signal.",
+  "ownership": "diagnostic complete; no GUI or process ownership retained; no follow-up sampling"
+}

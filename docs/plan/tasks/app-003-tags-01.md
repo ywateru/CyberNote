@@ -1,7 +1,7 @@
 ---
 id: app-003-tags-01
 scope: committed-document-tags-and-local-tag-browser
-status: ready
+status: in-progress
 depends-on: []
 ---
 
@@ -36,12 +36,17 @@ depends-on: []
 4. Rust 对 mark 属性、所在文本和连续跨度做严格验证，旧文档/归档仍可读；导出/导入后的真实 Editor 可打开。按官方限制，有已提交标签不能加锁，锁定笔记即使已解锁也不转换为真实标签；保存/解密不接受锁定文档中的 noteTag。TS/Rust 纯文本投影应逐字相同。
 5. 生产输入法路径不得抢占组合输入、选区或其他编辑器；提交与撤销为同一可解释的历史动作，不在只读状态或异步晚事件中写正文。实现若需要细化契约，先回报 root，不自行新增未说明的行为。
 
+### 独审阻塞修复（2026-11-04）
+
+首个源码候选 `96584b74d2356c361e897ed5ad275b15823c21a0` 在真实生产 App/Editor 接真实 Rust Store 的独立检查中，组合输入改动已有标签内部文字时发送了旧 name/新跨度，得到 `archive_invalid` 并显示真实保存错误。输入结束后成功不能关闭这个中间错误。按架构新增的 Editor 出站合法快照契约窄修：保全全部 preedit 文字和其他格式，在副本上移除非法 noteTag，保持活动输入法、Editor、历史、授权与保存队列。检查其他生产 Editor 快照与附件/OCR正文 ACK 的表示关系，外部非法文档继续由 Rust 拒绝。先冻结独审报告，再由开发修复并重新独审；当前不合入产品源码，不标 SOURCE-READY。
+
 ## verification
 
 执行现有依赖下 typecheck、真实 Editor schema crosscheck，以及有意义的生产边界检查。至少覆盖：
 
 - 真 Editor 输入与 plain paste `#UI对照` 后真实空格事务，形成 mark；普通 `#`、`a#b`、代码/URL、过长/无效名字不变。
 - Undo/Redo、修改已提交标签内部/删除字符、带其他格式分片、光标在标签前后、组合输入、两 Editor 身份隔离；不丢正文/空格，不让旧目标写入新笔记。
+- 真 App/Editor 的组合未结束时，实际保存到真实 Store 的快照合法且含全部当前文字，活动 Editor/DOM/选区与 composing 不被副本改写；后续输入、compositionend、Undo/Redo、正文 ACK 与重启一致。旧失败保留，不能只证明最终保存成功或只测纯投影函数。
 - 实际 App 目录/单标签筛选，多个引用去重、删最后引用、最近删除/恢复、搜索叠加、无结果、清除/普通目录切换；失败状态不展示“已保存”。
 - 真 Rust 临时 Store save/reopen、合法与恶意 mark 拒绝且旧 revision/正文不变、TS/Rust text 一致；有标签 lock 拒绝、已解锁锁定笔记保留普通 #text、普通文档 closeLocks/unlock 不变；正确密码解密伪造 tag 密文时拒绝且无钥匙/正文/revision/密文变化。访问删除屏障仍需证明仅源标签名清除。
 - 完整归档导出、同 ID 重复导入、旧无标签归档与坏标签归档原子拒绝，使用现有 FIX-00 路径，不能只测试独立解析器。
