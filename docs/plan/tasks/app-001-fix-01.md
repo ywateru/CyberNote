@@ -39,3 +39,5 @@ src/App.tsx、src/Editor.tsx、src/style.css、src/types.ts、src-tauri/src/stor
 ## verification
 
 开发者完成类型/构建验证并提交；由独立 verify 走 Mac画廊进出、手机格式选择→继续输入→关闭重开、7种纸张逐项保存恢复、表格转文本与撤销、清单勾选重启。生成与原版对应状态截图。布局未精确测量则不能标像素pass。构建产物与源码hash重新记录。
+
+2026-11-03独立安装版发现：08f2776的真实IME显示后WebView布局高度未缩小，格式工具栏被键盘遮住，原生触摸不能打开面板；Back收键盘后可触摸，X恢复IME后再次遮挡。P1证据见 `docs/verification/qa-fix-01/run-08f2776/finding-android-ime.md`。修复必须用原生触摸/系统键盘走完整入口，DOM `.click()` 或编辑器内部命令只能用于分离的程序边界检查，不能替代可触达性。Android修复中，Mac已提交产物继续独立复验。
