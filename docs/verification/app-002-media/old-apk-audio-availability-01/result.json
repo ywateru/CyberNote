@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-03",
+  "scope": "frozen-old-apk-controlled-audio-availability-only",
+  "status": "unknown",
+  "device": {
+    "serial": "emulator-5580",
+    "emulatorPid": 3197,
+    "retainedExecSession": 73263,
+    "avd": "nuva_mirror_isolated",
+    "androidRelease": "11",
+    "webviewPackage": "com.google.android.webview",
+    "webviewVersion": "91.0.4472.114",
+    "package": "com.local.notesclone",
+    "installedApkSha256": "5dd6dfc8d31812c2bafcff5115d9946456ff6d37028f2caed174585c91ca0ca2"
+  },
+  "localProtocol": {
+    "path": "/Users/water/Library/Android/sdk/emulator/lib/emulator_controller.proto",
+    "sha256": "1d62c6bcad5f06621f90ec2bf26c661ba769ccd0f1416b5314d25a68e04eee5f",
+    "injectAudioDefinitionPresent": true,
+    "service": "android.emulation.control.EmulatorController"
+  },
+  "endpointDiscovery": {
+    "explicitGrpcLaunchFlag": false,
+    "explicitGrpcJwtOrTokenLaunchFlag": false,
+    "selectedArguments": ["-avd", "nuva_mirror_isolated", "-port", "5580", "-read-only", "-no-window", "-no-snapshot"],
+    "pidIniFoundInCheckedCommonRoots": false,
+    "checkedRoots": ["/tmp/avd/running", "$TMPDIR/avd/running", "$HOME/Library/Caches/TemporaryItems/avd/running", "$HOME/.android/avd/running", "$HOME/.android/avd"],
+    "processOwnedTcpListenerPorts": [5580, 5581, 52701],
+    "grpcEndpointIdentified": false,
+    "publicConsoleGrpcQuery": "KO: No active gRPC service",
+    "authenticationAvailability": "unknown"
+  },
+  "singleProbe": {
+    "transport": "node:http2 builtin; one empty protobuf unary request",
+    "host": "127.0.0.1",
+    "port": 52701,
+    "rpc": "getMicrophoneState",
+    "status": "timeout",
+    "limitMs": 3000,
+    "elapsedMs": 3004,
+    "responseHeadersObserved": false,
+    "clientDestroyedAfterProbe": true,
+    "portConfirmedGrpc": false
+  },
+  "effects": {
+    "appGetUserMediaStarted": false,
+    "audioInjected": false,
+    "hostMicrophoneStateChanged": false,
+    "authenticationMaterialPrinted": false,
+    "dependenciesInstalled": false,
+    "emulatorRestartedOrStopped": false,
+    "dataClearedOrApkChanged": false,
+    "adbForwardsCreated": false,
+    "productBuiltOrModified": false
+  },
+  "remainingUnknown": ["usable gRPC endpoint/authentication", "controlled input reaching Android microphone", "getUserMedia permission and actual media tracks", "record/pause/resume/finalize/save", "decoded identifiable track and duration", "cold-start playback and output", "actual microphone cleanup", "pixel and original Notes interaction parity"],
+  "stopReason": "bounded endpoint probe did not establish a usable controlled audio input; subsequent public avd grpc query confirms no active gRPC service. Silent hostmicoff-only flow is a separate later baseline."
+}
