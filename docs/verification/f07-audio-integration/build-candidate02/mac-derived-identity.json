@@ -1,0 +1,80 @@
+{
+  "createdAt": "2026-11-03T16:55:47.025358+00:00",
+  "sourceApp": "/private/tmp/notes-f07-audio-mac-candidate02-ebb1f11b.app",
+  "preservedUnsignedBaselineUnchanged": true,
+  "derivedApp": "/private/tmp/notes-f07-audio-mac-candidate02-sealed.app",
+  "signCommand": [
+    "codesign",
+    "--force",
+    "--sign",
+    "-",
+    "--timestamp=none",
+    "/private/tmp/notes-f07-audio-mac-candidate02-sealed.app"
+  ],
+  "signExit": 0,
+  "strictVerifyExit": 0,
+  "executable": {
+    "path": "/private/tmp/notes-f07-audio-mac-candidate02-sealed.app/Contents/MacOS/notes-clone",
+    "bytes": 15534288,
+    "sha256": "5e948ad9647a0ff878471dc213b327ca88628608b877b1f38c1ce6d154171e79"
+  },
+  "files": [
+    {
+      "path": "Contents/Info.plist",
+      "type": "file",
+      "bytes": 1193,
+      "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3"
+    },
+    {
+      "path": "Contents/MacOS/notes-clone",
+      "type": "file",
+      "bytes": 15534288,
+      "sha256": "5e948ad9647a0ff878471dc213b327ca88628608b877b1f38c1ce6d154171e79"
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    }
+  ],
+  "bundleFileBytes": 15537681,
+  "bundleAggregate": "b7c114ee6d0ee91c121536c5e8cf96a98221ab3188263a01f2b7d8189ff1c163",
+  "changes": [
+    {
+      "path": "Contents/MacOS/notes-clone",
+      "before": {
+        "path": "Contents/MacOS/notes-clone",
+        "type": "file",
+        "bytes": 15606880,
+        "sha256": "ebb1f11bb4c66685002090b51ac28c6b6a021122338a96bfbf6c246e61f1cfaf"
+      },
+      "after": {
+        "path": "Contents/MacOS/notes-clone",
+        "type": "file",
+        "bytes": 15534288,
+        "sha256": "5e948ad9647a0ff878471dc213b327ca88628608b877b1f38c1ce6d154171e79"
+      }
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "before": null,
+      "after": {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "type": "file",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+      }
+    }
+  ],
+  "unchangedResourcePaths": [
+    "Contents/Info.plist"
+  ],
+  "archive": {
+    "path": "/private/tmp/notes-f07-audio-mac-candidate02-sealed.zip",
+    "bytes": 4623681,
+    "sha256": "6686f7255b8dd65e0c74bb99e15f29d0f3e769d4a02f37f0ccb9f0629650c686"
+  },
+  "signingScope": "Local adhoc complete bundle signature only; no developer certificate, notarization or distribution acceptance claim",
+  "sourceProductEdits": false
+}

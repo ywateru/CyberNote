@@ -10,6 +10,8 @@
 
 ## 运行与构建
 
+11/4第二批统一候选fabafcf已完成双端构建，219项输入前后SHA一致：Mac完整本地签名包5e948ad9已由开发实际确认正常加载、三栏和原生顶部，搜索unique→zero→clear/正文UndoRedo与正常退出重开持久有限通过，独立复验与像素对照进行中；Android APK a50dded8已构建，真实音频控件验证待完成。该批包含Store模块、手机音频展开与Mac启动修复，不能把模块进入包内视为附件前端/完整录音闭环完成。证据见docs/verification/f07-audio-integration/build-candidate02/及mac-developer02/。
+
 本机已使用 Node 22.16、pnpm 10.15、Rust 1.97.1、Xcode/macOS SDK 构建。先执行：
 
 ```sh

@@ -1,0 +1,24 @@
+{
+  "kind": "transcribed CUA observations; original full text/images remain in tool transcript",
+  "dateLocal": "2026-11-04 Asia/Shanghai",
+  "app": "/private/tmp/notes-f07-audio-mac-candidate02-sealed.app",
+  "firstObservedPid": 23069,
+  "fixtureA": "7b67dda1-90ff-4eb1-9a20-d49b94bf2bdc",
+  "fixtureB": "79444c2b-0ffc-41f5-8067-64c083aee922",
+  "steps": [
+    {"action":"launch exact candidate02 after normal old-instance CmdQ", "url":"tauri://localhost", "threeColumns":true, "nativeToolbar":true, "existingNotes":31},
+    {"action":"native new note and type title/newline/body", "title":"QA F07 MAC C02 A 20261104", "body":"Alpha Beta Gamma", "savedRevision":42},
+    {"action":"CmdEnd then native type suffix", "suffix":" C02-HISTORY", "savedRevision":54},
+    {"action":"native search field click/type QA Quote", "resultCount":1, "body":"**QA Quote**\n> Quoted text\nAfter quote", "focus":"native search"},
+    {"action":"native CmdA/type long no-match query", "query":"QA-NO-MATCH-20261103-2301-ABCDEFGHIJKLMNOPQRSTUVWXYZ-NEVER-EXISTS-7f62c83e9d4a", "resultCount":0, "emptyMessage":"未找到备忘录", "bodyEditorPresent":false, "disabled":["添加附件","核对清单","格式","插入表格","更多备忘录操作","共享备忘录"], "focus":"native search"},
+    {"action":"native click disabled format", "axChange":false, "focus":"native search", "persistedFixtureRowsUnchanged":true},
+    {"action":"native clear button", "folder":"QA 独立验证", "body":"**QA F07 MAC C02 A 20261104**\nAlpha Beta Gamma C02-HISTORY", "focus":"native search"},
+    {"action":"normal native body click then CmdZ", "body":"**QA F07 MAC C02 A 20261104**\nAlpha Beta Gamma", "savedRevision":55, "focus":"body"},
+    {"action":"ShiftCmdZ", "body":"**QA F07 MAC C02 A 20261104**\nAlpha Beta Gamma C02-HISTORY", "savedRevision":56, "fullDocumentsMatchAfterSuffix":true},
+    {"action":"normal CmdQ then exact-path reopen once", "body":"**QA F07 MAC C02 A 20261104**\nAlpha Beta Gamma C02-HISTORY", "searchEmpty":true, "persistedRowsExactMatchRedo":true}
+  ],
+  "editorIdentityMeasured":false,
+  "pendingSaveRaceExercised":false,
+  "pixelParityMeasured":false,
+  "screenshots":"CUA tool transcript only; no local image file"
+}

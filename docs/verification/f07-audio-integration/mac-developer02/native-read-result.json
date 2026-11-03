@@ -1,0 +1,90 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_b3e347e2460f1e67aba53fa5fc3b5e484af574af62a5af848886cf651501fe18\",\"subject\":null,\"provider\":{\"id\":\"frida\",\"name\":\"Frida\",\"version\":null},\"analysis_profile\":null,\"predicate_type\":\"rea.frida.instrumentation-observation\",\"operation\":\"instrument_with_frida\",\"parameters\":{\"session_id\":\"9b12c225-9e3a-473e-9b26-fb5b5457ad39\",\"device_id\":\"local\",\"mode\":\"attach\",\"pid\":23069},\"raw_result\":null,\"normalized_result\":{\"session_id\":\"9b12c225-9e3a-473e-9b26-fb5b5457ad39\",\"device_id\":\"local\",\"state\":\"running\",\"target\":\"备忘录 (pid 23069)\",\"pid\":23069,\"mode\":\"attach\",\"scripts\":[{\"script_id\":\"49defcff-1a41-444c-8f90-853a516beaf7\",\"name\":\"rea-49defcff-1a41-444c-8f90-853a516beaf7\"}],\"messages\":[{\"script_id\":\"49defcff-1a41-444c-8f90-853a516beaf7\",\"type\":\"send\",\"payload\":{\"pid\":23069,\"windows\":[{\"number\":68228,\"title\":\"备忘录\",\"visible\":1},{\"number\":68233,\"title\":\"\",\"visible\":0},{\"number\":68266,\"title\":\"Window\",\"visible\":1}],\"webviews\":[{\"url\":\"tauri://localhost\",\"loading\":0,\"title\":\"备忘录\"}],\"errors\":[]}}],\"messages_truncated\":false,\"source_kind\":\"inline\",\"source_path\":null,\"source_sha256\":\"fbf77201570f269ded70e9a064670dd21216fc5848a54d27da3a2df640645b75\",\"cleanup_error\":null},\"confidence\":\"observed\",\"authority\":\"external-service\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"The target operating system and architecture were not reported by this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_b3e347e2460f1e67aba53fa5fc3b5e484af574af62a5af848886cf651501fe18",
+    "subject": null,
+    "provider": {
+      "id": "frida",
+      "name": "Frida",
+      "version": null
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.frida.instrumentation-observation",
+    "operation": "instrument_with_frida",
+    "parameters": {
+      "session_id": "9b12c225-9e3a-473e-9b26-fb5b5457ad39",
+      "device_id": "local",
+      "mode": "attach",
+      "pid": 23069
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "session_id": "9b12c225-9e3a-473e-9b26-fb5b5457ad39",
+      "device_id": "local",
+      "state": "running",
+      "target": "备忘录 (pid 23069)",
+      "pid": 23069,
+      "mode": "attach",
+      "scripts": [
+        {
+          "script_id": "49defcff-1a41-444c-8f90-853a516beaf7",
+          "name": "rea-49defcff-1a41-444c-8f90-853a516beaf7"
+        }
+      ],
+      "messages": [
+        {
+          "script_id": "49defcff-1a41-444c-8f90-853a516beaf7",
+          "type": "send",
+          "payload": {
+            "pid": 23069,
+            "windows": [
+              {
+                "number": 68228,
+                "title": "备忘录",
+                "visible": 1
+              },
+              {
+                "number": 68233,
+                "title": "",
+                "visible": 0
+              },
+              {
+                "number": 68266,
+                "title": "Window",
+                "visible": 1
+              }
+            ],
+            "webviews": [
+              {
+                "url": "tauri://localhost",
+                "loading": 0,
+                "title": "备忘录"
+              }
+            ],
+            "errors": []
+          }
+        }
+      ],
+      "messages_truncated": false,
+      "source_kind": "inline",
+      "source_path": null,
+      "source_sha256": "fbf77201570f269ded70e9a064670dd21216fc5848a54d27da3a2df640645b75",
+      "cleanup_error": null
+    },
+    "confidence": "observed",
+    "authority": "external-service",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "The target operating system and architecture were not reported by this observation."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}
