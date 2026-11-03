@@ -1,0 +1,92 @@
+
+thread 'main' (35626709) panicked at /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-runtime-wry-2.12.3/src/lib.rs:3643:38:
+RefCell already mutably borrowed
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::cell::panic_already_mutably_borrowed
+   3: tauri_runtime_wry::handle_user_message::<tauri::EventLoopMessage>
+   4: <tauri_runtime_wry::Context<tauri::EventLoopMessage>>::send_user_message
+   5: <tauri::webview::Webview>::eval::<alloc::string::String>
+   6: <tauri::webview::Webview>::emit_js
+   7: <tauri::event::listener::Listeners>::emit_js_filter::<tauri_runtime_wry::Wry<tauri::EventLoopMessage>, std::collections::hash::map::Values<alloc::string::String, tauri::webview::Webview>, &<tauri::manager::AppManager>::emit_to<&tauri_plugin_notes_ui::model::ToolbarEvent>::{closure#0}>
+   8: <tauri::manager::AppManager>::emit_to::<&tauri_plugin_notes_ui::model::ToolbarEvent>
+   9: <tauri::window::Window as tauri::Emitter<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>>::emit_to::<tauri::event::EventTarget, &tauri_plugin_notes_ui::model::ToolbarEvent>
+  10: tauri_plugin_notes_ui::macos::event::<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>
+  11: -[NotesUIController send:]
+  12: ___26-[NotesUIController build]_block_invoke.151
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: <unknown>
+  17: <unknown>
+  18: <unknown>
+  19: <unknown>
+  20: <unknown>
+  21: <unknown>
+  22: <unknown>
+  23: <unknown>
+  24: <unknown>
+  25: <unknown>
+  26: <unknown>
+  27: <unknown>
+  28: <unknown>
+  29: tao::platform_impl::platform::util::async::close_async
+  30: <alloc::sync::Arc<tao::platform_impl::platform::window::UnownedWindow>>::drop_slow
+  31: <alloc::sync::Arc<tao::window::Window>>::drop_slow
+  32: tauri_runtime_wry::on_window_close
+  33: tauri_runtime_wry::handle_event_loop::<tauri::EventLoopMessage>
+  34: tauri_runtime_wry::make_event_handler::<tauri::EventLoopMessage, <tauri::app::App>::make_run_event_loop_callback<<tauri::app::Builder<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>>::run::{closure#0}>::{closure#0}>::{closure#0}
+  35: <tao::platform_impl::platform::app_state::EventLoopHandler<tauri_runtime_wry::Message<tauri::EventLoopMessage>> as tao::platform_impl::platform::app_state::EventHandler>::handle_user_events
+  36: <tao::platform_impl::platform::app_state::AppState>::cleared
+  37: tao::platform_impl::platform::observer::control_flow_end_handler
+  38: <unknown>
+  39: <unknown>
+  40: <unknown>
+  41: <unknown>
+  42: <unknown>
+  43: <unknown>
+  44: <unknown>
+  45: <unknown>
+  46: <unknown>
+  47: <unknown>
+  48: <unknown>
+  49: <unknown>
+  50: <tao::platform_impl::platform::event_loop::EventLoop<tauri_runtime_wry::Message<tauri::EventLoopMessage>>>::run::<tauri_runtime_wry::make_event_handler<tauri::EventLoopMessage, <tauri::app::App>::make_run_event_loop_callback<<tauri::app::Builder<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>>::run::{closure#0}>::{closure#0}>::{closure#0}>
+  51: <tauri_runtime_wry::Wry<tauri::EventLoopMessage> as tauri_runtime::Runtime<tauri::EventLoopMessage>>::run::<<tauri::app::App>::make_run_event_loop_callback<<tauri::app::Builder<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>>::run::{closure#0}>::{closure#0}>
+  52: <tauri::app::Builder<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>>::run
+  53: notes_clone_lib::run
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+thread 'main' (35626709) panicked at /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/webview.rs:121:26:
+poisoned webview manager: PoisonError { .. }
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::result::unwrap_failed
+   3: <tauri::window::Window>::webviews
+   4: tauri::app::on_event_loop_event::<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>
+   5: <tauri::app::App>::make_run_event_loop_callback::<<tauri::app::Builder<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>>::run::{closure#0}>::{closure#0}
+   6: tauri_runtime_wry::handle_event_loop::<tauri::EventLoopMessage>
+   7: tauri_runtime_wry::make_event_handler::<tauri::EventLoopMessage, <tauri::app::App>::make_run_event_loop_callback<<tauri::app::Builder<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>>::run::{closure#0}>::{closure#0}>::{closure#0}
+   8: <tao::platform_impl::platform::app_state::EventLoopHandler<tauri_runtime_wry::Message<tauri::EventLoopMessage>> as tao::platform_impl::platform::app_state::EventHandler>::handle_nonuser_event
+   9: <tao::platform_impl::platform::app_state::Handler>::handle_nonuser_event
+  10: <tao::platform_impl::platform::app_state::AppState>::cleared
+  11: tao::platform_impl::platform::observer::control_flow_end_handler
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: <unknown>
+  17: <unknown>
+  18: <unknown>
+  19: <unknown>
+  20: <unknown>
+  21: <unknown>
+  22: <unknown>
+  23: <unknown>
+  24: <tao::platform_impl::platform::event_loop::EventLoop<tauri_runtime_wry::Message<tauri::EventLoopMessage>>>::run::<tauri_runtime_wry::make_event_handler<tauri::EventLoopMessage, <tauri::app::App>::make_run_event_loop_callback<<tauri::app::Builder<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>>::run::{closure#0}>::{closure#0}>::{closure#0}>
+  25: <tauri_runtime_wry::Wry<tauri::EventLoopMessage> as tauri_runtime::Runtime<tauri::EventLoopMessage>>::run::<<tauri::app::App>::make_run_event_loop_callback<<tauri::app::Builder<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>>::run::{closure#0}>::{closure#0}>
+  26: <tauri::app::Builder<tauri_runtime_wry::Wry<tauri::EventLoopMessage>>>::run
+  27: notes_clone_lib::run
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
