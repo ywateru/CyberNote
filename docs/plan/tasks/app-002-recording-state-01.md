@@ -1,7 +1,7 @@
 ---
 id: app-002-recording-state-01
 scope: production-recording-panel-initial-pause-finish-and-clock
-status: ready
+status: source-candidate
 depends-on: [app-002-recording-extract-01]
 ---
 
@@ -47,3 +47,7 @@ docs/INDEX.md、docs/ui/android.md、docs/ui/recording-mobile.md、docs/architec
 typecheck与受影响的既有26项资源清理回归。定向检查必须挂载实际生产组件并使用production RecordingSession，受控媒体/时钟替身边界明确：idle零采集、一次start、pause/resume、暂停时间冻结与延迟tick、Done等待末块且恰好一次父调用、reject保留同File重试、空/异常最终事件、重复Done、取消/卸载/晚权限/晚onstop。不复制状态机写镜像测试。
 
 提交冻结后独立审查与必要复跑。SOURCE-READY后仍需与父附件ACK接线在同一新包串行实际验证，原生进入初始/开始/暂停/继续/完成、资源状态/同附件/完整正文与冷启分别记账。模拟静音不计可听采集，224×480压缩参考不计高清像素通过。
+
+## source candidate / 2026-11-04
+
+局部组件候选与受控验证见 [证据](../../verification/app-002-recording-state/README.md)。待独立审查，不计父ACK、原生包、真实音轨或像素通过。

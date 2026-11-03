@@ -1,0 +1,34 @@
+{
+  "kind": "actual-production-recording-panel-with-controlled-platform",
+  "status": "pass",
+  "browser": "156.0.8078.80",
+  "checks": 17,
+  "results": [
+    "StrictMode mount remains idle, zero capture and disabled Done",
+    "Repeated explicit start during permission wait creates one real Session/recorder",
+    "Monotonic active time survives delayed redraw, pause freezes and resume continues",
+    "Paused Done stops once, releases capture and awaits last data/onstop before one parent call",
+    "Rejected parent submission keeps same File, displays error and retry never stops/captures again",
+    "Empty recording fails visibly without attachment submission",
+    "Missing MIME fails visibly without attachment submission",
+    "Non-audio MIME fails visibly without attachment submission",
+    "Unexpected onstop is an error, not implicit successful finish",
+    "Stop failure releases capture and shows actual error",
+    "Missing final event times out, disposes and rejects later captured handlers",
+    "Permission denial shows failure and never constructs recorder",
+    "Unmount during pending permission releases late stream without recorder or parent callback",
+    "Escape cancel releases live recording once and captured late events cannot submit",
+    "Unmount while waiting onstop gates captured late data/stop",
+    "Unmount during parent save does not pretend IPC was cancelled or issue a second save",
+    "Three mobile states keep title, time, primary center and bottom Done in fixed regions"
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "limits": [
+    "Real mounted production RecordingPanel and production RecordingSession; fake browser media/time boundaries only",
+    "No physical microphone, encoded audio, playback, native app or Android acceptance",
+    "No App/Editor/store/IPC/durable body ACK/cold persistence acceptance",
+    "390×844 headless emulation layout relationships only; original 224×480 compressed frames do not establish pixel parity",
+    "Local cancel gates component callbacks and releases capture; cannot undo an already-sent parent IPC"
+  ]
+}
