@@ -1,0 +1,71 @@
+[
+  {
+    "check": "startup",
+    "command": [
+      "node",
+      "scripts/check-search-zero-startup.mjs"
+    ],
+    "exitCode": 0,
+    "output": "app-startup.json"
+  },
+  {
+    "check": "presentation",
+    "command": [
+      "node",
+      "scripts/check-search-zero-ui.mjs"
+    ],
+    "exitCode": 0,
+    "output": "app-presentation.json"
+  },
+  {
+    "check": "typecheck",
+    "command": [
+      "pnpm",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "output": "typecheck.txt"
+  },
+  {
+    "check": "search-selection",
+    "command": [
+      "node",
+      "scripts/check-search-selection.mjs"
+    ],
+    "exitCode": 0,
+    "output": "search-selection.json"
+  },
+  {
+    "check": "native-toolbar",
+    "command": [
+      "node",
+      "scripts/check-native-toolbar.mjs"
+    ],
+    "exitCode": 0,
+    "output": "native-toolbar.json"
+  },
+  {
+    "check": "format",
+    "command": [
+      "pnpm",
+      "exec",
+      "prettier",
+      "--check",
+      "src/App.tsx",
+      "scripts/check-search-zero-ui.mjs",
+      "scripts/check-search-zero-startup.mjs"
+    ],
+    "exitCode": 0,
+    "output": "format.txt"
+  },
+  {
+    "check": "diff",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "output": "diff-check.txt"
+  }
+]

@@ -97,6 +97,7 @@ function run(name, change, expected) {
     filter: "",
     view: "list",
     loading: false,
+    workspaceLoaded: true,
     synchronizing: false,
     syncError: "",
     accessSuspended: [],
@@ -184,6 +185,16 @@ run(
   "a real folder named 搜索 with an empty query stays an ordinary empty folder",
   { query: "", currentFolder: { name: "搜索" } },
   { zero: false, title: "搜索", subtitle: "0个备忘录", body: "无备忘录" },
+);
+run(
+  "initial workspace without a successful load does not claim confirmed no results",
+  { workspaceLoaded: false },
+  oldSearch,
+);
+run(
+  "an unrelated error after successful load does not hide confirmed no results",
+  { error: "unrelated action failed" },
+  zero,
 );
 run(
   "loading does not claim confirmed no results",

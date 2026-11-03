@@ -1,0 +1,57 @@
+diff --git a/scripts/check-search-zero-ui.mjs b/scripts/check-search-zero-ui.mjs
+index 1223037..d1c7ca8 100644
+--- a/scripts/check-search-zero-ui.mjs
++++ b/scripts/check-search-zero-ui.mjs
+@@ -97,6 +97,7 @@ function run(name, change, expected) {
+     filter: "",
+     view: "list",
+     loading: false,
++    workspaceLoaded: true,
+     synchronizing: false,
+     syncError: "",
+     accessSuspended: [],
+@@ -185,6 +186,16 @@ run(
+   { query: "", currentFolder: { name: "搜索" } },
+   { zero: false, title: "搜索", subtitle: "0个备忘录", body: "无备忘录" },
+ );
++run(
++  "initial workspace without a successful load does not claim confirmed no results",
++  { workspaceLoaded: false },
++  oldSearch,
++);
++run(
++  "an unrelated error after successful load does not hide confirmed no results",
++  { error: "unrelated action failed" },
++  zero,
++);
+ run(
+   "loading does not claim confirmed no results",
+   { loading: true },
+diff --git a/src/App.tsx b/src/App.tsx
+index b87d3f8..b8f85e3 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -342,6 +342,7 @@ function App() {
+   const wsRef = useRef(ws);
+   wsRef.current = ws;
+   const [loading, setLoading] = useState(true);
++  const [workspaceLoaded, setWorkspaceLoaded] = useState(false);
+   const [error, setError] = useState("");
+   const [folderId, setFolderId] = useState("default");
+   const [baseNoteId, setNoteId] = useState<string | null>(null);
+@@ -506,6 +507,7 @@ function App() {
+   const desktopSearchZero =
+     desktopSearch &&
+     view === "list" &&
++    workspaceLoaded &&
+     !loading &&
+     !synchronizing &&
+     !syncError &&
+@@ -906,6 +908,7 @@ function App() {
+         setAccessSuspended([...blockedNotes.current]);
+         synchronizingRef.current = false;
+         setSynchronizing(false);
++        setWorkspaceLoaded(true);
+       },
+       (e) => {
+         fail(e);

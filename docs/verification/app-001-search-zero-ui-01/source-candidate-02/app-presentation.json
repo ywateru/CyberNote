@@ -1,0 +1,137 @@
+{
+  "tests": 16,
+  "results": [
+    {
+      "name": "trusted desktop list zero uses the confirmed header and section without central hint",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索</strong><span>无结果</span></div>",
+      "body": "<div class=\"search-zero-section\">备忘录</div>",
+      "nativeTitle": "搜索",
+      "nativeCount": 0
+    },
+    {
+      "name": "a real folder named 搜索 with an empty query stays an ordinary empty folder",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">无备忘录</div>",
+      "nativeTitle": "搜索",
+      "nativeCount": 0
+    },
+    {
+      "name": "initial workspace without a successful load does not claim confirmed no results",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">未找到备忘录</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 0
+    },
+    {
+      "name": "an unrelated error after successful load does not hide confirmed no results",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索</strong><span>无结果</span></div>",
+      "body": "<div class=\"search-zero-section\">备忘录</div>",
+      "nativeTitle": "搜索",
+      "nativeCount": 0
+    },
+    {
+      "name": "loading does not claim confirmed no results",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">正在打开备忘录…</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 0
+    },
+    {
+      "name": "active trusted synchronization retains the old presentation",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">未找到备忘录</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 0
+    },
+    {
+      "name": "failed synchronization does not claim confirmed no results",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">未找到备忘录</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 0
+    },
+    {
+      "name": "access shielding does not claim confirmed no results",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">未找到备忘录</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 0
+    },
+    {
+      "name": "an active access operation does not claim confirmed no results",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">未找到备忘录</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 0
+    },
+    {
+      "name": "mobile zero presentation is unchanged",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">未找到备忘录</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 0
+    },
+    {
+      "name": "independent note presentation is unchanged",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">未找到备忘录</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 0
+    },
+    {
+      "name": "unobserved gallery zero presentation is unchanged",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">未找到备忘录</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 0
+    },
+    {
+      "name": "unique result preserves existing title count and result branch",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>1个备忘录</span></div>",
+      "body": "<div class=\"existing-result-rows\">原结果行</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 1
+    },
+    {
+      "name": "multiple results preserve existing title count and result branch",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>搜索结果</strong><span>3个备忘录</span></div>",
+      "body": "<div class=\"existing-result-rows\">原结果行</div>",
+      "nativeTitle": "搜索结果",
+      "nativeCount": 3
+    },
+    {
+      "name": "clearing the query restores the ordinary folder title and empty state",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>备忘录</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">无备忘录</div>",
+      "nativeTitle": "备忘录",
+      "nativeCount": 0
+    },
+    {
+      "name": "filter-only empty results preserve the old filter hint",
+      "pass": true,
+      "header": "<div class=\"folder-heading\"><strong>备忘录</strong><span>0个备忘录</span></div>",
+      "body": "<div class=\"empty-state\">未找到备忘录</div>",
+      "nativeTitle": "备忘录",
+      "nativeCount": 0
+    }
+  ],
+  "limitations": [
+    "Actual App presentation AST and production toolbar projection execute in Node/React static rendering.",
+    "Nonempty note rows are controlled; no DOM mount, native AppKit layout, pixel acceptance or runtime focus assertion."
+  ]
+}

@@ -342,6 +342,7 @@ function App() {
   const wsRef = useRef(ws);
   wsRef.current = ws;
   const [loading, setLoading] = useState(true);
+  const [workspaceLoaded, setWorkspaceLoaded] = useState(false);
   const [error, setError] = useState("");
   const [folderId, setFolderId] = useState("default");
   const [baseNoteId, setNoteId] = useState<string | null>(null);
@@ -506,6 +507,7 @@ function App() {
   const desktopSearchZero =
     desktopSearch &&
     view === "list" &&
+    workspaceLoaded &&
     !loading &&
     !synchronizing &&
     !syncError &&
@@ -906,6 +908,7 @@ function App() {
         setAccessSuspended([...blockedNotes.current]);
         synchronizingRef.current = false;
         setSynchronizing(false);
+        setWorkspaceLoaded(true);
       },
       (e) => {
         fail(e);

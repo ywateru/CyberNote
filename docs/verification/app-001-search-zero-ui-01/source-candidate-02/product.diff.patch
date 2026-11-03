@@ -1,0 +1,115 @@
+diff --git a/plugins/tauri-plugin-notes-ui/macos/toolbar.m b/plugins/tauri-plugin-notes-ui/macos/toolbar.m
+index b0610f1..a5e20d3 100644
+--- a/plugins/tauri-plugin-notes-ui/macos/toolbar.m
++++ b/plugins/tauri-plugin-notes-ui/macos/toolbar.m
+@@ -301,7 +301,9 @@ - (NSDictionary *)apply:(NSDictionary *)state {
+         button.contentTintColor=[item[@"selected"] boolValue]?NSColor.systemYellowColor:NSColor.labelColor;
+     }
+     self.title.stringValue=state[@"folderTitle"];[self.title setAccessibilityLabel:state[@"folderTitle"]];
+-    self.count.stringValue=[NSString stringWithFormat:@"%@ 个备忘录",state[@"folderCount"]];
++    BOOL zeroSearch=[state[@"folderTitle"] isEqual:@"搜索"] && [state[@"folderCount"] unsignedLongLongValue]==0
++        && hasSearch && [searchState[@"value"] length]>0;
++    self.count.stringValue=zeroSearch?@"无结果":[NSString stringWithFormat:@"%@ 个备忘录",state[@"folderCount"]];
+     [self.count setAccessibilityLabel:self.count.stringValue];
+     if(hasSearch) {self.search.enabled=[searchState[@"enabled"] boolValue];
+         if(![self.search.stringValue isEqual:searchState[@"value"]]) self.search.stringValue=searchState[@"value"];}
+diff --git a/src/App.tsx b/src/App.tsx
+index fda3765..b8f85e3 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -342,6 +342,7 @@ function App() {
+   const wsRef = useRef(ws);
+   wsRef.current = ws;
+   const [loading, setLoading] = useState(true);
++  const [workspaceLoaded, setWorkspaceLoaded] = useState(false);
+   const [error, setError] = useState("");
+   const [folderId, setFolderId] = useState("default");
+   const [baseNoteId, setNoteId] = useState<string | null>(null);
+@@ -503,6 +504,16 @@ function App() {
+             : b.updatedAt - a.updatedAt),
+     );
+   const desktopSearch = !mobile && !separate && !!query;
++  const desktopSearchZero =
++    desktopSearch &&
++    view === "list" &&
++    workspaceLoaded &&
++    !loading &&
++    !synchronizing &&
++    !syncError &&
++    !accessSuspended.length &&
++    !accessGate.state?.operationId &&
++    listed.length === 0;
+   const noteId = projectSearchNote({
+     searching: desktopSearch,
+     baseNoteId,
+@@ -897,6 +908,7 @@ function App() {
+         setAccessSuspended([...blockedNotes.current]);
+         synchronizingRef.current = false;
+         setSynchronizing(false);
++        setWorkspaceLoaded(true);
+       },
+       (e) => {
+         fail(e);
+@@ -1707,6 +1719,14 @@ function App() {
+       : ws.notes.filter((n) => n.folderId === id).length;
+   const folderLabel =
+     folderId === "all" ? "全部备忘录" : currentFolder?.name || "备忘录";
++  const listTitle = desktopSearchZero
++    ? "搜索"
++    : query
++      ? "搜索结果"
++      : folderLabel;
++  const listSubtitle = desktopSearchZero
++    ? "无结果"
++    : `${listed.length}个备忘录`;
+   const startLong = (callback: () => void) => {
+     longPress.current = setTimeout(callback, 520);
+   };
+@@ -2762,7 +2782,7 @@ function App() {
+             : "threeColumn",
+         sidebar,
+         settings,
+-        folderTitle: query ? "搜索结果" : folderLabel,
++        folderTitle: listTitle,
+         folderCount: listed.length,
+         query,
+         searchAck: nativeSearchAck,
+@@ -2992,8 +3012,8 @@ function App() {
+                   </IconButton>
+                 )}
+                 <div className="folder-heading">
+-                  <strong>{query ? "搜索结果" : folderLabel}</strong>
+-                  <span>{listed.length}个备忘录</span>
++                  <strong>{listTitle}</strong>
++                  <span>{listSubtitle}</span>
+                 </div>
+                 <IconButton
+                   label="显示选项"
+@@ -3033,6 +3053,8 @@ function App() {
+         >
+           {loading ? (
+             <div className="empty-state">正在打开备忘录…</div>
++          ) : desktopSearchZero ? (
++            <div className="search-zero-section">备忘录</div>
+           ) : listed.length === 0 ? (
+             <div className="empty-state">
+               {query || filter ? "未找到备忘录" : "无备忘录"}
+diff --git a/src/style.css b/src/style.css
+index 0395e71..d38c364 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -333,6 +333,14 @@ a {
+   overscroll-behavior: contain;
+   padding-bottom: 8px;
+ }
++.search-zero-section {
++  height: 40px;
++  padding: 10px 16px 0;
++  border-bottom: 0.5px solid var(--line);
++  font-size: 15px;
++  font-weight: 600;
++  line-height: 20px;
++}
+ .date-section {
+   font-size: 16px;
+   font-weight: 700;
