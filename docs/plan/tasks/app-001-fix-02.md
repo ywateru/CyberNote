@@ -2,7 +2,7 @@
 id: app-001-fix-02
 scope: mac-toolbar-symbols-and-native-controls
 status: pending
-depends-on: [app-001-fix-01]
+depends-on: [app-001-fix-01, app-001-fix-03]
 ---
 
 ## objective
