@@ -1,0 +1,145 @@
+[
+  {
+    "at": "2026-11-03T12:29:01.646327+00:00",
+    "args": [
+      "shell",
+      "ime",
+      "set",
+      "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME"
+    ],
+    "exit": 0,
+    "stdout": "Input method com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME selected for user #0\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-03T12:29:01.689200+00:00",
+    "args": [
+      "shell",
+      "ime",
+      "disable",
+      "com.osfans.trime/.ime.core.TrimeInputMethodService"
+    ],
+    "exit": 0,
+    "stdout": "Input method com.osfans.trime/.ime.core.TrimeInputMethodService: now disabled for user #0\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-03T12:29:01.724614+00:00",
+    "args": [
+      "shell",
+      "settings",
+      "put",
+      "secure",
+      "default_input_method",
+      "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-03T12:29:01.758758+00:00",
+    "args": [
+      "shell",
+      "settings",
+      "put",
+      "secure",
+      "enabled_input_methods",
+      "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME:com.google.android.googlequicksearchbox/com.google.android.voicesearch.ime.VoiceInputMethodService"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-03T12:29:01.789056+00:00",
+    "args": [
+      "shell",
+      "settings",
+      "put",
+      "secure",
+      "selected_input_method_subtype",
+      "-1"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-03T12:29:01.814040+00:00",
+    "args": [
+      "shell",
+      "settings",
+      "put",
+      "secure",
+      "show_ime_with_hard_keyboard",
+      "1"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-03T12:29:01.834373+00:00",
+    "args": [
+      "shell",
+      "settings",
+      "get",
+      "secure",
+      "default_input_method"
+    ],
+    "exit": 0,
+    "stdout": "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-03T12:29:01.854184+00:00",
+    "args": [
+      "shell",
+      "settings",
+      "get",
+      "secure",
+      "enabled_input_methods"
+    ],
+    "exit": 0,
+    "stdout": "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME:com.google.android.googlequicksearchbox/com.google.android.voicesearch.ime.VoiceInputMethodService\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-03T12:29:01.875392+00:00",
+    "args": [
+      "shell",
+      "settings",
+      "get",
+      "secure",
+      "selected_input_method_subtype"
+    ],
+    "exit": 0,
+    "stdout": "-1\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-03T12:29:01.895738+00:00",
+    "args": [
+      "shell",
+      "settings",
+      "get",
+      "secure",
+      "show_ime_with_hard_keyboard"
+    ],
+    "exit": 0,
+    "stdout": "1\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-03T12:29:02.375387+00:00",
+    "args": [
+      "shell",
+      "sha256sum",
+      "/data/app/~~CDaC3aJQ-9RfsalKTn--ew==/com.local.notesclone-VhirTuzH0CfR0K3ZzVFmUg==/base.apk"
+    ],
+    "exit": 0,
+    "stdout": "d5c6f59b79031d1e103f418450e6cbd9d7fa8e8fc085263fab3d23d6b3e04d21  /data/app/~~CDaC3aJQ-9RfsalKTn--ew==/com.local.notesclone-VhirTuzH0CfR0K3ZzVFmUg==/base.apk\n",
+    "stderr": ""
+  }
+]
