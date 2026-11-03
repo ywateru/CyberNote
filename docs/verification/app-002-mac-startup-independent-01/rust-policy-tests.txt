@@ -1,0 +1,19 @@
+
+running 12 tests
+test media_permission::tests::compiled_macos_boundary_accepts_the_locked_tauri_root_url ... ok
+test media_permission::tests::custom_protocol_navigation_still_requires_confirmed_instance_load ... ok
+test media_permission::tests::actual_config_blocks_frames_objects_and_form_navigation ... ok
+test media_permission::tests::same_local_url_reload_remains_a_source_boundary ... ok
+test media_permission::tests::trusted_reload_revokes_until_started_and_finished ... ok
+test media_permission::tests::unconfirmed_and_unknown_kinds_are_denied ... ok
+test media_permission::tests::cancelled_local_load_does_not_require_a_missing_finish ... ok
+test media_permission::tests::custom_protocol_root_spellings_keep_the_exact_authority_boundary ... ok
+test media_permission::tests::untrusted_navigation_or_load_cannot_be_reopened_by_old_finish ... ok
+test media_permission::tests::contention_cannot_skip_a_revocation ... ok
+test media_permission::tests::replacement_instance_and_destroyed_resource_do_not_inherit_trust ... ok
+test media_permission::tests::exact_product_and_development_origins ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 42 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.39s
+     Running unittests src/lib.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/notes_clone_lib-96d8ebc868607599)

@@ -25,7 +25,7 @@
 | APP-002-ATTACHMENT-STORE-01 附件持久操作 | done（仅模块），源4d5898f独立SOURCE-READY、主42b2631 | 独立14项真实附件/六次exit78及Session11通过，原六Rust主整合hash一致；真实窗口incarnation/持久身份/查询去重/窄补偿/冷恢复已提供，旧store入口保持。前端pendingDocs/正文ACK与系统选择器仍由父任务负责；当前统一包不含此模块 |
 | APP-002-AUDIO-DURATION-01 音频卡片时长 | 3edc4ad0独立真实1:06/初始暂停/播放暂停有限通过 | f4d3a02独立审查通过生产helper11组及真实AudioPlayer/离线Chrome156：原WebM探针66.004秒、主初始0暂停、有限WAV不建探针、错误/重试/晚事件清理；不重编码原文件。216项输入前后不变，APK3edc4ad0…；Android91独立媒体revision30/429547B原SHA保持，真实1:06/初始0paused与play-pause通过；展开不可达，跳转/冷启/Mac未验，非可听采集/像素通过 |
 | APP-002-AUDIO-CONTROLS-01 手机播放控件 | 主ae35bc3/41131ae，源8893bed独立SOURCE-READY，待新包 | 旧3edc4ad0卡片1:06但展开隐藏/双击起IME失败保留。真实标题button+NodeView事件、44px移动操作区已接线；四input主hash同冻结，独立Chrome156实际生产NodeView触摸/range/±15/键盘与既有媒体回归通过。Android91/IME与Mac安装未验，原版展开手势及像素unknown |
-| APP-002-MAC-STARTUP-01 Mac入口加载 | in-progress，sealed11dcbfc4首次导航被Ignore | PID18813真实sealed路径/严格签名通过但WK URL=null/loading=false，CUA白窗、未挂载React；初次navigation26被policyIgnore。原request日志private，锁定Tauri默认无尾slash入口与EntryBoundary空path拒绝是待核源码假说；先隔离修本地入口等价形式，不放宽媒体/来源边界、不把白屏当F07通过 |
+| APP-002-MAC-STARTUP-01 Mac入口加载 | 主ebb05a4/f051307，源c4890fc独立SOURCE-READY，待新包 | 锁定Tauri默认无尾slash入口被生产EntryBoundary拒绝的源码缺陷已修；旧predicate真实回归先失败，独立生产Rust12组通过，主18533字节/SHA0008e0f3…与冻结同。仅精确custom protocol根入口接受空path，媒体/来源边界保持。旧sealed11dcbfc4白窗/navigation Ignore与private原request保持，尚未以新包证明启动/React/F07/像素 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |

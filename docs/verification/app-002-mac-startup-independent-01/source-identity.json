@@ -1,0 +1,96 @@
+{
+  "candidate": "c4890fc22f289335ad16445a1128b2e38b3f34fd",
+  "sourceCommit": "0e85224",
+  "baseline": "4d61222",
+  "candidateTreeClean": true,
+  "sourceSha256": "0008e0f343c15e0019bdb86c44b6423d07b477ca1206bd38ed40be1487bb7ad6",
+  "manifestSha256": "9e47871d4e6437672756c95c0c04c2a58440b4b4456ff0a8ecfc40cb5dcfd4d7",
+  "allDeveloperManifestFilesMatch": true,
+  "compiledBoundaryBeforeAllowsUnchanged": true,
+  "pageTrustThroughResponseProductionBytesUnchanged": true,
+  "changedPaths": [
+    "docs/plan/tasks/app-002-mac-startup-01.md",
+    "docs/verification/app-002-mac-startup/baseline-empty-path-test-exit.json",
+    "docs/verification/app-002-mac-startup/baseline-empty-path-test.log",
+    "docs/verification/app-002-mac-startup/candidate-media-policy-test-exit.json",
+    "docs/verification/app-002-mac-startup/candidate-media-policy-test.log",
+    "docs/verification/app-002-mac-startup/format-and-host-cfg.json",
+    "docs/verification/app-002-mac-startup/locked-tauri-entry-source.json",
+    "docs/verification/app-002-mac-startup/manifest.json",
+    "docs/verification/app-002-mac-startup/source-candidate-01.md",
+    "src-tauri/src/media_permission.rs"
+  ],
+  "frameworkSources": [
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/protocol/mod.rs",
+      "sha256": "4c5bffce1f2b4a493a0a8daca3c84551ccc78a3d06a1c8bbe17dcc1dfd7f31fa",
+      "excerpts": [
+        {
+          "start": 28,
+          "end": 39,
+          "text": "/// The origin (`scheme://host`, without a trailing slash) a custom protocol is served from.\n///\n/// On Windows and Android custom protocols are served over `http(s)://{scheme}.localhost`;\n/// everywhere else they are served over `{scheme}://localhost`.\npub(crate) fn origin(scheme: &str, use_https: bool) -> String {\n  if cfg!(windows) || cfg!(target_os = \"android\") {\n    let http = if use_https { \"https\" } else { \"http\" };\n    format!(\"{http}://{scheme}.localhost\")\n  } else {\n    format!(\"{scheme}://localhost\")\n  }\n}"
+        }
+      ]
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/mod.rs",
+      "sha256": "6e39aff7d45d40f163a26f2b9484f1aab6977209762204a0650b9d3ad9636793",
+      "excerpts": [
+        {
+          "start": 334,
+          "end": 359,
+          "text": "  /// The `tauri` custom protocol URL we use to serve the embedded assets.\n  /// Returns `tauri://localhost` or its `wry` workaround URL `http://tauri.localhost`/`https://tauri.localhost`\n  pub(crate) fn tauri_protocol_url(&self, https: bool) -> Cow<'_, Url> {\n    Cow::Owned(Url::parse(&crate::protocol::origin(\"tauri\", https)).unwrap())\n  }\n\n  /// Get the base app URL for [`WebviewUrl::App`](tauri_utils::config::WebviewUrl::App).\n  ///\n  /// * In dev mode, this is the [`devUrl`](tauri_utils::config::BuildConfig::dev_url) configuration value if it exists.\n  /// * In production mode, this is the [`frontendDist`](tauri_utils::config::BuildConfig::frontend_dist) configuration value if it's a [`FrontendDist::Url`](tauri_utils::config::FrontendDist::Url).\n  /// * Returns [`Self::tauri_protocol_url`] (e.g. `tauri://localhost`) otherwise.\n  pub(crate) fn get_app_url(&self, https: bool) -> Cow<'_, Url> {\n    #[cfg(dev)]\n    let url = self.config.build.dev_url.as_ref();\n    #[cfg(not(dev))]\n    let url = match self.config.build.frontend_dist.as_ref() {\n      Some(crate::utils::config::FrontendDist::Url(url)) => Some(url),\n      _ => None,\n    };\n\n    if let Some(url) = url {\n      Cow::Borrowed(url)\n    } else {\n      self.tauri_protocol_url(https)\n    }\n  }"
+        },
+        {
+          "start": 377,
+          "end": 388,
+          "text": "    if path.ends_with('/') {\n      path.pop();\n    }\n    path = percent_encoding::percent_decode(path.as_bytes())\n      .decode_utf8_lossy()\n      .to_string();\n    let path = if path.is_empty() {\n      // if the url is `tauri://localhost`, we should load `index.html`\n      \"index.html\".to_string()\n    } else {\n      // skip the leading `/`, if it starts with one.\n      path.strip_prefix('/').unwrap_or(path.as_str()).to_string()"
+        }
+      ]
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/webview.rs",
+      "sha256": "3bfb8bba5dbd61d08ec5ff4ce2fa882997df78666b840a8f13b30aea2c2e7381",
+      "excerpts": [
+        {
+          "start": 468,
+          "end": 486,
+          "text": "    let mut url = match &pending.webview_attributes.url {\n      WebviewUrl::App(path) => {\n        let app_url = app_manager.get_app_url(pending.webview_attributes.use_https_scheme);\n        let url = if PROXY_DEV_SERVER && is_local_network_url(&app_url) {\n          Cow::Owned(Url::parse(\"tauri://localhost\").unwrap())\n        } else {\n          app_url\n        };\n        // ignore \"index.html\" just to simplify the url\n        if path.to_str() != Some(\"index.html\") {\n          url\n            .join(&path.to_string_lossy())\n            .map_err(crate::Error::InvalidUrl)\n            // this will never fail\n            .unwrap()\n        } else {\n          url.into_owned()\n        }\n      }"
+        },
+        {
+          "start": 601,
+          "end": 630,
+          "text": "    let navigation_handler = pending.navigation_handler.take();\n    let app_manager = manager.manager_owned();\n    let label = pending.label.clone();\n    pending.navigation_handler = Some(Box::new(move |url| {\n      // always allow navigation events for the isolation iframe and do not emit them for consumers\n      #[cfg(feature = \"isolation\")]\n      if let crate::Pattern::Isolation { schema, .. } = &*pattern {\n        if url.scheme() == schema\n          && url.domain() == Some(crate::pattern::ISOLATION_IFRAME_SRC_DOMAIN)\n        {\n          return true;\n        }\n      }\n      if let Some(handler) = &navigation_handler {\n        if !handler(url) {\n          return false;\n        }\n      }\n      let webview = app_manager.webview.webviews_lock().get(&label).cloned();\n      if let Some(w) = webview {\n        app_manager\n          .plugins\n          .lock()\n          .expect(\"poisoned plugin store\")\n          .on_navigation(&w, url)\n      } else {\n        true\n      }\n    }));\n"
+        },
+        {
+          "start": 296,
+          "end": 335,
+          "text": "\n        if let Some(w) = app_manager_.get_webview(&label) {\n          if let Some(on_page_load) = &app_manager_.webview.on_page_load {\n            on_page_load(&w, &payload);\n          }\n\n          app_manager_\n            .plugins\n            .lock()\n            .unwrap()\n            .on_page_load(&w, &payload);\n        }\n\n        if let Some(handler) = &on_page_load_handler {\n          handler(url, event);\n        }\n      }));\n\n    let permission_request_handler = pending.permission_request_handler.take();\n    if permission_request_handler.is_some() || self.on_permission_request.is_some() {\n      let label_ = pending.label.clone();\n      let app_manager_ = manager.manager_owned();\n      pending\n        .permission_request_handler\n        .replace(Box::new(move |kind| {\n          if let Some(handler) = &permission_request_handler {\n            let response = handler(kind);\n            if response != crate::webview::PermissionResponse::Default {\n              return response;\n            }\n          }\n\n          if let Some(w) = app_manager_.get_webview(&label_) {\n            if let Some(on_permission_request) = &app_manager_.webview.on_permission_request {\n              return on_permission_request(w, kind);\n            }\n          }\n\n          crate::webview::PermissionResponse::Default\n        }));"
+        }
+      ]
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-utils-2.10.2/src/config.rs",
+      "sha256": "4c00eb5bd8f0aba67f8702e938039a44031f045ea271fe94d93585a0675714b9",
+      "excerpts": [
+        {
+          "start": 122,
+          "end": 126,
+          "text": "impl Default for WebviewUrl {\n  fn default() -> Self {\n    Self::App(\"index.html\".into())\n  }\n}"
+        },
+        {
+          "start": 1971,
+          "end": 1975,
+          "text": "  pub create: bool,\n  /// The window webview URL.\n  #[serde(default)]\n  pub url: WebviewUrl,\n  /// The user agent for the webview"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "No GUI, device, package build or original process probing",
+    "Independent test invokes actual app library module, not a copied model",
+    "Development baseline failure read as developer evidence; not independently rerun",
+    "Runtime first-request URL remains unknown/private"
+  ],
+  "candidateTreeCleanAfter": true
+}

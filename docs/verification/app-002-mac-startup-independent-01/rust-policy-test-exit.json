@@ -1,0 +1,18 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--locked",
+    "--offline",
+    "--lib",
+    "media_permission::tests::",
+    "--",
+    "--nocapture"
+  ],
+  "cwd": "/private/tmp/apple-notes-mac-startup-01",
+  "target": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target",
+  "exit": 0,
+  "elapsedSeconds": 0.456218208
+}

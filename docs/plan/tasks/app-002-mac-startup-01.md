@@ -1,7 +1,7 @@
 ---
 id: app-002-mac-startup-01
 scope: bundled-mac-entry-navigation-and-permission-boundary
-status: implemented
+status: in-progress
 depends-on: []
 ---
 
@@ -33,3 +33,7 @@ depends-on: []
 ## source candidate01（待独立审查）
 
 2026-11-04：仅EntryBoundary的CustomProtocol补充锁定框架根入口空path。新增真实macOS编译分支回归在旧predicate先失败（parser path为空断言通过，allows断言失败），最小修复后media_permission实际12组通过，rustfmt与diff检查通过。框架origin/manager源码精确行及文件hash、基线失败和候选日志见`../../verification/app-002-mac-startup/`。没有重打包/重启/设备动作，不宣称原private request URL已捕获或Mac UI启动/F07通过。
+
+## independent source delivery01
+
+2026-11-04：冻结候选c4890fc经独立审查SOURCE-READY，实际生产media_permission定向Rust12组通过，产品格式与scoped diff检查通过。主已整合产品ebb05a4及原始日志f051307，media_permission.rs的18533字节/SHA0008e0f3…与冻结一致，身份见`../../verification/app-002-mac-startup/main-integration.json`。报告为`../reviews/app-002-mac-startup-static-01.md`，独立5项manifest证据位于`../../verification/app-002-mac-startup-independent-01/`。原日志末尾空行为P3非阻断，原样保留；未将源码结论升级为实际启动或F07通过。任务继续in-progress，待新统一包实际验证。
