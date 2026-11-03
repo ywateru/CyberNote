@@ -1,0 +1,11 @@
+[package]
+name = "qa-scan-boundary"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+
+[dependencies]
+tauri-plugin-notes-scan = { path = "../../../../plugins/tauri-plugin-notes-scan" }
+base64 = "0.22"
+serde_json = "1"

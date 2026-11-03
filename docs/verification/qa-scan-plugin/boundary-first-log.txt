@@ -1,0 +1,13 @@
+     Locking 362 packages to latest compatible versions
+      Adding base64 v0.22.1 (available: v0.23.1)
+      Adding tauri-plugin v2.6.3 (available: v2.7.2)
+   Compiling tauri-plugin-notes-scan v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-scan)
+   Compiling qa-scan-boundary v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/qa-scan-plugin/boundary-probe)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.04s
+     Running `plugins/tauri-plugin-notes-scan/target/debug/qa-scan-boundary /Users/water/work/2026/Apple-Notes-Clone/docs/verification/qa-scan-plugin/chinese-fixture.png /private/tmp/qa-scan-boundary-verify01`
+
+thread 'main' (35040435) panicked at src/main.rs:6:47:
+assertion `left == right` failed
+  left: "invalid_token"
+ right: "file_missing"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
