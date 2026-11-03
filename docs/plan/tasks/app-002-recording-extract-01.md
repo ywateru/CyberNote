@@ -20,3 +20,7 @@ docs/INDEX.md、docs/architecture.md录音与附件契约、app-002-media.md、a
 ## verification
 
 提交前typecheck与现有录音资源清理检查，核对移动前后JSX/状态/生命周期/事件处理逻辑的等价性与真实App import调用，不新增镜像实现的机械测试。独立审查检查无功能改变、无漏依赖、真实挂载链完整，并复跑必要检查；source-ready仅表示接缝可整合，不代表录音/保存/像素通过。新包构建保持由root统一排期，不独自占设备/target。
+
+## source candidate 01
+
+基线fabafcf的纯抽取已完成：真实App改为import新RecordingPanel，移动组件主体与错误转文字函数逐字相同，props和父挂载/onCancel/onDone保持。typecheck、既有26组RecordingSession清理检查及diff-check通过。报告`../../verification/app-002-recording-extract/README.md`，源等价与SHA记录在其source-candidate-01目录。等待独立源码审查，保持ready；不修录音状态/保存，未操作设备/target/打包。

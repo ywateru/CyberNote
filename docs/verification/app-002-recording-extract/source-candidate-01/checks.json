@@ -1,0 +1,29 @@
+[
+  {
+    "command": [
+      "pnpm",
+      "typecheck"
+    ],
+    "exit": 0,
+    "combinedOutput": "\n> notes-clone@0.1.0 typecheck /private/tmp/apple-notes-recording-extract-01\n> tsc --noEmit\n\n",
+    "combinedOutputSha256": "f68be8fd8717f8bd2be7861e701166778945588709320506ae7da2b3c6e3a4f4"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/check-recording-session.mjs"
+    ],
+    "exit": 0,
+    "combinedOutput": "{\n  \"kind\": \"production-recording-session-failure-injection\",\n  \"status\": \"pass\",\n  \"checks\": 26,\n  \"results\": [\n    \"preparation createRecorder releases every acquired capture resource immediately\",\n    \"preparation recorder.start releases every acquired capture resource immediately\",\n    \"preparation createContext releases every acquired capture resource immediately\",\n    \"preparation context.analyser releases every acquired capture resource immediately\",\n    \"preparation context.source releases every acquired capture resource immediately\",\n    \"preparation source.connect releases every acquired capture resource immediately\",\n    \"preparation setInterval releases every acquired capture resource immediately\",\n    \"permission denial reports once without creating capture resources\",\n    \"permission resolve after disposal has no callbacks or recorder\",\n    \"permission reject after disposal has no callbacks or recorder\",\n    \"auto-start, real analyser samples and pause/resume remain; explicit stop waits for final data\",\n    \"dispose releases once; captured late data/stop/error/ended/timer cannot revive session\",\n    \"recorderError releases once; captured late data/stop/error/ended/timer cannot revive session\",\n    \"trackEnded releases once; captured late data/stop/error/ended/timer cannot revive session\",\n    \"analyserError releases once; captured late data/stop/error/ended/timer cannot revive session\",\n    \"stopping tracks does not turn normal completion into an interruption\",\n    \"one track stop failure still releases the other track, timer, nodes and context\",\n    \"pause exception reports failure and releases capture\",\n    \"resume exception reports failure and releases capture\",\n    \"old permission session cannot stop or publish into the next session\",\n    \"preview creates one URL and revokes that same URL once\",\n    \"partially started recorder throwing still stops recorder and every track\",\n    \"synchronous recorder error during start prevents later context acquisition\",\n    \"async context close rejection after disposal is handled without late UI errors\",\n    \"production browser bindings retain audio-only permission and audio/mp4 MIME selection\",\n    \"production browser bindings retain audio-only permission and default MIME selection\"\n  ],\n  \"limits\": \"Fake platform boundaries; no microphone/device/encoding/playback acceptance.\"\n}\n",
+    "combinedOutputSha256": "df97e4d60ac9fac497cec93bfebddb6f6e97e45ac923f7942620842c5fec3f82"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "combinedOutput": ""
+  }
+]
