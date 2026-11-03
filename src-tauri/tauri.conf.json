@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "备忘录",
+  "version": "0.1.0",
+  "identifier": "com.local.notesclone",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "备忘录",
+        "width": 1088,
+        "height": 660,
+        "minWidth": 700,
+        "minHeight": 440,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true,
+        "trafficLightPosition": { "x": 18, "y": 20 }
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: http://asset.localhost data: blob:; media-src 'self' asset: http://asset.localhost data: blob:; connect-src ipc: http://ipc.localhost 'self'; font-src 'self' data:",
+      "assetProtocol": { "enable": true, "scope": ["$APPDATA/attachments/**"] }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app"],
+    "category": "Productivity",
+    "shortDescription": "本地备忘录",
+    "iOS": { "minimumSystemVersion": "15.0" },
+    "android": { "minSdkVersion": 26 },
+    "macOS": { "minimumSystemVersion": "12.0", "infoPlist": "Info.plist" }
+  }
+}
