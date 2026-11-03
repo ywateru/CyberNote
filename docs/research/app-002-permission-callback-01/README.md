@@ -52,4 +52,6 @@ srcdoc/about:blank/blob/data等本地派生文档仍需单列，不能仅凭“�
 
 ## 交付限制
 
+同日补充的一轮候选设计核对：本App严格固定同一可信bundle入口L时，`Started(L旧)→Started(L重载)→Finished(L旧)`缺load ID，可能提前恢复来源可信，但在全局拒外导航、实例策略与frame/object/form限制下，本身不构成跨源授权。不得称最新加载已完成。必须拒绝的序列为`Navigation(U)/Started(U)→失信→晚Finished(L)`；晚Finished不能清除未知/非白名单U留下的失信。`Started(L1)取消→Started(L2)→Finished(L2)`未必再有L1的Finished，故等待队列全部耗尽也会造成永久不可用，不能拿计数补load ID。最终最小契约以`docs/plan/tasks/app-002-permission-01.md`更新为准；同可信入口重载正常恢复，不采用第二Started永久禁用方案。
+
 所有候选必须由develop实现、verify独立静态审查，再按root冻结的新包复验。首次拒绝/允许、无附件副作用、进程保持、静音录制与冷启、受控不可信页面/子frame拒绝均未由本研究运行；旧WebView91对有效CSP/Permissions-Policy执行仍unknown。宿主麦克风OFF与有效音轨unknown边界保持。

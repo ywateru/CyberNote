@@ -19,6 +19,8 @@ depends-on: [app-002-media]
 4. 继续走现有系统运行时权限和getUserMedia/MediaRecorder，不先造新音频插件。用户拒绝须返回正常可见错误，无panic、永久等待、附件或假卡片；正常同意才能继续实际录制子集。不得改全局系统授权以掩盖首次请求路径。
 5. 宿主麦克风保持OFF；现有模拟器没有active gRPC，静音真实录制只能验证权限/编码/存储流程，不能算可辨音轨或可听采集通过。有效音轨继续unknown，后续另验证。
 
+锁定页面事件没有load ID，不能用Started计数/Finished队列伪造最新加载完成证明。针对本App只加载严格匹配可信bundle入口的边界，同入口正常重载应能恢复媒体，不因第二次Started永久禁用，也不等待可能已取消且永不Finished的旧加载。非白名单/未知导航或Started必须先撤销并留下不可由晚可信Finished解除的失信状态；不同/未知Finished不得授信。相同可信入口的旧Finished可能提前恢复“可信来源”状态，此边界不声称最新load已完成；其可接受性同时依赖全局拒外导航、固定本地入口、实例资源与frame/object/form限制，不是通用Web浏览器来源识别。
+
 ## implementation
 
 develop在现有媒体隔离目录准备最小Rust/配置边界及必要定向检查，保留资源清理候选0b29cc0身份，勿混入暂停完成、父保存重试、Rust附件补偿或纸张视觉实现。native只读核锁定依赖公开API/线程和来源边界；verify独立静态复核后由root合入、统一输入冻结及构建。不得升级Tauri/Wry、下载无关平台或复制target。
