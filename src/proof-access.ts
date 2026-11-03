@@ -11,6 +11,7 @@ type InvokeFn = typeof Invoke;
 type Hold = { id: string; release: () => void };
 let raw: InvokeFn;
 let saveArmed = false,
+  registrationArmed = false,
   readArmed = false,
   dropCommit = false;
 const saves: Hold[] = [],
@@ -98,6 +99,10 @@ export function createProofInvoker(invoke: InvokeFn): InvokeFn {
       saveArmed = true;
       void record("save-armed");
     });
+    button("暂停下次保存登记响应至prepare", () => {
+      registrationArmed = true;
+      void record("registration-armed");
+    });
     button("暂停下次读取响应至commit", () => {
       readArmed = true;
       void record("read-armed");
@@ -145,6 +150,7 @@ export function createProofInvoker(invoke: InvokeFn): InvokeFn {
       requestId: id,
       command,
       action: action?.type,
+      revision: action?.revision,
       noteId: action?.id || payload.noteId || payload.id,
       operationId: payload.operationId,
     };
@@ -172,6 +178,10 @@ export function createProofInvoker(invoke: InvokeFn): InvokeFn {
         epoch: value?.access?.epoch,
         success: true,
       });
+      if (command === "register_save_intent" && registrationArmed) {
+        registrationArmed = false;
+        await hold(saves, id, "registration-held-after-real-result");
+      }
       if (["load_workspace", "read_note_text"].includes(command) && readArmed) {
         readArmed = false;
         await hold(reads, id, "read-held-after-real-result");
