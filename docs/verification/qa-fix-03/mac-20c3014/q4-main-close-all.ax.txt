@@ -1,0 +1,62 @@
+Window: "备忘录", App: 备忘录.
+0 standard window 备忘录, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost
+			3 container
+				4 button 添加文件夹
+				5 button 隐藏文件夹
+				6 button 快速备忘录 3
+				7 text 在我的 Mac 上
+				8 button 全部备忘录 27
+				9 button 备忘录 0
+				10 button Notes Clone UI 2
+				11 button QA 独立验证 10
+				12 button FIX01 6
+				13 button FIX03 Session Proof 6
+				14 button 新建文件夹
+				15 button 更多设置
+			16 splitter 调整分栏宽度
+			17 container
+				18 text FIX03 Session Proof 6 个备忘录
+				19 button 显示选项
+			20 text 今天
+			21 button QA FIX03 Timing20 Mac 18:01 已锁定
+			22 button QA FIX03 Timing20 Mac 17:59 PUBLIC-TIMING20-BASECD PRIVATE-LOCAL-A-20 PRIVATE-LOCAL-B-20
+			23 button QA FIX03 Independent20 Mac 17:42 已锁定
+			24 button FIX03 Baseline Final 17:14 PUBLIC-BASELINE-BASE PRIVATE-BASELINE-LOCAL-A PRIVATE-BASELINE-LOCAL-B
+			25 button FIX03 Baseline Final 17:13 PUBLIC-BASELINE-BASE PRIVATE-BASELINE-PEER-X
+			26 button FIX03 Public Q1 16:38 已锁定
+			27 splitter 调整分栏宽度
+			28 container
+				29 button 新建备忘录
+				30 button 格式
+				31 button 核对清单
+				32 button 表格
+				33 button 添加附件
+				34 button 共享
+				35 button 更多
+				36 text field (settable) 搜索备忘录, Placeholder: 搜索
+				37 heading 此备忘录已锁定, Value: 2
+					38 text 此备忘录已锁定
+				39 text 输入密码以查看此备忘录。
+				40 button 查看备忘录
+			41 container
+				42 text gate-accepted · save 0 / read 0
+				43 button 暂停下次保存至prepare
+				44 button 暂停下次保存登记响应至prepare
+				45 button 暂停下次读取响应至commit
+				46 button 释放保存
+				47 button 释放读取
+				48 button 丢弃下次commit通知
+				49 button 记录DOM
+	50 close button
+	51 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	52 minimize button
+53 menu bar
+	54 备忘录
+	55 文件
+	56 编辑
+	57 显示
+	58 窗口
+
+The focused UI element is 2 HTML content Description: 备忘录, URL: tauri://localhost

@@ -1,0 +1,81 @@
+Window: "备忘录", App: 备忘录.
+0 standard window 备忘录, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost
+			3 container
+				4 text 其他窗口仍有未确认保存的更改，锁定未执行
+				5 button 重试
+				6 button 关闭错误
+			7 container
+				8 button 添加文件夹
+				9 button 隐藏文件夹
+				10 button 快速备忘录 3
+				11 text 在我的 Mac 上
+				12 button 全部备忘录 26
+				13 button 备忘录 0
+				14 button Notes Clone UI 2
+				15 button QA 独立验证 10
+				16 button FIX01 6
+				17 button FIX03 Session Proof 5
+				18 button 新建文件夹
+				19 button 更多设置
+			20 splitter 调整分栏宽度
+			21 container
+				22 text FIX03 Session Proof 5 个备忘录
+				23 button 显示选项
+			24 text 今天
+			25 button QA FIX03 Timing20 Mac 17:56 PUBLIC-TIMING20-BASECD PRIVATE-PEER-X-20
+			26 button QA FIX03 Independent20 Mac 17:42 已锁定
+			27 button FIX03 Baseline Final 17:14 PUBLIC-BASELINE-BASE PRIVATE-BASELINE-LOCAL-A PRIVATE-BASELINE-LOCAL-B
+			28 button FIX03 Baseline Final 17:13 PUBLIC-BASELINE-BASE PRIVATE-BASELINE-PEER-X
+			29 button FIX03 Public Q1 16:38 已锁定
+			30 splitter 调整分栏宽度
+			31 container
+				32 button 新建备忘录
+				33 button 格式
+				34 button 核对清单
+				35 button 表格
+				36 button 添加附件
+				37 button 共享
+				38 button 更多
+				39 text field (settable) 搜索备忘录, Placeholder: 搜索
+				40 button 2026年11月3日 17:56
+				41 text entry area (settable) 备忘录正文, Value: QA FIX03 Timing20 Mac
+PUBLIC-TIMING20-BASECD PRIVATE-PEER-X-20
+					42 text (settable) QA FIX03 Timing20 Mac
+					43 text (settable) PUBLIC-TIMING20-BASECD PRIVATE-PEER-X-20
+			44 container 设置
+				45 heading 设置, Value: 2
+					46 text 设置
+				47 heading 外观, Value: 3
+					48 text 外观
+				49 button 跟随系统
+				50 button 浅色
+				51 button 深色
+				52 heading 本地数据, Value: 3
+					53 text 本地数据
+				54 button 导出本地备份
+				55 button 导入本地备份
+				56 button 关闭所有已锁定的备忘录
+				57 text 所有备忘录和附件保存在此设备中。
+				58 button 完成
+			59 container
+				60 text gate-accepted · save 0 / read 0
+				61 button 暂停下次保存至prepare
+				62 button 暂停下次保存登记响应至prepare
+				63 button 暂停下次读取响应至commit
+				64 button 释放保存
+				65 button 释放读取
+				66 button 丢弃下次commit通知
+				67 button 记录DOM
+	68 close button
+	69 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	70 minimize button
+71 menu bar
+	72 备忘录
+	73 文件
+	74 编辑
+	75 显示
+	76 窗口
+
+The focused UI element is 2 HTML content Description: 备忘录, URL: tauri://localhost

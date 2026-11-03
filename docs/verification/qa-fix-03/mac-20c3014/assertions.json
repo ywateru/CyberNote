@@ -1,0 +1,35 @@
+{
+  "scope": "finite final20 production UI and opt-in same-source timing evidence",
+  "assertions": {
+    "freshMonotonicLog": true,
+    "q8SameRequestHeldReleasedAcknowledged": true,
+    "q8NativeSelectedTextRetained": true,
+    "q8UndoRemovesDRedoRestoresD": true,
+    "earlyRegistrationActuallyCompletedBeforeHold": true,
+    "aAndBUseSameOldRevisionAndConflict": true,
+    "failedDrainAbortsWithoutCommit": true,
+    "ordinaryRetryStillOldRevisionConflict": true,
+    "q2SavedBeforeParticipantAckAndCommit": true,
+    "q2RealRevisionAdvanced57To58": true,
+    "q4SameOldReadExecutedHeldReleasedRejected": true,
+    "q4DroppedCommitStaysCovered": true,
+    "q4FocusTrustedSnapshotThenNoEditor": true,
+    "copyColdRevision1": true,
+    "defaultRestoredHash": true
+  },
+  "requestIds": {
+    "q8": "806830f9-8f8d-4db1-b20a-c6e53068caa2",
+    "earlyRegistration": "ae99b047-f3f4-4c91-85ab-512c9967d1b6",
+    "A": "86b99873-0ba0-4ce5-8808-ec7c61b12ade",
+    "B": "3129976f-0532-4c24-83aa-625833c7c499",
+    "q2": "2b61ee14-2d73-40aa-b71a-0970f0d3aab1",
+    "lateRead": "8f6100a2-f80a-4803-99ac-77c7079f211e"
+  },
+  "unknown": [
+    "Editor object identity",
+    "S3 save outside ACK drain set after commit",
+    "four encrypted fixture GUI imports",
+    "full F12/F13 matrix",
+    "pixel parity"
+  ]
+}

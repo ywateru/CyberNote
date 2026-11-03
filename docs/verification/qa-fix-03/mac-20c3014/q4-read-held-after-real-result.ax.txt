@@ -1,0 +1,25 @@
+Window: "QA FIX03 Timing20 Mac", App: 备忘录.
+0 standard window QA FIX03 Timing20 Mac, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost/index.html?note=bd095f20-f857-46ae-bded-bc1705e025a9
+			3 text 正在确认保存与锁定状态…
+			4 container
+				5 text read-held-after-real-result · save 0 / read 1
+				6 button 暂停下次保存至prepare
+				7 button 暂停下次保存登记响应至prepare
+				8 button 暂停下次读取响应至commit
+				9 button 释放保存
+				10 button 释放读取
+				11 button 丢弃下次commit通知
+				12 button 记录DOM
+	13 close button
+	14 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	15 minimize button
+16 menu bar
+	17 备忘录
+	18 文件
+	19 编辑
+	20 显示
+	21 窗口
+
+The focused UI element is 2 HTML content Description: 备忘录, URL: tauri://localhost/index.html?note=bd095f20-f857-46ae-bded-bc1705e025a9
