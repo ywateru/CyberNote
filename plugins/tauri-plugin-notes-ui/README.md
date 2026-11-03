@@ -15,7 +15,7 @@ const bound = await toolbar.bind(initialState);
 // 状态提交串行化；合并搜索事件后递增 revision，再调用 update。
 await toolbar.update(nextState);
 const diagnostic = await toolbar.inspect();
-// 宿主搜索菜单 / Cmd+Shift+F（所属窗口）：
+// 宿主搜索菜单 / Option+Cmd+F（Mac 所属窗口）：
 await toolbar.focusSearch();
 // 窗口组件销毁：先停止宿主队列；注销失败也必须解除事件监听。
 try { await toolbar.unbind(); } finally { unlisten(); }
@@ -49,7 +49,9 @@ guest `NotesToolbar.listen` 在 bind 响应前尚无 UUID，会过滤早期事�
 
 明确错误包含 `search_missing`、`search_disabled`、`stale_binding`、`window_closed`、`focus_failed`，并沿用 `invalid_binding`、`window_mismatch`、`unsupported` 和线程/原生错误。未 bind 的 guest 实例在 invoke 前返回 `not_bound`。窗口关闭清理先发生时可能返回 `stale_binding`；保留控制器但视图已脱离窗口时返回 `window_closed`。
 
-FIX02 正式宿主须将所属窗口的全局搜索菜单及 Cmd+Shift+F 路由到该方法；Cmd+F 的笔记内查找继续独立。新增 API 不会自动改动主应用菜单或快捷键。两窗焦点、实际输入、中文组字、重复调用、关闭与重绑的 GUI 验证均 not-run，见 `docs/verification/app-001-native-toolbar-plugin/focus-search/README.md`。
+FIX02 正式 Mac 宿主须将所属窗口的全局搜索菜单及 Option+Cmd+F 路由到该方法；Cmd+F 的笔记内查找继续独立。新增 API 不会自动改动主应用菜单或快捷键。原 Notes 的全局列表搜索使用 Option+Cmd+F，Cmd+Shift+F 对应查找和替换；早期插件及宿主记录中的 Cmd+Shift+F 是历史候选行为，不代表原版快捷键一致。当前 Rust 菜单单独修正为 `CmdOrCtrl+Alt+F`，尚须以该新输入构建后实际验证，不能由旧包的聚焦结果推定通过。浏览器预览保留原有独立快捷键。
+
+早期插件阶段的两窗焦点、实际输入、中文组字、重复调用、关闭与重绑 GUI 验证状态仍以 `docs/verification/app-001-native-toolbar-plugin/focus-search/README.md` 为准。正式包后续的有限搜索编辑几何观察单独见 `docs/verification/app-001-fix-02-visual-01/runtime-search-editor-01/selfcheck.md`：该包仍使用旧快捷键，长查询视口与焦点颜色尚未通过，不能作为此次快捷键纠正的运行证据。
 
 ## 权限
 

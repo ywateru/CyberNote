@@ -302,7 +302,7 @@ pub fn run() {
                     .text("gallery", "切换画廊视图")
                     .item(
                         &MenuItemBuilder::with_id("search", "搜索备忘录")
-                            .accelerator("CmdOrCtrl+Shift+F")
+                            .accelerator("CmdOrCtrl+Alt+F")
                             .build(app)?,
                     )
                     .build()?;
