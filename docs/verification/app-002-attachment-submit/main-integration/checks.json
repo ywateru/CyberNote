@@ -1,0 +1,29 @@
+{
+  "scope": "post-merge frontend build and production controlled boundary regressions; not device/pixel proof",
+  "checks": [
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "result": "build.txt",
+      "bytes": 757,
+      "sha256": "b90dcdd50488b8d046e91cd52e1feb1eccaecf9cf0f553ce85d01bfd3b6fb3aa",
+      "groups": null
+    },
+    {
+      "command": "node scripts/check-attachment-submission.mjs",
+      "exitCode": 0,
+      "result": "submission.json",
+      "bytes": 2735,
+      "sha256": "a510ebf3b95fbc7be923b77750d412f2aefc45bafbf299d9896c6d6f785a714e",
+      "groups": 23
+    },
+    {
+      "command": "node scripts/check-attachment-cancellation.mjs",
+      "exitCode": 0,
+      "result": "cancellation.json",
+      "bytes": 5759,
+      "sha256": "f499c9f64ae9d9cb27f15650dc0a7614fc3f3227a1a05463bf511cdd30023f1f",
+      "groups": 8
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "candidate": "d81dd575f967a98535d36a0200b60040e5b49095",
+  "finalStatus": "",
+  "sourcesUnchanged": true,
+  "old01Unchanged": true,
+  "temporaryDependencyLinkRemoved": true,
+  "checks": [
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "stdout": "typecheck.stdout.txt",
+      "stderr": "typecheck.stderr.txt"
+    },
+    {
+      "command": "node scripts/check-attachment-submission.mjs",
+      "exitCode": 0,
+      "groups": 23,
+      "stdout": "submission.stdout.txt",
+      "stderr": "submission.stderr.txt"
+    },
+    {
+      "command": "node scripts/check-attachment-cancellation.mjs",
+      "exitCode": 0,
+      "groups": 8,
+      "stdout": "cancellation.stdout.json",
+      "stderr": "cancellation.stderr.txt"
+    },
+    {
+      "command": "node /Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-002-attachment-submit-independent-02/cancellation-reentrancy.mjs",
+      "exitCode": 0,
+      "groups": 3,
+      "stdout": "reentrancy.stdout.json",
+      "stderr": "reentrancy.stderr.txt"
+    },
+    {
+      "command": "git diff --check 72c93b1b34bcfd3a95c331d1da93e187ff5fda14..HEAD",
+      "exitCode": 0,
+      "stdout": "diff-check.stdout.txt",
+      "stderr": "diff-check.stderr.txt"
+    }
+  ]
+}

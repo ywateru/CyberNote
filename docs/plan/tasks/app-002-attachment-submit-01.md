@@ -1,7 +1,7 @@
 ---
 id: app-002-attachment-submit-01
 scope: file-picker-return-target-and-attachment-document-commit
-status: ready
+status: in-progress
 depends-on: [app-002-permission-01, app-002-attachment-store-01]
 ---
 
@@ -57,3 +57,7 @@ depends-on: [app-002-permission-01, app-002-attachment-store-01]
 ## verification
 
 独立静态审查后统一构建冻结包。Mac真实菜单→系统Open选图片/PDF→受管字节→正文节点→自身保存→只移开临时来源→冷启→实际图片/PDF预览或明确未实现结果。取消及一个受控插入/保存失败分别核完整正文、附件表与实际文件，重试不得重复；真实目标失效继续拒绝。Android真实文件选择同链有限复验，不能用DOM注入文件替代用户选择。新包未实测前不得把旧PDF复制成功升级为完整附件通过，像素/系统预览差异与功能结果分别记录。
+
+## source integration / 2026-11-04
+
+源d81dd575独立SOURCE-READY，报告`../reviews/app-002-attachment-submit-static-02.md`。前端主c793166/01aada6合入，8产品/脚本冻结hash逐项相同，主pnpm build、23生产模块和8实际App取消回归通过。原607950a失败与独审01保持。实现已可进入下一新包的系统选择器/正文ACK/预览/冷启实测；status仍in-progress，不用源码通过替代该E2E门槛。证据`../../verification/app-002-attachment-submit/main-integration/`。零结果展示任务可在此App owner已冻结独审合入后串行开始。
