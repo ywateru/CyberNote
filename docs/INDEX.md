@@ -19,6 +19,7 @@
 - [手机纸张选择页几何测量](research/mobile-paper-calibration/analysis.md)
 - [标签、智能文件夹、数学与笔记链接](ui/local-features.md)
 - [真实标签与本地标签浏览首批接入](plan/tasks/app-003-tags-01.md)
+- [Apple 官方标签与锁定限制补证](research/tag-lock-official-20261104.md)
 - [交互状态矩阵](ui/interaction-matrix.md)
 - [交付计划](plan/README.md)
 - [手机媒体权限入口崩溃修复](plan/tasks/app-002-permission-01.md)
