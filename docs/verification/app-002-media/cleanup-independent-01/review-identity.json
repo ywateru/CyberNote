@@ -1,0 +1,23 @@
+{
+  "review_date": "2026-11-03",
+  "scope": "independent source review and controlled checks; no React mount, device, build or installation",
+  "candidate_worktree": "/private/tmp/apple-notes-media-roundtrip-02",
+  "source_sha256": {
+    "src/App.tsx": "5c81e6d532d70c89c966a9c275406f1998421d83a898ca74b708d4b8b7352226",
+    "src/recording-session.ts": "38a83851b3ee0234e7662f32cf9fed8e7019492b42e7c32bfd74af707eae11c0",
+    "scripts/check-recording-session.mjs": "eb2148765f988d28841de89407a66e22e2ed4fbda07f1428c8136fb6c51f425a"
+  },
+  "check_exit_codes": {
+    "recording_session_26": 0,
+    "typecheck": 0,
+    "native_toolbar_12": 0,
+    "commit_diff_check": 0
+  },
+  "temporary_node_modules_link_removed": true,
+  "tracked_diff": "",
+  "candidate_status": "",
+  "merge_gate": "Frozen old 5dd6dfc8 APK actual media baseline must complete before root merges or builds the candidate; candidate requires later actual verification.",
+  "reviewed_commit": "0b29cc0f3f79bb473f38dcfa578f88af787178ff",
+  "head_at_review_end": "f1114a02b4aa2dd660304606246e293b5f070560",
+  "concurrent_commit_scope": "f1114a0 adds only two old-apk-audio-availability-01 documentation files; reviewed App/module/check script diff versus 0b29cc0 is empty"
+}
