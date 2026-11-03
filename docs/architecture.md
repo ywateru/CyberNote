@@ -43,16 +43,31 @@ paperStyle 合法值为 plain、lines-small、lines-medium、lines-large、grid-
 
 | 实际 Tauri 命令 | 输入 | 输出/约束 |
 |---|---|---|
-| `load_workspace` | 无 | 文件夹、完整富文档、附件元数据、设置；默认文件夹幂等初始化 |
-| `workspace_action` | `action: {type, ...}` | `createNote/saveNote/patchNote/deleteNote/restoreNote/purgeNote`、文件夹管理、`settings`、锁定操作；create 返回新实体，其他通常返回 workspace |
-| `store_attachment` | noteId、name、mime、Base64 data | 受管本地附件元数据；100 MB 上限；拒绝越界相对路径 |
-| `read_attachment` | id | Base64 data、mime、name；锁定检查 |
-| `export_archive` | 本地 path | 写入版本 1 `.notesbackup`，包含密文及附件 |
-| `import_archive` | 本地 path | 完整校验、冲突时导入副本并恢复设置；返回更新 workspace |
+| `load_workspace` | 无 | 文件夹、已授权文档、附件元数据、设置及 access 快照；屏障目标正文脱敏 |
+| `register_save_intent` | noteId、intent、expected | Rust注入真实调用窗口；保存入队时预登记当前note epoch，prepare后不接受目标新登记 |
+| `workspace_action` | `action: {type, ...}`、expected | 通用变更检查进程会话/全局epoch；saveNote须带登记的saveIntent，按真实窗口及note epoch检查；返回值带access |
+| `acknowledge_access` | operationId、success | Rust注入真实窗口；未完成的目标保存不得成功ACK |
+| `read_note_text` | id、expected | 执行时检查实时授权与屏障，返回title/text及access；拷贝/分享统一使用 |
+| `store_attachment` | noteId、name、mime、Base64 data、expected | 受管本地附件元数据；100 MB 上限；实时授权/屏障检查 |
+| `read_attachment` | id、expected | Base64 data、mime、name及access；按附件真实归属note检查 |
+| `export_archive` | 本地 path、expected | 写版本1密文归档；屏障期间拒绝；标题仍可见 |
+| `import_archive` | 本地 path、expected | 完整校验、冲突副本和设置恢复；先执行全部窗口保存屏障，成功清钥匙并更新epoch |
 
 当前搜索在前端对 Rust 载入的本地笔记正文与元数据做中文子串过滤，没有独立 FTS/search 命令。附件随永久删除清理，没有单独 remove_attachment 命令。MacShell/MobileShell 是概念边界，首轮均由 `src/App.tsx` 分支渲染，富编辑器在 `src/Editor.tsx`，原生存储在 `src-tauri/src/store.rs`。
 
 Rust 错误应结构化：code/message，UI 显示错误并保留未保存内容。自动保存做按笔记串行队列/版本校验，避免切笔记或慢写导致旧内容覆盖新内容。输入法 composition 过程中不改写光标/文档。退出/失焦前清空队列并验证重启内容。附件内容 URL 只从受管路径生成。
+
+### 进程授权与多窗口保存边界（APP-001-FIX-03）
+
+Rust Session拥有随机进程sessionId、全局epoch与逐笔记epoch，Store.keys是唯一解锁授权。renderer不保留独立unlocked集合。notes-access只广播prepare/commit/abort、操作ID、目标ID、真实参与窗口及access元数据，不带正文/密码/钥匙。设置锁、移除锁、关闭全部锁、删除笔记/文件夹、永久删除和归档导入均先冻结目标，真实窗口集合来自AppHandle.webview_windows，调用窗口身份由Tauri注入，不能通过action自报。
+
+prepare后新读取脱敏、目标新保存登记拒绝；prepare前登记的保存可以继续执行，窗口严格等待队列且确认pendingDocs与保存失败集合均空后才ACK。Rust也拒绝带未完成intent的成功ACK，保存失败直接使当前屏障失败。异步workspace_action/import_archive将10秒有界Condvar等待放在spawn_blocking中，等待时释放Store mutex且离开GUI线程。任何失败ACK、保存冲突、超时或参与窗口消失均abort，不撤销旧授权、不丢弃pending编辑；已成功排空的保存仍持久保留。abort恢复prepare前editor的editable，包含纸张页冻结状态。
+
+全部ACK后才执行变更、提升目标epoch、撤销目标钥匙，再从权威Store重新生成响应；commit立即destroy受影响Editor及历史，清正文/预览/搜索/find、纸张/格式书签、绘画/录音/媒体目标。原先进行中的保存响应只确认revision，不回填正文；读取与变更响应经进程、epoch、renderer generation检查，失效结果不进入缓存。启动先订阅事件再取快照，重新聚焦/回前台先遮挡旧内容再同步；同步失败继续遮挡并提供重试，事件丢失后仍以可信快照恢复。系统剪贴板或用户已经明确交给系统分享的副本不在撤销契约中，不读取/清理用户剪贴板，不等待系统分享无限结束。
+
+解锁在正确密码解密后、插入key前复用真实Editor schema和应用属性校验；正常/加密save与首次lock同样校验。未知密码归档只校验外层密文格式，非法内部节点或drawing属性在正确密码解锁时拒绝，密文与旧会话不变。lockNote已持久提交但WAL整理错误用lock_committed报告真实状态，仍commit授权边界并提示维护错误，不能假abort恢复旧正文。
+
+仅显式启用Rust feature access-boundary-proof且Vite VITE_ACCESS_BOUNDARY_PROOF=1的额外测试包包含固定暂停/记录适配器：只暂停真实save执行或真实读取结果交付，按prepare/commit释放；不改请求/结果，不写Editor/React状态。默认生产包不编入Rust记录命令，Vite消除整个测试模块。测试包与生产包指纹和运行证据分别记录。
 
 ### 本地归档可靠性契约（APP-001-FIX-00）
 

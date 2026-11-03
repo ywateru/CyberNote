@@ -7,7 +7,6 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { type Editor, type JSONContent } from "@tiptap/react";
-import { invoke } from "@tauri-apps/api/core";
 import { exit, onBackButtonPress } from "@tauri-apps/api/app";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
@@ -68,7 +67,19 @@ import {
   IndentDecrease,
   Quote,
 } from "lucide-react";
-import { action, loadWorkspace, native, storeAttachment } from "./bridge";
+import {
+  action,
+  loadWorkspace,
+  native,
+  storeAttachment,
+  readNoteText,
+  exportArchive,
+  importArchive,
+  registerSaveIntent,
+  acknowledgeAccess,
+  subscribeAccess,
+  invalidateAccessRequests,
+} from "./bridge";
 import NoteEditor from "./Editor";
 import { convertTableToText, toggleListStyle } from "./editor-actions";
 import type { SelectionBookmark } from "@tiptap/pm/state";
@@ -79,6 +90,8 @@ import {
   type Note,
   type Settings,
   type Workspace,
+  type AccessEvent,
+  blankDoc,
 } from "./types";
 
 const empty: Workspace = {
@@ -194,7 +207,25 @@ function App() {
   const [sidebar, setSidebar] = useState(true);
   const [settings, setSettings] = useState<Settings>({});
   const [saving, setSaving] = useState(0);
-  const [unlocked, setUnlocked] = useState<Set<string>>(new Set());
+  const unlocked = new Set(
+    ws.notes
+      .filter((n) => !n.locked || ws.access?.notes[n.id]?.authorized)
+      .map((n) => n.id),
+  );
+  const [accessSuspended, setAccessSuspended] = useState<string[]>([]);
+  const [synchronizing, setSynchronizing] = useState(false);
+  const [syncError, setSyncError] = useState("");
+  const blockedNotes = useRef(new Set<string>());
+  const saveFailures = useRef(new Map<string, unknown>());
+  const accessHandler = useRef<(event: AccessEvent) => void>(() => {});
+  const clearSensitive = useRef<(ids: string[]) => void>(() => {});
+  const synchronizeRef = useRef<() => Promise<void>>(async () => {});
+  const synchronization = useRef<Promise<void> | null>(null);
+  const syncSequence = useRef(0);
+  const initializedSelection = useRef(false);
+  const barrierEditor = useRef<{ editor: Editor; editable: boolean } | null>(
+    null,
+  );
   const [find, setFind] = useState("");
   const [showFind, setShowFind] = useState(false);
   const [notice, setNotice] = useState("");
@@ -206,6 +237,7 @@ function App() {
   const [mobile, setMobile] = useState(window.innerWidth < 700 && !separate);
   const queues = useRef(new Map<string, Promise<unknown>>());
   const revisions = useRef(new Map<string, number>());
+  const externalVersions = useRef(new Map<string, number>());
   const pendingDocs = useRef(new Map<string, JSONContent>());
   const fileInput = useRef<HTMLInputElement>(null);
   const cameraInput = useRef<HTMLInputElement>(null);
@@ -222,23 +254,69 @@ function App() {
   const onReady = useCallback((e: Editor | null) => setEditor(e), []);
   const fail = useCallback((e: unknown) => setError(errText(e)), []);
   const hydrate = useCallback((data: Workspace) => {
-    data.notes.forEach((n) => revisions.current.set(n.id, n.revision));
-    setWs(data);
+    const previous = wsRef.current;
+    const changed = previous.notes
+      .filter(
+        (n) =>
+          previous.access &&
+          data.access &&
+          (previous.access.sessionId !== data.access.sessionId ||
+            previous.access.notes[n.id]?.epoch !==
+              data.access.notes[n.id]?.epoch),
+      )
+      .map((n) => n.id);
+    if (changed.length) clearSensitive.current(changed);
+    const notes = data.notes.map((n) => {
+      revisions.current.set(n.id, n.revision);
+      const pending = pendingDocs.current.get(n.id);
+      const old = previous.notes.find((old) => old.id === n.id);
+      if (
+        !pending &&
+        old &&
+        JSON.stringify(old.document) !== JSON.stringify(n.document)
+      )
+        externalVersions.current.set(
+          n.id,
+          (externalVersions.current.get(n.id) || 0) + 1,
+        );
+      if (
+        !pending ||
+        changed.includes(n.id) ||
+        !data.access?.notes[n.id]?.authorized
+      )
+        return n;
+      const text = documentText(pending);
+      return {
+        ...n,
+        document: pending,
+        plainText: text,
+        title: text.split("\n")[0] || "新备忘录",
+      };
+    });
+    const next = { ...data, notes };
+    wsRef.current = next;
+    setWs(next);
     setSettings(data.settings);
   }, []);
   useEffect(() => {
-    loadWorkspace()
-      .then((data) => {
-        hydrate(data);
-        setFolderId(String(data.settings.selectedFolder || "default"));
-        const selectedId = separate || String(data.settings.selectedNote || "");
-        if (data.notes.some((n) => n.id === selectedId)) {
-          setNoteId(selectedId);
-          if (separate) setPage("editor");
-        }
-      })
+    let disposed = false;
+    let unlisten: (() => void) | undefined;
+    (async () => {
+      unlisten = await subscribeAccess((event) => accessHandler.current(event));
+      if (disposed) {
+        unlisten();
+        return;
+      }
+      await synchronizeRef.current();
+    })()
       .catch(fail)
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!disposed) setLoading(false);
+      });
+    return () => {
+      disposed = true;
+      unlisten?.();
+    };
   }, [hydrate, fail, separate]);
   useEffect(() => {
     const resize = () => {
@@ -268,6 +346,10 @@ function App() {
   }, [theme]);
   const flush = useCallback(async () => {
     await Promise.all([...queues.current.values()]);
+    if (pendingDocs.current.size || saveFailures.current.size)
+      throw Error(
+        "还有未确认保存的更改；锁定未执行，请保持窗口打开并重试编辑保存。",
+      );
   }, []);
   const refresh = useCallback(async () => {
     await flush();
@@ -295,6 +377,12 @@ function App() {
   );
   const saveDoc = useCallback(
     (id: string, doc: JSONContent) => {
+      if (blockedNotes.current.has(id)) {
+        fail(Error("备忘录正在同步锁定状态"));
+        return;
+      }
+      const ticket = registerSaveIntent(id);
+      void ticket.catch(() => {}); // The queued save handles and retains registration failures.
       pendingDocs.current.set(id, doc);
       const text = documentText(doc);
       setWs((prev) => ({
@@ -318,12 +406,15 @@ function App() {
           const n = await action<Note>({
             type: "saveNote",
             id,
+            saveIntent: await ticket,
             document: doc,
             revision: revisions.current.get(id) || 0,
           });
           revisions.current.set(id, n.revision);
-          if (pendingDocs.current.get(id) === doc)
+          if (pendingDocs.current.get(id) === doc) {
             pendingDocs.current.delete(id);
+            saveFailures.current.delete(id);
+          }
           setWs((prev) => ({
             ...prev,
             notes: prev.notes.map((old) =>
@@ -331,7 +422,10 @@ function App() {
             ),
           }));
         })
-        .catch(fail)
+        .catch((e) => {
+          saveFailures.current.set(id, e);
+          fail(e);
+        })
         .finally(() => setSaving((v) => Math.max(0, v - 1)));
       queues.current.set(id, next);
     },
@@ -350,9 +444,12 @@ function App() {
         .onCloseRequested(async (event) => {
           if (pendingDocs.current.size) {
             event.preventDefault();
-            await flush();
-            if (!pendingDocs.current.size) await getCurrentWindow().destroy();
-            else setError("还有未保存的更改，请保持窗口打开并重试保存。");
+            try {
+              await flush();
+              if (!pendingDocs.current.size) await getCurrentWindow().destroy();
+            } catch (e) {
+              fail(e);
+            }
           }
         })
         .then((fn) => (unlisten = fn));
@@ -361,6 +458,139 @@ function App() {
       unlisten?.();
     };
   }, [flush, fail]);
+  clearSensitive.current = (ids) => {
+    if (!ids.length) return;
+    if (noteId && ids.includes(noteId)) {
+      if (editor && !editor.isDestroyed) editor.destroy();
+      barrierEditor.current = null;
+      formatTarget.current = null;
+      paperTarget.current = null;
+      setMenu(null);
+      setModal(null);
+      setModalValue("");
+      setDraw(null);
+      setRecord(false);
+      setEditing(false);
+      setShowFind(false);
+      setFind("");
+    }
+    setQuery("");
+    setSearching(false);
+    setContextNote(null);
+  };
+  synchronizeRef.current = () => {
+    syncSequence.current++;
+    invalidateAccessRequests();
+    setSynchronizing(true);
+    setSyncError("");
+    if (synchronization.current) return synchronization.current;
+    const task = (async () => {
+      for (;;) {
+        const sequence = syncSequence.current;
+        try {
+          const data = await loadWorkspace();
+          if (sequence !== syncSequence.current) continue;
+          hydrate(data);
+          if (!initializedSelection.current) {
+            initializedSelection.current = true;
+            setFolderId(String(data.settings.selectedFolder || "default"));
+            const selectedId =
+              separate || String(data.settings.selectedNote || "");
+            if (data.notes.some((n) => n.id === selectedId)) {
+              setNoteId(selectedId);
+              if (separate) setPage("editor");
+            }
+          }
+          blockedNotes.current = new Set(data.access?.suspended || []);
+          setAccessSuspended([...blockedNotes.current]);
+          setSynchronizing(false);
+          return;
+        } catch (e) {
+          if (sequence !== syncSequence.current) continue;
+          fail(e);
+          setSyncError(errText(e));
+          return; // Keep cached content covered until a trusted retry succeeds.
+        }
+      }
+    })().finally(() => {
+      synchronization.current = null;
+    });
+    synchronization.current = task;
+    return task;
+  };
+  accessHandler.current = (event) => {
+    if (event.phase === "prepare") {
+      blockedNotes.current = new Set(event.noteIds);
+      setAccessSuspended(event.noteIds);
+      if (
+        noteId &&
+        blockedNotes.current.has(noteId) &&
+        editor &&
+        !editor.isDestroyed
+      ) {
+        barrierEditor.current = { editor, editable: editor.isEditable };
+        editor.setEditable(false, false);
+      }
+      void (async () => {
+        let success = false;
+        try {
+          await flush();
+          success = !pendingDocs.current.size && !saveFailures.current.size;
+        } catch (e) {
+          fail(e);
+        }
+        try {
+          await acknowledgeAccess(event.operationId, success);
+        } catch (e) {
+          fail(e);
+        }
+      })();
+      return;
+    }
+    if (event.phase === "abort") {
+      blockedNotes.current.clear();
+      setAccessSuspended([]);
+      const frozen = barrierEditor.current;
+      if (frozen && !frozen.editor.isDestroyed)
+        frozen.editor.setEditable(frozen.editable, false);
+      barrierEditor.current = null;
+      setWs((prev) => ({ ...prev, access: event.access }));
+      fail(Error("锁定未执行：请检查所有窗口是否有未保存的更改，再重试。"));
+      void synchronizeRef.current();
+      return;
+    }
+    clearSensitive.current(event.noteIds);
+    setWs((prev) => ({
+      ...prev,
+      access: event.access,
+      notes: prev.notes.map((n) =>
+        event.noteIds.includes(n.id)
+          ? { ...n, document: structuredClone(blankDoc), plainText: "" }
+          : n,
+      ),
+    }));
+    void synchronizeRef.current();
+  };
+  useEffect(() => {
+    const visible = () => {
+      if (document.visibilityState === "visible") void synchronizeRef.current();
+    };
+    document.addEventListener("visibilitychange", visible);
+    let unlisten: (() => void) | undefined;
+    if (native)
+      getCurrentWindow()
+        .onFocusChanged(({ payload }) => {
+          if (payload) void synchronizeRef.current();
+        })
+        .then((fn) => {
+          unlisten = fn;
+        })
+        .catch(fail);
+    return () => {
+      document.removeEventListener("visibilitychange", visible);
+      unlisten?.();
+    };
+  }, [fail]);
   const keyboard = (show: boolean) => {
     const api = (
       window as unknown as {
@@ -624,10 +854,10 @@ function App() {
               });
         if (typeof path !== "string") return;
         if (mode === "export") {
-          await invoke("export_archive", { path });
+          await exportArchive(path);
           setNotice("本地备份已导出");
         } else {
-          const data = await invoke<Workspace>("import_archive", { path });
+          const data = await importArchive(path);
           hydrate(data);
           setNotice("本地备份已导入");
         }
@@ -764,10 +994,11 @@ function App() {
     setMenu(null);
     if (!current) return;
     try {
-      const data = { title: current.title, text: current.plainText };
+      await flush();
+      const data = await readNoteText(current.id);
       if (navigator.share) await navigator.share(data);
       else {
-        await navigator.clipboard.writeText(current.plainText);
+        await navigator.clipboard.writeText(data.text);
         setNotice("备忘录已复制，可粘贴分享。");
       }
     } catch (e) {
@@ -1044,11 +1275,6 @@ function App() {
           id: selected.id,
           password: modalValue,
         });
-        setUnlocked((prev) => {
-          const n = new Set(prev);
-          n.delete(selected.id);
-          return n;
-        });
       } else if (modal === "unlock") {
         if (!current) return;
         await doAction({
@@ -1056,7 +1282,6 @@ function App() {
           id: current.id,
           password: modalValue,
         });
-        setUnlocked((prev) => new Set(prev).add(current.id));
       } else if (modal === "deleteFolder") {
         await doAction({ type: "deleteFolder", id: contextFolder });
         if (folderId === contextFolder) chooseFolder("default");
@@ -1324,8 +1549,11 @@ function App() {
                   <MenuRow
                     icon={<Copy size={18} />}
                     onClick={() => {
-                      navigator.clipboard
-                        .writeText(n.plainText)
+                      flush()
+                        .then(() => readNoteText(n.id))
+                        .then((data) =>
+                          navigator.clipboard.writeText(data.text),
+                        )
                         .then(() => setNotice("已复制"))
                         .catch(fail);
                       setMenu(null);
@@ -1471,7 +1699,7 @@ function App() {
   };
   return (
     <div
-      className={`app ${mobile ? "mobile" : "desktop"} ${view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${menu === "format" && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
+      className={`app ${synchronizing || accessSuspended.length ? "access-sync" : ""} ${mobile ? "mobile" : "desktop"} ${view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${menu === "format" && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
       style={
         {
           "--sidebar-width": `${settings.sidebarWidth || 228}px`,
@@ -2042,7 +2270,7 @@ function App() {
                 </div>
               ) : (
                 <NoteEditor
-                  key={`${current.id}-${unlocked.has(current.id)}`}
+                  key={`${current.id}-${ws.access?.sessionId || "preview"}-${ws.access?.notes[current.id]?.epoch || 0}-${externalVersions.current.get(current.id) || 0}`}
                   note={current}
                   onChange={saveDoc}
                   onReady={onReady}
@@ -2069,6 +2297,22 @@ function App() {
         )}
       </main>
       {renderMenu()}
+      {(synchronizing || accessSuspended.length > 0) && (
+        <div className="access-cover" role="status">
+          <div>
+            {syncError ? (
+              <>
+                同步失败，备忘录内容暂时隐藏。<p>{syncError}</p>
+                <button onClick={() => void synchronizeRef.current()}>
+                  重试同步
+                </button>
+              </>
+            ) : (
+              "正在确认保存与锁定状态…"
+            )}
+          </div>
+        </div>
+      )}
       {modal && (
         <div
           className="modal-backdrop"
@@ -2283,11 +2527,7 @@ function App() {
                     导入本地备份
                   </MenuRow>
                   <MenuRow
-                    onClick={() =>
-                      patch({ type: "closeLocks" }).then(() =>
-                        setUnlocked(new Set()),
-                      )
-                    }
+                    onClick={() => patch({ type: "closeLocks" })}
                     icon={<Lock size={18} />}
                   >
                     关闭所有已锁定的备忘录

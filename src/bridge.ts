@@ -1,4 +1,8 @@
-import { invoke, isTauri } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
+import { AccessGate } from "./access-client";
+import type { AccessEvent, AccessState } from "./types";
+import { invoke as nativeInvoke, isTauri } from "@tauri-apps/api/core";
+import { createProofInvoker, proofReceive, proofVerdict } from "./proof-access";
 import {
   blankDoc,
   documentText,
@@ -7,6 +11,86 @@ import {
   type Workspace,
 } from "./types";
 export const native = isTauri();
+const invoke =
+  import.meta.env.VITE_ACCESS_BOUNDARY_PROOF === "1" && native
+    ? createProofInvoker(nativeInvoke)
+    : nativeInvoke;
+export const accessGate = new AccessGate();
+const attachmentOwners = new Map<string, string>();
+export const invalidateAccessRequests = () => accessGate.invalidate();
+export async function subscribeAccess(handler: (event: AccessEvent) => void) {
+  if (!native) return () => {};
+  return listen<AccessEvent>("notes-access", ({ payload }) => {
+    if (
+      import.meta.env.VITE_ACCESS_BOUNDARY_PROOF === "1" &&
+      !proofReceive(payload)
+    )
+      return;
+    accessGate.invalidate(payload.access);
+    handler(payload);
+  });
+}
+function accept<T>(
+  value: T,
+  stamp: ReturnType<AccessGate["stamp"]>,
+  mode: "read" | "save" | "transition" = "read",
+): T {
+  const state = (value as { access?: AccessState }).access;
+  if (!state) throw Error("后端未提供授权状态");
+  try {
+    accessGate.accept(state, stamp, mode);
+    if (import.meta.env.VITE_ACCESS_BOUNDARY_PROOF === "1")
+      proofVerdict(value, true, mode);
+  } catch (error) {
+    if (import.meta.env.VITE_ACCESS_BOUNDARY_PROOF === "1")
+      proofVerdict(value, false, mode, error);
+    throw error;
+  }
+  const attachments = (value as { attachments?: Attachment[] }).attachments;
+  if (attachments) {
+    attachmentOwners.clear();
+    attachments.forEach((a) => attachmentOwners.set(a.id, a.noteId));
+  }
+  return value;
+}
+export async function registerSaveIntent(noteId: string): Promise<string> {
+  const intent = crypto.randomUUID();
+  if (native)
+    await invoke("register_save_intent", {
+      noteId,
+      intent,
+      expected: accessGate.expected(noteId),
+    });
+  return intent;
+}
+export async function acknowledgeAccess(operationId: string, success: boolean) {
+  if (native) await invoke("acknowledge_access", { operationId, success });
+}
+export async function readNoteText(
+  id: string,
+): Promise<{ title: string; text: string }> {
+  if (!native) {
+    const n = preview.notes.find((n) => n.id === id);
+    if (!n || n.locked) throw Error("请先解锁备忘录");
+    return { title: n.title, text: n.plainText };
+  }
+  const stamp = accessGate.stamp(id);
+  return accept(
+    await invoke("read_note_text", { id, expected: accessGate.expected(id) }),
+    stamp,
+  );
+}
+export async function exportArchive(path: string) {
+  await invoke("export_archive", { path, expected: accessGate.expected() });
+}
+export async function importArchive(path: string): Promise<Workspace> {
+  const stamp = accessGate.stamp();
+  return accept(
+    await invoke("import_archive", { path, expected: accessGate.expected() }),
+    stamp,
+    "transition",
+  );
+}
 const initial = (): Workspace => ({
   folders: [
     {
@@ -53,12 +137,45 @@ let preview: Workspace = readPreview();
 const persist = () =>
   localStorage.setItem("notes-browser-preview", JSON.stringify(preview));
 export async function loadWorkspace(): Promise<Workspace> {
-  return native ? invoke("load_workspace") : structuredClone(preview);
+  const stamp = accessGate.stamp();
+  if (native) return accept(await invoke("load_workspace"), stamp);
+  const value = structuredClone(preview);
+  value.access = {
+    sessionId: "browser-preview",
+    epoch: 1,
+    notes: Object.fromEntries(
+      value.notes.map((n) => [n.id, { epoch: 0, authorized: !n.locked }]),
+    ),
+    suspended: [],
+    operationId: null,
+  };
+  accessGate.accept(value.access, stamp);
+  return value;
 }
 export async function action<T = Workspace>(
   a: Record<string, unknown>,
 ): Promise<T> {
-  if (native) return invoke("workspace_action", { action: a });
+  if (native) {
+    const stamp = accessGate.stamp(typeof a.id === "string" ? a.id : undefined);
+    const transition = [
+      "lockNote",
+      "unlockNote",
+      "removeLock",
+      "closeLocks",
+      "deleteNote",
+      "purgeNote",
+      "deleteFolder",
+    ].includes(String(a.type));
+    const value = await invoke<T>("workspace_action", {
+      action: a,
+      expected: accessGate.expected(),
+    });
+    return accept(
+      value,
+      stamp,
+      a.type === "saveNote" ? "save" : transition ? "transition" : "read",
+    );
+  }
   const n = preview.notes.find((x) => x.id === a.id);
   let result: unknown;
   switch (a.type) {
@@ -164,13 +281,21 @@ export async function storeAttachment(
   file: File,
 ): Promise<Attachment> {
   const data = await fileBase64(file);
-  if (native)
-    return invoke("store_attachment", {
-      noteId,
-      name: file.name,
-      mime: file.type || "application/octet-stream",
-      data,
-    });
+  if (native) {
+    const stamp = accessGate.stamp(noteId);
+    const attachment: Attachment = accept(
+      await invoke("store_attachment", {
+        noteId,
+        expected: accessGate.expected(noteId),
+        name: file.name,
+        mime: file.type || "application/octet-stream",
+        data,
+      }),
+      stamp,
+    );
+    attachmentOwners.set(attachment.id, noteId);
+    return attachment;
+  }
   const a: Attachment = {
     id: crypto.randomUUID(),
     noteId,
@@ -194,7 +319,18 @@ export async function storeAttachment(
 export async function readAttachment(
   id: string,
 ): Promise<{ data: string; mime: string; name: string }> {
-  if (native) return invoke("read_attachment", { id });
+  if (native) {
+    const noteId = attachmentOwners.get(id);
+    if (!noteId) throw Error("附件不存在");
+    const stamp = accessGate.stamp(noteId);
+    return accept(
+      await invoke("read_attachment", {
+        id,
+        expected: accessGate.expected(noteId),
+      }),
+      stamp,
+    );
+  }
   const a = preview.attachments.find((x) => x.id === id);
   return {
     data: localStorage.getItem(`preview-file-${id}`) || "",

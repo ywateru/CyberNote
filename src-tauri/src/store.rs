@@ -147,7 +147,7 @@ impl Store {
         serde_json::from_str(&x.ok_or_else(|| err("not_found", "文件夹不存在"))?)
             .map_err(Into::into)
     }
-    fn note(&self, nid: &str) -> Result<Note> {
+    pub(crate) fn note(&self, nid: &str) -> Result<Note> {
         let x: Option<String> = self
             .db
             .query_row("SELECT body FROM notes WHERE id=?1", [nid], |r| r.get(0))
@@ -164,7 +164,7 @@ impl Store {
             .map(|s| serde_json::from_str(&s).map_err(Into::into))
             .collect()
     }
-    fn notes(&self) -> Result<Vec<Note>> {
+    pub(crate) fn notes(&self) -> Result<Vec<Note>> {
         let mut q = self
             .db
             .prepare("SELECT body FROM notes ORDER BY rowid DESC")?;
@@ -200,10 +200,61 @@ impl Store {
                         .ok_or_else(|| err("encryption", "加密数据缺失"))?,
                     k,
                 )?;
+                self.validate_document(&n.document, &n)?;
                 n.plain_text = doc_text(&n.document);
             }
         }
         Ok(n)
+    }
+    fn validate_document(&self, doc: &Value, note: &Note) -> Result<()> {
+        archive::validate_live_document(doc, note, &self.attachments()?)
+    }
+    pub(crate) fn authorized(&self, nid: &str) -> Result<bool> {
+        let note = self.note(nid)?;
+        Ok(note.deleted_at.is_none() && (!note.locked || self.keys.contains_key(nid)))
+    }
+    pub(crate) fn revoke_keys(&mut self, ids: &[String]) {
+        for id in ids {
+            self.keys.remove(id);
+        }
+    }
+    pub(crate) fn folder_note_ids(&self, fid: &str) -> Result<Vec<String>> {
+        self.folder(fid)?;
+        let folders = self.folders()?;
+        let mut ids = vec![fid.to_string()];
+        loop {
+            let more: Vec<_> = folders
+                .iter()
+                .filter(|f| {
+                    !ids.contains(&f.id) && f.parent_id.as_ref().is_some_and(|p| ids.contains(p))
+                })
+                .map(|f| f.id.clone())
+                .collect();
+            if more.is_empty() {
+                break;
+            }
+            ids.extend(more);
+        }
+        Ok(self
+            .notes()?
+            .into_iter()
+            .filter(|n| ids.contains(&n.folder_id))
+            .map(|n| n.id)
+            .collect())
+    }
+    pub(crate) fn attachment_note(&self, aid: &str) -> Result<String> {
+        self.attachments()?
+            .into_iter()
+            .find(|a| a.id == aid)
+            .map(|a| a.note_id)
+            .ok_or_else(|| err("not_found", "附件不存在"))
+    }
+    pub(crate) fn note_text(&self, nid: &str) -> Result<Value> {
+        if !self.authorized(nid)? {
+            return Err(err("locked", "请先解锁备忘录"));
+        }
+        let n = self.visible(self.note(nid)?)?;
+        Ok(json!({"title":n.title,"text":n.plain_text}))
     }
     pub fn workspace(&self) -> Result<Value> {
         let ns = self
@@ -264,9 +315,7 @@ impl Store {
                     .get("document")
                     .ok_or_else(|| err("invalid", "缺少文档"))?
                     .clone();
-                if document["type"] != "doc" {
-                    return Err(err("invalid", "无效文档"));
-                }
+                self.validate_document(&document, &n)?;
                 let text = doc_text(&document);
                 n.title = text
                     .lines()
@@ -488,6 +537,7 @@ impl Store {
                     return Err(err("unsupported", "此版本暂不支持锁定含附件的备忘录"));
                 }
                 let mut salt = [0u8; 16];
+                self.validate_document(&n.document, &n)?;
                 OsRng.fill_bytes(&mut salt);
                 let key = derive(password, &salt)?;
                 n.sealed = Some(encrypt(&n.document, &key, &B64.encode(salt))?);
@@ -496,18 +546,26 @@ impl Store {
                 n.locked = true;
                 n.revision += 1;
                 self.put_note(&n)?;
-                self.db.execute_batch("PRAGMA wal_checkpoint(TRUNCATE);")?;
                 self.keys.remove(nid);
+                // The encrypted row is already durable. A maintenance error
+                // must not make callers restore the pre-lock authorization.
+                self.db.execute_batch("PRAGMA wal_checkpoint(TRUNCATE);").map_err(|e|
+                    err("lock_committed", format!("备忘录已锁定，但本地历史数据整理失败：{e}。请重新同步并检查本地存储。"))
+                )?;
             }
             "unlockNote" => {
                 let nid = str_field(&a, "id")?;
                 let n = self.note(nid)?;
-                let sealed = n.sealed.ok_or_else(|| err("invalid", "备忘录未锁定"))?;
+                let sealed = n
+                    .sealed
+                    .as_ref()
+                    .ok_or_else(|| err("invalid", "备忘录未锁定"))?;
                 let salt = B64
                     .decode(sealed["salt"].as_str().unwrap_or_default())
                     .map_err(|_| err("encryption", "加密信息损坏"))?;
                 let key = derive(str_field(&a, "password")?, &salt)?;
-                decrypt(&sealed, &key)?;
+                let document = decrypt(sealed, &key)?;
+                self.validate_document(&document, &n)?;
                 self.keys.insert(nid.into(), key);
             }
             "closeLocks" => {
@@ -721,6 +779,64 @@ mod tests {
         s.action(json!({"type":"unlockNote","id":nid,"password":"abcdef"}))
             .unwrap();
         assert_eq!(s.visible(s.note(nid).unwrap()).unwrap().document, sample());
+    }
+    #[test]
+    fn checkpoint_failure_after_durable_lock_commits_authorization_boundary() {
+        use crate::session::{Session, Token};
+        use rusqlite::hooks::{AuthAction, AuthContext, Authorization};
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(dir.path()).unwrap();
+        let created = store.action(json!({"type":"createNote"})).unwrap();
+        let id = created["id"].as_str().unwrap().to_string();
+        store
+            .action(json!({"type":"saveNote","id":id,"revision":0,"document":sample()}))
+            .unwrap();
+        // SQLite itself denies only checkpoint preparation, after the encrypted
+        // row was written. No command result or Store mutation is mocked.
+        store
+            .db
+            .authorizer(Some(|ctx: AuthContext<'_>| match ctx.action {
+                AuthAction::Pragma {
+                    pragma_name: "wal_checkpoint",
+                    ..
+                } => Authorization::Deny,
+                _ => Authorization::Allow,
+            }));
+        let mut session = Session::new(store);
+        let state = session.snapshot().unwrap();
+        let token = Token {
+            session_id: state["sessionId"].as_str().unwrap().into(),
+            epoch: state["epoch"].as_u64().unwrap(),
+            note_epoch: Some(0),
+        };
+        let windows = ["main".into(), "note-second".into()].into();
+        let prepare = session
+            .begin(
+                json!({"type":"lockNote","id":id,"password":"abcdef"}),
+                windows,
+                &token,
+            )
+            .unwrap();
+        let op = prepare["operationId"].as_str().unwrap();
+        session.acknowledge(op, "main", true).unwrap();
+        session.acknowledge(op, "note-second", true).unwrap();
+        let (result, event) = session
+            .finish(op, &["main".into(), "note-second".into()].into(), false)
+            .unwrap();
+        assert_eq!(result.unwrap_err().code, "lock_committed");
+        assert_eq!(event["phase"], "commit");
+        assert!(session.check(&token, Some(&id)).is_err());
+        assert!(session.store.note(&id).unwrap().locked);
+        assert!(session.store.note_text(&id).is_err());
+        assert!(!session
+            .workspace()
+            .unwrap()
+            .to_string()
+            .contains("across restarts"));
+        drop(session);
+        let reopened = Store::open(dir.path()).unwrap();
+        assert!(reopened.note(&id).unwrap().locked);
+        assert!(!reopened.authorized(&id).unwrap());
     }
     #[test]
     fn archive_attachments_and_cycle_guards() {

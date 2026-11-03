@@ -31,7 +31,9 @@ function MediaView({ node }: NodeViewProps) {
       .then((x) => {
         if (live) setSrc(`data:${x.mime};base64,${x.data}`);
       })
-      .catch((e) => setError(e.message || String(e)));
+      .catch((e) => {
+        if (live) setError(e.message || String(e));
+      });
     return () => {
       live = false;
     };

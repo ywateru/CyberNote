@@ -3115,3 +3115,16 @@ a {
     background: #3a383d;
   }
 }
+.app.access-sync > :not(.access-cover) {
+  visibility: hidden;
+  pointer-events: none;
+}
+.access-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  color: var(--secondary);
+}

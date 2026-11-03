@@ -4,6 +4,14 @@
 use super::*;
 #[path = "archive/document.rs"]
 mod document;
+pub(super) fn validate_live_document(
+    doc: &Value,
+    note: &Note,
+    attachments: &[Attachment],
+) -> Result<()> {
+    let by_id = attachments.iter().map(|a| (a.id.as_str(), a)).collect();
+    document::validate_document(doc, note, &by_id)
+}
 use document::validate_document;
 use serde::de::{DeserializeSeed, MapAccess, SeqAccess, Visitor};
 use std::{

@@ -48,6 +48,20 @@ export interface Workspace {
   notes: Note[];
   attachments: Attachment[];
   settings: Settings;
+  access?: AccessState;
+}
+export interface AccessState {
+  sessionId: string;
+  epoch: number;
+  notes: Record<string, { epoch: number; authorized: boolean }>;
+  suspended: string[];
+  operationId: string | null;
+}
+export interface AccessEvent {
+  phase: "prepare" | "commit" | "abort";
+  operationId: string;
+  noteIds: string[];
+  access: AccessState;
 }
 export interface DrawingStroke {
   color: string;
