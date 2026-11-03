@@ -1,0 +1,67 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_f368e6b7e26cb188eb29f2062863208076315b81c5964c8af17eb5aa87f4a7c0\",\"subject\":null,\"provider\":{\"id\":\"frida\",\"name\":\"Frida\",\"version\":null},\"analysis_profile\":null,\"predicate_type\":\"rea.frida.instrumentation-observation\",\"operation\":\"instrument_with_frida\",\"parameters\":{\"session_id\":\"9444d8cd-88ed-41dd-b6bd-5b03e99eba10\",\"device_id\":\"local\",\"mode\":\"attach\",\"pid\":18813},\"raw_result\":null,\"normalized_result\":{\"session_id\":\"9444d8cd-88ed-41dd-b6bd-5b03e99eba10\",\"device_id\":\"local\",\"state\":\"running\",\"target\":\"备忘录 (pid 18813)\",\"pid\":18813,\"mode\":\"attach\",\"scripts\":[{\"script_id\":\"82be3586-78f5-4e78-a3f4-7d05977516d1\",\"name\":\"rea-82be3586-78f5-4e78-a3f4-7d05977516d1\"}],\"messages\":[{\"script_id\":\"82be3586-78f5-4e78-a3f4-7d05977516d1\",\"type\":\"error\",\"description\":\"ReferenceError: 'ObjC' is not defined\",\"stack\":\"ReferenceError: 'ObjC' is not defined\\n    at <eval> (/rea-82be3586-78f5-4e78-a3f4-7d05977516d1.js:1)\",\"file_name\":\"/rea-82be3586-78f5-4e78-a3f4-7d05977516d1.js\",\"line_number\":1,\"column_number\":1}],\"messages_truncated\":false,\"source_kind\":\"inline\",\"source_path\":null,\"source_sha256\":\"bd4dbe81917d614535d772ce850720a13481e9cceba3e6bafcea79e02c27b7f1\",\"cleanup_error\":null},\"confidence\":\"observed\",\"authority\":\"external-service\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"The target operating system and architecture were not reported by this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_f368e6b7e26cb188eb29f2062863208076315b81c5964c8af17eb5aa87f4a7c0",
+    "subject": null,
+    "provider": {
+      "id": "frida",
+      "name": "Frida",
+      "version": null
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.frida.instrumentation-observation",
+    "operation": "instrument_with_frida",
+    "parameters": {
+      "session_id": "9444d8cd-88ed-41dd-b6bd-5b03e99eba10",
+      "device_id": "local",
+      "mode": "attach",
+      "pid": 18813
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "session_id": "9444d8cd-88ed-41dd-b6bd-5b03e99eba10",
+      "device_id": "local",
+      "state": "running",
+      "target": "备忘录 (pid 18813)",
+      "pid": 18813,
+      "mode": "attach",
+      "scripts": [
+        {
+          "script_id": "82be3586-78f5-4e78-a3f4-7d05977516d1",
+          "name": "rea-82be3586-78f5-4e78-a3f4-7d05977516d1"
+        }
+      ],
+      "messages": [
+        {
+          "script_id": "82be3586-78f5-4e78-a3f4-7d05977516d1",
+          "type": "error",
+          "description": "ReferenceError: 'ObjC' is not defined",
+          "stack": "ReferenceError: 'ObjC' is not defined\n    at <eval> (/rea-82be3586-78f5-4e78-a3f4-7d05977516d1.js:1)",
+          "file_name": "/rea-82be3586-78f5-4e78-a3f4-7d05977516d1.js",
+          "line_number": 1,
+          "column_number": 1
+        }
+      ],
+      "messages_truncated": false,
+      "source_kind": "inline",
+      "source_path": null,
+      "source_sha256": "bd4dbe81917d614535d772ce850720a13481e9cceba3e6bafcea79e02c27b7f1",
+      "cleanup_error": null
+    },
+    "confidence": "observed",
+    "authority": "external-service",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "The target operating system and architecture were not reported by this observation."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

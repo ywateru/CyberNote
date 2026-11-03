@@ -1,0 +1,67 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_615be2d9899884ef4e2ab1de07b15f932e656591cfe0554578714eb5f4c85fd2\",\"subject\":null,\"provider\":{\"id\":\"frida\",\"name\":\"Frida\",\"version\":null},\"analysis_profile\":null,\"predicate_type\":\"rea.frida.instrumentation-observation\",\"operation\":\"instrument_with_frida\",\"parameters\":{\"session_id\":\"2cc96739-9617-4628-aae8-b58198a7d3f7\",\"device_id\":\"local\",\"mode\":\"attach\",\"pid\":18813},\"raw_result\":null,\"normalized_result\":{\"session_id\":\"2cc96739-9617-4628-aae8-b58198a7d3f7\",\"device_id\":\"local\",\"state\":\"running\",\"target\":\"备忘录 (pid 18813)\",\"pid\":18813,\"mode\":\"attach\",\"scripts\":[{\"script_id\":\"0e398488-41d4-4810-bfeb-eb722e219fc3\",\"name\":\"rea-0e398488-41d4-4810-bfeb-eb722e219fc3\"}],\"messages\":[{\"script_id\":\"0e398488-41d4-4810-bfeb-eb722e219fc3\",\"type\":\"error\",\"description\":\"Error: unable to find global export 'dispatch_get_main_queue'\",\"stack\":\"Error: unable to find global export 'dispatch_get_main_queue'\\n    at value (/frida/runtime/core.js:218)\\n    at exp (/rea-0e398488-41d4-4810-bfeb-eb722e219fc3.js:1)\\n    at <eval> (/rea-0e398488-41d4-4810-bfeb-eb722e219fc3.js:14)\",\"file_name\":\"/frida/runtime/core.js\",\"line_number\":218,\"column_number\":1}],\"messages_truncated\":false,\"source_kind\":\"inline\",\"source_path\":null,\"source_sha256\":\"6d4f8c53a2b02d9c521aefe95253300d4af3004c5afc0fb382c55b4a11911760\",\"cleanup_error\":null},\"confidence\":\"observed\",\"authority\":\"external-service\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"The target operating system and architecture were not reported by this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_615be2d9899884ef4e2ab1de07b15f932e656591cfe0554578714eb5f4c85fd2",
+    "subject": null,
+    "provider": {
+      "id": "frida",
+      "name": "Frida",
+      "version": null
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.frida.instrumentation-observation",
+    "operation": "instrument_with_frida",
+    "parameters": {
+      "session_id": "2cc96739-9617-4628-aae8-b58198a7d3f7",
+      "device_id": "local",
+      "mode": "attach",
+      "pid": 18813
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "session_id": "2cc96739-9617-4628-aae8-b58198a7d3f7",
+      "device_id": "local",
+      "state": "running",
+      "target": "备忘录 (pid 18813)",
+      "pid": 18813,
+      "mode": "attach",
+      "scripts": [
+        {
+          "script_id": "0e398488-41d4-4810-bfeb-eb722e219fc3",
+          "name": "rea-0e398488-41d4-4810-bfeb-eb722e219fc3"
+        }
+      ],
+      "messages": [
+        {
+          "script_id": "0e398488-41d4-4810-bfeb-eb722e219fc3",
+          "type": "error",
+          "description": "Error: unable to find global export 'dispatch_get_main_queue'",
+          "stack": "Error: unable to find global export 'dispatch_get_main_queue'\n    at value (/frida/runtime/core.js:218)\n    at exp (/rea-0e398488-41d4-4810-bfeb-eb722e219fc3.js:1)\n    at <eval> (/rea-0e398488-41d4-4810-bfeb-eb722e219fc3.js:14)",
+          "file_name": "/frida/runtime/core.js",
+          "line_number": 218,
+          "column_number": 1
+        }
+      ],
+      "messages_truncated": false,
+      "source_kind": "inline",
+      "source_path": null,
+      "source_sha256": "6d4f8c53a2b02d9c521aefe95253300d4af3004c5afc0fb382c55b4a11911760",
+      "cleanup_error": null
+    },
+    "confidence": "observed",
+    "authority": "external-service",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "The target operating system and architecture were not reported by this observation."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

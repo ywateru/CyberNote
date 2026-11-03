@@ -1,0 +1,85 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_c7120562f84e462d0b193ea3991d124ff071c53a0917c759ad7a2c65f985de44\",\"subject\":null,\"provider\":{\"id\":\"frida\",\"name\":\"Frida\",\"version\":null},\"analysis_profile\":null,\"predicate_type\":\"rea.frida.instrumentation-observation\",\"operation\":\"instrument_with_frida\",\"parameters\":{\"session_id\":\"a3d688d6-c84d-416f-97a4-a51883524a39\",\"device_id\":\"local\",\"mode\":\"attach\",\"pid\":18813},\"raw_result\":null,\"normalized_result\":{\"session_id\":\"a3d688d6-c84d-416f-97a4-a51883524a39\",\"device_id\":\"local\",\"state\":\"running\",\"target\":\"备忘录 (pid 18813)\",\"pid\":18813,\"mode\":\"attach\",\"scripts\":[{\"script_id\":\"915502df-9bef-404a-a8a0-7d2464e3d7e0\",\"name\":\"rea-915502df-9bef-404a-a8a0-7d2464e3d7e0\"}],\"messages\":[{\"script_id\":\"915502df-9bef-404a-a8a0-7d2464e3d7e0\",\"type\":\"send\",\"payload\":{\"pid\":18813,\"windows\":[{\"number\":68155,\"title\":\"备忘录\",\"visible\":1},{\"number\":68172,\"title\":\"Window\",\"visible\":1}],\"webviews\":[{\"url\":null,\"loading\":0,\"title\":\"\"}],\"errors\":[]}}],\"messages_truncated\":false,\"source_kind\":\"inline\",\"source_path\":null,\"source_sha256\":\"613d7648b127af19db22ec178f083b232357f0eebee867c194d1dca8b060f615\",\"cleanup_error\":null},\"confidence\":\"observed\",\"authority\":\"external-service\",\"environment\":null,\"limitations\":[\"Artifact identity is unavailable for this observation.\",\"The target operating system and architecture were not reported by this observation.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_c7120562f84e462d0b193ea3991d124ff071c53a0917c759ad7a2c65f985de44",
+    "subject": null,
+    "provider": {
+      "id": "frida",
+      "name": "Frida",
+      "version": null
+    },
+    "analysis_profile": null,
+    "predicate_type": "rea.frida.instrumentation-observation",
+    "operation": "instrument_with_frida",
+    "parameters": {
+      "session_id": "a3d688d6-c84d-416f-97a4-a51883524a39",
+      "device_id": "local",
+      "mode": "attach",
+      "pid": 18813
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "session_id": "a3d688d6-c84d-416f-97a4-a51883524a39",
+      "device_id": "local",
+      "state": "running",
+      "target": "备忘录 (pid 18813)",
+      "pid": 18813,
+      "mode": "attach",
+      "scripts": [
+        {
+          "script_id": "915502df-9bef-404a-a8a0-7d2464e3d7e0",
+          "name": "rea-915502df-9bef-404a-a8a0-7d2464e3d7e0"
+        }
+      ],
+      "messages": [
+        {
+          "script_id": "915502df-9bef-404a-a8a0-7d2464e3d7e0",
+          "type": "send",
+          "payload": {
+            "pid": 18813,
+            "windows": [
+              {
+                "number": 68155,
+                "title": "备忘录",
+                "visible": 1
+              },
+              {
+                "number": 68172,
+                "title": "Window",
+                "visible": 1
+              }
+            ],
+            "webviews": [
+              {
+                "url": null,
+                "loading": 0,
+                "title": ""
+              }
+            ],
+            "errors": []
+          }
+        }
+      ],
+      "messages_truncated": false,
+      "source_kind": "inline",
+      "source_path": null,
+      "source_sha256": "613d7648b127af19db22ec178f083b232357f0eebee867c194d1dca8b060f615",
+      "cleanup_error": null
+    },
+    "confidence": "observed",
+    "authority": "external-service",
+    "environment": null,
+    "limitations": [
+      "Artifact identity is unavailable for this observation.",
+      "The target operating system and architecture were not reported by this observation."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}
