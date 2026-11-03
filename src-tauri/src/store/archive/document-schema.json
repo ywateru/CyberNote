@@ -1,0 +1,338 @@
+{
+  "version": 1,
+  "nodes": {
+    "paragraph": {
+      "content": "inline*",
+      "groups": [
+        "block"
+      ],
+      "marks": [
+        "link",
+        "textStyle",
+        "bold",
+        "code",
+        "italic",
+        "strike",
+        "underline",
+        "highlight"
+      ],
+      "attrs": {}
+    },
+    "blockquote": {
+      "content": "block+",
+      "groups": [
+        "block"
+      ],
+      "marks": [],
+      "attrs": {}
+    },
+    "bulletList": {
+      "content": "listItem+",
+      "groups": [
+        "block",
+        "list"
+      ],
+      "marks": [],
+      "attrs": {}
+    },
+    "codeBlock": {
+      "content": "text*",
+      "groups": [
+        "block"
+      ],
+      "marks": [],
+      "attrs": {
+        "language": {
+          "required": false,
+          "default": null
+        }
+      }
+    },
+    "doc": {
+      "content": "block+",
+      "groups": [],
+      "marks": [],
+      "attrs": {}
+    },
+    "hardBreak": {
+      "content": "",
+      "groups": [
+        "inline"
+      ],
+      "marks": [],
+      "attrs": {}
+    },
+    "heading": {
+      "content": "inline*",
+      "groups": [
+        "block"
+      ],
+      "marks": [
+        "link",
+        "textStyle",
+        "bold",
+        "code",
+        "italic",
+        "strike",
+        "underline",
+        "highlight"
+      ],
+      "attrs": {
+        "level": {
+          "required": false,
+          "default": 1
+        }
+      }
+    },
+    "horizontalRule": {
+      "content": "",
+      "groups": [
+        "block"
+      ],
+      "marks": [],
+      "attrs": {}
+    },
+    "listItem": {
+      "content": "paragraph block*",
+      "groups": [],
+      "marks": [],
+      "attrs": {}
+    },
+    "orderedList": {
+      "content": "listItem+",
+      "groups": [
+        "block",
+        "list"
+      ],
+      "marks": [],
+      "attrs": {
+        "start": {
+          "required": false,
+          "default": 1
+        },
+        "type": {
+          "required": false,
+          "default": null
+        }
+      }
+    },
+    "text": {
+      "content": "",
+      "groups": [
+        "inline"
+      ],
+      "marks": [],
+      "attrs": {}
+    },
+    "taskList": {
+      "content": "taskItem+",
+      "groups": [
+        "block",
+        "list"
+      ],
+      "marks": [],
+      "attrs": {}
+    },
+    "taskItem": {
+      "content": "paragraph block*",
+      "groups": [],
+      "marks": [],
+      "attrs": {
+        "checked": {
+          "required": false,
+          "default": false
+        }
+      }
+    },
+    "table": {
+      "content": "tableRow+",
+      "groups": [
+        "block"
+      ],
+      "marks": [],
+      "attrs": {}
+    },
+    "tableCell": {
+      "content": "block+",
+      "groups": [],
+      "marks": [],
+      "attrs": {
+        "colspan": {
+          "required": false,
+          "default": 1
+        },
+        "rowspan": {
+          "required": false,
+          "default": 1
+        },
+        "colwidth": {
+          "required": false,
+          "default": null
+        },
+        "align": {
+          "required": false,
+          "default": null
+        }
+      }
+    },
+    "tableHeader": {
+      "content": "block+",
+      "groups": [],
+      "marks": [],
+      "attrs": {
+        "colspan": {
+          "required": false,
+          "default": 1
+        },
+        "rowspan": {
+          "required": false,
+          "default": 1
+        },
+        "colwidth": {
+          "required": false,
+          "default": null
+        },
+        "align": {
+          "required": false,
+          "default": null
+        }
+      }
+    },
+    "tableRow": {
+      "content": "(tableCell | tableHeader)*",
+      "groups": [],
+      "marks": [],
+      "attrs": {}
+    },
+    "attachment": {
+      "content": "",
+      "groups": [
+        "block"
+      ],
+      "marks": [],
+      "attrs": {
+        "id": {
+          "required": false,
+          "default": ""
+        },
+        "name": {
+          "required": false,
+          "default": "附件"
+        },
+        "kind": {
+          "required": false,
+          "default": "file"
+        }
+      }
+    },
+    "drawing": {
+      "content": "",
+      "groups": [
+        "block"
+      ],
+      "marks": [],
+      "attrs": {
+        "strokes": {
+          "required": false,
+          "default": []
+        }
+      }
+    }
+  },
+  "marks": {
+    "link": {
+      "rank": 0,
+      "excludes": [
+        "link"
+      ],
+      "attrs": {
+        "href": {
+          "required": false,
+          "default": null
+        },
+        "target": {
+          "required": false,
+          "default": "_blank"
+        },
+        "rel": {
+          "required": false,
+          "default": "noopener noreferrer nofollow"
+        },
+        "class": {
+          "required": false,
+          "default": null
+        },
+        "title": {
+          "required": false,
+          "default": null
+        }
+      }
+    },
+    "textStyle": {
+      "rank": 1,
+      "excludes": [
+        "textStyle"
+      ],
+      "attrs": {
+        "color": {
+          "required": false,
+          "default": null
+        }
+      }
+    },
+    "bold": {
+      "rank": 2,
+      "excludes": [
+        "bold"
+      ],
+      "attrs": {}
+    },
+    "code": {
+      "rank": 3,
+      "excludes": [
+        "link",
+        "textStyle",
+        "bold",
+        "code",
+        "italic",
+        "strike",
+        "underline",
+        "highlight"
+      ],
+      "attrs": {}
+    },
+    "italic": {
+      "rank": 4,
+      "excludes": [
+        "italic"
+      ],
+      "attrs": {}
+    },
+    "strike": {
+      "rank": 5,
+      "excludes": [
+        "strike"
+      ],
+      "attrs": {}
+    },
+    "underline": {
+      "rank": 6,
+      "excludes": [
+        "underline"
+      ],
+      "attrs": {}
+    },
+    "highlight": {
+      "rank": 7,
+      "excludes": [
+        "highlight"
+      ],
+      "attrs": {
+        "color": {
+          "required": false,
+          "default": null
+        }
+      }
+    }
+  }
+}

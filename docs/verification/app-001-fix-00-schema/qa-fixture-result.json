@@ -1,0 +1,46 @@
+{
+  "fixtures": [
+    {
+      "name": "block-inside-paragraph.notesbackup",
+      "sha256": "891ce5c697deb50d9b55f9aa5dfd94432d5235118c5f68de1655e5f2e44370a3",
+      "result": {
+        "accepted": false,
+        "error": {
+          "code": "archive_invalid",
+          "message": "paragraph 的子节点不符合当前编辑器 schema"
+        }
+      },
+      "workspaceSettingsAndAllAttachmentBytesEqualAfterReopen": true,
+      "sourceBytesEqual": true,
+      "importsDirectoryClean": true
+    },
+    {
+      "name": "inline-at-doc-root.notesbackup",
+      "sha256": "c486c5b9d07097b393dc1342f55033ad1bfca0f58499a1cdd83f6af970f2d28e",
+      "result": {
+        "accepted": false,
+        "error": {
+          "code": "archive_invalid",
+          "message": "doc 的子节点不符合当前编辑器 schema"
+        }
+      },
+      "workspaceSettingsAndAllAttachmentBytesEqualAfterReopen": true,
+      "sourceBytesEqual": true,
+      "importsDirectoryClean": true
+    },
+    {
+      "name": "paragraph-inside-table.notesbackup",
+      "sha256": "68ab9cf9d31aa78747c1a835ce3a8400e94ab6717c3bc4a3f73f0f8472eb8fb3",
+      "result": {
+        "accepted": false,
+        "error": {
+          "code": "archive_invalid",
+          "message": "table 的子节点不符合当前编辑器 schema"
+        }
+      },
+      "workspaceSettingsAndAllAttachmentBytesEqualAfterReopen": true,
+      "sourceBytesEqual": true,
+      "importsDirectoryClean": true
+    }
+  ]
+}

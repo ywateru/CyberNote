@@ -8,14 +8,8 @@ import {
   type JSONContent,
   type NodeViewProps,
 } from "@tiptap/react";
-import { Node, mergeAttributes } from "@tiptap/core";
-import StarterKit from "@tiptap/starter-kit";
-import TaskList from "@tiptap/extension-task-list";
-import TaskItem from "@tiptap/extension-task-item";
-import { TableKit } from "@tiptap/extension-table";
-import Highlight from "@tiptap/extension-highlight";
-import { TextStyle, Color } from "@tiptap/extension-text-style";
-import Placeholder from "@tiptap/extension-placeholder";
+import { createEditorExtensions } from "./editor-schema";
+export { AttachmentNode, DrawingNode } from "./editor-schema";
 import {
   Play,
   Pause,
@@ -163,28 +157,6 @@ export function AudioPlayer({ src, name }: { src: string; name: string }) {
     </div>
   );
 }
-export const AttachmentNode = Node.create({
-  name: "attachment",
-  group: "block",
-  atom: true,
-  draggable: true,
-  addAttributes() {
-    return {
-      id: { default: "" },
-      name: { default: "附件" },
-      kind: { default: "file" },
-    };
-  },
-  parseHTML() {
-    return [{ tag: "div[data-attachment]" }];
-  },
-  renderHTML({ HTMLAttributes }) {
-    return ["div", mergeAttributes(HTMLAttributes, { "data-attachment": "" })];
-  },
-  addNodeView() {
-    return ReactNodeViewRenderer(MediaView);
-  },
-});
 function DrawingView({ node, getPos, editor }: NodeViewProps) {
   const strokes: DrawingStroke[] = node.attrs.strokes || [];
   return (
@@ -217,24 +189,6 @@ function DrawingView({ node, getPos, editor }: NodeViewProps) {
     </NodeViewWrapper>
   );
 }
-export const DrawingNode = Node.create({
-  name: "drawing",
-  group: "block",
-  atom: true,
-  draggable: true,
-  addAttributes() {
-    return { strokes: { default: [] } };
-  },
-  parseHTML() {
-    return [{ tag: "div[data-drawing]" }];
-  },
-  renderHTML({ HTMLAttributes }) {
-    return ["div", mergeAttributes(HTMLAttributes, { "data-drawing": "" })];
-  },
-  addNodeView() {
-    return ReactNodeViewRenderer(DrawingView);
-  },
-});
 export default function NoteEditor({
   note,
   onChange,
@@ -249,21 +203,10 @@ export default function NoteEditor({
   const ref = useRef(onChange);
   ref.current = onChange;
   const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        heading: { levels: [1, 2, 3] },
-        link: { openOnClick: false },
-      }),
-      TaskList,
-      TaskItem.configure({ nested: true }),
-      TableKit.configure({ table: { resizable: true } }),
-      Highlight.configure({ multicolor: true }),
-      TextStyle,
-      Color,
-      AttachmentNode,
-      DrawingNode,
-      Placeholder.configure({ placeholder: "" }),
-    ],
+    extensions: createEditorExtensions({
+      attachment: ReactNodeViewRenderer(MediaView),
+      drawing: ReactNodeViewRenderer(DrawingView),
+    }),
     content: note.document,
     editorProps: {
       attributes: { "aria-label": "备忘录正文", spellcheck: "true" },

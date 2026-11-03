@@ -1,0 +1,18 @@
+
+> notes-clone@0.1.0 build /Users/water/work/2026/Apple-Notes-Clone
+> tsc -b && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 1848 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.50 kB │ gzip:   0.33 kB
+dist/assets/index-ByqjoOVL.css   40.74 kB │ gzip:   8.94 kB
+dist/assets/index-B6W4W8K0.js   842.51 kB │ gzip: 264.77 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.95s

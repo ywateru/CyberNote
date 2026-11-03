@@ -1,0 +1,1805 @@
+[
+  {
+    "name": "legacy-empty-title",
+    "category": "valid",
+    "schemaAccepted": true,
+    "importAccepted": true,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "level": 1
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "plain-and-empty-paragraphs",
+    "category": "valid",
+    "schemaAccepted": true,
+    "importAccepted": true,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "文字"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": []
+        }
+      ]
+    }
+  },
+  {
+    "name": "default-heading-attributes",
+    "category": "valid",
+    "schemaAccepted": true,
+    "importAccepted": true,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "content": [
+            {
+              "type": "text",
+              "text": "默认标题"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "all-supported-nodes-and-marks",
+    "category": "valid",
+    "schemaAccepted": true,
+    "importAccepted": true,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "content": [
+            {
+              "type": "text",
+              "text": "标题"
+            }
+          ],
+          "attrs": {
+            "level": 1
+          }
+        },
+        {
+          "type": "heading",
+          "content": [
+            {
+              "type": "text",
+              "text": "小标题"
+            }
+          ],
+          "attrs": {
+            "level": 2
+          }
+        },
+        {
+          "type": "heading",
+          "content": [
+            {
+              "type": "text",
+              "text": "副标题"
+            }
+          ],
+          "attrs": {
+            "level": 3
+          }
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "link",
+                  "attrs": {
+                    "href": "https://example.test/a",
+                    "title": "链接"
+                  }
+                },
+                {
+                  "type": "textStyle",
+                  "attrs": {
+                    "color": "#222222"
+                  }
+                },
+                {
+                  "type": "bold"
+                },
+                {
+                  "type": "italic"
+                },
+                {
+                  "type": "strike"
+                },
+                {
+                  "type": "underline"
+                },
+                {
+                  "type": "highlight",
+                  "attrs": {
+                    "color": "#e8c1f0"
+                  }
+                }
+              ],
+              "text": "组合格式"
+            },
+            {
+              "type": "hardBreak",
+              "marks": [
+                {
+                  "type": "bold"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "code"
+                }
+              ],
+              "text": "代码"
+            }
+          ]
+        },
+        {
+          "type": "blockquote",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "引用"
+                }
+              ]
+            },
+            {
+              "type": "bulletList",
+              "content": [
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "项目"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "orderedList",
+                      "content": [
+                        {
+                          "type": "listItem",
+                          "content": [
+                            {
+                              "type": "paragraph",
+                              "content": [
+                                {
+                                  "type": "text",
+                                  "text": "编号"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "attrs": {
+                        "start": -1,
+                        "type": "a"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "taskList",
+          "content": [
+            {
+              "type": "taskItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "任务"
+                    }
+                  ]
+                },
+                {
+                  "type": "taskList",
+                  "content": [
+                    {
+                      "type": "taskItem",
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "子任务"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "attrs": {
+                "checked": true
+              }
+            }
+          ]
+        },
+        {
+          "type": "codeBlock",
+          "content": [
+            {
+              "type": "text",
+              "text": "第一行\n第二行"
+            }
+          ],
+          "attrs": {
+            "language": "text"
+          }
+        },
+        {
+          "type": "horizontalRule"
+        },
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableHeader",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "表头"
+                        }
+                      ]
+                    }
+                  ],
+                  "attrs": {
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "colwidth": [
+                      100,
+                      0
+                    ],
+                    "align": "center"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "A1"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "A2"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "attachment",
+          "attrs": {
+            "id": "$attachment",
+            "name": "original.txt",
+            "kind": "file"
+          }
+        },
+        {
+          "type": "drawing",
+          "attrs": {
+            "strokes": [
+              {
+                "tool": "pen",
+                "color": "#112233",
+                "width": 2.5,
+                "points": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    4.2,
+                    8
+                  ]
+                ]
+              },
+              {
+                "tool": "eraser",
+                "color": "#ffffff",
+                "width": 10,
+                "points": [
+                  [
+                    5,
+                    5
+                  ]
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "schema-allows-empty-table-row",
+    "category": "valid",
+    "schemaAccepted": true,
+    "importAccepted": true,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "default-attachment-and-drawing",
+    "category": "valid",
+    "schemaAccepted": true,
+    "importAccepted": true,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "attachment",
+          "attrs": {
+            "id": "$attachment"
+          }
+        },
+        {
+          "type": "drawing"
+        }
+      ]
+    }
+  },
+  {
+    "name": "inline-at-doc-root",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "text",
+          "text": "文字"
+        }
+      ]
+    }
+  },
+  {
+    "name": "block-inside-paragraph",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "文字"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "paragraph-inside-table",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "文字"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "empty-doc",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": []
+    }
+  },
+  {
+    "name": "nested-doc",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "list-item-at-doc-root",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "row-at-doc-root",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "tableRow"
+        }
+      ]
+    }
+  },
+  {
+    "name": "cell-at-doc-root",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "tableCell",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "heading-in-paragraph",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "heading",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "文字"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "block-in-heading",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "文字"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "empty-blockquote",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "blockquote",
+          "content": []
+        }
+      ]
+    }
+  },
+  {
+    "name": "empty-bullet-list",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "bulletList",
+          "content": []
+        }
+      ]
+    }
+  },
+  {
+    "name": "empty-ordered-list",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "orderedList",
+          "content": []
+        }
+      ]
+    }
+  },
+  {
+    "name": "empty-task-list",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "taskList",
+          "content": []
+        }
+      ]
+    }
+  },
+  {
+    "name": "paragraph-directly-in-bullet-list",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "bulletList",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "task-item-in-ordered-list",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "orderedList",
+          "content": [
+            {
+              "type": "taskItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "list-item-in-task-list",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "taskList",
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "list-item-needs-leading-paragraph",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "bulletList",
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "heading",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "文字"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "task-item-needs-leading-paragraph",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "taskList",
+          "content": [
+            {
+              "type": "taskItem",
+              "content": [
+                {
+                  "type": "blockquote",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "empty-table",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": []
+        }
+      ]
+    }
+  },
+  {
+    "name": "paragraph-in-row",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "empty-cell",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "text-directly-in-cell",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "文字"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "content-inside-hard-break",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "hardBreak",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "文字"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "content-inside-rule",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "horizontalRule",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "content-inside-attachment",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "attachment",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": []
+            }
+          ],
+          "attrs": {
+            "id": "$attachment",
+            "kind": "file"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "content-inside-drawing",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "drawing",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "hard-break-in-code-block",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "codeBlock",
+          "content": [
+            {
+              "type": "hardBreak"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "marked-text-in-code-block",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "codeBlock",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "bold"
+                }
+              ],
+              "text": "code"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "marked-block-at-root",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "文字"
+            }
+          ],
+          "marks": [
+            {
+              "type": "bold"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "duplicate-marks",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "bold"
+                },
+                {
+                  "type": "bold"
+                }
+              ],
+              "text": "x"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "out-of-order-marks",
+    "category": "valid",
+    "schemaAccepted": true,
+    "importAccepted": true,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "italic"
+                },
+                {
+                  "type": "bold"
+                }
+              ],
+              "text": "x"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "code-excludes-other-marks",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "bold"
+                },
+                {
+                  "type": "code"
+                }
+              ],
+              "text": "x"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "unknown-mark",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "unknown"
+                }
+              ],
+              "text": "x"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "empty-text",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": ""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "non-string-text",
+    "category": "structure",
+    "schemaAccepted": false,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": 5
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "text-node-child-content",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": []
+                }
+              ],
+              "text": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "non-text-node-text-field",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "文字"
+            }
+          ],
+          "text": "unloadable extra text"
+        }
+      ]
+    }
+  },
+  {
+    "name": "heading-level-string",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "content": [
+            {
+              "type": "text",
+              "text": "文字"
+            }
+          ],
+          "attrs": {
+            "level": "1"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "heading-level-outside-config",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "content": [
+            {
+              "type": "text",
+              "text": "文字"
+            }
+          ],
+          "attrs": {
+            "level": 4
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "heading-level-null",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "content": [
+            {
+              "type": "text",
+              "text": "文字"
+            }
+          ],
+          "attrs": {
+            "level": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "checked-is-not-boolean",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "taskList",
+          "content": [
+            {
+              "type": "taskItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": []
+                }
+              ],
+              "attrs": {
+                "checked": "false"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "ordered-start-is-not-integer",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "orderedList",
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": []
+                }
+              ]
+            }
+          ],
+          "attrs": {
+            "start": 1.5
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "table-colspan-zero",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": []
+                    }
+                  ],
+                  "attrs": {
+                    "colspan": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "table-rowspan-string",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": []
+                    }
+                  ],
+                  "attrs": {
+                    "rowspan": "1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "table-colwidth-wrong-type",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": []
+                    }
+                  ],
+                  "attrs": {
+                    "colwidth": "100"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "table-colwidth-count-mismatch",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": []
+                    }
+                  ],
+                  "attrs": {
+                    "colspan": 2,
+                    "colwidth": [
+                      100
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "table-align-unknown",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": []
+                    }
+                  ],
+                  "attrs": {
+                    "align": "diagonal"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "drawing-strokes-wrong-type",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "drawing",
+          "attrs": {
+            "strokes": {}
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "drawing-point-wrong-type",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "drawing",
+          "attrs": {
+            "strokes": [
+              {
+                "tool": "pen",
+                "width": 2,
+                "color": "#000",
+                "points": [
+                  [
+                    "x",
+                    1
+                  ]
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "drawing-tool-unknown",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "drawing",
+          "attrs": {
+            "strokes": [
+              {
+                "tool": "spray",
+                "width": 2,
+                "color": "#000",
+                "points": [
+                  [
+                    0,
+                    1
+                  ]
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "link-href-object",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "link",
+                  "attrs": {
+                    "href": {}
+                  }
+                }
+              ],
+              "text": "link"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "highlight-color-object",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "highlight",
+                  "attrs": {
+                    "color": {}
+                  }
+                }
+              ],
+              "text": "color"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "attachment-name-object",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "attachment",
+          "attrs": {
+            "id": "$attachment",
+            "name": {},
+            "kind": "file"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "unknown-paragraph-attribute",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "文字"
+            }
+          ],
+          "attrs": {
+            "unknown": "would be dropped"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "unknown-bold-attribute",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "bold",
+                  "attrs": {
+                    "unknown": true
+                  }
+                }
+              ],
+              "text": "x"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "table-grid-budget",
+    "category": "attributes",
+    "schemaAccepted": true,
+    "importAccepted": false,
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": []
+                    }
+                  ],
+                  "attrs": {
+                    "colspan": 100000
+                  }
+                },
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

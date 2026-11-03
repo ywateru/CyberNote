@@ -1,0 +1,6 @@
+pnpm exec prettier --check src/editor-schema.ts src/Editor.tsx scripts/check-editor-schema.mjs package.json
+Checking formatting...
+All matched files use Prettier code style!
+
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+Exit code: 0

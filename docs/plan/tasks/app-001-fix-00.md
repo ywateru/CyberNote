@@ -42,3 +42,12 @@ src-tauri/src/store.rs、必要的Rust辅助模块与真实临时目录测试；
 - 真实 Rust 回归 13 passed / 0 failed / 1 子进程专用 worker 默认 ignored；worker 实际被恢复测试启动六次，覆盖提交前后退出。Clippy all-targets、warnings-as-errors 通过。
 - 原 QA 探针复制到 `docs/verification/app-001-fix-00/store-probes/` 后复测：设置相等、失败导入原附件保留、自环拒绝；原失败目录未修改。更强的合法首附件+坏第二 Base64 回归也通过。
 - 开发者证据与边界见 `docs/verification/app-001-fix-00/selfcheck.md`；本轮不改 UI，不触碰系统 Notes，不声称像素一致或全功能通过。按协调计划，独立存储复核通过后再重构建 Mac/Android 产物，当前应用文件仍为首轮基线。
+
+## developer schema supplement — 2026-11-03
+
+针对独立报告唯一剩余 `FIX-00-QA-01` 完成补修，等待独立 verify；本段为开发者自测结果，不改变任务验收状态。
+
+- 抽出实际 Editor 共用扩展 factory，保持扩展顺序、选项和 React 节点视图不变；从真实 ProseMirror schema 生成 Rust 内嵌清单，并以 `pnpm test:schema` 检测漂移。
+- 归档在写入前校验 root/block/inline、列表首段、任务、表格行/单元格、叶节点内容基数、marks 位置与互斥，以及应用属性类型/预算。默认省略属性与 ProseMirror 接受的 marks 输入顺序保留；不自动改写导入文档。
+- 共享 63 例：7 例合法文档导入、导出/重导入、附件字节及重开通过；35 例实际 schema 非法结构及 21 例额外属性/封装/预算错误在公开归档入口被拒绝，旧状态与源文件保持。原独立三份坏归档只读重跑也全部拒绝，原 QA 正常归档仍可往返。
+- `cargo test --offline` 为 15 passed / 0 failed / 1 专用 worker 默认 ignored；真实六中断点仍通过。TypeScript、前端构建、Cargo check、Clippy all-targets `-D warnings` 及真实 Editor schema 对照通过。证据见 `docs/verification/app-001-fix-00-schema/selfcheck.md`。原 `qa-fix-00/` 与 `qa-001/` 未修改；未重构建 Mac/APK 或开展新 GUI/设备验证。

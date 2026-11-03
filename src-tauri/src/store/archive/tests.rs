@@ -486,6 +486,176 @@ fn recovery_refuses_journal_path_that_could_delete_an_old_file() {
     assert_eq!(files(&f.root), before.1);
 }
 
+fn replace_attachment_placeholder(value: &mut Value, attachment: &str) {
+    match value {
+        Value::String(text) if text == "$attachment" => *text = attachment.to_string(),
+        Value::Array(values) => {
+            for value in values {
+                replace_attachment_placeholder(value, attachment);
+            }
+        }
+        Value::Object(values) => {
+            for value in values.values_mut() {
+                replace_attachment_placeholder(value, attachment);
+            }
+        }
+        _ => {}
+    }
+}
+fn semantic_workspace(mut workspace: Value) -> Value {
+    // Copy-on-write intentionally assigns new physical filenames on every
+    // import. Entity data/IDs and independently read bytes must still match.
+    for attachment in workspace["attachments"].as_array_mut().unwrap() {
+        attachment["relativePath"] = json!("managed-file");
+    }
+    // System folders are reused in the destination, including their local
+    // creation timestamps; the archive never overwrites those identities.
+    for folder in workspace["folders"].as_array_mut().unwrap() {
+        if ["default", "quick", "trash"].contains(&folder["id"].as_str().unwrap()) {
+            folder["createdAt"] = json!(0);
+        }
+    }
+    for key in ["folders", "notes", "attachments"] {
+        workspace[key]
+            .as_array_mut()
+            .unwrap()
+            .sort_by(|a, b| a["id"].as_str().cmp(&b["id"].as_str()));
+    }
+    workspace
+}
+
+#[test]
+fn shared_editor_schema_corpus_uses_public_import_and_preserves_state_on_rejection() {
+    let cases: Vec<Value> = serde_json::from_str(include_str!("document-cases.json")).unwrap();
+    for case in cases {
+        let f = fixture();
+        let name = case["name"].as_str().unwrap();
+        let mut store = populate_local(&f.root);
+        let before = snapshot(&store);
+        let mut archive = read_json(&f.archive);
+        let mut document = case["document"].clone();
+        replace_attachment_placeholder(&mut document, &f.original_id);
+        archive["notes"][0]["document"] = document.clone();
+        let text = doc_text(&document);
+        archive["notes"][0]["plainText"] = json!(text);
+        archive["notes"][0]["title"] = json!(text.lines().next().unwrap_or("新备忘录"));
+        let path = f._temp.path().join("corpus.notesbackup");
+        write_json(&path, &archive);
+        let source_bytes = fs::read(&path).unwrap();
+        let result = store.import_archive(&path);
+        if !case["importAccepted"].as_bool().unwrap() {
+            let error = result
+                .err()
+                .unwrap_or_else(|| panic!("accepted invalid case {name}"));
+            assert!(
+                ["archive_invalid", "archive_limit"].contains(&error.code.as_str()),
+                "unexpected error for {name}: {}",
+                error.message
+            );
+            assert_eq!(snapshot(&store), before, "changed workspace for {name}");
+            drop(store);
+            assert_eq!(
+                snapshot(&Store::open(&f.root).unwrap()),
+                before,
+                "changed reopened workspace for {name}"
+            );
+            eprintln!("public archive corpus: {name}: rejected; workspace/files/settings/reopen unchanged");
+        } else {
+            result.unwrap_or_else(|e| panic!("rejected valid case {name}: {}", e.message));
+            let imported_id = archive["notes"][0]["id"].as_str().unwrap();
+            assert_eq!(
+                store.note(imported_id).unwrap().document,
+                document,
+                "rewrote {name}"
+            );
+            for old in before.0["notes"].as_array().unwrap() {
+                assert_eq!(
+                    serde_json::to_value(store.note(old["id"].as_str().unwrap()).unwrap()).unwrap(),
+                    *old
+                );
+            }
+            for (file, bytes) in &before.1 {
+                assert_eq!(&files(&f.root)[file], bytes, "changed old bytes for {name}");
+            }
+            let after = snapshot(&store);
+            let backup = f._temp.path().join("roundtrip.notesbackup");
+            store.export_archive(&backup).unwrap();
+            let mut fresh = Store::open(f._temp.path().join("roundtrip")).unwrap();
+            fresh.import_archive(&backup).unwrap();
+            assert_eq!(
+                semantic_workspace(fresh.workspace().unwrap()),
+                semantic_workspace(after.0.clone()),
+                "roundtrip changed entities for {name}"
+            );
+            for attachment in store.attachments().unwrap() {
+                assert_eq!(
+                    fresh.read_attachment(&attachment.id).unwrap(),
+                    store.read_attachment(&attachment.id).unwrap()
+                );
+            }
+            drop(store);
+            assert_eq!(snapshot(&Store::open(&f.root).unwrap()), after);
+            eprintln!("public archive corpus: {name}: accepted; document unchanged; export/import/bytes/reopen preserved");
+        }
+        assert_eq!(
+            fs::read(&path).unwrap(),
+            source_bytes,
+            "source changed for {name}"
+        );
+        assert_clean(&f.root);
+    }
+}
+
+#[test]
+fn independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads() {
+    let invalid = [
+        ("inline-at-doc-root", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/inline-at-doc-root.notesbackup")),
+        ("block-inside-paragraph", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/block-inside-paragraph.notesbackup")),
+        ("paragraph-inside-table", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/paragraph-inside-table.notesbackup")),
+    ];
+    let f = fixture();
+    let mut store = populate_local(&f.root);
+    let before = snapshot(&store);
+    for (name, fixture) in invalid {
+        let path = f._temp.path().join(format!("{name}.notesbackup"));
+        fs::write(&path, fixture).unwrap();
+        assert_eq!(
+            store.import_archive(&path).unwrap_err().code,
+            "archive_invalid"
+        );
+        assert_eq!(snapshot(&store), before);
+        assert_eq!(fs::read_to_string(&path).unwrap(), fixture);
+        assert_clean(&f.root);
+    }
+    drop(store);
+    assert_eq!(snapshot(&Store::open(&f.root).unwrap()), before);
+    let legacy = include_str!(
+        "../../../../docs/verification/qa-001/store-probes/fixtures/valid.notesbackup"
+    );
+    let path = f._temp.path().join("legacy.notesbackup");
+    fs::write(&path, legacy).unwrap();
+    let mut store = Store::open(f._temp.path().join("legacy")).unwrap();
+    store.import_archive(&path).unwrap();
+    let expected: Value = serde_json::from_str(legacy).unwrap();
+    let workspace = store.workspace().unwrap();
+    assert_eq!(workspace["notes"], expected["notes"]);
+    assert_eq!(workspace["settings"], expected["settings"]);
+    let roundtrip = f._temp.path().join("legacy-roundtrip.notesbackup");
+    store.export_archive(&roundtrip).unwrap();
+    let mut fresh = Store::open(f._temp.path().join("legacy-roundtrip")).unwrap();
+    fresh.import_archive(&roundtrip).unwrap();
+    assert_eq!(
+        semantic_workspace(fresh.workspace().unwrap()),
+        semantic_workspace(workspace)
+    );
+    for attachment in store.attachments().unwrap() {
+        assert_eq!(
+            fresh.read_attachment(&attachment.id).unwrap(),
+            store.read_attachment(&attachment.id).unwrap()
+        );
+    }
+}
+
 #[test]
 #[ignore = "subprocess worker; invoked by real_subprocess_interruption_recovers_before_and_after_sqlite_commit"]
 fn crash_worker() {

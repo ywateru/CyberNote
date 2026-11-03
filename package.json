@@ -15,7 +15,8 @@
     "android:init": "node scripts/android.mjs init",
     "android:build": "node scripts/android.mjs build",
     "android:dev": "node scripts/android.mjs dev",
-    "test:rust": "cargo test --manifest-path src-tauri/Cargo.toml"
+    "test:rust": "cargo test --manifest-path src-tauri/Cargo.toml",
+    "test:schema": "node scripts/check-editor-schema.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.9.0",

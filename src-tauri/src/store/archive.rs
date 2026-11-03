@@ -2,6 +2,9 @@
 //! publishing their database references; a durable journal reclaims only files
 //! that are not referenced after SQLite crash recovery.
 use super::*;
+#[path = "archive/document.rs"]
+mod document;
+use document::validate_document;
 use serde::de::{DeserializeSeed, MapAccess, SeqAccess, Visitor};
 use std::{
     collections::{HashMap, HashSet},
@@ -197,100 +200,6 @@ fn validate_folders(folders: &[Folder]) -> Result<()> {
                 .ok_or_else(|| invalid("文件夹父引用不存在"))?
                 .parent_id
                 .as_deref();
-        }
-    }
-    Ok(())
-}
-fn validate_document(
-    doc: &Value,
-    note: &Note,
-    attachments: &HashMap<&str, &Attachment>,
-) -> Result<()> {
-    if doc["type"] != "doc" {
-        return Err(invalid("笔记文档根节点无效"));
-    }
-    let mut stack = vec![(doc, 0)];
-    let mut nodes = 0;
-    while let Some((node, depth)) = stack.pop() {
-        nodes += 1;
-        if depth > 64 || nodes > 100_000 {
-            return Err(limit("笔记文档层级或节点过多"));
-        }
-        let kind = node["type"]
-            .as_str()
-            .ok_or_else(|| invalid("文档节点缺少类型"))?;
-        if ![
-            "doc",
-            "paragraph",
-            "text",
-            "heading",
-            "bulletList",
-            "orderedList",
-            "listItem",
-            "taskList",
-            "taskItem",
-            "blockquote",
-            "codeBlock",
-            "hardBreak",
-            "horizontalRule",
-            "table",
-            "tableRow",
-            "tableHeader",
-            "tableCell",
-            "attachment",
-            "drawing",
-        ]
-        .contains(&kind)
-        {
-            return Err(invalid(format!("不支持的文档节点: {kind}")));
-        }
-        if kind == "text" && node["text"].as_str().is_none() {
-            return Err(invalid("文本节点内容无效"));
-        }
-        if let Some(attrs) = node.get("attrs") {
-            if !attrs.is_object() {
-                return Err(invalid("文档节点属性无效"));
-            }
-        }
-        if kind == "attachment" {
-            let aid = node["attrs"]["id"]
-                .as_str()
-                .ok_or_else(|| invalid("附件节点缺少 ID"))?;
-            let a = attachments
-                .get(aid)
-                .ok_or_else(|| invalid("文档引用的附件不存在"))?;
-            if a.note_id != note.id || node["attrs"]["kind"].as_str() != Some(&a.kind) {
-                return Err(invalid("文档附件归属或类型不符"));
-            }
-        }
-        if let Some(marks) = node.get("marks") {
-            for mark in marks
-                .as_array()
-                .ok_or_else(|| invalid("文档格式标记无效"))?
-            {
-                if ![
-                    "bold",
-                    "italic",
-                    "underline",
-                    "strike",
-                    "code",
-                    "link",
-                    "highlight",
-                    "textStyle",
-                ]
-                .contains(&mark["type"].as_str().unwrap_or(""))
-                {
-                    return Err(invalid("未知文档格式标记"));
-                }
-            }
-        }
-        if let Some(content) = node.get("content") {
-            for child in content
-                .as_array()
-                .ok_or_else(|| invalid("文档子节点无效"))?
-            {
-                stack.push((child, depth + 1));
-            }
         }
     }
     Ok(())
