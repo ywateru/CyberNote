@@ -1,0 +1,229 @@
+{
+  "status": "fail",
+  "apkSha256": "e117f92992c450fe8e224a2a9e116df7e0c71a3735335ba8c5a223e5c7c87d5a",
+  "trigger": "native create synthetic note -> select Beta -> bold -> X -> system Back -> More/paper cancel -> More/paper grid-large",
+  "before": {
+    "identity": {
+      "editor": 10,
+      "view": 11,
+      "dom": 12,
+      "keyed": [
+        {
+          "key": "636980693",
+          "type": "Y8"
+        },
+        {
+          "key": "059e1f48-1fb1-4351-bd05-ad6e44fb53b3-d3814517-9a3a-4737-9857-f1b91f4fd796-0-0",
+          "type": "v9"
+        }
+      ]
+    },
+    "selection": {
+      "type": "text",
+      "anchor": 33,
+      "head": 37
+    },
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "level": 1
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "FIX07PAPER-1793711379156"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Alpha "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "bold"
+                }
+              ],
+              "text": "Beta"
+            },
+            {
+              "type": "text",
+              "text": " Gamma"
+            }
+          ]
+        }
+      ]
+    },
+    "imeShown": false
+  },
+  "after": {
+    "identity": {
+      "editor": 13,
+      "view": 14,
+      "dom": 15,
+      "keyed": [
+        {
+          "key": "3629944018",
+          "type": "Y8"
+        },
+        {
+          "key": "059e1f48-1fb1-4351-bd05-ad6e44fb53b3-d3814517-9a3a-4737-9857-f1b91f4fd796-0-0",
+          "type": "v9"
+        }
+      ]
+    },
+    "selection": {
+      "type": "text",
+      "anchor": 1,
+      "head": 1
+    },
+    "document": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "level": 1
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "FIX07PAPER-1793711379156"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Alpha "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "bold"
+                }
+              ],
+              "text": "Beta"
+            },
+            {
+              "type": "text",
+              "text": " Gamma"
+            }
+          ]
+        }
+      ]
+    },
+    "imeShown": false
+  },
+  "hydrateActual": {
+    "receivedAt": "2026-11-03T13:09:59.565Z",
+    "kind": "hydrate-actual",
+    "id": "059e1f48-1fb1-4351-bd05-ad6e44fb53b3",
+    "pending": false,
+    "compareResult": true,
+    "left": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "level": 1
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "FIX07PAPER-1793711379156"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Alpha "
+            },
+            {
+              "type": "text",
+              "marks": [
+                {
+                  "type": "bold"
+                }
+              ],
+              "text": "Beta"
+            },
+            {
+              "type": "text",
+              "text": " Gamma"
+            }
+          ]
+        }
+      ]
+    },
+    "right": {
+      "content": [
+        {
+          "attrs": {
+            "level": 1
+          },
+          "content": [
+            {
+              "text": "FIX07PAPER-1793711379156",
+              "type": "text"
+            }
+          ],
+          "type": "heading"
+        },
+        {
+          "content": [
+            {
+              "text": "Alpha ",
+              "type": "text"
+            },
+            {
+              "marks": [
+                {
+                  "type": "bold"
+                }
+              ],
+              "text": "Beta",
+              "type": "text"
+            },
+            {
+              "text": " Gamma",
+              "type": "text"
+            }
+          ],
+          "type": "paragraph"
+        }
+      ],
+      "type": "doc"
+    },
+    "leftRevision": 42,
+    "rightRevision": 43,
+    "externalBefore": 0,
+    "sessionBefore": "d3814517-9a3a-4737-9857-f1b91f4fd796",
+    "sessionAfter": "d3814517-9a3a-4737-9857-f1b91f4fd796",
+    "epochAfter": 0
+  },
+  "epochBeforeInterpretation": "field absent in raw JSON because O.access.notes[we.id]?.epoch was undefined; not a numeric zero",
+  "dynamicFacts": {
+    "samePMDocument": true,
+    "sameNoteEditorKey": true,
+    "productionComparatorReturnedTrue": true,
+    "pending": false,
+    "externalBefore": 0
+  },
+  "sourceInference": "hydrate compares previous missing note epoch undefined to authoritative 0, targets note in changed[], and clearSensitive destroys active editor. createNote inserts note but discards returned access snapshot. Actual comparator returned true; externalVersion did not cause this repeat."
+}
