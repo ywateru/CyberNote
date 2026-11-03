@@ -1,0 +1,17 @@
+{
+  "productionModule": "src/audio-playback.ts",
+  "checks": [
+    "finite metadata / real zero / unknown / bounded seek",
+    "Infinity → finite / one silent probe / intervening user position and play preserved",
+    "normal finite duration supersedes probe / late probe ignored",
+    "unresolved seek remains unknown / visible failure / manual retry",
+    "probe timeout releases media and stays unknown",
+    "probe / actual media error visible and retryable",
+    "failed seek retry restores requested position without playing",
+    "async play rejection / sync throw visible / user retry works",
+    "unmount / source replacement lifetime / late events and play rejection ignored",
+    "intervening user pause invalidates pending play promise",
+    "direct probe cancellation clears listeners and deadline"
+  ],
+  "passed": 11
+}
