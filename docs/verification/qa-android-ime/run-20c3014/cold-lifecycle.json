@@ -1,0 +1,26 @@
+{
+  "source": "tool-return transcript of actual sequential adb calls; no private-data export",
+  "sequence": [
+    {
+      "command": "am force-stop com.local.notesclone",
+      "exit": 0
+    },
+    {
+      "command": "pidof com.local.notesclone",
+      "exit": 1,
+      "stdout": "",
+      "meaning": "no app process"
+    },
+    {
+      "command": "am start -W -n com.local.notesclone/.MainActivity",
+      "exit": 0,
+      "LaunchState": "COLD",
+      "TotalTime": 684,
+      "WaitTime": 686
+    },
+    {
+      "action": "open All notes, then actual synthetic 你好 row",
+      "evidence": "ime-cold-opened.json"
+    }
+  ]
+}

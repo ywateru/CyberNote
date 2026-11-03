@@ -1,0 +1,17 @@
+import {execFileSync} from 'node:child_process';
+import fs from 'node:fs';
+const adb='/Users/water/Library/Android/sdk/platform-tools/adb';const args=['-s','emulator-5580'];const out=process.env.QA03_ANDROID_OUT || '/private/tmp/qa03-android-next';fs.mkdirSync(out,{recursive:true});
+const run=(...a)=>execFileSync(adb,[...args,...a]);
+const pid=run('shell','pidof','com.local.notesclone').toString().trim().split(' ')[0];run('forward','tcp:9222',`localabstract:webview_devtools_remote_${pid}`);
+const tabs=await(await fetch('http://127.0.0.1:9222/json')).json();const tab=tabs.find(t=>t.url.startsWith('http://tauri.localhost'));if(!tab)throw Error('No app tab');
+const ws=new WebSocket(tab.webSocketDebuggerUrl);await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j});let id=0;const pending=new Map();ws.onmessage=e=>{const v=JSON.parse(e.data);if(v.id){const p=pending.get(v.id);pending.delete(v.id);v.error?p.reject(v.error):p.resolve(v.result)}};
+const call=(method,params)=>new Promise((resolve,reject)=>{const n=++id;pending.set(n,{resolve,reject});ws.send(JSON.stringify({id:n,method,params}))});
+const read=async(expression)=>{const r=await call('Runtime.evaluate',{expression,returnByValue:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value};
+const events=[];
+await read(`(()=>{window.__qaImeEvents=[];const t=document.querySelector('.tiptap');for(const type of ['compositionstart','compositionupdate','compositionend','beforeinput','input'])t.addEventListener(type,e=>{const v=t.editor?.view,s=getSelection();window.__qaImeEvents.push({at:performance.now(),type:e.type,data:e.data,inputType:e.inputType,isComposing:e.isComposing,pmComposing:v?.composing,compositionNode:v?.input?.compositionNode?.textContent,dom:t.innerHTML,pmSelection:v?.state.selection.toJSON(),domSelection:{anchor:s?.anchorNode?.textContent,offset:s?.anchorOffset}})}, {passive:true});return 'passive event observer attached; no events dispatched or editor state writes'})()`);
+const inspect=()=>read(`(()=>{const t=document.querySelector('.tiptap'),v=t.editor.view,s=getSelection();return {at:new Date().toISOString(),composing:v.composing,compositionNode:v.input.compositionNode?.textContent,dom:t.innerHTML,doc:v.state.doc.toJSON(),pmSelection:v.state.selection.toJSON(),domSelection:{anchor:s?.anchorNode?.textContent,offset:s?.anchorOffset},events:window.__qaImeEvents}})()`);
+for(const [x,y] of [[755,1890],[810,1540],[650,1710],[108,1710],[918,1540]])run('shell','input','tap',String(x),String(y));
+fs.writeFileSync(`${out}/ime-fast-marked.json`,JSON.stringify(await inspect(),null,2)+'\n');fs.writeFileSync(`${out}/ime-fast-marked.png`,run('exec-out','screencap','-p'));
+run('shell','input','tap','78','1404');
+fs.writeFileSync(`${out}/ime-fast-committed.json`,JSON.stringify(await inspect(),null,2)+'\n');fs.writeFileSync(`${out}/ime-fast-committed.png`,run('exec-out','screencap','-p'));
+fs.appendFileSync(`${out}/actions.jsonl`,JSON.stringify({at:new Date().toISOString(),op:'native-fast-ime-cycle',taps:[[755,1890],[810,1540],[650,1710],[108,1710],[918,1540],[78,1404]],observer:'passive composition/beforeinput/input; no dispatch or editor mutation'})+'\n');ws.close();
