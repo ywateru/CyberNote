@@ -94,6 +94,7 @@ import type { BindingInfo } from "../plugins/tauri-plugin-notes-ui/guest-js";
 import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
 import { documentsEqual } from "./document-equality";
+import { RecordingSession, createRecordingPreview } from "./recording-session";
 import { convertTableToText, toggleListStyle } from "./editor-actions";
 import type { SelectionBookmark } from "@tiptap/pm/state";
 import {
@@ -3719,62 +3720,35 @@ function RecordingPanel({
   const [error, setError] = useState("");
   const [blob, setBlob] = useState<Blob | null>(null);
   const [busy, setBusy] = useState(false);
-  const recorder = useRef<MediaRecorder | null>(null);
-  const stream = useRef<MediaStream | null>(null);
-  const chunks = useRef<BlobPart[]>([]);
+  const session = useRef<RecordingSession | null>(null);
+  const [previewUrl, setPreviewUrl] = useState("");
   const [levels, setLevels] = useState<number[]>([]);
   useEffect(() => {
-    let cancelled = false;
-    let ctx: AudioContext | undefined;
-    let timer: ReturnType<typeof setInterval> | undefined;
-    (async () => {
-      try {
-        if (!navigator.mediaDevices?.getUserMedia)
-          throw Error("设备未提供录音访问，请检查麦克风权限。");
-        const s = await navigator.mediaDevices.getUserMedia({ audio: true });
-        if (cancelled) {
-          s.getTracks().forEach((t) => t.stop());
-          return;
-        }
-        stream.current = s;
-        const mime = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm"].find(
-          (x) => MediaRecorder.isTypeSupported(x),
-        );
-        const r = new MediaRecorder(s, mime ? { mimeType: mime } : undefined);
-        recorder.current = r;
-        r.ondataavailable = (e) => {
-          if (e.data.size) chunks.current.push(e.data);
-        };
-        r.onstop = () => {
-          setBlob(new Blob(chunks.current, { type: r.mimeType }));
-          setStatus("stopped");
-        };
-        r.start(250);
-        setStatus("recording");
-        ctx = new AudioContext();
-        const analyzer = ctx.createAnalyser();
-        analyzer.fftSize = 64;
-        ctx.createMediaStreamSource(s).connect(analyzer);
-        const data = new Uint8Array(analyzer.frequencyBinCount);
-        timer = setInterval(() => {
-          if (r.state !== "recording") return;
-          analyzer.getByteFrequencyData(data);
-          const avg = data.reduce((a, b) => a + b, 0) / data.length;
-          setLevels((v) => [...v.slice(-89), Math.max(2, avg)]);
-        }, 100);
-      } catch (e) {
+    const capture = new RecordingSession({
+      onRecording: () => setStatus("recording"),
+      onStopped: (recorded) => {
+        setBlob(recorded);
+        setStatus("stopped");
+      },
+      onLevel: (level) => setLevels((v) => [...v.slice(-89), level]),
+      onError: (e) => {
         setError(errText(e));
         setStatus("error");
-      }
-    })();
+      },
+    });
+    session.current = capture;
+    void capture.start();
     return () => {
-      cancelled = true;
-      if (timer) clearInterval(timer);
-      if (recorder.current?.state !== "inactive") recorder.current?.stop();
-      stream.current?.getTracks().forEach((t) => t.stop());
-      ctx?.close();
+      capture.dispose();
+      if (session.current === capture) session.current = null;
     };
   }, []);
+  useEffect(() => {
+    if (!blob) return;
+    const preview = createRecordingPreview(blob);
+    setPreviewUrl(preview.url);
+    return () => preview.dispose();
+  }, [blob]);
   useEffect(() => {
     if (status !== "recording") return;
     const t = setInterval(() => setSeconds((v) => v + 0.1), 100);
@@ -3786,7 +3760,14 @@ function RecordingPanel({
       <section className="recording-sheet">
         <div className="sheet-handle" />
         <header>
-          <button onClick={onCancel}>取消</button>
+          <button
+            onClick={() => {
+              session.current?.dispose();
+              onCancel();
+            }}
+          >
+            取消
+          </button>
           <div>
             <strong>新录音</strong>
             <small>
@@ -3844,15 +3825,13 @@ function RecordingPanel({
             </p>
             <div className="recording-controls">
               <button
-                disabled={!recorder.current || status === "stopped"}
+                disabled={!session.current?.recorder || status === "stopped"}
                 aria-label={status === "paused" ? "继续录音" : "暂停录音"}
                 onClick={() => {
                   if (status === "recording") {
-                    recorder.current?.pause();
-                    setStatus("paused");
+                    if (session.current?.pause()) setStatus("paused");
                   } else if (status === "paused") {
-                    recorder.current?.resume();
-                    setStatus("recording");
+                    if (session.current?.resume()) setStatus("recording");
                   }
                 }}
               >
@@ -3863,17 +3842,16 @@ function RecordingPanel({
                 )}
               </button>
               <button
-                disabled={!recorder.current || status === "stopped"}
+                disabled={!session.current?.recorder || status === "stopped"}
                 aria-label="结束录音"
                 onClick={() => {
-                  recorder.current?.stop();
-                  stream.current?.getTracks().forEach((t) => t.stop());
+                  session.current?.stop();
                 }}
               >
                 <StopCircle size={30} />
               </button>
             </div>
-            {blob && <audio controls src={URL.createObjectURL(blob)} />}
+            {blob && previewUrl && <audio controls src={previewUrl} />}
           </>
         )}
       </section>

@@ -1,0 +1,29 @@
+{
+  "kind": "isolated-recording-cleanup-candidate-source",
+  "baseHead": "fd7bfd26c2bcec4cdd33be0aa07d901c6a3f6adc",
+  "deviceOrBuild": false,
+  "appOutsideRecordingPanelAndImportUnchanged": true,
+  "files": [
+    {
+      "path": "src/App.tsx",
+      "bytes": 123723,
+      "sha256": "5c81e6d532d70c89c966a9c275406f1998421d83a898ca74b708d4b8b7352226"
+    },
+    {
+      "path": "src/recording-session.ts",
+      "bytes": 8026,
+      "sha256": "38a83851b3ee0234e7662f32cf9fed8e7019492b42e7c32bfd74af707eae11c0"
+    },
+    {
+      "path": "scripts/check-recording-session.mjs",
+      "bytes": 14539,
+      "sha256": "eb2148765f988d28841de89407a66e22e2ed4fbda07f1428c8136fb6c51f425a"
+    }
+  ],
+  "checks": {
+    "typecheck": "pass",
+    "productionModuleFailureInjection": 26,
+    "existingNativeToolbarChecks": 12
+  },
+  "limits": "controlled platform substitutes; no device microphone/encoding/playback/pixel acceptance"
+}
