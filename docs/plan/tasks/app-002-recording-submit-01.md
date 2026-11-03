@@ -32,6 +32,8 @@ depends-on: [app-002-attachment-store-01, app-002-recording-state-01]
   → 关闭面板 → 刷新
 ```
 
+录音面板保存期间自身 overlay 仍需打开。现有 picker availability 正确地拒绝 record=true，不能直接复用到录音而让自身永久失败，也不能放宽所有 picker/nativeAssert。允许为当前唯一活动录音票据提供窄的 availability 适配，仅豁免该票据对应的录音自身 overlay；原scope/note/Editor/完整文档/书签/会话、loading/sync/访问屏障及其他overlay门禁全部保留。底层原目标重绑定与同一个 AttachmentSubmission 实现继续复用。检查必须证明普通picker在录音打开时仍拒绝、过期录音票据和其他overlay不取得插入权限。
+
 所有入口都必须捕获有效原目标，不以 null 回落到稍后当前笔记。每次 await 后核查该会话仍活跃和原目标合法。父保存失败必须 reject 给面板，保留最终 File 与已取得的 operation/附件/插入阶段；缺 Editor、insert false/throw、ACK 失败不能静默 resolve。
 
 取消、Back、关闭窗口与授权失效先同步关闭这次提交的入场，防止晚存储响应插入节点。只允许已有 Rust cancel 核本操作安全新文件；当 renderer pending 文档仍引用附件时，保留附件与可恢复状态，不因数据库暂未引用就删除。已 committed 的附件永不按失败新文件清理。不能确定结果时保留真实 deferred/错误，不伪称取消成功。
