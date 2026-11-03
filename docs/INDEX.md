@@ -5,6 +5,8 @@
 - [需求与验收](requirements.md)
 - [架构与数据契约](architecture.md)
 - [参考资料与调研](research/README.md)
+- [本地标签、智能文件夹、数学、链接与格式接入分析](research/local-feature-integration.md)
+- [离线扫描与媒体接入研究](research/offline-media-scanning.md)
 - [UI 规格](ui/README.md)
 - [Mac 布局](ui/macos.md)
 - [Android 布局与录屏流程](ui/android.md)

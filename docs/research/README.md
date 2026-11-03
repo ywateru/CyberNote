@@ -40,6 +40,8 @@ Mac公开原生能力与当前依赖绑定的实证见[原生UI研究](macos-nat
 
 ## 原生媒体与扫描补充
 
+具体版本、当前代码调用链、原始录屏边界与离线接入方案见[离线媒体与扫描研究](offline-media-scanning.md)。标签、智能文件夹、数学、笔记链接、标准格式与附件浏览的现状和跨模块契约见[本地高级功能接入分析](local-feature-integration.md)。这些研究不代表应用已实现或运行验证通过。
+
 - Tauri WebviewBuilder 的权限回调资料：https://docs.rs/tauri/latest/tauri/webview/struct.WebviewBuilder.html 。Android 仍可能需要系统运行时授权；必须实际录制并重启播放，不能只测API存在。
 - Android 官方 WebView 权限说明：https://developer.android.com/develop/ui/compose/migrate/interoperability-apis/wrap-webview-in-compose 。Web权限授予前需要对应相机/麦克风运行时权限。
 - Google 官方本地文字识别：https://developers.google.com/ml-kit/vision/text-recognition/v2/android 。有 bundled 中文模型的集成路径，可作为后续真正离线扫描文本候选；当前尚未接入，不声称有OCR。
