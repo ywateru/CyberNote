@@ -1,0 +1,210 @@
+mod model;
+pub use model::*;
+#[cfg(target_os = "macos")]
+mod macos;
+
+use serde::{Deserialize, Serialize};
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
+use tauri::{
+    plugin::{Builder, TauriPlugin},
+    AppHandle, Manager, Runtime, State, Window,
+};
+
+pub const EVENT_NAME: &str = "notes-ui://intent";
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Error {
+    pub code: String,
+    pub message: String,
+}
+impl Error {
+    pub fn new(code: &str, message: impl Into<String>) -> Self {
+        Self {
+            code: code.into(),
+            message: message.into(),
+        }
+    }
+}
+impl std::fmt::Display for Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}: {}", self.code, self.message)
+    }
+}
+impl std::error::Error for Error {}
+pub type Result<T> = std::result::Result<T, Error>;
+
+#[derive(Clone)]
+struct Binding {
+    id: String,
+    state: ToolbarState,
+}
+impl Binding {
+    fn permits_event(&self, label: &str, event: &ToolbarEvent) -> bool {
+        event.window_label == label
+            && event.binding_id == self.id
+            && event.state_revision == self.state.revision
+            && self.state.permits(&event.intent)
+    }
+}
+type Bindings = Arc<Mutex<HashMap<String, Binding>>>;
+pub struct NotesUi<R: Runtime> {
+    app: AppHandle<R>,
+    bindings: Bindings,
+}
+impl<R: Runtime> NotesUi<R> {
+    pub async fn bind(&self, window: Window<R>, state: ToolbarState) -> Result<BindingInfo> {
+        state.validate()?;
+        #[cfg(target_os = "macos")]
+        {
+            macos::bind(&self.app, self.bindings.clone(), window, state).await
+        }
+        #[cfg(not(target_os = "macos"))]
+        {
+            let _ = (window, state);
+            Err(unsupported())
+        }
+    }
+    pub async fn update(
+        &self,
+        window: Window<R>,
+        binding_id: String,
+        state: ToolbarState,
+    ) -> Result<BindingInfo> {
+        state.validate()?;
+        valid_binding_id(&binding_id)?;
+        #[cfg(target_os = "macos")]
+        {
+            macos::update(&self.app, self.bindings.clone(), window, binding_id, state).await
+        }
+        #[cfg(not(target_os = "macos"))]
+        {
+            let _ = (window, binding_id, state);
+            Err(unsupported())
+        }
+    }
+    pub async fn inspect(&self, window: Window<R>, binding_id: String) -> Result<BindingInfo> {
+        valid_binding_id(&binding_id)?;
+        #[cfg(target_os = "macos")]
+        {
+            macos::inspect(&self.app, self.bindings.clone(), window, binding_id).await
+        }
+        #[cfg(not(target_os = "macos"))]
+        {
+            let _ = (window, binding_id);
+            Err(unsupported())
+        }
+    }
+    pub async fn unbind(&self, window: Window<R>, binding_id: String) -> Result<()> {
+        valid_binding_id(&binding_id)?;
+        #[cfg(target_os = "macos")]
+        {
+            macos::unbind(&self.app, self.bindings.clone(), window, binding_id).await
+        }
+        #[cfg(not(target_os = "macos"))]
+        {
+            let _ = (window, binding_id);
+            Err(unsupported())
+        }
+    }
+}
+fn valid_binding_id(id: &str) -> Result<()> {
+    if id.len() != 36 || uuid::Uuid::parse_str(id).is_err() {
+        return Err(Error::new("invalid_binding", "绑定编号无效"));
+    }
+    Ok(())
+}
+#[cfg(not(target_os = "macos"))]
+fn unsupported() -> Error {
+    Error::new("unsupported", "此原生顶部模块仅支持 macOS")
+}
+pub trait NotesUiExt<R: Runtime> {
+    fn notes_ui(&self) -> State<'_, NotesUi<R>>;
+}
+impl<R: Runtime, T: Manager<R>> NotesUiExt<R> for T {
+    fn notes_ui(&self) -> State<'_, NotesUi<R>> {
+        self.state()
+    }
+}
+
+fn own_window<R: Runtime>(window: &Window<R>, window_label: &str) -> Result<()> {
+    if window.label() != window_label {
+        return Err(Error::new("window_mismatch", "前端只能绑定所属窗口"));
+    }
+    Ok(())
+}
+#[tauri::command]
+async fn bind<R: Runtime>(
+    window: Window<R>,
+    state: State<'_, NotesUi<R>>,
+    window_label: String,
+    toolbar: ToolbarState,
+) -> Result<BindingInfo> {
+    own_window(&window, &window_label)?;
+    state.bind(window, toolbar).await
+}
+#[tauri::command]
+async fn update<R: Runtime>(
+    window: Window<R>,
+    state: State<'_, NotesUi<R>>,
+    window_label: String,
+    binding_id: String,
+    toolbar: ToolbarState,
+) -> Result<BindingInfo> {
+    own_window(&window, &window_label)?;
+    state.update(window, binding_id, toolbar).await
+}
+#[tauri::command]
+async fn inspect<R: Runtime>(
+    window: Window<R>,
+    state: State<'_, NotesUi<R>>,
+    window_label: String,
+    binding_id: String,
+) -> Result<BindingInfo> {
+    own_window(&window, &window_label)?;
+    state.inspect(window, binding_id).await
+}
+#[tauri::command]
+async fn unbind<R: Runtime>(
+    window: Window<R>,
+    state: State<'_, NotesUi<R>>,
+    window_label: String,
+    binding_id: String,
+) -> Result<()> {
+    own_window(&window, &window_label)?;
+    state.unbind(window, binding_id).await
+}
+pub fn init<R: Runtime>() -> TauriPlugin<R> {
+    Builder::new("notes-ui")
+        .invoke_handler(tauri::generate_handler![bind, update, unbind, inspect])
+        .setup(|app, _| {
+            app.manage(NotesUi {
+                app: app.clone(),
+                bindings: Arc::new(Mutex::new(HashMap::new())),
+            });
+            Ok(())
+        })
+        .on_event(|app, event| {
+            #[cfg(target_os = "macos")]
+            if let tauri::RunEvent::WindowEvent {
+                label,
+                event: tauri::WindowEvent::Destroyed,
+                ..
+            } = event
+            {
+                macos::destroy_label(app, label);
+            }
+            #[cfg(not(target_os = "macos"))]
+            let _ = (app, event);
+        })
+        .on_drop(|app| {
+            #[cfg(target_os = "macos")]
+            macos::destroy_all(&app);
+            #[cfg(not(target_os = "macos"))]
+            let _ = app;
+        })
+        .build()
+}
+#[cfg(test)]
+mod tests;

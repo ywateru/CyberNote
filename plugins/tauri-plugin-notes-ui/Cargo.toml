@@ -1,0 +1,33 @@
+[package]
+name = "tauri-plugin-notes-ui"
+version = "0.1.0"
+edition = "2021"
+links = "tauri-plugin-notes-ui"
+description = "Window-bound public AppKit controls for the Notes Clone toolbar"
+license = "MIT"
+
+[lib]
+name = "tauri_plugin_notes_ui"
+
+[features]
+desktop-demo = ["tauri/wry", "tauri/webview-data-url"]
+
+[dependencies]
+tauri = { version = "=2.12.5", default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4"] }
+
+[build-dependencies]
+tauri-plugin = { version = "=2.6.3", features = ["build"] }
+cc = "1"
+
+[dev-dependencies]
+tauri = { version = "=2.12.5", default-features = false, features = ["test"] }
+base64 = "0.22"
+
+[[example]]
+name = "toolbar_demo"
+required-features = ["desktop-demo"]
+
+[workspace]
