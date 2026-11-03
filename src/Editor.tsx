@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   EditorContent,
   NodeViewWrapper,
@@ -81,6 +81,8 @@ function AudioPlayerSession({ src, name }: { src: string; name: string }) {
   );
   const [playback, setPlayback] = useState(initialAudioPlaybackState);
   const [expanded, setExpanded] = useState(false);
+  const detailId = useId();
+  const toggleExpanded = () => setExpanded((value) => !value);
   useEffect(() => {
     if (!audio.current) return;
     const player = createAudioPlayback(audio.current, src, setPlayback);
@@ -94,17 +96,42 @@ function AudioPlayerSession({ src, name }: { src: string; name: string }) {
   const error =
     playback.mediaError || playback.playError || playback.durationError;
   return (
-    <div className="audio-card">
+    <div
+      className="audio-card"
+      onMouseDownCapture={(event) => {
+        // Keep taps on non-editable audio UI from placing the editor caret.
+        // The native range must retain its own pointer/focus/drag behavior.
+        if (!(event.target instanceof HTMLInputElement)) event.preventDefault();
+      }}
+      onClick={(event) => event.stopPropagation()}
+    >
       <audio ref={audio} />
       <div
         className="audio-summary"
-        onDoubleClick={() => setExpanded(!expanded)}
+        onDoubleClick={(event) => {
+          if (!(event.target as Element).closest("button, input"))
+            toggleExpanded();
+          event.stopPropagation();
+        }}
       >
-        <span>
+        <button
+          type="button"
+          className="audio-title-toggle"
+          aria-label={`${expanded ? "收起" : "显示"}录音进度：${name}`}
+          aria-expanded={expanded}
+          aria-controls={detailId}
+          onClick={(event) => {
+            // A native double click also emits two click events. Treat the
+            // first click/keyboard activation as one toggle, not three.
+            if (event.detail < 2) toggleExpanded();
+          }}
+        >
           <strong>{name.replace(/\.[^.]+$/, "")}</strong>
           <small>录音 · {formatAudioTime(duration)}</small>
-        </span>
+        </button>
         <button
+          type="button"
+          className="audio-play-toggle"
           disabled={!src || !!playback.mediaError}
           onClick={() => controller.current?.toggle()}
         >
@@ -116,16 +143,20 @@ function AudioPlayerSession({ src, name }: { src: string; name: string }) {
           {playing ? "暂停" : "播放"}
         </button>
         <button
+          type="button"
           className="audio-expand"
-          aria-label="显示录音进度"
-          onClick={() => setExpanded(!expanded)}
+          aria-label={expanded ? "收起录音进度" : "显示录音进度"}
+          aria-expanded={expanded}
+          aria-controls={detailId}
+          onClick={() => toggleExpanded()}
         >
           ⌄
         </button>
       </div>
       {expanded && (
-        <div className="audio-detail">
+        <div className="audio-detail" id={detailId}>
           <button
+            type="button"
             aria-label="后退15秒"
             disabled={duration === null || !!playback.mediaError}
             onClick={() => controller.current?.skip(-15)}
@@ -135,6 +166,7 @@ function AudioPlayerSession({ src, name }: { src: string; name: string }) {
           </button>
           <input
             aria-label="播放进度"
+            aria-valuetext={formatAudioTime(time)}
             type="range"
             min={0}
             max={duration ?? 0}
@@ -145,6 +177,7 @@ function AudioPlayerSession({ src, name }: { src: string; name: string }) {
           />
           <span>{formatAudioTime(time)}</span>
           <button
+            type="button"
             aria-label="前进15秒"
             disabled={duration === null || !!playback.mediaError}
             onClick={() => controller.current?.skip(15)}
@@ -158,6 +191,7 @@ function AudioPlayerSession({ src, name }: { src: string; name: string }) {
         <div className="inline-error" role="alert">
           {error}{" "}
           <button
+            type="button"
             aria-label="重试录音"
             onClick={() => controller.current?.retry()}
           >

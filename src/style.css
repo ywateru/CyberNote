@@ -773,12 +773,17 @@ a {
   gap: 8px;
   padding: 10px 12px;
 }
-.audio-summary > span {
+.audio-summary .audio-title-toggle {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 3px;
   flex: 1;
   min-width: 0;
+  margin: -10px 0 -10px -12px;
+  padding: 10px 0 10px 12px;
+  text-align: left;
+  color: inherit;
 }
 .audio-summary strong {
   font-size: 12px;
@@ -790,7 +795,8 @@ a {
   font-size: 11px;
   color: var(--secondary);
 }
-.audio-summary > button {
+.audio-summary > .audio-play-toggle,
+.audio-summary > .audio-expand {
   background: #fff;
   border-radius: 20px;
   padding: 5px 8px;
@@ -800,6 +806,11 @@ a {
   font-size: 12px;
   font-weight: 600;
   color: #111;
+}
+.audio-card button > * {
+  /* Tiptap's real NodeView stops events whose target is the native control.
+     Keep title text/SVG hits on that button instead of its non-input child. */
+  pointer-events: none;
 }
 .audio-summary .audio-expand {
   background: transparent;
@@ -1705,7 +1716,8 @@ a {
 .dark .audio-card {
   background: #37373b;
 }
-.dark .audio-summary > button {
+.dark .audio-summary > .audio-play-toggle,
+.dark .audio-summary > .audio-expand {
   background: #5b5b60;
   color: #fff;
 }
@@ -2251,6 +2263,10 @@ a {
   .mobile .audio-summary {
     padding: 12px;
   }
+  .mobile .audio-title-toggle {
+    margin-block: -12px;
+    padding-block: 12px;
+  }
   .mobile .audio-summary strong {
     font-size: 13px;
   }
@@ -2259,6 +2275,44 @@ a {
   }
   .mobile .audio-summary > button {
     font-size: 13px;
+  }
+  .mobile .audio-play-toggle {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .mobile .audio-play-toggle::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    min-width: 44px;
+    height: 44px;
+    transform: translateY(-50%);
+  }
+  .mobile .audio-detail {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 38px 44px;
+    gap: 6px;
+    padding: 0 8px 8px;
+  }
+  .mobile .audio-detail button {
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+  }
+  .mobile .audio-detail button small {
+    left: 14px;
+    top: 17px;
+  }
+  .mobile .audio-detail input {
+    height: 44px;
+    min-width: 0;
+    touch-action: pan-y;
+  }
+  .mobile .audio-detail > span {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
   }
   .mobile .audio-expand {
     display: none;

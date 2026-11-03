@@ -130,7 +130,7 @@ try {
   await page.waitForFunction(() => !!window.mountAudio);
   await page.evaluate((src) => window.mountAudio(src), src);
   await page.getByText("录音 · 1:06", { exact: true }).waitFor();
-  await page.getByRole("button", { name: "显示录音进度" }).click();
+  await page.locator(".audio-expand").click();
   const snapshot = () =>
     page.evaluate(() => {
       const a = document.querySelector("audio");
@@ -249,7 +249,7 @@ try {
     "data:audio/wav;base64," + wav.toString("base64"),
   );
   await page.getByText("录音 · 0:02", { exact: true }).waitFor();
-  await page.getByRole("button", { name: "显示录音进度" }).click();
+  await page.locator(".audio-expand").click();
   const finiteMetadata = await snapshot();
   assert.equal(finiteMetadata.max, 2);
   assert.equal(finiteMetadata.currentTime, 0);

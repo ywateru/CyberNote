@@ -31,3 +31,7 @@ depends-on: []
 ## verification
 
 候选typecheck与必要生产事件边界检查；独立复核真实NodeView/React接线，避免只测CSS常量。统一新APK上使用既有66秒受管附件，原生触摸展开→播放暂停→拖动约30秒→±15→两端→收回，核实际main currentTime/paused/range和未自动跳转。完整JSON/revision/原字节SHA保持、IME不误起；不得DOM click/state写入替代触摸。保留原失败及确切新包身份，独立实测前不标done；非移动smoke和pixel结果分别记录。
+
+## source candidate 01
+
+基线6fd3bf8的隔离源码候选已完成标题原生按钮/NodeView事件边界/44px移动触摸区修复，保留紧凑文字与播放胶囊，无新增永久图标。typecheck、11组播放helper、真实NoteEditor→NodeView离线触摸/键盘与既有真实媒体浏览器回归通过；JSON/选区/revision未变。报告及确切限制见`../../verification/app-002-audio-controls/README.md`。尚待独立审查和统一新APK原生触摸/IME实测，status保持ready，不宣称Android、macOS或像素验收已通过。
