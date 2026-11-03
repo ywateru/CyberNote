@@ -164,3 +164,56 @@ fn tauri_window_target_delivers_only_to_the_bound_window() {
     assert_eq!(own.load(Ordering::SeqCst), 1);
     assert_eq!(other.load(Ordering::SeqCst), 0);
 }
+
+#[test]
+fn search_focus_requires_enabled_search_without_mutating_query_or_revision() {
+    let mut record = Binding {
+        id: uuid::Uuid::new_v4().to_string(),
+        state: sample(),
+    };
+    record.state.search.as_mut().unwrap().value = "已有查询与中文".into();
+    let before = serde_json::to_value(&record.state).unwrap();
+    record.permits_search_focus().unwrap();
+    assert_eq!(serde_json::to_value(&record.state).unwrap(), before);
+    record.state.search.as_mut().unwrap().enabled = false;
+    assert_eq!(
+        record.permits_search_focus().unwrap_err().code,
+        "search_disabled"
+    );
+    record.state.search = None;
+    assert_eq!(
+        record.permits_search_focus().unwrap_err().code,
+        "search_missing"
+    );
+}
+
+#[test]
+fn focus_command_rejects_cross_window_and_invalid_uuid_before_native_dispatch() {
+    let app = tauri::test::mock_app();
+    app.manage(NotesUi {
+        app: app.handle().clone(),
+        bindings: Arc::new(Mutex::new(HashMap::new())),
+    });
+    let webview = tauri::WebviewWindowBuilder::new(
+        &app,
+        "focus-owner",
+        tauri::WebviewUrl::App("index.html".into()),
+    )
+    .build()
+    .unwrap();
+    let window = webview.as_ref().window();
+    let cross = tauri::async_runtime::block_on(focus_search(
+        window.clone(),
+        app.state(),
+        "other-window".into(),
+        uuid::Uuid::new_v4().to_string(),
+    ));
+    assert_eq!(cross.unwrap_err().code, "window_mismatch");
+    let invalid = tauri::async_runtime::block_on(focus_search(
+        window.clone(),
+        app.state(),
+        "focus-owner".into(),
+        "../arbitrary-selector".into(),
+    ));
+    assert_eq!(invalid.unwrap_err().code, "invalid_binding");
+}

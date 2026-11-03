@@ -1,0 +1,22 @@
+   Compiling tauri-plugin-notes-ui v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-ui)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.83s
+     Running unittests src/lib.rs (plugins/tauri-plugin-notes-scan/target/debug/deps/tauri_plugin_notes_ui-84a94128b292d801)
+
+running 8 tests
+test tests::events_cannot_cross_windows_bindings_revisions_or_disabled_commands ... ok
+test macos::tests::focus_lookup_rejects_other_window_and_old_id_after_rebind ... ok
+test tests::search_focus_requires_enabled_search_without_mutating_query_or_revision ... ok
+test tests::menus_require_unique_owned_commands_and_bounded_nesting ... ok
+test tests::contract_rejects_unknown_variants_fields_and_unbounded_state ... ok
+test tests::guest_window_label_must_match_the_invoking_window ... ok
+test tests::tauri_window_target_delivers_only_to_the_bound_window ... ok
+test tests::focus_command_rejects_cross_window_and_invalid_uuid_before_native_dispatch ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests tauri_plugin_notes_ui
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

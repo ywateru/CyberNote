@@ -307,6 +307,18 @@
           "markdownDescription": "Denies the bind command without any pre-configured scope."
         },
         {
+          "description": "Enables the focus_search command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-focus-search",
+          "markdownDescription": "Enables the focus_search command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the focus_search command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-focus-search",
+          "markdownDescription": "Denies the focus_search command without any pre-configured scope."
+        },
+        {
           "description": "Enables the inspect command without any pre-configured scope.",
           "type": "string",
           "const": "allow-inspect",
@@ -343,10 +355,10 @@
           "markdownDescription": "Denies the update command without any pre-configured scope."
         },
         {
-          "description": "Own-window toolbar binding, state updates, inspection and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`",
+          "description": "Own-window toolbar binding, state updates, inspection, search focus and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Own-window toolbar binding, state updates, inspection and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`"
+          "markdownDescription": "Own-window toolbar binding, state updates, inspection, search focus and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`"
         }
       ]
     }

@@ -1,6 +1,6 @@
 ## Default Permission
 
-Own-window toolbar binding, state updates, inspection and teardown. No note storage access.
+Own-window toolbar binding, state updates, inspection, search focus and teardown. No note storage access.
 
 #### This default permission set includes the following:
 
@@ -8,6 +8,7 @@ Own-window toolbar binding, state updates, inspection and teardown. No note stor
 - `allow-update`
 - `allow-unbind`
 - `allow-inspect`
+- `allow-focus-search`
 
 ## Permission Table
 
@@ -40,6 +41,32 @@ Enables the bind command without any pre-configured scope.
 <td>
 
 Denies the bind command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`notes-ui:allow-focus-search`
+
+</td>
+<td>
+
+Enables the focus_search command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`notes-ui:deny-focus-search`
+
+</td>
+<td>
+
+Denies the focus_search command without any pre-configured scope.
 
 </td>
 </tr>

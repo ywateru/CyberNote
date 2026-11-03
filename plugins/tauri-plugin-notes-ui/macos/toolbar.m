@@ -94,6 +94,7 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
 - (NSDictionary *)information;
 - (void)layout;
 - (void)dispose;
+- (NSDictionary *)focusSearch;
 @end
 
 @implementation NotesUIController
@@ -302,6 +303,24 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
         @"fullSizeContent":(self.window.styleMask&NSWindowStyleMaskFullSizeContentView)?@YES:@NO,@"symbolFallbacks":self.symbolFallbacks?:@[],
         @"windowNumber":@(self.window.windowNumber),@"scaleFactor":@(self.window.backingScaleFactor)};
 }
+- (NSDictionary *)focusSearch {
+    NSWindow *window=self.window;
+    if(self.disposed || !window || self.root.window!=window)
+        return @{@"code":@"window_closed",@"message":@"搜索所属窗口已经关闭"};
+    NSDictionary *searchState=self.state[@"search"];
+    if(!searchState || (id)searchState==NSNull.null || !self.search)
+        return @{@"code":@"search_missing",@"message":@"当前窗口没有搜索控件"};
+    if(![searchState[@"enabled"] boolValue] || !self.search.enabled)
+        return @{@"code":@"search_disabled",@"message":@"当前窗口搜索已禁用"};
+    NSTextView *editor=[self.search.currentEditor isKindOfClass:NSTextView.class]?(NSTextView *)self.search.currentEditor:nil;
+    // Repeated requests while editing (including marked text) are a no-op.
+    if(window.firstResponder==self.search || (editor && window.firstResponder==editor))return nil;
+    // Only request first responder. No activation/order, text/selection setter, rebind or intent.
+    // AppKit's own caret/selection behavior remains to be observed at host integration.
+    if(![window makeFirstResponder:self.search])
+        return @{@"code":@"focus_failed",@"message":@"原生搜索无法取得输入焦点"};
+    return nil;
+}
 - (void)send:(NSDictionary *)intent {
     if(self.disposed || self.suppress || !self.callback)return;
     self.sequence++;
@@ -400,6 +419,16 @@ char *notes_ui_inspect(const char *binding) {
     NotesUIController *controller=controllers[[NSString stringWithUTF8String:binding]];
     if(!controller||controller.disposed)return failure(@"stale_binding",@"原生顶部绑定不存在");
     return encoded(@{@"ok":@YES,@"native":[controller information]});
+}
+char *notes_ui_focus_search(const char *binding) {
+    if(!NSThread.isMainThread)return failure(@"thread",@"AppKit 必须在主线程执行");
+    @try {
+        NotesUIController *controller=controllers[[NSString stringWithUTF8String:binding]];
+        if(!controller || controller.disposed)return failure(@"stale_binding",@"原生顶部绑定不存在");
+        NSDictionary *error=[controller focusSearch];
+        if(error)return encoded(@{@"ok":@NO,@"error":error});
+        return encoded(@{@"ok":@YES,@"native":[controller information]});
+    } @catch(NSException *exception) {return failure(@"native",exception.reason?:@"原生搜索聚焦失败");}
 }
 void notes_ui_destroy(const char *binding) {
     if(!NSThread.isMainThread)return;

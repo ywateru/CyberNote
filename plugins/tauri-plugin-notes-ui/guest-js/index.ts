@@ -68,6 +68,10 @@ export class NotesToolbar {
   async inspect(): Promise<BindingInfo> {
     return invoke('plugin:notes-ui|inspect', { windowLabel: this.windowLabel, bindingId: this.requiredBinding() });
   }
+  /** Current window/binding only; requests first responder without text or selection setters. */
+  async focusSearch(): Promise<BindingInfo> {
+    return invoke('plugin:notes-ui|focus_search', { windowLabel: this.windowLabel, bindingId: this.requiredBinding() });
+  }
   async unbind(): Promise<void> {
     await invoke('plugin:notes-ui|unbind', { windowLabel: this.windowLabel, bindingId: this.requiredBinding() });
     this.bindingId = null;

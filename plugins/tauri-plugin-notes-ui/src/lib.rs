@@ -41,6 +41,17 @@ struct Binding {
     state: ToolbarState,
 }
 impl Binding {
+    fn permits_search_focus(&self) -> Result<()> {
+        let search = self
+            .state
+            .search
+            .as_ref()
+            .ok_or_else(|| Error::new("search_missing", "当前窗口没有搜索控件"))?;
+        if !search.enabled {
+            return Err(Error::new("search_disabled", "当前窗口搜索已禁用"));
+        }
+        Ok(())
+    }
     fn permits_event(&self, label: &str, event: &ToolbarEvent) -> bool {
         event.window_label == label
             && event.binding_id == self.id
@@ -101,6 +112,19 @@ impl<R: Runtime> NotesUi<R> {
         #[cfg(target_os = "macos")]
         {
             macos::unbind(&self.app, self.bindings.clone(), window, binding_id).await
+        }
+        #[cfg(not(target_os = "macos"))]
+        {
+            let _ = (window, binding_id);
+            Err(unsupported())
+        }
+    }
+    /// Request this binding's native search first responder without rewriting its query or state.
+    pub async fn focus_search(&self, window: Window<R>, binding_id: String) -> Result<BindingInfo> {
+        valid_binding_id(&binding_id)?;
+        #[cfg(target_os = "macos")]
+        {
+            macos::focus_search(&self.app, self.bindings.clone(), window, binding_id).await
         }
         #[cfg(not(target_os = "macos"))]
         {
@@ -175,9 +199,25 @@ async fn unbind<R: Runtime>(
     own_window(&window, &window_label)?;
     state.unbind(window, binding_id).await
 }
+#[tauri::command]
+async fn focus_search<R: Runtime>(
+    window: Window<R>,
+    state: State<'_, NotesUi<R>>,
+    window_label: String,
+    binding_id: String,
+) -> Result<BindingInfo> {
+    own_window(&window, &window_label)?;
+    state.focus_search(window, binding_id).await
+}
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("notes-ui")
-        .invoke_handler(tauri::generate_handler![bind, update, unbind, inspect])
+        .invoke_handler(tauri::generate_handler![
+            bind,
+            update,
+            unbind,
+            inspect,
+            focus_search
+        ])
         .setup(|app, _| {
             app.manage(NotesUi {
                 app: app.clone(),

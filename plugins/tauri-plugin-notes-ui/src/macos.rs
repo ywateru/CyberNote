@@ -17,6 +17,7 @@ extern "C" {
     ) -> *mut c_char;
     fn notes_ui_update(id: *const c_char, state: *const c_char) -> *mut c_char;
     fn notes_ui_inspect(id: *const c_char) -> *mut c_char;
+    fn notes_ui_focus_search(id: *const c_char) -> *mut c_char;
     fn notes_ui_destroy(id: *const c_char);
     fn notes_ui_free(value: *mut c_char);
 }
@@ -252,6 +253,22 @@ pub(super) async fn unbind<R: Runtime>(
     })
     .await
 }
+pub(super) async fn focus_search<R: Runtime>(
+    app: &AppHandle<R>,
+    map: Bindings,
+    window: Window<R>,
+    id: String,
+) -> Result<BindingInfo> {
+    on_main(app, move || {
+        let label = window.label().to_owned();
+        let record = binding(&map, &label, &id)?;
+        record.permits_search_focus()?;
+        let id_c = cstr(&id)?;
+        let native = unsafe { response(notes_ui_focus_search(id_c.as_ptr()))? };
+        Ok(info(label, record, native))
+    })
+    .await
+}
 pub(super) fn destroy_label<R: Runtime>(app: &AppHandle<R>, label: &str) {
     if let Some(state) = app.try_state::<NotesUi<R>>() {
         let record = state.bindings.lock().ok().and_then(|mut m| m.remove(label));
@@ -280,5 +297,52 @@ pub(super) fn destroy_all<R: Runtime>(app: &AppHandle<R>) {
                 }
             }
         });
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn focus_lookup_rejects_other_window_and_old_id_after_rebind() {
+        let old_id = uuid::Uuid::new_v4().to_string();
+        let state: ToolbarState =
+            serde_json::from_str(include_str!("../examples/state.json")).unwrap();
+        let map: Bindings = Arc::new(Mutex::new(HashMap::from([(
+            "main".into(),
+            Binding {
+                id: old_id.clone(),
+                state: state.clone(),
+            },
+        )])));
+        assert_eq!(
+            binding(&map, "independent", &old_id).err().unwrap().code,
+            "stale_binding"
+        );
+        binding(&map, "main", &old_id)
+            .unwrap()
+            .permits_search_focus()
+            .unwrap();
+        map.lock().unwrap().remove("main");
+        assert_eq!(
+            binding(&map, "main", &old_id).err().unwrap().code,
+            "stale_binding"
+        );
+        let new_id = uuid::Uuid::new_v4().to_string();
+        map.lock().unwrap().insert(
+            "main".into(),
+            Binding {
+                id: new_id.clone(),
+                state,
+            },
+        );
+        assert_eq!(
+            binding(&map, "main", &old_id).err().unwrap().code,
+            "stale_binding"
+        );
+        binding(&map, "main", &new_id)
+            .unwrap()
+            .permits_search_focus()
+            .unwrap();
     }
 }

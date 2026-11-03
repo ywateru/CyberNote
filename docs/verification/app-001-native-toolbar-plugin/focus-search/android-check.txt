@@ -1,0 +1,52 @@
+   Compiling tauri-plugin-notes-ui v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-ui)
+warning: fields `id` and `state` are never read
+  --> src/lib.rs:40:5
+   |
+39 | struct Binding {
+   |        ------- fields in this struct
+40 |     id: String,
+   |     ^^
+41 |     state: ToolbarState,
+   |     ^^^^^
+   |
+   = note: `Binding` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: methods `permits_search_focus` and `permits_event` are never used
+  --> src/lib.rs:44:8
+   |
+43 | impl Binding {
+   | ------------ methods in this implementation
+44 |     fn permits_search_focus(&self) -> Result<()> {
+   |        ^^^^^^^^^^^^^^^^^^^^
+...
+55 |     fn permits_event(&self, label: &str, event: &ToolbarEvent) -> bool {
+   |        ^^^^^^^^^^^^^
+
+warning: fields `app` and `bindings` are never read
+  --> src/lib.rs:64:5
+   |
+63 | pub struct NotesUi<R: Runtime> {
+   |            ------- fields in this struct
+64 |     app: AppHandle<R>,
+   |     ^^^
+65 |     bindings: Bindings,
+   |     ^^^^^^^^
+
+warning: method `permits` is never used
+   --> src/model.rs:195:19
+    |
+149 | impl ToolbarState {
+    | ----------------- method in this implementation
+...
+195 |     pub(crate) fn permits(&self, intent: &Intent) -> bool {
+    |                   ^^^^^^^
+
+warning: function `enabled_command` is never used
+   --> src/model.rs:248:4
+    |
+248 | fn enabled_command(entries: &[MenuEntry], command: MenuCommand) -> bool {
+    |    ^^^^^^^^^^^^^^^
+
+warning: `tauri-plugin-notes-ui` (lib) generated 5 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.04s
