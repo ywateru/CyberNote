@@ -1,0 +1,51 @@
+NSControl.h:24
+24: @property (nullable, weak) id target; // Target is weak for zeroing-weak compatible objects in apps linked on 10.10 or later. Otherwise the behavior of this property is 'assign’.
+
+NSMenuItem.h:94
+94: @property (nullable, weak) id target;
+95: @property (nullable) SEL action;
+
+NSMenu.h:67
+67:  
+68:  If a font is specified, then it will be applied to the menu.  In 10.6, the setFont: API below should be preferred.
+69: */
+70:  
+71: + (void)popUpContextMenu:(NSMenu*)menu withEvent:(NSEvent*)event forView:(NSView*)view;
+72: + (void)popUpContextMenu:(NSMenu*)menu withEvent:(NSEvent*)event forView:(NSView*)view withFont:(nullable NSFont*)font;
+73: 
+74: /* Pops up the receiver as a popup menu. The top left or right corner of the given item (which must be present in the receiver) is positioned at the given location in the given view, interpreted in the view's own coordinate system.  If item is nil, the menu is positioned such that the top left or right of the menu content frame is at the given location.  If view is nil, the location is interpreted in the screen coordinate system. This allows you to pop up a menu disconnected from any window.  The method returns YES if menu tracking ended because an item was selected, and NO if menu tracking was cancelled for any reason.
+75:  
+76:    This method determines whether to use the top left or right corner by calling userInterfaceLayoutDirection on the view or its cell (if implemented).  If not implemented, or if the view is nil, it inspects the userInterfaceLayoutDirection of the NSApplication.
+77: */
+78: - (BOOL)popUpMenuPositioningItem:(nullable NSMenuItem *)item atLocation:(NSPoint)location inView:(nullable NSView *)view API_AVAILABLE(macos(10.6));
+
+NSMenu.h:162
+162: /* Dismisses the menu and ends all menu tracking */
+163: - (void)cancelTracking API_AVAILABLE(macos(10.5));
+164: 
+165: /* Dismisses the menu immediately, without any fade or other effect, and ends all menu tracking */
+166: - (void)cancelTrackingWithoutAnimation API_AVAILABLE(macos(10.6));
+
+NSPopover.h:44
+44:     /*  AppKit will close the popover when the user interacts with a user interface element outside the popover.  Note that interacting with menus or panels that become key only when needed will not cause a transient popover to close.  The exact interactions that will cause transient popovers to close are not specified. 
+45:      */
+46:     NSPopoverBehaviorTransient = 1,
+
+NSPopover.h:123
+123: /*  The content size of the popover.  The popover's content size is set to match the size of the content view when the content view controller is set.  Changes to the content size of the popover will animate while the popover is shown (provided animates is YES). 
+124:  */
+125: @property NSSize contentSize;
+126: 
+127: /*  YES if the popover is being shown, NO otherwise. The popover is considered to be shown from the point when -showRelativeToRect:ofView:preferredEdge: is invoked until the popover is closed in response to an invocation of either -close or -performClose:.
+128:  */
+129: @property(readonly, getter=isShown) BOOL shown;
+
+NSPopover.h:169
+169: ///   - positioningRect: The rectangle within `positioningView` relative to which the popover should be positioned. Normally set to the bounds of `positioningView`. May be an empty rectangle, which will default to the bounds of `positioningView`.
+170: ///   - positioningView: The view relative to which the popover should be positioned. Causes the method to raise `NSInvalidArgumentException` if `nil`.
+171: ///   - preferredEdge: The edge of `positioningView` the popover should prefer to be anchored to (respects to the `-isFlipped` state of `positioningView`). The current (but not guaranteed) behavior is that AppKit will place the anchor towards the `preferredEdge` of the `positioningRect` unless such a placement would cause the popover not to fit on the screen of `positioningView`. If the anchor cannot be placed towards the `preferredEdge`, AppKit will (in the current implementation) attempt to place the anchor on the opposite side of the `positioningRect`. If that cannot be done, AppKit will attempt to place the anchor on a remaining side of the popover, and failing that will center the popover on the screen, causing it to (at least temporarily) lose its anchor.
+172: ///
+173: /// - Note: This method will throw a `NSInvalidArgumentException` if view is `nil` or if `view` is not in a window, or if the popover’s behavior is `NSPopoverBehaviorSemitransient` and the popover’s `positioningView` is in a popover or child window. It will throw a `NSInternalInconsistencyException` if the popover’s  content view controller (or the view controller’s view) is `nil`. If the popover is already being shown, this method will update to be associated with the new `view` and `positioningRect` passed.
+174: ///
+175: /// - Note: If the positioning view isn’t visible (its window isn’t visible, or the positioning rect is outside of its visible rect), this method does nothing.
+176: - (void)showRelativeToRect:(NSRect)positioningRect ofView:(NSView *)positioningView preferredEdge:(NSRectEdge)preferredEdge;

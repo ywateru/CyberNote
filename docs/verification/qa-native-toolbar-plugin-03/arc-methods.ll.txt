@@ -1,0 +1,100 @@
+1: define internal void @"\01-[NotesUIController formatColorsClicked:]"(ptr noundef %0, ptr noundef %1, ptr noundef %2) #1 {
+2:   %4 = alloca ptr, align 8
+3:   %5 = alloca ptr, align 8
+4:   %6 = alloca ptr, align 8
+5:   %7 = alloca i32, align 4
+6:   %8 = alloca ptr, align 8
+7:   %9 = alloca ptr, align 8
+8:   %10 = alloca %struct.__objcFastEnumerationState, align 8
+9:   %11 = alloca [16 x ptr], align 8
+10:   %12 = alloca ptr, align 8
+11:   %13 = alloca ptr, align 8
+12:   %14 = alloca [3 x ptr], align 8
+13:   %15 = alloca [3 x ptr], align 8
+14:   store ptr %0, ptr %4, align 8
+15:   store ptr %1, ptr %5, align 8
+16:   store ptr null, ptr %6, align 8
+17:   call void @llvm.objc.storeStrong(ptr %6, ptr %2) #2
+18:   %16 = load ptr, ptr %4, align 8
+19:   %17 = load ptr, ptr %6, align 8
+20:   %18 = call zeroext i1 @"objc_msgSend$permitsFormatButton:"(ptr noundef %16, ptr noundef undef, ptr noundef %17)
+179: 
+180: 107:                                              ; preds = %106
+181:   %108 = load ptr, ptr %8, align 8
+182:   %109 = load ptr, ptr %4, align 8
+183:   call void @"objc_msgSend$setActiveMenu:"(ptr noundef %109, ptr noundef undef, ptr noundef %108)
+184:   %110 = load ptr, ptr %8, align 8
+185:   %111 = load ptr, ptr %6, align 8
+186:   %112 = load [2 x double], ptr @NSZeroPoint, align 8
+187:   %113 = call zeroext i1 @"objc_msgSend$popUpMenuPositioningItem:atLocation:inView:"(ptr noundef %110, ptr noundef undef, ptr noundef null, [2 x double] %112, ptr noundef %111)
+188:   %114 = load ptr, ptr %4, align 8
+189:   call void @"objc_msgSend$setActiveMenu:"(ptr noundef %114, ptr noundef undef, ptr noundef null)
+190:   call void @llvm.objc.storeStrong(ptr %8, ptr null) #2
+191:   store i32 0, ptr %7, align 4
+192:   br label %115
+193: 
+
+1: define internal void @"\01-[NotesUIController buttonClicked:]"(ptr noundef %0, ptr noundef %1, ptr noundef %2) #1 {
+2:   %4 = alloca %struct.CGPoint, align 8
+3:   %5 = alloca double, align 8
+4:   %6 = alloca double, align 8
+5:   %7 = alloca %struct.CGPoint, align 8
+6:   %8 = alloca double, align 8
+7:   %9 = alloca double, align 8
+8:   %10 = alloca ptr, align 8
+9:   %11 = alloca ptr, align 8
+10:   %12 = alloca ptr, align 8
+11:   %13 = alloca ptr, align 8
+12:   %14 = alloca ptr, align 8
+13:   %15 = alloca ptr, align 8
+14:   %16 = alloca %struct.__objcFastEnumerationState, align 8
+15:   %17 = alloca [16 x ptr], align 8
+16:   %18 = alloca ptr, align 8
+17:   %19 = alloca ptr, align 8
+18:   %20 = alloca %struct.CGPoint, align 8
+19:   %21 = alloca i32, align 4
+20:   %22 = alloca ptr, align 8
+189:   br label %124
+190: 
+191: 124:                                              ; preds = %123
+192:   %125 = load ptr, ptr %10, align 8
+193:   %126 = call ptr @llvm.objc.retain(ptr %125) #2
+194:   store ptr %126, ptr %19, align 8
+195:   %127 = load ptr, ptr %14, align 8
+196:   %128 = load ptr, ptr %19, align 8
+197:   call void @"objc_msgSend$setActiveMenu:"(ptr noundef %128, ptr noundef undef, ptr noundef %127)
+198:   %129 = load ptr, ptr %14, align 8
+199:   store double 0.000000e+00, ptr %5, align 8
+200:   store double 3.400000e+01, ptr %6, align 8
+201:   %130 = load double, ptr %5, align 8
+211:   %137 = extractvalue %struct.CGPoint %133, 1
+212:   store double %137, ptr %136, align 8
+213:   %138 = load ptr, ptr %12, align 8
+214:   %139 = load [2 x double], ptr %20, align 8
+215:   %140 = call zeroext i1 @"objc_msgSend$popUpMenuPositioningItem:atLocation:inView:"(ptr noundef %129, ptr noundef undef, ptr noundef null, [2 x double] %139, ptr noundef %138)
+216:   %141 = load ptr, ptr %19, align 8
+217:   call void @"objc_msgSend$setActiveMenu:"(ptr noundef %141, ptr noundef undef, ptr noundef null)
+218:   store i32 1, ptr %21, align 4
+219:   call void @llvm.objc.storeStrong(ptr %19, ptr null) #2
+220:   call void @llvm.objc.storeStrong(ptr %14, ptr null) #2
+221:   br label %210
+300:   %183 = call ptr @llvm.objc.retain(ptr %182) #2
+301:   store ptr %183, ptr %25, align 8
+302:   %184 = load ptr, ptr %24, align 8
+303:   %185 = load ptr, ptr %25, align 8
+304:   call void @"objc_msgSend$setActiveMenu:"(ptr noundef %185, ptr noundef undef, ptr noundef %184)
+305:   %186 = load ptr, ptr %24, align 8
+306:   store double 0.000000e+00, ptr %8, align 8
+307:   store double 3.400000e+01, ptr %9, align 8
+308:   %187 = load double, ptr %8, align 8
+318:   %194 = extractvalue %struct.CGPoint %190, 1
+319:   store double %194, ptr %193, align 8
+320:   %195 = load ptr, ptr %12, align 8
+321:   %196 = load [2 x double], ptr %26, align 8
+322:   %197 = call zeroext i1 @"objc_msgSend$popUpMenuPositioningItem:atLocation:inView:"(ptr noundef %186, ptr noundef undef, ptr noundef null, [2 x double] %196, ptr noundef %195)
+323:   %198 = load ptr, ptr %25, align 8
+324:   call void @"objc_msgSend$setActiveMenu:"(ptr noundef %198, ptr noundef undef, ptr noundef null)
+325:   call void @llvm.objc.storeStrong(ptr %25, ptr null) #2
+326:   br label %209
+327: 
+328: 199:                                              ; preds = %172

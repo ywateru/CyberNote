@@ -1,0 +1,91 @@
+[
+  {
+    "name": "gallery",
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "--locked",
+      "--offline",
+      "--lib",
+      "--target-dir",
+      "plugins/tauri-plugin-notes-scan/target",
+      "tests::gallery_browse_is_explicit_and_rejects_stale_editor_actions",
+      "--",
+      "--exact"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "format",
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "--locked",
+      "--offline",
+      "--lib",
+      "--target-dir",
+      "plugins/tauri-plugin-notes-scan/target",
+      "tests::format_surface_accepts_only_format_commands_and_disabled_colors_cannot_dispatch",
+      "--",
+      "--exact"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "identity",
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "--locked",
+      "--offline",
+      "--lib",
+      "--target-dir",
+      "plugins/tauri-plugin-notes-scan/target",
+      "tests::events_cannot_cross_windows_bindings_revisions_or_disabled_commands",
+      "--",
+      "--exact"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "archive-members",
+    "command": [
+      "ar",
+      "-t",
+      "plugins/tauri-plugin-notes-scan/target/debug/build/tauri-plugin-notes-ui-75a932cff01dc06c/out/libnotes_ui_toolbar.a"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "archive-format-symbols",
+    "command": [
+      "nm",
+      "-g",
+      "plugins/tauri-plugin-notes-scan/target/debug/build/tauri-plugin-notes-ui-75a932cff01dc06c/out/libnotes_ui_toolbar.a"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "arc-method-evidence",
+    "command": [
+      "xcrun",
+      "clang",
+      "-S",
+      "-emit-llvm",
+      "-O0",
+      "-fobjc-arc",
+      "-fblocks",
+      "-mmacosx-version-min=12.0",
+      "plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "-o",
+      "/private/tmp/notes-ui-review03-toolbar.ll"
+    ],
+    "exitCode": 0
+  }
+]
