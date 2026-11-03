@@ -1,0 +1,6 @@
+cargo:rerun-if-changed=permissions
+cargo:PERMISSION_FILES_PATH=/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-scan/target/aarch64-linux-android/debug/build/tauri-plugin-notes-ui-c1a44aad6c549d07/out/tauri-plugin-notes-ui-permission-files
+cargo:rerun-if-env-changed=REMOVE_UNUSED_COMMANDS
+cargo:rustc-check-cfg=cfg(mobile)
+cargo:rustc-cfg=mobile
+cargo:rustc-check-cfg=cfg(desktop)

@@ -46,4 +46,10 @@ plugins/tauri-plugin-notes-scan/target/debug/examples/toolbar_demo > docs/verifi
 
 ## 本阶段边界
 
-真实运行发现并修复 BOOL→JSON integer 导致 bind 响应解析失败的问题；active/fullSizeContent 现在明确 JSON boolean。两窗实际绑定与有限意图/更新已有日志。一次 cua.getApp(.app) 调用挂起 1762 秒后被中断，无法取得受控截图；事件日志有输入记录，但不把工具挂起期间的动作归因于完成的受控测试。未完成搜索、选区、缩放、溢出、关闭重开、非 Mac 编译或像素/RGB差分，均 unknown。正式主应用接入和像素验收属于 FIX02；不能把编译成功、glassRegular 诊断或符号校准当作 UI 完全一致。
+真实运行发现并修复 BOOL→JSON integer 导致 bind 响应解析失败的问题；active/fullSizeContent 现在明确 JSON boolean。两窗实际绑定与有限意图/更新已有日志。一次 cua.getApp(.app) 调用挂起 1762 秒后被中断，无法取得受控截图；事件日志有输入记录，但不把工具挂起期间的动作归因于完成的受控测试。未完成搜索、选区、缩放、溢出、关闭重开或像素/RGB差分，均 unknown。正式主应用接入和像素验收属于 FIX02；不能把编译成功、glassRegular 诊断或符号校准当作 UI 完全一致。
+
+## 非 Mac 头部编译补证
+
+2026-11-03：使用已安装 aarch64-linux-android 目标和现有 scan target，离线 locked 的 `cargo check --lib` 通过（4.08秒）。编译输入仅 src/lib.rs + src/model.rs，未纳入 macos.rs/toolbar.m；插件 build-script 未输出 AppKit/Foundation/QuartzCore 链接，Android normal dependencies 无 Apple framework 包。5项 dead-code warning 来自非Mac分支未用的Mac绑定状态/权限助手，不影响通过。
+
+bind/update/inspect/unbind 先做自身参数校验，对有效调用均返回 `{code:"unsupported",message:"此原生顶部模块仅支持 macOS"}`。此为编译与源码契约验证，未执行Android invoke；不声称此模块提供手机原生顶部栏。guest严格TypeScript检查再次通过。所有代码/Cargo/锁相对adc544a未变化，证据见 docs/verification/app-001-native-toolbar-plugin/android-compile-audit.json、android-check.txt、android-build-script-output.txt、android-module-inputs.txt 和 android-normal-dependencies.txt。

@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-03",
+  "scope": "no GUI or device; compile and static contract evidence only",
+  "command": "cargo check --manifest-path plugins/tauri-plugin-notes-ui/Cargo.toml --locked --offline --lib --target aarch64-linux-android --target-dir plugins/tauri-plugin-notes-scan/target",
+  "exit": 0,
+  "elapsedSeconds": 4.08,
+  "targetAlreadyInstalled": true,
+  "cacheReused": "plugins/tauri-plugin-notes-scan/target",
+  "dataFreeBefore": "2.7GiB",
+  "warnings": {
+    "count": 5,
+    "reason": "Mac-only state/event permission helpers unused in non-Mac stub; no compile errors"
+  },
+  "compilerInputs": [
+    "src/lib.rs",
+    "src/model.rs"
+  ],
+  "macBridgeCompiled": false,
+  "macFrameworkLinkDirectives": [],
+  "targetNormalAppleFrameworkPackages": [],
+  "unsupported": {
+    "commands": [
+      "bind",
+      "update",
+      "inspect",
+      "unbind"
+    ],
+    "validPayload": "returns {code:unsupported,message:此原生顶部模块仅支持 macOS}",
+    "validationOrder": "own-window label; state/UUID when applicable; then unsupported",
+    "runtimeExecuted": false
+  },
+  "guestStrictTypescriptExit": 0,
+  "codeIdentities": [
+    {
+      "path": "plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "sha256": "4fc65b70ddda100270bdc8917242b871f496feaf9daa67a06fe5295cdc5ba602",
+      "sameAs": "adc544a"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "sha256": "ffede89499fa04a0d70e0d561503d32a66717177e038c158b1d49e45a06bc3e2",
+      "sameAs": "adc544a"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/build.rs",
+      "sha256": "d7a6f9e32ede69f696150751b1e14730ee5948842deb4f21b6432d3da100c828",
+      "sameAs": "adc544a"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "sha256": "12bb9a68e2a2ddd1ce4400f33db4ea46614c758ef28758b96d621364dc27ff9e",
+      "sameAs": "adc544a"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/model.rs",
+      "sha256": "5f5e4082c89f2f70837d3364dd1cfef6543a8cc0d44f7ac52509c95888bc0fbd",
+      "sameAs": "adc544a"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "sha256": "a3c797f3fd0597d184479e80e1e6a01b945d47788f699be2b0708adfdc31f899",
+      "sameAs": "adc544a"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/tests.rs",
+      "sha256": "20a9aeb30955b5039a9a7c5fcdc9e3d049645be68cec3b35b77e4eaec9a2dd55",
+      "sameAs": "adc544a"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "sha256": "5508898877e37d0dd86699a90adc31be25e28227f8d038d26f5360b252f773fa",
+      "sameAs": "adc544a"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "sha256": "bb2658589ec42733e51a5d30a5056e42d0fbe6f571b517af65188887853dccfa",
+      "sameAs": "adc544a"
+    }
+  ],
+  "remainingUnknown": [
+    "non-Mac runtime invoke",
+    "controlled screenshot/search/IME/selection/resize/lifecycle",
+    "host integration",
+    "pixel parity"
+  ]
+}

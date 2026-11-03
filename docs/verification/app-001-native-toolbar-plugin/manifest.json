@@ -19,8 +19,8 @@
     },
     {
       "path": "plugins/tauri-plugin-notes-ui/README.md",
-      "sha256": "1b5c29847d83c440d59dc6d4e97bdcf54ba0b64575564a11da5153ce05975ea7",
-      "bytes": 6142
+      "sha256": "ac02fd27317adb0c247eb618fab58bb279318046e619e618dbcb1f9b7c6333be",
+      "bytes": 7152
     },
     {
       "path": "plugins/tauri-plugin-notes-ui/build.rs",
@@ -129,8 +129,14 @@
     "editor selection",
     "resize and overflow",
     "close/reopen lifecycle allocation count",
-    "non-mac compile",
     "host application integration",
     "pixel parity"
-  ]
+  ],
+  "nonMacCompile": {
+    "target": "aarch64-linux-android",
+    "exit": 0,
+    "audit": "android-compile-audit.json",
+    "codeSameAs": "adc544a",
+    "runtimeExecuted": false
+  }
 }
