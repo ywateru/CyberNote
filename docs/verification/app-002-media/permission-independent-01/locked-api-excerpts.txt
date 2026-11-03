@@ -1,0 +1,347 @@
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/webview.rs:291
+291:     let on_page_load_handler = pending.on_page_load_handler.take();
+292:     pending
+293:       .on_page_load_handler
+294:       .replace(Box::new(move |url, event| {
+295:         let payload = PageLoadPayload { url: &url, event };
+296: 
+297:         if let Some(w) = app_manager_.get_webview(&label) {
+298:           if let Some(on_page_load) = &app_manager_.webview.on_page_load {
+299:             on_page_load(&w, &payload);
+300:           }
+301: 
+302:           app_manager_
+303:             .plugins
+304:             .lock()
+305:             .unwrap()
+306:             .on_page_load(&w, &payload);
+307:         }
+308: 
+309:         if let Some(handler) = &on_page_load_handler {
+310:           handler(url, event);
+311:         }
+312:       }));
+313: 
+314:     let permission_request_handler = pending.permission_request_handler.take();
+315:     if permission_request_handler.is_some() || self.on_permission_request.is_some() {
+316:       let label_ = pending.label.clone();
+317:       let app_manager_ = manager.manager_owned();
+318:       pending
+319:         .permission_request_handler
+320:         .replace(Box::new(move |kind| {
+321:           if let Some(handler) = &permission_request_handler {
+322:             let response = handler(kind);
+323:             if response != crate::webview::PermissionResponse::Default {
+324:               return response;
+325:             }
+326:           }
+327: 
+328:           if let Some(w) = app_manager_.get_webview(&label_) {
+329:             if let Some(on_permission_request) = &app_manager_.webview.on_permission_request {
+330:               return on_permission_request(w, kind);
+331:             }
+332:           }
+333: 
+334:           crate::webview::PermissionResponse::Default
+335:         }));
+336:     }
+337: 
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/webview.rs:601
+601:     let navigation_handler = pending.navigation_handler.take();
+602:     let app_manager = manager.manager_owned();
+603:     let label = pending.label.clone();
+604:     pending.navigation_handler = Some(Box::new(move |url| {
+605:       // always allow navigation events for the isolation iframe and do not emit them for consumers
+606:       #[cfg(feature = "isolation")]
+607:       if let crate::Pattern::Isolation { schema, .. } = &*pattern {
+608:         if url.scheme() == schema
+609:           && url.domain() == Some(crate::pattern::ISOLATION_IFRAME_SRC_DOMAIN)
+610:         {
+611:           return true;
+612:         }
+613:       }
+614:       if let Some(handler) = &navigation_handler {
+615:         if !handler(url) {
+616:           return false;
+617:         }
+618:       }
+619:       let webview = app_manager.webview.webviews_lock().get(&label).cloned();
+620:       if let Some(w) = webview {
+621:         app_manager
+622:           .plugins
+623:           .lock()
+624:           .expect("poisoned plugin store")
+625:           .on_navigation(&w, url)
+626:       } else {
+627:         true
+628:       }
+629:     }));
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/webview.rs:640
+640:     let webview = Webview::new(window, webview, use_https_scheme);
+641: 
+642:     let webview_event_listeners = self.event_listeners.clone();
+643:     let webview_ = webview.clone();
+644:     webview.on_webview_event(move |event| {
+645:       let _ = on_webview_event(&webview_, event);
+646:       for handler in webview_event_listeners.iter() {
+647:         handler(&webview_, event);
+648:       }
+649:     });
+650: 
+651:     // insert the webview into our manager
+652:     {
+653:       self
+654:         .webviews_lock()
+655:         .insert(webview.label().to_string(), webview.clone());
+656:     }
+657: 
+658:     // let plugins know that a new webview has been added to the manager
+659:     let manager = webview.manager_owned();
+660:     let webview_ = webview.clone();
+661:     // run on main thread so the plugin store doesn't dead lock with the event loop handler in App
+662:     let _ = webview.run_on_main_thread(move || {
+663:       manager
+664:         .plugins
+665:         .lock()
+666:         .expect("poisoned plugin store")
+667:         .webview_created(webview_);
+668:     });
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/mod.rs:1428
+1428: pub struct Webview<R: Runtime> {
+1429:   pub(crate) window: Arc<Mutex<Window<R>>>,
+1430:   /// The webview created by the runtime.
+1431:   pub(crate) webview: DetachedWebview<EventLoopMessage, R>,
+1432:   /// The manager to associate this webview with.
+1433:   pub(crate) manager: Arc<AppManager<R>>,
+1434:   pub(crate) app_handle: AppHandle<R>,
+1435:   pub(crate) resources_table: Arc<Mutex<ResourceTable>>,
+1436:   use_https_scheme: bool,
+1437: }
+1438: 
+1439: impl<R: Runtime> std::fmt::Debug for Webview<R> {
+1440:   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+1441:     f.debug_struct("Window")
+1442:       .field("window", &self.window.lock().unwrap())
+1443:       .field("webview", &self.webview)
+1444:       .field("use_https_scheme", &self.use_https_scheme)
+1445:       .finish()
+1446:   }
+1447: }
+1448: 
+1449: impl<R: Runtime> Clone for Webview<R> {
+1450:   fn clone(&self) -> Self {
+1451:     Self {
+1452:       window: self.window.clone(),
+1453:       webview: self.webview.clone(),
+1454:       manager: self.manager.clone(),
+1455:       app_handle: self.app_handle.clone(),
+1456:       resources_table: self.resources_table.clone(),
+1457:       use_https_scheme: self.use_https_scheme,
+1458:     }
+1459:   }
+1460: }
+1461: 
+1462: impl<R: Runtime> Hash for Webview<R> {
+1463:   /// Only use the [`Webview`]'s label to represent its hash.
+1464:   fn hash<H: Hasher>(&self, state: &mut H) {
+1465:     self.webview.label.hash(state)
+1466:   }
+1467: }
+1468: 
+1469: impl<R: Runtime> Eq for Webview<R> {}
+1470: impl<R: Runtime> PartialEq for Webview<R> {
+1471:   /// Only use the [`Webview`]'s label to compare equality.
+1472:   fn eq(&self, other: &Self) -> bool {
+1473:     self.webview.label.eq(&other.webview.label)
+1474:   }
+1475: }
+1476: 
+1477: /// Base webview functions.
+1478: impl<R: Runtime> Webview<R> {
+1479:   /// Whether this webview instance is still registered on the manager.
+1480:   ///
+1481:   /// Returns false once the webview is closed, even if a new webview with the same label exists.
+1482:   pub(crate) fn is_registered(&self) -> bool {
+1483:     self
+1484:       .manager
+1485:       .get_webview(self.label())
+1486:       // clones share the resources table, so it identifies the webview instance
+1487:       .is_some_and(|w| Arc::ptr_eq(&w.resources_table, &self.resources_table))
+1488:   }
+1489: 
+1490:   /// Create a new webview that is attached to the window.
+1491:   pub(crate) fn new(
+1492:     window: Window<R>,
+1493:     webview: DetachedWebview<EventLoopMessage, R>,
+1494:     use_https_scheme: bool,
+1495:   ) -> Self {
+1496:     Self {
+1497:       manager: window.manager.clone(),
+1498:       app_handle: window.app_handle.clone(),
+1499:       window: Arc::new(Mutex::new(window)),
+1500:       webview,
+1501:       resources_table: Default::default(),
+1502:       use_https_scheme,
+1503:     }
+1504:   }
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/mod.rs:2567
+2567: impl<R: Runtime> Manager<R> for Webview<R> {
+2568:   fn resources_table(&self) -> MutexGuard<'_, ResourceTable> {
+2569:     self
+2570:       .resources_table
+2571:       .lock()
+2572:       .expect("poisoned window resources table")
+2573:   }
+2574: }
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs:459
+459:   pub fn on_navigation<F>(mut self, on_navigation: F) -> Self
+460:   where
+461:     F: Fn(&Webview<R>, &Url) -> bool + Send + 'static,
+462:   {
+463:     self.on_navigation = Box::new(on_navigation);
+464:     self
+465:   }
+466: 
+467:   /// Callback invoked when the webview performs a navigation to a page.
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs:483
+483:   pub fn on_page_load<F>(mut self, on_page_load: F) -> Self
+484:   where
+485:     F: FnMut(&Webview<R>, &PageLoadPayload<'_>) + Send + 'static,
+486:   {
+487:     self.on_page_load = Box::new(on_page_load);
+488:     self
+489:   }
+490: 
+491:   /// Callback invoked when the window is created.
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs:531
+531:   pub fn on_webview_ready<F>(mut self, on_webview_ready: F) -> Self
+532:   where
+533:     F: FnMut(Webview<R>) + Send + 'static,
+534:   {
+535:     self.on_webview_ready = Box::new(on_webview_ready);
+536:     self
+537:   }
+538: 
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs:946
+946:   pub(crate) fn webview_created(&mut self, webview: Webview<R>) {
+947:     self
+948:       .store
+949:       .iter_mut()
+950:       .for_each(|plugin| plugin.webview_created(webview.clone()))
+951:   }
+952: 
+953:   pub(crate) fn on_navigation(&mut self, webview: &Webview<R>, url: &Url) -> bool {
+954:     for plugin in self.store.iter_mut() {
+955:       #[cfg(feature = "tracing")]
+956:       let _span =
+957:         tracing::trace_span!("plugin::hooks::on_navigation", name = plugin.name()).entered();
+958:       if !plugin.on_navigation(webview, url) {
+959:         return false;
+960:       }
+961:     }
+962:     true
+963:   }
+964: 
+965:   /// Runs the on_page_load hook for all plugins in the store.
+966:   pub(crate) fn on_page_load(&mut self, webview: &Webview<R>, payload: &PageLoadPayload<'_>) {
+967:     self.store.iter_mut().for_each(|plugin| {
+968:       #[cfg(feature = "tracing")]
+969:       let _span =
+970:         tracing::trace_span!("plugin::hooks::on_page_load", name = plugin.name()).entered();
+971:       plugin.on_page_load(webview, payload)
+972:     })
+973:   }
+974: 
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/resources/mod.rs:96
+96: 
+97:   /// Inserts a `Arc`-wrapped resource into the resource table.
+98:   ///
+99:   /// The resource type is erased at runtime and must be statically known
+100:   /// when retrieving it through `get()`.
+101:   ///
+102:   /// Returns a unique resource ID, which acts as a key for this resource.
+103:   pub fn add_arc<T: Resource>(&mut self, resource: Arc<T>) -> ResourceId {
+104:     let resource = resource as Arc<dyn Resource>;
+105:     self.add_arc_dyn(resource)
+106:   }
+107: 
+108:   /// Inserts a `Arc`-wrapped resource into the resource table.
+109:   ///
+110:   /// The resource type is erased at runtime and must be statically known
+111:   /// when retrieving it through `get()`.
+112:   ///
+113:   /// Returns a unique resource ID, which acts as a key for this resource.
+114:   pub fn add_arc_dyn(&mut self, resource: Arc<dyn Resource>) -> ResourceId {
+115:     let mut rid = Self::new_random_rid();
+116:     while self.index.contains_key(&rid) {
+117:       rid = Self::new_random_rid();
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/resources/mod.rs:133
+133:   pub fn get<T: Resource>(&self, rid: ResourceId) -> crate::Result<Arc<T>> {
+134:     self
+135:       .index
+136:       .get(&rid)
+137:       .and_then(|rc| rc.downcast_arc::<T>())
+138:       .cloned()
+139:       .ok_or_else(|| crate::Error::BadResourceId(rid))
+140:   }
+141: 
+142:   /// Returns a reference counted pointer to the resource of the given `rid`.
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/resources/mod.rs:197
+197:   pub fn names(&self) -> impl Iterator<Item = (ResourceId, Cow<'_, str>)> {
+198:     self
+199:       .index
+200:       .iter()
+201:       .map(|(&id, resource)| (id, resource.name()))
+202:   }
+203: 
+204:   /// Removes the resource with the given `rid` from the resource table. If the
+205:   /// only reference to this resource existed in the resource table, this will
+206:   /// cause the resource to be dropped. However, since resources are reference
+207:   /// counted, therefore pending ops are not automatically cancelled. A resource
+208:   /// may implement the `close()` method to perform clean-ups such as canceling
+209:   /// ops.
+210:   pub fn close(&mut self, rid: ResourceId) -> crate::Result<()> {
+211:     self
+212:       .index
+213:       .remove(&rid)
+214:       .ok_or_else(|| crate::Error::BadResourceId(rid))
+215:       .map(|resource| resource.close())
+216:   }
+217: 
+218:   /// Removes and frees all resources stored. Note that the
+219:   /// resource's `close()` method is *not* called.
+220:   pub(crate) fn clear(&mut self) {
+
+/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/mod.rs:360
+360: 
+361:   fn csp(&self) -> Option<Csp> {
+362:     if !crate::is_dev() {
+363:       self.config.app.security.csp.clone()
+364:     } else {
+365:       self
+366:         .config
+367:         .app
+368:         .security
+369:         .dev_csp
+370:         .clone()
+371:         .or_else(|| self.config.app.security.csp.clone())
+372:     }
+373:   }
+374: 
+375:   pub fn get_asset(&self, mut path: String, _use_https_schema: bool) -> crate::Result<Asset> {
+376:     let assets = &self.assets;
+377:     if path.ends_with('/') {
+378:       path.pop();
+379:     }
+380:     path = percent_encoding::percent_decode(path.as_bytes())

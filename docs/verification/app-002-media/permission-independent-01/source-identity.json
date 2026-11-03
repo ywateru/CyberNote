@@ -1,0 +1,78 @@
+{
+  "capturedAt": "2026-11-03T15:08:52.922478+00:00",
+  "candidateWorktree": "/private/tmp/apple-notes-media-roundtrip-02",
+  "candidateCommit": "88dfee5cef009ce6e4357661ceb0fc8fd50035ed",
+  "candidateStatus": "",
+  "testCommand": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--offline",
+    "--lib",
+    "media_permission::tests",
+    "--target-dir",
+    "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target"
+  ],
+  "testExitCode": 0,
+  "diffCheckExitCode": 2,
+  "packagedBuildOrInstall": false,
+  "deviceOperation": false,
+  "files": {
+    "src-tauri/src/media_permission.rs": {
+      "sha256": "7e5dc1d8248471de6326aebc6df97dfe46cce676fe43d168f0a22df68e9a1f17",
+      "bytes": 14994
+    },
+    "src-tauri/src/lib.rs": {
+      "sha256": "b020421707ba7da9e6339bebc09531e3cbf3545a030fd21a3ab527537a63d14c",
+      "bytes": 11945
+    },
+    "src-tauri/tauri.conf.json": {
+      "sha256": "bdcaad86a23a62886b9755bb1bdc38997cb9e03f3f5c16b18346a58b486996f0",
+      "bytes": 1363
+    },
+    "src-tauri/Cargo.toml": {
+      "sha256": "a84af3b69d650a5f743193ec61b268a2ba004416ad3fd7f2f400c76704d0cb31",
+      "bytes": 828
+    },
+    "src-tauri/Cargo.lock": {
+      "sha256": "99d9e9cd49367cd850d0362f2d9cb38b58e8356aa9cdd9127fb90441a56c666b",
+      "bytes": 114470
+    },
+    "src/App.tsx": {
+      "sha256": "5c81e6d532d70c89c966a9c275406f1998421d83a898ca74b708d4b8b7352226",
+      "bytes": 123723
+    },
+    "src/editor-schema.ts": {
+      "sha256": "13c90323b0632d6668e98ca3a24d29fd8db991e881446ba20263bbbf43631252",
+      "bytes": 2701
+    },
+    "src/Editor.tsx": {
+      "sha256": "447dfce35d0934bac18b961c98dccbebc140ae6f1c27f8e0f940cecd48aa863c",
+      "bytes": 8644
+    }
+  },
+  "lockedPublicApi": {
+    "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/webview.rs": {
+      "sha256": "3bfb8bba5dbd61d08ec5ff4ce2fa882997df78666b840a8f13b30aea2c2e7381",
+      "bytes": 25200
+    },
+    "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/mod.rs": {
+      "sha256": "b5319b171c09a8e652d75585be39d92b387df370340ca90b58141b501c17009a",
+      "bytes": 96498
+    },
+    "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs": {
+      "sha256": "8c8a9c3cdb93d1d149f1f1822e5bf8cd5e454f1ce7f3e57a427b97ba59f52a9f",
+      "bytes": 34621
+    },
+    "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/resources/mod.rs": {
+      "sha256": "c70407d96ebe8851ed7d269cdd7ee167c148d542dc08026086ddb8473f46a4ce",
+      "bytes": 8322
+    },
+    "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/manager/mod.rs": {
+      "sha256": "6e39aff7d45d40f163a26f2b9484f1aab6977209762204a0650b9d3ad9636793",
+      "bytes": 29822
+    }
+  },
+  "productDiffCheckExitCode": 0
+}

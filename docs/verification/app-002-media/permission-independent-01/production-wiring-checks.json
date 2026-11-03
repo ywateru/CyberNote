@@ -1,0 +1,29 @@
+[
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "88dfee5^",
+      "88dfee5",
+      "--",
+      "src-tauri/src/lib.rs",
+      "src-tauri/src/media_permission.rs",
+      "src-tauri/tauri.conf.json"
+    ],
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "on_permission_request|on_page_load|on_navigation|WebviewWindow|iframe|srcdoc|dangerouslySetInnerHTML|<object|<embed|window\\.open|\\.navigate\\(|loadUrl",
+      "src",
+      "src-tauri/src",
+      "plugins"
+    ],
+    "exitCode": 0,
+    "output": "src-tauri/src/media_permission.rs:197:        .on_navigation(|webview, url| {\nsrc-tauri/src/media_permission.rs:204:        .on_page_load(|webview, payload| {\nsrc-tauri/src/lib.rs:18:fn proof_access_record(event: Value, window: tauri::WebviewWindow) -> Result<()> {\nsrc-tauri/src/lib.rs:76:    window: tauri::WebviewWindow,\nsrc-tauri/src/lib.rs:90:    window: tauri::WebviewWindow,\nsrc-tauri/src/lib.rs:171:    window: tauri::WebviewWindow,\nsrc-tauri/src/lib.rs:222:    window: tauri::WebviewWindow,\nsrc-tauri/src/lib.rs:238:        .on_permission_request(media_permission::response)\nplugins/tauri-plugin-notes-ui/src/tests.rs:169:    let window = tauri::WebviewWindowBuilder::new(\nplugins/tauri-plugin-notes-ui/src/tests.rs:193:    let first = tauri::WebviewWindowBuilder::new(\nplugins/tauri-plugin-notes-ui/src/tests.rs:200:    let second = tauri::WebviewWindowBuilder::new(\nplugins/tauri-plugin-notes-ui/src/tests.rs:209:    // JS getCurrentWindow().listen uses EventTarget::Window, unlike Rust WebviewWindow::listen.\nplugins/tauri-plugin-notes-ui/src/tests.rs:260:    let webview = tauri::WebviewWindowBuilder::new(\nplugins/tauri-plugin-notes-ui/README.md:26:事件 `notes-ui://intent` 明确发送到 `EventTarget::Window { label }`，包含 windowLabel、bindingId、stateRevision、sequence 和类型化 intent。前端使用 `getCurrentWindow().listen`，并再次过滤 label+bindingId。Rust 的 WebviewWindow::listen 目标与 Window::listen 不同，Rust 宿主应监听 Window 或 listen_any 后严格路由。省略动作即隐藏；disabled 动作/菜单不发意图。菜单命令为固定枚举，不接受任意 selector 或 JS。格式现在使用横排首行的原生 NSPopover，其余菜单仍为 NSMenu；实际主窗和像素验收未运行。\nsrc/proof-access.ts:20:const requestIds = new WeakMap<object, string>();\nplugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs:3:use tauri::{Listener, Manager, WebviewUrl, WebviewWindowBuilder};\nplugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs:20:            let main = WebviewWindowBuilder::new(\nplugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs:57:            let second = WebviewWindowBuilder::new(\nsrc/App.tsx:14:import { WebviewWindow } from \"@tauri-apps/api/webviewWindow\";\nsrc/App.tsx:1010:      new WebviewWindow(`note-${Date.now()}`, {\n"
+  }
+]

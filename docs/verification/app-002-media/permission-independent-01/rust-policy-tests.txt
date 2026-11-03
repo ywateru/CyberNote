@@ -1,0 +1,39 @@
+   Compiling objc2-exception-helper v0.1.1
+   Compiling tauri-plugin-notes-ui v0.1.0 (/private/tmp/apple-notes-media-roundtrip-02/plugins/tauri-plugin-notes-ui)
+   Compiling libsqlite3-sys v0.30.1
+   Compiling objc2 v0.6.5
+   Compiling rusqlite v0.32.1
+   Compiling notes-clone v0.1.0 (/private/tmp/apple-notes-media-roundtrip-02/src-tauri)
+   Compiling block2 v0.6.2
+   Compiling objc2-core-foundation v0.3.2
+   Compiling dispatch2 v0.3.1
+   Compiling objc2-foundation v0.3.2
+   Compiling objc2-quartz-core v0.3.2
+   Compiling objc2-app-kit v0.3.2
+   Compiling objc2-web-kit v0.3.2
+   Compiling tao v0.37.2
+   Compiling window-vibrancy v0.8.1
+   Compiling muda v0.20.0
+   Compiling rfd v0.17.2
+   Compiling wry v0.57.1
+   Compiling tauri-runtime v2.12.2
+   Compiling tauri-runtime-wry v2.12.3
+   Compiling tauri v2.12.5
+   Compiling tauri-plugin-fs v2.7.1
+   Compiling tauri-plugin-dialog v2.8.4
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.45s
+     Running unittests src/lib.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/notes_clone_lib-36aff10f74d96dac)
+
+running 9 tests
+test media_permission::tests::same_local_url_reload_remains_a_source_boundary ... ok
+test media_permission::tests::unconfirmed_and_unknown_kinds_are_denied ... ok
+test media_permission::tests::cancelled_local_load_does_not_require_a_missing_finish ... ok
+test media_permission::tests::trusted_reload_revokes_until_started_and_finished ... ok
+test media_permission::tests::untrusted_navigation_or_load_cannot_be_reopened_by_old_finish ... ok
+test media_permission::tests::contention_cannot_skip_a_revocation ... ok
+test media_permission::tests::replacement_instance_and_destroyed_resource_do_not_inherit_trust ... ok
+test media_permission::tests::exact_product_and_development_origins ... ok
+test media_permission::tests::actual_config_blocks_frames_objects_and_form_navigation ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 30 filtered out; finished in 0.00s
+
