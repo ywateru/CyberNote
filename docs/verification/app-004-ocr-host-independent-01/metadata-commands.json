@@ -1,0 +1,77 @@
+[
+  {
+    "label": "main-mac",
+    "argv": [
+      "cargo",
+      "metadata",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--filter-platform",
+      "aarch64-apple-darwin",
+      "--format-version",
+      "1"
+    ],
+    "cwd": "/private/tmp/apple-notes-ocr-host-review01",
+    "exit": 0,
+    "elapsedSeconds": 0.5317108631134033,
+    "packages": 282
+  },
+  {
+    "label": "main-android",
+    "argv": [
+      "cargo",
+      "metadata",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--filter-platform",
+      "aarch64-linux-android",
+      "--format-version",
+      "1"
+    ],
+    "cwd": "/private/tmp/apple-notes-ocr-host-review01",
+    "exit": 0,
+    "elapsedSeconds": 0.20250606536865234,
+    "packages": 299
+  },
+  {
+    "label": "scan-mac",
+    "argv": [
+      "cargo",
+      "metadata",
+      "--manifest-path",
+      "plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--filter-platform",
+      "aarch64-apple-darwin",
+      "--format-version",
+      "1"
+    ],
+    "cwd": "/private/tmp/apple-notes-ocr-host-review01",
+    "exit": 0,
+    "elapsedSeconds": 0.1782972812652588,
+    "packages": 228
+  },
+  {
+    "label": "builddep-baseline-diagnostic",
+    "argv": [
+      "cargo",
+      "metadata",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--offline",
+      "--filter-platform",
+      "aarch64-apple-darwin",
+      "--format-version",
+      "1"
+    ],
+    "cwd": "/private/tmp/ocr-host-builddep-diagnostic-q62kshk8",
+    "exit": 101,
+    "elapsedSeconds": 0.11386895179748535,
+    "scope": "Disposable manifest-level diagnostic: candidate main/ui descriptors with only scan Cargo/lock restored byte-for-byte from baseline; no product edit, no native compilation, not original author failure log."
+  }
+]

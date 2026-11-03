@@ -1,0 +1,29 @@
+{
+  "result": "BLOCKED",
+  "priority": "P2",
+  "candidate": "2ad1e89423d1be6e872c248bfcae92ff2abade62",
+  "baseline": "8bc8ae2f712ebf85ec0cd79453318563e3d83a8b",
+  "productAggregateSha256": "50232142de0ca96d6ec4786eccde73232aff54b17196c781448587b96d3161ab",
+  "findings": [
+    {
+      "id": "P2-01",
+      "title": "OCR preview plaintext remains in React state after original target suspend/clear and after successful finish",
+      "location": "src/App.tsx:2247; src/App.tsx:2148",
+      "independent_reproductions": [
+        "ocr-sensitive-state-repro",
+        "ocr-sensitive-state-completed-repro"
+      ],
+      "both_exit": 1,
+      "scope": "Production AST closures and modules with controlled platform and DB replies; not real lock/device or visible leak"
+    }
+  ],
+  "reportPath": "/Users/water/work/2026/Apple-Notes-Clone/docs/plan/reviews/app-004-ocr-host-static-01.md",
+  "reportSha256": "f9c478b8087b37d8d8242db873043a417f840f1ffd120825839655a6e1c45222",
+  "limits": [
+    "No native build, shared target, GUI/device or downloads",
+    "No real native OCR/DB ACK/cold start or original pixel acceptance",
+    "320px panel PNG has an uninvestigated bottom capture anomaly; actual DOM geometry assertions passed",
+    "Author historical failed attempts are transcriptions, not preserved original native logs"
+  ],
+  "release": "Review source unchanged; owned node_modules symlink and panel cache removed; dependency descriptor diagnostic removed"
+}

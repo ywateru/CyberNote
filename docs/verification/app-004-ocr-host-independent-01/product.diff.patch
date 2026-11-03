@@ -1,0 +1,2507 @@
+diff --git a/plugins/tauri-plugin-notes-scan/Cargo.lock b/plugins/tauri-plugin-notes-scan/Cargo.lock
+index f6762e6..c982035 100644
+--- a/plugins/tauri-plugin-notes-scan/Cargo.lock
++++ b/plugins/tauri-plugin-notes-scan/Cargo.lock
+@@ -2684,9 +2684,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "tauri-plugin"
+-version = "2.6.3"
++version = "2.7.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "74be5dd4bed9afbd145e5716b5fa2ec28cbc29c34ffa61c258c9273d896c8020"
++checksum = "67fb21a77e8f94e8beb3325e583102488659365af0a3948b7ea244c5b779c291"
+ dependencies = [
+  "anyhow",
+  "glob",
+diff --git a/plugins/tauri-plugin-notes-scan/Cargo.toml b/plugins/tauri-plugin-notes-scan/Cargo.toml
+index 9a0f795..8c41cb0 100644
+--- a/plugins/tauri-plugin-notes-scan/Cargo.toml
++++ b/plugins/tauri-plugin-notes-scan/Cargo.toml
+@@ -17,7 +17,7 @@ uuid = { version = "1", features = ["v4"] }
+ base64 = "0.22"
+ 
+ [build-dependencies]
+-tauri-plugin = { version = "=2.6.3", features = ["build"] }
++tauri-plugin = { version = "=2.7.2", features = ["build"] }
+ cc = "1"
+ 
+ [dev-dependencies]
+diff --git a/plugins/tauri-plugin-notes-scan/README.md b/plugins/tauri-plugin-notes-scan/README.md
+index 207ea49..bbbf060 100644
+--- a/plugins/tauri-plugin-notes-scan/README.md
++++ b/plugins/tauri-plugin-notes-scan/README.md
+@@ -1,6 +1,6 @@
+ # Notes Scan 原生模块
+ 
+-独立 Tauri 2 插件，Rust + Kotlin + macOS Objective-C/Vision。**尚未接入 Notes Clone，模块编译/测试不代表安装版全流程、真机或像素通过。** 本目录外的主应用、Cargo/package、README、architecture 均未修改。
++独立 Tauri 2 插件，Rust + Kotlin + macOS Objective-C/Vision。**已在APP-004-OCR-HOST-01候选源码接入主App文字路径，尚未完成主App原生构建和安装版验收。** 独立模块已有编译/设备证据不代替主App全流程、真机或像素通过。
+ 
+ ## 已实现的模块边界
+ 
+@@ -24,7 +24,11 @@ Android初始扫描页参考 `references/mobile/frames-2s/frame-041.png` 的黑
+ 
+ 本模块不接收noteId/revision/选区，也不修改笔记库。宿主负责原note/选区绑定、锁定/删除/冲突判定。插件依赖没有云识别调用；ML Kit传递依赖含Play services命名的基础组件，这不等于下载模型路线。实际APK内Hani模型字节和原生OCR库见验证证据。首次安装前断网与无GMS兼容必须设备实测，尚未通过。
+ 
+-## 后续主应用接入（串行，由 develop_app 执行）
++## 主应用文字接入与后续文稿集成（串行）
++
++文字首批已接主Cargo/lock/Builder/capability、src/ocr-native.ts与OcrHost/App真实正文ACK路径，工程预览见docs/ui/ocr-text.md。Mac新增明确的本地OCR命令，Android复用picker/camera；实际文字单事务插原选区，正文ACK后acknowledge，失败同操作重试。仅源码候选已验证，安装与冷启待root独立安排。
++
++兼容例外：scan的build-dependency tauri-plugin精确2.6.3对齐主线已有2.7.2，独立lock只改对应version/checksum，主lock只新增path包。runtime tauri2.12.5、插件0.1.0、Android模型和原生引擎字节保持；未下载依赖。其余文稿资源持久化契约仍待实现：
+ 
+ 1. 主Rust Cargo增加本目录path依赖，并在Builder注册 `.plugin(tauri_plugin_notes_scan::init())`；主capability显式添加 `notes-scan:default`。插件自己的build.rs负责原生Android源码路径，禁止只修改gen/android。Android相机运行时权限由ScanActivity请求，主应用最终Manifest/target/签名仍需安装验证。
+ 2. pnpm本地依赖或直接导入 `guest-js/index.ts`。选择目标时保存noteId/revision与映射选区，开始会话；Mac仅text模式，外部已选图片转受限字节ingest；Android可pickImage/recognize或openCamera。camera返回ready会话，不要再重复finish。
+@@ -33,7 +37,7 @@ Android初始扫描页参考 `references/mobile/frames-2s/frame-041.png` 的黑
+ 5. 宿主在自己的暂存/日志/数据库事务中提交扫描集合、附件关系和文档节点，沿用FIX-00恢复原则；全部持久提交后才acknowledge。失败保留ready会话用于重试，不能先ack再保存。重启/备份保留原始字节、旋正图/校正图、四角/滤镜/旋转和顺序。插件ack后不再承担长期笔记存储。
+ 6. 媒体浏览记录真实扫描来源；手机入口/返回/相机权限/背压/中断、原图移除后重启、归档副本冲突映射均由APP-004-scanning继续完成。Mac保留实际不可用的原版相机入口，不把本地图片OCR假称连续互通扫描。
+ 
+-`execute(Request)`也为Rust宿主公开；具体请求包括begin/get/ingestImage/pickImage/openCamera/cropPage/movePage/deletePage/rotatePage/recognize/finish/readFile/acknowledge/cancel/cleanup。cropPage支持pageId替换，坐标无效拒绝；删除后清理无引用原图/派生图；旋转记录到页面并用于PDF。Mac不支持camera/pickImage及文稿处理，明确unsupported。主App尚未连接以上任何入口。
++`execute(Request)`也为Rust宿主公开；具体请求包括begin/get/ingestImage/pickImage/openCamera/cropPage/movePage/deletePage/rotatePage/recognize/finish/readFile/acknowledge/cancel/cleanup。cropPage支持pageId替换，坐标无效拒绝；删除后清理无引用原图/派生图；旋转记录到页面并用于PDF。Mac不支持camera/pickImage及文稿处理，明确unsupported。主App首批只连接text模式begin/get/ingestImage/pickImage/openCamera/recognize/finish/acknowledge/cancel；文稿裁切/改序/删除/旋转、PDF及长期扫描集合未接主App。
+ 
+ ## 可复现的独立检查
+ 
+diff --git a/plugins/tauri-plugin-notes-ui/guest-js/index.ts b/plugins/tauri-plugin-notes-ui/guest-js/index.ts
+index 1603301..600b7f8 100644
+--- a/plugins/tauri-plugin-notes-ui/guest-js/index.ts
++++ b/plugins/tauri-plugin-notes-ui/guest-js/index.ts
+@@ -8,7 +8,7 @@ export type MenuCommand = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'h
+   | 'colorDefault' | 'colorPurple' | 'colorPink' | 'colorOrange' | 'colorMint' | 'colorBlue'
+   | 'styleTitle' | 'styleHeading' | 'styleSubheading' | 'styleBody' | 'styleMonospaced'
+   | 'listBullet' | 'listDash' | 'listNumber' | 'blockquote'
+-  | 'choosePhotoVideo' | 'recordAudio' | 'attachFile' | 'takePhoto' | 'scanDocument' | 'addSketch'
++  | 'choosePhotoVideo' | 'recognizeImageText' | 'recordAudio' | 'attachFile' | 'takePhoto' | 'scanDocument' | 'addSketch'
+   | 'pinNote' | 'lockNote' | 'findInNote' | 'moveNote' | 'recentNotes'
+   | 'mathInsert' | 'mathSuggest' | 'mathOff' | 'attachmentsSmall' | 'attachmentsLarge' | 'deleteNote'
+   | 'viewGallery' | 'viewList' | 'sortDefault' | 'sortModified' | 'sortCreated' | 'sortTitle'
+diff --git a/plugins/tauri-plugin-notes-ui/src/model.rs b/plugins/tauri-plugin-notes-ui/src/model.rs
+index bdc8da5..677d3e1 100644
+--- a/plugins/tauri-plugin-notes-ui/src/model.rs
++++ b/plugins/tauri-plugin-notes-ui/src/model.rs
+@@ -42,6 +42,7 @@ pub enum MenuCommand {
+     ListNumber,
+     Blockquote,
+     ChoosePhotoVideo,
++    RecognizeImageText,
+     RecordAudio,
+     AttachFile,
+     TakePhoto,
+diff --git a/scripts/check-native-toolbar.mjs b/scripts/check-native-toolbar.mjs
+index d7fa96f..f17704f 100644
+--- a/scripts/check-native-toolbar.mjs
++++ b/scripts/check-native-toolbar.mjs
+@@ -341,4 +341,53 @@ await test("host projections distinguish browse, open, focused table, and indepe
+     ),
+   );
+ });
++await test("local OCR has its own typed native command; Continuity stays disabled and unavailable targets cannot recognize", async () => {
++  const input = {
++    layout: "threeColumn",
++    sidebar: true,
++    settings: {},
++    folderTitle: "folder",
++    folderCount: 1,
++    query: "",
++    searchAck: 0,
++    available: true,
++    editable: true,
++    editor: { isActive: () => false },
++  };
++  const entries = (state) =>
++    state.menus
++      .find((menu) => menu.owner === "attachment")
++      .items.filter((item) => item.kind === "item");
++  const enabled = entries(toolbarState(input));
++  assert.equal(
++    enabled.find((item) => item.command === "recognizeImageText").label,
++    "从图片识别文本…",
++  );
++  assert.equal(
++    enabled.find((item) => item.command === "recognizeImageText").enabled,
++    true,
++  );
++  for (const command of ["takePhoto", "scanDocument", "addSketch"])
++    assert.equal(
++      enabled.find((item) => item.command === command).enabled,
++      false,
++    );
++  const disabled = entries(
++    toolbarState({ ...input, available: false, editable: false }),
++  );
++  assert.equal(
++    disabled.find((item) => item.command === "recognizeImageText").enabled,
++    false,
++  );
++  const guest = await readFile(
++    "plugins/tauri-plugin-notes-ui/guest-js/index.ts",
++    "utf8",
++  );
++  const native = await readFile(
++    "plugins/tauri-plugin-notes-ui/src/model.rs",
++    "utf8",
++  );
++  assert.match(guest, /'recognizeImageText'/);
++  assert.match(native, /RecognizeImageText,/);
++});
+ console.log(JSON.stringify({ tests: results.length, results }, null, 2));
+diff --git a/scripts/check-ocr-host.mjs b/scripts/check-ocr-host.mjs
+new file mode 100644
+index 0000000..49a87a8
+--- /dev/null
++++ b/scripts/check-ocr-host.mjs
+@@ -0,0 +1,897 @@
++import assert from "node:assert/strict";
++import { readFile, stat } from "node:fs/promises";
++import { dirname, resolve } from "node:path";
++import { createHash } from "node:crypto";
++import ts from "typescript";
++import { Schema, Fragment, Slice } from "@tiptap/pm/model";
++import { EditorState, TextSelection } from "@tiptap/pm/state";
++import { history, undo, redo } from "@tiptap/pm/history";
++
++const modules = new Map(),
++  hashes = {};
++async function production(path) {
++  path = resolve(path);
++  if (modules.has(path)) return modules.get(path).exports;
++  const source = await readFile(path, "utf8");
++  hashes[path.replace(process.cwd() + "/", "")] = createHash("sha256")
++    .update(source)
++    .digest("hex");
++  let output = ts
++    .transpileModule(source, {
++      compilerOptions: {
++        target: ts.ScriptTarget.ES2022,
++        module: ts.ModuleKind.ESNext,
++      },
++    })
++    .outputText.replaceAll("import.meta.env.VITE_ACCESS_BOUNDARY_PROOF", '"0"');
++  for (const match of [...output.matchAll(/from ["']([^"']+)["']/g)]) {
++    const name = match[1];
++    let url;
++    if (name.startsWith(".")) {
++      let file = resolve(dirname(path), name);
++      if (!file.endsWith(".ts")) {
++        const directory = await stat(file).then(
++          (value) => value.isDirectory(),
++          () => false,
++        );
++        file += directory ? "/index.ts" : ".ts";
++      }
++      await production(file);
++      url = modules.get(file).url;
++    } else if (name === "@tauri-apps/api/core")
++      url =
++        "data:text/javascript;base64," +
++        Buffer.from(
++          "export const isTauri=()=>true; export const invoke=(...args)=>globalThis.__ocrBoundary.invoke(...args);",
++        ).toString("base64");
++    else if (name === "@tauri-apps/api/event")
++      url =
++        "data:text/javascript;base64," +
++        Buffer.from("export const listen=async()=>()=>{};").toString("base64");
++    else throw Error("Unexpected runtime import " + name);
++    output = output
++      .replaceAll(JSON.stringify(name), JSON.stringify(url))
++      .replaceAll("'" + name + "'", JSON.stringify(url));
++  }
++  const url =
++    "data:text/javascript;base64," + Buffer.from(output).toString("base64");
++  const exports = await import(url);
++  modules.set(path, { exports, url });
++  return exports;
++}
++const { OcrHost, ocrParagraphs } = await production("src/ocr-host.ts");
++const { ocrNative, selectedOcrImage, MAX_OCR_IMAGE_BYTES } =
++  await production("src/ocr-native.ts");
++const { TrustedSynchronization } = await production(
++  "src/trusted-synchronization.ts",
++);
++const { rebindAttachmentTarget } = await production("src/attachment-target.ts");
++const { enqueueSave } = await production("src/save-queue.ts");
++const { SaveRevisions } = await production("src/save-revisions.ts");
++const { documentsEqual } = await production("src/document-equality.ts");
++const { documentText } = await production("src/types.ts");
++const bridge = await production("src/bridge.ts");
++const source = await readFile("src/App.tsx", "utf8");
++hashes["src/App.tsx"] = createHash("sha256").update(source).digest("hex");
++const ast = ts.createSourceFile(
++    "App.tsx",
++    source,
++    ts.ScriptTarget.ES2022,
++    true,
++    ts.ScriptKind.TSX,
++  ),
++  nodes = [];
++function visit(n) {
++  nodes.push(n);
++  ts.forEachChild(n, visit);
++}
++visit(ast);
++const unique = (values, label) => {
++  assert.equal(values.length, 1, label);
++  return values[0];
++};
++const declaration = (name) =>
++  unique(
++    nodes.filter(
++      (n) => ts.isVariableDeclaration(n) && n.name.getText(ast) === name,
++    ),
++    name,
++  );
++const assignment = (name) =>
++  unique(
++    nodes.filter(
++      (n) =>
++        ts.isBinaryExpression(n) &&
++        n.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
++        n.left.getText(ast) === name,
++    ),
++    name,
++  ).getText(ast) + ";";
++const execute = (code, env) =>
++  Function(
++    "env",
++    `with(env){${ts.transpileModule(code, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText}}`,
++  )(env);
++const closeEffect = unique(
++  nodes.filter(
++    (node) =>
++      ts.isCallExpression(node) &&
++      node.expression.getText(ast) === "useEffect" &&
++      node.arguments[0]?.getText(ast).includes(".onCloseRequested"),
++  ),
++  "single close owner",
++).arguments[0];
++const targetEffect = unique(
++  nodes.filter(
++    (node) =>
++      ts.isCallExpression(node) &&
++      node.expression.getText(ast) === "useEffect" &&
++      node.arguments[0]
++        ?.getText(ast)
++        .includes("operation.target.scope !== pickerRuntime.current.scope"),
++  ),
++  "OCR target effect",
++).arguments[0];
++const names = [
++  "fail",
++  "hydrate",
++  "flush",
++  "refresh",
++  "saveDoc",
++  "validatePickerTarget",
++  "capturePickerTarget",
++  "finishOcr",
++  "cancelOcr",
++  "retryOcr",
++  "confirmOcr",
++  "awaitOcrDocumentAck",
++  "openOcr",
++  "processOcr",
++  "nativeSelection",
++];
++const deferred = () => {
++  let resolve, reject;
++  const promise = new Promise((a, b) => {
++    resolve = a;
++    reject = b;
++  });
++  return { promise, resolve, reject };
++};
++const flush = async () => {
++  for (let i = 0; i < 150; i++) await Promise.resolve();
++};
++const checks = [];
++const test = async (name, run) => {
++  await run();
++  checks.push(name);
++};
++function fixture(options = {}) {
++  const access = {
++    sessionId: "process-ocr",
++    epoch: 4,
++    notes: {
++      a: { epoch: 3, authorized: true },
++      b: { epoch: 2, authorized: true },
++    },
++    suspended: [],
++    operationId: null,
++  };
++  bridge.accessGate.state = access;
++  const schema = new Schema({
++    nodes: {
++      doc: { content: "block+" },
++      paragraph: { group: "block", content: "text*" },
++      text: {},
++    },
++  });
++  const initial = {
++    type: "doc",
++    content: [
++      { type: "paragraph", content: [{ type: "text", text: "prefixsuffix" }] },
++    ],
++  };
++  const backend = {
++    notes: ["a", "b"].map((id) => ({
++      id,
++      document: structuredClone(initial),
++      revision: 0,
++      locked: false,
++      deletedAt: null,
++    })),
++    attachments: [],
++    folders: [],
++    settings: {},
++    access,
++  };
++  const calls = [],
++    sessions = new Map();
++  let api,
++    closed = 0,
++    sessionCount = 0;
++  const env = {
++    ...bridge,
++    OcrHost,
++    ocrParagraphs,
++    ocrNative,
++    Fragment,
++    Slice,
++    TrustedSynchronization,
++    rebindAttachmentTarget,
++    enqueueSave,
++    documentsEqual,
++    documentText,
++    secureId: () => `operation-${++env.ids}`,
++    ids: 0,
++    errText: (e) => e.message,
++    useCallback: (fn) => fn,
++    queues: { current: new Map() },
++    pendingDocs: { current: new Map() },
++    saveFailures: { current: new Map() },
++    revisions: { current: new SaveRevisions() },
++    externalVersions: { current: new Map() },
++    blockedNotes: { current: new Set() },
++    attachmentSubmissions: { current: new Map() },
++    ocrOperation: { current: null },
++    ocr: null,
++    ocrState: null,
++    recordingTicket: { current: null },
++    recordingLifecycle: {
++      current: { active: () => false, close: async () => {}, detach() {} },
++    },
++    ocrLifecycle: { current: null },
++    nativeEditorOwners: { current: new WeakMap() },
++    nativeDocumentVersions: { current: new WeakMap() },
++    pickerRuntime: { current: null },
++    wsRef: { current: structuredClone(backend) },
++    synchronization: new TrustedSynchronization(),
++    synchronizeRef: { current: null },
++    synchronizingRef: { current: false },
++    initializedSelection: { current: true },
++    clearSensitive: { current: () => assert.fail("unexpected access clear") },
++    nativeAssert: { current: null },
++    nativeHandler: { current: null },
++    androidBack: { current: null },
++    native: true,
++    nativeScope: "scope",
++    noteId: "a",
++    page: "editor",
++    mobile: true,
++    loading: false,
++    synchronizing: false,
++    accessSuspended: [],
++    draw: null,
++    record: false,
++    modal: null,
++    menu: "media",
++    showFind: false,
++    searching: false,
++    view: "list",
++    galleryEditor: false,
++    separate: null,
++    current: backend.notes[0],
++    ws: structuredClone(backend),
++    saving: 0,
++    error: "",
++    dispatches: 0,
++    setWs: (v) => {
++      env.ws = typeof v === "function" ? v(env.ws) : v;
++    },
++    setError: (v) => {
++      env.error = v;
++    },
++    setSaving: (v) => {
++      env.saving = typeof v === "function" ? v(env.saving) : v;
++    },
++    setSettings() {},
++    setSynchronizing: (v) => {
++      env.synchronizing = v;
++    },
++    setSyncError() {},
++    setAccessSuspended: (v) => {
++      env.accessSuspended = v;
++    },
++    setWorkspaceLoaded() {},
++    setMenu: (v) => {
++      env.menu = v;
++    },
++    setOcr: (v) => {
++      env.ocr = v;
++      render();
++    },
++    setOcrState: (v) => {
++      env.ocrState = v;
++    },
++    setEditing() {},
++    setRecord: (v) => {
++      env.record = v;
++    },
++    setModal: (v) => {
++      env.modal = v;
++    },
++    setSearching() {},
++    setQuery() {},
++    setFilter() {},
++    setNativeSearchAck() {},
++    getCurrentWindow: () => ({
++      onCloseRequested: async (fn) => {
++        env.closeHandler = fn;
++        return () => {};
++      },
++      destroy: async () => {
++        closed++;
++      },
++    }),
++    document: { addEventListener() {}, removeEventListener() {} },
++  };
++  const editor = {
++    isDestroyed: false,
++    isEditable: true,
++    schema,
++    state: EditorState.create({
++      schema,
++      doc: schema.nodeFromJSON(initial),
++      plugins: [history()],
++    }),
++    commands: { blur() {} },
++    getJSON: () => editor.state.doc.toJSON(),
++    view: {
++      dispatch: (tr) => {
++        if (options.throwBefore) throw Error("dispatch before");
++        editor.state = editor.state.apply(tr);
++        if (tr.docChanged) {
++          env.dispatches++;
++          env.nativeDocumentVersions.current.set(
++            editor,
++            (env.nativeDocumentVersions.current.get(editor) || 0) + 1,
++          );
++          void api.saveDoc("a", editor.getJSON());
++        }
++        if (options.throwAfter && tr.docChanged) throw Error("dispatch after");
++      },
++    },
++  };
++  editor.state = editor.state.apply(
++    editor.state.tr.setSelection(TextSelection.create(editor.state.doc, 7)),
++  );
++  env.editor = editor;
++  env.nativeEditorOwners.current.set(editor, "a");
++  env.nativeDocumentVersions.current.set(editor, 0);
++  function render() {
++    execute(
++      `const attachmentBaseAvailable=${declaration("attachmentBaseAvailable").initializer.getText(ast)};const pickerBaseAvailable=${declaration("pickerBaseAvailable").initializer.getText(ast)};${assignment("pickerRuntime.current")}`,
++      env,
++    );
++  }
++  globalThis.FileReader = class {
++    readAsDataURL(file) {
++      if (options.readerFailure) {
++        queueMicrotask(() => this.onerror());
++        return;
++      }
++      void file.arrayBuffer().then((bytes) => {
++        this.result = `data:${file.type};base64,${Buffer.from(bytes).toString("base64")}`;
++        this.onload();
++      });
++    }
++  };
++  globalThis.__ocrBoundary = {
++    invoke: async (command, args) => {
++      calls.push({
++        command,
++        operation: args?.request?.operation,
++        noteId: args?.action?.id,
++        sessionId: args?.request?.sessionId,
++      });
++      if (command === "load_workspace") {
++        if (options.syncFailure) throw Error("sync failed");
++        return structuredClone(backend);
++      }
++      if (command === "register_save_intent") return;
++      if (command === "workspace_action") {
++        assert.equal(args.action.type, "saveNote");
++        if (options.saveWait) await options.saveWait.promise;
++        if (options.saveFailures > 0) {
++          options.saveFailures--;
++          throw Error("body save failed");
++        }
++        const row = backend.notes.find((n) => n.id === args.action.id);
++        row.document = structuredClone(args.action.document);
++        row.revision++;
++        return { ...structuredClone(row), access };
++      }
++      assert.equal(command, "plugin:notes-scan|execute");
++      const r = args.request;
++      if (r.operation === "begin") {
++        const value = {
++          version: 1,
++          sessionId: `native-session-${++sessionCount}`,
++          mode: r.mode,
++          state: "draft",
++          createdAt: 0,
++          updatedAt: 0,
++          files: [],
++          pages: [],
++          ocr: null,
++          pdfToken: null,
++        };
++        sessions.set(value.sessionId, value);
++        return structuredClone(value);
++      }
++      const s = sessions.get(r.sessionId);
++      if (!s) throw { code: "session_missing", message: "session missing" };
++      if (r.operation === "get") return structuredClone(s);
++      if (["pickImage", "ingestImage", "openCamera"].includes(r.operation)) {
++        if (options.selectionWait) await options.selectionWait.promise;
++        if (options.selectionCancelled) {
++          options.selectionCancelled = false;
++          if (r.operation === "openCamera") sessions.delete(r.sessionId);
++          throw { code: "cancelled", message: "selection cancelled" };
++        }
++        if (r.operation === "ingestImage")
++          assert.equal(
++            r.data,
++            Buffer.from("user-selected-image").toString("base64"),
++          );
++        s.files = [
++          {
++            token: "image-token",
++            mime: "image/png",
++            size: 20,
++            width: 300,
++            height: 300,
++          },
++        ];
++        if (r.operation === "openCamera") {
++          s.state = "ready";
++          s.ocr = {
++            status: options.empty ? "empty" : "recognized",
++            text: options.empty
++              ? ""
++              : (options.text ?? "第一行\n\n第二行<script>"),
++          };
++        }
++        return structuredClone(s);
++      }
++      if (r.operation === "recognize") {
++        if (options.recognizeWait) await options.recognizeWait.promise;
++        if (options.nativeFailure)
++          throw { code: "ocr_failed", message: "native OCR failed" };
++        assert.equal(r.fileToken, "image-token");
++        s.ocr = {
++          status: options.empty ? "empty" : "recognized",
++          text: options.empty
++            ? ""
++            : (options.text ?? "第一行\n\n第二行<script>"),
++        };
++        return structuredClone(s);
++      }
++      if (r.operation === "finish") {
++        assert.equal(s.state, "draft");
++        s.state = "ready";
++        return structuredClone(s);
++      }
++      if (r.operation === "acknowledge") {
++        assert.ok(
++          backend.notes[0].revision > 0,
++          "no native ack before actual body ACK",
++        );
++        if (options.cleanupFailures > 0) {
++          options.cleanupFailures--;
++          throw { code: "cleanup_failed", message: "cleanup failed" };
++        }
++        sessions.delete(r.sessionId);
++        return { removed: true };
++      }
++      if (r.operation === "cancel") {
++        sessions.delete(r.sessionId);
++        return { removed: true };
++      }
++      throw Error("unexpected native operation " + r.operation);
++    },
++  };
++  render();
++  api = execute(
++    [
++      ...names.map(
++        (n) => `const ${n}=${declaration(n).initializer.getText(ast)};`,
++      ),
++      assignment("synchronizeRef.current"),
++      assignment("ocrLifecycle.current"),
++      assignment("nativeAssert.current"),
++      assignment("nativeHandler.current"),
++      assignment("androidBack.current"),
++      `return {${names.join(",")}};`,
++    ].join("\n"),
++    env,
++  );
++  Object.assign(env, api);
++  const sourceFile = new File(["user-selected-image"], "selected.png", {
++    type: "image/png",
++  });
++  return {
++    env,
++    api,
++    editor,
++    backend,
++    calls,
++    sessions,
++    options,
++    render,
++    sourceFile,
++    mountClose: () =>
++      execute("return (" + closeEffect.getText(ast) + ")();", env),
++    targetChanged: () => execute("(" + targetEffect.getText(ast) + ")();", env),
++    get closed() {
++      return closed;
++    },
++    open(nativeEntry = false) {
++      if (nativeEntry) {
++        env.menu = null;
++        env.nativeHandler.current(
++          { kind: "menu", command: "recognizeImageText" },
++          {
++            noteId: "a",
++            scope: env.nativeScope,
++            stamp: bridge.accessGate.stamp("a"),
++            editor,
++            bookmark: editor.state.selection.getBookmark(),
++            documentVersion:
++              env.nativeDocumentVersions.current.get(editor) || 0,
++          },
++          1,
++        );
++      } else api.openOcr();
++      return env.ocrOperation.current;
++    },
++    async recognized(kind = "image") {
++      const op = this.open();
++      await op.process(kind === "file" ? { kind, file: sourceFile } : { kind });
++      assert.equal(op.state.phase, "recognized");
++      return op;
++    },
++  };
++}
++await test("ordinary/native entries freeze same original target, selection and operation, disable generic picker", async () => {
++  for (const nativeEntry of [false, true]) {
++    const f = fixture(),
++      op = f.open(nativeEntry);
++    assert.equal(op.target.noteId, "a");
++    assert.equal(op.target.editor, f.editor);
++    assert.equal(op.target.bookmark.resolve(f.editor.state.doc).from, 7);
++    assert.equal(op.operationId, "operation-1");
++    assert.throws(() => f.api.capturePickerTarget(), /不可添加附件/);
++    await f.api.cancelOcr();
++    assert.equal(f.env.ocrOperation.current, null);
++  }
++});
++await test("actual typed guest Mac selected image, Android picker, and ready camera paths preserve real text; camera does not finish twice", async () => {
++  for (const kind of ["file", "image", "camera"]) {
++    const f = fixture(),
++      op = await f.recognized(kind);
++    assert.equal(op.state.text, "第一行\n\n第二行<script>");
++    assert.equal(
++      f.calls.filter((c) => c.operation === "finish").length,
++      kind === "camera" ? 0 : 1,
++    );
++    await f.api.cancelOcr();
++    assert.equal(f.sessions.size, 0);
++  }
++});
++await test("actual PM insertion is one transaction with blank lines and literal text; waits body ACK before native cleanup", async () => {
++  const wait = deferred(),
++    f = fixture({ saveWait: wait }),
++    op = await f.recognized();
++  const first = op.confirm(),
++    same = op.confirm();
++  assert.equal(first, same);
++  await flush();
++  assert.equal(f.env.dispatches, 1);
++  assert.equal(op.documentAck, false);
++  assert.equal(f.calls.filter((c) => c.operation === "acknowledge").length, 0);
++  wait.resolve();
++  await first;
++  assert.equal(op.documentAck, true);
++  assert.equal(op.cleaned, true);
++  assert.equal(f.env.dispatches, 1);
++  assert.match(
++    documentText(f.backend.notes[0].document),
++    /第一行\n\n第二行<script>/,
++  );
++  assert.ok(documentsEqual(f.editor.getJSON(), f.backend.notes[0].document));
++});
++await test("failed body save retries same operation/result and exact pending body without reinsertion", async () => {
++  const f = fixture({ saveFailures: 3 }),
++    op = await f.recognized();
++  await assert.rejects(f.api.confirmOcr(op), /body save failed/);
++  assert.equal(op.documentAck, false);
++  assert.ok(op.insertedDocument);
++  assert.equal(f.sessions.size, 1);
++  const target = op.target;
++  f.options.saveFailures = 0;
++  await f.api.confirmOcr(op);
++  assert.equal(op.target, target);
++  assert.equal(f.env.dispatches, 1);
++  assert.equal(f.env.ocrOperation.current, null);
++  assert.equal(f.backend.notes[0].revision, 1);
++});
++await test("cleanup failure is saved separately and retry never inserts or saves again", async () => {
++  const f = fixture({ cleanupFailures: 1 }),
++    op = await f.recognized();
++  await assert.rejects(
++    f.api.confirmOcr(op),
++    (error) => error.message === "cleanup failed",
++  );
++  assert.equal(op.documentAck, true);
++  assert.equal(op.state.phase, "cleanup-pending");
++  const saves = f.calls.filter((c) => c.command === "workspace_action").length;
++  await f.api.confirmOcr(op);
++  assert.equal(f.env.dispatches, 1);
++  assert.equal(
++    f.calls.filter((c) => c.command === "workspace_action").length,
++    saves,
++  );
++  assert.equal(f.sessions.size, 0);
++});
++for (const kind of ["empty", "nativeFailure"])
++  await test(kind + " is explicit and never inserts a fake node", async () => {
++    const f = fixture({ [kind]: true }),
++      op = f.open();
++    await op.process({ kind: "image" });
++    assert.equal(op.state.phase, kind === "empty" ? "empty" : "failed");
++    await assert.rejects(op.confirm());
++    assert.equal(f.env.dispatches, 0);
++    await f.api.cancelOcr();
++    assert.equal(f.sessions.size, 0);
++  });
++for (const kind of ["image", "camera"])
++  await test(
++    kind +
++      " selection cancellation is distinct and can retry without leaking native sessions",
++    async () => {
++      const f = fixture({ selectionCancelled: true }),
++        op = f.open();
++      await op.process({ kind });
++      assert.equal(op.state.phase, "choose");
++      assert.match(op.state.error, /cancelled/);
++      await op.process({ kind });
++      assert.equal(op.state.phase, "recognized");
++      await f.api.cancelOcr();
++      assert.equal(f.sessions.size, 0);
++    },
++  );
++for (const change of [
++  "note",
++  "locked",
++  "document",
++  "scope",
++  "bookmark",
++  "epoch",
++  "syncFailure",
++])
++  await test(
++    change + " target invalidation rejects late confirmation",
++    async () => {
++      const f = fixture(),
++        op = await f.recognized();
++      if (change === "note") {
++        f.env.noteId = "b";
++        f.env.current = f.backend.notes[1];
++      }
++      if (change === "locked") {
++        f.backend.notes[0].locked = true;
++        f.backend.access.notes.a.authorized = false;
++      }
++      if (change === "document") {
++        f.editor.state = f.editor.state.apply(
++          f.editor.state.tr.insertText("changed"),
++        );
++      }
++      if (change === "scope") f.env.nativeScope = "other";
++      if (change === "bookmark")
++        op.target.bookmark = {
++          resolve() {
++            throw Error("bookmark invalid");
++          },
++        };
++      if (change === "epoch") f.backend.access.notes.a.epoch++;
++      if (change === "syncFailure") f.options.syncFailure = true;
++      f.render();
++      await assert.rejects(f.api.confirmOcr(op));
++      assert.equal(f.env.dispatches, 0);
++      assert.equal(
++        f.calls.filter((c) => c.operation === "acknowledge").length,
++        0,
++      );
++      await f.api.cancelOcr();
++    },
++  );
++await test("cancel seals before pending native work, waits its terminal result, then cancels same session without insertion", async () => {
++  const wait = deferred(),
++    f = fixture({ recognizeWait: wait }),
++    op = f.open();
++  const processing = op.process({ kind: "image" });
++  await flush();
++  const cancelling = f.api.cancelOcr();
++  assert.equal(op.accepting, false);
++  assert.equal(f.calls.filter((c) => c.operation === "cancel").length, 0);
++  wait.resolve();
++  await Promise.all([processing, cancelling]);
++  assert.equal(f.env.dispatches, 0);
++  assert.equal(f.sessions.size, 0);
++  await assert.rejects(op.confirm());
++});
++await test("cancel after insertion preserves failed pending body and original result for same save retry", async () => {
++  const f = fixture({ saveFailures: 3 }),
++    op = await f.recognized();
++  await assert.rejects(f.api.confirmOcr(op));
++  await assert.rejects(f.api.cancelOcr(), /待保存正文/);
++  assert.equal(f.sessions.size, 1);
++  assert.equal(f.env.dispatches, 1);
++  f.options.saveFailures = 0;
++  await f.api.confirmOcr(op);
++  assert.equal(f.env.dispatches, 1);
++  assert.equal(f.sessions.size, 0);
++});
++await test("dispatch throw after real mutation retains transaction identity and never reinserts", async () => {
++  const f = fixture({ throwAfter: true }),
++    op = await f.recognized();
++  await assert.rejects(f.api.confirmOcr(op), /dispatch after/);
++  assert.ok(op.insertedDocument);
++  f.options.throwAfter = false;
++  await f.api.confirmOcr(op);
++  assert.equal(f.env.dispatches, 1);
++});
++await test("wrong note or wrong durable document cannot acknowledge OCR operation", async () => {
++  const f = fixture({ saveFailures: 3 }),
++    op = await f.recognized();
++  await assert.rejects(f.api.confirmOcr(op));
++  op.acknowledgeDocument("b", op.insertedDocument);
++  op.acknowledgeDocument("a", {
++    type: "doc",
++    content: [{ type: "paragraph" }],
++  });
++  assert.equal(op.documentAck, false);
++  f.options.saveFailures = 0;
++  await f.api.confirmOcr(op);
++});
++await test("one actual history transaction supports Undo/Redo and persists through original queue", async () => {
++  const f = fixture(),
++    op = await f.recognized();
++  await f.api.confirmOcr(op);
++  assert.equal(undo(f.editor.state, f.editor.view.dispatch), true);
++  await f.env.queues.current.get("a");
++  assert.equal(documentText(f.backend.notes[0].document), "prefixsuffix");
++  assert.equal(redo(f.editor.state, f.editor.view.dispatch), true);
++  await f.env.queues.current.get("a");
++  assert.match(
++    documentText(f.backend.notes[0].document),
++    /第一行\n\n第二行<script>/,
++  );
++});
++await test("actual old selected-file callback retains its captured OCR owner and cannot feed a newer target", async () => {
++  const f = fixture(),
++    old = f.open();
++  const callback = unique(
++    nodes.filter(
++      (node) =>
++        ts.isJsxAttribute(node) &&
++        node.name.getText(ast) === "onFile" &&
++        node.parent.parent.tagName?.getText(ast) === "OcrPanel",
++    ),
++    "actual OCR file callback",
++  ).initializer.expression;
++  const onFile = execute("return (" + callback.getText(ast) + ");", {
++    ...f.env,
++    ocr: old,
++  });
++  await f.api.cancelOcr(old);
++  const next = f.open();
++  onFile(f.sourceFile);
++  await flush();
++  assert.equal(f.calls.filter((call) => call.operation === "begin").length, 0);
++  assert.equal(f.env.ocrOperation.current, next);
++  assert.equal(next.state.phase, "choose");
++  await f.api.cancelOcr(next);
++});
++await test("bounded Mac File bridge rejects zero/oversize/non-image before reader or plugin invocation", async () => {
++  for (const file of [
++    { size: 0, type: "image/png" },
++    { size: MAX_OCR_IMAGE_BYTES + 1, type: "image/png" },
++    { size: 5, type: "text/plain" },
++  ])
++    await assert.rejects(selectedOcrImage(file));
++  const f = fixture({ readerFailure: true });
++  await assert.rejects(selectedOcrImage(f.sourceFile), /读取/);
++});
++await test("existing close owner seals OCR synchronously and awaits native completion/cleanup before destroy", async () => {
++  const wait = deferred(),
++    f = fixture({ recognizeWait: wait }),
++    op = f.open();
++  const work = op.process({ kind: "image" });
++  await flush();
++  const cleanup = f.mountClose();
++  let prevented = 0;
++  const closing = f.env.closeHandler({ preventDefault: () => prevented++ });
++  assert.equal(op.accepting, false);
++  assert.equal(f.closed, 0);
++  wait.resolve();
++  await Promise.all([work, closing]);
++  assert.equal(prevented, 1);
++  assert.equal(f.closed, 1);
++  assert.equal(f.sessions.size, 0);
++  assert.equal(f.env.dispatches, 0);
++  cleanup();
++});
++await test("existing close owner retries same pending OCR body before cleanup; persistent failure keeps window open", async () => {
++  const f = fixture({ saveFailures: 3 }),
++    op = await f.recognized();
++  await assert.rejects(f.api.confirmOcr(op));
++  const cleanup = f.mountClose();
++  await f.env.closeHandler({ preventDefault() {} });
++  assert.equal(f.closed, 0);
++  assert.equal(f.sessions.size, 1);
++  assert.equal(f.env.dispatches, 1);
++  f.options.saveFailures = 0;
++  await f.env.closeHandler({ preventDefault() {} });
++  assert.equal(f.closed, 1);
++  assert.equal(f.sessions.size, 0);
++  assert.equal(f.env.dispatches, 1);
++  cleanup();
++});
++await test("actual target-change effect seals processing and never retargets late OCR result", async () => {
++  const wait = deferred(),
++    f = fixture({ recognizeWait: wait }),
++    op = f.open();
++  const work = op.process({ kind: "image" });
++  await flush();
++  f.env.noteId = "b";
++  f.env.nativeScope = "scope-b";
++  f.env.current = f.backend.notes[1];
++  f.render();
++  f.targetChanged();
++  assert.equal(op.accepting, false);
++  wait.resolve();
++  await work;
++  await flush();
++  assert.equal(f.env.dispatches, 0);
++  assert.equal(f.sessions.size, 0);
++  assert.equal(f.env.ocrOperation.current, null);
++});
++await test("suspension and actual close-effect unmount seal late result and clean only original session", async () => {
++  for (const action of ["suspend", "unmount"]) {
++    const wait = deferred(),
++      f = fixture({ recognizeWait: wait }),
++      op = f.open();
++    const work = op.process({ kind: "image" });
++    await flush();
++    if (action === "suspend") f.env.ocrLifecycle.current.suspend(["a"]);
++    else {
++      const cleanup = f.mountClose();
++      cleanup();
++    }
++    assert.equal(op.accepting, false);
++    assert.equal(op.detached, true);
++    wait.resolve();
++    await work;
++    await flush();
++    assert.equal(f.env.dispatches, 0);
++    assert.equal(f.sessions.size, 0);
++  }
++});
++console.log(
++  JSON.stringify(
++    {
++      kind: "actual-App-OCR-closures-production-controller-guest-bridge-queue-PM",
++      status: "pass",
++      checks: checks.length,
++      results: checks,
++      sourceHashes: hashes,
++      limits: [
++        "AST-extracted actual App closures; production OcrHost, typed notes-scan guest/adapter, authority, trusted sync, bridge, SaveQueue and actual PM transaction/history",
++        "Controlled native OCR results/permission/selection/DB responses/FileReader and Editor dispatch host; no mounted App, actual native OCR, Rust DB/device, camera hardware, cold start or original pixel acceptance",
++      ],
++    },
++    null,
++    2,
++  ),
++);
+diff --git a/scripts/check-ocr-panel-browser.mjs b/scripts/check-ocr-panel-browser.mjs
+new file mode 100644
+index 0000000..d438f92
+--- /dev/null
++++ b/scripts/check-ocr-panel-browser.mjs
+@@ -0,0 +1,268 @@
++import assert from "node:assert/strict";
++import { mkdir, writeFile } from "node:fs/promises";
++import { resolve } from "node:path";
++import { pathToFileURL } from "node:url";
++import { createServer } from "node:http";
++import { createServer as createViteServer } from "vite";
++import react from "@vitejs/plugin-react";
++if (!process.env.PLAYWRIGHT_CORE_PATH || !process.env.CHROME_PATH)
++  throw Error("Use existing browser paths only; no download");
++const { chromium } = await import(
++  pathToFileURL(process.env.PLAYWRIGHT_CORE_PATH)
++);
++const output = resolve(process.argv[2] || "artifacts/ocr-panel-browser");
++await mkdir(output, { recursive: true });
++const entry = `import React from 'react';import {createRoot} from 'react-dom/client';import OcrPanel from '/src/OcrPanel.tsx';import '/src/style.css';const root=createRoot(document.querySelector('#root'));window.renderNumber=0;window.showOcr=(state,android=false,inserted=false)=>{const version=++window.renderNumber;root.render(React.createElement('div',{'data-check-render':version},React.createElement(OcrPanel,{state,android,inserted,onImage:()=>window.calls.push('image'),onCamera:()=>window.calls.push('camera'),onFile:file=>window.calls.push({file:file.name}),onConfirm:()=>window.calls.push('confirm'),onCancel:()=>window.calls.push('cancel')})));return version};window.calls=[];`;
++const vite = await createViteServer({
++  configFile: false,
++  cacheDir: resolve("artifacts/ocr-panel-vite-cache"),
++  plugins: [
++    react(),
++    {
++      name: "actual-ocr-panel",
++      resolveId: (id) => (id === "/__ocr.tsx" ? id : undefined),
++      load: (id) => (id === "/__ocr.tsx" ? entry : undefined),
++    },
++  ],
++  server: { middlewareMode: true, hmr: false },
++  appType: "custom",
++});
++const server = createServer((req, res) => {
++  if (req.url === "/__check") {
++    res.setHeader("Content-Type", "text/html");
++    vite
++      .transformIndexHtml(
++        req.url,
++        '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><div id="root"></div><script type="module" src="/__ocr.tsx"></script>',
++      )
++      .then((html) => res.end(html))
++      .catch((error) => {
++        res.statusCode = 500;
++        res.end(String(error));
++      });
++  } else vite.middlewares(req, res);
++});
++await new Promise((done) => server.listen(0, "127.0.0.1", done));
++let browser;
++const checks = [],
++  errors = [],
++  external = [];
++try {
++  browser = await chromium.launch({
++    executablePath: process.env.CHROME_PATH,
++    headless: true,
++  });
++  const context = await browser.newContext({
++    viewport: { width: 390, height: 844 },
++    hasTouch: true,
++    isMobile: true,
++  });
++  const page = await context.newPage(),
++    origin = `http://127.0.0.1:${server.address().port}`;
++  await page.route("**/*", (route) => {
++    const url = route.request().url();
++    if (
++      url.startsWith(origin) ||
++      url.startsWith("data:") ||
++      url.startsWith("blob:")
++    )
++      return route.continue();
++    external.push(url);
++    return route.abort();
++  });
++  page.on("pageerror", (e) => errors.push(String(e)));
++  await page.goto(origin + "/__check");
++  await page.waitForFunction(() => !!window.showOcr);
++  const show = async (
++    phase,
++    text = "",
++    error = "",
++    android = false,
++    inserted = false,
++  ) => {
++    const version = await page.evaluate(
++      (args) => window.showOcr(...args),
++      [{ phase, text, error }, android, inserted],
++    );
++    await page.waitForFunction(
++      ({ phase, version }) =>
++        document.querySelector("[data-check-render]")?.dataset.checkRender ===
++          String(version) &&
++        document.querySelector("[data-ocr-phase]")?.dataset.ocrPhase === phase,
++      { phase, version },
++    );
++  };
++  const test = async (name, run) => {
++    await run();
++    checks.push(name);
++  };
++  await test("Mac local image source has no camera/Continuity impersonation and picker binds selected File", async () => {
++    await show("choose");
++    assert.equal(
++      await page.getByRole("button", { name: "拍摄文字" }).count(),
++      0,
++    );
++    assert.ok(
++      await page
++        .getByRole("button", { name: "插入", exact: true })
++        .isDisabled(),
++    );
++    await page.locator("input[type=file]").setInputFiles({
++      name: "user-selected.png",
++      mimeType: "image/png",
++      buffer: Buffer.from("controlled file selection"),
++    });
++    assert.deepEqual(await page.evaluate(() => window.calls.at(-1)), {
++      file: "user-selected.png",
++    });
++  });
++  await test("Android sources emit distinct actual user choices", async () => {
++    await show("choose", "", "", true);
++    await page
++      .getByRole("button", { name: "从图片识别文本…", exact: true })
++      .click();
++    await page.getByRole("button", { name: "拍摄文字", exact: true }).click();
++    assert.deepEqual(await page.evaluate(() => window.calls.slice(-2)), [
++      "image",
++      "camera",
++    ]);
++  });
++  await test("Actual OCR text is literal and preserves newlines; confirmation uses accessible custom button", async () => {
++    await show("recognized", "第一行\n\n<script>alert(1)</script>");
++    assert.equal(
++      await page.getByLabel("识别文字预览").textContent(),
++      "第一行\n\n<script>alert(1)</script>",
++    );
++    assert.equal(await page.locator(".ocr-panel script").count(), 0);
++    await page.getByRole("button", { name: "插入", exact: true }).click();
++    assert.equal(await page.evaluate(() => window.calls.at(-1)), "confirm");
++    await page.screenshot({ path: resolve(output, "recognized-390.png") });
++  });
++  await test("Busy, empty and failed noninserted states never enable insertion or substitute empty success", async () => {
++    for (const phase of [
++      "processing",
++      "confirming",
++      "cancelling",
++      "empty",
++      "failed",
++    ]) {
++      await show(phase, "", phase === "failed" ? "真实识别失败" : "");
++      assert.ok(
++        await page
++          .getByRole("button", { name: "插入", exact: true })
++          .isDisabled(),
++      );
++      if (phase === "failed")
++        assert.match(
++          await page.getByRole("alert").textContent(),
++          /真实识别失败/,
++        );
++      if (phase === "empty")
++        assert.match(
++          await page.getByRole("status").textContent(),
++          /未识别到文字/,
++        );
++    }
++  });
++  await test("Pending body retry and post-ACK cleanup retry are distinct actions", async () => {
++    await show("failed", "实际文字", "保存失败", false, true);
++    assert.ok(
++      await page
++        .getByRole("button", { name: "重试保存", exact: true })
++        .isEnabled(),
++    );
++    await show("cleanup-pending", "实际文字", "清理失败", false, true);
++    assert.match(await page.getByRole("status").textContent(), /文字已保存/);
++    assert.ok(
++      await page
++        .getByRole("button", { name: "重试清理", exact: true })
++        .isEnabled(),
++    );
++    assert.equal(
++      await page.getByRole("button", { name: "插入", exact: true }).count(),
++      0,
++    );
++  });
++  await test("Keyboard focus cycles within panel and Escape routes cancellation", async () => {
++    await show("recognized", "实际文字");
++    await page.getByRole("button", { name: "插入", exact: true }).focus();
++    await page.keyboard.press("Tab");
++    assert.equal(
++      await page.evaluate(() =>
++        document.activeElement.getAttribute("aria-label"),
++      ),
++      "识别文字预览",
++    );
++    await page.keyboard.press("Shift+Tab");
++    assert.equal(
++      await page.evaluate(() => document.activeElement.textContent),
++      "插入",
++    );
++    await page.keyboard.press("Escape");
++    assert.equal(await page.evaluate(() => window.calls.at(-1)), "cancel");
++  });
++  await test("320x568 long text remains scrollable with 44px reachable actions and no viewport overflow", async () => {
++    await page.setViewportSize({ width: 320, height: 568 });
++    await show("recognized", Array(100).fill("本地文字识别核验").join("\n"));
++    const geometry = await page.evaluate(() => {
++      const r = document.querySelector(".ocr-panel").getBoundingClientRect();
++      return {
++        panel: { x: r.x, y: r.y, right: r.right, bottom: r.bottom },
++        textScrollable:
++          document.querySelector(".ocr-text").scrollHeight >
++          document.querySelector(".ocr-text").clientHeight,
++        buttons: [...document.querySelectorAll(".ocr-actions button")].map(
++          (n) => {
++            const r = n.getBoundingClientRect();
++            return { height: r.height, width: r.width, bottom: r.bottom };
++          },
++        ),
++      };
++    });
++    assert.ok(
++      geometry.panel.x >= 0 &&
++        geometry.panel.y >= 0 &&
++        geometry.panel.right <= 320 &&
++        geometry.panel.bottom <= 568,
++    );
++    assert.ok(geometry.textScrollable);
++    assert.ok(
++      geometry.buttons.every(
++        (r) => r.height >= 44 && r.width >= 44 && r.bottom <= 568,
++      ),
++    );
++    await page.screenshot({ path: resolve(output, "recognized-long-320.png") });
++    await writeFile(
++      resolve(output, "geometry.json"),
++      JSON.stringify(geometry, null, 2) + "\n",
++    );
++  });
++  assert.deepEqual(errors, []);
++  assert.deepEqual(external, []);
++  await writeFile(
++    resolve(output, "result.json"),
++    JSON.stringify(
++      {
++        status: "pass",
++        checks: checks.length,
++        results: checks,
++        browser: await browser.version(),
++        pageErrors: errors,
++        externalRequests: external,
++        limits: [
++          "Actual mounted engineering OcrPanel with controlled props/callbacks and synthetic selected File",
++          "No mounted App or real native OCR/device/camera/DB/ACK/cold start/original preview pixel acceptance",
++        ],
++      },
++      null,
++      2,
++    ) + "\n",
++  );
++  console.log(
++    `OCR panel passed ${checks.length} checks: ${output}/result.json`,
++  );
++} finally {
++  await browser?.close();
++  await vite.close();
++  await new Promise((done) => server.close(done));
++}
+diff --git a/scripts/check-recording-submit.mjs b/scripts/check-recording-submit.mjs
+index 8693238..c71dd42 100644
+--- a/scripts/check-recording-submit.mjs
++++ b/scripts/check-recording-submit.mjs
+@@ -268,6 +268,10 @@ function fixture(options = {}) {
+     blockedNotes: { current: new Set() },
+     attachmentSubmissions: { current: new Map() },
+     attachmentBatches: { current: new Set() },
++    ocrOperation: { current: null },
++    ocrLifecycle: {
++      current: { active: () => false, close: async () => {}, detach() {} },
++    },
+     recordingTicket: { current: null },
+     recordingLifecycle: { current: null },
+     pickerRuntime: { current: null },
+@@ -299,6 +303,7 @@ function fixture(options = {}) {
+     accessSuspended: [],
+     draw: null,
+     record: false,
++    ocr: null,
+     modal: null,
+     menu: "media",
+     showFind: false,
+diff --git a/src-tauri/Cargo.lock b/src-tauri/Cargo.lock
+index ae93254..8a0e451 100644
+--- a/src-tauri/Cargo.lock
++++ b/src-tauri/Cargo.lock
+@@ -2047,6 +2047,7 @@ dependencies = [
+  "tauri",
+  "tauri-build",
+  "tauri-plugin-dialog",
++ "tauri-plugin-notes-scan",
+  "tauri-plugin-notes-ui",
+  "tempfile",
+  "uuid",
+@@ -3529,6 +3530,19 @@ dependencies = [
+  "url",
+ ]
+ 
++[[package]]
++name = "tauri-plugin-notes-scan"
++version = "0.1.0"
++dependencies = [
++ "base64 0.22.1",
++ "cc",
++ "serde",
++ "serde_json",
++ "tauri",
++ "tauri-plugin",
++ "uuid",
++]
++
+ [[package]]
+ name = "tauri-plugin-notes-ui"
+ version = "0.1.0"
+diff --git a/src-tauri/Cargo.toml b/src-tauri/Cargo.toml
+index a202c26..cdabb67 100644
+--- a/src-tauri/Cargo.toml
++++ b/src-tauri/Cargo.toml
+@@ -13,6 +13,7 @@ tauri-build = { version = "2", features = [] }
+ [dependencies]
+ tauri = { version = "2", features = ["protocol-asset"] }
+ tauri-plugin-dialog = "2"
++tauri-plugin-notes-scan = { path = "../plugins/tauri-plugin-notes-scan" }
+ serde = { version = "1", features = ["derive"] }
+ serde_json = "1"
+ rusqlite = { version = "0.32", features = ["bundled"] }
+diff --git a/src-tauri/capabilities/default.json b/src-tauri/capabilities/default.json
+index 8152cec..8c13b51 100644
+--- a/src-tauri/capabilities/default.json
++++ b/src-tauri/capabilities/default.json
+@@ -12,6 +12,7 @@
+     "core:window:allow-minimize",
+     "core:window:allow-toggle-maximize",
+     "core:webview:allow-create-webview-window",
+-    "dialog:default"
++    "dialog:default",
++    "notes-scan:default"
+   ]
+ }
+diff --git a/src-tauri/src/lib.rs b/src-tauri/src/lib.rs
+index ea367b5..a82ffb4 100644
+--- a/src-tauri/src/lib.rs
++++ b/src-tauri/src/lib.rs
+@@ -331,6 +331,7 @@ pub fn run() {
+         .on_permission_request(media_permission::response)
+         .plugin(media_permission::lifecycle())
+         .plugin(tauri_plugin_dialog::init())
++        .plugin(tauri_plugin_notes_scan::init())
+         .setup(|app| {
+             let root = app.path().app_data_dir()?;
+             app.manage(AppState(Arc::new((
+diff --git a/src/App.tsx b/src/App.tsx
+index b84ec22..caa0c7c 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -131,6 +131,15 @@ import {
+ } from "./search-selection";
+ import { SearchEditorGate } from "./search-editor-gate";
+ import RecordingPanel from "./RecordingPanel";
++import { Fragment, Slice } from "@tiptap/pm/model";
++import {
++  OcrHost,
++  ocrParagraphs,
++  type OcrSource,
++  type OcrState,
++} from "./ocr-host";
++import { ocrNative } from "./ocr-native";
++import OcrPanel from "./OcrPanel";
+ import linesSmallPreview from "../assets/mobile-paper-previews/lines-small.svg";
+ import linesMediumPreview from "../assets/mobile-paper-previews/lines-medium.svg";
+ import linesLargePreview from "../assets/mobile-paper-previews/lines-large.svg";
+@@ -400,6 +409,19 @@ function App() {
+   const nativeEditorIds = useRef(new WeakMap<Editor, number>());
+   const nativeEditorOwners = useRef(new WeakMap<Editor, string>());
+   const nativeEditorCounter = useRef(0);
++  const ocrOperation = useRef<OcrHost<PickerTarget> | null>(null);
++  const [ocr, setOcr] = useState<OcrHost<PickerTarget> | null>(null);
++  const [ocrState, setOcrState] = useState<OcrState>({
++    phase: "choose",
++    text: "",
++    error: "",
++  });
++  const ocrLifecycle = useRef({
++    active: (): boolean => false,
++    close: async () => {},
++    suspend: (_ids: string[]) => {},
++    detach: () => {},
++  });
+   const recordingTicket = useRef<RecordingTicket | null>(null);
+   const recordingLifecycle = useRef({
+     active: (): boolean => false,
+@@ -418,14 +440,14 @@ function App() {
+     noteId: string | null;
+     editor: Editor | null;
+     available: boolean;
+-    scanInfoAvailable: boolean;
++    ocrAvailable: boolean;
+     recordingAvailable: boolean;
+   }>({
+     scope: "",
+     noteId: null,
+     editor: null,
+     available: false,
+-    scanInfoAvailable: false,
++    ocrAvailable: false,
+     recordingAvailable: false,
+   });
+   const nativeAssert = useRef<
+@@ -739,6 +761,7 @@ function App() {
+           revisions.current.confirmed(id, n.revision);
+           for (const submission of attachmentSubmissions.current.values())
+             submission.acknowledge(id, n.document);
++          ocrOperation.current?.acknowledgeDocument(id, n.document);
+           if (pendingDocs.current.get(id) === doc) {
+             pendingDocs.current.delete(id);
+             saveFailures.current.delete(id);
+@@ -837,14 +860,22 @@ function App() {
+     if (native)
+       getCurrentWindow()
+         .onCloseRequested(async (event) => {
+-          if (pendingDocs.current.size || recordingLifecycle.current.active()) {
++          if (
++            pendingDocs.current.size ||
++            recordingLifecycle.current.active() ||
++            ocrLifecycle.current.active()
++          ) {
+             event.preventDefault();
+             try {
+-              await recordingLifecycle.current.close();
++              // Both owners seal admission synchronously before the first wait.
++              const ocrClosing = ocrLifecycle.current.close();
++              const recordingClosing = recordingLifecycle.current.close();
++              await Promise.all([ocrClosing, recordingClosing]);
+               await flush();
+               if (
+                 !pendingDocs.current.size &&
+-                !recordingLifecycle.current.active()
++                !recordingLifecycle.current.active() &&
++                !ocrLifecycle.current.active()
+               )
+                 await getCurrentWindow().destroy();
+             } catch (e) {
+@@ -855,6 +886,7 @@ function App() {
+         .then((fn) => (unlisten = fn));
+     return () => {
+       document.removeEventListener("visibilitychange", hidden);
++      ocrLifecycle.current.detach();
+       recordingLifecycle.current.detach();
+       unlisten?.();
+     };
+@@ -871,6 +903,7 @@ function App() {
+       if (ids.includes(batch.target.noteId)) batch.target.invalidated = true;
+     for (const submission of attachmentSubmissions.current.values())
+       if (ids.includes(submission.noteId)) submission.invalidate();
++    ocrLifecycle.current.suspend(ids);
+     recordingLifecycle.current.suspend(ids);
+     for (const id of ids) {
+       const instance = editorsRef.current.get(id);
+@@ -933,6 +966,7 @@ function App() {
+   accessHandler.current = (event) => {
+     if (event.phase === "prepare") {
+       synchronization.invalidate();
++      ocrLifecycle.current.suspend(event.noteIds);
+       recordingLifecycle.current.suspend(event.noteIds);
+       blockedNotes.current = new Set(event.noteIds);
+       setAccessSuspended(event.noteIds);
+@@ -1230,7 +1264,8 @@ function App() {
+   };
+   const androidBack = useRef<() => void>(() => {});
+   androidBack.current = () => {
+-    if (modal === "paper") closePaper();
++    if (ocrOperation.current) void cancelOcr().catch(fail);
++    else if (modal === "paper") closePaper();
+     else if (modal) setModal(null);
+     else if (menu === "format") closeFormat(false);
+     else if (menu) setMenu(null);
+@@ -1343,6 +1378,7 @@ function App() {
+   }, [fail]);
+   useEffect(() => {
+     const handler = (e: KeyboardEvent) => {
++      if (ocrOperation.current && e.key !== "Escape") return;
+       // AppKit menu accelerators also work while NSSearchField owns first responder.
+       if (
+         native &&
+@@ -1372,7 +1408,8 @@ function App() {
+         }
+       }
+       if (e.key === "Escape") {
+-        if (modal === "paper") closePaper();
++        if (ocrOperation.current) void cancelOcr().catch(fail);
++        else if (modal === "paper") closePaper();
+         else if (modal) setModal(null);
+         else if (menu) setMenu(null);
+         else if (showFind) setShowFind(false);
+@@ -1458,17 +1495,34 @@ function App() {
+     target: PickerTarget,
+     recording?: RecordingTicket,
+     allowSealed = false,
++    ocr?: OcrHost<PickerTarget>,
+   ) => {
+     const owned = () =>
+-      !recording ||
+-      (recordingTicket.current === recording &&
+-        recording.batch.target === target &&
+-        !recording.detached &&
+-        (allowSealed || recording.accepting));
++      (!ocr ||
++        (ocrOperation.current === ocr &&
++          ocr.target === target &&
++          !ocr.detached &&
++          (allowSealed || ocr.accepting))) &&
++      (!recording ||
++        (recordingTicket.current === recording &&
++          recording.batch.target === target &&
++          !recording.detached &&
++          (allowSealed || recording.accepting)));
+     if (!owned()) throw Error("原录音会话已关闭，不会提交到其他备忘录");
+     if (target.invalidated) throw Error("原附件目标已失效，请保持窗口打开");
+-    await flush();
+-    if (!owned()) throw Error("原录音会话已关闭");
++    if (ocr?.insertedDocument && !ocr.documentAck) {
++      // Only this operation's exact pending body can bypass the generic flush
++      // failure to retry its own ACK. The full trusted target check still follows.
++      const pending = pendingDocs.current.get(target.noteId);
++      if (
++        !pending ||
++        !documentsEqual(pending, ocr.insertedDocument) ||
++        target.editor.isDestroyed ||
++        !documentsEqual(target.editor.getJSON(), ocr.insertedDocument)
++      )
++        throw Error("原识别文字的待保存正文已改变，请保持窗口打开");
++    } else await flush();
++    if (!owned()) throw Error("原录音或文字识别会话已关闭");
+     const synced = await synchronizeRef.current();
+     if (!owned()) throw Error("原录音会话已关闭");
+     const live = pickerRuntime.current;
+@@ -1491,7 +1545,11 @@ function App() {
+         : undefined,
+       trustedSynchronization: synchronization.current(synced),
+       available:
+-        (recording ? live.recordingAvailable : live.available) &&
++        (ocr
++          ? live.ocrAvailable
++          : recording
++            ? live.recordingAvailable
++            : live.available) &&
+         !!note &&
+         !note.deletedAt &&
+         !!instance &&
+@@ -1610,6 +1668,7 @@ function App() {
+         await cancelRecording(batch.recording);
+       else await submitAttachmentBatch(batch);
+     }
++    if (ocrOperation.current) await retryOcr();
+   };
+   const discardUninsertedAttachments = async () => {
+     for (const batch of attachmentBatches.current) {
+@@ -1835,10 +1894,7 @@ function App() {
+       ) : null}
+     </div>
+   );
+-  const capturePickerTarget = (
+-    context?: NativeContext,
+-    scanInfo = false,
+-  ): PickerBatch => {
++  const capturePickerTarget = (context?: NativeContext): PickerBatch => {
+     const live = pickerRuntime.current;
+     const instance = context ? context.editor : live.editor;
+     if (
+@@ -1847,7 +1903,7 @@ function App() {
+       !instance ||
+       instance.isDestroyed ||
+       !instance.isEditable ||
+-      (!live.available && !(scanInfo && live.scanInfoAvailable)) ||
++      !live.available ||
+       blockedNotes.current.has(live.noteId) ||
+       accessGate.state?.operationId
+     )
+@@ -1880,11 +1936,10 @@ function App() {
+     input: HTMLInputElement | null,
+     accept?: string,
+     context?: NativeContext,
+-    scanInfo = false,
+   ) => {
+     try {
+       if (!input) throw Error("附件选择器尚未就绪");
+-      const batch = capturePickerTarget(context, scanInfo);
++      const batch = capturePickerTarget(context);
+       const previous = pickerTargets.current.get(input);
+       if (previous) previous.target.invalidated = true;
+       pickerTargets.current.set(input, batch);
+@@ -2090,6 +2145,123 @@ function App() {
+       }
+     },
+   };
++  const finishOcr = (operation: OcrHost<PickerTarget>) => {
++    if (operation.cleaned && ocrOperation.current === operation) {
++      ocrOperation.current = null;
++      if (!operation.detached) setOcr(null);
++    }
++  };
++  const cancelOcr = async (operation = ocrOperation.current) => {
++    if (!operation) return;
++    await operation.cancel();
++    finishOcr(operation);
++  };
++  const retryOcr = async () => {
++    const operation = ocrOperation.current;
++    if (!operation) return;
++    if (operation.insertedDocument && !operation.detached)
++      await confirmOcr(operation);
++    else await cancelOcr(operation);
++  };
++  const confirmOcr = async (operation: OcrHost<PickerTarget>) => {
++    if (ocrOperation.current !== operation || operation.detached)
++      throw Error("原文字识别会话已关闭");
++    await operation.confirm();
++    finishOcr(operation);
++  };
++  const awaitOcrDocumentAck = async (operation: OcrHost<PickerTarget>) => {
++    await queues.current.get(operation.target.noteId);
++    if (operation.documentAck) return;
++    await validatePickerTarget(operation.target, undefined, true, operation);
++    const document = operation.insertedDocument;
++    if (!document) throw Error("识别文字尚未插入正文");
++    const outcome = await saveDoc(operation.target.noteId, document);
++    if (!outcome.saved) throw outcome.error;
++  };
++  const openOcr = (context?: NativeContext) => {
++    if (!native)
++      throw Error("请在已安装的 Mac 或 Android 应用中识别本地图片文字。");
++    if (ocrOperation.current)
++      throw Error("上次文字识别尚未核定，请先重试保存或取消");
++    const batch = capturePickerTarget(context),
++      target = batch.target;
++    const operation: OcrHost<PickerTarget> = new OcrHost(
++      batch.operationIds[0],
++      target,
++      {
++        native: ocrNative,
++        validate: () =>
++          validatePickerTarget(target, undefined, false, operation),
++        insert: (text, inserted) => {
++          const instance = target.editor;
++          const nodes = ocrParagraphs(text).map((node) =>
++            instance.schema.nodeFromJSON(node),
++          );
++          const transaction = instance.state.tr
++            .setSelection(target.bookmark.resolve(instance.state.doc))
++            .replaceSelection(new Slice(Fragment.fromArray(nodes), 0, 0));
++          const document = transaction.doc.toJSON();
++          try {
++            instance.view.dispatch(transaction);
++          } finally {
++            if (
++              !instance.isDestroyed &&
++              documentsEqual(instance.getJSON(), document)
++            ) {
++              inserted(document);
++              target.document = document;
++              target.bookmark = instance.state.selection.getBookmark();
++              target.documentVersion =
++                nativeDocumentVersions.current.get(instance) || 0;
++              // Keep the captured raw trusted body until ACK. On an own failed
++              // pending save the backend still legitimately contains that body.
++            }
++          }
++        },
++        awaitDocumentAck: awaitOcrDocumentAck,
++        update: (state) => {
++          if (ocrOperation.current === operation && !operation.detached)
++            setOcrState(state);
++        },
++      },
++    );
++    ocrOperation.current = operation;
++    setOcrState(operation.state);
++    setOcr(operation);
++    setMenu(null);
++    target.editor.commands.blur();
++    setEditing(false);
++  };
++  const processOcr = (operation: OcrHost<PickerTarget>, source: OcrSource) => {
++    if (ocrOperation.current !== operation || operation.detached) return;
++    void operation.process(source).catch(fail);
++  };
++  ocrLifecycle.current = {
++    active: () => !!ocrOperation.current,
++    close: async () => {
++      const operation = ocrOperation.current;
++      if (!operation) return;
++      await operation.close();
++      finishOcr(operation);
++    },
++    suspend: (ids) => {
++      const operation = ocrOperation.current;
++      if (operation && ids.includes(operation.target.noteId)) {
++        operation.seal();
++        operation.detached = true;
++        setOcr(null);
++        void cancelOcr(operation).catch(fail);
++      }
++    },
++    detach: () => {
++      const operation = ocrOperation.current;
++      if (operation) {
++        operation.seal();
++        operation.detached = true;
++        void operation.cancel().catch(() => {});
++      }
++    },
++  };
+   const tools = (bottom = false) => (
+     <div
+       className={`editor-tools ${bottom ? "bottom-tools" : ""}`}
+@@ -2304,7 +2476,11 @@ function App() {
+                 icon={<ScanText size={19} />}
+                 onClick={() => {
+                   setMenu(null);
+-                  openModal("scanInfo");
++                  try {
++                    openOcr();
++                  } catch (error) {
++                    fail(error);
++                  }
+                 }}
+               >
+                 扫描文本
+@@ -2631,14 +2807,15 @@ function App() {
+     !current.deletedAt &&
+     (!mobile || page === "editor") &&
+     (!current.locked || !!accessGate.state?.notes[current.id]?.authorized);
+-  const pickerBaseAvailable = attachmentBaseAvailable && !record;
++  const pickerBaseAvailable = attachmentBaseAvailable && !record && !ocr;
+   pickerRuntime.current = {
+     scope: JSON.stringify([nativeScope, page]),
+     noteId,
+     editor,
+     available: pickerBaseAvailable && !modal,
+-    scanInfoAvailable: pickerBaseAvailable && modal === "scanInfo",
+-    recordingAvailable: attachmentBaseAvailable && !modal && !menu,
++    ocrAvailable:
++      attachmentBaseAvailable && !record && !modal && !!ocrOperation.current,
++    recordingAvailable: attachmentBaseAvailable && !modal && !menu && !ocr,
+   };
+   const recording = record ? recordingTicket.current : null;
+   useEffect(() => {
+@@ -2651,6 +2828,18 @@ function App() {
+     )
+       void cancelRecording(ticket).catch(fail);
+   }, [nativeScope, page, editor]);
++  useEffect(() => {
++    const operation = ocrOperation.current;
++    if (
++      operation &&
++      (operation.target.scope !== pickerRuntime.current.scope ||
++        operation.target.editor !== editor ||
++        operation.target.invalidated)
++    ) {
++      operation.target.invalidated = true;
++      void cancelOcr(operation).catch(fail);
++    }
++  }, [nativeScope, page, editor]);
+   nativeAssert.current = (context, editing = false, overlay = false) => {
+     const live = accessGate.stamp(context.noteId || undefined);
+     if (
+@@ -2664,7 +2853,7 @@ function App() {
+       (context.noteId &&
+         (blockedNotes.current.has(context.noteId) ||
+           accessGate.state?.suspended.includes(context.noteId))) ||
+-      (!overlay && (modal || draw || record))
++      (!overlay && (modal || draw || record || ocrOperation.current))
+     )
+       throw new Error("备忘录或授权状态已改变，请重新执行操作");
+     if (
+@@ -2803,6 +2992,10 @@ function App() {
+             context,
+           );
+           return;
++        case "recognizeImageText":
++          nativeSelection(context);
++          openOcr(context);
++          return;
+         case "recordAudio":
+           nativeSelection(context);
+           openRecording(context);
+@@ -2968,7 +3161,8 @@ function App() {
+       !accessGate.state?.operationId &&
+       !modal &&
+       !draw &&
+-      !record;
++      !record &&
++      !ocr;
+     const editable =
+       available &&
+       !!current &&
+@@ -3088,6 +3282,23 @@ function App() {
+         ref={cameraInput}
+         onChange={(e) => fileSelected(e.currentTarget)}
+       />
++      {ocr && (
++        <OcrPanel
++          key={ocr.operationId}
++          state={ocrState}
++          android={/Android/i.test(navigator.userAgent)}
++          inserted={!!ocr.insertedDocument}
++          onImage={() => processOcr(ocr, { kind: "image" })}
++          onCamera={() => processOcr(ocr, { kind: "camera" })}
++          onFile={(file) => processOcr(ocr, { kind: "file", file })}
++          onConfirm={() => {
++            void confirmOcr(ocr).catch(() => {});
++          }}
++          onCancel={() => {
++            void cancelOcr(ocr).catch(fail);
++          }}
++        />
++      )}
+       <aside className="sidebar">
+         {!nativeTop && (
+           <div
+@@ -3924,30 +4135,6 @@ function App() {
+                 </button>
+               </>
+             )}
+-            {modal === "scanInfo" && (
+-              <>
+-                <h2>扫描文本</h2>
+-                <p>
+-                  当前版本尚未接入设备文字识别。可以先拍摄文稿照片并添加到备忘录。
+-                </p>
+-                <div className="modal-actions">
+-                  <button onClick={() => setModal(null)}>取消</button>
+-                  <button
+-                    onClick={() => {
+-                      setModal(null);
+-                      openAttachmentPicker(
+-                        cameraInput.current,
+-                        undefined,
+-                        undefined,
+-                        true,
+-                      );
+-                    }}
+-                  >
+-                    拍摄文稿
+-                  </button>
+-                </div>
+-              </>
+-            )}
+           </div>
+         </div>
+       )}
+diff --git a/src/OcrPanel.css b/src/OcrPanel.css
+new file mode 100644
+index 0000000..69cba5c
+--- /dev/null
++++ b/src/OcrPanel.css
+@@ -0,0 +1,77 @@
++.ocr-backdrop {
++  position: fixed;
++  inset: 0;
++  z-index: 110;
++  background: #0004;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  padding: max(20px, env(safe-area-inset-top, 0px))
++    max(20px, env(safe-area-inset-right, 0px))
++    max(20px, env(safe-area-inset-bottom, 0px))
++    max(20px, env(safe-area-inset-left, 0px));
++}
++.ocr-panel {
++  display: flex;
++  flex-direction: column;
++  width: min(520px, 100%);
++  max-height: 100%;
++  padding: 24px;
++  border-radius: 18px;
++  background: var(--paper);
++  color: var(--ink);
++  box-shadow: 0 12px 40px #0002;
++  overflow: auto;
++}
++.ocr-panel h2 {
++  margin: 0 0 8px;
++  font-size: 20px;
++  outline: none;
++}
++.ocr-description {
++  color: var(--secondary);
++  font-size: 14px;
++  line-height: 1.5;
++  margin: 0 0 16px;
++}
++.ocr-sources {
++  display: flex;
++  flex-wrap: wrap;
++  gap: 12px;
++}
++.ocr-panel button {
++  min-height: 44px;
++  padding: 8px 16px;
++  border: 0;
++  border-radius: 10px;
++  background: var(--grouped);
++  color: var(--accent);
++  font: inherit;
++}
++.ocr-panel button:disabled {
++  color: var(--secondary);
++  opacity: 0.6;
++}
++.ocr-text {
++  white-space: pre-wrap;
++  overflow-wrap: anywhere;
++  font: inherit;
++  line-height: 1.6;
++  padding: 16px;
++  border: 1px solid var(--line);
++  border-radius: 10px;
++  max-height: 45vh;
++  min-height: 80px;
++  overflow: auto;
++}
++.ocr-error {
++  color: var(--danger);
++  font-size: 14px;
++  line-height: 1.5;
++}
++.ocr-actions {
++  display: flex;
++  justify-content: flex-end;
++  gap: 12px;
++  margin-top: 20px;
++}
+diff --git a/src/OcrPanel.tsx b/src/OcrPanel.tsx
+new file mode 100644
+index 0000000..af5573a
+--- /dev/null
++++ b/src/OcrPanel.tsx
+@@ -0,0 +1,142 @@
++import { useEffect, useRef } from "react";
++import type { OcrState } from "./ocr-host";
++import "./OcrPanel.css";
++
++// The reference recording does not show this confirmation page. This is a local
++// engineering UI over actual OCR text, not an original-Notes pixel claim.
++export default function OcrPanel({
++  state,
++  android,
++  inserted,
++  onImage,
++  onCamera,
++  onFile,
++  onConfirm,
++  onCancel,
++}: {
++  state: OcrState;
++  android: boolean;
++  inserted: boolean;
++  onImage(): void;
++  onCamera(): void;
++  onFile(file: File): void;
++  onConfirm(): void;
++  onCancel(): void;
++}) {
++  const input = useRef<HTMLInputElement>(null),
++    heading = useRef<HTMLHeadingElement>(null);
++  useEffect(() => {
++    heading.current?.focus();
++  }, []);
++  const busy = ["processing", "confirming", "cancelling"].includes(state.phase);
++  const saved = state.phase === "saved" || state.phase === "cleanup-pending";
++  const canConfirm =
++    state.phase === "recognized" ||
++    (state.phase === "failed" && inserted) ||
++    state.phase === "cleanup-pending";
++  return (
++    <div
++      className="ocr-backdrop"
++      onKeyDown={(e) => {
++        if (e.key === "Escape") {
++          e.stopPropagation();
++          onCancel();
++        }
++        if (e.key === "Tab") {
++          const targets = [
++            ...e.currentTarget.querySelectorAll<HTMLElement>(
++              'button:not([disabled]), [tabindex="0"]',
++            ),
++          ];
++          const first = targets[0],
++            last = targets.at(-1);
++          if (
++            e.shiftKey &&
++            (document.activeElement === first ||
++              !targets.includes(document.activeElement as HTMLElement))
++          ) {
++            e.preventDefault();
++            last?.focus();
++          } else if (
++            !e.shiftKey &&
++            (document.activeElement === last ||
++              !targets.includes(document.activeElement as HTMLElement))
++          ) {
++            e.preventDefault();
++            first?.focus();
++          }
++        }
++      }}
++    >
++      <section
++        className="ocr-panel"
++        role="dialog"
++        aria-modal="true"
++        aria-labelledby="ocr-heading"
++        data-ocr-phase={state.phase}
++      >
++        <h2 id="ocr-heading" tabIndex={-1} ref={heading}>
++          扫描文本
++        </h2>
++        <p className="ocr-description">
++          在此设备识别图片文字，确认后插入原备忘录。
++        </p>
++        {state.phase === "choose" && (
++          <div className="ocr-sources">
++            <button
++              onClick={() => (android ? onImage() : input.current?.click())}
++            >
++              从图片识别文本…
++            </button>
++            {android && <button onClick={onCamera}>拍摄文字</button>}
++          </div>
++        )}
++        <input
++          ref={input}
++          className="hidden-input"
++          type="file"
++          accept="image/*"
++          onChange={(e) => {
++            const file = e.currentTarget.files?.[0];
++            e.currentTarget.value = "";
++            if (file) onFile(file);
++          }}
++        />
++        {state.phase === "processing" && <p role="status">正在识别文字…</p>}
++        {state.phase === "empty" && (
++          <p role="status">未识别到文字。原备忘录没有更改。</p>
++        )}
++        {state.phase === "cancelling" && (
++          <p role="status">正在取消，请在已打开的相机或图片选择页完成返回。</p>
++        )}
++        {state.phase === "confirming" && <p role="status">正在保存识别文字…</p>}
++        {saved && (
++          <p role="status">
++            文字已保存。
++            {state.phase === "cleanup-pending"
++              ? "临时识别资料尚待清理，请重试清理。"
++              : "正在清理临时识别资料…"}
++          </p>
++        )}
++        {state.error && (
++          <p className="ocr-error" role="alert">
++            {state.error}
++          </p>
++        )}
++        {state.text && (
++          <pre className="ocr-text" aria-label="识别文字预览" tabIndex={0}>
++            {state.text}
++          </pre>
++        )}
++        <div className="ocr-actions">
++          <button disabled={state.phase === "cancelling"} onClick={onCancel}>
++            {saved ? "关闭" : "取消"}
++          </button>
++          <button disabled={!canConfirm || busy} onClick={onConfirm}>
++            {saved ? "重试清理" : inserted ? "重试保存" : "插入"}
++          </button>
++        </div>
++      </section>
++    </div>
++  );
++}
+diff --git a/src/native-toolbar-state.ts b/src/native-toolbar-state.ts
+index a0e798c..6c616f9 100644
+--- a/src/native-toolbar-state.ts
++++ b/src/native-toolbar-state.ts
+@@ -169,6 +169,7 @@ export function toolbarState(input: {
+               item("choosePhotoVideo", "选取照片或视频…", editable),
+               item("recordAudio", "录音", editable),
+               item("attachFile", "附加文件…", editable),
++              item("recognizeImageText", "从图片识别文本…", editable),
+               separator,
+               item("takePhoto", "拍照", false),
+               item("scanDocument", "扫描文稿", false),
+diff --git a/src/ocr-host.ts b/src/ocr-host.ts
+new file mode 100644
+index 0000000..9954086
+--- /dev/null
++++ b/src/ocr-host.ts
+@@ -0,0 +1,293 @@
++import type { JSONContent } from "@tiptap/react";
++import type { ScanSession } from "../plugins/tauri-plugin-notes-scan/guest-js";
++import { documentsEqual } from "./document-equality";
++
++export type OcrSource =
++  { kind: "image" } | { kind: "camera" } | { kind: "file"; file: File };
++export type OcrState = {
++  phase:
++    | "choose"
++    | "processing"
++    | "recognized"
++    | "empty"
++    | "failed"
++    | "confirming"
++    | "saved"
++    | "cleanup-pending"
++    | "cancelling"
++    | "cancelled";
++  text: string;
++  error: string;
++};
++export interface OcrNativePorts {
++  begin(): Promise<ScanSession>;
++  get(sessionId: string): Promise<ScanSession>;
++  select(sessionId: string, source: OcrSource): Promise<ScanSession>;
++  recognize(sessionId: string, token: string): Promise<ScanSession>;
++  finish(sessionId: string): Promise<ScanSession>;
++  acknowledge(sessionId: string): Promise<unknown>;
++  cancel(sessionId: string): Promise<unknown>;
++}
++export const ocrError = (error: unknown): string => {
++  if (typeof error === "object" && error && "message" in error)
++    return String(error.message);
++  return String(error);
++};
++const missingSession = (error: unknown) =>
++  typeof error === "object" &&
++  error !== null &&
++  "code" in error &&
++  error.code === "session_missing";
++
++/** One original target, one OCR result, one document transaction and ACK. Native
++ * sessions remain temporary; successful body ACK alone permits acknowledge. */
++export class OcrHost<Target extends { noteId: string }> {
++  state: OcrState = { phase: "choose", text: "", error: "" };
++  accepting = true;
++  detached = false;
++  sessionId?: string;
++  insertedDocument?: JSONContent;
++  documentAck = false;
++  cleaned = false;
++  private processing?: Promise<void>;
++  private confirming?: Promise<void>;
++  private cancelling?: Promise<void>;
++  constructor(
++    readonly operationId: string,
++    readonly target: Target,
++    private ports: {
++      native: OcrNativePorts;
++      validate(): Promise<void>;
++      insert(text: string, inserted: (document: JSONContent) => void): void;
++      awaitDocumentAck(operation: OcrHost<Target>): Promise<void>;
++      update(state: OcrState): void;
++    },
++  ) {}
++  private publish(
++    phase: OcrState["phase"],
++    error = "",
++    text = this.state.text,
++  ) {
++    this.state = { phase, text, error };
++    if (!this.detached) this.ports.update(this.state);
++  }
++  private admitted() {
++    if (!this.accepting || this.detached)
++      throw Error("原文字识别会话已关闭，不会插入其他备忘录");
++  }
++  private session(value: ScanSession) {
++    if (
++      !value ||
++      value.version !== 1 ||
++      value.mode !== "text" ||
++      !value.sessionId ||
++      !["draft", "ready"].includes(value.state) ||
++      (this.sessionId && value.sessionId !== this.sessionId)
++    )
++      throw Error("文字识别会话身份或状态不匹配");
++    this.sessionId = value.sessionId;
++    return value;
++  }
++  process(source: OcrSource): Promise<void> {
++    if (this.processing) return this.processing;
++    if (!this.accepting || this.detached || this.state.phase !== "choose")
++      return Promise.reject(Error("此文字识别操作不能重新选择，请取消后重试"));
++    this.publish("processing", "", "");
++    const work = (async () => {
++      try {
++        let session = this.session(
++          this.sessionId
++            ? await this.ports.native.get(this.sessionId)
++            : await this.ports.native.begin(),
++        );
++        this.admitted();
++        if (session.state !== "draft")
++          throw Error("原识别会话已完成，请取消后重新选择");
++        session = this.session(
++          await this.ports.native.select(session.sessionId, source),
++        );
++        this.admitted();
++        if (source.kind !== "camera") {
++          if (session.state !== "draft") throw Error("所选图片识别状态不匹配");
++          const file = session.files.find((file) =>
++            file.mime.startsWith("image/"),
++          );
++          if (!file) throw Error("所选图片没有可识别的图像");
++          session = this.session(
++            await this.ports.native.recognize(session.sessionId, file.token),
++          );
++          this.admitted();
++          session = this.session(
++            await this.ports.native.finish(session.sessionId),
++          );
++          this.admitted();
++        }
++        if (session.state !== "ready" || !session.ocr)
++          throw Error("设备尚未完成文字识别");
++        const result = session.ocr;
++        if (result.status === "failed")
++          throw result.error || Error("设备文字识别失败");
++        if (result.status === "empty") {
++          if (result.text?.trim()) throw Error("空识别结果包含了不一致的文字");
++          this.publish("empty", "", "");
++        } else if (
++          result.status === "recognized" &&
++          typeof result.text === "string" &&
++          result.text.trim()
++        )
++          this.publish("recognized", "", result.text);
++        else throw Error("设备返回了无效的文字识别结果");
++      } catch (error) {
++        if (!this.accepting || this.detached) return;
++        const cancelled =
++          typeof error === "object" &&
++          error &&
++          "code" in error &&
++          error.code === "cancelled";
++        if (cancelled && source.kind === "camera" && this.sessionId) {
++          // Camera cancellation may already remove its draft. Establish absence
++          // through the same native session before allowing a fresh selection.
++          try {
++            this.session(await this.ports.native.get(this.sessionId));
++          } catch (lookupError) {
++            if (missingSession(lookupError)) this.sessionId = undefined;
++            else {
++              this.publish("failed", ocrError(lookupError));
++              return;
++            }
++          }
++          if (!this.accepting || this.detached) return;
++        }
++        this.publish(cancelled ? "choose" : "failed", ocrError(error));
++      }
++    })();
++    this.processing = work;
++    void work
++      .finally(() => {
++        if (this.processing === work) this.processing = undefined;
++      })
++      .catch(() => {});
++    return work;
++  }
++  acknowledgeDocument(noteId: string, document: JSONContent) {
++    if (
++      noteId === this.target.noteId &&
++      this.insertedDocument &&
++      documentsEqual(this.insertedDocument, document)
++    )
++      this.documentAck = true;
++  }
++  confirm(): Promise<void> {
++    if (this.confirming) return this.confirming;
++    if (
++      this.detached ||
++      (!this.insertedDocument &&
++        (!this.accepting ||
++          this.state.phase !== "recognized" ||
++          !this.state.text.trim()))
++    )
++      return Promise.reject(Error("没有可插入的实际识别文字"));
++    const work = (async () => {
++      this.publish(this.documentAck ? "saved" : "confirming");
++      try {
++        if (!this.insertedDocument) {
++          await this.ports.validate();
++          this.admitted();
++          this.ports.insert(this.state.text, (document) => {
++            this.insertedDocument = document;
++          });
++          if (!this.insertedDocument)
++            throw Error("编辑器未接受识别文字，请重试");
++        }
++        if (!this.documentAck) await this.ports.awaitDocumentAck(this);
++        if (!this.documentAck)
++          throw Error("识别文字尚未确认保存，请保持窗口打开并重试保存");
++        this.publish("saved");
++        await this.cleanupSaved();
++      } catch (error) {
++        this.publish(
++          this.documentAck ? "cleanup-pending" : "failed",
++          ocrError(error),
++        );
++        throw error;
++      }
++    })();
++    this.confirming = work;
++    void work
++      .finally(() => {
++        if (this.confirming === work) this.confirming = undefined;
++      })
++      .catch(() => {});
++    return work;
++  }
++  private async cleanupSaved() {
++    if (this.cleaned) return;
++    if (!this.documentAck || !this.sessionId)
++      throw Error("正文尚未确认保存，不能清理原识别会话");
++    try {
++      await this.ports.native.acknowledge(this.sessionId);
++    } catch (error) {
++      if (!missingSession(error)) throw error;
++    }
++    this.cleaned = true;
++    this.accepting = false;
++    this.publish("saved");
++  }
++  seal() {
++    this.accepting = false;
++  }
++  cancel(): Promise<void> {
++    this.seal();
++    if (this.cancelling) return this.cancelling;
++    this.publish("cancelling");
++    const work = (async () => {
++      await this.processing?.catch(() => {});
++      await this.confirming?.catch(() => {});
++      if (this.documentAck) {
++        await this.cleanupSaved();
++        return;
++      }
++      if (this.insertedDocument)
++        throw Error(
++          "识别文字已在待保存正文中，请重试保存；不会删除正文或重复插入",
++        );
++      if (this.sessionId && !this.cleaned) {
++        try {
++          await this.ports.native.cancel(this.sessionId);
++        } catch (error) {
++          if (!missingSession(error)) throw error;
++        }
++      }
++      this.cleaned = true;
++      this.publish("cancelled");
++    })().catch((error) => {
++      this.publish(
++        this.documentAck ? "cleanup-pending" : "failed",
++        ocrError(error),
++      );
++      throw error;
++    });
++    this.cancelling = work;
++    void work
++      .finally(() => {
++        if (this.cancelling === work) this.cancelling = undefined;
++      })
++      .catch(() => {});
++    return work;
++  }
++  async close() {
++    this.seal();
++    await this.processing?.catch(() => {});
++    await this.confirming?.catch(() => {});
++    if (this.insertedDocument && !this.documentAck) await this.confirm();
++    await this.cancel();
++  }
++}
++
++export function ocrParagraphs(text: string): JSONContent[] {
++  if (!text.trim()) throw Error("没有可插入的识别文字");
++  return text.split(/\r\n|\r|\n/).map((line) => ({
++    type: "paragraph",
++    ...(line ? { content: [{ type: "text", text: line }] } : {}),
++  }));
++}
+diff --git a/src/ocr-native.ts b/src/ocr-native.ts
+new file mode 100644
+index 0000000..40948ba
+--- /dev/null
++++ b/src/ocr-native.ts
+@@ -0,0 +1,44 @@
++import * as scan from "../plugins/tauri-plugin-notes-scan/guest-js";
++import type { OcrNativePorts } from "./ocr-host";
++
++export const MAX_OCR_IMAGE_BYTES = 20 * 1024 * 1024;
++/** Only a File returned by the user image picker enters the bounded Mac bridge.
++ * No renderer-supplied path, image preview or permanent attachment is published. */
++export function selectedOcrImage(file: File): Promise<string> {
++  if (!file.size || file.size > MAX_OCR_IMAGE_BYTES)
++    return Promise.reject(Error("请选择不超过20 MiB的非空图片"));
++  if (!file.type.startsWith("image/"))
++    return Promise.reject(Error("请选择图片文件"));
++  return new Promise((resolve, reject) => {
++    const reader = new FileReader();
++    reader.onerror = () => reject(reader.error || Error("无法读取所选图片"));
++    reader.onabort = () => reject(Error("所选图片读取已取消"));
++    reader.onload = () => {
++      if (typeof reader.result !== "string") {
++        reject(Error("所选图片编码无效"));
++        return;
++      }
++      const comma = reader.result.indexOf(",");
++      if (comma < 0 || !reader.result.slice(0, comma).endsWith(";base64")) {
++        reject(Error("所选图片编码无效"));
++        return;
++      }
++      resolve(reader.result.slice(comma + 1));
++    };
++    reader.readAsDataURL(file);
++  });
++}
++export const ocrNative: OcrNativePorts = {
++  begin: () => scan.begin("text"),
++  get: scan.get,
++  select: async (sessionId, source) =>
++    source.kind === "camera"
++      ? scan.openCamera(sessionId)
++      : source.kind === "image"
++        ? scan.pickImage(sessionId)
++        : scan.ingestImage(sessionId, await selectedOcrImage(source.file)),
++  recognize: scan.recognize,
++  finish: scan.finish,
++  acknowledge: scan.acknowledge,
++  cancel: scan.cancel,
++};

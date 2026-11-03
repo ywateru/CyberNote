@@ -1,0 +1,12 @@
+error: failed to select a version for `tauri-plugin`.
+    ... required by package `tauri-plugin-notes-ui v0.1.0 (/private/tmp/ocr-host-builddep-diagnostic-q62kshk8/plugins/tauri-plugin-notes-ui)`
+    ... which satisfies path dependency `tauri-plugin-notes-ui` (locked to 0.1.0) of package `notes-clone v0.1.0 (/private/tmp/ocr-host-builddep-diagnostic-q62kshk8/src-tauri)`
+versions that meet the requirements `=2.7.2` are: 2.7.2
+
+all possible versions conflict with previously selected packages
+
+  previously selected package `tauri-plugin v2.6.3`
+    ... which satisfies dependency `tauri-plugin = "=2.6.3"` of package `tauri-plugin-notes-scan v0.1.0 (/private/tmp/ocr-host-builddep-diagnostic-q62kshk8/plugins/tauri-plugin-notes-scan)`
+    ... which satisfies path dependency `tauri-plugin-notes-scan` (locked to 0.1.0) of package `notes-clone v0.1.0 (/private/tmp/ocr-host-builddep-diagnostic-q62kshk8/src-tauri)`
+
+failed to select a version for `tauri-plugin` which could resolve this conflict

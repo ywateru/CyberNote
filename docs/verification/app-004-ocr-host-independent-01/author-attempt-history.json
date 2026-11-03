@@ -1,0 +1,26 @@
+{
+  "records": [
+    {
+      "kind": "transcribed-prior-tool-result",
+      "command": "initial OCR panel browser check",
+      "result": "failed",
+      "error": "AssertionError assert.ok(geometry.textScrollable), scripts/check-ocr-panel-browser.mjs:228",
+      "cause": "show helper waited phase only; final recognized state reused phase before long text committed",
+      "fix": "test harness uses a per-render version and waits that DOM commit and unchanged phase assertion; product CSS/assertions unchanged",
+      "rerun": "panel-result.json: 7 pass"
+    },
+    {
+      "kind": "transcribed-prior-tool-result",
+      "command": "initial unfiltered offline cargo metadata",
+      "result": "failed",
+      "error": "uncached foreign Linux atk 0.18.2 dependency; offline refused",
+      "resolution": "filtered actual macOS/Android target metadata, no download"
+    },
+    {
+      "kind": "transcribed-prior-tool-result",
+      "command": "initial main offline metadata with scan build-dependency 2.6.3",
+      "result": "resolver failed",
+      "resolution": "root explicitly authorized only scan build-dependency to existing main 2.7.2; exact lock diff recorded"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "case": "recognized OCR preview must be erased when original target is suspended/cleared",
+  "scope": "Actual App ocrLifecycle.suspend closure; called by both access prepare and clearSensitive; controlled native session results, no real lock/DB/device",
+  "detached": true,
+  "accepting": false,
+  "currentOperation": null,
+  "visiblePanel": false,
+  "nativeSessions": 0,
+  "retainedReactOcrState": {
+    "phase": "recognized",
+    "text": "合成私密OCR文字-ACCESS-REVOKE",
+    "error": ""
+  }
+}

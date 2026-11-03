@@ -38,6 +38,7 @@
 - [录音父保存与真实正文确认接线](plan/tasks/app-002-recording-submit-01.md)
 - [暂停录音真实回放与前后15秒](plan/tasks/app-002-recording-preview-01.md)
 - [离线OCR主应用文字接入](plan/tasks/app-004-ocr-host-01.md)
+- [OCR主接入独审01与待修预览清理](plan/reviews/app-004-ocr-host-static-01.md)
 - [验证与像素比较规则](verification/README.md)
 - [candidate03 Android身份及保留数据升级](verification/unified-candidate03-android-independent-01/README.md)
 - [candidate03 Mac录音准备权限路径诊断](verification/candidate03-mic-preparing-diagnosis-01/README.md)

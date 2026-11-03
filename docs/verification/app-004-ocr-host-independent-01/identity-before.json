@@ -1,0 +1,222 @@
+{
+  "candidate": "2ad1e89423d1be6e872c248bfcae92ff2abade62",
+  "baseline": "8bc8ae2f712ebf85ec0cd79453318563e3d83a8b",
+  "initial_status": "",
+  "product_files": [
+    {
+      "path": "src/App.tsx",
+      "size": 152684,
+      "sha256": "95ed31a987e83e8f0a634861427700c566e30c7d21d7619e46d358a852238871"
+    },
+    {
+      "path": "src/OcrPanel.tsx",
+      "size": 4467,
+      "sha256": "92f09c5c3271f1cceea92dafb692c848f0da94f88e67c442a34494a69cb8040a"
+    },
+    {
+      "path": "src/OcrPanel.css",
+      "size": 1490,
+      "sha256": "7739e459f3be0637ab7e36a52841acc77a0bde2619f5c9d5691d9b98995fca30"
+    },
+    {
+      "path": "src/ocr-host.ts",
+      "size": 9908,
+      "sha256": "93e5d610988044350053f816d1700762e67d27c0e8339713da61f11873006d6e"
+    },
+    {
+      "path": "src/ocr-native.ts",
+      "size": 1768,
+      "sha256": "382cdda5d67f7ac043d520edbbdffc0389679ea55dae5596a4460e11d7c079d5"
+    },
+    {
+      "path": "src/native-toolbar-state.ts",
+      "size": 7488,
+      "sha256": "bb03630f2e9bb7a3e4a5c0200cf55667f36c26e55e682e6c5b87c6c1d8683200"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "size": 4540,
+      "sha256": "618fc6f016736557b6ad03f9c210412d41ad00cb6dd8a4e1519a1f704d642d1a"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/model.rs",
+      "size": 11343,
+      "sha256": "4dd474e0447ebac4f019537a90b44498bfe9bfcdb15648bc0d0bf5369c7d3e2a"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "size": 678,
+      "sha256": "3024ec191f5eb81795a5eb08a477314bae3643942f3b90477e0a9a0e7830cb3c"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "size": 91670,
+      "sha256": "6b495b0ca3f2bcd6926e78ecb4af7a9575ced72cd0d068ab39508a670cda07dc"
+    },
+    {
+      "path": "src-tauri/Cargo.toml",
+      "size": 902,
+      "sha256": "c6f56b877cf36bfb77e199519dfc685df6bb5224b24f30b45114efedc68a08a4"
+    },
+    {
+      "path": "src-tauri/Cargo.lock",
+      "size": 114667,
+      "sha256": "889b7f449ff4b34263139279cacf57f105fd9c3c6a7099bb56c958f3780ed1b0"
+    },
+    {
+      "path": "src-tauri/capabilities/default.json",
+      "size": 502,
+      "sha256": "c23d82da76184d05410f5bd455fb70b530077ab39f73b9fbb8f3bfa12baae130"
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "size": 16020,
+      "sha256": "3ac6550f01e2cf73415031560e6318f0412e32216fcd3c62dfaac81d508ab9be"
+    }
+  ],
+  "declared_aggregate": "50232142de0ca96d6ec4786eccde73232aff54b17196c781448587b96d3161ab",
+  "aggregate_calculations": {
+    "json_compact": "310ed678253b4e1dd340f23717374f14209640781a693a82c21499b3affd00ad",
+    "path_hash_newline": "8ca5c9fc3b07b7c0689bd0d145db444cb8f0233eff230eeebaa81851b4f0c20d",
+    "hash_path_newline": "50232142de0ca96d6ec4786eccde73232aff54b17196c781448587b96d3161ab",
+    "hash_concat": "58e230815ad1b5e4639d6a5874c4a1486bc5f85c29475c10251b13784e93b6b1",
+    "path_nul_hash": "206ae23305e686e26cb87386126816840e9258717ab5d9ac9fb8f5bca534a08e"
+  },
+  "matched_aggregate_methods": [
+    "hash_path_newline"
+  ],
+  "unchanged_boundaries": [
+    {
+      "path": "src/RecordingPanel.tsx",
+      "sha256": "62547323720046169dfc2e04382ee12608951377fbdd709735c518d56c1d8f4b",
+      "baselineSha256": "62547323720046169dfc2e04382ee12608951377fbdd709735c518d56c1d8f4b",
+      "equal": true
+    },
+    {
+      "path": "src/recording-session.ts",
+      "sha256": "38a83851b3ee0234e7662f32cf9fed8e7019492b42e7c32bfd74af707eae11c0",
+      "baselineSha256": "38a83851b3ee0234e7662f32cf9fed8e7019492b42e7c32bfd74af707eae11c0",
+      "equal": true
+    },
+    {
+      "path": "src/audio-playback.ts",
+      "sha256": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+      "baselineSha256": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+      "equal": true
+    },
+    {
+      "path": "src/Editor.tsx",
+      "sha256": "49ee50032becb30ab92e5c93d7f9b3ce8cc6a738260bcb2d5a03cd38c44f7497",
+      "baselineSha256": "49ee50032becb30ab92e5c93d7f9b3ce8cc6a738260bcb2d5a03cd38c44f7497",
+      "equal": true
+    },
+    {
+      "path": "src/editor-schema.ts",
+      "sha256": "13c90323b0632d6668e98ca3a24d29fd8db991e881446ba20263bbbf43631252",
+      "baselineSha256": "13c90323b0632d6668e98ca3a24d29fd8db991e881446ba20263bbbf43631252",
+      "equal": true
+    },
+    {
+      "path": "src/types.ts",
+      "sha256": "108c97dcc8879b36830226631c8c590d2be98ba33b148c11699adf694092bcd6",
+      "baselineSha256": "108c97dcc8879b36830226631c8c590d2be98ba33b148c11699adf694092bcd6",
+      "equal": true
+    },
+    {
+      "path": "src/bridge.ts",
+      "sha256": "693de27d6780e6b1059732df66c0bf9cf37ca438b9176765565593c3d290c9f1",
+      "baselineSha256": "693de27d6780e6b1059732df66c0bf9cf37ca438b9176765565593c3d290c9f1",
+      "equal": true
+    },
+    {
+      "path": "src/save-queue.ts",
+      "sha256": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+      "baselineSha256": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+      "equal": true
+    },
+    {
+      "path": "src/attachment-target.ts",
+      "sha256": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+      "baselineSha256": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+      "equal": true
+    },
+    {
+      "path": "src/attachment-submission.ts",
+      "sha256": "68a412cd73f2303e7c4251933fc79c123a2655472296a6999fba5687107857f3",
+      "baselineSha256": "68a412cd73f2303e7c4251933fc79c123a2655472296a6999fba5687107857f3",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/guest-js/index.ts",
+      "sha256": "02196fccae9502ea54396f34c6cf851c94470f55c5a80bdeb5f6d36bc9b79acc",
+      "baselineSha256": "02196fccae9502ea54396f34c6cf851c94470f55c5a80bdeb5f6d36bc9b79acc",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/src/lib.rs",
+      "sha256": "15d89deb6a2b5bdfb8883afd27e88eed5d1a2012fe7af9bfd8edf9cf258b7add",
+      "baselineSha256": "15d89deb6a2b5bdfb8883afd27e88eed5d1a2012fe7af9bfd8edf9cf258b7add",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/src/session.rs",
+      "sha256": "c353c95608597fa32987270fab56f7b2aaaaf4497d21b4686c2000c550db0a0c",
+      "baselineSha256": "c353c95608597fa32987270fab56f7b2aaaaf4497d21b4686c2000c550db0a0c",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/android/src/main/res/values/styles.xml",
+      "sha256": "274442edbbad6d4b7688d77a62d2fb9afebeebaa45d8fe55c80fd15cd2cfd0f9",
+      "baselineSha256": "274442edbbad6d4b7688d77a62d2fb9afebeebaa45d8fe55c80fd15cd2cfd0f9",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/android/src/main/AndroidManifest.xml",
+      "sha256": "27740afd8ebe992014f27dccbc9c26b9fa5ec632ad7a923b9acd16e12937df65",
+      "baselineSha256": "27740afd8ebe992014f27dccbc9c26b9fa5ec632ad7a923b9acd16e12937df65",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "sha256": "7d6851b9de75ba94896532b73cd56e3042670674279ed1d37263bc8a498f6bea",
+      "baselineSha256": "7d6851b9de75ba94896532b73cd56e3042670674279ed1d37263bc8a498f6bea",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ScanActivity.kt",
+      "sha256": "c80f437a6ac38607059e68b2591f0d4cbb9113cb62d998642547fa09bd17acf3",
+      "baselineSha256": "c80f437a6ac38607059e68b2591f0d4cbb9113cb62d998642547fa09bd17acf3",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/CropView.kt",
+      "sha256": "ddf6d36b4be2cf7f8a55a2a145a5822311843d875e9de79514e373ec71792ce7",
+      "baselineSha256": "ddf6d36b4be2cf7f8a55a2a145a5822311843d875e9de79514e373ec71792ce7",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt",
+      "sha256": "d8ef1ad81bb8244030a29e697752738db2c7cb7d0f510f5ff164e02094f294ba",
+      "baselineSha256": "d8ef1ad81bb8244030a29e697752738db2c7cb7d0f510f5ff164e02094f294ba",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ChineseOcr.kt",
+      "sha256": "a02a0ea14be2b88910d82c14cc4ccaa814f5a2315e4e69f9b058526101e6c17d",
+      "baselineSha256": "a02a0ea14be2b88910d82c14cc4ccaa814f5a2315e4e69f9b058526101e6c17d",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ProbeActivity.kt",
+      "sha256": "ccc13eef43dfd0ec2f5de1f97ec0d5bbc6e086e825626729367f9bce666f2127",
+      "baselineSha256": "ccc13eef43dfd0ec2f5de1f97ec0d5bbc6e086e825626729367f9bce666f2127",
+      "equal": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/Images.kt",
+      "sha256": "b03b5257abf4908003cbcc8814785ae20dd8781e6eaa93b8824e530c5a6e3ce4",
+      "baselineSha256": "b03b5257abf4908003cbcc8814785ae20dd8781e6eaa93b8824e530c5a6e3ce4",
+      "equal": true
+    }
+  ]
+}
