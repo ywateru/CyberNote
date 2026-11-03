@@ -37,6 +37,17 @@ depends-on: [app-002-permission-01]
 
 实施按实际边界分步提交：先持久操作与安全补偿，再前端捕获/重验证/ACK接线；完整候选交独立审查后统一构建。期间不混入录音暂停/计时、绘画或搜索结果修复，也不以模块测试代替系统选择器实际链路。
 
+## context
+
+- `docs/architecture.md`：附件提交、实时授权、保存intent与归档兼容契约。
+- `docs/research/app-002-attachment-entry-01/`：实际App/bridge路径及归因限制。
+- `docs/plan/reviews/app-002-mac-attachment-baseline-01.md`与对应冻结证据：真实失败和冷启孤儿，不能改写为成功。
+- `docs/requirements.md` F08/F15/F19与`docs/plan/tasks/app-002-media.md`：完整离线媒体范围。
+
+## path
+
+允许必要的`src/App.tsx`、`src/bridge.ts`、实际生产附件操作辅助模块，以及`src-tauri/src/lib.rs`、`session.rs`、`store.rs`/Store辅助模块。持久记录与归档公开结构分离，已有导入恢复、永久删除与旧附件应保持一致；冷启恢复不清扫缺少新操作记录的既有文件。相关真实边界检查与任务证据可同行，不改依赖或既有归档格式。搜索结果App候选须先合入或冻结交接后再串行实施前端接线，避免并行改同一文件。
+
 ## verification
 
 独立静态审查后统一构建冻结包。Mac真实菜单→系统Open选图片/PDF→受管字节→正文节点→自身保存→只移开临时来源→冷启→实际图片/PDF预览或明确未实现结果。取消及一个受控插入/保存失败分别核完整正文、附件表与实际文件，重试不得重复；真实目标失效继续拒绝。Android真实文件选择同链有限复验，不能用DOM注入文件替代用户选择。新包未实测前不得把旧PDF复制成功升级为完整附件通过，像素/系统预览差异与功能结果分别记录。
