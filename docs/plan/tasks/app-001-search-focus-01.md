@@ -1,7 +1,7 @@
 ---
 id: app-001-search-focus-01
 scope: native-menu-search-focus-before-renderer-roundtrip
-status: ready
+status: ready-for-review
 depends-on: []
 ---
 
@@ -28,3 +28,7 @@ docs/INDEX.md、docs/architecture.md 的 Mac 原生顶部宿主契约、docs/res
 开发与独立源审核对同步主线程路径、精确窗口/当前绑定、disabled/unbind/destroy/no-search 与重复请求行为，运行该插件受影响检查及允许的最小编译。需要构建时先交接 target 所有权，不重跑无关存储矩阵。
 
 通过源审后纳入下一统一默认 Mac 包。实际记录一次快捷键→立即粘贴的输入顺序与真实落点、完整合成正文及 revision，保留失败，禁止重复刷到通过。另测已聚焦搜索、普通显式搜索、唯一→零→clear、独立窗口、禁用/关闭与中文 marked text；没有可靠事件时序只报告实际目标和限制。原版相同动作作对照后再评价交互一致，不把减少 Promise 往返直接当原版一致或像素通过。
+
+## 开发候选 01（2026-11-04）
+
+两项插件源码已冻结并待独立源审。菜单事件精确 `search` 后按真实唯一 focused main 取得当前绑定，在本次回调直接调用与 IPC 共用的同步 focus body；IPC 仍使用原 async `on_main`。App/bridge/F07/宿主/ObjC/依赖未变。最小 locked/offline 插件测试13项通过，共享 target 已释放；无完整包、GUI、设备或像素验收。证据：[源码候选01](../../verification/app-001-search-focus-01/source-candidate-01/README.md)，两源码 aggregate `7f4ea27e672293cfb4f5c4dc0805da92762dc495139b5298bcdf1f37f1c6d968`。真实快捷键异常原因仍 unknown，本候选效果待新包验证。

@@ -1,0 +1,46 @@
+   Compiling bitflags v2.13.2
+   Compiling objc2 v0.6.5
+   Compiling tauri-utils v2.10.2
+   Compiling generic-array v0.14.7
+   Compiling cpufeatures v0.2.17
+   Compiling muda v0.20.0
+   Compiling selectors v0.38.0
+   Compiling png v0.18.1
+   Compiling ico v0.6.0
+   Compiling dom_query v0.28.0
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling objc2-core-foundation v0.3.2
+   Compiling objc2-foundation v0.3.2
+   Compiling objc2-quartz-core v0.3.2
+   Compiling objc2-app-kit v0.3.2
+   Compiling tauri-build v2.7.4
+   Compiling tauri-plugin v2.7.2
+   Compiling tauri-codegen v2.7.4
+   Compiling tauri v2.12.5
+   Compiling tauri-plugin-notes-ui v0.1.0 (/private/tmp/apple-notes-search-focus-01/plugins/tauri-plugin-notes-ui)
+   Compiling tauri-macros v2.7.4
+   Compiling objc2-web-kit v0.3.2
+   Compiling window-vibrancy v0.8.1
+   Compiling tauri-runtime v2.12.2
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.14s
+     Running unittests src/lib.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/tauri_plugin_notes_ui-555b8726ba210167)
+
+running 13 tests
+test macos::tests::menu_search_matches_only_the_exact_menu_event_id ... ok
+test tests::events_cannot_cross_windows_bindings_revisions_or_disabled_commands ... ok
+test tests::gallery_browse_is_explicit_and_rejects_stale_editor_actions ... ok
+test tests::format_surface_accepts_only_format_commands_and_disabled_colors_cannot_dispatch ... ok
+test macos::tests::focus_lookup_rejects_other_window_and_old_id_after_rebind ... ok
+test macos::tests::menu_search_uses_only_the_focused_main_current_binding ... ok
+test tests::contract_rejects_unknown_variants_fields_and_unbounded_state ... ok
+test macos::tests::menu_search_rejects_disabled_or_missing_search_without_changing_state ... ok
+test tests::search_focus_requires_enabled_search_without_mutating_query_or_revision ... ok
+test tests::guest_window_label_must_match_the_invoking_window ... ok
+test tests::menus_require_unique_owned_commands_and_bounded_nesting ... ok
+test tests::tauri_window_target_delivers_only_to_the_bound_window ... ok
+test tests::focus_command_rejects_cross_window_and_invalid_uuid_before_native_dispatch ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s

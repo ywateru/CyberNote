@@ -227,13 +227,18 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
         })
         .on_event(|app, event| {
             #[cfg(target_os = "macos")]
-            if let tauri::RunEvent::WindowEvent {
-                label,
-                event: tauri::WindowEvent::Destroyed,
-                ..
-            } = event
-            {
-                macos::destroy_label(app, label);
+            match event {
+                event if macos::is_search_menu_event(event) => {
+                    if let Err(error) = macos::focus_search_from_menu(app) {
+                        eprintln!("notes-ui: menu search focus failed: {error}");
+                    }
+                }
+                tauri::RunEvent::WindowEvent {
+                    label,
+                    event: tauri::WindowEvent::Destroyed,
+                    ..
+                } => macos::destroy_label(app, label),
+                _ => {}
             }
             #[cfg(not(target_os = "macos"))]
             let _ = (app, event);

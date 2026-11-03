@@ -1,0 +1,205 @@
+diff --git a/plugins/tauri-plugin-notes-ui/src/lib.rs b/plugins/tauri-plugin-notes-ui/src/lib.rs
+index d8733ea..0bc133a 100644
+--- a/plugins/tauri-plugin-notes-ui/src/lib.rs
++++ b/plugins/tauri-plugin-notes-ui/src/lib.rs
+@@ -227,13 +227,18 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
+         })
+         .on_event(|app, event| {
+             #[cfg(target_os = "macos")]
+-            if let tauri::RunEvent::WindowEvent {
+-                label,
+-                event: tauri::WindowEvent::Destroyed,
+-                ..
+-            } = event
+-            {
+-                macos::destroy_label(app, label);
++            match event {
++                event if macos::is_search_menu_event(event) => {
++                    if let Err(error) = macos::focus_search_from_menu(app) {
++                        eprintln!("notes-ui: menu search focus failed: {error}");
++                    }
++                }
++                tauri::RunEvent::WindowEvent {
++                    label,
++                    event: tauri::WindowEvent::Destroyed,
++                    ..
++                } => macos::destroy_label(app, label),
++                _ => {}
+             }
+             #[cfg(not(target_os = "macos"))]
+             let _ = (app, event);
+diff --git a/plugins/tauri-plugin-notes-ui/src/macos.rs b/plugins/tauri-plugin-notes-ui/src/macos.rs
+index e936847..e6b635b 100644
+--- a/plugins/tauri-plugin-notes-ui/src/macos.rs
++++ b/plugins/tauri-plugin-notes-ui/src/macos.rs
+@@ -259,15 +259,61 @@ pub(super) async fn focus_search<R: Runtime>(
+     window: Window<R>,
+     id: String,
+ ) -> Result<BindingInfo> {
+-    on_main(app, move || {
+-        let label = window.label().to_owned();
+-        let record = binding(&map, &label, &id)?;
+-        record.permits_search_focus()?;
+-        let id_c = cstr(&id)?;
+-        let native = unsafe { response(notes_ui_focus_search(id_c.as_ptr()))? };
+-        Ok(info(label, record, native))
+-    })
+-    .await
++    on_main(app, move || focus_search_on_main(&map, &window, &id)).await
++}
++// Both callers already run on the main thread. The menu path must not queue or wait on on_main.
++fn focus_search_on_main<R: Runtime>(
++    map: &Bindings,
++    window: &Window<R>,
++    id: &str,
++) -> Result<BindingInfo> {
++    let label = window.label().to_owned();
++    let record = binding(map, &label, id)?;
++    record.permits_search_focus()?;
++    let id_c = cstr(id)?;
++    let native = unsafe { response(notes_ui_focus_search(id_c.as_ptr()))? };
++    Ok(info(label, record, native))
++}
++pub(super) fn is_search_menu_event(event: &tauri::RunEvent) -> bool {
++    matches!(event, tauri::RunEvent::MenuEvent(event) if event.id().as_ref() == "search")
++}
++fn menu_search_binding(map: &Bindings, focused_label: &str) -> Result<Binding> {
++    if focused_label != "main" {
++        return Err(Error::new("search_window", "当前聚焦窗口不支持全局搜索"));
++    }
++    let record = map
++        .lock()
++        .map_err(|_| Error::new("state", "顶部绑定锁损坏"))?
++        .get(focused_label)
++        .cloned()
++        .ok_or_else(|| Error::new("stale_binding", "窗口没有顶部绑定"))?;
++    record.permits_search_focus()?;
++    Ok(record)
++}
++pub(super) fn focus_search_from_menu<R: Runtime>(app: &AppHandle<R>) -> Result<BindingInfo> {
++    // Tauri invokes plugin events on its event-loop thread, after its global menu listeners.
++    // This removes the renderer roundtrip, not the queue before Tauri's MenuEvent itself.
++    std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
++        let mut focused = None;
++        for window in app.webview_windows().into_values() {
++            if window
++                .is_focused()
++                .map_err(|e| Error::new("window", e.to_string()))?
++            {
++                if focused.is_some() {
++                    return Err(Error::new("search_window", "无法唯一确定聚焦窗口"));
++                }
++                focused = Some(window);
++            }
++        }
++        let window = focused.ok_or_else(|| Error::new("search_window", "没有聚焦窗口"))?;
++        let state = app
++            .try_state::<NotesUi<R>>()
++            .ok_or_else(|| Error::new("state", "顶部插件尚未初始化"))?;
++        let record = menu_search_binding(&state.bindings, window.label())?;
++        focus_search_on_main(&state.bindings, &window.as_ref().window(), &record.id)
++    }))
++    .unwrap_or_else(|_| Err(Error::new("native", "原生顶部主线程任务失败")))
+ }
+ pub(super) fn destroy_label<R: Runtime>(app: &AppHandle<R>, label: &str) {
+     if let Some(state) = app.try_state::<NotesUi<R>>() {
+@@ -304,6 +350,99 @@ pub(super) fn destroy_all<R: Runtime>(app: &AppHandle<R>) {
+ mod tests {
+     use super::*;
+     #[test]
++    fn menu_search_matches_only_the_exact_menu_event_id() {
++        for id in [
++            "search",
++            "find",
++            "search-more",
++            "Search",
++            "",
++            "notes-ui:search",
++        ] {
++            let event = tauri::RunEvent::MenuEvent(tauri::menu::MenuEvent { id: id.into() });
++            assert_eq!(is_search_menu_event(&event), id == "search");
++        }
++        assert!(!is_search_menu_event(&tauri::RunEvent::Ready));
++    }
++    #[test]
++    fn menu_search_uses_only_the_focused_main_current_binding() {
++        let old_id = uuid::Uuid::new_v4().to_string();
++        let mut state: ToolbarState =
++            serde_json::from_str(include_str!("../examples/state.json")).unwrap();
++        state.search.as_mut().unwrap().value = "保留查询与选区".into();
++        let before = serde_json::to_value(&state).unwrap();
++        let map: Bindings = Arc::new(Mutex::new(HashMap::from([
++            (
++                "main".into(),
++                Binding {
++                    id: old_id.clone(),
++                    state: state.clone(),
++                },
++            ),
++            (
++                "note-independent".into(),
++                Binding {
++                    id: uuid::Uuid::new_v4().to_string(),
++                    state: state.clone(),
++                },
++            ),
++        ])));
++        let record = menu_search_binding(&map, "main").unwrap();
++        assert_eq!(record.id, old_id);
++        assert_eq!(serde_json::to_value(&record.state).unwrap(), before);
++        for label in ["note-independent", "other", ""] {
++            assert_eq!(
++                menu_search_binding(&map, label).err().unwrap().code,
++                "search_window"
++            );
++        }
++        map.lock().unwrap().remove("main");
++        assert_eq!(
++            menu_search_binding(&map, "main").err().unwrap().code,
++            "stale_binding"
++        );
++        let new_id = uuid::Uuid::new_v4().to_string();
++        map.lock().unwrap().insert(
++            "main".into(),
++            Binding {
++                id: new_id.clone(),
++                state,
++            },
++        );
++        assert_eq!(menu_search_binding(&map, "main").unwrap().id, new_id);
++        assert_eq!(
++            binding(&map, "main", &record.id).err().unwrap().code,
++            "stale_binding"
++        );
++        assert_eq!(
++            serde_json::to_value(&map.lock().unwrap().get("main").unwrap().state).unwrap(),
++            before
++        );
++    }
++    #[test]
++    fn menu_search_rejects_disabled_or_missing_search_without_changing_state() {
++        let mut state: ToolbarState =
++            serde_json::from_str(include_str!("../examples/state.json")).unwrap();
++        state.search.as_mut().unwrap().enabled = false;
++        let map: Bindings = Arc::new(Mutex::new(HashMap::from([(
++            "main".into(),
++            Binding {
++                id: uuid::Uuid::new_v4().to_string(),
++                state,
++            },
++        )])));
++        for code in ["search_disabled", "search_missing"] {
++            let before =
++                serde_json::to_value(&map.lock().unwrap().get("main").unwrap().state).unwrap();
++            assert_eq!(menu_search_binding(&map, "main").err().unwrap().code, code);
++            assert_eq!(
++                serde_json::to_value(&map.lock().unwrap().get("main").unwrap().state).unwrap(),
++                before
++            );
++            map.lock().unwrap().get_mut("main").unwrap().state.search = None;
++        }
++    }
++    #[test]
+     fn focus_lookup_rejects_other_window_and_old_id_after_rebind() {
+         let old_id = uuid::Uuid::new_v4().to_string();
+         let state: ToolbarState =
