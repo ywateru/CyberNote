@@ -279,6 +279,8 @@ pub fn run() {
                     .separator()
                     .text("export", "导出本地备份…")
                     .text("import", "导入本地备份…")
+                    .separator()
+                    .close_window_with_text("关闭窗口")
                     .build()?;
                 let edit = SubmenuBuilder::new(app, "编辑")
                     .undo()

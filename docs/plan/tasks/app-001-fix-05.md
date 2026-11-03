@@ -27,3 +27,9 @@ depends-on: [app-001-fix-02]
 ## verification
 
 第一阶段核锁定Tauri公开关闭角色及实际调用目标，记录输入SHA与必要源码格式/编译检查范围；源码准备不等于运行通过。最终从正式已识别进程/路径/产物执行：独立窗正文获焦、原生搜索获焦时单次Cmd+W或实际关闭菜单，目标窗消失、main保留；输入未保存内容后关闭，等待真实保存并重开核完整正文。保存失败/冲突关闭不丢pending的边界继续沿现有守卫做实际/定向核验，未达成则unknown，不用直接调用destroy伪装快捷键。
+
+## first-stage delivery
+
+2026-11-03：隔离基线d5d11ce在File菜单新增分隔线和公开`close_window_with_text("关闭窗口")`，只有两行产品变化。已核锁定Tauri2.12.5→muda0.20.0的macOS Cmd+W/performClose角色以及tao0.37.2/runtime-wry2.12.3的可阻止CloseRequested静态链；不新建JS处理、广播或直接destroy，现有App关闭/flush守卫未改。
+
+`rustfmt --check`、离线locked/no-deps metadata与缓存归档checksum检查通过；没有编译、GUI、设备或产物验证。源码SHA/公开依据/检查范围见`docs/verification/app-001-fix-05/README.md`和`prepare-results.json`。实际单窗归属、pending保存/重开、失败/冲突保全、事件时序与菜单像素仍unknown，任务保持in-progress，旧一次Cmd+W失败不在本阶段关闭。
