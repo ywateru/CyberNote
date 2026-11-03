@@ -12,11 +12,11 @@
 | APP-001-FIX-02 Mac顶部校准 | in-progress，217133a独立blocked/有限功能通过 | 34223af正式Mac4118f77f…/APK0aac2d73…；搜索续输/Undo归属/格式选区/多窗/基本锁态隔离/画廊分栏及Android冷启有限通过；CmdW和公共失活像素仍P2 blocking（独立74.55%），同位置焦点unknown，完整任务未通过 |
 | APP-001 原生顶部模块 | 9f4d61b历史有限静态pass，34223af正式宿主已接入 | 当前插件锁对齐2.7.2，并修正搜索祖先临时隐藏导致丢焦；4a16a6a不覆盖新增输入。正式生命周期/焦点/窗口路由由本轮独立复验，Mac真marked composition及完整像素状态仍unknown |
 | APP-001-FIX-03 锁定跨窗失效 | 本轮双端有限安全门槛pass，完整矩阵partial | e5fcdc4 Android14断言关闭UUID P1；835751d真实Mac生产Q1/Q7与同源proof15断言，含旧基线冲突/副本冷启/Q2排空/Q3abort/Q4拒绝及恢复，无新P1；S3/四fixtureGUI/对象identity/全矩阵仍unknown，允许FIX02接入 |
-| APP-001-FIX-04 Android长停留中文组字 | in-progress/partial，4998e2b独立有限主路径通过 | f3071f3/APK d5c6f59b…；独立空段73.53s/中部77.80s、快速/删除/同Trime混输及一次COLD完整JSON六条通过，原输入设置恢复；整体报告blocked，格式/后台P1与选纸P2继续FIX06/07，未标整项通过 |
-| APP-001-FIX-02-VISUAL-01 顶部内部内容 | in-progress，7c133f1接入正式宿主构建中 | e8cce09准备与7e8c50c有限静态pass已合入，中文格式/按钮墨迹/真实搜索排布；runtime/像素仍unknown，旧公共ROI失败未关闭 |
-| APP-001-FIX-05 Mac关闭窗口 | in-progress，b6bb05d新宿主实际仍失败 | 系统关闭角色已合入并默认构建；独立窗正文单次CmdW后整个PID89891/两窗消失，证据已保留，退出原因诊断中；源码链静态pass不能覆盖运行失败，保存/目标隔离未通过 |
-| APP-001-FIX-06 Android组字失焦/导航 | in-progress，先做有限平台基线 | FIX04候选格式blur/后台仍留预编辑，旧0aac同现；独立长停留主路径及冷保全完成后Android已交develop，先核同IME普通文本框commit/cancel，未改产品；纸张选择失败转FIX07 |
-| APP-001-FIX-07 纸张保存返回选区 | in-progress，a540928隔离候选待静态审查 | 新严格JSON语义比较替换hydrate一处，开发22项定向/16access/typecheck通过；正式包与真实选纸仍unknown，旧失败未关闭，不影响当前两端冻结输入 |
+| APP-001-FIX-04 Android长停留中文组字 | in-progress/partial，4998e2b独立有限主路径通过 | f3071f3/APK d5c6f59b…；独立空段73.53s/中部77.80s、快速/删除/同Trime混输及一次COLD完整JSON六条通过，原设置恢复；历史格式/后台观察及报告保留，当前归因依FIX06新增平台证据调整，选纸P2继续FIX07；未标整项通过 |
+| APP-001-FIX-02-VISUAL-01 顶部内部内容 | in-progress，下一搜索bounds候选构建中 | 7c133f1及有限静态审查已合入；ec1包1392宽同位置Fill公共ROI MAE8.1027/变化67.83%仍FAIL，不与历史1088宽ROI作改善比较；搜索真实view bounds/胶囊focus校准中，全局搜索快捷键错误另待最小纠正 |
+| APP-001-FIX-05 Mac关闭窗口 | in-progress，5874eab开发三条实际通过/独立实际待验 | b6bb05d关闭时同步激活通知重入Tauri窗口表导致panic已复现；最小异步回调修复ec1cf0d包三条关闭开发通过、f11170a有限静态通过；独立实际、pending保存/失败/冲突/冷启仍unknown，顶部像素另行阻塞 |
+| APP-001-FIX-06 Android组字失焦/导航 | in-progress，fa1cdb5平台对照/8b9d6af独立复核完成 | 同Trime普通contenteditable失焦、原生EditText藏IME均同现ni hao‸，现证据反对应用盲目回滚/删字符；旧格式/后台观察与历史报告保留，原版精确语义、导航隔离与宿主存储保全仍unknown；输入设置已恢复，未改产品 |
+| APP-001-FIX-07 纸张保存返回选区 | in-progress，766a810新APK实际仍FAIL | 严格JSON语义比较已合入、25efa59有限静态通过；APK e117f929…真实grid-large选区33..37→1..1且Editor/View/DOM重建，取消正常；继续核真正React key/hydrate/pending/授权状态，外部更新未测，不能以比较修正关闭失败 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |

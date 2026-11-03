@@ -117,11 +117,13 @@ Mac 条件编译注册本地 `tauri-plugin-notes-ui`，仅 `main` / `note-*` 窗
 
 原生意图关联对应 revision 的 noteId、窗口范围、授权 stamp、Editor 实例、实例所属笔记、文档版本与 SelectionBookmark。执行前检查实时授权/屏障/覆盖层和实例有效性，编辑动作恢复对应选区；异步 flush、附件保存、正文读取后再次检查目标。输入更新文档版本，单独移动选区不触发无意义原生状态更新。上下文失效时清理书签和 Editor 引用，控制器不持有正文。
 
-Cmd+N、Cmd+F、Cmd+Shift+F 由 AppKit 菜单处理，以实际聚焦的允许窗口发送 `menu-action`，不广播。全局搜索调用当前绑定的 `focusSearch`；独立窗没有全局搜索，Cmd+F 只改变所属笔记窗口的查找状态。未实现菜单动作保持禁用，不用成功提示替代功能。原生系统 API 的使用不代表像素匹配；本轮冻结源码/产物与失败的有限 RGB 比较见 `verification/app-001-fix-02/selfcheck.md`。
+Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许窗口发送 `menu-action`，不广播。全局搜索使用 Option+Cmd+F 并调用当前绑定的 `focusSearch`；独立窗没有全局搜索，Cmd+F 只改变所属笔记窗口的查找状态。原版 Cmd+Shift+F 打开笔记内替换栏，不能作为全局搜索快捷键；项目现有错误映射待最小更正，历史续输测试不能证明快捷键一致。未实现菜单动作保持禁用，不用成功提示替代功能。原生系统 API 的使用不代表像素匹配；本轮冻结源码/产物与失败的有限 RGB 比较见 `verification/app-001-fix-02/selfcheck.md`。
 # Android 长候选保护（FIX04 部分修复）
 
 项目固定 `prosemirror-view@1.42.9`，在pnpm补丁内添加默认关闭的 `androidPreserveComposition` 选项，仅 `native && Android userAgent` 的正式编辑器启用。真实可信compositionstart/update在原有初始化后设置当前view的nativeCompositionActive；compositionend、clear、destroy释放。原5000ms闲置回调仅当该信号、view.composing、view.hasFocus、连接且属于该view的compositionNode与DOM focusNode均匹配时保留，不替换为更长固定延时，不推测候选文本。
 
 无有效节点/焦点或缺少原生活跃信号时仍执行上游回退。可信非组词beforeinput/keydown（排除229、Process、modifier及isComposing）、blur、window失焦、document隐藏使信号失效并沿用20ms收束；程序化end/clear不受阻，destroy移除新增监听。保存、授权、版本冲突和跨笔记协议未改。15项确定性检查只证明这些恢复分支，不证明真实输入法或平台通用性。
 
-真实设备证据仅覆盖Android11/WebView91/Trime3.3.13的有限主路径。程序化DOM blur可能使IME将未选内联预编辑保留为正文，后台恢复还涉及授权屏障及Editor替换；本补丁不猜候选、不按字符删标记、不整文档回滚。格式/后台提交取消边界及选择纸张并保存后的选区失败仍阻塞完整交付，两包纸张取消均有限通过；后续FIX06须先核原生commit/cancel证据，纸张保存另核刷新与选区链路。原包与修复包、通过与失败记录均保留在 `docs/verification/app-001-fix-04/`。
+真实运行证据仅覆盖Android11模拟器/WebView91/Trime3.3.13的有限主路径。FIX06独立平台对照显示，未绑定PM/Tiptap/React的普通contenteditable真实失焦后也保留`ni hao‸`；原生EditText按Back隐藏键盘后同样保留且仍有焦点。不能把隐藏键盘等同于明确取消/候选提交，或仅据残留文本、compositionend.isTrusted=false归因应用丢失组字保护。平台同现不证明苹果Notes的精确行为，也不证明宿主存储保全；完整限制见`plan/reviews/app-001-fix-06-platform-01.md`。
+
+应用保全输入法实际交付内容与相邻已确认正文，真实候选应替换对应组字段，明确删除/取消不得复活旧组字。真实失焦、单纯隐藏键盘、后台恢复、切笔记与授权销毁分别核定；没有原版/平台commit-cancel及可靠范围证据时，不猜候选、不按字符删标记、不盲目回滚。后台恢复仍须遵循授权屏障，旧Editor不可写入新笔记。格式/后台的原版一致性与隔离仍未通过；历史可见/保存结果及P1报告保留，当前应用独有归因已不成立。选择纸张并保存后的选区失败由FIX07继续处理，取消路径有限通过。原包与修复包、通过与失败记录均保留在`docs/verification/app-001-fix-04/`，平台新增证据在`docs/verification/app-001-fix-06/platform-baseline/`。
