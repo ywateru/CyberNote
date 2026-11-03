@@ -1,6 +1,6 @@
 # candidate04 统一包进度
 
-状态：**Mac与Android均已构建并保全，Android已精确替换安装且指定数据保留通过；本批尚未启动运行验收**。本页记录2026-11-04的阶段结果，不替代准备目录中的原始记录。
+状态：**Mac与Android均已构建并保全；Android精确替换安装且指定数据保留通过；Mac实际OCR插入及正常冷启恢复有限通过，像素未通过**。本页记录2026-11-04的阶段结果，不替代准备目录中的原始记录。
 
 ## 正常生成前置
 
@@ -73,8 +73,14 @@ APK 304,110,831字节，SHA-256 `bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405
 
 恢复构建阶段未安装或启动candidate04；其后替换安装结果见末节。没有新的设备OCR/录音/附件冷启或像素通过。完整目标继续active。
 
-## 本批替换安装及有限窗口观察（最新）
+## 本批替换安装及前置窗口观察
 
 2026-11-04，[Android独立安装记录](../unified-candidate04-android-install-01/README.md)确认设备从candidate03替换为上述精确candidate04 APK。安装后base.apk的304,110,831字节/SHA完全匹配本机成品；firstInstallTime与userId不变，三条指定合成笔记完整行、附件元数据、指定音频及DB/WAL设备端校验值安装前后一致。root逐项核对清单15文件/52,737字节，aggregate `d60a3a1ed9dde99bbb5f16c9b56cb2e7ce4fbc87449b83bfd81fc47005bf9058`。核对使用设备现有SQLite只读固定ID查询，未传整DB/WAL；原被自动审批拒绝的整库临时副本命令未运行。新包未启动，安装与立即保留数据不覆盖启动迁移、编辑保存、OCR、录音、播放或UI。
 
 [Mac有限观察记录](../candidate04-mac-runtime-01/README.md)已取得原版零结果完整AX与真实JPEG。原生PNG工具明确返回缺现有屏幕录制权限；旧candidate03窗口绑定超时，正常退出未完成，因此candidate04未启动。root核对8证据文件/131,435字节，aggregate `5a50b75d3b6eba77125d6f7363b867034b5ded8ff994c6f8166bc91cb07fff29`。同条件无损整窗pair及像素一致仍UNKNOWN。
+
+## Mac恢复与实际OCR持久化（最新）
+
+2026-11-04，[Mac恢复记录](../candidate04-mac-runtime-recovery-01/README.md)在再次精确核验旧candidate03 PID/启动/路径/可执行hash后，只对该无响应测试实例发一次SIGTERM并观察退出；不是正常退出或保存通过，未保存内存状态仍UNKNOWN。初次新包启动被锁屏阻断的失败单独保留。收到用户解锁回复后，candidate04实际运行身份、旧合成正文显示、显式zero→clear恢复通过，没有点击已知下载相关文件卡片。
+
+对本地既有中文fixture，正常文件选择器→实际识别三行文字→插入合成正文→CUA CmdQ正常退出→确认进程消失→精确路径冷启动→新PID完整正文恢复均通过。root逐项复核27文件/756,398 B，aggregate `3b27679bc1cb0ef62ff85b9ca8932b470d6c7758686b0ca12e5cadeefb50ed61`。内部document/session ACK没有独立跟踪，网络未强制断开，不宣称首次离线、全部OCR或录音通过。三截图均真实JPEG，2176×1320，未重编码；原生PNG/无重采样/像素一致仍UNKNOWN。前文“尚未启动04”保留为对应早期检查点，由本节更新当前运行状态。

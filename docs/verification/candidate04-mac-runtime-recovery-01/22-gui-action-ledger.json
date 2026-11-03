@@ -1,0 +1,36 @@
+{
+  "recordType": "Retrospective transcription of already returned CUA actions/results; no newly executed GUI actions",
+  "unlockResume": "Parent relayed explicit user unlock reply after the locked result; no GUI retry until that reply.",
+  "launch": {
+    "path": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app",
+    "timeoutMs": 15000,
+    "elapsedSeconds": 2.9857,
+    "returnedAX": true
+  },
+  "filePicker": {
+    "method": "OCR menu, local image source, native Open, super+shift+g, PathTextField setValue, Return, enabled Open button",
+    "selectedAbsolutePath": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/qa-scan-plugin/chinese-fixture.png",
+    "returnedSelectedRowURL": "file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/qa-scan-plugin/chinese-fixture.png",
+    "selectedRowObserved": true,
+    "enabledOpenClicked": true,
+    "subsequentState": "Processing text, followed by exact three-line recognized preview"
+  },
+  "insert": {
+    "action": "Clicked enabled Insert",
+    "result": "OCR modal removed, expected text visible in body, toolbar re-enabled"
+  },
+  "normalQuit": {
+    "action": "clone04.pressKey(super+q)",
+    "elapsedSeconds": 0.1399,
+    "processCheck": "18-normal-quit-process-check.json"
+  },
+  "coldLaunch": {
+    "path": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app",
+    "timeoutMs": 15000,
+    "elapsedSeconds": 0.709,
+    "returnedRestoredBodyAX": true
+  },
+  "bindingTimeoutInResumedStage": false,
+  "guiReleased": true,
+  "lastObservedPID": 56019
+}

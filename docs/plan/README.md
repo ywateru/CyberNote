@@ -32,13 +32,13 @@
 | APP-002-RECORDING-STATE-01 录音面板状态 | done（仅模块），源12b94d7独立SOURCE-READY、主784a1e8 | idle显式开始/单调活动计时/暂停直接完成/同File失败重试，独立实际Panel+Session受控17与原26通过，主11输入字节核同且pnpm build通过。原物理触点unknown；未接父正文ACK、设备有效音轨/完整回放/转写/像素，开发diffcheck原日志空行已更正记账 |
 | APP-002-RECORDING-SUBMIT-01 录音父保存 | in-progress，源8ee0111独立SOURCE-READY、主6ebacbe | 两入口同原目标/票据与operation，正文ACK前reject保留File、ACK后关面板且刷新单列；取消等待真实run并保全pending，唯一close监听复用。独立20+23+8+26及新增5组通过，主2源码hash同/build/父20/搜索5+16通过。真实录制/正文ACK/冷启/可听与像素待统一candidate03，不以受控源检查追认旧包 |
 | APP-002-UNIFIED-C03 统一新包 | built，Mac附件/冷启与Android保留数据升级有限通过 | c6594db冻结232输入499805fa…；zip800b7fb1…/APK bd29ae0b…已保存。Mac真实picker/两附件正文ACK/owned字节/正常退出冷启通过，录音preparing未采集；Android replace安装后实际base.apk同，三指定合成行/附件/SQLite及WAL字节不变，未启动或执行交互。root复核Mac49及Android9证据；整窗像素、可听录音及新包Android交互未通过 |
-| APP-002-UNIFIED-C04 统一新包 | 双端built，Android精确替换/指定数据保留pass；启动及像素未验 | Mac d8f832e/ZIP6a821684…签名通过；Android恢复3d55dba/原279同+5取图工具，APK bbc4c1a8…/v2/25模型通过。root核Mac11/Android构建16/安装15证据；设备exactAPK、三合成行/附件/DB-WAL保持，新包未启动。Mac原版AX/JPEG可读，PNG权限缺失/旧clone退出阻塞，未启动04或取得整窗pair。前三构建失败与旧daemon均保留 |
+| APP-002-UNIFIED-C04 统一新包 | 双端built；Mac实际OCR/正常冷启及Android精确安装有限pass；像素未验 | Mac d8f832e/ZIP6a821684…、Android3d55dba/APKbbc4c1a8…/v2/25模型通过。Android exactAPK/三合成行/附件/DB-WAL保持，新包未启动。Mac04精确运行身份/zero→clear/本地图三行中文OCR插入/正常CmdQ后新PID完整正文恢复pass，root核27证据；内部ACK未直接追踪，录音未执行。PNG权限缺失/整窗pair未得，前三构建失败、旧03非正常SIGTERM与旧daemon均保留 |
 | APP-002-RECORDING-PREVIEW-01 暂停回放 | in-progress，源e01c90a独立SOURCE-READY、主e9e426f | 原P2重载就绪门禁关闭；独立repro/恢复4/模块16/有界提交后Panel25通过，原脚本两次时点失败保留非阻塞。主6源码同/build/preview16/父20通过；candidate03不含此实现。WK/Android真实前缀可播/可定位/可听与像素仍待后包 |
 | APP-001-SEARCH-FOCUS-01 Mac菜单搜索焦点 | in-progress，源d9bc5a4独立SOURCE-READY、主175cd1f | plugin精确MenuEvent同步请求真实唯一focused main当前enabled绑定，与IPC共body；独立与主cargo13/13通过、两产品hash同。无新包快输入/marked text实测，异常原因unknown和Tauri排队仍保留，不承诺已修复 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-003-TAGS-01 真实标签 | in-progress，首候选独审IME P2阻塞 | 96584b7文档mark/Editor提交/Rust校验/侧栏筛选已实现；真实App→Rust独审发现标签内部组字中间保存archive_invalid，先补合法出站快照契约再窄修复核。官方tag/lock互斥已补；未合入/未进安装包，像素未验，不关闭智能文件夹及父任务 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
-| APP-004-OCR-HOST-01 OCR主App文字接入 | in-progress，源5b707ae独审02 SOURCE-READY、主cd7c94e | 独立原两失败repro/37及typecheck通过，01预览明文P2关闭；未ACK恢复/ACK后cleanup retry/晚回与owner隔离保全。主14源码同/build/OCR37/preview16/父20/toolbar13通过。candidate03不含本实现；真实Vision/Android OCR/正文ACK/冷启/像素待新包，320图unknown保留，完整文稿/PDF另批 |
+| APP-004-OCR-HOST-01 OCR主App文字接入 | in-progress，主cd7c94e，Mac04实际OCR/正文正常冷启有限pass | 源5b707ae独审02原两失败repro/37/typecheck及主14源码同/build/相关回归通过。candidate04 Mac已有本地fixture三行中文识别→插入→正常CmdQ→新PID完整正文恢复；未直接追踪内部ACK，未强制断网。Android实际OCR/完整矩阵/320图/像素仍unknown，candidate03不含此实现，完整文稿/PDF另批 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |
 | PARITY-001 修正差异 | pending，依赖顶部/媒体/本地功能/扫描接入 | 逐页几何、菜单、手势/动画、字体与材料校准；明确原图/叠图/差分和未知项 |
 

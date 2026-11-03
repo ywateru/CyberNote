@@ -47,6 +47,7 @@
 - [验证与像素比较规则](verification/README.md)
 - [candidate04双端构建与Android离线恢复](verification/unified-candidate04/README.md)
 - [candidate04 Mac有限窗口观察与取图权限阻塞](verification/candidate04-mac-runtime-01/README.md)
+- [candidate04 Mac实际启动、中文OCR插入与正常冷启恢复](verification/candidate04-mac-runtime-recovery-01/README.md)
 - [旧candidate03 Mac界面超时的一次只读线程样本](verification/candidate03-mac-ax-timeout-diagnosis-01/README.md)
 - [candidate04 Android精确安装与指定数据保留](verification/unified-candidate04-android-install-01/README.md)
 - [原生比例PNG窗口取证工具任务](plan/tasks/tools-lossless-window-capture-01.md)

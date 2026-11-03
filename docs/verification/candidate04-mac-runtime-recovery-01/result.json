@@ -1,0 +1,176 @@
+{
+  "at": "2026-11-03T22:23:48.391809+00:00",
+  "status": "PASS_LIMITED_CANDIDATE04_MAC_RUNTIME_OCR_PERSISTENCE",
+  "oldCloneRecovery": {
+    "status": "CONTROLLED_TERMINATION_OBSERVED",
+    "identity": {
+      "pid": 39665,
+      "start": "Wed Nov 4 03:42:28 2026",
+      "executable": "/private/tmp/notes-unified-candidate03-mac-sealed.app/Contents/MacOS/notes-clone",
+      "executableSha256": "f11565151c018ae43173b2f2b1d5b223f0e29b2150fc179a34645a74cb0d3c56"
+    },
+    "signal": "one SIGTERM",
+    "waitElapsedSeconds": 0.155609625,
+    "normalExitOrSavePass": false,
+    "unsavedMemoryState": "UNKNOWN",
+    "allPendingEmpty": "UNKNOWN",
+    "SIGKILLSent": false
+  },
+  "candidate04": {
+    "sealedExecutable": {
+      "at": "2026-11-03T22:13:26.003239+00:00",
+      "app": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app",
+      "executable": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app/Contents/MacOS/notes-clone",
+      "bytes": 16005376,
+      "sha256": "c1bece8821acb4df552da6b66664a4dec35b6ab136d8922932f92aea31929bbd",
+      "match": true
+    },
+    "firstRunningIdentity": {
+      "pid": 55529,
+      "start": "Wed Nov 4 06:15:08 2026",
+      "executable": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app/Contents/MacOS/notes-clone",
+      "executableSha256": "c1bece8821acb4df552da6b66664a4dec35b6ab136d8922932f92aea31929bbd"
+    },
+    "normalQuitObserved": true,
+    "coldRunningIdentity": {
+      "pid": 56019,
+      "start": "Wed Nov 4 06:19:45 2026",
+      "executable": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app/Contents/MacOS/notes-clone",
+      "executableSha256": "c1bece8821acb4df552da6b66664a4dec35b6ab136d8922932f92aea31929bbd"
+    },
+    "coldPIDChanged": true
+  },
+  "checks": {
+    "firstAttemptLocked": {
+      "status": "BLOCKED_THEN_RESUMED_AFTER_EXPLICIT_USER_UNLOCK",
+      "notCountedAsLaunch": true
+    },
+    "actualLaunchAndAX": "PASS",
+    "oldSyntheticVisibleRecovery": {
+      "status": "PASS_UI_OBSERVATION_ONLY",
+      "title": "QA C03 MEDIA 20261104 0327",
+      "limits": "Existing synthetic body and image visible; no old attachment byte-integrity check or file-card click."
+    },
+    "zeroResultsThenClear": {
+      "status": "PASS",
+      "query": "QA-NO-MATCH-20261103-2301-ABCDEFGHIJKLMNOPQRSTUVWXYZ-NEVER-EXISTS-7f62c83e9d4a",
+      "evidence": [
+        "07-zero-results-ax.txt",
+        "08-search-cleared-ax.txt"
+      ]
+    },
+    "actualOCR": {
+      "status": "PASS_ONE_EXISTING_LOCAL_FIXTURE",
+      "fixture": {
+        "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/qa-scan-plugin/chinese-fixture.png",
+        "bytes": 70361,
+        "sha256": "53e4caa8f5d48a7a3bbb55ba0b72b93a33bf3def9418142edbbe9f8a35facda9",
+        "expectedText": "离线文字识别\n备忘录扫描测试\n本地保存 2026",
+        "reusedExistingFixture": true
+      },
+      "actualText": "离线文字识别\n备忘录扫描测试\n本地保存 2026",
+      "expectedTextExactMatch": true,
+      "evidence": [
+        "14-ocr-first-result-ax.txt",
+        "15-ocr-recognized-ax.txt",
+        "15-ocr-recognized.jpg"
+      ]
+    },
+    "bodyInsertion": {
+      "status": "PASS_UI_AND_COLD_START_PERSISTENCE",
+      "expectedBody": "QA C04 OCR RECOVERY 20261104 0617\nSynthetic candidate04 local OCR and cold-start verification.\n离线文字识别\n备忘录扫描测试\n本地保存 2026",
+      "evidence": [
+        "16-ocr-insert-result-ax.txt",
+        "17-before-normal-quit-ax.txt",
+        "19-cold-start-restored-ax.txt"
+      ]
+    },
+    "internalDocumentAndSessionACK": {
+      "status": "NOT_SEPARATELY_INSTRUMENTED",
+      "limits": "OCR modal closed and body persisted across normal quit/new process. No direct ACK/transaction/session-cleanup trace; no database read."
+    },
+    "normalQuitAndColdStart": {
+      "status": "PASS_FOR_THIS_SYNTHETIC_NOTE",
+      "evidence": [
+        "18-normal-quit-process-check.json",
+        "19-cold-start-restored-ax.txt",
+        "20-cold-start-runtime-identity.json"
+      ]
+    },
+    "pixelParity": "UNKNOWN",
+    "recordingAndAudio": "NOT_EXECUTED",
+    "androidRuntimeThisStage": "NOT_TOUCHED"
+  },
+  "screenshots": [
+    {
+      "path": "docs/verification/candidate04-mac-runtime-recovery-01/06-initial-observation.jpg",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "bytes": 246105,
+      "sha256": "1b3c3d3d83305f7b5ed795de9c6ba76dcc10b64214734500276baefa915f3abc",
+      "headerHex": "ffd8ffe000104a46",
+      "renamedWithoutReencoding": true,
+      "pixelParity": "UNKNOWN",
+      "noResamplingProof": "UNKNOWN"
+    },
+    {
+      "path": "docs/verification/candidate04-mac-runtime-recovery-01/15-ocr-recognized.jpg",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "bytes": 218180,
+      "sha256": "87286d38f89dfb15477e9f5958abf2976f730f517bedf94dc003d1f8a3d32707",
+      "headerHex": "ffd8ffe000104a46",
+      "renamedWithoutReencoding": true,
+      "pixelParity": "UNKNOWN",
+      "noResamplingProof": "UNKNOWN"
+    },
+    {
+      "path": "docs/verification/candidate04-mac-runtime-recovery-01/19-cold-start-restored.jpg",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "bytes": 245769,
+      "sha256": "5b7fd87359f685ad173d6c5e096f22ac2a73056739b48b36c5b75878f65b4c48",
+      "headerHex": "ffd8ffe000104a46",
+      "renamedWithoutReencoding": true,
+      "pixelParity": "UNKNOWN",
+      "noResamplingProof": "UNKNOWN"
+    }
+  ],
+  "newSyntheticData": {
+    "title": "QA C04 OCR RECOVERY 20261104 0617",
+    "expectedBody": "QA C04 OCR RECOVERY 20261104 0617\nSynthetic candidate04 local OCR and cold-start verification.\n离线文字识别\n备忘录扫描测试\n本地保存 2026",
+    "keptForReview": true,
+    "noteID": "NOT_COLLECTED",
+    "databaseRead": false
+  },
+  "networkOfflineProof": "NOT_COLLECTED. Fixture wording does not prove offline operation; network was not forced off or observed.",
+  "permissions": "No screen/microphone requests, grants, resets or TCC changes.",
+  "notPerformed": [
+    "original Notes observation/signal/mutation",
+    "old file-card/download click",
+    "external link or sharing",
+    "recording/playback",
+    "native PNG observer retry",
+    "cache/data/attachment cleanup",
+    "private database read/copy",
+    "build/download/test or host target use",
+    "Android access"
+  ],
+  "postTaskState": {
+    "guiOwnership": "released",
+    "lastObservedCandidate04PID": 56019,
+    "newSyntheticNoteVisible": true,
+    "noPendingAwaitedCUACall": true,
+    "backendGlobalPendingState": "UNKNOWN"
+  },
+  "limits": [
+    "Old03 SIGTERM is not normal exit/save success.",
+    "One fixture and one note do not establish all OCR languages/images or all data migrations.",
+    "OCR confirmation panel is engineering UI, not an original Notes pixel equality claim.",
+    "CUA screenshots are JPEG, not lossless PNG. No matched layout/pixel pair or no-resampling proof.",
+    "No source/product changes by this agent."
+  ]
+}

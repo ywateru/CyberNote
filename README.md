@@ -4,7 +4,7 @@
 
 **当前是可运行开发版，尚未达到原版全部UI、交互及逐像素一致，完整目标仍在进行。** 需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，细分状态见[交付计划](docs/plan/README.md)。
 
-2026-11-04最新双端候选为 **candidate04**，已保存Mac本地完整签名包和Android arm64 debug APK。本批包括暂停录音试听、OCR文字宿主接入及搜索零结果文字位置校准；这些新增能力已经通过源码独审，尚未完成本批安装后的实际运行验收。[构建记录](docs/verification/unified-candidate04/README.md)分别记录构建、签名、模型、运行与像素范围。
+2026-11-04最新双端候选为 **candidate04**，已保存Mac本地完整签名包和Android arm64 debug APK。本批包括暂停录音试听、OCR文字宿主接入及搜索零结果文字位置校准。Mac实际启动、搜索零结果恢复及单张本地图OCR插入/正常退出冷启恢复已有限通过，Android已精确替换安装并核对指定数据保留；完整运行与像素验收仍未完成。[构建记录](docs/verification/unified-candidate04/README.md)分别记录构建、签名、模型、运行与像素范围。
 
 | 平台 | 本机交付文件（未纳入Git） | 已完成检查 |
 | --- | --- | --- |
@@ -15,13 +15,15 @@ Mac源码冻结为 `d8f832e83349c7503b872e0e88853d1ab7b0713a`，279项列明输�
 
 Android前三次失败原样保留：本地socket限制、wrapper意外分发下载后停止、真实variant缓存键缺失。最终只读补充缓存复用既有相同AAR，通过完整114项外部依赖解析后正式恢复构建成功；未手改原缓存BTree、依赖或产品源码。[恢复构建](docs/verification/unified-candidate04/android-recovery-01/README.md)七类输入及额外RO缓存/环境前后核验通过，无新增下载提示，临时离线配置已安全移除。
 
-实际运行结果仍来自较早candidate03：[Mac附件与正常退出冷启](docs/verification/unified-candidate03-independent-01/README.md)有限通过，[Android保留数据升级](docs/verification/unified-candidate03-android-independent-01/README.md)有限通过，均不能直接追认candidate04。Mac真实录音仍无文件或可听性通过，权限线索见[只读诊断](docs/verification/candidate03-mic-preparing-diagnosis-01/README.md)。
+较早candidate03的[Mac附件与正常退出冷启](docs/verification/unified-candidate03-independent-01/README.md)、[Android保留数据升级](docs/verification/unified-candidate03-android-independent-01/README.md)均只对应其本包，不直接追认candidate04。Mac真实录音仍无文件或可听性通过，权限线索见[只读诊断](docs/verification/candidate03-mic-preparing-diagnosis-01/README.md)。
+
+最新[candidate04 Mac恢复与实际OCR持久化](docs/verification/candidate04-mac-runtime-recovery-01/README.md)已通过精确安装身份核验、零结果→清空恢复、三行中文实际识别/插入及正常退出后的完整正文冷启恢复。内部document/session ACK未独立追踪，未强制断网，不将结果扩大为首次离线、全OCR、录音或像素通过。旧candidate03仅对精确无响应测试PID发一次SIGTERM，未保存内存状态未知，不能记作旧包正常退出。
 
 candidate04现已完成[Android精确替换安装与指定数据保留核对](docs/verification/unified-candidate04-android-install-01/README.md)：安装字节匹配成品，三条合成笔记、指定附件及数据库校验值保持；新包未启动，不代替真实编辑/冷启/OCR/录音/UI验收。数据核对使用设备内固定ID只读查询，没有复制整份数据库。
 
-原生比例PNG取图工具已通过[独立源码审查](docs/plan/reviews/tools-lossless-window-capture-static-01.md)，并从主路径编译为独立工具。最新[Mac有限观察](docs/verification/candidate04-mac-runtime-01/README.md)已能读取原版窗口，原生取图因缺现有屏幕录制权限明确拒绝；未生成PNG。旧candidate03窗口绑定超时，正常退出未完成，candidate04尚未启动。历史与本轮CUA截图实际编码JPEG，旧字节保持，不用于无损像素验收。原版与本批的同条件整窗像素仍未通过。
+原生比例PNG取图工具已通过[独立源码审查](docs/plan/reviews/tools-lossless-window-capture-static-01.md)，并从主路径编译为独立工具。[前置Mac有限观察](docs/verification/candidate04-mac-runtime-01/README.md)已能读取原版窗口，原生取图因缺现有屏幕录制权限明确拒绝，未生成PNG；旧包退出和新包未启动属于当时检查点，后续恢复结果见上段。历史与本轮CUA截图实际编码JPEG，旧字节保持，不用于无损像素验收。原版与本批的同条件整窗像素仍未通过。
 
-尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音与暂停试听的设备验收、绘画及附件完整预览、真实OCR文字保存与冷启验收、完整文稿扫描主流程、标签/智能文件夹/数学/笔记链接和标准格式导入导出。具体通过子用例和缺口以交付计划与独立报告为准。
+尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音与暂停试听的设备验收、绘画及附件完整预览、Android实际OCR与更广OCR矩阵、完整文稿扫描主流程、标签/智能文件夹/数学/笔记链接和标准格式导入导出。标签首个源码候选的输入法中间保存与筛选新建问题由[独立审查](docs/plan/reviews/app-003-tags-static-01.md)阻塞，正在隔离分支窄修，未进入candidate04。具体通过子用例和缺口以交付计划与独立报告为准。
 
 ## 运行与构建
 
@@ -100,7 +102,7 @@ FIX-02 已把 Mac 主窗和独立窗顶部接入本地 AppKit 插件，使用真
 
 - Mac 顶部已使用原生控件和 SF Symbols；字形、中文格式标签、控件内部位置、材质、侧栏间距和画廊卡片仍有实际像素差异。网页内容区域仍含 Lucide 图标。图库双击同窗展开与返回已接入原生顶部，尚待独立验收。
 - 移动端格式面板已改为替代键盘的底部面板，并按录屏排列七种纸张；整体尺寸、系统选择菜单、手势动画和图标仍需逐帧对照。X 恢复键盘与 Android Back 关闭面板并收起键盘属于项目交互约定，录屏没有证明这些触点。
-- OCR文字宿主已接入candidate04源码和Mac包，真实设备识别/正文保存仍未验收。完整文稿扫描主App流程、转写、标签、智能文件夹、数学结果、笔记间链接、PDF/Markdown等格式导入导出仍未完成；相应需求F17–F19保持未完成。
+- OCR文字宿主已接入candidate04源码和Mac包，Mac单张本地图实际识别/正文保存/正常冷启有限通过；Android与其他识别情况未验收。完整文稿扫描主App流程、转写、标签、智能文件夹、数学结果、笔记间链接、PDF/Markdown等格式导入导出仍未完成；相应需求F17–F19保持未完成。
 - 清单自动归类/段落折叠、附件浏览器和原版菜单完整性仍有缺口。
 - Android 仅已测现有模拟器 Android 11 / Chrome 91 / arm64；真机、多尺寸、输入法组合输入与新版 Android 的系统栏仍需覆盖。iOS 未建立可运行产物，不计入已交付平台。
 
