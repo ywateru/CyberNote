@@ -115,3 +115,5 @@ App（当前挂载/父目标与保存归属）
 ![录制态坐标标注衍生图](recording-mobile-assets/recording-annotated.png)
 
 ![暂停态坐标标注衍生图](recording-mobile-assets/paused-annotated.png)
+
+后续真实暂停回放接线见 [app-002-recording-preview-01](../plan/tasks/app-002-recording-preview-01.md)。该任务不改变本文件原帧事实，尚不代表已实现或设备通过。
