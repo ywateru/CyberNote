@@ -370,3 +370,157 @@ fn conflict_copy_obeys_live_session_source_epoch_and_prepare() {
     assert!(s.ordinary(action, &token(&s, Some(&id))).is_err());
     assert_eq!(s.store.notes().unwrap().len(), count);
 }
+
+#[test]
+fn attachment_owner_uses_real_session_window_incarnation_and_current_access() {
+    let (_dir, mut s, id) = setup();
+    let op = Uuid::new_v4().to_string();
+    let value = s
+        .store_attachment_operation(
+            "main",
+            &op,
+            &id,
+            "proof.pdf",
+            "application/pdf",
+            b"local-only",
+            &token(&s, Some(&id)),
+        )
+        .unwrap();
+    assert_eq!(value["status"], "stored");
+    assert_eq!(value["access"]["sessionId"], s.id);
+    for query in [true, false] {
+        let response = if query {
+            s.query_attachment_operation("note-real-second", &op, &id, &token(&s, Some(&id)))
+        } else {
+            s.cancel_attachment_operation("note-real-second", &op, &id, &token(&s, Some(&id)))
+        };
+        assert_eq!(response.unwrap_err().code, "attachment_operation_conflict");
+    }
+    let mut stale = token(&s, Some(&id));
+    stale.note_epoch = Some(900);
+    assert_eq!(
+        s.query_attachment_operation("main", &op, &id, &stale)
+            .unwrap_err()
+            .code,
+        "access_changed"
+    );
+    let mut stale = token(&s, Some(&id));
+    stale.session_id = Uuid::new_v4().to_string();
+    assert_eq!(
+        s.cancel_attachment_operation("main", &op, &id, &stale)
+            .unwrap_err()
+            .code,
+        "access_changed"
+    );
+    let barrier = begin(&mut s, json!({"type":"deleteNote","id":id}));
+    assert_eq!(
+        s.query_attachment_operation("main", &op, &id, &token(&s, Some(&id)))
+            .unwrap_err()
+            .code,
+        "access_changed"
+    );
+    assert_eq!(
+        s.cancel_attachment_operation("main", &op, &id, &token(&s, Some(&id)))
+            .unwrap_err()
+            .code,
+        "access_changed"
+    );
+    s.acknowledge(&barrier, "main", false).unwrap();
+    assert!(s.finish(&barrier, &windows(), false).unwrap().0.is_err());
+    assert_eq!(
+        s.query_attachment_operation("main", &op, &id, &token(&s, Some(&id)))
+            .unwrap()["status"],
+        "stored"
+    );
+    s.forget_attachment_window("main");
+    assert_eq!(
+        s.query_attachment_operation("main", &op, &id, &token(&s, Some(&id)))
+            .unwrap_err()
+            .code,
+        "attachment_operation_conflict"
+    );
+    // Same real label in a later Session cannot assume the previous ownership.
+    let mut fresh = Session::new(s.store);
+    assert_eq!(
+        fresh
+            .query_attachment_operation("main", &op, &id, &token(&fresh, Some(&id)))
+            .unwrap_err()
+            .code,
+        "attachment_operation_conflict"
+    );
+}
+
+#[test]
+fn attachment_cancel_waits_for_other_windows_registered_save_and_retains_committed_ref() {
+    let (_dir, mut s, id) = setup();
+    let op = Uuid::new_v4().to_string();
+    let value = s
+        .store_attachment_operation(
+            "main",
+            &op,
+            &id,
+            "proof.pdf",
+            "application/pdf",
+            b"local-only",
+            &token(&s, Some(&id)),
+        )
+        .unwrap();
+    let attachment = value["attachment"].clone();
+    s.register_save(
+        "note-real-second",
+        &id,
+        "other-window-pending",
+        token(&s, Some(&id)),
+    )
+    .unwrap();
+    assert_eq!(
+        s.cancel_attachment_operation("main", &op, &id, &token(&s, Some(&id)))
+            .unwrap()["status"],
+        "deferred"
+    );
+    assert!(s
+        .store
+        .read_attachment(attachment["id"].as_str().unwrap())
+        .is_ok());
+    s.save("note-real-second",json!({"type":"saveNote","id":id,"saveIntent":"other-window-pending","revision":1,"document":document("drained without attachment")})).unwrap();
+    assert_eq!(
+        s.cancel_attachment_operation("main", &op, &id, &token(&s, Some(&id)))
+            .unwrap()["status"],
+        "aborted"
+    );
+    assert!(s
+        .store
+        .read_attachment(attachment["id"].as_str().unwrap())
+        .is_err());
+    let op = Uuid::new_v4().to_string();
+    let attachment = s
+        .store_attachment_operation(
+            "main",
+            &op,
+            &id,
+            "proof.pdf",
+            "application/pdf",
+            b"local-only",
+            &token(&s, Some(&id)),
+        )
+        .unwrap()["attachment"]
+        .clone();
+    let doc = json!({"type":"doc","content":[{"type":"heading","attrs":{"level":1}},{"type":"attachment","attrs":{"id":attachment["id"],"kind":attachment["kind"],"name":attachment["displayName"]}}]});
+    save(&mut s, "main", &id, "actual-reference", 2, doc);
+    s.register_save(
+        "note-real-second",
+        &id,
+        "future-pending",
+        token(&s, Some(&id)),
+    )
+    .unwrap();
+    assert_eq!(
+        s.cancel_attachment_operation("main", &op, &id, &token(&s, Some(&id)))
+            .unwrap()["status"],
+        "committed"
+    );
+    assert!(s
+        .store
+        .read_attachment(attachment["id"].as_str().unwrap())
+        .is_ok());
+}

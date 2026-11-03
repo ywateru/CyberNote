@@ -1,5 +1,5 @@
 //! Process-owned authorization and the save/ACK boundary shared by real windows.
-use crate::store::{AppError, Result, Store};
+use crate::store::{AppError, AttachmentOwner, Result, Store};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -42,6 +42,7 @@ pub struct Session {
     epoch: u64,
     note_epochs: HashMap<String, u64>,
     intents: HashMap<String, SaveIntent>,
+    attachment_windows: HashMap<String, String>,
     pub pending: Option<Pending>,
 }
 impl Session {
@@ -52,6 +53,7 @@ impl Session {
             epoch: 1,
             note_epochs: HashMap::new(),
             intents: HashMap::new(),
+            attachment_windows: HashMap::new(),
             pending: None,
         }
     }
@@ -121,6 +123,77 @@ impl Session {
             return Err(denied("备忘录已锁定或删除，请重新解锁"));
         }
         Ok(())
+    }
+    fn attachment_owner(&mut self, window: &str) -> Result<AttachmentOwner> {
+        if window.is_empty() || window.len() > 128 || window.chars().any(char::is_control) {
+            return Err(denied("真实窗口身份无效"));
+        }
+        let incarnation = self
+            .attachment_windows
+            .entry(window.into())
+            .or_insert_with(|| Uuid::new_v4().to_string())
+            .clone();
+        Ok(AttachmentOwner {
+            session: self.id.clone(),
+            window: window.into(),
+            incarnation,
+        })
+    }
+    pub fn forget_attachment_window(&mut self, window: &str) {
+        self.attachment_windows.remove(window);
+    }
+    pub fn store_attachment_operation(
+        &mut self,
+        window: &str,
+        operation: &str,
+        note: &str,
+        name: &str,
+        mime: &str,
+        bytes: &[u8],
+        token: &Token,
+    ) -> Result<Value> {
+        self.sensitive(note, token)?;
+        let owner = self.attachment_owner(window)?;
+        let value = self
+            .store
+            .store_attachment_operation(operation, note, &owner, name, mime, bytes)?;
+        self.tagged(value)
+    }
+    pub fn query_attachment_operation(
+        &mut self,
+        window: &str,
+        operation: &str,
+        note: &str,
+        token: &Token,
+    ) -> Result<Value> {
+        self.sensitive(note, token)?;
+        let owner = self.attachment_owner(window)?;
+        let value = self
+            .store
+            .query_attachment_operation(operation, note, &owner)?;
+        self.tagged(value)
+    }
+    pub fn cancel_attachment_operation(
+        &mut self,
+        window: &str,
+        operation: &str,
+        note: &str,
+        token: &Token,
+    ) -> Result<Value> {
+        self.sensitive(note, token)?;
+        let owner = self.attachment_owner(window)?;
+        // Every registered save from every real window is checked while the
+        // caller holds the same Session/Store mutex as the cleanup decision.
+        // Renderer pendingDocs that have not registered an intent are not
+        // visible here: the frontend must roll back/drain before cancelling.
+        let value = if self.intents.values().any(|intent| intent.note == note) {
+            self.store
+                .defer_attachment_operation(operation, note, &owner, "save_pending")?
+        } else {
+            self.store
+                .cancel_attachment_operation(operation, note, &owner)?
+        };
+        self.tagged(value)
     }
     pub fn register_save(
         &mut self,

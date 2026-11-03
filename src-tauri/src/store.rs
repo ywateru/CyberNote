@@ -17,6 +17,9 @@ use std::{
 use uuid::Uuid;
 #[path = "store/archive.rs"]
 mod archive;
+#[path = "store/attachment_operations.rs"]
+mod attachment_operations;
+pub(crate) use attachment_operations::AttachmentOwner;
 
 #[derive(Debug, Serialize)]
 pub struct AppError {
@@ -86,7 +89,7 @@ pub struct Note {
     #[serde(default)]
     pub sealed: Option<Value>,
 }
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct Attachment {
     pub id: String,
@@ -112,7 +115,9 @@ impl Store {
             root: root.as_ref().into(),
             keys: HashMap::new(),
         };
+        s.initialize_attachment_operations()?;
         s.recover_imports()?;
+        s.recover_attachment_operations()?;
         for (fid, name, kind, order) in [
             ("default", "备忘录", "default", 0),
             ("quick", "快速备忘录", "quick", -1),
@@ -459,12 +464,23 @@ impl Store {
                 if self.note(nid)?.deleted_at.is_none() {
                     return Err(err("invalid", "先移到最近删除"));
                 }
-                let files = self
+                let mut files = self
                     .attachments()?
                     .into_iter()
                     .filter(|x| x.note_id == nid)
                     .collect::<Vec<_>>();
+                for attachment in self.operation_files_for_purge(nid)? {
+                    if !files
+                        .iter()
+                        .any(|file| file.relative_path == attachment.relative_path)
+                    {
+                        files.push(attachment);
+                    }
+                }
                 let tx = self.db.transaction()?;
+                // Retire ownership journals in the same DB decision as purge.
+                // A terminal journal must never later delete a reused path.
+                tx.execute("UPDATE attachment_operations SET state='retired', reason='note_purged' WHERE note_id=?1", [nid])?;
                 tx.execute("DELETE FROM attachments WHERE note_id=?1", [nid])?;
                 tx.execute("DELETE FROM notes WHERE id=?1", [nid])?;
                 tx.commit()?;

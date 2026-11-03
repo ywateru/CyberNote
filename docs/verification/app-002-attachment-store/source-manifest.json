@@ -1,0 +1,76 @@
+{
+  "date": "2026-11-04",
+  "baseline": "0026f5da73e387ba903798831ef189c8a9329c77",
+  "status": "source-candidate-awaiting-independent-review",
+  "productionAndTestFiles": [
+    {
+      "path": "src-tauri/src/lib.rs",
+      "bytes": 15971,
+      "sha256": "9f7e4d1ffd9a7097cd4ba3558b6cbb84ac0707b5084d8174e1e0200adc5bb6d2"
+    },
+    {
+      "path": "src-tauri/src/session.rs",
+      "bytes": 15689,
+      "sha256": "85b588403147aaeb98e68cc8060edb057fa979dcdf9775cd872765aef7bc4ded"
+    },
+    {
+      "path": "src-tauri/src/session/tests.rs",
+      "bytes": 18615,
+      "sha256": "9238ab01b660f159bfe8e205de6214718cb85ab0e1897967c20511bcdb055976"
+    },
+    {
+      "path": "src-tauri/src/store.rs",
+      "bytes": 43269,
+      "sha256": "651b6f278644b10748f7f81e96cd94a92a1ca0b7f13f4989fd2aa40872f06259"
+    },
+    {
+      "path": "src-tauri/src/store/attachment_operations.rs",
+      "bytes": 17304,
+      "sha256": "a00304fb939207938d02ae71e0d436191200430a71db38c872bb1adf5b8f8e00"
+    },
+    {
+      "path": "src-tauri/src/store/attachment_operations/tests.rs",
+      "bytes": 21187,
+      "sha256": "2030e6e2190470c7b57fb9d7fa9b5e8f741da1ea0651698dca98092322009998"
+    }
+  ],
+  "testResults": {
+    "attachmentFilter": {
+      "passed": 14,
+      "failed": 0,
+      "ignored": 1,
+      "filteredOut": 36,
+      "realCrashWorkerInvocations": 6,
+      "exitCode": 78
+    },
+    "sessionModule": {
+      "passed": 11,
+      "failed": 0,
+      "filteredOut": 40
+    },
+    "accessBoundaryProofFeatureCheck": "passed",
+    "rustfmt": "passed",
+    "diffCheck": "passed"
+  },
+  "targetReleased": true,
+  "packageOrDeviceValidation": "not run; frontend not wired",
+  "legacyStoreAttachmentByteIdentical": true,
+  "dependenciesAndPublicArchiveUnchanged": true,
+  "evidenceFiles": [
+    {
+      "path": "docs/verification/app-002-attachment-store/rust-attachment-result.txt",
+      "bytes": 2332,
+      "sha256": "2e487ccd7d480b5382792d0744b2de7fcd8e026f9425aef0d7a8e23e68187c04"
+    },
+    {
+      "path": "docs/verification/app-002-attachment-store/rust-session-final-output.txt",
+      "bytes": 400,
+      "sha256": "f06ac59599d8ba303dd81b6b575f2a018760b044633f05a7ce136ce5ad43e455"
+    },
+    {
+      "path": "docs/verification/app-002-attachment-store/rust-proof-final-output.txt",
+      "bytes": 628,
+      "sha256": "c8a1b7484d393be74d3cbaffdad5545c692d1baaa6dee0de881fbd04fd5db841"
+    }
+  ]
+}

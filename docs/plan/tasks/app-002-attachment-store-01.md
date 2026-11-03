@@ -31,3 +31,9 @@ depends-on: [app-002-permission-01]
 使用真实临时SQLite与受管附件目录穿过实际Store/Session边界：相同操作重复写入与查询、同ID不同内容/owner/note拒绝、写后响应未送达仍能核结果、未引用补偿、已引用不可补偿、在途保存/屏障deferred或拒绝、重复补偿、文件/数据库失败、至少覆盖文件落盘与元数据事务前后真实重开恢复。旧附件与旧孤儿须明确保留。不要只测返回常量，不为此扩展无关安全/归档矩阵。
 
 源码候选提交后独立静态审查，再主合入；无App构建/安装/GUI。共享主target只串行用于必要Rust检查，先确认无其他构建。父任务后续真实系统选择器、正文ACK、冷启预览与像素仍分别验收。
+
+## source candidate · 2026-11-04
+
+已实现三条真实窗口注入的store/query/cancel_attachment_operation、私有SQLite operation journal、独占新文件/metadata+stored同事务、真实正文引用核定、所有窗口SaveIntent门槛、窄补偿、非终态冷恢复和purge退休。旧store_attachment保持字节相同；没有App/bridge/录音/依赖/归档公开字段变化。准确参数、状态、owner/incarnation、preparing保守拒绝、10k历史上限、purge崩溃遗留及renderer未登记pendingDocs责任见 `docs/verification/app-002-attachment-store/source-candidate-01.md`。
+
+共享target由root释放后串行首次编译和必要检查通过：attachment filter14passed/worker1ignored（父测试实际派生6次exit78断点），完整Session11passed，access-boundary-proof feature cargo check、fmt/diffcheck通过，target已释放。当前为待独立审查的Rust源码候选，不是系统文件入口/正文ACK/冷启预览或像素验收。

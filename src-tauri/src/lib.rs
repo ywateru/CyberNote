@@ -193,6 +193,90 @@ fn store_attachment(
     )?;
     session.tagged(value)
 }
+// Preserve the real failure category while keeping private journal/database
+// details out of renderer errors, including failures before owner comparison.
+fn attachment_operation_error(error: AppError) -> AppError {
+    let message = match error.code.as_str() {
+        "database" => "附件数据库操作失败，请保留未保存内容后重试",
+        "filesystem" => "附件文件操作失败，请保留未保存内容后重试",
+        "document" => "附件操作记录无法读取，请保留未保存内容后重试",
+        _ => return error,
+    };
+    AppError {
+        code: error.code,
+        message: message.into(),
+    }
+}
+#[tauri::command]
+fn store_attachment_operation(
+    operation_id: String,
+    note_id: String,
+    name: String,
+    mime: String,
+    data: String,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    state: State<AppState>,
+) -> Result<Value> {
+    const MAX_ENCODED: usize = ((100 * 1024 * 1024 + 2) / 3) * 4;
+    if data.len() > MAX_ENCODED {
+        return Err(AppError {
+            code: "too_large".into(),
+            message: "附件不能超过100 MB".into(),
+        });
+    }
+    let bytes = B64.decode(data).map_err(|_| AppError {
+        code: "invalid".into(),
+        message: "文件编码错误".into(),
+    })?;
+    state
+        .0
+         .0
+        .lock()
+        .map_err(|_| failure("数据锁错误"))?
+        .store_attachment_operation(
+            window.label(),
+            &operation_id,
+            &note_id,
+            &name,
+            &mime,
+            &bytes,
+            &expected,
+        )
+        .map_err(attachment_operation_error)
+}
+#[tauri::command]
+fn query_attachment_operation(
+    operation_id: String,
+    note_id: String,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    state: State<AppState>,
+) -> Result<Value> {
+    state
+        .0
+         .0
+        .lock()
+        .map_err(|_| failure("数据锁错误"))?
+        .query_attachment_operation(window.label(), &operation_id, &note_id, &expected)
+        .map_err(attachment_operation_error)
+}
+#[tauri::command]
+fn cancel_attachment_operation(
+    operation_id: String,
+    note_id: String,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    state: State<AppState>,
+) -> Result<Value> {
+    state
+        .0
+         .0
+        .lock()
+        .map_err(|_| failure("数据锁错误"))?
+        .cancel_attachment_operation(window.label(), &operation_id, &note_id, &expected)
+        .map_err(attachment_operation_error)
+}
 #[tauri::command]
 fn read_attachment(id: String, expected: Token, state: State<AppState>) -> Result<Value> {
     let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
@@ -235,6 +319,15 @@ async fn import_archive(
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = tauri::Builder::default()
+        .on_window_event(|window, event| {
+            if matches!(event, tauri::WindowEvent::Destroyed) {
+                if let Some(state) = window.try_state::<AppState>() {
+                    if let Ok(mut session) = state.0 .0.lock() {
+                        session.forget_attachment_window(window.label());
+                    };
+                }
+            }
+        })
         .on_permission_request(media_permission::response)
         .plugin(media_permission::lifecycle())
         .plugin(tauri_plugin_dialog::init())
@@ -337,6 +430,9 @@ pub fn run() {
         read_note_text,
         workspace_action,
         store_attachment,
+        store_attachment_operation,
+        query_attachment_operation,
+        cancel_attachment_operation,
         read_attachment,
         export_archive,
         import_archive
@@ -349,6 +445,9 @@ pub fn run() {
         read_note_text,
         workspace_action,
         store_attachment,
+        store_attachment_operation,
+        query_attachment_operation,
+        cancel_attachment_operation,
         read_attachment,
         export_archive,
         import_archive,
@@ -357,4 +456,27 @@ pub fn run() {
     builder
         .run(tauri::generate_context!())
         .expect("Notes failed to start");
+}
+
+#[cfg(test)]
+mod attachment_command_tests {
+    use super::*;
+    #[test]
+    fn private_storage_errors_keep_category_without_returning_journal_details() {
+        for code in ["database", "filesystem", "document"] {
+            let result = attachment_operation_error(AppError {
+                code: code.into(),
+                message: "PRIVATE foreign owner path SQL bytes".into(),
+            });
+            assert_eq!(result.code, code);
+            assert!(!result.message.contains("PRIVATE"));
+            assert!(!result.message.contains("foreign"));
+        }
+        let result = attachment_operation_error(AppError {
+            code: "attachment_operation_conflict".into(),
+            message: "附件操作身份或内容不匹配".into(),
+        });
+        assert_eq!(result.code, "attachment_operation_conflict");
+        assert_eq!(result.message, "附件操作身份或内容不匹配");
+    }
 }
