@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-03",
+  "scope": "independent finite real Mac UI image/PDF baseline on existing frozen binary; no implementation edits",
+  "bundle": "/private/tmp/notes-search-scroll-56d7e05.app",
+  "exe_bytes": 15534976,
+  "exe_sha256": "56d7e059437690fa000a1e69a01fee24f1595eed69e9acf287c694098a2eff9a",
+  "source_provenance_from_handoff": {
+    "commits": [
+      "5a5669f",
+      "444f03b"
+    ],
+    "input_count": 99,
+    "aggregate": "9d27cd8592fe291e2513961137bca643f71fd9ef5b419056404015bdbb182e7f",
+    "limit": "No independent entire source manifest revalidation/rebuild in this runtime round."
+  },
+  "note_id": "2df8f45b-2c30-467e-b389-e36065e9ca52",
+  "note_title": "QA MEDIA 56D7 20261103 2232",
+  "revision": 69,
+  "png": {
+    "actual_system_selected_and_open_clicked": true,
+    "result": "error: 备忘录或授权状态已改变，请重新执行操作",
+    "document_unchanged": true,
+    "note_attachment_count_after_error": 0,
+    "managed_copy_and_preview": "not reached"
+  },
+  "pdf": {
+    "actual_system_selected_and_open_clicked": true,
+    "result": "same error",
+    "document_unchanged": true,
+    "managed_copy_equals_fixture": true,
+    "attachment_id": "754a70e3-7590-44be-8bd6-0da9501279f0",
+    "document_references_attachment": false,
+    "managed_record_and_file_persist_after_cold_start": true,
+    "preview": "not reached; no document node to open"
+  },
+  "cold": {
+    "before_pid": 5962,
+    "after_pid": 7041,
+    "old_process_absent_before_launch": true,
+    "exact_bundle_path_read_back": true,
+    "entire_note_equal": true,
+    "temporary_source_paths_absent": true,
+    "orphan_persists": true
+  },
+  "root_cause": "unknown exact throw/IPC point; post-store bridge accept and other guards not distinguished",
+  "outcome": "fail: no complete local attachment roundtrip; persisted orphan PDF observed",
+  "handoff": "Mac GUI released after final CmdQ; no clone process/window. Android emulator session73263 untouched. Generated fixture originals and own note/managed orphan retained; no clear or cleanup."
+}

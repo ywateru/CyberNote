@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-03",
+  "kind": "one bounded read-only source audit; no new GUI/runtime acceptance",
+  "source_commit_at_read": "f7d252d0e7c80d42c3ca25790060f64c3a0ff030",
+  "sources": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "2e70dab621ce51ffa1b56c4e05d7aec424cc384dcc71e6a82c5c7e474136e272",
+      "frozen_56d7_input_sha256": "2e70dab621ce51ffa1b56c4e05d7aec424cc384dcc71e6a82c5c7e474136e272",
+      "matches_frozen_input": true
+    },
+    {
+      "path": "src/bridge.ts",
+      "sha256": "4a5c33170e9cce8eac9000b1f5b169ed332a6def7da80fa33258c48bdb8b240f",
+      "frozen_56d7_input_sha256": "4a5c33170e9cce8eac9000b1f5b169ed332a6def7da80fa33258c48bdb8b240f",
+      "matches_frozen_input": true
+    },
+    {
+      "path": "src/access-client.ts",
+      "sha256": "fb3a9a062fbee9b5b68ca5a8bcbd8cb0de49170b5af35f907d95d09a0ba70d10",
+      "frozen_56d7_input_sha256": "fb3a9a062fbee9b5b68ca5a8bcbd8cb0de49170b5af35f907d95d09a0ba70d10",
+      "matches_frozen_input": true
+    },
+    {
+      "path": "src/native-toolbar-controller.ts",
+      "sha256": "9dfa31e0ca200db7dc54dc15c2aa62d51d7a8aff23a5873643399a9f9c9a6214",
+      "frozen_56d7_input_sha256": "9dfa31e0ca200db7dc54dc15c2aa62d51d7a8aff23a5873643399a9f9c9a6214",
+      "matches_frozen_input": true
+    },
+    {
+      "path": "src/Editor.tsx",
+      "sha256": "447dfce35d0934bac18b961c98dccbebc140ae6f1c27f8e0f940cecd48aa863c",
+      "frozen_56d7_input_sha256": "447dfce35d0934bac18b961c98dccbebc140ae6f1c27f8e0f940cecd48aa863c",
+      "matches_frozen_input": true
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "sha256": "fb8f06e24ef6776a9ba7c287fbe6af1d6d02c358616340c8e5fca19de7bffb79",
+      "frozen_56d7_input_sha256": "fb8f06e24ef6776a9ba7c287fbe6af1d6d02c358616340c8e5fca19de7bffb79",
+      "matches_frozen_input": true
+    },
+    {
+      "path": "src-tauri/src/session.rs",
+      "sha256": "4aa89215c51c24cfd706227b0317d944d7f52f07f2a4dabcea5af2bee7f8466a",
+      "frozen_56d7_input_sha256": "4aa89215c51c24cfd706227b0317d944d7f52f07f2a4dabcea5af2bee7f8466a",
+      "matches_frozen_input": true
+    },
+    {
+      "path": "src-tauri/src/store.rs",
+      "sha256": "6542e51687e86cf877bb7c20c553e7d2e60c91894d7e152346632e3e48898904",
+      "frozen_56d7_input_sha256": "6542e51687e86cf877bb7c20c553e7d2e60c91894d7e152346632e3e48898904",
+      "matches_frozen_input": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "sha256": "2d23fed63051e1841ee8f954d02474b659216893f79a65ed64cef651c32d02c0",
+      "frozen_56d7_input_sha256": "2d23fed63051e1841ee8f954d02474b659216893f79a65ed64cef651c32d02c0",
+      "matches_frozen_input": true
+    }
+  ],
+  "existing_verify_evidence": [
+    {
+      "path": "docs/verification/app-002-media/mac-attachment-baseline-56d7-01/05-before-success-storage.json",
+      "sha256": "232b456768d9efe28efaed51b05ba88a5e8dc2f5ab5208c29c73710e48b3037f"
+    },
+    {
+      "path": "docs/verification/app-002-media/mac-attachment-baseline-56d7-01/08-image-import-return.ax.txt",
+      "sha256": "5d9b7b608d72c8e356ae179d6179234a7a0c16fa6744c63a2f113bbd2f91a289"
+    },
+    {
+      "path": "docs/verification/app-002-media/mac-attachment-baseline-56d7-01/09-after-image-error-storage.json",
+      "sha256": "232b456768d9efe28efaed51b05ba88a5e8dc2f5ab5208c29c73710e48b3037f"
+    },
+    {
+      "path": "docs/verification/app-002-media/mac-attachment-baseline-56d7-01/13-after-pdf-error-storage.json",
+      "sha256": "224182000a64e1fcba61956f1530ee55ee46b5aa0ed8971a998e7b9dbe6627bc"
+    },
+    {
+      "path": "docs/verification/app-002-media/mac-attachment-baseline-56d7-01/16-managed-attachment-after-error.json",
+      "sha256": "84b3542c20c440c33bd24fb348a997cc5b5f61d8011449a5856114532753d016"
+    }
+  ]
+}

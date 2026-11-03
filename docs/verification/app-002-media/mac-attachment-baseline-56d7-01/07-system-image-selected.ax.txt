@@ -1,0 +1,90 @@
+Window: "Open", App: 备忘录.
+0 dialog Open, ID: open-panel, Secondary Actions: Raise
+	1 split group
+		2 scroll area Secondary Actions: Scroll Up, Scroll Down
+			3 outline sidebar
+				4 row (selectable) Description: clock, Value: Recents
+				5 row (selectable) Description: Shared Folder, Value: Shared
+				6 row (selectable, expanded) Value: Favorites, Secondary Actions: Collapse
+				7 row (selectable) Applications
+				8 row (selectable) Description: home, Value: water
+				9 row (selectable) Description: document, Value: Documents
+				10 row (selectable) Description: move, Value: work
+				11 row (selectable) Description: Arrow Down Circle, Value: Downloads
+				12 row (selectable, expanded) Value: Locations, Secondary Actions: Collapse
+				13 row (selectable) Description: iCloud, Value: iCloud云盘
+				14 row (selectable) Macintosh HD
+				15 row (selectable) Eject, Description: eject, Value: LightCraft
+				16 row (selectable) Eject, Description: eject, Value: Cliproom
+				17 row (selectable, expanded) Value: Tags, Secondary Actions: Collapse
+				18 row (selectable) 红色
+				19 row (selectable) 橙色
+				20 row (selectable) 黄色
+				21 row (selectable) 绿色
+				22 row (selectable) 蓝色
+				23 row (selectable) 紫色
+				24 row (selectable) 灰色
+				25 row (selectable) All Tags…
+				26 row (selectable, expanded) Value: Media, Secondary Actions: Collapse
+				27 row (selectable) Music
+				28 row (selectable) Description: photo, Value: Photos
+				29 row (selectable) Description: movie, Value: Movies
+			30 scroll bar (settable, float) 0
+				31 value indicator (settable, float) 0
+				32 increment arrow button
+				33 decrement arrow button
+				34 increment page button
+				35 decrement page button
+		36 splitter (disabled, settable, float) 167
+		37 scroll area
+			38 outline Description: list view, ID: ListView
+				39 row (selectable) Description: go down, Value: Name
+Size
+Kind
+Date Added
+				40 row (selected)
+					41 cell (selected)
+						42 image
+						43 text field (selected, settable) URL: file:///private/tmp/notes-media-baseline-56d7/source/QA56D7-controlled.png, Value: QA56D7-controlled.png, Secondary Actions: Open Finder item
+					44 cell (selected)
+						45 text 23 KB
+					46 cell (selected)
+						47 text PNG image
+					48 cell (selected)
+						49 text 今天 22:31
+				50 row (selectable)
+					51 cell
+						52 image
+						53 text field (settable) URL: file:///private/tmp/notes-media-baseline-56d7/source/QA56D7-controlled.pdf, Value: QA56D7-controlled.pdf, Secondary Actions: Open Finder item
+					54 cell
+						55 text 31 KB
+					56 cell
+						57 text PDF Document
+					58 cell
+						59 text 今天 22:31
+				60 container
+					61 sort button Name
+					62 sort button Size
+					63 sort button Kind
+					64 sort button Date Added
+		65 container
+			66 button back
+			67 button (disabled) forward
+		68 menu button Description: List, Help: Show as Icons, List, or Columns, and hide/show the sidebar, ID: View Options
+		69 menu button Help: Change the item grouping (hold down Option to change the sort), ID: Group or Sort By
+		70 pop up button Where:, Value: source, ID: where popup
+		71 search text field Search
+			72 button search
+		73 button Cancel, ID: CancelButton
+		74 button Open, ID: OKButton
+75 menu bar
+	76 备忘录
+	77 文件
+	78 编辑
+	79 显示
+	80 窗口
+
+Selected:
+	40 row (selected)
+
+Note: Pay special attention to the content selected by the user. If the user asks a question or refers to the content they are looking at on-screen, they might be referring to the selected content (but they might be referring to something else that's visible, too).
