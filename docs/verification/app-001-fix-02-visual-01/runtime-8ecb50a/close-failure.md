@@ -1,0 +1,11 @@
+# Default Mac close failure — preserved baseline
+
+Build: `pnpm mac:build`, default features `[]`, source HEAD 8ecb50ac5dff4528efc188de5f1a4cc1e24aacd2. Executable SHA256 `b6bb05d539096f5e2b874e975738cfd9cab9e3047be813bdb794352f48d27af2`; full package retained at `/private/tmp/notes-visual-close-b6bb05d.app`. Source manifest: source-inputs.json, 98 files, aggregate 2f56e03f05fa02b3183e9c4f0cc2a5af92a926e2e19a0f233ff1d7dd9de2d13c.
+
+Observed first failure: main window 66908 and independent daily TODO window 66932 existed; body focused; a single real CUA Cmd+W removed the entire process PID 89891. No test text edit was introduced. Before AX/image and before/after window inventories retained alongside this report. The after screenshot was unavailable because the process had exited. Exact PID/time system log reported launchd status 25856 at 2026-11-03 20:15:58.749 +0800. That alone suggested exit101 but was not a panic stack. A bounded target-filename search in DiagnosticReports returned no matching report.
+
+One controlled reproduction launched the identical executable with RUST_BACKTRACE=1 and captured only its stdout/stderr. Real CUA opened the same synthetic note independently, focused its body, inspected the actual File menu (关闭窗口, performClose:), dismissed it, and pressed Cmd+W once. Process returned exit101. See cmdw-reproduction.stderr.log, not a synthetic event or a direct window destroy.
+
+The first actual panic is `RefCell already mutably borrowed` at tauri-runtime-wry 2.12.3 lib.rs:3643. Stack: runtime on_window_close → Tao close_async → AppKit notification → NotesUIController build block → send: → Rust toolbar event → Tauri emit_js → Webview.eval → runtime window map borrow. A second panic reports poisoned webview manager during unwind. This establishes synchronous native activity-event emission reentering Tauri while the runtime removes a window. It does not establish the File menu role as defective, nor a failed pending-save flush.
+
+Minimal follow-up: defer only BecomeKey/ResignKey notifications onto the main queue, capture their active value, retain only the weak controller, and discard notifications after disposal. The Rust callback still validates binding ID, window label, and permitted event. Follow-up build and real GUI results belong to runtime-close-deferred-01; baseline files here are unchanged.

@@ -218,8 +218,12 @@ static NSPoint contentOffsetFor(NSString *action) {
         [self.observers addObject:[center addObserverForName:name object:self.window queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *n){(void)n;[weak layout];}]];
     }
     for(NSNotificationName name in @[NSWindowDidBecomeKeyNotification,NSWindowDidResignKeyNotification]) {
-        [self.observers addObject:[center addObserverForName:name object:self.window queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *n){(void)n;NotesUIController *strong=weak;
-            if(strong && !strong.disposed) [strong send:@{@"kind":@"windowActivity",@"active":strong.window.keyWindow?@YES:@NO}];}]];
+        [self.observers addObject:[center addObserverForName:name object:self.window queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *n){(void)n;
+            BOOL active=[name isEqual:NSWindowDidBecomeKeyNotification];
+            // AppKit can post these while Tauri is removing a window. Emit after that
+            // runtime borrow ends, and discard notifications from disposed bindings.
+            dispatch_async(dispatch_get_main_queue(), ^{NotesUIController *strong=weak;
+                if(strong && !strong.disposed) [strong send:@{@"kind":@"windowActivity",@"active":@(active)}];});}]];
     }
     [self.observers addObject:[center addObserverForName:NSWindowWillCloseNotification object:self.window queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *n){(void)n;
         NotesUIController *strong=weak;if(strong){[strong dispose];[controllers removeObjectForKey:strong.bindingId];}}]];
