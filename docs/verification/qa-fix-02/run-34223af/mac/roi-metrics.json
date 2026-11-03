@@ -1,0 +1,46 @@
+{
+  "status": "fail: raw RGB differs; limited comparison only",
+  "inputs": {
+    "roi-original.png": {
+      "sha256": "9235a974cd2d77b03e35faa72010ca93582bf05ee3b0dff29f5c2074e5929e09"
+    },
+    "roi-clone.png": {
+      "sha256": "94f617d83b34f9537124a0d67714483b861ba034977bda5f84ce4a7dc17b0dc0"
+    }
+  },
+  "imagePixels": [
+    2176,
+    1322
+  ],
+  "roiPixels": [
+    1096,
+    8,
+    2168,
+    104
+  ],
+  "roiMeaning": "Common new/edit/share/search strip in gallery-expanded note; excludes folder title/count, sidebar, body/date/caret and system sharing indicator.",
+  "content": "每日 TODO\n记录每一个想法\n今天的计划\n整理需求与交互\n完成本地保存",
+  "theme": "Light, as visibly observed",
+  "registration": "none",
+  "rescale": "none",
+  "colorNormalization": "none",
+  "masks": [],
+  "pixels": 102912,
+  "maeRGB": 9.13191853233831,
+  "maePerChannel": [
+    9.13191853233831,
+    9.13191853233831,
+    9.13191853233831
+  ],
+  "rmseRGB": 34.24086164266808,
+  "exactChangedPixelRatio": 0.7454912935323383,
+  "maxChannelDeltaOver8PixelRatio": 0.06534709266169154,
+  "maximumChannelDelta": 224,
+  "limitations": [
+    "Different screen positions: original approximately (160,185), clone (153,100), so material/background effect is uncontrolled.",
+    "No contemporaneous per-capture key-window metadata; strict matched focus-state acceptance unknown.",
+    "Same-size pair at capture; subsequent original window restoration is separate and does not modify captured pixels.",
+    "Original 6 synthetic notes, clone 2; differing count excluded.",
+    "Not full page, active-state, menu, independent-window or pixel acceptance."
+  ]
+}

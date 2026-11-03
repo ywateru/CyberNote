@@ -1,0 +1,21 @@
+Frozen source 34223af:plugins/tauri-plugin-notes-ui/macos/toolbar.m
+346: }
+347: - (NSDictionary *)focusSearch {
+348:     NSWindow *window=self.window;
+349:     if(self.disposed || !window || self.root.window!=window)
+350:         return @{@"code":@"window_closed",@"message":@"搜索所属窗口已经关闭"};
+351:     NSDictionary *searchState=self.state[@"search"];
+352:     if(!searchState || (id)searchState==NSNull.null || !self.search)
+353:         return @{@"code":@"search_missing",@"message":@"当前窗口没有搜索控件"};
+354:     if(![searchState[@"enabled"] boolValue] || !self.search.enabled)
+355:         return @{@"code":@"search_disabled",@"message":@"当前窗口搜索已禁用"};
+356:     NSTextView *editor=[self.search.currentEditor isKindOfClass:NSTextView.class]?(NSTextView *)self.search.currentEditor:nil;
+357:     // Repeated requests while editing (including marked text) are a no-op.
+358:     if(window.firstResponder==self.search || (editor && window.firstResponder==editor))return nil;
+359:     // Only request first responder. No activation/order, text/selection setter, rebind or intent.
+360:     // AppKit's own caret/selection behavior remains to be observed at host integration.
+361:     if(![window makeFirstResponder:self.search])
+362:         return @{@"code":@"focus_failed",@"message":@"原生搜索无法取得输入焦点"};
+363:     return nil;
+364: }
+365: - (void)send:(NSDictionary *)intent {

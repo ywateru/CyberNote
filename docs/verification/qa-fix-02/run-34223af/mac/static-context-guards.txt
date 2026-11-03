@@ -1,0 +1,201 @@
+Frozen source 34223af:src/App.tsx
+1881:   const nativeScope = JSON.stringify([
+1882:     folderId,
+1883:     noteId,
+1884:     view,
+1885:     galleryEditor,
+1886:     separate,
+1887:   ]);
+1888:   nativeAssert.current = (context, editing = false, overlay = false) => {
+1889:     const live = accessGate.stamp(context.noteId || undefined);
+1890:     if (
+1891:       context.scope !== nativeScope ||
+1892:       context.noteId !== noteId ||
+1893:       JSON.stringify(live) !== JSON.stringify(context.stamp) ||
+1894:       loading ||
+1895:       synchronizing ||
+1896:       accessSuspended.length ||
+1897:       accessGate.state?.operationId ||
+1898:       (context.noteId &&
+1899:         (blockedNotes.current.has(context.noteId) ||
+1900:           accessGate.state?.suspended.includes(context.noteId))) ||
+1901:       (!overlay && (modal || draw || record))
+1902:     )
+1903:       throw new Error("备忘录或授权状态已改变，请重新执行操作");
+1904:     if (
+1905:       editing &&
+1906:       (!current ||
+1907:         current.deletedAt ||
+1908:         !context.editor ||
+1909:         context.editor !== editor ||
+1910:         nativeEditorOwners.current.get(context.editor) !== context.noteId ||
+1911:         editor.isDestroyed ||
+1912:         !editor.isEditable ||
+1913:         !context.bookmark ||
+1914:         (current.locked && !accessGate.state?.notes[current.id]?.authorized) ||
+1915:         (nativeDocumentVersions.current.get(editor) || 0) !==
+1916:           context.documentVersion)
+1917:     )
+1918:       throw new Error("编辑内容或选区已改变，请重新选择后执行操作");
+1919:   };
+1920:   const nativeSelection = (context: NativeContext) => {
+1921:     nativeAssert.current(context, true);
+1922:     const target = context.editor!;
+1923:     target.view.dispatch(
+1924:       target.state.tr.setSelection(context.bookmark!.resolve(target.state.doc)),
+1925:     );
+1926:     return target;
+1927:   };
+1928:   nativeHandler.current = (intent, context, sequence) => {
+1929:     if (intent.kind === "search") {
+1930:       setNativeSearchAck(sequence);
+1931:       setQuery(intent.phase === "cancel" ? "" : intent.value);
+1932:       setSearching(intent.phase !== "cancel");
+1933:       setFilter("");
+1934:       return;
+1935:     }
+1936:     if (intent.kind === "windowActivity") return;
+1937:     try {
+1938:       nativeAssert.current(context);
+1939:       const command: MenuCommand | undefined =
+1940:         intent.kind === "menu" ? intent.command : undefined;
+1941:       if (intent.kind === "action") {
+1942:         switch (intent.action) {
+1943:           case "newFolder":
+1944:             setContextFolder(null);
+1945:             openModal("newFolder");
+1946:             return;
+1947:           case "toggleSidebar":
+1948:             setSidebar((value) => !value);
+1949:             return;
+1950:           case "backToGallery":
+1951:             back();
+1952:             return;
+1953:           case "newNote":
+1954:             void createNote(() => nativeAssert.current(context));
+1955:             return;
+1956:           case "share":
+1957:             void shareTarget(context);
+1958:             return;
+1959:           case "checklist":
+1960:             nativeSelection(context).chain().focus().toggleTaskList().run();
+1961:             return;
+1962:           case "table":
+1963:             nativeSelection(context)
+1964:               .chain()
+1965:               .focus()
+1966:               .insertTable({ rows: 2, cols: 2, withHeaderRow: false })
+1967:               .run();
+1968:             return;
+1969:           default:
+1970:             throw new Error("原生菜单未提供可执行命令");
+1971:         }
+1972:       }
+1973:       switch (command) {
+1974:         case "viewGallery":
+1975:           updateSettings({ view: "gallery" });
+1976:           return;
+1977:         case "viewList":
+1978:           updateSettings({ view: "list" });
+1979:           return;
+1980:         case "sortDefault":
+1981:         case "sortModified":
+1982:           updateSettings({ sort: "updated" });
+1983:           return;
+1984:         case "sortCreated":
+1985:           updateSettings({ sort: "created" });
+1986:           return;
+1987:         case "sortTitle":
+1988:           updateSettings({ sort: "title" });
+1989:           return;
+1990:         case "groupByDate":
+1991:           updateSettings({ groupDates: settings.groupDates === false });
+1992:           return;
+1993:         case "findInNote":
+1994:           nativeSelection(context);
+1995:           setShowFind(true);
+1996:           return;
+1997:         case "moveNote":
+1998:           nativeSelection(context);
+1999:           setContextNote(null);
+2000:           openModal("move");
+2001:           return;
+2002:         case "pinNote":
+2003:         case "deleteNote":
+2004:         case "lockNote": {
+2005:           nativeSelection(context);
+2006:           const validate = () => nativeAssert.current(context, true);
+2007:           if (command === "lockNote" && !current!.locked) {
+2008:             setContextNote(null);
+2009:             openModal("lock");
+2010:             return;
+2011:           }
+2012:           const action =
+2013:             command === "pinNote"
+2014:               ? {
+2015:                   type: "patchNote",
+2016:                   id: context.noteId,
+2017:                   pinned: !current!.pinned,
+2018:                 }
+2019:               : {
+2020:                   type: command === "deleteNote" ? "deleteNote" : "removeLock",
+2021:                   id: context.noteId,
+2022:                 };
+2023:           void doAction(action, validate)
+2024:             .then(() => {
+2025:               if (command === "deleteNote")
+2026:                 setNoteId((id) => (id === context.noteId ? null : id));
+2027:             })
+2028:             .catch(fail);
+2029:           return;
+2030:         }
+2031:         case "choosePhotoVideo":
+2032:         case "attachFile":
+2033:           nativeSelection(context);
+2034:           nativeAttachmentTarget.current = { ...context };
+2035:           if (!fileInput.current) throw new Error("附件选择器尚未就绪");
+2036:           fileInput.current.accept =
+2037:             command === "choosePhotoVideo" ? "image/*,video/*" : "";
+2038:           fileInput.current.click();
+2039:           return;
+2040:         case "recordAudio":
+2041:           nativeSelection(context);
+2042:           nativeAttachmentTarget.current = { ...context };
+2043:           setRecord(true);
+2044:           return;
+2045:       }
+2046:       const target = nativeSelection(context);
+2047:       const chain = target.chain().focus();
+2048:       const colors: Partial<Record<MenuCommand, string>> = {
+2049:         colorPurple: "#e8c1f0",
+2050:         colorPink: "#f6bfd4",
+2051:         colorOrange: "#fac69c",
+2052:         colorMint: "#b3dfbd",
+2053:         colorBlue: "#bad6f3",
+2054:       };
+2055:       if (command && colors[command]) {
+2056:         chain.setHighlight({ color: colors[command] }).run();
+2057:         return;
+2058:       }
+2059:       switch (command) {
+2060:         case "bold":
+2061:           chain.toggleBold().run();
+2062:           break;
+2063:         case "italic":
+2064:           chain.toggleItalic().run();
+2065:           break;
+2066:         case "underline":
+2067:           chain.toggleUnderline().run();
+2068:           break;
+2069:         case "strikethrough":
+2070:           chain.toggleStrike().run();
+2071:           break;
+2072:         case "highlight":
+2073:           chain.toggleHighlight({ color: "#e8c1f0" }).run();
+2074:           break;
+2075:         case "colorDefault":
+2076:           chain.unsetHighlight().run();
+2077:           break;
+2078:         case "styleTitle":
+2079:           chain.setHeading({ level: 1 }).run();
+2080:           break;

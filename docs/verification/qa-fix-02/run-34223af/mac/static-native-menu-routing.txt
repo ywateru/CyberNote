@@ -1,0 +1,88 @@
+Frozen source 34223af:src-tauri/src/lib.rs
+259:             {
+260:                 use tauri::menu::{
+261:                     MenuBuilder, MenuItemBuilder, PredefinedMenuItem, SubmenuBuilder,
+262:                 };
+263:                 let app_menu = SubmenuBuilder::new(app, "备忘录")
+264:                     .about(None)
+265:                     .separator()
+266:                     .hide()
+267:                     .hide_others()
+268:                     .show_all()
+269:                     .separator()
+270:                     .quit()
+271:                     .build()?;
+272:                 let file = SubmenuBuilder::new(app, "文件")
+273:                     .item(
+274:                         &MenuItemBuilder::with_id("new_note", "新建备忘录")
+275:                             .accelerator("CmdOrCtrl+N")
+276:                             .build(app)?,
+277:                     )
+278:                     .text("new_folder", "新建文件夹")
+279:                     .separator()
+280:                     .text("export", "导出本地备份…")
+281:                     .text("import", "导入本地备份…")
+282:                     .build()?;
+283:                 let edit = SubmenuBuilder::new(app, "编辑")
+284:                     .undo()
+285:                     .redo()
+286:                     .separator()
+287:                     .cut()
+288:                     .copy()
+289:                     .paste()
+290:                     .select_all()
+291:                     .separator()
+292:                     .item(
+293:                         &MenuItemBuilder::with_id("find_in_note", "在备忘录中查找")
+294:                             .accelerator("CmdOrCtrl+F")
+295:                             .build(app)?,
+296:                     )
+297:                     .build()?;
+298:                 let view = SubmenuBuilder::new(app, "显示")
+299:                     .text("sidebar", "显示/隐藏文件夹")
+300:                     .text("gallery", "切换画廊视图")
+301:                     .item(
+302:                         &MenuItemBuilder::with_id("search", "搜索备忘录")
+303:                             .accelerator("CmdOrCtrl+Shift+F")
+304:                             .build(app)?,
+305:                     )
+306:                     .build()?;
+307:                 let window = SubmenuBuilder::with_id(app, tauri::menu::WINDOW_SUBMENU_ID, "窗口")
+308:                     .item(&PredefinedMenuItem::minimize(app, None)?)
+309:                     .item(&PredefinedMenuItem::maximize(app, None)?)
+310:                     .build()?;
+311:                 app.set_menu(
+312:                     MenuBuilder::new(app)
+313:                         .items(&[&app_menu, &file, &edit, &view, &window])
+314:                         .build()?,
+315:                 )?;
+316:                 app.on_menu_event(|app, event| {
+317:                     use tauri::Emitter;
+318:                     if let Some(window) = app
+319:                         .webview_windows()
+320:                         .into_values()
+321:                         .find(|window| window.is_focused().unwrap_or(false))
+322:                     {
+323:                         if window.label() == "main" || window.label().starts_with("note-") {
+324:                             let _ = window.emit_to(
+325:                                 tauri::EventTarget::Window {
+326:                                     label: window.label().to_owned(),
+327:                                 },
+328:                                 "menu-action",
+329:                                 event.id().as_ref(),
+330:                             );
+331:                         }
+332:                     }
+333:                 });
+334:             }
+335:             Ok(())
+336:         });
+337:     #[cfg(target_os = "macos")]
+338:     let builder = builder.plugin(tauri_plugin_notes_ui::init());
+339:     #[cfg(not(feature = "access-boundary-proof"))]
+340:     let builder = builder.invoke_handler(tauri::generate_handler![
+341:         load_workspace,
+342:         register_save_intent,
+343:         acknowledge_access,
+344:         read_note_text,
+345:         workspace_action,
