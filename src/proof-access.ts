@@ -7,6 +7,7 @@ import type {
   InvokeOptions,
 } from "@tauri-apps/api/core";
 import type { AccessEvent } from "./types";
+import { secureId } from "./secure-id";
 type InvokeFn = typeof Invoke;
 type Hold = { id: string; release: () => void };
 let raw: InvokeFn;
@@ -145,7 +146,7 @@ export function createProofInvoker(invoke: InvokeFn): InvokeFn {
       return raw(command, args, options);
     const payload = args as Record<string, unknown>;
     const action = payload.action as Record<string, unknown> | undefined;
-    const id = crypto.randomUUID();
+    const id = secureId();
     const metadata = {
       requestId: id,
       command,

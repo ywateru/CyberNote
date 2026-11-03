@@ -93,4 +93,6 @@ ID 冲突采用导入副本：既有普通文件夹、笔记、附件保留原 I
 
 Android 11 自带 Chrome 91 缺少 Array.findLast；Tiptap 3 的事务分发使用此方法。入口在载入编辑器前引入 core-js 对应补全，CSS 根高度提供 100vh→100dvh fallback，Vite 目标 chrome90。原生 MainActivity 统一设置 WebView 容器的 systemBars / IME 避让：底部取两者 inset 的最大值，并扣除已处理的 inset 后传给子视图；保持 adjustResize 配置，避免旧 WebView 在 edge-to-edge 下仅被键盘覆盖而不缩小布局。前端只使用该实际布局高度的 resize，不再叠加键盘 offset。系统 Back 经 Tauri onBackButtonPress 进入同一 React 导航。Android11 / Chrome91 原生坐标触摸的键盘→格式→X / Back 回归见 `docs/verification/app-001-fix-01-ime/`，待独立复验。
 
+Android WebView 91 即使处于安全上下文也缺少 `crypto.randomUUID`，但支持 `getRandomValues`。保存intent、客户端演示实体与可选proof请求ID统一由 `secureId` 生成：优先原生randomUUID，否则使用平台getRandomValues填充16字节并设置RFC4122 v4版本/variant位。两种安全随机源均不可用时明确拒绝，保存队列保留pending内容；禁止Math.random或可预测计数器降级。Rust仍生成正式实体ID，授权协议和revision基线不变。
+
 锁定使用 Argon2 + AES-GCM，密钥仅保留进程内存；正文从数据库明文记录清除，secure_delete + wal_checkpoint(TRUNCATE) 减少旧正文遗留，标题仍作为元数据可见。当前含附件笔记不支持锁定。归档不依赖跨文件系统的假原子事务；附件引用以 SQLite 提交为准，暂存日志承担中断恢复。

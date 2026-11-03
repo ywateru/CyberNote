@@ -1,5 +1,6 @@
 import { listen } from "@tauri-apps/api/event";
 import { AccessGate } from "./access-client";
+import { secureId } from "./secure-id";
 import type { AccessEvent, AccessState } from "./types";
 import { invoke as nativeInvoke, isTauri } from "@tauri-apps/api/core";
 import { createProofInvoker, proofReceive, proofVerdict } from "./proof-access";
@@ -54,7 +55,7 @@ function accept<T>(
   return value;
 }
 export async function registerSaveIntent(noteId: string): Promise<string> {
-  const intent = crypto.randomUUID();
+  const intent = secureId();
   if (native)
     await invoke("register_save_intent", {
       noteId,
@@ -185,7 +186,7 @@ export async function action<T = Workspace>(
   switch (a.type) {
     case "createNote": {
       const note: Note = {
-        id: crypto.randomUUID(),
+        id: secureId(),
         folderId: String(a.folderId || "default"),
         document: structuredClone(blankDoc),
         title: "新备忘录",
@@ -243,7 +244,7 @@ export async function action<T = Workspace>(
       break;
     case "createFolder": {
       const f = {
-        id: crypto.randomUUID(),
+        id: secureId(),
         name: String(a.name),
         kind: "normal",
         parentId: (a.parentId as string | null) || null,
@@ -301,7 +302,7 @@ export async function storeAttachment(
     return attachment;
   }
   const a: Attachment = {
-    id: crypto.randomUUID(),
+    id: secureId(),
     noteId,
     kind: file.type.startsWith("image/")
       ? "image"
