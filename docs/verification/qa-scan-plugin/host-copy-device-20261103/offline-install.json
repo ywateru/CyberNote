@@ -1,0 +1,46 @@
+[
+  {
+    "args": [
+      "shell",
+      "cmd",
+      "connectivity",
+      "airplane-mode",
+      "enable"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "shell",
+      "svc",
+      "wifi",
+      "disable"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "shell",
+      "svc",
+      "data",
+      "disable"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "install",
+      "-r",
+      "plugins/tauri-plugin-notes-scan/android/harness/build/outputs/apk/debug/harness-debug.apk"
+    ],
+    "exit": 0,
+    "stdout": "Performing Streamed Install\nSuccess\n",
+    "stderr": ""
+  }
+]

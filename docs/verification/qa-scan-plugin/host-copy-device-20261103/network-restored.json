@@ -1,0 +1,55 @@
+{
+  "commands": [
+    {
+      "args": [
+        "shell",
+        "am",
+        "force-stop",
+        "com.local.notesscan.harness"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "disable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "svc",
+        "wifi",
+        "enable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "svc",
+        "data",
+        "enable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "after": {
+    "airplane_mode_on": "0",
+    "wifi_on": "1",
+    "mobile_data": "1"
+  },
+  "matchesBefore": true
+}

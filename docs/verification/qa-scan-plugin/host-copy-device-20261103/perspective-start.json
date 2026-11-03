@@ -1,0 +1,29 @@
+[
+  {
+    "args": [
+      "shell",
+      "am",
+      "force-stop",
+      "com.local.notesscan.harness"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "shell",
+      "am",
+      "start",
+      "-W",
+      "-n",
+      "com.local.notesscan.harness/com.local.notesscan.DeviceFixtureActivity",
+      "--es",
+      "scenario",
+      "perspective-pdf"
+    ],
+    "exit": 0,
+    "stdout": "Starting: Intent { cmp=com.local.notesscan.harness/com.local.notesscan.DeviceFixtureActivity (has extras) }\nStatus: ok\nLaunchState: COLD\nActivity: com.local.notesscan.harness/com.local.notesscan.DeviceFixtureActivity\nTotalTime: 1158\nWaitTime: 1164\nComplete\n",
+    "stderr": ""
+  }
+]

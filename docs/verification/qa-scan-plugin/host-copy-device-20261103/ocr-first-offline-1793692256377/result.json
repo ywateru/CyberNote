@@ -1,0 +1,17 @@
+{
+  "scenario": "ocr-first-offline",
+  "startedAt": 1793692256377,
+  "scope": "Native SessionStore\/MLKit\/Bitmap\/PdfDocument\/PdfRenderer only; no camera, Tauri invoke or main Store",
+  "preconditions": {
+    "airplaneMode": 1,
+    "activeNetwork": null,
+    "gmsInstalled": true
+  },
+  "checks": [],
+  "status": "failed",
+  "error": {
+    "class": "com.local.notesscan.ScanFailure",
+    "message": "无效会话目录"
+  },
+  "finishedAt": 1793692256411
+}

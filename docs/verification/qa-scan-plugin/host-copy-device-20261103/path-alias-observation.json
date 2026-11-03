@@ -1,0 +1,17 @@
+{
+  "shell run-as com.local.notesscan.harness pwd": {
+    "exit": 0,
+    "stdout": "/data/user/0/com.local.notesscan.harness\n",
+    "stderr": ""
+  },
+  "shell run-as com.local.notesscan.harness readlink -f files/notes-scan-sessions": {
+    "exit": 0,
+    "stdout": "/data/user/0/com.local.notesscan.harness/files/notes-scan-sessions\n",
+    "stderr": ""
+  },
+  "shell ls -ld /data/user/0 /data/data": {
+    "exit": 0,
+    "stdout": "drwxrwx--x 207 system system 12288 2026-11-03 15:50 /data/data\ndrwxrwx--x 207 system system 12288 2026-11-03 15:50 /data/user/0\n",
+    "stderr": ""
+  }
+}
