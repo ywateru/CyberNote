@@ -18,7 +18,8 @@
 | APP-001-FIX-06 Android组字失焦/导航 | in-progress，fa1cdb5平台对照/8b9d6af独立复核完成 | 同Trime普通contenteditable失焦、原生EditText藏IME均同现ni hao‸，现证据反对应用盲目回滚/删字符；旧格式/后台观察与历史报告保留，原版精确语义、导航隔离与宿主存储保全仍unknown；输入设置已恢复，未改产品 |
 | APP-001-FIX-07 纸张保存返回选区 | 原选纸P2有限关闭，完整任务partial | 4e2adbd独立复验5c46536/APK5dd6dfc8，取消/grid-large/重开Back均保选区、全文、Editor/View/DOM及父key；自身保存/Home恢复/COLD完整Rust正文与纸张通过。开发真实Store外部变化仅独立只读复核；Undo首步无正文变化unknown，原版/真实第二窗/完整矩阵未通过，旧e117失败保留 |
 | APP-001-PAPER-PREVIEW 手机纸张页 | pending，FIX07有限门槛已满足，待媒体与App源码交接 | 六SVG和有限几何研究已准备；选择器专属预览/留白/行列布局待接入，不改真正纸张间距，不冒称低清录屏可证明高清像素 |
-| APP-002 媒体闭环 | in-progress，0b29cc0独立静态有限pass，旧包真实流程基线进行中 | 资源清理候选生产模块26项/typecheck/12顶部检查独立通过，未合入；Android5dd6真实getUM流程仅在hostmicoff零信号下执行，模拟器无active gRPC，受控音轨/可听采集仍unknown；Mac56d7图片/PDF真实附件基线进行中。录音/附件/绘画均未整体验收 |
+| APP-002 媒体闭环 | in-progress，旧包录音入口P1，资源清理候选静态有限pass | 0b29cc0生产模块26项/typecheck/12顶部检查独立通过，未合入；Android5dd6在hostmicoff后真实点录音，两次（含无observer）在权限提示前约10秒SIGABRT，转PERMISSION-01；正文保全/附件为空。模拟器无active gRPC，受控音轨/可听采集仍unknown；Mac56d7图片/PDF真实附件基线进行中，均未整体验收 |
+| APP-002-PERMISSION-01 手机媒体权限入口 | in-progress，旧5dd6重复实际FAIL，最小公开接口候选准备 | Wry0.57.1 GetUrl SendError panic与本App权限回调webview.url同步路径相符，因果由锁定源码/候选进一步确认；不放开任意来源、不取消系统授权。先冻结旧失败、独立静态审查，再新APK复验权限与现有录制流程；有效音轨仍unknown |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |
