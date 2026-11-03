@@ -70,6 +70,10 @@ Rust 错误应结构化：code/message，UI 显示错误并保留未保存内容
 
 上述为APP-002修复契约，并非当前版本已具备。静态缺口及真实自检方案见`research/media-roundtrip-readiness/analysis.md`；设备授权、有效音轨、冷启可听播放和像素仍须独立验证。
 
+APP-002-ATTACHMENT-SUBMIT-01将同一契约先接入系统文件选择链。操作在打开面板前固定原目标与operationId，未发起和已失效分别表达；晚面板结果不得回落到当前笔记。focus触发的可信同步必须给出成功/序号/当前snapshot，只有后端session/global epoch/noteEpoch、原scope/note/Editor/文档版本/书签均未变，才可将本次操作重绑定纯renderer generation变化。全局AccessGate语义不变，真实目标变化仍拒绝。
+
+为覆盖“文件已写入但响应或正文失败”，后端以真实窗口、授权session、原note和operationId建立持久操作记录，附件元数据与记录同事务提交，相同操作重复请求复用结果；新授权下可核查真实结果。操作记录独立于公开Attachment与归档字段。前端处理插入false/throw，将stored、inserted、正文ACK与列表刷新分别记账。安全补偿仅作用本操作新建文件，Rust核owner、权威正文引用、保存intent和屏障；已引用保留，无法安全判定则deferred。冷启仅恢复有该操作记录的未引用新文件，不清扫旧孤儿。具体接口名与实现检查在候选中同步，当前不能称已接入。
+
 ### 进程授权与多窗口保存边界（APP-001-FIX-03）
 
 Rust Session拥有随机进程sessionId、全局epoch与逐笔记epoch，Store.keys是唯一解锁授权。renderer不保留独立unlocked集合。notes-access只广播prepare/commit/abort、操作ID、目标ID、真实参与窗口及access元数据，不带正文/密码/钥匙。设置锁、移除锁、关闭全部锁、删除笔记/文件夹、永久删除和归档导入均先冻结目标，真实窗口集合来自AppHandle.webview_windows，调用窗口身份由Tauri注入，不能通过action自报。
