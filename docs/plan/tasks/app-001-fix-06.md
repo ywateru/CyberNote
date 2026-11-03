@@ -9,7 +9,7 @@ depends-on: [app-001-fix-04]
 
 收束FIX04真实候选版仍失败的组字失焦/后台边界。FIX04先冻结空段长停留主路径，允许独立验证该有限修复；本任务未通过前，手机中文输入整体仍阻塞，不能将拆分任务理解为降低原需求。
 
-2026-11-03开发实测candidate01（APK d5c6f59b…）中，真实格式入口导致程序化DOM blur，随后观察到`isTrusted=false`的compositionend，data为`ni hao‸`，PM清理后预编辑仍残留在正文。只能确认事件与动作时序；Tiptap blur实现中的DOM blur/removeAllRanges不证明它构造了该事件。实际切后台/恢复也留下本轮预编辑，授权同步后Editor14换为Editor32；该事实不证明同步是残留的唯一原因。对应旧0aac候选的同条件对照由FIX04冻结记录补充，未取到结果前不判既有问题或修复回归。
+2026-11-03开发实测candidate01（源码f3071f3，APK d5c6f59b…）中，真实格式入口导致程序化DOM blur，随后观察到`isTrusted=false`的compositionend，data为`ni hao‸`，PM清理后预编辑仍残留在正文。只能确认事件与动作时序；Tiptap blur实现中的DOM blur/removeAllRanges不证明它构造了该事件，真实候选操作也观察到isTrusted=false，不能仅据此分类。实际切后台/恢复也留下本轮预编辑，授权同步后Editor14换为Editor32；该事实不证明同步是残留的唯一原因。旧0aac同条件空paragraph约0.555秒后打开格式，也保留`ni hao‸`；paper取消脚本在两包均由31..35变为1..1。证明这两个有限失败在旧包已存在，不证明全部blur/后台同因，完整证据见FIX04冻结selfcheck。
 
 1. 正常候选提交仍以真实输入法结果替换对应组字段，格式入口、系统失焦、后台、返回与切笔记不留下临时拼音/光标符号，不重复候选、不删相邻已确认文本。
 2. 先记录各边界原生输入法实际commit/cancel、DOM事件、事务、焦点与文档时序，再选最小实现。若无真实候选，不猜测汉字；不能按字符串删除`‸`、删光标前固定字符、清整篇或用假compositionend得到通过。需要暂存/回退预编辑时须明确真实起止范围、映射事务、原有选区内容与已确认正文保全，先写契约再实施。

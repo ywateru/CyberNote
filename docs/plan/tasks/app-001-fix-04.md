@@ -39,6 +39,8 @@ src/Editor.tsx、必要composition适配模块、src/App.tsx中直接相关保�
 
 ## verification
 
+2026-11-03本轮已冻结f3071f3，APK及重新安装base.apk均为d5c6f59b79031d1e103f418450e6cbd9d7fa8e8fc085263fab3d23d6b3e04d21（300954658B），保留`/private/tmp/notes-fix04-candidate-01-d5c6f59b.apk`。91输入聚合105aef1b…，不声称全部输入均提交或完整HEAD可复现；精确清单见`docs/verification/app-001-fix-04/source-inputs.json`。开发自测和已知失败见selfcheck/artifacts。原输入设置与Trime Disable已恢复，Android明确交独立verify有限复验主路径；本任务partial/in-progress，FIX06与paper失败不因拆分而解除手机交付阻塞。Mac原4118包保留，root另接入顶部/关闭窗口改动构建新的正式候选。
+
 开发冻结修复源码、APK及安装内hash，再交独立verify；不以浏览器预览或直接输入汉字代替安装版的真实IME路径。
 
 - 原环境/同输入法/同内联模式：实际软键盘输入拼音，捕获compositionstart/update、候选可见、原生实际marked range/只读View状态；分别快速选词及无按键停留跨过原故障边界后再选词。时间戳、preedit、candidate、输入事件和最终JSON对应，不能只看最后标题或用固定延时推断保存ACK。

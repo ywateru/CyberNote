@@ -12,10 +12,10 @@
 | APP-001-FIX-02 Mac顶部校准 | in-progress，217133a独立blocked/有限功能通过 | 34223af正式Mac4118f77f…/APK0aac2d73…；搜索续输/Undo归属/格式选区/多窗/基本锁态隔离/画廊分栏及Android冷启有限通过；CmdW和公共失活像素仍P2 blocking（独立74.55%），同位置焦点unknown，完整任务未通过 |
 | APP-001 原生顶部模块 | 9f4d61b历史有限静态pass，34223af正式宿主已接入 | 当前插件锁对齐2.7.2，并修正搜索祖先临时隐藏导致丢焦；4a16a6a不覆盖新增输入。正式生命周期/焦点/窗口路由由本轮独立复验，Mac真marked composition及完整像素状态仍unknown |
 | APP-001-FIX-03 锁定跨窗失效 | 本轮双端有限安全门槛pass，完整矩阵partial | e5fcdc4 Android14断言关闭UUID P1；835751d真实Mac生产Q1/Q7与同源proof15断言，含旧基线冲突/副本冷启/Q2排空/Q3abort/Q4拒绝及恢复，无新P1；S3/四fixtureGUI/对象identity/全矩阵仍unknown，允许FIX02接入 |
-| APP-001-FIX-04 Android长停留中文组字 | in-progress，e352541独立实际P1待新包修复复验 | 0aac新空段真实timer/end/clear及node替换双写已记录；中部34s长停保持同node并正确提交，真实ACK本轮未重建；固定PM版本仅Android有效原生组字opt-in适配构建中，原失败保留，修复未通过；Mac已交回 |
-| APP-001-FIX-02-VISUAL-01 顶部内部内容 | in-progress，隔离源码准备e8cce09 | 中文格式/按钮内部墨迹/真实搜索排布已在独立worktree编译；未合入宿主、runtime/像素unknown，待FIX04冻结后接入复验 |
-| APP-001-FIX-05 Mac关闭窗口 | in-progress，实际CmdW未通过 | FIX02再次单次保留66795；隔离准备系统关闭角色，保留现有close-request保存守卫，不能直接destroy；正式运行仍待验证 |
-| APP-001-FIX-06 Android组字失焦/导航 | pending，实际残留继续blocking | FIX04候选空段长停留开发有限通过，格式blur/后台仍留预编辑；待旧包同条件对照、主路径冻结/独立复验后串行修复，事件构造者与paper选区失败因果未证 |
+| APP-001-FIX-04 Android长停留中文组字 | in-progress/partial，f3071f3冻结待独立复验 | 固定PM1.42.9/Android opt-in，实际APK d5c6f59b…；开发空段约199s、中部/快速/删除/混输有限通过，完整JSON冷保全含原失败残留；设备已交verify，格式/后台/paper仍阻塞整体，未标整项通过 |
+| APP-001-FIX-02-VISUAL-01 顶部内部内容 | in-progress，7c133f1接入正式宿主构建中 | e8cce09准备与7e8c50c有限静态pass已合入，中文格式/按钮墨迹/真实搜索排布；runtime/像素仍unknown，旧公共ROI失败未关闭 |
+| APP-001-FIX-05 Mac关闭窗口 | in-progress，c64b697接入正式宿主构建中 | da32415准备与a6e01b9有限静态pass已合入，系统关闭角色沿既有close-request保存守卫；旧实际CmdW失败未关闭，正式运行待验证 |
+| APP-001-FIX-06 Android组字失焦/导航 | pending，实际残留继续blocking | FIX04候选格式blur/后台仍留预编辑；旧0aac同条件复现格式残留及paper取消31..35→1..1，原生commit/cancel与paper因果待实证；主路径独立复验后串行修复 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
