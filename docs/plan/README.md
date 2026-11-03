@@ -15,7 +15,7 @@
 | APP-001-FIX-04 Android长停留中文组字 | in-progress/partial，f3071f3冻结待独立复验 | 固定PM1.42.9/Android opt-in，实际APK d5c6f59b…；开发空段约199s、中部/快速/删除/混输有限通过，完整JSON冷保全含原失败残留；设备已交verify，格式/后台/paper仍阻塞整体，未标整项通过 |
 | APP-001-FIX-02-VISUAL-01 顶部内部内容 | in-progress，7c133f1接入正式宿主构建中 | e8cce09准备与7e8c50c有限静态pass已合入，中文格式/按钮墨迹/真实搜索排布；runtime/像素仍unknown，旧公共ROI失败未关闭 |
 | APP-001-FIX-05 Mac关闭窗口 | in-progress，c64b697接入正式宿主构建中 | da32415准备与a6e01b9有限静态pass已合入，系统关闭角色沿既有close-request保存守卫；旧实际CmdW失败未关闭，正式运行待验证 |
-| APP-001-FIX-06 Android组字失焦/导航 | pending，实际残留继续blocking | FIX04候选格式blur/后台仍留预编辑；旧0aac同条件复现格式残留及paper取消31..35→1..1，原生commit/cancel与paper因果待实证；主路径独立复验后串行修复 |
+| APP-001-FIX-06 Android组字失焦/导航 | pending，实际残留继续blocking | FIX04候选格式blur/后台仍留预编辑；旧0aac同条件复现格式残留；paper取消两包均保留选区，实际失败为选择大网格后31..35→1..1，原生commit/cancel与paper因果待实证；主路径独立复验后串行修复 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
