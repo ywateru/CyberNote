@@ -1,3 +1,4 @@
+mod media_permission;
 mod session;
 mod store;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
@@ -234,18 +235,8 @@ async fn import_archive(
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = tauri::Builder::default()
-        .on_permission_request(|webview, kind| {
-            use tauri::webview::{PermissionKind, PermissionResponse};
-            let trusted = webview
-                .url()
-                .map(|u| matches!(u.host_str(), Some("localhost") | Some("tauri.localhost")))
-                .unwrap_or(false);
-            if trusted && matches!(kind, PermissionKind::Microphone | PermissionKind::Camera) {
-                PermissionResponse::Allow
-            } else {
-                PermissionResponse::Deny
-            }
-        })
+        .on_permission_request(media_permission::response)
+        .plugin(media_permission::lifecycle())
         .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
             let root = app.path().app_data_dir()?;

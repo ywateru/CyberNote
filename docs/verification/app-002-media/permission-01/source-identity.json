@@ -1,0 +1,61 @@
+{
+  "capturedAt": "2026-11-03T15:01:00.555190+00:00",
+  "worktree": "/private/tmp/apple-notes-media-roundtrip-02",
+  "headBeforePermissionCandidate": "5cb43db63f7fdae8e9cf3d5d3de66ff71d4481dc",
+  "cleanupCandidate": "0b29cc0",
+  "files": {
+    "src-tauri/src/media_permission.rs": {
+      "sha256": "7e5dc1d8248471de6326aebc6df97dfe46cce676fe43d168f0a22df68e9a1f17",
+      "bytes": 14994
+    },
+    "src-tauri/src/lib.rs": {
+      "sha256": "b020421707ba7da9e6339bebc09531e3cbf3545a030fd21a3ab527537a63d14c",
+      "bytes": 11945
+    },
+    "src-tauri/tauri.conf.json": {
+      "sha256": "bdcaad86a23a62886b9755bb1bdc38997cb9e03f3f5c16b18346a58b486996f0",
+      "bytes": 1363
+    },
+    "src-tauri/Cargo.toml": {
+      "sha256": "a84af3b69d650a5f743193ec61b268a2ba004416ad3fd7f2f400c76704d0cb31",
+      "bytes": 828
+    },
+    "src-tauri/Cargo.lock": {
+      "sha256": "99d9e9cd49367cd850d0362f2d9cb38b58e8356aa9cdd9127fb90441a56c666b",
+      "bytes": 114470
+    },
+    "src/App.tsx": {
+      "sha256": "5c81e6d532d70c89c966a9c275406f1998421d83a898ca74b708d4b8b7352226",
+      "bytes": 123723
+    },
+    "src/recording-session.ts": {
+      "sha256": "38a83851b3ee0234e7662f32cf9fed8e7019492b42e7c32bfd74af707eae11c0",
+      "bytes": 8026
+    },
+    "src/editor-schema.ts": {
+      "sha256": "13c90323b0632d6668e98ca3a24d29fd8db991e881446ba20263bbbf43631252",
+      "bytes": 2701
+    },
+    "src/Editor.tsx": {
+      "sha256": "447dfce35d0934bac18b961c98dccbebc140ae6f1c27f8e0f940cecd48aa863c",
+      "bytes": 8644
+    }
+  },
+  "checksPlanned": [
+    "cargo test --manifest-path src-tauri/Cargo.toml --offline --lib media_permission::tests --target-dir /Users/water/work/2026/Apple-Notes-Clone/src-tauri/target",
+    "cargo check --manifest-path src-tauri/Cargo.toml --offline --lib --target aarch64-linux-android --target-dir /Users/water/work/2026/Apple-Notes-Clone/src-tauri/target"
+  ],
+  "packagedBuildOrInstall": false,
+  "additionalLockedPublicApi": {
+    "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/resources/mod.rs": "c70407d96ebe8851ed7d269cdd7ee167c148d542dc08026086ddb8473f46a4ce",
+    "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/lib.rs": "fda874d750f7ce7959b5914707257ebd49b4a619d2e1c23c74b52821371c2bd0",
+    "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/mod.rs": "b5319b171c09a8e652d75585be39d92b387df370340ca90b58141b501c17009a",
+    "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/window/mod.rs": "58734d4a9165cd270b021bee75310b897d7d3f4ad64644b1b574b898a48fa153",
+    "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs": "8c8a9c3cdb93d1d149f1f1822e5bf8cd5e454f1ce7f3e57a427b97ba59f52a9f"
+  },
+  "ndkEnvironment": {
+    "CC_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang",
+    "CXX_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang++",
+    "AR_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar"
+  }
+}
