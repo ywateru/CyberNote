@@ -1,0 +1,65 @@
+{
+  "at": "2026-11-03T20:48:05.608624+00:00",
+  "sign": {
+    "argv": [
+      "/usr/bin/codesign",
+      "--force",
+      "--sign",
+      "-",
+      "--timestamp=none",
+      "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app: replacing existing signature\n"
+  },
+  "verify": {
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app: valid on disk\n/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app: satisfies its Designated Requirement\n"
+  },
+  "displays": [
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Executable=/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app/Contents/MacOS/notes-clone\nIdentifier=com.local.notesclone\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=31373 flags=0x2(adhoc) hashes=974+3 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=a7293be3da2d66d5fbe47bfd29f02c1e89731f44\nCandidateCDHashFull sha256=a7293be3da2d66d5fbe47bfd29f02c1e89731f446349e2322a672ae075848614\nHash choices=sha256\nCMSDigest=a7293be3da2d66d5fbe47bfd29f02c1e89731f446349e2322a672ae075848614\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11124736\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=a7293be3da2d66d5fbe47bfd29f02c1e89731f44\nSignature=adhoc\nInfo.plist entries=16\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=0\nInternal requirements count=0 size=12\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Executable=/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app"
+      ],
+      "exit": 0,
+      "stdout": "# designated => cdhash H\"a7293be3da2d66d5fbe47bfd29f02c1e89731f44\"\n",
+      "stderr": "Executable=/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app/Contents/MacOS/notes-clone\n"
+    }
+  ]
+}

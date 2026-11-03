@@ -1,0 +1,108 @@
+{
+  "at": "2026-11-03T21:00:42.402639+00:00",
+  "scope": "Only source-configured direct AGP/Kotlin entry coordinates and present artifact identities; not a full transitive/offline resolution proof",
+  "sourceConfigurations": [
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/build.gradle.kts",
+      "bytes": 375,
+      "sha256": "975b86375423d877cfd5a90648bed227bae5665a82fce99e3ebd901419e80bf9",
+      "text": "buildscript {\n    repositories {\n        google()\n        mavenCentral()\n    }\n    dependencies {\n        classpath(\"com.android.tools.build:gradle:9.3.1\")\n        classpath(\"org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.10\")\n    }\n}\n\nallprojects {\n    repositories {\n        google()\n        mavenCentral()\n    }\n}\n\ntasks.register(\"clean\").configure {\n    delete(\"build\")\n}\n"
+    },
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "bytes": 343,
+      "sha256": "e3856dc35370b6f5c3222b981e546c08121bf96629e6a336d0c7f8f8020eb942",
+      "text": "plugins {\n    `kotlin-dsl`\n}\n\ngradlePlugin {\n    plugins {\n        create(\"pluginsForCoolKids\") {\n            id = \"rust\"\n            implementationClass = \"RustPlugin\"\n        }\n    }\n}\n\nrepositories {\n    google()\n    mavenCentral()\n}\n\ndependencies {\n    compileOnly(gradleApi())\n    implementation(\"com.android.tools.build:gradle:9.3.1\")\n}\n"
+    }
+  ],
+  "cacheEntries": [
+    {
+      "cache": "/private/tmp/notes-scan-gradle-home",
+      "coordinate": "com.android.tools.build:gradle:9.3.1",
+      "exists": true,
+      "artifacts": [
+        {
+          "path": "/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/com.android.tools.build/gradle/9.3.1/683d0b5ce181727ea2dcc9cecd12a380bb21433c/gradle-9.3.1.pom",
+          "bytes": 9034,
+          "sha256": "310b87ad50d932c7ce88a424e9828d460536a524a2f91c2b1656915183c426dd"
+        },
+        {
+          "path": "/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/com.android.tools.build/gradle/9.3.1/c1b6c02a8fc39bf66416535fb07a966f2a0aea86/gradle-9.3.1.jar",
+          "bytes": 13156012,
+          "sha256": "4ae9f55cef115978de7f502e49ea163e89c78a8ab40943504a37c948b94eadb5"
+        },
+        {
+          "path": "/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/com.android.tools.build/gradle/9.3.1/dd3450281d8e08aebe2b56dcf84a9a4c243077a/gradle-9.3.1.module",
+          "bytes": 11102,
+          "sha256": "6237ee246d21fe5c6378cb061a29ddc4426a4f0dcf1bc66e72456a485bd32182"
+        }
+      ]
+    },
+    {
+      "cache": "/private/tmp/notes-scan-gradle-home",
+      "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.10",
+      "exists": true,
+      "artifacts": [
+        {
+          "path": "/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/2.2.10/5b7032e3454baa99627177ef48a324dbf33d42a3/kotlin-gradle-plugin-2.2.10-gradle813.jar",
+          "bytes": 23160022,
+          "sha256": "bd6b97bd9e563bb57db55a98eaad4306e3f0b39c8a0f9be76e476b22ad51f3b8"
+        },
+        {
+          "path": "/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/2.2.10/ac80ea5e4634d6cfa0affddfa0be8ae4bb9270f5/kotlin-gradle-plugin-2.2.10.module",
+          "bytes": 169250,
+          "sha256": "d0aa54915c5b57407a3c1740b0c530cf9657bf587d6d1018b79a8fa67f6a8821"
+        },
+        {
+          "path": "/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/2.2.10/b7f13cfcd49cdf8ad62d055aca4db62202da0994/kotlin-gradle-plugin-2.2.10.pom",
+          "bytes": 13055,
+          "sha256": "2efac5be4709583777b2505ea2603ba8e1d7bcf9fa633f2ed7054d6511b1c4a5"
+        }
+      ]
+    },
+    {
+      "cache": "/Users/water/.gradle",
+      "coordinate": "com.android.tools.build:gradle:9.3.1",
+      "exists": true,
+      "artifacts": [
+        {
+          "path": "/Users/water/.gradle/caches/modules-2/files-2.1/com.android.tools.build/gradle/9.3.1/683d0b5ce181727ea2dcc9cecd12a380bb21433c/gradle-9.3.1.pom",
+          "bytes": 9034,
+          "sha256": "310b87ad50d932c7ce88a424e9828d460536a524a2f91c2b1656915183c426dd"
+        },
+        {
+          "path": "/Users/water/.gradle/caches/modules-2/files-2.1/com.android.tools.build/gradle/9.3.1/c1b6c02a8fc39bf66416535fb07a966f2a0aea86/gradle-9.3.1.jar",
+          "bytes": 13156012,
+          "sha256": "4ae9f55cef115978de7f502e49ea163e89c78a8ab40943504a37c948b94eadb5"
+        },
+        {
+          "path": "/Users/water/.gradle/caches/modules-2/files-2.1/com.android.tools.build/gradle/9.3.1/dd3450281d8e08aebe2b56dcf84a9a4c243077a/gradle-9.3.1.module",
+          "bytes": 11102,
+          "sha256": "6237ee246d21fe5c6378cb061a29ddc4426a4f0dcf1bc66e72456a485bd32182"
+        }
+      ]
+    },
+    {
+      "cache": "/Users/water/.gradle",
+      "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.10",
+      "exists": true,
+      "artifacts": [
+        {
+          "path": "/Users/water/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/2.2.10/5b7032e3454baa99627177ef48a324dbf33d42a3/kotlin-gradle-plugin-2.2.10-gradle813.jar",
+          "bytes": 23160022,
+          "sha256": "bd6b97bd9e563bb57db55a98eaad4306e3f0b39c8a0f9be76e476b22ad51f3b8"
+        },
+        {
+          "path": "/Users/water/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/2.2.10/ac80ea5e4634d6cfa0affddfa0be8ae4bb9270f5/kotlin-gradle-plugin-2.2.10.module",
+          "bytes": 169250,
+          "sha256": "d0aa54915c5b57407a3c1740b0c530cf9657bf587d6d1018b79a8fa67f6a8821"
+        },
+        {
+          "path": "/Users/water/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/2.2.10/b7f13cfcd49cdf8ad62d055aca4db62202da0994/kotlin-gradle-plugin-2.2.10.pom",
+          "bytes": 13055,
+          "sha256": "2efac5be4709583777b2505ea2603ba8e1d7bcf9fa633f2ed7054d6511b1c4a5"
+        }
+      ]
+    }
+  ]
+}

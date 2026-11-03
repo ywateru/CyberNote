@@ -1,0 +1,50 @@
+{
+  "at": "2026-11-03T21:04:58.551488+00:00",
+  "scope": "Read-only final Android attempt03 process check",
+  "activeBuildProcesses": [],
+  "gradleServices": [
+    {
+      "pid": 49050,
+      "lsofExit": 0,
+      "selectedCacheOpenFileCount": 215,
+      "selectedCacheExamples": [
+        "java    49050 water  cwd      DIR               1,17       608            27393541 /private/tmp/notes-scan-gradle-home/daemon/9.6.1",
+        "java    49050 water  txt      REG               1,17     57112            27393525 /private/tmp/notes-scan-gradle-home/native/660c5614fbf4a5f2a75b1949f50a0caf5cd603558e7d8a26e50b933a0cfb79d1/osx-aarch64/libnative-platform.dylib",
+        "java    49050 water  txt      REG               1,17    534584            27394375 /private/tmp/notes-scan-gradle-home/native/0.2.8/aarch64-macos/libgradle-fileevents.dylib"
+      ],
+      "command": "/opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -Xmx2048m -Dfile.encoding=UTF-8 -Duser.country=CN -Duser.language=zh -Duser.variant -cp /private/tmp/notes-scan-gradle-home/wrapper/dists/gradle-9.6.1-bin/4ticwg1pgcbps2hj28r8so764/gradle-9.6.1/lib/gradle-daemon-main-9.6.1.jar -javaagent:/private/tmp/notes-scan-gradle-home/wrapper/dists/gradle-9.6.1-bin/4ticwg1pgcbps2hj28r8so764/gradle-9.6.1/lib/agents/gradle-instrumentation-agent-9.6.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.6.1"
+    },
+    {
+      "pid": 49089,
+      "lsofExit": 0,
+      "selectedCacheOpenFileCount": 14,
+      "selectedCacheExamples": [
+        "java    49089 water    4r   REG               1,17    107582            27392366 /private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-tools-compat/2.3.21/d96ec659bcf373765197eddfcf19995bfeed9896/kotlin-build-tools-compat-2.3.21.jar",
+        "java    49089 water    5r   REG               1,17   1461208            27392334 /private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-tools-impl/2.3.21/c6c11fd63ff15677c11f14dbdbad624f8d8dbf04/kotlin-build-tools-impl-2.3.21.jar",
+        "java    49089 water    6r   REG               1,17     99749            27392066 /private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-tooling-core/2.3.21/7a050c09910ee587944bc2a7413e2d97d751f647/kotlin-tooling-core-2.3.21.jar"
+      ],
+      "command": "/opt/zerobrew/Cellar/openjdk@17/17.0.19/libexec/openjdk.jdk/Contents/Home/bin/java -cp /private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-tools-compat/2.3.21/d96ec659bcf373765197eddfcf19995bfeed9896/kotlin-build-tools-compat-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-tools-impl/2.3.21/c6c11fd63ff15677c11f14dbdbad624f8d8dbf04/kotlin-build-tools-impl-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-tooling-core/2.3.21/7a050c09910ee587944bc2a7413e2d97d751f647/kotlin-tooling-core-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-tools-cri-impl/2.3.21/15fb91d42e1985323b900ed0e0c24e70e601387a/kotlin-build-tools-cri-impl-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-tools-api/2.3.21/9b0a49a4d4c570c63a3a2553816bf0539536ab69/kotlin-build-tools-api-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-runner/2.3.21/3245f77bb78bff349c35e0f4dfaede07e9d1249c/kotlin-compiler-runner-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/2.3.21/c4b47f8e33cdbeedd8c1415ab9f9ade870388162/kotlin-compiler-embeddable-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-daemon-client/2.3.21/8bd63e265ea5e6472f96f7e9e2431d02b4e69f3e/kotlin-daemon-client-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/2.3.21/a2ee2c4e220fee522f0451b723bab2a43f3481a7/kotlin-stdlib-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/2.3.21/8dafd7f0eb5efef35a446683a2774fef61c68aeb/kotlin-script-runtime-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.6.10/1cbe9c92c12a94eea200d23c2bbaedaf3daf5132/kotlin-reflect-1.6.10.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-daemon-embeddable/2.3.21/384c12222b10aaa06fdd2163435709efdade5a02/kotlin-daemon-embeddable-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm/1.8.0/ac1dc37a30a93150b704022f8d895ee1bd3a36b3/kotlinx-coroutines-core-jvm-1.8.0.jar -Djava.awt.headless=true -Djava.rmi.server.hostname=127.0.0.1 -Xmx2048m -XX:ReservedCodeCacheSize=320m -ea -Dkotlin.daemon.custom.run.files.path.for.tests=/Users/water/Library/Application Support/kotlin/daemon -XX:+UseCodeCacheFlushing -XX:+UseParallelGC -Dkotlin.daemon.initiator.marker.file=/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/kotlin-compiler-client-17191483458302050847-is-running --add-exports java.base/sun.nio.ch=ALL-UNNAMED org.jetbrains.kotlin.daemon.KotlinCompileDaemon --daemon-runFilesPath /Users/water/Library/Application Support/kotlin/daemon --daemon-autoshutdownIdleSeconds=7200 --daemon-compilerClasspath /private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-tools-compat/2.3.21/d96ec659bcf373765197eddfcf19995bfeed9896/kotlin-build-tools-compat-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-tools-impl/2.3.21/c6c11fd63ff15677c11f14dbdbad624f8d8dbf04/kotlin-build-tools-impl-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-tooling-core/2.3.21/7a050c09910ee587944bc2a7413e2d97d751f647/kotlin-tooling-core-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-tools-cri-impl/2.3.21/15fb91d42e1985323b900ed0e0c24e70e601387a/kotlin-build-tools-cri-impl-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-tools-api/2.3.21/9b0a49a4d4c570c63a3a2553816bf0539536ab69/kotlin-build-tools-api-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-runner/2.3.21/3245f77bb78bff349c35e0f4dfaede07e9d1249c/kotlin-compiler-runner-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/2.3.21/c4b47f8e33cdbeedd8c1415ab9f9ade870388162/kotlin-compiler-embeddable-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-daemon-client/2.3.21/8bd63e265ea5e6472f96f7e9e2431d02b4e69f3e/kotlin-daemon-client-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/2.3.21/a2ee2c4e220fee522f0451b723bab2a43f3481a7/kotlin-stdlib-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/2.3.21/8dafd7f0eb5efef35a446683a2774fef61c68aeb/kotlin-script-runtime-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.6.10/1cbe9c92c12a94eea200d23c2bbaedaf3daf5132/kotlin-reflect-1.6.10.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-daemon-embeddable/2.3.21/384c12222b10aaa06fdd2163435709efdade5a02/kotlin-daemon-embeddable-2.3.21.jar:/private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm/1.8.0/ac1dc37a30a93150b704022f8d895ee1bd3a36b3/kotlinx-coroutines-core-jvm-1.8.0.jar"
+    },
+    {
+      "pid": 68415,
+      "lsofExit": 0,
+      "selectedCacheOpenFileCount": 0,
+      "selectedCacheExamples": [],
+      "command": null
+    },
+    {
+      "pid": 69762,
+      "lsofExit": 0,
+      "selectedCacheOpenFileCount": 0,
+      "selectedCacheExamples": [],
+      "command": null
+    },
+    {
+      "pid": 82371,
+      "lsofExit": 0,
+      "selectedCacheOpenFileCount": 0,
+      "selectedCacheExamples": [],
+      "command": null
+    }
+  ]
+}

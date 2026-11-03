@@ -1,0 +1,50 @@
+{
+  "startedAt": "2026-11-03T20:50:57.650634+00:00",
+  "stage": "android",
+  "expectedHead": "d8f832e83349c7503b872e0e88853d1ab7b0713a",
+  "sourceAggregate": "21358ef21f530eada2862860e163114b6628ac0ca2e5e88156d4f0f3789f7153",
+  "attempt": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate04/build-01/android-attempt01",
+  "exitCode": 1,
+  "diskFreeBefore": 6286360576,
+  "explicitEnvironmentOverrides": {
+    "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+    "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+    "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+    "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "temporaryGradleInit": {
+    "path": "/private/tmp/notes-scan-gradle-home/init.d/candidate04-offline-attempt01.gradle",
+    "device": 16777233,
+    "inode": 27968747,
+    "bytes": 142,
+    "sha256": "ac1fa48efd4c6b09cc19a6ade0ca25138e44cdfe1e2f4e64300530f8b435c781"
+  },
+  "command": [
+    "pnpm",
+    "android:build",
+    "--debug"
+  ],
+  "offlineMarkerMissing": true,
+  "inputComparisons": {
+    "head": true,
+    "files": true,
+    "toolVersions": true,
+    "relevantEnvironment": true,
+    "selectedParentEnvironment": true,
+    "effectiveBuildEnvironment": true,
+    "ocrCache": true
+  },
+  "temporaryGradleInitRemoved": true,
+  "temporaryGradleInitBeforeCleanup": {
+    "path": "/private/tmp/notes-scan-gradle-home/init.d/candidate04-offline-attempt01.gradle",
+    "device": 16777233,
+    "inode": 27968747,
+    "bytes": 142,
+    "regularFile": true,
+    "sha256": "ac1fa48efd4c6b09cc19a6ade0ca25138e44cdfe1e2f4e64300530f8b435c781"
+  },
+  "endedAt": "2026-11-03T20:51:11.980061+00:00",
+  "diskFreeAfter": 6074695680
+}

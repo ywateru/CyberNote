@@ -1,6 +1,6 @@
 # candidate04 统一包进度
 
-状态：**正常生成前置和零结果文字源码独审通过，尚未最终冻结或构建**。本页记录2026-11-04的阶段结果，不替代准备目录中的原始记录。
+状态：**源码已冻结，Mac已构建并保存，Android三次构建均失败；本批尚未运行验收**。本页记录2026-11-04的阶段结果，不替代准备目录中的原始记录。
 
 ## 正常生成前置
 
@@ -24,3 +24,29 @@ OCR接入及预览明文清理已在主源码独审接受；暂停录音预览�
 截图格式更正：2026-11-04新原版读取已恢复，但CUA原始截图实际为JPEG。candidate03独立目录中17个名为png的历史截图亦经独立文件头检查为JPEG；其旧字节和manifest保持不变，不能用作无损PNG逐像素验收。原版新观察和限制见[补充记录](../../research/mac-zero-original-recapture-20261104-01/README.md)。后续必须先核实真实编码和采样比例。
 
 正式Android构建前另行串行共享Gradle cache使用者，并明确授权已有脚本的临时离线init方案。构建、签名、模型成员核验不代表设备运行、可听录音、真实OCR、冷启或像素验收通过。
+
+## 最终冻结与Mac构建
+
+2026-11-04冻结源码 `d8f832e83349c7503b872e0e88853d1ab7b0713a`，279项列明输入aggregate `21358ef21f530eada2862860e163114b6628ac0ca2e5e88156d4f0f3789f7153`，见[输入清单](build-01/source-inputs-before.json)。前述“后续指定SHA”是当时准备阶段状态，本节为其后实际结果。
+
+Mac `pnpm mac:build` 退出0，输入七类比较均相同。原始链接签名包保留不改，另作完整adhoc签名副本，严格验签退出0。root逐文件核对[Mac阶段清单](build-01/MAC-STAGE-MANIFEST.json)的11个文件，共321,938字节，全部size/SHA-256相符。完整本地签名ZIP已另存 `artifacts/unified-candidate04/NotesClone-mac.zip`，4,750,334字节，SHA-256 `6a821684a64406c5febd9dd6f703e84c09459f0fb7acf90ad015e4e4b40b4738`。原始ZIP同时保留。这不是开发者公证分发包，也没有获得实际OCR、录音或像素通过。
+
+## Android尝试01–03
+
+三次都使用上述冻结输入，未采集旧APK、未安装或启动。root逐文件核对[Android失败阶段清单](build-01/ANDROID-ATTEMPTS-01-03-MANIFEST.json)的23个文件，共422,266字节，全部size/SHA-256相符；当前没有 `android-original-identity.json`。
+
+| 尝试 | 结果 | 实际边界 |
+| --- | --- | --- |
+| 01 | exit1 | Rust编译通过，Tauri本地WebSocket受到执行权限限制，未进入Gradle |
+| 02 | exit-15 | 必要权限解决WebSocket问题，但wrapper先于Gradle offline init启动9.6.1分发包下载；监测发现后停止所属进程，保留95,820,438字节part |
+| 03 | exit1 | 复用本机已有9.6.1成功，两次出现offline标记，无下载提示；离线解析拒绝 `androidx.lifecycle:lifecycle-livedata:2.10.0` |
+
+[wrapper静态审计](wrapper-audit-01/README.md)后，仅新增两个指向已有相同版本分发目录及成功标记的链接；[独立version验证](wrapper-reuse-01/result.json)退出0，原分发树、part和lock字节不变。链接和失败现场均保留。
+
+attempt03的AAR实际上在selected和默认cache中都存在，55,037字节、SHA-256 `3e8c009fc88da1c52e4ed05a81269d5ac9bd405046f300307f5e3a17e201a6df`；对应descriptor也相同。故“No cached version”不能被解释为文件不存在，尚需定位Gradle仓库/索引解析状态。外层configuration cache序列化报错没有证明产品源码错误。七类输入比较仍相同，临时init身份匹配后删除成功，最低可用空间5,004,304,384字节；未触发空间或下载停止器。共享target已释放，但本轮产生的Gradle/Kotlin daemon仍存在，不能声称cache无进程占用。
+
+## 运行与像素门槛
+
+candidate04 Mac尚未启动，Android尚无本批可用APK。录音、暂停回放、真实OCR文字保存与冷启均待本批实际运行。当前窗口工具仍返回Mac锁定，用户的解锁确认并未转化为可操作窗口状态，未继续盲目输入。
+
+历史CUA截图实际编码为JPEG，即使文件后缀写作PNG也不构成无损证据；旧文件与清单保留。新的原生比例PNG取证工具在独立实现/审查中，须通过后才能用于同条件原版/克隆成对截图。整窗像素一致仍UNKNOWN。

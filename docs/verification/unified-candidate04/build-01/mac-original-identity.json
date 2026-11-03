@@ -1,0 +1,104 @@
+{
+  "at": "2026-11-03T20:47:55.420228+00:00",
+  "stage": "mac",
+  "expectedHead": "d8f832e83349c7503b872e0e88853d1ab7b0713a",
+  "sourceAggregate": "21358ef21f530eada2862860e163114b6628ac0ca2e5e88156d4f0f3789f7153",
+  "buildAttempt": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate04/build-01/mac-attempt01",
+  "features": "default; no proof/config feature override",
+  "listedInputsUnchanged": true,
+  "dist": [
+    {
+      "path": "assets/index-BcMrr02P.js",
+      "bytes": 925836,
+      "sha256": "beaff113dce9da46ce73df7683e9c5d4fa9d782c87a8f414b66d1f01939eb336",
+      "type": "file"
+    },
+    {
+      "path": "assets/index-asJeAgVv.css",
+      "bytes": 56284,
+      "sha256": "f07d9e22699260c7a0c1fa173f344e46965d1718eb546dd0e67520ac2914ee1a",
+      "type": "file"
+    },
+    {
+      "path": "index.html",
+      "bytes": 498,
+      "sha256": "69bd25743d6fe69f3dd64ff6189901509694ae0d7682971a8c21f531a456a616",
+      "type": "file"
+    }
+  ],
+  "sourceApp": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+  "preservedApp": "/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.app",
+  "executable": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app/Contents/MacOS/notes-clone",
+    "bytes": 16080752,
+    "sha256": "5072520c8fa5fb98b953848a480269241b2a5fc383bf56b7e6307b09ef91fa50"
+  },
+  "bundleFiles": [
+    {
+      "path": "Contents/Info.plist",
+      "bytes": 1193,
+      "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+      "type": "file"
+    },
+    {
+      "path": "Contents/MacOS/notes-clone",
+      "bytes": 16080752,
+      "sha256": "5072520c8fa5fb98b953848a480269241b2a5fc383bf56b7e6307b09ef91fa50",
+      "type": "file"
+    }
+  ],
+  "preservedBundleMatches": true,
+  "archive": {
+    "path": "/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.zip",
+    "bytes": 4820701,
+    "sha256": "2be1ef8f27e30eeae139b92bf05c2df5bad568a2dd523d0ad05108ad93add63d"
+  },
+  "signatureCommands": [
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.app"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Executable=/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.app/Contents/MacOS/notes-clone\nIdentifier=notes_clone-d3015a5dc8a7adce\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=124792 flags=0x20002(adhoc,linker-signed) hashes=3896+0 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=a1bf356839b6fb10cbb0b302e5b0c9d13de30ffe\nCandidateCDHashFull sha256=a1bf356839b6fb10cbb0b302e5b0c9d13de30ffef38c317a06069248550ba708\nHash choices=sha256\nCMSDigest=a1bf356839b6fb10cbb0b302e5b0c9d13de30ffef38c317a06069248550ba708\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11124736\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=a1bf356839b6fb10cbb0b302e5b0c9d13de30ffe\nSignature=adhoc\nInfo.plist=not bound\nTeamIdentifier=not set\nSealed Resources=none\nInternal requirements=none\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.app"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Executable=/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.app"
+      ],
+      "exit": 0,
+      "stdout": "# designated => cdhash H\"a1bf356839b6fb10cbb0b302e5b0c9d13de30ffe\"\n",
+      "stderr": "Executable=/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.app"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.app: code has no resources but signature indicates they must be present\n"
+    }
+  ]
+}

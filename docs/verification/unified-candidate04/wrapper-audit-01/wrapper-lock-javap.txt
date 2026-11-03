@@ -1,0 +1,21 @@
+Compiled from "SourceFile"
+public final class org.gradle.internal.file.locking.ExclusiveFileAccessManager {
+  public org.gradle.internal.file.locking.ExclusiveFileAccessManager();
+    Code:
+       0: aload_0
+       1: invokespecial #11                 // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static void maybeCloseQuietly(java.io.Closeable);
+    Code:
+       0: aload_0
+       1: ifnull        14
+       4: aload_0
+       5: invokeinterface #18,  1           // InterfaceMethod java/io/Closeable.close:()V
+      10: goto          14
+      13: pop
+      14: return
+    Exception table:
+       from    to  target type
+           4    13    13   Class java/lang/Exception
+}

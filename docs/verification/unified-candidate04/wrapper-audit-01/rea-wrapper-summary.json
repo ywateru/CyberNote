@@ -1,0 +1,144 @@
+{
+  "scope": "REA static JAR identity/inventory only; no Java semantic provider was used, semantics are separately recorded from existing JDK javap output; opened archive session closed",
+  "open": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"result\":{\"path\":\"/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar\",\"format\":\"zip\",\"kind\":\"archive\",\"sha256\":\"497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7\",\"architecture\":null}}"
+      }
+    ],
+    "structuredContent": {
+      "result": {
+        "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+        "format": "zip",
+        "kind": "archive",
+        "sha256": "497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7",
+        "architecture": null
+      }
+    }
+  },
+  "summary": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"evidence_id\":\"ev_52909d048a8ba1ebf35ad7c7627afacc70071b59f4471083418323724de1badf\",\"subject\":{\"name\":\"gradle-wrapper.jar\",\"digest\":{\"sha256\":\"497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7\"},\"local_path\":\"/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar\",\"format\":\"zip\",\"architecture\":null},\"provider\":{\"id\":\"rea-analysis-view\",\"name\":\"REA analysis view projection\",\"version\":\"1\"},\"analysis_profile\":null,\"predicate_type\":\"rea.analysis-view\",\"operation\":\"inspect_analysis_view\",\"parameters\":{\"parent_evidence_id\":\"ev_2b9247b8a461faba2bd69b42cdab46243755e8cc24b5a1bc77ec210fe74b9f2e\",\"view\":{\"kind\":\"summary\"}},\"raw_result\":null,\"normalized_result\":{\"kind\":\"summary\",\"view\":{\"kind\":\"summary\"},\"parent_evidence_id\":\"ev_2b9247b8a461faba2bd69b42cdab46243755e8cc24b5a1bc77ec210fe74b9f2e\",\"parent_operation\":\"inspect_artifact\",\"parent_digest\":\"2b9247b8a461faba2bd69b42cdab46243755e8cc24b5a1bc77ec210fe74b9f2e\",\"view_digest\":\"b0a0fd565e04f494c4db7a0aa3af30e2b7216fa97f6adbdd3a55b4a66af2c15d\",\"artifact\":{\"path\":\"/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar\",\"sha256\":\"497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7\"},\"coverage\":{\"status\":\"complete-within-view\",\"examined\":104,\"total\":104,\"next_offset\":null,\"exhausted\":true},\"limitations\":[\"Inspection derives bounded static hypotheses and next probes; it does not execute the artifact or claim format-specific semantics.\",\"ZIP inventory lists central-directory entries only. Non-entry bytes, including an APK Signing Block before the central directory or a ZIP comment after it, are not occurrences.\"],\"unknowns\":[\"Inventory does not establish application runtime behavior or complete format-specific analysis.\"],\"summary\":{\"manifest\":{\"manifest_id\":\"agm_c301f494900ee6ac58fbf45758d2750b23bcf925de5ce2786de36894f27005ca\",\"root_artifact_id\":\"art_2ef9d7f538942b38a12c2ee58b3b7f151410fb23d1664cc3a67ab2bbdf770972\",\"root_sha256\":\"497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7\",\"root_format\":\"zip\",\"graph_sha256\":\"a40daa096e79560043892700f1581ff6d45e4f3957db3a35e82259b31c70b88d\",\"node_count\":35,\"occurrence_count\":35,\"edge_count\":34},\"available_counts\":{\"nodes\":35,\"occurrences\":35,\"edges\":34,\"integrity_contradictions\":0},\"observed_entry_kind_counts\":{\"file\":35,\"directory\":0,\"symlink\":0,\"slice\":0},\"source_complete\":true,\"inventory_evidence_ids\":[\"ev_0d041675b28af205999d5a62e79ef46d3a8495b5980b1f66b530754d0a5138ce\"],\"inspection\":{\"coverage\":{\"status\":\"complete-within-substeps\",\"substeps_completed\":1,\"observations_retained\":1,\"observations_omitted\":0,\"hypotheses_retained\":0,\"hypotheses_omitted\":0,\"unexplored_branches_retained\":0,\"unexplored_branches_omitted\":0,\"next_probes_retained\":0,\"next_probes_omitted\":0},\"unexplored_branches\":[]},\"limitation_count\":2}},\"confidence\":\"derived\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"Inspection derives bounded static hypotheses and next probes; it does not execute the artifact or claim format-specific semantics.\",\"ZIP inventory lists central-directory entries only. Non-entry bytes, including an APK Signing Block before the central directory or a ZIP comment after it, are not occurrences.\"],\"relationship_coverage\":null,\"locations\":[{\"kind\":\"artifact-path\",\"path\":\"/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar\"}],\"evidence_links\":[\"ev_2b9247b8a461faba2bd69b42cdab46243755e8cc24b5a1bc77ec210fe74b9f2e\"]}"
+      }
+    ],
+    "structuredContent": {
+      "evidence_id": "ev_52909d048a8ba1ebf35ad7c7627afacc70071b59f4471083418323724de1badf",
+      "subject": {
+        "name": "gradle-wrapper.jar",
+        "digest": {
+          "sha256": "497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7"
+        },
+        "local_path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+        "format": "zip",
+        "architecture": null
+      },
+      "provider": {
+        "id": "rea-analysis-view",
+        "name": "REA analysis view projection",
+        "version": "1"
+      },
+      "analysis_profile": null,
+      "predicate_type": "rea.analysis-view",
+      "operation": "inspect_analysis_view",
+      "parameters": {
+        "parent_evidence_id": "ev_2b9247b8a461faba2bd69b42cdab46243755e8cc24b5a1bc77ec210fe74b9f2e",
+        "view": {
+          "kind": "summary"
+        }
+      },
+      "raw_result": null,
+      "normalized_result": {
+        "kind": "summary",
+        "view": {
+          "kind": "summary"
+        },
+        "parent_evidence_id": "ev_2b9247b8a461faba2bd69b42cdab46243755e8cc24b5a1bc77ec210fe74b9f2e",
+        "parent_operation": "inspect_artifact",
+        "parent_digest": "2b9247b8a461faba2bd69b42cdab46243755e8cc24b5a1bc77ec210fe74b9f2e",
+        "view_digest": "b0a0fd565e04f494c4db7a0aa3af30e2b7216fa97f6adbdd3a55b4a66af2c15d",
+        "artifact": {
+          "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+          "sha256": "497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7"
+        },
+        "coverage": {
+          "status": "complete-within-view",
+          "examined": 104,
+          "total": 104,
+          "next_offset": null,
+          "exhausted": true
+        },
+        "limitations": [
+          "Inspection derives bounded static hypotheses and next probes; it does not execute the artifact or claim format-specific semantics.",
+          "ZIP inventory lists central-directory entries only. Non-entry bytes, including an APK Signing Block before the central directory or a ZIP comment after it, are not occurrences."
+        ],
+        "unknowns": [
+          "Inventory does not establish application runtime behavior or complete format-specific analysis."
+        ],
+        "summary": {
+          "manifest": {
+            "manifest_id": "agm_c301f494900ee6ac58fbf45758d2750b23bcf925de5ce2786de36894f27005ca",
+            "root_artifact_id": "art_2ef9d7f538942b38a12c2ee58b3b7f151410fb23d1664cc3a67ab2bbdf770972",
+            "root_sha256": "497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7",
+            "root_format": "zip",
+            "graph_sha256": "a40daa096e79560043892700f1581ff6d45e4f3957db3a35e82259b31c70b88d",
+            "node_count": 35,
+            "occurrence_count": 35,
+            "edge_count": 34
+          },
+          "available_counts": {
+            "nodes": 35,
+            "occurrences": 35,
+            "edges": 34,
+            "integrity_contradictions": 0
+          },
+          "observed_entry_kind_counts": {
+            "file": 35,
+            "directory": 0,
+            "symlink": 0,
+            "slice": 0
+          },
+          "source_complete": true,
+          "inventory_evidence_ids": [
+            "ev_0d041675b28af205999d5a62e79ef46d3a8495b5980b1f66b530754d0a5138ce"
+          ],
+          "inspection": {
+            "coverage": {
+              "status": "complete-within-substeps",
+              "substeps_completed": 1,
+              "observations_retained": 1,
+              "observations_omitted": 0,
+              "hypotheses_retained": 0,
+              "hypotheses_omitted": 0,
+              "unexplored_branches_retained": 0,
+              "unexplored_branches_omitted": 0,
+              "next_probes_retained": 0,
+              "next_probes_omitted": 0
+            },
+            "unexplored_branches": []
+          },
+          "limitation_count": 2
+        }
+      },
+      "confidence": "derived",
+      "authority": "shipped-artifact",
+      "environment": null,
+      "limitations": [
+        "Inspection derives bounded static hypotheses and next probes; it does not execute the artifact or claim format-specific semantics.",
+        "ZIP inventory lists central-directory entries only. Non-entry bytes, including an APK Signing Block before the central directory or a ZIP comment after it, are not occurrences."
+      ],
+      "relationship_coverage": null,
+      "locations": [
+        {
+          "kind": "artifact-path",
+          "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar"
+        }
+      ],
+      "evidence_links": [
+        "ev_2b9247b8a461faba2bd69b42cdab46243755e8cc24b5a1bc77ec210fe74b9f2e"
+      ]
+    }
+  }
+}

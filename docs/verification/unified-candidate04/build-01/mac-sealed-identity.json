@@ -1,0 +1,67 @@
+{
+  "at": "2026-11-03T20:48:05.892542+00:00",
+  "expectedHead": "d8f832e83349c7503b872e0e88853d1ab7b0713a",
+  "sourceAggregate": "21358ef21f530eada2862860e163114b6628ac0ca2e5e88156d4f0f3789f7153",
+  "sourceApp": "/private/tmp/notes-unified-candidate04-build-01-mac-original-5072520c.app",
+  "derivedApp": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app",
+  "preservedOriginalUnchanged": true,
+  "executable": {
+    "path": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app/Contents/MacOS/notes-clone",
+    "bytes": 16005376,
+    "sha256": "c1bece8821acb4df552da6b66664a4dec35b6ab136d8922932f92aea31929bbd"
+  },
+  "bundleFiles": [
+    {
+      "path": "Contents/Info.plist",
+      "bytes": 1193,
+      "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+      "type": "file"
+    },
+    {
+      "path": "Contents/MacOS/notes-clone",
+      "bytes": 16005376,
+      "sha256": "c1bece8821acb4df552da6b66664a4dec35b6ab136d8922932f92aea31929bbd",
+      "type": "file"
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b",
+      "type": "file"
+    }
+  ],
+  "bundleAggregate": "0c9e8e5114489670bf09fe14f6b6f066fd19f275b8f6a866098830df2f948fb6",
+  "changes": [
+    {
+      "path": "Contents/MacOS/notes-clone",
+      "before": {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16080752,
+        "sha256": "5072520c8fa5fb98b953848a480269241b2a5fc383bf56b7e6307b09ef91fa50",
+        "type": "file"
+      },
+      "after": {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16005376,
+        "sha256": "c1bece8821acb4df552da6b66664a4dec35b6ab136d8922932f92aea31929bbd",
+        "type": "file"
+      }
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "before": null,
+      "after": {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b",
+        "type": "file"
+      }
+    }
+  ],
+  "archive": {
+    "path": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.zip",
+    "bytes": 4750334,
+    "sha256": "6a821684a64406c5febd9dd6f703e84c09459f0fb7acf90ad015e4e4b40b4738"
+  },
+  "scope": "Complete local adhoc bundle signature only. No Developer ID, notarization, distribution, TCC permission or runtime acceptance claim."
+}

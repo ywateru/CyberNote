@@ -1,0 +1,122 @@
+
+> notes-clone@0.1.0 android:build /Users/water/work/2026/Apple-Notes-Clone
+> node scripts/android.mjs build --debug
+
+
+> notes-clone@0.1.0 tauri /Users/water/work/2026/Apple-Notes-Clone
+> tauri android build --debug --target aarch64 --apk
+
+        Info Using installed NDK: /Users/water/Library/Android/sdk/ndk/27.2.12479018
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `pnpm build`
+
+> notes-clone@0.1.0 build /Users/water/work/2026/Apple-Notes-Clone
+> tsc -b && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 1881 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.50 kB │ gzip:   0.32 kB
+dist/assets/index-asJeAgVv.css   56.28 kB │ gzip:  11.58 kB
+dist/assets/index-BcMrr02P.js   925.84 kB │ gzip: 290.84 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.25s
+[1m[92m   Compiling[0m notes-clone v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/src-tauri)
+[1m[92m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 3.65s
+        Info symlinking lib "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" in jniLibs dir "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a"
+        Info "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libandroid.so"
+        Info "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libdl.so"
+        Info "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "liblog.so"
+        Info "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libm.so"
+        Info "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libc.so"
+        Info symlink at "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a/libnotes_clone_lib.so" points to "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so"
+CANDIDATE04_OFFLINE=true
+CANDIDATE04_OFFLINE=true
+WARNING: The option setting 'android.proguard.failOnMissingFiles=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: API 'applicationVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling applicationVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'testVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling testVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'unitTestVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling unitTestVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+w: file:///Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build.gradle.kts:17:1: 'fun Project.android(configure: Action<BaseAppModuleExtension>): Unit' is deprecated. Replaced by com.android.build.api.dsl.ApplicationExtension.
+This class is not used for the public extensions in AGP when android.newDsl=true, which is the default in AGP 9.0, and will be removed in AGP 10.0.
+WARNING: API 'libraryVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling libraryVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+w: file:///Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/mobile/android/build.gradle.kts:8:1: 'fun Project.android(configure: Action<LibraryExtension>): Unit' is deprecated. Replaced by com.android.build.api.dsl.LibraryExtension.
+This class is not used for the public extensions in AGP when android.newDsl=true, which is the default in AGP 9.0, and will be removed in AGP 10.0.
+w: file:///Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-plugin-dialog-2.8.4/android/build.gradle.kts:8:1: 'fun Project.android(configure: Action<LibraryExtension>): Unit' is deprecated. Replaced by com.android.build.api.dsl.LibraryExtension.
+This class is not used for the public extensions in AGP when android.newDsl=true, which is the default in AGP 9.0, and will be removed in AGP 10.0.
+w: file:///Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-scan/android/build.gradle.kts:8:1: 'fun Project.android(configure: Action<LibraryExtension>): Unit' is deprecated. Replaced by com.android.build.api.dsl.LibraryExtension.
+This class is not used for the public extensions in AGP when android.newDsl=true, which is the default in AGP 9.0, and will be removed in AGP 10.0.
+
+1 problem was found storing the configuration cache.
+- Task `:app:processUniversalDebugNavigationResources` of type `com.android.build.gradle.internal.tasks.ProcessNavigationXmlTask`: error writing value of type 'java.util.ArrayList'
+
+See the complete report at file:///Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/build/reports/configuration-cache/5q4c0z45b460470xg4qo13x1a/6y3kgkjghfuz9w2pfn0yiz3v1/configuration-cache-report.html
+
+[Incubating] Problems report is available at: file:///Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Configuration cache state could not be cached: field `elements` of `org.gradle.internal.serialize.codecs.core.ResolutionBackedFileCollectionSpec` bean found in field `__runtimeDependenciesNavigationFiles__` of task `:app:processUniversalDebugNavigationResources` of type `com.android.build.gradle.internal.tasks.ProcessNavigationXmlTask`: error writing value of type 'java.util.ArrayList'
+> Could not download lifecycle-livedata-2.10.0.aar (androidx.lifecycle:lifecycle-livedata:2.10.0): No cached version available for offline mode
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 14s
+Configuration cache entry discarded due to serialization error.
+failed to build APK: Failed to assemble APK with Io(BeforeSpawn(<closure>), Io(StderrFile(OwnedFd { fd: 21 }), Io(StdoutFile(OwnedFd { fd: 20 }), Io(StdinFile(OwnedFd { fd: 19 }), Io(Env("WRY_ANDROID_KOTLIN_FILES_OUT_DIR", "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated"), Io(Env("CARGO_TARGET_I686_LINUX_ANDROID_LINKER", "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/i686-linux-android26-clang"), Io(Env("CARGO_TARGET_AARCH64_LINUX_ANDROID_RUSTFLAGS", "-Clink-arg=-landroid -Clink-arg=-llog -Clink-arg=-lOpenSLES"), Io(Env("RUST_LOG_STYLE", "always"), Io(Env("TMPDIR", "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/"), Io(Env("TAURI_ANDROID_PACKAGE_UNESCAPED", "com.local.notesclone"), Io(Env("TAURI_ANDROID_PROJECT_PATH", "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android"), Io(Env("CARGO_TARGET_X86_64_LINUX_ANDROID_RUSTFLAGS", "-Clink-arg=-landroid -Clink-arg=-llog -Clink-arg=-lOpenSLES"), Io(Env("CARGO_TARGET_ARMV7_LINUX_ANDROIDEABI_LINKER", "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/armv7a-linux-androideabi26-clang"), Io(Env("CARGO_NET_OFFLINE", "true"), Io(Env("CARGO_BUILD_JOBS", "2"), Io(Env("WRY_ANDROID_PACKAGE", "com.local.notesclone"), Io(Env("HOME", "/Users/water"), Io(Env("SSH_AUTH_SOCK", "/var/run/com.apple.launchd.2RWcWccX87/Listeners"), Io(Env("TAURI_CLI_VERBOSITY", "0"), Io(Env("WRY_ANDROID_LIBRARY", "notes_clone_lib"), Io(Env("CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER", "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang"), Io(Env("CARGO_TARGET_X86_64_LINUX_ANDROID_LINKER", "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/x86_64-linux-android26-clang"), Io(Env("PATH", "/Users/water/work/2026/Apple-Notes-Clone/node_modules/.bin:/snapshot/dist/node-gyp-bin:/Users/water/work/2026/Apple-Notes-Clone/node_modules/.bin:/Users/water/work/2026/Apple-Notes-Clone/node_modules/.bin:/snapshot/dist/node-gyp-bin:/Users/water/work/2026/Apple-Notes-Clone/node_modules/.bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/water/.antigravity-ide/antigravity-ide/bin:/Users/water/.antigravity-ide/antigravity-ide/bin:/Users/water/.antigravity-ide/antigravity-ide/bin:/Users/water/.local/node-v22.16.0-darwin-arm64/bin:/Users/water/.local/bin:/opt/zerobrew/bin:/Applications/Cursor.app/Contents/Resources/app/bin:/Users/water/.rbenv/bin:/Users/water/.antigravity/antigravity/bin:/Users/water/.antigravity/antigravity/bin:/Users/water/.cargo/bin:/Users/water/work/tina/ref/clawdbot/.bin:/Users/water/.cargo/bin:/opt/zerobrew/opt/openjdk@17/bin:/Users/water/.opencode/bin:/Users/water/.local/bin:/Users/water/.bun/bin:/Users/water/.antigravity/antigravity/bin:/opt/homebrew/opt/openjdk@21/bin:/opt/homebrew/opt/python@3.12/libexec/bin:/Users/water/.local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Users/water/.codex/tmp/arg0-macos/codex-arg09SSfaE:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/water/.antigravity-ide/antigravity-ide/bin:/Users/water/.local/node-v22.16.0-darwin-arm64/bin:/opt/zerobrew/bin:/Applications/Cursor.app/Contents/Resources/app/bin:/Users/water/.rbenv/bin:/Users/water/.antigravity/antigravity/bin:/Users/water/.cargo/bin:/Users/water/work/tina/ref/clawdbot/.bin:/opt/zerobrew/opt/openjdk@17/bin:/Users/water/.opencode/bin:/Users/water/.bun/bin:/Users/water/Library/pnpm:/Users/water/Library/Android/sdk/emulator:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/water/.lmstudio/bin:/Users/water/Library/Android/sdk/platform-tools:/Users/water/Library/Android/sdk/cmdline-tools/latest/bin:/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Users/water/.lmstudio/bin:/Users/water/Library/Android/sdk/platform-tools:/Users/water/Library/Android/sdk/cmdline-tools/latest/bin:/Users/water/Library/Android/sdk/emulator"), Io(Env("NDK_HOME", "/Users/water/Library/Android/sdk/ndk/27.2.12479018"), Io(Env("ANDROID_HOME", "/Users/water/Library/Android/sdk"), Io(Env("CARGO_TARGET_I686_LINUX_ANDROID_RUSTFLAGS", "-Clink-arg=-landroid -Clink-arg=-llog -Clink-arg=-lOpenSLES"), Io(Env("CARGO_TARGET_ARMV7_LINUX_ANDROIDEABI_RUSTFLAGS", "-Clink-arg=-landroid -Clink-arg=-llog -Clink-arg=-lOpenSLES"), Io(Env("RUST_LOG", "warn"), Io(Env("TERM", "xterm-256color"), Cmd(["/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradlew", "--project-dir", "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android"])))))))))))))))))))))))))))))): command ["/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradlew", "--project-dir", "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android"] exited with code 1
+       Error failed to build APK: Failed to assemble APK with Io(BeforeSpawn(<closure>), Io(StderrFile(OwnedFd { fd: 21 }), Io(StdoutFile(OwnedFd { fd: 20 }), Io(StdinFile(OwnedFd { fd: 19 }), Io(Env("WRY_ANDROID_KOTLIN_FILES_OUT_DIR", "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated"), Io(Env("CARGO_TARGET_I686_LINUX_ANDROID_LINKER", "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/i686-linux-android26-clang"), Io(Env("CARGO_TARGET_AARCH64_LINUX_ANDROID_RUSTFLAGS", "-Clink-arg=-landroid -Clink-arg=-llog -Clink-arg=-lOpenSLES"), Io(Env("RUST_LOG_STYLE", "always"), Io(Env("TMPDIR", "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/"), Io(Env("TAURI_ANDROID_PACKAGE_UNESCAPED", "com.local.notesclone"), Io(Env("TAURI_ANDROID_PROJECT_PATH", "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android"), Io(Env("CARGO_TARGET_X86_64_LINUX_ANDROID_RUSTFLAGS", "-Clink-arg=-landroid -Clink-arg=-llog -Clink-arg=-lOpenSLES"), Io(Env("CARGO_TARGET_ARMV7_LINUX_ANDROIDEABI_LINKER", "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/armv7a-linux-androideabi26-clang"), Io(Env("CARGO_NET_OFFLINE", "true"), Io(Env("CARGO_BUILD_JOBS", "2"), Io(Env("WRY_ANDROID_PACKAGE", "com.local.notesclone"), Io(Env("HOME", "/Users/water"), Io(Env("SSH_AUTH_SOCK", "/var/run/com.apple.launchd.2RWcWccX87/Listeners"), Io(Env("TAURI_CLI_VERBOSITY", "0"), Io(Env("WRY_ANDROID_LIBRARY", "notes_clone_lib"), Io(Env("CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER", "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang"), Io(Env("CARGO_TARGET_X86_64_LINUX_ANDROID_LINKER", "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/x86_64-linux-android26-clang"), Io(Env("PATH", "/Users/water/work/2026/Apple-Notes-Clone/node_modules/.bin:/snapshot/dist/node-gyp-bin:/Users/water/work/2026/Apple-Notes-Clone/node_modules/.bin:/Users/water/work/2026/Apple-Notes-Clone/node_modules/.bin:/snapshot/dist/node-gyp-bin:/Users/water/work/2026/Apple-Notes-Clone/node_modules/.bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/water/.antigravity-ide/antigravity-ide/bin:/Users/water/.antigravity-ide/antigravity-ide/bin:/Users/water/.antigravity-ide/antigravity-ide/bin:/Users/water/.local/node-v22.16.0-darwin-arm64/bin:/Users/water/.local/bin:/opt/zerobrew/bin:/Applications/Cursor.app/Contents/Resources/app/bin:/Users/water/.rbenv/bin:/Users/water/.antigravity/antigravity/bin:/Users/water/.antigravity/antigravity/bin:/Users/water/.cargo/bin:/Users/water/work/tina/ref/clawdbot/.bin:/Users/water/.cargo/bin:/opt/zerobrew/opt/openjdk@17/bin:/Users/water/.opencode/bin:/Users/water/.local/bin:/Users/water/.bun/bin:/Users/water/.antigravity/antigravity/bin:/opt/homebrew/opt/openjdk@21/bin:/opt/homebrew/opt/python@3.12/libexec/bin:/Users/water/.local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Users/water/.codex/tmp/arg0-macos/codex-arg09SSfaE:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/water/.antigravity-ide/antigravity-ide/bin:/Users/water/.local/node-v22.16.0-darwin-arm64/bin:/opt/zerobrew/bin:/Applications/Cursor.app/Contents/Resources/app/bin:/Users/water/.rbenv/bin:/Users/water/.antigravity/antigravity/bin:/Users/water/.cargo/bin:/Users/water/work/tina/ref/clawdbot/.bin:/opt/zerobrew/opt/openjdk@17/bin:/Users/water/.opencode/bin:/Users/water/.bun/bin:/Users/water/Library/pnpm:/Users/water/Library/Android/sdk/emulator:/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/water/.lmstudio/bin:/Users/water/Library/Android/sdk/platform-tools:/Users/water/Library/Android/sdk/cmdline-tools/latest/bin:/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Users/water/.lmstudio/bin:/Users/water/Library/Android/sdk/platform-tools:/Users/water/Library/Android/sdk/cmdline-tools/latest/bin:/Users/water/Library/Android/sdk/emulator"), Io(Env("NDK_HOME", "/Users/water/Library/Android/sdk/ndk/27.2.12479018"), Io(Env("ANDROID_HOME", "/Users/water/Library/Android/sdk"), Io(Env("CARGO_TARGET_I686_LINUX_ANDROID_RUSTFLAGS", "-Clink-arg=-landroid -Clink-arg=-llog -Clink-arg=-lOpenSLES"), Io(Env("CARGO_TARGET_ARMV7_LINUX_ANDROIDEABI_RUSTFLAGS", "-Clink-arg=-landroid -Clink-arg=-llog -Clink-arg=-lOpenSLES"), Io(Env("RUST_LOG", "warn"), Io(Env("TERM", "xterm-256color"), Cmd(["/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradlew", "--project-dir", "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android"])))))))))))))))))))))))))))))): command ["/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradlew", "--project-dir", "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android"] exited with code 1
+ ELIFECYCLE  Command failed with exit code 1.
+ ELIFECYCLE  Command failed with exit code 1.

@@ -1,0 +1,71 @@
+{
+  "method": "Read installed source and advertised in-session tool metadata only; no REA operations, helper compilation/execution, screenshot, GUI, attach, target launch, permissions/configuration changes, downloads or product/target mutations.",
+  "installedPackageVersion": "6.7.0",
+  "files": [
+    {
+      "path": "/Users/water/.local/share/rea/node_modules/rea-agents/package.json",
+      "bytes": 24696,
+      "sha256": "3f6c47fb12c8388f291a21e7f99a876495d03aee671b3b6a0708dd12d6ebb570"
+    },
+    {
+      "path": "/Users/water/.local/share/rea/node_modules/rea-agents/dist/domain/native/nativeUiObservation.js",
+      "bytes": 4732,
+      "sha256": "f719bd9a4baf030e886baf8051999c3470a88b419bc68df91bf7b41b63eeb883"
+    },
+    {
+      "path": "/Users/water/.local/share/rea/node_modules/rea-agents/dist/native/NativeUiObservation.js",
+      "bytes": 10154,
+      "sha256": "95350f003238d7a530f65f2f60fc8f65ebe9b8c99a87e6cb0276037a7bc7cae4"
+    },
+    {
+      "path": "/Users/water/.local/share/rea/node_modules/rea-agents/bridge/native/ReaNativeUI.swift",
+      "bytes": 10933,
+      "sha256": "4413715438ea35edf9a872dd1cd2d4d7669ec8398fe3dc904fd0efad633a4615"
+    },
+    {
+      "path": "/Users/water/.local/share/rea/node_modules/rea-agents/dist/native/NativeUiHelperRuntime.js",
+      "bytes": 3375,
+      "sha256": "c523de91f84b10ce342f804d67b5fba30d9e9c612a359fa1cb2514f90ea678e2"
+    },
+    {
+      "path": "/Users/water/.local/share/rea/node_modules/rea-agents/dist/native/NativeMacOSProviderMetadata.js",
+      "bytes": 1995,
+      "sha256": "145fa21fc1c759d55da04cf2e62a0f86e0a87cc20138856ef8cea3ab899becf0"
+    },
+    {
+      "path": "/Users/water/.local/share/rea/node_modules/rea-agents/dist/mcp/toolContracts-BPoHQdlC.js",
+      "bytes": 561218,
+      "sha256": "6db131b22faf3081991c0c34e84926860b93955731e39cb2e9f2af8e2e76855a"
+    }
+  ],
+  "advertisedSchema": {
+    "observe_native_ui": {
+      "required": {
+        "pid": "positive integer",
+        "window_id": "positive integer"
+      },
+      "optional": {
+        "screenshot": "boolean, default true",
+        "accessibility": "boolean, default true",
+        "max_nodes": "positive safe integer, default500"
+      },
+      "strictObject": true,
+      "resolutionControlsAdvertised": false
+    },
+    "open_binary": {
+      "path": "required absolute local path",
+      "provider_id": "optional string",
+      "format": "optional dos-com or raw-binary",
+      "architecture": "optional enum; raw-binary only",
+      "entry_point": "optional hex string; raw-binary only",
+      "snapshot_path": "optional absolute path"
+    },
+    "binary_session": {
+      "allFieldsOptional": true
+    },
+    "close_binary": {
+      "allFieldsOptional": true
+    }
+  },
+  "schemaProvenance": "Exact current ALL_TOOLS descriptions for observe_native_ui/open_binary/binary_session/close_binary inspected without invoking them; input fields/defaults cross-checked against installed domain schema. No public macOS native window discovery tool appeared in current REA tool-name inventory; Android window and Frida process tools are different scopes."
+}

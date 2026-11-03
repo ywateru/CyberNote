@@ -1,0 +1,32 @@
+{
+  "at": "2026-11-03T20:53:26.896176+00:00",
+  "reason": "Raw build log reported Fetching distribution / Downloading gradle-9.6.1-bin.zip. Stop immediately because authorization forbids downloads. Do not remove partial files or change caches. Leave runner alive to record failure and cleanup init.",
+  "runnerPid": 47323,
+  "actions": [
+    {
+      "pid": 47683,
+      "command": "/opt/zerobrew/opt/openjdk@17/bin/java -Xmx64m -Xms64m -Dorg.gradle.appname=gradlew -jar /Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar --project-dir /Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android assembleUniversalDebug -PabiList=arm64-v8a -ParchList=arm64 -PtargetList=aarch64 --warn",
+      "action": "SIGTERM sent to owned attempt02 descendant"
+    },
+    {
+      "pid": 47403,
+      "command": "node /Users/water/work/2026/Apple-Notes-Clone/node_modules/.bin/../@tauri-apps/cli/tauri.js android build --debug --target aarch64 --apk",
+      "action": "SIGTERM sent to owned attempt02 descendant"
+    },
+    {
+      "pid": 47371,
+      "command": "pnpm tauri android build --debug --target aarch64 --apk",
+      "action": "SIGTERM sent to owned attempt02 descendant"
+    },
+    {
+      "pid": 47362,
+      "command": "node scripts/android.mjs build --debug",
+      "action": "SIGTERM sent to owned attempt02 descendant"
+    },
+    {
+      "pid": 47333,
+      "command": "pnpm android:build --debug",
+      "action": "SIGTERM sent to owned attempt02 descendant"
+    }
+  ]
+}
