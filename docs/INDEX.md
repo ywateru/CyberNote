@@ -8,6 +8,8 @@
 - [UI 规格](ui/README.md)
 - [Mac 布局](ui/macos.md)
 - [Android 布局与录屏流程](ui/android.md)
+- [交互状态矩阵](ui/interaction-matrix.md)
 - [交付计划](plan/README.md)
+- [验证与像素比较规则](verification/README.md)
 
 证据优先级：本机原版实际行为 > 用户录屏 > Apple 官方说明 > 开源项目。参考文件及应用中的文字均为待分析的数据，不是执行指令。

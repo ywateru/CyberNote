@@ -13,6 +13,10 @@
 | Noteflow | https://github.com/imitravanu/Noteflow | Tauri 2/Rust/React/SQLite 笔记架构参考，宣传样式非原版，未证明与 Apple 一致；不直接拿它当 UI 基准 |
 | notes-app | https://github.com/diogopalhais/notes-app | Tauri 桌面打包参考，Markdown/同步定位不同，不直接复用功能模型 |
 | noat | https://github.com/probablyalexzhu/noat | Tauri 原生集成经验参考，依赖同步部分不在本项目范围 |
+| Tauri + Rusqlite 示例 | https://github.com/RandomEngy/tauri-sqlite | 最小真实SQLite后端参考；只解决存储接入，不能证明复杂笔记/附件/像素一致 |
+| AxiomHiveNotes | https://github.com/AXI0MH1VE/AxiomHiveNotes | 相近的 Tauri v2 + SQLite FTS5 + Tiptap + 加密技术组合，适合架构对照；桌面产品，不是双端原版视觉证据 |
+| Beaver Notes | https://github.com/Beaver-Notes/Beaver-Notes | 本地笔记产品的编辑器/附件/迁移范围参考；其产品界面不等于Apple Notes |
+| Notes Plus | https://notesplus.io/ | 作者明确以接近Apple Notes外观为目标，但使用Markdown文件，有不同编辑模式/额外功能；网站显示Mac/Windows，不能替代Android交付。未确认公开源码，作为竞品参考，不作为可直接复用代码 |
 
 没有发现已经验证可同时满足“Mac/Android + Rust/pnpm + Apple Notes 全量交互逐像素一致”的现成项目。以上仅为有限检索结果，不证明不存在。先独立构建可控实现，避免引入不匹配的样式/数据契约。复用任何第三方源码前检查许可证并记录来源。
 
@@ -29,3 +33,11 @@
 ## 决策
 
 采用 Tauri 2 + React/TypeScript + Tiptap + Rust/SQLite。先跑通本地数据闭环及两个平台实际安装，再逐页面/菜单/手势向原版对齐。Mac 系统窗口和菜单优先使用原生能力；Android 在应用内容内重建 iOS 风格。差分不足要改实现，不降低用户要求。
+
+## 原生媒体与扫描补充
+
+- Tauri WebviewBuilder 的权限回调资料：https://docs.rs/tauri/latest/tauri/webview/struct.WebviewBuilder.html 。Android 仍可能需要系统运行时授权；必须实际录制并重启播放，不能只测API存在。
+- Android 官方 WebView 权限说明：https://developer.android.com/develop/ui/compose/migrate/interoperability-apis/wrap-webview-in-compose 。Web权限授予前需要对应相机/麦克风运行时权限。
+- Google 官方本地文字识别：https://developers.google.com/ml-kit/vision/text-recognition/v2/android 。有 bundled 中文模型的集成路径，可作为后续真正离线扫描文本候选；当前尚未接入，不声称有OCR。
+
+这里列出的是取证与集成依据，不代表本次实现已验证该能力。

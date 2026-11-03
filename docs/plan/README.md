@@ -5,8 +5,10 @@
 | 任务 | 当前状态 | 交付 |
 |---|---|---|
 | REF-001 原版取证/需求/UI/调研 | in-progress | 原视频已保全、抽帧、初始规格已写，持续补证 |
-| APP-001 跨端完整实现 | ready | Tauri/Rust 本地库、Mac 与手机壳、富文本、附件等真实实现，Mac .app + Android APK |
+| APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建并实际运行；安卓编辑保存兼容问题正在修复，尚未独立验收 |
 | QA-001 独立验证 | pending，依赖 APP-001 | 真实安装和数据恢复、交互与截图对比、阻塞问题清单 |
 | PARITY-001 修正差异 | pending，依赖 QA-001 | 按原版补齐功能与像素；重新验证 |
 
 docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，docs/ui 是视觉证据。实现阶段遵循 docs-sprint 的 develop/verify 分离。空仓库先建立 Git 基线，串行实施开发/验证；不要求用户批准已授权的常规设计补全。测试必须覆盖真实持久化边界和 UI 用户路径，不能只测试同实现的常量。
+
+具体模块边界与必须实证的调用链见 [交付分解](analysis/delivery-map.md)。后续每项阻塞差异建立最小可验收任务，先修再复核。
