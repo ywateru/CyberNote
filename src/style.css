@@ -2422,6 +2422,9 @@ a {
     padding: 20px 16px 5px;
   }
   .mobile .modal-paper {
+    /* Width-normalized starting values from the 224px recording; DPR is unknown. */
+    --paper-ref-unit: calc(100vw / 224);
+    --paper-preview-color: #d3d0d4;
     position: absolute;
     inset: 20px 0 0;
     width: 100%;
@@ -2429,27 +2432,80 @@ a {
     max-height: none;
     border-radius: 16px 16px 0 0;
     background: var(--grouped);
-    padding: 15px 20px;
+    padding: calc(82 * var(--paper-ref-unit)) calc(25 * var(--paper-ref-unit))
+      calc(24px + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
   }
-  .mobile .paper-description {
-    margin-top: 45px !important;
-    font-size: 12px !important;
+  .mobile .modal-paper .sheet-top {
+    position: absolute;
+    top: 15px;
+    left: 16px;
+    right: 16px;
+    height: 24px;
+    display: block;
   }
-  .mobile .paper-options {
-    gap: 30px 35px;
-    padding: 35px 20px;
-    grid-template-columns: 1fr 1fr;
-  }
-  .mobile .paper-option {
-    height: 110px;
-    border-radius: 5px;
-    border-width: 3px;
-  }
-  .mobile .sheet-top strong {
+  .mobile .modal-paper .sheet-top strong {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
     font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
   }
-  .mobile .sheet-top button {
+  .mobile .modal-paper .sheet-top button {
+    float: left;
     font-size: 17px;
+    line-height: 24px;
+  }
+  .mobile .modal-paper .sheet-top > span {
+    display: none;
+  }
+  .mobile .modal-paper .paper-description {
+    position: absolute;
+    top: calc(54 * var(--paper-ref-unit));
+    left: 0;
+    right: 0;
+    margin: 0 !important;
+    font-size: 12px !important;
+    line-height: 18px;
+    text-align: center;
+  }
+  .mobile .modal-paper .paper-options {
+    grid-template-columns: repeat(2, calc(74 * var(--paper-ref-unit)));
+    gap: calc(26 * var(--paper-ref-unit));
+    padding: 0;
+    margin: 0;
+  }
+  .mobile .modal-paper .paper-option {
+    width: calc(74 * var(--paper-ref-unit));
+    height: calc(60 * var(--paper-ref-unit));
+    border-radius: 5px;
+    border: 0;
+    background-image: none;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 3.5%);
+  }
+  .mobile .modal-paper .paper-option.selected {
+    outline: 1.5px solid var(--accent);
+    outline-offset: 0.5px;
+  }
+  .mobile .modal-paper .paper-blank {
+    grid-column: 1 / -1;
+  }
+  .mobile .modal-paper .paper-preview {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-color: var(--paper-preview-color);
+    -webkit-mask-image: var(--paper-preview-url);
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: var(--paper-preview-url);
+    mask-mode: alpha;
+    mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
   }
   .mobile .search-suggestions {
     padding: 20px 16px;
@@ -3084,14 +3140,8 @@ a {
     color: var(--accent);
     background: rgba(128, 128, 128, 0.12);
   }
-  .mobile .paper-blank {
-    width: calc((100% - 35px) / 2);
-  }
   .mobile .paper-check {
     display: none;
-  }
-  .mobile .paper-option {
-    border-width: 2px;
   }
   .mobile .tiptap h1 {
     font-size: 28px;

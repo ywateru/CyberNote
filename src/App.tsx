@@ -4,6 +4,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type CSSProperties,
   type ReactNode,
   type PointerEvent as ReactPointerEvent,
 } from "react";
@@ -95,6 +96,12 @@ import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
 import { documentsEqual } from "./document-equality";
 import { RecordingSession, createRecordingPreview } from "./recording-session";
+import linesSmallPreview from "../assets/mobile-paper-previews/lines-small.svg";
+import linesMediumPreview from "../assets/mobile-paper-previews/lines-medium.svg";
+import linesLargePreview from "../assets/mobile-paper-previews/lines-large.svg";
+import gridSmallPreview from "../assets/mobile-paper-previews/grid-small.svg";
+import gridMediumPreview from "../assets/mobile-paper-previews/grid-medium.svg";
+import gridLargePreview from "../assets/mobile-paper-previews/grid-large.svg";
 import { convertTableToText, toggleListStyle } from "./editor-actions";
 import type { SelectionBookmark } from "@tiptap/pm/state";
 import {
@@ -107,6 +114,44 @@ import {
   type AccessEvent,
   blankDoc,
 } from "./types";
+
+const desktopPaperOptions = [
+  "plain",
+  "lines-small",
+  "lines-medium",
+  "lines-large",
+  "grid-small",
+  "grid-medium",
+  "grid-large",
+] as const;
+type PaperOption = (typeof desktopPaperOptions)[number];
+const mobilePaperOptions = [
+  "plain",
+  "lines-small",
+  "grid-small",
+  "lines-medium",
+  "grid-medium",
+  "lines-large",
+  "grid-large",
+] as const satisfies readonly PaperOption[];
+const paperOptionLabels: Record<PaperOption, string> = {
+  plain: "空白",
+  "lines-small": "密横线",
+  "lines-medium": "中横线",
+  "lines-large": "疏横线",
+  "grid-small": "密网格",
+  "grid-medium": "中网格",
+  "grid-large": "疏网格",
+};
+const paperPreviewUrls: Record<Exclude<PaperOption, "plain">, string> = {
+  "lines-small": linesSmallPreview,
+  "lines-medium": linesMediumPreview,
+  "lines-large": linesLargePreview,
+  "grid-small": gridSmallPreview,
+  "grid-medium": gridMediumPreview,
+  "grid-large": gridLargePreview,
+};
+type PaperPreviewStyle = CSSProperties & { "--paper-preview-url": string };
 
 const empty: Workspace = {
   folders: [],
@@ -272,6 +317,7 @@ function App() {
   } | null>(null);
   const [record, setRecord] = useState(false);
   const [mobile, setMobile] = useState(window.innerWidth < 700 && !separate);
+  const paperOptions = mobile ? mobilePaperOptions : desktopPaperOptions;
   const queues = useRef(new Map<string, Promise<unknown>>());
   const revisions = useRef(new SaveRevisions());
   const externalVersions = useRef(new Map<string, number>());
@@ -3031,30 +3077,10 @@ function App() {
                   更改此备忘录中手写输入的横线或网格样式。
                 </p>
                 <div className="paper-options">
-                  {[
-                    "plain",
-                    "lines-small",
-                    "lines-medium",
-                    "lines-large",
-                    "grid-small",
-                    "grid-medium",
-                    "grid-large",
-                  ].map((p) => (
+                  {paperOptions.map((p) => (
                     <button
                       key={p}
-                      aria-label={
-                        (
-                          {
-                            plain: "空白",
-                            "lines-small": "密横线",
-                            "lines-medium": "中横线",
-                            "lines-large": "疏横线",
-                            "grid-small": "密网格",
-                            "grid-medium": "中网格",
-                            "grid-large": "疏网格",
-                          } as Record<string, string>
-                        )[p]
-                      }
+                      aria-label={paperOptionLabels[p]}
                       data-paper-style={p}
                       className={`paper-option ${p === "plain" ? "paper-blank" : ""} paper-${p} ${current?.paperStyle === p ? "selected" : ""}`}
                       onClick={async () => {
@@ -3066,6 +3092,17 @@ function App() {
                         closePaper();
                       }}
                     >
+                      {mobile && p !== "plain" && (
+                        <span
+                          className="paper-preview"
+                          aria-hidden="true"
+                          style={
+                            {
+                              "--paper-preview-url": `url("${paperPreviewUrls[p]}")`,
+                            } as PaperPreviewStyle
+                          }
+                        />
+                      )}
                       {current?.paperStyle === p && (
                         <span className="paper-check">
                           <Check size={15} />
