@@ -119,7 +119,7 @@ Mac 条件编译注册本地 `tauri-plugin-notes-ui`，仅 `main` / `note-*` 窗
 
 原生意图关联对应 revision 的 noteId、窗口范围、授权 stamp、Editor 实例、实例所属笔记、文档版本与 SelectionBookmark。执行前检查实时授权/屏障/覆盖层和实例有效性，编辑动作恢复对应选区；异步 flush、附件保存、正文读取后再次检查目标。输入更新文档版本，单独移动选区不触发无意义原生状态更新。上下文失效时清理书签和 Editor 引用，控制器不持有正文。
 
-Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许窗口发送 `menu-action`，不广播。全局搜索使用 Option+Cmd+F 并调用当前绑定的 `focusSearch`；独立窗没有全局搜索，Cmd+F 只改变所属笔记窗口的查找状态。原版 Cmd+Shift+F 打开笔记内替换栏，不能作为全局搜索快捷键；项目现有错误映射待最小更正，历史续输测试不能证明快捷键一致。未实现菜单动作保持禁用，不用成功提示替代功能。原生系统 API 的使用不代表像素匹配；本轮冻结源码/产物与失败的有限 RGB 比较见 `verification/app-001-fix-02/selfcheck.md`。
+Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许窗口发送 `menu-action`，不广播。全局搜索使用 Option+Cmd+F 并调用当前绑定的 `focusSearch`；独立窗没有全局搜索，Cmd+F 只改变所属笔记窗口的查找状态。原版 Cmd+Shift+F 打开笔记内替换栏，不能作为全局搜索快捷键；444f03b已最小更正项目菜单映射，实际新包仍待验证；历史续输测试不能证明快捷键一致。未实现菜单动作保持禁用，不用成功提示替代功能。原生系统 API 的使用不代表像素匹配；本轮冻结源码/产物与失败的有限 RGB 比较见 `verification/app-001-fix-02/selfcheck.md`。
 # Android 长候选保护（FIX04 部分修复）
 
 项目固定 `prosemirror-view@1.42.9`，在pnpm补丁内添加默认关闭的 `androidPreserveComposition` 选项，仅 `native && Android userAgent` 的正式编辑器启用。真实可信compositionstart/update在原有初始化后设置当前view的nativeCompositionActive；compositionend、clear、destroy释放。原5000ms闲置回调仅当该信号、view.composing、view.hasFocus、连接且属于该view的compositionNode与DOM focusNode均匹配时保留，不替换为更长固定延时，不推测候选文本。
