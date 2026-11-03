@@ -93,7 +93,9 @@ notes-scan现已通过主Cargo path依赖、Builder及notes-scan:default capabil
 
 仅真实正文ACK后才acknowledge插件会话；其后暂存清理失败只重试清理，不重插正文或倒退已保存状态。取消等待原生工作终态后按同session取消，ACK过的正文保留；空结果不插假节点。唯一窗口close监听在首次await前同步封住OCR与录音。访问prepare、目标变化、卸载封住入场，晚结果不改目标。插入但ACK失败时保留同文档及结果；仅实际pending正文、Editor正文完全等于本操作插入文档且既有可信身份仍有效时重试，不放宽全局授权或普通picker。正文回调确认原note与完整文档相等后才记ACK。
 
-开发定向27项、挂载预览7项、录音父20项和工具栏13项通过，结果采用受控OCR/数据库返回，不证明安装版真实OCR、相机、冷启或像素。预览见ui/ocr-text.md，来源和限度见verification/app-004-ocr-host/source-candidate-01/README.md。长期扫描集合/多页PDF/复裁另批接入，主App原生构建及实测仍由root串行安排；任务见plan/tasks/app-004-ocr-host-01.md。
+OCR预览缓存与正文/操作归属分开：访问prepare、clearSensitive/commit和卸载时同步清空React预览文字/错误并隐藏面板，先封住当前操作回调，晚返回不能回填。prepare可abort，仍须保留真实未ACK正文及原operation/session用于既有保存重试；不因清预览丢弃pending文档。成功保存并清理或取消终止时，同时清空Host文字/错误及React预览，避免operation已释放后留无主明文。ACK后cleanup失败保留原资源身份，仅重试清理；不重复插入。
+
+候选01原27项未覆盖React预览清除，独审P2保留；候选02开发37项含新增10组失效/完成/保存恢复和新旧owner隔离边界，原两份独立repro原样通过。挂载预览7项与父20/附件23+8回归通过，受控结果不证明原生OCR、相机、冷启或像素；320截图异常观察仍unknown。预览见ui/ocr-text.md，原证据及修复分账见verification/app-004-ocr-host/source-candidate-01/和source-candidate-02/。长期扫描集合/多页PDF/复裁另批接入，主App原生构建及实测仍由root串行安排；任务见plan/tasks/app-004-ocr-host-01.md。
 
 ### 进程授权与多窗口保存边界（APP-001-FIX-03）
 

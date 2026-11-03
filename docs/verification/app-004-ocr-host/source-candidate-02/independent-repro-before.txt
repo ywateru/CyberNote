@@ -1,0 +1,33 @@
+{
+  "case": "recognized OCR preview must be erased when original target is suspended/cleared",
+  "scope": "Actual App ocrLifecycle.suspend closure; called by both access prepare and clearSensitive; controlled native session results, no real lock/DB/device",
+  "detached": true,
+  "accepting": false,
+  "currentOperation": null,
+  "visiblePanel": false,
+  "nativeSessions": 0,
+  "retainedReactOcrState": {
+    "phase": "recognized",
+    "text": "合成私密OCR文字-ACCESS-REVOKE",
+    "error": ""
+  }
+}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: suspended/cleared original OCR preview must not remain in React state
++ actual - expected
+
++ '合成私密OCR文字-ACCESS-REVOKE'
+- ''
+
+    at file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-ocr-host-independent-01/ocr-sensitive-state-repro.mjs:572:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '合成私密OCR文字-ACCESS-REVOKE',
+  expected: '',
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

@@ -231,7 +231,7 @@ export class OcrHost<Target extends { noteId: string }> {
     }
     this.cleaned = true;
     this.accepting = false;
-    this.publish("saved");
+    this.publish("saved", "", "");
   }
   seal() {
     this.accepting = false;
@@ -259,7 +259,7 @@ export class OcrHost<Target extends { noteId: string }> {
         }
       }
       this.cleaned = true;
-      this.publish("cancelled");
+      this.publish("cancelled", "", "");
     })().catch((error) => {
       this.publish(
         this.documentAck ? "cleanup-pending" : "failed",

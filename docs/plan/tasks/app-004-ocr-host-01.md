@@ -63,3 +63,11 @@ depends-on: [app-002-recording-submit-01, app-004-scan-plugin]
 开发检查：实际App闭包/生产控制器与typed guest/bridge/SaveQueue/PM共27项；实际挂载工程预览7项；录音父20项、工具栏13项，typecheck/build及附件回归见候选报告。主Cargo Mac/Android目标metadata --offline --locked通过，仅解析不编译；scan独立Mac解析通过。源码、日志、截图和限度保存在docs/verification/app-004-ocr-host/source-candidate-01/，冻结后交独立复核，禁止自合并。
 
 主App真实Vision/Android OCR、原选区/正文ACK/UndoRedo/冷启、物理相机与原版像素均未由开发受控检查证明，须新包独立验收；本项仍pending-review，不标APP-004完成。
+
+## source candidate 02
+
+候选01 `2ad1e89423d1be6e872c248bfcae92ff2abade62` 独审被一项P2阻塞：失效及正常完成后React OCR预览明文未清。原候选/证据保持，完整独审见主文档plan/reviews/app-004-ocr-host-static-01.md。本次仅App同步清预览及Host真实终态清文字/错误，不改Panel/CSS或原生层。
+
+prepare/clearSensitive/卸载先封回调并立即清UI；未ACK正文与原operation/session保留，prepare失败→abort后可经原通用保存重试；ACK后清理失败只重试原session。真正cancel/acknowledge完成后Host结果也清空，正常finish清React状态并释放owner，防无主明文。37项包含原27和新增10组实际accessHandler/clearSensitive/close闭包及新旧owner隔离，独立原两份repro原样复跑通过，Panel原7与父20/附件23+8、typecheck/build均通过，精确身份/原始日志见verification/app-004-ocr-host/source-candidate-02/。
+
+独审对320px截图底部截断/重复画面的观察仍未知，本次不据此改CSS或标视觉通过；同一7项DOM几何通过不替代截图/像素验收。新候选继续待独立复审，未原生构建、设备或GUI运行。

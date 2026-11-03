@@ -1,0 +1,39 @@
+{
+  "files": [
+    {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-ocr-host-independent-01/ocr-sensitive-state-repro.mjs",
+      "copiedAs": "review01-ocr-sensitive-state-repro.mjs",
+      "sha256": "71d156fb925eb0b150ea765526dee727a90fd2d39d208b728a383369ec7f3042"
+    },
+    {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-ocr-host-independent-01/ocr-sensitive-state-completed-repro.mjs",
+      "copiedAs": "review01-ocr-sensitive-state-completed-repro.mjs",
+      "sha256": "6db652e37c246c25e2586e25f2d3c760d23bcdb8e51fea0f95cdc2eab3797d7f"
+    },
+    {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-ocr-host-independent-01/ocr-sensitive-state-completed-repro.stdout.txt",
+      "copiedAs": "review01-ocr-sensitive-state-completed-repro.stdout.txt",
+      "sha256": "a1726201e3273bc0888ff554361878d65ee5b4cfcbcf82cfc99f7be4b2f6af43"
+    },
+    {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-ocr-host-independent-01/ocr-sensitive-state-completed-repro.stderr.txt",
+      "copiedAs": "review01-ocr-sensitive-state-completed-repro.stderr.txt",
+      "sha256": "6fbb97e129c0d120653b86144226fe055a32b189659e067de489bb408173963d"
+    }
+  ],
+  "commands": [
+    {
+      "command": "node /Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-ocr-host-independent-01/ocr-sensitive-state-repro.mjs",
+      "cwd": "/private/tmp/apple-notes-ocr-host-01",
+      "beforeFixExit": 1,
+      "afterFixExit": 0
+    },
+    {
+      "command": "node /Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-ocr-host-independent-01/ocr-sensitive-state-completed-repro.mjs",
+      "cwd": "/private/tmp/apple-notes-ocr-host-01",
+      "originalReviewExit": 1,
+      "afterFixExit": 0
+    }
+  ],
+  "limits": "Original independent repro source files copied unchanged; current reruns execute actual candidate02 App/Host via cwd. Review01 source/evidence untouched."
+}

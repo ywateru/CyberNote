@@ -33,6 +33,8 @@
 
 打开聚焦标题；Tab/ShiftTab限制在当前可用按钮和文字预览；Escape阻止冒泡后取消。选图回调捕获已渲染的operation，旧File回调不能提交到新操作。打开前编辑器失焦，不主动弹IME。
 
+授权prepare、最终clearSensitive/commit和卸载同步清空React预览文字及错误；封住回调后隐藏，晚返回不回填。正常完成/取消也清空无主预览。prepare若abort，未ACK正文与原操作恢复身份仍保留，不能用清UI缓存代替丢弃待保存正文；只有取消/清理真正终止后才清Host结果文字。
+
 ## 组件和验证边界
 
 App拥有原目标与真实保存ACK，OcrHost拥有会话/事务状态，ocr-native只调用现成typed guest，OcrPanel仅显示状态/发用户动作。320×568与390×844实际挂载组件的滚动/44px可达/文字转义/键盘检查见verification/app-004-ocr-host/source-candidate-01/。受控props和合成File不证明真实主App、OCR引擎、物理相机、设备安全区或原版像素一致。

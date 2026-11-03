@@ -2148,7 +2148,8 @@ function App() {
   const finishOcr = (operation: OcrHost<PickerTarget>) => {
     if (operation.cleaned && ocrOperation.current === operation) {
       ocrOperation.current = null;
-      if (!operation.detached) setOcr(null);
+      setOcrState({ phase: "choose", text: "", error: "" });
+      setOcr(null);
     }
   };
   const cancelOcr = async (operation = ocrOperation.current) => {
@@ -2249,6 +2250,9 @@ function App() {
       if (operation && ids.includes(operation.target.noteId)) {
         operation.seal();
         operation.detached = true;
+        // Drop the UI copy immediately; pending body/session ownership remains
+        // on the sealed operation until its real save/cancellation completes.
+        setOcrState({ phase: "choose", text: "", error: "" });
         setOcr(null);
         void cancelOcr(operation).catch(fail);
       }
@@ -2258,6 +2262,8 @@ function App() {
       if (operation) {
         operation.seal();
         operation.detached = true;
+        setOcrState({ phase: "choose", text: "", error: "" });
+        setOcr(null);
         void operation.cancel().catch(() => {});
       }
     },
