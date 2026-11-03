@@ -1,0 +1,72 @@
+   Compiling notes-fix03-fixtures v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-fix-03/fixture-generator)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.53s
+     Running `docs/verification/app-001-fix-03/fixture-generator/target/debug/notes-fix03-fixtures`
+{
+  "cases": [
+    {
+      "actualPlaintextArchiveValidationError": null,
+      "archive": "fixtures/valid-rich.notesbackup",
+      "baselineCorrectPasswordUnlockAccepted": true,
+      "baselineCorrectPasswordUnlockError": null,
+      "baselinePublishedDocumentMatchesFixture": true,
+      "expectedDecryptedSchemaValid": true,
+      "name": "valid-rich",
+      "noteId": "7118910a-5313-4040-bb3d-f29b2b5b3a16",
+      "outerEncryptedArchiveImported": true,
+      "plaintextDocument": "fixtures/valid-rich.document.json",
+      "purpose": "fixture integrity and pre-fix observation; not FIX03 acceptance",
+      "wrongPasswordRejected": true
+    },
+    {
+      "actualPlaintextArchiveValidationError": null,
+      "archive": "fixtures/valid-drawing.notesbackup",
+      "baselineCorrectPasswordUnlockAccepted": true,
+      "baselineCorrectPasswordUnlockError": null,
+      "baselinePublishedDocumentMatchesFixture": true,
+      "expectedDecryptedSchemaValid": true,
+      "name": "valid-drawing",
+      "noteId": "ac581c7d-0fdf-4b95-84b4-fbda0e54c149",
+      "outerEncryptedArchiveImported": true,
+      "plaintextDocument": "fixtures/valid-drawing.document.json",
+      "purpose": "fixture integrity and pre-fix observation; not FIX03 acceptance",
+      "wrongPasswordRejected": true
+    },
+    {
+      "actualPlaintextArchiveValidationError": {
+        "code": "archive_invalid",
+        "message": "paragraph 的子节点不符合当前编辑器 schema"
+      },
+      "archive": "fixtures/invalid-structure.notesbackup",
+      "baselineCorrectPasswordUnlockAccepted": true,
+      "baselineCorrectPasswordUnlockError": null,
+      "baselinePublishedDocumentMatchesFixture": true,
+      "expectedDecryptedSchemaValid": false,
+      "name": "invalid-structure",
+      "noteId": "a52f6d24-d505-413d-816c-d55c68b66611",
+      "outerEncryptedArchiveImported": true,
+      "plaintextDocument": "fixtures/invalid-structure.document.json",
+      "purpose": "fixture integrity and pre-fix observation; not FIX03 acceptance",
+      "wrongPasswordRejected": true
+    },
+    {
+      "actualPlaintextArchiveValidationError": {
+        "code": "archive_invalid",
+        "message": "drawing 属性 strokes 类型或值无效"
+      },
+      "archive": "fixtures/invalid-drawing-attribute.notesbackup",
+      "baselineCorrectPasswordUnlockAccepted": true,
+      "baselineCorrectPasswordUnlockError": null,
+      "baselinePublishedDocumentMatchesFixture": true,
+      "expectedDecryptedSchemaValid": false,
+      "name": "invalid-drawing-attribute",
+      "noteId": "efe4a95c-4714-4f42-bd12-07ba3435d66e",
+      "outerEncryptedArchiveImported": true,
+      "plaintextDocument": "fixtures/invalid-drawing-attribute.document.json",
+      "purpose": "fixture integrity and pre-fix observation; not FIX03 acceptance",
+      "wrongPasswordRejected": true
+    }
+  ],
+  "construction": "Production Store saveNote, lockNote (Argon2 + AES256-GCM), export_archive, cold import_archive, unlockNote; no crypto reimplementation or production edit",
+  "status": "fixtures-prepared-not-fix-pass",
+  "syntheticPassword": "FIX03-synthetic-only-2026"
+}

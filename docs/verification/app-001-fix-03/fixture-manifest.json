@@ -1,0 +1,125 @@
+{
+  "createdAt": "2026-11-03T07:20:26.594385+00:00",
+  "status": "fixture preparation only; FIX03 not implemented or accepted",
+  "productionReferenceCommit": "8124911",
+  "observedRepositoryHead": "812491173d31f0f69f5f85ad22f6c464d053ea7b",
+  "sourceInputs": [
+    {
+      "path": "src-tauri/src/store.rs",
+      "sha256": "0d765cfa41d67541fea89ba7868971c51003346f87e0ec6d37010d3da39a4822"
+    },
+    {
+      "path": "src-tauri/src/store/archive.rs",
+      "sha256": "cd703c2b3adfd812505928c9b8b8d4a8aec2df648224cc28d0c418d1ebdbc270"
+    },
+    {
+      "path": "src-tauri/src/store/archive/document.rs",
+      "sha256": "ec1f8c79f56d0d871a5bd57be7307833b13b49ef604555cace4ebc993d347e3b"
+    },
+    {
+      "path": "src-tauri/src/store/archive/document-schema.json",
+      "sha256": "3a2e8cefd25ddf5438fbb81f3cae3ba7f10ec0d13c61b7ff3810636fcff6199c"
+    },
+    {
+      "path": "src-tauri/Cargo.lock",
+      "sha256": "6769eb1a942563f697fbfc8010d89cbaba90bba1a0789e3d286c04ff80e8522f"
+    }
+  ],
+  "files": [
+    {
+      "path": "fixture-generator/Cargo.lock",
+      "bytes": 17376,
+      "sha256": "ad965e7d76857b413e0da38b17226841e86d08370ba79b2ef6f11c0feeb2da5f"
+    },
+    {
+      "path": "fixture-generator/Cargo.toml",
+      "bytes": 318,
+      "sha256": "9a236019c8127bd2cb00984801d979768f7b3324533508951546e354de4922d1"
+    },
+    {
+      "path": "fixture-generator/src/main.rs",
+      "bytes": 7075,
+      "sha256": "14a502833506875e69fad3e3ffead850fa06f013d34de256a1b9f2e600d8081f"
+    },
+    {
+      "path": "fixture-result.json",
+      "bytes": 3119,
+      "sha256": "11f5a3e4146cdcde4a89d54037eeb11d779c831097284400c4d1587fac96bace"
+    },
+    {
+      "path": "fixtures/invalid-drawing-attribute.document.json",
+      "bytes": 711,
+      "sha256": "9a4e3a23dd9759275b62a690dc87b67f0d144c38f30d518b66c815675de13a5b"
+    },
+    {
+      "path": "fixtures/invalid-drawing-attribute.notesbackup",
+      "bytes": 1291,
+      "sha256": "8f81fc6e82e29523359414b3e92bee250c843bc9108f2d872a1de4264886e9d6"
+    },
+    {
+      "path": "fixtures/invalid-structure.document.json",
+      "bytes": 505,
+      "sha256": "422e3e09404c77f6fcc0c1736737d5a94cf39b71f15fda9165915ee427be4fdb"
+    },
+    {
+      "path": "fixtures/invalid-structure.notesbackup",
+      "bytes": 1203,
+      "sha256": "017e71fa6cc348affd7e77ac322697868a7eb82f12d3b4c6bdf150a8ba52e2cc"
+    },
+    {
+      "path": "fixtures/valid-drawing.document.json",
+      "bytes": 1151,
+      "sha256": "7b455ac2317e3354fec2f9601fc97002ee0cdaf60c23dca78316a1dcb20e1e1d"
+    },
+    {
+      "path": "fixtures/valid-drawing.notesbackup",
+      "bytes": 1415,
+      "sha256": "33eebc793857300e5bb09d6a887c52eef642addfe8f463225197efe3449cbc2a"
+    },
+    {
+      "path": "fixtures/valid-rich.document.json",
+      "bytes": 2540,
+      "sha256": "7673f2b4dc25c722bd83f8a12e0646c72b7d93b8849141980b6ef7f2ebd74cc5"
+    },
+    {
+      "path": "fixtures/valid-rich.notesbackup",
+      "bytes": 2186,
+      "sha256": "a34d594a7be6c750c00b9ba371f943e10587b5184680b3646716a98e074b0e4a"
+    }
+  ],
+  "archiveAudit": [
+    {
+      "archive": "invalid-drawing-attribute.notesbackup",
+      "rawPrivateMarkerAbsent": true,
+      "attachments": 0,
+      "saltBytes": 16,
+      "nonceBytes": 12,
+      "ciphertextBytes": 333
+    },
+    {
+      "archive": "invalid-structure.notesbackup",
+      "rawPrivateMarkerAbsent": true,
+      "attachments": 0,
+      "saltBytes": 16,
+      "nonceBytes": 12,
+      "ciphertextBytes": 265
+    },
+    {
+      "archive": "valid-drawing.notesbackup",
+      "rawPrivateMarkerAbsent": true,
+      "attachments": 0,
+      "saltBytes": 16,
+      "nonceBytes": 12,
+      "ciphertextBytes": 426
+    },
+    {
+      "archive": "valid-rich.notesbackup",
+      "rawPrivateMarkerAbsent": true,
+      "attachments": 0,
+      "saltBytes": 16,
+      "nonceBytes": 12,
+      "ciphertextBytes": 1000
+    }
+  ],
+  "futureRuntimeScenarios": "not run / unknown; see late-actions.md"
+}
