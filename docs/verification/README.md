@@ -29,4 +29,6 @@
 - 克隆真实主窗截图为`references/desktop/clone-list-editor-first.png`；存在标题/图标/侧栏间距差异，不代表像素验收通过。
 - Android开发自测发现旧WebView缺少Array.findLast导致编辑事务未触发保存；兼容补全后，独立QA在已安装APK上确认中文、清单、表格经force-stop/冷启动保持。具体范围与限制见`docs/verification/qa-001/README.md`。
 - 首轮独立报告`docs/plan/reviews/qa-001-01.md`结论为blocked：基础持久化通过，但归档存在附件损坏问题，功能/菜单/画廊/纸张与像素仍有差异。
+- 归档阻塞已由`docs/plan/reviews/app-001-fix-00-02.md`独立关闭：三份非法文档拒绝、63例schema跨检、五组额外合法文档、晚期数据库失败与六次真实进程中断恢复通过。结论仅限FIX-00，不升级为整应用或像素通过。
+- F12后续静态审查见`docs/plan/reviews/lock-boundary-static-01.md`：跨窗锁状态与明文缓存失效存在P1缺口，运行复现仍not-run；安排FIX-03修复并独立验收。
 - 最终报告由独立verify agent写入；阻塞修复交由develop agent，再复核。
