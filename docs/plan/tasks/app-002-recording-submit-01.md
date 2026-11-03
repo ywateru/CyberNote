@@ -1,7 +1,7 @@
 ---
 id: app-002-recording-submit-01
 scope: recording-parent-operation-document-ack-and-cancellation
-status: pending
+status: in-progress
 depends-on: [app-002-attachment-store-01, app-002-recording-state-01]
 ---
 

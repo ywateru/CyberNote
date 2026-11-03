@@ -1,0 +1,232 @@
+{
+  "candidate": "f992b90781d190c35be4cc059c64b9f9bb484d71",
+  "baseline": "7ef7975c26021051dd1041b40eb8af570b88bd84",
+  "worktree": "/private/tmp/apple-notes-search-zero-ui-01",
+  "initialStatus": "",
+  "sourceManifest": {
+    "baseline": "7ef7975c26021051dd1041b40eb8af570b88bd84",
+    "previousCandidate": "e7a2b8c8831b0ff48686970f4f985210f3d8e765",
+    "aggregateAlgorithm": "SHA256 of UTF-8 compact JSON entries with sorted keys and preserved listed path order",
+    "entries": [
+      {
+        "path": "src/App.tsx",
+        "bytes": 138780,
+        "sha256": "60df9da2d3c452b5439999b089d264c73f8a0ce50b5f19b88b6ff5e61d8a3658"
+      },
+      {
+        "path": "src/style.css",
+        "bytes": 64579,
+        "sha256": "f62e02264fa449d5a2c44e5b8409672bea58c21ceffc19b28780642ac9d39cac"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+        "bytes": 40781,
+        "sha256": "6e2d2b695c6d184e6bb73ee75e9f8e5ac956719f36777819e3f11c64438101e2"
+      },
+      {
+        "path": "scripts/check-search-zero-ui.mjs",
+        "bytes": 7866,
+        "sha256": "a01db401a0bc60dfb50ad7d82d72e8fbfa22408bf5950de60802cd0030685fc5"
+      },
+      {
+        "path": "scripts/check-search-zero-startup.mjs",
+        "bytes": 9685,
+        "sha256": "d36f420b520fb471e2d95c246c55755fbdf9c8eaf62b0c21290d17973e3f59af"
+      }
+    ],
+    "aggregateSha256": "3b1e23c8ec0eb87ef594759644a7e2ac02436615e206402607e6767e9465e86b"
+  },
+  "boundaries": {
+    "baseline": "7ef7975c26021051dd1041b40eb8af570b88bd84",
+    "entries": [
+      {
+        "path": "src/Editor.tsx",
+        "bytes": 10532,
+        "sha256": "49ee50032becb30ab92e5c93d7f9b3ce8cc6a738260bcb2d5a03cd38c44f7497",
+        "baselineSha256": "49ee50032becb30ab92e5c93d7f9b3ce8cc6a738260bcb2d5a03cd38c44f7497",
+        "unchanged": true
+      },
+      {
+        "path": "src/bridge.ts",
+        "bytes": 11949,
+        "sha256": "693de27d6780e6b1059732df66c0bf9cf37ca438b9176765565593c3d290c9f1",
+        "baselineSha256": "693de27d6780e6b1059732df66c0bf9cf37ca438b9176765565593c3d290c9f1",
+        "unchanged": true
+      },
+      {
+        "path": "src/access-client.ts",
+        "bytes": 1889,
+        "sha256": "fb3a9a062fbee9b5b68ca5a8bcbd8cb0de49170b5af35f907d95d09a0ba70d10",
+        "baselineSha256": "fb3a9a062fbee9b5b68ca5a8bcbd8cb0de49170b5af35f907d95d09a0ba70d10",
+        "unchanged": true
+      },
+      {
+        "path": "src/attachment-target.ts",
+        "bytes": 2252,
+        "sha256": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+        "baselineSha256": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+        "unchanged": true
+      },
+      {
+        "path": "src/attachment-submission.ts",
+        "bytes": 6197,
+        "sha256": "68a412cd73f2303e7c4251933fc79c123a2655472296a6999fba5687107857f3",
+        "baselineSha256": "68a412cd73f2303e7c4251933fc79c123a2655472296a6999fba5687107857f3",
+        "unchanged": true
+      },
+      {
+        "path": "src/trusted-synchronization.ts",
+        "bytes": 1974,
+        "sha256": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128",
+        "baselineSha256": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128",
+        "unchanged": true
+      },
+      {
+        "path": "src/save-queue.ts",
+        "bytes": 608,
+        "sha256": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+        "baselineSha256": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+        "unchanged": true
+      },
+      {
+        "path": "src/search-selection.ts",
+        "bytes": 951,
+        "sha256": "243d637f056fe8fadd1a5dc1c47c4689c6b865d82a764b6da1a9e44ec91d3a3a",
+        "baselineSha256": "243d637f056fe8fadd1a5dc1c47c4689c6b865d82a764b6da1a9e44ec91d3a3a",
+        "unchanged": true
+      },
+      {
+        "path": "src/search-editor-gate.ts",
+        "bytes": 1341,
+        "sha256": "8601b7da9c89e3620583d912c0454cb1a8d70ead5dbe9bd56df393ec3387f888",
+        "baselineSha256": "8601b7da9c89e3620583d912c0454cb1a8d70ead5dbe9bd56df393ec3387f888",
+        "unchanged": true
+      },
+      {
+        "path": "src/native-toolbar-state.ts",
+        "bytes": 7408,
+        "sha256": "79d9550cb61d4971fb7c0df8701462cfdf0f9f325e704e6d637930b7ec60987c",
+        "baselineSha256": "79d9550cb61d4971fb7c0df8701462cfdf0f9f325e704e6d637930b7ec60987c",
+        "unchanged": true
+      },
+      {
+        "path": "src/native-toolbar-controller.ts",
+        "bytes": 8219,
+        "sha256": "9dfa31e0ca200db7dc54dc15c2aa62d51d7a8aff23a5873643399a9f9c9a6214",
+        "baselineSha256": "9dfa31e0ca200db7dc54dc15c2aa62d51d7a8aff23a5873643399a9f9c9a6214",
+        "unchanged": true
+      },
+      {
+        "path": "src/RecordingPanel.tsx",
+        "bytes": 8819,
+        "sha256": "62547323720046169dfc2e04382ee12608951377fbdd709735c518d56c1d8f4b",
+        "baselineSha256": "62547323720046169dfc2e04382ee12608951377fbdd709735c518d56c1d8f4b",
+        "unchanged": true
+      },
+      {
+        "path": "src/RecordingPanel.css",
+        "bytes": 4528,
+        "sha256": "ed4c3c2823dafcda885a6856c8a7a19841735aea5b7768c3b5c6668698754f0b",
+        "baselineSha256": "ed4c3c2823dafcda885a6856c8a7a19841735aea5b7768c3b5c6668698754f0b",
+        "unchanged": true
+      },
+      {
+        "path": "src/recording-session.ts",
+        "bytes": 8026,
+        "sha256": "38a83851b3ee0234e7662f32cf9fed8e7019492b42e7c32bfd74af707eae11c0",
+        "baselineSha256": "38a83851b3ee0234e7662f32cf9fed8e7019492b42e7c32bfd74af707eae11c0",
+        "unchanged": true
+      },
+      {
+        "path": "src/recording-clock.ts",
+        "bytes": 984,
+        "sha256": "4982340b02af9210bdf0e1055c677aac94fc0e4bb191ed38ce1f0c88a5bfb658",
+        "baselineSha256": "4982340b02af9210bdf0e1055c677aac94fc0e4bb191ed38ce1f0c88a5bfb658",
+        "unchanged": true
+      },
+      {
+        "path": "src-tauri/src/lib.rs",
+        "bytes": 15971,
+        "sha256": "9f7e4d1ffd9a7097cd4ba3558b6cbb84ac0707b5084d8174e1e0200adc5bb6d2",
+        "baselineSha256": "9f7e4d1ffd9a7097cd4ba3558b6cbb84ac0707b5084d8174e1e0200adc5bb6d2",
+        "unchanged": true
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/src/lib.rs",
+        "bytes": 7273,
+        "sha256": "a787e57b978b77ddeb9222c7232563585a8146eb3cc733bd448397acc9703579",
+        "baselineSha256": "a787e57b978b77ddeb9222c7232563585a8146eb3cc733bd448397acc9703579",
+        "unchanged": true
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/src/macos.rs",
+        "bytes": 11337,
+        "sha256": "f7cb2c543f727a62292921651a13f8c541d4c2b9427e448e25a76a42ed5d497a",
+        "baselineSha256": "f7cb2c543f727a62292921651a13f8c541d4c2b9427e448e25a76a42ed5d497a",
+        "unchanged": true
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/src/model.rs",
+        "bytes": 11319,
+        "sha256": "9a9007651550c3c73599599b8122c1b2233c0c3fdc09fee9ee1ae8b8a4da8d35",
+        "baselineSha256": "9a9007651550c3c73599599b8122c1b2233c0c3fdc09fee9ee1ae8b8a4da8d35",
+        "unchanged": true
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+        "bytes": 4517,
+        "sha256": "898c1503ba91a16f6e1dc0b3596afb387dc17717c5cfbe71ccc24d3ef8cf8ce8",
+        "baselineSha256": "898c1503ba91a16f6e1dc0b3596afb387dc17717c5cfbe71ccc24d3ef8cf8ce8",
+        "unchanged": true
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/Cargo.toml",
+        "bytes": 784,
+        "sha256": "ec9cc969b217821733fb8008f37d4b064029cd3d23fbcecad8a2fa49a2f5e813",
+        "baselineSha256": "ec9cc969b217821733fb8008f37d4b064029cd3d23fbcecad8a2fa49a2f5e813",
+        "unchanged": true
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/Cargo.lock",
+        "bytes": 100382,
+        "sha256": "1aaff6687dcd8775a58041dde52e16c2815cc05c7551f79444c91d42d59e6437",
+        "baselineSha256": "1aaff6687dcd8775a58041dde52e16c2815cc05c7551f79444c91d42d59e6437",
+        "unchanged": true
+      },
+      {
+        "path": "package.json",
+        "bytes": 1820,
+        "sha256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007",
+        "baselineSha256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007",
+        "unchanged": true
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "bytes": 69103,
+        "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+        "baselineSha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+        "unchanged": true
+      }
+    ]
+  },
+  "old01Sha256Before": {
+    "docs/verification/app-001-search-zero-ui-independent-01/check-protected.mjs": "a1d2320cdc198da76f4a04c2f0c05779de2db33a1826bdf818e851863d65752b",
+    "docs/verification/app-001-search-zero-ui-independent-01/completion.json": "939246f80c796e3c4b90d647d0268d113b39f8b811e8dd21895fac9618c0655b",
+    "docs/verification/app-001-search-zero-ui-independent-01/identity.json": "4d5dc08767d79efa85f21a15b343f97dc052e1c6990f5f6e650ed03c45978b0d",
+    "docs/verification/app-001-search-zero-ui-independent-01/manifest.json": "51035d7efec14c7397b3dc38e7c8f599879e61a0bf1a1700539d09dbc9eb26b3",
+    "docs/verification/app-001-search-zero-ui-independent-01/presentation.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/verification/app-001-search-zero-ui-independent-01/presentation.stdout.json": "cee5a4224c85277ca3f91215a115d804300c672288dabb2a041c59a94e9a677e",
+    "docs/verification/app-001-search-zero-ui-independent-01/protected.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/verification/app-001-search-zero-ui-independent-01/protected.stdout.json": "d4447ebde28c8103fb9e3d29580ee2f41b513acc6d608d47853cabb8b7190f95",
+    "docs/verification/app-001-search-zero-ui-independent-01/search-selection.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/verification/app-001-search-zero-ui-independent-01/search-selection.stdout.json": "7abe3040160aa2a1a90c6e03a539f301783498b6360ce5574e63e71e02e8a9f6",
+    "docs/verification/app-001-search-zero-ui-independent-01/startup-subscription-failure.mjs": "0b72c16e508595ef3bafb019bf3b9f85acf4e5c9ce712715edbb9ab80ca33bde",
+    "docs/verification/app-001-search-zero-ui-independent-01/startup-subscription-failure.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/verification/app-001-search-zero-ui-independent-01/startup-subscription-failure.stdout.json": "4944c264e05a26f0619fda1345c4546652d8e375c5af348e5aa1dead42b3f768",
+    "docs/verification/app-001-search-zero-ui-independent-01/toolbar.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/verification/app-001-search-zero-ui-independent-01/toolbar.stdout.json": "4f2fc59619095c9e9901278dc4ea2d78c536cbe17a423dc849091aa4e9d852bc",
+    "docs/verification/app-001-search-zero-ui-independent-01/typecheck.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/verification/app-001-search-zero-ui-independent-01/typecheck.stdout.txt": "d27ae53cde95b7bb58c8b5a5200d9b2d8fcca19505210dfe3a59314167833de2",
+    "docs/plan/reviews/app-001-search-zero-ui-static-01.md": "03fc530ceea420c93e4b9ecc7c1fba66b2ea0e4514bdbd5954612ff77a404926"
+  }
+}

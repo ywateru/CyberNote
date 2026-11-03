@@ -1,0 +1,198 @@
+{
+  "tests": 5,
+  "results": [
+    {
+      "name": "startup subscription rejects before any synchronization",
+      "state": {
+        "errors": [
+          "subscription unavailable"
+        ],
+        "syncCalls": 0,
+        "loadCalls": 0,
+        "unsubscribeCalls": 0,
+        "invalidations": 0,
+        "loading": false,
+        "workspaceLoaded": false,
+        "synchronizing": false,
+        "syncError": "",
+        "accessSuspended": [],
+        "error": "subscription unavailable"
+      },
+      "shown": {
+        "desktopSearchZero": false,
+        "listTitle": "搜索结果",
+        "listSubtitle": "0个备忘录"
+      },
+      "pass": true
+    },
+    {
+      "name": "subscription succeeds but the actual coordinator load rejects",
+      "state": {
+        "errors": [
+          "workspace load unavailable"
+        ],
+        "syncCalls": 1,
+        "loadCalls": 1,
+        "unsubscribeCalls": 1,
+        "invalidations": 1,
+        "loading": false,
+        "workspaceLoaded": false,
+        "synchronizing": true,
+        "syncError": "workspace load unavailable",
+        "accessSuspended": [],
+        "error": "workspace load unavailable",
+        "syncResult": {
+          "success": false,
+          "sequence": 1,
+          "error": {}
+        }
+      },
+      "shown": {
+        "desktopSearchZero": false,
+        "listTitle": "搜索结果",
+        "listSubtitle": "0个备忘录"
+      },
+      "trusted": false,
+      "pass": true
+    },
+    {
+      "name": "successful trusted empty workspace publication permits confirmed zero",
+      "state": {
+        "errors": [],
+        "syncCalls": 1,
+        "loadCalls": 1,
+        "unsubscribeCalls": 1,
+        "invalidations": 1,
+        "loading": false,
+        "workspaceLoaded": true,
+        "synchronizing": false,
+        "syncError": "",
+        "accessSuspended": [],
+        "ws": {
+          "notes": [],
+          "folders": [],
+          "settings": {},
+          "access": {
+            "notes": {},
+            "suspended": []
+          }
+        },
+        "settings": {},
+        "folderId": "default",
+        "syncResult": {
+          "success": true,
+          "sequence": 1,
+          "snapshot": {
+            "notes": [],
+            "folders": [],
+            "settings": {},
+            "access": {
+              "notes": {},
+              "suspended": []
+            }
+          }
+        }
+      },
+      "shown": {
+        "desktopSearchZero": true,
+        "listTitle": "搜索",
+        "listSubtitle": "无结果"
+      },
+      "trusted": true,
+      "pass": true
+    },
+    {
+      "name": "an unrelated action error after successful load preserves confirmed zero",
+      "state": {
+        "errors": [
+          "unrelated action failed"
+        ],
+        "syncCalls": 1,
+        "loadCalls": 1,
+        "unsubscribeCalls": 1,
+        "invalidations": 1,
+        "loading": false,
+        "workspaceLoaded": true,
+        "synchronizing": false,
+        "syncError": "",
+        "accessSuspended": [],
+        "ws": {
+          "notes": [],
+          "folders": [],
+          "settings": {},
+          "access": {
+            "notes": {},
+            "suspended": []
+          }
+        },
+        "settings": {},
+        "folderId": "default",
+        "syncResult": {
+          "success": true,
+          "sequence": 1,
+          "snapshot": {
+            "notes": [],
+            "folders": [],
+            "settings": {},
+            "access": {
+              "notes": {},
+              "suspended": []
+            }
+          }
+        },
+        "error": "unrelated action failed"
+      },
+      "shown": {
+        "desktopSearchZero": true,
+        "listTitle": "搜索",
+        "listSubtitle": "无结果"
+      },
+      "trusted": true,
+      "pass": true
+    },
+    {
+      "name": "a later failed synchronization shields an earlier loaded empty workspace",
+      "state": {
+        "errors": [
+          "workspace load unavailable"
+        ],
+        "syncCalls": 2,
+        "loadCalls": 2,
+        "unsubscribeCalls": 1,
+        "invalidations": 2,
+        "loading": false,
+        "workspaceLoaded": true,
+        "synchronizing": true,
+        "syncError": "workspace load unavailable",
+        "accessSuspended": [],
+        "ws": {
+          "notes": [],
+          "folders": [],
+          "settings": {},
+          "access": {
+            "notes": {},
+            "suspended": []
+          }
+        },
+        "settings": {},
+        "folderId": "default",
+        "syncResult": {
+          "success": false,
+          "sequence": 2,
+          "error": {}
+        },
+        "retryFailure": true,
+        "error": "workspace load unavailable"
+      },
+      "shown": {
+        "desktopSearchZero": false,
+        "listTitle": "搜索结果",
+        "listSubtitle": "0个备忘录"
+      },
+      "trusted": false,
+      "pass": true
+    }
+  ],
+  "execution": "Actual App AST startup effect, state initializers, fail/hydrate callbacks, synchronization assignment and presentation declarations, plus production TrustedSynchronization; React setters and subscribe/load I/O controlled.",
+  "limitations": "No React mount, actual Tauri subscription, native GUI, rendering or pixel acceptance. Empty-workspace fixture does not exercise note hydration bodies."
+}

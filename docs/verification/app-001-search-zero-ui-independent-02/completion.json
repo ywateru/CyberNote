@@ -1,0 +1,78 @@
+{
+  "candidate": "f992b90781d190c35be4cc059c64b9f9bb484d71",
+  "finalStatus": "",
+  "sourceManifestUnchanged": true,
+  "old01Sha256Unchanged": true,
+  "temporaryDependencyLinkRemoved": true,
+  "checks": [
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "stdout": "typecheck.stdout.txt",
+      "stderr": "typecheck.stderr.txt"
+    },
+    {
+      "command": "node scripts/check-search-zero-startup.mjs",
+      "exitCode": 0,
+      "tests": 5,
+      "stdout": "startup.stdout.json",
+      "stderr": "startup.stderr.txt"
+    },
+    {
+      "command": "node scripts/check-search-zero-ui.mjs",
+      "exitCode": 0,
+      "tests": 16,
+      "stdout": "presentation.stdout.json",
+      "stderr": "presentation.stderr.txt"
+    },
+    {
+      "command": "node scripts/check-search-selection.mjs",
+      "exitCode": 0,
+      "tests": 7,
+      "stdout": "search-selection.stdout.json",
+      "stderr": "search-selection.stderr.txt"
+    },
+    {
+      "command": "node scripts/check-native-toolbar.mjs",
+      "exitCode": 0,
+      "tests": 12,
+      "stdout": "toolbar.stdout.json",
+      "stderr": "toolbar.stderr.txt"
+    },
+    {
+      "command": "node <independent-02>/startup-subscription-replay.mjs",
+      "exitCode": 0,
+      "status": "original P2 fixed in controlled actual App replay",
+      "stdout": "subscription-replay.stdout.json",
+      "stderr": "subscription-replay.stderr.txt"
+    },
+    {
+      "command": "node <independent-02>/startup-lifecycle.mjs",
+      "exitCode": 0,
+      "tests": 2,
+      "stdout": "lifecycle.stdout.json",
+      "stderr": "lifecycle.stderr.txt"
+    },
+    {
+      "command": "node <independent-01>/check-protected.mjs",
+      "exitCode": 0,
+      "protectedBodies": 16,
+      "stdout": "protected.stdout.json",
+      "stderr": "protected.stderr.txt"
+    },
+    {
+      "command": "git diff --check 7ef7975..f992b907",
+      "exitCode": 2,
+      "output": "docs/verification/app-001-search-zero-ui-01/source-candidate-02/typecheck.txt:4: new blank line at EOF.",
+      "classification": "nonblocking documentation output whitespace; no product issue"
+    },
+    {
+      "command": "git diff --check 7ef7975..f992b907 -- <5 source-manifest files>",
+      "exitCode": 0,
+      "stdout": "product-diff-check.stdout.txt",
+      "stderr": "product-diff-check.stderr.txt"
+    }
+  ],
+  "noNativeCompileOrTargetUse": true,
+  "noBuildGuiDeviceOrMainGitMutation": true
+}

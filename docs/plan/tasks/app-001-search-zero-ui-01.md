@@ -1,7 +1,7 @@
 ---
 id: app-001-search-zero-ui-01
 scope: mac-zero-result-list-title-subtitle-and-section
-status: ready-for-review
+status: in-progress-for-review
 depends-on: []
 ---
 
@@ -47,3 +47,7 @@ App纯展示谓词仅已确认桌面主窗列表零结果时生成“搜索 / �
 按独审01 P2新增workspaceLoaded正向事实：初值false，实际synchronizeRef的成功publish完成后才为true，仅用于desktopSearchZero展示门禁。订阅拒绝或首次工作区加载失败不能满足；成功加载后无关动作error不影响该展示，后续同步失败仍由现有同步门禁遮挡。没有修改订阅/同步返回协议或F07/附件/录音保护区。真实App启动effect、初始化、hydrate/同步赋值和生产TrustedSynchronization执行5组通过；App实际展示16组、原搜索选择7组/顶部12组及typecheck通过。24整文件与15保护片段不变，候选01的12项报告/证据逐字保留。
 
 [源码候选02](../../verification/app-001-search-zero-ui-01/source-candidate-02/README.md)，5源码aggregate `3b1e23c8ec0eb87ef594759644a7e2ac02436615e206402607e6767e9465e86b`，等待第二轮独立源审。没有新原生构建、GUI、设备或像素验收。
+
+## 主整合与运行门槛
+
+f992b90经独审02 SOURCE-READY后以edafd3a/59c94c5主合入。主5项源码hash相同，pnpm build、实际启动5组和展示16组整合检查通过，既有focus两Rust源未变。独审01原始失败与02原始typecheck日志EOF空行均保留；整范围diffcheck2与产品/脚本5范围diffcheck0分账。没有新包原生/设备/像素通过；旧包同几何尝试仅取得原版有效零态，配对unknown，详见docs/verification/mac-zero-same-geometry-before-01/README.md。

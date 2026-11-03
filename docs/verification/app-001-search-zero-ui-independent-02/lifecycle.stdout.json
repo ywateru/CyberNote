@@ -1,0 +1,106 @@
+{
+  "tests": 2,
+  "results": [
+    {
+      "name": "actual successful retry after initial failed load establishes the positive fact",
+      "state": {
+        "errors": [
+          "workspace load unavailable"
+        ],
+        "syncCalls": 2,
+        "loadCalls": 2,
+        "unsubscribeCalls": 1,
+        "invalidations": 2,
+        "loading": false,
+        "workspaceLoaded": true,
+        "synchronizing": false,
+        "syncError": "",
+        "accessSuspended": [],
+        "error": "workspace load unavailable",
+        "syncResult": {
+          "success": true,
+          "sequence": 2,
+          "snapshot": {
+            "notes": [],
+            "folders": [],
+            "settings": {},
+            "access": {
+              "notes": {},
+              "suspended": []
+            }
+          }
+        },
+        "recovered": true,
+        "ws": {
+          "notes": [],
+          "folders": [],
+          "settings": {},
+          "access": {
+            "notes": {},
+            "suspended": []
+          }
+        },
+        "settings": {},
+        "folderId": "default"
+      },
+      "shown": {
+        "desktopSearchZero": true,
+        "listTitle": "搜索",
+        "listSubtitle": "无结果"
+      },
+      "trusted": true
+    },
+    {
+      "name": "pending actual first load cannot establish loaded before publication",
+      "state": {
+        "errors": [],
+        "syncCalls": 1,
+        "loadCalls": 1,
+        "unsubscribeCalls": 1,
+        "invalidations": 1,
+        "loading": false,
+        "workspaceLoaded": true,
+        "synchronizing": false,
+        "syncError": "",
+        "accessSuspended": [],
+        "ws": {
+          "notes": [],
+          "folders": [],
+          "settings": {},
+          "access": {
+            "notes": {},
+            "suspended": []
+          }
+        },
+        "settings": {},
+        "folderId": "default",
+        "syncResult": {
+          "success": true,
+          "sequence": 1,
+          "snapshot": {
+            "notes": [],
+            "folders": [],
+            "settings": {},
+            "access": {
+              "notes": {},
+              "suspended": []
+            }
+          }
+        }
+      },
+      "shown": {
+        "desktopSearchZero": true,
+        "listTitle": "搜索",
+        "listSubtitle": "无结果"
+      },
+      "trusted": true,
+      "intermediate": {
+        "loadCalls": 1,
+        "workspaceLoaded": false,
+        "loading": true,
+        "synchronizing": true
+      }
+    }
+  ],
+  "fixture": "Reuses frozen author actual App AST/module fixture, adds independent recovery and pending-publication assertions; no copied synchronization or presentation rule; no mounted React/Tauri/native execution"
+}

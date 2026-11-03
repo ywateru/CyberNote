@@ -1,0 +1,60 @@
+{
+  "head": "59c94c54bca09652566f6c6515654df094060e27",
+  "at": "2026-11-03T18:49:28.405983+00:00",
+  "checks": [
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "startup",
+      "command": [
+        "node",
+        "scripts/check-search-zero-startup.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "presentation",
+      "command": [
+        "node",
+        "scripts/check-search-zero-ui.mjs"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "scope": "Main integration build and affected actual App AST display/startup checks; no native/device/pixel result.",
+  "sourceEntriesVerified": [
+    {
+      "path": "src/App.tsx",
+      "bytes": 138780,
+      "sha256": "60df9da2d3c452b5439999b089d264c73f8a0ce50b5f19b88b6ff5e61d8a3658"
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 64579,
+      "sha256": "f62e02264fa449d5a2c44e5b8409672bea58c21ceffc19b28780642ac9d39cac"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "bytes": 40781,
+      "sha256": "6e2d2b695c6d184e6bb73ee75e9f8e5ac956719f36777819e3f11c64438101e2"
+    },
+    {
+      "path": "scripts/check-search-zero-ui.mjs",
+      "bytes": 7866,
+      "sha256": "a01db401a0bc60dfb50ad7d82d72e8fbfa22408bf5950de60802cd0030685fc5"
+    },
+    {
+      "path": "scripts/check-search-zero-startup.mjs",
+      "bytes": 9685,
+      "sha256": "d36f420b520fb471e2d95c246c55755fbdf9c8eaf62b0c21290d17973e3f59af"
+    }
+  ],
+  "sourceAggregate": "3b1e23c8ec0eb87ef594759644a7e2ac02436615e206402607e6767e9465e86b",
+  "focusSourcesUnchangedFrom175cd1f": true
+}

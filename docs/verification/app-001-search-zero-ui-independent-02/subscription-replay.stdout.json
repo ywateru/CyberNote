@@ -1,0 +1,23 @@
+{
+  "candidate": "f992b90781d190c35be4cc059c64b9f9bb484d71",
+  "status": "FIXED_IN_CONTROLLED_REPLAY",
+  "execution": "AST-extracted actual App startup effect and presentation declarations; controlled subscribeAccess rejection and React host setters; no GUI, actual Tauri subscription or native rendering",
+  "afterStartup": {
+    "loading": false,
+    "synchronizing": false,
+    "syncError": "",
+    "accessSuspended": [],
+    "errors": [
+      "subscription unavailable"
+    ],
+    "syncCalls": 0,
+    "workspaceLoaded": false
+  },
+  "displayed": {
+    "desktopSearchZero": false,
+    "listTitle": "搜索结果",
+    "listSubtitle": "0个备忘录"
+  },
+  "observation": "Original startup subscription failure still clears loading, but actual false initializer now prevents the confirmed-zero presentation before any trusted load.",
+  "sourceSha256": "60df9da2d3c452b5439999b089d264c73f8a0ce50b5f19b88b6ff5e61d8a3658"
+}

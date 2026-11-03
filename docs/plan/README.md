@@ -19,7 +19,7 @@
 | APP-001-FIX-07 纸张保存返回选区 | 原选纸P2有限关闭，完整任务partial | 4e2adbd独立复验5c46536/APK5dd6dfc8，取消/grid-large/重开Back均保选区、全文、Editor/View/DOM及父key；自身保存/Home恢复/COLD完整Rust正文与纸张通过。开发真实Store外部变化仅独立只读复核；Undo首步无正文变化unknown，原版/真实第二窗/完整矩阵未通过，旧e117失败保留 |
 | APP-001-PAPER-PREVIEW 手机纸张页 | 主1fa9170，dba83641独立七态/短屏/选区有限通过 | android-independent-01记录六mask实际可见、七态原生选择保存重开、全文/selection/真父key与Editor/View/DOM保持，短屏真实滚动末卡可点save，分辨率恢复。低清录屏高清像素/iOS非零安全区未知；不跨后续包追认 |
 | APP-001-SEARCH-RESULTS Mac搜索结果 | candidate02显式搜索F07独立有限通过，快快捷键异常/像素未关闭 | 源b144c6e独立static-02；sealed5e948ad9实际unique→zero→clear/禁用/正文UndoRedo通过，严格DOM/Editor/View全程同、A隐藏不可写后恢复。快速OptionCmdF后立即paste一次落正文，已Undo恢复、原因unknown另查；零结果文案/分组仍与原版不同，公共ROI差异非整页且窗口尺寸不同。旧56d7正文残留/11dcbfc4白窗保留 |
-| APP-001-SEARCH-ZERO-UI-01 Mac零结果列表 | in-progress，源e7a2b8c独审P2阻断，修下一候选 | 原版“搜索 / 无结果 / 备忘录＋分隔线”；旧包文案与分组不同。e7的typecheck/App14/PM7/controller12通过，但独立实际启动effect证实订阅失败且syncCalls=0时仍误宣告无结果，须增加正向成功加载事实。原失败证据与不同尺寸pixelFAIL保留；真实同尺寸复采/蓝金焦点/快快捷键各自验证 |
+| APP-001-SEARCH-ZERO-UI-01 Mac零结果列表 | in-progress，源f992b90独立SOURCE-READY、主edafd3a/59c94c5 | 以真实成功加载事实确认“搜索 / 无结果 / 备忘录＋分隔线”。旧e7首次订阅失败误判P2在独立真实启动重放关闭，5+16+7+12与主build/启动/展示通过，5源码hash同。旧包同尺寸原版图有效但clone未获同态，配对像素unknown，见mac-zero-same-geometry-before-01；新包UI/蓝金焦点/快快捷键各自复验 |
 | APP-002 媒体闭环 | in-progress，3edc4ad0独立有限播放通过、手机transport仍blocked | android-independent-01独立无包装进入12s/Cancel真实资源状态、完整JSON不变；已有429547B/SHA/1101packets核证。首次Deny/带包装Allow保存冷启仅原始开发证据独立核，分别记账。旧dba的Infinity/0:00缺口由3edc4ad0新包独立核1:06/initial0paused/真实play-pause有限修正；移动展开隐藏使range/±15未验，Mac startup与旧附件/孤儿FAIL保持，可听/物理释放/绘画未验 |
 | APP-002-PERMISSION-01 手机媒体权限入口 | 主ff6b93a，dba83641独立已授权取消有限通过 | 998de4b静态9项通过；0505534首次Deny无包装弹窗/12秒存活、Allow带包装实际采集及App冷启由独立只读核原始证据；2326c75独立实际无包装进入/12秒/取消与真实资源清理。未重置系统权限。仅关闭已实测子集，不跨3edc4ad0新包追认；同canonical旧Finished无loadID、有效CSP/frame和可听音轨仍unknown |
 | APP-002-ATTACHMENT-SUBMIT-01 附件提交 | in-progress，源d81dd57独立SOURCE-READY、主c793166/01aada6 | 旧607950a取消P1在新源独立实际App8+新增3及23模块中关闭；等待真实run/FileReader/IPC终态前保留身份。8源码主整合hash相同，主build/23+8回归通过。真实系统选择器/正文ACK/冷启/预览待新包，旧孤儿失败保留，不以source-ready结束整项 |
@@ -29,7 +29,7 @@
 | APP-002-MAC-STARTUP-01 Mac入口加载 | sealed5e948ad9独立实际有限通过 | fabafcf确切包/219输入核同，启动显示tauri://localhost/三栏/原生顶部；显式搜索unique→zero→clear/禁用/正文UndoRedo与严格DOM/Editor/View同一有限通过。72项Mac证据已冻结；快速快捷键粘贴异常与公共ROI像素FAIL保留。旧11dcbfc4白窗仍为旧包失败，不追认当前主树 |
 | APP-002-RECORDING-EXTRACT-01 录音组件接缝 | done（仅抽取），源966ba7d独立SOURCE-READY、主63603d1 | 实际App中RecordingPanel纯抽取，完整组件/props/父保存/周边字节等价；独立typecheck/26cleanup通过，主两个产品文件与冻结同。不修初始自动录制/暂停完成/正文ACK，不追认旧包已含此模块 |
 | APP-002-RECORDING-STATE-01 录音面板状态 | done（仅模块），源12b94d7独立SOURCE-READY、主784a1e8 | idle显式开始/单调活动计时/暂停直接完成/同File失败重试，独立实际Panel+Session受控17与原26通过，主11输入字节核同且pnpm build通过。原物理触点unknown；未接父正文ACK、设备有效音轨/完整回放/转写/像素，开发diffcheck原日志空行已更正记账 |
-| APP-002-RECORDING-SUBMIT-01 录音父保存 | ready，等待零结果App owner合入后串行实施 | 附件前端源d81dd57与录音state784a1e8已主合入，复用同operation/原目标/一次插入/真实正文ACK与取消pending保全。实施依赖已审模块，不以真实picker E2E为前置，两完整路径同新包分账实测 |
+| APP-002-RECORDING-SUBMIT-01 录音父保存 | in-progress，零结果已合入，隔离接线实施 | 附件前端源d81dd57与录音state784a1e8已主合入，复用同operation/原目标/一次插入/真实正文ACK与取消pending保全。实施依赖已审模块，不以真实picker E2E为前置，两完整路径同新包分账实测 |
 | APP-001-SEARCH-FOCUS-01 Mac菜单搜索焦点 | in-progress，源d9bc5a4独立SOURCE-READY、主175cd1f | plugin精确MenuEvent同步请求真实唯一focused main当前enabled绑定，与IPC共body；独立与主cargo13/13通过、两产品hash同。无新包快输入/marked text实测，异常原因unknown和Tauri排队仍保留，不承诺已修复 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
