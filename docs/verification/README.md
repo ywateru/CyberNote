@@ -33,6 +33,7 @@
 - F12后续静态审查见`docs/plan/reviews/lock-boundary-static-01.md`：跨窗锁状态与明文缓存失效存在P1缺口，运行复现仍not-run；安排FIX-03修复并独立验收。
 - FIX03候选fe10c3a的独立无GUI补审ad9ea3d见`docs/plan/reviews/app-001-fix-03-static-01.md`：Rust25/schema65/access12/editor检查与真实Session/Store独立probe6项通过，但前端hydrate在pending时错误推进保存基线，可能让后续队列隐式覆盖另一窗已确认内容，P1 blocking。该覆盖链静态确认，尚未真窗复现；修复进行中，不将有限后端通过当作整项通过。证据在`qa-fix-03/run-fe10c3a/`，开发与独立运行证据分别保留。
 - 上述P1由b5dcfa8修复，633688e独立补审`app-001-fix-03-static-02.md`确认静态覆盖链关闭，16个gate/基线检查与4个真实Rust副本边界检查通过。d9a5be5只添加固定真实登记响应暂停/版本日志，默认入口关闭；正式Mac/APK已恢复默认构建。真窗排队/冲突恢复、时序和同源安装版仍待实际复核，不把静态关闭等同FIX03整项完成。副本已保存但随后同步失败可重复另存的P3单列backlog。
+- d9a5be5默认APK（3cb26e23…）安装内流式hash核对后，独立真实Android键入发现`crypto.randomUUID`缺失使新增保存登记失败，P1见`app-001-fix-03-android-01.md`（aa6280a）及`qa-fix-03/android-d9a5be5/`。环境是API30/WebView91，isSecureContext=true、getRandomValues可用；不是已证实的不安全上下文问题。合成pending正文只读保全、主数据未清理；锁定/冷启矩阵尚未到达，待最小UUID兼容修复的新默认包复验。
 - FIX-01独立安装版报告见`docs/plan/reviews/app-001-fix-01-01.md`：格式栏IME遮挡、重复附加栏、等宽样式标签和纸张页IME遮挡等本轮P1/P2已关闭；最终源码0d8b245与安装内APK指纹独立核对，纸张真触摸/同选区恢复/继续输入/一次冷启14项断言通过。最终产物清单见`app-001-fix-01-paper/build-manifest.json`，未覆盖矩阵partial/not-run及像素unknown仍保留。
 - 初始键盘遮挡实证仍保存在`qa-fix-01/run-08f2776/finding-android-ime.md`、纸张后续发现见`qa-fix-01/run-8124911/finding-paper-ime.md`。DOM点击不证明用户可触达；最后修复由实际原生触摸复验，不以开发者自测代替独立结果。
 - 原生扫描插件9340dba已通过2358901模块审查：真实Mac中文/空图OCR、会话边界、Android离线强制构建与随包模型检查通过。Android首次断网运行、真实相机/透视/PDF、宿主复制和主App集成仍unknown，详见`docs/plan/reviews/app-004-scan-plugin-01.md`。
