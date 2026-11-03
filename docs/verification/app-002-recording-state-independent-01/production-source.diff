@@ -1,0 +1,632 @@
+diff --git a/src/RecordingPanel.css b/src/RecordingPanel.css
+new file mode 100644
+index 0000000..7c1ec89
+--- /dev/null
++++ b/src/RecordingPanel.css
+@@ -0,0 +1,172 @@
++/* Local recording overrides. Mobile relationships come from recording-mobile.md;
++   compressed video bounds are not device points or a pixel-parity claim. */
++.recording-backdrop .recording-sheet header {
++  position: relative;
++  justify-content: center;
++}
++.recording-backdrop .recording-sheet .recording-cancel {
++  position: absolute;
++  left: 20px;
++}
++.recording-backdrop .recording-sheet .recording-notice {
++  min-height: 38px;
++  max-width: 90%;
++  margin-top: 8px;
++  font-size: 12px;
++  text-align: center;
++  color: var(--secondary);
++}
++.recording-backdrop .recording-sheet .recording-notice[role="alert"] {
++  color: var(--danger);
++}
++.recording-backdrop .recording-sheet .recording-controls {
++  width: 100%;
++  position: relative;
++  display: flex;
++  justify-content: center;
++  margin-top: auto;
++  margin-bottom: 28px;
++  height: 58px;
++  flex-shrink: 0;
++}
++.recording-backdrop .recording-sheet .recording-primary {
++  width: 146px;
++  height: 58px;
++  min-width: 0;
++  border: 1px solid #aaa;
++  background: var(--paper);
++  color: #ff3b30;
++  border-radius: 32px;
++  font-size: 17px;
++}
++.recording-backdrop .recording-sheet .recording-primary-idle,
++.recording-backdrop .recording-sheet .recording-primary-requesting {
++  width: 58px;
++}
++.recording-backdrop .recording-sheet .recording-red-core {
++  width: 46px;
++  height: 46px;
++  border-radius: 50%;
++  background: #ff3b30;
++}
++.recording-backdrop .recording-sheet .recording-primary-paused {
++  border-color: #ff3b30;
++  background: rgba(255, 59, 48, 0.08);
++}
++.recording-backdrop .recording-sheet .recording-primary svg {
++  width: 28px;
++  height: 28px;
++}
++.recording-backdrop .recording-sheet .recording-done {
++  position: absolute;
++  right: 18px;
++  top: 0;
++  min-width: 44px;
++  height: 58px;
++  border: 0;
++  color: var(--accent);
++  background: transparent;
++  font-size: 16px;
++}
++.recording-backdrop .recording-sheet .recording-done:disabled {
++  color: #a6a6aa;
++}
++.recording-backdrop .recording-sheet .recording-retry-preview {
++  position: absolute;
++  bottom: 100px;
++  max-width: 80%;
++}
++@media (max-width: 760px) {
++  .mobile .recording-backdrop[class] {
++    padding-top: max(6.875vh, env(safe-area-inset-top, 0px));
++  }
++  .mobile .recording-backdrop .recording-sheet {
++    padding-bottom: env(safe-area-inset-bottom, 0px);
++  }
++  .mobile .recording-backdrop .recording-sheet .sheet-handle {
++    position: absolute;
++    top: 0.45%;
++    margin: 0;
++    width: 9.4%;
++    height: 4px;
++  }
++  .mobile .recording-backdrop .recording-sheet header {
++    position: absolute;
++    top: 5.8%;
++    height: 8%;
++    padding: 0;
++  }
++  .mobile .recording-backdrop .recording-sheet header > div {
++    gap: 6px;
++  }
++  .mobile .recording-backdrop .recording-sheet header strong {
++    font-size: clamp(18px, 5.35vw, 23px);
++  }
++  .mobile .recording-backdrop .recording-sheet header small {
++    font-size: clamp(11px, 3.1vw, 13px);
++  }
++  .mobile .recording-backdrop .recording-sheet .recording-cancel {
++    display: none;
++  }
++  .mobile .recording-backdrop .recording-sheet .waveform {
++    position: absolute;
++    top: 15.9%;
++    height: 36.9%;
++    min-height: 0;
++    margin: 0;
++  }
++  .mobile .recording-backdrop .recording-sheet .recording-time {
++    position: absolute;
++    top: 65.4%;
++    margin: 0;
++    font-size: clamp(28px, 9.6vw, 42px);
++    font-weight: 500;
++  }
++  .mobile .recording-backdrop .recording-sheet .recording-notice {
++    position: absolute;
++    top: 71%;
++    margin: 0;
++    max-height: 12%;
++    overflow: auto;
++  }
++  .mobile .recording-backdrop .recording-sheet .recording-controls {
++    position: absolute;
++    top: 85.45%;
++    height: 7.4%;
++    margin: 0;
++  }
++  .mobile .recording-backdrop .recording-sheet .recording-primary {
++    height: 100%;
++    width: 37.05%;
++    border-radius: 999px;
++    font-size: clamp(14px, 3.8vw, 17px);
++  }
++  .mobile .recording-backdrop .recording-sheet .recording-primary-idle,
++  .mobile .recording-backdrop .recording-sheet .recording-primary-requesting {
++    width: auto;
++    aspect-ratio: 1;
++  }
++  .mobile .recording-backdrop .recording-sheet .recording-red-core {
++    width: 80%;
++    height: 80%;
++  }
++  .mobile .recording-backdrop .recording-sheet .recording-primary svg {
++    width: 32%;
++    height: 45%;
++  }
++  .mobile .recording-backdrop .recording-sheet .recording-done {
++    right: 4.5%;
++    height: 100%;
++    font-size: clamp(13px, 3.8vw, 17px);
++  }
++  .mobile .recording-backdrop .recording-sheet .recording-retry-preview {
++    bottom: 16%;
++    height: 32px;
++  }
++}
++
++.recording-backdrop .recording-sheet .wave-bars {
++  width: 50%;
++  margin-right: auto;
++  padding: 0;
++}
+diff --git a/src/RecordingPanel.tsx b/src/RecordingPanel.tsx
+index b235e7a..a8964a1 100644
+--- a/src/RecordingPanel.tsx
++++ b/src/RecordingPanel.tsx
+@@ -1,11 +1,48 @@
+ import { useEffect, useRef, useState } from "react";
+-import { Pause, Play, StopCircle } from "lucide-react";
++import { Pause } from "lucide-react";
+ import { RecordingSession, createRecordingPreview } from "./recording-session";
++import { RecordingClock, recordingTime } from "./recording-clock";
++import "./RecordingPanel.css";
+ 
+-const errText = (e: unknown): string =>
+-  typeof e === "object" && e !== null && "message" in e
++type Phase =
++  | "idle"
++  | "requesting"
++  | "recording"
++  | "paused"
++  | "finalizing"
++  | "saving"
++  | "retry"
++  | "submitted"
++  | "error";
++const errText = (e: unknown): string => {
++  if (e instanceof AggregateError)
++    return `${e.message} ${e.errors.map(errText).join("；")}`;
++  return typeof e === "object" && e !== null && "message" in e
+     ? String(e.message)
+     : String(e);
++};
++
++function recordingFile(blob: Blob): File {
++  if (!blob.size) throw Error("录音没有可保存的音频，请重新录制。");
++  // Use the recorder's actual format; never label unknown bytes as WebM.
++  const format =
++    /^audio\/(webm|mp4|ogg|wav|x-wav|aac|mpeg)(?:\s*;[^\r\n]*)?$/i.exec(
++      blob.type,
++    );
++  if (!format) throw Error("设备返回了无法识别的录音格式，请重新录制。");
++  const extensions: Record<string, string> = {
++    webm: "webm",
++    mp4: "m4a",
++    ogg: "ogg",
++    wav: "wav",
++    "x-wav": "wav",
++    aac: "aac",
++    mpeg: "mp3",
++  };
++  return new File([blob], `新录音.${extensions[format[1].toLowerCase()]}`, {
++    type: blob.type,
++  });
++}
+ 
+ export default function RecordingPanel({
+   onCancel,
+@@ -14,147 +51,247 @@ export default function RecordingPanel({
+   onCancel: () => void;
+   onDone: (file: File) => Promise<void>;
+ }) {
+-  const [status, setStatus] = useState<
+-    "starting" | "recording" | "paused" | "stopped" | "error"
+-  >("starting");
+-  const [seconds, setSeconds] = useState(0);
+-  const [error, setError] = useState("");
+-  const [blob, setBlob] = useState<Blob | null>(null);
+-  const [busy, setBusy] = useState(false);
++  const [status, setStatus] = useState<Phase>("idle");
++  const phase = useRef<Phase>("idle");
++  const live = useRef(false);
+   const session = useRef<RecordingSession | null>(null);
+-  const [previewUrl, setPreviewUrl] = useState("");
++  const clock = useRef(new RecordingClock());
++  const [elapsed, setElapsed] = useState(0);
++  const [error, setError] = useState("");
+   const [levels, setLevels] = useState<number[]>([]);
++  const finalFile = useRef<File | null>(null);
++  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
++  const [previewUrl, setPreviewUrl] = useState("");
++  const deadline = useRef<number | null>(null);
++  const done = useRef(onDone);
++  done.current = onDone;
++  const [createdAt] = useState(() =>
++    new Date().toLocaleTimeString("zh-CN", {
++      hour: "2-digit",
++      minute: "2-digit",
++    }),
++  );
++
++  const transition = (next: Phase) => {
++    phase.current = next;
++    setStatus(next);
++  };
++  const clearDeadline = () => {
++    if (deadline.current !== null) window.clearTimeout(deadline.current);
++    deadline.current = null;
++  };
++  const fail = (e: unknown) => {
++    if (!live.current) return;
++    clearDeadline();
++    clock.current.pause();
++    setElapsed(clock.current.milliseconds());
++    session.current?.dispose();
++    setError(errText(e));
++    transition("error");
++  };
++  const submit = async (file: File) => {
++    if (!live.current) return;
++    transition("saving");
++    setError("");
++    try {
++      await done.current(file);
++      if (live.current && phase.current === "saving") transition("submitted");
++    } catch (e) {
++      if (!live.current || phase.current !== "saving") return;
++      setError(errText(e));
++      transition("retry");
++    }
++  };
+   useEffect(() => {
+-    const capture = new RecordingSession({
+-      onRecording: () => setStatus("recording"),
+-      onStopped: (recorded) => {
+-        setBlob(recorded);
+-        setStatus("stopped");
+-      },
+-      onLevel: (level) => setLevels((v) => [...v.slice(-89), level]),
+-      onError: (e) => {
+-        setError(errText(e));
+-        setStatus("error");
+-      },
+-    });
+-    session.current = capture;
+-    void capture.start();
++    live.current = true;
+     return () => {
+-      capture.dispose();
+-      if (session.current === capture) session.current = null;
++      live.current = false;
++      clearDeadline();
++      clock.current.pause();
++      session.current?.dispose();
++      session.current = null;
+     };
+   }, []);
+-  useEffect(() => {
+-    if (!blob) return;
+-    const preview = createRecordingPreview(blob);
+-    setPreviewUrl(preview.url);
+-    return () => preview.dispose();
+-  }, [blob]);
+   useEffect(() => {
+     if (status !== "recording") return;
+-    const t = setInterval(() => setSeconds((v) => v + 0.1), 100);
+-    return () => clearInterval(t);
++    const timer = window.setInterval(
++      () => {
++        if (live.current && phase.current === "recording")
++          setElapsed(clock.current.milliseconds());
++      },
++      50,
++    );
++    return () => window.clearInterval(timer);
+   }, [status]);
+-  const time = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${(seconds % 60).toFixed(2).padStart(5, "0")}`;
++  useEffect(() => {
++    if (!previewBlob) return;
++    const preview = createRecordingPreview(previewBlob);
++    setPreviewUrl(preview.url);
++    return () => preview.dispose();
++  }, [previewBlob]);
++
++  const begin = () => {
++    if (!live.current || phase.current !== "idle") return;
++    transition("requesting");
++    const capture = new RecordingSession({
++      onRecording: () => {
++        if (!live.current || phase.current !== "requesting") return;
++        clock.current.resume();
++        transition("recording");
++      },
++      onStopped: (blob) => {
++        if (!live.current) return;
++        if (phase.current !== "finalizing") {
++          fail(Error("录音意外停止，请重新录制。"));
++          return;
++        }
++        clearDeadline();
++        try {
++          const file = recordingFile(blob);
++          finalFile.current = file;
++          setPreviewBlob(blob);
++          void submit(file);
++        } catch (e) {
++          fail(e);
++        }
++      },
++      onLevel: (level) => {
++        if (live.current && phase.current === "recording")
++          setLevels((values) => [...values.slice(-89), level]);
++      },
++      onError: fail,
++    });
++    session.current = capture;
++    void capture.start();
++  };
++  const primary = () => {
++    if (phase.current === "idle") {
++      begin();
++      return;
++    }
++    if (phase.current === "recording" && session.current?.pause()) {
++      clock.current.pause();
++      setElapsed(clock.current.milliseconds());
++      transition("paused");
++    } else if (phase.current === "paused" && session.current?.resume()) {
++      clock.current.resume();
++      transition("recording");
++    }
++  };
++  const finish = () => {
++    if (!live.current) return;
++    if (phase.current === "retry" && finalFile.current) {
++      void submit(finalFile.current);
++      return;
++    }
++    if (phase.current !== "paused") return;
++    transition("finalizing");
++    // An absent terminal event is a visible failure, never an empty attachment.
++    deadline.current = window.setTimeout(
++      () => fail(Error("录音收尾超时，请重新录制。")),
++      15000,
++    );
++    session.current?.stop();
++  };
++  const cancel = () => {
++    if (!live.current) return;
++    live.current = false;
++    clearDeadline();
++    clock.current.pause();
++    session.current?.dispose();
++    onCancel();
++  };
++  const canFinish = status === "paused" || status === "retry";
++  const primaryLabel =
++    status === "idle"
++      ? "开始录音"
++      : status === "paused"
++        ? "继续录音"
++        : "暂停录音";
++  const notice =
++    error ||
++    (status === "requesting"
++      ? "正在准备麦克风…"
++      : status === "finalizing"
++        ? "正在完成录音…"
++        : status === "saving"
++          ? "正在保存录音…"
++          : status === "submitted"
++            ? "录音已提交"
++            : "");
+   return (
+-    <div className="recording-backdrop">
+-      <section className="recording-sheet">
++    <div
++      className="recording-backdrop"
++      onKeyDown={(event) => {
++        if (event.key === "Escape") cancel();
++      }}
++    >
++      <section
++        className="recording-sheet"
++        role="dialog"
++        aria-modal="true"
++        aria-label="新录音"
++        data-recording-state={status}
++      >
+         <div className="sheet-handle" />
+         <header>
+-          <button
+-            onClick={() => {
+-              session.current?.dispose();
+-              onCancel();
+-            }}
+-          >
++          <button className="recording-cancel" onClick={cancel}>
+             取消
+           </button>
+           <div>
+             <strong>新录音</strong>
+             <small>
+-              今天{" "}
+-              {new Date().toLocaleTimeString("zh-CN", {
+-                hour: "2-digit",
+-                minute: "2-digit",
+-              })}
++              今天 {createdAt} {recordingTime(elapsed, false)}
+             </small>
+           </div>
+-          <button
+-            disabled={!blob || busy}
+-            onClick={async () => {
+-              if (!blob) return;
+-              setBusy(true);
+-              try {
+-                await onDone(
+-                  new File(
+-                    [blob],
+-                    `新录音.${blob.type.includes("mp4") ? "m4a" : "webm"}`,
+-                    { type: blob.type },
+-                  ),
+-                );
+-              } catch (e) {
+-                setError(errText(e));
+-              } finally {
+-                setBusy(false);
+-              }
+-            }}
+-          >
+-            完成
+-          </button>
+         </header>
+-        <div className="waveform">
++        <div className="waveform" aria-hidden="true">
+           <div className="wave-bars">
+-            {levels.map((h, i) => (
+-              <i key={i} style={{ height: `${h}px` }} />
++            {levels.map((height, index) => (
++              <i key={index} style={{ height: `${height}px` }} />
+             ))}
+           </div>
+           <div className="recording-playhead" />
+         </div>
+-        {error ? (
+-          <p className="recording-error">{error}</p>
+-        ) : (
+-          <>
+-            <div className="recording-time">{time}</div>
+-            <p className="recording-subtitle">
+-              {status === "recording"
+-                ? "正在录音"
+-                : status === "paused"
+-                  ? "已暂停"
+-                  : status === "stopped"
+-                    ? "录音已完成"
+-                    : "正在准备麦克风…"}
+-            </p>
+-            <div className="recording-controls">
+-              <button
+-                disabled={!session.current?.recorder || status === "stopped"}
+-                aria-label={status === "paused" ? "继续录音" : "暂停录音"}
+-                onClick={() => {
+-                  if (status === "recording") {
+-                    if (session.current?.pause()) setStatus("paused");
+-                  } else if (status === "paused") {
+-                    if (session.current?.resume()) setStatus("recording");
+-                  }
+-                }}
+-              >
+-                {status === "paused" ? (
+-                  <Play fill="currentColor" />
+-                ) : (
+-                  <Pause fill="currentColor" />
+-                )}
+-              </button>
+-              <button
+-                disabled={!session.current?.recorder || status === "stopped"}
+-                aria-label="结束录音"
+-                onClick={() => {
+-                  session.current?.stop();
+-                }}
+-              >
+-                <StopCircle size={30} />
+-              </button>
+-            </div>
+-            {blob && previewUrl && <audio controls src={previewUrl} />}
+-          </>
++        <div className="recording-time" aria-label="活动录音时间">
++          {recordingTime(elapsed)}
++        </div>
++        <div className="recording-notice" role={error ? "alert" : "status"}>
++          {notice}
++        </div>
++        {status === "retry" && previewUrl && (
++          <audio
++            className="recording-retry-preview"
++            controls
++            src={previewUrl}
++            aria-label="待保存录音预览"
++          />
+         )}
++        <div className="recording-controls">
++          <button
++            className={`recording-primary recording-primary-${status}`}
++            aria-label={primaryLabel}
++            disabled={
++              status !== "idle" && status !== "recording" && status !== "paused"
++            }
++            onClick={primary}
++          >
++            {status === "idle" || status === "requesting" ? (
++              <span className="recording-red-core" />
++            ) : status === "paused" ? (
++              "继续"
++            ) : (
++              <Pause fill="currentColor" />
++            )}
++          </button>
++          <button
++            className="recording-done"
++            disabled={!canFinish}
++            onClick={finish}
++          >
++            {status === "retry" ? "重试" : "完成"}
++          </button>
++        </div>
+       </section>
+     </div>
+   );
+diff --git a/src/recording-clock.ts b/src/recording-clock.ts
+new file mode 100644
+index 0000000..1b4805d
+--- /dev/null
++++ b/src/recording-clock.ts
+@@ -0,0 +1,29 @@
++// The UI clock measures active capture intervals, never encoded audio duration.
++export class RecordingClock {
++  private accumulated = 0;
++  private since: number | null = null;
++  constructor(private now: () => number = () => performance.now()) {}
++  resume() {
++    if (this.since === null) this.since = this.now();
++  }
++  pause() {
++    if (this.since === null) return;
++    this.accumulated += Math.max(0, this.now() - this.since);
++    this.since = null;
++  }
++  milliseconds() {
++    return (
++      this.accumulated +
++      (this.since === null ? 0 : Math.max(0, this.now() - this.since))
++    );
++  }
++}
++
++export function recordingTime(milliseconds: number, fractional = true) {
++  const centiseconds = Math.floor(milliseconds / 10);
++  const seconds = Math.floor(centiseconds / 100);
++  const base = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
++  return fractional
++    ? `${base}.${String(centiseconds % 100).padStart(2, "0")}`
++    : base;
++}

@@ -1,7 +1,7 @@
 ---
 id: app-002-recording-state-01
 scope: production-recording-panel-initial-pause-finish-and-clock
-status: source-candidate
+status: done
 depends-on: [app-002-recording-extract-01]
 ---
 
@@ -51,3 +51,7 @@ typecheck与受影响的既有26项资源清理回归。定向检查必须挂载
 ## source candidate / 2026-11-04
 
 局部组件候选与受控验证见 [证据](../../verification/app-002-recording-state/README.md)。待独立审查，不计父ACK、原生包、真实音轨或像素通过。
+
+## main integration / 2026-11-04
+
+独立SOURCE-READY报告`../reviews/app-002-recording-state-static-01.md`；主784a1e8产品字节与12b94d7冻结相同，11项共享/产品身份核同，主pnpm build通过。done仅本局部模块，父正文确认由app-002-recording-submit-01单独接入，设备/可听音轨/像素未通过。原开发日志空行导致提交范围diffcheck exit2已在证据README显式更正，未改原日志。

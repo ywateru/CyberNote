@@ -1,0 +1,32 @@
+{
+  "at": "2026-11-03T17:59:55.118269+00:00",
+  "source": "12b94d7603486f278fd09dec5dbd9a3078892d69",
+  "typecheck": {
+    "command": "pnpm typecheck",
+    "exitCode": 0,
+    "stdout": "notes-clone@0.1.0 typecheck; tsc --noEmit",
+    "toolSession": 15081
+  },
+  "cleanup": {
+    "command": "node scripts/check-recording-session.mjs",
+    "exitCode": 0,
+    "kind": "production-recording-session-failure-injection",
+    "checks": 26,
+    "status": "pass",
+    "limits": "Fake platform boundaries; no microphone/device/encoding/playback acceptance."
+  },
+  "actualPanel": {
+    "command": "existing Chrome and Playwright, node scripts/check-recording-panel-browser.mjs <evidence>/browser",
+    "exitCode": 0,
+    "toolSession": 41133,
+    "result": "browser/result.json",
+    "checks": 17
+  },
+  "diffCheck": {
+    "command": "git diff --check baseline..candidate",
+    "exitCode": 2,
+    "stdout": "docs/verification/app-002-recording-state/typecheck.txt:4: new blank line at EOF.",
+    "severity": "nonblocking documentation whitespace; developer README pass claim inaccurate for committed range"
+  },
+  "scope": "Independent source/static and controlled actual production component only; no Rust target, device, native package, real microphone, encoded audio, durable parent ACK or pixel acceptance."
+}

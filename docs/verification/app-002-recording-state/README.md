@@ -48,3 +48,7 @@ PLAYWRIGHT_CORE_PATH=/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/n
 ## 明确未验收
 
 无真实麦克风、编码音轨、可听播放、Android/iOS/macOS 安装包或新设备证据；无 App→正文持久 ACK、附件持久去重、冷启恢复的本次证明。手机仅 headless Chrome 模拟；224×480 有损参考图不能作为高清像素通过。完成态退出、实际权限路径和本地资源状态须父接线进入同一新包后串行验证。
+
+## 主整合更正 / 2026-11-04
+
+源12b94d7已独立SOURCE-READY并以784a1e8主合入；11项产品/共享输入与冻结字节相同，主pnpm build通过。独立报告`docs/plan/reviews/app-002-recording-state-static-01.md`与`main-integration.json`给出范围。此前“git diff --check通过”不适用于整个已提交范围：原typecheck.txt第4行EOF多空行导致baseline..candidate检查exit2。该原始日志保留，不重写为通过。局部组件结论不覆盖父保存ACK、真实设备音轨或像素。

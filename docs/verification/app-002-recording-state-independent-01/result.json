@@ -1,0 +1,31 @@
+{
+  "at": "2026-11-03T18:00:11.875652+00:00",
+  "source": "12b94d7603486f278fd09dec5dbd9a3078892d69",
+  "baseline": "72c93b1b34bcfd3a95c331d1da93e187ff5fda14",
+  "verdict": "SOURCE-READY local component only",
+  "blockingFindings": [],
+  "nonblockingFindings": [
+    {
+      "path": "docs/verification/app-002-recording-state/typecheck.txt",
+      "line": 4,
+      "detail": "Committed EOF blank line; range diffcheck exits2, developer README diffcheck pass inaccurate."
+    }
+  ],
+  "checks": {
+    "sourceManifest": 11,
+    "allHashesAndSharedBaselineMatch": true,
+    "typecheckExit": 0,
+    "sessionControlled": 26,
+    "actualPanelControlled": 17,
+    "pageErrors": 0,
+    "externalRequests": 0
+  },
+  "notAccepted": [
+    "parent App save ACK/error propagation",
+    "installed native package",
+    "physical microphone and encoded audible audio",
+    "cold persistence",
+    "pixel parity"
+  ],
+  "cleanup": "own dependency symlink removed; worktree clean; browser/server finally closed; no GUI/device/target use"
+}
