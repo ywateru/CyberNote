@@ -1,0 +1,77 @@
+/* OFFLINE RESEARCH STARTING VALUES ONLY — not production CSS or a parity pass.
+ * Based on width normalization of a224px source; source DPR is UNKNOWN.
+ * Scope previews only; do not reuse these cells for real note/drawing paper.
+ * At390wide: card128.84x104.46, L/R43.53, col/row gap45.27, grid top142.77
+ * from foreground sheet top. Allow ±2sourcepx (~3.5 at390) on edge anchors.
+ */
+.mobile .modal-paper {
+  --paper-ref-unit: calc(100vw / 224);
+  --preview-stroke: 0.75px;
+  --preview-rule: #d3d0d4; /* provisional; compressed source does not establish RGB parity */
+  padding: 0;
+}
+.mobile .modal-paper .sheet-top {
+  position: absolute; top: 15px; left: 16px; right: 16px; height: 24px;
+  display: block;
+}
+.mobile .modal-paper .sheet-top button { font-size: 17px; line-height: 24px; float: left; }
+.mobile .modal-paper .sheet-top strong {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  white-space: nowrap; font-size: 16px; line-height: 24px; font-weight: 600;
+}
+.mobile .modal-paper .sheet-top > span { display: none; }
+.mobile .modal-paper .paper-description {
+  position: absolute; top: calc(54 * var(--paper-ref-unit)); left: 0; right: 0;
+  margin: 0 !important; font-size: 12px !important; line-height: 18px; text-align: center;
+  /* top94.02 at390 -> text ink depends on actual platform font. Source ink top97.5. */
+}
+.mobile .modal-paper .paper-options {
+  position: absolute; top: calc(82 * var(--paper-ref-unit)); left: calc(25 * var(--paper-ref-unit));
+  display: grid; grid-template-columns: repeat(2, calc(74 * var(--paper-ref-unit)));
+  gap: calc(26 * var(--paper-ref-unit)); padding: 0; margin: 0;
+}
+.mobile .modal-paper .paper-option {
+  width: calc(74 * var(--paper-ref-unit)); height: calc(60 * var(--paper-ref-unit));
+  position: relative; border: 0; border-radius: 5px; background: #fff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 3.5%);
+}
+.mobile .modal-paper .paper-blank { grid-column: 1 / -1; }
+.mobile .modal-paper .paper-option.selected {
+  outline: 1.5px solid var(--accent); outline-offset: 0.5px;
+  /* Border strength/hue remains a follow-up with full-resolution reference. */
+}
+.mobile .modal-paper .paper-check { display: none; }
+.mobile .modal-paper .paper-option:not(.paper-blank)::before {
+  content: ''; position: absolute; pointer-events: none;
+  left: calc(7 * var(--paper-ref-unit)); right: calc(7 * var(--paper-ref-unit)); top: 0; bottom: 0;
+  background-repeat: no-repeat;
+}
+.mobile .modal-paper .paper-lines-small::before {
+  background-image: linear-gradient(var(--preview-rule),var(--preview-rule)),linear-gradient(var(--preview-rule),var(--preview-rule)),linear-gradient(var(--preview-rule),var(--preview-rule)),linear-gradient(var(--preview-rule),var(--preview-rule)),linear-gradient(var(--preview-rule),var(--preview-rule)),linear-gradient(var(--preview-rule),var(--preview-rule)),linear-gradient(var(--preview-rule),var(--preview-rule));
+  background-position: 0 12.5%,0 25%,0 37.5%,0 50%,0 62.5%,0 75%,0 87.5%;
+  background-size: 100% var(--preview-stroke);
+}
+.mobile .modal-paper .paper-lines-medium::before {
+  background-image: linear-gradient(var(--preview-rule),var(--preview-rule)),linear-gradient(var(--preview-rule),var(--preview-rule)),linear-gradient(var(--preview-rule),var(--preview-rule));
+  background-position: 0 25%,0 50%,0 75%; background-size: 100% var(--preview-stroke);
+}
+.mobile .modal-paper .paper-lines-large::before {
+  background-image: linear-gradient(var(--preview-rule),var(--preview-rule)),linear-gradient(var(--preview-rule),var(--preview-rule));
+  background-position: 0 25%,0 75%; background-size: 100% var(--preview-stroke);
+}
+.mobile .modal-paper .paper-grid-small::before,
+.mobile .modal-paper .paper-grid-medium::before,
+.mobile .modal-paper .paper-grid-large::before {
+  top: calc(7 * var(--paper-ref-unit)); bottom: auto; right: auto;
+  width: calc(60 * var(--paper-ref-unit)); height: calc(44 * var(--paper-ref-unit));
+  box-sizing: border-box; border: var(--preview-stroke) solid var(--preview-rule);
+  background-image: linear-gradient(90deg,var(--preview-rule) var(--preview-stroke),transparent 0),linear-gradient(var(--preview-rule) var(--preview-stroke),transparent 0);
+  background-repeat: repeat;
+}
+.mobile .modal-paper .paper-grid-small::before { background-size: 12.5% 16.6666667%; }
+.mobile .modal-paper .paper-grid-medium::before { background-size: 25% 33.3333333%; }
+.mobile .modal-paper .paper-grid-large::before { background-size: 50% 50%; }
+/* Counts8x6,4x3,2x2 are required. For exact terminal-line count use a preview-only SVG
+ * with explicit endpoints if browser fractional-repeat rounding produces edge artifacts.
+ * This anchored draft does not implement scrolling, safe-area policy or accessibility;
+ * integrate those existing behaviors separately and rerun real-device checks. */
