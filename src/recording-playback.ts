@@ -166,6 +166,13 @@ export function createRecordingPlayback(
     },
     retry() {
       if (!live) return;
+      if (media.mediaError) {
+        // Reload invalidates the previous decoded data before the shared
+        // controller clears its error. Only new media readiness may reopen it.
+        ready = false;
+        if (pending) clearTimeout(pending.timer);
+        pending = undefined;
+      }
       seekError = "";
       seekMessage = "";
       player.retry();

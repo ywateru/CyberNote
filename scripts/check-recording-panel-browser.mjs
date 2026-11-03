@@ -200,6 +200,9 @@ try {
       }
       load() {
         this.error = null;
+        this.readyState = 0;
+        this.duration = NaN;
+        this.ranges = [];
       }
       removeAttribute(name) {
         if (name === "src") this.src = "";
@@ -827,6 +830,62 @@ try {
     assert.equal((await counts()).deadlines, 0);
     assert.equal((await counts()).urls, 0);
     assert.equal((await counts()).files, 0);
+  });
+  await test("Reload after media failure disables real Panel controls until new readiness", async () => {
+    await open({ preview: true });
+    await paused();
+    await page.evaluate(() => {
+      window.platform.pauseEvent();
+      window.platform.emit("prefix", false);
+    });
+    await page.waitForFunction(() => window.platform.audios.length === 1);
+    await page.evaluate(() => window.platform.audios[0].ready());
+    assert.ok(
+      await page
+        .getByRole("button", { name: "播放录音", exact: true })
+        .isEnabled(),
+    );
+    await page.evaluate(() => {
+      const a = window.platform.audios[0];
+      a.error = { code: 4 };
+      a.readyState = 0;
+      a.emit("error");
+    });
+    await page.getByRole("button", { name: "重试回放", exact: true }).click();
+    assert.ok(
+      await page
+        .getByRole("button", { name: "播放录音", exact: true })
+        .isDisabled(),
+    );
+    assert.ok(
+      await page
+        .getByRole("button", { name: "前进15秒", exact: true })
+        .isDisabled(),
+    );
+    await page.evaluate(() => {
+      const a = window.platform.audios[0];
+      a.duration = 45;
+      a.readyState = 1;
+      a.emit("loadedmetadata");
+    });
+    assert.ok(
+      await page
+        .getByRole("button", { name: "播放录音", exact: true })
+        .isDisabled(),
+    );
+    await page.evaluate(() => window.platform.audios[0].ready());
+    assert.ok(
+      await page
+        .getByRole("button", { name: "播放录音", exact: true })
+        .isEnabled(),
+    );
+    assert.ok(
+      await page
+        .getByRole("button", { name: "前进15秒", exact: true })
+        .isEnabled(),
+    );
+    assert.equal((await counts()).stops, 0);
+    await page.evaluate(() => window.unmountPanel());
   });
   await test("Small mobile playback/error controls retain 44px targets and separate notice/primary regions", async () => {
     await page.setViewportSize({ width: 320, height: 568 });

@@ -246,6 +246,9 @@ try {
     }
     load() {
       this.error = null;
+      this.readyState = 0;
+      this.duration = NaN;
+      this.range = [];
     }
     removeAttribute(name) {
       if (name === "src") this.src = "";
@@ -382,6 +385,31 @@ try {
     assert.equal(f.state.ready, false);
     f.player.retry();
     assert.equal(f.audio.src, "blob:fixture");
+    f.player.dispose();
+  });
+  await test("media-error retry closes old readiness before error clears and waits fresh decoded media", async () => {
+    const f = playback();
+    f.audio.ready();
+    assert.equal(f.state.ready, true);
+    f.audio.error = { code: 4 };
+    f.audio.readyState = 0;
+    f.audio.emit("error");
+    f.player.retry();
+    assert.equal(f.audio.readyState, 0);
+    assert.equal(f.state.ready, false);
+    assert.equal(f.state.canSeek, false);
+    const plays = f.audio.plays;
+    f.player.toggle();
+    assert.equal(f.audio.plays, plays);
+    f.audio.duration = 45;
+    f.audio.readyState = 1;
+    f.audio.emit("loadedmetadata");
+    assert.equal(f.state.ready, false);
+    f.audio.ready();
+    assert.equal(f.state.ready, true);
+    assert.equal(f.state.canSeek, true);
+    f.player.toggle();
+    assert.equal(f.audio.plays, plays + 1);
     f.player.dispose();
   });
   await test("dispose seals late play/seek/metadata and stops production probe before URL revoke exactly once", async () => {
