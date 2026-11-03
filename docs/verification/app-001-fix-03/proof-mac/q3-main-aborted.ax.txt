@@ -1,0 +1,79 @@
+Window: "备忘录", App: 备忘录.
+0 standard window 备忘录, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost
+			3 container
+				4 text 其他窗口仍有未确认保存的更改，锁定未执行
+				5 button 重试
+				6 button 关闭错误
+			7 container
+				8 button 添加文件夹
+				9 button 隐藏文件夹
+				10 button 快速备忘录 3
+				11 text 在我的 Mac 上
+				12 button 全部备忘录 22
+				13 button 备忘录 0
+				14 button Notes Clone UI 2
+				15 button QA 独立验证 10
+				16 button FIX01 6
+				17 button FIX03 Session Proof 1
+				18 button 新建文件夹
+				19 button 更多设置
+			20 splitter 调整分栏宽度
+			21 container
+				22 button 返回画廊
+				23 button 新建备忘录
+				24 button 格式
+				25 button 核对清单
+				26 button 表格
+				27 button 添加附件
+				28 button 共享
+				29 button 更多
+				30 text field (settable) 搜索备忘录, Placeholder: 搜索
+				31 button 2026年11月3日 16:37
+				32 text entry area (settable) 备忘录正文, Value: FIX03 Public Q1
+PRIVATE-Q1-PRODUCTION-2026
+PRIVATE-Q1-SECOND-SAVED
+PRIVATE-Q1-FINAL-SAVED
+PRIVATE-Q2-DRAINED-SAVE
+PRIVATE-Q3-OTHER-WINDOW-SAVED
+					33 text (settable) FIX03 Public Q1
+					34 text (settable) PRIVATE-Q1-PRODUCTION-2026
+					35 text (settable) PRIVATE-Q1-SECOND-SAVED
+					36 text (settable) PRIVATE-Q1-FINAL-SAVED
+					37 text (settable) PRIVATE-Q2-DRAINED-SAVE
+					38 text (settable) PRIVATE-Q3-OTHER-WINDOW-SAVED
+			39 container 设置
+				40 heading 设置, Value: 2
+					41 text 设置
+				42 heading 外观, Value: 3
+					43 text 外观
+				44 button 跟随系统
+				45 button 浅色
+				46 button 深色
+				47 heading 本地数据, Value: 3
+					48 text 本地数据
+				49 button 导出本地备份
+				50 button 导入本地备份
+				51 button 关闭所有已锁定的备忘录
+				52 text 所有备忘录和附件保存在此设备中。
+				53 button 完成
+			54 container
+				55 text delivery · save 0 / read 0
+				56 button 暂停下次保存至prepare
+				57 button 暂停下次读取响应至commit
+				58 button 释放保存
+				59 button 释放读取
+				60 button 丢弃下次commit通知
+				61 button 记录DOM
+	62 close button
+	63 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	64 minimize button
+65 menu bar
+	66 备忘录
+	67 文件
+	68 编辑
+	69 显示
+	70 窗口
+
+The focused UI element is 2 HTML content Description: 备忘录, URL: tauri://localhost

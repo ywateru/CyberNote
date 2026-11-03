@@ -1,0 +1,49 @@
+Window: "FIX03 Public Q1", App: 备忘录.
+0 standard window FIX03 Public Q1, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost/index.html?note=1cd12df0-4af6-468f-9ec2-c66d0c1b98a6
+			3 container
+				4 text 锁定未执行：请检查所有窗口是否有未保存的更改，再重试。
+				5 button 重试
+				6 button 关闭错误
+			7 container
+				8 button 新建备忘录
+				9 button 格式
+				10 button 核对清单
+				11 button 表格
+				12 button 添加附件
+				13 button 共享
+				14 button 更多
+				15 text field (settable) 搜索备忘录, Placeholder: 搜索
+				16 button 2026年11月3日 16:37
+				17 text entry area (settable) 备忘录正文, Value: FIX03 Public Q1
+PRIVATE-Q1-PRODUCTION-2026
+PRIVATE-Q1-SECOND-SAVED
+PRIVATE-Q1-FINAL-SAVED
+PRIVATE-Q2-DRAINED-SAVE
+PRIVATE-Q3-PENDING-RETAINED
+					18 text (settable) FIX03 Public Q1
+					19 text (settable) PRIVATE-Q1-PRODUCTION-2026
+					20 text (settable) PRIVATE-Q1-SECOND-SAVED
+					21 text (settable) PRIVATE-Q1-FINAL-SAVED
+					22 text (settable) PRIVATE-Q2-DRAINED-SAVE
+					23 text (settable) PRIVATE-Q3-PENDING-RETAINED
+			24 container
+				25 text dom · save 0 / read 0
+				26 button 暂停下次保存至prepare
+				27 button 暂停下次读取响应至commit
+				28 button 释放保存
+				29 button 释放读取
+				30 button 丢弃下次commit通知
+				31 button 记录DOM
+	32 close button
+	33 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	34 minimize button
+35 menu bar
+	36 备忘录
+	37 文件
+	38 编辑
+	39 显示
+	40 窗口
+
+The focused UI element is 2 HTML content Description: 备忘录, URL: tauri://localhost/index.html?note=1cd12df0-4af6-468f-9ec2-c66d0c1b98a6
