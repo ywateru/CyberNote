@@ -1,0 +1,53 @@
+{
+  "head": "6ebacbee70b2277308e3c11b83ed7df7ab17a6c3",
+  "at": "2026-11-03T19:15:35.315337+00:00",
+  "sourceEntriesVerified": [
+    {
+      "path": "src/App.tsx",
+      "bytes": 145715,
+      "sha256": "3beef1eea93e564e317f81efe30f89c391183a7d47e27d4cb3f954781783b696"
+    },
+    {
+      "path": "scripts/check-recording-submit.mjs",
+      "bytes": 34019,
+      "sha256": "ed30c9c3534de9daaa168817b63311c71971b8e613953d63b8a95cd54195f3ee"
+    }
+  ],
+  "sourceAggregate": "941e9f7c3e287d8aeb606078354cb11e65b2f0ece5af4c30c6ceaa9239b330b2",
+  "independentManifestSha256": "6400251b0b11f99ae4b95a4374338210d896bd860d1fbd988c5fa4ad7ba2ec25",
+  "checks": [
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "recording-parent",
+      "command": [
+        "node",
+        "scripts/check-recording-submit.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "search-startup",
+      "command": [
+        "node",
+        "scripts/check-search-zero-startup.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "search-presentation",
+      "command": [
+        "node",
+        "scripts/check-search-zero-ui.mjs"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "scope": "Main integration build and affected actual App parent/search AST checks; no device/native-media/pixel result."
+}

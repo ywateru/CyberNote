@@ -1,0 +1,17 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+14336 !== 4951
+
+    at file:///private/tmp/apple-notes-recording-submit-01/docs/verification/app-002-recording-submit-independent-01/check-boundaries.mjs:46:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 14336,
+  expected: 4951,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

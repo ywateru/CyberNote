@@ -61,7 +61,7 @@ paperStyle 合法值为 plain、lines-small、lines-medium、lines-large、grid-
 
 Rust 错误应结构化：code/message，UI 显示错误并保留未保存内容。自动保存做按笔记串行队列/版本校验，避免切笔记或慢写导致旧内容覆盖新内容。输入法 composition 过程中不改写光标/文档。退出/失焦前清空队列并验证重启内容。附件内容 URL 只从受管路径生成。
 
-### 录音会话与附件提交边界（APP-002目标契约，待实现/实证）
+### 录音会话与附件提交边界（APP-002源码已接线，安装版待实证）
 
 先沿用现有WebView的真实采集链。每次录音固定session身份、目标noteId、Editor、实时授权身份及插入书签；所有入口使用同一归属检查，不能只保护Mac原生工具栏入口。权限请求和异步结束返回时再次检查会话仍有效；目标切换、销毁、删除或授权失效后的结果不插入另一篇笔记。
 
@@ -71,15 +71,17 @@ Rust 错误应结构化：code/message，UI 显示错误并保留未保存内容
 
 附件落盘、插入正文、正文持久成功分别记账；仅在正文确认引用后将该次录音标为保存成功。失败重试复用本次已创建的附件身份或完成安全补偿，不能每次重试生成永久重复附件。补偿只可清理本会话新建且权威持久文档尚未引用的附件，检查归属与并发状态后由Rust执行，不接受前端任意删除路径。正文已持久成功而随后列表刷新失败时保留该附件及成功身份，不能误删已引用文件或再次插入。保存中取消、窗口消失及访问屏障的边界须有确定结果；取消后不得晚到插入，已有提交则按真实结果恢复并核对，不将未完成请求静默当作取消成功。
 
-上述为APP-002修复契约，并非当前版本已具备。静态缺口及真实自检方案见`research/media-roundtrip-readiness/analysis.md`；设备授权、有效音轨、冷启可听播放和像素仍须独立验证。
+上述契约的局部状态、附件前端与录音父接线已分别独审并主合入，局部状态784a1e8、附件c793166/01aada6、录音父6ebacbe。当前运行仍是旧fabafcf候选，不据主源码推认它已具备新行为。历史缺口见`research/media-roundtrip-readiness/analysis.md`；新统一包的设备授权、有效音轨、正文持久、冷启可听播放和像素仍须独立验证。
 
-APP-002-ATTACHMENT-SUBMIT-01将同一契约先接入系统文件选择链。操作在打开面板前固定原目标与operationId，未发起和已失效分别表达；晚面板结果不得回落到当前笔记。focus触发的可信同步必须给出成功/序号/当前snapshot，只有后端session/global epoch/noteEpoch、原scope/note/Editor/文档版本/书签均未变，才可将本次操作重绑定纯renderer generation变化。全局AccessGate语义不变，真实目标变化仍拒绝。
+APP-002-ATTACHMENT-SUBMIT-01已在主源码将同一契约接入系统文件选择链。操作在打开面板前固定原目标与operationId，未发起和已失效分别表达；晚面板结果不得回落到当前笔记。focus触发的可信同步必须给出成功/序号/当前snapshot，只有后端session/global epoch/noteEpoch、原scope/note/Editor/文档版本/书签均未变，才可将本次操作重绑定纯renderer generation变化。全局AccessGate语义不变，真实目标变化仍拒绝。
 
-为覆盖“文件已写入但响应或正文失败”，后端以真实窗口、授权session、原note和operationId建立持久操作记录，附件元数据与记录同事务提交，相同操作重复请求复用结果；新授权下可核查真实结果。操作记录独立于公开Attachment与归档字段。前端处理插入false/throw，将stored、inserted、正文ACK与列表刷新分别记账。安全补偿仅作用本操作新建文件，Rust核owner、权威正文引用、保存intent和屏障；已引用保留，无法安全判定则deferred。冷启仅恢复有该操作记录的未引用新文件，不清扫旧孤儿。具体接口名与实现检查在候选中同步，当前不能称已接入。
+为覆盖“文件已写入但响应或正文失败”，后端以真实窗口、授权session、原note和operationId建立持久操作记录，附件元数据与记录同事务提交，相同操作重复请求复用结果；新授权下可核查真实结果。操作记录独立于公开Attachment与归档字段。前端处理插入false/throw，将stored、inserted、正文ACK与列表刷新分别记账。安全补偿仅作用本操作新建文件，Rust核owner、权威正文引用、保存intent和屏障；已引用保留，无法安全判定则deferred。冷启仅恢复有该操作记录的未引用新文件，不清扫旧孤儿。主bridge与AttachmentSubmission已使用同一operation命令；源码接入与安装版真实边界分别记账。
 
 节点已插入但正文ACK失败时，renderer若仍保留引用该附件的pending文档，应保留operation/附件以便重试；不得仅因数据库暂未引用便补偿删除。只有确认本地回退和对应保存队列结果后才发取消。Session对SaveIntents/屏障的核查不能冒称知道尚未登记的renderer pendingDocs；这是前端接线责任，不新增客户端自报的授权放宽开关。
 
-2026-11-04模块状态：上述三个operation命令已作为42b2631整合，源4d5898f独立SOURCE-READY，六Rust文件主整合hash完全相同；前端仍待父任务接线，既有store_attachment不自动获得新幂等/补偿语义。准确参数、五种公开状态、window incarnation、preparing保守拒绝重写、10,000条历史限额、冷恢复及purge中断遗留限制见`verification/app-002-attachment-store/source-candidate-01.md`，独立检查见`plan/reviews/app-002-attachment-store-static-01.md`。当前F07+Audio安装包f4d3a02不包含此模块。
+2026-11-04模块状态：三个operation命令以42b2631整合，源4d5898f独立SOURCE-READY，六Rust文件hash一致。系统文件与录音父现已在主源码接同一AttachmentSubmission/map/SaveQueue；旧store_attachment仍保留原语义。准确参数、五种状态、window incarnation、preparing保守拒绝重写、10,000条历史限额、冷恢复及purge中断限制见`verification/app-002-attachment-store/source-candidate-01.md`与独审报告。统一candidate03尚未冻结/构建，不声称当前旧fabafcf运行包包含这些后续修改。
+
+录音票据在打开前固定目标和operation；仅当前同一ticket可窄豁免自己的record遮挡，普通picker/global nativeAssert保持原门禁。Panel onDone的resolve约定为真实saveDoc返回正文已acknowledge，失败reject保留同File；已ACK刷新失败仅重刷。取消先封submit，但保留同ticket窄cancel归属，Panel立即卸载以释放采集，operation等待真实run/FileReader/IPC结束后才核安全取消。Editor/pending引用与已ACK附件保留；deferred/身份失效保留可恢复身份和可见错误。唯一close监听通过同一lifecycle ref等安全取消或真实pending正文确认，不新增竞争监听。源码证据见`plan/reviews/app-002-recording-submit-static-01.md`；暂停快照与±15另由app-002-recording-preview-01负责，不改变最终File/父ACK协议。
 
 ### 进程授权与多窗口保存边界（APP-001-FIX-03）
 

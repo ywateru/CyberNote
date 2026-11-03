@@ -53,3 +53,7 @@ depends-on: [app-002-attachment-store-01, app-002-recording-state-01]
 普通/原生录音入口固定同一原目标票据和operation，父Done复用AttachmentSubmission与真实saveDoc/SaveQueue ACK；ACK前错误reject回Panel，同File重试保留原操作，ACK后刷新失败只重刷。取消/Back先封入场并卸载Panel，未插入settle后由原目标窄cancel核定终态；pending引用保全，全局重试继续原正文保存。复用现有唯一close监听与lifecycle ref，访问/目标/卸载封口。普通picker与全局nativeAssert不放宽，Panel/Session/clock/CSS/Rust/依赖未改。
 
 真实App父回调＋生产helper/bridge/SaveQueue定向20组、原附件23/实际取消8/Session26、typecheck与格式差异检查通过。[源码报告](../../verification/app-002-recording-submit/source-candidate-01/README.md)，2源码aggregate `941e9f7c3e287d8aeb606078354cb11e65b2f0ece5af4c30c6ceaa9239b330b2`。等待独立源码审查；没有GUI/设备/原生构建/target或可听音轨与像素验收。
+
+## 源码与主整合状态
+
+8ee0111经独审01 SOURCE-READY后以6ebacbe主合入。独立20+23+8+26及5项新增生命周期检查通过；主2源码hash相同，pnpm build、父20组、搜索启动5/展示16整合检查通过。Panel/Session/clock/CSS/Rust/依赖未变。报告与原始边界脚本首次路径错误及修正结果均保留于独审目录。任务保持in-progress，统一candidate03真实Mac/Android录制、正文确认、冷启、可听播放与像素仍需分别实测。
