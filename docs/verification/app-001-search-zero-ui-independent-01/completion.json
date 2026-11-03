@@ -1,0 +1,59 @@
+{
+  "candidate": "e7a2b8c8831b0ff48686970f4f985210f3d8e765",
+  "headAtRelease": "e7a2b8c8831b0ff48686970f4f985210f3d8e765",
+  "worktreeStatusAtRelease": "",
+  "temporaryDependencyLinkRemoved": true,
+  "checks": [
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "stdout": "typecheck.stdout.txt",
+      "stderr": "typecheck.stderr.txt"
+    },
+    {
+      "command": "node scripts/check-search-zero-ui.mjs",
+      "exitCode": 0,
+      "tests": 14,
+      "stdout": "presentation.stdout.json",
+      "stderr": "presentation.stderr.txt"
+    },
+    {
+      "command": "node scripts/check-search-selection.mjs",
+      "exitCode": 0,
+      "tests": 7,
+      "stdout": "search-selection.stdout.json",
+      "stderr": "search-selection.stderr.txt"
+    },
+    {
+      "command": "node scripts/check-native-toolbar.mjs",
+      "exitCode": 0,
+      "tests": 12,
+      "stdout": "toolbar.stdout.json",
+      "stderr": "toolbar.stderr.txt"
+    },
+    {
+      "command": "node <independent-01>/check-protected.mjs",
+      "exitCode": 0,
+      "protectedBodies": 16,
+      "stdout": "protected.stdout.json",
+      "stderr": "protected.stderr.txt"
+    },
+    {
+      "command": "node <independent-01>/startup-subscription-failure.mjs",
+      "exitCode": 0,
+      "outcome": "P2 reproduced; assertion requires the failure to remain visible as evidence",
+      "stdout": "startup-subscription-failure.stdout.json",
+      "stderr": "startup-subscription-failure.stderr.txt"
+    },
+    {
+      "command": "git diff --check 7ef7975c26021051dd1041b40eb8af570b88bd84..e7a2b8c8831b0ff48686970f4f985210f3d8e765",
+      "exitCode": 0,
+      "output": "empty; tool transcript"
+    }
+  ],
+  "sourceFilesFixedGitBlobsVerified": true,
+  "noProductEdits": true,
+  "noMainGitChanges": true,
+  "noNativeCompileOrTargetUse": true,
+  "noGuiOrDevice": true
+}

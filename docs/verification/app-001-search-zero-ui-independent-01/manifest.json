@@ -1,0 +1,94 @@
+{
+  "candidate": "e7a2b8c8831b0ff48686970f4f985210f3d8e765",
+  "conclusion": "BLOCKED: P2 initial subscription failure can claim confirmed zero before trusted load",
+  "files": [
+    {
+      "path": "docs/plan/reviews/app-001-search-zero-ui-static-01.md",
+      "bytes": 7899,
+      "sha256": "03fc530ceea420c93e4b9ecc7c1fba66b2ea0e4514bdbd5954612ff77a404926"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/check-protected.mjs",
+      "bytes": 2645,
+      "sha256": "a1d2320cdc198da76f4a04c2f0c05779de2db33a1826bdf818e851863d65752b"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/completion.json",
+      "bytes": 1840,
+      "sha256": "939246f80c796e3c4b90d647d0268d113b39f8b811e8dd21895fac9618c0655b"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/identity.json",
+      "bytes": 8336,
+      "sha256": "4d5dc08767d79efa85f21a15b343f97dc052e1c6990f5f6e650ed03c45978b0d"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/presentation.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/presentation.stdout.json",
+      "bytes": 5137,
+      "sha256": "cee5a4224c85277ca3f91215a115d804300c672288dabb2a041c59a94e9a677e"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/protected.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/protected.stdout.json",
+      "bytes": 3168,
+      "sha256": "d4447ebde28c8103fb9e3d29580ee2f41b513acc6d608d47853cabb8b7190f95"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/search-selection.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/search-selection.stdout.json",
+      "bytes": 835,
+      "sha256": "7abe3040160aa2a1a90c6e03a539f301783498b6360ce5574e63e71e02e8a9f6"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/startup-subscription-failure.mjs",
+      "bytes": 3138,
+      "sha256": "0b72c16e508595ef3bafb019bf3b9f85acf4e5c9ce712715edbb9ab80ca33bde"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/startup-subscription-failure.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/startup-subscription-failure.stdout.json",
+      "bytes": 856,
+      "sha256": "4944c264e05a26f0619fda1345c4546652d8e375c5af348e5aa1dead42b3f768"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/toolbar.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/toolbar.stdout.json",
+      "bytes": 1448,
+      "sha256": "4f2fc59619095c9e9901278dc4ea2d78c536cbe17a423dc849091aa4e9d852bc"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/typecheck.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/app-001-search-zero-ui-independent-01/typecheck.stdout.txt",
+      "bytes": 90,
+      "sha256": "d27ae53cde95b7bb58c8b5a5200d9b2d8fcca19505210dfe3a59314167833de2"
+    }
+  ],
+  "aggregateMethod": "sorted path + NUL + sha256 + LF, UTF-8",
+  "aggregateSha256": "b950c93159f2b70f3641502e5613f16d8d82ea9ce559fe8f6beefb7980b62a1c",
+  "scope": "independent source/controlled checks, no target/native compilation/build/GUI/device/pixel acceptance"
+}
