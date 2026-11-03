@@ -1,0 +1,67 @@
+{
+  "baseline": "48120ab2aa4831f03fcb04cf5478e666a1b09492",
+  "files": [
+    {
+      "path": "src/RecordingPanel.tsx",
+      "sha256": "076ae3879234915a0aa1ddf604338a2b254b50ff9bd7885f5df968ef93ffd46c"
+    },
+    {
+      "path": "src/RecordingPanel.css",
+      "sha256": "7c673a17db5644151ebfe29f1b0dd168d2f78cde5b403c6099e7f8af8fb8165f"
+    },
+    {
+      "path": "src/recording-session.ts",
+      "sha256": "59b4520d7ba6b90a305e1ebd61e0fedba800df031ac55f2eb6f5e6fee51472d8"
+    },
+    {
+      "path": "src/recording-playback.ts",
+      "sha256": "c98017c7605d87d839bc4e6559bb7e8a816f058ddbff38382c040b16764e8d7c"
+    },
+    {
+      "path": "scripts/check-recording-panel-browser.mjs",
+      "sha256": "c0b8fcabe74888a60da46245833d90948664ed6b27335f734233348720bc9b39"
+    },
+    {
+      "path": "scripts/check-recording-preview.mjs",
+      "sha256": "5f963640db3003bfb5cf2d6d1d4b88d3ab63d4032176c10cda4bd73d6b7f03b4"
+    }
+  ],
+  "aggregate": "aee56e147153f070a00f3d8bf8cbc2536c854a60708470e1e7de9c0b5e53b7b7",
+  "unchanged": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "60df9da2d3c452b5439999b089d264c73f8a0ce50b5f19b88b6ff5e61d8a3658",
+      "equalsBaseline": true
+    },
+    {
+      "path": "src/bridge.ts",
+      "sha256": "693de27d6780e6b1059732df66c0bf9cf37ca438b9176765565593c3d290c9f1",
+      "equalsBaseline": true
+    },
+    {
+      "path": "src/save-queue.ts",
+      "sha256": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+      "equalsBaseline": true
+    },
+    {
+      "path": "src/audio-playback.ts",
+      "sha256": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+      "equalsBaseline": true
+    },
+    {
+      "path": "src/AudioPlayer.tsx",
+      "absent": true
+    },
+    {
+      "path": "package.json",
+      "sha256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007",
+      "equalsBaseline": true
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+      "equalsBaseline": true
+    }
+  ],
+  "scope": "No App/bridge/SaveQueue/Rust/dependencies/shared-player changes. No build/native/device/microphone run."
+}

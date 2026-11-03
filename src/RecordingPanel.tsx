@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Pause } from "lucide-react";
-import { RecordingSession, createRecordingPreview } from "./recording-session";
+import { Pause, Play, RotateCcw, RotateCw } from "lucide-react";
+import { RecordingSession } from "./recording-session";
+import {
+  createRecordingPlayback,
+  initialRecordingPlaybackState,
+} from "./recording-playback";
 import { RecordingClock, recordingTime } from "./recording-clock";
 import "./RecordingPanel.css";
 
@@ -60,8 +64,19 @@ export default function RecordingPanel({
   const [error, setError] = useState("");
   const [levels, setLevels] = useState<number[]>([]);
   const finalFile = useRef<File | null>(null);
-  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
-  const [previewUrl, setPreviewUrl] = useState("");
+  const previewGeneration = useRef(0);
+  const previewPlayer = useRef<ReturnType<
+    typeof createRecordingPlayback
+  > | null>(null);
+  const [previewSource, setPreviewSource] = useState<{
+    blob: Blob;
+    generation: number;
+  } | null>(null);
+  const [previewState, setPreviewState] = useState(
+    initialRecordingPlaybackState,
+  );
+  const [previewError, setPreviewError] = useState("");
+  const [previewPending, setPreviewPending] = useState(false);
   const deadline = useRef<number | null>(null);
   const done = useRef(onDone);
   done.current = onDone;
@@ -80,9 +95,19 @@ export default function RecordingPanel({
     if (deadline.current !== null) window.clearTimeout(deadline.current);
     deadline.current = null;
   };
+  const clearPlayback = () => {
+    ++previewGeneration.current;
+    previewPlayer.current?.dispose();
+    previewPlayer.current = null;
+    setPreviewSource(null);
+    setPreviewState(initialRecordingPlaybackState);
+    setPreviewError("");
+    setPreviewPending(false);
+  };
   const fail = (e: unknown) => {
     if (!live.current) return;
     clearDeadline();
+    clearPlayback();
     clock.current.pause();
     setElapsed(clock.current.milliseconds());
     session.current?.dispose();
@@ -91,6 +116,7 @@ export default function RecordingPanel({
   };
   const submit = async (file: File) => {
     if (!live.current) return;
+    clearPlayback();
     transition("saving");
     setError("");
     try {
@@ -100,12 +126,16 @@ export default function RecordingPanel({
       if (!live.current || phase.current !== "saving") return;
       setError(errText(e));
       transition("retry");
+      setPreviewSource({ blob: file, generation: previewGeneration.current });
     }
   };
   useEffect(() => {
     live.current = true;
     return () => {
       live.current = false;
+      ++previewGeneration.current;
+      previewPlayer.current?.dispose();
+      previewPlayer.current = null;
       clearDeadline();
       clock.current.pause();
       session.current?.dispose();
@@ -114,21 +144,75 @@ export default function RecordingPanel({
   }, []);
   useEffect(() => {
     if (status !== "recording") return;
-    const timer = window.setInterval(
-      () => {
-        if (live.current && phase.current === "recording")
-          setElapsed(clock.current.milliseconds());
-      },
-      50,
-    );
+    const timer = window.setInterval(() => {
+      if (live.current && phase.current === "recording")
+        setElapsed(clock.current.milliseconds());
+    }, 50);
     return () => window.clearInterval(timer);
   }, [status]);
   useEffect(() => {
-    if (!previewBlob) return;
-    const preview = createRecordingPreview(previewBlob);
-    setPreviewUrl(preview.url);
-    return () => preview.dispose();
-  }, [previewBlob]);
+    if (
+      !previewSource ||
+      !live.current ||
+      previewSource.generation !== previewGeneration.current ||
+      (phase.current !== "paused" && phase.current !== "retry")
+    )
+      return;
+    const generation = previewSource.generation;
+    let player: ReturnType<typeof createRecordingPlayback>;
+    try {
+      player = createRecordingPlayback(
+        new Audio(),
+        previewSource.blob,
+        (state) => {
+          if (
+            live.current &&
+            generation === previewGeneration.current &&
+            (phase.current === "paused" || phase.current === "retry")
+          )
+            setPreviewState(state);
+        },
+      );
+      previewPlayer.current = player;
+    } catch (error) {
+      setPreviewError(errText(error));
+      return;
+    }
+    return () => {
+      player.dispose();
+      if (previewPlayer.current === player) previewPlayer.current = null;
+    };
+  }, [previewSource]);
+
+  const preparePausedPreview = () => {
+    clearPlayback();
+    const generation = previewGeneration.current;
+    const capture = session.current;
+    if (!capture) return;
+    setPreviewPending(true);
+    void capture
+      .snapshot()
+      .then((blob) => {
+        if (
+          !live.current ||
+          phase.current !== "paused" ||
+          generation !== previewGeneration.current
+        )
+          return;
+        setPreviewPending(false);
+        setPreviewSource({ blob, generation });
+      })
+      .catch((error) => {
+        if (
+          !live.current ||
+          phase.current !== "paused" ||
+          generation !== previewGeneration.current
+        )
+          return;
+        setPreviewPending(false);
+        setPreviewError(errText(error));
+      });
+  };
 
   const begin = () => {
     if (!live.current || phase.current !== "idle") return;
@@ -149,7 +233,6 @@ export default function RecordingPanel({
         try {
           const file = recordingFile(blob);
           finalFile.current = file;
-          setPreviewBlob(blob);
           void submit(file);
         } catch (e) {
           fail(e);
@@ -173,9 +256,13 @@ export default function RecordingPanel({
       clock.current.pause();
       setElapsed(clock.current.milliseconds());
       transition("paused");
-    } else if (phase.current === "paused" && session.current?.resume()) {
-      clock.current.resume();
-      transition("recording");
+      preparePausedPreview();
+    } else if (phase.current === "paused") {
+      clearPlayback();
+      if (session.current?.resume()) {
+        clock.current.resume();
+        transition("recording");
+      }
     }
   };
   const finish = () => {
@@ -185,6 +272,7 @@ export default function RecordingPanel({
       return;
     }
     if (phase.current !== "paused") return;
+    clearPlayback();
     transition("finalizing");
     // An absent terminal event is a visible failure, never an empty attachment.
     deadline.current = window.setTimeout(
@@ -196,6 +284,7 @@ export default function RecordingPanel({
   const cancel = () => {
     if (!live.current) return;
     live.current = false;
+    clearPlayback();
     clearDeadline();
     clock.current.pause();
     session.current?.dispose();
@@ -208,8 +297,18 @@ export default function RecordingPanel({
       : status === "paused"
         ? "继续录音"
         : "暂停录音";
+  const playbackError =
+    previewError ||
+    previewState.mediaError ||
+    previewState.playError ||
+    previewState.seekError ||
+    previewState.durationError;
+  const previewAllowed = status === "paused" || status === "retry";
   const notice =
     error ||
+    playbackError ||
+    (previewPending ? "正在准备暂停回放…" : "") ||
+    previewState.seekMessage ||
     (status === "requesting"
       ? "正在准备麦克风…"
       : status === "finalizing"
@@ -253,19 +352,62 @@ export default function RecordingPanel({
           </div>
           <div className="recording-playhead" />
         </div>
-        <div className="recording-time" aria-label="活动录音时间">
-          {recordingTime(elapsed)}
+        <div
+          className="recording-time"
+          aria-label={
+            previewAllowed && previewState.playing
+              ? "实际回放位置"
+              : "活动录音时间"
+          }
+        >
+          {recordingTime(
+            previewAllowed && previewState.playing
+              ? previewState.time * 1000
+              : elapsed,
+          )}
         </div>
-        <div className="recording-notice" role={error ? "alert" : "status"}>
+        <div
+          className="recording-notice"
+          role={error || playbackError ? "alert" : "status"}
+        >
           {notice}
         </div>
-        {status === "retry" && previewUrl && (
-          <audio
-            className="recording-retry-preview"
-            controls
-            src={previewUrl}
-            aria-label="待保存录音预览"
-          />
+        <div className="recording-playback" aria-label="录音回放">
+          <button
+            aria-label="后退15秒"
+            disabled={!previewAllowed || !previewState.canSeek}
+            onClick={() => previewPlayer.current?.skip(-15)}
+          >
+            <RotateCcw />
+            <span>15</span>
+          </button>
+          <button
+            aria-label={previewState.playing ? "暂停回放" : "播放录音"}
+            disabled={!previewAllowed || !previewState.ready}
+            onClick={() => previewPlayer.current?.toggle()}
+          >
+            {previewState.playing ? (
+              <Pause fill="currentColor" />
+            ) : (
+              <Play fill="currentColor" />
+            )}
+          </button>
+          <button
+            aria-label="前进15秒"
+            disabled={!previewAllowed || !previewState.canSeek}
+            onClick={() => previewPlayer.current?.skip(15)}
+          >
+            <RotateCw />
+            <span>15</span>
+          </button>
+        </div>
+        {previewAllowed && previewSource && playbackError && (
+          <button
+            className="recording-playback-retry"
+            onClick={() => previewPlayer.current?.retry()}
+          >
+            重试回放
+          </button>
         )}
         <div className="recording-controls">
           <button

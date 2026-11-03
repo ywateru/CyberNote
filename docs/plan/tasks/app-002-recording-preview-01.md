@@ -1,7 +1,7 @@
 ---
 id: app-002-recording-preview-01
 scope: paused-recording-preview-and-skip-controls
-status: in-progress
+status: pending-review
 depends-on: [app-002-recording-state-01]
 ---
 
@@ -37,6 +37,10 @@ MediaRecorder非终态前缀没有标准可播放保证。本任务只能先实�
 定向检查穿过实际Panel/Session与生产播放控制器，覆盖暂停快照不终止采集、不丢/重复最终块、重复请求、继续后再暂停、无数据/不支持前缀、快照与完成/取消交错、晚play Promise、URL及所有资源释放。原Panel17与Session26只对受影响边界回归，另做typecheck。受控媒体与时钟用于错误竞态必须披露；不能以受控结果证明设备可听。
 
 独审通过后新包在确切Mac WK和Android WebView版本分别验证：首个短暂停从头播至尾、继续后累计快照、超过15秒的真实前后定位并继续推进、完成后正文音频与冷启保持、取消时无晚播放。记录实际MIME、文件身份、实际媒体事件与位置。生成音轨只可用于模块测试，不代替真实硬件音轨验收。可听性、原版精确回放显示/手势与逐像素继续分别记账。
+
+## source candidate 01
+
+开发自检已冻结，待独立审查；[源码、边界和原始验证记录](../../verification/app-002-recording-preview/source-candidate-01/README.md)。snapshot/adapter15、既有Session26、共享播放11、实际Panel24及typecheck通过，合计76项定向检查。仅受控平台事件，未验真实编码前缀/WK/Android/可听性/原版像素。candidate03不包含本候选，独审后进入下一包。
 
 ## candidate01 review
 

@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "scripts/check-audio-playback.mjs"
+  ],
+  "exitCode": 0,
+  "stdout": "{\n  \"productionModule\": \"src/audio-playback.ts\",\n  \"checks\": [\n    \"finite metadata / real zero / unknown / bounded seek\",\n    \"Infinity → finite / one silent probe / intervening user position and play preserved\",\n    \"normal finite duration supersedes probe / late probe ignored\",\n    \"unresolved seek remains unknown / visible failure / manual retry\",\n    \"probe timeout releases media and stays unknown\",\n    \"probe / actual media error visible and retryable\",\n    \"failed seek retry restores requested position without playing\",\n    \"async play rejection / sync throw visible / user retry works\",\n    \"unmount / source replacement lifetime / late events and play rejection ignored\",\n    \"intervening user pause invalidates pending play promise\",\n    \"direct probe cancellation clears listeners and deadline\"\n  ],\n  \"passed\": 11\n}\n"
+}

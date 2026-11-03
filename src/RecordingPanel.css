@@ -71,11 +71,6 @@
 .recording-backdrop .recording-sheet .recording-done:disabled {
   color: #a6a6aa;
 }
-.recording-backdrop .recording-sheet .recording-retry-preview {
-  position: absolute;
-  bottom: 100px;
-  max-width: 80%;
-}
 @media (max-width: 760px) {
   .mobile .recording-backdrop[class] {
     padding-top: max(6.875vh, env(safe-area-inset-top, 0px));
@@ -133,6 +128,7 @@
     position: absolute;
     top: 85.45%;
     height: 7.4%;
+    min-height: 44px;
     margin: 0;
   }
   .mobile .recording-backdrop .recording-sheet .recording-primary {
@@ -159,14 +155,70 @@
     height: 100%;
     font-size: clamp(13px, 3.8vw, 17px);
   }
-  .mobile .recording-backdrop .recording-sheet .recording-retry-preview {
-    bottom: 16%;
-    height: 32px;
-  }
 }
 
 .recording-backdrop .recording-sheet .wave-bars {
   width: 50%;
   margin-right: auto;
   padding: 0;
+}
+
+.recording-backdrop .recording-sheet .recording-playback {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: clamp(156px, 50%, 260px);
+  min-height: 44px;
+  margin: 12px 0 20px;
+  flex-shrink: 0;
+}
+.recording-backdrop .recording-sheet .recording-playback button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+}
+.recording-backdrop .recording-sheet .recording-playback button:disabled {
+  color: #a6a6aa;
+}
+.recording-backdrop .recording-sheet .recording-playback button svg {
+  width: 28px;
+  height: 28px;
+}
+.recording-backdrop .recording-sheet .recording-playback button span {
+  position: absolute;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 600;
+}
+.recording-backdrop .recording-sheet .recording-playback-retry {
+  min-height: 44px;
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+}
+@media (max-width: 760px) {
+  .mobile .recording-backdrop .recording-sheet .recording-playback {
+    position: absolute;
+    top: 75.4%;
+    height: 8%;
+    margin: 0;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-notice {
+    min-height: 0;
+    max-height: 4%;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-playback-retry {
+    position: absolute;
+    top: 56%;
+    font-size: 12px;
+    min-height: 44px;
+  }
 }

@@ -31,6 +31,15 @@ const browserEnvironment: RecordingEnvironment = {
   clearInterval: (timer) => window.clearInterval(timer),
 };
 
+type SnapshotRequest = {
+  pause: number;
+  promise: Promise<Blob>;
+  resolve: (blob: Blob) => void;
+  reject: (error: unknown) => void;
+  timer: ReturnType<typeof setTimeout>;
+  settled: boolean;
+};
+
 // One instance owns one permission request and all of its capture resources.
 // Discard closes callback admission before stopping resources; normal stop keeps
 // only the final recorder events alive until the browser delivers the blob.
@@ -47,6 +56,13 @@ export class RecordingSession {
   private failed = false;
   private finished = false;
   private stopping = false;
+  private pauseSequence = 0;
+  private observedPause = 0;
+  private pauseEvents: number[] = [];
+  private snapshotRequest?: SnapshotRequest;
+  // An issued request cannot be unsent. Keep its slot through resume/cancel so
+  // its late data event cannot be assigned directly to a newer pause request.
+  private issuedSnapshot?: SnapshotRequest;
 
   constructor(
     private callbacks: RecordingCallbacks,
@@ -67,6 +83,9 @@ export class RecordingSession {
     this.recorder.ondataavailable = null;
     this.recorder.onstop = null;
     this.recorder.onerror = null;
+    this.recorder.onpause = null;
+    this.pauseEvents = [];
+    this.issuedSnapshot = undefined;
   }
 
   private releaseCapture(): unknown[] {
@@ -101,6 +120,7 @@ export class RecordingSession {
   }
 
   private discard(): unknown[] {
+    this.invalidateSnapshot();
     this.detachRecorder();
     this.chunks = [];
     const errors: unknown[] = [];
@@ -149,7 +169,40 @@ export class RecordingSession {
       const recorder = this.environment.createRecorder(stream);
       this.recorder = recorder;
       recorder.ondataavailable = (event) => {
-        if (this.accepting && event.data.size) this.chunks.push(event.data);
+        if (!this.accepting) return;
+        if (event.data.size) this.chunks.push(event.data);
+        const issued = this.issuedSnapshot;
+        if (issued) {
+          this.issuedSnapshot = undefined;
+          if (
+            issued === this.snapshotRequest &&
+            !issued.settled &&
+            issued.pause === this.observedPause &&
+            !this.stopping
+          ) {
+            const blob = new Blob([...this.chunks], {
+              type: recorder.mimeType,
+            });
+            this.settleSnapshot(
+              issued,
+              blob.size ? blob : undefined,
+              Error("暂停录音尚无可回放的数据，可继续录制或完成保存。"),
+            );
+          }
+          this.issueSnapshot();
+        }
+      };
+      recorder.onpause = () => {
+        const pause = this.pauseEvents.shift();
+        if (
+          !this.accepting ||
+          this.stopping ||
+          pause !== this.pauseSequence ||
+          recorder.state !== "paused"
+        )
+          return;
+        this.observedPause = pause;
+        this.issueSnapshot();
       };
       recorder.onerror = (event) =>
         this.fail(
@@ -200,6 +253,8 @@ export class RecordingSession {
   pause() {
     if (!this.accepting || this.stopping || !this.recorder) return false;
     try {
+      this.invalidateSnapshot();
+      this.pauseEvents.push(++this.pauseSequence);
       this.recorder.pause();
       return true;
     } catch (error) {
@@ -211,6 +266,7 @@ export class RecordingSession {
   resume() {
     if (!this.accepting || this.stopping || !this.recorder) return false;
     try {
+      this.invalidateSnapshot();
       this.recorder.resume();
       return true;
     } catch (error) {
@@ -219,9 +275,93 @@ export class RecordingSession {
     }
   }
 
+  private settleSnapshot(
+    request: SnapshotRequest,
+    blob?: Blob,
+    error?: unknown,
+  ) {
+    if (request.settled) return;
+    request.settled = true;
+    clearTimeout(request.timer);
+    if (blob) request.resolve(blob);
+    else request.reject(error);
+  }
+
+  private invalidateSnapshot() {
+    this.observedPause = 0;
+    if (this.snapshotRequest)
+      this.settleSnapshot(
+        this.snapshotRequest,
+        undefined,
+        Error("暂停回放已结束。"),
+      );
+    this.snapshotRequest = undefined;
+  }
+
+  private issueSnapshot() {
+    const request = this.snapshotRequest;
+    if (
+      !request ||
+      request.settled ||
+      this.issuedSnapshot ||
+      !this.accepting ||
+      this.stopping ||
+      !this.recorder ||
+      this.recorder.state !== "paused" ||
+      this.observedPause !== request.pause
+    )
+      return;
+    this.issuedSnapshot = request;
+    try {
+      this.recorder.requestData();
+    } catch (error) {
+      this.issuedSnapshot = undefined;
+      this.settleSnapshot(request, undefined, error);
+    }
+  }
+
+  /** A nonterminal prefix candidate, not a guarantee of a complete playable or
+   * seekable container. Main chunks and onStopped/final File are untouched. */
+  snapshot(): Promise<Blob> {
+    if (
+      !this.accepting ||
+      this.stopping ||
+      !this.recorder ||
+      (this.recorder.state !== "paused" &&
+        !this.pauseEvents.includes(this.pauseSequence))
+    )
+      return Promise.reject(Error("录音尚未实际暂停，不能创建回放快照。"));
+    if (this.snapshotRequest) return this.snapshotRequest.promise;
+    let resolve!: (blob: Blob) => void, reject!: (error: unknown) => void;
+    const promise = new Promise<Blob>((yes, no) => {
+      resolve = yes;
+      reject = no;
+    });
+    const request: SnapshotRequest = {
+      pause: this.pauseSequence,
+      promise,
+      resolve,
+      reject,
+      settled: false,
+      timer: setTimeout(
+        () =>
+          this.settleSnapshot(
+            request,
+            undefined,
+            Error("暂停回放数据未就绪，可继续录制或完成保存。"),
+          ),
+        5000,
+      ),
+    };
+    this.snapshotRequest = request;
+    this.issueSnapshot();
+    return promise;
+  }
+
   stop() {
     if (!this.accepting || this.stopping || !this.recorder) return;
     this.stopping = true;
+    this.invalidateSnapshot();
     try {
       if (this.recorder.state !== "inactive") this.recorder.stop();
       const errors = this.releaseCapture();
