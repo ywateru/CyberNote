@@ -22,6 +22,7 @@ depends-on: [app-001-fix-01]
 - docs/ui/macos.md、docs/ui/android.md、docs/ui/interaction-matrix.md
 - docs/research/offline-media-scanning.md（完成研究后读取；无此文档时先等待root交接）
 - docs/research/media-roundtrip-readiness/analysis.md、inputs.json（21份只读输入；静态缺口不等于设备已复现，须按当前交付重新核源码）
+- docs/research/media-roundtrip-readiness/current-source-delta.md（67ce948有限差异核对及现有APK/受控音轨方案；可用性尚未运行）
 - references/mobile/frames-2s/frame-014.png至019.png（26–36s），frame-022.png至024.png（42–46s）
 - docs/plan/reviews/qa-001-01.md、docs/verification/qa-fix-01/（已完成项只在新改动影响时回归）
 

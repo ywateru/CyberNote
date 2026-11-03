@@ -8,6 +8,7 @@
 - [本地标签、智能文件夹、数学、链接与格式接入分析](research/local-feature-integration.md)
 - [离线扫描与媒体接入研究](research/offline-media-scanning.md)
 - [现有录音与本地播放链准备审计](research/media-roundtrip-readiness/analysis.md)
+- [录音链当前源码差异与受控音轨基线](research/media-roundtrip-readiness/current-source-delta.md)
 - [Android中文组合输入验证工具](research/android-ime-verification.md)
 - [UI 规格](ui/README.md)
 - [Mac正式顶部公共区域差异与校准起点](research/macos-toolbar-host-deltas/analysis.md)
