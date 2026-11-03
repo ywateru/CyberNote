@@ -41,3 +41,7 @@ depends-on: []
 ## source candidate 01
 
 基线6fd3bf8的隔离源码候选已完成标题原生按钮/NodeView事件边界/44px移动触摸区修复，保留紧凑文字与播放胶囊，无新增永久图标。typecheck、11组播放helper、真实NoteEditor→NodeView离线触摸/键盘与既有真实媒体浏览器回归通过；JSON/选区/revision未变。报告及确切限制见`../../verification/app-002-audio-controls/README.md`。尚待独立审查和统一新APK原生触摸/IME实测，status保持ready，不宣称Android、macOS或像素验收已通过。
+
+## candidate02 developer runtime
+
+2026-11-04：fabafcf冻结219输入一致，新APK a50dded8实际保数据安装并读回hash同；开发原生触摸标题展开/播放暂停/range29→44→29、4.6→0、61.3→66.004及收回通过，IME未误起。媒体完整正文/revision30、纸张正文/revision58、附件metadata/429547B原SHA前后精确一致。主audio初始duration仍Infinity，末端seek后平台变66.004；HTML step0.05使value66、实际time66.004，分别记录。54项manifest与原始动作/截图见`../../verification/f07-audio-integration/android-developer02/`。设备已交独立实际，任务仍in-progress，原版展开语义/完整像素与Mac未追认。

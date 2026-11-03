@@ -37,3 +37,7 @@ depends-on: []
 ## independent source delivery01
 
 2026-11-04：冻结候选c4890fc经独立审查SOURCE-READY，实际生产media_permission定向Rust12组通过，产品格式与scoped diff检查通过。主已整合产品ebb05a4及原始日志f051307，media_permission.rs的18533字节/SHA0008e0f3…与冻结一致，身份见`../../verification/app-002-mac-startup/main-integration.json`。报告为`../reviews/app-002-mac-startup-static-01.md`，独立5项manifest证据位于`../../verification/app-002-mac-startup-independent-01/`。原日志末尾空行为P3非阻断，原样保留；未将源码结论升级为实际启动或F07通过。任务继续in-progress，待新统一包实际验证。
+
+## candidate02 developer runtime
+
+2026-11-04：fabafcf冻结219输入同，新sealed完整bundle严格本地签名通过，exe SHA5e948ad9…；实际首次启动与正常CmdQ重开均加载tauri://localhost、三栏/原生顶部/合成正文，REA只读URL/loading/title核同且已detach。开发F07唯一→零→clear/禁用、正文UndoRedo和正常重开完整JSON/revision保持有限通过，证据`../../verification/f07-audio-integration/mac-developer02/`。独立新包实际与公共ROI对照进行中，Editor严格身份、快快捷键时序、完整像素及媒体许可另记，旧白窗不改写。
