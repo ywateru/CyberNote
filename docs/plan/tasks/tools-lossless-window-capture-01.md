@@ -1,7 +1,7 @@
 ---
 id: tools-lossless-window-capture-01
 scope: read-only-native-window-pixel-evidence
-status: in-progress
+status: source-ready-runtime-pending
 depends-on: [app-001-search-zero-geometry-01]
 ---
 
@@ -27,4 +27,17 @@ candidate04构建尚在主树进行，本任务必须与主源码和冻结分离
 
 ## 当前交接
 
-2026-11-04作者已报告既有SDK编译与受控离线PNG/拒绝检查通过，仍待冻结SHA和独立审查。未授权真实窗口枚举/取图，未获得像素对比结果。candidate04主树构建阶段已结束：Mac成功、Android失败并释放target。工具继续独立工作树，不改变该候选产品输入。
+2026-11-04作者冻结744a9247a571d7569351e428e50db579b9031187，独审SOURCE-READY，无阻断；独立编译与10+7受控检查通过。root核对4工具源及独审10证据/报告hash一致。未运行真实窗口枚举/取图，未获得像素对比结果。candidate04原构建阶段已结束：Mac成功、Android失败并释放target。本次只增加取证工具，应用产品字节仍与d8f832e相同。
+## 开发合同补充
+
+命令仅为 `list --bundle` 与 `capture --bundle --pid --window --executable --expected-identity --output-dir`。list返回白名单目标的实例/可执行文件hash、选窗ID与几何/原生比例及identity token；capture要求调用者原样传入对应token，并前后重新核实例、可执行文件及选窗几何。窗口标题不读取、不输出。精确PID不能单独防PID复用，故token包括launchDate与exe文件身份。公共API未公开窗口创建generation；不能排除同进程同几何的瞬时windowID复用，必须在manifest记录该公开API限制，不能声称已证明无复用。
+
+原生比例用macOS14起filter.contentRect×pointPixelScale，非整数像素、混屏/跨屏、越界或尺寸不一致直接拒绝；使用单窗filter、无光标、请求去阴影、不包含子窗、SDR/BGRA、保留alpha、无音频。API没有无重采样证明，默认manifest固定UNKNOWN；`--require-unscaled`在访问屏幕前明确拒绝严格模式。输出必须是新目录、以独占方式写PNG和最后成功manifest，不覆盖旧证据。list/capture在任何ScreenCaptureKit访问之前检查已有屏幕捕获授权，工具没有权限请求调用。无控制目标、AX、启动应用、shell执行或全屏fallback。
+
+编译由单独Python小脚本用已存在xcrun/swiftc、SDK元数据生成嵌入构建身份，并用新输出目录内的私有module cache编译后清理；与Rust/Gradle/产品源码无关。本轮只运行参数、输出拒绝、受控PNG编码/验证和编译检查，不运行list或capture后端。锁屏、系统隐私UI时序、实际窗口边框/背板与色彩仍需后续授权实测，源码检查不可代替。
+
+## 源码候选01
+
+4工具源聚合 `838726b3629f53135c4da187002f94ab704295cc82b5d4bd541bedcec7130ff3`。Swift6.3.3/SDK26.5/target14.2独立observer与离线测试编译均0错误/0警告；10组离线合成图/参数/PNG/目录/清理与7组CLI帮助/拒绝/仅help进程deadline通过。222产品文件与基线相同。完整编译失败/成功、检查及身份见 [候选01](../../verification/tools-lossless-window-capture-01/source-candidate-01/README.md)，用法见scripts/window-capture.md。进程调用器默认15秒、最大30秒，超时SIGKILL，不使用无法保证取消的TaskGroup；中断输出全部不接受。没有任何真实SCK、权限、GUI或设备运行；公开API限制和实际取图均留UNKNOWN，等待独立源审。
+
+独审见 [报告](../reviews/tools-lossless-window-capture-static-01.md)。报告明确仅help进程deadline验证不是SCK挂起实测；真实窗口、权限主体、原生背板和像素一致均未通过。

@@ -1,0 +1,25 @@
+{
+  "error": "observer compilation failed",
+  "checks": [
+    {
+      "name": "observer",
+      "arguments": [
+        "/Library/Developer/CommandLineTools/usr/bin/swift-frontend",
+        "-parse-as-library",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk",
+        "-target",
+        "arm64-apple-macosx14.2",
+        "-module-cache-path",
+        "/private/tmp/notes-window-capture-build01/module-cache",
+        "/private/tmp/apple-notes-window-capture-01/scripts/window-capture.swift",
+        "/private/tmp/notes-window-capture-build01/BuildIdentity.swift",
+        "-o",
+        "/private/tmp/notes-window-capture-build01/window-capture"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "<unknown>:0: error: no frontend action was selected\n"
+    }
+  ]
+}

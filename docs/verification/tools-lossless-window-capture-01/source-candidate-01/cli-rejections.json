@@ -1,0 +1,51 @@
+{
+  "checks": 7,
+  "allPass": true,
+  "results": [
+    {
+      "name": "help",
+      "exitCode": 0,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.954196125,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 0,\n    \"stdout\": \"window-capture list --bundle <com.apple.Notes|com.local.notesclone>\\nwindow-capture capture --bundle <allowed bundle> --pid <PID> --window <CGWindowID>\\n  --executable <absolute executable path> --expected-identity <token from list>\\n  --output-dir <new absolute directory> [--require-unscaled]\\nNo UI actions, process launch, audio, permission requests, or full-screen fallback.\\nPNG encoding is lossless; source no-resampling is UNKNOWN. Strict mode rejects.\\n\",\n    \"stderr\": \"\"\n  },\n  \"acceptOutput\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "illegal-bundle",
+      "exitCode": 2,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.009688125000000002,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"invalid_bundle\\\",\\n  \\\"message\\\" : \\\"Only com.apple.Notes and com.local.notesclone are accepted.\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "missing-identity",
+      "exitCode": 2,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.0062959999999999995,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"missing_argument\\\",\\n  \\\"message\\\" : \\\"capture requires all six named options.\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "unknown-action",
+      "exitCode": 2,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.00660525,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"invalid_argument\\\",\\n  \\\"message\\\" : \\\"Unknown option: --activate\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "existing-output-before-backend",
+      "exitCode": 2,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.006397124999999998,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"output_not_new\\\",\\n  \\\"message\\\" : \\\"Output must be a new directory under an existing parent; mkdir errno=17.\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "strict-before-backend",
+      "exitCode": 2,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15,\n    \"elapsedSeconds\": 0.006055458,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"unscaled_proof_unavailable\\\",\\n  \\\"message\\\" : \\\"Public screenshot API does not prove zero internal resampling. Strict mode refuses before accessing windows or permissions.\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "hard-deadline-on-help-only-process",
+      "exitCode": 124,
+      "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 1e-06,\n    \"elapsedSeconds\": 0.0009206249999999996,\n    \"timedOut\": true,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": -9,\n    \"stdout\": \"\",\n    \"stderr\": \"\"\n  },\n  \"acceptOutput\": false,\n  \"limitation\": \"Do not accept any output from this interrupted attempt, including files left by SIGKILL. Preserve it as interrupted evidence; use a new output directory for any later authorized attempt. No automatic retry.\"\n}\n",
+      "stderr": ""
+    }
+  ],
+  "oldEvidenceUnchanged": true,
+  "strictOutputAbsent": true,
+  "limitations": "No valid list/capture backend invoked. Deadline exercised only on help; real SCK behavior UNKNOWN."
+}
