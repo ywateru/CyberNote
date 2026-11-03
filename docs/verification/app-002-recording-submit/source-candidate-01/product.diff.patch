@@ -1,0 +1,547 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index b8f85e3..b84ec22 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -30,6 +30,15 @@ type PickerBatch = {
+   operationIds: string[];
+   files?: File[];
+   cancelRequested?: boolean;
++  recording?: RecordingTicket;
++};
++type RecordingTicket = {
++  batch: PickerBatch;
++  accepting: boolean;
++  detached: boolean;
++  file?: File;
++  running?: Promise<void>;
++  cancelling?: Promise<void>;
+ };
+ import { exit, onBackButtonPress } from "@tauri-apps/api/app";
+ import { getCurrentWindow } from "@tauri-apps/api/window";
+@@ -391,8 +400,14 @@ function App() {
+   const nativeEditorIds = useRef(new WeakMap<Editor, number>());
+   const nativeEditorOwners = useRef(new WeakMap<Editor, string>());
+   const nativeEditorCounter = useRef(0);
+-  const nativeAttachmentTarget = useRef<NativeContext | null>(null);
+-  // Recording retains its existing context. Every picker has an explicit owner.
++  const recordingTicket = useRef<RecordingTicket | null>(null);
++  const recordingLifecycle = useRef({
++    active: (): boolean => false,
++    close: async () => {},
++    suspend: (_ids: string[]) => {},
++    detach: () => {},
++  });
++  // Every picker and recording retains its explicit original owner.
+   const pickerTargets = useRef(new Map<HTMLInputElement, PickerBatch>());
+   const attachmentSubmissions = useRef(
+     new Map<string, AttachmentSubmission<PickerTarget>>(),
+@@ -404,12 +419,14 @@ function App() {
+     editor: Editor | null;
+     available: boolean;
+     scanInfoAvailable: boolean;
++    recordingAvailable: boolean;
+   }>({
+     scope: "",
+     noteId: null,
+     editor: null,
+     available: false,
+     scanInfoAvailable: false,
++    recordingAvailable: false,
+   });
+   const nativeAssert = useRef<
+     (context: NativeContext, editing?: boolean, overlay?: boolean) => void
+@@ -820,11 +837,16 @@ function App() {
+     if (native)
+       getCurrentWindow()
+         .onCloseRequested(async (event) => {
+-          if (pendingDocs.current.size) {
++          if (pendingDocs.current.size || recordingLifecycle.current.active()) {
+             event.preventDefault();
+             try {
++              await recordingLifecycle.current.close();
+               await flush();
+-              if (!pendingDocs.current.size) await getCurrentWindow().destroy();
++              if (
++                !pendingDocs.current.size &&
++                !recordingLifecycle.current.active()
++              )
++                await getCurrentWindow().destroy();
+             } catch (e) {
+               fail(e);
+             }
+@@ -833,6 +855,7 @@ function App() {
+         .then((fn) => (unlisten = fn));
+     return () => {
+       document.removeEventListener("visibilitychange", hidden);
++      recordingLifecycle.current.detach();
+       unlisten?.();
+     };
+   }, [flush, fail]);
+@@ -848,16 +871,7 @@ function App() {
+       if (ids.includes(batch.target.noteId)) batch.target.invalidated = true;
+     for (const submission of attachmentSubmissions.current.values())
+       if (ids.includes(submission.noteId)) submission.invalidate();
+-    const attachmentTarget = nativeAttachmentTarget.current;
+-    if (attachmentTarget) {
+-      // Keep an explicitly rejected intent, never turn a late picker return
+-      // into the ordinary-entry fallback for the newly visible note.
+-      nativeAttachmentTarget.current = {
+-        ...attachmentTarget,
+-        editor: null,
+-        bookmark: null,
+-      };
+-    }
++    recordingLifecycle.current.suspend(ids);
+     for (const id of ids) {
+       const instance = editorsRef.current.get(id);
+       if (instance && !instance.isDestroyed) instance.destroy();
+@@ -919,6 +933,7 @@ function App() {
+   accessHandler.current = (event) => {
+     if (event.phase === "prepare") {
+       synchronization.invalidate();
++      recordingLifecycle.current.suspend(event.noteIds);
+       blockedNotes.current = new Set(event.noteIds);
+       setAccessSuspended(event.noteIds);
+       if (
+@@ -1220,7 +1235,7 @@ function App() {
+     else if (menu === "format") closeFormat(false);
+     else if (menu) setMenu(null);
+     else if (draw) setDraw(null);
+-    else if (record) setRecord(false);
++    else if (record) void cancelRecording().catch(fail);
+     else if (showFind) setShowFind(false);
+     else if (searching) {
+       setSearching(false);
+@@ -1439,10 +1454,23 @@ function App() {
+     const t = setTimeout(() => setNotice(""), 3500);
+     return () => clearTimeout(t);
+   }, [notice]);
+-  const validatePickerTarget = async (target: PickerTarget) => {
++  const validatePickerTarget = async (
++    target: PickerTarget,
++    recording?: RecordingTicket,
++    allowSealed = false,
++  ) => {
++    const owned = () =>
++      !recording ||
++      (recordingTicket.current === recording &&
++        recording.batch.target === target &&
++        !recording.detached &&
++        (allowSealed || recording.accepting));
++    if (!owned()) throw Error("原录音会话已关闭，不会提交到其他备忘录");
+     if (target.invalidated) throw Error("原附件目标已失效，请保持窗口打开");
+     await flush();
++    if (!owned()) throw Error("原录音会话已关闭");
+     const synced = await synchronizeRef.current();
++    if (!owned()) throw Error("原录音会话已关闭");
+     const live = pickerRuntime.current;
+     const instance = live.editor;
+     const note = wsRef.current.notes.find((n) => n.id === target.noteId);
+@@ -1463,7 +1491,7 @@ function App() {
+         : undefined,
+       trustedSynchronization: synchronization.current(synced),
+       available:
+-        live.available &&
++        (recording ? live.recordingAvailable : live.available) &&
+         !!note &&
+         !note.deletedAt &&
+         !!instance &&
+@@ -1478,6 +1506,23 @@ function App() {
+     target.bookmark.resolve(target.editor.state.doc);
+     target.stamp = stamp;
+   };
++  const awaitAttachmentDocumentAck = async (
++    operation: AttachmentSubmission<PickerTarget>,
++    target: PickerTarget,
++  ) => {
++    await queues.current.get(target.noteId);
++    if (!operation.documentAck) {
++      const pending = pendingDocs.current.get(target.noteId);
++      if (
++        !pending ||
++        !operation.attachment ||
++        !documentReferencesAttachment(pending, operation.attachment)
++      )
++        throw Error("附件正文尚未确认保存，请保持窗口打开");
++      const outcome = await saveDoc(target.noteId, pending);
++      if (!outcome.saved) throw outcome.error;
++    }
++  };
+   const submitAttachmentBatch = async (batch: PickerBatch) => {
+     if (batch.cancelRequested)
+       throw Error("附件取消尚未核定，请重试取消；不会继续插入正文");
+@@ -1498,7 +1543,8 @@ function App() {
+       }
+       const operation = submission;
+       await operation.run({
+-        validate: () => validatePickerTarget(target),
++        validate: () =>
++          validatePickerTarget(target, batch.recording, operation.inserted),
+         storage: native
+           ? {
+               kind: "journal",
+@@ -1545,21 +1591,11 @@ function App() {
+         references: (attachment) =>
+           !target.editor.isDestroyed &&
+           documentReferencesAttachment(target.editor.getJSON(), attachment),
+-        awaitDocumentAck: async () => {
+-          await queues.current.get(target.noteId);
+-          if (!operation.documentAck) {
+-            const pending = pendingDocs.current.get(target.noteId);
+-            if (
+-              !pending ||
+-              !operation.attachment ||
+-              !documentReferencesAttachment(pending, operation.attachment)
+-            )
+-              throw Error("附件正文尚未确认保存，请保持窗口打开");
+-            const outcome = await saveDoc(target.noteId, pending);
+-            if (!outcome.saved) throw outcome.error;
+-          }
++        awaitDocumentAck: () => awaitAttachmentDocumentAck(operation, target),
++        refresh: async () => {
++          if (batch.recording) finishRecording(batch.recording);
++          await refresh();
+         },
+-        refresh,
+       });
+     }
+     attachmentBatches.current.delete(batch);
+@@ -1569,11 +1605,18 @@ function App() {
+   };
+   const retryAttachments = async () => {
+     for (const [id, doc] of [...pendingDocs.current]) await saveDoc(id, doc);
+-    for (const batch of [...attachmentBatches.current])
+-      await submitAttachmentBatch(batch);
++    for (const batch of [...attachmentBatches.current]) {
++      if (batch.recording && batch.cancelRequested)
++        await cancelRecording(batch.recording);
++      else await submitAttachmentBatch(batch);
++    }
+   };
+   const discardUninsertedAttachments = async () => {
+     for (const batch of attachmentBatches.current) {
++      if (batch.recording) {
++        await cancelRecording(batch.recording);
++        continue;
++      }
+       await validatePickerTarget(batch.target);
+       const operations = batch.operationIds.map((id) =>
+         attachmentSubmissions.current.get(id),
+@@ -1792,7 +1835,10 @@ function App() {
+       ) : null}
+     </div>
+   );
+-  const capturePickerTarget = (context?: NativeContext, scanInfo = false) => {
++  const capturePickerTarget = (
++    context?: NativeContext,
++    scanInfo = false,
++  ): PickerBatch => {
+     const live = pickerRuntime.current;
+     const instance = context ? context.editor : live.editor;
+     if (
+@@ -1867,19 +1913,182 @@ function App() {
+         input?.removeEventListener("cancel", cancelled);
+     };
+   }, []);
+-  const captureSearchAttachmentTarget = () => {
+-    nativeAttachmentTarget.current = desktopSearch
+-      ? {
+-          noteId,
+-          scope: nativeScope,
+-          stamp: accessGate.stamp(noteId || undefined),
+-          editor,
+-          bookmark: editor?.state.selection.getBookmark() || null,
+-          documentVersion: editor
+-            ? nativeDocumentVersions.current.get(editor) || 0
+-            : 0,
++  const finishRecording = (ticket: RecordingTicket) => {
++    ticket.accepting = false;
++    if (recordingTicket.current === ticket) {
++      recordingTicket.current = null;
++      if (!ticket.detached) setRecord(false);
++    }
++  };
++  const recordingReferenced = (ticket: RecordingTicket) => {
++    const operation = attachmentSubmissions.current.get(
++      ticket.batch.operationIds[0],
++    );
++    const attachment = operation?.attachment;
++    return (
++      !!attachment &&
++      ((!ticket.batch.target.editor.isDestroyed &&
++        documentReferencesAttachment(
++          ticket.batch.target.editor.getJSON(),
++          attachment,
++        )) ||
++        (!!pendingDocs.current.get(ticket.batch.target.noteId) &&
++          documentReferencesAttachment(
++            pendingDocs.current.get(ticket.batch.target.noteId)!,
++            attachment,
++          )))
++    );
++  };
++  const sealRecording = (ticket: RecordingTicket) => {
++    ticket.accepting = false;
++    const operation = attachmentSubmissions.current.get(
++      ticket.batch.operationIds[0],
++    );
++    if (
++      !operation?.documentAck &&
++      !operation?.inserted &&
++      !recordingReferenced(ticket)
++    ) {
++      ticket.batch.cancelRequested = true;
++      operation?.invalidate();
++    }
++  };
++  const cancelRecording = (ticket = recordingTicket.current): Promise<void> => {
++    if (!ticket) return Promise.resolve();
++    // Admission is sealed before any wait. Ownership survives until authoritative
++    // cancellation; otherwise the same ticket would reject its own cleanup.
++    sealRecording(ticket);
++    if (recordingTicket.current === ticket && !ticket.detached)
++      setRecord(false);
++    if (ticket.cancelling) return ticket.cancelling;
++    const work = (async () => {
++      const operation = attachmentSubmissions.current.get(
++        ticket.batch.operationIds[0],
++      );
++      if (operation && ticket.batch.cancelRequested)
++        await operation.settleForCancellation();
++      else await ticket.running?.catch(() => {});
++      if (operation?.documentAck) {
++        finishRecording(ticket);
++        return;
++      }
++      if (operation?.inserted || recordingReferenced(ticket))
++        throw Error(
++          "录音已进入待保存正文，附件已保留；请使用重试保存，不会删除",
++        );
++      if (operation?.storageAttempted) {
++        await validatePickerTarget(ticket.batch.target, ticket, true);
++        if (recordingReferenced(ticket))
++          throw Error("录音仍被本窗口正文引用，不能取消");
++        if (native) {
++          const result = await cancelAttachmentOperation(
++            operation.operationId,
++            operation.noteId,
++          );
++          if (result.status !== "aborted" && result.status !== "notPersisted")
++            throw Error(
++              `录音附件已保留待恢复（${result.reason || result.status}）`,
++            );
+         }
+-      : null;
++      }
++      ticket.batch.target.invalidated = true;
++      attachmentBatches.current.delete(ticket.batch);
++      if (operation)
++        attachmentSubmissions.current.delete(operation.operationId);
++      finishRecording(ticket);
++    })();
++    ticket.cancelling = work;
++    void work
++      .finally(() => {
++        if (ticket.cancelling === work) ticket.cancelling = undefined;
++      })
++      .catch(() => {});
++    return work;
++  };
++  const submitRecording = (
++    ticket: RecordingTicket,
++    file: File,
++  ): Promise<void> => {
++    if (
++      !ticket.accepting ||
++      recordingTicket.current !== ticket ||
++      ticket.detached
++    )
++      return Promise.reject(Error("原录音会话已关闭，不会提交到其他备忘录"));
++    if (ticket.file && ticket.file !== file)
++      return Promise.reject(Error("录音文件身份已改变，请保留原录音重试"));
++    if (ticket.running) return ticket.running;
++    ticket.file = file;
++    ticket.batch.files = [file];
++    attachmentBatches.current.add(ticket.batch);
++    const work = (async () => {
++      const operation = attachmentSubmissions.current.get(
++        ticket.batch.operationIds[0],
++      );
++      // A retry of an already inserted node first retries its original pending
++      // body. Generic validation flushes and correctly rejects failed queues.
++      if (operation?.inserted && !operation.documentAck) {
++        if (ticket.batch.target.invalidated)
++          throw Error("原录音目标已失效，正文仍保留");
++        await awaitAttachmentDocumentAck(operation, ticket.batch.target);
++      }
++      await submitAttachmentBatch(ticket.batch);
++    })().catch((error) => {
++      const operation = attachmentSubmissions.current.get(
++        ticket.batch.operationIds[0],
++      );
++      if (!operation?.documentAck) throw error;
++      finishRecording(ticket);
++      setError("录音正文已保存，但列表刷新失败；请重试刷新。" + errText(error));
++    });
++    ticket.running = work;
++    void work
++      .finally(() => {
++        if (ticket.running === work) ticket.running = undefined;
++      })
++      .catch(() => {});
++    return work;
++  };
++  const openRecording = (context?: NativeContext) => {
++    if (recordingTicket.current)
++      throw Error("上次录音操作尚未核定，请先重试保存或取消");
++    const batch = capturePickerTarget(context);
++    const ticket: RecordingTicket = { batch, accepting: true, detached: false };
++    batch.recording = ticket;
++    recordingTicket.current = ticket;
++    setMenu(null);
++    setRecord(true);
++  };
++  recordingLifecycle.current = {
++    active: () => !!recordingTicket.current,
++    close: async () => {
++      const ticket = recordingTicket.current;
++      if (!ticket) return;
++      sealRecording(ticket);
++      if (!ticket.detached) setRecord(false);
++      const operation = attachmentSubmissions.current.get(
++        ticket.batch.operationIds[0],
++      );
++      if (operation?.inserted || recordingReferenced(ticket)) {
++        await ticket.running?.catch(() => {});
++        await retryAttachments();
++        if (!operation?.documentAck)
++          throw Error("录音正文尚未保存，请保持窗口打开");
++        finishRecording(ticket);
++      } else await cancelRecording(ticket);
++    },
++    suspend: (ids) => {
++      const ticket = recordingTicket.current;
++      if (ticket && ids.includes(ticket.batch.target.noteId))
++        void cancelRecording(ticket).catch(fail);
++    },
++    detach: () => {
++      const ticket = recordingTicket.current;
++      if (ticket) {
++        ticket.detached = true;
++        sealRecording(ticket);
++      }
++    },
+   };
+   const tools = (bottom = false) => (
+     <div
+@@ -2051,9 +2260,11 @@ function App() {
+               <MenuRow
+                 icon={<Volume2 size={19} />}
+                 onClick={() => {
+-                  setMenu(null);
+-                  captureSearchAttachmentTarget();
+-                  setRecord(true);
++                  try {
++                    openRecording();
++                  } catch (error) {
++                    fail(error);
++                  }
+                 }}
+               >
+                 录音
+@@ -2412,22 +2623,34 @@ function App() {
+     separate,
+     query,
+   ]);
+-  const pickerBaseAvailable =
++  const attachmentBaseAvailable =
+     !loading &&
+     !draw &&
+-    !record &&
+     !accessSuspended.length &&
+     !!current &&
+     !current.deletedAt &&
+     (!mobile || page === "editor") &&
+     (!current.locked || !!accessGate.state?.notes[current.id]?.authorized);
++  const pickerBaseAvailable = attachmentBaseAvailable && !record;
+   pickerRuntime.current = {
+     scope: JSON.stringify([nativeScope, page]),
+     noteId,
+     editor,
+     available: pickerBaseAvailable && !modal,
+     scanInfoAvailable: pickerBaseAvailable && modal === "scanInfo",
++    recordingAvailable: attachmentBaseAvailable && !modal && !menu,
+   };
++  const recording = record ? recordingTicket.current : null;
++  useEffect(() => {
++    const ticket = recordingTicket.current;
++    if (
++      ticket &&
++      (ticket.batch.target.scope !== pickerRuntime.current.scope ||
++        ticket.batch.target.editor !== editor ||
++        ticket.batch.target.invalidated)
++    )
++      void cancelRecording(ticket).catch(fail);
++  }, [nativeScope, page, editor]);
+   nativeAssert.current = (context, editing = false, overlay = false) => {
+     const live = accessGate.stamp(context.noteId || undefined);
+     if (
+@@ -2582,8 +2805,7 @@ function App() {
+           return;
+         case "recordAudio":
+           nativeSelection(context);
+-          nativeAttachmentTarget.current = { ...context };
+-          setRecord(true);
++          openRecording(context);
+           return;
+       }
+       const target = nativeSelection(context);
+@@ -3752,44 +3974,11 @@ function App() {
+           }}
+         />
+       )}
+-      {record && (
++      {recording && (
+         <RecordingPanel
+-          onCancel={() => {
+-            nativeAttachmentTarget.current = null;
+-            setRecord(false);
+-          }}
+-          onDone={async (file) => {
+-            if (!current || !editor) return;
+-            try {
+-              const target = nativeAttachmentTarget.current;
+-              if (target) nativeAssert.current(target, true, true);
+-              const a = await storeAttachment(
+-                target?.noteId || current.id,
+-                file,
+-              );
+-              if (target) {
+-                nativeAssert.current(target, true, true);
+-                editor.view.dispatch(
+-                  editor.state.tr.setSelection(
+-                    target.bookmark!.resolve(editor.state.doc),
+-                  ),
+-                );
+-              }
+-              nativeAttachmentTarget.current = null;
+-              editor
+-                .chain()
+-                .focus()
+-                .insertContent({
+-                  type: "attachment",
+-                  attrs: { id: a.id, name: a.displayName, kind: "audio" },
+-                })
+-                .run();
+-              setRecord(false);
+-              await refresh();
+-            } catch (e) {
+-              fail(e);
+-            }
+-          }}
++          key={recording.batch.operationIds[0]}
++          onCancel={() => void cancelRecording(recording).catch(fail)}
++          onDone={(file) => submitRecording(recording, file)}
+         />
+       )}
+     </div>

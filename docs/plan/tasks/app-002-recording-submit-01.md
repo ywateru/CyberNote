@@ -1,7 +1,7 @@
 ---
 id: app-002-recording-submit-01
 scope: recording-parent-operation-document-ack-and-cancellation
-status: in-progress
+status: ready-for-review
 depends-on: [app-002-attachment-store-01, app-002-recording-state-01]
 ---
 
@@ -47,3 +47,9 @@ depends-on: [app-002-attachment-store-01, app-002-recording-state-01]
 新统一默认包记录精确源码输入、产物与安装身份后，Mac/Android 分别实际录制→暂停直接完成→正文卡片→正常退出/冷启动→播放，核完整正文、revision、附件元数据和原文件 SHA；记录真实资源释放及错误。音轨可听性必须用实际含声音采集验证，已有 429547B 静音原文件不算通过。无法取得硬件音源时明确 unknown，不能用生成音轨或非空 Blob 替代。
 
 原版暂停回放/转写、全页像素及未测状态仍由后续任务负责。本任务只在源审与明确的新包实际证据范围内关闭对应缺口，不追认 candidate02 已包含新接线。
+
+## 开发候选 01（2026-11-04）
+
+普通/原生录音入口固定同一原目标票据和operation，父Done复用AttachmentSubmission与真实saveDoc/SaveQueue ACK；ACK前错误reject回Panel，同File重试保留原操作，ACK后刷新失败只重刷。取消/Back先封入场并卸载Panel，未插入settle后由原目标窄cancel核定终态；pending引用保全，全局重试继续原正文保存。复用现有唯一close监听与lifecycle ref，访问/目标/卸载封口。普通picker与全局nativeAssert不放宽，Panel/Session/clock/CSS/Rust/依赖未改。
+
+真实App父回调＋生产helper/bridge/SaveQueue定向20组、原附件23/实际取消8/Session26、typecheck与格式差异检查通过。[源码报告](../../verification/app-002-recording-submit/source-candidate-01/README.md)，2源码aggregate `941e9f7c3e287d8aeb606078354cb11e65b2f0ece5af4c30c6ceaa9239b330b2`。等待独立源码审查；没有GUI/设备/原生构建/target或可听音轨与像素验收。
