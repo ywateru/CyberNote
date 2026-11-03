@@ -1,6 +1,6 @@
 # Apple Notes Clone
 
-更新：2026-11-03。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
+更新：2026-11-04。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
 - [需求与验收](requirements.md)
 - [架构与数据契约](architecture.md)

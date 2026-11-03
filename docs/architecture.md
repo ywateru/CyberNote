@@ -74,6 +74,8 @@ APP-002-ATTACHMENT-SUBMIT-01将同一契约先接入系统文件选择链。操�
 
 为覆盖“文件已写入但响应或正文失败”，后端以真实窗口、授权session、原note和operationId建立持久操作记录，附件元数据与记录同事务提交，相同操作重复请求复用结果；新授权下可核查真实结果。操作记录独立于公开Attachment与归档字段。前端处理插入false/throw，将stored、inserted、正文ACK与列表刷新分别记账。安全补偿仅作用本操作新建文件，Rust核owner、权威正文引用、保存intent和屏障；已引用保留，无法安全判定则deferred。冷启仅恢复有该操作记录的未引用新文件，不清扫旧孤儿。具体接口名与实现检查在候选中同步，当前不能称已接入。
 
+节点已插入但正文ACK失败时，renderer若仍保留引用该附件的pending文档，应保留operation/附件以便重试；不得仅因数据库暂未引用便补偿删除。只有确认本地回退和对应保存队列结果后才发取消。Session对SaveIntents/屏障的核查不能冒称知道尚未登记的renderer pendingDocs；这是前端接线责任，不新增客户端自报的授权放宽开关。
+
 ### 进程授权与多窗口保存边界（APP-001-FIX-03）
 
 Rust Session拥有随机进程sessionId、全局epoch与逐笔记epoch，Store.keys是唯一解锁授权。renderer不保留独立unlocked集合。notes-access只广播prepare/commit/abort、操作ID、目标ID、真实参与窗口及access元数据，不带正文/密码/钥匙。设置锁、移除锁、关闭全部锁、删除笔记/文件夹、永久删除和归档导入均先冻结目标，真实窗口集合来自AppHandle.webview_windows，调用窗口身份由Tauri注入，不能通过action自报。

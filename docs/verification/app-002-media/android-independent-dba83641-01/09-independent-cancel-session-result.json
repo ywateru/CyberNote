@@ -1,0 +1,98 @@
+{
+  "observation": "actual unwrapped already-authorized entry; native Android recording/cancel; read-only real React ref/CDP handle; no platform API or app/ref writes",
+  "before": {
+    "at": 903884.1000000006,
+    "observerPresent": false,
+    "panelPresent": true,
+    "session": {
+      "live": true,
+      "started": true,
+      "failed": false,
+      "finished": false,
+      "stopping": false,
+      "timer": 11,
+      "recorderIsNull": false,
+      "contextIsNull": false,
+      "trackCount": 1
+    },
+    "heldRecorder": {
+      "state": "recording",
+      "mimeType": "audio/webm;codecs=opus"
+    },
+    "heldContext": {
+      "state": "running"
+    },
+    "heldTracks": [
+      {
+        "kind": "audio",
+        "readyState": "live",
+        "enabled": true,
+        "muted": false
+      }
+    ]
+  },
+  "twelveSecond": {
+    "at": 915886.5,
+    "observerPresent": false,
+    "panelPresent": true,
+    "session": {
+      "live": true,
+      "started": true,
+      "failed": false,
+      "finished": false,
+      "stopping": false,
+      "timer": 11,
+      "recorderIsNull": false,
+      "contextIsNull": false,
+      "trackCount": 1
+    },
+    "heldRecorder": {
+      "state": "recording",
+      "mimeType": "audio/webm;codecs=opus"
+    },
+    "heldContext": {
+      "state": "running"
+    },
+    "heldTracks": [
+      {
+        "kind": "audio",
+        "readyState": "live",
+        "enabled": true,
+        "muted": false
+      }
+    ]
+  },
+  "after": {
+    "at": 917670.9000000004,
+    "observerPresent": false,
+    "panelPresent": false,
+    "session": {
+      "live": false,
+      "started": true,
+      "failed": false,
+      "finished": false,
+      "stopping": false,
+      "timer": null,
+      "recorderIsNull": true,
+      "contextIsNull": true,
+      "trackCount": 0
+    },
+    "heldRecorder": {
+      "state": "inactive",
+      "mimeType": "audio/webm;codecs=opus"
+    },
+    "heldContext": {
+      "state": "closed"
+    },
+    "heldTracks": [
+      {
+        "kind": "audio",
+        "readyState": "ended",
+        "enabled": true,
+        "muted": false
+      }
+    ]
+  },
+  "unchangedEntireFilteredRust": true,
+  "pidSame": true
+}

@@ -1,0 +1,62 @@
+{
+  "developerFirstDeny": {
+    "beforeEntireFixtureEqualsAfter": true,
+    "observerAbsentAtEntry": true,
+    "observerAbsentAfterWait": true,
+    "visiblePermissionDenied": true,
+    "pidAfterWait": "6564",
+    "realSystemPromptXml": true,
+    "noteRevisionBefore": 29,
+    "noteRevisionAfter": 29
+  },
+  "developerAllowWithWrappers": {
+    "realSystemPromptXml": true,
+    "wrapperPresent": true,
+    "getUserMediaConstraints": {
+      "audio": true
+    },
+    "stopRecorder": [
+      {
+        "state": "inactive",
+        "mimeType": "audio/webm;codecs=opus"
+      }
+    ],
+    "stopStreams": [
+      [
+        {
+          "kind": "audio",
+          "readyState": "ended",
+          "enabled": true,
+          "muted": false
+        }
+      ]
+    ],
+    "stopContexts": [
+      {
+        "state": "closed",
+        "sampleRate": 44100
+      }
+    ],
+    "previewRevokeObserved": true,
+    "afterCompleteEntireFixtureEqualsFinal": true,
+    "finalEntireFixtureEqualsDeveloperCold": true,
+    "attachments": [
+      {
+        "displayName": "新录音.webm",
+        "id": "cb3fa001-9d73-4580-b959-38481fbba90b",
+        "kind": "audio",
+        "mime": "audio/webm;codecs=opus",
+        "noteId": "a9d1bbe7-a0ee-4f46-ba3e-e0889085cac3",
+        "relativePath": "cb3fa001-9d73-4580-b959-38481fbba90b.webm",
+        "size": 429547
+      }
+    ]
+  },
+  "packets": {
+    "count": 1101,
+    "lastPts": "66.004000",
+    "lastDuration": "0.060000",
+    "derivedEnd": 66.06400000000001
+  },
+  "scope": "Independent reading/recomparison of existing original developer evidence; not a repeated independent first Deny/Allow/save/cold device action."
+}

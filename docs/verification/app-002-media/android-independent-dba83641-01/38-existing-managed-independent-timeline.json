@@ -1,0 +1,19 @@
+{
+  "command": [
+    "ffprobe",
+    "-v",
+    "error",
+    "-show_packets",
+    "-select_streams",
+    "a:0",
+    "-of",
+    "json",
+    "docs/verification/app-002-media/android-independent-dba83641-01/existing-managed-recording.webm"
+  ],
+  "exitCode": 0,
+  "packetCount": 1101,
+  "lastPts": "66.004000",
+  "lastDuration": "0.060000",
+  "derivedEndSeconds": 66.064,
+  "audibleAcceptance": false
+}
