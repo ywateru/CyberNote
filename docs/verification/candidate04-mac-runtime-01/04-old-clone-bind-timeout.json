@@ -1,0 +1,12 @@
+{
+  "recordType": "retrospective record of an already returned tool result",
+  "tool": "mcp__cua_repl.js",
+  "requestedTimeoutMs": 15000,
+  "elapsedSeconds": 15.0253,
+  "code": "var fullNativeAX = await nativeNotes.getAXState({disableDiffing:true});\nawait fsEvidence.writeFile('/Users/water/work/2026/Apple-Notes-Clone/docs/verification/candidate04-mac-runtime-01/02-original-ax.txt', fullNativeAX);\nvar oldClone = await cua.getApp('/private/tmp/notes-unified-candidate03-mac-sealed.app');",
+  "result": "js execution timed out; kernel reset, rerun your request",
+  "oldCloneFreshAXReturned": false,
+  "quitActionSent": false,
+  "candidate04Launched": false,
+  "limitations": "This records the prior tool result; no GUI operation was repeated to create this record."
+}

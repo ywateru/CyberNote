@@ -1,0 +1,14 @@
+{
+  "recordType": "retrospective record of an already returned tool result",
+  "tool": "mcp__cua_repl.js",
+  "requestedTimeoutMs": 15000,
+  "code": "var dock = await cua.getApp('com.apple.dock');",
+  "result": "aborted by user after 447.5s",
+  "returnedAX": false,
+  "quitActionSent": false,
+  "candidate04Launched": false,
+  "pendingAwaitedToolCallAtReport": false,
+  "backendCancellationState": "UNKNOWN",
+  "guiOwnership": "released; no further GUI calls authorized by current parent task",
+  "limitations": "Reported duration is the tool-returned duration. No Dock rebind or process mutation was performed to verify cancellation."
+}

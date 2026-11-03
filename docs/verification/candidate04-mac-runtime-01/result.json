@@ -1,0 +1,83 @@
+{
+  "scope": "Limited original Notes observation and unsuccessful attempt to bind the old candidate03 clone. This is not candidate04 runtime acceptance.",
+  "reportCreatedAtUtc": "2026-11-03T21:57:30.691864+00:00",
+  "checks": {
+    "originalAXReadable": {
+      "status": "PASS_LIMITED_OBSERVATION",
+      "windowTitle": "搜索",
+      "state": "无结果",
+      "separatorValues": [
+        228,
+        280
+      ],
+      "searchEnabled": false,
+      "fullAXVerifiedOffline": true,
+      "noteBodyReadOrChanged": false,
+      "foregroundKeyOrFocusProven": false
+    },
+    "screenshotEncoding": {
+      "status": "PASS_IDENTITY_ONLY",
+      "format": "JPEG",
+      "width": 2784,
+      "height": 1806,
+      "headerHex": "ffd8ffe000104a46",
+      "reencoded": false,
+      "losslessOrPixelParityProven": false
+    },
+    "nativePNGObserver": {
+      "status": "BLOCKED",
+      "exitCode": 2,
+      "code": "permission_required",
+      "permissionRequested": false,
+      "targetTokenReturned": false,
+      "pngCaptureAttempted": false,
+      "pngGenerated": false,
+      "pixelParity": "UNKNOWN",
+      "noResamplingProof": "UNKNOWN"
+    },
+    "oldCloneNormalExit": {
+      "status": "NOT_COMPLETED",
+      "exitState": "UNKNOWN",
+      "quitActionSent": false
+    },
+    "candidate04LaunchAndRuntimeIdentity": {
+      "status": "NOT_EXECUTED"
+    },
+    "matchedLayoutScreenshotPair": {
+      "status": "UNKNOWN"
+    },
+    "pixelParity": {
+      "status": "UNKNOWN"
+    },
+    "localSaveAndColdStart": {
+      "status": "NOT_EXECUTED"
+    },
+    "recordingPauseAndPreview": {
+      "status": "NOT_EXECUTED"
+    },
+    "actualOCR": {
+      "status": "NOT_EXECUTED"
+    },
+    "androidRuntime": {
+      "status": "NOT_TOUCHED"
+    }
+  },
+  "oldCloneObservedIdentity": [
+    {
+      "pid": 39665,
+      "start": "Wed Nov 4 03:42:28 2026",
+      "args": "/private/tmp/notes-unified-candidate03-mac-sealed.app/Contents/MacOS/notes-clone",
+      "executableSha256": "f11565151c018ae43173b2f2b1d5b223f0e29b2150fc179a34645a74cb0d3c56"
+    }
+  ],
+  "candidate04RuntimeIdentity": null,
+  "actionsAfterGUIRelease": [
+    "Offline reading of existing evidence files",
+    "Writing this limited report and manifest"
+  ],
+  "postAttemptUserUnlockReply": "Received; GUI was not resumed within this report task.",
+  "noNewDatabaseRead": true,
+  "noNewPermissionRequest": true,
+  "noNewAppLaunch": true,
+  "evidenceCaveat": "Original Notes AX and JPEG are one limited observation. Their availability does not establish a paired clone comparison. Old clone process identity was collected before the failed bind and is not a post-attempt liveness check."
+}
