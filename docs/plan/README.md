@@ -21,9 +21,10 @@
 | APP-001-SEARCH-RESULTS Mac搜索结果 | b144c6e独立source-ready，f4d3a02统一双端已构建、待实际 | f3e5c84冻结static-02：原P2停放restore、P1隐藏A失效切Boverlay均源码修正；7组/12顶部通过。11/4双端冻结216项aggregate a6b19154…前后不变，APK3edc4ad0…；Mac派生sealed exe11dcbfc4…严格本地签名检查通过、实际待验。原版a2dcde9与旧56d7差异保持；真实Mac唯一→零→clear/焦点/Undo、有限像素和新包手机smoke仍待验 |
 | APP-002 媒体闭环 | in-progress，dba83641独立实际取消与媒体身份有限通过，时长仍FAIL | android-independent-01独立无包装进入12s/Cancel真实资源状态、完整JSON不变；已有429547B/SHA/1101packets核证。首次Deny/带包装Allow保存冷启仅原始开发证据独立核，分别记账。HTML Infinity/0:00真缺口；旧5dd6及Mac附件/孤儿FAIL保持，可听/物理释放/绘画未验 |
 | APP-002-PERMISSION-01 手机媒体权限入口 | 主ff6b93a，dba83641独立已授权取消有限通过 | 998de4b静态9项通过；0505534首次Deny无包装弹窗/12秒存活、Allow带包装实际采集及App冷启由独立只读核原始证据；2326c75独立实际无包装进入/12秒/取消与真实资源清理。未重置系统权限。仅关闭已实测子集，不跨3edc4ad0新包追认；同canonical旧Finished无loadID、有效CSP/frame和可听音轨仍unknown |
-| APP-002-ATTACHMENT-SUBMIT-01 附件提交 | pending，最小持久操作/原目标重验证方案已准备 | 依赖权限候选源码交接。系统面板返回后来源/目标失效需精确归因，不跳guard；PDF30956B未被正文引用且冷启保持，须有持久操作身份、安全补偿/去重和正文ACK。旧孤儿保留证据，不能以文件存在算预览通过 |
-| APP-002-ATTACHMENT-STORE-01 附件持久操作 | in-progress，Rust模块隔离实施 | 权限源码已合入；先提供真实窗口/会话归属、稳定操作身份、查询/去重、安全补偿与冷启恢复，和F07 App路径隔离。模块通过后再父任务接线，不算系统选择/预览通过 |
+| APP-002-ATTACHMENT-SUBMIT-01 附件提交 | ready，Store已整合、前端待接线 | 42b2631提供真实owner/operation持久边界；系统面板返回原目标重验证、stored/inserted/正文ACK/refreshed分账和pending引用保全仍待App/bridge接线。PDF30956B未被正文引用且冷启保持的旧失败保留，不跳guard、不以文件存在算预览通过 |
+| APP-002-ATTACHMENT-STORE-01 附件持久操作 | done（仅模块），源4d5898f独立SOURCE-READY、主42b2631 | 独立14项真实附件/六次exit78及Session11通过，原六Rust主整合hash一致；真实窗口incarnation/持久身份/查询去重/窄补偿/冷恢复已提供，旧store入口保持。前端pendingDocs/正文ACK与系统选择器仍由父任务负责；当前统一包不含此模块 |
 | APP-002-AUDIO-DURATION-01 音频卡片时长 | ae567ef独立source-ready，f4d3a02双端已构建、待实际 | f4d3a02独立审查通过生产helper11组及真实AudioPlayer/离线Chrome156：原WebM探针66.004秒、主初始0暂停、有限WAV不建探针、错误/重试/晚事件清理；不重编码原文件。216项输入前后不变，APK3edc4ad0…；Android91既有媒体真实播放/跳转/冷启及Mac仍待新包验证，非可听采集/像素通过 |
+| APP-002-AUDIO-CONTROLS-01 手机播放控件 | ready，新3edc4ad0开发实际暴露可达阻塞 | Android真实卡片已显示1:06/初始0paused，但audio-expand隐藏，原生双击未展开且正文起IME；range/±15未可达。保全该失败后在AudioPlayer/音频CSS窄边界修复触摸入口，不改App附件前端/媒体controller；录屏未展示展开手势，精确原版行为及像素保持unknown |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |

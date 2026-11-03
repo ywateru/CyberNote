@@ -1,7 +1,7 @@
 ---
 id: app-002-attachment-store-01
 scope: durable-owned-attachment-operation-and-safe-recovery
-status: in-progress
+status: done
 depends-on: [app-002-permission-01]
 ---
 
@@ -31,6 +31,10 @@ depends-on: [app-002-permission-01]
 使用真实临时SQLite与受管附件目录穿过实际Store/Session边界：相同操作重复写入与查询、同ID不同内容/owner/note拒绝、写后响应未送达仍能核结果、未引用补偿、已引用不可补偿、在途保存/屏障deferred或拒绝、重复补偿、文件/数据库失败、至少覆盖文件落盘与元数据事务前后真实重开恢复。旧附件与旧孤儿须明确保留。不要只测返回常量，不为此扩展无关安全/归档矩阵。
 
 源码候选提交后独立静态审查，再主合入；无App构建/安装/GUI。共享主target只串行用于必要Rust检查，先确认无其他构建。父任务后续真实系统选择器、正文ACK、冷启预览与像素仍分别验收。
+
+## independent delivery · 2026-11-04
+
+源4d5898f由独立审查判SOURCE-READY，无blocking；14个真实附件检查、其中六次实际exit78子进程中断、完整Session11项、fmt/diffcheck通过。报告`../reviews/app-002-attachment-store-static-01.md`，证据`../../verification/app-002-attachment-store-independent-01/`。主42b2631整合后六个Rust文件hash与冻结blob完全相同，见`../../verification/app-002-attachment-store/main-integration.json`，不重复相同矩阵。本任务done仅指独立定义的Rust模块交付；父任务前端、系统选择器、正文ACK、默认包运行/像素仍未完成。
 
 ## source candidate · 2026-11-04
 

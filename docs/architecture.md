@@ -50,6 +50,9 @@ paperStyle 合法值为 plain、lines-small、lines-medium、lines-large、grid-
 | `acknowledge_access` | operationId、success | Rust注入真实窗口；未完成的目标保存不得成功ACK |
 | `read_note_text` | id、expected | 执行时检查实时授权与屏障，返回title/text及access；拷贝/分享统一使用 |
 | `store_attachment` | noteId、name、mime、Base64 data、expected | 受管本地附件元数据；100 MB 上限；实时授权/屏障检查 |
+| `store_attachment_operation` | operationId、noteId、name、mime、Base64 data、expected | 新持久操作；真实window/Session生成owner；同身份同完整字节复用，返回operation状态/attachment?/access |
+| `query_attachment_operation` | operationId、noteId、expected | 同真实owner、当前合法授权查实际持久状态；不以renderer generation当后端身份 |
+| `cancel_attachment_operation` | operationId、noteId、expected | 只取消本操作安全未引用新文件；有权威引用则committed，有在途保存/身份不确定则deferred |
 | `read_attachment` | id、expected | Base64 data、mime、name及access；按附件真实归属note检查 |
 | `export_archive` | 本地 path、expected | 写版本1密文归档；屏障期间拒绝；标题仍可见 |
 | `import_archive` | 本地 path、expected | 完整校验、冲突副本和设置恢复；先执行全部窗口保存屏障，成功清钥匙并更新epoch |
@@ -75,6 +78,8 @@ APP-002-ATTACHMENT-SUBMIT-01将同一契约先接入系统文件选择链。操�
 为覆盖“文件已写入但响应或正文失败”，后端以真实窗口、授权session、原note和operationId建立持久操作记录，附件元数据与记录同事务提交，相同操作重复请求复用结果；新授权下可核查真实结果。操作记录独立于公开Attachment与归档字段。前端处理插入false/throw，将stored、inserted、正文ACK与列表刷新分别记账。安全补偿仅作用本操作新建文件，Rust核owner、权威正文引用、保存intent和屏障；已引用保留，无法安全判定则deferred。冷启仅恢复有该操作记录的未引用新文件，不清扫旧孤儿。具体接口名与实现检查在候选中同步，当前不能称已接入。
 
 节点已插入但正文ACK失败时，renderer若仍保留引用该附件的pending文档，应保留operation/附件以便重试；不得仅因数据库暂未引用便补偿删除。只有确认本地回退和对应保存队列结果后才发取消。Session对SaveIntents/屏障的核查不能冒称知道尚未登记的renderer pendingDocs；这是前端接线责任，不新增客户端自报的授权放宽开关。
+
+2026-11-04模块状态：上述三个operation命令已作为42b2631整合，源4d5898f独立SOURCE-READY，六Rust文件主整合hash完全相同；前端仍待父任务接线，既有store_attachment不自动获得新幂等/补偿语义。准确参数、五种公开状态、window incarnation、preparing保守拒绝重写、10,000条历史限额、冷恢复及purge中断遗留限制见`verification/app-002-attachment-store/source-candidate-01.md`，独立检查见`plan/reviews/app-002-attachment-store-static-01.md`。当前F07+Audio安装包f4d3a02不包含此模块。
 
 ### 进程授权与多窗口保存边界（APP-001-FIX-03）
 

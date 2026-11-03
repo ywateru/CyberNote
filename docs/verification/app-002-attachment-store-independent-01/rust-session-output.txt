@@ -1,0 +1,18 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.37s
+     Running unittests src/lib.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/notes_clone_lib-fe3ed268105cc061)
+
+running 11 tests
+test session::tests::live_schema_rejects_invalid_saves_without_changing_revision_or_body ... ok
+test session::tests::pending_intent_cannot_ack_and_failed_barrier_preserves_authorization_and_retry ... ok
+test session::tests::real_revision_conflict_forces_abort_even_if_window_claims_success ... ok
+test session::tests::conflict_copy_obeys_live_session_source_epoch_and_prepare ... ok
+test session::tests::attachment_owner_uses_real_session_window_incarnation_and_current_access ... ok
+test session::tests::window_identity_and_session_identity_cannot_be_supplied_by_saved_action ... ok
+test session::tests::attachment_cancel_waits_for_other_windows_registered_save_and_retains_committed_ref ... ok
+test session::tests::timeout_missing_window_and_failed_ack_never_commit ... ok
+test session::tests::registered_save_drains_before_two_window_commit_and_old_access_expires ... ok
+test session::tests::close_locks_rejects_late_commands_and_delete_response_cannot_publish_decrypted_body ... ok
+test session::tests::frozen_ciphertexts_validate_after_decrypt_before_publishing_key ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 40 filtered out; finished in 2.26s
+

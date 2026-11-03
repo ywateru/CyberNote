@@ -1,0 +1,57 @@
+   Compiling objc2-exception-helper v0.1.1
+   Compiling tauri-plugin-notes-ui v0.1.0 (/private/tmp/apple-notes-attachment-store-01/plugins/tauri-plugin-notes-ui)
+   Compiling libsqlite3-sys v0.30.1
+   Compiling objc2 v0.6.5
+   Compiling rusqlite v0.32.1
+   Compiling notes-clone v0.1.0 (/private/tmp/apple-notes-attachment-store-01/src-tauri)
+   Compiling block2 v0.6.2
+   Compiling objc2-core-foundation v0.3.2
+   Compiling dispatch2 v0.3.1
+   Compiling objc2-foundation v0.3.2
+   Compiling objc2-quartz-core v0.3.2
+   Compiling objc2-app-kit v0.3.2
+   Compiling objc2-web-kit v0.3.2
+   Compiling tao v0.37.2
+   Compiling muda v0.20.0
+   Compiling window-vibrancy v0.8.1
+   Compiling rfd v0.17.2
+   Compiling tauri-runtime v2.12.2
+   Compiling wry v0.57.1
+   Compiling tauri-runtime-wry v2.12.3
+   Compiling tauri v2.12.5
+   Compiling tauri-plugin-fs v2.7.1
+   Compiling tauri-plugin-dialog v2.8.4
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.10s
+     Running unittests src/lib.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/notes_clone_lib-fe3ed268105cc061)
+
+running 15 tests
+test store::attachment_operations::tests::crash_worker ... ignored, real subprocess worker invoked by boundary test
+test attachment_command_tests::private_storage_errors_keep_category_without_returning_journal_details ... ok
+test store::attachment_operations::tests::duplicate_response_loss_and_foreign_identity_do_not_create_or_overwrite ... ok
+test store::attachment_operations::tests::inconsistent_identity_is_deferred_and_never_treated_as_safe_absence ... ok
+test session::tests::attachment_owner_uses_real_session_window_incarnation_and_current_access ... ok
+test store::attachment_operations::tests::cancel_is_narrow_repeatable_and_committed_documents_are_preserved ... ok
+test session::tests::attachment_cancel_waits_for_other_windows_registered_save_and_retains_committed_ref ... ok
+test store::attachment_operations::tests::cold_reopen_preserves_actual_reference_and_purge_retires_old_path ... ok
+
+running 1 test
+test store::attachment_operations::tests::filesystem_and_sqlite_failures_keep_recoverable_private_records ... ok
+test store::archive::tests::qa_bad_second_blob_preserves_existing_attachment_database_settings_and_source ... ok
+test store::tests::archive_attachments_and_cycle_guards ... ok
+test store::attachment_operations::tests::invalid_operation_shape_and_history_limit_fail_before_new_file_creation ... ok
+
+running 1 test
+
+running 1 test
+
+running 1 test
+
+running 1 test
+
+running 1 test
+test store::attachment_operations::tests::true_process_crashes_recover_at_file_and_sqlite_boundaries_preserving_legacy ... ok
+test store::attachment_operations::tests::locked_owner_defers_cold_cleanup_and_pending_purge_collects_its_new_file ... ok
+test store::tests::conflict_copy_rejects_locked_and_attachment_sources_without_a_new_note ... ok
+
+test result: ok. 14 passed; 0 failed; 1 ignored; 0 measured; 36 filtered out; finished in 0.58s
+

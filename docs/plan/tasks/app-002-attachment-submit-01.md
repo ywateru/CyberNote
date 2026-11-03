@@ -1,8 +1,8 @@
 ---
 id: app-002-attachment-submit-01
 scope: file-picker-return-target-and-attachment-document-commit
-status: pending
-depends-on: [app-002-permission-01]
+status: ready
+depends-on: [app-002-permission-01, app-002-attachment-store-01]
 ---
 
 ## objective
@@ -36,6 +36,8 @@ depends-on: [app-002-permission-01]
 前端分别记录stored、inserted、documentAck与refreshed。处理真实insertContent返回false/throw，正文成功以现有saveDoc/flush ACK为准；ACK后刷新失败保留成功身份，不能重复插入或补偿删除。补偿为窄的“取消本次附件操作”接口，Rust检查owner、权威持久正文、尚未完成的SaveIntents与访问屏障；已引用则保留并标记committed，不能安全判定则返回deferred。冷启恢复仅处理有本次journal身份的未引用新文件，保留旧56d7 PDF孤儿作为历史证据。
 
 实施按实际边界分步提交：先持久操作与安全补偿，再前端捕获/重验证/ACK接线；完整候选交独立审查后统一构建。期间不混入录音暂停/计时、绘画或搜索结果修复，也不以模块测试代替系统选择器实际链路。
+
+2026-11-04：Store模块源4d5898f独立SOURCE-READY并主整合42b2631，实际store/query/cancel_attachment_operation接口和责任见`../../verification/app-002-attachment-store/source-candidate-01.md`。前端接线可在包含该模块、F07与AudioPlayer的主基线创建隔离分支继续。当前3edc4ad0 APK/sealed11dcbfc4 Mac包不包含新模块，不用于声称该修复通过。
 
 ## context
 

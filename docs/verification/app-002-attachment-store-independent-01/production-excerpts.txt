@@ -1,0 +1,703 @@
+
+src-tauri/src/lib.rs:196-283
+  196 // Preserve the real failure category while keeping private journal/database
+  197 // details out of renderer errors, including failures before owner comparison.
+  198 fn attachment_operation_error(error: AppError) -> AppError {
+  199     let message = match error.code.as_str() {
+  200         "database" => "附件数据库操作失败，请保留未保存内容后重试",
+  201         "filesystem" => "附件文件操作失败，请保留未保存内容后重试",
+  202         "document" => "附件操作记录无法读取，请保留未保存内容后重试",
+  203         _ => return error,
+  204     };
+  205     AppError {
+  206         code: error.code,
+  207         message: message.into(),
+  208     }
+  209 }
+  210 #[tauri::command]
+  211 fn store_attachment_operation(
+  212     operation_id: String,
+  213     note_id: String,
+  214     name: String,
+  215     mime: String,
+  216     data: String,
+  217     expected: Token,
+  218     window: tauri::WebviewWindow,
+  219     state: State<AppState>,
+  220 ) -> Result<Value> {
+  221     const MAX_ENCODED: usize = ((100 * 1024 * 1024 + 2) / 3) * 4;
+  222     if data.len() > MAX_ENCODED {
+  223         return Err(AppError {
+  224             code: "too_large".into(),
+  225             message: "附件不能超过100 MB".into(),
+  226         });
+  227     }
+  228     let bytes = B64.decode(data).map_err(|_| AppError {
+  229         code: "invalid".into(),
+  230         message: "文件编码错误".into(),
+  231     })?;
+  232     state
+  233         .0
+  234          .0
+  235         .lock()
+  236         .map_err(|_| failure("数据锁错误"))?
+  237         .store_attachment_operation(
+  238             window.label(),
+  239             &operation_id,
+  240             &note_id,
+  241             &name,
+  242             &mime,
+  243             &bytes,
+  244             &expected,
+  245         )
+  246         .map_err(attachment_operation_error)
+  247 }
+  248 #[tauri::command]
+  249 fn query_attachment_operation(
+  250     operation_id: String,
+  251     note_id: String,
+  252     expected: Token,
+  253     window: tauri::WebviewWindow,
+  254     state: State<AppState>,
+  255 ) -> Result<Value> {
+  256     state
+  257         .0
+  258          .0
+  259         .lock()
+  260         .map_err(|_| failure("数据锁错误"))?
+  261         .query_attachment_operation(window.label(), &operation_id, &note_id, &expected)
+  262         .map_err(attachment_operation_error)
+  263 }
+  264 #[tauri::command]
+  265 fn cancel_attachment_operation(
+  266     operation_id: String,
+  267     note_id: String,
+  268     expected: Token,
+  269     window: tauri::WebviewWindow,
+  270     state: State<AppState>,
+  271 ) -> Result<Value> {
+  272     state
+  273         .0
+  274          .0
+  275         .lock()
+  276         .map_err(|_| failure("数据锁错误"))?
+  277         .cancel_attachment_operation(window.label(), &operation_id, &note_id, &expected)
+  278         .map_err(attachment_operation_error)
+  279 }
+  280 #[tauri::command]
+  281 fn read_attachment(id: String, expected: Token, state: State<AppState>) -> Result<Value> {
+  282     let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
+  283     let note = session.store.attachment_note(&id)?;
+
+src-tauri/src/lib.rs:320-334
+  320 pub fn run() {
+  321     let builder = tauri::Builder::default()
+  322         .on_window_event(|window, event| {
+  323             if matches!(event, tauri::WindowEvent::Destroyed) {
+  324                 if let Some(state) = window.try_state::<AppState>() {
+  325                     if let Ok(mut session) = state.0 .0.lock() {
+  326                         session.forget_attachment_window(window.label());
+  327                     };
+  328                 }
+  329             }
+  330         })
+  331         .on_permission_request(media_permission::response)
+  332         .plugin(media_permission::lifecycle())
+  333         .plugin(tauri_plugin_dialog::init())
+  334         .setup(|app| {
+
+src-tauri/src/lib.rs:423-460
+  423     #[cfg(target_os = "macos")]
+  424     let builder = builder.plugin(tauri_plugin_notes_ui::init());
+  425     #[cfg(not(feature = "access-boundary-proof"))]
+  426     let builder = builder.invoke_handler(tauri::generate_handler![
+  427         load_workspace,
+  428         register_save_intent,
+  429         acknowledge_access,
+  430         read_note_text,
+  431         workspace_action,
+  432         store_attachment,
+  433         store_attachment_operation,
+  434         query_attachment_operation,
+  435         cancel_attachment_operation,
+  436         read_attachment,
+  437         export_archive,
+  438         import_archive
+  439     ]);
+  440     #[cfg(feature = "access-boundary-proof")]
+  441     let builder = builder.invoke_handler(tauri::generate_handler![
+  442         load_workspace,
+  443         register_save_intent,
+  444         acknowledge_access,
+  445         read_note_text,
+  446         workspace_action,
+  447         store_attachment,
+  448         store_attachment_operation,
+  449         query_attachment_operation,
+  450         cancel_attachment_operation,
+  451         read_attachment,
+  452         export_archive,
+  453         import_archive,
+  454         proof_access_record
+  455     ]);
+  456     builder
+  457         .run(tauri::generate_context!())
+  458         .expect("Notes failed to start");
+  459 }
+  460 
+
+src-tauri/src/session.rs:112-204
+  112     }
+  113     pub fn sensitive(&self, note: &str, token: &Token) -> Result<()> {
+  114         self.check(token, Some(note))?;
+  115         if self
+  116             .pending
+  117             .as_ref()
+  118             .is_some_and(|p| p.targets.iter().any(|id| id == note))
+  119         {
+  120             return Err(denied("备忘录正在同步锁定状态，请稍候"));
+  121         }
+  122         if !self.store.authorized(note)? {
+  123             return Err(denied("备忘录已锁定或删除，请重新解锁"));
+  124         }
+  125         Ok(())
+  126     }
+  127     fn attachment_owner(&mut self, window: &str) -> Result<AttachmentOwner> {
+  128         if window.is_empty() || window.len() > 128 || window.chars().any(char::is_control) {
+  129             return Err(denied("真实窗口身份无效"));
+  130         }
+  131         let incarnation = self
+  132             .attachment_windows
+  133             .entry(window.into())
+  134             .or_insert_with(|| Uuid::new_v4().to_string())
+  135             .clone();
+  136         Ok(AttachmentOwner {
+  137             session: self.id.clone(),
+  138             window: window.into(),
+  139             incarnation,
+  140         })
+  141     }
+  142     pub fn forget_attachment_window(&mut self, window: &str) {
+  143         self.attachment_windows.remove(window);
+  144     }
+  145     pub fn store_attachment_operation(
+  146         &mut self,
+  147         window: &str,
+  148         operation: &str,
+  149         note: &str,
+  150         name: &str,
+  151         mime: &str,
+  152         bytes: &[u8],
+  153         token: &Token,
+  154     ) -> Result<Value> {
+  155         self.sensitive(note, token)?;
+  156         let owner = self.attachment_owner(window)?;
+  157         let value = self
+  158             .store
+  159             .store_attachment_operation(operation, note, &owner, name, mime, bytes)?;
+  160         self.tagged(value)
+  161     }
+  162     pub fn query_attachment_operation(
+  163         &mut self,
+  164         window: &str,
+  165         operation: &str,
+  166         note: &str,
+  167         token: &Token,
+  168     ) -> Result<Value> {
+  169         self.sensitive(note, token)?;
+  170         let owner = self.attachment_owner(window)?;
+  171         let value = self
+  172             .store
+  173             .query_attachment_operation(operation, note, &owner)?;
+  174         self.tagged(value)
+  175     }
+  176     pub fn cancel_attachment_operation(
+  177         &mut self,
+  178         window: &str,
+  179         operation: &str,
+  180         note: &str,
+  181         token: &Token,
+  182     ) -> Result<Value> {
+  183         self.sensitive(note, token)?;
+  184         let owner = self.attachment_owner(window)?;
+  185         // Every registered save from every real window is checked while the
+  186         // caller holds the same Session/Store mutex as the cleanup decision.
+  187         // Renderer pendingDocs that have not registered an intent are not
+  188         // visible here: the frontend must roll back/drain before cancelling.
+  189         let value = if self.intents.values().any(|intent| intent.note == note) {
+  190             self.store
+  191                 .defer_attachment_operation(operation, note, &owner, "save_pending")?
+  192         } else {
+  193             self.store
+  194                 .cancel_attachment_operation(operation, note, &owner)?
+  195         };
+  196         self.tagged(value)
+  197     }
+  198     pub fn register_save(
+  199         &mut self,
+  200         window: &str,
+  201         note: &str,
+  202         intent: &str,
+  203         token: Token,
+  204     ) -> Result<()> {
+
+src-tauri/src/store.rs:106-125
+  106     keys: HashMap<String, [u8; 32]>,
+  107 }
+  108 impl Store {
+  109     pub fn open(root: impl AsRef<Path>) -> Result<Self> {
+  110         fs::create_dir_all(root.as_ref().join("attachments"))?;
+  111         let db = Connection::open(root.as_ref().join("notes.sqlite3"))?;
+  112         db.execute_batch("PRAGMA journal_mode=WAL; PRAGMA secure_delete=ON; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS folders(id TEXT PRIMARY KEY, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS notes(id TEXT PRIMARY KEY, folder_id TEXT NOT NULL, body TEXT NOT NULL, revision INTEGER NOT NULL); CREATE TABLE IF NOT EXISTS attachments(id TEXT PRIMARY KEY, note_id TEXT NOT NULL, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS settings(id INTEGER PRIMARY KEY CHECK(id=1), body TEXT NOT NULL); PRAGMA user_version=1;")?;
+  113         let mut s = Self {
+  114             db,
+  115             root: root.as_ref().into(),
+  116             keys: HashMap::new(),
+  117         };
+  118         s.initialize_attachment_operations()?;
+  119         s.recover_imports()?;
+  120         s.recover_attachment_operations()?;
+  121         for (fid, name, kind, order) in [
+  122             ("default", "备忘录", "default", 0),
+  123             ("quick", "快速备忘录", "quick", -1),
+  124             ("trash", "最近删除", "trash", 9999),
+  125         ] {
+
+src-tauri/src/store.rs:462-497
+  462             "purgeNote" => {
+  463                 let nid = str_field(&a, "id")?;
+  464                 if self.note(nid)?.deleted_at.is_none() {
+  465                     return Err(err("invalid", "先移到最近删除"));
+  466                 }
+  467                 let mut files = self
+  468                     .attachments()?
+  469                     .into_iter()
+  470                     .filter(|x| x.note_id == nid)
+  471                     .collect::<Vec<_>>();
+  472                 for attachment in self.operation_files_for_purge(nid)? {
+  473                     if !files
+  474                         .iter()
+  475                         .any(|file| file.relative_path == attachment.relative_path)
+  476                     {
+  477                         files.push(attachment);
+  478                     }
+  479                 }
+  480                 let tx = self.db.transaction()?;
+  481                 // Retire ownership journals in the same DB decision as purge.
+  482                 // A terminal journal must never later delete a reused path.
+  483                 tx.execute("UPDATE attachment_operations SET state='retired', reason='note_purged' WHERE note_id=?1", [nid])?;
+  484                 tx.execute("DELETE FROM attachments WHERE note_id=?1", [nid])?;
+  485                 tx.execute("DELETE FROM notes WHERE id=?1", [nid])?;
+  486                 tx.commit()?;
+  487                 for f in files {
+  488                     let path = self.attachment_path(&f.relative_path)?;
+  489                     if path.exists() {
+  490                         fs::remove_file(path)?;
+  491                     }
+  492                 }
+  493                 self.keys.remove(nid);
+  494             }
+  495             "createFolder" => {
+  496                 let name = str_field(&a, "name")?.trim();
+  497                 if name.is_empty() {
+
+src-tauri/src/store/attachment_operations.rs:27-425
+   27 fn valid_operation(value: &str) -> Result<()> {
+   28     if !Uuid::parse_str(value).is_ok_and(|id| id.get_version_num() == 4 && id.to_string() == value)
+   29     {
+   30         return Err(err("invalid", "附件操作ID必须为标准UUID v4"));
+   31     }
+   32     Ok(())
+   33 }
+   34 fn conflict() -> AppError {
+   35     err("attachment_operation_conflict", "附件操作身份或内容不匹配")
+   36 }
+   37 fn sync_directory(path: &Path) -> Result<()> {
+   38     #[cfg(unix)]
+   39     fs::File::open(path)?.sync_all()?;
+   40     Ok(())
+   41 }
+   42 fn response(op: &Operation, state: &str, reason: Option<&str>) -> Result<Value> {
+   43     let mut value = json!({"operationId":op.id,"noteId":op.note,"status":state});
+   44     if matches!(state, "stored" | "committed") {
+   45         value["attachment"] = serde_json::to_value(&op.attachment)?;
+   46     }
+   47     if let Some(reason) = reason {
+   48         value["reason"] = json!(reason);
+   49     }
+   50     Ok(value)
+   51 }
+   52 impl Store {
+   53     pub(super) fn initialize_attachment_operations(&self) -> Result<()> {
+   54         self.db.execute_batch("CREATE TABLE IF NOT EXISTS attachment_operations(operation_id TEXT PRIMARY KEY, note_id TEXT NOT NULL, owner TEXT NOT NULL, attachment TEXT NOT NULL, state TEXT NOT NULL CHECK(state IN ('preparing','stored','committed','aborting','aborted','retired')), reason TEXT);")?;
+   55         Ok(())
+   56     }
+   57     fn attachment_operation(&self, operation: &str) -> Result<Option<Operation>> {
+   58         let row = self.db.query_row(
+   59             "SELECT note_id,owner,attachment,state,reason FROM attachment_operations WHERE operation_id=?1",
+   60             [operation], |row| Ok((row.get::<_,String>(0)?,row.get::<_,String>(1)?,row.get::<_,String>(2)?,row.get::<_,String>(3)?,row.get::<_,Option<String>>(4)?)),
+   61         ).optional()?;
+   62         row.map(|(note, owner, attachment, state, reason)| {
+   63             Ok(Operation {
+   64                 id: operation.into(),
+   65                 note,
+   66                 owner: serde_json::from_str(&owner)?,
+   67                 attachment: serde_json::from_str(&attachment)?,
+   68                 state,
+   69                 reason,
+   70             })
+   71         })
+   72         .transpose()
+   73     }
+   74     fn owned_operation(
+   75         &self,
+   76         operation: &str,
+   77         note: &str,
+   78         owner: &AttachmentOwner,
+   79     ) -> Result<Option<Operation>> {
+   80         valid_operation(operation)?;
+   81         let op = self.attachment_operation(operation)?;
+   82         if op
+   83             .as_ref()
+   84             .is_some_and(|op| op.note != note || &op.owner != owner)
+   85         {
+   86             return Err(conflict());
+   87         }
+   88         Ok(op)
+   89     }
+   90     fn set_operation_state(&self, op: &Operation, state: &str, reason: Option<&str>) -> Result<()> {
+   91         if self.db.execute(
+   92             "UPDATE attachment_operations SET state=?1,reason=?2 WHERE operation_id=?3",
+   93             params![state, reason, op.id],
+   94         )? != 1
+   95         {
+   96             return Err(err("attachment_operation_missing", "附件操作记录已消失"));
+   97         }
+   98         Ok(())
+   99     }
+  100     // Check both real metadata identity and authoritative document nodes. A
+  101     // missing/changed identity or encrypted owner is not proof of no reference.
+  102     fn operation_reference(&self, op: &Operation) -> Result<Reference> {
+  103         let a = &op.attachment;
+  104         let prefix = format!("op-{}-", op.id);
+  105         let expected = format!("{prefix}{}.blob", a.id);
+  106         if a.note_id != op.note || a.relative_path != expected || Uuid::parse_str(&a.id).is_err() {
+  107             return Ok(Reference::Uncertain("managed_identity_changed"));
+  108         }
+  109         self.attachment_path(&a.relative_path)?;
+  110         let attachments = self.attachments()?;
+  111         let same = attachments.iter().find(|candidate| candidate.id == a.id);
+  112         if same.is_some_and(|candidate| candidate != a)
+  113             || attachments
+  114                 .iter()
+  115                 .any(|candidate| candidate.relative_path == a.relative_path && candidate.id != a.id)
+  116         {
+  117             return Ok(Reference::Uncertain("managed_identity_changed"));
+  118         }
+  119         if same.is_none() && matches!(op.state.as_str(), "stored" | "committed") {
+  120             return Ok(Reference::Uncertain("attachment_metadata_missing"));
+  121         }
+  122         let mut referenced = false;
+  123         for note in self.notes()? {
+  124             if note.id == op.note && note.locked {
+  125                 return Ok(Reference::Uncertain("owner_document_locked"));
+  126             }
+  127             let mut nodes = vec![&note.document];
+  128             while let Some(node) = nodes.pop() {
+  129                 if node["type"] == "attachment" && node["attrs"]["id"] == a.id {
+  130                     if note.id != a.note_id || node["attrs"]["kind"] != a.kind || same.is_none() {
+  131                         return Ok(Reference::Uncertain("document_attachment_identity_changed"));
+  132                     }
+  133                     referenced = true;
+  134                 }
+  135                 if let Some(children) = node["content"].as_array() {
+  136                     nodes.extend(children);
+  137                 }
+  138             }
+  139         }
+  140         Ok(if referenced {
+  141             Reference::Present
+  142         } else {
+  143             Reference::Absent
+  144         })
+  145     }
+  146     fn check_operation_file(&self, op: &Operation) -> Result<()> {
+  147         let metadata = fs::metadata(self.attachment_path(&op.attachment.relative_path)?)?;
+  148         if !metadata.is_file() || metadata.len() != op.attachment.size {
+  149             return Err(err("attachment_file_changed", "本次附件文件不完整或已改变"));
+  150         }
+  151         Ok(())
+  152     }
+  153     pub(crate) fn store_attachment_operation(
+  154         &mut self,
+  155         operation: &str,
+  156         note: &str,
+  157         owner: &AttachmentOwner,
+  158         name: &str,
+  159         mime: &str,
+  160         bytes: &[u8],
+  161     ) -> Result<Value> {
+  162         valid_operation(operation)?;
+  163         if bytes.len() > MAX_BYTES {
+  164             return Err(err("too_large", "附件不能超过100 MB"));
+  165         }
+  166         if name.is_empty()
+  167             || name.len() > 1024
+  168             || mime.is_empty()
+  169             || mime.len() > 255
+  170             || name.chars().chain(mime.chars()).any(char::is_control)
+  171         {
+  172             return Err(err("invalid", "附件名称或类型无效"));
+  173         }
+  174         let display = Path::new(name)
+  175             .file_name()
+  176             .and_then(|name| name.to_str())
+  177             .ok_or_else(|| err("invalid", "附件名称无效"))?;
+  178         let n = self.note(note)?;
+  179         if n.locked || n.deleted_at.is_some() {
+  180             return Err(err("locked", "锁定或已删除备忘录不能添加附件"));
+  181         }
+  182         if let Some(op) = self.owned_operation(operation, note, owner)? {
+  183             if op.attachment.display_name != display
+  184                 || op.attachment.mime != mime
+  185                 || op.attachment.size != bytes.len() as u64
+  186             {
+  187                 return Err(conflict());
+  188             }
+  189             if !matches!(op.state.as_str(), "stored" | "committed") {
+  190                 return Err(err(
+  191                     "attachment_operation_incomplete",
+  192                     "本次附件操作未完成或已取消，请查询状态后处理",
+  193                 ));
+  194             }
+  195             if fs::read(self.attachment_path(&op.attachment.relative_path)?)? != bytes {
+  196                 return Err(conflict());
+  197             }
+  198             return self.query_attachment_operation(operation, note, owner);
+  199         }
+  200         let count: i64 =
+  201             self.db
+  202                 .query_row("SELECT count(*) FROM attachment_operations", [], |row| {
+  203                     row.get(0)
+  204                 })?;
+  205         if count >= MAX_OPERATIONS {
+  206             return Err(err("attachment_operation_limit", "附件操作记录已达上限"));
+  207         }
+  208         let aid = id();
+  209         let op = Operation {
+  210             id: operation.into(),
+  211             note: note.into(),
+  212             owner: owner.clone(),
+  213             state: "preparing".into(),
+  214             reason: None,
+  215             attachment: Attachment {
+  216                 id: aid.clone(),
+  217                 note_id: note.into(),
+  218                 kind: if mime.starts_with("image/") {
+  219                     "image"
+  220                 } else if mime.starts_with("audio/") {
+  221                     "audio"
+  222                 } else if mime.starts_with("video/") {
+  223                     "video"
+  224                 } else {
+  225                     "file"
+  226                 }
+  227                 .into(),
+  228                 relative_path: format!("op-{operation}-{aid}.blob"),
+  229                 mime: mime.into(),
+  230                 display_name: display.into(),
+  231                 size: bytes.len() as u64,
+  232             },
+  233         };
+  234         // SQLite identity is durable before the first possible file write.
+  235         self.db.execute("INSERT INTO attachment_operations(operation_id,note_id,owner,attachment,state)VALUES(?1,?2,?3,?4,'preparing')",params![op.id,op.note,serde_json::to_string(owner)?,serde_json::to_string(&op.attachment)?])?;
+  236         checkpoint("after_prepare");
+  237         let path = self.attachment_path(&op.attachment.relative_path)?;
+  238         let mut file = match OpenOptions::new().write(true).create_new(true).open(&path) {
+  239             Ok(file) => file,
+  240             Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => {
+  241                 // The exclusive create did not establish ownership of that
+  242                 // existing object. Retire the journal so recovery cannot delete it.
+  243                 self.set_operation_state(&op, "retired", Some("path_collision"))?;
+  244                 return Err(error.into());
+  245             }
+  246             Err(error) => return Err(error.into()),
+  247         };
+  248         file.write_all(bytes)?;
+  249         file.sync_all()?;
+  250         sync_directory(&self.root.join("attachments"))?;
+  251         checkpoint("after_file");
+  252         let tx = self.db.transaction()?;
+  253         tx.execute(
+  254             "INSERT INTO attachments(id,note_id,body)VALUES(?1,?2,?3)",
+  255             params![
+  256                 op.attachment.id,
+  257                 op.note,
+  258                 serde_json::to_string(&op.attachment)?
+  259             ],
+  260         )?;
+  261         tx.execute(
+  262             "UPDATE attachment_operations SET state='stored',reason=NULL WHERE operation_id=?1",
+  263             [&op.id],
+  264         )?;
+  265         checkpoint("before_store_commit");
+  266         tx.commit()?;
+  267         checkpoint("after_store_commit");
+  268         response(&op, "stored", None)
+  269     }
+  270     pub(crate) fn query_attachment_operation(
+  271         &self,
+  272         operation: &str,
+  273         note: &str,
+  274         owner: &AttachmentOwner,
+  275     ) -> Result<Value> {
+  276         let Some(op) = self.owned_operation(operation, note, owner)? else {
+  277             return Ok(json!({"operationId":operation,"noteId":note,"status":"notPersisted"}));
+  278         };
+  279         if matches!(op.state.as_str(), "aborted" | "retired") {
+  280             return response(&op, "aborted", op.reason.as_deref());
+  281         }
+  282         match self.operation_reference(&op)? {
+  283             Reference::Present => {
+  284                 self.check_operation_file(&op)?;
+  285                 self.set_operation_state(&op, "committed", None)?;
+  286                 response(&op, "committed", None)
+  287             }
+  288             Reference::Uncertain(reason) => response(&op, "deferred", Some(reason)),
+  289             Reference::Absent if op.state == "stored" || op.state == "committed" => {
+  290                 self.check_operation_file(&op)?;
+  291                 response(&op, &op.state, None)
+  292             }
+  293             Reference::Absent => response(
+  294                 &op,
+  295                 "deferred",
+  296                 Some(if op.state == "aborting" {
+  297                     "cleanup_pending"
+  298                 } else {
+  299                     "storage_incomplete"
+  300                 }),
+  301             ),
+  302         }
+  303     }
+  304     pub(crate) fn defer_attachment_operation(
+  305         &self,
+  306         operation: &str,
+  307         note: &str,
+  308         owner: &AttachmentOwner,
+  309         reason: &str,
+  310     ) -> Result<Value> {
+  311         let value = self.query_attachment_operation(operation, note, owner)?;
+  312         if value["status"] == "committed"
+  313             || value["status"] == "aborted"
+  314             || value["status"] == "notPersisted"
+  315         {
+  316             return Ok(value);
+  317         }
+  318         Ok(json!({"operationId":operation,"noteId":note,"status":"deferred","reason":reason}))
+  319     }
+  320     pub(crate) fn cancel_attachment_operation(
+  321         &mut self,
+  322         operation: &str,
+  323         note: &str,
+  324         owner: &AttachmentOwner,
+  325     ) -> Result<Value> {
+  326         let Some(op) = self.owned_operation(operation, note, owner)? else {
+  327             return Ok(json!({"operationId":operation,"noteId":note,"status":"notPersisted"}));
+  328         };
+  329         if matches!(op.state.as_str(), "aborted" | "retired") {
+  330             return response(&op, "aborted", op.reason.as_deref());
+  331         }
+  332         self.cancel_owned_attachment_operation(&op)
+  333     }
+  334     fn cancel_owned_attachment_operation(&mut self, op: &Operation) -> Result<Value> {
+  335         match self.operation_reference(op)? {
+  336             Reference::Present => {
+  337                 self.check_operation_file(op)?;
+  338                 self.set_operation_state(op, "committed", None)?;
+  339                 return response(op, "committed", None);
+  340             }
+  341             Reference::Uncertain(reason) => return response(op, "deferred", Some(reason)),
+  342             Reference::Absent => {}
+  343         }
+  344         if op.state == "committed" {
+  345             return response(op, "committed", None);
+  346         }
+  347         // Withdraw metadata first: a later newly registered save cannot refer
+  348         // to an attachment whose cancellation has already begun.
+  349         let tx = self.db.transaction()?;
+  350         tx.execute(
+  351             "DELETE FROM attachments WHERE id=?1 AND note_id=?2",
+  352             params![op.attachment.id, op.note],
+  353         )?;
+  354         tx.execute("UPDATE attachment_operations SET state='aborting',reason='cleanup_pending' WHERE operation_id=?1",[&op.id])?;
+  355         tx.commit()?;
+  356         checkpoint("after_cancel_metadata");
+  357         match fs::remove_file(self.attachment_path(&op.attachment.relative_path)?) {
+  358             Ok(()) => {}
+  359             Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+  360             Err(error) => return Err(error.into()),
+  361         }
+  362         sync_directory(&self.root.join("attachments"))?;
+  363         checkpoint("after_cancel_file");
+  364         self.set_operation_state(op, "aborted", None)?;
+  365         response(op, "aborted", None)
+  366     }
+  367     pub(super) fn operation_files_for_purge(&self, note: &str) -> Result<Vec<Attachment>> {
+  368         let ids = {
+  369             let mut query = self.db.prepare("SELECT operation_id FROM attachment_operations WHERE note_id=?1 AND state NOT IN ('aborted','retired')")?;
+  370             let ids = query
+  371                 .query_map([note], |row| row.get::<_, String>(0))?
+  372                 .collect::<std::result::Result<Vec<_>, _>>()?;
+  373             ids
+  374         };
+  375         let live = self.attachments()?;
+  376         let mut files = Vec::new();
+  377         for id in ids {
+  378             let op = self
+  379                 .attachment_operation(&id)?
+  380                 .ok_or_else(|| err("attachment_operation_missing", "附件操作记录消失"))?;
+  381             let attachment = op.attachment;
+  382             if attachment.note_id != note
+  383                 || attachment.relative_path != format!("op-{}-{}.blob", op.id, attachment.id)
+  384                 || live.iter().any(|other| {
+  385                     (other.id == attachment.id || other.relative_path == attachment.relative_path)
+  386                         && other != &attachment
+  387                 })
+  388             {
+  389                 return Err(conflict());
+  390             }
+  391             self.attachment_path(&attachment.relative_path)?;
+  392             files.push(attachment);
+  393         }
+  394         Ok(files)
+  395     }
+  396     pub(super) fn recover_attachment_operations(&mut self) -> Result<()> {
+  397         let ids = {
+  398             let mut query=self.db.prepare("SELECT operation_id FROM attachment_operations WHERE state IN ('preparing','stored','aborting')")?;
+  399             let ids = query
+  400                 .query_map([], |row| row.get::<_, String>(0))?
+  401                 .collect::<std::result::Result<Vec<_>, _>>()?;
+  402             ids
+  403         };
+  404         for operation in ids {
+  405             let op = self
+  406                 .attachment_operation(&operation)?
+  407                 .ok_or_else(|| err("attachment_operation_missing", "恢复时附件操作消失"))?;
+  408             // Only this private journal's nonterminal creations are eligible.
+  409             // Old attachments/orphans and terminal histories are never swept.
+  410             self.cancel_owned_attachment_operation(&op)?;
+  411         }
+  412         Ok(())
+  413     }
+  414 }
+  415 #[cfg(not(test))]
+  416 fn checkpoint(_: &str) {}
+  417 #[cfg(test)]
+  418 fn checkpoint(stage: &str) {
+  419     if std::env::var("NOTES_TEST_ATTACHMENT_CRASH").as_deref() == Ok(stage) {
+  420         std::process::exit(78);
+  421     }
+  422 }
+  423 #[cfg(test)]
+  424 #[path = "attachment_operations/tests.rs"]
+  425 mod tests;

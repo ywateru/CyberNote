@@ -22,6 +22,8 @@
 - [系统文件选择与附件正文提交修复](plan/tasks/app-002-attachment-submit-01.md)
 - [附件持久操作、去重与安全恢复](plan/tasks/app-002-attachment-store-01.md)
 - [本地音频无限时长与播放错误修复](plan/tasks/app-002-audio-duration-01.md)
+- [手机录音播放控件触摸可达修复](plan/tasks/app-002-audio-controls-01.md)
+- [原录屏录音初始、暂停与完成逐帧补证](research/mobile-recording-sequence-01/README.md)
 - [Mac搜索结果与零结果恢复](plan/tasks/app-001-search-results-01.md)
 - [验证与像素比较规则](verification/README.md)
 
