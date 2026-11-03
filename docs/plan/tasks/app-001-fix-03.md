@@ -2,6 +2,7 @@
 id: app-001-fix-03
 scope: locked-note-session-invalidation-across-windows
 status: in-progress
+integration-gate: limited-pass-20c3014
 depends-on: [app-001-fix-01]
 ---
 
@@ -10,6 +11,8 @@ depends-on: [app-001-fix-01]
 修复 F12/F13 已锁定内容在其他打开窗口中的会话失效边界。来源为独立静态审查 `docs/plan/reviews/lock-boundary-static-01.md`；静态发现不等于设备已复现，修复验收须用真实窗口。安排在FIX-01之后、Mac顶部像素任务之前，串行修改共享App/Store。
 
 2026-11-03：FIX-01本轮P1/P2阻塞已由最终0d8b245独立纸张入口复验关闭，完整矩阵仍有partial/not-run；现授权优先实现本项安全边界，避免让后续外观/媒体能力继续依赖已知跨窗授权缺口。生产实现由develop_app进行，独立运行验收仍待其交付。
+
+2026-11-03最终20c3014独立有限安全门槛已通过，允许FIX02正式接入。Android e5fcdc4在原WebView91默认APK完成14项有限真实流程，关闭UUID保存P1；Mac 835751d在默认包完成Q1/Q7，并在独立核身份的同源专用包完成Q8实际选区/Undo/Redo、早登记A/B旧基线冲突与普通retry、真实副本冷保全、Q2成功排空、Q3abort、Q4同请求晚读拒绝和漏commit后的可信恢复，15项有限断言无新P1。默认完整.app已还原并冷启核904517fc…/无proof。此处不标整项verified：S3非ACK集合commit后旧保存、四份密文GUI导入、Editor对象identity、Q6完整派生缓存/归档/附件矩阵、像素和IME仍按独立报告保留unknown/not-run；已通过独立真实后端检查不冒充这些GUI场景。报告见`app-001-fix-03-android-03.md`和`app-001-fix-03-mac-01.md`。
 
 1. 密码设置/关闭全部已锁定备忘录/删除与锁会话失效后，所有打开窗口均采用同一Rust授权状态。后端发出不含正文/密码/密钥的失效通知；前端不能仅凭本地unlocked集合继续视作已授权。明确窗口启动、焦点恢复与事件丢失时的状态同步。
 2. 失效须清除相应编辑器、文档历史、工作区正文/预览、搜索派生内容、分享/拷贝来源以及未完成的异步读取结果；卸载后不能被晚到的刷新/保存响应重新灌入明文。异步结果与后台授权版本绑定，过期结果拒绝应用。无需删除原文档或用空文档覆盖已保存密文。

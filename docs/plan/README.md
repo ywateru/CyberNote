@@ -9,9 +9,9 @@
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |
 | APP-001-FIX-00 归档完整性 | verified，独立pass | 原失败、schema跨检、设置/附件保全与六次进程中断恢复通过；见fix-00-02报告 |
 | APP-001-FIX-01 编辑与导航修复 | 本轮P1/P2关闭，完整矩阵partial | 最终0d8b245纸张入口、恢复输入与一次冷启独立通过；未覆盖行为与像素继续保留，不标整项verified |
-| APP-001-FIX-02 Mac顶部校准 | pending，依赖FIX-01/FIX-03 | 运行时系统符号、公开原生控件/材质、分组与平台菜单 |
-| APP-001 原生顶部模块 | b735961静态入口补审通过，待接入 | 28d1594关闭focusSearch静态缺口；原候选编译/有限双窗事件及Android条件编译通过；正式主App/焦点/IME/像素仍归FIX-02 |
-| APP-001-FIX-03 锁定跨窗失效 | in-progress，最终20c3014 Android有限pass，Mac多窗复验中 | e5fcdc4在原WebView91默认安装包完成14项真实输入/锁定/错密/编辑/冷启断言，关闭UUID保存P1；633688e确认pending静态链，7031e4a冻结产物身份；Mac多窗安全门槛继续，不将开发运行记录当独立通过 |
+| APP-001-FIX-02 Mac顶部校准 | in-progress，安全有限门槛已通过 | develop开始正式主App接入；单一原生顶部/52pt宿主留白、真实窗口菜单与搜索、选区及布局同步；主窗运行/像素仍待交付 |
+| APP-001 原生顶部模块 | 9f4d61b隔离产品补齐已交独立静态审查 | 新增横排原生格式浮层及galleryBrowse，649c24e提供可追溯几何起点；保留此前focusSearch补审，当前新候选实际GUI/IME/像素仍unknown，不能称模块整体已通过 |
+| APP-001-FIX-03 锁定跨窗失效 | 本轮双端有限安全门槛pass，完整矩阵partial | e5fcdc4 Android14断言关闭UUID P1；835751d真实Mac生产Q1/Q7与同源proof15断言，含旧基线冲突/副本冷启/Q2排空/Q3abort/Q4拒绝及恢复，无新P1；S3/四fixtureGUI/对象identity/全矩阵仍unknown，允许FIX02接入 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
