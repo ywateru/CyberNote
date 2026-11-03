@@ -1,6 +1,6 @@
-# 最终候选有限真窗补验（尚未执行）
+# 有限真窗补验协议与身份边界
 
-候选 `d9a5be5`，生产行为 `b5dcfa8`。Mac 锁屏阻止本轮执行，因此本文件仅是可执行步骤，结果均 not-run。默认交付包已恢复；额外专用包位于 `/private/tmp/notes-fix03-proof-d9a5be5.app`，身份见 `proof-mac/identity-final.json`。禁止把当前仍运行的旧 `fe10c3a` 专用进程当作新候选。
+候选 `d9a5be5`，生产行为 `b5dcfa8`。先前 Mac 锁屏恢复后，d9 的 P1 与 Q4 有限序列已实际执行，证据见 proof-mac/final-d9a5be5/；副本进程退出后的SQLite只读重开通过，逐份应用冷启GUI留独立复验。最终20包仅增加安全UUID兼容，同源专用包另列身份，不把d9运行冒充20运行。默认交付包已恢复；额外专用包位于 `/private/tmp/notes-fix03-proof-d9a5be5.app`，身份见 `proof-mac/identity-final.json`。禁止把当前仍运行的旧 `fe10c3a` 专用进程当作新候选。
 
 解锁后先通过原生应用退出旧进程，归档 `/private/tmp/notes-fix03-proof.jsonl`（此轮仅是旧包启动日志）。使用新专用包重新启动；记录启动 AX 与固定面板存在，确认实际可执行文件 SHA256 后开始。每步均以真实 AX、日志 ACK、请求与 operation ID 判断，不使用固定延时假定队列状态。
 

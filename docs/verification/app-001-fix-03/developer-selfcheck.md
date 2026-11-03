@@ -1,6 +1,6 @@
 # FIX03 开发自查与构建交接
 
-最终源码候选：`d9a5be5`（生产行为修复 `b5dcfa8`，最后提交仅增加可选 proof 暂停点）。旧候选 `fe10c3a` 经独立静态审查确认 P1 保存基线竞态，不能作为本项通过候选。本文件是开发证据，不能替代独立验收，也不表示 F12/F13 或整体像素一致性完成。只操作克隆中的合成文件夹 `FIX03 Session Proof`，未读取用户原版 Notes 的私人正文，未向第三方发送分享，也未检查或清空系统剪贴板。
+最终源码候选：`20c3014`（授权/保存基线行为修复 `b5dcfa8`，`d9a5be5` 固定 proof 早期暂停点，`20c3014` 统一安全随机 UUID 兼容）。旧候选 `fe10c3a` 经独立静态审查确认 P1 保存基线竞态，不能作为本项通过候选。本文件是开发证据，不能替代独立验收，也不表示 F12/F13 或整体像素一致性完成。只操作克隆中的合成文件夹 `FIX03 Session Proof`，未读取用户原版 Notes 的私人正文，未向第三方发送分享，也未检查或清空系统剪贴板。
 
 ## 实现范围
 
@@ -14,13 +14,14 @@ Rust `Session` 统一拥有进程 UUID、全局 epoch、逐笔记 epoch、真实
 
 ## 构建身份
 
-`proof-mac/source-final.json` 是最终候选共享前端、Rust 与所列 macOS 配置的有序 SHA256 清单，aggregate 为 `927a7f15e05e09b6fbac11669be1c86b303a064b1bd679397cc391da3b1a954b`。
+`source-20c3014.json` 是最终候选共享前端、Rust 与所列 macOS 配置的有序 SHA256 清单，aggregate 为 `36da576c291a16a91742b4297b49f85efce1f268f8543cfcf8e72d92960ee117`。`proof-mac/source-final.json` 保留实际有限真窗运行的 d9 身份，不覆盖其历史。
 
-- `production-mac/identity.json`：实际 Q1 运行的正式包（新增只读 verdict 日志之前），无 proof 开关。
+- `production-mac/identity.json`：实际 Q1 运行的历史正式包（新增只读 verdict 日志之前），无 proof 开关。`identity-d9a5be5.json` 保留上一个默认包身份；`identity-final.json` 是最终20默认正式包。
 - `proof-mac/identity.json`、`source-before-verdict.json`：实际 Q2/Q3/Q4 运行的额外测试包及源清单。
 - `proof-mac/identity-verdict-unrun-fe10c3a.json`、`source-fe10c3a.json`：只读 verdict 日志新增包，仅启动后锁屏，未运行最终 Q4。`identity-b5dcfa8-unrun.json`、`source-b5dcfa8.json` 同样为未运行中间候选，不能混入旧运行结果。
-- `proof-mac/identity-final.json`、`source-final.json`：`d9a5be5` 最终额外测试包。包含真实 gate verdict、漏 commit cover，以及真实保存登记完成后交付前的固定暂停点。完整包保存在 `/private/tmp/notes-fix03-proof-d9a5be5.app`，最后有限 P1/Q4 运行尚被系统锁屏阻止。
-- `android-identity.json`：`d9a5be5` 默认开关 Android arm64 debug APK。首次构建因本地临时 WebSocket 权限被系统拒绝，授权重跑成功；该身份另列全部已跟踪 Android 原生平台文件的 SHA256。未安装或操作设备，不把构建成功写作 Android 功能验收。
+- `proof-mac/identity-final.json`、`source-final.json`：`d9a5be5` 最终额外测试包。包含真实 gate verdict、漏 commit cover，以及真实保存登记完成后交付前的固定暂停点。完整包保存在 `/private/tmp/notes-fix03-proof-d9a5be5.app`，已在用户解锁后完成有限 P1/Q4 真窗运行，见 `proof-mac/final-d9a5be5/`；不再以之前锁屏的 not-run 状态覆盖真实结果。
+- `proof-mac/identity-20c3014.json`：最终同源额外测试包（独立复验用，未冒充d9运行），完整包 `/private/tmp/notes-fix03-proof-20c3014.app`。
+- `android-identity-d9a5be5.json`：独立 Android 运行发现 WebView91 缺 randomUUID 的旧默认包；`android-identity.json` 是 `20c3014` 默认开关 Android arm64 debug APK。首次构建因本地临时 WebSocket 权限被系统拒绝，授权重跑成功；该身份另列全部已跟踪 Android 原生平台文件的 SHA256。未安装或操作设备，不把构建成功写作 Android 功能验收。
 
 测试包仅通过 Cargo `access-boundary-proof` 与 `VITE_ACCESS_BOUNDARY_PROOF=1` 双重显式选择。固定面板只能暂停真实 save 执行、保存登记原样响应交付、真实 workspace/text 结果交付、丢弃下一次 commit 通知和读取 DOM 状态。它不写 React/Editor、不改请求或结果、不提供任意执行入口。事件由真实 prepare/commit 驱动释放；日志经 Rust 注入实际调用窗口，只允许固定元数据字段，写入固定本地测试日志。默认构建不注册 Rust 日志命令，Vite 消除模块。`production-no-proof.json` 记录默认 JS、macOS 可执行文件与 Android 原生库中四个 proof 标记均不存在。
 
@@ -37,9 +38,10 @@ Rust `Session` 统一拥有进程 UUID、全局 epoch、逐笔记 epoch、真实
 | 真实 Editor schema | 65 个文档用例匹配共享 schema |
 | 真实 Editor state/history | 表格转正文、选择、单次 Undo/Redo、表格外边界通过 |
 | TypeScript | 通过 |
+| 安全UUID兼容 | 原生路径、版本/variant边界、真实CSPRNG fallback、无安全源拒绝通过；独立015d148复核通过 |
 | cargo fmt / clippy all-targets + proof feature | 通过，warnings denied |
-| macOS 默认与专用构建 | 最终专用包及默认包均成功；默认恢复身份见 production-mac/identity-final.json，最终候选 GUI 未测 |
-| Android 默认 arm64 debug 构建 | 成功，设备运行未测 |
+| macOS 默认与专用构建 | 20同源专用/默认包身份单列；d9有限真窗证据通过，20最终独立GUI未测 |
+| Android 默认 arm64 debug 构建 | 20包成功待独立设备复验；旧d9实际输入/保存失败，独立报告aa6280a |
 
 ## 实际 macOS 双窗开发证据
 
@@ -53,12 +55,16 @@ Q3：W2 保存请求 `dbcf935e-2633-4675-9254-e1bf04e185e4` 暂停时，W1 实�
 
 Q4 原包：真实 workspace 读取 `fc7616cc-adb2-48ab-b3c9-711b90b375ab` 结果已执行后 seq184 暂停交付；operation `16ecffd8-592e-425d-a01b-d2d6fc050dd5` seq191/193 prepare、seq203/204 commit，seq206 才释放旧结果。最终 `q4-late-read-rejected.*` 与 seq221 DOM 为 editorCount0、hasPrivate false。该原包未记录 AccessGate verdict，因此此处结论是实际晚到交付顺序和最终界面未复活，不声称已有逐请求 gate-rejected 日志。
 
-Q4 漏 commit 原包：seq257 确实丢弃了 W2 下一次 commit，但尚未留下未聚焦 cover 元数据及最终 focus 恢复的完整证据。最终 `d9a5be5` 的有限 P1（登记响应暂停→外窗已确认保存→focus hydrate→A/B仍旧基线冲突→源保持→安全副本）及 Q4（真实 gate-rejected 关联及漏 commit cover/focus）当前 **not-run：Mac 锁屏且自动解锁失败**。不以静态设计或前面的 Q4 DOM 代替这项运行。
+Q4 漏 commit 原包：seq257 确实丢弃了 W2 下一次 commit，但尚未留下未聚焦 cover 元数据及最终 focus 恢复的完整证据。随后用户解锁后，`d9a5be5` 的有限 P1 与 Q4 已实际运行，原始日志、AX、截图和断言见 `proof-mac/final-d9a5be5/`。P1 seq46 登记结果暂停→主窗 seq62 保存 X revision2→W2可信 focus→A/B seq89/92 和普通重试 seq121 都以旧 revision1 返回 conflict，source X 保持；seq134 原子副本成功 revision1，含A/B。退出进程后 SQLite 只读重开确认源 id `8ae60447-20ef-416e-9323-b54c3c9f04ef` 保持 X/revision2、副本 id `6b87cc68-1a44-496b-b5dd-9c52faa00880` 保持 A/B/revision1。应用冷启动后逐份 GUI 复核仍留独立验收。
+
+最终 d9 Q4：同一真实 request `fb3df310-17bd-44e8-bdf3-98bc49c65390` seq193 暂停→commit→seq215释放→seq219真实 gate-rejected(access_changed)；seq236 DOM editor0/privatefalse。漏 commit operation `dc4fd16b-ba7e-4a71-b1ef-2f9166bf090d` seq277 在未聚焦 W2 记录 covered true；聚焦后可信快照完成，seq290 editor0/privatefalse。它们是开发真窗证据，不能替代最终20包独立验收。
 
 ## 独立复验与保留限制
 
-独立方从最终 `d9a5be5` 重新构建，按 `docs/verification/qa-fix-03/test-plan.md` 执行。合成冻结密码和四份归档见 fixtures 的既有说明；不要重新生成非法文档。额外 timing 包构建：`VITE_ACCESS_BOUNDARY_PROOF=1 pnpm tauri build --features access-boundary-proof --bundles app`；默认交付包恢复：`pnpm mac:build`。每轮应先退出测试进程再归档固定日志，避免不同进程 seq 从1重启后混在同文件。
+独立方从最终 `20c3014` 重新构建，按 `docs/verification/qa-fix-03/test-plan.md` 执行。合成冻结密码和四份归档见 fixtures 的既有说明；不要重新生成非法文档。额外 timing 包构建：`VITE_ACCESS_BOUNDARY_PROOF=1 pnpm tauri build --features access-boundary-proof --bundles app`；默认交付包恢复：`pnpm mac:build`。每轮应先退出测试进程再归档固定日志，避免不同进程 seq 从1重启后混在同文件。
 
 新增真实 SQLite 副本写失败测试确认源不改/不创建新笔记；合法副本冷重开保持两份文档，非法 schema/锁定/附件源拒绝且状态保持。新增 Session 测试确认错误全局/源 epoch、prepare 和删除后请求不能创建副本。
 
-未覆盖的运行矩阵仍 unknown，尤其最终候选真窗基线竞态与副本恢复、Android 本轮运行、最终漏通知恢复、全部删除/附件/导入中途窗口变化和完整像素交互一致性。当前含附件笔记仍不支持锁定，标题按既有契约可见；不引入 iCloud，不更改这些产品约束。本文不是完整安全审计。
+独立 Android 默认 d9 包发现 WebView91 在安全上下文仍缺 randomUUID，所有保存登记失败并保留 pending。`20c3014` 集中使用 secureId：原生 API 或 getRandomValues 的 RFC4122 v4，缺强随机源明确拒绝。原生/版本位/variant位/真实随机 fallback/缺源拒绝与类型和16个access检查通过；此变化没有改 Rust 授权/revision。新版双端和同源专用包身份单列，最终 Android 原生输入/保存/冷启动待独立设备复验。最终20默认macOS正式包已干净启动，无proof面板；`startup-20c3014.*` 显示源X与独立副本A/B两个列表摘要。恢复时第一次getApp命中旧保留PID70272的过期界面，因此使用真实系统Quit菜单退出、确认无克隆进程后再启动最终包，记录唯一PID73159及正式可执行路径，不把首次旧窗口算作最终冷启动证据。
+
+未覆盖的运行矩阵仍 unknown，尤其最终20包独立真窗/Android复验、全部删除/附件/导入中途窗口变化和完整像素交互一致性。当前含附件笔记仍不支持锁定，标题按既有契约可见；不引入 iCloud，不更改这些产品约束。本文不是完整安全审计。

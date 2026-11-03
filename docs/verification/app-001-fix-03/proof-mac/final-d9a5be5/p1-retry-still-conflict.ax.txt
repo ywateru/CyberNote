@@ -1,0 +1,47 @@
+Window: "FIX03 Baseline Final", App: 备忘录.
+0 standard window FIX03 Baseline Final, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost/index.html?note=8ae60447-20ef-416e-9323-b54c3c9f04ef
+			3 container
+				4 text 其他窗口已保存新的内容。本窗口更改仍保留，重试不会覆盖已保存版本。普通无附件的备忘录可另存为新备忘录。
+				5 button 重试
+				6 button 将本窗口内容另存为新备忘录
+				7 button 关闭错误
+			8 container
+				9 button 新建备忘录
+				10 button 格式
+				11 button 核对清单
+				12 button 表格
+				13 button 添加附件
+				14 button 共享
+				15 button 更多
+				16 text field (settable) 搜索备忘录, Placeholder: 搜索
+				17 button 2026年11月3日 17:14
+				18 text entry area (settable) 备忘录正文, Value: FIX03 Baseline Final
+PUBLIC-BASELINE-BASE
+PRIVATE-BASELINE-LOCAL-A
+PRIVATE-BASELINE-LOCAL-B
+					19 text (settable) FIX03 Baseline Final
+					20 text (settable) PUBLIC-BASELINE-BASE
+					21 text (settable) PRIVATE-BASELINE-LOCAL-A
+					22 text (settable) PRIVATE-BASELINE-LOCAL-B
+			23 container
+				24 text command-error · save 0 / read 0
+				25 button 暂停下次保存至prepare
+				26 button 暂停下次保存登记响应至prepare
+				27 button 暂停下次读取响应至commit
+				28 button 释放保存
+				29 button 释放读取
+				30 button 丢弃下次commit通知
+				31 button 记录DOM
+	32 close button
+	33 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	34 minimize button
+35 menu bar
+	36 备忘录
+	37 文件
+	38 编辑
+	39 显示
+	40 窗口
+
+The focused UI element is 2 HTML content Description: 备忘录, URL: tauri://localhost/index.html?note=8ae60447-20ef-416e-9323-b54c3c9f04ef

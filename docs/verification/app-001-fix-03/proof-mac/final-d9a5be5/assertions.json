@@ -1,0 +1,63 @@
+{
+  "sourceCommit": "d9a5be5",
+  "status": "developer evidence only; independent acceptance pending",
+  "checks": [
+    {
+      "name": "registration response held before peer confirmed save and focus snapshot; A/B plus ordinary retry use revision1",
+      "status": "pass",
+      "seqs": [
+        46,
+        62,
+        69,
+        89,
+        92,
+        121
+      ]
+    },
+    {
+      "name": "real conflict copy response succeeds with new revision1",
+      "status": "pass",
+      "seqs": [
+        134
+      ]
+    },
+    {
+      "name": "same real read result delivered after commit is rejected by production gate",
+      "status": "pass",
+      "seqs": [
+        193,
+        215,
+        218,
+        219
+      ]
+    },
+    {
+      "name": "dropped commit remains covered before focus and trusted sync removes editor",
+      "status": "pass",
+      "seqs": [
+        277,
+        290
+      ]
+    },
+    {
+      "name": "q4-late-read-rejected.ax.txt shows locked state with no editor or synthetic secret",
+      "status": "pass",
+      "seqs": []
+    },
+    {
+      "name": "q4-missed-commit-focus.ax.txt shows locked state with no editor or synthetic secret",
+      "status": "pass",
+      "seqs": []
+    },
+    {
+      "name": "pending editor survives focus and retry conflict",
+      "status": "pass",
+      "seqs": []
+    },
+    {
+      "name": "peer confirmed X remains in main editor",
+      "status": "pass",
+      "seqs": []
+    }
+  ]
+}
