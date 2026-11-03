@@ -12,6 +12,7 @@
 | APP-001-FIX-02 Mac顶部校准 | in-progress，安全有限门槛已通过 | develop开始正式主App接入；单一原生顶部/52pt宿主留白、真实窗口菜单与搜索、选区及布局同步；主窗运行/像素仍待交付 |
 | APP-001 原生顶部模块 | 9f4d61b有限独立静态pass，主App接入中 | 4a16a6a确认13输入/三个定向用例及新原生编译单元，无已确认接入前P1/P2；横排格式浮层/galleryBrowse采用649c24e几何起点；生命周期实际重入、GUI/IME/像素仍unknown，不能称模块整体已通过 |
 | APP-001-FIX-03 锁定跨窗失效 | 本轮双端有限安全门槛pass，完整矩阵partial | e5fcdc4 Android14断言关闭UUID P1；835751d真实Mac生产Q1/Q7与同源proof15断言，含旧基线冲突/副本冷启/Q2排空/Q3abort/Q4拒绝及恢复，无新P1；S3/四fixtureGUI/对象identity/全矩阵仍unknown，允许FIX02接入 |
+| APP-001-FIX-04 Android长停留中文组字 | pending，实际输入P1已发现 | 20默认APK的Trime快速真候选可替换，长停留后残留拼音再附汉字；独立事件继续冻结，当前Mac候选先收束后串行修复，不升级手机完整输入通过 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
