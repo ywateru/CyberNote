@@ -1,0 +1,161 @@
+{
+  "status": "PARTIAL_RUNTIME_SUCCESS_WITH_DURATION_DEFECT",
+  "apkSha256": "dba83641b95b028f36cb92c80b901c68b5cccf3b1d0b56d653c3e527fae370e4",
+  "sourceAggregate": "c3fc543fcfe8686b0f9906305c1dae8c9fcf441ba0f4d4bc9716c4889de12259",
+  "freezeHead": "fc2706c98faa826a3b8bf88596ef3e3c2d2b3881",
+  "features": "default, no proof feature/flag",
+  "device": "emulator-5580",
+  "androidApi": 30,
+  "webviewVersion": "91.0.4472.114",
+  "hostMicrophone": "OFF; command OK before install; never enabled",
+  "firstSystemDeny": {
+    "observationWrappers": false,
+    "realSystemPrompt": true,
+    "choice": "Deny",
+    "visibleError": "Permission denied",
+    "pidBeforeAndAfter": 6564,
+    "survivedAfterDenyWaitSeconds": 12,
+    "fullRustWorkspaceFixtureStateUnchanged": true,
+    "attachmentCountTotal": 0,
+    "managedDirectoryEmpty": true
+  },
+  "systemAllow": {
+    "observationWrappers": true,
+    "realSystemPrompt": true,
+    "choice": "While using the app",
+    "stream": "actual getUserMedia audio:true; no synthetic stream",
+    "recorderMime": "audio/webm;codecs=opus",
+    "pauseResume": "one real native pause and resume; pause UI time stayed01:04.80 in two snapshots",
+    "explicitStop": true,
+    "observedAfterStop": {
+      "recorder": "inactive",
+      "tracks": "ended",
+      "audioContext": "closed; close promise resolved",
+      "finalDataBeforeStopEvent": true,
+      "previewURLRevokeOnComplete": true
+    },
+    "save": "one real Complete; authority doc revision29->30; attachment node and metadata1",
+    "playback": "native Play/Pause; currentTime0.797095->0.954975->1.167242; mediaError null; not full/end-to-end or audible playback acceptance"
+  },
+  "unwrappedAuthorizedCancel": {
+    "count": 1,
+    "observationWrappers": false,
+    "actualSessionReadMethod": "bounded React Fiber read and CDP remote handles; no app/ref writes; original recorder/context/tracks retained read-only; handles released",
+    "before": {
+      "at": 614913,
+      "observerPresent": false,
+      "panelPresent": true,
+      "session": {
+        "live": true,
+        "started": true,
+        "failed": false,
+        "finished": false,
+        "stopping": false,
+        "timer": 151,
+        "recorderIsNull": false,
+        "contextIsNull": false,
+        "trackCount": 1
+      },
+      "heldRecorder": {
+        "state": "recording",
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      "heldContext": {
+        "state": "running"
+      },
+      "heldTracks": [
+        {
+          "kind": "audio",
+          "readyState": "live",
+          "enabled": true,
+          "muted": false
+        }
+      ]
+    },
+    "after": {
+      "at": 616201.9000000004,
+      "observerPresent": false,
+      "panelPresent": false,
+      "session": {
+        "live": false,
+        "started": true,
+        "failed": false,
+        "finished": false,
+        "stopping": false,
+        "timer": null,
+        "recorderIsNull": true,
+        "contextIsNull": true,
+        "trackCount": 0
+      },
+      "heldRecorder": {
+        "state": "inactive",
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      "heldContext": {
+        "state": "closed"
+      },
+      "heldTracks": [
+        {
+          "kind": "audio",
+          "readyState": "ended",
+          "enabled": true,
+          "muted": false
+        }
+      ]
+    },
+    "completeSavedRustStateUnchanged": true
+  },
+  "coldStart": {
+    "method": "am force-stop only com.local.notesclone then am start; emulator unchanged",
+    "pid": 7137,
+    "fullSavedRustStateEqual": true,
+    "managedBytes": 429547,
+    "mediaSha256": "cd7ee9692361fb3502775e8b7efc87ba0957ee22835f10e6d7335b09980fdf4f",
+    "mediaShaUnchanged": true,
+    "noteId": "a9d1bbe7-a0ee-4f46-ba3e-e0889085cac3",
+    "attachmentId": "cb3fa001-9d73-4580-b959-38481fbba90b"
+  },
+  "durationDefect": {
+    "actualPackets": 1101,
+    "lastPtsSeconds": 66.004,
+    "lastPacketDurationSeconds": 0.06,
+    "derivedPacketEndSeconds": 66.064,
+    "browserDuration": "Infinity",
+    "uiDisplay": "录音 · 0:00",
+    "coldStartReadyState": 4,
+    "coldStartNetworkState": 1,
+    "coldStartBuffered": [],
+    "coldStartSeekable": [
+      [
+        0,
+        "Infinity"
+      ]
+    ],
+    "dataUrlMime": "audio/webm;codecs=opus",
+    "mediaError": null,
+    "limitation": "MediaError property snapshots only; complete historic media-event/error stream was not captured. An earlier range Infinity serialized to null in saved-metadata-before-cold-start.json; corrected reader explicitly preserves Infinity strings in cold-start-ready/note-metadata."
+  },
+  "notAccepted": [
+    "audible/recognizable microphone audio (host OFF)",
+    "full playback/end/seek duration handling",
+    "physical OS microphone release/indicator",
+    "paused direct Complete path",
+    "parent save-failure retry/compensation",
+    "controlled untrusted frame/source runtime denial",
+    "Mac capture",
+    "pixel equivalence",
+    "paper seven states/masks"
+  ],
+  "cleanup": {
+    "noObserverAfterCleanupAndColdStart": true,
+    "cdpRemoteHandlesReleased": true,
+    "forward9227Removed": true,
+    "ownedDevicePermissionXmlRemoved": true,
+    "currentAppPid": 7137,
+    "emulatorPid": 3197,
+    "parentEmulatorSession": 73263,
+    "emulatorRestartWipeUninstall": false,
+    "globalPermissionReset": false,
+    "runtimePermissionChange": "only actual user-facing OS Deny once, Allow once"
+  }
+}

@@ -1,0 +1,293 @@
+{
+  "url": "http://tauri.localhost/",
+  "viewport": [
+    393,
+    751,
+    2.75
+  ],
+  "text": "备忘录\n2026年11月3日23:18\nMEDIA02-PERMISSION-20261103B\n\n\n\n\n取消\n新录音\n今天 下午11:23\n完成\n00:02.90\n\n正在录音",
+  "document": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 1
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "MEDIA02-PERMISSION-20261103B"
+          }
+        ]
+      },
+      {
+        "type": "paragraph"
+      }
+    ]
+  },
+  "buttons": [
+    {
+      "text": "备忘录",
+      "label": null,
+      "disabled": false,
+      "cls": "back-button",
+      "rect": {
+        "x": 8,
+        "y": 9.5,
+        "w": 68,
+        "h": 25
+      }
+    },
+    {
+      "text": "",
+      "label": "共享",
+      "disabled": false,
+      "cls": "icon-button  ",
+      "rect": {
+        "x": 321.0909118652344,
+        "y": 6,
+        "w": 24,
+        "h": 32
+      }
+    },
+    {
+      "text": "",
+      "label": "更多",
+      "disabled": false,
+      "cls": "icon-button  ",
+      "rect": {
+        "x": 357.0909118652344,
+        "y": 6,
+        "w": 24,
+        "h": 32
+      }
+    },
+    {
+      "text": "2026年11月3日23:18",
+      "label": null,
+      "disabled": false,
+      "cls": "note-date",
+      "rect": {
+        "x": 139.99432373046875,
+        "y": 64,
+        "w": 113.09659576416016,
+        "h": 16
+      }
+    },
+    {
+      "text": "",
+      "label": "核对清单",
+      "disabled": false,
+      "cls": "icon-button  ",
+      "rect": {
+        "x": 15,
+        "y": 707.2727661132812,
+        "w": 32,
+        "h": 38
+      }
+    },
+    {
+      "text": "",
+      "label": "添加附件",
+      "disabled": false,
+      "cls": "icon-button  ",
+      "rect": {
+        "x": 125.36363983154297,
+        "y": 707.2727661132812,
+        "w": 32,
+        "h": 38
+      }
+    },
+    {
+      "text": "",
+      "label": "绘画",
+      "disabled": false,
+      "cls": "icon-button  ",
+      "rect": {
+        "x": 235.72727966308594,
+        "y": 707.2727661132812,
+        "w": 32,
+        "h": 38
+      }
+    },
+    {
+      "text": "",
+      "label": "新建备忘录",
+      "disabled": false,
+      "cls": "icon-button  ",
+      "rect": {
+        "x": 346.0909118652344,
+        "y": 707.2727661132812,
+        "w": 32,
+        "h": 38
+      }
+    },
+    {
+      "text": "取消",
+      "label": null,
+      "disabled": false,
+      "cls": "",
+      "rect": {
+        "x": 20,
+        "y": 59.31818389892578,
+        "w": 35,
+        "h": 20.363636016845703
+      }
+    },
+    {
+      "text": "完成",
+      "label": null,
+      "disabled": true,
+      "cls": "",
+      "rect": {
+        "x": 338.0909118652344,
+        "y": 59.31818389892578,
+        "w": 35,
+        "h": 20.363636016845703
+      }
+    },
+    {
+      "text": "",
+      "label": "暂停录音",
+      "disabled": false,
+      "cls": "",
+      "rect": {
+        "x": 91.54545593261719,
+        "y": 668.2727661132812,
+        "w": 90,
+        "h": 48
+      }
+    },
+    {
+      "text": "",
+      "label": "结束录音",
+      "disabled": false,
+      "cls": "",
+      "rect": {
+        "x": 211.5454559326172,
+        "y": 668.2727661132812,
+        "w": 90,
+        "h": 48
+      }
+    }
+  ],
+  "recording": "取消\n新录音\n今天 下午11:23\n完成\n00:02.90\n\n正在录音",
+  "audio": [],
+  "observer": {
+    "logs": [
+      {
+        "at": 237799.5,
+        "type": "getUserMedia-call",
+        "constraints": {
+          "audio": true
+        }
+      },
+      {
+        "at": 351221.0999999996,
+        "type": "getUserMedia-resolve",
+        "tracks": [
+          {
+            "kind": "audio",
+            "readyState": "live"
+          }
+        ]
+      },
+      {
+        "at": 351229.5999999996,
+        "type": "MediaRecorder-construct",
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      {
+        "at": 351241.5,
+        "type": "AudioContext-construct"
+      },
+      {
+        "at": 351292,
+        "type": "recorder-start"
+      },
+      {
+        "at": 351535.0999999996,
+        "type": "recorder-dataavailable",
+        "size": 1587,
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      {
+        "at": 351839.7000000002,
+        "type": "recorder-dataavailable",
+        "size": 1924,
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      {
+        "at": 352147.2000000002,
+        "type": "recorder-dataavailable",
+        "size": 1889,
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      {
+        "at": 352433.7000000002,
+        "type": "recorder-dataavailable",
+        "size": 1948,
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      {
+        "at": 352738.5,
+        "type": "recorder-dataavailable",
+        "size": 1913,
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      {
+        "at": 353044.5999999996,
+        "type": "recorder-dataavailable",
+        "size": 1953,
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      {
+        "at": 353335.7999999998,
+        "type": "recorder-dataavailable",
+        "size": 2055,
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      {
+        "at": 353637.5,
+        "type": "recorder-dataavailable",
+        "size": 1797,
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      {
+        "at": 353945.2000000002,
+        "type": "recorder-dataavailable",
+        "size": 1573,
+        "mimeType": "audio/webm;codecs=opus"
+      },
+      {
+        "at": 354231.5999999996,
+        "type": "recorder-dataavailable",
+        "size": 1832,
+        "mimeType": "audio/webm;codecs=opus"
+      }
+    ],
+    "streams": [
+      [
+        {
+          "kind": "audio",
+          "readyState": "live",
+          "enabled": true,
+          "muted": false
+        }
+      ]
+    ],
+    "recorders": [
+      {
+        "state": "recording",
+        "mimeType": "audio/webm;codecs=opus"
+      }
+    ],
+    "contexts": [
+      {
+        "state": "running",
+        "sampleRate": 44100
+      }
+    ]
+  }
+}

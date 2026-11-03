@@ -1,0 +1,237 @@
+src/App.tsx:258
+258:   const instance = useRef<Editor | null>(null);
+259:   const parkedEditable = useRef<boolean | null>(null);
+260:   const activeRef = useRef(active);
+261:   activeRef.current = active;
+262:   const ready = useCallback(
+263:     (editor: Editor | null) => {
+264:       instance.current = editor;
+265:       if (editor && !editor.isDestroyed && !activeRef.current) {
+266:         parkedEditable.current = editor.isEditable;
+267:         editor.setEditable(false, false);
+268:       }
+269:       onReady(note.id, editor);
+270:     },
+271:     [note.id, onReady],
+272:   );
+273:   useLayoutEffect(() => {
+274:     const editor = instance.current;
+275:     if (!editor || editor.isDestroyed) return;
+276:     if (!active && parkedEditable.current === null) {
+277:       parkedEditable.current = editor.isEditable;
+278:       editor.setEditable(false, false);
+279:       editor.view.dom.blur();
+280:     } else if (active && !blocked && parkedEditable.current !== null) {
+281:       // An access-barrier abort may already have restored this same editor.
+282:       editor.setEditable(editor.isEditable || parkedEditable.current, false);
+283:       parkedEditable.current = null;
+284:     }
+285:   });
+
+src/App.tsx:664
+664:   const saveConflictCopy = async () => {
+665:     const id = noteId;
+666:     if (!id || blockedNotes.current.has(id)) return;
+667:     const frozen = editor && !editor.isDestroyed ? editor : null;
+668:     const editable = frozen?.isEditable;
+669:     blockedNotes.current.add(id);
+670:     frozen?.setEditable(false, false);
+671:     setSaving((v) => v + 1);
+672:     let copyConfirmed = false;
+673:     try {
+674:       await queues.current.get(id);
+
+src/App.tsx:712
+712:     } catch (e) {
+713:       if (copyConfirmed)
+714:         setError(
+715:           "副本已经保存，但列表同步失败。本窗口内容仍保留，请先重试同步并核对新备忘录。",
+716:         );
+717:       else fail(e);
+718:     } finally {
+719:       blockedNotes.current.delete(id);
+720:       if (frozen && !frozen.isDestroyed && editable !== undefined)
+721:         frozen.setEditable(editable, false);
+722:       setSaving((v) => Math.max(0, v - 1));
+723:     }
+
+src/App.tsx:747
+747:     return () => {
+748:       document.removeEventListener("visibilitychange", hidden);
+749:       unlisten?.();
+750:     };
+751:   }, [flush, fail]);
+752:   clearSensitive.current = (ids) => {
+753:     if (!ids.length) return;
+754:     nativeToolbar.current?.invalidate((context) => {
+755:       context.editor = null;
+756:       context.bookmark = null;
+757:     });
+758:     nativeAttachmentTarget.current = null;
+759:     for (const id of ids) {
+760:       const instance = editorsRef.current.get(id);
+761:       if (instance && !instance.isDestroyed) instance.destroy();
+762:     }
+763:     if (noteId && ids.includes(noteId)) {
+764:       barrierEditor.current = null;
+765:       formatTarget.current = null;
+766:       paperTarget.current = null;
+767:       setMenu(null);
+768:       setModal(null);
+769:       setModalValue("");
+770:       setDraw(null);
+771:       setRecord(false);
+772:       setEditing(false);
+773:       setShowFind(false);
+774:       setFind("");
+775:     }
+776:     setQuery("");
+777:     setSearching(false);
+778:     setContextNote(null);
+
+src/App.tsx:821
+821:     if (event.phase === "prepare") {
+822:       blockedNotes.current = new Set(event.noteIds);
+823:       setAccessSuspended(event.noteIds);
+824:       if (
+825:         noteId &&
+826:         blockedNotes.current.has(noteId) &&
+827:         editor &&
+828:         !editor.isDestroyed
+829:       ) {
+830:         barrierEditor.current = { editor, editable: editor.isEditable };
+831:         editor.setEditable(false, false);
+832:       }
+833:       void (async () => {
+834:         let success = false;
+835:         try {
+836:           await flush();
+837:           success = !pendingDocs.current.size && !saveFailures.current.size;
+838:         } catch (e) {
+839:           fail(e);
+840:         }
+841:         try {
+842:           await acknowledgeAccess(event.operationId, success);
+843:         } catch (e) {
+844:           fail(e);
+845:         }
+846:       })();
+847:       return;
+848:     }
+849:     if (event.phase === "abort") {
+850:       blockedNotes.current.clear();
+851:       setAccessSuspended([]);
+852:       const frozen = barrierEditor.current;
+853:       if (frozen && !frozen.editor.isDestroyed)
+854:         frozen.editor.setEditable(frozen.editable, false);
+855:       barrierEditor.current = null;
+856:       setWs((prev) => ({ ...prev, access: event.access }));
+857:       fail(Error("锁定未执行：请检查所有窗口是否有未保存的更改，再重试。"));
+858:       void synchronizeRef.current();
+
+src/App.tsx:1008
+1008:       editor.off("transaction", changed);
+1009:     };
+1010:   }, [editor, noteId]);
+1011:   useEffect(() => {
+1012:     formatTarget.current = null;
+1013:     setMenu((value) => (value === "format" ? null : value));
+1014:     const target = paperTarget.current;
+1015:     if (target && target.noteId !== noteId) {
+1016:       if (!target.editor.isDestroyed)
+1017:         target.editor.setEditable(target.editable, false);
+1018:       paperTarget.current = null;
+1019:       setModal((value) => (value === "paper" ? null : value));
+1020:     }
+1021:   }, [noteId]);
+
+src/App.tsx:3025
+3025:         {[...new Set(desktopSearch ? [baseNoteId, noteId] : [noteId])].map(
+3026:           (id) => {
+3027:             const note = ws.notes.find((candidate) => candidate.id === id);
+3028:             if (
+3029:               !note ||
+3030:               note.deletedAt ||
+3031:               (note.locked && !unlocked.has(note.id))
+3032:             )
+3033:               return null;
+3034:             return (
+3035:               <SearchEditorHost
+3036:                 key={`${note.id}-${ws.access?.sessionId || "preview"}-${ws.access?.notes[note.id]?.epoch || 0}-${externalVersions.current.get(note.id) || 0}`}
+3037:                 note={note}
+3038:                 active={note.id === noteId}
+3039:                 blocked={blockedNotes.current.has(note.id)}
+3040:                 onChange={saveDoc}
+3041:                 onReady={onReady}
+3042:                 onDate={() => setNotice(`创建于 ${fmtDate(note.createdAt)}`)}
+3043:                 onFocus={(focused) => {
+3044:                   setEditing(focused);
+3045:                   if (focused && mobile && menu === "format") {
+3046:                     setMenu(null);
+3047:                     formatTarget.current = null;
+3048:                   }
+3049:                 }}
+3050:               />
+3051:             );
+3052:           },
+
+src/App.tsx:3350
+3350:           initial={draw.strokes}
+3351:           paperStyle={current?.paperStyle || "plain"}
+3352:           onCancel={() => setDraw(null)}
+3353:           onDone={(strokes) => {
+3354:             if (draw.pos !== undefined)
+3355:               editor
+3356:                 ?.chain()
+3357:                 .focus()
+3358:                 .setNodeSelection(draw.pos)
+3359:                 .updateAttributes("drawing", { strokes })
+3360:                 .run();
+3361:             else
+3362:               editor
+3363:                 ?.chain()
+3364:                 .focus()
+3365:                 .insertContent({ type: "drawing", attrs: { strokes } })
+3366:                 .run();
+3367:             setDraw(null);
+3368:           }}
+3369:         />
+3370:       )}
+3371:       {record && (
+3372:         <RecordingPanel
+3373:           onCancel={() => {
+3374:             nativeAttachmentTarget.current = null;
+3375:             setRecord(false);
+3376:           }}
+3377:           onDone={async (file) => {
+3378:             if (!current || !editor) return;
+3379:             try {
+3380:               const target = nativeAttachmentTarget.current;
+3381:               if (target) nativeAssert.current(target, true, true);
+3382:               const a = await storeAttachment(
+3383:                 target?.noteId || current.id,
+3384:                 file,
+3385:               );
+3386:               if (target) {
+3387:                 nativeAssert.current(target, true, true);
+3388:                 editor.view.dispatch(
+3389:                   editor.state.tr.setSelection(
+3390:                     target.bookmark!.resolve(editor.state.doc),
+3391:                   ),
+3392:                 );
+3393:               }
+3394:               nativeAttachmentTarget.current = null;
+3395:               editor
+3396:                 .chain()
+3397:                 .focus()
+3398:                 .insertContent({
+3399:                   type: "attachment",
+3400:                   attrs: { id: a.id, name: a.displayName, kind: "audio" },
+3401:                 })
+3402:                 .run();
+3403:               setRecord(false);
+3404:               await refresh();
+3405:             } catch (e) {
+3406:               fail(e);
+3407:             }
+3408:           }}

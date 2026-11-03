@@ -1,0 +1,81 @@
+{
+  "capturedAt": "2026-11-03T15:26:33.599423+00:00",
+  "candidateWorktree": "/private/tmp/apple-notes-search-zero-01",
+  "candidateCommit": "c072a93887f0786cbc2fc2853b1f3b1556ceac5e",
+  "candidateBaseline": "a2dcde9",
+  "mainAtReview": "729b953a4c785cd49597a943a74a348c90556bbc",
+  "candidateStatusAfterChecks": "",
+  "checks": [
+    {
+      "name": "typecheck",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "search-selection",
+      "command": [
+        "node",
+        "scripts/check-search-selection.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "a2dcde9",
+        "c072a93887f0786cbc2fc2853b1f3b1556ceac5e"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "files": {
+    "src/App.tsx": {
+      "sha256": "5fbc34e231268fed92408195ca142d6e7e885f6813bb8b8892da7308ce81f669",
+      "bytes": 129289
+    },
+    "src/search-selection.ts": {
+      "sha256": "19feee660a16a3a9b7b44d5cdbc9f2db7cd33f4bbaf06898ad7c0c77a554e4ee",
+      "bytes": 579
+    },
+    "scripts/check-search-selection.mjs": {
+      "sha256": "670810aa746d8931f8d14f5ff45a7a5f8a9ff013c461f6300267b784f178189c",
+      "bytes": 5360
+    },
+    "src/Editor.tsx": {
+      "sha256": "447dfce35d0934bac18b961c98dccbebc140ae6f1c27f8e0f940cecd48aa863c",
+      "bytes": 8644
+    },
+    "src/native-toolbar-state.ts": {
+      "sha256": "79d9550cb61d4971fb7c0df8701462cfdf0f9f325e704e6d637930b7ec60987c",
+      "bytes": 7408
+    },
+    "src/native-toolbar-controller.ts": {
+      "sha256": "9dfa31e0ca200db7dc54dc15c2aa62d51d7a8aff23a5873643399a9f9c9a6214",
+      "bytes": 8219
+    },
+    "src/editor-schema.ts": {
+      "sha256": "13c90323b0632d6668e98ca3a24d29fd8db991e881446ba20263bbbf43631252",
+      "bytes": 2701
+    },
+    "src/style.css": {
+      "sha256": "87b2773eabec06a4a7aff46ca7d7bb9136ddeba2938e6c01ff88515ffa3cbe91",
+      "bytes": 63091
+    },
+    "package.json": {
+      "sha256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007",
+      "bytes": 1820
+    },
+    "pnpm-lock.yaml": {
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+      "bytes": 69103
+    }
+  },
+  "temporaryModulesLinkRemoved": true,
+  "buildOrGuiOrDevice": false
+}

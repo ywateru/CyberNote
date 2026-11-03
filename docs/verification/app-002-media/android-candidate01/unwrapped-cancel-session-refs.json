@@ -1,0 +1,65 @@
+{
+  "method": "Read-only CDP handle to actual React RecordingSession and original recorder/context/tracks; native Cancel; no API wrappers or app/ref writes",
+  "before": {
+    "at": 614913,
+    "observerPresent": false,
+    "panelPresent": true,
+    "session": {
+      "live": true,
+      "started": true,
+      "failed": false,
+      "finished": false,
+      "stopping": false,
+      "timer": 151,
+      "recorderIsNull": false,
+      "contextIsNull": false,
+      "trackCount": 1
+    },
+    "heldRecorder": {
+      "state": "recording",
+      "mimeType": "audio/webm;codecs=opus"
+    },
+    "heldContext": {
+      "state": "running"
+    },
+    "heldTracks": [
+      {
+        "kind": "audio",
+        "readyState": "live",
+        "enabled": true,
+        "muted": false
+      }
+    ]
+  },
+  "after": {
+    "at": 616201.9000000004,
+    "observerPresent": false,
+    "panelPresent": false,
+    "session": {
+      "live": false,
+      "started": true,
+      "failed": false,
+      "finished": false,
+      "stopping": false,
+      "timer": null,
+      "recorderIsNull": true,
+      "contextIsNull": true,
+      "trackCount": 0
+    },
+    "heldRecorder": {
+      "state": "inactive",
+      "mimeType": "audio/webm;codecs=opus"
+    },
+    "heldContext": {
+      "state": "closed"
+    },
+    "heldTracks": [
+      {
+        "kind": "audio",
+        "readyState": "ended",
+        "enabled": true,
+        "muted": false
+      }
+    ]
+  }
+}
