@@ -13,6 +13,7 @@
 | APP-001-FIX-03 锁定跨窗失效 | pending，FIX-01后优先 | 静态审查发现其他窗口缓存未失效；同步授权、清理明文并用真实多窗复核 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
+| APP-004 原生模块 | in-progress，路径隔离 | 独立plugins目录实现，暂未接入；主App集成和安装版验证仍待APP-004 |
 | PARITY-001 修正差异 | pending，依赖 QA-001 | 按原版补齐功能与像素；重新验证 |
 
 docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，docs/ui 是视觉证据。实现阶段遵循 docs-sprint 的 develop/verify 分离。空仓库先建立 Git 基线，串行实施开发/验证；不要求用户批准已授权的常规设计补全。测试必须覆盖真实持久化边界和 UI 用户路径，不能只测试同实现的常量。
