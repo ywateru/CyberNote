@@ -44,3 +44,4 @@
 - 后续e6cc378宿主复制补证已独立运行通过。旧Android harness首次断网实测在SessionStore目录校验报错，两fixture均未进入OCR/PDF；原失败报告与tar位于`qa-scan-plugin/host-copy-device-20261103/`并保留。
 - ec6b6dc修复可信私有根目录的系统别名后，独立补审`docs/plan/reviews/app-004-scan-plugin-03.md`（dbddf34）实际通过首次断网中文/空白OCR、透视与两页PDF、10项路径边界；导出PDF另由Poppler重渲染独立核对。APK与安装包hash相符，网络已恢复。只关闭正常目录误拒绝P1，证据在`qa-scan-plugin/run-ec6b6dc/`；主App接入、实体相机、无GMS设备、UI像素仍unknown。
 - 最终报告由独立verify agent写入；阻塞修复交由develop agent，再复核。
+- FIX02正式宿主候选34223af已冻结，开发自检、89项源码输入聚合45e6b4a3…和产物身份见`app-001-fix-02/`：Mac4118f77f…、APK0aac2d73…。新包安装smoke与真实Mac搜索/窗口/格式等由独立verify进行，不将开发自检当独立通过。公共顶部同尺寸失活ROI原始差值MAE9.1324、changed74.57%，明确pixel fail；不同屏幕位置限制材质归因，整页/活动态未验。后续最小墨迹校准见`research/macos-toolbar-host-deltas/`；Android长停留IME P1继承FIX04。

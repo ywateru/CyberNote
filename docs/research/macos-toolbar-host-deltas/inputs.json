@@ -1,0 +1,621 @@
+{
+  "readAt": "2026-11-03T11:06:50.073454+00:00",
+  "head": "7ac5b820c98891cd60537caf1f9be02ffc8fce1a",
+  "files": [
+    {
+      "path": "docs/verification/app-001-fix-02/runtime/pair-original.png",
+      "bytes": 118336,
+      "sha256": "99796aa5bd03e2b0e171ca70e3f7af840964be2b2a18f5e683223a34d01a5fd4",
+      "imagePixels": [
+        2176,
+        1322
+      ],
+      "currentMatchesFrozenAtFinish": true,
+      "sourceType": "retained-local-evidence"
+    },
+    {
+      "path": "docs/verification/app-001-fix-02/runtime/pair-clone.png",
+      "bytes": 135702,
+      "sha256": "72e1b0f319cddb0e11a1e8523eacd49bf90a095f74c8034e10d21c937a6ce7e5",
+      "imagePixels": [
+        2176,
+        1322
+      ],
+      "currentMatchesFrozenAtFinish": true,
+      "sourceType": "retained-local-evidence"
+    },
+    {
+      "path": "docs/verification/app-001-fix-02/runtime/roi-metrics.json",
+      "bytes": 2047,
+      "sha256": "ec02f8ffe22a476481d06e42c77caf35bc52c58fdce7d0300f28f93af7e04470",
+      "currentMatchesFrozenAtFinish": true,
+      "sourceType": "retained-local-evidence"
+    },
+    {
+      "path": "docs/verification/app-001-fix-02/runtime/pair-before-capture.json",
+      "bytes": 4668,
+      "sha256": "52ce89a75d778ff548a300efb5007fa2f47cb3ba1807d79df5fb598af8e877b8",
+      "currentMatchesFrozenAtFinish": true,
+      "sourceType": "retained-local-evidence"
+    },
+    {
+      "path": "docs/verification/app-001-fix-02/runtime/pair-after-capture.json",
+      "bytes": 4668,
+      "sha256": "c6ccd96dc0d8b92ab8c2b675f3efc87ac1ffe6797dd5bd40e25505e8dc8b64c1",
+      "currentMatchesFrozenAtFinish": true,
+      "sourceType": "retained-local-evidence"
+    },
+    {
+      "path": "docs/verification/app-001-fix-02/runtime/original-window-state.json",
+      "bytes": 4668,
+      "sha256": "8e47619937faf5a388457ff34b1b5855361afff792ba9efaea892ecc13c426ad",
+      "currentMatchesFrozenAtFinish": true,
+      "sourceType": "retained-local-evidence"
+    },
+    {
+      "path": "docs/research/macos-toolbar-geometry/analysis.md",
+      "bytes": 7989,
+      "sha256": "a6ab32711bc7c7b43a72493eff2e0569665e259a38370b6fc78a5250b0119a43",
+      "currentMatchesFrozenAtFinish": true,
+      "sourceType": "retained-local-evidence"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "bytes": 36422,
+      "sha256": "dd2482a79c39f0f6069ab992ed9733358d8e2c6644cd9eb54fa0e47ecac505bf",
+      "currentMatchesFrozenAtFinish": true,
+      "sourceType": "working-tree-source-read-for-calibration-locations-only",
+      "matchesStartHead": false
+    }
+  ],
+  "scope": "offline common top strip only; no GUI/build/product edits",
+  "method": {
+    "coordinates": "source top-left, half-open bbox; 2 source px =1pt",
+    "inkMask": "max(RGB)<threshold and max(RGB)-min(RGB)<18",
+    "thresholds": [
+      175,
+      190,
+      205
+    ],
+    "inkUncertaintyPx": "usually1–2; measured threshold sensitivity retained",
+    "surface": "visible face envelope from local strong edge near known expected cap center; shadow excluded; approx±2px; not hit frame",
+    "noNewCapture": true
+  },
+  "measurements": {
+    "new": {
+      "roiPx": [
+        1110,
+        22,
+        1170,
+        82
+      ],
+      "ink": {
+        "original": {
+          "175": [
+            1127,
+            35,
+            1159,
+            67
+          ],
+          "190": [
+            1127,
+            35,
+            1159,
+            67
+          ],
+          "205": [
+            1127,
+            34,
+            1160,
+            67
+          ]
+        },
+        "clone": {
+          "175": [
+            1127,
+            38,
+            1159,
+            70
+          ],
+          "190": [
+            1127,
+            38,
+            1159,
+            70
+          ],
+          "205": [
+            1127,
+            38,
+            1159,
+            70
+          ]
+        }
+      },
+      "cloneToOriginalCenterDeltaPx": [
+        0.0,
+        -3.0
+      ],
+      "cloneToOriginalCenterDeltaPt": [
+        0.0,
+        -1.5
+      ]
+    },
+    "format": {
+      "roiPx": [
+        1226,
+        24,
+        1294,
+        80
+      ],
+      "ink": {
+        "original": {
+          "175": [
+            1234,
+            40,
+            1285,
+            65
+          ],
+          "190": [
+            1234,
+            39,
+            1285,
+            65
+          ],
+          "205": [
+            1234,
+            39,
+            1285,
+            65
+          ]
+        },
+        "clone": {
+          "175": [
+            1235,
+            40,
+            1273,
+            65
+          ],
+          "190": [
+            1235,
+            40,
+            1273,
+            65
+          ],
+          "205": [
+            1235,
+            40,
+            1273,
+            65
+          ]
+        }
+      },
+      "cloneToOriginalCenterDeltaPx": [
+        5.5,
+        -0.5
+      ],
+      "cloneToOriginalCenterDeltaPt": [
+        2.75,
+        -0.25
+      ]
+    },
+    "checklist": {
+      "roiPx": [
+        1304,
+        24,
+        1374,
+        80
+      ],
+      "ink": {
+        "original": {
+          "175": [
+            1325,
+            36,
+            1362,
+            69
+          ],
+          "190": [
+            1325,
+            36,
+            1362,
+            69
+          ],
+          "205": [
+            1325,
+            36,
+            1362,
+            69
+          ]
+        },
+        "clone": {
+          "175": [
+            1316,
+            35,
+            1352,
+            69
+          ],
+          "190": [
+            1316,
+            35,
+            1352,
+            69
+          ],
+          "205": [
+            1316,
+            35,
+            1352,
+            69
+          ]
+        }
+      },
+      "cloneToOriginalCenterDeltaPx": [
+        9.5,
+        0.5
+      ],
+      "cloneToOriginalCenterDeltaPt": [
+        4.75,
+        0.25
+      ]
+    },
+    "table": {
+      "roiPx": [
+        1388,
+        24,
+        1457,
+        80
+      ],
+      "ink": {
+        "original": {
+          "175": [
+            1406,
+            37,
+            1445,
+            67
+          ],
+          "190": [
+            1406,
+            37,
+            1445,
+            67
+          ],
+          "205": [
+            1406,
+            37,
+            1445,
+            67
+          ]
+        },
+        "clone": {
+          "175": [
+            1397,
+            37,
+            1435,
+            67
+          ],
+          "190": [
+            1397,
+            37,
+            1435,
+            67
+          ],
+          "205": [
+            1397,
+            37,
+            1435,
+            67
+          ]
+        }
+      },
+      "cloneToOriginalCenterDeltaPx": [
+        9.5,
+        0.0
+      ],
+      "cloneToOriginalCenterDeltaPt": [
+        4.75,
+        0.0
+      ]
+    },
+    "attachment": {
+      "roiPx": [
+        1470,
+        22,
+        1532,
+        82
+      ],
+      "ink": {
+        "original": {
+          "175": [
+            1484,
+            35,
+            1516,
+            70
+          ],
+          "190": [
+            1484,
+            35,
+            1516,
+            70
+          ],
+          "205": [
+            1484,
+            34,
+            1516,
+            70
+          ]
+        },
+        "clone": {
+          "175": [
+            1480,
+            34,
+            1511,
+            70
+          ],
+          "190": [
+            1480,
+            34,
+            1511,
+            70
+          ],
+          "205": [
+            1480,
+            34,
+            1511,
+            70
+          ]
+        }
+      },
+      "cloneToOriginalCenterDeltaPx": [
+        4.5,
+        0.5
+      ],
+      "cloneToOriginalCenterDeltaPt": [
+        2.25,
+        0.25
+      ]
+    },
+    "share": {
+      "roiPx": [
+        1580,
+        22,
+        1640,
+        82
+      ],
+      "ink": {
+        "original": {
+          "175": [
+            1593,
+            32,
+            1622,
+            69
+          ],
+          "190": [
+            1593,
+            32,
+            1622,
+            69
+          ],
+          "205": [
+            1593,
+            32,
+            1622,
+            69
+          ]
+        },
+        "clone": {
+          "175": [
+            1597,
+            36,
+            1625,
+            72
+          ],
+          "190": [
+            1597,
+            36,
+            1626,
+            72
+          ],
+          "205": [
+            1597,
+            36,
+            1626,
+            72
+          ]
+        }
+      },
+      "cloneToOriginalCenterDeltaPx": [
+        -4.0,
+        -3.5
+      ],
+      "cloneToOriginalCenterDeltaPt": [
+        -2.0,
+        -1.75
+      ]
+    },
+    "more": {
+      "roiPx": [
+        1670,
+        30,
+        1725,
+        78
+      ],
+      "ink": {
+        "original": {
+          "175": [
+            1681,
+            49,
+            1711,
+            55
+          ],
+          "190": [
+            1681,
+            49,
+            1711,
+            55
+          ],
+          "205": [
+            1681,
+            49,
+            1711,
+            55
+          ]
+        },
+        "clone": {
+          "175": [
+            1676,
+            50,
+            1707,
+            56
+          ],
+          "190": [
+            1676,
+            50,
+            1707,
+            56
+          ],
+          "205": [
+            1676,
+            49,
+            1707,
+            56
+          ]
+        }
+      },
+      "cloneToOriginalCenterDeltaPx": [
+        4.5,
+        -1.0
+      ],
+      "cloneToOriginalCenterDeltaPt": [
+        2.25,
+        -0.5
+      ]
+    },
+    "search_icon": {
+      "roiPx": [
+        1776,
+        25,
+        1830,
+        80
+      ],
+      "ink": {
+        "original": {
+          "175": [
+            1787,
+            40,
+            1812,
+            65
+          ],
+          "190": [
+            1787,
+            40,
+            1812,
+            65
+          ],
+          "205": [
+            1787,
+            40,
+            1812,
+            65
+          ]
+        },
+        "clone": {
+          "175": [
+            1800,
+            40,
+            1825,
+            65
+          ],
+          "190": [
+            1800,
+            40,
+            1825,
+            65
+          ],
+          "205": [
+            1800,
+            40,
+            1825,
+            65
+          ]
+        }
+      },
+      "cloneToOriginalCenterDeltaPx": [
+        -13.0,
+        0.0
+      ],
+      "cloneToOriginalCenterDeltaPt": [
+        -6.5,
+        0.0
+      ]
+    },
+    "search_text": {
+      "roiPx": [
+        1830,
+        24,
+        1910,
+        82
+      ],
+      "ink": {
+        "original": {
+          "175": [
+            1830,
+            41,
+            1878,
+            65
+          ],
+          "190": [
+            1830,
+            41,
+            1878,
+            65
+          ],
+          "205": [
+            1830,
+            41,
+            1878,
+            65
+          ]
+        },
+        "clone": {
+          "175": [
+            1841,
+            29,
+            1890,
+            52
+          ],
+          "190": [
+            1841,
+            29,
+            1890,
+            53
+          ],
+          "205": [
+            1841,
+            29,
+            1890,
+            53
+          ]
+        }
+      },
+      "cloneToOriginalCenterDeltaPx": [
+        -11.5,
+        12.0
+      ],
+      "cloneToOriginalCenterDeltaPt": [
+        -5.75,
+        6.0
+      ]
+    }
+  },
+  "finishedAt": "2026-11-03T11:09:58.826276+00:00",
+  "outputs": [
+    {
+      "path": "docs/research/macos-toolbar-host-deltas/top-ink-deltas.png",
+      "bytes": 65728,
+      "sha256": "38cd68e01136a7c56c3c3367f9466f2df35667795f316b72a20c433abc43fa00",
+      "imagePixels": [
+        1072,
+        306
+      ],
+      "kind": "single annotated native-pixel crop; no rescale"
+    }
+  ]
+}

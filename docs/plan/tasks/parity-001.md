@@ -20,8 +20,11 @@ depends-on: [app-001-fix-02, app-002-media, app-003-local-features, app-004-scan
 
 - docs/requirements.md、docs/ui/README.md、macos.md、android.md、local-features.md、interaction-matrix.md
 - docs/verification/README.md、docs/plan/backlog.md
+- docs/research/macos-toolbar-host-deltas/analysis.md、inputs.json（当前正式宿主失活对照的内部墨迹差异；不同屏幕背景不支持材质因果，先按最终候选确认输入身份）
 - references/desktop/README.md及实采原图；references/mobile/original/和加密抽帧
 - 前置功能各独立review，区分已通过行为与仍未通过的外观
+
+Mac顶部下一轮从已测公共组内部开始：中文“格式”文案、动作图标视觉位置、搜索图标与占位文字分别校准。四组外边界与18/18/16pt间距近似齐，不能为了内部墨迹误差整体移动胶囊。实施前核冻结候选和研究输入关系，重采使用相同窗口屏幕位置/焦点/背景；既有74.57% raw mismatch仅描述那对失活图，不代表全页结果或单一材质参数的错误。
 
 ## path
 

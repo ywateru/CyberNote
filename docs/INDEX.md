@@ -10,6 +10,7 @@
 - [现有录音与本地播放链准备审计](research/media-roundtrip-readiness/analysis.md)
 - [Android中文组合输入验证工具](research/android-ime-verification.md)
 - [UI 规格](ui/README.md)
+- [Mac正式顶部公共区域差异与校准起点](research/macos-toolbar-host-deltas/analysis.md)
 - [Mac 布局](ui/macos.md)
 - [Android 布局与录屏流程](ui/android.md)
 - [手机纸张选择页几何测量](research/mobile-paper-calibration/analysis.md)
