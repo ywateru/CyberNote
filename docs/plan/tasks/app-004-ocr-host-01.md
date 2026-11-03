@@ -1,7 +1,7 @@
 ---
 id: app-004-ocr-host-01
 scope: local-text-recognition-host-integration
-status: pending
+status: in-progress
 depends-on: [app-002-recording-submit-01, app-004-scan-plugin]
 ---
 
@@ -51,3 +51,7 @@ depends-on: [app-002-recording-submit-01, app-004-scan-plugin]
 开发定向覆盖实际控制器、插件边界与App确认回调：选择取消、空图、原生失败、目标切换/锁定、重复确认、正文失败同操作重试、保存成功但cleanup失败、取消与处理中交错、晚返回及资源归属。完成typecheck/build，受影响schema/Rust检查只按实际改动运行。冻结源码后独立review。
 
 统一新包独立实测Mac图片→真实Vision和Android图片/相机→bundled OCR，真实正文ACK/UndoRedo/正常退出冷启。使用合成中文文稿，保全源图、实际OCR文本和保存前后文档。实体相机质量、无GMS和未见原版预览继续未知；不要求清空用户主应用数据来证明首次离线，已有插件隔离首次离线证据与主App离线运行分开记账。
+
+## scheduling
+
+录音preview已冻结dc33152并转独审，本任务从主线新建独立worktree `/private/tmp/apple-notes-ocr-host-01` / `task/app-004-ocr-host-01`。只实施本地OCR文字宿主路径，不触preview候选。若其独审出现阻塞，优先回原preview工作树修复，OCR保持独立未交付状态。构建/设备由root串行排期，开发先源码/定向检查，不抢占独立运行的GUI/设备。

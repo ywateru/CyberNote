@@ -1,16 +1,23 @@
 # Apple Notes Clone
 
-用 Rust + pnpm 构建的本地备忘录应用，当前目标为 macOS 与 Android。Tauri 2 提供安装应用与原生窗口，React/Tiptap 提供编辑器，Rust/SQLite 保存笔记与附件。不接入 iCloud。
+用 Rust + pnpm 构建的本地备忘录应用，目标为 macOS 与 Android。Tauri 2 提供安装应用与原生窗口，React/Tiptap 提供编辑器，Rust/SQLite 保存笔记与附件。不接入 iCloud。
 
-**当前为首轮可运行实现，尚未达到原版 UI/交互像素级一致，不能视为完整验收版本。** 需求、录屏保全、原版采样与差异记录见 `docs/INDEX.md`、`references/README.md`。功能已实现、开发者已自测、独立验证通过是三种不同状态。
+**当前是可运行开发版，尚未达到原版全部 UI、交互及逐像素一致，完整目标仍在进行。** 功能、源码审查、安装版操作和像素结果分别记录，不以构建成功代替验收。需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，最新细分状态见[交付计划](docs/plan/README.md)。
 
-2026-11-04最新任务状态以`docs/plan/README.md`为准，下面首轮记录保留原批次范围。FIX01与FIX03已有有限独立通过，完整矩阵未关闭；FIX04长停留候选六条独立主路径通过，整体输入仍partial。FIX06新增平台对照表明装饰拼音保留在同输入法的普通输入区也可同现，不据此盲目删除正文；原版精确提交/取消仍待核。FIX07新APK5dd6dfc8已独立实测取消/选择大网格/重开返回保留原选区与编辑器，完整正文、纸张和冷启持久化有限通过；原e117失败记录保留，单步Undo及完整矩阵仍unknown。Mac关窗panic最小修复已有三条独立实际关闭及一次编辑冷启通过，pending/失败/冲突仍未验；56d7新包搜索长查询滚动、续输、clear与OptionCmdF已独立有限通过，蓝色焦点及顶部像素仍失败。媒体、扫描主App接入及高级功能仍未完成。
+2026-11-04最新统一包为candidate03，冻结源码 `c6594dbdfe8ee0313205a4b14bcdfeb37b819088`，232项列明构建输入在两端构建前后相同。该包包括搜索零结果显示与焦点、原目标附件提交、录音初始/暂停/完成状态和真实正文保存确认接线。Mac本地签名及Android debug构建/验签均通过，独立安装版操作复验进行中。[完整构建记录](docs/verification/unified-candidate03/build/README.md)保留Android首次环境失败和必要权限下原命令重试结果。
 
-11/4统一候选f4d3a02已构建：Android APK3edc4ad0的真实受管录音已独立核为1:06、初始0/暂停、播放推进与暂停稳定，完整笔记/revision/429547B原文件SHA保持；共享导航及纸张选区/真实Editor宿主也有限通过。移动展开入口隐藏使进度拖动和±15秒仍不可达，已单列窄修复，不能称完整播放或可听采集通过。Mac完整本地签名派生包11dcbfc4已运行到原生窗口，但首次本地导航被Ignore、网页未加载，startup修复优先；搜索零结果源码已独立SOURCE-READY，真实Mac流程和像素因此尚未执行。附件持久操作模块4d5898f已独立通过并主整合42b2631，前端原目标重验证/正文ACK仍待接线；旧真实图片/PDF失败和孤儿证据保留。dba83641独立录音取消、七态纸张/短屏仅适用旧包，首次Deny/带包装Allow保存冷启另按开发原始证据复核，不跨新包追认。
+本机安装文件另存于项目的 `artifacts/unified-candidate03/`（未纳入Git）：
+
+| 平台 | 文件 | 构建范围 |
+| --- | --- | --- |
+| Mac | `NotesClone-mac.zip` | 解压为.app；完整本地adhoc签名，未做开发者公证 |
+| Android | `NotesClone-android-arm64.apk` | 现有debug签名，仅arm64-v8a |
+
+文件SHA256及副本核对见[交接记录](docs/verification/unified-candidate03/root-handoff/result.json)。旧候选与失败证据继续保存在各批次验证目录，不能据本次主源码追认旧包行为。
+
+尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音的完整冷启链、暂停录音试听、绘画及附件完整预览、扫描主App接入、标签/智能文件夹/数学/笔记链接和标准格式导入导出。具体已通过子用例与缺口以交付计划及独立报告为准。
 
 ## 运行与构建
-
-11/4第二批统一候选fabafcf已完成双端构建，219项输入前后SHA一致：Mac完整本地签名包5e948ad9已由开发实际确认正常加载、三栏和原生顶部，搜索unique→zero→clear/正文UndoRedo与正常退出重开持久有限通过，独立复验与像素对照进行中；Android APK a50dded8已构建，真实音频控件验证待完成。该批包含Store模块、手机音频展开与Mac启动修复，不能把模块进入包内视为附件前端/完整录音闭环完成。证据见docs/verification/f07-audio-integration/build-candidate02/及mac-developer02/。
 
 本机已使用 Node 22.16、pnpm 10.15、Rust 1.97.1、Xcode/macOS SDK 构建。先执行：
 
