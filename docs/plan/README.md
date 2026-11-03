@@ -31,7 +31,7 @@
 | APP-002-RECORDING-STATE-01 录音面板状态 | done（仅模块），源12b94d7独立SOURCE-READY、主784a1e8 | idle显式开始/单调活动计时/暂停直接完成/同File失败重试，独立实际Panel+Session受控17与原26通过，主11输入字节核同且pnpm build通过。原物理触点unknown；未接父正文ACK、设备有效音轨/完整回放/转写/像素，开发diffcheck原日志空行已更正记账 |
 | APP-002-RECORDING-SUBMIT-01 录音父保存 | in-progress，源8ee0111独立SOURCE-READY、主6ebacbe | 两入口同原目标/票据与operation，正文ACK前reject保留File、ACK后关面板且刷新单列；取消等待真实run并保全pending，唯一close监听复用。独立20+23+8+26及新增5组通过，主2源码hash同/build/父20/搜索5+16通过。真实录制/正文ACK/冷启/可听与像素待统一candidate03，不以受控源检查追认旧包 |
 | APP-002-UNIFIED-C03 统一新包 | built，独立运行进行中 | c6594db冻结232列明输入499805fa…两端前后同；Mac本地完整签名zip800b7fb1…、Android debug APK bd29ae0b…验签通过。原失败与同命令必要权限重试均保留，root核29证据/232源码并保存workspace安装包；真实picker/录音ACK/冷启/可听/像素待新包分别实测 |
-| APP-002-RECORDING-PREVIEW-01 暂停回放 | in-progress，独立组件分支接真实快照，下一包验收 | 复用Panel/Session/播放控制器，不占App父接线；非终态前缀可播性无标准保证，必须目标设备实测。暂停play/±15接真实能力与独立生命周期，失败不破坏最终File；不扩大candidate03来源 |
+| APP-002-RECORDING-PREVIEW-01 暂停回放 | in-progress，preview01独审P2阻塞，02窄修中 | 复用Panel/Session/播放控制器，不占App父接线；非终态前缀可播性无标准保证，必须目标设备实测。暂停play/±15接真实能力与独立生命周期，失败不破坏最终File；不扩大candidate03来源 |
 | APP-001-SEARCH-FOCUS-01 Mac菜单搜索焦点 | in-progress，源d9bc5a4独立SOURCE-READY、主175cd1f | plugin精确MenuEvent同步请求真实唯一focused main当前enabled绑定，与IPC共body；独立与主cargo13/13通过、两产品hash同。无新包快输入/marked text实测，异常原因unknown和Tauri排队仍保留，不承诺已修复 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |

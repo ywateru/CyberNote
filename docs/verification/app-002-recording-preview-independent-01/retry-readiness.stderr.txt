@@ -1,0 +1,17 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: retry reload is not media-ready before a new data/canplay event
+
+true !== false
+
+    at file:///private/tmp/apple-notes-recording-preview-01/docs/verification/app-002-recording-preview-independent-01/retry-readiness.mjs:48:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

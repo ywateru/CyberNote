@@ -1,0 +1,25 @@
+{
+  "status": "pass",
+  "checks": 15,
+  "results": [
+    "actual pause event gates requestData; duplicate snapshot promise; cumulative bytes and MIME remain final exactly once",
+    "old issued data slot drains before newer paused request; old rejection never resolves new promise",
+    "empty snapshot fails alone and capture can resume/finalize",
+    "throw snapshot fails alone and capture can resume/finalize",
+    "timeout snapshot fails alone and capture can resume/finalize",
+    "stop seals pending snapshot, releases once and rejects late captured events",
+    "dispose seals pending snapshot, releases once and rejects late captured events",
+    "error seals pending snapshot, releases once and rejects late captured events",
+    "snapshot outside pause rejects without stopping capture",
+    "actual ready state and seekable ranges gate controls, independent of finite duration",
+    "skip suppresses optimistic time, clamps real ranges, confirms only actual seeked/currentTime",
+    "mismatched seek and missing confirmation show explicit errors without invented success",
+    "media/play errors remain explicit; retry reloads same source without capture dependency",
+    "dispose seals late play/seek/metadata and stops production probe before URL revoke exactly once",
+    "synchronous media load error still releases URL/source and listeners"
+  ],
+  "limits": [
+    "Production Session, recording adapter and unchanged production playback controller; controlled platform events, chunks, timers and media only",
+    "No claim of encoded prefix playability, device audibility, mobile/native acceptance or pixel parity"
+  ]
+}
