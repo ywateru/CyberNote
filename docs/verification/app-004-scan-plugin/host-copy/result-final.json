@@ -1,0 +1,77 @@
+{
+  "afterAcknowledgeError": {
+    "code": "session_missing",
+    "message": "扫描会话已过期或不存在"
+  },
+  "copiedBytes": 605425,
+  "destination": "/private/tmp/notes-scan-host-copy-20261103-03/host-staging/committed-image.png",
+  "draftRefusal": {
+    "code": "session_state",
+    "message": "请先完成扫描"
+  },
+  "existingTargetPreserved": true,
+  "existingTargetRefusal": {
+    "code": "io",
+    "message": "File exists (os error 17)"
+  },
+  "failedTargetRemoved": true,
+  "fixture": "docs/verification/app-004-scan-plugin/host-copy/chinese-multichunk-fixture.png",
+  "fullBytesEqual": true,
+  "hostCopySurvivesAcknowledge": true,
+  "limits": "No WebView invoke, real GUI runtime, main Store transaction, process crash, Android, or forced network-off tested.",
+  "minimumReadChunks": 3,
+  "ocr": {
+    "engine": "apple-vision-accurate",
+    "fileToken": "075e7624-5031-4f78-9391-789f008e3dda",
+    "languages": [
+      "zh-Hans",
+      "zh-Hant",
+      "en-US"
+    ],
+    "lines": [
+      {
+        "box": {
+          "height": 0.07597663116455078,
+          "width": 0.2690620613098144,
+          "x": 0.06387013325574163,
+          "y": 0.17363959119417782
+        },
+        "confidence": 1,
+        "text": "离线文字识别"
+      },
+      {
+        "box": {
+          "height": 0.07500000000000007,
+          "width": 0.3154069709777832,
+          "x": 0.06250000175674791,
+          "y": 0.2740000003103181
+        },
+        "confidence": 1,
+        "text": "备忘录扫描测试"
+      },
+      {
+        "box": {
+          "height": 0.07499999999999996,
+          "width": 0.30377906799316406,
+          "x": 0.062499999993671056,
+          "y": 0.3740000003005468
+        },
+        "confidence": 0.5,
+        "text": "本地保存 2026"
+      }
+    ],
+    "revision": 3,
+    "status": "recognized",
+    "text": "离线文字识别\n备忘录扫描测试\n本地保存 2026"
+  },
+  "privateRoot": "/private/tmp/notes-scan-host-copy-20261103-03",
+  "readChunkLimit": 262144,
+  "readyRetainedUntilAcknowledge": true,
+  "runtime": "tauri::test::MockRuntime; real plugin init + NotesScanExt + copy_file_to",
+  "sessionRetainedAfterFailure": true,
+  "sourceRemovedAfterAcknowledge": true,
+  "truncatedResourceError": {
+    "code": "native",
+    "message": "文件读取长度不一致"
+  }
+}

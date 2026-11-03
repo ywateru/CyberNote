@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries><package android:name="com.google.android.gms" /></queries>
     <application android:label="扫描模块验证" android:theme="@style/NotesScanTheme" android:allowBackup="false">
         <activity android:name="com.local.notesscan.ProbeActivity" android:exported="true">
             <intent-filter>
@@ -6,5 +7,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.local.notesscan.DeviceFixtureActivity" android:exported="true" />
     </application>
 </manifest>

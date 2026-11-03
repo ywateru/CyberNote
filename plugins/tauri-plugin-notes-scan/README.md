@@ -56,3 +56,22 @@ bash plugins/tauri-plugin-notes-scan/scripts/check-android.sh --offline assemble
 Mac无窗口真实OCR：先用 `scripts/generate-fixture.swift` 生成图，再 `cargo run --manifest-path plugins/tauri-plugin-notes-scan/Cargo.toml --locked --offline --example macos_probe -- IMAGE PRIVATE_TEST_ROOT`。CLI路径只用于合成图测试，不是公开IPC。该进程须能访问系统Vision服务；受限环境可能无法调用，记录失败，不能用空结果代替。源码/图/结果/产物hash和实际验证边界见 `docs/verification/app-004-scan-plugin/`。
 
 独立验证APK的applicationId为 `com.local.notesscan.harness`，与主应用不同；尚未安装。仅其Manifest声明ProbeActivity启动页，主插件Manifest不声明该入口。验证UI可选择本地图OCR或打开真实扫描；结果写入该APK私有 `files/probe-result.json`。设备交接后verify可用run-as读取，不需要外部存储权限。该APK不含主笔记库，也不代表Rust→Store主App链路已测。
+
+## 实际宿主复制探针与待运行设备夹具
+
+`examples/host_copy_probe.rs` 使用 Tauri 官方 MockRuntime 替代窗口运行时，加载本模块**原有 `init()`**，把 app data override 到新建临时根目录；实际调用 `app.notes_scan().execute()` 和 `app.notes_scan().copy_file_to()`。插件 setup、NotesScanExt、SessionStore、ImageIO/Vision、分块读取与磁盘复制均真实，生产复制代码没有修改。`tauri/test` 仅为 dev-dependency，不增加生产 IPC、路径输入或替代复制器。
+
+```sh
+swift -module-cache-path /private/tmp/notes-scan-swiftcache plugins/tauri-plugin-notes-scan/scripts/generate-fixture.swift /private/tmp/notes-scan-host-image.png --noise-border
+cargo build --manifest-path plugins/tauri-plugin-notes-scan/Cargo.toml --locked --offline --example host_copy_probe --target-dir plugins/tauri-plugin-notes-scan/target
+plugins/tauri-plugin-notes-scan/target/debug/examples/host_copy_probe /private/tmp/notes-scan-host-image.png /private/tmp/notes-scan-host-copy-NEW
+```
+
+最后一个目录必须不存在。噪点边框保证归一化 PNG 大于 256 KiB，仍真实识别三行受控中文。探针核对完整字节、draft 拒绝、已有目标不覆盖、ready 后截断私有测试资源引发的失败与目标清理、恢复资源后重试、ack 前 ready/资源仍存在、ack 后资源失效而宿主副本保留。结果见 `docs/verification/app-004-scan-plugin/host-copy/`。它没有 WebView invoke、真实 GUI runtime、主 Store 事务或崩溃恢复，因此不构成正式 App 集成通过。
+
+独立 Android debug 构建另将 `android/src/deviceFixture/java/` 加入 Kotlin debug 源集；被主应用作为 library 引用时不包含该目录。仅 harness Manifest 声明 `DeviceFixtureActivity`，其中两种场景仍待设备交接后运行：
+
+- `ocr-first-offline`：要求全新 harness 数据、首次启动前飞行模式且无活动网络；实际 bundled ML Kit 识别 APK 内受控中文与空白 PNG，验证原始字节、recognized/empty、ready 重开和 ack。运行前后检查离线条件，记录 GMS 安装状态；这不代替外部对清空/首次启动和网络状态的记录，也未证明无 GMS 运行。
+- `perspective-pdf`：生成已知四边形投影的四色夹具，经真实 ingest/addPage/Images.correct 校正并读取实际像素；再创建第二页、旋转第一页、改序、finish 生成 PDF，用系统 PdfRenderer 解码两页并逐点核对四色、页序和横竖向。原图、校正图、PDF、两张渲染图、ready JSON、结果 JSON 全部保存私有 files/device-fixture 下。自动边缘检测、相机和手势不在这个夹具范围。
+
+设备交接后的精确操作与收集方式见验证子目录 README；当前仅编译准备，没有安装或运行 Android 夹具。

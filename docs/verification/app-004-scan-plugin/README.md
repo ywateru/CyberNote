@@ -1,6 +1,6 @@
 # APP-004 扫描插件开发者检查
 
-2026-11-03。独立模块：`plugins/tauri-plugin-notes-scan/`；没有接入主App，也没有访问GUI、安装APK、使用设备/摄像头或向原版Notes写入。本文是开发自检，独立verify尚未执行。最终源码逐文件SHA见 `artifact-inventory.json` 的sources；同一目录的根构建缓存不参与主应用构建。
+2026-11-03。独立模块：`plugins/tauri-plugin-notes-scan/`；没有接入主App，也没有访问GUI、安装APK、使用设备/摄像头或向原版Notes写入。本文保留 `9340dba` 的开发自检基线；该基线后续独立模块检查见只读 review `2358901`。新增实际宿主复制开发补证和待运行 Android 夹具见 `host-copy/README.md`，不能将本页旧产物 hash 当作新增夹具产物。基线源码逐文件SHA见 `artifact-inventory.json` 的sources；同一目录的根构建缓存不参与主应用构建。
 
 | 检查 | 实际结果 | 证据 |
 |---|---|---|

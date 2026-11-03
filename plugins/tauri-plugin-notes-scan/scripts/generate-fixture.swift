@@ -10,4 +10,13 @@ if !CommandLine.arguments.contains("--blank") {
     ("离线文字识别\n备忘录扫描测试\n本地保存 2026" as NSString).draw(in:NSRect(x:100,y:240,width:1400,height:600),withAttributes:attributes)
 }
 NSGraphicsContext.restoreGraphicsState()
+// Deterministic noise below the text forces a multi-chunk normalized PNG for host-copy checks.
+if CommandLine.arguments.contains("--noise-border"), let data = bitmap.bitmapData {
+    var state:UInt32 = 0x4e4f5445
+    for y in 904..<1000 { for x in 0..<1600 {
+        let p = data.advanced(by:y * bitmap.bytesPerRow + x * 4)
+        for c in 0..<3 { state ^= state << 13; state ^= state >> 17; state ^= state << 5; p[c] = UInt8(truncatingIfNeeded:state) }
+        p[3] = 255
+    } }
+}
 try bitmap.representation(using:.png,properties:[:])!.write(to:URL(fileURLWithPath:output))

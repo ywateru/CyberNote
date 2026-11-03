@@ -37,6 +37,8 @@ dependencies {
 dependencyLocking { lockAllConfigurations() }
 
 if (rootProject == project) {
+    // Controlled device fixtures are built only in this standalone verification project.
+    kotlin.sourceSets.getByName("debug").kotlin.srcDir("src/deviceFixture/java")
     project(":tauri-android") {
         layout.buildDirectory.set(rootProject.layout.buildDirectory.dir("tauri-android"))
     }
