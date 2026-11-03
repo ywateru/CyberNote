@@ -1,0 +1,48 @@
+{
+  "task": "app-001-search-results-01",
+  "baseline": "a2dcde9",
+  "branch": "task/app-001-search-results",
+  "worktree": "/private/tmp/apple-notes-search-zero-01",
+  "status": "source-candidate-awaiting-independent-static-review-and-unified-runtime",
+  "source_sha256": {
+    "src/App.tsx": "5fbc34e231268fed92408195ca142d6e7e885f6813bb8b8892da7308ce81f669",
+    "src/search-selection.ts": "19feee660a16a3a9b7b44d5cdbc9f2db7cd33f4bbaf06898ad7c0c77a554e4ee",
+    "scripts/check-search-selection.mjs": "670810aa746d8931f8d14f5ff45a7a5f8a9ff013c461f6300267b784f178189c"
+  },
+  "checks": {
+    "typecheck": "pass",
+    "production_selection_toolbar_and_headless_Tiptap_history_groups": 5,
+    "diff_check": "pass",
+    "gui": "not-run",
+    "build": "not-run",
+    "pixel_parity": "not-verified",
+    "mobile_smoke": "not-run"
+  },
+  "unchanged_blocks": {
+    "listed-filter-sort": {
+      "equal_to_baseline": true,
+      "sha256": "33acaad11f6180ead9d397906873444a916daa02e04735107f4cec76bb926331"
+    },
+    "saveDoc": {
+      "equal_to_baseline": true,
+      "sha256": "559bda96f482b33f6783c816ba356ab2fdece690494fb40df2a33b03ee11d57b"
+    },
+    "flush": {
+      "equal_to_baseline": true,
+      "sha256": "57a4f95779eb8e71b26ab1c07ba1a22a68edc849c082a5b3b86ee658d18046a0"
+    },
+    "createNote": {
+      "equal_to_baseline": true,
+      "sha256": "1ec51c4d8df22990df9b4731bb5e667afd7d03db574cba7fa9119a17e09c4385"
+    },
+    "fileSelected": {
+      "equal_to_baseline": true,
+      "sha256": "8d91baa16f4519306fe709bc89d5b66702e88f33825adb5a1da32951cccdc49c"
+    }
+  },
+  "limitations": [
+    "Headless Tiptap test verifies primitive/history, not mounted React lifecycle or native focus.",
+    "Quoted/fuzzy search parsing unchanged.",
+    "Mac runtime/full Rust persistence/cold reopen/actual Undo and mobile navigation smoke await unified build."
+  ]
+}

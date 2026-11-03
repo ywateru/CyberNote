@@ -95,6 +95,7 @@ import type { BindingInfo } from "../plugins/tauri-plugin-notes-ui/guest-js";
 import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
 import { documentsEqual } from "./document-equality";
+import { projectSearchNote } from "./search-selection";
 import { RecordingSession, createRecordingPreview } from "./recording-session";
 import linesSmallPreview from "../assets/mobile-paper-previews/lines-small.svg";
 import linesMediumPreview from "../assets/mobile-paper-previews/lines-medium.svg";
@@ -235,6 +236,75 @@ function MenuRow({
     </button>
   );
 }
+// Keep the pre-search editor mounted so its pending document and Undo history
+// remain owned by the same note. A parked editor is neither visible nor writable.
+function SearchEditorHost({
+  note,
+  active,
+  blocked,
+  onChange,
+  onReady,
+  onFocus,
+  onDate,
+}: {
+  note: Note;
+  active: boolean;
+  blocked: boolean;
+  onChange: (id: string, doc: JSONContent) => void;
+  onReady: (id: string, editor: Editor | null) => void;
+  onFocus: (focused: boolean) => void;
+  onDate: () => void;
+}) {
+  const instance = useRef<Editor | null>(null);
+  const parkedEditable = useRef<boolean | null>(null);
+  const activeRef = useRef(active);
+  activeRef.current = active;
+  const ready = useCallback(
+    (editor: Editor | null) => {
+      instance.current = editor;
+      if (editor && !editor.isDestroyed && !activeRef.current) {
+        parkedEditable.current = editor.isEditable;
+        editor.setEditable(false, false);
+      }
+      onReady(note.id, editor);
+    },
+    [note.id, onReady],
+  );
+  useLayoutEffect(() => {
+    const editor = instance.current;
+    if (!editor || editor.isDestroyed) return;
+    if (!active && parkedEditable.current === null) {
+      parkedEditable.current = editor.isEditable;
+      editor.setEditable(false, false);
+      editor.view.dom.blur();
+    } else if (active && !blocked && parkedEditable.current !== null) {
+      // An access-barrier abort may already have restored this same editor.
+      editor.setEditable(editor.isEditable || parkedEditable.current, false);
+      parkedEditable.current = null;
+    }
+  });
+  return (
+    <div
+      className="editor-scroll"
+      hidden={!active}
+      inert={!active}
+      aria-hidden={!active || undefined}
+      style={active ? undefined : { display: "none" }}
+    >
+      <button className="note-date" onClick={onDate}>
+        {fmtDate(note.updatedAt)}
+      </button>
+      <NoteEditor
+        note={note}
+        onChange={onChange}
+        onReady={ready}
+        onFocus={(focused) => {
+          if (activeRef.current) onFocus(focused);
+        }}
+      />
+    </div>
+  );
+}
 function App() {
   const separate = new URLSearchParams(location.search).get("note");
   const [ws, setWs] = useState<Workspace>(empty);
@@ -243,7 +313,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [folderId, setFolderId] = useState("default");
-  const [noteId, setNoteId] = useState<string | null>(null);
+  const [baseNoteId, setNoteId] = useState<string | null>(null);
+  const [searchNoteId, setSearchNoteId] = useState<string | null>(null);
   const [page, setPage] = useState<"folders" | "notes" | "editor">("folders");
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
@@ -253,7 +324,11 @@ function App() {
   const [modalValue, setModalValue] = useState("");
   const [contextNote, setContextNote] = useState<string | null>(null);
   const [contextFolder, setContextFolder] = useState<string | null>(null);
-  const [editor, setEditor] = useState<Editor | null>(null);
+  const [editors, setEditors] = useState<ReadonlyMap<string, Editor>>(
+    new Map(),
+  );
+  const editorsRef = useRef(editors);
+  editorsRef.current = editors;
   const [editing, setEditing] = useState(false);
   const [galleryEditor, setGalleryEditor] = useState(false);
   const [, updateFormatState] = useState(0);
@@ -328,19 +403,80 @@ function App() {
   const swipe = useRef<{ x: number; y: number } | null>(null);
   const [swiped, setSwiped] = useState<string | null>(null);
   const longPress = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const current = ws.notes.find((n) => n.id === noteId);
-  const currentFolder = ws.folders.find((f) => f.id === folderId);
-  const selected = ws.notes.find((n) => n.id === (contextNote || noteId));
   const theme = settings.theme || "system";
   const view = settings.view || "list";
   const sort = settings.sort || "updated";
-  const onReady = useCallback(
-    (e: Editor | null) => {
-      if (e && noteId) nativeEditorOwners.current.set(e, noteId);
-      setEditor(e);
-    },
-    [noteId],
+  const listed = ws.notes
+    .filter((n) => {
+      if (query || filter) {
+        if (n.deletedAt) return false;
+      } else if (folderId === "all") {
+        if (n.deletedAt) return false;
+      } else if (n.folderId !== folderId) return false;
+      if (
+        query &&
+        !`${n.title}\n${n.plainText}`
+          .toLocaleLowerCase()
+          .includes(query.toLocaleLowerCase())
+      )
+        return false;
+      if (filter === "locked" && !n.locked) return false;
+      if (
+        filter === "checklist" &&
+        !JSON.stringify(n.document).includes("taskItem")
+      )
+        return false;
+      if (filter === "tags" && !n.plainText.includes("#")) return false;
+      if (
+        ["audio", "image", "file", "video"].includes(filter) &&
+        !ws.attachments.some((a) => a.noteId === n.id && a.kind === filter)
+      )
+        return false;
+      return true;
+    })
+    .sort(
+      (a, b) =>
+        Number(b.pinned) - Number(a.pinned) ||
+        (sort === "title"
+          ? a.title.localeCompare(b.title, "zh")
+          : sort === "created"
+            ? b.createdAt - a.createdAt
+            : b.updatedAt - a.updatedAt),
+    );
+  const desktopSearch = !mobile && !separate && !!query;
+  const noteId = projectSearchNote({
+    searching: desktopSearch,
+    baseNoteId,
+    searchNoteId,
+    resultIds: listed.map((note) => note.id),
+  });
+  const current = ws.notes.find((n) => n.id === noteId);
+  const currentFolder = ws.folders.find((f) => f.id === folderId);
+  const selected = ws.notes.find(
+    (n) =>
+      n.id === (desktopSearch && !listed.length ? null : contextNote || noteId),
   );
+  const editor = noteId ? editors.get(noteId) || null : null;
+  const onReady = useCallback((id: string, instance: Editor | null) => {
+    if (instance) nativeEditorOwners.current.set(instance, id);
+    setEditors((previous) => {
+      if (previous.get(id) === instance || (!instance && !previous.has(id)))
+        return previous;
+      const next = new Map(previous);
+      if (instance) next.set(id, instance);
+      else next.delete(id);
+      return next;
+    });
+  }, []);
+  useEffect(() => {
+    if (!desktopSearch) setSearchNoteId(null);
+    else {
+      setContextNote(null);
+      setMenu(null);
+      setShowFind(false);
+      setEditing(false);
+    }
+  }, [desktopSearch, query]);
   const fail = useCallback((e: unknown) => setError(errText(e)), []);
   const hydrate = useCallback((data: Workspace) => {
     const previous = wsRef.current;
@@ -620,8 +756,11 @@ function App() {
       context.bookmark = null;
     });
     nativeAttachmentTarget.current = null;
+    for (const id of ids) {
+      const instance = editorsRef.current.get(id);
+      if (instance && !instance.isDestroyed) instance.destroy();
+    }
     if (noteId && ids.includes(noteId)) {
-      if (editor && !editor.isDestroyed) editor.destroy();
       barrierEditor.current = null;
       formatTarget.current = null;
       paperTarget.current = null;
@@ -835,17 +974,30 @@ function App() {
     }
   };
   useEffect(() => {
+    const releases = [...editors.values()].map((instance) => {
+      const changed = ({
+        transaction,
+      }: {
+        transaction: import("@tiptap/pm/state").Transaction;
+      }) => {
+        if (transaction.docChanged)
+          nativeDocumentVersions.current.set(
+            instance,
+            (nativeDocumentVersions.current.get(instance) || 0) + 1,
+          );
+      };
+      instance.on("transaction", changed);
+      return () => instance.off("transaction", changed);
+    });
+    return () => releases.forEach((release) => release());
+  }, [editors]);
+  useEffect(() => {
     if (!editor) return;
     const changed = ({
       transaction,
     }: {
       transaction: import("@tiptap/pm/state").Transaction;
     }) => {
-      if (transaction.docChanged)
-        nativeDocumentVersions.current.set(
-          editor,
-          (nativeDocumentVersions.current.get(editor) || 0) + 1,
-        );
       for (const target of [formatTarget.current, paperTarget.current])
         if (target && target.editor === editor && target.noteId === noteId)
           target.bookmark = target.bookmark.map(transaction.mapping);
@@ -881,13 +1033,14 @@ function App() {
   };
   const chooseNote = (n: Note) => {
     if (!mobile && view === "gallery") setGalleryEditor(true);
-    setNoteId(n.id);
+    if (desktopSearch) setSearchNoteId(n.id);
+    else setNoteId(n.id);
     setPage("editor");
     setMenu(null);
     setSwiped(null);
     setShowFind(false);
     setEditing(false);
-    updateSettings({ selectedNote: n.id });
+    if (!desktopSearch) updateSettings({ selectedNote: n.id });
   };
   const createNote = useCallback(
     async (validate?: () => void) => {
@@ -1278,43 +1431,6 @@ function App() {
         .setTextSelection({ from: match, to: match + find.length })
         .run();
   };
-  const listed = ws.notes
-    .filter((n) => {
-      if (query || filter) {
-        if (n.deletedAt) return false;
-      } else if (folderId === "all") {
-        if (n.deletedAt) return false;
-      } else if (n.folderId !== folderId) return false;
-      if (
-        query &&
-        !`${n.title}\n${n.plainText}`
-          .toLocaleLowerCase()
-          .includes(query.toLocaleLowerCase())
-      )
-        return false;
-      if (filter === "locked" && !n.locked) return false;
-      if (
-        filter === "checklist" &&
-        !JSON.stringify(n.document).includes("taskItem")
-      )
-        return false;
-      if (filter === "tags" && !n.plainText.includes("#")) return false;
-      if (
-        ["audio", "image", "file", "video"].includes(filter) &&
-        !ws.attachments.some((a) => a.noteId === n.id && a.kind === filter)
-      )
-        return false;
-      return true;
-    })
-    .sort(
-      (a, b) =>
-        Number(b.pinned) - Number(a.pinned) ||
-        (sort === "title"
-          ? a.title.localeCompare(b.title, "zh")
-          : sort === "created"
-            ? b.createdAt - a.createdAt
-            : b.updatedAt - a.updatedAt),
-    );
   const groupName = (n: Note) => {
     if (n.pinned) return "置顶";
     if (settings.groupDates === false) return "";
@@ -1941,6 +2057,7 @@ function App() {
     view,
     galleryEditor,
     separate,
+    query,
   ]);
   nativeAssert.current = (context, editing = false, overlay = false) => {
     const live = accessGate.stamp(context.noteId || undefined);
@@ -2632,8 +2749,11 @@ function App() {
                           return;
                         }
                         if (!mobile && view === "gallery") {
-                          setNoteId(n.id);
-                          updateSettings({ selectedNote: n.id });
+                          if (desktopSearch) setSearchNoteId(n.id);
+                          else {
+                            setNoteId(n.id);
+                            updateSettings({ selectedNote: n.id });
+                          }
                         } else chooseNote(n);
                       }}
                       onDoubleClick={() => {
@@ -2873,7 +2993,9 @@ function App() {
           </div>
         )}
         {!current ? (
-          <div className="editor-empty">{loading ? "" : "未选择备忘录"}</div>
+          <div className="editor-empty">
+            {loading || desktopSearch ? "" : "未选择备忘录"}
+          </div>
         ) : current.locked && !unlocked.has(current.id) ? (
           <div className="locked-state">
             <Lock size={48} />
@@ -2881,51 +3003,60 @@ function App() {
             <p>输入密码以查看此备忘录。</p>
             <button onClick={() => openModal("unlock")}>查看备忘录</button>
           </div>
-        ) : (
-          <>
-            <div className="editor-scroll">
+        ) : current.deletedAt ? (
+          <div className="editor-scroll">
+            <button
+              className="note-date"
+              onClick={() => setNotice(`创建于 ${fmtDate(current.createdAt)}`)}
+            >
+              {fmtDate(current.updatedAt)}
+            </button>
+            <div className="deleted-note">
+              <p>此备忘录位于“最近删除”中。</p>
               <button
-                className="note-date"
-                onClick={() =>
-                  setNotice(`创建于 ${fmtDate(current.createdAt)}`)
-                }
+                onClick={() => patch({ type: "restoreNote", id: current.id })}
               >
-                {fmtDate(current.updatedAt)}
+                恢复备忘录
               </button>
-              {current.deletedAt ? (
-                <div className="deleted-note">
-                  <p>此备忘录位于“最近删除”中。</p>
-                  <button
-                    onClick={() =>
-                      patch({ type: "restoreNote", id: current.id })
-                    }
-                  >
-                    恢复备忘录
-                  </button>
-                  <pre>{current.plainText}</pre>
-                </div>
-              ) : (
-                <NoteEditor
-                  key={`${current.id}-${ws.access?.sessionId || "preview"}-${ws.access?.notes[current.id]?.epoch || 0}-${externalVersions.current.get(current.id) || 0}`}
-                  note={current}
-                  onChange={saveDoc}
-                  onReady={onReady}
-                  onFocus={(focused) => {
-                    setEditing(focused);
-                    if (focused && mobile && menu === "format") {
-                      setMenu(null);
-                      formatTarget.current = null;
-                    }
-                  }}
-                />
-              )}
+              <pre>{current.plainText}</pre>
             </div>
-            {mobile &&
-              !current.deletedAt &&
-              menu !== "format" &&
-              (editing ? tools() : tools(true))}
-          </>
+          </div>
+        ) : null}
+        {[...new Set(desktopSearch ? [baseNoteId, noteId] : [noteId])].map(
+          (id) => {
+            const note = ws.notes.find((candidate) => candidate.id === id);
+            if (
+              !note ||
+              note.deletedAt ||
+              (note.locked && !unlocked.has(note.id))
+            )
+              return null;
+            return (
+              <SearchEditorHost
+                key={`${note.id}-${ws.access?.sessionId || "preview"}-${ws.access?.notes[note.id]?.epoch || 0}-${externalVersions.current.get(note.id) || 0}`}
+                note={note}
+                active={note.id === noteId}
+                blocked={blockedNotes.current.has(note.id)}
+                onChange={saveDoc}
+                onReady={onReady}
+                onDate={() => setNotice(`创建于 ${fmtDate(note.createdAt)}`)}
+                onFocus={(focused) => {
+                  setEditing(focused);
+                  if (focused && mobile && menu === "format") {
+                    setMenu(null);
+                    formatTarget.current = null;
+                  }
+                }}
+              />
+            );
+          },
         )}
+        {mobile &&
+          current &&
+          !current.deletedAt &&
+          (!current.locked || unlocked.has(current.id)) &&
+          menu !== "format" &&
+          (editing ? tools() : tools(true))}
         {saving > 0 && (
           <div className="save-status" aria-live="polite">
             正在保存…
