@@ -10,6 +10,7 @@
 | APP-001-FIX-00 归档完整性 | in-progress，优先P1 | 导入失败不损坏附件、恢复设置、树与引用校验 |
 | APP-001-FIX-01 编辑与导航修复 | pending，等QA交接 | 同窗画廊、手机格式面板、7种纸张、格式/表格/清单行为 |
 | APP-001-FIX-02 Mac顶部校准 | pending，依赖FIX-01 | 运行时系统符号、公开原生控件/材质、分组与平台菜单 |
+| APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | PARITY-001 修正差异 | pending，依赖 QA-001 | 按原版补齐功能与像素；重新验证 |
 
 docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，docs/ui 是视觉证据。实现阶段遵循 docs-sprint 的 develop/verify 分离。空仓库先建立 Git 基线，串行实施开发/验证；不要求用户批准已授权的常规设计补全。测试必须覆盖真实持久化边界和 UI 用户路径，不能只测试同实现的常量。
