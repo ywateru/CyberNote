@@ -45,3 +45,9 @@ depends-on: [app-002-permission-01]
 新APK覆盖安装后实读hash匹配，Android11/API30/WebView91开发有限实际确认：原受管WebM卡片1:06、主metadata仍Infinity但初始time0/paused；真实播放推进0.703411秒、暂停0.921484秒。完整媒体note/revision、受管429547B/SHA不变；共享导航与纸张Beta39..43保留，纸张两次合法保存后恢复grid-large。48项原始证据与manifest在`../../verification/f07-audio-integration/android-developer01/`。
 
 实际也发现旧移动展开入口不可达：audio-expand为display:none，单次原生summary双击未展开而起IME，range/±15没有可操作控件，未测也不通过。专门修复`app-002-audio-controls-01.md`。独立新包复验与Mac仍待完成；不以有限时长显示成功关闭本任务全部交互。
+
+## independent installed subset · 2026-11-04
+
+独立新包有限实测已完成，报告`../reviews/unified-f4d3a02-android-independent-01.md`、66项原始证据`../../verification/unified-f4d3a02-independent-01/android/`。独立两次核安装APK与受管WebM hash、216输入及开发22+48项manifest均匹配；卡片1:06、播放前实际time0/paused，真实播放推进0.513487后暂停1.45205并稳定。最初采样时解析已完成，只证明解析后位置0，不声称捕获所有初始瞬态。主duration仍Infinity，有限显示和真实平台metadata分开记账。完整fixture JSON/revision30/58/attachment不变，共享导航及一次纸张Beta39..43/真实Editor身份保持通过。
+
+独立只读确认移动展开隐藏、range不存在；未重复失败手势，±15/拖动/ended/新冷启/声音不通过或未测。Mac sealed包另有导航被Ignore的startup阻塞，尚未到播放器或F07。任务保持in-progress，下一触摸入口候选与Mac启动修复按各自确切新包再验。
