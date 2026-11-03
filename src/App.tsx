@@ -93,6 +93,7 @@ import { toolbarState } from "./native-toolbar-state";
 import type { BindingInfo } from "../plugins/tauri-plugin-notes-ui/guest-js";
 import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
+import { documentsEqual } from "./document-equality";
 import { convertTableToText, toggleListStyle } from "./editor-actions";
 import type { SelectionBookmark } from "@tiptap/pm/state";
 import {
@@ -314,7 +315,7 @@ function App() {
       if (
         !pending &&
         old &&
-        JSON.stringify(old.document) !== JSON.stringify(n.document)
+        !documentsEqual(old.document, n.document)
       )
         externalVersions.current.set(
           n.id,

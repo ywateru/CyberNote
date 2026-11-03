@@ -1,0 +1,94 @@
+{
+  "scope": "Actual JSON comparator, real schema/state/history and extracted production hydrate/key. No React mount, device, native paper action or runtime root-cause claim.",
+  "tests": 22,
+  "results": [
+    {
+      "name": "real rich schema document: recursive object key reorder is equal",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: text",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: node type",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: node attribute",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: nested mark attribute",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: nested list attribute",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: boolean attribute",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: content array order",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: mark array order",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: missing content",
+      "status": "pass"
+    },
+    {
+      "name": "real document change remains different: array length",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: missing vs null",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: missing vs explicit undefined",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: null vs empty object",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: number vs string",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: object vs array",
+      "status": "pass"
+    },
+    {
+      "name": "strict JSON boundary: nested arrays",
+      "status": "pass"
+    },
+    {
+      "name": "actual hydrate: paper-only authoritative refresh preserves production key and real bookmark/history path",
+      "status": "pass"
+    },
+    {
+      "name": "actual hydrate: genuinely changed authoritative document still advances editor key",
+      "status": "pass"
+    },
+    {
+      "name": "actual hydrate: same document cannot exempt new process session",
+      "status": "pass"
+    },
+    {
+      "name": "actual hydrate: same document cannot exempt new note authorization epoch",
+      "status": "pass"
+    },
+    {
+      "name": "actual hydrate: unauthorized authoritative snapshot cannot revive a pending document",
+      "status": "pass"
+    }
+  ]
+}

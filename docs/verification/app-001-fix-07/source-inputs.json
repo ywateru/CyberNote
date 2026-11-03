@@ -1,0 +1,20 @@
+{
+  "base": "393b7a3",
+  "scope": "Finite owned source/test inputs only; no app binary built and not a complete production build manifest.",
+  "files": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "9154968f9489fe68e92445d492a6973f259f911d01f8823ddb14b572f614b524"
+    },
+    {
+      "path": "src/document-equality.ts",
+      "sha256": "629d2729ac47626f6618f13d6858c98dc5a0f654a4b53ba70f6ec0731204db7d"
+    },
+    {
+      "path": "scripts/check-document-identity.mjs",
+      "sha256": "25d30bc76624bc6afb649f3f3fc585e823709afd37aad706c0b808de26db21a6"
+    }
+  ],
+  "algorithm": "SHA256 of ordered sha256 + two spaces + path + LF",
+  "aggregate": "d6dbd781c9ea5a774293097e63f856dbc48087bbb6b92365ba196eea9028d853"
+}
