@@ -1,0 +1,4485 @@
+{
+  "date": "2026-11-03",
+  "scope": "saved original screenshots only; no GUI/runtime/production edits",
+  "coordinates": "top-left source origin; rectangles [left,top,right,bottom); px / 2 = pt",
+  "method": {
+    "surface": "manual visible face boundary, excluding diffuse shadow; edge RGB profiles retained",
+    "ink": "neutral max(RGB)<190 and channel spread<18 in recorded ROI; sensitivity thresholds175/205; color swatch separately hue-filtered",
+    "uncertaintyPx": {
+      "neutralInk": "typically ±1–2; threshold sensitivity retained",
+      "cleanGlassFace": "±2 per edge; white-on-white and antialiasing prevent an exact control frame",
+      "cursorOccludedFormatGroupLeft": "±6, pointer halo overlaps; left anchor only approximate",
+      "popoverBody": "±2–4; diffuse boundary",
+      "popoverCornerRadius": "approximate 36±4, no exact curve fit",
+      "arrowTip": "±4 or unknown under pointer halo"
+    },
+    "noInference": [
+      "hit rectangles",
+      "AppKit layout constraints",
+      "exact toolbar frame height",
+      "font baselines or row hit heights",
+      "glass blur radius",
+      "active/key-window state"
+    ]
+  },
+  "symbolReuse": {
+    "path": "docs/research/assets/macos-symbols/rankings.json",
+    "bytes": 47621,
+    "sha256": "27c9992a08f38e25fce7a563bb1cabbef9beba7f431e939c39f687b98f16b563"
+  },
+  "reference52PtBand": {
+    "px": [
+      0,
+      0,
+      2176,
+      104
+    ],
+    "pt": [
+      0.0,
+      0.0,
+      1088.0,
+      52.0
+    ],
+    "sizePx": [
+      2176,
+      104
+    ],
+    "sizePt": [
+      1088.0,
+      52.0
+    ],
+    "centerPx": [
+      1088.0,
+      52.0
+    ],
+    "centerPt": [
+      544.0,
+      26.0
+    ]
+  },
+  "bandMeaning": "host integration reference only; actual AX toolbar frame unavailable",
+  "images": {
+    "format": {
+      "source": {
+        "path": "references/desktop/macos26-format.png",
+        "bytes": 131788,
+        "sha256": "e9cea4e4b0431d4b7836e8997d5f0d14001eec77cc83227b1ab009530b7ae755"
+      },
+      "sizePx": [
+        2176,
+        1320
+      ],
+      "sizePt": [
+        1088,
+        660
+      ],
+      "windowActivity": "unknown; visible gray foreground only; filename not used as active proof",
+      "surfaces": {
+        "list_options": {
+          "px": [
+            928,
+            16,
+            1000,
+            88
+          ],
+          "pt": [
+            464.0,
+            8.0,
+            500.0,
+            44.0
+          ],
+          "sizePx": [
+            72,
+            72
+          ],
+          "sizePt": [
+            36.0,
+            36.0
+          ],
+          "centerPx": [
+            964.0,
+            52.0
+          ],
+          "centerPt": [
+            482.0,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 957,
+              "rightExclusivePx": 971
+            },
+            {
+              "yPx": 18,
+              "leftPx": 950,
+              "rightExclusivePx": 978
+            },
+            {
+              "yPx": 26,
+              "leftPx": 938,
+              "rightExclusivePx": 990
+            },
+            {
+              "yPx": 36,
+              "leftPx": 932,
+              "rightExclusivePx": 997
+            },
+            {
+              "yPx": 52,
+              "leftPx": 928,
+              "rightExclusivePx": 1000
+            },
+            {
+              "yPx": 68,
+              "leftPx": 932,
+              "rightExclusivePx": 996
+            },
+            {
+              "yPx": 78,
+              "leftPx": 940,
+              "rightExclusivePx": 988
+            },
+            {
+              "yPx": 86,
+              "leftPx": 956,
+              "rightExclusivePx": 972
+            },
+            {
+              "yPx": 87,
+              "leftPx": 958,
+              "rightExclusivePx": 970
+            }
+          ]
+        },
+        "new": {
+          "px": [
+            1034,
+            16,
+            1108,
+            88
+          ],
+          "pt": [
+            517.0,
+            8.0,
+            554.0,
+            44.0
+          ],
+          "sizePx": [
+            74,
+            72
+          ],
+          "sizePt": [
+            37.0,
+            36.0
+          ],
+          "centerPx": [
+            1071.0,
+            52.0
+          ],
+          "centerPt": [
+            535.5,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 1064,
+              "rightExclusivePx": 1080
+            },
+            {
+              "yPx": 18,
+              "leftPx": 1059,
+              "rightExclusivePx": 1085
+            },
+            {
+              "yPx": 26,
+              "leftPx": 1046,
+              "rightExclusivePx": 1097
+            },
+            {
+              "yPx": 36,
+              "leftPx": 1039,
+              "rightExclusivePx": 1104
+            },
+            {
+              "yPx": 52,
+              "leftPx": 1035,
+              "rightExclusivePx": 1108
+            },
+            {
+              "yPx": 68,
+              "leftPx": 1044,
+              "rightExclusivePx": 1104
+            },
+            {
+              "yPx": 78,
+              "leftPx": 1048,
+              "rightExclusivePx": 1096
+            },
+            {
+              "yPx": 86,
+              "leftPx": 1062,
+              "rightExclusivePx": 1082
+            },
+            {
+              "yPx": 87,
+              "leftPx": 1064,
+              "rightExclusivePx": 1077
+            }
+          ]
+        },
+        "format_checklist_table_media": {
+          "px": [
+            1144,
+            16,
+            1466,
+            88
+          ],
+          "pt": [
+            572.0,
+            8.0,
+            733.0,
+            44.0
+          ],
+          "sizePx": [
+            322,
+            72
+          ],
+          "sizePt": [
+            161.0,
+            36.0
+          ],
+          "centerPx": [
+            1305.0,
+            52.0
+          ],
+          "centerPt": [
+            652.5,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 6,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": null,
+              "rightExclusivePx": null,
+              "reason": "pointer overlaps left cap; not sampled"
+            },
+            {
+              "yPx": 18,
+              "leftPx": null,
+              "rightExclusivePx": null,
+              "reason": "pointer overlaps left cap; not sampled"
+            },
+            {
+              "yPx": 26,
+              "leftPx": null,
+              "rightExclusivePx": null,
+              "reason": "pointer overlaps left cap; not sampled"
+            },
+            {
+              "yPx": 36,
+              "leftPx": null,
+              "rightExclusivePx": null,
+              "reason": "pointer overlaps left cap; not sampled"
+            },
+            {
+              "yPx": 52,
+              "leftPx": null,
+              "rightExclusivePx": null,
+              "reason": "pointer overlaps left cap; not sampled"
+            },
+            {
+              "yPx": 68,
+              "leftPx": null,
+              "rightExclusivePx": null,
+              "reason": "pointer overlaps left cap; not sampled"
+            },
+            {
+              "yPx": 78,
+              "leftPx": null,
+              "rightExclusivePx": null,
+              "reason": "pointer overlaps left cap; not sampled"
+            },
+            {
+              "yPx": 86,
+              "leftPx": null,
+              "rightExclusivePx": null,
+              "reason": "pointer overlaps left cap; not sampled"
+            },
+            {
+              "yPx": 87,
+              "leftPx": null,
+              "rightExclusivePx": null,
+              "reason": "pointer overlaps left cap; not sampled"
+            }
+          ]
+        },
+        "share_more": {
+          "px": [
+            1502,
+            16,
+            1662,
+            88
+          ],
+          "pt": [
+            751.0,
+            8.0,
+            831.0,
+            44.0
+          ],
+          "sizePx": [
+            160,
+            72
+          ],
+          "sizePt": [
+            80.0,
+            36.0
+          ],
+          "centerPx": [
+            1582.0,
+            52.0
+          ],
+          "centerPt": [
+            791.0,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 1536,
+              "rightExclusivePx": 1629
+            },
+            {
+              "yPx": 18,
+              "leftPx": 1526,
+              "rightExclusivePx": 1640
+            },
+            {
+              "yPx": 26,
+              "leftPx": 1512,
+              "rightExclusivePx": 1651
+            },
+            {
+              "yPx": 36,
+              "leftPx": 1505,
+              "rightExclusivePx": 1657
+            },
+            {
+              "yPx": 52,
+              "leftPx": 1502,
+              "rightExclusivePx": 1659
+            },
+            {
+              "yPx": 68,
+              "leftPx": 1506,
+              "rightExclusivePx": 1650
+            },
+            {
+              "yPx": 78,
+              "leftPx": 1514,
+              "rightExclusivePx": 1650
+            },
+            {
+              "yPx": 86,
+              "leftPx": 1530,
+              "rightExclusivePx": 1634
+            },
+            {
+              "yPx": 87,
+              "leftPx": 1536,
+              "rightExclusivePx": 1626
+            }
+          ]
+        },
+        "search": {
+          "px": [
+            1694,
+            16,
+            2160,
+            88
+          ],
+          "pt": [
+            847.0,
+            8.0,
+            1080.0,
+            44.0
+          ],
+          "sizePx": [
+            466,
+            72
+          ],
+          "sizePt": [
+            233.0,
+            36.0
+          ],
+          "centerPx": [
+            1927.0,
+            52.0
+          ],
+          "centerPt": [
+            963.5,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 1728,
+              "rightExclusivePx": 2128
+            },
+            {
+              "yPx": 18,
+              "leftPx": 1718,
+              "rightExclusivePx": 2137
+            },
+            {
+              "yPx": 26,
+              "leftPx": 1704,
+              "rightExclusivePx": 2150
+            },
+            {
+              "yPx": 36,
+              "leftPx": 1698,
+              "rightExclusivePx": 2156
+            },
+            {
+              "yPx": 52,
+              "leftPx": 1694,
+              "rightExclusivePx": 2160
+            },
+            {
+              "yPx": 68,
+              "leftPx": 1698,
+              "rightExclusivePx": 2156
+            },
+            {
+              "yPx": 78,
+              "leftPx": 1707,
+              "rightExclusivePx": 2148
+            },
+            {
+              "yPx": 86,
+              "leftPx": 1723,
+              "rightExclusivePx": 2132
+            },
+            {
+              "yPx": 87,
+              "leftPx": 1728,
+              "rightExclusivePx": 2125
+            }
+          ]
+        }
+      },
+      "ink": {
+        "folder_title": {
+          "px": [
+            498,
+            27,
+            744,
+            51
+          ],
+          "pt": [
+            249.0,
+            13.5,
+            372.0,
+            25.5
+          ],
+          "sizePx": [
+            246,
+            24
+          ],
+          "sizePt": [
+            123.0,
+            12.0
+          ],
+          "centerPx": [
+            621.0,
+            39.0
+          ],
+          "centerPt": [
+            310.5,
+            19.5
+          ],
+          "roiPx": [
+            480,
+            20,
+            800,
+            54
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              498,
+              27,
+              744,
+              51
+            ],
+            "205": [
+              498,
+              27,
+              744,
+              51
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "folder_count": {
+          "px": [
+            497,
+            58,
+            594,
+            78
+          ],
+          "pt": [
+            248.5,
+            29.0,
+            297.0,
+            39.0
+          ],
+          "sizePx": [
+            97,
+            20
+          ],
+          "sizePt": [
+            48.5,
+            10.0
+          ],
+          "centerPx": [
+            545.5,
+            68.0
+          ],
+          "centerPt": [
+            272.75,
+            34.0
+          ],
+          "roiPx": [
+            480,
+            55,
+            700,
+            85
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              497,
+              58,
+              594,
+              78
+            ],
+            "205": [
+              497,
+              58,
+              595,
+              78
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "add_folder": {
+          "px": [
+            305,
+            36,
+            349,
+            67
+          ],
+          "pt": [
+            152.5,
+            18.0,
+            174.5,
+            33.5
+          ],
+          "sizePx": [
+            44,
+            31
+          ],
+          "sizePt": [
+            22.0,
+            15.5
+          ],
+          "centerPx": [
+            327.0,
+            51.5
+          ],
+          "centerPt": [
+            163.5,
+            25.75
+          ],
+          "roiPx": [
+            296,
+            28,
+            354,
+            76
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              305,
+              36,
+              349,
+              67
+            ],
+            "205": [
+              305,
+              36,
+              349,
+              67
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "sidebar_toggle": {
+          "px": [
+            393,
+            37,
+            432,
+            67
+          ],
+          "pt": [
+            196.5,
+            18.5,
+            216.0,
+            33.5
+          ],
+          "sizePx": [
+            39,
+            30
+          ],
+          "sizePt": [
+            19.5,
+            15.0
+          ],
+          "centerPx": [
+            412.5,
+            52.0
+          ],
+          "centerPt": [
+            206.25,
+            26.0
+          ],
+          "roiPx": [
+            385,
+            28,
+            443,
+            76
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              393,
+              37,
+              432,
+              67
+            ],
+            "205": [
+              393,
+              36,
+              432,
+              67
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "search_placeholder": {
+          "px": [
+            1760,
+            41,
+            1808,
+            65
+          ],
+          "pt": [
+            880.0,
+            20.5,
+            904.0,
+            32.5
+          ],
+          "sizePx": [
+            48,
+            24
+          ],
+          "sizePt": [
+            24.0,
+            12.0
+          ],
+          "centerPx": [
+            1784.0,
+            53.0
+          ],
+          "centerPt": [
+            892.0,
+            26.5
+          ],
+          "roiPx": [
+            1750,
+            32,
+            1830,
+            78
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1760,
+              41,
+              1808,
+              65
+            ],
+            "205": [
+              1760,
+              41,
+              1808,
+              65
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "new": {
+          "px": [
+            1057,
+            35,
+            1089,
+            67
+          ],
+          "pt": [
+            528.5,
+            17.5,
+            544.5,
+            33.5
+          ],
+          "sizePx": [
+            32,
+            32
+          ],
+          "sizePt": [
+            16.0,
+            16.0
+          ],
+          "centerPx": [
+            1073.0,
+            51.0
+          ],
+          "centerPt": [
+            536.5,
+            25.5
+          ],
+          "kind": "reused glyph mask; not remeasured",
+          "threshold": 163,
+          "source": "symbolReuse"
+        },
+        "checklist": {
+          "px": [
+            1255,
+            36,
+            1292,
+            69
+          ],
+          "pt": [
+            627.5,
+            18.0,
+            646.0,
+            34.5
+          ],
+          "sizePx": [
+            37,
+            33
+          ],
+          "sizePt": [
+            18.5,
+            16.5
+          ],
+          "centerPx": [
+            1273.5,
+            52.5
+          ],
+          "centerPt": [
+            636.75,
+            26.25
+          ],
+          "kind": "reused glyph mask; not remeasured",
+          "threshold": 162,
+          "source": "symbolReuse"
+        },
+        "table": {
+          "px": [
+            1336,
+            37,
+            1375,
+            67
+          ],
+          "pt": [
+            668.0,
+            18.5,
+            687.5,
+            33.5
+          ],
+          "sizePx": [
+            39,
+            30
+          ],
+          "sizePt": [
+            19.5,
+            15.0
+          ],
+          "centerPx": [
+            1355.5,
+            52.0
+          ],
+          "centerPt": [
+            677.75,
+            26.0
+          ],
+          "kind": "reused glyph mask; not remeasured",
+          "threshold": 162,
+          "source": "symbolReuse"
+        },
+        "media": {
+          "px": [
+            1414,
+            35,
+            1445,
+            70
+          ],
+          "pt": [
+            707.0,
+            17.5,
+            722.5,
+            35.0
+          ],
+          "sizePx": [
+            31,
+            35
+          ],
+          "sizePt": [
+            15.5,
+            17.5
+          ],
+          "centerPx": [
+            1429.5,
+            52.5
+          ],
+          "centerPt": [
+            714.75,
+            26.25
+          ],
+          "kind": "reused glyph mask; not remeasured",
+          "threshold": 162,
+          "source": "symbolReuse"
+        },
+        "share": {
+          "px": [
+            1523,
+            32,
+            1552,
+            69
+          ],
+          "pt": [
+            761.5,
+            16.0,
+            776.0,
+            34.5
+          ],
+          "sizePx": [
+            29,
+            37
+          ],
+          "sizePt": [
+            14.5,
+            18.5
+          ],
+          "centerPx": [
+            1537.5,
+            50.5
+          ],
+          "centerPt": [
+            768.75,
+            25.25
+          ],
+          "kind": "reused glyph mask; not remeasured",
+          "threshold": 164,
+          "source": "symbolReuse"
+        },
+        "more": {
+          "px": [
+            1611,
+            49,
+            1641,
+            55
+          ],
+          "pt": [
+            805.5,
+            24.5,
+            820.5,
+            27.5
+          ],
+          "sizePx": [
+            30,
+            6
+          ],
+          "sizePt": [
+            15.0,
+            3.0
+          ],
+          "centerPx": [
+            1626.0,
+            52.0
+          ],
+          "centerPt": [
+            813.0,
+            26.0
+          ],
+          "kind": "reused glyph mask; not remeasured",
+          "threshold": 163,
+          "source": "symbolReuse"
+        },
+        "search": {
+          "px": [
+            1717,
+            40,
+            1742,
+            65
+          ],
+          "pt": [
+            858.5,
+            20.0,
+            871.0,
+            32.5
+          ],
+          "sizePx": [
+            25,
+            25
+          ],
+          "sizePt": [
+            12.5,
+            12.5
+          ],
+          "centerPx": [
+            1729.5,
+            52.5
+          ],
+          "centerPt": [
+            864.75,
+            26.25
+          ],
+          "kind": "reused glyph mask; not remeasured",
+          "threshold": 188,
+          "source": "symbolReuse"
+        }
+      },
+      "edgeProfiles": [
+        {
+          "axis": "vertical",
+          "xPx": 1070,
+          "samples": [
+            [
+              14,
+              250,
+              250,
+              250
+            ],
+            [
+              15,
+              250,
+              250,
+              250
+            ],
+            [
+              16,
+              255,
+              255,
+              255
+            ],
+            [
+              17,
+              255,
+              255,
+              255
+            ],
+            [
+              86,
+              255,
+              255,
+              255
+            ],
+            [
+              87,
+              255,
+              255,
+              255
+            ],
+            [
+              88,
+              244,
+              244,
+              244
+            ],
+            [
+              89,
+              244,
+              244,
+              244
+            ],
+            [
+              92,
+              245,
+              245,
+              245
+            ],
+            [
+              100,
+              246,
+              246,
+              246
+            ],
+            [
+              104,
+              247,
+              247,
+              247
+            ]
+          ]
+        },
+        {
+          "axis": "vertical",
+          "xPx": 1360,
+          "samples": [
+            [
+              14,
+              250,
+              250,
+              250
+            ],
+            [
+              15,
+              250,
+              250,
+              250
+            ],
+            [
+              16,
+              255,
+              255,
+              255
+            ],
+            [
+              17,
+              255,
+              255,
+              255
+            ],
+            [
+              86,
+              255,
+              255,
+              255
+            ],
+            [
+              87,
+              255,
+              255,
+              255
+            ],
+            [
+              88,
+              244,
+              244,
+              244
+            ],
+            [
+              89,
+              244,
+              244,
+              244
+            ],
+            [
+              92,
+              245,
+              245,
+              245
+            ],
+            [
+              100,
+              246,
+              246,
+              246
+            ],
+            [
+              104,
+              247,
+              247,
+              247
+            ]
+          ]
+        },
+        {
+          "axis": "vertical",
+          "xPx": 1600,
+          "samples": [
+            [
+              14,
+              250,
+              250,
+              250
+            ],
+            [
+              15,
+              250,
+              250,
+              250
+            ],
+            [
+              16,
+              255,
+              255,
+              255
+            ],
+            [
+              17,
+              255,
+              255,
+              255
+            ],
+            [
+              86,
+              255,
+              255,
+              255
+            ],
+            [
+              87,
+              255,
+              255,
+              255
+            ],
+            [
+              88,
+              244,
+              244,
+              244
+            ],
+            [
+              89,
+              244,
+              244,
+              244
+            ],
+            [
+              92,
+              245,
+              245,
+              245
+            ],
+            [
+              100,
+              246,
+              246,
+              246
+            ],
+            [
+              104,
+              247,
+              247,
+              247
+            ]
+          ]
+        },
+        {
+          "axis": "vertical",
+          "xPx": 1950,
+          "samples": [
+            [
+              14,
+              250,
+              250,
+              250
+            ],
+            [
+              15,
+              250,
+              250,
+              250
+            ],
+            [
+              16,
+              255,
+              255,
+              255
+            ],
+            [
+              17,
+              255,
+              255,
+              255
+            ],
+            [
+              86,
+              255,
+              255,
+              255
+            ],
+            [
+              87,
+              255,
+              255,
+              255
+            ],
+            [
+              88,
+              244,
+              244,
+              244
+            ],
+            [
+              89,
+              244,
+              244,
+              244
+            ],
+            [
+              92,
+              245,
+              245,
+              245
+            ],
+            [
+              100,
+              246,
+              246,
+              246
+            ],
+            [
+              104,
+              247,
+              247,
+              247
+            ]
+          ]
+        }
+      ]
+    },
+    "gallery-open-note": {
+      "source": {
+        "path": "references/desktop/macos26-gallery-open-note.png",
+        "bytes": 111772,
+        "sha256": "19691cf2191530e8898fa1a781f493570ee4b0c4d6447d85d0cee9d63dae5491"
+      },
+      "sizePx": [
+        2176,
+        1320
+      ],
+      "sizePt": [
+        1088,
+        660
+      ],
+      "windowActivity": "unknown; visible gray foreground only; filename not used as active proof",
+      "surfaces": {
+        "back": {
+          "px": [
+            472,
+            16,
+            544,
+            88
+          ],
+          "pt": [
+            236.0,
+            8.0,
+            272.0,
+            44.0
+          ],
+          "sizePx": [
+            72,
+            72
+          ],
+          "sizePt": [
+            36.0,
+            36.0
+          ],
+          "centerPx": [
+            508.0,
+            52.0
+          ],
+          "centerPt": [
+            254.0,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 501,
+              "rightExclusivePx": 515
+            },
+            {
+              "yPx": 18,
+              "leftPx": 495,
+              "rightExclusivePx": 522
+            },
+            {
+              "yPx": 26,
+              "leftPx": 483,
+              "rightExclusivePx": 534
+            },
+            {
+              "yPx": 36,
+              "leftPx": 476,
+              "rightExclusivePx": 540
+            },
+            {
+              "yPx": 52,
+              "leftPx": 472,
+              "rightExclusivePx": 544
+            },
+            {
+              "yPx": 68,
+              "leftPx": 476,
+              "rightExclusivePx": 540
+            },
+            {
+              "yPx": 78,
+              "leftPx": 485,
+              "rightExclusivePx": 532
+            },
+            {
+              "yPx": 86,
+              "leftPx": 500,
+              "rightExclusivePx": 516
+            },
+            {
+              "yPx": 87,
+              "leftPx": 503,
+              "rightExclusivePx": 514
+            }
+          ]
+        },
+        "new": {
+          "px": [
+            1104,
+            16,
+            1178,
+            88
+          ],
+          "pt": [
+            552.0,
+            8.0,
+            589.0,
+            44.0
+          ],
+          "sizePx": [
+            74,
+            72
+          ],
+          "sizePt": [
+            37.0,
+            36.0
+          ],
+          "centerPx": [
+            1141.0,
+            52.0
+          ],
+          "centerPt": [
+            570.5,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 1133,
+              "rightExclusivePx": 1149
+            },
+            {
+              "yPx": 18,
+              "leftPx": 1128,
+              "rightExclusivePx": 1155
+            },
+            {
+              "yPx": 26,
+              "leftPx": 1115,
+              "rightExclusivePx": 1168
+            },
+            {
+              "yPx": 36,
+              "leftPx": 1109,
+              "rightExclusivePx": 1175
+            },
+            {
+              "yPx": 52,
+              "leftPx": 1105,
+              "rightExclusivePx": 1178
+            },
+            {
+              "yPx": 68,
+              "leftPx": 1109,
+              "rightExclusivePx": 1174
+            },
+            {
+              "yPx": 78,
+              "leftPx": 1118,
+              "rightExclusivePx": 1166
+            },
+            {
+              "yPx": 86,
+              "leftPx": 1131,
+              "rightExclusivePx": 1152
+            },
+            {
+              "yPx": 87,
+              "leftPx": 1135,
+              "rightExclusivePx": 1148
+            }
+          ]
+        },
+        "format_checklist_table_media": {
+          "px": [
+            1214,
+            16,
+            1536,
+            88
+          ],
+          "pt": [
+            607.0,
+            8.0,
+            768.0,
+            44.0
+          ],
+          "sizePx": [
+            322,
+            72
+          ],
+          "sizePt": [
+            161.0,
+            36.0
+          ],
+          "centerPx": [
+            1375.0,
+            52.0
+          ],
+          "centerPt": [
+            687.5,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 1248,
+              "rightExclusivePx": 1504
+            },
+            {
+              "yPx": 18,
+              "leftPx": 1238,
+              "rightExclusivePx": 1513
+            },
+            {
+              "yPx": 26,
+              "leftPx": 1224,
+              "rightExclusivePx": 1526
+            },
+            {
+              "yPx": 36,
+              "leftPx": 1217,
+              "rightExclusivePx": 1532
+            },
+            {
+              "yPx": 52,
+              "leftPx": 1214,
+              "rightExclusivePx": 1536
+            },
+            {
+              "yPx": 68,
+              "leftPx": 1218,
+              "rightExclusivePx": 1532
+            },
+            {
+              "yPx": 78,
+              "leftPx": 1226,
+              "rightExclusivePx": 1524
+            },
+            {
+              "yPx": 86,
+              "leftPx": 1242,
+              "rightExclusivePx": 1508
+            },
+            {
+              "yPx": 87,
+              "leftPx": 1248,
+              "rightExclusivePx": 1501
+            }
+          ]
+        },
+        "share_more": {
+          "px": [
+            1572,
+            16,
+            1732,
+            88
+          ],
+          "pt": [
+            786.0,
+            8.0,
+            866.0,
+            44.0
+          ],
+          "sizePx": [
+            160,
+            72
+          ],
+          "sizePt": [
+            80.0,
+            36.0
+          ],
+          "centerPx": [
+            1652.0,
+            52.0
+          ],
+          "centerPt": [
+            826.0,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 1605,
+              "rightExclusivePx": 1699
+            },
+            {
+              "yPx": 18,
+              "leftPx": 1596,
+              "rightExclusivePx": 1708
+            },
+            {
+              "yPx": 26,
+              "leftPx": 1583,
+              "rightExclusivePx": 1721
+            },
+            {
+              "yPx": 36,
+              "leftPx": 1576,
+              "rightExclusivePx": 1728
+            },
+            {
+              "yPx": 52,
+              "leftPx": 1572,
+              "rightExclusivePx": 1732
+            },
+            {
+              "yPx": 68,
+              "leftPx": 1576,
+              "rightExclusivePx": 1728
+            },
+            {
+              "yPx": 78,
+              "leftPx": 1584,
+              "rightExclusivePx": 1720
+            },
+            {
+              "yPx": 86,
+              "leftPx": 1599,
+              "rightExclusivePx": 1705
+            },
+            {
+              "yPx": 87,
+              "leftPx": 1607,
+              "rightExclusivePx": 1697
+            }
+          ]
+        },
+        "search": {
+          "px": [
+            1764,
+            16,
+            2160,
+            88
+          ],
+          "pt": [
+            882.0,
+            8.0,
+            1080.0,
+            44.0
+          ],
+          "sizePx": [
+            396,
+            72
+          ],
+          "sizePt": [
+            198.0,
+            36.0
+          ],
+          "centerPx": [
+            1962.0,
+            52.0
+          ],
+          "centerPt": [
+            981.0,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 1797,
+              "rightExclusivePx": 2128
+            },
+            {
+              "yPx": 18,
+              "leftPx": 1788,
+              "rightExclusivePx": 2137
+            },
+            {
+              "yPx": 26,
+              "leftPx": 1775,
+              "rightExclusivePx": 2150
+            },
+            {
+              "yPx": 36,
+              "leftPx": 1768,
+              "rightExclusivePx": 2156
+            },
+            {
+              "yPx": 52,
+              "leftPx": 1764,
+              "rightExclusivePx": 2160
+            },
+            {
+              "yPx": 68,
+              "leftPx": 1768,
+              "rightExclusivePx": 2156
+            },
+            {
+              "yPx": 78,
+              "leftPx": 1776,
+              "rightExclusivePx": 2148
+            },
+            {
+              "yPx": 86,
+              "leftPx": 1791,
+              "rightExclusivePx": 2132
+            },
+            {
+              "yPx": 87,
+              "leftPx": 1799,
+              "rightExclusivePx": 2125
+            }
+          ]
+        }
+      },
+      "ink": {
+        "back": {
+          "px": [
+            498,
+            38,
+            514,
+            66
+          ],
+          "pt": [
+            249.0,
+            19.0,
+            257.0,
+            33.0
+          ],
+          "sizePx": [
+            16,
+            28
+          ],
+          "sizePt": [
+            8.0,
+            14.0
+          ],
+          "centerPx": [
+            506.0,
+            52.0
+          ],
+          "centerPt": [
+            253.0,
+            26.0
+          ],
+          "roiPx": [
+            487,
+            30,
+            526,
+            75
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              498,
+              38,
+              514,
+              66
+            ],
+            "205": [
+              498,
+              38,
+              514,
+              66
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "folder_title": {
+          "px": [
+            570,
+            27,
+            816,
+            51
+          ],
+          "pt": [
+            285.0,
+            13.5,
+            408.0,
+            25.5
+          ],
+          "sizePx": [
+            246,
+            24
+          ],
+          "sizePt": [
+            123.0,
+            12.0
+          ],
+          "centerPx": [
+            693.0,
+            39.0
+          ],
+          "centerPt": [
+            346.5,
+            19.5
+          ],
+          "roiPx": [
+            555,
+            20,
+            860,
+            54
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              570,
+              27,
+              816,
+              51
+            ],
+            "205": [
+              570,
+              27,
+              816,
+              51
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "folder_count": {
+          "px": [
+            569,
+            58,
+            666,
+            78
+          ],
+          "pt": [
+            284.5,
+            29.0,
+            333.0,
+            39.0
+          ],
+          "sizePx": [
+            97,
+            20
+          ],
+          "sizePt": [
+            48.5,
+            10.0
+          ],
+          "centerPx": [
+            617.5,
+            68.0
+          ],
+          "centerPt": [
+            308.75,
+            34.0
+          ],
+          "roiPx": [
+            555,
+            55,
+            780,
+            85
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              569,
+              58,
+              666,
+              78
+            ],
+            "205": [
+              569,
+              58,
+              667,
+              78
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "new": {
+          "px": [
+            1127,
+            35,
+            1159,
+            67
+          ],
+          "pt": [
+            563.5,
+            17.5,
+            579.5,
+            33.5
+          ],
+          "sizePx": [
+            32,
+            32
+          ],
+          "sizePt": [
+            16.0,
+            16.0
+          ],
+          "centerPx": [
+            1143.0,
+            51.0
+          ],
+          "centerPt": [
+            571.5,
+            25.5
+          ],
+          "roiPx": [
+            1110,
+            22,
+            1170,
+            82
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1127,
+              35,
+              1159,
+              67
+            ],
+            "205": [
+              1127,
+              34,
+              1160,
+              67
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "format_label": {
+          "px": [
+            1234,
+            39,
+            1285,
+            65
+          ],
+          "pt": [
+            617.0,
+            19.5,
+            642.5,
+            32.5
+          ],
+          "sizePx": [
+            51,
+            26
+          ],
+          "sizePt": [
+            25.5,
+            13.0
+          ],
+          "centerPx": [
+            1259.5,
+            52.0
+          ],
+          "centerPt": [
+            629.75,
+            26.0
+          ],
+          "roiPx": [
+            1226,
+            30,
+            1294,
+            78
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1234,
+              40,
+              1285,
+              65
+            ],
+            "205": [
+              1234,
+              39,
+              1285,
+              65
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "checklist": {
+          "px": [
+            1325,
+            36,
+            1362,
+            69
+          ],
+          "pt": [
+            662.5,
+            18.0,
+            681.0,
+            34.5
+          ],
+          "sizePx": [
+            37,
+            33
+          ],
+          "sizePt": [
+            18.5,
+            16.5
+          ],
+          "centerPx": [
+            1343.5,
+            52.5
+          ],
+          "centerPt": [
+            671.75,
+            26.25
+          ],
+          "roiPx": [
+            1314,
+            24,
+            1372,
+            80
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1325,
+              36,
+              1362,
+              69
+            ],
+            "205": [
+              1325,
+              36,
+              1362,
+              69
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "table": {
+          "px": [
+            1406,
+            37,
+            1445,
+            67
+          ],
+          "pt": [
+            703.0,
+            18.5,
+            722.5,
+            33.5
+          ],
+          "sizePx": [
+            39,
+            30
+          ],
+          "sizePt": [
+            19.5,
+            15.0
+          ],
+          "centerPx": [
+            1425.5,
+            52.0
+          ],
+          "centerPt": [
+            712.75,
+            26.0
+          ],
+          "roiPx": [
+            1397,
+            26,
+            1454,
+            79
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1406,
+              37,
+              1445,
+              67
+            ],
+            "205": [
+              1406,
+              37,
+              1445,
+              67
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "attachment": {
+          "px": [
+            1484,
+            35,
+            1516,
+            70
+          ],
+          "pt": [
+            742.0,
+            17.5,
+            758.0,
+            35.0
+          ],
+          "sizePx": [
+            32,
+            35
+          ],
+          "sizePt": [
+            16.0,
+            17.5
+          ],
+          "centerPx": [
+            1500.0,
+            52.5
+          ],
+          "centerPt": [
+            750.0,
+            26.25
+          ],
+          "roiPx": [
+            1473,
+            23,
+            1530,
+            81
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1484,
+              35,
+              1516,
+              70
+            ],
+            "205": [
+              1484,
+              34,
+              1516,
+              70
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "share": {
+          "px": [
+            1593,
+            32,
+            1622,
+            69
+          ],
+          "pt": [
+            796.5,
+            16.0,
+            811.0,
+            34.5
+          ],
+          "sizePx": [
+            29,
+            37
+          ],
+          "sizePt": [
+            14.5,
+            18.5
+          ],
+          "centerPx": [
+            1607.5,
+            50.5
+          ],
+          "centerPt": [
+            803.75,
+            25.25
+          ],
+          "roiPx": [
+            1583,
+            24,
+            1638,
+            79
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1593,
+              32,
+              1622,
+              69
+            ],
+            "205": [
+              1593,
+              32,
+              1622,
+              69
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "more": {
+          "px": [
+            1681,
+            49,
+            1711,
+            55
+          ],
+          "pt": [
+            840.5,
+            24.5,
+            855.5,
+            27.5
+          ],
+          "sizePx": [
+            30,
+            6
+          ],
+          "sizePt": [
+            15.0,
+            3.0
+          ],
+          "centerPx": [
+            1696.0,
+            52.0
+          ],
+          "centerPt": [
+            848.0,
+            26.0
+          ],
+          "roiPx": [
+            1670,
+            32,
+            1723,
+            74
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1681,
+              49,
+              1711,
+              55
+            ],
+            "205": [
+              1681,
+              49,
+              1711,
+              55
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "search_icon": {
+          "px": [
+            1787,
+            40,
+            1812,
+            65
+          ],
+          "pt": [
+            893.5,
+            20.0,
+            906.0,
+            32.5
+          ],
+          "sizePx": [
+            25,
+            25
+          ],
+          "sizePt": [
+            12.5,
+            12.5
+          ],
+          "centerPx": [
+            1799.5,
+            52.5
+          ],
+          "centerPt": [
+            899.75,
+            26.25
+          ],
+          "roiPx": [
+            1776,
+            28,
+            1822,
+            78
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1787,
+              40,
+              1812,
+              65
+            ],
+            "205": [
+              1787,
+              40,
+              1812,
+              65
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "search_placeholder": {
+          "px": [
+            1830,
+            41,
+            1878,
+            65
+          ],
+          "pt": [
+            915.0,
+            20.5,
+            939.0,
+            32.5
+          ],
+          "sizePx": [
+            48,
+            24
+          ],
+          "sizePt": [
+            24.0,
+            12.0
+          ],
+          "centerPx": [
+            1854.0,
+            53.0
+          ],
+          "centerPt": [
+            927.0,
+            26.5
+          ],
+          "roiPx": [
+            1825,
+            32,
+            1900,
+            78
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1830,
+              41,
+              1878,
+              65
+            ],
+            "205": [
+              1830,
+              41,
+              1878,
+              65
+            ]
+          },
+          "kind": "ink only; not control frame"
+        }
+      },
+      "edgeProfiles": [
+        {
+          "axis": "vertical",
+          "xPx": 1140,
+          "samples": [
+            [
+              14,
+              250,
+              250,
+              250
+            ],
+            [
+              15,
+              250,
+              250,
+              250
+            ],
+            [
+              16,
+              255,
+              255,
+              255
+            ],
+            [
+              17,
+              255,
+              255,
+              255
+            ],
+            [
+              86,
+              255,
+              255,
+              255
+            ],
+            [
+              87,
+              255,
+              255,
+              255
+            ],
+            [
+              88,
+              244,
+              244,
+              244
+            ],
+            [
+              89,
+              244,
+              244,
+              244
+            ],
+            [
+              92,
+              245,
+              245,
+              245
+            ],
+            [
+              100,
+              246,
+              246,
+              246
+            ],
+            [
+              104,
+              247,
+              247,
+              247
+            ]
+          ]
+        },
+        {
+          "axis": "vertical",
+          "xPx": 1300,
+          "samples": [
+            [
+              14,
+              250,
+              250,
+              250
+            ],
+            [
+              15,
+              250,
+              250,
+              250
+            ],
+            [
+              16,
+              255,
+              255,
+              255
+            ],
+            [
+              17,
+              255,
+              255,
+              255
+            ],
+            [
+              86,
+              255,
+              255,
+              255
+            ],
+            [
+              87,
+              255,
+              255,
+              255
+            ],
+            [
+              88,
+              244,
+              244,
+              244
+            ],
+            [
+              89,
+              244,
+              244,
+              244
+            ],
+            [
+              92,
+              245,
+              245,
+              245
+            ],
+            [
+              100,
+              246,
+              246,
+              246
+            ],
+            [
+              104,
+              247,
+              247,
+              247
+            ]
+          ]
+        },
+        {
+          "axis": "vertical",
+          "xPx": 1620,
+          "samples": [
+            [
+              14,
+              250,
+              250,
+              250
+            ],
+            [
+              15,
+              250,
+              250,
+              250
+            ],
+            [
+              16,
+              255,
+              255,
+              255
+            ],
+            [
+              17,
+              255,
+              255,
+              255
+            ],
+            [
+              86,
+              255,
+              255,
+              255
+            ],
+            [
+              87,
+              255,
+              255,
+              255
+            ],
+            [
+              88,
+              244,
+              244,
+              244
+            ],
+            [
+              89,
+              244,
+              244,
+              244
+            ],
+            [
+              92,
+              245,
+              245,
+              245
+            ],
+            [
+              100,
+              246,
+              246,
+              246
+            ],
+            [
+              104,
+              247,
+              247,
+              247
+            ]
+          ]
+        },
+        {
+          "axis": "vertical",
+          "xPx": 1950,
+          "samples": [
+            [
+              14,
+              250,
+              250,
+              250
+            ],
+            [
+              15,
+              250,
+              250,
+              250
+            ],
+            [
+              16,
+              255,
+              255,
+              255
+            ],
+            [
+              17,
+              255,
+              255,
+              255
+            ],
+            [
+              86,
+              255,
+              255,
+              255
+            ],
+            [
+              87,
+              255,
+              255,
+              255
+            ],
+            [
+              88,
+              244,
+              244,
+              244
+            ],
+            [
+              89,
+              244,
+              244,
+              244
+            ],
+            [
+              92,
+              245,
+              245,
+              245
+            ],
+            [
+              100,
+              246,
+              246,
+              246
+            ],
+            [
+              104,
+              247,
+              247,
+              247
+            ]
+          ]
+        }
+      ]
+    },
+    "gallery": {
+      "source": {
+        "path": "references/desktop/macos26-gallery.png",
+        "bytes": 100914,
+        "sha256": "97e487b0d40e6d461a225e60924323a24ad56aeac94bd78444aacdf7eb6b1974"
+      },
+      "sizePx": [
+        2176,
+        1320
+      ],
+      "sizePt": [
+        1088,
+        660
+      ],
+      "windowActivity": "unknown; visible gray foreground only; filename not used as active proof",
+      "surfaces": {
+        "options_new": {
+          "px": [
+            1302,
+            16,
+            1444,
+            88
+          ],
+          "pt": [
+            651.0,
+            8.0,
+            722.0,
+            44.0
+          ],
+          "sizePx": [
+            142,
+            72
+          ],
+          "sizePt": [
+            71.0,
+            36.0
+          ],
+          "centerPx": [
+            1373.0,
+            52.0
+          ],
+          "centerPt": [
+            686.5,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 1336,
+              "rightExclusivePx": 1409
+            },
+            {
+              "yPx": 18,
+              "leftPx": 1326,
+              "rightExclusivePx": 1419
+            },
+            {
+              "yPx": 26,
+              "leftPx": 1312,
+              "rightExclusivePx": 1433
+            },
+            {
+              "yPx": 36,
+              "leftPx": 1305,
+              "rightExclusivePx": 1440
+            },
+            {
+              "yPx": 52,
+              "leftPx": 1302,
+              "rightExclusivePx": 1443
+            },
+            {
+              "yPx": 68,
+              "leftPx": 1306,
+              "rightExclusivePx": 1438
+            },
+            {
+              "yPx": 78,
+              "leftPx": 1314,
+              "rightExclusivePx": 1430
+            },
+            {
+              "yPx": 86,
+              "leftPx": 1330,
+              "rightExclusivePx": 1416
+            },
+            {
+              "yPx": 87,
+              "leftPx": 1336,
+              "rightExclusivePx": 1408
+            }
+          ]
+        },
+        "search": {
+          "px": [
+            1510,
+            16,
+            2160,
+            88
+          ],
+          "pt": [
+            755.0,
+            8.0,
+            1080.0,
+            44.0
+          ],
+          "sizePx": [
+            650,
+            72
+          ],
+          "sizePt": [
+            325.0,
+            36.0
+          ],
+          "centerPx": [
+            1835.0,
+            52.0
+          ],
+          "centerPt": [
+            917.5,
+            26.0
+          ],
+          "kind": "visible face envelope, not hit/frame",
+          "shape": "rounded capsule or near-circle; visible cap radius roughly34–38px, not exact curve fit",
+          "edgeErrorPx": 2,
+          "whiteFaceContourSamples": [
+            {
+              "yPx": 16,
+              "leftPx": 1544,
+              "rightExclusivePx": 2128
+            },
+            {
+              "yPx": 18,
+              "leftPx": 1534,
+              "rightExclusivePx": 2137
+            },
+            {
+              "yPx": 26,
+              "leftPx": 1520,
+              "rightExclusivePx": 2150
+            },
+            {
+              "yPx": 36,
+              "leftPx": 1513,
+              "rightExclusivePx": 2156
+            },
+            {
+              "yPx": 52,
+              "leftPx": 1510,
+              "rightExclusivePx": 2160
+            },
+            {
+              "yPx": 68,
+              "leftPx": 1514,
+              "rightExclusivePx": 2156
+            },
+            {
+              "yPx": 78,
+              "leftPx": 1522,
+              "rightExclusivePx": 2148
+            },
+            {
+              "yPx": 86,
+              "leftPx": 1538,
+              "rightExclusivePx": 2132
+            },
+            {
+              "yPx": 87,
+              "leftPx": 1544,
+              "rightExclusivePx": 2125
+            }
+          ]
+        }
+      },
+      "ink": {
+        "folder_title": {
+          "px": [
+            482,
+            27,
+            728,
+            51
+          ],
+          "pt": [
+            241.0,
+            13.5,
+            364.0,
+            25.5
+          ],
+          "sizePx": [
+            246,
+            24
+          ],
+          "sizePt": [
+            123.0,
+            12.0
+          ],
+          "centerPx": [
+            605.0,
+            39.0
+          ],
+          "centerPt": [
+            302.5,
+            19.5
+          ],
+          "roiPx": [
+            465,
+            20,
+            830,
+            54
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              482,
+              27,
+              728,
+              51
+            ],
+            "205": [
+              482,
+              27,
+              728,
+              51
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "folder_count": {
+          "px": [
+            481,
+            58,
+            578,
+            78
+          ],
+          "pt": [
+            240.5,
+            29.0,
+            289.0,
+            39.0
+          ],
+          "sizePx": [
+            97,
+            20
+          ],
+          "sizePt": [
+            48.5,
+            10.0
+          ],
+          "centerPx": [
+            529.5,
+            68.0
+          ],
+          "centerPt": [
+            264.75,
+            34.0
+          ],
+          "roiPx": [
+            465,
+            55,
+            720,
+            85
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              481,
+              58,
+              578,
+              78
+            ],
+            "205": [
+              481,
+              58,
+              579,
+              78
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "more": {
+          "px": [
+            1323,
+            49,
+            1353,
+            55
+          ],
+          "pt": [
+            661.5,
+            24.5,
+            676.5,
+            27.5
+          ],
+          "sizePx": [
+            30,
+            6
+          ],
+          "sizePt": [
+            15.0,
+            3.0
+          ],
+          "centerPx": [
+            1338.0,
+            52.0
+          ],
+          "centerPt": [
+            669.0,
+            26.0
+          ],
+          "roiPx": [
+            1310,
+            30,
+            1358,
+            76
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1323,
+              49,
+              1353,
+              55
+            ],
+            "205": [
+              1323,
+              48,
+              1353,
+              55
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "new": {
+          "px": [
+            1392,
+            35,
+            1424,
+            67
+          ],
+          "pt": [
+            696.0,
+            17.5,
+            712.0,
+            33.5
+          ],
+          "sizePx": [
+            32,
+            32
+          ],
+          "sizePt": [
+            16.0,
+            16.0
+          ],
+          "centerPx": [
+            1408.0,
+            51.0
+          ],
+          "centerPt": [
+            704.0,
+            25.5
+          ],
+          "roiPx": [
+            1380,
+            24,
+            1440,
+            80
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1392,
+              35,
+              1424,
+              67
+            ],
+            "205": [
+              1392,
+              35,
+              1425,
+              67
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "search_icon": {
+          "px": [
+            1533,
+            40,
+            1558,
+            65
+          ],
+          "pt": [
+            766.5,
+            20.0,
+            779.0,
+            32.5
+          ],
+          "sizePx": [
+            25,
+            25
+          ],
+          "sizePt": [
+            12.5,
+            12.5
+          ],
+          "centerPx": [
+            1545.5,
+            52.5
+          ],
+          "centerPt": [
+            772.75,
+            26.25
+          ],
+          "roiPx": [
+            1510,
+            26,
+            1565,
+            80
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1533,
+              40,
+              1558,
+              65
+            ],
+            "205": [
+              1533,
+              40,
+              1558,
+              65
+            ]
+          },
+          "kind": "ink only; not control frame"
+        },
+        "search_placeholder": {
+          "px": [
+            1576,
+            41,
+            1624,
+            65
+          ],
+          "pt": [
+            788.0,
+            20.5,
+            812.0,
+            32.5
+          ],
+          "sizePx": [
+            48,
+            24
+          ],
+          "sizePt": [
+            24.0,
+            12.0
+          ],
+          "centerPx": [
+            1600.0,
+            53.0
+          ],
+          "centerPt": [
+            800.0,
+            26.5
+          ],
+          "roiPx": [
+            1570,
+            32,
+            1650,
+            78
+          ],
+          "threshold": 190,
+          "sensitivityBoundsPx": {
+            "175": [
+              1576,
+              41,
+              1624,
+              65
+            ],
+            "205": [
+              1576,
+              41,
+              1624,
+              65
+            ]
+          },
+          "kind": "ink only; not control frame"
+        }
+      },
+      "edgeProfiles": [
+        {
+          "axis": "vertical",
+          "xPx": 1370,
+          "samples": [
+            [
+              14,
+              250,
+              250,
+              250
+            ],
+            [
+              15,
+              250,
+              250,
+              250
+            ],
+            [
+              16,
+              255,
+              255,
+              255
+            ],
+            [
+              17,
+              255,
+              255,
+              255
+            ],
+            [
+              86,
+              255,
+              255,
+              255
+            ],
+            [
+              87,
+              255,
+              255,
+              255
+            ],
+            [
+              88,
+              244,
+              244,
+              244
+            ],
+            [
+              89,
+              244,
+              244,
+              244
+            ],
+            [
+              92,
+              245,
+              245,
+              245
+            ],
+            [
+              100,
+              246,
+              246,
+              246
+            ],
+            [
+              104,
+              247,
+              247,
+              247
+            ]
+          ]
+        },
+        {
+          "axis": "vertical",
+          "xPx": 1950,
+          "samples": [
+            [
+              14,
+              250,
+              250,
+              250
+            ],
+            [
+              15,
+              250,
+              250,
+              250
+            ],
+            [
+              16,
+              255,
+              255,
+              255
+            ],
+            [
+              17,
+              255,
+              255,
+              255
+            ],
+            [
+              86,
+              255,
+              255,
+              255
+            ],
+            [
+              87,
+              255,
+              255,
+              255
+            ],
+            [
+              88,
+              244,
+              244,
+              244
+            ],
+            [
+              89,
+              244,
+              244,
+              244
+            ],
+            [
+              92,
+              245,
+              245,
+              245
+            ],
+            [
+              100,
+              246,
+              246,
+              246
+            ],
+            [
+              104,
+              247,
+              247,
+              247
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "popover": {
+    "body": {
+      "px": [
+        1014,
+        114,
+        1366,
+        764
+      ],
+      "pt": [
+        507.0,
+        57.0,
+        683.0,
+        382.0
+      ],
+      "sizePx": [
+        352,
+        650
+      ],
+      "sizePt": [
+        176.0,
+        325.0
+      ],
+      "centerPx": [
+        1190.0,
+        439.0
+      ],
+      "centerPt": [
+        595.0,
+        219.5
+      ],
+      "edgeErrorPx": 4,
+      "shape": "rounded body, approximate corner radius36±4px (18±2pt); excludes arrow/shadow"
+    },
+    "arrow": {
+      "approxTipPx": [
+        1190,
+        94
+      ],
+      "approxJoinPx": [
+        [
+          1162,
+          114
+        ],
+        [
+          1218,
+          114
+        ]
+      ],
+      "tipErrorPx": 4,
+      "limitation": "pointer halo overlaps; approximate visible outline only"
+    },
+    "separators": [
+      {
+        "px": [
+          1026,
+          190,
+          1354,
+          191
+        ],
+        "pt": [
+          513.0,
+          95.0,
+          677.0,
+          95.5
+        ],
+        "sizePx": [
+          328,
+          1
+        ],
+        "sizePt": [
+          164.0,
+          0.5
+        ],
+        "centerPx": [
+          1190.0,
+          190.5
+        ],
+        "centerPt": [
+          595.0,
+          95.25
+        ]
+      },
+      {
+        "px": [
+          1026,
+          681,
+          1354,
+          682
+        ],
+        "pt": [
+          513.0,
+          340.5,
+          677.0,
+          341.0
+        ],
+        "sizePx": [
+          328,
+          1
+        ],
+        "sizePt": [
+          164.0,
+          0.5
+        ],
+        "centerPx": [
+          1190.0,
+          681.5
+        ],
+        "centerPt": [
+          595.0,
+          340.75
+        ]
+      },
+      {
+        "px": [
+          1258,
+          132,
+          1259,
+          176
+        ],
+        "pt": [
+          629.0,
+          66.0,
+          629.5,
+          88.0
+        ],
+        "sizePx": [
+          1,
+          44
+        ],
+        "sizePt": [
+          0.5,
+          22.0
+        ],
+        "centerPx": [
+          1258.5,
+          154.0
+        ],
+        "centerPt": [
+          629.25,
+          77.0
+        ]
+      }
+    ],
+    "ink": {
+      "bold": {
+        "px": [
+          1045,
+          138,
+          1067,
+          165
+        ],
+        "pt": [
+          522.5,
+          69.0,
+          533.5,
+          82.5
+        ],
+        "sizePx": [
+          22,
+          27
+        ],
+        "sizePt": [
+          11.0,
+          13.5
+        ],
+        "centerPx": [
+          1056.0,
+          151.5
+        ],
+        "centerPt": [
+          528.0,
+          75.75
+        ],
+        "roiPx": [
+          1036,
+          130,
+          1075,
+          180
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1045,
+            138,
+            1067,
+            165
+          ],
+          "205": [
+            1045,
+            138,
+            1067,
+            165
+          ]
+        }
+      },
+      "italic": {
+        "px": [
+          1105,
+          138,
+          1124,
+          165
+        ],
+        "pt": [
+          552.5,
+          69.0,
+          562.0,
+          82.5
+        ],
+        "sizePx": [
+          19,
+          27
+        ],
+        "sizePt": [
+          9.5,
+          13.5
+        ],
+        "centerPx": [
+          1114.5,
+          151.5
+        ],
+        "centerPt": [
+          557.25,
+          75.75
+        ],
+        "roiPx": [
+          1097,
+          130,
+          1133,
+          180
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1105,
+            138,
+            1124,
+            165
+          ],
+          "205": [
+            1105,
+            138,
+            1125,
+            165
+          ]
+        }
+      },
+      "underline": {
+        "px": [
+          1161,
+          137,
+          1183,
+          171
+        ],
+        "pt": [
+          580.5,
+          68.5,
+          591.5,
+          85.5
+        ],
+        "sizePx": [
+          22,
+          34
+        ],
+        "sizePt": [
+          11.0,
+          17.0
+        ],
+        "centerPx": [
+          1172.0,
+          154.0
+        ],
+        "centerPt": [
+          586.0,
+          77.0
+        ],
+        "roiPx": [
+          1151,
+          130,
+          1193,
+          180
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1161,
+            137,
+            1183,
+            171
+          ],
+          "205": [
+            1161,
+            137,
+            1183,
+            171
+          ]
+        }
+      },
+      "strike": {
+        "px": [
+          1215,
+          137,
+          1246,
+          165
+        ],
+        "pt": [
+          607.5,
+          68.5,
+          623.0,
+          82.5
+        ],
+        "sizePx": [
+          31,
+          28
+        ],
+        "sizePt": [
+          15.5,
+          14.0
+        ],
+        "centerPx": [
+          1230.5,
+          151.0
+        ],
+        "centerPt": [
+          615.25,
+          75.5
+        ],
+        "roiPx": [
+          1206,
+          130,
+          1253,
+          180
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1215,
+            137,
+            1245,
+            165
+          ],
+          "205": [
+            1215,
+            137,
+            1246,
+            165
+          ]
+        }
+      },
+      "highlight": {
+        "px": [
+          1269,
+          134,
+          1306,
+          171
+        ],
+        "pt": [
+          634.5,
+          67.0,
+          653.0,
+          85.5
+        ],
+        "sizePx": [
+          37,
+          37
+        ],
+        "sizePt": [
+          18.5,
+          18.5
+        ],
+        "centerPx": [
+          1287.5,
+          152.5
+        ],
+        "centerPt": [
+          643.75,
+          76.25
+        ],
+        "roiPx": [
+          1266,
+          130,
+          1315,
+          180
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1269,
+            135,
+            1306,
+            171
+          ],
+          "205": [
+            1269,
+            134,
+            1306,
+            171
+          ]
+        }
+      },
+      "highlight_color": {
+        "px": [
+          1328,
+          144,
+          1344,
+          160
+        ],
+        "pt": [
+          664.0,
+          72.0,
+          672.0,
+          80.0
+        ],
+        "sizePx": [
+          16,
+          16
+        ],
+        "sizePt": [
+          8.0,
+          8.0
+        ],
+        "centerPx": [
+          1336.0,
+          152.0
+        ],
+        "centerPt": [
+          668.0,
+          76.0
+        ],
+        "roiPx": [
+          1320,
+          134,
+          1350,
+          170
+        ],
+        "kind": "visible ink only",
+        "threshold": "hue mask"
+      },
+      "style_title": {
+        "px": [
+          1085,
+          216,
+          1159,
+          251
+        ],
+        "pt": [
+          542.5,
+          108.0,
+          579.5,
+          125.5
+        ],
+        "sizePx": [
+          74,
+          35
+        ],
+        "sizePt": [
+          37.0,
+          17.5
+        ],
+        "centerPx": [
+          1122.0,
+          233.5
+        ],
+        "centerPt": [
+          561.0,
+          116.75
+        ],
+        "roiPx": [
+          1074,
+          206,
+          1180,
+          262
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1085,
+            216,
+            1159,
+            251
+          ],
+          "205": [
+            1084,
+            215,
+            1159,
+            251
+          ]
+        }
+      },
+      "style_heading": {
+        "px": [
+          1085,
+          276,
+          1178,
+          305
+        ],
+        "pt": [
+          542.5,
+          138.0,
+          589.0,
+          152.5
+        ],
+        "sizePx": [
+          93,
+          29
+        ],
+        "sizePt": [
+          46.5,
+          14.5
+        ],
+        "centerPx": [
+          1131.5,
+          290.5
+        ],
+        "centerPt": [
+          565.75,
+          145.25
+        ],
+        "roiPx": [
+          1074,
+          267,
+          1200,
+          315
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1085,
+            276,
+            1178,
+            305
+          ],
+          "205": [
+            1084,
+            276,
+            1178,
+            305
+          ]
+        }
+      },
+      "style_subheading": {
+        "px": [
+          1085,
+          338,
+          1160,
+          362
+        ],
+        "pt": [
+          542.5,
+          169.0,
+          580.0,
+          181.0
+        ],
+        "sizePx": [
+          75,
+          24
+        ],
+        "sizePt": [
+          37.5,
+          12.0
+        ],
+        "centerPx": [
+          1122.5,
+          350.0
+        ],
+        "centerPt": [
+          561.25,
+          175.0
+        ],
+        "roiPx": [
+          1074,
+          329,
+          1180,
+          371
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1085,
+            338,
+            1160,
+            362
+          ],
+          "205": [
+            1085,
+            338,
+            1160,
+            362
+          ]
+        }
+      },
+      "style_body": {
+        "px": [
+          1085,
+          396,
+          1134,
+          420
+        ],
+        "pt": [
+          542.5,
+          198.0,
+          567.0,
+          210.0
+        ],
+        "sizePx": [
+          49,
+          24
+        ],
+        "sizePt": [
+          24.5,
+          12.0
+        ],
+        "centerPx": [
+          1109.5,
+          408.0
+        ],
+        "centerPt": [
+          554.75,
+          204.0
+        ],
+        "roiPx": [
+          1074,
+          389,
+          1160,
+          431
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1085,
+            396,
+            1134,
+            420
+          ],
+          "205": [
+            1085,
+            396,
+            1134,
+            420
+          ]
+        }
+      },
+      "body_check": {
+        "px": [
+          1048,
+          399,
+          1066,
+          417
+        ],
+        "pt": [
+          524.0,
+          199.5,
+          533.0,
+          208.5
+        ],
+        "sizePx": [
+          18,
+          18
+        ],
+        "sizePt": [
+          9.0,
+          9.0
+        ],
+        "centerPx": [
+          1057.0,
+          408.0
+        ],
+        "centerPt": [
+          528.5,
+          204.0
+        ],
+        "roiPx": [
+          1035,
+          388,
+          1072,
+          432
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1048,
+            399,
+            1066,
+            417
+          ],
+          "205": [
+            1048,
+            399,
+            1066,
+            417
+          ]
+        }
+      },
+      "style_mono": {
+        "px": [
+          1085,
+          454,
+          1178,
+          477
+        ],
+        "pt": [
+          542.5,
+          227.0,
+          589.0,
+          238.5
+        ],
+        "sizePx": [
+          93,
+          23
+        ],
+        "sizePt": [
+          46.5,
+          11.5
+        ],
+        "centerPx": [
+          1131.5,
+          465.5
+        ],
+        "centerPt": [
+          565.75,
+          232.75
+        ],
+        "roiPx": [
+          1074,
+          447,
+          1200,
+          489
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1085,
+            454,
+            1178,
+            476
+          ],
+          "205": [
+            1085,
+            454,
+            1178,
+            477
+          ]
+        }
+      },
+      "style_bullet": {
+        "px": [
+          1087,
+          512,
+          1256,
+          536
+        ],
+        "pt": [
+          543.5,
+          256.0,
+          628.0,
+          268.0
+        ],
+        "sizePx": [
+          169,
+          24
+        ],
+        "sizePt": [
+          84.5,
+          12.0
+        ],
+        "centerPx": [
+          1171.5,
+          524.0
+        ],
+        "centerPt": [
+          585.75,
+          262.0
+        ],
+        "roiPx": [
+          1074,
+          503,
+          1280,
+          546
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1087,
+            512,
+            1256,
+            536
+          ],
+          "205": [
+            1087,
+            512,
+            1256,
+            536
+          ]
+        }
+      },
+      "style_dash": {
+        "px": [
+          1085,
+          570,
+          1233,
+          594
+        ],
+        "pt": [
+          542.5,
+          285.0,
+          616.5,
+          297.0
+        ],
+        "sizePx": [
+          148,
+          24
+        ],
+        "sizePt": [
+          74.0,
+          12.0
+        ],
+        "centerPx": [
+          1159.0,
+          582.0
+        ],
+        "centerPt": [
+          579.5,
+          291.0
+        ],
+        "roiPx": [
+          1074,
+          561,
+          1280,
+          606
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1085,
+            570,
+            1233,
+            593
+          ],
+          "205": [
+            1085,
+            570,
+            1233,
+            594
+          ]
+        }
+      },
+      "style_number": {
+        "px": [
+          1085,
+          628,
+          1211,
+          652
+        ],
+        "pt": [
+          542.5,
+          314.0,
+          605.5,
+          326.0
+        ],
+        "sizePx": [
+          126,
+          24
+        ],
+        "sizePt": [
+          63.0,
+          12.0
+        ],
+        "centerPx": [
+          1148.0,
+          640.0
+        ],
+        "centerPt": [
+          574.0,
+          320.0
+        ],
+        "roiPx": [
+          1074,
+          620,
+          1280,
+          666
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1085,
+            628,
+            1211,
+            652
+          ],
+          "205": [
+            1085,
+            628,
+            1211,
+            652
+          ]
+        }
+      },
+      "style_quote": {
+        "px": [
+          1087,
+          714,
+          1176,
+          738
+        ],
+        "pt": [
+          543.5,
+          357.0,
+          588.0,
+          369.0
+        ],
+        "sizePx": [
+          89,
+          24
+        ],
+        "sizePt": [
+          44.5,
+          12.0
+        ],
+        "centerPx": [
+          1131.5,
+          726.0
+        ],
+        "centerPt": [
+          565.75,
+          363.0
+        ],
+        "roiPx": [
+          1074,
+          703,
+          1210,
+          751
+        ],
+        "kind": "visible ink only",
+        "threshold": 190,
+        "sensitivityBoundsPx": {
+          "175": [
+            1087,
+            714,
+            1176,
+            738
+          ],
+          "205": [
+            1087,
+            714,
+            1176,
+            738
+          ]
+        }
+      }
+    },
+    "styleRows": [
+      {
+        "name": "style_title",
+        "inkRectPx": [
+          1085,
+          216,
+          1159,
+          251
+        ],
+        "inkCenterYPx": 233.5,
+        "inkCenterYPt": 116.75
+      },
+      {
+        "name": "style_heading",
+        "inkRectPx": [
+          1085,
+          276,
+          1178,
+          305
+        ],
+        "inkCenterYPx": 290.5,
+        "inkCenterYPt": 145.25
+      },
+      {
+        "name": "style_subheading",
+        "inkRectPx": [
+          1085,
+          338,
+          1160,
+          362
+        ],
+        "inkCenterYPx": 350.0,
+        "inkCenterYPt": 175.0
+      },
+      {
+        "name": "style_body",
+        "inkRectPx": [
+          1085,
+          396,
+          1134,
+          420
+        ],
+        "inkCenterYPx": 408.0,
+        "inkCenterYPt": 204.0
+      },
+      {
+        "name": "style_mono",
+        "inkRectPx": [
+          1085,
+          454,
+          1178,
+          477
+        ],
+        "inkCenterYPx": 465.5,
+        "inkCenterYPt": 232.75
+      },
+      {
+        "name": "style_bullet",
+        "inkRectPx": [
+          1087,
+          512,
+          1256,
+          536
+        ],
+        "inkCenterYPx": 524.0,
+        "inkCenterYPt": 262.0
+      },
+      {
+        "name": "style_dash",
+        "inkRectPx": [
+          1085,
+          570,
+          1233,
+          594
+        ],
+        "inkCenterYPx": 582.0,
+        "inkCenterYPt": 291.0
+      },
+      {
+        "name": "style_number",
+        "inkRectPx": [
+          1085,
+          628,
+          1211,
+          652
+        ],
+        "inkCenterYPx": 640.0,
+        "inkCenterYPt": 320.0
+      },
+      {
+        "name": "style_quote",
+        "inkRectPx": [
+          1087,
+          714,
+          1176,
+          738
+        ],
+        "inkCenterYPx": 726.0,
+        "inkCenterYPt": 363.0
+      }
+    ],
+    "relations": {
+      "styleLeftInkPx": 1085,
+      "styleLeftInsetFromBodyPx": 71,
+      "styleLeftInsetFromBodyPt": 35.5,
+      "separatorInsetPx": 12,
+      "firstDividerFromBodyTopPx": 76,
+      "firstDividerFromBodyTopPt": 38,
+      "secondDividerFromBodyTopPx": 567,
+      "quoteAreaAfterSecondDividerPx": 82,
+      "topControlInkCenterXPx": [
+        1056.0,
+        1114.5,
+        1172.0,
+        1230.5,
+        1287.5,
+        1336.0
+      ],
+      "topControlCenterMeaning": "ink centers, not button centers",
+      "regularTextTopStepsPx": [
+        60,
+        62,
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "limitation": "row text sizes vary; 58px repeated ink-top steps do not establish actual row hit height or baseline"
+    }
+  },
+  "galleryTitleComparison": {
+    "browsingTitleLeftPx": 482,
+    "openedTitleLeftPx": 570,
+    "deltaPx": 88,
+    "deltaPt": 44,
+    "browsingCountLeftPx": 481,
+    "openedCountLeftPx": 569,
+    "backVisibleInBrowsing": false,
+    "backVisibleInOpened": true,
+    "openedBackVisibleFace": {
+      "px": [
+        472,
+        16,
+        544,
+        88
+      ],
+      "pt": [
+        236.0,
+        8.0,
+        272.0,
+        44.0
+      ],
+      "sizePx": [
+        72,
+        72
+      ],
+      "sizePt": [
+        36.0,
+        36.0
+      ],
+      "centerPx": [
+        508.0,
+        52.0
+      ],
+      "centerPt": [
+        254.0,
+        26.0
+      ]
+    },
+    "titleInkToBackRightPx": 26,
+    "titleInkToBackRightPt": 13,
+    "browsingTitleInkFromSidebarRightPx": 26,
+    "sidebarRightReferencePx": 456,
+    "limitation": "same literal text and raster size; visible ink displacement only, no layout-mode/placeholder constraint inferred"
+  },
+  "toolbarRelations": {
+    "cleanFacesYRangePx": [
+      16,
+      88
+    ],
+    "cleanFacesYRangePt": [
+      8,
+      44
+    ],
+    "faceHeightPx": 72,
+    "faceHeightPt": 36,
+    "visualFaceCenterYPx": 52,
+    "visualFaceCenterYPt": 26,
+    "spaceFromFaceBottomTo52PtBandPx": 16,
+    "searchRightMarginPx": 16,
+    "searchRightMarginPt": 8,
+    "format": {
+      "newToEditingFaceGapPx": 36,
+      "editingToShareFaceGapPx": 36,
+      "shareToSearchFaceGapPx": 32,
+      "searchSizePt": [
+        233,
+        36
+      ]
+    },
+    "gallery-open-note": {
+      "newToEditingFaceGapPx": 36,
+      "editingToShareFaceGapPx": 36,
+      "shareToSearchFaceGapPx": 32,
+      "searchSizePt": [
+        198,
+        36
+      ]
+    },
+    "gallery": {
+      "optionsNewToSearchFaceGapPx": 66,
+      "searchSizePt": [
+        325,
+        36
+      ]
+    },
+    "editingActionShiftBetweenFormatAndOpenedPx": 70,
+    "editingActionShiftBetweenFormatAndOpenedPt": 35,
+    "limitation": "gaps measured between face envelopes, not item spacing constraints; uncertainty sums across edges"
+  },
+  "ax": {
+    "source": {
+      "path": "references/desktop/macos26-format.ax.txt",
+      "bytes": 4302,
+      "sha256": "c53f5b6ba78f0a7ca192bbfb6ab5b494650d43d146c6aab5ae5288ba5bc0f6dd"
+    },
+    "observed": "toolbar roles/names; popup top controls40–45, style buttons47–54 and56; style body selected; all popup controls recorded disabled; focused collection38",
+    "geometry": "no AXPosition/AXSize/frame in saved text",
+    "gallerySpecificAx": "no gallery*.ax/.json/.txt found in bounded references/desktop inventory; gallery semantics from screenshot and capture README only"
+  },
+  "uncertainRegions": {
+    "format": [
+      {
+        "boxPx": [
+          1112,
+          0,
+          1262,
+          120
+        ],
+        "reason": "pointer/highlight overlay; formatting label, group left and arrow tip not reliable for exact outline/color"
+      }
+    ],
+    "gallery-open-note": [
+      {
+        "boxPx": [
+          610,
+          345,
+          737,
+          456
+        ],
+        "reason": "body pointer halo; outside measured toolbar"
+      }
+    ],
+    "gallery": [
+      {
+        "boxPx": [
+          1000,
+          70,
+          1145,
+          210
+        ],
+        "reason": "body pointer halo extends into cropped header; not a Notes control and outside measured title/action faces"
+      }
+    ],
+    "all": [
+      {
+        "boxPx": [
+          32,
+          32,
+          165,
+          73
+        ],
+        "reason": "purple screen-sharing system overlay; excluded from Notes design"
+      }
+    ]
+  }
+}
