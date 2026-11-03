@@ -9,3 +9,5 @@ Apple WWDC20《Adopt the new look of macOS》说明：应用可在asset catalog�
 `NSAccentColorName`有官方Info.plist文档入口：https://developer.apple.com/documentation/bundleresources/information-property-list/nsaccentcolorname 。本轮网页只返回JavaScript占位；Markdown端点抓取失败，故不把正文细节当作已核验。
 
 下一步仅有界只读检查原版Notes及当前克隆的Info.plist/命名颜色配置和当前偏好，不改全局设置、不复制未知资源。确认真实配置后再选择公开接入；先完成field editor真实布局修复。强调色可能影响多个控件，需要在最终候选中一并观察，不能将局部ring颜色修正称完整像素通过。
+
+2026-11-04 后续：[命名强调色资产只读接入准备](../mac-accent-asset-preparation-01.md) 汇总已有原版资产依据、最小方案及本机actool未就绪事实；未实现，不加入或影响当前unified candidate03来源。
