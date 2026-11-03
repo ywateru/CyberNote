@@ -22,3 +22,4 @@
 
 - FIX-01开发截图 `docs/verification/app-001-fix-01/mac-gallery-open.png` 中，画廊展开后的顶部未显示原版文件夹标题/计数；FIX-02已明确涵盖该状态。此图也不是同文案原版差分，不能据它给全页像素分数。
 - 富文本表格需单独对齐默认列宽、单元格留白/行高、选中边框与操作柄。原版 `macos26-table-boundary-before.png` 为三栏，开发截图为展开编辑，两者编辑区宽度不同；后续必须先复现同一模式/内容再量化，不能直接拿不同页面的整图宽度相除认定误差。转文本/一次Undo功能通过也不代表表格外观通过。
+- 手机纸张预览卡片的线条/网格仍需独立像素校准：原版 `references/mobile/frames-2s/frame-044.png` 的纸张内图案四周留白；当前开发证据 `docs/verification/app-001-fix-01-paper/android/paper-picker-native.png` 图案延伸到卡片边缘，线条数量、网格密度与顶部留白也未完成同尺寸差分。FIX-01七项可达/背景持久化通过不等于预览图案外观通过，归PARITY-001按源比例校准。
