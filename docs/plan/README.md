@@ -8,7 +8,7 @@
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |
 | APP-001-FIX-00 归档完整性 | verified，独立pass | 原失败、schema跨检、设置/附件保全与六次进程中断恢复通过；见fix-00-02报告 |
-| APP-001-FIX-01 编辑与导航修复 | in-progress，修复独立finding | 08f2776手机格式栏被真实IME遮挡，P1修复中；Mac同窗画廊/表格等继续独立复验 |
+| APP-001-FIX-01 编辑与导航修复 | in-progress，修复独立finding | 格式栏IME遮挡和重复附加栏已修复复核；8124911纸张页仍被IME遮挡，P2修复与七样式复验中 |
 | APP-001-FIX-02 Mac顶部校准 | pending，依赖FIX-01/FIX-03 | 运行时系统符号、公开原生控件/材质、分组与平台菜单 |
 | APP-001 原生顶部模块 | in-progress，路径隔离 | 独立插件提前实现公开AppKit控件，正式App接入和像素验收仍归FIX-02 |
 | APP-001-FIX-03 锁定跨窗失效 | pending，FIX-01后优先 | 静态审查发现其他窗口缓存未失效；同步授权、清理明文并用真实多窗复核 |
