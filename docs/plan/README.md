@@ -12,7 +12,7 @@
 | APP-001-FIX-02 Mac顶部校准 | in-progress，217133a独立blocked/有限功能通过 | 34223af正式Mac4118f77f…/APK0aac2d73…；搜索续输/Undo归属/格式选区/多窗/基本锁态隔离/画廊分栏及Android冷启有限通过；CmdW和公共失活像素仍P2 blocking（独立74.55%），同位置焦点unknown，完整任务未通过 |
 | APP-001 原生顶部模块 | 9f4d61b历史有限静态pass，34223af正式宿主已接入 | 当前插件锁对齐2.7.2，并修正搜索祖先临时隐藏导致丢焦；4a16a6a不覆盖新增输入。正式生命周期/焦点/窗口路由由本轮独立复验，Mac真marked composition及完整像素状态仍unknown |
 | APP-001-FIX-03 锁定跨窗失效 | 本轮双端有限安全门槛pass，完整矩阵partial | e5fcdc4 Android14断言关闭UUID P1；835751d真实Mac生产Q1/Q7与同源proof15断言，含旧基线冲突/副本冷启/Q2排空/Q3abort/Q4拒绝及恢复，无新P1；S3/四fixtureGUI/对象identity/全矩阵仍unknown，允许FIX02接入 |
-| APP-001-FIX-04 Android长停留中文组字 | in-progress/partial，f3071f3冻结待独立复验 | 固定PM1.42.9/Android opt-in，实际APK d5c6f59b…；开发空段约199s、中部/快速/删除/混输有限通过，完整JSON冷保全含原失败残留；设备已交verify，格式/后台/paper仍阻塞整体，未标整项通过 |
+| APP-001-FIX-04 Android长停留中文组字 | in-progress/partial，4998e2b独立有限主路径通过 | f3071f3/APK d5c6f59b…；独立空段73.53s/中部77.80s、快速/删除/同Trime混输及一次COLD完整JSON六条通过，原输入设置恢复；整体报告blocked，格式/后台P1与选纸P2继续FIX06/07，未标整项通过 |
 | APP-001-FIX-02-VISUAL-01 顶部内部内容 | in-progress，7c133f1接入正式宿主构建中 | e8cce09准备与7e8c50c有限静态pass已合入，中文格式/按钮墨迹/真实搜索排布；runtime/像素仍unknown，旧公共ROI失败未关闭 |
 | APP-001-FIX-05 Mac关闭窗口 | in-progress，b6bb05d新宿主实际仍失败 | 系统关闭角色已合入并默认构建；独立窗正文单次CmdW后整个PID89891/两窗消失，证据已保留，退出原因诊断中；源码链静态pass不能覆盖运行失败，保存/目标隔离未通过 |
 | APP-001-FIX-06 Android组字失焦/导航 | in-progress，先做有限平台基线 | FIX04候选格式blur/后台仍留预编辑，旧0aac同现；独立长停留主路径及冷保全完成后Android已交develop，先核同IME普通文本框commit/cancel，未改产品；纸张选择失败转FIX07 |

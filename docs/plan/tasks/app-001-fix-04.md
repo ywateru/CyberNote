@@ -43,6 +43,8 @@ src/Editor.tsx、必要composition适配模块、src/App.tsx中直接相关保�
 
 开发冻结修复源码、APK及安装内hash，再交独立verify；不以浏览器预览或直接输入汉字代替安装版的真实IME路径。
 
+4998e2b独立报告`docs/plan/reviews/app-001-fix-04-01.md`已完成：91输入80git+11generated与实际安装SHA匹配，空paragraph73.5297s/正文中部77.7964s后真实候选精确替换，快速/五键取消/继续中英混输及一次force-stop/COLD完整JSON共六条有限路径通过。未新增独立P1/P2/P3，继承格式/后台P1与选择grid-large后的选区P2，整体仍partial/blocked。设置已恢复本轮实际起始值，Android归还后交develop进行FIX06有限平台对照；Mac本轮未测。
+
 - 原环境/同输入法/同内联模式：实际软键盘输入拼音，捕获compositionstart/update、候选可见、原生实际marked range/只读View状态；分别快速选词及无按键停留跨过原故障边界后再选词。时间戳、preedit、candidate、输入事件和最终JSON对应，不能只看最后标题或用固定延时推断保存ACK。
 - 长停留至少两种位置：新段落和已有正文中部；候选替换精确、前后文字不变，无临时拼音/光标符号。再真实取消/删除组字、继续另一段输入、中英混输。
 - 选区格式、Undo/Redo、提交后的真实保存、切笔记、后台恢复与强停冷启核完整文档；组字期间导航/返回的收束边界单列，未做继续unknown。
