@@ -1,7 +1,7 @@
 ---
 id: app-002-audio-duration-01
 scope: finite-local-audio-duration-and-player-errors
-status: pending
+status: in-progress
 depends-on: [app-002-permission-01]
 ---
 

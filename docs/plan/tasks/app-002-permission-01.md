@@ -36,3 +36,9 @@ develop在现有媒体隔离目录准备最小Rust/配置边界及必要定向�
 新冻结APK正常覆盖安装，保留现有模拟器和数据。首次未授权时真实UI打开录音→正常系统权限提示→拒绝/允许各有限一次；不崩溃，拒绝无附件，允许后真实recorder/track状态与显式结束可观察。暂停完成仍原缺口，不在本批冒称修好。确认静音媒体容器/时长、受管附件和正文、冷启读取；麦克风指示/物理释放、可听音轨、Mac采集与像素未证部分明确unknown。另用受控不可信来源验证不会获得媒体授权，不为测试加载私人/任意外部网站。
 
 证据保存于APP002对应新目录，准确区分旧包崩溃、无观察器复核、静态候选和新包实际结果。
+
+## 当前有限结果（0505534冻结）
+
+权限源主ff6b93a，独立静态报告998de4b。新APK dba83641包含权限、cleanup2993884与paper1fa9170；143项实际输入前后聚合c3fc543f…一致。开发首次Deny无API包装真实系统弹窗、同PID等待12秒存活且完整正文/零附件保持；Allow一次带实际API转发包装，真实录制/暂停继续/显式stop/完成后正文ACK及唯一受管文件冷启保持。随后已授权无包装只读实际Session refs、原生取消证明该次recorder inactive/track ended/context closed；仅clone冷启存活。没有重置授权或开启hostmic。
+
+这不是逐项独立设备通过；verify正在同包复验。有效frame/CSP、物理采集释放与可听音轨仍unknown。实际HTML duration Infinity/0:00转`app-002-audio-duration-01.md`，暂停直接完成/保存失败回传仍原缺口。旧5dd6两次无权限提示前退出不改写。完整输入、包装边界、字节与错误状态证据见`docs/verification/app-002-media/android-candidate01/README.md`。
