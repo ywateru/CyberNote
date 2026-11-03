@@ -1,11 +1,13 @@
 ---
 id: app-002-media
 scope: real-media-recording-and-drawing-roundtrip
-status: pending
+status: in-progress
 depends-on: [app-001-fix-01]
 ---
 
 ## objective
+
+2026-11-03首批已进入隔离准备阶段：`/private/tmp/apple-notes-media-roundtrip-02`基线67ce948。当前先核源码差异/现有采集方案，Mac归搜索及关闭复验、Android待FIX07独立复验；设备交接前不运行媒体基线，不称录音已实现或已验收。
 
 补齐并独立验证 F08/F09/F10 的真实附件、录音、绘画闭环。实际排期由root在FIX-01后按原生顶部任务的设备交接决定；不与其他实现修改同一App/Editor/存储文件。
 
