@@ -1,0 +1,35 @@
+[
+  {
+    "case": "inline-at-doc-root",
+    "rustImport": {
+      "accepted": true
+    },
+    "editorSchema": {
+      "schemaAccepted": false,
+      "error": "Invalid content for node doc: <\"TEXT DIRECTLY IN DOC\">"
+    },
+    "invalidDocumentPersistedAfterReopen": true
+  },
+  {
+    "case": "block-inside-paragraph",
+    "rustImport": {
+      "accepted": true
+    },
+    "editorSchema": {
+      "schemaAccepted": false,
+      "error": "Invalid content for node paragraph: <paragraph(\"NESTED BLOCK\")>"
+    },
+    "invalidDocumentPersistedAfterReopen": true
+  },
+  {
+    "case": "paragraph-inside-table",
+    "rustImport": {
+      "accepted": true
+    },
+    "editorSchema": {
+      "schemaAccepted": false,
+      "error": "Invalid content for node table: <paragraph(\"NOT A TABLE ROW\")>"
+    },
+    "invalidDocumentPersistedAfterReopen": true
+  }
+]
