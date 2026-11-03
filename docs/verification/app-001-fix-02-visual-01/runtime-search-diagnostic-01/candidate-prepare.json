@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-03",
+  "source": "plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+  "sha256": "4115f4d503e08e6d126367f40a02aff8be1f5a7df1a7009bed5b86af8083d99e",
+  "check": {
+    "command": "clang -fobjc-arc -fsyntax-only -Werror=implicit-function-declaration plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+    "exitCode": 0,
+    "stdoutBytes": 0,
+    "stderrBytes": 0,
+    "scope": "Objective-C source syntax only; no linking, app build, window launch or runtime acceptance"
+  },
+  "changes": [
+    "Use calibrated public searchTextBounds/searchButtonBounds for idle drawing",
+    "Pass calibrated public searchTextBounds into standard NSSearchFieldCell public edit/select entry points",
+    "Use the existing public capsule focus mask; color remains the system accent and remains a known mismatch",
+    "Remove all temporary diagnostic logging from production source"
+  ],
+  "runtimeStatus": "not built or launched; Mac GUI handed to independent ec1 close verifier",
+  "diagnosticInput": "toolbar-source.m is the preceding instrumented build input, not this prepared candidate",
+  "preservation": {
+    "failedBoundsPackage": "/private/tmp/notes-search-bounds-99cd367.app",
+    "diagnosticPackage": "/private/tmp/notes-search-diagnostic-69634e8.app",
+    "closePackage": "/private/tmp/notes-close-deferred-ec1cf0d.app"
+  }
+}

@@ -77,30 +77,43 @@ static NSPoint contentOffsetFor(NSString *action) {
 - (BOOL)acceptsFirstMouse:(NSEvent *)event {(void)event;return YES;}
 @end
 
-@interface NotesUISearchFieldCell : NSSearchFieldCell
+@interface NotesUISearchCell : NSSearchFieldCell
 @end
-@implementation NotesUISearchFieldCell
-- (NSRect)searchButtonRectForBounds:(NSRect)bounds {
-    return NSOffsetRect([super searchButtonRectForBounds:bounds],-6.5,0);
+@implementation NotesUISearchCell
+- (NSRect)editorFrame:(NSRect)rect inView:(NSView *)view {
+    if(![view isKindOfClass:NSSearchField.class])return rect;
+    // A borderless search cell receives the full control frame for editing.
+    // Feed AppKit the same public text bounds used to draw the idle field,
+    // retaining its own field editor, selection, input method and clip view.
+    NSRect text=((NSSearchField *)view).searchTextBounds;
+    return NSOffsetRect(text,NSMinX(rect)-NSMinX(view.bounds),NSMinY(rect)-NSMinY(view.bounds));
 }
-- (NSRect)searchTextRectForBounds:(NSRect)bounds {
-    NSRect text=[super searchTextRectForBounds:bounds];
-    // Preserve the system's trailing edge/cancel affordance. The same native text area
-    // lays out the placeholder and the field editor; no extra text view is introduced.
-    text.origin.x-=5.75;text.size.width+=5.75;
-    NSFont *font=self.font;
-    if(font) {
-        CGFloat lineHeight=ceil(font.ascender-font.descender+font.leading);
-        CGFloat inset=MAX(0,(NSHeight(text)-lineHeight)/2);
-        text=NSInsetRect(text,0,inset);
-    }
-    return text;
+- (void)selectWithFrame:(NSRect)rect inView:(NSView *)view editor:(NSText *)editor delegate:(id)delegate start:(NSInteger)start length:(NSInteger)length {
+    [super selectWithFrame:[self editorFrame:rect inView:view] inView:view editor:editor delegate:delegate start:start length:length];
+}
+- (void)editWithFrame:(NSRect)rect inView:(NSView *)view editor:(NSText *)editor delegate:(id)delegate event:(NSEvent *)event {
+    [super editWithFrame:[self editorFrame:rect inView:view] inView:view editor:editor delegate:delegate event:event];
 }
 @end
 @interface NotesUISearchField : NSSearchField
 @end
 @implementation NotesUISearchField
-+ (Class)cellClass {return NotesUISearchFieldCell.class;}
++ (Class)cellClass {return NotesUISearchCell.class;}
+- (NSRect)searchButtonBounds {
+    return NSOffsetRect([super searchButtonBounds],-6.5,0);
+}
+- (NSRect)searchTextBounds {
+    // AppKit's standard cell also reads these public view metrics. One layout
+    // path serves inactive text, placeholder, and the retained field editor.
+    NSRect text=[super searchTextBounds];
+    text.origin.x-=5.75;text.size.width+=5.75;
+    CGFloat lineHeight=ceil(self.font.ascender-self.font.descender+self.font.leading);
+    return NSInsetRect(text,0,MAX(0,(NSHeight(text)-lineHeight)/2));
+}
+- (NSRect)focusRingMaskBounds {return NSInsetRect(self.bounds,-10,-4);}
+- (void)drawFocusRingMask {
+    [[NSBezierPath bezierPathWithRoundedRect:self.focusRingMaskBounds xRadius:18 yRadius:18] fill];
+}
 @end
 
 @interface NotesUISearchFormatter : NSFormatter

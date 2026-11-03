@@ -1,0 +1,9 @@
+# Search public layout first runtime iteration — failed
+
+Default actual Mac build exit0. 99 production input files, including src/document-equality.ts, aggregate bd7bbb61d2496c2612de6ac03c59798008e76f9dc5b950d46cdeed95552e6a3b; unchanged after build. Executable SHA256 99cd3677bb211be5ecd545ae131ddb0dfde9652f33845c25dee3e01528f9ee1f, full package /private/tmp/notes-search-bounds-99cd367.app. toolbar-source.m is the exact native source input preserved because the product WIP was not committed at this stage. This build includes the root FIX07 document comparator change; that feature is not accepted by this Mac visual check.
+
+Native changes replaced cell-only offsets with public NSSearchField searchTextBounds/searchButtonBounds, retaining the standard NSSearchFieldCell and the actual field editor. Public focusRingMaskBounds/drawFocusRingMask create a capsule matching the existing 36pt search group geometry. No custom placeholder, text view, selection replacement, or composition simulation.
+
+Actual CUA observations: empty-unfocused.png shows placeholder vertically lowered and separated from icon. empty-focused.png and short-query.png show the real focused editor still starts at the icon, so the focused layout FAILS. The public focus mask takes effect (capsule), but system blue ring/caret differs from original Notes golden ring/caret; color parity FAILS. Typing MacABC produces the actual visible query, one matching synthetic result, and a real cancel/clear button. This proves this short query path only; it does not establish continuation/selection/long query/undo/IME acceptance for a final implementation.
+
+Offline public-metric agreement is not runtime field-editor correctness. A bounded subsequent diagnostic will log only frame/class metadata at real focus and public edit/select callbacks to identify the actual layout owner. No further blind content offsets have been applied.

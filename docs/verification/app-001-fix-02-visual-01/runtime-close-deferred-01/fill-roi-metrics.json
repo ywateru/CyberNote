@@ -1,0 +1,33 @@
+{
+  "status": "fail: not pixel identical; limited inactive filled-window baseline",
+  "windowPoints": [
+    1392,
+    903
+  ],
+  "imagePixels": [
+    2784,
+    1806
+  ],
+  "roiPixels": [
+    1450,
+    8,
+    2776,
+    104
+  ],
+  "maeRGB": 8.102713360985419,
+  "exactChangedPixelRatio": 0.678324534942182,
+  "maximumChannelDelta": 219,
+  "inputs": {
+    "fill-original-inactive-pair.png": "db6077ccd8c28b984001c76c72cfb84e6bb9e907e5b3afaf66e959ca1538ffe5",
+    "fill-clone-inactive-pair.png": "b7a9aa42c802bf7f6a90564b3ba4cb4d8d5e564107e1b720551a06a8c10b882f"
+  },
+  "registration": "None; equal actual system Fill dimensions, no resize, translation, color normalization or threshold",
+  "geometry": "Both actual Fill windows1392x903 at X48 Y29; see fill-state.json and fill-clone-pair.before.json",
+  "limitations": [
+    "Only inactive toolbar absolute ROI. Intra-capture key-window flag unavailable.",
+    "Original inactive toolbar is disabled/gray; clone controls retain darker ink, a real state/rendering difference.",
+    "Original search expands and moves controls at Fill width; clone search capped233pt. This is a real responsive layout mismatch.",
+    "Other comparison app hidden in each capture; pointer outside ROI. Sidebar, counts, title, body, date and system sharing indicator excluded.",
+    "Do not compare this filled-window raw score to historical1088px pairs as proof of improvement."
+  ]
+}
