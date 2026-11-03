@@ -11,6 +11,7 @@
 - [UI 规格](ui/README.md)
 - [Mac 布局](ui/macos.md)
 - [Android 布局与录屏流程](ui/android.md)
+- [手机纸张选择页几何测量](research/mobile-paper-calibration/analysis.md)
 - [标签、智能文件夹、数学与笔记链接](ui/local-features.md)
 - [交互状态矩阵](ui/interaction-matrix.md)
 - [交付计划](plan/README.md)
