@@ -1,0 +1,74 @@
+{
+  "result": "SOURCE-READY",
+  "previousP2": "closed-by-original-two-independent-repro-replays",
+  "candidate": "5b707ae73f541bb784f08e6af0d1afdae2750c2c",
+  "parentCandidate": "2ad1e89423d1be6e872c248bfcae92ff2abade62",
+  "originalBaseline": "8bc8ae2f712ebf85ec0cd79453318563e3d83a8b",
+  "productAggregateSha256": "8ab33c1e95fdc37cf09a624ed81e5b30465800b778fe4e6fba20ad2962e076a1",
+  "productAggregateAlgorithm": "SHA-256 UTF-8 concatenation in identity-before.json productFiles array order, per entry sha256 + two ASCII spaces + relative path + LF.",
+  "checkCount": 37,
+  "commands": {
+    "ocr-host": {
+      "argv": [
+        "node",
+        "scripts/check-ocr-host.mjs"
+      ],
+      "cwd": "/private/tmp/apple-notes-ocr-host-review02",
+      "exit": 0,
+      "elapsedSeconds": 1.6102869510650635
+    },
+    "original-active-repro": {
+      "argv": [
+        "node",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-ocr-host-independent-02/ocr-sensitive-state-repro.mjs"
+      ],
+      "cwd": "/private/tmp/apple-notes-ocr-host-review02",
+      "exit": 0,
+      "elapsedSeconds": 0.5878689289093018
+    },
+    "original-completed-repro": {
+      "argv": [
+        "node",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-004-ocr-host-independent-02/ocr-sensitive-state-completed-repro.mjs"
+      ],
+      "cwd": "/private/tmp/apple-notes-ocr-host-review02",
+      "exit": 0,
+      "elapsedSeconds": 0.6096153259277344
+    },
+    "typecheck": {
+      "argv": [
+        "./node_modules/.bin/tsc",
+        "--noEmit"
+      ],
+      "cwd": "/private/tmp/apple-notes-ocr-host-review02",
+      "exit": 0,
+      "elapsedSeconds": 1.6498150825500488
+    },
+    "diff-check": {
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "2ad1e89423d1be6e872c248bfcae92ff2abade62",
+        "HEAD"
+      ],
+      "cwd": "/private/tmp/apple-notes-ocr-host-review02",
+      "exit": 0,
+      "elapsedSeconds": 0.021023035049438477
+    }
+  },
+  "newConfirmedBlockers": [],
+  "identity": "14 product files, 22 protected files, 17 retained candidate01 author evidence, 7 check sources and 16 runtime source modules matched exact frozen bytes; before/after clean",
+  "reproAdaptation": "None. Original review01 source hashes matched exactly; only cwd binds production candidate02. Assertions unchanged.",
+  "report": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/plan/reviews/app-004-ocr-host-static-02.md",
+    "sha256": "9a8f29a4cae038a885127fc7e6d3b9da2309b5cf8ed558e3137caf218cb6510e"
+  },
+  "limits": [
+    "Source/AST production closures with controlled platform/DB replies, not mounted complete App or real event/lock delivery.",
+    "No native build, GUI/device/shared target/download; no actual native OCR, Rust DB ACK, cold start, physical camera, no-GMS or pixel acceptance.",
+    "Panel/CSS unchanged; original Panel7 DOM scope and 320px capture UNKNOWN retained, not rerun.",
+    "Candidate lacks later main recording preview; integration regression checks belong to root."
+  ],
+  "release": "Owned node_modules symlink removed; no background processes started; review tree clean"
+}

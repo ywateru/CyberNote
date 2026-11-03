@@ -1,7 +1,7 @@
 ---
 id: app-004-ocr-host-01
 scope: local-text-recognition-host-integration
-status: pending-review
+status: in-progress
 depends-on: [app-002-recording-submit-01, app-004-scan-plugin]
 ---
 
@@ -71,3 +71,7 @@ depends-on: [app-002-recording-submit-01, app-004-scan-plugin]
 prepare/clearSensitive/卸载先封回调并立即清UI；未ACK正文与原operation/session保留，prepare失败→abort后可经原通用保存重试；ACK后清理失败只重试原session。真正cancel/acknowledge完成后Host结果也清空，正常finish清React状态并释放owner，防无主明文。37项包含原27和新增10组实际accessHandler/clearSensitive/close闭包及新旧owner隔离，独立原两份repro原样复跑通过，Panel原7与父20/附件23+8、typecheck/build均通过，精确身份/原始日志见verification/app-004-ocr-host/source-candidate-02/。
 
 独审对320px截图底部截断/重复画面的观察仍未知，本次不据此改CSS或标视觉通过；同一7项DOM几何通过不替代截图/像素验收。新候选继续待独立复审，未原生构建、设备或GUI运行。
+
+## independent acceptance and main integration
+
+独审02在独立detached树对5b707ae重放两原失败脚本原字节、37生产闭包与typecheck/diff均通过，关闭01 P2；报告见app-004-ocr-host-static-02.md。主c9fe811/cd7c94e合入14产品hash相同，6个preview文件保留e01c90a原字节，主build/OCR37/preview16/父20/toolbar13通过。详见verification/app-004-ocr-host/main-integration-01。源码接入已接受，真实主App平台/持久化/像素仍未通过，任务整体继续in-progress。

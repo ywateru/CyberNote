@@ -1,0 +1,55 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index caa0c7c..1ff5b42 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -2148,7 +2148,8 @@ function App() {
+   const finishOcr = (operation: OcrHost<PickerTarget>) => {
+     if (operation.cleaned && ocrOperation.current === operation) {
+       ocrOperation.current = null;
+-      if (!operation.detached) setOcr(null);
++      setOcrState({ phase: "choose", text: "", error: "" });
++      setOcr(null);
+     }
+   };
+   const cancelOcr = async (operation = ocrOperation.current) => {
+@@ -2249,6 +2250,9 @@ function App() {
+       if (operation && ids.includes(operation.target.noteId)) {
+         operation.seal();
+         operation.detached = true;
++        // Drop the UI copy immediately; pending body/session ownership remains
++        // on the sealed operation until its real save/cancellation completes.
++        setOcrState({ phase: "choose", text: "", error: "" });
+         setOcr(null);
+         void cancelOcr(operation).catch(fail);
+       }
+@@ -2258,6 +2262,8 @@ function App() {
+       if (operation) {
+         operation.seal();
+         operation.detached = true;
++        setOcrState({ phase: "choose", text: "", error: "" });
++        setOcr(null);
+         void operation.cancel().catch(() => {});
+       }
+     },
+diff --git a/src/ocr-host.ts b/src/ocr-host.ts
+index 9954086..17e1e97 100644
+--- a/src/ocr-host.ts
++++ b/src/ocr-host.ts
+@@ -231,7 +231,7 @@ export class OcrHost<Target extends { noteId: string }> {
+     }
+     this.cleaned = true;
+     this.accepting = false;
+-    this.publish("saved");
++    this.publish("saved", "", "");
+   }
+   seal() {
+     this.accepting = false;
+@@ -259,7 +259,7 @@ export class OcrHost<Target extends { noteId: string }> {
+         }
+       }
+       this.cleaned = true;
+-      this.publish("cancelled");
++      this.publish("cancelled", "", "");
+     })().catch((error) => {
+       this.publish(
+         this.documentAck ? "cleanup-pending" : "failed",

@@ -1,0 +1,395 @@
+diff --git a/scripts/check-ocr-host.mjs b/scripts/check-ocr-host.mjs
+index 49a87a8..b71111d 100644
+--- a/scripts/check-ocr-host.mjs
++++ b/scripts/check-ocr-host.mjs
+@@ -70,6 +70,10 @@ const { enqueueSave } = await production("src/save-queue.ts");
+ const { SaveRevisions } = await production("src/save-revisions.ts");
+ const { documentsEqual } = await production("src/document-equality.ts");
+ const { documentText } = await production("src/types.ts");
++const { shouldClearSearchAfterAccessChange } = await production(
++  "src/search-selection.ts",
++);
++const { SearchEditorGate } = await production("src/search-editor-gate.ts");
+ const bridge = await production("src/bridge.ts");
+ const source = await readFile("src/App.tsx", "utf8");
+ hashes["src/App.tsx"] = createHash("sha256").update(source).digest("hex");
+@@ -148,6 +152,8 @@ const names = [
+   "openOcr",
+   "processOcr",
+   "nativeSelection",
++  "restoreEditor",
++  "retryAttachments",
+ ];
+ const deferred = () => {
+   let resolve, reject;
+@@ -220,6 +226,8 @@ function fixture(options = {}) {
+     enqueueSave,
+     documentsEqual,
+     documentText,
++    shouldClearSearchAfterAccessChange,
++    editorGate: new SearchEditorGate(),
+     secureId: () => `operation-${++env.ids}`,
+     ids: 0,
+     errText: (e) => e.message,
+@@ -231,12 +239,26 @@ function fixture(options = {}) {
+     externalVersions: { current: new Map() },
+     blockedNotes: { current: new Set() },
+     attachmentSubmissions: { current: new Map() },
++    attachmentBatches: { current: [] },
++    pickerTargets: { current: new Map() },
++    nativeToolbar: { current: null },
++    barrierEditor: { current: null },
++    formatTarget: { current: null },
++    paperTarget: { current: null },
++    accessHandler: { current: null },
++    blankDoc: { type: "doc", content: [{ type: "paragraph" }] },
++    desktopSearch: false,
+     ocrOperation: { current: null },
+     ocr: null,
+     ocrState: null,
+     recordingTicket: { current: null },
+     recordingLifecycle: {
+-      current: { active: () => false, close: async () => {}, detach() {} },
++      current: {
++        active: () => false,
++        close: async () => {},
++        detach() {},
++        suspend() {},
++      },
+     },
+     ocrLifecycle: { current: null },
+     nativeEditorOwners: { current: new WeakMap() },
+@@ -312,6 +334,11 @@ function fixture(options = {}) {
+     setQuery() {},
+     setFilter() {},
+     setNativeSearchAck() {},
++    setModalValue() {},
++    setDraw() {},
++    setShowFind() {},
++    setFind() {},
++    setContextNote() {},
+     getCurrentWindow: () => ({
+       onCloseRequested: async (fn) => {
+         env.closeHandler = fn;
+@@ -326,6 +353,12 @@ function fixture(options = {}) {
+   const editor = {
+     isDestroyed: false,
+     isEditable: true,
++    setEditable(value) {
++      editor.isEditable = value;
++    },
++    destroy() {
++      editor.isDestroyed = true;
++    },
+     schema,
+     state: EditorState.create({
+       schema,
+@@ -354,6 +387,7 @@ function fixture(options = {}) {
+     editor.state.tr.setSelection(TextSelection.create(editor.state.doc, 7)),
+   );
+   env.editor = editor;
++  env.editorsRef = { current: new Map([["a", editor]]) };
+   env.nativeEditorOwners.current.set(editor, "a");
+   env.nativeDocumentVersions.current.set(editor, 0);
+   function render() {
+@@ -387,6 +421,10 @@ function fixture(options = {}) {
+         return structuredClone(backend);
+       }
+       if (command === "register_save_intent") return;
++      if (command === "acknowledge_access") {
++        calls.at(-1).success = args.success;
++        return;
++      }
+       if (command === "workspace_action") {
+         assert.equal(args.action.type, "saveNote");
+         if (options.saveWait) await options.saveWait.promise;
+@@ -483,6 +521,7 @@ function fixture(options = {}) {
+         return { removed: true };
+       }
+       if (r.operation === "cancel") {
++        if (options.cancelWait) await options.cancelWait.promise;
+         sessions.delete(r.sessionId);
+         return { removed: true };
+       }
+@@ -520,6 +559,12 @@ function fixture(options = {}) {
+     sourceFile,
+     mountClose: () =>
+       execute("return (" + closeEffect.getText(ast) + ")();", env),
++    mountAccess: () =>
++      execute(
++        assignment("clearSensitive.current") +
++          assignment("accessHandler.current"),
++        env,
++      ),
+     targetChanged: () => execute("(" + targetEffect.getText(ast) + ")();", env),
+     get closed() {
+       return closed;
+@@ -878,6 +923,268 @@ await test("suspension and actual close-effect unmount seal late result and clea
+     assert.equal(f.sessions.size, 0);
+   }
+ });
++await test("normal saved and cancelled completion erase React preview and terminal Host text before releasing owner", async () => {
++  for (const saved of [false, true]) {
++    const f = fixture({ text: "sensitive-terminal-text" }),
++      op = await f.recognized();
++    if (saved) await f.api.confirmOcr(op);
++    else await f.api.cancelOcr(op);
++    assert.equal(f.env.ocrOperation.current, null);
++    assert.equal(f.env.ocr, null);
++    assert.equal(f.env.ocrState.text, "");
++    assert.equal(f.env.ocrState.error, "");
++    assert.equal(op.state.text, "");
++    assert.equal(op.state.error, "");
++    f.env.ocrLifecycle.current.suspend(["a"]);
++    assert.equal(f.env.ocrState.text, "");
++    assert.equal(f.sessions.size, 0);
++    if (saved)
++      assert.match(
++        documentText(f.backend.notes[0].document),
++        /sensitive-terminal-text/,
++      );
++  }
++});
++await test("suspend erases React text and error synchronously while original delayed cancellation keeps its resource owner", async () => {
++  const wait = deferred(),
++    f = fixture({ text: "sensitive-cancelling-text", cancelWait: wait }),
++    op = await f.recognized();
++  f.env.ocrState = { ...f.env.ocrState, error: "sensitive-preview-error" };
++  f.env.ocrLifecycle.current.suspend(["a"]);
++  assert.deepEqual(f.env.ocrState, { phase: "choose", text: "", error: "" });
++  assert.equal(f.env.ocr, null);
++  assert.equal(f.env.ocrOperation.current, op);
++  assert.equal(op.detached, true);
++  await flush();
++  assert.equal(f.sessions.size, 1);
++  wait.resolve();
++  await flush();
++  assert.equal(f.sessions.size, 0);
++  assert.equal(f.env.ocrOperation.current, null);
++  assert.equal(f.env.ocrState.text, "");
++  assert.equal(op.state.text, "");
++});
++await test("actual access prepare then commit clears preview before delayed cancellation and destroys only original editor", async () => {
++  const wait = deferred(),
++    f = fixture({ text: "sensitive-commit-text", cancelWait: wait }),
++    op = await f.recognized();
++  f.mountAccess();
++  f.env.accessHandler.current({
++    phase: "prepare",
++    noteIds: ["a"],
++    operationId: "access-commit",
++  });
++  assert.equal(f.env.ocrState.text, "");
++  assert.equal(f.env.ocrState.error, "");
++  assert.equal(f.editor.isEditable, false);
++  await flush();
++  assert.ok(
++    f.calls.some(
++      (call) => call.command === "acknowledge_access" && call.success,
++    ),
++  );
++  const access = structuredClone(f.backend.access);
++  access.notes.a = { epoch: 4, authorized: false };
++  f.backend.access = access;
++  f.backend.notes[0].locked = true;
++  f.backend.notes[0].document = f.env.blankDoc;
++  f.env.accessHandler.current({
++    phase: "commit",
++    noteIds: ["a"],
++    operationId: "access-commit",
++    access,
++  });
++  assert.equal(f.editor.isDestroyed, true);
++  assert.equal(f.env.ocrState.text, "");
++  wait.resolve();
++  await flush();
++  assert.equal(f.sessions.size, 0);
++  assert.equal(f.env.ocrOperation.current, null);
++  assert.equal(f.env.ocrState.text, "");
++  assert.equal(op.state.text, "");
++  assert.equal(f.env.dispatches, 0);
++});
++await test("actual clearSensitive without prepare erases recognized preview and terminal result", async () => {
++  const f = fixture({ text: "sensitive-direct-clear" }),
++    op = await f.recognized();
++  f.mountAccess();
++  f.env.clearSensitive.current(["a"]);
++  assert.equal(f.env.ocr, null);
++  assert.equal(f.env.ocrState.text, "");
++  assert.equal(f.editor.isDestroyed, true);
++  await flush();
++  assert.equal(f.sessions.size, 0);
++  assert.equal(op.state.text, "");
++});
++await test("actual prepare failure and abort preserve unACKed body and same operation for generic save retry without preview resurrection", async () => {
++  const f = fixture({ text: "pending-private-body", saveFailures: 3 }),
++    op = await f.recognized();
++  await assert.rejects(f.api.confirmOcr(op));
++  const pending = structuredClone(f.env.pendingDocs.current.get("a")),
++    sessionId = op.sessionId;
++  f.mountAccess();
++  f.env.accessHandler.current({
++    phase: "prepare",
++    noteIds: ["a"],
++    operationId: "access-abort",
++  });
++  await flush();
++  assert.ok(
++    f.calls.some(
++      (call) => call.command === "acknowledge_access" && call.success === false,
++    ),
++  );
++  assert.equal(f.env.ocrState.text, "");
++  assert.equal(f.env.ocrOperation.current, op);
++  assert.equal(op.sessionId, sessionId);
++  assert.equal(op.documentAck, false);
++  assert.deepEqual(f.env.pendingDocs.current.get("a"), pending);
++  assert.deepEqual(f.editor.getJSON(), pending);
++  assert.equal(f.sessions.size, 1);
++  f.env.accessHandler.current({
++    phase: "abort",
++    noteIds: ["a"],
++    operationId: "access-abort",
++    access: f.backend.access,
++  });
++  await flush();
++  assert.equal(f.editor.isDestroyed, false);
++  assert.equal(f.editor.isEditable, true);
++  assert.equal(f.env.ocr, null);
++  assert.equal(f.env.ocrState.text, "");
++  f.options.saveFailures = 0;
++  await f.api.retryAttachments();
++  assert.equal(f.env.dispatches, 1);
++  assert.deepEqual(f.backend.notes[0].document, pending);
++  assert.equal(f.env.pendingDocs.current.size, 0);
++  assert.equal(f.sessions.size, 0);
++  assert.equal(op.documentAck, true);
++  assert.equal(op.state.text, "");
++  assert.equal(f.env.ocrOperation.current, null);
++  assert.equal(f.env.ocrState.text, "");
++});
++await test("ACKed cleanup failure retains same session across prepare and retries cleanup without body save or preview refill", async () => {
++  const f = fixture({ text: "saved-private-body", cleanupFailures: 2 }),
++    op = await f.recognized();
++  await assert.rejects(f.api.confirmOcr(op));
++  const saved = structuredClone(f.backend.notes[0].document),
++    sessionId = op.sessionId;
++  const saves = f.calls.filter(
++    (call) => call.command === "workspace_action",
++  ).length;
++  f.mountAccess();
++  f.env.accessHandler.current({
++    phase: "prepare",
++    noteIds: ["a"],
++    operationId: "access-cleanup",
++  });
++  await flush();
++  assert.equal(op.documentAck, true);
++  assert.equal(op.cleaned, false);
++  assert.equal(op.sessionId, sessionId);
++  assert.equal(f.env.ocrOperation.current, op);
++  assert.equal(f.env.ocrState.text, "");
++  assert.equal(f.env.ocrState.error, "");
++  await f.api.retryAttachments();
++  assert.equal(
++    f.calls.filter((call) => call.command === "workspace_action").length,
++    saves,
++  );
++  assert.equal(f.env.dispatches, 1);
++  assert.deepEqual(f.backend.notes[0].document, saved);
++  assert.equal(f.sessions.size, 0);
++  assert.equal(op.state.text, "");
++  assert.equal(f.env.ocrOperation.current, null);
++  assert.equal(f.env.ocrState.text, "");
++});
++await test("actual access prepare/commit and close-effect unmount reject pending OCR text and cannot refill cleared UI", async () => {
++  for (const action of ["prepare", "commit", "unmount"]) {
++    const wait = deferred(),
++      f = fixture({ text: "late-private-result", recognizeWait: wait }),
++      op = f.open();
++    const work = op.process({ kind: "image" });
++    await flush();
++    if (action === "unmount") f.mountClose()();
++    else {
++      f.mountAccess();
++      f.env.accessHandler.current({
++        phase: action,
++        noteIds: ["a"],
++        operationId: "access-late",
++        access: f.backend.access,
++      });
++    }
++    assert.equal(f.env.ocrState.text, "");
++    assert.equal(f.env.ocrState.error, "");
++    assert.equal(f.env.ocr, null);
++    wait.resolve();
++    await work;
++    await flush();
++    assert.equal(f.env.dispatches, 0);
++    assert.equal(f.sessions.size, 0);
++    assert.equal(f.env.ocrState.text, "");
++    assert.equal(op.state.text, "");
++  }
++});
++await test("actual unmount erases a recognized preview immediately and Host result only after same-session cleanup", async () => {
++  const wait = deferred(),
++    f = fixture({ text: "unmounted-private-text", cancelWait: wait }),
++    op = await f.recognized();
++  f.mountClose()();
++  assert.equal(f.env.ocrState.text, "");
++  assert.equal(f.env.ocrState.error, "");
++  assert.equal(f.env.ocr, null);
++  assert.equal(op.detached, true);
++  await flush();
++  assert.equal(f.sessions.size, 1);
++  wait.resolve();
++  await flush();
++  assert.equal(f.sessions.size, 0);
++  assert.equal(op.state.text, "");
++  assert.equal(f.env.ocrState.text, "");
++});
++await test("unrelated target suspend and actual clearSensitive preserve current OCR owner and preview", async () => {
++  const f = fixture({ text: "current-note-a-preview" }),
++    op = await f.recognized();
++  const state = structuredClone(f.env.ocrState),
++    sessionId = op.sessionId;
++  f.env.ocrLifecycle.current.suspend(["b"]);
++  f.mountAccess();
++  f.env.clearSensitive.current(["b"]);
++  assert.equal(f.env.ocrOperation.current, op);
++  assert.equal(f.env.ocr, op);
++  assert.equal(op.accepting, true);
++  assert.equal(op.detached, false);
++  assert.deepEqual(f.env.ocrState, state);
++  assert.equal(op.sessionId, sessionId);
++  assert.equal(f.sessions.size, 1);
++  assert.equal(f.editor.isDestroyed, false);
++  await f.api.cancelOcr(op);
++});
++await test("old terminal finish and captured update callback cannot erase or refill a later valid OCR owner", async () => {
++  const f = fixture({ text: "old-owner-text" }),
++    old = await f.recognized();
++  await f.api.cancelOcr(old);
++  f.options.text = "new-owner-text";
++  const next = await f.recognized(),
++    state = structuredClone(f.env.ocrState);
++  f.api.finishOcr(old);
++  old.ports.update({
++    phase: "recognized",
++    text: "late-old-owner-text",
++    error: "old-error",
++  });
++  f.api.processOcr(old, { kind: "file", file: f.sourceFile });
++  await assert.rejects(f.api.confirmOcr(old));
++  await flush();
++  assert.equal(f.env.ocrOperation.current, next);
++  assert.equal(f.env.ocr, next);
++  assert.deepEqual(f.env.ocrState, state);
++  assert.equal(f.env.ocrState.text, "new-owner-text");
++  assert.equal(next.accepting, true);
++  assert.equal(f.sessions.size, 1);
++  await f.api.cancelOcr(next);
++});
+ console.log(
+   JSON.stringify(
+     {

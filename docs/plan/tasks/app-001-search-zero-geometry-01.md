@@ -1,7 +1,7 @@
 ---
 id: app-001-search-zero-geometry-01
 scope: mac-confirmed-zero-search-local-text-geometry
-status: pending
+status: ready
 depends-on: [app-004-ocr-host-01, app-001-search-zero-ui-01]
 ---
 
@@ -43,4 +43,4 @@ typecheck及现有受影响原生顶部/零结果展示检查；检查零态外f
 
 ## scheduling
 
-OCR源接入冻结/独审/主合入之后才从最新主HEAD建立开发worktree，避免同时拥有App/native-menu/CSS交界文件。先源码检查、不运行native构建或占GUI，统一包由root串行排期。当前仅规划，未实施。
+OCR源接入5b707ae已独审02接受并主cd7c94e整合，故源码owner前置已满足；OCR平台运行任务仍继续，不由此追认完成。现在可从最新主HEAD建立开发worktree，避免同时拥有App/native-menu/CSS交界文件。先源码检查、不运行native构建或占GUI，统一包由root串行排期。

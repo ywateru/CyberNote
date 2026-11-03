@@ -36,7 +36,7 @@
 | APP-001-SEARCH-FOCUS-01 Mac菜单搜索焦点 | in-progress，源d9bc5a4独立SOURCE-READY、主175cd1f | plugin精确MenuEvent同步请求真实唯一focused main当前enabled绑定，与IPC共body；独立与主cargo13/13通过、两产品hash同。无新包快输入/marked text实测，异常原因unknown和Tauri排队仍保留，不承诺已修复 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
-| APP-004-OCR-HOST-01 OCR主App文字接入 | pending-review，candidate01独审P2、candidate02待复审 | 首次独审发现React预览明文残留；候选02清UI缓存/Host终态结果并保未ACK正文与原操作，开发37+7及原两repro通过。受控结果不代替原生OCR/设备/冷启/像素，320图视觉unknown保留；build-dep仅对齐已有2.7.2，完整文稿/PDF另批 |
+| APP-004-OCR-HOST-01 OCR主App文字接入 | in-progress，源5b707ae独审02 SOURCE-READY、主cd7c94e | 独立原两失败repro/37及typecheck通过，01预览明文P2关闭；未ACK恢复/ACK后cleanup retry/晚回与owner隔离保全。主14源码同/build/OCR37/preview16/父20/toolbar13通过。candidate03不含本实现；真实Vision/Android OCR/正文ACK/冷启/像素待新包，320图unknown保留，完整文稿/PDF另批 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |
 | PARITY-001 修正差异 | pending，依赖顶部/媒体/本地功能/扫描接入 | 逐页几何、菜单、手势/动画、字体与材料校准；明确原图/叠图/差分和未知项 |
 
