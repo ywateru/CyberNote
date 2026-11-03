@@ -1,0 +1,29 @@
+{
+  "status": "BLOCKED_NATIVE_ACTIONS_NOT_EXECUTED",
+  "attempt01": {
+    "execSession": 9097,
+    "exitCode": 2,
+    "closingOutput": "WARN: Device disconnected; scrcpy 3.3.1; ADB emulator-5580 device; Renderer metal; Texture1080x2280",
+    "cua": "getApp bare path Invalid app; getState no mirror object",
+    "stoppedBy": "own Ctrl-C"
+  },
+  "attempt02": {
+    "execSession": 61800,
+    "exitCode": 2,
+    "log": "viewer-attempt02.log",
+    "stoppedBy": "own Ctrl-C"
+  },
+  "wrapper": {
+    "path": "/private/tmp/Notes Independent C02.app",
+    "cuaCall": "getApp path",
+    "result": "aborted by user after1006.8s; no returned surface or UI action"
+  },
+  "finalHostCheck": {
+    "command": "pgrep -fl scrcpy",
+    "exitCode": 1,
+    "output": "",
+    "meaning": "no own viewer remains"
+  },
+  "device": "preserved online, no restart or input",
+  "note": "No audible test or device interaction; no permission/data mutation."
+}

@@ -1,0 +1,37 @@
+{
+  "candidate": "607950a57b1a1f01eb59b2e4db5738b66e890c40",
+  "status": "REPRODUCED",
+  "execution": "AST-extracted unchanged production App validate/submit/cancel closures + production AttachmentSubmission/TrustedSynchronization/bridge/AccessGate + real PM bookmark; controlled FileReader and invoke; backend states follow existing Store semantics; no actual Rust DB or device",
+  "calls": [
+    {
+      "command": "cancel_attachment_operation",
+      "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+    },
+    {
+      "command": "store_attachment_operation",
+      "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+    }
+  ],
+  "completed": {
+    "success": false,
+    "message": "原附件目标已失效，请保持窗口打开"
+  },
+  "final": {
+    "backendStoredOperations": 1,
+    "frontendBatches": 0,
+    "frontendSubmissions": 0,
+    "targetInvalidated": true
+  },
+  "sourceSha256": {
+    "App": "b3686f393e34065e0b76a29e6a5dd6c28275ebad47f755f1eec868de26583a7d",
+    "attachment-submission": "4045440f9032d8523ddc5001e89c63f4f783efb5e62d2e37b9de803b43415193",
+    "trusted-synchronization": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128",
+    "attachment-target": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+    "document-equality": "629d2729ac47626f6618f13d6858c98dc5a0f654a4b53ba70f6ec0731204db7d",
+    "bridge": "693de27d6780e6b1059732df66c0bf9cf37ca438b9176765565593c3d290c9f1",
+    "access-client": "fb3a9a062fbee9b5b68ca5a8bcbd8cb0de49170b5af35f907d95d09a0ba70d10",
+    "secure-id": "04eb982510ffd3b6a6931f3f61ddbf1cc53d981d2e8aac281a5110c7c112c3ab",
+    "proof-access": "64b235d209e03649d340354b1aa187efd2fe872cfbc9e007951306359c3ca3ca",
+    "types": "108c97dcc8879b36830226631c8c590d2be98ba33b148c11699adf694092bcd6"
+  }
+}
