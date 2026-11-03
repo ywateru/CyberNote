@@ -16,6 +16,7 @@
 | APP-001-FIX-02-VISUAL-01 顶部内部内容 | in-progress，7c133f1接入正式宿主构建中 | e8cce09准备与7e8c50c有限静态pass已合入，中文格式/按钮墨迹/真实搜索排布；runtime/像素仍unknown，旧公共ROI失败未关闭 |
 | APP-001-FIX-05 Mac关闭窗口 | in-progress，c64b697接入正式宿主构建中 | da32415准备与a6e01b9有限静态pass已合入，系统关闭角色沿既有close-request保存守卫；旧实际CmdW失败未关闭，正式运行待验证 |
 | APP-001-FIX-06 Android组字失焦/导航 | pending，实际残留继续blocking | FIX04候选格式blur/后台仍留预编辑；旧0aac同条件复现格式残留；paper取消两包均保留选区，实际失败为选择大网格后31..35→1..1，原生commit/cancel与paper因果待实证；主路径独立复验后串行修复 |
+| APP-001-FIX-07 纸张保存返回选区 | in-progress，隔离源码准备 | 核hydrate对象键顺序比较/外部版本与Editor书签链，仅语义相同的JSON不应重建；主Mac构建和Android复验输入保持冻结，真实选纸失败未关闭 |
 | APP-002 媒体闭环 | pending，依赖FIX-01，串行排期 | 附件真实预览/重启、录音状态机与真实音轨、绘画重开编辑 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
