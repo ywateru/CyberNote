@@ -27,6 +27,6 @@
 - 原视频已保全并抽帧；Mac原版主窗、菜单、画廊、清单与表格均已采集独立测试内容。
 - REA原生UI采集因宿主AX权限拒绝；CUA采集正常。用户已手动解锁，已恢复界面对照。
 - 克隆真实主窗截图为`references/desktop/clone-list-editor-first.png`；存在标题/图标/侧栏间距差异，不代表像素验收通过。
-- Android开发自测发现旧WebView缺少Array.findLast导致编辑事务未触发保存；开发者已加入兼容补全，冷启动重测中，未标通过。
-- 首轮构建产物已经出现，独立验证尚未开始，不能将开发者自测当最终验收。
+- Android开发自测发现旧WebView缺少Array.findLast导致编辑事务未触发保存；兼容补全后，独立QA在已安装APK上确认中文、清单、表格经force-stop/冷启动保持。具体范围与限制见`docs/verification/qa-001/README.md`。
+- 首轮独立报告`docs/plan/reviews/qa-001-01.md`结论为blocked：基础持久化通过，但归档存在附件损坏问题，功能/菜单/画廊/纸张与像素仍有差异。
 - 最终报告由独立verify agent写入；阻塞修复交由develop agent，再复核。

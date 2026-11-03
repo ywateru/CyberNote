@@ -21,3 +21,15 @@ REA 已验证原程序路径/哈希，但 observe_native_ui 因 Accessibility �
 - macos26-table.png、macos26-table-menu.png、macos26-table.ax.txt：2×2表格、单元格内容和操作。
 - clone-initial.png、clone-list-editor-first.png：首轮克隆实际主窗，用于差异定位，非原版参考。
 - macos26-list-editor-active.png：解锁后重新采集的三栏；尽管文件名含active，该帧工具栏呈失活外观，不能据此比较激活颜色。
+- macos26-settings.png：原版偏好只读采样，新建开头为标题，自动排序勾选项关闭。
+- macos26-typed-title.png：实际键入首行后回车为标题+正文，与纯文本整段粘贴得到正文的路径不同。
+- macos26-math-suggestion.png：`2+3=` 的黄色内联建议，尚未接受。
+- macos26-math-menu.png：实际勾号在“建议结果”，AX selected/悬停不等同设置勾号。
+- macos26-math-confirmed-tag.png：Return 接受结果，随后输入 `#UI对照` 与空格识别标签并出现侧栏芯片。
+- macos26-note-link-suggestion.png：`>>` 查询已有合成笔记的建议浮层。
+- macos26-note-link.png：接受后的内联笔记链接；点击后实测同主窗打开目标。
+- macos26-smart-folder.png：未提交的新建智能文件夹对话框。
+- macos26-smart-folder-filter-menu.png 与 .ax.txt：规则种类下拉菜单；界面裁切部分文字时以实际 AX 记录补充。
+- macos26-smart-folder-tags.ax.txt：标签匹配方式菜单。采样后取消对话框，未保存文件夹。
+
+本批主窗截图部分为2176×1322px，设置/表单可有独立窗口尺寸；比较前逐文件读取尺寸，不按本文件首段将全部图片假定为2176×1320。各文件 SHA-256 见 `checksums.sha256`。
