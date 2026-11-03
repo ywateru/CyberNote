@@ -11,6 +11,8 @@ depends-on: [app-001-fix-03]
 
 失败基线为20c3014默认APK（44b6b16d…），emulator-5580/API30/WebView91，Trime3.3.13随包luna_pinyin_simp与真正“编辑中文本”内联预编辑。快速约2.8秒输入nihao、选择“你好”有真实composition事件且可正常替换；长停留后观察到view.composing=false、compositionNode仍含`ni hao‸`，选词后出现拼音与汉字并存。原始证据在`docs/verification/qa-android-ime/`，正式独立报告/精确持续时间以verify冻结结果为准。
 
+e352541已冻结独立报告`docs/plan/reviews/app-001-android-ime-01.md`：长停留按实际动作边界估计约35秒，失败残留在真正冷启后仍保存；快速轮次只替换本轮新增后缀，不抹掉旧失败。未捕获长轮完整事件，不声称精确5秒触发或保存重载因果。实际选区/单字粗体/Undo/Redo及JSON冷保全有限通过。原四项系统输入设置已精确恢复LatinIME，Trime模式Disable且不在启用列表中；FIX04开发/复验须显式重新配置与最终恢复，不能假定IME仍启用。
+
 1. 用真实软键盘拼音和候选保持预编辑生命周期。用户暂停输入、等待自动保存、再选词时，候选应替换同一段预编辑，不残留临时拼音/光标符号，不重复汉字，不跳光标或丢相邻正文。
 2. 原有快速组字、取消/删除预编辑、连续多段中文与中英混输继续可用。不能只增加一个更长固定超时来推迟故障，不能通过伪造候选/输入事件、清空正文或覆盖整份文档来得到通过。
 3. 保存/外部同步、原生与手机格式动作、切笔记/后台/返回的提交与取消边界明确。自身保存不能提前结束真实IME组字或重建正在组字的DOM；若跨笔记/授权变化必须收束，不让旧组合写到另一个note。修改不得绕过FIX03授权或冲突基线。
@@ -23,6 +25,7 @@ depends-on: [app-001-fix-03]
 - docs/research/android-ime-verification.md、docs/research/android-ime-readiness/
 - docs/research/android-ime-diagnosis/analysis.md 与 inputs.json（20源码及锁定PM的只读候选机制，不是根因已证）
 - docs/verification/qa-android-ime/（仅合成内容；独立原始候选/内联/快速/长停留事件与截图）
+- docs/plan/reviews/app-001-android-ime-01.md（e352541独立实际P1与有限通过边界）
 - docs/plan/reviews/app-001-fix-03-mac-01.md、app-001-fix-03-android-03.md（已通过有限安全边界不得回退）
 
 锁定prosemirror-view 1.42.9本地源码存在Android 5000ms的scheduleComposeEnd→endComposition→clearComposition路径；clearComposition可置composing=false而暂留compositionNode，真实DOM compositionend另清node。与现象匹配但目前只是可追溯候选机制，不能将它或自动保存重载未经时序实证写作已确认根因。开发须先核完整独立事件和真实调用边界。
