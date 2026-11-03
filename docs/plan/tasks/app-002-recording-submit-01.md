@@ -2,7 +2,7 @@
 id: app-002-recording-submit-01
 scope: recording-parent-operation-document-ack-and-cancellation
 status: pending
-depends-on: [app-002-attachment-submit-01, app-002-recording-state-01]
+depends-on: [app-002-attachment-store-01, app-002-recording-state-01]
 ---
 
 ## objective
@@ -13,7 +13,7 @@ depends-on: [app-002-attachment-submit-01, app-002-recording-state-01]
 
 ## context
 
-阅读 docs/INDEX.md、docs/architecture.md 的媒体生命周期/附件提交/授权契约、docs/research/mobile-recording-next-01/analysis.md、docs/ui/recording-mobile.md，以及两个依赖任务最终独立报告。必须从依赖已合入的主 HEAD 建立隔离分支，读取真实 AttachmentSubmission/helper 接口后接线，不根据尚未冻结的接口猜测实现。
+阅读 docs/INDEX.md、docs/architecture.md 的媒体生命周期/附件提交/授权契约、docs/research/mobile-recording-next-01/analysis.md、docs/ui/recording-mobile.md，以及两个依赖任务最终独立报告。必须从依赖已合入且附件前端已独立SOURCE-READY并合入的主 HEAD 建立隔离分支，读取真实 AttachmentSubmission/helper 接口后接线，不根据尚未冻结的接口猜测实现。前端源d81dd575已独立通过并主c793166/01aada6合入；真实文件选择器E2E不是录音父接线实施的前置门槛，两条完整路径在同一新包各自实际验证，不能互相替代。
 
 ## path
 
