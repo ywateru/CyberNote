@@ -1,0 +1,38 @@
+{
+  "candidate": "d9bc5a469b31cfcab14a482656819bfebe213181",
+  "files": [
+    {
+      "path": "docs/plan/reviews/app-001-search-focus-static-01.md",
+      "bytes": 7911,
+      "sha256": "70098e59e54d32c67ea734b995e9f953486fb9be549e0d973c88b66778bc1b1f"
+    },
+    {
+      "path": "docs/verification/app-001-search-focus-independent-01/cargo-test.stderr.txt",
+      "bytes": 217,
+      "sha256": "9b3d37eca28506a550b5e336ac3644c83479614b741f4fcd2738045105b7a957"
+    },
+    {
+      "path": "docs/verification/app-001-search-focus-independent-01/cargo-test.stdout.txt",
+      "bytes": 1198,
+      "sha256": "f782b39a2aba8ddf0974c17fe76f42151b58082c261e393ad9b0c2d2f9d4e3d8"
+    },
+    {
+      "path": "docs/verification/app-001-search-focus-independent-01/completion.json",
+      "bytes": 980,
+      "sha256": "bfd7deeff0c8fdaeee11febcb33b7d1f16ed0b33ff7cff7230354f8919331dfd"
+    },
+    {
+      "path": "docs/verification/app-001-search-focus-independent-01/identity.json",
+      "bytes": 5019,
+      "sha256": "5ed155a7a344ca98e62e19225975524e958c381de49251fc8d745d7234e81b4b"
+    },
+    {
+      "path": "docs/verification/app-001-search-focus-independent-01/source-chain.json",
+      "bytes": 7756,
+      "sha256": "8c0b33d0e0e2d2d0ef83925f5d539b2061571e2ef15725bde29e888232a95a5a"
+    }
+  ],
+  "aggregateMethod": "sorted path + NUL + sha256 + LF, UTF-8",
+  "aggregateSha256": "1d6958420be61ba6c046ec3afe4f101569be429bc3a9e1b0342c2d47077cd10e",
+  "scope": "independent source + 13 local plugin tests; no actual fast input/native package acceptance"
+}

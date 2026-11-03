@@ -1,0 +1,109 @@
+{
+  "sources": [
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/app.rs",
+      "crateSource": "tauri-2.12.5/src/app.rs",
+      "bytes": 94329,
+      "sha256": "ef71e5c2da6696f9bef817f5f32d34c7710b678ca7ec8a00e539527bca5ad1d4",
+      "excerpts": [
+        {
+          "start": 2518,
+          "end": 2523,
+          "meaning": "Muda handler sends runtime proxy event",
+          "text": "      // setup menu event handler\n      let proxy = runtime.create_proxy();\n      muda::MenuEvent::set_event_handler(Some(move |e: muda::MenuEvent| {\n        let _ = proxy.send_event(EventLoopMessage::MenuEvent(e.into()));\n      }));\n"
+        },
+        {
+          "start": 2754,
+          "end": 2774,
+          "meaning": "global menu listeners run before plugin",
+          "text": "        #[cfg(desktop)]\n        EventLoopMessage::MenuEvent(ref e) => {\n          for listener in &*app_handle\n            .manager\n            .menu\n            .global_event_listeners\n            .lock()\n            .unwrap()\n          {\n            listener(app_handle, e.clone());\n          }\n          for (label, listener) in &*app_handle.manager.menu.event_listeners.lock().unwrap() {\n            if let Some(w) = app_handle.manager().get_window(label) {\n              listener(&w, e.clone());\n            }\n          }\n        }\n        #[cfg(all(desktop, feature = \"tray-icon\"))]\n        EventLoopMessage::TrayIconEvent(ref e) => {\n          for listener in &*app_handle\n            .manager"
+        },
+        {
+          "start": 2810,
+          "end": 2816,
+          "meaning": "plugin on_event is called synchronously from runtime event callback",
+          "text": "\n  manager\n    .plugins\n    .lock()\n    .expect(\"poisoned plugin store\")\n    .on_event(app_handle, &event);\n"
+        }
+      ]
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs",
+      "crateSource": "tauri-2.12.5/src/plugin.rs",
+      "bytes": 34621,
+      "sha256": "8c8a9c3cdb93d1d149f1f1822e5bf8cd5e454f1ce7f3e57a427b97ba59f52a9f",
+      "excerpts": [
+        {
+          "start": 844,
+          "end": 850,
+          "meaning": "builder hook directly invokes registered closure",
+          "text": "    (self.on_page_load)(webview, payload)\n  }\n\n  fn on_event(&mut self, app: &AppHandle<R>, event: &RunEvent) {\n    (self.on_event)(app, event)\n  }\n"
+        },
+        {
+          "start": 975,
+          "end": 982,
+          "meaning": "store directly invokes each plugin",
+          "text": "  /// Runs the on_event hook for all plugins in the store.\n  pub(crate) fn on_event(&mut self, app: &AppHandle<R>, event: &RunEvent) {\n    self\n      .store\n      .iter_mut()\n      .for_each(|plugin| plugin.on_event(app, event))\n  }\n"
+        }
+      ]
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-runtime-wry-2.12.3/src/lib.rs",
+      "crateSource": "tauri-runtime-wry-2.12.3/src/lib.rs",
+      "bytes": 168926,
+      "sha256": "ec343fc347aff1fb5327100df2541992e47eb6be1ddb55102170e2253b9c6d59",
+      "excerpts": [
+        {
+          "start": 196,
+          "end": 210,
+          "meaning": "getter sends message then recv",
+          "text": "macro_rules! getter {\n  ($self: ident, $rx: expr, $message: expr) => {{\n    $self.context.send_user_message($message)?;\n    $rx\n      .recv()\n      .map_err(|_| $crate::Error::FailedToReceiveMessage)\n  }};\n}\n\nmacro_rules! window_getter {\n  ($self: ident, $message: expr) => {{\n    let (tx, rx) = channel();\n    getter!($self, rx, Message::Window($self.window_id, $message(tx)))\n  }};\n}"
+        },
+        {
+          "start": 263,
+          "end": 280,
+          "meaning": "same recorded main thread handles message directly",
+          "text": "  fn send_user_message(&self, message: Message<T>) -> Result<()> {\n    if current_thread().id() == self.main_thread_id {\n      handle_user_message(\n        &self.main_thread.window_target,\n        message,\n        UserMessageContext {\n          window_id_map: &self.window_id_map,\n          windows: &self.main_thread.windows,\n        },\n      );\n      Ok(())\n    } else {\n      self\n        .proxy\n        .send_event(message)\n        .map_err(|_| Error::FailedToSendMessage)\n    }\n  }"
+        },
+        {
+          "start": 1894,
+          "end": 1896,
+          "meaning": "is_focused uses window_getter",
+          "text": "  fn is_focused(&self) -> Result<bool> {\n    window_getter!(self, WindowMessage::IsFocused)\n  }"
+        },
+        {
+          "start": 2759,
+          "end": 2773,
+          "meaning": "main thread id records event-loop creation thread",
+          "text": "  fn init(event_loop: EventLoop<Message<T>>) -> Result<Self> {\n    let main_thread_id = current_thread().id();\n    let web_context = WebContextStore::default();\n\n    #[allow(clippy::arc_with_non_send_sync)]\n    let windows = Arc::new(WindowsStore(RefCell::new(BTreeMap::default())));\n    let window_id_map = WindowIdStore::default();\n\n    let context = Context {\n      window_id_map,\n      main_thread_id,\n      proxy: event_loop.create_proxy(),\n      main_thread: DispatcherMainThreadContext {\n        window_target: event_loop.deref().clone(),\n        web_context,"
+        },
+        {
+          "start": 3263,
+          "end": 3265,
+          "meaning": "IsFocused responds from native window",
+          "text": "          WindowMessage::IsMaximized(tx) => tx.send(window.is_maximized()).unwrap(),\n          #[cfg(not(windows))]\n          WindowMessage::IsFocused(tx) => tx.send(window.is_focused()).unwrap(),"
+        },
+        {
+          "start": 4299,
+          "end": 4321,
+          "meaning": "UserEvent directly invokes runtime callback",
+          "text": "    Event::UserEvent(message) => match message {\n      Message::RequestExit(code) => {\n        let (tx, rx) = channel();\n        callback(RunEvent::ExitRequested {\n          code: Some(code),\n          tx,\n        });\n\n        let recv = rx.try_recv();\n        let should_prevent = matches!(recv, Ok(ExitRequestedEventAction::Prevent));\n\n        if !should_prevent {\n          *control_flow = ControlFlow::ExitWithCode(code);\n        }\n      }\n      Message::Window(id, WindowMessage::Close) => {\n        on_close_requested(callback, id, windows);\n      }\n      Message::Window(id, WindowMessage::Destroy) => {\n        on_window_close(id, windows);\n      }\n      Message::UserEvent(t) => callback(RunEvent::UserEvent(t)),\n      message => {"
+        }
+      ]
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tao-0.37.2/src/platform_impl/macos/event_loop.rs",
+      "crateSource": "tao-0.37.2/src/platform_impl/macos/event_loop.rs",
+      "bytes": 10604,
+      "sha256": "5a46ed47ea47e8b3ad32eb379936c2f3d6a35273a6669a4f1628629ec1857b60",
+      "excerpts": [
+        {
+          "start": 159,
+          "end": 170,
+          "meaning": "macOS event loop requires main thread",
+          "text": "\nimpl<T> EventLoop<T> {\n  pub(crate) fn new(_: &PlatformSpecificEventLoopAttributes) -> Self {\n    let panic_info: Rc<PanicInfo> = Default::default();\n    setup_control_flow_observers(Rc::downgrade(&panic_info));\n\n    let delegate = unsafe {\n      if !util::is_main_thread() {\n        panic!(\"On macOS, `EventLoop` must be created on the main thread!\");\n      }\n\n      // This must be done before `NSApp()` (equivalent to sending"
+        }
+      ]
+    }
+  ],
+  "limits": "local locked dependency source inspection, not a runtime trace; no download or instrumentation"
+}

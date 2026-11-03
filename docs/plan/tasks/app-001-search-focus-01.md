@@ -1,7 +1,7 @@
 ---
 id: app-001-search-focus-01
 scope: native-menu-search-focus-before-renderer-roundtrip
-status: ready-for-review
+status: in-progress-for-review
 depends-on: []
 ---
 
@@ -32,3 +32,7 @@ docs/INDEX.md、docs/architecture.md 的 Mac 原生顶部宿主契约、docs/res
 ## 开发候选 01（2026-11-04）
 
 两项插件源码已冻结并待独立源审。菜单事件精确 `search` 后按真实唯一 focused main 取得当前绑定，在本次回调直接调用与 IPC 共用的同步 focus body；IPC 仍使用原 async `on_main`。App/bridge/F07/宿主/ObjC/依赖未变。最小 locked/offline 插件测试13项通过，共享 target 已释放；无完整包、GUI、设备或像素验收。证据：[源码候选01](../../verification/app-001-search-focus-01/source-candidate-01/README.md)，两源码 aggregate `7f4ea27e672293cfb4f5c4dc0805da92762dc495139b5298bcdf1f37f1c6d968`。真实快捷键异常原因仍 unknown，本候选效果待新包验证。
+
+## source integration / 2026-11-04
+
+源d9bc5a4独立SOURCE-READY，报告`../reviews/app-001-search-focus-static-01.md`。主175cd1f合入，两产品文件与冻结字节相同，主最小插件cargo13/13通过并释放target。新包真实快速输入、marked text与窗口门禁尚待实测，不能称异常已关闭；status保持in-progress。
