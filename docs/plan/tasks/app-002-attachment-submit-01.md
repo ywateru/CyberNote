@@ -41,6 +41,8 @@ depends-on: [app-002-permission-01, app-002-attachment-store-01]
 
 2026-11-04：基线72c93b1上的前端源码候选01已完成开发侧接线与定向检查，待独立审查，详见`../../verification/app-002-attachment-submit/source-candidate-01/README.md`。普通/原生文件与照片/相机显式原目标、可信同步结果、同operationId真实query恢复、插入结果与实际saveNote队列ACK、仅刷新重试及未插入窄取消已接入App/bridge。typecheck、新23组生产边界、原16组授权/12组原生工具栏及schema/实际PM回归通过。没有构建或系统选择器、设备、冷启、像素验收；录音父保存仍用原路径，原56d7失败/孤儿结论不变。
 
+2026-11-04：候选607950a独审BLOCKED，仅1项P1：等FileReader时过早cancel未知op并清identity，晚store留下stored孤儿，正式结论见`../reviews/app-002-attachment-submit-static-01.md`，原证据保持。后续源码候选02只增加App等待本批真实run/store settle、再次可信复核和生产helper的settleForCancellation，共15行产品修改，不改Rust。typecheck、原23组和新增8组实际App AST取消回归通过；详见`../../verification/app-002-attachment-submit/source-candidate-02/README.md`。仍待新独立审查，没有构建/设备/冷启/像素验收。
+
 ## context
 
 - `docs/architecture.md`：附件提交、实时授权、保存intent与归档兼容契约。

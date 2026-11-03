@@ -61,6 +61,16 @@ export class AttachmentSubmission<Target> {
     this.invalidated = true;
   }
 
+  async settleForCancellation(): Promise<void> {
+    // Seal admission synchronously, then wait for the actual submission,
+    // including FileReader and any already-dispatched IPC, to finish. A failed
+    // response is not evidence that storage had no side effects; the caller
+    // still has to query/cancel under current authority before releasing us.
+    this.invalidate();
+    const running = this.running;
+    if (running) await running.catch(() => {});
+  }
+
   acknowledge(noteId: string, document: JSONContent) {
     if (
       this.inserted &&

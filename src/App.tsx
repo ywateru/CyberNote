@@ -1572,6 +1572,11 @@ function App() {
       // can no longer race a safe backend cancellation and insert its old node.
       batch.cancelRequested = true;
       for (const op of operations) op?.invalidate();
+      // StorageAttempted includes FileReader time, before the store IPC exists.
+      // Keep every identity until all admitted work has really settled; a
+      // cancel of an unknown op cannot prevent a later store for that same op.
+      await Promise.all(operations.map((op) => op?.settleForCancellation()));
+      await validatePickerTarget(batch.target);
       for (const op of operations) {
         if (!op) continue;
         if (
