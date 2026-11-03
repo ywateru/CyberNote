@@ -83,13 +83,17 @@ APP-002-ATTACHMENT-SUBMIT-01已在主源码将同一契约接入系统文件选�
 
 录音票据在打开前固定目标和operation；仅当前同一ticket可窄豁免自己的record遮挡，普通picker/global nativeAssert保持原门禁。Panel onDone的resolve约定为真实saveDoc返回正文已acknowledge，失败reject保留同File；已ACK刷新失败仅重刷。取消先封submit，但保留同ticket窄cancel归属，Panel立即卸载以释放采集，operation等待真实run/FileReader/IPC结束后才核安全取消。Editor/pending引用与已ACK附件保留；deferred/身份失效保留可恢复身份和可见错误。唯一close监听通过同一lifecycle ref等安全取消或真实pending正文确认，不新增竞争监听。源码证据见`plan/reviews/app-002-recording-submit-static-01.md`；暂停快照与±15另由app-002-recording-preview-01负责，不改变最终File/父ACK协议。
 
-### OCR宿主接入（APP-004-OCR-HOST-01待实现）
+### OCR宿主接入（APP-004-OCR-HOST-01源码候选，待独审和安装版实测）
 
-现成notes-scan插件提供私有暂存会话和真实本地OCR，但尚未注册/接入主App。首批只把实际文字结果接到既有普通段落与保存队列，不新增扫描节点、永久图片或文档schema。主Cargo path插件、Builder和capability显式接入；保持已锁定模型和原生依赖。Mac本地图片识别与不可用连续互通入口分开表达，Android使用插件本地选图/文字相机。
+notes-scan现已通过主Cargo path依赖、Builder及notes-scan:default capability接入候选源码。OcrHost归属单次原目标、原生会话、正文事务及真实saveDoc ACK；ocr-native直接使用已有typed guest。首批只把实际文字接到既有普通段落与保存队列，不新增扫描节点、永久图片或文档schema。Mac typed命令recognizeImageText标为“从图片识别文本…”，notes-ui Rust/guest union与native-toolbar-state使用同一命令；takePhoto/scanDocument/addSketch仍禁用。Android使用插件本地选图/文字相机，camera返回ready，不重复finish。Mac仅对用户已选非空图片作受限20MiB读取/ingest，不接受路径输入。
+
+主宿主与scan独立build依赖的精确版本冲突获准窄修：scan的tauri-plugin build-dependency由=2.6.3对齐主线已有=2.7.2；独立lock只改对应version/checksum。主lock只增加path包与依赖条目，现有registry版本不变。runtime tauri=2.12.5、scan版本0.1.0、Android模型和原生引擎字节保持；未下载依赖。
 
 打开前固定原note/Editor/完整文档与版本/bookmark/access/operation；普通与原生入口同一控制器。预览属于未取证的工程界面，明确区分取消、识别中、recognized、empty、failed、确认中、正文已ACK及清理待重试。确认非空实际文字以一次事务插入原选区，重复确认复用同保存Promise；保存失败保留结果/同操作，不能再次插入。目标改变、锁定/删除、关闭/取消封入场，晚到结果不得插当前另一篇。focus可信同步沿用现有严格身份规则，不扩大门禁。
 
-仅真实正文ACK后才acknowledge插件会话；其后暂存清理失败只重试清理，不重插正文或倒退已保存状态。取消等待原生工作终态后按同session取消，ACK过的正文保留；空结果不插假节点。长期扫描集合/多页PDF/复裁另批接入，本文不是已有源码或安装版通过声明。任务与真实链路检查见plan/tasks/app-004-ocr-host-01.md。
+仅真实正文ACK后才acknowledge插件会话；其后暂存清理失败只重试清理，不重插正文或倒退已保存状态。取消等待原生工作终态后按同session取消，ACK过的正文保留；空结果不插假节点。唯一窗口close监听在首次await前同步封住OCR与录音。访问prepare、目标变化、卸载封住入场，晚结果不改目标。插入但ACK失败时保留同文档及结果；仅实际pending正文、Editor正文完全等于本操作插入文档且既有可信身份仍有效时重试，不放宽全局授权或普通picker。正文回调确认原note与完整文档相等后才记ACK。
+
+开发定向27项、挂载预览7项、录音父20项和工具栏13项通过，结果采用受控OCR/数据库返回，不证明安装版真实OCR、相机、冷启或像素。预览见ui/ocr-text.md，来源和限度见verification/app-004-ocr-host/source-candidate-01/README.md。长期扫描集合/多页PDF/复裁另批接入，主App原生构建及实测仍由root串行安排；任务见plan/tasks/app-004-ocr-host-01.md。
 
 ### 进程授权与多窗口保存边界（APP-001-FIX-03）
 

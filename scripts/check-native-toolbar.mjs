@@ -341,4 +341,53 @@ await test("host projections distinguish browse, open, focused table, and indepe
     ),
   );
 });
+await test("local OCR has its own typed native command; Continuity stays disabled and unavailable targets cannot recognize", async () => {
+  const input = {
+    layout: "threeColumn",
+    sidebar: true,
+    settings: {},
+    folderTitle: "folder",
+    folderCount: 1,
+    query: "",
+    searchAck: 0,
+    available: true,
+    editable: true,
+    editor: { isActive: () => false },
+  };
+  const entries = (state) =>
+    state.menus
+      .find((menu) => menu.owner === "attachment")
+      .items.filter((item) => item.kind === "item");
+  const enabled = entries(toolbarState(input));
+  assert.equal(
+    enabled.find((item) => item.command === "recognizeImageText").label,
+    "从图片识别文本…",
+  );
+  assert.equal(
+    enabled.find((item) => item.command === "recognizeImageText").enabled,
+    true,
+  );
+  for (const command of ["takePhoto", "scanDocument", "addSketch"])
+    assert.equal(
+      enabled.find((item) => item.command === command).enabled,
+      false,
+    );
+  const disabled = entries(
+    toolbarState({ ...input, available: false, editable: false }),
+  );
+  assert.equal(
+    disabled.find((item) => item.command === "recognizeImageText").enabled,
+    false,
+  );
+  const guest = await readFile(
+    "plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+    "utf8",
+  );
+  const native = await readFile(
+    "plugins/tauri-plugin-notes-ui/src/model.rs",
+    "utf8",
+  );
+  assert.match(guest, /'recognizeImageText'/);
+  assert.match(native, /RecognizeImageText,/);
+});
 console.log(JSON.stringify({ tests: results.length, results }, null, 2));

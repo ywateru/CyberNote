@@ -8,7 +8,7 @@ export type MenuCommand = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'h
   | 'colorDefault' | 'colorPurple' | 'colorPink' | 'colorOrange' | 'colorMint' | 'colorBlue'
   | 'styleTitle' | 'styleHeading' | 'styleSubheading' | 'styleBody' | 'styleMonospaced'
   | 'listBullet' | 'listDash' | 'listNumber' | 'blockquote'
-  | 'choosePhotoVideo' | 'recordAudio' | 'attachFile' | 'takePhoto' | 'scanDocument' | 'addSketch'
+  | 'choosePhotoVideo' | 'recognizeImageText' | 'recordAudio' | 'attachFile' | 'takePhoto' | 'scanDocument' | 'addSketch'
   | 'pinNote' | 'lockNote' | 'findInNote' | 'moveNote' | 'recentNotes'
   | 'mathInsert' | 'mathSuggest' | 'mathOff' | 'attachmentsSmall' | 'attachmentsLarge' | 'deleteNote'
   | 'viewGallery' | 'viewList' | 'sortDefault' | 'sortModified' | 'sortCreated' | 'sortTitle'

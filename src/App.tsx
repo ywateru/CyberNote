@@ -131,6 +131,15 @@ import {
 } from "./search-selection";
 import { SearchEditorGate } from "./search-editor-gate";
 import RecordingPanel from "./RecordingPanel";
+import { Fragment, Slice } from "@tiptap/pm/model";
+import {
+  OcrHost,
+  ocrParagraphs,
+  type OcrSource,
+  type OcrState,
+} from "./ocr-host";
+import { ocrNative } from "./ocr-native";
+import OcrPanel from "./OcrPanel";
 import linesSmallPreview from "../assets/mobile-paper-previews/lines-small.svg";
 import linesMediumPreview from "../assets/mobile-paper-previews/lines-medium.svg";
 import linesLargePreview from "../assets/mobile-paper-previews/lines-large.svg";
@@ -400,6 +409,19 @@ function App() {
   const nativeEditorIds = useRef(new WeakMap<Editor, number>());
   const nativeEditorOwners = useRef(new WeakMap<Editor, string>());
   const nativeEditorCounter = useRef(0);
+  const ocrOperation = useRef<OcrHost<PickerTarget> | null>(null);
+  const [ocr, setOcr] = useState<OcrHost<PickerTarget> | null>(null);
+  const [ocrState, setOcrState] = useState<OcrState>({
+    phase: "choose",
+    text: "",
+    error: "",
+  });
+  const ocrLifecycle = useRef({
+    active: (): boolean => false,
+    close: async () => {},
+    suspend: (_ids: string[]) => {},
+    detach: () => {},
+  });
   const recordingTicket = useRef<RecordingTicket | null>(null);
   const recordingLifecycle = useRef({
     active: (): boolean => false,
@@ -418,14 +440,14 @@ function App() {
     noteId: string | null;
     editor: Editor | null;
     available: boolean;
-    scanInfoAvailable: boolean;
+    ocrAvailable: boolean;
     recordingAvailable: boolean;
   }>({
     scope: "",
     noteId: null,
     editor: null,
     available: false,
-    scanInfoAvailable: false,
+    ocrAvailable: false,
     recordingAvailable: false,
   });
   const nativeAssert = useRef<
@@ -739,6 +761,7 @@ function App() {
           revisions.current.confirmed(id, n.revision);
           for (const submission of attachmentSubmissions.current.values())
             submission.acknowledge(id, n.document);
+          ocrOperation.current?.acknowledgeDocument(id, n.document);
           if (pendingDocs.current.get(id) === doc) {
             pendingDocs.current.delete(id);
             saveFailures.current.delete(id);
@@ -837,14 +860,22 @@ function App() {
     if (native)
       getCurrentWindow()
         .onCloseRequested(async (event) => {
-          if (pendingDocs.current.size || recordingLifecycle.current.active()) {
+          if (
+            pendingDocs.current.size ||
+            recordingLifecycle.current.active() ||
+            ocrLifecycle.current.active()
+          ) {
             event.preventDefault();
             try {
-              await recordingLifecycle.current.close();
+              // Both owners seal admission synchronously before the first wait.
+              const ocrClosing = ocrLifecycle.current.close();
+              const recordingClosing = recordingLifecycle.current.close();
+              await Promise.all([ocrClosing, recordingClosing]);
               await flush();
               if (
                 !pendingDocs.current.size &&
-                !recordingLifecycle.current.active()
+                !recordingLifecycle.current.active() &&
+                !ocrLifecycle.current.active()
               )
                 await getCurrentWindow().destroy();
             } catch (e) {
@@ -855,6 +886,7 @@ function App() {
         .then((fn) => (unlisten = fn));
     return () => {
       document.removeEventListener("visibilitychange", hidden);
+      ocrLifecycle.current.detach();
       recordingLifecycle.current.detach();
       unlisten?.();
     };
@@ -871,6 +903,7 @@ function App() {
       if (ids.includes(batch.target.noteId)) batch.target.invalidated = true;
     for (const submission of attachmentSubmissions.current.values())
       if (ids.includes(submission.noteId)) submission.invalidate();
+    ocrLifecycle.current.suspend(ids);
     recordingLifecycle.current.suspend(ids);
     for (const id of ids) {
       const instance = editorsRef.current.get(id);
@@ -933,6 +966,7 @@ function App() {
   accessHandler.current = (event) => {
     if (event.phase === "prepare") {
       synchronization.invalidate();
+      ocrLifecycle.current.suspend(event.noteIds);
       recordingLifecycle.current.suspend(event.noteIds);
       blockedNotes.current = new Set(event.noteIds);
       setAccessSuspended(event.noteIds);
@@ -1230,7 +1264,8 @@ function App() {
   };
   const androidBack = useRef<() => void>(() => {});
   androidBack.current = () => {
-    if (modal === "paper") closePaper();
+    if (ocrOperation.current) void cancelOcr().catch(fail);
+    else if (modal === "paper") closePaper();
     else if (modal) setModal(null);
     else if (menu === "format") closeFormat(false);
     else if (menu) setMenu(null);
@@ -1343,6 +1378,7 @@ function App() {
   }, [fail]);
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (ocrOperation.current && e.key !== "Escape") return;
       // AppKit menu accelerators also work while NSSearchField owns first responder.
       if (
         native &&
@@ -1372,7 +1408,8 @@ function App() {
         }
       }
       if (e.key === "Escape") {
-        if (modal === "paper") closePaper();
+        if (ocrOperation.current) void cancelOcr().catch(fail);
+        else if (modal === "paper") closePaper();
         else if (modal) setModal(null);
         else if (menu) setMenu(null);
         else if (showFind) setShowFind(false);
@@ -1458,17 +1495,34 @@ function App() {
     target: PickerTarget,
     recording?: RecordingTicket,
     allowSealed = false,
+    ocr?: OcrHost<PickerTarget>,
   ) => {
     const owned = () =>
-      !recording ||
-      (recordingTicket.current === recording &&
-        recording.batch.target === target &&
-        !recording.detached &&
-        (allowSealed || recording.accepting));
+      (!ocr ||
+        (ocrOperation.current === ocr &&
+          ocr.target === target &&
+          !ocr.detached &&
+          (allowSealed || ocr.accepting))) &&
+      (!recording ||
+        (recordingTicket.current === recording &&
+          recording.batch.target === target &&
+          !recording.detached &&
+          (allowSealed || recording.accepting)));
     if (!owned()) throw Error("原录音会话已关闭，不会提交到其他备忘录");
     if (target.invalidated) throw Error("原附件目标已失效，请保持窗口打开");
-    await flush();
-    if (!owned()) throw Error("原录音会话已关闭");
+    if (ocr?.insertedDocument && !ocr.documentAck) {
+      // Only this operation's exact pending body can bypass the generic flush
+      // failure to retry its own ACK. The full trusted target check still follows.
+      const pending = pendingDocs.current.get(target.noteId);
+      if (
+        !pending ||
+        !documentsEqual(pending, ocr.insertedDocument) ||
+        target.editor.isDestroyed ||
+        !documentsEqual(target.editor.getJSON(), ocr.insertedDocument)
+      )
+        throw Error("原识别文字的待保存正文已改变，请保持窗口打开");
+    } else await flush();
+    if (!owned()) throw Error("原录音或文字识别会话已关闭");
     const synced = await synchronizeRef.current();
     if (!owned()) throw Error("原录音会话已关闭");
     const live = pickerRuntime.current;
@@ -1491,7 +1545,11 @@ function App() {
         : undefined,
       trustedSynchronization: synchronization.current(synced),
       available:
-        (recording ? live.recordingAvailable : live.available) &&
+        (ocr
+          ? live.ocrAvailable
+          : recording
+            ? live.recordingAvailable
+            : live.available) &&
         !!note &&
         !note.deletedAt &&
         !!instance &&
@@ -1610,6 +1668,7 @@ function App() {
         await cancelRecording(batch.recording);
       else await submitAttachmentBatch(batch);
     }
+    if (ocrOperation.current) await retryOcr();
   };
   const discardUninsertedAttachments = async () => {
     for (const batch of attachmentBatches.current) {
@@ -1835,10 +1894,7 @@ function App() {
       ) : null}
     </div>
   );
-  const capturePickerTarget = (
-    context?: NativeContext,
-    scanInfo = false,
-  ): PickerBatch => {
+  const capturePickerTarget = (context?: NativeContext): PickerBatch => {
     const live = pickerRuntime.current;
     const instance = context ? context.editor : live.editor;
     if (
@@ -1847,7 +1903,7 @@ function App() {
       !instance ||
       instance.isDestroyed ||
       !instance.isEditable ||
-      (!live.available && !(scanInfo && live.scanInfoAvailable)) ||
+      !live.available ||
       blockedNotes.current.has(live.noteId) ||
       accessGate.state?.operationId
     )
@@ -1880,11 +1936,10 @@ function App() {
     input: HTMLInputElement | null,
     accept?: string,
     context?: NativeContext,
-    scanInfo = false,
   ) => {
     try {
       if (!input) throw Error("附件选择器尚未就绪");
-      const batch = capturePickerTarget(context, scanInfo);
+      const batch = capturePickerTarget(context);
       const previous = pickerTargets.current.get(input);
       if (previous) previous.target.invalidated = true;
       pickerTargets.current.set(input, batch);
@@ -2087,6 +2142,123 @@ function App() {
       if (ticket) {
         ticket.detached = true;
         sealRecording(ticket);
+      }
+    },
+  };
+  const finishOcr = (operation: OcrHost<PickerTarget>) => {
+    if (operation.cleaned && ocrOperation.current === operation) {
+      ocrOperation.current = null;
+      if (!operation.detached) setOcr(null);
+    }
+  };
+  const cancelOcr = async (operation = ocrOperation.current) => {
+    if (!operation) return;
+    await operation.cancel();
+    finishOcr(operation);
+  };
+  const retryOcr = async () => {
+    const operation = ocrOperation.current;
+    if (!operation) return;
+    if (operation.insertedDocument && !operation.detached)
+      await confirmOcr(operation);
+    else await cancelOcr(operation);
+  };
+  const confirmOcr = async (operation: OcrHost<PickerTarget>) => {
+    if (ocrOperation.current !== operation || operation.detached)
+      throw Error("原文字识别会话已关闭");
+    await operation.confirm();
+    finishOcr(operation);
+  };
+  const awaitOcrDocumentAck = async (operation: OcrHost<PickerTarget>) => {
+    await queues.current.get(operation.target.noteId);
+    if (operation.documentAck) return;
+    await validatePickerTarget(operation.target, undefined, true, operation);
+    const document = operation.insertedDocument;
+    if (!document) throw Error("识别文字尚未插入正文");
+    const outcome = await saveDoc(operation.target.noteId, document);
+    if (!outcome.saved) throw outcome.error;
+  };
+  const openOcr = (context?: NativeContext) => {
+    if (!native)
+      throw Error("请在已安装的 Mac 或 Android 应用中识别本地图片文字。");
+    if (ocrOperation.current)
+      throw Error("上次文字识别尚未核定，请先重试保存或取消");
+    const batch = capturePickerTarget(context),
+      target = batch.target;
+    const operation: OcrHost<PickerTarget> = new OcrHost(
+      batch.operationIds[0],
+      target,
+      {
+        native: ocrNative,
+        validate: () =>
+          validatePickerTarget(target, undefined, false, operation),
+        insert: (text, inserted) => {
+          const instance = target.editor;
+          const nodes = ocrParagraphs(text).map((node) =>
+            instance.schema.nodeFromJSON(node),
+          );
+          const transaction = instance.state.tr
+            .setSelection(target.bookmark.resolve(instance.state.doc))
+            .replaceSelection(new Slice(Fragment.fromArray(nodes), 0, 0));
+          const document = transaction.doc.toJSON();
+          try {
+            instance.view.dispatch(transaction);
+          } finally {
+            if (
+              !instance.isDestroyed &&
+              documentsEqual(instance.getJSON(), document)
+            ) {
+              inserted(document);
+              target.document = document;
+              target.bookmark = instance.state.selection.getBookmark();
+              target.documentVersion =
+                nativeDocumentVersions.current.get(instance) || 0;
+              // Keep the captured raw trusted body until ACK. On an own failed
+              // pending save the backend still legitimately contains that body.
+            }
+          }
+        },
+        awaitDocumentAck: awaitOcrDocumentAck,
+        update: (state) => {
+          if (ocrOperation.current === operation && !operation.detached)
+            setOcrState(state);
+        },
+      },
+    );
+    ocrOperation.current = operation;
+    setOcrState(operation.state);
+    setOcr(operation);
+    setMenu(null);
+    target.editor.commands.blur();
+    setEditing(false);
+  };
+  const processOcr = (operation: OcrHost<PickerTarget>, source: OcrSource) => {
+    if (ocrOperation.current !== operation || operation.detached) return;
+    void operation.process(source).catch(fail);
+  };
+  ocrLifecycle.current = {
+    active: () => !!ocrOperation.current,
+    close: async () => {
+      const operation = ocrOperation.current;
+      if (!operation) return;
+      await operation.close();
+      finishOcr(operation);
+    },
+    suspend: (ids) => {
+      const operation = ocrOperation.current;
+      if (operation && ids.includes(operation.target.noteId)) {
+        operation.seal();
+        operation.detached = true;
+        setOcr(null);
+        void cancelOcr(operation).catch(fail);
+      }
+    },
+    detach: () => {
+      const operation = ocrOperation.current;
+      if (operation) {
+        operation.seal();
+        operation.detached = true;
+        void operation.cancel().catch(() => {});
       }
     },
   };
@@ -2304,7 +2476,11 @@ function App() {
                 icon={<ScanText size={19} />}
                 onClick={() => {
                   setMenu(null);
-                  openModal("scanInfo");
+                  try {
+                    openOcr();
+                  } catch (error) {
+                    fail(error);
+                  }
                 }}
               >
                 扫描文本
@@ -2631,14 +2807,15 @@ function App() {
     !current.deletedAt &&
     (!mobile || page === "editor") &&
     (!current.locked || !!accessGate.state?.notes[current.id]?.authorized);
-  const pickerBaseAvailable = attachmentBaseAvailable && !record;
+  const pickerBaseAvailable = attachmentBaseAvailable && !record && !ocr;
   pickerRuntime.current = {
     scope: JSON.stringify([nativeScope, page]),
     noteId,
     editor,
     available: pickerBaseAvailable && !modal,
-    scanInfoAvailable: pickerBaseAvailable && modal === "scanInfo",
-    recordingAvailable: attachmentBaseAvailable && !modal && !menu,
+    ocrAvailable:
+      attachmentBaseAvailable && !record && !modal && !!ocrOperation.current,
+    recordingAvailable: attachmentBaseAvailable && !modal && !menu && !ocr,
   };
   const recording = record ? recordingTicket.current : null;
   useEffect(() => {
@@ -2650,6 +2827,18 @@ function App() {
         ticket.batch.target.invalidated)
     )
       void cancelRecording(ticket).catch(fail);
+  }, [nativeScope, page, editor]);
+  useEffect(() => {
+    const operation = ocrOperation.current;
+    if (
+      operation &&
+      (operation.target.scope !== pickerRuntime.current.scope ||
+        operation.target.editor !== editor ||
+        operation.target.invalidated)
+    ) {
+      operation.target.invalidated = true;
+      void cancelOcr(operation).catch(fail);
+    }
   }, [nativeScope, page, editor]);
   nativeAssert.current = (context, editing = false, overlay = false) => {
     const live = accessGate.stamp(context.noteId || undefined);
@@ -2664,7 +2853,7 @@ function App() {
       (context.noteId &&
         (blockedNotes.current.has(context.noteId) ||
           accessGate.state?.suspended.includes(context.noteId))) ||
-      (!overlay && (modal || draw || record))
+      (!overlay && (modal || draw || record || ocrOperation.current))
     )
       throw new Error("备忘录或授权状态已改变，请重新执行操作");
     if (
@@ -2802,6 +2991,10 @@ function App() {
             command === "choosePhotoVideo" ? "image/*,video/*" : "",
             context,
           );
+          return;
+        case "recognizeImageText":
+          nativeSelection(context);
+          openOcr(context);
           return;
         case "recordAudio":
           nativeSelection(context);
@@ -2968,7 +3161,8 @@ function App() {
       !accessGate.state?.operationId &&
       !modal &&
       !draw &&
-      !record;
+      !record &&
+      !ocr;
     const editable =
       available &&
       !!current &&
@@ -3088,6 +3282,23 @@ function App() {
         ref={cameraInput}
         onChange={(e) => fileSelected(e.currentTarget)}
       />
+      {ocr && (
+        <OcrPanel
+          key={ocr.operationId}
+          state={ocrState}
+          android={/Android/i.test(navigator.userAgent)}
+          inserted={!!ocr.insertedDocument}
+          onImage={() => processOcr(ocr, { kind: "image" })}
+          onCamera={() => processOcr(ocr, { kind: "camera" })}
+          onFile={(file) => processOcr(ocr, { kind: "file", file })}
+          onConfirm={() => {
+            void confirmOcr(ocr).catch(() => {});
+          }}
+          onCancel={() => {
+            void cancelOcr(ocr).catch(fail);
+          }}
+        />
+      )}
       <aside className="sidebar">
         {!nativeTop && (
           <div
@@ -3922,30 +4133,6 @@ function App() {
                 <button className="modal-cancel" onClick={() => setModal(null)}>
                   完成
                 </button>
-              </>
-            )}
-            {modal === "scanInfo" && (
-              <>
-                <h2>扫描文本</h2>
-                <p>
-                  当前版本尚未接入设备文字识别。可以先拍摄文稿照片并添加到备忘录。
-                </p>
-                <div className="modal-actions">
-                  <button onClick={() => setModal(null)}>取消</button>
-                  <button
-                    onClick={() => {
-                      setModal(null);
-                      openAttachmentPicker(
-                        cameraInput.current,
-                        undefined,
-                        undefined,
-                        true,
-                      );
-                    }}
-                  >
-                    拍摄文稿
-                  </button>
-                </div>
               </>
             )}
           </div>

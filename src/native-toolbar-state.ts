@@ -169,6 +169,7 @@ export function toolbarState(input: {
               item("choosePhotoVideo", "选取照片或视频…", editable),
               item("recordAudio", "录音", editable),
               item("attachFile", "附加文件…", editable),
+              item("recognizeImageText", "从图片识别文本…", editable),
               separator,
               item("takePhoto", "拍照", false),
               item("scanDocument", "扫描文稿", false),

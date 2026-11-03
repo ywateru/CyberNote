@@ -1,7 +1,7 @@
 ---
 id: app-004-ocr-host-01
 scope: local-text-recognition-host-integration
-status: in-progress
+status: pending-review
 depends-on: [app-002-recording-submit-01, app-004-scan-plugin]
 ---
 
@@ -19,11 +19,11 @@ depends-on: [app-002-recording-submit-01, app-004-scan-plugin]
 
 ## path
 
-主Cargo/lock/Builder/capability注册；src/App.tsx入口与父确认、必要的独立OCR控制器/预览组件和专用样式、typed guest调用接缝；已有插件仅在发现接入阻塞时窄修，不重写已审引擎。不得改编辑schema/归档格式、添加永久图片附件或触及录音预览与共享播放模块。依赖仅接入现成path插件，不升级版本。开发在主线最新基线的新worktree，先冻结录音preview候选，再串行接此任务。
+主Cargo/lock/Builder/capability注册；src/App.tsx入口与父确认、必要的独立OCR控制器/预览组件和专用样式、typed guest调用接缝；已有插件仅在发现接入阻塞时窄修，不重写已审引擎。不得改编辑schema/归档格式、添加永久图片附件或触及录音预览与共享播放模块。依赖接入现成path插件；唯一获准兼容例外为scan build-dependency tauri-plugin精确2.6.3→主线已有2.7.2，runtime/模型不变、无下载。开发在主线最新基线的新worktree，先冻结录音preview候选，再串行接此任务。
 
 ## existing evidence and scope
 
-遵循requirements F16、architecture已有原目标/授权/保存边界、ui/android录屏扫描入口、research/offline-media-scanning及plugins/tauri-plugin-notes-scan/README。复用现有插件execute/begin/get/pickImage/openCamera/recognize/finish/acknowledge/cancel，不复制OCR引擎。主Cargo path注册与capability显式接入；既有插件版本和模型保持锁定，不升级依赖。Mac原版不可用的连续互通入口保持实际可用条件；本地图片识别入口明确表达其用途，不将其称作原版连续互通。
+遵循requirements F16、architecture已有原目标/授权/保存边界、ui/android录屏扫描入口、research/offline-media-scanning及plugins/tauri-plugin-notes-scan/README。复用现有插件execute/begin/get/pickImage/openCamera/recognize/finish/acknowledge/cancel，不复制OCR引擎。主Cargo path注册与capability显式接入；既有插件runtime版本和模型保持锁定，build-dependency兼容例外及lock精确变动见architecture。Mac原版不可用的连续互通入口保持实际可用条件；本地图片识别入口明确表达其用途，不将其称作原版连续互通。
 
 ## host contract
 
@@ -55,3 +55,11 @@ depends-on: [app-002-recording-submit-01, app-004-scan-plugin]
 ## scheduling
 
 录音preview已冻结dc33152并转独审，本任务从主线新建独立worktree `/private/tmp/apple-notes-ocr-host-01` / `task/app-004-ocr-host-01`。只实施本地OCR文字宿主路径，不触preview候选。若其独审出现阻塞，优先回原preview工作树修复，OCR保持独立未交付状态。构建/设备由root串行排期，开发先源码/定向检查，不抢占独立运行的GUI/设备。
+
+## source candidate 01
+
+基线8bc8ae2f712ebf85ec0cd79453318563e3d83a8b，隔离工作树实现。产品接缝：OcrHost/ocr-native/OcrPanel、App原目标/保存ACK/唯一close/访问失效、notes-ui Rust与guest的recognizeImageText及native-toolbar-state、主Cargo/Builder/capability。notes-scan原生引擎和guest字节保留；没有触录音preview/共享播放或编辑schema。
+
+开发检查：实际App闭包/生产控制器与typed guest/bridge/SaveQueue/PM共27项；实际挂载工程预览7项；录音父20项、工具栏13项，typecheck/build及附件回归见候选报告。主Cargo Mac/Android目标metadata --offline --locked通过，仅解析不编译；scan独立Mac解析通过。源码、日志、截图和限度保存在docs/verification/app-004-ocr-host/source-candidate-01/，冻结后交独立复核，禁止自合并。
+
+主App真实Vision/Android OCR、原选区/正文ACK/UndoRedo/冷启、物理相机与原版像素均未由开发受控检查证明，须新包独立验收；本项仍pending-review，不标APP-004完成。

@@ -331,6 +331,7 @@ pub fn run() {
         .on_permission_request(media_permission::response)
         .plugin(media_permission::lifecycle())
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_notes_scan::init())
         .setup(|app| {
             let root = app.path().app_data_dir()?;
             app.manage(AppState(Arc::new((

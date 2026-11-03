@@ -42,6 +42,7 @@ pub enum MenuCommand {
     ListNumber,
     Blockquote,
     ChoosePhotoVideo,
+    RecognizeImageText,
     RecordAudio,
     AttachFile,
     TakePhoto,

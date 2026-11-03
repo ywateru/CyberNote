@@ -1,0 +1,55 @@
+{
+  "checks": [
+    {
+      "target": "aarch64-apple-darwin",
+      "command": "cargo metadata --manifest-path src-tauri/Cargo.toml --offline --locked --filter-platform aarch64-apple-darwin --format-version 1",
+      "exitCode": 0,
+      "packageCount": 282,
+      "root": "path+file:///private/tmp/apple-notes-ocr-host-01/src-tauri#notes-clone@0.1.0",
+      "outputSha256": "d2745f16c9d509de8328bed08c47715080015f8dc5d9bbbc3c2e0b7fc398992d"
+    },
+    {
+      "target": "aarch64-linux-android",
+      "command": "cargo metadata --manifest-path src-tauri/Cargo.toml --offline --locked --filter-platform aarch64-linux-android --format-version 1",
+      "exitCode": 0,
+      "packageCount": 299,
+      "root": "path+file:///private/tmp/apple-notes-ocr-host-01/src-tauri#notes-clone@0.1.0",
+      "outputSha256": "a0ec21a3132c246d8d6e1f362f05257faa2c3ab0cac02331da27872a9a994060"
+    }
+  ],
+  "scanStandaloneMacMetadata": {
+    "exitCode": 0,
+    "limits": "Offline filtered metadata only, not native compilation"
+  },
+  "locks": [
+    {
+      "path": "src-tauri/Cargo.lock",
+      "added": [
+        {
+          "name": "tauri-plugin-notes-scan",
+          "version": "0.1.0"
+        }
+      ],
+      "removed": []
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "added": [
+        {
+          "name": "tauri-plugin",
+          "version": "2.7.2",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "67fb21a77e8f94e8beb3325e583102488659365af0a3948b7ea244c5b779c291"
+        }
+      ],
+      "removed": [
+        {
+          "name": "tauri-plugin",
+          "version": "2.6.3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "checksum": "74be5dd4bed9afbd145e5716b5fa2ec28cbc29c34ffa61c258c9273d896c8020"
+        }
+      ]
+    }
+  ]
+}

@@ -268,6 +268,10 @@ function fixture(options = {}) {
     blockedNotes: { current: new Set() },
     attachmentSubmissions: { current: new Map() },
     attachmentBatches: { current: new Set() },
+    ocrOperation: { current: null },
+    ocrLifecycle: {
+      current: { active: () => false, close: async () => {}, detach() {} },
+    },
     recordingTicket: { current: null },
     recordingLifecycle: { current: null },
     pickerRuntime: { current: null },
@@ -299,6 +303,7 @@ function fixture(options = {}) {
     accessSuspended: [],
     draw: null,
     record: false,
+    ocr: null,
     modal: null,
     menu: "media",
     showFind: false,

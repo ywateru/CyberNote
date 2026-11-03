@@ -1,6 +1,6 @@
 # Notes Scan 原生模块
 
-独立 Tauri 2 插件，Rust + Kotlin + macOS Objective-C/Vision。**尚未接入 Notes Clone，模块编译/测试不代表安装版全流程、真机或像素通过。** 本目录外的主应用、Cargo/package、README、architecture 均未修改。
+独立 Tauri 2 插件，Rust + Kotlin + macOS Objective-C/Vision。**已在APP-004-OCR-HOST-01候选源码接入主App文字路径，尚未完成主App原生构建和安装版验收。** 独立模块已有编译/设备证据不代替主App全流程、真机或像素通过。
 
 ## 已实现的模块边界
 
@@ -24,7 +24,11 @@ Android初始扫描页参考 `references/mobile/frames-2s/frame-041.png` 的黑�
 
 本模块不接收noteId/revision/选区，也不修改笔记库。宿主负责原note/选区绑定、锁定/删除/冲突判定。插件依赖没有云识别调用；ML Kit传递依赖含Play services命名的基础组件，这不等于下载模型路线。实际APK内Hani模型字节和原生OCR库见验证证据。首次安装前断网与无GMS兼容必须设备实测，尚未通过。
 
-## 后续主应用接入（串行，由 develop_app 执行）
+## 主应用文字接入与后续文稿集成（串行）
+
+文字首批已接主Cargo/lock/Builder/capability、src/ocr-native.ts与OcrHost/App真实正文ACK路径，工程预览见docs/ui/ocr-text.md。Mac新增明确的本地OCR命令，Android复用picker/camera；实际文字单事务插原选区，正文ACK后acknowledge，失败同操作重试。仅源码候选已验证，安装与冷启待root独立安排。
+
+兼容例外：scan的build-dependency tauri-plugin精确2.6.3对齐主线已有2.7.2，独立lock只改对应version/checksum，主lock只新增path包。runtime tauri2.12.5、插件0.1.0、Android模型和原生引擎字节保持；未下载依赖。其余文稿资源持久化契约仍待实现：
 
 1. 主Rust Cargo增加本目录path依赖，并在Builder注册 `.plugin(tauri_plugin_notes_scan::init())`；主capability显式添加 `notes-scan:default`。插件自己的build.rs负责原生Android源码路径，禁止只修改gen/android。Android相机运行时权限由ScanActivity请求，主应用最终Manifest/target/签名仍需安装验证。
 2. pnpm本地依赖或直接导入 `guest-js/index.ts`。选择目标时保存noteId/revision与映射选区，开始会话；Mac仅text模式，外部已选图片转受限字节ingest；Android可pickImage/recognize或openCamera。camera返回ready会话，不要再重复finish。
@@ -33,7 +37,7 @@ Android初始扫描页参考 `references/mobile/frames-2s/frame-041.png` 的黑�
 5. 宿主在自己的暂存/日志/数据库事务中提交扫描集合、附件关系和文档节点，沿用FIX-00恢复原则；全部持久提交后才acknowledge。失败保留ready会话用于重试，不能先ack再保存。重启/备份保留原始字节、旋正图/校正图、四角/滤镜/旋转和顺序。插件ack后不再承担长期笔记存储。
 6. 媒体浏览记录真实扫描来源；手机入口/返回/相机权限/背压/中断、原图移除后重启、归档副本冲突映射均由APP-004-scanning继续完成。Mac保留实际不可用的原版相机入口，不把本地图片OCR假称连续互通扫描。
 
-`execute(Request)`也为Rust宿主公开；具体请求包括begin/get/ingestImage/pickImage/openCamera/cropPage/movePage/deletePage/rotatePage/recognize/finish/readFile/acknowledge/cancel/cleanup。cropPage支持pageId替换，坐标无效拒绝；删除后清理无引用原图/派生图；旋转记录到页面并用于PDF。Mac不支持camera/pickImage及文稿处理，明确unsupported。主App尚未连接以上任何入口。
+`execute(Request)`也为Rust宿主公开；具体请求包括begin/get/ingestImage/pickImage/openCamera/cropPage/movePage/deletePage/rotatePage/recognize/finish/readFile/acknowledge/cancel/cleanup。cropPage支持pageId替换，坐标无效拒绝；删除后清理无引用原图/派生图；旋转记录到页面并用于PDF。Mac不支持camera/pickImage及文稿处理，明确unsupported。主App首批只连接text模式begin/get/ingestImage/pickImage/openCamera/recognize/finish/acknowledge/cancel；文稿裁切/改序/删除/旋转、PDF及长期扫描集合未接主App。
 
 ## 可复现的独立检查
 
