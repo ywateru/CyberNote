@@ -33,3 +33,9 @@ depends-on: [app-002-permission-01]
 已将独立、静音、一次有限seek、15秒截止的媒体探针接入真实AudioPlayer，正常有限metadata不启用探针。未知时长显示“时长未知”，媒体错误/play拒绝可见并支持手动重试；播放器和探针在src变更/卸载后清理，晚事件/Promise不更新新实例。前端通过生产helper的11组定向检查、真实播放器Chrome156离线检查、typecheck及现有editor回归。记录：`docs/verification/app-002-audio-duration/README.md`。
 
 此状态只表示源码候选。Android91安装/冷启、中部拖动与±15秒、Mac smoke仍待独立统一包验证；不将Chrome离线结果升级为设备验收，不涉及原音频重编码、录音暂停完成、父保存补偿、可听采集或像素一致性。
+
+## independent source and unified build · 2026-11-04
+
+独立审查已通过，报告`../reviews/app-002-audio-duration-static-01.md`，源码ae567ef、身份清单64b59aa、独立报告f4d3a02。独立复跑11组生产helper及真实AudioPlayer离线Chrome156序列；约66秒原WebM由静音探针得到66.004秒，主播放器保持初始0/paused，正常2秒WAV不建立探针。ffprobe packet-end66.064和完整decode66.060不混作平台duration。
+
+统一输入冻结在f4d3a02，216项aggregate `a6b191546c39f2bf1c431e7547228a2714f79e355376a686380c89efd2299939`，Mac与Android构建后均不变，default features，无proof。APK `/private/tmp/notes-f07-audio-android-candidate01-3edc4ad0.apk`，301366970B、SHA256 `3edc4ad07524f630d694c0695cbde34bc4a02aa3c36f1fba0bd44a8de80574bf`。构建证据`../../verification/f07-audio-integration/build-candidate01/`；Mac完整bundle本地adhoc派生包`/private/tmp/notes-f07-audio-mac-candidate01-sealed.app`，strict verify通过、exe SHA256 `11dcbfc41dc28f1917c38804691cdda37c49cbb6022d0c776185fd0ca01fc759`；原始未seal包与失败签名日志保持。安装实际仍待验收，不把该构建状态写作Android91时长或Mac运行通过。

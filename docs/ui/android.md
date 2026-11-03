@@ -77,7 +77,7 @@
 
 纸张预览有限测量见[离线几何校准](../research/mobile-paper-calibration/analysis.md)（d22a393），原始坐标/线数/输入SHA在同目录measurements.json。以390宽等比换算的起点：正常卡片约128.8×104.5，左右外留白43.5、行列间距约45.3，图案左右内边约12.2；横线分别7/3/2条，完整网格分别8×6、4×3、2×2格。疏网格预览单格并非正方形；选择器须有独立内嵌图案层，不能改变真实绘画纸张步长。源DPR未知、边界约±1–2源像素，390不是恢复出的设备逻辑宽度；recommended.css为研究草案，未接入也未判像素通过。接入须保留既有滚动、七项可达、键盘隐藏、选择/取消/Back与选区恢复。
 
-上述固定图案的独立透明SVG已于1ae3258完成，位于`assets/mobile-paper-previews/`；仅包含单色图案，适合CSS alpha mask，线宽仍为工程起点。[离线渲染与计数检查](../research/mobile-paper-calibration/preview-assets/README.md)通过，不代表已接入主应用或WebView像素通过。
+上述固定图案的独立透明SVG已于1ae3258完成，位于`assets/mobile-paper-previews/`；仅包含单色图案，适合CSS alpha mask，线宽仍为工程起点。[离线渲染与计数检查](../research/mobile-paper-calibration/preview-assets/README.md)通过。主1fa9170已接入，dba83641真包独立观察六mask可见、七态选择/保存/重开与短屏滚动末卡通过，见[独立Android报告](../plan/reviews/app-002-android-independent-01.md)；同一完整正文、选区及真正Editor宿主实例保全。该结果不是低清原录屏的高清像素通过，也不跨下一统一包追认。
 
 补充导航抽样：`references/mobile/navigation-106-110/contact-sheet.jpg`按原始帧n=3180..3297、每3帧取一帧、8列5行；对应106.0..109.9秒、0.1秒间隔。该段返回时前景列表向右退出，后面的文件夹页从左侧较小位移进入，顶部标题/按钮也在转场；其后文件夹页纵向滚动时大标题收至导航栏中心。只可据此确认方向和大致顺序，0.1秒采样不足以精确拟合动画曲线。后续逐帧测量应读原视频30fps，不把采样间隔当动画时长。
 

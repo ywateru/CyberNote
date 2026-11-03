@@ -4,6 +4,8 @@
 
 最新汇总以`docs/plan/README.md`为准，下方逐批历史不覆盖其后修复。2026-11-03新增独立结果：FIX07的5dd6包原选纸失败点有限关闭（`plan/reviews/app-001-fix-07-android-02.md`），Mac56d7搜索滚动/快捷键7项有限通过（`plan/reviews/app-001-search-scroll-runtime-01.md`）。两项都不代表完整交互或像素通过，旧失败证据保留。录音清理候选0b29cc0仅独立静态有限通过，旧包真实流程/有效音轨和候选设备验证仍须分别完成。
 
+2026-11-04更新：11/3的dba83641 Android开发原始权限/录音保存证据、独立无包装取消与七种纸张/短屏有限实际结果已归档于`app-002-media/android-candidate01/`和`android-independent-dba83641-01/`，见`plan/reviews/app-002-android-independent-01.md`。原Infinity/0:00缺陷仍是该旧包失败。F07零结果与AudioPlayer现已独立SOURCE-READY并以f4d3a02/216项aggregate a6b19154…统一构建，APK3edc4ad0…；证据见`f07-audio-integration/build-candidate01/`。新包实际与像素尚待独立验证，不继承dba或离线Chrome结果；后续结果按独立报告和确切包身份更新。
+
 ## 环境与截图要求
 
 每次报告包含：源码commit、产物SHA-256、构建命令、OS/设备/WebView版本、窗口/内容像素与逻辑尺寸、DPR、主题/语言/字体、测试数据、动作序列、预期与实际、截图/日志路径、限制。

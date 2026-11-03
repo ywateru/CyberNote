@@ -1,0 +1,56 @@
+{
+  "capturedAt": "2026-11-03T16:00:35.678417+00:00",
+  "headBefore": "f3e5c847f334988c8d0ea2b74cc21bd4feb31ca0",
+  "headAfter": "f3e5c847f334988c8d0ea2b74cc21bd4feb31ca0",
+  "checks": [
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "log": "typecheck.txt"
+    },
+    {
+      "command": "node scripts/check-search-selection.mjs",
+      "exitCode": 0,
+      "groups": 7,
+      "log": "search-selection.txt"
+    },
+    {
+      "command": "pnpm test:native-toolbar",
+      "exitCode": 0,
+      "groups": 12,
+      "log": "native-toolbar.txt"
+    }
+  ],
+  "sourceEdits": false,
+  "mainGitMutations": false,
+  "packageBuild": false,
+  "deviceOrGUIActions": false,
+  "preexistingUntracked": "docs/verification/app-002-media/android-independent-dba83641-01/",
+  "pending": "Audio independent static approval and main integration before build freeze/build",
+  "files": {
+    "build-plan.md": {
+      "bytes": 3217,
+      "sha256": "2e898782b935ad80e8b7f0a222afdf9e428063b1384727bb129f6d91fcbca2d9"
+    },
+    "capture-inputs.py": {
+      "bytes": 3237,
+      "sha256": "bb8989d1038fadb92a3083c5350c050847dc657e52d816f335931babf9db4565"
+    },
+    "inputs-preflight.json": {
+      "bytes": 40444,
+      "sha256": "5b7ce96b0a4a7e8fef3c1f397331f5d703f16b77a34d61957c3a1541fc97453f"
+    },
+    "native-toolbar.txt": {
+      "bytes": 1571,
+      "sha256": "3e5cbc4eace2f7a004c6a96468a080fff2ca5c17c7d1fea20ac2ec6987abbba5"
+    },
+    "search-selection.txt": {
+      "bytes": 835,
+      "sha256": "7abe3040160aa2a1a90c6e03a539f301783498b6360ce5574e63e71e02e8a9f6"
+    },
+    "typecheck.txt": {
+      "bytes": 88,
+      "sha256": "52a5bada304f34bd87edde89494b9b41543983aa07899e23878ee933966603ec"
+    }
+  }
+}

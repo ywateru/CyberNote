@@ -28,3 +28,9 @@ native在root创建的新隔离worktree实现最小App搜索/选择投影与原�
 同冻结新Mac包，在合成folder先输入并保存已知正文，搜索唯一命中→长无匹配→尝试已禁用动作→clear；逐态核列表、正文/可编辑/原生动作状态与焦点。完整正文与Rust持久内容不得被空结果清空；clear后原folder/note及正文恢复，必要的一次实际Undo/Redo仍归原正文。冷启核完整正文，别仅比较可见AX。真实目标删除/锁定的旧上下文拒绝可用已有定向边界，不重跑全授权/IME矩阵。
 
 以同内容/窗口尺寸/主题采原版和克隆的零结果区域，保留原图/叠图/差分与匹配范围，动态区域明示；未齐色彩/材质/整页几何继续FAIL/unknown。新增一次有限手机smoke仅确认共享选择逻辑不回退导航，不把Mac证据当手机像素通过。
+
+## current delivery · 2026-11-04
+
+独立static-02已将b144c6e判为SOURCE-READY（报告f3e5c84），主整合dbe83a7/001e672。原static-01两项blocking及旧56d7真实失败保留，复审不是实际窗口通过。主preflight的7组搜索/12组原生顶部与typecheck通过。
+
+与AudioPlayer统一冻结在f4d3a02，216项实际输入aggregate `a6b191546c39f2bf1c431e7547228a2714f79e355376a686380c89efd2299939`，Mac和Android构建前后不变。APK3edc4ad0…，Mac完整bundle本地adhoc派生sealed包exe11dcbfc4…，strict verify通过；证据`../../verification/f07-audio-integration/build-candidate01/`。本次真实窗口与有限像素序列、Android共享宿主smoke按`../../verification/unified-f4d3a02-independent-01/PLAN.md`，尚未执行的项目仍unknown。

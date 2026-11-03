@@ -1,0 +1,57 @@
+
+> notes-clone@0.1.0 android:build /Users/water/work/2026/Apple-Notes-Clone
+> node scripts/android.mjs build --debug
+
+
+> notes-clone@0.1.0 tauri /Users/water/work/2026/Apple-Notes-Clone
+> tauri android build --debug --target aarch64 --apk
+
+        Info Using installed NDK: /Users/water/Library/Android/sdk/ndk/27.2.12479018
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `pnpm build`
+
+> notes-clone@0.1.0 build /Users/water/work/2026/Apple-Notes-Clone
+> tsc -b && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 1868 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.50 kB │ gzip:   0.32 kB
+dist/assets/index-CERbqkin.css   49.21 kB │ gzip:  10.40 kB
+dist/assets/index-CPCen-s1.js   891.44 kB │ gzip: 280.05 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.28s
+[1m[92m   Compiling[0m libsqlite3-sys v0.30.1
+[1m[92m   Compiling[0m rusqlite v0.32.1
+[1m[92m   Compiling[0m notes-clone v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/src-tauri)
+[1m[92m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 8.28s
+        Info symlinking lib "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" in jniLibs dir "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a"
+        Info "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libandroid.so"
+        Info "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libdl.so"
+        Info "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "liblog.so"
+        Info "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libm.so"
+        Info "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libc.so"
+        Info symlink at "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a/libnotes_clone_lib.so" points to "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so"
+        Info connection; remote_addr=127.0.0.1:60438 conn_id=0
+
+> notes-clone@0.1.0 tauri /Users/water/work/2026/Apple-Notes-Clone
+> tauri android android-studio-script --target aarch64
+
+[1m[32m        Info[0m Using installed NDK: /Users/water/Library/Android/sdk/ndk/27.2.12479018
+[1m[92m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 0.37s
+[1m[32m        Info[0m symlinking lib "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" in jniLibs dir "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a"
+[1m[32m        Info[0m "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libandroid.so"
+[1m[32m        Info[0m "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libdl.so"
+[1m[32m        Info[0m "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "liblog.so"
+[1m[32m        Info[0m "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libm.so"
+[1m[32m        Info[0m "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libc.so"
+Configuration cache entry reused.
+    Finished 1 APK at:
+        /Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk
+

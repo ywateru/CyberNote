@@ -18,12 +18,12 @@
 | APP-001-FIX-06 Android组字失焦/导航 | in-progress，fa1cdb5平台对照/8b9d6af独立复核完成 | 同Trime普通contenteditable失焦、原生EditText藏IME均同现ni hao‸，现证据反对应用盲目回滚/删字符；旧格式/后台观察与历史报告保留，原版精确语义、导航隔离与宿主存储保全仍unknown；输入设置已恢复，未改产品 |
 | APP-001-FIX-07 纸张保存返回选区 | 原选纸P2有限关闭，完整任务partial | 4e2adbd独立复验5c46536/APK5dd6dfc8，取消/grid-large/重开Back均保选区、全文、Editor/View/DOM及父key；自身保存/Home恢复/COLD完整Rust正文与纸张通过。开发真实Store外部变化仅独立只读复核；Undo首步无正文变化unknown，原版/真实第二窗/完整矩阵未通过，旧e117失败保留 |
 | APP-001-PAPER-PREVIEW 手机纸张页 | 主1fa9170，dba83641独立七态/短屏/选区有限通过 | android-independent-01记录六mask实际可见、七态原生选择保存重开、全文/selection/真父key与Editor/View/DOM保持，短屏真实滚动末卡可点save，分辨率恢复。低清录屏高清像素/iOS非零安全区未知；不跨后续包追认 |
-| APP-001-SEARCH-RESULTS Mac搜索结果 | 主001e672，b144c6e独立source-ready，待统一包 | f3e5c84冻结static-02：原P2停放restore、P1隐藏A失效切Boverlay均源码修正；主preflight typecheck/7组/12顶部通过。原版a2dcde9与旧56d7差异保持；真实Mac唯一→零→clear/焦点/Undo和新包手机smoke仍待验 |
+| APP-001-SEARCH-RESULTS Mac搜索结果 | b144c6e独立source-ready，f4d3a02统一双端已构建、待实际 | f3e5c84冻结static-02：原P2停放restore、P1隐藏A失效切Boverlay均源码修正；7组/12顶部通过。11/4双端冻结216项aggregate a6b19154…前后不变，APK3edc4ad0…；Mac派生sealed exe11dcbfc4…严格本地签名检查通过、实际待验。原版a2dcde9与旧56d7差异保持；真实Mac唯一→零→clear/焦点/Undo、有限像素和新包手机smoke仍待验 |
 | APP-002 媒体闭环 | in-progress，dba83641独立实际取消与媒体身份有限通过，时长仍FAIL | android-independent-01独立无包装进入12s/Cancel真实资源状态、完整JSON不变；已有429547B/SHA/1101packets核证。首次Deny/带包装Allow保存冷启仅原始开发证据独立核，分别记账。HTML Infinity/0:00真缺口；旧5dd6及Mac附件/孤儿FAIL保持，可听/物理释放/绘画未验 |
-| APP-002-PERMISSION-01 手机媒体权限入口 | 主ff6b93a，新dba83641开发入口有限通过，独立实际进行中 | 998de4b静态9项通过；0505534新首次Deny无包装弹窗/12秒存活、Allow带包装实际采集，另已授权无包装取消与App冷启存活。未重置系统权限。仅关闭已实测子集，不跨包追认；同canonical旧Finished无loadID、有效CSP/frame和可听音轨仍unknown |
+| APP-002-PERMISSION-01 手机媒体权限入口 | 主ff6b93a，dba83641独立已授权取消有限通过 | 998de4b静态9项通过；0505534首次Deny无包装弹窗/12秒存活、Allow带包装实际采集及App冷启由独立只读核原始证据；2326c75独立实际无包装进入/12秒/取消与真实资源清理。未重置系统权限。仅关闭已实测子集，不跨3edc4ad0新包追认；同canonical旧Finished无loadID、有效CSP/frame和可听音轨仍unknown |
 | APP-002-ATTACHMENT-SUBMIT-01 附件提交 | pending，最小持久操作/原目标重验证方案已准备 | 依赖权限候选源码交接。系统面板返回后来源/目标失效需精确归因，不跳guard；PDF30956B未被正文引用且冷启保持，须有持久操作身份、安全补偿/去重和正文ACK。旧孤儿保留证据，不能以文件存在算预览通过 |
 | APP-002-ATTACHMENT-STORE-01 附件持久操作 | in-progress，Rust模块隔离实施 | 权限源码已合入；先提供真实窗口/会话归属、稳定操作身份、查询/去重、安全补偿与冷启恢复，和F07 App路径隔离。模块通过后再父任务接线，不算系统选择/预览通过 |
-| APP-002-AUDIO-DURATION-01 音频卡片时长 | in-progress，Editor独立源码任务 | dba83641受管约66秒Opus/WebM可有限播放，HTML Infinity/卡片0:00已冻结；使用既有合成媒体修AudioPlayer，不重复录音/改Rust/App或受管原文件。不得以静音当可听采集，权限/保存与时长分别记账 |
+| APP-002-AUDIO-DURATION-01 音频卡片时长 | ae567ef独立source-ready，f4d3a02双端已构建、待实际 | f4d3a02独立审查通过生产helper11组及真实AudioPlayer/离线Chrome156：原WebM探针66.004秒、主初始0暂停、有限WAV不建探针、错误/重试/晚事件清理；不重编码原文件。216项输入前后不变，APK3edc4ad0…；Android91既有媒体真实播放/跳转/冷启及Mac仍待新包验证，非可听采集/像素通过 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |

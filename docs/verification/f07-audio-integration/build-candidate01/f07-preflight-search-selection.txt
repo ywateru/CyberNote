@@ -1,0 +1,33 @@
+{
+  "tests": 7,
+  "results": [
+    {
+      "name": "unique result, zero result, clear preserve the base selection",
+      "pass": true
+    },
+    {
+      "name": "explicit result selection is limited to actual matches",
+      "pass": true
+    },
+    {
+      "name": "mobile and independent-note paths keep their real selection",
+      "pass": true
+    },
+    {
+      "name": "zero-result native actions disabled and global new-note/search enabled",
+      "pass": true
+    },
+    {
+      "name": "installed Tiptap parking primitive keeps full document and Undo/Redo",
+      "pass": true
+    },
+    {
+      "name": "unrelated parked-note access change keeps the valid visible target",
+      "pass": true
+    },
+    {
+      "name": "prepare then park then late abort/conflict/paper restore has one writer",
+      "pass": true
+    }
+  ]
+}
