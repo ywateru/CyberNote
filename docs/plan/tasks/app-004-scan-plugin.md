@@ -29,3 +29,7 @@ depends-on: []
 开发者应编译插件本身与Android原生library、记录锁定依赖和实际model打包证据；以真实受控图像调用Mac Vision等无需GUI的API保存结果，错误/取消/过期token与会话限制做合理检查。不能用类型检查替代OCR实际运行。Android实际相机/离线首次识别须在后续独立设备交接后由verify执行。提交后由独立verify审查源码和模块检查；应用入口→插件→Rust受管附件→保存/重启的接入仍由APP-004-scanning完成。
 
 2026-11-03进展：实现提交9340dba；独立报告 `docs/plan/reviews/app-004-scan-plugin-01.md`（2358901）结论为module-checks pass。真实Mac Vision、会话边界、Android强制离线重建/模型字节已验，Android设备运行、宿主copy_file_to实际执行和主App集成仍unknown。本任务继续补运行证据，不将模块检查升级为完整扫描验收。
+
+2026-11-03实际运行补证：e6cc378宿主分块复制、失败清理与ack顺序已由独立verify真实复核通过。Android当前harness APK `6734d4b22f9d1395759e73a4136f2d53ffa4c5a487b164e993ad419dfe90e0ed` 首次安装/断网后，`ocr-first-offline` 与 `perspective-pdf` 均在SessionStore.begin→save→dir报“无效会话目录”；OCR checks为空、PDF尚未执行，构成P1运行阻塞。原始tar与补审由verify保全。native_ui_research在保存原生顶部模块阶段后负责最小修复，仍只写扫描插件及自身证据，不触碰共享App/FIX-03。
+
+修复必须先证实真实私有目录的absolute/canonical路径差异；合法系统目录别名可规范到同一可信根，仍保留UUID/token归属、严格规范化子路径/普通文件/状态边界。不能直接删除防越界判断、任意放宽路径或把失败改成empty成功。增加针对实际根别名的有效回归，并在最终harness实际断网识别与透视/PDF自测后交独立复核；首次失败史和修后清洁状态分别记录，不能混称从未失败的首次通过。

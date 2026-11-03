@@ -34,4 +34,5 @@
 - FIX-01独立安装版报告见`docs/plan/reviews/app-001-fix-01-01.md`：格式栏IME遮挡、重复附加栏、等宽样式标签和纸张页IME遮挡等本轮P1/P2已关闭；最终源码0d8b245与安装内APK指纹独立核对，纸张真触摸/同选区恢复/继续输入/一次冷启14项断言通过。最终产物清单见`app-001-fix-01-paper/build-manifest.json`，未覆盖矩阵partial/not-run及像素unknown仍保留。
 - 初始键盘遮挡实证仍保存在`qa-fix-01/run-08f2776/finding-android-ime.md`、纸张后续发现见`qa-fix-01/run-8124911/finding-paper-ime.md`。DOM点击不证明用户可触达；最后修复由实际原生触摸复验，不以开发者自测代替独立结果。
 - 原生扫描插件9340dba已通过2358901模块审查：真实Mac中文/空图OCR、会话边界、Android离线强制构建与随包模型检查通过。Android首次断网运行、真实相机/透视/PDF、宿主复制和主App集成仍unknown，详见`docs/plan/reviews/app-004-scan-plugin-01.md`。
+- 后续e6cc378宿主复制补证已独立运行通过。Androidharness首次断网实测则在SessionStore目录校验报错，两fixture均未进入OCR/PDF，当前为P1阻塞修复中；不能继续把“未运行”或模块检查pass描述为Android扫描可用。补审原始tar位于`qa-scan-plugin/host-copy-device-20261103/`，完整主App接入仍未执行。
 - 最终报告由独立verify agent写入；阻塞修复交由develop agent，再复核。
