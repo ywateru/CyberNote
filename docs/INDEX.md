@@ -15,6 +15,8 @@
 - [candidate04同画布零结果几何补证](research/mac-zero-candidate04-geometry-01/README.md)
 - [Mac宽窗工具栏弹性布局分析](research/mac-wide-toolbar-layout-01/README.md)
 - [Mac宽三栏工具栏几何校准任务](plan/tasks/app-001-wide-toolbar-geometry-01.md)
+- [宽三栏工具栏独审与生产布局矩阵](plan/reviews/app-001-wide-toolbar-geometry-static-01.md)
+- [Mac候选05构建与真实宽窗复验任务](plan/tasks/app-001-wide-toolbar-runtime-01.md)
 - [Mac 布局](ui/macos.md)
 - [Android 布局与录屏流程](ui/android.md)
 - [手机录音面板三态布局与坐标](ui/recording-mobile.md)
