@@ -1,7 +1,7 @@
 ---
 id: app-002-audio-card-01
 scope: saved-recording-timestamp-and-mobile-compact-card
-status: source-candidate
+status: source-ready
 depends-on: [app-003-tags-01]
 ---
 
@@ -45,4 +45,10 @@ UI仅对新紧凑卡作真实组件检查：三行、未知日期两行、独立
 
 开发检查使用准确本树offline/locked Rust Session/Store、新命名CLI和纯合成字节；真实Panel/Session→实际App闭包→production Submission/bridge/SaveQueue→真实Rust临时DB覆盖权限等待、跨日长暂停、响应丢失、正文ACK失败、refresh失败和旧目标晚响应。另有实际Editor NodeView卡片320/390与桌面检查、原有录音及附件回归。精确命令、失败首轮、最终源码哈希和边界在`docs/verification/app-002-audio-card-01/README.md`。
 
-此记录仅为开发交付候选，待不同作者独立源码审查；SOURCE-READY、合入、Mac/Android新包、真实有效音轨、设备冷启与原版像素对照由root后续完成。原片取时规则、长时长格式、深色、展开及所有像素一致性继续unknown。未运行平台构建、GUI/ADB、下载、依赖升级或设备数据复制。
+上述为开发候选阶段记录，后续独审与主整合见下文。Mac/Android新包、真实有效音轨、设备冷启与原版像素对照仍由root后续完成。原片取时规则、长时长格式、深色、展开及所有像素一致性继续unknown。未运行平台构建、GUI/ADB、下载、依赖升级或设备数据复制。
+
+## independent review and main integration 2026-11-04
+
+精确源码9303b484经不同作者独审b477f79通过，P1/P2/P3产品findings均无，仅授予列明源码和受控实际链SOURCE-READY。独审包括准确编译Store/Session47项、额外5项持久坏值/归档重映射/完整Eq测试、Panel到Rust5场景、NodeView8、实际Session权限8及相关回归；见`docs/plan/reviews/app-002-audio-card-static-01.md`与独立证据目录。
+
+主线4dbdbd25238c430f7800cb286b642577a09ccf50整合后，238产品输入与11改动检查脚本逐字等于冻结候选，前后未变。pnpm build、schema96/access16/toolbar13/OCR37、Panel→实际App闭包→production Submission/bridge/SaveQueue→准确Rust Session/Store5、实际NodeView8通过；当前挂载App/Editor的标签browser27、保存11/53条及组合12/170条真实tag-only Store action通过。两类CLI身份及不同transport边界明确区分，无重新Rust编译、平台构建或native claim。主整合证据在`docs/verification/app-002-audio-card-main-integration-01/README.md`。新设备包、真实音轨/冷启及原版取时/像素验收仍待后续。

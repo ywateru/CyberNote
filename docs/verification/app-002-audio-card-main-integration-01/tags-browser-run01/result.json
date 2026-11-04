@@ -1,0 +1,463 @@
+{
+  "results": [
+    {
+      "name": "real-text-input-ASCII-space",
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "noteTag",
+                    "attrs": {
+                      "name": "UI对照"
+                    }
+                  }
+                ],
+                "text": "#UI对照"
+              },
+              {
+                "type": "text",
+                "text": " "
+              }
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "UI对照"
+      ],
+      "text": "#UI对照",
+      "selection": {
+        "type": "text",
+        "anchor": 7,
+        "head": 7
+      },
+      "changes": 2
+    },
+    {
+      "name": "undo-redo",
+      "ok": true
+    },
+    {
+      "name": "internal-edit-removes-mark-keeps-text-two-editor-isolation",
+      "ok": true
+    },
+    {
+      "name": "plain-paste-then-real-space",
+      "ok": true
+    },
+    {
+      "name": "no-submit-hash",
+      "ok": true
+    },
+    {
+      "name": "no-submit-inline",
+      "ok": true
+    },
+    {
+      "name": "no-submit-digits",
+      "ok": true
+    },
+    {
+      "name": "no-submit-long",
+      "ok": true
+    },
+    {
+      "name": "no-submit-invalid",
+      "ok": true
+    },
+    {
+      "name": "no-submit-code",
+      "ok": true
+    },
+    {
+      "name": "partial-link-wins-clears-whole-tag-keeps-bold-text",
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "#"
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.invalid",
+                      "target": "_blank",
+                      "rel": "noopener noreferrer nofollow",
+                      "class": null,
+                      "title": null
+                    }
+                  }
+                ],
+                "text": "UI"
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ],
+                "text": "对照"
+              },
+              {
+                "type": "text",
+                "text": " "
+              }
+            ]
+          }
+        ]
+      },
+      "tags": [],
+      "text": "#UI对照",
+      "selection": {
+        "type": "text",
+        "anchor": 2,
+        "head": 4
+      },
+      "changes": 22
+    },
+    {
+      "name": "split-block-clears-both-fragments",
+      "ok": true
+    },
+    {
+      "name": "whole-span-edit-before",
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "x"
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "noteTag",
+                    "attrs": {
+                      "name": "UI对照"
+                    }
+                  }
+                ],
+                "text": "#UI"
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "bold"
+                  },
+                  {
+                    "type": "noteTag",
+                    "attrs": {
+                      "name": "UI对照"
+                    }
+                  }
+                ],
+                "text": "对照"
+              },
+              {
+                "type": "text",
+                "text": " "
+              }
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "UI对照"
+      ],
+      "text": "x#UI对照",
+      "selection": {
+        "type": "text",
+        "anchor": 2,
+        "head": 2
+      },
+      "changes": 24
+    },
+    {
+      "name": "whole-span-edit-after",
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "noteTag",
+                    "attrs": {
+                      "name": "UI对照"
+                    }
+                  }
+                ],
+                "text": "#UI"
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "bold"
+                  },
+                  {
+                    "type": "noteTag",
+                    "attrs": {
+                      "name": "UI对照"
+                    }
+                  }
+                ],
+                "text": "对照"
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ],
+                "text": "x"
+              },
+              {
+                "type": "text",
+                "text": " "
+              }
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "UI对照"
+      ],
+      "text": "#UI对照x",
+      "selection": {
+        "type": "text",
+        "anchor": 1,
+        "head": 1
+      },
+      "changes": 25
+    },
+    {
+      "name": "whole-span-edit-delete",
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "#U"
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ],
+                "text": "对照"
+              },
+              {
+                "type": "text",
+                "text": " "
+              }
+            ]
+          }
+        ]
+      },
+      "tags": [],
+      "text": "#U对照",
+      "selection": {
+        "type": "text",
+        "anchor": 1,
+        "head": 1
+      },
+      "changes": 26
+    },
+    {
+      "name": "whole-span-edit-code",
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "#"
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ],
+                "text": "UI"
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ],
+                "text": "对照"
+              },
+              {
+                "type": "text",
+                "text": " "
+              }
+            ]
+          }
+        ]
+      },
+      "tags": [],
+      "text": "#UI对照",
+      "selection": {
+        "type": "text",
+        "anchor": 2,
+        "head": 4
+      },
+      "changes": 27
+    },
+    {
+      "name": "whole-span-edit-codeblock",
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": null
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "#UI对照 "
+              }
+            ]
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "tags": [],
+      "text": "#UI对照",
+      "selection": {
+        "type": "text",
+        "anchor": 3,
+        "head": 3
+      },
+      "changes": 28
+    },
+    {
+      "name": "whole-span-edit-replace-selection",
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "#changed"
+              },
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ],
+                "text": "对照"
+              },
+              {
+                "type": "text",
+                "text": " "
+              }
+            ]
+          }
+        ]
+      },
+      "tags": [],
+      "text": "#changed对照",
+      "selection": {
+        "type": "text",
+        "anchor": 9,
+        "head": 9
+      },
+      "changes": 29
+    },
+    {
+      "name": "composition-native-events-space-after-end",
+      "ok": true
+    },
+    {
+      "name": "locked-no-submit",
+      "ok": true
+    },
+    {
+      "name": "readonly-no-submit",
+      "ok": true
+    },
+    {
+      "name": "authorized-projection-access-barrier",
+      "catalog": [
+        [
+          "UI对照",
+          2
+        ]
+      ],
+      "prepare": [],
+      "selected": null,
+      "sameName": "UI对照"
+    },
+    {
+      "name": "actual-App-last-reference-empty-park-clear-restores-instance-history",
+      "ok": true
+    },
+    {
+      "name": "actual-App-tag-and-text-search-clear",
+      "ok": true
+    },
+    {
+      "name": "actual-App-delete-restore-keeps-filter-empty-then-rebuilds",
+      "ok": true
+    },
+    {
+      "name": "actual-App-physical-folder-clears-tag",
+      "ok": true
+    },
+    {
+      "name": "actual-App-pending-tag-preserved-with-save-registration-error-without-durable-write",
+      "ok": true
+    }
+  ],
+  "errors": [],
+  "sourceRoot": "/Users/water/work/2026/Apple-Notes-Clone",
+  "limitations": [
+    "Headless Chromium, not native runtime or pixel parity.",
+    "Composition events are controlled browser events; real Android/iOS IME remains unknown.",
+    "Access projection tested through production pure module; multiwindow native event transport remains covered by existing access checks."
+  ]
+}

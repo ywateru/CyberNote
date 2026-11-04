@@ -1,0 +1,1199 @@
+[
+  {
+    "request": {
+      "command": "load_workspace",
+      "params": {}
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {},
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "attachments": [],
+        "folders": [
+          {
+            "createdAt": 1793764068575,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "notes": [],
+        "settings": {}
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "workspace_action",
+      "params": {
+        "action": {
+          "type": "createNote"
+        },
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1,
+          "noteEpoch": null
+        }
+      }
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "createdAt": 1793764068576,
+        "deletedAt": null,
+        "document": {
+          "content": [
+            {
+              "attrs": {
+                "level": 1
+              },
+              "type": "heading"
+            }
+          ],
+          "type": "doc"
+        },
+        "folderId": "default",
+        "id": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "locked": false,
+        "originalFolderId": null,
+        "paperStyle": "plain",
+        "pinned": false,
+        "plainText": "",
+        "revision": 0,
+        "sealed": null,
+        "title": "新备忘录",
+        "updatedAt": 1793764068576
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "workspace_action",
+      "params": {
+        "action": {
+          "type": "createNote"
+        },
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1,
+          "noteEpoch": null
+        }
+      }
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "createdAt": 1793764068576,
+        "deletedAt": null,
+        "document": {
+          "content": [
+            {
+              "attrs": {
+                "level": 1
+              },
+              "type": "heading"
+            }
+          ],
+          "type": "doc"
+        },
+        "folderId": "default",
+        "id": "bc53d01d-2800-452e-ac09-e7e8b1d1a72a",
+        "locked": false,
+        "originalFolderId": null,
+        "paperStyle": "plain",
+        "pinned": false,
+        "plainText": "",
+        "revision": 0,
+        "sealed": null,
+        "title": "新备忘录",
+        "updatedAt": 1793764068576
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "load_workspace",
+      "params": {}
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "attachments": [],
+        "folders": [
+          {
+            "createdAt": 1793764068575,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "notes": [
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "bc53d01d-2800-452e-ac09-e7e8b1d1a72a",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068576
+          },
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "a8115b09-7124-4746-8241-d22d3329cf20",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068576
+          }
+        ],
+        "settings": {}
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "load_workspace",
+      "params": {}
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "attachments": [],
+        "folders": [
+          {
+            "createdAt": 1793764068575,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "notes": [
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "bc53d01d-2800-452e-ac09-e7e8b1d1a72a",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068576
+          },
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "a8115b09-7124-4746-8241-d22d3329cf20",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068576
+          }
+        ],
+        "settings": {}
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "store_attachment_operation",
+      "params": {
+        "operationId": "57a43e8c-4557-4f3b-8610-ff5b2602c587",
+        "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "name": "新录音.webm",
+        "mime": "audio/webm;codecs=opus",
+        "data": "c3ludGhldGljLWNvbnRyb2xsZWQtYXVkaW8tb25seQ==",
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1,
+          "noteEpoch": 0
+        },
+        "recordedAt": 1793721599000
+      }
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "attachment": {
+          "displayName": "新录音.webm",
+          "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+          "kind": "audio",
+          "mime": "audio/webm;codecs=opus",
+          "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+          "recordedAt": 1793721599000,
+          "relativePath": "op-57a43e8c-4557-4f3b-8610-ff5b2602c587-d2391c1c-1e33-42a3-9e11-bf052171f16e.blob",
+          "size": 31
+        },
+        "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "operationId": "57a43e8c-4557-4f3b-8610-ff5b2602c587",
+        "status": "stored"
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "load_workspace",
+      "params": {}
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "attachments": [
+          {
+            "displayName": "新录音.webm",
+            "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+            "kind": "audio",
+            "mime": "audio/webm;codecs=opus",
+            "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+            "recordedAt": 1793721599000,
+            "relativePath": "op-57a43e8c-4557-4f3b-8610-ff5b2602c587-d2391c1c-1e33-42a3-9e11-bf052171f16e.blob",
+            "size": 31
+          }
+        ],
+        "folders": [
+          {
+            "createdAt": 1793764068575,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "notes": [
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "bc53d01d-2800-452e-ac09-e7e8b1d1a72a",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068576
+          },
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "a8115b09-7124-4746-8241-d22d3329cf20",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068576
+          }
+        ],
+        "settings": {}
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "register_save_intent",
+      "params": {
+        "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "intent": "8b2c8359-ced8-45b7-95f7-a7f958d99fe2",
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    "response": {
+      "ok": null
+    }
+  },
+  {
+    "request": {
+      "command": "register_save_intent",
+      "params": {
+        "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "intent": "735af983-70ef-4e23-b9fb-0a6ff0ff568e",
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    "response": {
+      "ok": null
+    }
+  },
+  {
+    "request": {
+      "command": "register_save_intent",
+      "params": {
+        "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "intent": "fa85071f-bec7-4cc4-9c4e-9de054ebe1cf",
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    "response": {
+      "ok": null
+    }
+  },
+  {
+    "request": {
+      "command": "workspace_action",
+      "params": {
+        "action": {
+          "type": "saveNote",
+          "id": "a8115b09-7124-4746-8241-d22d3329cf20",
+          "saveIntent": "fa85071f-bec7-4cc4-9c4e-9de054ebe1cf",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": {
+                  "level": 1
+                }
+              },
+              {
+                "type": "attachment",
+                "attrs": {
+                  "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+                  "kind": "audio",
+                  "name": "新录音.webm"
+                }
+              }
+            ]
+          },
+          "revision": 0
+        },
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1
+        }
+      }
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "createdAt": 1793764068576,
+        "deletedAt": null,
+        "document": {
+          "content": [
+            {
+              "attrs": {
+                "level": 1
+              },
+              "type": "heading"
+            },
+            {
+              "attrs": {
+                "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+                "kind": "audio",
+                "name": "新录音.webm"
+              },
+              "type": "attachment"
+            }
+          ],
+          "type": "doc"
+        },
+        "folderId": "default",
+        "id": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "locked": false,
+        "originalFolderId": null,
+        "paperStyle": "plain",
+        "pinned": false,
+        "plainText": "",
+        "revision": 1,
+        "sealed": null,
+        "title": "新备忘录",
+        "updatedAt": 1793764068947
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "load_workspace",
+      "params": {}
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "attachments": [
+          {
+            "displayName": "新录音.webm",
+            "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+            "kind": "audio",
+            "mime": "audio/webm;codecs=opus",
+            "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+            "recordedAt": 1793721599000,
+            "relativePath": "op-57a43e8c-4557-4f3b-8610-ff5b2602c587-d2391c1c-1e33-42a3-9e11-bf052171f16e.blob",
+            "size": 31
+          }
+        ],
+        "folders": [
+          {
+            "createdAt": 1793764068575,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "notes": [
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                },
+                {
+                  "attrs": {
+                    "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+                    "kind": "audio",
+                    "name": "新录音.webm"
+                  },
+                  "type": "attachment"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "a8115b09-7124-4746-8241-d22d3329cf20",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 1,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068947
+          },
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "bc53d01d-2800-452e-ac09-e7e8b1d1a72a",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068576
+          }
+        ],
+        "settings": {}
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "query_attachment_operation",
+      "params": {
+        "operationId": "57a43e8c-4557-4f3b-8610-ff5b2602c587",
+        "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "attachment": {
+          "displayName": "新录音.webm",
+          "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+          "kind": "audio",
+          "mime": "audio/webm;codecs=opus",
+          "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+          "recordedAt": 1793721599000,
+          "relativePath": "op-57a43e8c-4557-4f3b-8610-ff5b2602c587-d2391c1c-1e33-42a3-9e11-bf052171f16e.blob",
+          "size": 31
+        },
+        "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "operationId": "57a43e8c-4557-4f3b-8610-ff5b2602c587",
+        "status": "committed"
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "read_attachment",
+      "params": {
+        "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "data": "c3ludGhldGljLWNvbnRyb2xsZWQtYXVkaW8tb25seQ==",
+        "mime": "audio/webm;codecs=opus",
+        "name": "新录音.webm",
+        "recordedAt": 1793721599000
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "load_workspace",
+      "params": {}
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "attachments": [
+          {
+            "displayName": "新录音.webm",
+            "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+            "kind": "audio",
+            "mime": "audio/webm;codecs=opus",
+            "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+            "recordedAt": 1793721599000,
+            "relativePath": "op-57a43e8c-4557-4f3b-8610-ff5b2602c587-d2391c1c-1e33-42a3-9e11-bf052171f16e.blob",
+            "size": 31
+          }
+        ],
+        "folders": [
+          {
+            "createdAt": 1793764068575,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "notes": [
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                },
+                {
+                  "attrs": {
+                    "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+                    "kind": "audio",
+                    "name": "新录音.webm"
+                  },
+                  "type": "attachment"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "a8115b09-7124-4746-8241-d22d3329cf20",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 1,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068947
+          },
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "bc53d01d-2800-452e-ac09-e7e8b1d1a72a",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068576
+          }
+        ],
+        "settings": {}
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "store_attachment_operation",
+      "params": {
+        "operationId": "57a43e8c-4557-4f3b-8610-ff5b2602c587",
+        "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "name": "新录音.webm",
+        "mime": "audio/webm;codecs=opus",
+        "data": "c3ludGhldGljLWNvbnRyb2xsZWQtYXVkaW8tb25seQ==",
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    "response": {
+      "error": {
+        "code": "attachment_operation_conflict",
+        "message": "附件操作身份或内容不匹配"
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "store_attachment_operation",
+      "params": {
+        "operationId": "57a43e8c-4557-4f3b-8610-ff5b2602c587",
+        "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+        "name": "新录音.webm",
+        "mime": "audio/webm;codecs=opus",
+        "data": "c3ludGhldGljLWNvbnRyb2xsZWQtYXVkaW8tb25seQ==",
+        "recordedAt": 1793721599001,
+        "expected": {
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    "response": {
+      "error": {
+        "code": "attachment_operation_conflict",
+        "message": "附件操作身份或内容不匹配"
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "load_workspace",
+      "params": {}
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "a8115b09-7124-4746-8241-d22d3329cf20": {
+              "authorized": true,
+              "epoch": 0
+            },
+            "bc53d01d-2800-452e-ac09-e7e8b1d1a72a": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "492b4c6a-df96-4358-b2e7-1ae3d70ba61c",
+          "suspended": []
+        },
+        "attachments": [
+          {
+            "displayName": "新录音.webm",
+            "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+            "kind": "audio",
+            "mime": "audio/webm;codecs=opus",
+            "noteId": "a8115b09-7124-4746-8241-d22d3329cf20",
+            "recordedAt": 1793721599000,
+            "relativePath": "op-57a43e8c-4557-4f3b-8610-ff5b2602c587-d2391c1c-1e33-42a3-9e11-bf052171f16e.blob",
+            "size": 31
+          }
+        ],
+        "folders": [
+          {
+            "createdAt": 1793764068575,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793764068575,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "notes": [
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                },
+                {
+                  "attrs": {
+                    "id": "d2391c1c-1e33-42a3-9e11-bf052171f16e",
+                    "kind": "audio",
+                    "name": "新录音.webm"
+                  },
+                  "type": "attachment"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "a8115b09-7124-4746-8241-d22d3329cf20",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 1,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068947
+          },
+          {
+            "createdAt": 1793764068576,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "bc53d01d-2800-452e-ac09-e7e8b1d1a72a",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793764068576
+          }
+        ],
+        "settings": {}
+      }
+    }
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "build",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 3.576326166,
+    "freeAfter": 5767315456
+  },
+  {
+    "name": "schema",
+    "command": [
+      "node",
+      "scripts/check-editor-schema.mjs",
+      "--output",
+      "docs/verification/app-002-audio-card-main-integration-01/schema-result.json"
+    ],
+    "exitCode": 0,
+    "seconds": 0.25299195799999996,
+    "freeAfter": 5767262208
+  },
+  {
+    "name": "access",
+    "command": [
+      "node",
+      "docs/verification/app-002-audio-card-main-integration-01/scripts/access-boundary-owned-output.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.19430162500000003,
+    "freeAfter": 5767159808
+  },
+  {
+    "name": "native-toolbar",
+    "command": [
+      "node",
+      "scripts/check-native-toolbar.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.2145082089999999,
+    "freeAfter": 5767081984
+  },
+  {
+    "name": "ocr",
+    "command": [
+      "node",
+      "scripts/check-ocr-host.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 1.350936667,
+    "freeAfter": 5766955008
+  }
+]

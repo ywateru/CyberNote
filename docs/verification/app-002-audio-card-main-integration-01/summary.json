@@ -1,0 +1,187 @@
+{
+  "status": "PASS_LISTED_MAIN_INTEGRATION_BOUNDARIES",
+  "mainCommit": "4dbdbd25238c430f7800cb286b642577a09ccf50",
+  "productCount": 238,
+  "productAggregateSHA256": "5d1690457ff9dfca2905309e495a28583173e47744984087ba181a85177af295",
+  "basicCommands": [
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 3.576326166,
+      "freeAfter": 5767315456
+    },
+    {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/check-editor-schema.mjs",
+        "--output",
+        "docs/verification/app-002-audio-card-main-integration-01/schema-result.json"
+      ],
+      "exitCode": 0,
+      "seconds": 0.25299195799999996,
+      "freeAfter": 5767262208
+    },
+    {
+      "name": "access",
+      "command": [
+        "node",
+        "docs/verification/app-002-audio-card-main-integration-01/scripts/access-boundary-owned-output.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.19430162500000003,
+      "freeAfter": 5767159808
+    },
+    {
+      "name": "native-toolbar",
+      "command": [
+        "node",
+        "scripts/check-native-toolbar.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.2145082089999999,
+      "freeAfter": 5767081984
+    },
+    {
+      "name": "ocr",
+      "command": [
+        "node",
+        "scripts/check-ocr-host.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 1.350936667,
+      "freeAfter": 5766955008
+    }
+  ],
+  "browserCommands": [
+    {
+      "name": "audio-integration",
+      "command": [
+        "node",
+        "scripts/check-audio-card-integration.mjs",
+        "docs/verification/app-002-audio-card-main-integration-01/audio-integration-run01"
+      ],
+      "environment": {
+        "NOTES_AUDIO_CARD_BINARY": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-audio-card-store",
+        "NOTES_TAG_STORE_BINARY": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-qa-fix-store",
+        "PLAYWRIGHT_CORE_PATH": "/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/index.mjs",
+        "CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      },
+      "exitCode": 0,
+      "seconds": 3.928710083,
+      "freeAfter": 5752496128
+    },
+    {
+      "name": "audio-ui",
+      "command": [
+        "node",
+        "scripts/check-audio-card-ui.mjs",
+        "docs/verification/app-002-audio-card-main-integration-01/audio-ui-run01"
+      ],
+      "environment": {
+        "NOTES_AUDIO_CARD_BINARY": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-audio-card-store",
+        "NOTES_TAG_STORE_BINARY": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-qa-fix-store",
+        "PLAYWRIGHT_CORE_PATH": "/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/index.mjs",
+        "CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      },
+      "exitCode": 0,
+      "seconds": 3.114960875,
+      "freeAfter": 5743411200
+    },
+    {
+      "name": "tags-browser",
+      "command": [
+        "node",
+        "scripts/check-tags-browser.mjs",
+        "docs/verification/app-002-audio-card-main-integration-01/tags-browser-run01"
+      ],
+      "environment": {
+        "NOTES_AUDIO_CARD_BINARY": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-audio-card-store",
+        "NOTES_TAG_STORE_BINARY": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-qa-fix-store",
+        "PLAYWRIGHT_CORE_PATH": "/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/index.mjs",
+        "CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      },
+      "exitCode": 0,
+      "seconds": 4.0561169580000005,
+      "freeAfter": 5664366592
+    },
+    {
+      "name": "tags-save",
+      "command": [
+        "node",
+        "scripts/check-tags-save-boundary.mjs",
+        "docs/verification/app-002-audio-card-main-integration-01/tags-save-run01"
+      ],
+      "environment": {
+        "NOTES_AUDIO_CARD_BINARY": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-audio-card-store",
+        "NOTES_TAG_STORE_BINARY": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-qa-fix-store",
+        "PLAYWRIGHT_CORE_PATH": "/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/index.mjs",
+        "CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      },
+      "exitCode": 0,
+      "seconds": 8.022361167,
+      "freeAfter": 5645471744
+    },
+    {
+      "name": "tags-composition",
+      "command": [
+        "node",
+        "scripts/check-tags-composition-retention.mjs",
+        "docs/verification/app-002-audio-card-main-integration-01/tags-composition-run01"
+      ],
+      "environment": {
+        "NOTES_AUDIO_CARD_BINARY": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-audio-card-store",
+        "NOTES_TAG_STORE_BINARY": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-qa-fix-store",
+        "PLAYWRIGHT_CORE_PATH": "/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/index.mjs",
+        "CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      },
+      "exitCode": 0,
+      "seconds": 14.788116291999998,
+      "freeAfter": 5621411840
+    }
+  ],
+  "counts": {
+    "audioIntegration": 5,
+    "audioUI": 8,
+    "schema": 96,
+    "access": 16,
+    "nativeToolbar": 13,
+    "ocr": 37,
+    "tagBrowser": 27,
+    "tagSaveBoundary": 11,
+    "tagSaveStoreActions": 53,
+    "tagComposition": 12,
+    "tagCompositionStoreActions": 170
+  },
+  "tagSaveActions": {
+    "createNote": 4,
+    "saveNote": 10,
+    "__workspace": 36,
+    "settings": 3
+  },
+  "tagCompositionActions": {
+    "createNote": 14,
+    "saveNote": 47,
+    "__workspace": 109
+  },
+  "pageErrors": {
+    "audioIntegration": [],
+    "audioUI": [],
+    "tagBrowser": [],
+    "tagSaveBoundary": [],
+    "tagComposition": []
+  },
+  "externalAudioRequests": [],
+  "reusedRustEvidence": "Exact-source independent Store/Session47 + extra5 and real Session authority8; current source/copy identity verified, no Rust recompile or rerun in main integration.",
+  "limits": [
+    "Controlled audio hardware and IPC transport; App audio closures AST-extracted, React setters/Editor command host controlled. No mounted App shell for audio check.",
+    "Audio chain uses exact new independent Session/Store CLI a2df38d0; tag save/composition use original exact historical tag-only Store CLI f43d9695 with current mounted App/Editor/queue. These are distinct protocols/scopes, not native Tauri transport.",
+    "Browser composition events are controlled/engine events, not OS IME acceptance. OCR host results are controlled, not native OCR.",
+    "No GUI/ADB/platform build/install/download/dependency change/user database or media copy. All new temporary stores/media created directly from synthetic fixtures.",
+    "Original Notes timestamp selection, dark/expanded/long-duration gesture/pixel parity and new package/device/audio acceptance remain UNKNOWN."
+  ]
+}

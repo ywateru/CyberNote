@@ -1,0 +1,57 @@
+{
+  "tests": 13,
+  "results": [
+    {
+      "name": "listen precedes bind; only own binding early events replay",
+      "status": "pass"
+    },
+    {
+      "name": "caret context refresh does not update controls or close a menu",
+      "status": "pass"
+    },
+    {
+      "name": "one update in flight coalesces latest desired state",
+      "status": "pass"
+    },
+    {
+      "name": "native query arriving during update wins over stale React query",
+      "status": "pass"
+    },
+    {
+      "name": "missing native search event waits, then resumes with exact acknowledgment",
+      "status": "pass"
+    },
+    {
+      "name": "composition preserves pending state until actual committed search event",
+      "status": "pass"
+    },
+    {
+      "name": "old note revision, duplicate sequence, and wrong window are rejected",
+      "status": "pass"
+    },
+    {
+      "name": "dispose during bind releases the eventual binding and listener",
+      "status": "pass"
+    },
+    {
+      "name": "unbind rejection still releases listener and rejects late events",
+      "status": "pass"
+    },
+    {
+      "name": "invalidation clears retained editor targets and refuses old events",
+      "status": "pass"
+    },
+    {
+      "name": "inconsistent stale search cannot spin forever",
+      "status": "pass"
+    },
+    {
+      "name": "host projections distinguish browse, open, focused table, and independent window",
+      "status": "pass"
+    },
+    {
+      "name": "local OCR has its own typed native command; Continuity stays disabled and unavailable targets cannot recognize",
+      "status": "pass"
+    }
+  ]
+}
