@@ -1,0 +1,224 @@
+/* Local recording overrides. Mobile relationships come from recording-mobile.md;
+   compressed video bounds are not device points or a pixel-parity claim. */
+.recording-backdrop .recording-sheet header {
+  position: relative;
+  justify-content: center;
+}
+.recording-backdrop .recording-sheet .recording-cancel {
+  position: absolute;
+  left: 20px;
+}
+.recording-backdrop .recording-sheet .recording-notice {
+  min-height: 38px;
+  max-width: 90%;
+  margin-top: 8px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--secondary);
+}
+.recording-backdrop .recording-sheet .recording-notice[role="alert"] {
+  color: var(--danger);
+}
+.recording-backdrop .recording-sheet .recording-controls {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: 28px;
+  height: 58px;
+  flex-shrink: 0;
+}
+.recording-backdrop .recording-sheet .recording-primary {
+  width: 146px;
+  height: 58px;
+  min-width: 0;
+  border: 1px solid #aaa;
+  background: var(--paper);
+  color: #ff3b30;
+  border-radius: 32px;
+  font-size: 17px;
+}
+.recording-backdrop .recording-sheet .recording-primary-idle,
+.recording-backdrop .recording-sheet .recording-primary-requesting {
+  width: 58px;
+}
+.recording-backdrop .recording-sheet .recording-red-core {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #ff3b30;
+}
+.recording-backdrop .recording-sheet .recording-primary-paused {
+  border-color: #ff3b30;
+  background: rgba(255, 59, 48, 0.08);
+}
+.recording-backdrop .recording-sheet .recording-primary svg {
+  width: 28px;
+  height: 28px;
+}
+.recording-backdrop .recording-sheet .recording-done {
+  position: absolute;
+  right: 18px;
+  top: 0;
+  min-width: 44px;
+  height: 58px;
+  border: 0;
+  color: var(--accent);
+  background: transparent;
+  font-size: 16px;
+}
+.recording-backdrop .recording-sheet .recording-done:disabled {
+  color: #a6a6aa;
+}
+@media (max-width: 760px) {
+  .mobile .recording-backdrop[class] {
+    padding-top: max(6.875vh, env(safe-area-inset-top, 0px));
+  }
+  .mobile .recording-backdrop .recording-sheet {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .mobile .recording-backdrop .recording-sheet .sheet-handle {
+    position: absolute;
+    top: 0.45%;
+    margin: 0;
+    width: 9.4%;
+    height: 4px;
+  }
+  .mobile .recording-backdrop .recording-sheet header {
+    position: absolute;
+    top: 5.8%;
+    height: 8%;
+    padding: 0;
+  }
+  .mobile .recording-backdrop .recording-sheet header > div {
+    gap: 6px;
+  }
+  .mobile .recording-backdrop .recording-sheet header strong {
+    font-size: clamp(18px, 5.35vw, 23px);
+  }
+  .mobile .recording-backdrop .recording-sheet header small {
+    font-size: clamp(11px, 3.1vw, 13px);
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-cancel {
+    display: none;
+  }
+  .mobile .recording-backdrop .recording-sheet .waveform {
+    position: absolute;
+    top: 15.9%;
+    height: 36.9%;
+    min-height: 0;
+    margin: 0;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-time {
+    position: absolute;
+    top: 65.4%;
+    margin: 0;
+    font-size: clamp(28px, 9.6vw, 42px);
+    font-weight: 500;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-notice {
+    position: absolute;
+    top: 71%;
+    margin: 0;
+    max-height: 12%;
+    overflow: auto;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-controls {
+    position: absolute;
+    top: 85.45%;
+    height: 7.4%;
+    min-height: 44px;
+    margin: 0;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-primary {
+    height: 100%;
+    width: 37.05%;
+    border-radius: 999px;
+    font-size: clamp(14px, 3.8vw, 17px);
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-primary-idle,
+  .mobile .recording-backdrop .recording-sheet .recording-primary-requesting {
+    width: auto;
+    aspect-ratio: 1;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-red-core {
+    width: 80%;
+    height: 80%;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-primary svg {
+    width: 32%;
+    height: 45%;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-done {
+    right: 4.5%;
+    height: 100%;
+    font-size: clamp(13px, 3.8vw, 17px);
+  }
+}
+
+.recording-backdrop .recording-sheet .wave-bars {
+  width: 50%;
+  margin-right: auto;
+  padding: 0;
+}
+
+.recording-backdrop .recording-sheet .recording-playback {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: clamp(156px, 50%, 260px);
+  min-height: 44px;
+  margin: 12px 0 20px;
+  flex-shrink: 0;
+}
+.recording-backdrop .recording-sheet .recording-playback button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+}
+.recording-backdrop .recording-sheet .recording-playback button:disabled {
+  color: #a6a6aa;
+}
+.recording-backdrop .recording-sheet .recording-playback button svg {
+  width: 28px;
+  height: 28px;
+}
+.recording-backdrop .recording-sheet .recording-playback button span {
+  position: absolute;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 600;
+}
+.recording-backdrop .recording-sheet .recording-playback-retry {
+  min-height: 44px;
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+}
+@media (max-width: 760px) {
+  .mobile .recording-backdrop .recording-sheet .recording-playback {
+    position: absolute;
+    top: 75.4%;
+    height: 8%;
+    margin: 0;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-notice {
+    min-height: 0;
+    max-height: 4%;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-playback-retry {
+    position: absolute;
+    top: 56%;
+    font-size: 12px;
+    min-height: 44px;
+  }
+}

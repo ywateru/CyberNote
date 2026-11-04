@@ -1,0 +1,100 @@
+diff --git a/plugins/tauri-plugin-notes-ui/macos/toolbar.m b/plugins/tauri-plugin-notes-ui/macos/toolbar.m
+index 77d23a8..21921b5 100644
+--- a/plugins/tauri-plugin-notes-ui/macos/toolbar.m
++++ b/plugins/tauri-plugin-notes-ui/macos/toolbar.m
+@@ -139,6 +139,7 @@ static NSPoint contentOffsetFor(NSString *action) {
+ @property NSMutableDictionary<NSString *,NSView *> *groups;
+ @property NSMutableSet<NSString *> *layoutGroups;
+ @property NSMutableDictionary<NSString *,NSView *> *contents;
++@property NSView *sidebarBackground;
+ @property NSMutableDictionary<NSString *,NotesUIButton *> *buttons;
+ @property NSMutableDictionary<NSString *,NSDictionary *> *actionStates;
+ @property NSMutableDictionary<NSString *,NSMenu *> *menus;
+@@ -169,6 +170,7 @@ static NSPoint contentOffsetFor(NSString *action) {
+ 
+ @implementation NotesUIController
+ - (NSView *)makeGroup:(NSString *)name {
++    BOOL sidebar=[name isEqual:@"sidebar"];
+     NSView *content=[[NotesUIRoot alloc] initWithFrame:NSZeroRect];
+     NSView *effect=nil;
+     if(@available(macOS 26.0,*)) {
+@@ -176,7 +178,7 @@ static NSPoint contentOffsetFor(NSString *action) {
+         if(cls && [cls instancesRespondToSelector:@selector(setContentView:)] && [cls instancesRespondToSelector:@selector(setStyle:)]
+             && [cls instancesRespondToSelector:@selector(setCornerRadius:)]) {
+             NSGlassEffectView *glass=[[cls alloc] initWithFrame:NSZeroRect];
+-            glass.contentView=content; glass.cornerRadius=18;
++            if(!sidebar)glass.contentView=content; glass.cornerRadius=18;
+             glass.style=[self.state[@"glassStyle"] isEqual:@"clear"]?NSGlassEffectViewStyleClear:NSGlassEffectViewStyleRegular;
+             effect=glass;
+             self.material=[self.state[@"glassStyle"] isEqual:@"clear"]?@"glassClear":@"glassRegular";
+@@ -187,9 +189,17 @@ static NSPoint contentOffsetFor(NSString *action) {
+         legacy.material=NSVisualEffectMaterialHeaderView;legacy.blendingMode=NSVisualEffectBlendingModeWithinWindow;
+         legacy.state=NSVisualEffectStateFollowsWindowActiveState;legacy.wantsLayer=YES;
+         legacy.layer.cornerRadius=18;legacy.layer.masksToBounds=YES;
+-        [legacy addSubview:content];effect=legacy;self.material=@"legacyHeader";
++        if(!sidebar)[legacy addSubview:content];effect=legacy;self.material=@"legacyHeader";
+     }
+     content.autoresizingMask=NSViewWidthSizable|NSViewHeightSizable;
++    if(sidebar) {
++        // Keep controls above a separate retained background: hiding the visible
++        // column's glass must never hide/recreate its buttons or their AX targets.
++        NSView *host=[[NotesUIRoot alloc] initWithFrame:NSZeroRect];
++        effect.autoresizingMask=NSViewWidthSizable|NSViewHeightSizable;
++        [host addSubview:effect];[host addSubview:content];self.sidebarBackground=effect;
++        self.groups[name]=host;self.contents[name]=content;[self.root addSubview:host];return content;
++    }
+     self.groups[name]=effect;self.contents[name]=content;[self.root addSubview:effect];return content;
+ }
+ - (void)build {
+@@ -298,7 +308,7 @@ static NSPoint contentOffsetFor(NSString *action) {
+         NotesUIButton *button=self.buttons[action];NSDictionary *item=self.actionStates[action];button.hidden=item==nil;
+         button.enabled=[item[@"enabled"] boolValue];button.state=[item[@"selected"] boolValue]?NSControlStateValueOn:NSControlStateValueOff;
+         if(item) {button.image=images[action];NSString *label=labelFor(action,[state[@"tableFocused"] boolValue]);button.toolTip=label;[button setAccessibilityLabel:label];}
+-        button.contentTintColor=[item[@"selected"] boolValue]?NSColor.systemYellowColor:NSColor.labelColor;
++        button.contentTintColor=![action isEqual:@"toggleSidebar"] && [item[@"selected"] boolValue]?NSColor.systemYellowColor:NSColor.labelColor;
+     }
+     self.title.stringValue=state[@"folderTitle"];[self.title setAccessibilityLabel:state[@"folderTitle"]];
+     BOOL zeroSearch=[state[@"folderTitle"] isEqual:@"搜索"] && [state[@"folderCount"] unsignedLongLongValue]==0
+@@ -309,7 +319,7 @@ static NSPoint contentOffsetFor(NSString *action) {
+         if(![self.search.stringValue isEqual:searchState[@"value"]]) self.search.stringValue=searchState[@"value"];}
+     else {self.search.enabled=NO;}
+     if(@available(macOS 26.0,*)) {
+-        for(NSView *view in self.groups.allValues) if([view isKindOfClass:NSClassFromString(@"NSGlassEffectView")]) {
++        for(NSView *view in [self.groups.allValues arrayByAddingObject:self.sidebarBackground]) if([view isKindOfClass:NSClassFromString(@"NSGlassEffectView")]) {
+             ((NSGlassEffectView *)view).style=[state[@"glassStyle"] isEqual:@"clear"]?NSGlassEffectViewStyleClear:NSGlassEffectViewStyleRegular;
+             self.material=[state[@"glassStyle"] isEqual:@"clear"]?@"glassClear":@"glassRegular";
+         }
+@@ -320,6 +330,7 @@ static NSPoint contentOffsetFor(NSString *action) {
+     NSView *group=self.groups[name];
+     if(width>0)[self.layoutGroups addObject:name];
+     group.frame=NSMakeRect(x,8,MAX(0,width),36);self.contents[name].frame=NSMakeRect(0,0,MAX(0,width),36);
++    if([name isEqual:@"sidebar"])self.sidebarBackground.frame=self.contents[name].bounds;
+     CGFloat itemWidth=actions.count?width/actions.count:0;
+     for(NSUInteger i=0;i<actions.count;i++) {NotesUIButton *button=self.buttons[actions[i]];
+         if(button.superview!=self.contents[name])[self.contents[name] addSubview:button];
+@@ -344,6 +355,7 @@ static NSPoint contentOffsetFor(NSString *action) {
+     BOOL full=(self.window.styleMask&NSWindowStyleMaskFullSizeContentView)!=0;self.root.reserveTrafficLights=full;
+     CGFloat traffic=full?94:12;NSDictionary *columns=self.state[@"columns"];
+     BOOL sidebar=[columns[@"sidebarVisible"] boolValue];CGFloat side=sidebar?[columns[@"sidebarWidth"] doubleValue]:0;
++    self.sidebarBackground.hidden=sidebar;
+     NSString *layout=self.state[@"layout"];BOOL three=[layout isEqual:@"threeColumn"];
+     BOOL browse=[layout isEqual:@"galleryBrowse"],gallery=[layout isEqual:@"galleryExpanded"];
+     CGFloat boundary=three?side+[columns[@"listWidth"] doubleValue]:traffic;
+@@ -357,12 +369,14 @@ static NSPoint contentOffsetFor(NSString *action) {
+         if(self.actionStates[@"toggleSidebar"])[actions addObject:@"toggleSidebar"];
+         // The direct restore control survives a hidden or narrow folder column.
+         // Adding folders follows the visible column; only that action may overflow.
+-        if(sidebar && traffic+actions.count*36>=side-6 && [actions containsObject:@"newFolder"]) {
++        CGFloat itemWidth=sidebar?44:36;
++        if(sidebar && traffic+actions.count*itemWidth>side && [actions containsObject:@"newFolder"]) {
+             [actions removeObject:@"newFolder"];[hidden addObject:@"newFolder"];
+         }
+         if(actions.count) {
+-            CGFloat width=actions.count*36;
+-            [self placeGroup:@"sidebar" x:traffic width:width actions:actions];sidebarRight=traffic+width;
++            CGFloat width=actions.count*itemWidth;
++            CGFloat x=sidebar?MAX(traffic,side-width):traffic;
++            [self placeGroup:@"sidebar" x:x width:width actions:actions];sidebarRight=x+width;
+             // Hidden-list reference ink starts near156pt; its label frame is a154pt candidate.
+             titleX=MAX(titleX,sidebarRight+(three&&!sidebar?24:8));
+         }

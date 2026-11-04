@@ -1,0 +1,9 @@
+{
+  "command": [
+    "node",
+    "scripts/check-native-toolbar.mjs"
+  ],
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "node:internal/fs/promises:633\n  return new FileHandle(await PromisePrototypeThen(\n                        ^\n\nError: ENOENT: no such file or directory, open 'plugins/tauri-plugin-notes-ui/src/model.rs'\n    at async open (node:internal/fs/promises:633:25)\n    at async readFile (node:internal/fs/promises:1237:14)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-sidebar-visible-geometry-independent05/fixture/scripts/check-native-toolbar.mjs:386:18\n    at async test (file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-sidebar-visible-geometry-independent05/fixture/scripts/check-native-toolbar.mjs:108:3)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-sidebar-visible-geometry-independent05/fixture/scripts/check-native-toolbar.mjs:344:1 {\n  errno: -2,\n  code: 'ENOENT',\n  syscall: 'open',\n  path: 'plugins/tauri-plugin-notes-ui/src/model.rs'\n}\n\nNode.js v22.16.0\n"
+}

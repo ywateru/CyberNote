@@ -1,0 +1,94 @@
+{
+  "status": "pass",
+  "states": 390,
+  "chains": 120,
+  "appkitBinaries": 3,
+  "backgroundClasses": {
+    "baseline": [
+      "NSGlassEffectView"
+    ],
+    "candidate": [
+      "NSGlassEffectView"
+    ],
+    "candidate-fallback": [
+      "NSVisualEffectView"
+    ]
+  },
+  "candidateHitObservations": 588,
+  "allCandidateAndFallbackCenterHitsPass": true,
+  "exactProductionSourceEmbedding": true,
+  "knownBaselineTitleOverlaps": [
+    {
+      "name": "threeColumn-700-273-True-visible",
+      "group": "view",
+      "titleFrame": [
+        291,
+        11,
+        211,
+        18
+      ],
+      "groupFrame": [
+        496,
+        8,
+        36,
+        36
+      ],
+      "baselineIdentical": true
+    },
+    {
+      "name": "threeColumn-700-273-True-restored",
+      "group": "view",
+      "titleFrame": [
+        291,
+        11,
+        211,
+        18
+      ],
+      "groupFrame": [
+        496,
+        8,
+        36,
+        36
+      ],
+      "baselineIdentical": true
+    },
+    {
+      "name": "threeColumn-700-273-False-visible",
+      "group": "view",
+      "titleFrame": [
+        291,
+        11,
+        211,
+        18
+      ],
+      "groupFrame": [
+        496,
+        8,
+        36,
+        36
+      ],
+      "baselineIdentical": true
+    },
+    {
+      "name": "threeColumn-700-273-False-restored",
+      "group": "view",
+      "titleFrame": [
+        291,
+        11,
+        211,
+        18
+      ],
+      "groupFrame": [
+        496,
+        8,
+        36,
+        36
+      ],
+      "baselineIdentical": true
+    }
+  ],
+  "limits": [
+    "No actual NSWindow/GUI/event/field-editor/IME/runtime-package/pixel acceptance.",
+    "Fallback Class resolver forces production old branch on current macOS, not execution on old OS."
+  ]
+}
