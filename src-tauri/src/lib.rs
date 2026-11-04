@@ -295,11 +295,8 @@ fn read_note_text(id: String, expected: Token, state: State<AppState>) -> Result
 #[tauri::command]
 fn export_archive(path: String, expected: Token, state: State<AppState>) -> Result<()> {
     let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
-    session.check(&expected, None)?;
-    if session.pending.is_some() {
-        return Err(failure("锁定状态正在同步，请稍后导出"));
-    }
-    session.store.export_archive(&PathBuf::from(path))
+    session.store.ensure_legacy_capability()?;
+    session.export_archive(&PathBuf::from(path), &expected)
 }
 #[tauri::command]
 async fn import_archive(

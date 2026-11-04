@@ -96,7 +96,7 @@ fn new_database_initializes_current_schema_and_reopens_without_rewriting_rows() 
             .db
             .pragma_query_value(None, "user_version", |r| r.get::<_, i64>(0))
             .unwrap(),
-        1
+        2
     );
     assert_eq!(store.folders().unwrap().len(), 3);
     let note = store.action(json!({"type":"createNote"})).unwrap();
@@ -182,7 +182,7 @@ fn complete_legacy_zero_preserves_rows_and_only_fills_real_missing_system_rows()
             .db
             .pragma_query_value(None, "user_version", |r| r.get::<_, i64>(0))
             .unwrap(),
-        1
+        2
     );
 }
 
@@ -214,7 +214,7 @@ fn existing_system_and_settings_rows_are_not_even_inserted_again() {
 
 #[test]
 fn unsupported_versions_do_not_initialize_or_recover() {
-    for version in [-1, 2, 3, 99] {
+    for version in [-1, 3, 4, 99] {
         for schema in [false, true] {
             let temp = tempfile::tempdir().unwrap();
             let db = database(temp.path(), version, schema);
@@ -230,7 +230,7 @@ fn unsupported_versions_do_not_initialize_or_recover() {
 
 #[test]
 fn partial_unknown_and_mismatched_schemas_are_preserved() {
-    for version in [0, 1] {
+    for version in [0, 1, 2] {
         for sql in [
             "CREATE TABLE unrelated(a TEXT)",
             "CREATE TABLE sqliteX_extension(a TEXT)",
@@ -316,7 +316,7 @@ fn every_folder_row_is_strict_before_any_missing_row_is_created() {
             v
         }),
     ];
-    for version in [0, 1] {
+    for version in [0, 1, 2] {
         for (key, value) in &mutations {
             let temp = tempfile::tempdir().unwrap();
             let db = database(temp.path(), version, true);
@@ -365,8 +365,8 @@ impl Drop for ResetFailure {
 #[test]
 fn sql_failure_rolls_back_schema_system_settings_and_version_then_retry_works() {
     for existing in [false, true] {
-        for version in [0, 1] {
-            if !existing && version == 1 {
+        for version in [0, 1, 2] {
+            if !existing && version != 0 {
                 continue;
             }
             for stage in ["schema", "default", "quick", "trash", "settings", "version"] {

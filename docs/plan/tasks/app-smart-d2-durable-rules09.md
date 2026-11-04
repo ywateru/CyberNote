@@ -44,3 +44,5 @@ DB目标2，D1的识别/事务/未来拒绝继续保留；1→2在同事务校�
 真实临时Store：旧v1迁移2不改合法行；创建tags定义→关闭重开→规则/revision/成员保持；allSelected/anySelected/anyTag/noTags、多个合法标签、plainText伪标签、locked/unavailable、deleted/suspended、pinned true/false与all/any区别样本；CAS旧稿、删除后旧请求、整图和所有owner/parent失败前后不变。归档旧1/日期2/智能3真实导入两次，核冲突映射、设置、正文/日期/笔记物理owner，未知字段/未来query/伪旧格式拒绝；故障rollback和既有journal恢复。Session公开入口gate须在barrier/文件写入前，用真实Session/lib接缝验证，不用测试专用成功通道。
 
 只运行必要离线Rust测试、现有Store/archive/Session/日期回归；jobs2、至少2GiB、独占hosttarget、禁止cache清理/升级下载/平台build。若动TS边界，另pnpm typecheck及真实跨语言固定corpus；不写镜像求值器自证。完成后STOP，root固定commit，不同作者独立审查与必要实测。D/O/U全通过和准确双端新包验收前，不称智能功能或像素完成。
+
+root追加实际宿主适配器编译检查：本批触及lib.rs，允许一次 `cargo check --locked --offline --lib --manifest-path src-tauri/Cargo.toml`，同hosttarget/jobs2/至少2GiB，600秒有界。只验证宿主Rust库接入，不打包/安装Mac或Android，不作为设备/IPC运行通过。失败保留真实原因，不改依赖或下载绕路。

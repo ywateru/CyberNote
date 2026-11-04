@@ -13,6 +13,9 @@ fn denied(message: &str) -> AppError {
 }
 
 #[cfg(test)]
+#[path = "session/smart_tests.rs"]
+mod smart_tests;
+#[cfg(test)]
 mod tests;
 #[derive(Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -61,6 +64,7 @@ impl Session {
         *self.note_epochs.get(id).unwrap_or(&0)
     }
     pub fn check(&self, token: &Token, note: Option<&str>) -> Result<()> {
+        self.store.ensure_legacy_capability()?;
         if token.session_id != self.id
             || match note {
                 Some(id) => token.note_epoch != Some(self.note_epoch(id)),
@@ -72,6 +76,7 @@ impl Session {
         Ok(())
     }
     pub fn snapshot(&self) -> Result<Value> {
+        self.store.ensure_legacy_capability()?;
         let mut notes = BTreeMap::new();
         for n in self.store.notes()? {
             notes.insert(
@@ -108,7 +113,18 @@ impl Session {
         Ok(value)
     }
     pub fn workspace(&self) -> Result<Value> {
+        self.store.ensure_legacy_capability()?;
         self.tagged(self.store.workspace()?)
+    }
+    pub fn export_archive(&self, path: &std::path::Path, token: &Token) -> Result<()> {
+        self.check(token, None)?;
+        if self.pending.is_some() {
+            return Err(AppError {
+                code: "internal".into(),
+                message: "锁定状态正在同步，请稍后导出".into(),
+            });
+        }
+        self.store.export_archive(path)
     }
     pub fn sensitive(&self, note: &str, token: &Token) -> Result<()> {
         self.check(token, Some(note))?;
@@ -224,6 +240,7 @@ impl Session {
         Ok(())
     }
     pub fn save(&mut self, window: &str, mut action: Value) -> Result<Value> {
+        self.store.ensure_legacy_capability()?;
         let id = action["id"]
             .as_str()
             .ok_or_else(|| denied("缺少笔记ID"))?
@@ -333,6 +350,13 @@ impl Session {
             return Err(denied("无效锁定操作"));
         }
         let op = action["type"].as_str().unwrap();
+        if op == "importArchive" {
+            let path = action["path"]
+                .as_str()
+                .ok_or_else(|| denied("缺少归档路径"))?;
+            self.store
+                .preflight_legacy_archive(std::path::Path::new(path))?;
+        }
         let targets = match op {
             "lockNote" | "removeLock" | "deleteNote" | "purgeNote" => vec![action["id"]
                 .as_str()
@@ -400,6 +424,7 @@ impl Session {
         live_windows: &HashSet<String>,
         timeout: bool,
     ) -> Result<(Result<Value>, Value)> {
+        self.store.ensure_legacy_capability()?;
         if self.pending.as_ref().is_none_or(|p| p.id != operation) {
             return Err(denied("锁定操作已结束"));
         }
@@ -426,7 +451,7 @@ impl Session {
                 .as_str()
                 .ok_or_else(|| denied("缺少归档路径"))?;
             self.store
-                .import_archive(std::path::Path::new(path))
+                .import_legacy_archive(std::path::Path::new(path))
                 .and_then(|()| self.store.workspace())
         } else {
             self.store.action(p.action)

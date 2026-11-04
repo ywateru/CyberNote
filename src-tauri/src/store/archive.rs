@@ -1,4 +1,4 @@
-//! Version-1 workspace archives. Publish immutable files before atomically
+//! Versioned workspace archives. Publish immutable files before atomically
 //! publishing their database references; a durable journal reclaims only files
 //! that are not referenced after SQLite crash recovery.
 use super::*;
@@ -13,6 +13,39 @@ pub(super) fn validate_live_document(
     document::validate_document(doc, note, &by_id)
 }
 use document::validate_document;
+pub(super) fn valid_tag_name(name: &str) -> bool {
+    document::valid_tag_name(name)
+}
+pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+    validate_live_document(&note.document, note, attachments)?;
+    fn walk(node: &Value, names: &mut HashSet<String>) {
+        if let Some(marks) = node["marks"].as_array() {
+            for mark in marks {
+                if mark["type"] == "noteTag" {
+                    if let Some(name) = mark["attrs"]["name"].as_str() {
+                        names.insert(name.into());
+                    }
+                }
+            }
+        }
+        if let Some(children) = node["content"].as_array() {
+            for child in children {
+                walk(child, names);
+            }
+        }
+    }
+    let mut names = HashSet::new();
+    walk(&note.document, &mut names);
+    Ok(names)
+}
+pub(super) fn validate_live_graph(
+    folders: &[Folder],
+    notes: &[Note],
+    attachments: &[Attachment],
+) -> Result<()> {
+    validate_graph(folders, notes, attachments).map_err(|e| err("graph_invalid", e.message))
+}
+
 use serde::de::{DeserializeSeed, MapAccess, SeqAccess, Visitor};
 use std::{
     collections::{HashMap, HashSet},
@@ -194,8 +227,13 @@ fn validate_folders(folders: &[Folder]) -> Result<()> {
         if f.name.trim().is_empty() || f.name.len() > 4096 {
             return Err(invalid("文件夹名称无效"));
         }
-        if !["default", "quick", "trash"].contains(&f.id.as_str()) && f.kind != "normal" {
+        if !["default", "quick", "trash"].contains(&f.id.as_str())
+            && !["normal", "smart"].contains(&f.kind.as_str())
+        {
             return Err(invalid("未知文件夹类型"));
+        }
+        if f.kind == "smart" && f.parent_id.is_some() {
+            return Err(invalid("智能文件夹必须位于根层"));
         }
         let mut cursor = f.parent_id.as_deref();
         let mut ancestors = HashSet::from([f.id.as_str()]);
@@ -203,11 +241,9 @@ fn validate_folders(folders: &[Folder]) -> Result<()> {
             if !ancestors.insert(id) {
                 return Err(invalid("文件夹树包含循环"));
             }
-            cursor = by_id
-                .get(id)
-                .ok_or_else(|| invalid("文件夹父引用不存在"))?
-                .parent_id
-                .as_deref();
+            let parent = by_id.get(id).ok_or_else(|| invalid("文件夹父引用不存在"))?;
+            smart::require_parent(parent).map_err(|_| invalid("文件夹父引用不具备物理能力"))?;
+            cursor = parent.parent_id.as_deref();
         }
     }
     Ok(())
@@ -251,7 +287,6 @@ fn validate_graph(folders: &[Folder], notes: &[Note], attachments: &[Attachment]
     validate_folders(folders)?;
     unique_ids(notes.iter().map(|n| n.id.as_str()), "笔记")?;
     unique_ids(attachments.iter().map(|a| a.id.as_str()), "附件")?;
-    let fids: HashSet<_> = folders.iter().map(|f| f.id.as_str()).collect();
     let nids: HashMap<_, _> = notes.iter().map(|n| (n.id.as_str(), n)).collect();
     let aids: HashMap<_, _> = attachments.iter().map(|a| (a.id.as_str(), a)).collect();
     let mut paths = HashSet::new();
@@ -284,8 +319,21 @@ fn validate_graph(folders: &[Folder], notes: &[Note], attachments: &[Attachment]
         }
     }
     for n in notes {
-        if !fids.contains(n.folder_id.as_str()) {
-            return Err(invalid("笔记所属文件夹不存在"));
+        let owner = folders
+            .iter()
+            .find(|f| f.id == n.folder_id)
+            .ok_or_else(|| invalid("笔记所属文件夹不存在"))?;
+        if n.deleted_at.is_none() {
+            smart::require_live_owner(owner)
+                .map_err(|_| invalid("笔记所属文件夹不具备物理能力"))?;
+        }
+        if let Some(original) = n
+            .original_folder_id
+            .as_deref()
+            .and_then(|id| folders.iter().find(|f| f.id == id))
+        {
+            smart::require_live_owner(original)
+                .map_err(|_| invalid("备忘录原位置不具备物理能力"))?;
         }
         if n.revision < 0 || n.deleted_at.is_some() != (n.folder_id == "trash") {
             return Err(invalid("笔记版本或删除状态无效"));
@@ -364,14 +412,38 @@ fn copy_ids<'a>(
         .collect()
 }
 
+fn validate_archive_version(archive: &Archive) -> Result<()> {
+    if !matches!(archive.version, 1 | 2 | 3) {
+        return Err(invalid("不支持此备份版本"));
+    }
+    if archive.version < 3 && archive.folders.iter().any(|f| f.kind == "smart") {
+        return Err(invalid("旧版备份不能包含智能定义"));
+    }
+    if archive.version == 1 && archive.attachments.iter().any(|a| a.recorded_at.is_some()) {
+        return Err(invalid("版本1备份不能包含录音日期"));
+    }
+    Ok(())
+}
+fn read_archive(path: &Path) -> Result<Archive> {
+    let bytes = read_limited(path, MAX_ARCHIVE)?;
+    validate_json_budget(&bytes)?;
+    let archive: Archive = serde_json::from_slice(&bytes).map_err(|_| invalid("归档格式无效"))?;
+    validate_archive_version(&archive)?;
+    Ok(archive)
+}
+fn require_legacy_archive(archive: &Archive) -> Result<()> {
+    if archive.folders.iter().any(|f| f.kind == "smart") {
+        return Err(err(
+            "capability_unavailable",
+            "此界面尚未支持导入智能文件夹",
+        ));
+    }
+    Ok(())
+}
+
 impl Store {
     fn prepare_archive(&self, mut archive: Archive, transaction_id: &str) -> Result<ImportPlan> {
-        if !matches!(archive.version, 1 | 2) {
-            return Err(invalid("不支持此备份版本"));
-        }
-        if archive.version == 1 && archive.attachments.iter().any(|a| a.recorded_at.is_some()) {
-            return Err(invalid("版本1备份不能包含录音日期"));
-        }
+        validate_archive_version(&archive)?;
         if archive.folders.len() + archive.notes.len() + archive.attachments.len() > MAX_ENTITIES {
             return Err(limit("归档实体超过 10,000 项上限"));
         }
@@ -419,7 +491,7 @@ impl Store {
             archive
                 .folders
                 .iter()
-                .filter(|f| f.kind == "normal")
+                .filter(|f| matches!(f.kind.as_str(), "normal" | "smart"))
                 .map(|f| f.id.as_str()),
             existing_folders.iter().map(|f| f.id.as_str()),
         );
@@ -485,7 +557,7 @@ impl Store {
             archive
                 .folders
                 .iter()
-                .filter(|f| f.kind == "normal")
+                .filter(|f| matches!(f.kind.as_str(), "normal" | "smart"))
                 .cloned(),
         );
         let mut effective_notes = existing_notes;
@@ -525,7 +597,9 @@ impl Store {
             self.db
                 .query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
         let archive = Archive {
-            version: if attachments.iter().any(|a| a.recorded_at.is_some()) {
+            version: if folders.iter().any(|f| f.kind == "smart") {
+                3
+            } else if attachments.iter().any(|a| a.recorded_at.is_some()) {
                 2
             } else {
                 1
@@ -573,12 +647,22 @@ impl Store {
         result
     }
 
+    pub(crate) fn preflight_legacy_archive(&self, path: &Path) -> Result<()> {
+        self.ensure_legacy_capability()?;
+        require_legacy_archive(&read_archive(path)?)
+    }
+    pub(crate) fn import_legacy_archive(&mut self, path: &Path) -> Result<()> {
+        self.ensure_legacy_capability()?;
+        self.import_archive_policy(path, false)
+    }
     pub fn import_archive(&mut self, path: &Path) -> Result<()> {
-        let bytes = read_limited(path, MAX_ARCHIVE)?;
-        validate_json_budget(&bytes)?;
-        let archive: Archive =
-            serde_json::from_slice(&bytes).map_err(|e| invalid(format!("归档格式无效: {e}")))?;
-        drop(bytes);
+        self.import_archive_policy(path, true)
+    }
+    fn import_archive_policy(&mut self, path: &Path, allow_smart: bool) -> Result<()> {
+        let archive = read_archive(path)?;
+        if !allow_smart {
+            require_legacy_archive(&archive)?;
+        }
         let transaction_id = id();
         let plan = self.prepare_archive(archive, &transaction_id)?;
         self.recover_imports()?;

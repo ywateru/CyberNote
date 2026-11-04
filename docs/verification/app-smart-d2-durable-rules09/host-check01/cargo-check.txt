@@ -1,0 +1,85 @@
+   Compiling tauri-plugin-notes-scan v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-scan)
+   Compiling tauri-plugin-notes-ui v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-ui)
+   Compiling notes-clone v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/src-tauri)
+warning: function `validated_tags` is never used
+  --> src/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `import_archive` is never used
+   --> src/store/archive.rs:658:12
+    |
+444 | impl Store {
+    | ---------- method in this implementation
+...
+658 |     pub fn import_archive(&mut self, path: &Path) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+
+warning: function `invalid_input` is never used
+   --> src/store/smart.rs:210:4
+    |
+210 | fn invalid_input() -> AppError {
+    |    ^^^^^^^^^^^^^
+
+warning: function `parse` is never used
+   --> src/store/smart.rs:213:4
+    |
+213 | fn parse<T: serde::de::DeserializeOwned>(value: Value) -> Result<T> {
+    |    ^^^^^
+
+warning: function `name` is never used
+   --> src/store/smart.rs:216:4
+    |
+216 | fn name(value: &str) -> Result<String> {
+    |    ^^^^
+
+warning: struct `Create` is never constructed
+   --> src/store/smart.rs:225:8
+    |
+225 | struct Create {
+    |        ^^^^^^
+
+warning: struct `Update` is never constructed
+   --> src/store/smart.rs:231:8
+    |
+231 | struct Update {
+    |        ^^^^^^
+
+warning: struct `Delete` is never constructed
+   --> src/store/smart.rs:239:8
+    |
+239 | struct Delete {
+    |        ^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> src/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: methods `create_smart_folder`, `update_smart_folder`, `delete_smart_folder`, `smart_for_cas`, and `evaluate_smart_folder` are never used
+   --> src/store/smart.rs:261:19
+    |
+250 | impl Store {
+    | ---------- methods in this implementation
+...
+261 |     pub(crate) fn create_smart_folder(&mut self, input: Value) -> Result<Folder> {
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+279 |     pub(crate) fn update_smart_folder(&mut self, input: Value) -> Result<Folder> {
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+299 |     pub(crate) fn delete_smart_folder(&mut self, input: Value) -> Result<()> {
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+307 |     fn smart_for_cas(&self, id: &str, expected: u64) -> Result<Folder> {
+    |        ^^^^^^^^^^^^^
+...
+320 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: `notes-clone` (lib) generated 10 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.62s

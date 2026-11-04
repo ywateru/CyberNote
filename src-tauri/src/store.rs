@@ -21,7 +21,10 @@ mod archive;
 mod attachment_operations;
 #[path = "store/open.rs"]
 mod open;
+#[path = "store/smart.rs"]
+mod smart;
 pub(crate) use attachment_operations::AttachmentOwner;
+pub(crate) use smart::{SmartMembership, SmartQuery};
 #[cfg(test)]
 #[path = "store/recorded_at_tests.rs"]
 mod recorded_at_tests;
@@ -66,7 +69,7 @@ fn empty_doc() -> Value {
     json!({"type":"doc","content":[{"type":"heading","attrs":{"level":1}}]})
 }
 #[derive(Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase", try_from = "FolderRecord")]
+#[serde(rename_all = "camelCase", try_from = "smart::FolderRecord")]
 pub struct Folder {
     pub id: String,
     pub name: String,
@@ -74,39 +77,10 @@ pub struct Folder {
     pub kind: String,
     pub sort_order: i64,
     pub created_at: i64,
-}
-#[derive(Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-struct FolderRecord {
-    id: String,
-    name: String,
-    parent_id: Option<String>,
-    kind: String,
-    sort_order: i64,
-    created_at: i64,
-}
-impl TryFrom<FolderRecord> for Folder {
-    type Error = &'static str;
-    fn try_from(value: FolderRecord) -> std::result::Result<Self, Self::Error> {
-        match value.id.as_str() {
-            "default" | "quick" | "trash" => {
-                if value.kind != value.id || value.parent_id.is_some() {
-                    return Err("系统文件夹身份或层级无效");
-                }
-            }
-            "all" => return Err("全部备忘录不是文件夹实体"),
-            _ if value.kind != "normal" => return Err("自定义文件夹类型无效"),
-            _ => {}
-        }
-        Ok(Self {
-            id: value.id,
-            name: value.name,
-            parent_id: value.parent_id,
-            kind: value.kind,
-            sort_order: value.sort_order,
-            created_at: value.created_at,
-        })
-    }
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query: Option<SmartQuery>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub definition_revision: Option<u64>,
 }
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -212,9 +186,11 @@ impl Store {
     fn folder(&self, fid: &str) -> Result<Folder> {
         let x: Option<(i64, String, String)> = self
             .db
-            .query_row("SELECT rowid,id,body FROM folders WHERE id=?1", [fid], |r| {
-                Ok((r.get(0)?, r.get(1)?, r.get(2)?))
-            })
+            .query_row(
+                "SELECT rowid,id,body FROM folders WHERE id=?1",
+                [fid],
+                |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)),
+            )
             .optional()?;
         let (row, key, body) = x.ok_or_else(|| err("not_found", "文件夹不存在"))?;
         open::decode_folder(row, &key, &body)
@@ -285,7 +261,7 @@ impl Store {
         }
     }
     pub(crate) fn folder_note_ids(&self, fid: &str) -> Result<Vec<String>> {
-        self.folder(fid)?;
+        smart::require_live_owner(&self.folder(fid)?)?;
         let folders = self.folders()?;
         let mut ids = vec![fid.to_string()];
         loop {
@@ -362,6 +338,7 @@ impl Store {
                     .get("document")
                     .ok_or_else(|| err("invalid", "缺少文档"))?
                     .clone();
+                smart::require_live_owner(&self.folder(&copy.folder_id)?)?;
                 self.validate_document(&document, &copy)?;
                 let text = doc_text(&document);
                 copy.id = id();
@@ -396,9 +373,7 @@ impl Store {
             "createNote" => {
                 let folder_id = a["folderId"].as_str().unwrap_or("default");
                 let f = self.folder(folder_id)?;
-                if f.kind == "trash" {
-                    return Err(err("invalid", "不能在最近删除中新建备忘录"));
-                }
+                smart::require_live_owner(&f)?;
                 let n = Note {
                     id: id(),
                     folder_id: folder_id.into(),
@@ -489,9 +464,10 @@ impl Store {
                     n.paper_style = p.into();
                 }
                 if let Some(f) = a["folderId"].as_str() {
-                    if self.folder(f)?.kind == "trash" {
-                        return Err(err("invalid", "使用删除操作移入最近删除"));
+                    if n.deleted_at.is_some() {
+                        return Err(err("deleted", "请先恢复备忘录再移动"));
                     }
+                    smart::require_live_owner(&self.folder(f)?)?;
                     n.folder_id = f.into();
                 }
                 n.revision += 1;
@@ -510,11 +486,18 @@ impl Store {
             }
             "restoreNote" => {
                 let mut n = self.note(str_field(&a, "id")?)?;
-                let f = n
-                    .original_folder_id
-                    .take()
-                    .filter(|f| self.folder(f).is_ok())
-                    .unwrap_or("default".into());
+                let f = match n.original_folder_id.as_deref() {
+                    Some(id) => match self.folder(id) {
+                        Ok(folder) => {
+                            smart::require_live_owner(&folder)?;
+                            id.to_string()
+                        }
+                        Err(e) if e.code == "not_found" => "default".into(),
+                        Err(e) => return Err(e),
+                    },
+                    None => "default".into(),
+                };
+                n.original_folder_id = None;
                 n.folder_id = f;
                 n.deleted_at = None;
                 n.revision += 1;
@@ -560,13 +543,15 @@ impl Store {
                 }
                 let parent = a["parentId"].as_str().map(String::from);
                 if let Some(p) = &parent {
-                    self.folder(p)?;
+                    smart::require_parent(&self.folder(p)?)?;
                 }
                 let f = Folder {
                     id: id(),
                     name: name.into(),
                     parent_id: parent,
                     kind: "normal".into(),
+                    query: None,
+                    definition_revision: None,
                     sort_order: now(),
                     created_at: now(),
                 };
@@ -596,7 +581,9 @@ impl Store {
                     if p == f.id {
                         return Err(err("invalid", "不能将文件夹移入自身或子文件夹"));
                     }
-                    cursor = self.folder(&p)?.parent_id;
+                    let ancestor = self.folder(&p)?;
+                    smart::require_parent(&ancestor)?;
+                    cursor = ancestor.parent_id;
                 }
                 f.parent_id = parent;
                 self.put_folder(&f)?;

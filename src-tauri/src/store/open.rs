@@ -166,10 +166,10 @@ impl Store {
         let version: i64 = self
             .db
             .pragma_query_value(None, "user_version", |r| r.get(0))?;
-        if !matches!(version, 0 | 1) {
+        if !matches!(version, 0 | 1 | 2) {
             return Err(err(
                 "schema_version",
-                format!("不支持数据库版本 {version}，当前版本为1"),
+                format!("不支持数据库版本 {version}，当前版本为2"),
             ));
         }
         let tx = self.db.unchecked_transaction()?;
@@ -188,9 +188,11 @@ impl Store {
             }
         }
         let folders = read_folders(&tx)?;
-        // The optional private table is initialized within this same transaction.
-        self.initialize_attachment_operations()?;
-        checkpoint(&tx, "schema")?;
+        if version < 2 && folders.iter().any(|f| f.kind == "smart") {
+            return Err(err("folder_invalid", "旧版数据库不能包含智能定义"));
+        }
+        let mut effective_folders = folders.clone();
+        let mut missing = Vec::new();
         for (fid, name, order) in [
             ("default", "备忘录", 0),
             ("quick", "快速备忘录", -1),
@@ -204,10 +206,23 @@ impl Store {
                     kind: fid.into(),
                     sort_order: order,
                     created_at: now(),
+                    query: None,
+                    definition_revision: None,
                 };
+                effective_folders.push(folder.clone());
+                missing.push(folder);
+            }
+        }
+        // Validate the complete graph, including planned missing system rows,
+        // before initialization writes. Existing JSON is never rewritten.
+        archive::validate_live_graph(&effective_folders, &self.notes()?, &self.attachments()?)?;
+        self.initialize_attachment_operations()?;
+        checkpoint(&tx, "schema")?;
+        for fid in ["default", "quick", "trash"] {
+            if let Some(folder) = missing.iter().find(|f| f.id == fid) {
                 tx.execute(
                     "INSERT INTO folders(id,body)VALUES(?1,?2)",
-                    params![fid, serde_json::to_string(&folder)?],
+                    params![fid, serde_json::to_string(folder)?],
                 )?;
             }
             checkpoint(&tx, fid)?;
@@ -221,8 +236,8 @@ impl Store {
             tx.execute("INSERT INTO settings(id,body)VALUES(1,'{}')", [])?;
         }
         checkpoint(&tx, "settings")?;
-        if version == 0 {
-            tx.pragma_update(None, "user_version", 1)?;
+        if version < 2 {
+            tx.pragma_update(None, "user_version", 2)?;
         }
         checkpoint(&tx, "version")?;
         tx.commit()?;

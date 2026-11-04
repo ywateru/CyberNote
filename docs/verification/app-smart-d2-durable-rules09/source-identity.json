@@ -1,0 +1,22 @@
+{
+  "task": "APP-SMART-D2",
+  "baseline": "d7e6c72ae928bf5a346c462a46e1cf29c1c596d2",
+  "head": "d7e6c72ae928bf5a346c462a46e1cf29c1c596d2",
+  "files": {
+    "src-tauri/src/store.rs": "17445864d311f9e1b9a90ff1c76f8e2f3f5c940f4151c8b8f36b57c910edcb57",
+    "src-tauri/src/store/open.rs": "dffa8804c67b1786ac4134e1aef56a5bfa9502b323fe6676117075ea68ce4442",
+    "src-tauri/src/store/open_tests.rs": "13b2a33a6d4c9329fb9821412b4810f364cf1481a5a3fa378b0bf2ac1d936a07",
+    "src-tauri/src/store/smart.rs": "3590e564d823fc1be098b9cf417bb2aef898ff5d4f9be5c7c6d3747acb551c0b",
+    "src-tauri/src/store/smart_tests.rs": "ae6fe98c7f7dfb66419c452a1780e2906927b06af277a180de0d002594c7668b",
+    "src-tauri/src/store/archive.rs": "1d527ecc21d1f4593e75952693d171d48eaa951b9e7b35daea9a21fd22540532",
+    "src-tauri/src/store/archive/document.rs": "6dd018af7abb782fced57a7f46594fe8a39701777f976af34d5b6162e2daa611",
+    "src-tauri/src/session.rs": "3c79301c886df9feb899dfd4866019596790f524d0f49b9528cc3e570068e808",
+    "src-tauri/src/session/smart_tests.rs": "a5c84d01b32a79b91b1b4bde564e1f32d50abae01130b58677368045cfd5f526",
+    "src-tauri/src/lib.rs": "577163834b41c923f2d0054d3069b86d2f4a774773ede14f7c21c5c2b4723836"
+  },
+  "fullRegression": "run03: 67 passed, 0 failed, 3 ignored",
+  "finalNarrowTest": "run04: 1 passed, 70 filtered; only smart_tests.rs changed since run03",
+  "hostCompile": "host-check01: cargo check --locked --offline --lib --manifest-path src-tauri/Cargo.toml; exit0; 8.712 seconds",
+  "productionSourcesIdenticalAcrossRun03Run04HostCheck": true,
+  "sharedHostTargetReleased": true
+}

@@ -63,13 +63,11 @@ fn span(value: &Value) -> bool {
 fn nullable_string(value: &Value) -> bool {
     value.is_null() || value.is_string()
 }
-fn valid_tag_name(value: &Value) -> bool {
-    value.as_str().is_some_and(|name| {
-        let count = name.chars().count();
-        (1..=64).contains(&count)
-            && name.chars().all(|c| c.is_ascii_alphanumeric() || matches!(c, '_' | '-' | '\u{3400}'..='\u{4dbf}' | '\u{4e00}'..='\u{9fff}'))
-            && name.chars().any(|c| c.is_ascii_alphabetic() || matches!(c, '\u{3400}'..='\u{4dbf}' | '\u{4e00}'..='\u{9fff}'))
-    })
+pub(super) fn valid_tag_name(name: &str) -> bool {
+    let count = name.chars().count();
+    (1..=64).contains(&count)
+        && name.chars().all(|c| c.is_ascii_alphanumeric() || matches!(c, '_' | '-' | '\u{3400}'..='\u{4dbf}' | '\u{4e00}'..='\u{9fff}'))
+        && name.chars().any(|c| c.is_ascii_alphabetic() || matches!(c, '\u{3400}'..='\u{4dbf}' | '\u{4e00}'..='\u{9fff}'))
 }
 fn valid_strokes(value: &Value) -> bool {
     value.as_array().is_some_and(|strokes| {
@@ -95,7 +93,7 @@ fn valid_strokes(value: &Value) -> bool {
 }
 fn valid_attribute(owner: &str, key: &str, value: &Value, default: &Value) -> bool {
     match (owner, key) {
-        ("noteTag", "name") => valid_tag_name(value),
+        ("noteTag", "name") => value.as_str().is_some_and(valid_tag_name),
         ("heading", "level") => value.as_u64().is_some_and(|n| (1..=3).contains(&n)),
         ("taskItem", "checked") => value.is_boolean(),
         ("bulletList", "listStyle") => matches!(value.as_str(), Some("bullet" | "dash")),

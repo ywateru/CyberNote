@@ -1,0 +1,25 @@
+   Compiling notes-qa-fix-store v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-d2-durable-rules09/harness02)
+warning: unused import: `SmartMembership`
+  --> src/store.rs:27:24
+   |
+27 | pub(crate) use smart::{SmartMembership, SmartQuery};
+   |                        ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `notes-qa-fix-store` (bin "notes-qa-fix-store" test) generated 1 warning (run `cargo fix --bin "notes-qa-fix-store" -p notes-qa-fix-store --tests` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.67s
+     Running unittests src/main.rs (src-tauri/target/debug/deps/notes_qa_fix_store-275dda0e5f1d05fc)
+
+running 8 tests
+test store::smart::tests::strict_query_folder_and_action_shapes_reject_incomplete_or_future_data ... ok
+test session::smart_tests::smart_live_database_closes_all_session_and_lib_seams_before_side_effects ... ok
+test store::smart::tests::owner_parent_restore_and_conflict_copy_share_physical_capabilities ... ok
+test session::smart_tests::smart_import_is_rejected_before_prepare_and_rechecked_from_actual_finish_bytes ... ok
+test store::smart::tests::archive_three_double_import_remaps_real_entities_dates_and_selection ... ok
+test store::smart::tests::version_one_migration_preserves_json_and_bad_graphs_rollback_before_recovery ... ok
+test store::smart::tests::real_cas_rejects_stale_edits_delete_and_overflow_without_member_side_effects ... ok
+test store::smart::tests::real_tag_modes_boolean_unavailable_and_reopen_use_validated_spans ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 61 filtered out; finished in 0.90s
+
