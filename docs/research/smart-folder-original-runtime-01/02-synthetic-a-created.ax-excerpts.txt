@@ -1,0 +1,60 @@
+CUA action sequence (root only):
+1. Add Folder -> setValue name QA-SMART-20261104-A -> click 好.
+2. Click New Note -> paste exact two-line synthetic text.
+3. performSecondaryAction(selected note row, 置顶).
+4. Click New Note -> paste second exact two-line synthetic text.
+5. Right-click folder A -> inspect context menu.
+6. Attempt click 新建文件夹 refused by CUA because user changed Notes. Re-query full AX; menu absent, no new folder created by this attempt.
+
+Exact excerpts of returned AX, after creating first note:
+~46 标准窗口 QA-SMART-20261104-A – 1个备忘录, Secondary Actions: Raise
++				112 row (selected) Secondary Actions: 置顶, 共享, 删除
++					113 单元格 (selected) Secondary Actions: 置顶, 共享, 删除
++							117 text QA-SMART-20261104-A-PIN Synthetic pinned sample in A. 10:32
+~			73 文本输入区 (settable) ID: Note Body Text View, Secondary Actions: 制作核对清单项, Value: QA-SMART-20261104-A-PIN
+Synthetic pinned sample in A.
+
+Exact excerpts after actual pin action:
++				118 row (selectable)
++					119 单元格
++						120 文本 置顶
++						121 显示三角形 1
+~				112 row (selected) Secondary Actions: 移除置顶, 共享, 删除
+
+Exact excerpts after second note:
+~46 标准窗口 QA-SMART-20261104-A – 2个备忘录, Secondary Actions: Raise
++				131 row (selected)
++					132 单元格 (selected) QA-SMART-20261104-A, 2个备忘录
++						133 未知 Description: QA-SMART-20261104-A, 2个备忘录, ID: FolderCell
++							134 文本栏 (settable) QA-SMART-20261104-A
++							135 未知 2
++				141 row (selected) Secondary Actions: 置顶, 共享, 删除
++							146 text QA-SMART-20261104-A-PLAIN Synthetic ordinary sample in A. 10:33
+~			73 文本输入区 (settable) ID: Note Body Text View, Secondary Actions: 制作核对清单项, Value: QA-SMART-20261104-A-PLAIN
+Synthetic ordinary sample in A.
+
+Exact context menu excerpt:
++				147 菜单 Secondary Actions: Cancel
++					148 重新命名文件夹
++					149 删除文件夹
++					150 新建文件夹
++					151 共享文件夹
++					152 排序方式
++					160 按日期分组
++					165 转换为智能文件夹
+
+Exact refused action tool result:
+The user changed '/System/Applications/Notes.app'. Re-query the latest state with `get_app_state` before sending more actions.
+
+Exact full-query excerpts after refusal:
+0 标准窗口 QA-SMART-20261104-A – 2个备忘录, Secondary Actions: Raise
+				13 row (selected)
+					14 单元格 (selected) QA-SMART-20261104-A, 2个备忘录
+				27 row (selectable) Secondary Actions: 移除置顶, 共享, 删除
+							32 text QA-SMART-20261104-A-PIN Synthetic pinned sample in A. 10:32
+				36 row (selected) Secondary Actions: 置顶, 共享, 删除
+							41 text QA-SMART-20261104-A-PLAIN Synthetic ordinary sample in A. 10:33
+			45 文本输入区 (settable) ID: Note Body Text View, Secondary Actions: 制作核对清单项, Value: QA-SMART-20261104-A-PLAIN
+Synthetic ordinary sample in A.
+
+These are explicit excerpts, not an unabridged AX capture. No smart query has been saved/evaluated, no cold restart, and no PNG/pixel comparison in this stage. Account shown by sidebar is iCloud; these are synthetic test samples, not proof that original Notes is local-only. Clone remains local-only by its separate product contract.

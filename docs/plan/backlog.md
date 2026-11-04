@@ -37,3 +37,5 @@
 - 录音state源12b94d7独立审查仅非阻塞证据格式：typecheck.txt EOF多空行使baseline..candidate diffcheck exit2，原始日志保留，主整合README已显式更正，不冒称全范围通过。产品三文件字节不变，独立Panel17/Session26与主前端build通过；不据此升级父ACK/设备/像素。
 
 - 2026-11-04，PREVIEW-CHECK-WAIT（non-blocking）：原check-recording-panel-browser在卸载后立即读revoke及ready事件后立即读React按钮，两次独审原样非零；仅等真实条件的独立副本Panel25通过，产品来源hash前后同。以后将同一有界条件等待同步回生产检查脚本，保留原预期和失败日志，勿用固定sleep或吞异常。见app-002-recording-preview-static-02。
+
+- 2026-11-04，DRAWING-TARGET待复现：主b2f42c4静态读取中，edit-drawing事件带editor，但App只保存strokes/数字pos，完成时使用当时的全局editor/current；未看到与录音票据相当的原笔记/Editor/节点身份复核。绘画重开、后台另一窗口更新、目标导航及原节点删除后的完成归属须单列真实App→Store验证，再决定最小修复；目前仅源码风险，不冒称已经串写或数据丢失。不能让后续卡片/智能文件夹任务顺手修改该链。现有access清draw路径保持另行核对，不能只凭这一段断言访问屏障失败。

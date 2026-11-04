@@ -39,12 +39,13 @@
 | APP-001-SEARCH-FOCUS-01 Mac菜单搜索焦点 | in-progress，源d9bc5a4独立SOURCE-READY、主175cd1f | plugin精确MenuEvent同步请求真实唯一focused main当前enabled绑定，与IPC共body；独立与主cargo13/13通过、两产品hash同。无新包快输入/marked text实测，异常原因unknown和Tauri排队仍保留，不承诺已修复 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-002-AUDIO-CARD-01 手机紧凑录音卡 | in-progress，标签源码整合门槛已通过，新主线隔离开发 | 原片35.5秒证三行标题/日期/音频·2秒与白播放按钮；recordedAt首次实际开始、operation重试/受权read/归档1与2兼容契约明确。尚未交付日期实现或新安装包；展开/原版取时/像素仍unknown |
-| REF-SMART-FOLDERS-RUNTIME-01 原版智能视图 | ready，Mac当前锁定待解锁 | 已有表单选项证据不代表创建后结果；按专用合成目录/置顶/全部任意/搜索/新建/正常冷启步骤补证。存储与归档准备审计已保全，不把建议当原版行为 |
+| REF-SMART-FOLDERS-RUNTIME-01 原版智能视图 | in-progress，仅合成A目录/两样本建立；系统认证表单待完成 | 已实际置顶一篇、另一篇普通；A1/B/智能视图未建，未保存/求值/冷启。菜单下一动作因用户改变界面被CUA拒绝，已重新读取并将系统认证表单置前。新观察见smart-folder-original-runtime-01，存储准备建议仍不冒充原版行为 |
 | APP-003-TAGS-01 真实标签 | in-progress，候选04独审SOURCE-READY、主b598a74整合通过，设备待验 | 37ee2bd的12产品aggregate438a0cc3…逐字合入；独审12场景159 action关闭旧02活动组字丢输入和03结束后旧编辑器滞留。主build/schema96/access16/toolbar13/OCR37/标签27/save-boundary11（53 Store action）/composition12（170 action）/Rust指定1例通过；3次监听EPERM原日志保留、独立run02成功。root核68证据2517706B、aggregate632a5664…。历史失败保留；未进安装包，原生IME/native IPC/Session及像素unknown，不关闭父任务 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004-OCR-HOST-01 OCR主App文字接入 | in-progress，主cd7c94e，04双端单图实际OCR/正文冷启有限pass | 源5b707ae独审02及主接线保持。Mac本地fixture三行中文识别→插入→正常CmdQ→新PID完整正文恢复；Android系统picker选同图→三行识别→插入→force-stop新PID完整JSON恢复通过，实际插入位置/空首段及末行空格差异已记录。内部session ACK未直接追踪、未强制断网；完整矩阵/320图/像素unknown，完整文稿/PDF另批 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |
 | PARITY-001 修正差异 | pending，依赖顶部/媒体/本地功能/扫描接入 | 逐页几何、菜单、手势/动画、字体与材料校准；明确原图/叠图/差分和未知项 |
+| APP-005-UNIFIED-CANDIDATE06-01 下一批双端包 | pending，等待录音卡片独审与主整合门槛 | 新任务规定标签/录音日期/宽工具栏同包、分平台冻结、离线缓存及保留数据升级；尚未派发编译。新元数据写入后不降级旧包操作同一数据库，05如仍未启动则保留unrun历史身份 |
 
 docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，docs/ui 是视觉证据。实现阶段遵循 docs-sprint 的 develop/verify 分离。空仓库先建立 Git 基线，串行实施开发/验证；不要求用户批准已授权的常规设计补全。测试必须覆盖真实持久化边界和 UI 用户路径，不能只测试同实现的常量。
 
