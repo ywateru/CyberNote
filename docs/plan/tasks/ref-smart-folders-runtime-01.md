@@ -11,6 +11,8 @@ depends-on: []
 
 2026-11-04：Mac 当前锁定，等待用户解锁。截图工具授权已明确获得，用户已回复完成本机认证；当前实际权限状态尚无法观察。不重复请求同一授权，不绕过系统认证。
 
+后续检查：Mac已可读取原版窗口，但系统设置仍显示本机密码认证表单；已将该表单Raise置前，等待用户本人完成。截图工具精确构建preflight仍返回permission_required，没有采集PNG。此前锁定记录保留，不把用户的授权同意等同于系统已授予工具权限。
+
 ## context
 
 - docs/INDEX.md、docs/ui/local-features.md、docs/architecture.md

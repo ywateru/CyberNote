@@ -1,0 +1,98 @@
+{
+  "stage": "export",
+  "at": "2026-11-04T02:24:47.107860+00:00",
+  "freeBefore": 4822032384,
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "remote": "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob",
+  "destination": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/candidate04-android-audio-validation-01/new-recording.webm",
+  "bytes": 168397,
+  "sha256": "6e145210f656836e9f1260f8e349af1ab8737e52885b27ed70fba80bf15fb32c",
+  "sourceAfter": {
+    "bytes": 168397,
+    "sha256": "6e145210f656836e9f1260f8e349af1ab8737e52885b27ed70fba80bf15fb32c"
+  },
+  "status": "PASS",
+  "events": [
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "run-as",
+        "com.local.notesclone",
+        "stat",
+        "-c",
+        "%s",
+        "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "168397\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "run-as",
+        "com.local.notesclone",
+        "sha256sum",
+        "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "6e145210f656836e9f1260f8e349af1ab8737e52885b27ed70fba80bf15fb32c  /data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "exec-out",
+        "run-as",
+        "com.local.notesclone",
+        "cat",
+        "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdoutBytes": 168397
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "run-as",
+        "com.local.notesclone",
+        "stat",
+        "-c",
+        "%s",
+        "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "168397\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "run-as",
+        "com.local.notesclone",
+        "sha256sum",
+        "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "6e145210f656836e9f1260f8e349af1ab8737e52885b27ed70fba80bf15fb32c  /data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob\n"
+    }
+  ],
+  "freeAfter": 4821856256
+}

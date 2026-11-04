@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python3",
+    "scripts/run-window-capture.py",
+    "--build-dir",
+    "/private/tmp/notes-window-capture-main-083a8d4",
+    "--timeout-seconds",
+    "15",
+    "--",
+    "list",
+    "--bundle",
+    "com.apple.Notes"
+  ],
+  "exitCode": 2,
+  "elapsedSeconds": 0.057822542000000005,
+  "stdout": "{\n  \"supervision\": {\n    \"deadlineSeconds\": 15.0,\n    \"elapsedSeconds\": 0.018428583,\n    \"timedOut\": false,\n    \"termination\": \"SIGKILL on timeout; observer starts no child processes\"\n  },\n  \"observer\": {\n    \"exitCode\": 2,\n    \"stdout\": \"\",\n    \"stderr\": \"{\\n  \\\"code\\\" : \\\"permission_required\\\",\\n  \\\"message\\\" : \\\"Existing Screen Capture permission is required; no request was made.\\\",\\n  \\\"status\\\" : \\\"error\\\",\\n  \\\"successManifestWritten\\\" : false\\n}\\n\"\n  },\n  \"acceptOutput\": false\n}\n",
+  "stderr": "",
+  "context": "User explicitly confirmed permission/authentication; CUA still observes OS password authentication sheet. No authentication entered by agent."
+}

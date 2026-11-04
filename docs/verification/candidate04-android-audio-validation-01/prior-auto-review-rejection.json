@@ -1,0 +1,9 @@
+{
+  "action": "Run check-new-audio.py to export only the new recording to the host evidence directory then probe/decode it",
+  "executed": false,
+  "payloadExported": false,
+  "status": "BLOCKED_AUTO_REVIEW",
+  "reason": "The action copies newly recorded microphone audio from the Android emulator onto the host before probing it; the user authorized recording and local acceptance but did not authorize exporting this sensitive audio payload to that destination, so the sensitive-egress rule requires denial.",
+  "constraint": "Do not bypass this rejection through a workaround or indirect execution.",
+  "unaffectedWork": "Continue device-only stat/hash and UI/Store cold-restart persistence checks."
+}

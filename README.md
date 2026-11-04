@@ -24,6 +24,8 @@ Android前三次失败原样保留：本地socket限制、wrapper意外分发下
 
 candidate04已完成[Android精确安装保全](docs/verification/unified-candidate04-android-install-01/README.md)及[独立运行验收](docs/verification/candidate04-android-runtime-01/README.md)：实际键盘输入、系统选图OCR、26秒新录音保存及force-stop冷启恢复，新旧卡片播放/暂停等控制有限通过，三条原合成笔记/旧附件和音频保持。root逐文件核验159文件6615140 B。OCR实际在原heading前插入、开头空段令标题变为默认值，识别器移除末行一个空格，均如实记录。网络未关闭、未验正常退出/像素/实际可听；新麦克风音频导出被自动审批拒绝，未执行解码和非零音轨检查。没有复制整份数据库或音频到主机。
 
+后续用户明确授权该条测试录音到项目内指定路径的本地复制；新的[音频检查](docs/verification/candidate04-android-audio-validation-01/README.md)核对candidate04包和附件前后同SHA，完整解码26.46秒、单声道Opus48kHz及非零采样通过。信号峰值−80.93dB、RMS−102.55dB，不能算可听或有效收音通过；未试听、转写或上传。root逐文件核14证据200087B，旧拒绝及冻结运行记录原样保留。
+
 原生比例PNG取图工具已通过[独立源码审查](docs/plan/reviews/tools-lossless-window-capture-static-01.md)，并从主路径编译为独立工具。[前置Mac有限观察](docs/verification/candidate04-mac-runtime-01/README.md)已能读取原版窗口，原生取图因缺现有屏幕录制权限明确拒绝，未生成PNG；旧包退出和新包未启动属于当时检查点，后续恢复结果见上段。历史与本轮CUA截图实际编码JPEG，旧字节保持，不用于无损像素验收。原版与本批的同条件整窗像素仍未通过。
 
 尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音与暂停试听的设备验收、绘画及附件完整预览、Android更广OCR矩阵、完整文稿扫描主流程、标签设备验收、智能文件夹/数学/笔记链接和标准格式导入导出。标签候选04已通过[独立源码审查](docs/plan/reviews/app-003-tags-static-04.md)，合入主分支b598a74并完成[主线整合回归](docs/verification/app-003-tags-main-integration-01/README.md)：合法保存快照、活动组字保全、结束后停车和归档边界通过。旧候选02/03失败证据保留；当前安装包仍不含标签，原生系统输入法及像素未验。具体通过子用例和缺口以交付计划与独立报告为准。

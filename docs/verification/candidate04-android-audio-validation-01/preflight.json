@@ -1,0 +1,177 @@
+{
+  "stage": "preflight",
+  "at": "2026-11-04T02:24:28.574289+00:00",
+  "freeBefore": 4823068672,
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "remote": "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob",
+  "deviceProperties": {
+    "ro.product.model": "sdk_gphone_arm64",
+    "ro.product.device": "emulator_arm64",
+    "ro.build.fingerprint": "google/sdk_gphone_arm64/emulator_arm64:11/RSR1.240422.006/12134477:userdebug/dev-keys",
+    "ro.boot.qemu.avd_name": ""
+  },
+  "installedApk": {
+    "path": "/data/app/~~i7A72UmYyxom3rFlSGHyQg==/com.local.notesclone-ZdbzjPEYGGSNueTsB354DQ==/base.apk",
+    "bytes": 304110831,
+    "sha256": "bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2"
+  },
+  "sourceFile": {
+    "bytes": 168397,
+    "sha256": "6e145210f656836e9f1260f8e349af1ab8737e52885b27ed70fba80bf15fb32c"
+  },
+  "status": "PASS",
+  "events": [
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "get-state"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "device\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "getprop",
+        "ro.product.model"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "sdk_gphone_arm64\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "getprop",
+        "ro.product.device"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "emulator_arm64\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "getprop",
+        "ro.build.fingerprint"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "google/sdk_gphone_arm64/emulator_arm64:11/RSR1.240422.006/12134477:userdebug/dev-keys\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "getprop",
+        "ro.boot.qemu.avd_name"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "getprop",
+        "ro.kernel.qemu"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "1\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "pm",
+        "path",
+        "com.local.notesclone"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "package:/data/app/~~i7A72UmYyxom3rFlSGHyQg==/com.local.notesclone-ZdbzjPEYGGSNueTsB354DQ==/base.apk\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "stat",
+        "-c",
+        "%s",
+        "/data/app/~~i7A72UmYyxom3rFlSGHyQg==/com.local.notesclone-ZdbzjPEYGGSNueTsB354DQ==/base.apk"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "304110831\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "sha256sum",
+        "/data/app/~~i7A72UmYyxom3rFlSGHyQg==/com.local.notesclone-ZdbzjPEYGGSNueTsB354DQ==/base.apk"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2  /data/app/~~i7A72UmYyxom3rFlSGHyQg==/com.local.notesclone-ZdbzjPEYGGSNueTsB354DQ==/base.apk\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "run-as",
+        "com.local.notesclone",
+        "stat",
+        "-c",
+        "%s",
+        "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "168397\n"
+    },
+    {
+      "command": [
+        "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "run-as",
+        "com.local.notesclone",
+        "sha256sum",
+        "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "stdout": "6e145210f656836e9f1260f8e349af1ab8737e52885b27ed70fba80bf15fb32c  /data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob\n"
+    }
+  ],
+  "freeAfter": 4822925312
+}

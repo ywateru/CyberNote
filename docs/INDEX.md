@@ -67,6 +67,7 @@
 - [旧candidate03 Mac界面超时的一次只读线程样本](verification/candidate03-mac-ax-timeout-diagnosis-01/README.md)
 - [candidate04 Android精确安装与指定数据保留](verification/unified-candidate04-android-install-01/README.md)
 - [candidate04 Android实际输入/OCR/录音与冷启有限验收](verification/candidate04-android-runtime-01/README.md)
+- [用户新授权后的指定测试录音复制与解码检查](verification/candidate04-android-audio-validation-01/README.md)
 - [原生比例PNG窗口取证工具任务](plan/tasks/tools-lossless-window-capture-01.md)
 - [取图工具独立审查（真实窗口未验）](plan/reviews/tools-lossless-window-capture-static-01.md)
 - [candidate03 Android身份及保留数据升级](verification/unified-candidate03-android-independent-01/README.md)
