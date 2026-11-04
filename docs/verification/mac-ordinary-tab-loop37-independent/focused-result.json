@@ -1,0 +1,200 @@
+{
+  "scope": "Independent selected races through real production React/form/native-keyboard/guest; controlled Tauri IPC replies, headless Chromium not AppKit",
+  "checks": [
+    {
+      "name": "current controls reread after await skips newly inert checkbox",
+      "pass": true,
+      "detail": {
+        "focus": "取消",
+        "checkbox": false,
+        "calls": 1,
+        "pending": 0,
+        "name": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "saves": 0,
+        "cancelled": 0,
+        "closed": false
+      }
+    },
+    {
+      "name": "new reverse generation waits behind stale query",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "checkbox": false,
+        "calls": 1,
+        "pending": 1,
+        "name": "新建文件夹",
+        "start": 0,
+        "end": 0,
+        "saves": 0,
+        "cancelled": 0,
+        "closed": false
+      }
+    },
+    {
+      "name": "stale rejection silent and new generation query starts",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "checkbox": false,
+        "calls": 2,
+        "pending": 1,
+        "name": "新建文件夹",
+        "start": 0,
+        "end": 0,
+        "saves": 0,
+        "cancelled": 0,
+        "closed": false
+      }
+    },
+    {
+      "name": "fresh false reverse reselects preserved default",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "checkbox": false,
+        "calls": 2,
+        "pending": 0,
+        "name": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "saves": 0,
+        "cancelled": 0,
+        "closed": false
+      }
+    },
+    {
+      "name": "same task parent cancel and reply do not resurrect form/focus",
+      "pass": true,
+      "detail": {
+        "focus": "BODY",
+        "checkbox": false,
+        "calls": 1,
+        "pending": 0,
+        "saves": 0,
+        "cancelled": 1,
+        "closed": true
+      }
+    },
+    {
+      "name": "later default-prevented form event invalidates pending navigation",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "checkbox": false,
+        "calls": 1,
+        "pending": 0,
+        "name": "新建文件夹",
+        "start": 1,
+        "end": 2,
+        "saves": 0,
+        "cancelled": 0,
+        "closed": false
+      }
+    },
+    {
+      "name": "lost document focus without blur event drops reply silently",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "checkbox": false,
+        "calls": 1,
+        "pending": 0,
+        "name": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "saves": 0,
+        "cancelled": 0,
+        "closed": false
+      }
+    },
+    {
+      "name": "unavailable target focus reports generic failure without saving or replacing draft",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "checkbox": false,
+        "calls": 1,
+        "pending": 0,
+        "alert": "无法切换输入位置，请重试。",
+        "name": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "saves": 0,
+        "cancelled": 0,
+        "closed": false
+      }
+    },
+    {
+      "name": "external focus cancels both in-flight and queued navigation",
+      "pass": true,
+      "detail": {
+        "focus": "independent-outside",
+        "checkbox": false,
+        "calls": 1,
+        "pending": 0,
+        "name": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "saves": 0,
+        "cancelled": 0,
+        "closed": false
+      }
+    },
+    {
+      "name": "first true reply focuses checkbox",
+      "pass": true,
+      "detail": {
+        "focus": "",
+        "checkbox": true,
+        "calls": 1,
+        "pending": 0,
+        "name": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "saves": 0,
+        "cancelled": 0,
+        "closed": false
+      }
+    },
+    {
+      "name": "second accepted navigation rereads changed false policy",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "checkbox": false,
+        "calls": 2,
+        "pending": 0,
+        "name": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "saves": 0,
+        "cancelled": 0,
+        "closed": false
+      }
+    },
+    {
+      "name": "production guest exact command own-label only",
+      "pass": true,
+      "detail": [
+        {
+          "command": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        },
+        {
+          "command": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "status": "PASS"
+}

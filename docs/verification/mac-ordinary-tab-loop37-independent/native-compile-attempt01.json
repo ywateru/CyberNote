@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "xcrun",
+    "clang",
+    "-fobjc-arc",
+    "-fblocks",
+    "-mmacosx-version-min=12.0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "/private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37-independent/native-selected.m",
+    "-o",
+    "/private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37-independent/native-selected",
+    "-framework",
+    "AppKit",
+    "-framework",
+    "WebKit"
+  ],
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "/private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37-independent/native-selected.m:23:31: error: 'usesWeakReadAndWriteBarriers' is deprecated: first deprecated in macOS 10.12 - Garbage collection no longer supported [-Werror,-Wdeprecated-declarations]\n   23 |  check(table.pointerFunctions.usesWeakReadAndWriteBarriers,\"closed identities use actual weak object pointer barriers\");\n      |                               ^\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSPointerFunctions.h:76:16: note: 'usesWeakReadAndWriteBarriers' has been explicitly marked deprecated here\n   76 | @property BOOL usesWeakReadAndWriteBarriers       // pointers should (not) use GC weak read and write barriers\n      |                ^\n1 error generated.\n",
+  "elapsedSeconds": 0.8766294160000001
+}

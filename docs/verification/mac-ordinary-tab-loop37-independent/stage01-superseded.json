@@ -1,0 +1,13 @@
+{
+  "atUtc": "2026-11-04T23:33:59.492219+00:00",
+  "status": "PAUSED superseded candidate, no PASS",
+  "supersededProductCommit": "d3e467b2960075e2cb2749757de488c8cbd18ad1",
+  "assignedBase": "26648d88021adf3abdcfdfe879453a3b36866613",
+  "performed": "Read-only task/design/source and commit diff for13 candidate product paths, no source freeze yet",
+  "executedTests": [],
+  "sourceWrites": false,
+  "gitWrites": false,
+  "authorEvidenceSealedOrAccepted": false,
+  "reasonFromRoot": "Author regression discovered that37 closed-window bookkeeping must not alter existing35 attach semantics; remove attach closed rejection while retaining query tracking/observer start, append corrected product commit and old35 regression evidence. Wait final commit and author STOP/index before final source review.",
+  "knownNativeOwnershipReviewPlan": "Assess process-lifetime close observer token and weak closed-window set, main-thread access and current-window identity; distinguish query closure checks from35 monitor lifecycle. No defect conclusion made yet."
+}

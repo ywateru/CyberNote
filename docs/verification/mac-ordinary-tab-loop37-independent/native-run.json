@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "/private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37-independent/native-selected"
+  ],
+  "exitCode": 0,
+  "stdout": "PASS fresh production query directly reads real public getter once\nREAL_SYSTEM enabled=0 (read-only, no actual toggle)\nPASS second owned window query rereads, single process observer/table reused\nPASS actual closed identity collection does not retain ephemeral object\nPASS controlled getter exception is explicit and leaves output/WK/monitor unchanged\nPASS recorded closed identity rejects query before getter/output write\nPASS closed A does not poison other real window B\nPASS final correction preserves35 attach after synthetic close while query stays closed\nPASS reattach does not silently clear closed-query record\nPASS policy cleanup owns monitors only; close observer remains constant process lifetime\nPASS off-main guard precedes nil target and does not write output\nPASS no visible/key windows or pages, no data backend\nRESULT 11 independent native boundary checks\n",
+  "stderr": "2026-11-05 07:46:17.443 native-selected[69151:38645475] IOPMScheduleUserActivityLevelNotification returned 0\n2026-11-05 07:46:17.443 native-selected[69151:38645475] IOPMScheduleUserActivityLevelNotification returned 0\nCould not create a 'com.apple.coreservices.launchservicesd' sandbox extension\n",
+  "elapsedSeconds": 0.660085708
+}

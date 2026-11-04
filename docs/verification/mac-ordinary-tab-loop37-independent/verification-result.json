@@ -1,0 +1,2001 @@
+{
+  "status": "PASS source review only",
+  "sourceReady": true,
+  "actualMacAcceptance": "OPEN",
+  "base": "26648d88021adf3abdcfdfe879453a3b36866613",
+  "head": "6e247ca20a8f29b1bd8358c3ffcce7c046bdb6c3",
+  "productCommit": "1a5422fbc089b354b91e3d6b1db64b5e6ec9a2a9",
+  "changedProductFiles": 13,
+  "allProductFiles": 307,
+  "authorSealedFiles": 69,
+  "authorLocalArtifacts": 11,
+  "checks": [
+    {
+      "name": "read-only git command ('rev-parse', 'HEAD')",
+      "pass": true
+    },
+    {
+      "name": "fixed evidence HEAD",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('rev-list', '--max-count=4')",
+      "pass": true
+    },
+    {
+      "name": "head product correction initial base exact chain",
+      "pass": true
+    },
+    {
+      "name": "author69 exact root-supplied index SHA",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/README.md",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/all-product-inputs.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/android-check-attempt01.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/build-native-chain-attempt03.py",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/build-native-chain.py",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt01.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt02.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt03/result.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt03.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt04/result.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt04.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt05/result.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt05.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt06.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt07.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt08/result.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-attempt08.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-check-attempt01.mjs",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-check-attempt02.mjs",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-check-attempt04.mjs",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-check-attempt05.mjs",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-check-attempt06.mjs",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/component-check.mjs",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/execution-boundaries.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/failure-ledger.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/harness-entry.tsx",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/inputs-before.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/local-artifacts.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-compile-attempt01.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-compile-attempt02.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-compile-attempt03.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-policy35-compile-attempt02.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-policy35-compile.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-policy35-regression-attempt02.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-policy35-regression.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-query-attempt01.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-query-attempt02.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-query-attempt03.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-query.m",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-builder-attempt01.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-builder-attempt02.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-builder-attempt03.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-builder-attempt04.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-builder-attempt05.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-chain.rs",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-compile-args.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-compile-attempt01.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-compile-attempt02.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-compile-attempt03.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-run-attempt01.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-run-attempt02.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-run-attempt02.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-run-attempt03.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/native-rust-run-attempt03.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/product-source.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/protected-inputs-result.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/result.json",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/run-native-chain.py",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/rust-check-attempt01.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/rust-test-attempt01.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/rust-test-attempt02.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/rust-test-attempt03.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/rust-test-attempt04.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/source.patch",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/typecheck-attempt01.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/typecheck-attempt02.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/typecheck-attempt03.log",
+      "pass": true
+    },
+    {
+      "name": "author sealed docs/verification/mac-ordinary-tab-loop37/typecheck-attempt04.log",
+      "pass": true
+    },
+    {
+      "name": "author exact result SHA",
+      "pass": true
+    },
+    {
+      "name": "exact13 changed catalog aggregate",
+      "pass": true
+    },
+    {
+      "name": "exact307 full product catalog aggregate",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('diff', '--name-only')",
+      "pass": true
+    },
+    {
+      "name": "precisely approved13 changed source paths",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('diff', '26648d88021adf3abdcfdfe879453a3b36866613')",
+      "pass": true
+    },
+    {
+      "name": "author source patch exactly final base diff",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('ls-tree', '-rz')",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob assets/mobile-paper-previews/README.md",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob assets/mobile-paper-previews/grid-large.svg",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob assets/mobile-paper-previews/grid-medium.svg",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob assets/mobile-paper-previews/grid-small.svg",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob assets/mobile-paper-previews/lines-large.svg",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob assets/mobile-paper-previews/lines-medium.svg",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob assets/mobile-paper-previews/lines-small.svg",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob docs/fixtures/smart-projection09.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob index.html",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob package.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob patches/prosemirror-view@1.42.9.patch",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/README.md",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/consumer-rules.pro",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/gradle.lockfile",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/gradle.properties",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/harness/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/harness/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/blank-fixture.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/chinese-fixture.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/settings.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/deviceFixture/java/com/local/notesscan/DeviceFixtureActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ChineseOcr.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/CropView.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/Images.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ProbeActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ScanActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/main/res/values/styles.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/android/src/test/java/com/local/notesscan/GeometryTest.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/build.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/examples/host_copy_probe.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/examples/macos_probe.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/guest-js/index.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/macos/vision.m",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/package.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/permissions/autogenerated/commands/execute.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/permissions/autogenerated/reference.md",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/permissions/default.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/permissions/schemas/schema.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/scripts/artifact-inventory.py",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/scripts/check-android.sh",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/scripts/generate-fixture.swift",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-scan/src/session.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/README.md",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/build.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/examples/demo.html",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/examples/state.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/macos/format.h",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/macos/format.m",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/macos/keyboard.m",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/package.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/bind.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/focus_search.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/inspect.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/unbind.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/update.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/permissions/default.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/src/model.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/src/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/verification/format-gallery/README.md",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/verification/format-gallery/android-check.txt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/verification/format-gallery/checks.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/verification/format-gallery/guest-typecheck.txt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/verification/format-gallery/inputs.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/verification/format-gallery/objc-syntax.txt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/verification/format-gallery/rust-test.txt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob plugins/tauri-plugin-notes-ui/verification/format-gallery/source-isolation.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob pnpm-lock.yaml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob pnpm-workspace.yaml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/android-fix01.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/android-ime-regression.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/android-smoke.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/android.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/audio-card-rust-fixture.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/build-window-capture.py",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-access-boundary.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-android-composition.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-attachment-cancellation.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-attachment-submission.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-audio-card-integration.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-audio-card-store.py",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-audio-card-ui.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-audio-controls-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-audio-playback-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-audio-playback.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-body-typography-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-document-identity.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-editor-actions.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-editor-schema.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-metadata-session.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-native-toolbar.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-ocr-host.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-ocr-panel-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-recording-panel-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-recording-preview.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-recording-session.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-recording-submit.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-search-selection.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-search-zero-startup.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-search-zero-ui.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-secure-id.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-sidebar-restore-geometry.py",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-smart-contract.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-smart-ui.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-tags-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-tags-composition-retention.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-tags-save-boundary.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-tags-store.py",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-wide-toolbar-geometry.py",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/check-window-capture.swift",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/compare-fix02-toolbar.py",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/recording-platform-fixture.mjs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/run-window-capture.py",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/window-capture.md",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob scripts/window-capture.swift",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/Info.plist",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/app-icon.svg",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/build.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/capabilities/default.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/capabilities/macos-notes-ui.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/.editorconfig",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/proguard-rules.pro",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/layout/activity_main.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/values-night/themes.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/values/colors.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/values/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/values/strings.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/values/themes.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/app/src/main/res/xml/file_paths.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/BuildTask.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/RustPlugin.kt",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/gradle.properties",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/gradle/wrapper/gradle-wrapper.properties",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/gradlew",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/gradlew.bat",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/gen/android/settings.gradle",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/128x128.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/128x128@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/32x32.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/64x64.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/Square107x107Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/Square142x142Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/Square150x150Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/Square284x284Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/Square30x30Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/Square310x310Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/Square44x44Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/Square71x71Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/Square89x89Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/StoreLogo.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/android/values/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/icon.icns",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/icon.ico",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/icon.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-20x20@1x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-20x20@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-20x20@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-20x20@3x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-29x29@1x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-29x29@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-29x29@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-29x29@3x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-40x40@1x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-40x40@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-40x40@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-40x40@3x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-512@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-60x60@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-60x60@3x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-76x76@1x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-76x76@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/icons/ios/AppIcon-83.5x83.5@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/main.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/media_permission.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/session.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/session/metadata.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/session/smart_tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/session/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/archive.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/archive/document-cases.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/archive/document-schema.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/archive/document.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/archive/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/attachment_operations.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/attachment_operations/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/commits.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/folder_name_tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/metadata_tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/open.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/open_tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/recorded_at_tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/smart.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/src/store/smart_tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src-tauri/tauri.conf.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/App.tsx",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/Editor.tsx",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/MobileFolderIcons.tsx",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/OcrPanel.css",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/OcrPanel.tsx",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/RecordingPanel.css",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/RecordingPanel.tsx",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/SmartFolderForm.tsx",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/access-client.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/attachment-submission.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/attachment-target.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/audio-playback.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/bridge.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/document-equality.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/editor-actions.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/editor-save-snapshot.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/editor-schema.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/main.tsx",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/metadata-client.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/native-keyboard.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/native-toolbar-controller.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/native-toolbar-state.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/native-toolbar.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/note-tag-extension.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/note-tags.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/ocr-host.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/ocr-native.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/ordinary-folder-keyboard.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/proof-access.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/recording-clock.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/recording-metadata.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/recording-playback.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/recording-session.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/save-queue.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/save-revisions.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/search-editor-gate.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/search-selection.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/secure-id.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/sidebar-preference.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/smart-draft.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/smart-folders.css",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/smart-folders.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/style.css",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/tag-composition.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/trusted-synchronization.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/types.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob src/vite-env.d.ts",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob tsconfig.json",
+      "pass": true
+    },
+    {
+      "name": "current product exact commit blob vite.config.ts",
+      "pass": true
+    },
+    {
+      "name": "all13 changed current hashes in catalog",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('diff', 'd3e467b2960075e2cb2749757de488c8cbd18ad1')",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('diff', '--name-only')",
+      "pass": true
+    },
+    {
+      "name": "final source correction only removes attach closed rejection",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('show', '26648d88021adf3abdcfdfe879453a3b36866613:package.json')",
+      "pass": true
+    },
+    {
+      "name": "preserved dependency host style package.json",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('show', '26648d88021adf3abdcfdfe879453a3b36866613:pnpm-lock.yaml')",
+      "pass": true
+    },
+    {
+      "name": "preserved dependency host style pnpm-lock.yaml",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('show', '26648d88021adf3abdcfdfe879453a3b36866613:plugins/tauri-plugin-notes-ui/Cargo.toml')",
+      "pass": true
+    },
+    {
+      "name": "preserved dependency host style plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('show', '26648d88021adf3abdcfdfe879453a3b36866613:plugins/tauri-plugin-notes-ui/Cargo.lock')",
+      "pass": true
+    },
+    {
+      "name": "preserved dependency host style plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('show', '26648d88021adf3abdcfdfe879453a3b36866613:src-tauri/Cargo.lock')",
+      "pass": true
+    },
+    {
+      "name": "preserved dependency host style src-tauri/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('show', '26648d88021adf3abdcfdfe879453a3b36866613:src-tauri/Cargo.toml')",
+      "pass": true
+    },
+    {
+      "name": "preserved dependency host style src-tauri/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('show', '26648d88021adf3abdcfdfe879453a3b36866613:src-tauri/capabilities/macos-notes-ui.json')",
+      "pass": true
+    },
+    {
+      "name": "preserved dependency host style src-tauri/capabilities/macos-notes-ui.json",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('show', '26648d88021adf3abdcfdfe879453a3b36866613:src/style.css')",
+      "pass": true
+    },
+    {
+      "name": "preserved dependency host style src/style.css",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('show', '26648d88021adf3abdcfdfe879453a3b36866613:src/smart-folders.css')",
+      "pass": true
+    },
+    {
+      "name": "preserved dependency host style src/smart-folders.css",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/component-attempt03/component.html",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/component-attempt04/component.html",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/component-attempt05/component.html",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/component-attempt06/component.html",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/component-attempt06/result.json",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/component-attempt07/component.html",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/component-attempt07/result.json",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/component-attempt08/component.html",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/native-policy35-regression",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/native-query",
+      "pass": true
+    },
+    {
+      "name": "author preserved local artifact docs/verification/mac-ordinary-tab-loop37/native-rust-chain",
+      "pass": true
+    },
+    {
+      "name": "author52 controlled component preserved",
+      "pass": true
+    },
+    {
+      "name": "author13 C queries and real false getter preserved",
+      "pass": true
+    },
+    {
+      "name": "author5 actual Wry production command chain log",
+      "pass": true
+    },
+    {
+      "name": "actual Rust chain direct production command not IPC roundtrip",
+      "pass": true
+    },
+    {
+      "name": "old35 regression27 preserved",
+      "pass": true
+    },
+    {
+      "name": "author final17 Rust tests preserved",
+      "pass": true
+    },
+    {
+      "name": "all declared failure paths retained",
+      "pass": true
+    },
+    {
+      "name": "IPC caller own label before main-only dispatch",
+      "pass": true
+    },
+    {
+      "name": "main dispatch rechecks live current native identity",
+      "pass": true
+    },
+    {
+      "name": "main dispatcher propagates failure instead of bool fallback",
+      "pass": true
+    },
+    {
+      "name": "closed tracking limits query not old attach",
+      "pass": true
+    },
+    {
+      "name": "public getter read no writes in query",
+      "pass": true
+    },
+    {
+      "name": "closed observation owned once and windows weak",
+      "pass": true
+    },
+    {
+      "name": "guest fixed command current label no binding",
+      "pass": true
+    },
+    {
+      "name": "bridge native main Mac gate and explicit bool validation",
+      "pass": true
+    },
+    {
+      "name": "local ordinary-only form active gate",
+      "pass": true
+    },
+    {
+      "name": "read-only git command ('diff', '26648d88021adf3abdcfdfe879453a3b36866613')",
+      "pass": true
+    },
+    {
+      "name": "no added DOM or style markup beyond ref and handler",
+      "pass": true
+    },
+    {
+      "name": "command permissions/build schema connected plugins/tauri-plugin-notes-ui/build.rs",
+      "pass": true
+    },
+    {
+      "name": "command permissions/build schema connected plugins/tauri-plugin-notes-ui/permissions/default.toml",
+      "pass": true
+    },
+    {
+      "name": "command permissions/build schema connected plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml",
+      "pass": true
+    },
+    {
+      "name": "command permissions/build schema connected plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+      "pass": true
+    },
+    {
+      "name": "command permissions/build schema connected plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+      "pass": true
+    },
+    {
+      "name": "controller local synchronous cancellation and per-request query",
+      "pass": true
+    },
+    {
+      "name": "12 fresh meaningful component checks passed",
+      "pass": true
+    },
+    {
+      "name": "11 fresh native boundaries passed",
+      "pass": true
+    }
+  ],
+  "passed": 448,
+  "failed": [],
+  "freshComponentChecks": 12,
+  "freshNativeChecks": 11,
+  "readOnlyGitCommands": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "19fd91911e05867d236bd7fc43f451353b3da0a19b8c4e6c7441e1b28b1a80a1",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-list",
+        "--max-count=4",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "5e1e7e8bdc6f7efe7837f127f5bf9103bdd294e4b4e72d65943acd87e8b477ea",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "26648d88021adf3abdcfdfe879453a3b36866613",
+        "1a5422fbc089b354b91e3d6b1db64b5e6ec9a2a9"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "e0db0a6e21d099b2040d3439b81abef049341737f559dc462e1e75fb90877075",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "26648d88021adf3abdcfdfe879453a3b36866613",
+        "1a5422fbc089b354b91e3d6b1db64b5e6ec9a2a9"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "9ae3eb37234176ca36587c63c672b2931b69a8ac2dd7a90233c7d787dd03d1ee",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "ls-tree",
+        "-rz",
+        "-r",
+        "1a5422fbc089b354b91e3d6b1db64b5e6ec9a2a9"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "cf77fd5110eacbae15c38a677d2546147044defa23796dea7707475f7ce65df3",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "d3e467b2960075e2cb2749757de488c8cbd18ad1",
+        "1a5422fbc089b354b91e3d6b1db64b5e6ec9a2a9"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "4353028966cbb07027fafd2623edd5db21c8bf795af0ffeb7ab42488a0a1a12d",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "d3e467b2960075e2cb2749757de488c8cbd18ad1",
+        "1a5422fbc089b354b91e3d6b1db64b5e6ec9a2a9"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "d4f5051a50934f7dd8ef98746a922772c0ca33e235de45975b9c14c9b8371efa",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "26648d88021adf3abdcfdfe879453a3b36866613:package.json"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "26648d88021adf3abdcfdfe879453a3b36866613:pnpm-lock.yaml"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "26648d88021adf3abdcfdfe879453a3b36866613:plugins/tauri-plugin-notes-ui/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "ea0af0d3d408a465294b110d9a45354060ccbb48789ddd8f47a01fcbd19938b5",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "26648d88021adf3abdcfdfe879453a3b36866613:plugins/tauri-plugin-notes-ui/Cargo.lock"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "1aaff6687dcd8775a58041dde52e16c2815cc05c7551f79444c91d42d59e6437",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "26648d88021adf3abdcfdfe879453a3b36866613:src-tauri/Cargo.lock"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "889b7f449ff4b34263139279cacf57f105fd9c3c6a7099bb56c958f3780ed1b0",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "26648d88021adf3abdcfdfe879453a3b36866613:src-tauri/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "c6f56b877cf36bfb77e199519dfc685df6bb5224b24f30b45114efedc68a08a4",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "26648d88021adf3abdcfdfe879453a3b36866613:src-tauri/capabilities/macos-notes-ui.json"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "a5edca803c345b81ac933a00872a1cf60530f7de334a211e4d7211796170510f",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "26648d88021adf3abdcfdfe879453a3b36866613:src/style.css"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "5ceac05bf79ca9fa83e0237b909c76281c2b03993ab654dbc6bed37191060929",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "26648d88021adf3abdcfdfe879453a3b36866613:src/smart-folders.css"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "7e7a7bfa274858cbb1449e55e96026427dfa398489613dc60592e2608dc48005",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "26648d88021adf3abdcfdfe879453a3b36866613",
+        "1a5422fbc089b354b91e3d6b1db64b5e6ec9a2a9",
+        "--",
+        "src/SmartFolderForm.tsx"
+      ],
+      "exitCode": 0,
+      "stdoutSHA256": "c47c6a3e9058022dc38eeaba344d89f2baa6017a4ef22764098a177d151f12a6",
+      "stderr": ""
+    }
+  ],
+  "limits": [
+    "Fresh component transport/system policy replies controlled; real production React/guest but Chromium is not WK/AppKit.",
+    "Independent C probe real public getter observed false only, exception and synthetic close are explicit process-local inputs.",
+    "Weak ownership tested with ephemeral NSObject sentinel in actual table, not NSApp retaining/releasing actual closed window.",
+    "True native Wry command chain is reviewed sealed author evidence, not independently rerun; it invokes production function directly, no permission IPC roundtrip.",
+    "No formal Mac build, GUI, actual keyboard focus/system toggle/IME or pixel acceptance."
+  ]
+}

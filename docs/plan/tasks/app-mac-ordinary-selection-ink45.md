@@ -1,7 +1,7 @@
 ---
 id: app-mac-ordinary-selection-ink45
 scope: Light ordinary Mac folder name selected text ink
-status: pending
+status: in-progress
 depends-on: [ref-mac-ordinary-visual-readiness44]
 ---
 
@@ -25,3 +25,5 @@ root创建隔离树及START后，产品仅src/smart-folders.css。在现有普�
 ## Verification
 
 现有离线工具，同生产组件/完整CSS，只做一轮明确候选与旧色对照。尽可能用自有不可见WK的真实选择绘制；若捕获不含活动选择，只能标声明映射/受控证据，不能冒充实际包。全选和部分选择、自然态、底色条及非目标状态为必要范围。报告核心明暗和三阈值/完整ROI差异，不能将覆盖变多直接等同字形正确。禁止无方向字重/字号矩阵。有限检查后固定产品提交、封索引STOP，由不同作者独审，才合入准确Mac包Computer Use实拍。若候选不改善，保留结果停止并报告，不自动扩张。
+
+2026-11-05 root START45：在已整合37源的主线创建/private/tmp/apple-notes-ordinary-selection-ink45-01，native_ui_research唯一作者，仅CSS产品路径。与42代码路径不重叠，可隔离并行；verify_app不同作者独审后root串行合入。拟纳入Mac14，freeze前须两项均明确源通过，不以本条授权完整构建。

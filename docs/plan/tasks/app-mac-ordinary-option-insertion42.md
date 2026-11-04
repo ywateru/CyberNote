@@ -1,7 +1,7 @@
 ---
 id: app-mac-ordinary-option-insertion42
 scope: Native Mac ordinary folder name Option-Tab text insertion
-status: pending
+status: in-progress
 depends-on: [app-mac-ordinary-tab-loop37]
 ---
 
@@ -32,3 +32,5 @@ root创建独立worktree后，产品仅src/SmartFolderForm.tsx、必要窄src/or
 作者有限生产组件事件路径（非只调用候选helper）、真实WK受控input/React/onChange/原生history，覆盖全选、中间caret、CD局部替换、末尾、ShiftOption、持续键入/undo、命令失败草稿保全，以及各native/平台/模式/组字/修饰排除。场景隔离历史，保留全部失败与阴性对照。37普通Tab/ShiftTab有限回归。使用已有离线工具与自有缓存/target，不下载。
 
 固定产品提交后由不同作者独审，再合入准确Mac包。实际Computer Use在同一原版合成草稿序列核OptionTab、CmdZ/CmdShiftZ和名称值/选区/焦点，并复验37普通导航、普通智能往返/取消及侧栏不退化。开启系统导航、多窗和全原版交互仍无自动通过结论。
+
+2026-11-05 root START42：37源阶段已独审合入，创建/private/tmp/apple-notes-ordinary-option-insertion42-01，develop_app唯一作者。仅本项两产品路径；以root最新已提交主线为创建基线，禁止修改主树及37隔离树。完整行为/像素仍待准确包验收。
