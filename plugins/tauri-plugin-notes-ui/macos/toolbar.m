@@ -350,14 +350,25 @@ static NSPoint contentOffsetFor(NSString *action) {
     // 649c24e measures ink/surfaces, not internal AppKit frames. These are calibration starts.
     CGFloat titleX=three?(side>0?side+19:traffic+8):MAX(side+11,traffic+8);
     NSMutableArray *hidden=[NSMutableArray array];
-    if(sidebar && ![layout isEqual:@"independentNote"]) {
-        NSMutableArray *actions=[NSMutableArray array];for(NSString *action in @[@"newFolder",@"toggleSidebar"])
-            if(self.actionStates[action])[actions addObject:action];
-        CGFloat width=actions.count*36;
-        if(traffic+width<side-6)[self placeGroup:@"sidebar" x:traffic width:width actions:actions];else[hidden addObjectsFromArray:actions];
-    } else for(NSString *action in @[@"newFolder",@"toggleSidebar"])if(self.actionStates[action])[hidden addObject:action];
+    CGFloat sidebarRight=traffic;
+    if(![layout isEqual:@"independentNote"]) {
+        NSMutableArray *actions=[NSMutableArray array];
+        if(sidebar && self.actionStates[@"newFolder"])[actions addObject:@"newFolder"];
+        if(self.actionStates[@"toggleSidebar"])[actions addObject:@"toggleSidebar"];
+        // The direct restore control survives a hidden or narrow folder column.
+        // Adding folders follows the visible column; only that action may overflow.
+        if(sidebar && traffic+actions.count*36>=side-6 && [actions containsObject:@"newFolder"]) {
+            [actions removeObject:@"newFolder"];[hidden addObject:@"newFolder"];
+        }
+        if(actions.count) {
+            CGFloat width=actions.count*36;
+            [self placeGroup:@"sidebar" x:traffic width:width actions:actions];sidebarRight=traffic+width;
+            // Hidden-list reference ink starts near156pt; its label frame is a154pt candidate.
+            titleX=MAX(titleX,sidebarRight+(three&&!sidebar?24:8));
+        }
+    }
     if(gallery && self.actionStates[@"backToGallery"]) {
-        CGFloat backX=MAX(side+8,traffic+8);
+        CGFloat backX=MAX(MAX(side+8,traffic+8),sidebarRight+8);
         [self placeGroup:@"back" x:backX width:36 actions:@[@"backToGallery"]];titleX=backX+47;
     }
     BOOL hasSearch=self.state[@"search"] && (id)self.state[@"search"]!=NSNull.null;
