@@ -1,0 +1,11 @@
+{
+  "sourceCommit": "b5c0aef86edec3988691c73dfe5c83bd1dc0363f",
+  "command": [
+    "python3",
+    "-B",
+    "docs/verification/unified-candidate06/preparation/check-boundaries.py"
+  ],
+  "provenance": "Exact merged output and exit from independent exec tool return, transcribed after the already-completed single run; suite was not rerun.",
+  "exitCode": 0,
+  "output": "test_explicit_parameters_and_output_boundary (__main__.Boundaries) ... ok\ntest_failed_builds_never_collect (__main__.Boundaries) ... ok\ntest_freeze_bytes_and_no_overwrite (__main__.Boundaries) ... ok\ntest_low_space_and_download_guard (__main__.Boundaries) ... ok\ntest_owned_init_identity_and_replacements (__main__.Boundaries) ... ok\ntest_syntax_without_bytecode (__main__.Boundaries) ... ok\ntest_timeout_only_owned_process_group (__main__.Boundaries) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.210s\n\nOK\n"
+}

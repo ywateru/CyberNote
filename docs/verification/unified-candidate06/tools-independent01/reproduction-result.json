@@ -1,0 +1,100 @@
+{
+  "sourceCommit": "b5c0aef86edec3988691c73dfe5c83bd1dc0363f",
+  "leaderExitedChildAlive": {
+    "record": {
+      "diskFreeBefore": 5173882880,
+      "minimumFreeBytes": 5173870592,
+      "deadlineSeconds": 2,
+      "ownedProcessGroup": 77562,
+      "stopReason": "download-prompt",
+      "elapsedSeconds": 0.105,
+      "exitCode": 0
+    },
+    "caught": "RuntimeError('Owned command stopped: download-prompt')",
+    "childAliveAfterReturn": true,
+    "ownedGroupAliveAfterReturn": true,
+    "log": "Downloading https://controlled.invalid\n",
+    "cleanup": "Finally signals only this controlled newly created group; no external PID/group."
+  },
+  "unchangedOldOutput": {
+    "runnerExit": 0,
+    "runnerSuccess": true,
+    "oldOutputIdentityUnchanged": true,
+    "before": {
+      "inode": 28251183,
+      "mtimeNs": 1793765450536855426,
+      "sha256": "24f6903094f97006b904889f94fe0469ba7171c2d93d68ecaa95a0a05a8e88c6"
+    },
+    "after": {
+      "inode": 28251183,
+      "mtimeNs": 1793765450536855426,
+      "sha256": "24f6903094f97006b904889f94fe0469ba7171c2d93d68ecaa95a0a05a8e88c6"
+    },
+    "result": {
+      "schema": 1,
+      "startedAt": "2026-11-04T04:10:50.539425+00:00",
+      "stage": "mac",
+      "expectedHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "productAggregate": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "sourceAggregate": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "freezeSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "attempt": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-independent-stale-d9n9s23r/docs/verification/unified-candidate06/controlled/mac-old-output",
+      "nonce": "143b592ee7a0482f814df4405c43f5f1",
+      "command": [
+        "pnpm",
+        "mac:build"
+      ],
+      "exitCode": 0,
+      "explicitEnvironmentOverrides": {},
+      "diskFreeBefore": 5173854208,
+      "minimumFreeBytes": 5173846016,
+      "deadlineSeconds": 2,
+      "ownedProcessGroup": 77564,
+      "elapsedSeconds": 0.02,
+      "inputComparisons": {
+        "authorization": true,
+        "aggregate": true,
+        "effectiveBuildEnvironment": true,
+        "supplementalInputs": true
+      },
+      "supplementalInputsUnchanged": true,
+      "buildOutputIdentity": {
+        "path": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-independent-stale-d9n9s23r/src-tauri/target/release/bundle/macos/备忘录.app",
+        "bundleFiles": [
+          {
+            "path": "Contents/MacOS/notes-clone",
+            "bytes": 45,
+            "sha256": "24f6903094f97006b904889f94fe0469ba7171c2d93d68ecaa95a0a05a8e88c6",
+            "type": "file",
+            "mode": 420
+          }
+        ]
+      },
+      "dist": [
+        {
+          "path": "index.html",
+          "bytes": 19,
+          "sha256": "cf7c36fe81181a360b23576e76d85314333347c865190a1f480e0d20b35b2211",
+          "type": "file",
+          "mode": 420
+        }
+      ],
+      "endedAt": "2026-11-04T04:10:50.562990+00:00"
+    },
+    "calls": [
+      {
+        "requestedButNotExecuted": [
+          "pnpm",
+          "mac:build"
+        ],
+        "actual": [
+          "/Library/Developer/CommandLineTools/usr/bin/python3",
+          "-B",
+          "-c",
+          "print(\"CONTROLLED NO-OP: no build or output writes\")"
+        ]
+      }
+    ],
+    "scope": "Authorization/capture/lock patched to isolate artifact provenance. Real monitor runs only a fresh Python no-op. No actual pnpm/build/signing/cache."
+  }
+}
