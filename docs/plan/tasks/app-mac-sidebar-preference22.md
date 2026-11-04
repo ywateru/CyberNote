@@ -46,3 +46,7 @@ Mac main 首次可信workspace
 真实生产App和桥接接入，不能只测辅助默认值。覆盖首次missing/false/true/非法值及加载前零写；真实DOM/工具栏投影；四入口一致；快速交错最后值、旧完成/拒绝/无value/maintenanceError/重读不确定、重复hydrate不回滚、只改一个键；独立窗/Android和窄宽切换不写；原20/16/17产品身份保持。用隔离合成存储经过生产Rust settings路径写false→新Store读false、true同测，保留旧主题/栏宽/selection/未知键；不读用户DB，不用preview localStorage替代Rust。可复用字节身份匹配的现成只读工具，否则在任务隔离输出/临时target离线编译，禁止写共享target/cache或下载。
 
 运行一次typecheck与必要相关检查，保存准确产品SHA、原失败/修后证据、实现接入链与退出边界说明；SOURCE-READY STOP后root固定提交，不同作者独审。禁止平台正式包/GUI/ADB/用户DB/音频导出/Git。通过后root固定Mac11准确源/授权/冻结，独立核包，再Computer Use记录exeSHA/PID和实际两次正常重启、两条恢复入口/菜单文字及合成正文/有限计数。源码/隔离通过不代替准确包实际验收，也不授完整侧栏或像素PASS。
+
+## 退出边界决定（开发前只读评估后）
+
+作者只读锁定依赖与宿主确认：muda0.20.0 Mac CloseWindow走performClose:，Quit走terminate:；现App onCloseRequested只保护窗口关闭，Builder.run无新的退出握手。root决定本项不扩展宿主退出协议，保持所列最小路径。新增持久化承诺是准确已确认偏好跨正常退出；窗口close的pending/dirty必须等待。保留立即CmdQ并非此guard保护的源码边界，准确Mac11单列快速实际观察，若出现丢失再以最小后续修复处理并保持此场景partial；不通过长等待将其混入已确认正常重启结论。这不构成已验收或保证任意未交付事件在进程退出前落盘。

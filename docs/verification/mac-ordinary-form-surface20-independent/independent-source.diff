@@ -1,0 +1,49 @@
+--- baseline
++++ candidate
+@@ -503,6 +503,9 @@
+ .smart-mac .smart-form.smart-ordinary {
+   width: min(400px, calc(100% - 40px));
+   padding: 19px;
++  background: var(--paper, #fff);
++  border-color: transparent;
++  border-radius: 26px;
+ }
+ .smart-mac .smart-ordinary h2 {
+   font-size: 13px;
+@@ -527,6 +530,13 @@
+ .smart-mac .smart-ordinary .smart-make input {
+   width: 16px;
+   height: 16px;
++}
++.smart-mac .smart-ordinary .smart-make input:not(:checked) {
++  appearance: none;
++  -webkit-appearance: none;
++  background: var(--ordinary-checkbox, #e6e6e6);
++  border: 0;
++  border-radius: 5px;
+ }
+ .smart-mac .smart-ordinary .smart-make p {
+   margin: 2px 0 0 20px;
+@@ -540,4 +550,21 @@
+ }
+ .smart-mac .smart-ordinary footer button {
+   height: 24px;
+-}
++  background: var(--ordinary-button, #ececec);
++  border-color: transparent;
++}
++.smart-mac .smart-ordinary footer button.smart-primary {
++  background: #fdb82a;
++}
++.dark .smart-mac .smart-ordinary {
++  --ordinary-button: #3a3a3c;
++  --ordinary-checkbox: #48484a;
++  --surface: #2c2c2e;
++  color: var(--ink);
++}
++.dark .smart-mac .smart-ordinary footer button:not(.smart-primary) {
++  color: inherit;
++}
++.dark .smart-mac .smart-ordinary .smart-make p {
++  color: #aaa;
++}

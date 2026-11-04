@@ -1,0 +1,7 @@
+{
+  "scriptSHA256": "54ce29bf403797d1e7a8d43052dc62118e8e5c05013d3e880cb6d96bb8435e7f",
+  "exitCode": 1,
+  "exception": "StopIteration at bright230 contour scan",
+  "cause": "Independent script incorrectly attempted bright light-surface contour threshold against dark form. Dark form has no qualifying light surface. Not a product failure.",
+  "correction": "Exclude dark from light-reference color/contour comparison; retain its geometry and computed contrast checks."
+}

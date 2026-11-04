@@ -1,0 +1,30 @@
+{
+  "status": "pass",
+  "stop": true,
+  "reviewer": "verify_app; independent from develop_app",
+  "candidateCommitSuppliedByParent": "dbb594a8e7e807e211aac2ce36156c935162f2c1",
+  "gitObjectRead": false,
+  "sourceSHA256": "f18dfeb0b6c9d52d66b4d4ad78016bd234c2763b38ae9ba0f09a4b7410881186",
+  "authorIndexSHA256": "14170404c6be081d4a2f2653d550acf7d8c28c5b7ec23f7dc3d36de4e51afd87",
+  "authorIndexFilesVerified": 67,
+  "protectedInputs": 84,
+  "productionUICaseCount": 10,
+  "measurementsStatus": "pass",
+  "typecheckExitCode": 0,
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "initialFailuresPreserved": [
+    "run-attempt01-launch-failure.json",
+    "measurement-attempt01-failure.json",
+    "measurement-attempt01-script.py"
+  ],
+  "visualInspection": [
+    "independent-comparison.png",
+    "run-attempt02/candidate-dark-form.png"
+  ],
+  "resources": "Production fixture finally closes browser/Vite. All three WK subprocesses returned exit0. No GUI or platform build. Own caches retained, excluded from index.",
+  "limits": "Source/offscreen scoped pass only; complete pixels, installed Mac11, native active focus/selection and original dark parity remain open."
+}

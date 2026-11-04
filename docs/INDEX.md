@@ -47,6 +47,7 @@
 - [双端文件夹修复有限运行根接收18](verification/folder-fixes-runtime18-root-acceptance.md)
 - [Mac普通表单剩余像素差异研究19](verification/mac-ordinary-form-pixels19-research/README.md)
 - [普通Mac表单表面、角部和未选中框校准20](plan/tasks/app-mac-ordinary-form-surface20.md)
+- [普通Mac表单20源码与离屏独立审查](plan/reviews/app-mac-ordinary-form-surface20.md)
 - [原版侧栏隐藏偏好正常重启补证21](research/mac-sidebar-restart21/README.md)
 - [Mac主窗侧栏偏好最小接入准备22](research/mac-sidebar-preference22-readiness/analysis.md)
 - [Mac侧栏显隐偏好本地恢复修复22](plan/tasks/app-mac-sidebar-preference22.md)
