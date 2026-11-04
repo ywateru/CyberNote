@@ -29,3 +29,9 @@ depends-on: [qa-android-paper-current06-02]
 开发提交8463ed896847f891fd4fd5579affb253a11d681b仅改变App.tsx手机数组与作者自有验证证据。不同作者审查于4d86a7d封存，结论SOURCE-READY仅顺序范围：独立钉住准确App和完整CSS，真实App/Editor一次12步完成，实际行序符合原帧，七项ID/标签与预览保存重开、取消、Escape/背景处理器、桌面分支有限结果支持。
 
 首次点击已选plain后的PM选区3..8→1..1在开发旧/新控制和独立候选中均出现，明确allSelectionPass=false，未修也未追认为全部关闭路径通过。此任务仍in-progress，等待新APK准确身份与保数据升级后实际页面验收；原安装06顺序失败证据保持。
+
+## 准确Android运行补证
+
+recovery02来自347660b（产品字节同62244d4），APK177,445,114B、SHA843e0c01aad154872851664ced574e1fa07544d8fcf874022698c37a3ee160f8。新离线构建/收集通过，独立881断言产物核查通过；旧paper-build02缺标记失败不改写。不同代理实际install -r保留安装身份，在同QA-PAPER-INDEPENDENT-20261103C核原正文、可见粗体、日期23:45与grid-large选中保持。7卡顺序符合本任务原帧契约，取消返回、重开仍grid-large，最后取消回原文、键盘隐藏。
+
+证据在 `verification/android-paper-recovery02-runtime-01/` 及 `verification/unified-candidate06/android-paper-recovery-independent02/`。未点击纸张卡，未改样式，不声称本包七态保存或PM选区JSON已验；同状态plain边框、字体和像素对齐仍open。有限顺序缺陷已由真实安装版关闭，父项继续partial。

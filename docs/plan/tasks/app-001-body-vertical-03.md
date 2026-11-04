@@ -22,3 +22,9 @@ depends-on: [app-001-body-typography-01, ref-mac-punctuation-controls-03]
 pnpm build和必要相关检查，不扩展无关全套。不同作者独审后root指定准确commit、独占target离线Mac build04，保全旧包及新包身份；root CUA切换准确包、两份原版同文截图、同画布、重复/空行/长段、输入与侧栏回归。若结果更差或断行改变则继续修正，不标整体通过。
 
 开发代理不GUI/ADB、不平台build、不触共享target/cache，不下载升级；输出前>=2GiB。只stage本任务自有文件，不包含其他代理研究与root任务材料。独审及新包运行以后再关闭子项。
+
+## 2026-11-04 实际候选结果
+
+源码b2f3570经不同作者72项真实编辑器/完整CSS独审通过，生产只新增8行CSS。准确62244d4的Mac04包已构建、独核929断言并实际运行，exe SHA db921823…；小窗09/11/12与Fill24/25/26分别保留。完整画布的20个Ag中文短行在三个图像阈值下与原版逐行顶底对齐，两空段跨距102，最后Ag top921；长段起点相对旧clone改善6图像像素，4行wrap仍55/55/55/42。并非与原版长段wrap相同；外窗相同但正文宽不同。
+
+标点语料t160/200十条非空行顶底对齐；t120连续标点仍+1。type的Latin首墨位置在t160/200仍+1；标点行宽度与分栏位置差异未修。此CSS可保留为有限纵向改善，完整任务仍partial。直接键入中文在克隆与原版都失败，Return表现不同未归因；已提交粘贴与一次正常冷启可见文字恢复不替代IME通过。最新包侧栏两条恢复路径保持。证据见 `verification/mac-body-vertical-runtime-03/README.md` 和 `research/mac-body-vertical-candidate04-runtime-03/README.md`。

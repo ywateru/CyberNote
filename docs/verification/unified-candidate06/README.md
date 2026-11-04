@@ -19,3 +19,11 @@ Mac原始包strict签名exit1（原始错误保留），sealed派生包既有str
 侧栏动态菜单补丁已独审并合入准确b5063fd，独立构建于[mac-menu-build02](mac-menu-build02/README.md)，为上一轮侧栏验收包；上表原Mac06产物继续保留自身准确来源。其Mac exe731695ca…，菜单和直接恢复实际有限验收见../candidate06-mac-sidebar-menu-runtime-02/。Android06已完成保数据升级、ASCII标签输入保存/选择/强停冷启与旧未知日期录音卡有限验收，见../candidate06-android-runtime-01/及其独立复核；仍不扩张为全部标签/新音频有效收音/像素通过。
 
 当前Mac实际运行包更新为准确a90e55f的[正文候选build03](mac-body-build03/README.md)，exe b3c9013f…，保留侧栏修复，新增普通段落尺寸实验。实际输入、正常退出后手动重选完整正文、左上直接恢复与动态菜单再次有限通过，见../mac-body-typography-runtime-01/。同文局部分析支持字号改善，标点与前几行垂直起点仍不同；该包不是pixel PASS。Android未因本次Mac实验重建，仍以表内f18来源为准。
+
+## 2026-11-04 后续包
+
+上段为此前body03运行状态。当前Mac包为源码62244d4的[body-build04](mac-body-build04/README.md)，sealed exe `db92182330f81f0adfef38d5a9a103e705f166c27c3ff5d3578a8a0e0df85a8e`，独立929断言产物核查通过。新增的普通全p文档纵向CSS已实际运行；最新两条侧栏恢复路径、直接输入失败控制、正常退出与冷启可见正文恢复见[实际窗口记录](../mac-body-vertical-runtime-03/README.md)。完整输入/排版与像素目标仍未通过。
+
+Android纸张顺序新包来自源码347660b（与62244d4产品字节相同），见[recovery02](android-paper-recovery02/README.md)。原paper-build02命令虽exit0，但runner缺少本次离线标记而失败，未收集为ready或安装。recovery02保留旧结果与旧APK，用新复制工具关闭配置缓存，实际重新构建后本次离线标记出现、收集ready=true；不得回写旧失败为成功。其APK SHA843e0c01…与旧失败包字节相同，来源仍须由新attempt隔离/新生成记录证明。运行验收由不同代理另行保存，ready不代表已安装或像素通过。
+
+recovery02随后已由不同代理完成[881项产物核查](android-paper-recovery-independent02/README.md)及[保数据实际升级与纸张顺序有限验收](../android-paper-recovery02-runtime-01/README.md)：设备APK实算843e0c01…，同QA正文、可见粗体、原日期和grid-large保留，7卡行序同参考，取消与重开保持；最后取消回原文。未选择纸张卡，不扩张为新包七态保存、PM选区JSON或像素通过。Mac04的[运行叙述独立核查](../../plan/reviews/app-001-body-vertical-runtime-03.md)亦支持保存的侧栏恢复/可见正文记录，仍保留输入与像素限制。

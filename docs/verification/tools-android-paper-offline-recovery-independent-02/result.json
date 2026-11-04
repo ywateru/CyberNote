@@ -1,0 +1,346 @@
+{
+  "reviewedCommit": "347660b352f6becb1f52a9c79fdf5372b50f1f12",
+  "pass": true,
+  "scope": "Independent Python-only; no freeze/version/build/device/signing/cache/target access or dependency acquisition.",
+  "sourcesBefore": [
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/README.md",
+      "bytes": 5160,
+      "sha256": "50c83245d3bfdd152140c66788dd16bb18f4ced452c897065fc2b1a76e6d141e"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/check-recovery.py",
+      "bytes": 4667,
+      "sha256": "e927a828edb47e2fb2247744bc63ba333866d52ee686e3cfaf8d8b3faf944a95"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/collect-outputs.py",
+      "bytes": 12849,
+      "sha256": "41937111248283f7c9c35d7723773c1ce99dc2703ad328d5b7b35d5175db3b3b"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/common.py",
+      "bytes": 19902,
+      "sha256": "11dfce693463a5ffa9272199d5b1a8c1241a10c6cac1444b17a91f7a1a56bb54"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/evidence/controlled-check.json",
+      "bytes": 2548,
+      "sha256": "16ce368a3d32c7a995eca4d09cc1a3e3ee1c7873d509cca0d5a5b3a126577ab0"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/evidence/official-reference.json",
+      "bytes": 851,
+      "sha256": "5416fb5b3dd7e9a8a69e25c35f0c7eebad8aacb68c2dc739ca8573b8aaa9d201"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/evidence/reference-inputs.json",
+      "bytes": 7191,
+      "sha256": "12e0040e258eb0ed8672296262fc5c8d4c02993f1aa94ff57ece7f1cbf01cd0f"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/evidence/tool-diff.patch",
+      "bytes": 846,
+      "sha256": "a104dfecdac532b9af2dbb32908deba533075fa44bd7f323ba7424952556410b"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/evidence/tool-manifest.json",
+      "bytes": 1675,
+      "sha256": "166567434a43c0ce36039b347782d1b55b3d417813910f35b97344eb396a9899"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/freeze-inputs.py",
+      "bytes": 1362,
+      "sha256": "01ed7127603ff6637f78044c45577827967e5e7c22cd0875ec9dd54008dbf683"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/run-build.py",
+      "bytes": 10135,
+      "sha256": "7b1ff0d7cafa24e56220632c30a2ccb3d44c4b9ecfdffad74460ba82604b1abf"
+    }
+  ],
+  "exactCommitFilesMatch": 11,
+  "copies": [
+    {
+      "file": "common.py",
+      "oldSha256": "e2beeea6317faa01eb4330cd86fd107548c32400f492f0907306fd709574654d",
+      "newSha256": "11dfce693463a5ffa9272199d5b1a8c1241a10c6cac1444b17a91f7a1a56bb54",
+      "unchangedOtherThanSpecifiedAndroidString": true
+    },
+    {
+      "file": "freeze-inputs.py",
+      "oldSha256": "01ed7127603ff6637f78044c45577827967e5e7c22cd0875ec9dd54008dbf683",
+      "newSha256": "01ed7127603ff6637f78044c45577827967e5e7c22cd0875ec9dd54008dbf683",
+      "unchangedOtherThanSpecifiedAndroidString": true
+    },
+    {
+      "file": "run-build.py",
+      "oldSha256": "7b1ff0d7cafa24e56220632c30a2ccb3d44c4b9ecfdffad74460ba82604b1abf",
+      "newSha256": "7b1ff0d7cafa24e56220632c30a2ccb3d44c4b9ecfdffad74460ba82604b1abf",
+      "unchangedOtherThanSpecifiedAndroidString": true
+    },
+    {
+      "file": "collect-outputs.py",
+      "oldSha256": "41937111248283f7c9c35d7723773c1ce99dc2703ad328d5b7b35d5175db3b3b",
+      "newSha256": "41937111248283f7c9c35d7723773c1ce99dc2703ad328d5b7b35d5175db3b3b",
+      "unchangedOtherThanSpecifiedAndroidString": true
+    }
+  ],
+  "pythonSyntaxFiles": 5,
+  "effectiveEnvironment": {
+    "oldAndroid": {
+      "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+      "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+      "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+      "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+      "CARGO_NET_OFFLINE": "true",
+      "CARGO_BUILD_JOBS": "2",
+      "GRADLE_RO_DEP_CACHE": "/private/tmp/notes-lifecycle-cache-overlay-01/overlay-ro",
+      "GRADLE_OPTS": "-Dorg.gradle.daemon=false"
+    },
+    "newAndroid": {
+      "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+      "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+      "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+      "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+      "CARGO_NET_OFFLINE": "true",
+      "CARGO_BUILD_JOBS": "2",
+      "GRADLE_RO_DEP_CACHE": "/private/tmp/notes-lifecycle-cache-overlay-01/overlay-ro",
+      "GRADLE_OPTS": "-Dorg.gradle.daemon=false -Dorg.gradle.configuration-cache=false"
+    },
+    "macEqual": true,
+    "mac": {
+      "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+      "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+      "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+      "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+      "CARGO_NET_OFFLINE": "true",
+      "CARGO_BUILD_JOBS": "2"
+    },
+    "presenceChecksStubbed": true,
+    "doesNotProveAvailabilityOrGradleRuntime": true
+  },
+  "captureToolsExpression": {
+    "actualAstExpressionEvaluated": true,
+    "tools": [
+      {
+        "path": "check-recovery.py",
+        "bytes": 4667,
+        "sha256": "e927a828edb47e2fb2247744bc63ba333866d52ee686e3cfaf8d8b3faf944a95"
+      },
+      {
+        "path": "collect-outputs.py",
+        "bytes": 12849,
+        "sha256": "41937111248283f7c9c35d7723773c1ce99dc2703ad328d5b7b35d5175db3b3b"
+      },
+      {
+        "path": "common.py",
+        "bytes": 19902,
+        "sha256": "11dfce693463a5ffa9272199d5b1a8c1241a10c6cac1444b17a91f7a1a56bb54"
+      },
+      {
+        "path": "freeze-inputs.py",
+        "bytes": 1362,
+        "sha256": "01ed7127603ff6637f78044c45577827967e5e7c22cd0875ec9dd54008dbf683"
+      },
+      {
+        "path": "run-build.py",
+        "bytes": 10135,
+        "sha256": "7b1ff0d7cafa24e56220632c30a2ccb3d44c4b9ecfdffad74460ba82604b1abf"
+      }
+    ],
+    "includesAllFivePythonFiles": true,
+    "fullCaptureNotCalled": true
+  },
+  "refusalChecks": {
+    "successPredicateNegativeCases": [
+      {
+        "field": "error",
+        "value": true
+      },
+      {
+        "field": "error",
+        "value": false
+      },
+      {
+        "field": "error",
+        "value": null
+      },
+      {
+        "field": "invalidated",
+        "value": true
+      },
+      {
+        "field": "invalidated",
+        "value": false
+      },
+      {
+        "field": "invalidated",
+        "value": null
+      },
+      {
+        "field": "offlineMarkerMissing",
+        "value": true
+      },
+      {
+        "field": "offlineMarkerMissing",
+        "value": false
+      },
+      {
+        "field": "offlineMarkerMissing",
+        "value": null
+      },
+      {
+        "field": "cleanupError",
+        "value": true
+      },
+      {
+        "field": "cleanupError",
+        "value": false
+      },
+      {
+        "field": "cleanupError",
+        "value": null
+      },
+      {
+        "field": "stopReason",
+        "value": true
+      },
+      {
+        "field": "stopReason",
+        "value": false
+      },
+      {
+        "field": "stopReason",
+        "value": null
+      },
+      {
+        "field": "groupCleanupError",
+        "value": true
+      },
+      {
+        "field": "groupCleanupError",
+        "value": false
+      },
+      {
+        "field": "groupCleanupError",
+        "value": null
+      },
+      {
+        "field": "exitCode",
+        "value": 1
+      },
+      {
+        "field": "ownedGroupStopped",
+        "value": false
+      },
+      {
+        "field": "generatedOutputs",
+        "value": []
+      },
+      {
+        "field": "supplementalInputsUnchanged",
+        "value": false
+      },
+      {
+        "field": "inputComparisons",
+        "value": {}
+      },
+      {
+        "field": "inputComparisons",
+        "value": {
+          "files": false
+        }
+      },
+      {
+        "missing": "exitCode"
+      },
+      {
+        "missing": "ownedGroupStopped"
+      },
+      {
+        "missing": "generatedOutputs"
+      },
+      {
+        "missing": "supplementalInputsUnchanged"
+      },
+      {
+        "missing": "inputComparisons"
+      }
+    ],
+    "count": 29,
+    "collectorRejectsActualHistoricalFailureBeforePathRead": true,
+    "historicalExitCode": 0,
+    "historicalOfflineMarkerMissing": true
+  },
+  "historicalReferenceFilesUnchanged": 33,
+  "product": {
+    "files": 238,
+    "aggregate": "560f9826b44320f184493f8f522a2cfefaf78a7e4e7c1faad8fa001e1190583d",
+    "allFrozenProductBytesUnchanged": true
+  },
+  "developerManifest": {
+    "files": 10,
+    "selfExcluded": true,
+    "aggregate": "ada77824ec6e810432b51ad71a916b2238c685c9ec290d57289ebd60dbe76b41",
+    "matches": true
+  },
+  "sourcesAfter": [
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/README.md",
+      "bytes": 5160,
+      "sha256": "50c83245d3bfdd152140c66788dd16bb18f4ced452c897065fc2b1a76e6d141e"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/check-recovery.py",
+      "bytes": 4667,
+      "sha256": "e927a828edb47e2fb2247744bc63ba333866d52ee686e3cfaf8d8b3faf944a95"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/collect-outputs.py",
+      "bytes": 12849,
+      "sha256": "41937111248283f7c9c35d7723773c1ce99dc2703ad328d5b7b35d5175db3b3b"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/common.py",
+      "bytes": 19902,
+      "sha256": "11dfce693463a5ffa9272199d5b1a8c1241a10c6cac1444b17a91f7a1a56bb54"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/evidence/controlled-check.json",
+      "bytes": 2548,
+      "sha256": "16ce368a3d32c7a995eca4d09cc1a3e3ee1c7873d509cca0d5a5b3a126577ab0"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/evidence/official-reference.json",
+      "bytes": 851,
+      "sha256": "5416fb5b3dd7e9a8a69e25c35f0c7eebad8aacb68c2dc739ca8573b8aaa9d201"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/evidence/reference-inputs.json",
+      "bytes": 7191,
+      "sha256": "12e0040e258eb0ed8672296262fc5c8d4c02993f1aa94ff57ece7f1cbf01cd0f"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/evidence/tool-diff.patch",
+      "bytes": 846,
+      "sha256": "a104dfecdac532b9af2dbb32908deba533075fa44bd7f323ba7424952556410b"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/evidence/tool-manifest.json",
+      "bytes": 1675,
+      "sha256": "166567434a43c0ce36039b347782d1b55b3d417813910f35b97344eb396a9899"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/freeze-inputs.py",
+      "bytes": 1362,
+      "sha256": "01ed7127603ff6637f78044c45577827967e5e7c22cd0875ec9dd54008dbf683"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/android-paper-recovery-preparation02/run-build.py",
+      "bytes": 10135,
+      "sha256": "7b1ff0d7cafa24e56220632c30a2ccb3d44c4b9ecfdffad74460ba82604b1abf"
+    }
+  ],
+  "reviewedSourcesUnchanged": true
+}

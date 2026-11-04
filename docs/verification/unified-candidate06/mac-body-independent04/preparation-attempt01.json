@@ -1,0 +1,8 @@
+{
+  "recordedAt": "2026-11-04T08:41:57.634993+00:00",
+  "phase": "Verifier preparation only; verifier never executed",
+  "exitCode": 1,
+  "stdout": "Traceback (most recent call last):\n  File \"<stdin>\", line 25, in <module>\nAssertionError: mac-body-build03\n",
+  "cause": "Earlier generic body-build03 replacement consumed the later mac-body-build03 replacement key. The assertion occurred before writing verify.py or adaptation.json.",
+  "correction": "Use exact candidate06 body-build03 prose substitution separately from directory substitutions; preserve all check assertions."
+}

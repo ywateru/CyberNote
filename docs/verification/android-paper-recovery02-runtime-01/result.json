@@ -1,0 +1,226 @@
+{
+  "at": "2026-11-04T09:10:11.624573+00:00",
+  "conclusion": "PASS limited accurate-APK retain-data upgrade and QA paper order/cancel/reopen; full selection and pixels remain partial",
+  "sourceHead": "347660b352f6becb1f52a9c79fdf5372b50f1f12",
+  "independentArtifactReview": {
+    "path": "docs/verification/unified-candidate06/android-paper-recovery-independent02/result.json",
+    "bytes": 115384,
+    "sha256": "4a8d5163efd64d4cae1d30d915fe651e1179973d38c25955be5330f610ccc2ce"
+  },
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "beforeInstalledApk": {
+    "path": "/data/app/~~eb5P2bS7ZSfexzMHy-g4uA==/com.local.notesclone-zgT9fwv3c8LKq4bjcHFRQg==/base.apk",
+    "bytes": 177445114,
+    "sha256": "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4"
+  },
+  "afterInstalledApk": {
+    "path": "/data/app/~~8-gB99N_rfTWC29kKlqBbg==/com.local.notesclone-GpxZ00-vaYJ_FE_7Posouw==/base.apk",
+    "bytes": 177445114,
+    "sha256": "843e0c01aad154872851664ced574e1fa07544d8fcf874022698c37a3ee160f8"
+  },
+  "beforePackageFields": {
+    "userId": "10169",
+    "firstInstallTime": "2026-11-03 22:09:17",
+    "lastUpdateTime": "2026-11-04 13:02:44"
+  },
+  "afterPackageFields": {
+    "userId": "10169",
+    "firstInstallTime": "2026-11-03 22:09:17",
+    "lastUpdateTime": "2026-11-04 17:02:35"
+  },
+  "installEvent": {
+    "at": "2026-11-04T09:02:35.868265+00:00",
+    "args": [
+      "install",
+      "-r",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/android-paper-recovery02/android-attempt01/android-original.apk"
+    ],
+    "exitCode": 0,
+    "stdout": "Performing Streamed Install\nSuccess\n",
+    "stderr": ""
+  },
+  "noteTitle": "QA-PAPER-INDEPENDENT-20261103C",
+  "visibleBody": "Alpha Beta Gamma; Beta visibly bold",
+  "visibleNoteDateBeforeAndAfter": "2026年11月3日23:45",
+  "visualObservations": {
+    "preUpgradeGridLargeSelected": true,
+    "postUpgradeGridLargeSelected": true,
+    "postUpgradeRows": [
+      [
+        "plain"
+      ],
+      [
+        "lines-small",
+        "lines-medium"
+      ],
+      [
+        "lines-large",
+        "grid-small"
+      ],
+      [
+        "grid-medium",
+        "grid-large"
+      ]
+    ],
+    "sevenCardsVisibleWithoutKeyboard": true,
+    "cancelReturnsSameVisibleNote": true,
+    "reopenRetainsGridLarge": true,
+    "finalCancelReturnsSameVisibleNote": true,
+    "paperCardsClicked": false,
+    "plainSelected": false,
+    "paperStyleWriteRequested": false
+  },
+  "finalState": "Original QA note viewing state, keyboard hidden, PID18341; grid-large retained at last reopened paper page",
+  "recordCount": 17,
+  "originalPngs": [
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/01-before-note.png",
+      "bytes": 77656,
+      "sha256": "13fa8bdef24fd37a91aa1051a002cce93f048ed19ef55144fbfa29a843966dfa",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "16712"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/02-before-more.png",
+      "bytes": 132502,
+      "sha256": "e28f1bd3487b88a3d7c0796dd285c89e969a4c563e1210d56ee28beeb4f958d1",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "16712"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/03-before-grid-large.png",
+      "bytes": 71155,
+      "sha256": "0061b74f1468a31993342cac9e0111f75c485243797f4792d6653ad5338ca101",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "16712"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/04-before-cancel.png",
+      "bytes": 78229,
+      "sha256": "d109ebe4f3ef9afc8d4e9204d1711cba588ca35adcd40848c55ba65915df52ad",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "16712"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/08-after-launch.png",
+      "bytes": 102335,
+      "sha256": "b6592df1e24b940656971f21ebe07eb8753c7105db443ede1f8d3054c877ac59",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "18341"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/09-after-fixed-query.png",
+      "bytes": 132188,
+      "sha256": "9f3682753cb7d47196ecfa53f1ee322c58f2849c37090ad21caa87e5c760e128",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "18341"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/10-after-query-settled.png",
+      "bytes": 132155,
+      "sha256": "920e0ccf4c62399c7600ab5b5d9edb8bb0594fe35e2db73bcc6f846b9a241d3d",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "18341"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/11-after-notes-page.png",
+      "bytes": 215588,
+      "sha256": "00ec0a5335e8f10da6fe4c8f0880dd6931cce999b044f6439df5da9c4522bcf3",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "18341"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/12-upgraded-qa-note.png",
+      "bytes": 80944,
+      "sha256": "11ea6fa417fdaeb1a6e6f6fd607206da6fd7a145ebf781904e81aa740b73a860",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "18341"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/13-upgraded-paper-grid-large.png",
+      "bytes": 73478,
+      "sha256": "943cb49a8912d44f3aa0727c83a38899bd4370656e4a46821d3169550c8fb242",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "18341"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/14-upgraded-cancel-return.png",
+      "bytes": 80638,
+      "sha256": "5056cef655e1811df3ab97a16f5b186ec019334846160ed088276f5444b4b30d",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "18341"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/15-reopened-grid-large.png",
+      "bytes": 73060,
+      "sha256": "bf0de5414a72651a912928eb263d2c300e1c42eb948347df5d9b583e0e53400b",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "18341"
+    },
+    {
+      "path": "docs/verification/android-paper-recovery02-runtime-01/16-final-cancel-return.png",
+      "bytes": 81091,
+      "sha256": "d42463801a107c2c2738acddbe63430ea3e9766ce7a80e682c37abb3498327a5",
+      "dimensions": [
+        1080,
+        2280
+      ],
+      "pid": "18341"
+    }
+  ],
+  "referenceFrame": {
+    "path": "references/mobile/frames-2s/frame-044.png",
+    "bytes": 17032,
+    "sha256": "d4d51679c9be81ca39c18a326ba497028398b213e1e0e13ecbed316859af06f0"
+  },
+  "savedOriginalVideo": {
+    "path": "references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4",
+    "bytes": 8452211,
+    "sha256": "2bed50027479becf059cc32b68c361107a0c3f840f027f79933a4b99bc4e394d"
+  },
+  "limits": [
+    "Visual UI observations, no DOM/Editor/selection/JSON/revision/database assertions.",
+    "No paper choice/save/plain or Android Back/short-screen/IME/OCR/audio matrix exercised.",
+    "Reference224x480 compressed source with unknown DPR; no pixel parity or geometry certification.",
+    "Folder-page search showed suggestions despite typed query; used matching QA row on notes page; unrelated issue preserved, not fixed."
+  ],
+  "prohibitedActionsPerformed": false,
+  "deviceReleased": true
+}

@@ -1,0 +1,20 @@
+{
+  "checkedOn": "2026-11-04",
+  "currentDocsDisplayedVersion": "9.8.2",
+  "historicalDeveloperDisplayedVersionClaim": "9.6.1, retained as historical claim; not independently confirmed",
+  "sources": [
+    {
+      "url": "https://docs.gradle.org/current/userguide/configuration_cache_enabling.html",
+      "finding": "Configuration cache can be disabled with --no-configuration-cache; org.gradle.configuration-cache is the configuration switch."
+    },
+    {
+      "url": "https://docs.gradle.org/current/userguide/build_environment.html",
+      "finding": "System properties using -D have priority over Gradle property files; GRADLE_OPTS supplies Gradle client JVM arguments. Do not infer all daemon JVM options propagate."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/gradle/gradle/v9.6.1/platforms/core-runtime/launcher/src/main/java/org/gradle/launcher/cli/converter/LayoutToPropertiesConverter.java",
+      "finding": "Pinned v9.6.1 source defaultProperties loads property files then current process JVM system properties. Requested -D switch overrides project gradle.properties true. No actual launcher/Gradle build run."
+    }
+  ],
+  "limits": "Official docs/source are implementation evidence only, no authorization. Runtime OFFLINE marker remains unproven until separately authorized recovery."
+}

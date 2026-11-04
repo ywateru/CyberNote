@@ -1,0 +1,35 @@
+{
+  "source": "docs/verification/unified-candidate06/android-independent01/verify.py",
+  "sourceSHA256": "aa8e5514a1711b33e8746c5f2cdc4b4c27384cdc6f4e4a8d623ccafd8f530347",
+  "replacements": {
+    "android-independent01": "android-paper-recovery-independent02",
+    "android-build01": "android-paper-recovery02",
+    "f18da0ccf8bb6e131e80e22b9752f0df2725245d": "347660b352f6becb1f52a9c79fdf5372b50f1f12",
+    "ac195fb61c62be15ccc653716ad9691f5d8cdaf6bdacce7dc5f82e3f54bc6d1e": "0ceacbb6463f459cd6e56bfcda5a1d83036092d632293fee4d6c6c983c904752",
+    "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4": "843e0c01aad154872851664ced574e1fa07544d8fcf874022698c37a3ee160f8",
+    "2fe9158f4351c702966eab89934a3202e8bfc4ffd7843a7134af66dedf29a856": "4be3619edfc568c8780b7154d233275c3f44bb1bd2747258d6cef5b7f135eaa6",
+    "475243da98ca206e52a4868df0cbbfd7b135da606bff6875932a34bc4cd55e64": "0c4314c793d6776450136cbac98bb408d59014194854e6e3e12cb6a5b8ffd5f1",
+    "len(current) == 301": "len(current) == 302",
+    "301 complete inputs aggregate": "302 complete inputs aggregate",
+    "'inputFiles': 301": "'inputFiles': 302",
+    "'docs/verification/unified-candidate06/preparation'": "'docs/verification/unified-candidate06/android-paper-recovery-preparation02'",
+    "RUN / 'root-freeze-review.json'": "RUN / 'freeze-summary.json'"
+  },
+  "occurrences": {
+    "android-independent01": 1,
+    "android-build01": 3,
+    "f18da0ccf8bb6e131e80e22b9752f0df2725245d": 1,
+    "ac195fb61c62be15ccc653716ad9691f5d8cdaf6bdacce7dc5f82e3f54bc6d1e": 1,
+    "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4": 1,
+    "2fe9158f4351c702966eab89934a3202e8bfc4ffd7843a7134af66dedf29a856": 1,
+    "475243da98ca206e52a4868df0cbbfd7b135da606bff6875932a34bc4cd55e64": 1,
+    "len(current) == 301": 1,
+    "301 complete inputs aggregate": 1,
+    "'inputFiles': 301": 1,
+    "'docs/verification/unified-candidate06/preparation'": 1,
+    "RUN / 'root-freeze-review.json'": 1
+  },
+  "addedAssertions": "\nsummary = load(RUN / 'freeze-summary.json')\ncheck('exact freeze summary linkage', summary['sourceHead'] == SOURCE and summary['productAggregate'] == f['productAggregate'] and summary['inputAggregate'] == f['aggregate'] and summary['freeze'] == {**ident(RUN / 'input-freeze.json'), 'path': str(RUN / 'input-freeze.json')})\ncheck('explicit expected aggregates', f['productAggregate'] == '560f9826b44320f184493f8f522a2cfefaf78a7e4e7c1faad8fa001e1190583d' and f['aggregate'] == '2131ac2abe616b6599b2f7c77665ec095874b2c37cbb2e8be2b5450e4dcffc3f')\n",
+  "outputSHA256": "6bfa5d04f5a2807d8ddfc63b7f4334d4e8ab724efb9ddb37845a688d75370d6f",
+  "scope": "Exact recovery paths/identities, 302 input count, recovery tool directory, actual freeze-summary with explicit linkage/aggregate checks. Existing APK/model/ABI/DER/log assertions retained."
+}

@@ -1,0 +1,108 @@
+{
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "at": "2026-11-04T09:07:26.696254+00:00",
+  "hostFreeBefore": 76291899392,
+  "spaceBefore": {
+    "hostFreeBytes": 76291899392,
+    "deviceDataDf": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 628864   5311068  11% /storage/emulated/0/Android/obb\n"
+  },
+  "spaceBeforePng": {
+    "hostFreeBytes": 76291883008,
+    "deviceDataDf": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 628864   5311068  11% /storage/emulated/0/Android/obb\n"
+  },
+  "png": {
+    "path": "15-reopened-grid-large.png",
+    "bytes": 73060,
+    "sha256": "bf0de5414a72651a912928eb263d2c300e1c42eb948347df5d9b583e0e53400b"
+  },
+  "pidof": "18341",
+  "status": "PASS",
+  "events": [
+    {
+      "at": "2026-11-04T09:07:26.723355+00:00",
+      "args": [
+        "get-state"
+      ],
+      "exitCode": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T09:07:26.744165+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 628864   5311068  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T09:07:27.262767+00:00",
+      "args": [
+        "shell",
+        "input",
+        "tap",
+        "1013",
+        "144"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T09:07:27.814947+00:00",
+      "args": [
+        "shell",
+        "input",
+        "tap",
+        "549",
+        "709"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T09:07:27.859856+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 628864   5311068  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T09:07:28.537922+00:00",
+      "args": [
+        "exec-out",
+        "screencap",
+        "-p"
+      ],
+      "exitCode": 0,
+      "stdout": {
+        "bytes": 73060,
+        "sha256": "bf0de5414a72651a912928eb263d2c300e1c42eb948347df5d9b583e0e53400b"
+      },
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T09:07:28.569435+00:00",
+      "args": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exitCode": 0,
+      "stdout": "18341\n",
+      "stderr": ""
+    }
+  ],
+  "hostFreeAfter": 76291751936
+}

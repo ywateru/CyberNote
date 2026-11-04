@@ -47,10 +47,10 @@
 | PARITY-001 修正差异 | pending，依赖顶部/媒体/本地功能/扫描接入 | 逐页几何、菜单、手势/动画、字体与材料校准；明确原图/叠图/差分和未知项 |
 | APP-005-UNIFIED-CANDIDATE06-01 双端候选与Mac侧栏补包 | built，双端有限运行已独核，整体partial | f18源Mac06/Android06已构建；Android06保数据升级、ASCII标签保存/筛选/强停冷启及旧未知日期录音卡有限通过（166记录断言）。Mac菜单包b5063fd/731695ca…的画廊与侧栏验收保持；当前运行正文包a90e55f/b3c9013f…另见下一行。不同来源逐包保留，不能追认为同一APK源码或全像素/全部新元数据设备验收 |
 | APP-001-BODY-TYPOGRAPHY-01 Mac普通正文尺寸 | in-progress，源码独审通过，build03/同文有限运行完成 | 仅Mac主窗顶层p实验13px，受控CSS排除Android/独立窗/结构块；a90e55f准确新包产物929项独核。PID88780→正常退出→89698后人工重选完整corpus、侧栏按钮/菜单回归通过。07↔03同画布JPEG前三行宽差+1/+2/+2、高度相同；标点+74宽差和首行提前4仍未修，保留实验继续校准，不判像素通过 |
-| APP-001-SIDEBAR-RESTORE-01 桌面文件夹恢复 | done（本次功能故障范围），整窗像素仍open | 新Mac菜单补包exe731695ca…实际列表工具栏/菜单、画廊浏览/展开及正常退出新PID冷启恢复通过，独立28项记录复核支持；隐藏后保留左上直接按钮，菜单动态文字同原版。JPEG非像素通过，连续窄窗/完整焦点与DB未全验 |
+| APP-001-SIDEBAR-RESTORE-01 桌面文件夹恢复 | done（本次功能故障范围），整窗像素仍open | 菜单补包实际列表工具栏/菜单、画廊与冷启通过；最新Mac04 exe db921823…再次实际两条恢复路径通过，QA正文/计数保持。隐藏后保留左上直接按钮、菜单动态文字同原版。JPEG非像素通过，连续窄窗/完整焦点与DB未全验 |
 | APP-001-SIDEBAR-MENU-LABEL-01 侧栏菜单状态文字 | done（主窗状态文案范围） | 源8bfeb43独审72ad237 SOURCE-READY；准确b5063fd新Mac实际可见“隐藏文件夹”/隐藏“显示文件夹”及菜单恢复、画廊与冷启通过。独立源码16/host/guard1与实际记录28有限通过；独立窗口真实焦点与整窗像素未认证 |
-| APP-001-MOBILE-PAPER-ORDER-02 手机纸张顺序 | in-progress，当前06真实顺序缺陷已确认 | android-paper-current06-02的准确已安装06截图显示line/grid交错，与保全录屏86秒原帧及既有Android契约不同。仅重排mobile选项，开发真实App检查中；旧七态可达不证明顺序，需独审、新APK保数据升级与同笔记复验 |
-| APP-001-BODY-VERTICAL-03 Mac普通段落纵向 | in-progress，候选尚未进入运行包 | 两组原版同文支持首行偏高及累积行距差。仅全顶层p守卫下17px行高/min-height与2px根padding候选，保持13px字号与所有标点规则。R=2仅参数情景，实际响应和长文/混合文档需新包复验 |
+| APP-001-MOBILE-PAPER-ORDER-02 手机纸张顺序 | 有限顺序缺陷关闭，完整选区/像素partial | 仅重排mobile选项，源码与真实App独审通过。recovery02包843e0c01…独核881断言并实际install -r；原QA正文/可见粗体/日期与grid-large保留，新7卡顺序同参考，取消/重开仍grid-large。未点卡、未新验保存/选区JSON；旧新Chrome首plain均移选区观察保留，不扩张为七态原生或像素通过 |
+| APP-001-BODY-VERTICAL-03 Mac普通段落纵向 | partial，Mac04实际纵向改善，宽度/输入仍open | b2f3570仅全p守卫17px与2pxpadding，开发/独审各72受控检查通过；准确62244d4包db921823…独核929断言。完整窗口20Ag与原版逐行对齐、两空段推进102，长段起点改善6图像像素，wrap保持旧clone；连续标点/Latin阈值与宽度分栏差异保留。直接中文键入两边失败，不能称IME或整窗像素通过 |
 | REF-MAC-PUNCTUATION-CONTROLS-03 标点特性 | 有限运行完成，无可用产品修正 | Safari六组摘要宽度与推进相同；trim不支持，chws/palt仅语法支持。18块AX均512字符截断、JSON不能解析，聚焦/多行导出无改善；不声称computed或特性实际应用，不据此加入无效CSS |
 
 docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，docs/ui 是视觉证据。实现阶段遵循 docs-sprint 的 develop/verify 分离。空仓库先建立 Git 基线，串行实施开发/验证；不要求用户批准已授权的常规设计补全。测试必须覆盖真实持久化边界和 UI 用户路径，不能只测试同实现的常量。

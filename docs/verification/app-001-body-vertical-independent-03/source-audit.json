@@ -1,0 +1,355 @@
+{
+  "source": "b2f3570783361a5754e3a213730a72d201ddde7a",
+  "parent": "4d86a7d3dc5bb421331527ab88fdf2e056cb0850",
+  "productBaseline": "8463ed896847f891fd4fd5579affb253a11d681b",
+  "changedProductPaths": [
+    "src/style.css"
+  ],
+  "onlyExactEightCssLinesAdded": true,
+  "baselineCssSHA256": "75227796447c2f1404d5bb6e11f5c4663d53035d6cd343c288d92f6302f18bf7",
+  "candidateCssSHA256": "de2222e4b3c8e4ccde3af4312e8d0db5480dabea1a3c54fe4a0bf9c2a3feb962",
+  "addition": "/* Vertical candidate only while every direct editor element is a paragraph. */\n.desktop.native-toolbar:not(.separate) .note-document .tiptap:has(> p):not(:has(> :not(p))) {\n  padding-top: 2px;\n}\n.desktop.native-toolbar:not(.separate) .note-document .tiptap:has(> p):not(:has(> :not(p))) > p {\n  line-height: 17px;\n  min-height: 17px;\n}\n",
+  "authorEvidence": [
+    {
+      "path": "docs/verification/app-001-body-vertical-03/README.md",
+      "bytes": 5439,
+      "sha256": "ceb9131bd4929fb517618fd92eeb1e7166e1d9e6c81514974925cceba56e10c1"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/check-body-typography-regression.mjs",
+      "bytes": 11108,
+      "sha256": "8e0561591ddaa602623d9064411dc6f287d775824326adff83f88504bc4e3183"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/check-render.mjs",
+      "bytes": 13247,
+      "sha256": "ab32f6d6097caa3b2a76e214bd6a245db62be30d29ce808ffc94c830bacfb385"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/check-source.mjs",
+      "bytes": 2629,
+      "sha256": "cc55fccaed6005ec45a340456eee5a6aeb263966047bd7560a812c5ccbaff508"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/frontend-build.json",
+      "bytes": 186,
+      "sha256": "72327cc35388904f578b841ca9229dd2be28ca5c4dbcf5e971baae13741a1fbf"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/frontend-build.log",
+      "bytes": 757,
+      "sha256": "5ce74f3e478cc07b943f04179031b7f607be24bd0b179a36d048b92a3ed7e757"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/render-run01/result.json",
+      "bytes": 636601,
+      "sha256": "04e1c03f287050227fb278aa6a04106a19cd29175cd4646268b0735d14e9da5c"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/render-run02/result.json",
+      "bytes": 2002325,
+      "sha256": "bf4c9b56fba0b44a5a8c5208529da413dcb6012e51bdfe26c7ad3dc49a558241"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/source-audit.json",
+      "bytes": 1650,
+      "sha256": "5cdb084c8013feeb9ee1c169d8734e620e63501e66edddae60c8a700dfe2db1f"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/typography-regression01/independent.json",
+      "bytes": 63033,
+      "sha256": "e38131f764e6dbbc5cc2d728384784e3f1b1191f41b96aa6bd18fc4255b972b0"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/typography-regression01/mac-main.json",
+      "bytes": 63011,
+      "sha256": "801521f9fa3bc5fb806550df90e0a1180a63440796808f71dfa07789c3c66018"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/typography-regression01/phone.json",
+      "bytes": 62992,
+      "sha256": "55ff9e17d07f2d55f7d00b1fae76cb066f467114a4de703ca8b55ea68ce85eff"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/typography-regression01/result.json",
+      "bytes": 1314,
+      "sha256": "d8b564fdcae00fc6e277665c3c94c17c540c46e4d4d6192e8fe6b4cbef50d00b"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/typography-regression01/wide-android.json",
+      "bytes": 63011,
+      "sha256": "9e1833750aa3168e5c5bd2887569543611e257dfae5da63be474e943c43592c3"
+    },
+    {
+      "path": "docs/verification/app-001-body-vertical-03/manifest.json",
+      "bytes": 4313,
+      "sha256": "76a40be7829b753173e752b0e475357e1db27eb7a1d16ddc65cb422f2f036b83"
+    }
+  ],
+  "productionInputs": [
+    {
+      "path": "assets/mobile-paper-previews/README.md",
+      "candidateGitBlob": "334f8e4403b38ec0f6f8107868b152da6de85538",
+      "currentGitBlob": "334f8e4403b38ec0f6f8107868b152da6de85538"
+    },
+    {
+      "path": "assets/mobile-paper-previews/grid-large.svg",
+      "candidateGitBlob": "73a2a832e95511299f451ee5987c89f173cf19ac",
+      "currentGitBlob": "73a2a832e95511299f451ee5987c89f173cf19ac"
+    },
+    {
+      "path": "assets/mobile-paper-previews/grid-medium.svg",
+      "candidateGitBlob": "f93f93031d9803f1d1ab208beef0a76035d3c2b4",
+      "currentGitBlob": "f93f93031d9803f1d1ab208beef0a76035d3c2b4"
+    },
+    {
+      "path": "assets/mobile-paper-previews/grid-small.svg",
+      "candidateGitBlob": "63301fd0bdd5d223f2cbbdb08a5362fd11a81abf",
+      "currentGitBlob": "63301fd0bdd5d223f2cbbdb08a5362fd11a81abf"
+    },
+    {
+      "path": "assets/mobile-paper-previews/lines-large.svg",
+      "candidateGitBlob": "fc61702a862f5f5de6235b7ca6025b34c55bc4e5",
+      "currentGitBlob": "fc61702a862f5f5de6235b7ca6025b34c55bc4e5"
+    },
+    {
+      "path": "assets/mobile-paper-previews/lines-medium.svg",
+      "candidateGitBlob": "018197bc571e23e03aa8469744afabd6b4219a32",
+      "currentGitBlob": "018197bc571e23e03aa8469744afabd6b4219a32"
+    },
+    {
+      "path": "assets/mobile-paper-previews/lines-small.svg",
+      "candidateGitBlob": "07887d7bbfdb44457efabec9f62f96d6b6c1d001",
+      "currentGitBlob": "07887d7bbfdb44457efabec9f62f96d6b6c1d001"
+    },
+    {
+      "path": "package.json",
+      "candidateGitBlob": "37d341cb72c45941696bed9e3a3c994c1fa0292a",
+      "currentGitBlob": "37d341cb72c45941696bed9e3a3c994c1fa0292a"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "candidateGitBlob": "e8b97bb2b23b68591d235ff89b942bd054715dcf",
+      "currentGitBlob": "e8b97bb2b23b68591d235ff89b942bd054715dcf"
+    },
+    {
+      "path": "src/App.tsx",
+      "candidateGitBlob": "1e84da3f172fbaa53154efa6f96f6351abf7ea16",
+      "currentGitBlob": "1e84da3f172fbaa53154efa6f96f6351abf7ea16"
+    },
+    {
+      "path": "src/Editor.tsx",
+      "candidateGitBlob": "c3765003646655e692e5f30e741b2c1f5ba5fe5b",
+      "currentGitBlob": "c3765003646655e692e5f30e741b2c1f5ba5fe5b"
+    },
+    {
+      "path": "src/OcrPanel.css",
+      "candidateGitBlob": "69cba5c543b1a892c4d64a329158eb33280b1b85",
+      "currentGitBlob": "69cba5c543b1a892c4d64a329158eb33280b1b85"
+    },
+    {
+      "path": "src/OcrPanel.tsx",
+      "candidateGitBlob": "af5573ae6f82a2297997022bcf1c2b819211087f",
+      "currentGitBlob": "af5573ae6f82a2297997022bcf1c2b819211087f"
+    },
+    {
+      "path": "src/RecordingPanel.css",
+      "candidateGitBlob": "032127012d21c21807b50bfecb486047d9c8ff28",
+      "currentGitBlob": "032127012d21c21807b50bfecb486047d9c8ff28"
+    },
+    {
+      "path": "src/RecordingPanel.tsx",
+      "candidateGitBlob": "517a0fbdda2a63b8dd01d1be823bfb168403c004",
+      "currentGitBlob": "517a0fbdda2a63b8dd01d1be823bfb168403c004"
+    },
+    {
+      "path": "src/access-client.ts",
+      "candidateGitBlob": "925bae51ec41500f57826275a4e4fb2f6ac7d826",
+      "currentGitBlob": "925bae51ec41500f57826275a4e4fb2f6ac7d826"
+    },
+    {
+      "path": "src/attachment-submission.ts",
+      "candidateGitBlob": "3490cf8a8600491aa6b814f6692c0b2e16a20a08",
+      "currentGitBlob": "3490cf8a8600491aa6b814f6692c0b2e16a20a08"
+    },
+    {
+      "path": "src/attachment-target.ts",
+      "candidateGitBlob": "efbb5edf0f5dd1fd8cc699801f60c102d93edf0a",
+      "currentGitBlob": "efbb5edf0f5dd1fd8cc699801f60c102d93edf0a"
+    },
+    {
+      "path": "src/audio-playback.ts",
+      "candidateGitBlob": "a2329dcf6b61d4cb8c5e0ae05f738db102ceb4df",
+      "currentGitBlob": "a2329dcf6b61d4cb8c5e0ae05f738db102ceb4df"
+    },
+    {
+      "path": "src/bridge.ts",
+      "candidateGitBlob": "057e72753a46427ffa330a3d46975cd5a772ca64",
+      "currentGitBlob": "057e72753a46427ffa330a3d46975cd5a772ca64"
+    },
+    {
+      "path": "src/document-equality.ts",
+      "candidateGitBlob": "f364272ce863087c7c1d247fce3bf006abafe34f",
+      "currentGitBlob": "f364272ce863087c7c1d247fce3bf006abafe34f"
+    },
+    {
+      "path": "src/editor-actions.ts",
+      "candidateGitBlob": "06dd1f47410353d8aedf184c496fec0e207d1989",
+      "currentGitBlob": "06dd1f47410353d8aedf184c496fec0e207d1989"
+    },
+    {
+      "path": "src/editor-save-snapshot.ts",
+      "candidateGitBlob": "49e82e6893c22bddfdfcc33619c357a8156edf9f",
+      "currentGitBlob": "49e82e6893c22bddfdfcc33619c357a8156edf9f"
+    },
+    {
+      "path": "src/editor-schema.ts",
+      "candidateGitBlob": "6c6bac859d39bcea37c010e8813377e307487026",
+      "currentGitBlob": "6c6bac859d39bcea37c010e8813377e307487026"
+    },
+    {
+      "path": "src/main.tsx",
+      "candidateGitBlob": "8a767770edeea137e03ecc7d0fc0a4d12914a873",
+      "currentGitBlob": "8a767770edeea137e03ecc7d0fc0a4d12914a873"
+    },
+    {
+      "path": "src/native-toolbar-controller.ts",
+      "candidateGitBlob": "820463b165026d0c2a0d80506e78b301fdabe3a0",
+      "currentGitBlob": "820463b165026d0c2a0d80506e78b301fdabe3a0"
+    },
+    {
+      "path": "src/native-toolbar-state.ts",
+      "candidateGitBlob": "6c616f906cd0e2d8c6fb068d3ab352b954760513",
+      "currentGitBlob": "6c616f906cd0e2d8c6fb068d3ab352b954760513"
+    },
+    {
+      "path": "src/native-toolbar.ts",
+      "candidateGitBlob": "d9b45705a20dd0ab4ffffb3612f00b1aaed22088",
+      "currentGitBlob": "d9b45705a20dd0ab4ffffb3612f00b1aaed22088"
+    },
+    {
+      "path": "src/note-tag-extension.ts",
+      "candidateGitBlob": "67ebe093b3604d6f1c9ad0918c4f1875888689db",
+      "currentGitBlob": "67ebe093b3604d6f1c9ad0918c4f1875888689db"
+    },
+    {
+      "path": "src/note-tags.ts",
+      "candidateGitBlob": "ad960b53a42a56916670052321ce7eb354e2c3e1",
+      "currentGitBlob": "ad960b53a42a56916670052321ce7eb354e2c3e1"
+    },
+    {
+      "path": "src/ocr-host.ts",
+      "candidateGitBlob": "17e1e975563947f3f54089eb609dc97216a48c8d",
+      "currentGitBlob": "17e1e975563947f3f54089eb609dc97216a48c8d"
+    },
+    {
+      "path": "src/ocr-native.ts",
+      "candidateGitBlob": "40948ba031b672494717232338aa99a9b54cee1e",
+      "currentGitBlob": "40948ba031b672494717232338aa99a9b54cee1e"
+    },
+    {
+      "path": "src/proof-access.ts",
+      "candidateGitBlob": "eb397b57bf7c719ab52b926f3ad365b9950c2b3c",
+      "currentGitBlob": "eb397b57bf7c719ab52b926f3ad365b9950c2b3c"
+    },
+    {
+      "path": "src/recording-clock.ts",
+      "candidateGitBlob": "1b4805dcae5031e4098a1c9e748492e7546b673e",
+      "currentGitBlob": "1b4805dcae5031e4098a1c9e748492e7546b673e"
+    },
+    {
+      "path": "src/recording-metadata.ts",
+      "candidateGitBlob": "4076f3b6ea389357a42d2e82a7bdec011eea6f3d",
+      "currentGitBlob": "4076f3b6ea389357a42d2e82a7bdec011eea6f3d"
+    },
+    {
+      "path": "src/recording-playback.ts",
+      "candidateGitBlob": "44eca4d566f89a38944b490545e6d82e2c7ffaed",
+      "currentGitBlob": "44eca4d566f89a38944b490545e6d82e2c7ffaed"
+    },
+    {
+      "path": "src/recording-session.ts",
+      "candidateGitBlob": "0e9d7751133902ce41ea768d3f827b5033b45724",
+      "currentGitBlob": "0e9d7751133902ce41ea768d3f827b5033b45724"
+    },
+    {
+      "path": "src/save-queue.ts",
+      "candidateGitBlob": "cd04a2fd9f8bc04a9d3164357147544f7f11a09d",
+      "currentGitBlob": "cd04a2fd9f8bc04a9d3164357147544f7f11a09d"
+    },
+    {
+      "path": "src/save-revisions.ts",
+      "candidateGitBlob": "581479c8d804af08138b7e85f4b8887e93b9d9e9",
+      "currentGitBlob": "581479c8d804af08138b7e85f4b8887e93b9d9e9"
+    },
+    {
+      "path": "src/search-editor-gate.ts",
+      "candidateGitBlob": "556f22ea34c04609dfd74b5b229f515d986ccc07",
+      "currentGitBlob": "556f22ea34c04609dfd74b5b229f515d986ccc07"
+    },
+    {
+      "path": "src/search-selection.ts",
+      "candidateGitBlob": "eed3ae2bda0a3a2014f6fd24f77715b116aff519",
+      "currentGitBlob": "eed3ae2bda0a3a2014f6fd24f77715b116aff519"
+    },
+    {
+      "path": "src/secure-id.ts",
+      "candidateGitBlob": "3129cda81702efd17179de776cbbcc09cc8ce9b3",
+      "currentGitBlob": "3129cda81702efd17179de776cbbcc09cc8ce9b3"
+    },
+    {
+      "path": "src/style.css",
+      "candidateGitBlob": "0e5144407b4ba8c58929aa0f0cefa21334216c21",
+      "currentGitBlob": "0e5144407b4ba8c58929aa0f0cefa21334216c21"
+    },
+    {
+      "path": "src/tag-composition.ts",
+      "candidateGitBlob": "c7af7201b7cc05b9780955d3a00902a5883a3b5e",
+      "currentGitBlob": "c7af7201b7cc05b9780955d3a00902a5883a3b5e"
+    },
+    {
+      "path": "src/trusted-synchronization.ts",
+      "candidateGitBlob": "1fd9d756f4eccec98e10c51c2a041ebf46a1c34d",
+      "currentGitBlob": "1fd9d756f4eccec98e10c51c2a041ebf46a1c34d"
+    },
+    {
+      "path": "src/types.ts",
+      "candidateGitBlob": "fe24cd3ed09f18f8eb912b953067652373b51435",
+      "currentGitBlob": "fe24cd3ed09f18f8eb912b953067652373b51435"
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "candidateGitBlob": "11f02fe2a0061d6e6e1f271b21da95423b448b32",
+      "currentGitBlob": "11f02fe2a0061d6e6e1f271b21da95423b448b32"
+    },
+    {
+      "path": "vite.config.ts",
+      "candidateGitBlob": "3a7da39da149e2cbbd061414305b4b27ad7b5cf3",
+      "currentGitBlob": "3a7da39da149e2cbbd061414305b4b27ad7b5cf3"
+    }
+  ],
+  "sourceCorpora": [
+    {
+      "path": "docs/verification/mac-body-typography-runtime-01/corpus.json",
+      "bytes": 1446,
+      "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"
+    },
+    {
+      "path": "docs/verification/mac-punctuation-context-runtime-02/corpus.json",
+      "bytes": 393,
+      "sha256": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"
+    }
+  ],
+  "fixtureOriginalSHA256": "ab32f6d6097caa3b2a76e214bd6a245db62be30d29ce808ffc94c830bacfb385",
+  "fixturePinned": {
+    "path": "docs/verification/app-001-body-vertical-independent-03/check-pinned-render.mjs",
+    "bytes": 13693,
+    "sha256": "8a3a244ac53502ecd8ff990d41301e83cc10cc4528095b74fd1d6e4852d46bdf"
+  },
+  "fixtureAdaptation": [
+    "Pin full candidate CSS, production schema and NoteTag to exact commit",
+    "Record candidateSource SHA",
+    "Remove only newly owned temporary Vite cache after completion"
+  ],
+  "freeBytes": 77454114816
+}

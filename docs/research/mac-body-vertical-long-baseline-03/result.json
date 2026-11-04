@@ -1,0 +1,4993 @@
+{
+  "schema": "notesclone.mac.body.vertical.long.baseline03.v1",
+  "sourcesBefore": {
+    "06-original-long.cua-image": {
+      "path": "docs/verification/mac-body-vertical-runtime-03/06-original-long.cua-image",
+      "bytes": 405372,
+      "sha256": "0d8e106b588ec9b24268596dadc0a01e116ee735e2b6cef71702ace7296067ce"
+    },
+    "06-original-long.ax.txt": {
+      "path": "docs/verification/mac-body-vertical-runtime-03/06-original-long.ax.txt",
+      "bytes": 8843,
+      "sha256": "af9d22408fedf0708679d61b4a892cc7989aa547ce13d32c1a760864395d4035"
+    },
+    "07-body03-long.cua-image": {
+      "path": "docs/verification/mac-body-vertical-runtime-03/07-body03-long.cua-image",
+      "bytes": 393398,
+      "sha256": "439cbc689581d7b6e04f72d6fd1aa7dbea225dd1ee8e08187435cf34ff957f61"
+    },
+    "07-body03-long.ax.txt": {
+      "path": "docs/verification/mac-body-vertical-runtime-03/07-body03-long.ax.txt",
+      "bytes": 5665,
+      "sha256": "e33c112f809b26b29475cf9318ead58d830ae28f4c8d8e14b5ac5f2372d4be22"
+    },
+    "long-corpus.txt": {
+      "path": "docs/verification/mac-body-vertical-runtime-03/long-corpus.txt",
+      "bytes": 833,
+      "sha256": "2b2a2e1ecdaf34af8190d55beee7909eb929a84a9c13a8d5a4a9655812f8893a"
+    }
+  },
+  "coordinateSystem": "Decoded JPEG image pixels, top-left origin, exclusive bbox [x0,y0,x1,y1); no DPR/point/CSS pixel/true-baseline inference.",
+  "method": {
+    "ink": "299R+587G+114B < threshold*1000 and max(R,G,B)-min(R,G,B)<25",
+    "thresholds": [
+      120,
+      160,
+      200
+    ],
+    "registration": "None; explicit absolute role-specific ROIs, same fixed shared y stripes.",
+    "rowMapping": "Indices zero-based. 25 nonempty visual rows: title,20 exact Ag中文,4 wrapped lines from logical23. Empty logical11/12 have no visual-ink row.",
+    "rowYStripes": [
+      [
+        155,
+        200
+      ],
+      [
+        200,
+        235
+      ],
+      [
+        235,
+        269
+      ],
+      [
+        269,
+        304
+      ],
+      [
+        304,
+        338
+      ],
+      [
+        338,
+        373
+      ],
+      [
+        373,
+        407
+      ],
+      [
+        407,
+        442
+      ],
+      [
+        442,
+        476
+      ],
+      [
+        476,
+        509
+      ],
+      [
+        509,
+        544
+      ],
+      [
+        610,
+        646
+      ],
+      [
+        646,
+        680
+      ],
+      [
+        680,
+        715
+      ],
+      [
+        715,
+        749
+      ],
+      [
+        749,
+        784
+      ],
+      [
+        784,
+        818
+      ],
+      [
+        818,
+        852
+      ],
+      [
+        852,
+        886
+      ],
+      [
+        886,
+        919
+      ],
+      [
+        919,
+        954
+      ],
+      [
+        954,
+        987
+      ],
+      [
+        987,
+        1021
+      ],
+      [
+        1021,
+        1055
+      ],
+      [
+        1055,
+        1090
+      ]
+    ]
+  },
+  "corpus": {
+    "text": "QA-VERTICAL-LONG-20261104-03\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\n\n\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\n长段自动换行：这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。\n",
+    "unicodeCodePoints": 339,
+    "utf8Bytes": 833,
+    "trailingLF": 1,
+    "repeatAgChineseCount": 20,
+    "emptyLogicalLines": [
+      11,
+      12
+    ],
+    "longLogicalLineIndex": 23,
+    "longLogicalLineCodePoints": 207
+  },
+  "measurements": {
+    "06-original-long": {
+      "role": "original",
+      "encoding": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ],
+      "axBodyExtraction": {
+        "delimiterRule": "Value substring ending before newline+tab-indented next node declaration; excludes that one structural boundary newline.",
+        "bodyText": "QA-VERTICAL-LONG-20261104-03\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\n\n\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\n长段自动换行：这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。\n",
+        "unicodeCodePoints": 339,
+        "trailingLF": 1,
+        "equalsCorpus": true,
+        "equalsCorpusIgnoringTrailingLF": true,
+        "endBoundaryLiteral": "普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。\n\n\t\t\t114 滚动条 (disabled, settable, float) 0\n\t115 工具栏\n\t\t116 按钮 Description: 添加",
+        "nextNodeId": 114
+      },
+      "focusEvidence": "List row47 selected; no focused-body declaration in snapshot",
+      "rowRois": [
+        [
+          1210,
+          155,
+          2760,
+          200
+        ],
+        [
+          1210,
+          200,
+          2760,
+          235
+        ],
+        [
+          1210,
+          235,
+          2760,
+          269
+        ],
+        [
+          1210,
+          269,
+          2760,
+          304
+        ],
+        [
+          1210,
+          304,
+          2760,
+          338
+        ],
+        [
+          1210,
+          338,
+          2760,
+          373
+        ],
+        [
+          1210,
+          373,
+          2760,
+          407
+        ],
+        [
+          1210,
+          407,
+          2760,
+          442
+        ],
+        [
+          1210,
+          442,
+          2760,
+          476
+        ],
+        [
+          1210,
+          476,
+          2760,
+          509
+        ],
+        [
+          1210,
+          509,
+          2760,
+          544
+        ],
+        [
+          1210,
+          610,
+          2760,
+          646
+        ],
+        [
+          1210,
+          646,
+          2760,
+          680
+        ],
+        [
+          1210,
+          680,
+          2760,
+          715
+        ],
+        [
+          1210,
+          715,
+          2760,
+          749
+        ],
+        [
+          1210,
+          749,
+          2760,
+          784
+        ],
+        [
+          1210,
+          784,
+          2760,
+          818
+        ],
+        [
+          1210,
+          818,
+          2760,
+          852
+        ],
+        [
+          1210,
+          852,
+          2760,
+          886
+        ],
+        [
+          1210,
+          886,
+          2760,
+          919
+        ],
+        [
+          1210,
+          919,
+          2760,
+          954
+        ],
+        [
+          1210,
+          954,
+          2760,
+          987
+        ],
+        [
+          1210,
+          987,
+          2760,
+          1021
+        ],
+        [
+          1210,
+          1021,
+          2760,
+          1055
+        ],
+        [
+          1210,
+          1055,
+          2760,
+          1090
+        ]
+      ],
+      "interBlockEmptyStripe": [
+        1210,
+        540,
+        1700,
+        610
+      ],
+      "tailNeutralInkRoi": [
+        1210,
+        1087,
+        1700,
+        1160
+      ],
+      "rowMapping": [
+        {
+          "visualRowIndex": 0,
+          "logicalLineIndex": 0,
+          "repeatNumber": null,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 1,
+          "logicalLineIndex": 1,
+          "repeatNumber": 1,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 2,
+          "logicalLineIndex": 2,
+          "repeatNumber": 2,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 3,
+          "logicalLineIndex": 3,
+          "repeatNumber": 3,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 4,
+          "logicalLineIndex": 4,
+          "repeatNumber": 4,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 5,
+          "logicalLineIndex": 5,
+          "repeatNumber": 5,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 6,
+          "logicalLineIndex": 6,
+          "repeatNumber": 6,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 7,
+          "logicalLineIndex": 7,
+          "repeatNumber": 7,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 8,
+          "logicalLineIndex": 8,
+          "repeatNumber": 8,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 9,
+          "logicalLineIndex": 9,
+          "repeatNumber": 9,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 10,
+          "logicalLineIndex": 10,
+          "repeatNumber": 10,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 11,
+          "logicalLineIndex": 13,
+          "repeatNumber": 11,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 12,
+          "logicalLineIndex": 14,
+          "repeatNumber": 12,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 13,
+          "logicalLineIndex": 15,
+          "repeatNumber": 13,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 14,
+          "logicalLineIndex": 16,
+          "repeatNumber": 14,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 15,
+          "logicalLineIndex": 17,
+          "repeatNumber": 15,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 16,
+          "logicalLineIndex": 18,
+          "repeatNumber": 16,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 17,
+          "logicalLineIndex": 19,
+          "repeatNumber": 17,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 18,
+          "logicalLineIndex": 20,
+          "repeatNumber": 18,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 19,
+          "logicalLineIndex": 21,
+          "repeatNumber": 19,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 20,
+          "logicalLineIndex": 22,
+          "repeatNumber": 20,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 21,
+          "logicalLineIndex": 23,
+          "repeatNumber": null,
+          "longVisualLine": 1
+        },
+        {
+          "visualRowIndex": 22,
+          "logicalLineIndex": 23,
+          "repeatNumber": null,
+          "longVisualLine": 2
+        },
+        {
+          "visualRowIndex": 23,
+          "logicalLineIndex": 23,
+          "repeatNumber": null,
+          "longVisualLine": 3
+        },
+        {
+          "visualRowIndex": 24,
+          "logicalLineIndex": 23,
+          "repeatNumber": null,
+          "longVisualLine": 4
+        }
+      ],
+      "manualWrapAssociation": {
+        "method": "Manual reading of enlarged crop associated with known AX corpus; not OCR or layout-box measurement.",
+        "codePointBoundaries": [
+          0,
+          58,
+          116,
+          174,
+          207
+        ],
+        "segments": [
+          "长段自动换行：这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行",
+          "距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正",
+          "文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普",
+          "通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。"
+        ]
+      },
+      "thresholds": {
+        "120": {
+          "rowInk": [
+            [
+              1226,
+              175,
+              1651,
+              196
+            ],
+            [
+              1225,
+              207,
+              1309,
+              233
+            ],
+            [
+              1225,
+              241,
+              1309,
+              267
+            ],
+            [
+              1225,
+              275,
+              1309,
+              301
+            ],
+            [
+              1225,
+              309,
+              1309,
+              335
+            ],
+            [
+              1225,
+              343,
+              1309,
+              369
+            ],
+            [
+              1225,
+              377,
+              1309,
+              403
+            ],
+            [
+              1225,
+              411,
+              1309,
+              437
+            ],
+            [
+              1225,
+              445,
+              1309,
+              471
+            ],
+            [
+              1225,
+              479,
+              1309,
+              505
+            ],
+            [
+              1225,
+              513,
+              1309,
+              539
+            ],
+            [
+              1225,
+              615,
+              1309,
+              641
+            ],
+            [
+              1225,
+              649,
+              1309,
+              675
+            ],
+            [
+              1225,
+              683,
+              1309,
+              709
+            ],
+            [
+              1225,
+              717,
+              1309,
+              743
+            ],
+            [
+              1225,
+              751,
+              1309,
+              777
+            ],
+            [
+              1225,
+              785,
+              1309,
+              811
+            ],
+            [
+              1225,
+              819,
+              1309,
+              845
+            ],
+            [
+              1225,
+              853,
+              1309,
+              879
+            ],
+            [
+              1225,
+              887,
+              1309,
+              913
+            ],
+            [
+              1225,
+              921,
+              1309,
+              947
+            ],
+            [
+              1226,
+              955,
+              2719,
+              979
+            ],
+            [
+              1225,
+              989,
+              2719,
+              1013
+            ],
+            [
+              1226,
+              1023,
+              2719,
+              1047
+            ],
+            [
+              1225,
+              1057,
+              2058,
+              1081
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 425,
+              "height": 21
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 1493,
+              "height": 24
+            },
+            {
+              "width": 1494,
+              "height": 24
+            },
+            {
+              "width": 1493,
+              "height": 24
+            },
+            {
+              "width": 833,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1225,
+              207,
+              1309,
+              233
+            ],
+            [
+              1225,
+              241,
+              1309,
+              267
+            ],
+            [
+              1225,
+              275,
+              1309,
+              301
+            ],
+            [
+              1225,
+              309,
+              1309,
+              335
+            ],
+            [
+              1225,
+              343,
+              1309,
+              369
+            ],
+            [
+              1225,
+              377,
+              1309,
+              403
+            ],
+            [
+              1225,
+              411,
+              1309,
+              437
+            ],
+            [
+              1225,
+              445,
+              1309,
+              471
+            ],
+            [
+              1225,
+              479,
+              1309,
+              505
+            ],
+            [
+              1225,
+              513,
+              1309,
+              539
+            ],
+            [
+              1225,
+              615,
+              1309,
+              641
+            ],
+            [
+              1225,
+              649,
+              1309,
+              675
+            ],
+            [
+              1225,
+              683,
+              1309,
+              709
+            ],
+            [
+              1225,
+              717,
+              1309,
+              743
+            ],
+            [
+              1225,
+              751,
+              1309,
+              777
+            ],
+            [
+              1225,
+              785,
+              1309,
+              811
+            ],
+            [
+              1225,
+              819,
+              1309,
+              845
+            ],
+            [
+              1225,
+              853,
+              1309,
+              879
+            ],
+            [
+              1225,
+              887,
+              1309,
+              913
+            ],
+            [
+              1225,
+              921,
+              1309,
+              947
+            ]
+          ],
+          "repeatTopAdvances": [
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            102,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34
+          ],
+          "repeatBottomAdvances": [
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            102,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34
+          ],
+          "betweenRepeat10And11TopAdvance": 102,
+          "firstTenTopSpan": 306,
+          "lastTenTopSpan": 306,
+          "all20TopSpan": 714,
+          "interBlockEmptyStripeInk": null,
+          "tailNeutralInk": null,
+          "longVisualLineInk": [
+            [
+              1226,
+              955,
+              2719,
+              979
+            ],
+            [
+              1225,
+              989,
+              2719,
+              1013
+            ],
+            [
+              1226,
+              1023,
+              2719,
+              1047
+            ],
+            [
+              1225,
+              1057,
+              2058,
+              1081
+            ]
+          ],
+          "longTopAdvances": [
+            34,
+            34,
+            34
+          ],
+          "firstTitleInkLeftMinusDividerStart": 50
+        },
+        "160": {
+          "rowInk": [
+            [
+              1226,
+              175,
+              1651,
+              196
+            ],
+            [
+              1225,
+              207,
+              1309,
+              233
+            ],
+            [
+              1225,
+              241,
+              1309,
+              267
+            ],
+            [
+              1225,
+              275,
+              1309,
+              301
+            ],
+            [
+              1225,
+              309,
+              1309,
+              335
+            ],
+            [
+              1225,
+              343,
+              1309,
+              369
+            ],
+            [
+              1225,
+              377,
+              1309,
+              403
+            ],
+            [
+              1225,
+              411,
+              1309,
+              437
+            ],
+            [
+              1225,
+              445,
+              1309,
+              471
+            ],
+            [
+              1225,
+              479,
+              1309,
+              505
+            ],
+            [
+              1225,
+              513,
+              1309,
+              539
+            ],
+            [
+              1225,
+              615,
+              1309,
+              641
+            ],
+            [
+              1225,
+              649,
+              1309,
+              675
+            ],
+            [
+              1225,
+              683,
+              1309,
+              709
+            ],
+            [
+              1225,
+              717,
+              1309,
+              743
+            ],
+            [
+              1225,
+              751,
+              1309,
+              777
+            ],
+            [
+              1225,
+              785,
+              1309,
+              811
+            ],
+            [
+              1225,
+              819,
+              1309,
+              845
+            ],
+            [
+              1225,
+              853,
+              1309,
+              879
+            ],
+            [
+              1225,
+              887,
+              1309,
+              913
+            ],
+            [
+              1225,
+              921,
+              1309,
+              947
+            ],
+            [
+              1225,
+              955,
+              2720,
+              979
+            ],
+            [
+              1225,
+              989,
+              2720,
+              1013
+            ],
+            [
+              1225,
+              1023,
+              2719,
+              1047
+            ],
+            [
+              1225,
+              1057,
+              2058,
+              1081
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 425,
+              "height": 21
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 1495,
+              "height": 24
+            },
+            {
+              "width": 1495,
+              "height": 24
+            },
+            {
+              "width": 1494,
+              "height": 24
+            },
+            {
+              "width": 833,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1225,
+              207,
+              1309,
+              233
+            ],
+            [
+              1225,
+              241,
+              1309,
+              267
+            ],
+            [
+              1225,
+              275,
+              1309,
+              301
+            ],
+            [
+              1225,
+              309,
+              1309,
+              335
+            ],
+            [
+              1225,
+              343,
+              1309,
+              369
+            ],
+            [
+              1225,
+              377,
+              1309,
+              403
+            ],
+            [
+              1225,
+              411,
+              1309,
+              437
+            ],
+            [
+              1225,
+              445,
+              1309,
+              471
+            ],
+            [
+              1225,
+              479,
+              1309,
+              505
+            ],
+            [
+              1225,
+              513,
+              1309,
+              539
+            ],
+            [
+              1225,
+              615,
+              1309,
+              641
+            ],
+            [
+              1225,
+              649,
+              1309,
+              675
+            ],
+            [
+              1225,
+              683,
+              1309,
+              709
+            ],
+            [
+              1225,
+              717,
+              1309,
+              743
+            ],
+            [
+              1225,
+              751,
+              1309,
+              777
+            ],
+            [
+              1225,
+              785,
+              1309,
+              811
+            ],
+            [
+              1225,
+              819,
+              1309,
+              845
+            ],
+            [
+              1225,
+              853,
+              1309,
+              879
+            ],
+            [
+              1225,
+              887,
+              1309,
+              913
+            ],
+            [
+              1225,
+              921,
+              1309,
+              947
+            ]
+          ],
+          "repeatTopAdvances": [
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            102,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34
+          ],
+          "repeatBottomAdvances": [
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            102,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34
+          ],
+          "betweenRepeat10And11TopAdvance": 102,
+          "firstTenTopSpan": 306,
+          "lastTenTopSpan": 306,
+          "all20TopSpan": 714,
+          "interBlockEmptyStripeInk": null,
+          "tailNeutralInk": null,
+          "longVisualLineInk": [
+            [
+              1225,
+              955,
+              2720,
+              979
+            ],
+            [
+              1225,
+              989,
+              2720,
+              1013
+            ],
+            [
+              1225,
+              1023,
+              2719,
+              1047
+            ],
+            [
+              1225,
+              1057,
+              2058,
+              1081
+            ]
+          ],
+          "longTopAdvances": [
+            34,
+            34,
+            34
+          ],
+          "firstTitleInkLeftMinusDividerStart": 50
+        },
+        "200": {
+          "rowInk": [
+            [
+              1225,
+              175,
+              1651,
+              196
+            ],
+            [
+              1225,
+              207,
+              1309,
+              233
+            ],
+            [
+              1225,
+              241,
+              1309,
+              267
+            ],
+            [
+              1225,
+              275,
+              1309,
+              301
+            ],
+            [
+              1225,
+              309,
+              1309,
+              335
+            ],
+            [
+              1225,
+              343,
+              1309,
+              369
+            ],
+            [
+              1225,
+              377,
+              1309,
+              403
+            ],
+            [
+              1225,
+              411,
+              1309,
+              437
+            ],
+            [
+              1225,
+              445,
+              1309,
+              471
+            ],
+            [
+              1225,
+              479,
+              1309,
+              505
+            ],
+            [
+              1225,
+              513,
+              1309,
+              539
+            ],
+            [
+              1225,
+              615,
+              1309,
+              641
+            ],
+            [
+              1225,
+              649,
+              1309,
+              675
+            ],
+            [
+              1225,
+              683,
+              1309,
+              709
+            ],
+            [
+              1225,
+              717,
+              1309,
+              743
+            ],
+            [
+              1225,
+              751,
+              1309,
+              777
+            ],
+            [
+              1225,
+              785,
+              1309,
+              811
+            ],
+            [
+              1225,
+              819,
+              1309,
+              845
+            ],
+            [
+              1225,
+              853,
+              1309,
+              879
+            ],
+            [
+              1225,
+              887,
+              1309,
+              913
+            ],
+            [
+              1225,
+              921,
+              1309,
+              947
+            ],
+            [
+              1225,
+              955,
+              2720,
+              979
+            ],
+            [
+              1225,
+              989,
+              2720,
+              1013
+            ],
+            [
+              1225,
+              1023,
+              2720,
+              1047
+            ],
+            [
+              1225,
+              1057,
+              2059,
+              1081
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 426,
+              "height": 21
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 84,
+              "height": 26
+            },
+            {
+              "width": 1495,
+              "height": 24
+            },
+            {
+              "width": 1495,
+              "height": 24
+            },
+            {
+              "width": 1495,
+              "height": 24
+            },
+            {
+              "width": 834,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1225,
+              207,
+              1309,
+              233
+            ],
+            [
+              1225,
+              241,
+              1309,
+              267
+            ],
+            [
+              1225,
+              275,
+              1309,
+              301
+            ],
+            [
+              1225,
+              309,
+              1309,
+              335
+            ],
+            [
+              1225,
+              343,
+              1309,
+              369
+            ],
+            [
+              1225,
+              377,
+              1309,
+              403
+            ],
+            [
+              1225,
+              411,
+              1309,
+              437
+            ],
+            [
+              1225,
+              445,
+              1309,
+              471
+            ],
+            [
+              1225,
+              479,
+              1309,
+              505
+            ],
+            [
+              1225,
+              513,
+              1309,
+              539
+            ],
+            [
+              1225,
+              615,
+              1309,
+              641
+            ],
+            [
+              1225,
+              649,
+              1309,
+              675
+            ],
+            [
+              1225,
+              683,
+              1309,
+              709
+            ],
+            [
+              1225,
+              717,
+              1309,
+              743
+            ],
+            [
+              1225,
+              751,
+              1309,
+              777
+            ],
+            [
+              1225,
+              785,
+              1309,
+              811
+            ],
+            [
+              1225,
+              819,
+              1309,
+              845
+            ],
+            [
+              1225,
+              853,
+              1309,
+              879
+            ],
+            [
+              1225,
+              887,
+              1309,
+              913
+            ],
+            [
+              1225,
+              921,
+              1309,
+              947
+            ]
+          ],
+          "repeatTopAdvances": [
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            102,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34
+          ],
+          "repeatBottomAdvances": [
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            102,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34,
+            34
+          ],
+          "betweenRepeat10And11TopAdvance": 102,
+          "firstTenTopSpan": 306,
+          "lastTenTopSpan": 306,
+          "all20TopSpan": 714,
+          "interBlockEmptyStripeInk": null,
+          "tailNeutralInk": null,
+          "longVisualLineInk": [
+            [
+              1225,
+              955,
+              2720,
+              979
+            ],
+            [
+              1225,
+              989,
+              2720,
+              1013
+            ],
+            [
+              1225,
+              1023,
+              2720,
+              1047
+            ],
+            [
+              1225,
+              1057,
+              2059,
+              1081
+            ]
+          ],
+          "longTopAdvances": [
+            34,
+            34,
+            34
+          ],
+          "firstTitleInkLeftMinusDividerStart": 49
+        }
+      },
+      "divider": {
+        "roi": [
+          1168,
+          1200,
+          1280,
+          1600
+        ],
+        "columnMeanGray": {
+          "1168": 255.0,
+          "1169": 255.0,
+          "1170": 255.0,
+          "1171": 255.0,
+          "1172": 255.0,
+          "1173": 255.0,
+          "1174": 255.0,
+          "1175": 255.0,
+          "1176": 230.0,
+          "1177": 229.0,
+          "1178": 255.0,
+          "1179": 254.0,
+          "1180": 255.0,
+          "1181": 255.0,
+          "1182": 255.0,
+          "1183": 255.0,
+          "1184": 255.0,
+          "1185": 255.0,
+          "1186": 255.0,
+          "1187": 255.0,
+          "1188": 255.0,
+          "1189": 255.0,
+          "1190": 255.0,
+          "1191": 255.0,
+          "1192": 255.0,
+          "1193": 255.0,
+          "1194": 255.0,
+          "1195": 255.0,
+          "1196": 255.0,
+          "1197": 255.0,
+          "1198": 255.0,
+          "1199": 255.0,
+          "1200": 255.0,
+          "1201": 255.0,
+          "1202": 255.0,
+          "1203": 255.0,
+          "1204": 255.0,
+          "1205": 255.0,
+          "1206": 255.0,
+          "1207": 255.0,
+          "1208": 255.0,
+          "1209": 255.0,
+          "1210": 255.0,
+          "1211": 255.0,
+          "1212": 255.0,
+          "1213": 255.0,
+          "1214": 255.0,
+          "1215": 255.0,
+          "1216": 255.0,
+          "1217": 255.0,
+          "1218": 255.0,
+          "1219": 255.0,
+          "1220": 255.0,
+          "1221": 255.0,
+          "1222": 255.0,
+          "1223": 255.0,
+          "1224": 255.0,
+          "1225": 255.0,
+          "1226": 255.0,
+          "1227": 255.0,
+          "1228": 255.0,
+          "1229": 255.0,
+          "1230": 255.0,
+          "1231": 255.0,
+          "1232": 255.0,
+          "1233": 255.0,
+          "1234": 255.0,
+          "1235": 255.0,
+          "1236": 255.0,
+          "1237": 255.0,
+          "1238": 255.0,
+          "1239": 255.0,
+          "1240": 255.0,
+          "1241": 255.0,
+          "1242": 255.0,
+          "1243": 255.0,
+          "1244": 255.0,
+          "1245": 255.0,
+          "1246": 255.0,
+          "1247": 255.0,
+          "1248": 255.0,
+          "1249": 255.0,
+          "1250": 255.0,
+          "1251": 255.0,
+          "1252": 255.0,
+          "1253": 255.0,
+          "1254": 255.0,
+          "1255": 255.0,
+          "1256": 255.0,
+          "1257": 255.0,
+          "1258": 255.0,
+          "1259": 255.0,
+          "1260": 255.0,
+          "1261": 255.0,
+          "1262": 255.0,
+          "1263": 255.0,
+          "1264": 255.0,
+          "1265": 255.0,
+          "1266": 255.0,
+          "1267": 255.0,
+          "1268": 255.0,
+          "1269": 255.0,
+          "1270": 255.0,
+          "1271": 255.0,
+          "1272": 255.0,
+          "1273": 255.0,
+          "1274": 255.0,
+          "1275": 255.0,
+          "1276": 255.0,
+          "1277": 255.0,
+          "1278": 255.0,
+          "1279": 255.0
+        },
+        "meanGrayLessThan240Columns": [
+          1176,
+          1177
+        ],
+        "darkBandX": [
+          1176,
+          1178
+        ]
+      }
+    },
+    "07-body03-long": {
+      "role": "clone",
+      "encoding": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ],
+      "axBodyExtraction": {
+        "delimiterRule": "Value substring ending before newline+tab-indented next node declaration; excludes that one structural boundary newline.",
+        "bodyText": "QA-VERTICAL-LONG-20261104-03\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\n\n\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\nAg中文\n长段自动换行：这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。\n\n",
+        "unicodeCodePoints": 340,
+        "trailingLF": 2,
+        "equalsCorpus": false,
+        "equalsCorpusIgnoringTrailingLF": true,
+        "endBoundaryLiteral": "通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。\n\n\n\t\t\t\t\t28 text (settable) QA-VERTICAL-LONG-20261104-03\n\t\t\t\t\t29 text (settabl",
+        "nextNodeId": 28
+      },
+      "focusEvidence": "AX focus is node2 HTML content; no body-focus declaration. Gold caret visible after paragraph.",
+      "rowRois": [
+        [
+          1300,
+          155,
+          2760,
+          200
+        ],
+        [
+          1300,
+          200,
+          2760,
+          235
+        ],
+        [
+          1300,
+          235,
+          2760,
+          269
+        ],
+        [
+          1300,
+          269,
+          2760,
+          304
+        ],
+        [
+          1300,
+          304,
+          2760,
+          338
+        ],
+        [
+          1300,
+          338,
+          2760,
+          373
+        ],
+        [
+          1300,
+          373,
+          2760,
+          407
+        ],
+        [
+          1300,
+          407,
+          2760,
+          442
+        ],
+        [
+          1300,
+          442,
+          2760,
+          476
+        ],
+        [
+          1300,
+          476,
+          2760,
+          509
+        ],
+        [
+          1300,
+          509,
+          2760,
+          544
+        ],
+        [
+          1300,
+          610,
+          2760,
+          646
+        ],
+        [
+          1300,
+          646,
+          2760,
+          680
+        ],
+        [
+          1300,
+          680,
+          2760,
+          715
+        ],
+        [
+          1300,
+          715,
+          2760,
+          749
+        ],
+        [
+          1300,
+          749,
+          2760,
+          784
+        ],
+        [
+          1300,
+          784,
+          2760,
+          818
+        ],
+        [
+          1300,
+          818,
+          2760,
+          852
+        ],
+        [
+          1300,
+          852,
+          2760,
+          886
+        ],
+        [
+          1300,
+          886,
+          2760,
+          919
+        ],
+        [
+          1300,
+          919,
+          2760,
+          954
+        ],
+        [
+          1300,
+          954,
+          2760,
+          987
+        ],
+        [
+          1300,
+          987,
+          2760,
+          1021
+        ],
+        [
+          1300,
+          1021,
+          2760,
+          1055
+        ],
+        [
+          1300,
+          1055,
+          2760,
+          1090
+        ]
+      ],
+      "interBlockEmptyStripe": [
+        1300,
+        540,
+        1700,
+        610
+      ],
+      "tailNeutralInkRoi": [
+        1300,
+        1087,
+        1700,
+        1160
+      ],
+      "rowMapping": [
+        {
+          "visualRowIndex": 0,
+          "logicalLineIndex": 0,
+          "repeatNumber": null,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 1,
+          "logicalLineIndex": 1,
+          "repeatNumber": 1,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 2,
+          "logicalLineIndex": 2,
+          "repeatNumber": 2,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 3,
+          "logicalLineIndex": 3,
+          "repeatNumber": 3,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 4,
+          "logicalLineIndex": 4,
+          "repeatNumber": 4,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 5,
+          "logicalLineIndex": 5,
+          "repeatNumber": 5,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 6,
+          "logicalLineIndex": 6,
+          "repeatNumber": 6,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 7,
+          "logicalLineIndex": 7,
+          "repeatNumber": 7,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 8,
+          "logicalLineIndex": 8,
+          "repeatNumber": 8,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 9,
+          "logicalLineIndex": 9,
+          "repeatNumber": 9,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 10,
+          "logicalLineIndex": 10,
+          "repeatNumber": 10,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 11,
+          "logicalLineIndex": 13,
+          "repeatNumber": 11,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 12,
+          "logicalLineIndex": 14,
+          "repeatNumber": 12,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 13,
+          "logicalLineIndex": 15,
+          "repeatNumber": 13,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 14,
+          "logicalLineIndex": 16,
+          "repeatNumber": 14,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 15,
+          "logicalLineIndex": 17,
+          "repeatNumber": 15,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 16,
+          "logicalLineIndex": 18,
+          "repeatNumber": 16,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 17,
+          "logicalLineIndex": 19,
+          "repeatNumber": 17,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 18,
+          "logicalLineIndex": 20,
+          "repeatNumber": 18,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 19,
+          "logicalLineIndex": 21,
+          "repeatNumber": 19,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 20,
+          "logicalLineIndex": 22,
+          "repeatNumber": 20,
+          "longVisualLine": null
+        },
+        {
+          "visualRowIndex": 21,
+          "logicalLineIndex": 23,
+          "repeatNumber": null,
+          "longVisualLine": 1
+        },
+        {
+          "visualRowIndex": 22,
+          "logicalLineIndex": 23,
+          "repeatNumber": null,
+          "longVisualLine": 2
+        },
+        {
+          "visualRowIndex": 23,
+          "logicalLineIndex": 23,
+          "repeatNumber": null,
+          "longVisualLine": 3
+        },
+        {
+          "visualRowIndex": 24,
+          "logicalLineIndex": 23,
+          "repeatNumber": null,
+          "longVisualLine": 4
+        }
+      ],
+      "manualWrapAssociation": {
+        "method": "Manual reading of enlarged crop associated with known AX corpus; not OCR or layout-box measurement.",
+        "codePointBoundaries": [
+          0,
+          55,
+          110,
+          165,
+          207
+        ],
+        "segments": [
+          "长段自动换行：这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通",
+          "正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用",
+          "于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内",
+          "容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。"
+        ]
+      },
+      "thresholds": {
+        "120": {
+          "rowInk": [
+            [
+              1317,
+              171,
+              1742,
+              192
+            ],
+            [
+              1316,
+              203,
+              1397,
+              229
+            ],
+            [
+              1316,
+              238,
+              1397,
+              264
+            ],
+            [
+              1316,
+              272,
+              1397,
+              298
+            ],
+            [
+              1316,
+              307,
+              1397,
+              333
+            ],
+            [
+              1316,
+              341,
+              1397,
+              367
+            ],
+            [
+              1316,
+              376,
+              1397,
+              402
+            ],
+            [
+              1316,
+              410,
+              1397,
+              436
+            ],
+            [
+              1316,
+              445,
+              1397,
+              471
+            ],
+            [
+              1316,
+              479,
+              1397,
+              505
+            ],
+            [
+              1316,
+              513,
+              1397,
+              539
+            ],
+            [
+              1316,
+              617,
+              1397,
+              643
+            ],
+            [
+              1316,
+              651,
+              1397,
+              677
+            ],
+            [
+              1316,
+              686,
+              1397,
+              712
+            ],
+            [
+              1316,
+              720,
+              1397,
+              746
+            ],
+            [
+              1316,
+              754,
+              1397,
+              780
+            ],
+            [
+              1316,
+              789,
+              1397,
+              815
+            ],
+            [
+              1316,
+              823,
+              1397,
+              849
+            ],
+            [
+              1316,
+              858,
+              1397,
+              884
+            ],
+            [
+              1316,
+              892,
+              1397,
+              918
+            ],
+            [
+              1316,
+              927,
+              1397,
+              953
+            ],
+            [
+              1317,
+              961,
+              2732,
+              985
+            ],
+            [
+              1316,
+              995,
+              2730,
+              1019
+            ],
+            [
+              1317,
+              1029,
+              2731,
+              1053
+            ],
+            [
+              1317,
+              1063,
+              2382,
+              1087
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 425,
+              "height": 21
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 1415,
+              "height": 24
+            },
+            {
+              "width": 1414,
+              "height": 24
+            },
+            {
+              "width": 1414,
+              "height": 24
+            },
+            {
+              "width": 1065,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1316,
+              203,
+              1397,
+              229
+            ],
+            [
+              1316,
+              238,
+              1397,
+              264
+            ],
+            [
+              1316,
+              272,
+              1397,
+              298
+            ],
+            [
+              1316,
+              307,
+              1397,
+              333
+            ],
+            [
+              1316,
+              341,
+              1397,
+              367
+            ],
+            [
+              1316,
+              376,
+              1397,
+              402
+            ],
+            [
+              1316,
+              410,
+              1397,
+              436
+            ],
+            [
+              1316,
+              445,
+              1397,
+              471
+            ],
+            [
+              1316,
+              479,
+              1397,
+              505
+            ],
+            [
+              1316,
+              513,
+              1397,
+              539
+            ],
+            [
+              1316,
+              617,
+              1397,
+              643
+            ],
+            [
+              1316,
+              651,
+              1397,
+              677
+            ],
+            [
+              1316,
+              686,
+              1397,
+              712
+            ],
+            [
+              1316,
+              720,
+              1397,
+              746
+            ],
+            [
+              1316,
+              754,
+              1397,
+              780
+            ],
+            [
+              1316,
+              789,
+              1397,
+              815
+            ],
+            [
+              1316,
+              823,
+              1397,
+              849
+            ],
+            [
+              1316,
+              858,
+              1397,
+              884
+            ],
+            [
+              1316,
+              892,
+              1397,
+              918
+            ],
+            [
+              1316,
+              927,
+              1397,
+              953
+            ]
+          ],
+          "repeatTopAdvances": [
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            34,
+            104,
+            34,
+            35,
+            34,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35
+          ],
+          "repeatBottomAdvances": [
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            34,
+            104,
+            34,
+            35,
+            34,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35
+          ],
+          "betweenRepeat10And11TopAdvance": 104,
+          "firstTenTopSpan": 310,
+          "lastTenTopSpan": 310,
+          "all20TopSpan": 724,
+          "interBlockEmptyStripeInk": null,
+          "tailNeutralInk": null,
+          "longVisualLineInk": [
+            [
+              1317,
+              961,
+              2732,
+              985
+            ],
+            [
+              1316,
+              995,
+              2730,
+              1019
+            ],
+            [
+              1317,
+              1029,
+              2731,
+              1053
+            ],
+            [
+              1317,
+              1063,
+              2382,
+              1087
+            ]
+          ],
+          "longTopAdvances": [
+            34,
+            34,
+            34
+          ],
+          "firstTitleInkLeftMinusDividerStart": 50
+        },
+        "160": {
+          "rowInk": [
+            [
+              1317,
+              171,
+              1742,
+              192
+            ],
+            [
+              1316,
+              203,
+              1397,
+              229
+            ],
+            [
+              1316,
+              238,
+              1397,
+              264
+            ],
+            [
+              1316,
+              272,
+              1397,
+              298
+            ],
+            [
+              1316,
+              307,
+              1397,
+              333
+            ],
+            [
+              1316,
+              341,
+              1397,
+              367
+            ],
+            [
+              1316,
+              376,
+              1397,
+              402
+            ],
+            [
+              1316,
+              410,
+              1397,
+              436
+            ],
+            [
+              1316,
+              445,
+              1397,
+              471
+            ],
+            [
+              1316,
+              479,
+              1397,
+              505
+            ],
+            [
+              1316,
+              513,
+              1397,
+              539
+            ],
+            [
+              1316,
+              617,
+              1397,
+              643
+            ],
+            [
+              1316,
+              651,
+              1397,
+              677
+            ],
+            [
+              1316,
+              686,
+              1397,
+              712
+            ],
+            [
+              1316,
+              720,
+              1397,
+              746
+            ],
+            [
+              1316,
+              754,
+              1397,
+              780
+            ],
+            [
+              1316,
+              789,
+              1397,
+              815
+            ],
+            [
+              1316,
+              823,
+              1397,
+              849
+            ],
+            [
+              1316,
+              858,
+              1397,
+              884
+            ],
+            [
+              1316,
+              892,
+              1397,
+              918
+            ],
+            [
+              1316,
+              927,
+              1397,
+              953
+            ],
+            [
+              1316,
+              961,
+              2732,
+              985
+            ],
+            [
+              1316,
+              995,
+              2731,
+              1019
+            ],
+            [
+              1316,
+              1029,
+              2731,
+              1053
+            ],
+            [
+              1317,
+              1063,
+              2382,
+              1087
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 425,
+              "height": 21
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 1416,
+              "height": 24
+            },
+            {
+              "width": 1415,
+              "height": 24
+            },
+            {
+              "width": 1415,
+              "height": 24
+            },
+            {
+              "width": 1065,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1316,
+              203,
+              1397,
+              229
+            ],
+            [
+              1316,
+              238,
+              1397,
+              264
+            ],
+            [
+              1316,
+              272,
+              1397,
+              298
+            ],
+            [
+              1316,
+              307,
+              1397,
+              333
+            ],
+            [
+              1316,
+              341,
+              1397,
+              367
+            ],
+            [
+              1316,
+              376,
+              1397,
+              402
+            ],
+            [
+              1316,
+              410,
+              1397,
+              436
+            ],
+            [
+              1316,
+              445,
+              1397,
+              471
+            ],
+            [
+              1316,
+              479,
+              1397,
+              505
+            ],
+            [
+              1316,
+              513,
+              1397,
+              539
+            ],
+            [
+              1316,
+              617,
+              1397,
+              643
+            ],
+            [
+              1316,
+              651,
+              1397,
+              677
+            ],
+            [
+              1316,
+              686,
+              1397,
+              712
+            ],
+            [
+              1316,
+              720,
+              1397,
+              746
+            ],
+            [
+              1316,
+              754,
+              1397,
+              780
+            ],
+            [
+              1316,
+              789,
+              1397,
+              815
+            ],
+            [
+              1316,
+              823,
+              1397,
+              849
+            ],
+            [
+              1316,
+              858,
+              1397,
+              884
+            ],
+            [
+              1316,
+              892,
+              1397,
+              918
+            ],
+            [
+              1316,
+              927,
+              1397,
+              953
+            ]
+          ],
+          "repeatTopAdvances": [
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            34,
+            104,
+            34,
+            35,
+            34,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35
+          ],
+          "repeatBottomAdvances": [
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            34,
+            104,
+            34,
+            35,
+            34,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35
+          ],
+          "betweenRepeat10And11TopAdvance": 104,
+          "firstTenTopSpan": 310,
+          "lastTenTopSpan": 310,
+          "all20TopSpan": 724,
+          "interBlockEmptyStripeInk": null,
+          "tailNeutralInk": null,
+          "longVisualLineInk": [
+            [
+              1316,
+              961,
+              2732,
+              985
+            ],
+            [
+              1316,
+              995,
+              2731,
+              1019
+            ],
+            [
+              1316,
+              1029,
+              2731,
+              1053
+            ],
+            [
+              1317,
+              1063,
+              2382,
+              1087
+            ]
+          ],
+          "longTopAdvances": [
+            34,
+            34,
+            34
+          ],
+          "firstTitleInkLeftMinusDividerStart": 50
+        },
+        "200": {
+          "rowInk": [
+            [
+              1316,
+              171,
+              1742,
+              192
+            ],
+            [
+              1316,
+              203,
+              1397,
+              229
+            ],
+            [
+              1316,
+              238,
+              1397,
+              264
+            ],
+            [
+              1316,
+              272,
+              1397,
+              298
+            ],
+            [
+              1316,
+              307,
+              1397,
+              333
+            ],
+            [
+              1316,
+              341,
+              1397,
+              367
+            ],
+            [
+              1316,
+              376,
+              1397,
+              402
+            ],
+            [
+              1316,
+              410,
+              1397,
+              436
+            ],
+            [
+              1316,
+              445,
+              1397,
+              471
+            ],
+            [
+              1316,
+              479,
+              1397,
+              505
+            ],
+            [
+              1316,
+              513,
+              1397,
+              539
+            ],
+            [
+              1316,
+              617,
+              1397,
+              643
+            ],
+            [
+              1316,
+              651,
+              1397,
+              677
+            ],
+            [
+              1316,
+              686,
+              1397,
+              712
+            ],
+            [
+              1316,
+              720,
+              1397,
+              746
+            ],
+            [
+              1316,
+              754,
+              1397,
+              780
+            ],
+            [
+              1316,
+              789,
+              1397,
+              815
+            ],
+            [
+              1316,
+              823,
+              1397,
+              849
+            ],
+            [
+              1316,
+              858,
+              1397,
+              884
+            ],
+            [
+              1316,
+              892,
+              1397,
+              918
+            ],
+            [
+              1316,
+              927,
+              1397,
+              953
+            ],
+            [
+              1316,
+              961,
+              2732,
+              985
+            ],
+            [
+              1316,
+              995,
+              2731,
+              1019
+            ],
+            [
+              1316,
+              1029,
+              2731,
+              1053
+            ],
+            [
+              1316,
+              1063,
+              2382,
+              1087
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 426,
+              "height": 21
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 81,
+              "height": 26
+            },
+            {
+              "width": 1416,
+              "height": 24
+            },
+            {
+              "width": 1415,
+              "height": 24
+            },
+            {
+              "width": 1415,
+              "height": 24
+            },
+            {
+              "width": 1066,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1316,
+              203,
+              1397,
+              229
+            ],
+            [
+              1316,
+              238,
+              1397,
+              264
+            ],
+            [
+              1316,
+              272,
+              1397,
+              298
+            ],
+            [
+              1316,
+              307,
+              1397,
+              333
+            ],
+            [
+              1316,
+              341,
+              1397,
+              367
+            ],
+            [
+              1316,
+              376,
+              1397,
+              402
+            ],
+            [
+              1316,
+              410,
+              1397,
+              436
+            ],
+            [
+              1316,
+              445,
+              1397,
+              471
+            ],
+            [
+              1316,
+              479,
+              1397,
+              505
+            ],
+            [
+              1316,
+              513,
+              1397,
+              539
+            ],
+            [
+              1316,
+              617,
+              1397,
+              643
+            ],
+            [
+              1316,
+              651,
+              1397,
+              677
+            ],
+            [
+              1316,
+              686,
+              1397,
+              712
+            ],
+            [
+              1316,
+              720,
+              1397,
+              746
+            ],
+            [
+              1316,
+              754,
+              1397,
+              780
+            ],
+            [
+              1316,
+              789,
+              1397,
+              815
+            ],
+            [
+              1316,
+              823,
+              1397,
+              849
+            ],
+            [
+              1316,
+              858,
+              1397,
+              884
+            ],
+            [
+              1316,
+              892,
+              1397,
+              918
+            ],
+            [
+              1316,
+              927,
+              1397,
+              953
+            ]
+          ],
+          "repeatTopAdvances": [
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            34,
+            104,
+            34,
+            35,
+            34,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35
+          ],
+          "repeatBottomAdvances": [
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35,
+            34,
+            34,
+            104,
+            34,
+            35,
+            34,
+            34,
+            35,
+            34,
+            35,
+            34,
+            35
+          ],
+          "betweenRepeat10And11TopAdvance": 104,
+          "firstTenTopSpan": 310,
+          "lastTenTopSpan": 310,
+          "all20TopSpan": 724,
+          "interBlockEmptyStripeInk": null,
+          "tailNeutralInk": null,
+          "longVisualLineInk": [
+            [
+              1316,
+              961,
+              2732,
+              985
+            ],
+            [
+              1316,
+              995,
+              2731,
+              1019
+            ],
+            [
+              1316,
+              1029,
+              2731,
+              1053
+            ],
+            [
+              1316,
+              1063,
+              2382,
+              1087
+            ]
+          ],
+          "longTopAdvances": [
+            34,
+            34,
+            34
+          ],
+          "firstTitleInkLeftMinusDividerStart": 49
+        }
+      },
+      "divider": {
+        "roi": [
+          1168,
+          1200,
+          1280,
+          1600
+        ],
+        "columnMeanGray": {
+          "1168": 255.0,
+          "1169": 255.0,
+          "1170": 255.0,
+          "1171": 255.0,
+          "1172": 255.0,
+          "1173": 255.0,
+          "1174": 255.0,
+          "1175": 255.0,
+          "1176": 255.0,
+          "1177": 255.0,
+          "1178": 255.0,
+          "1179": 255.0,
+          "1180": 255.0,
+          "1181": 255.0,
+          "1182": 255.0,
+          "1183": 255.0,
+          "1184": 255.0,
+          "1185": 255.0,
+          "1186": 255.0,
+          "1187": 255.0,
+          "1188": 255.0,
+          "1189": 255.0,
+          "1190": 255.0,
+          "1191": 255.0,
+          "1192": 255.0,
+          "1193": 255.0,
+          "1194": 255.0,
+          "1195": 255.0,
+          "1196": 255.0,
+          "1197": 255.0,
+          "1198": 255.0,
+          "1199": 255.0,
+          "1200": 255.0,
+          "1201": 255.0,
+          "1202": 255.0,
+          "1203": 255.0,
+          "1204": 255.0,
+          "1205": 255.0,
+          "1206": 255.0,
+          "1207": 255.0,
+          "1208": 255.0,
+          "1209": 255.0,
+          "1210": 255.0,
+          "1211": 255.0,
+          "1212": 255.0,
+          "1213": 255.0,
+          "1214": 255.0,
+          "1215": 255.0,
+          "1216": 255.0,
+          "1217": 255.0,
+          "1218": 255.0,
+          "1219": 255.0,
+          "1220": 255.0,
+          "1221": 255.0,
+          "1222": 255.0,
+          "1223": 255.0,
+          "1224": 255.0,
+          "1225": 255.0,
+          "1226": 255.0,
+          "1227": 255.0,
+          "1228": 255.0,
+          "1229": 255.0,
+          "1230": 255.0,
+          "1231": 255.0,
+          "1232": 255.0,
+          "1233": 255.0,
+          "1234": 255.0,
+          "1235": 255.0,
+          "1236": 255.0,
+          "1237": 255.0,
+          "1238": 255.0,
+          "1239": 255.0,
+          "1240": 255.0,
+          "1241": 255.0,
+          "1242": 255.0,
+          "1243": 255.0,
+          "1244": 255.0,
+          "1245": 255.0,
+          "1246": 255.0,
+          "1247": 255.0,
+          "1248": 255.0,
+          "1249": 255.0,
+          "1250": 255.0,
+          "1251": 255.0,
+          "1252": 255.0,
+          "1253": 255.0,
+          "1254": 255.0,
+          "1255": 255.0,
+          "1256": 255.0,
+          "1257": 255.0,
+          "1258": 255.0,
+          "1259": 255.0,
+          "1260": 255.0,
+          "1261": 255.0,
+          "1262": 255.0,
+          "1263": 255.0,
+          "1264": 255.0,
+          "1265": 255.0,
+          "1266": 255.0,
+          "1267": 222.0,
+          "1268": 222.0,
+          "1269": 255.0,
+          "1270": 255.0,
+          "1271": 255.0,
+          "1272": 255.0,
+          "1273": 255.0,
+          "1274": 255.0,
+          "1275": 255.0,
+          "1276": 255.0,
+          "1277": 255.0,
+          "1278": 255.0,
+          "1279": 255.0
+        },
+        "meanGrayLessThan240Columns": [
+          1267,
+          1268
+        ],
+        "darkBandX": [
+          1267,
+          1269
+        ]
+      }
+    }
+  },
+  "pair": {
+    "sameDecodedCanvas": true,
+    "sameContentFrameEstablished": false,
+    "axRawBodyEqual": false,
+    "axBodyEqualIgnoringTrailingLF": true,
+    "sidebarVisualApproximateX": {
+      "original": 456,
+      "clone": 546
+    },
+    "dividerStartDelta": 91,
+    "thresholds": {
+      "120": {
+        "rows": [
+          {
+            "visualRowIndex": 0,
+            "topDelta": -4,
+            "bottomDelta": -4,
+            "bboxDelta": [
+              91,
+              -4,
+              91,
+              -4
+            ],
+            "widthDelta": 0,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 1,
+            "topDelta": -4,
+            "bottomDelta": -4,
+            "bboxDelta": [
+              91,
+              -4,
+              88,
+              -4
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 2,
+            "topDelta": -3,
+            "bottomDelta": -3,
+            "bboxDelta": [
+              91,
+              -3,
+              88,
+              -3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 3,
+            "topDelta": -3,
+            "bottomDelta": -3,
+            "bboxDelta": [
+              91,
+              -3,
+              88,
+              -3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 4,
+            "topDelta": -2,
+            "bottomDelta": -2,
+            "bboxDelta": [
+              91,
+              -2,
+              88,
+              -2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 5,
+            "topDelta": -2,
+            "bottomDelta": -2,
+            "bboxDelta": [
+              91,
+              -2,
+              88,
+              -2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 6,
+            "topDelta": -1,
+            "bottomDelta": -1,
+            "bboxDelta": [
+              91,
+              -1,
+              88,
+              -1
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 7,
+            "topDelta": -1,
+            "bottomDelta": -1,
+            "bboxDelta": [
+              91,
+              -1,
+              88,
+              -1
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 8,
+            "topDelta": 0,
+            "bottomDelta": 0,
+            "bboxDelta": [
+              91,
+              0,
+              88,
+              0
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 9,
+            "topDelta": 0,
+            "bottomDelta": 0,
+            "bboxDelta": [
+              91,
+              0,
+              88,
+              0
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 10,
+            "topDelta": 0,
+            "bottomDelta": 0,
+            "bboxDelta": [
+              91,
+              0,
+              88,
+              0
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 11,
+            "topDelta": 2,
+            "bottomDelta": 2,
+            "bboxDelta": [
+              91,
+              2,
+              88,
+              2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 12,
+            "topDelta": 2,
+            "bottomDelta": 2,
+            "bboxDelta": [
+              91,
+              2,
+              88,
+              2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 13,
+            "topDelta": 3,
+            "bottomDelta": 3,
+            "bboxDelta": [
+              91,
+              3,
+              88,
+              3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 14,
+            "topDelta": 3,
+            "bottomDelta": 3,
+            "bboxDelta": [
+              91,
+              3,
+              88,
+              3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 15,
+            "topDelta": 3,
+            "bottomDelta": 3,
+            "bboxDelta": [
+              91,
+              3,
+              88,
+              3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 16,
+            "topDelta": 4,
+            "bottomDelta": 4,
+            "bboxDelta": [
+              91,
+              4,
+              88,
+              4
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 17,
+            "topDelta": 4,
+            "bottomDelta": 4,
+            "bboxDelta": [
+              91,
+              4,
+              88,
+              4
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 18,
+            "topDelta": 5,
+            "bottomDelta": 5,
+            "bboxDelta": [
+              91,
+              5,
+              88,
+              5
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 19,
+            "topDelta": 5,
+            "bottomDelta": 5,
+            "bboxDelta": [
+              91,
+              5,
+              88,
+              5
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 20,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              88,
+              6
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 21,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              13,
+              6
+            ],
+            "widthDelta": -78,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          },
+          {
+            "visualRowIndex": 22,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              11,
+              6
+            ],
+            "widthDelta": -80,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          },
+          {
+            "visualRowIndex": 23,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              12,
+              6
+            ],
+            "widthDelta": -79,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          },
+          {
+            "visualRowIndex": 24,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              92,
+              6,
+              324,
+              6
+            ],
+            "widthDelta": 232,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          }
+        ]
+      },
+      "160": {
+        "rows": [
+          {
+            "visualRowIndex": 0,
+            "topDelta": -4,
+            "bottomDelta": -4,
+            "bboxDelta": [
+              91,
+              -4,
+              91,
+              -4
+            ],
+            "widthDelta": 0,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 1,
+            "topDelta": -4,
+            "bottomDelta": -4,
+            "bboxDelta": [
+              91,
+              -4,
+              88,
+              -4
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 2,
+            "topDelta": -3,
+            "bottomDelta": -3,
+            "bboxDelta": [
+              91,
+              -3,
+              88,
+              -3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 3,
+            "topDelta": -3,
+            "bottomDelta": -3,
+            "bboxDelta": [
+              91,
+              -3,
+              88,
+              -3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 4,
+            "topDelta": -2,
+            "bottomDelta": -2,
+            "bboxDelta": [
+              91,
+              -2,
+              88,
+              -2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 5,
+            "topDelta": -2,
+            "bottomDelta": -2,
+            "bboxDelta": [
+              91,
+              -2,
+              88,
+              -2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 6,
+            "topDelta": -1,
+            "bottomDelta": -1,
+            "bboxDelta": [
+              91,
+              -1,
+              88,
+              -1
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 7,
+            "topDelta": -1,
+            "bottomDelta": -1,
+            "bboxDelta": [
+              91,
+              -1,
+              88,
+              -1
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 8,
+            "topDelta": 0,
+            "bottomDelta": 0,
+            "bboxDelta": [
+              91,
+              0,
+              88,
+              0
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 9,
+            "topDelta": 0,
+            "bottomDelta": 0,
+            "bboxDelta": [
+              91,
+              0,
+              88,
+              0
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 10,
+            "topDelta": 0,
+            "bottomDelta": 0,
+            "bboxDelta": [
+              91,
+              0,
+              88,
+              0
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 11,
+            "topDelta": 2,
+            "bottomDelta": 2,
+            "bboxDelta": [
+              91,
+              2,
+              88,
+              2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 12,
+            "topDelta": 2,
+            "bottomDelta": 2,
+            "bboxDelta": [
+              91,
+              2,
+              88,
+              2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 13,
+            "topDelta": 3,
+            "bottomDelta": 3,
+            "bboxDelta": [
+              91,
+              3,
+              88,
+              3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 14,
+            "topDelta": 3,
+            "bottomDelta": 3,
+            "bboxDelta": [
+              91,
+              3,
+              88,
+              3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 15,
+            "topDelta": 3,
+            "bottomDelta": 3,
+            "bboxDelta": [
+              91,
+              3,
+              88,
+              3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 16,
+            "topDelta": 4,
+            "bottomDelta": 4,
+            "bboxDelta": [
+              91,
+              4,
+              88,
+              4
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 17,
+            "topDelta": 4,
+            "bottomDelta": 4,
+            "bboxDelta": [
+              91,
+              4,
+              88,
+              4
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 18,
+            "topDelta": 5,
+            "bottomDelta": 5,
+            "bboxDelta": [
+              91,
+              5,
+              88,
+              5
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 19,
+            "topDelta": 5,
+            "bottomDelta": 5,
+            "bboxDelta": [
+              91,
+              5,
+              88,
+              5
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 20,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              88,
+              6
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 21,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              12,
+              6
+            ],
+            "widthDelta": -79,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          },
+          {
+            "visualRowIndex": 22,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              11,
+              6
+            ],
+            "widthDelta": -80,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          },
+          {
+            "visualRowIndex": 23,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              12,
+              6
+            ],
+            "widthDelta": -79,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          },
+          {
+            "visualRowIndex": 24,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              92,
+              6,
+              324,
+              6
+            ],
+            "widthDelta": 232,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          }
+        ]
+      },
+      "200": {
+        "rows": [
+          {
+            "visualRowIndex": 0,
+            "topDelta": -4,
+            "bottomDelta": -4,
+            "bboxDelta": [
+              91,
+              -4,
+              91,
+              -4
+            ],
+            "widthDelta": 0,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 1,
+            "topDelta": -4,
+            "bottomDelta": -4,
+            "bboxDelta": [
+              91,
+              -4,
+              88,
+              -4
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 2,
+            "topDelta": -3,
+            "bottomDelta": -3,
+            "bboxDelta": [
+              91,
+              -3,
+              88,
+              -3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 3,
+            "topDelta": -3,
+            "bottomDelta": -3,
+            "bboxDelta": [
+              91,
+              -3,
+              88,
+              -3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 4,
+            "topDelta": -2,
+            "bottomDelta": -2,
+            "bboxDelta": [
+              91,
+              -2,
+              88,
+              -2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 5,
+            "topDelta": -2,
+            "bottomDelta": -2,
+            "bboxDelta": [
+              91,
+              -2,
+              88,
+              -2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 6,
+            "topDelta": -1,
+            "bottomDelta": -1,
+            "bboxDelta": [
+              91,
+              -1,
+              88,
+              -1
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 7,
+            "topDelta": -1,
+            "bottomDelta": -1,
+            "bboxDelta": [
+              91,
+              -1,
+              88,
+              -1
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 8,
+            "topDelta": 0,
+            "bottomDelta": 0,
+            "bboxDelta": [
+              91,
+              0,
+              88,
+              0
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 9,
+            "topDelta": 0,
+            "bottomDelta": 0,
+            "bboxDelta": [
+              91,
+              0,
+              88,
+              0
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 10,
+            "topDelta": 0,
+            "bottomDelta": 0,
+            "bboxDelta": [
+              91,
+              0,
+              88,
+              0
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 11,
+            "topDelta": 2,
+            "bottomDelta": 2,
+            "bboxDelta": [
+              91,
+              2,
+              88,
+              2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 12,
+            "topDelta": 2,
+            "bottomDelta": 2,
+            "bboxDelta": [
+              91,
+              2,
+              88,
+              2
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 13,
+            "topDelta": 3,
+            "bottomDelta": 3,
+            "bboxDelta": [
+              91,
+              3,
+              88,
+              3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 14,
+            "topDelta": 3,
+            "bottomDelta": 3,
+            "bboxDelta": [
+              91,
+              3,
+              88,
+              3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 15,
+            "topDelta": 3,
+            "bottomDelta": 3,
+            "bboxDelta": [
+              91,
+              3,
+              88,
+              3
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 16,
+            "topDelta": 4,
+            "bottomDelta": 4,
+            "bboxDelta": [
+              91,
+              4,
+              88,
+              4
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 17,
+            "topDelta": 4,
+            "bottomDelta": 4,
+            "bboxDelta": [
+              91,
+              4,
+              88,
+              4
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 18,
+            "topDelta": 5,
+            "bottomDelta": 5,
+            "bboxDelta": [
+              91,
+              5,
+              88,
+              5
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 19,
+            "topDelta": 5,
+            "bottomDelta": 5,
+            "bboxDelta": [
+              91,
+              5,
+              88,
+              5
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 20,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              88,
+              6
+            ],
+            "widthDelta": -3,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": true
+          },
+          {
+            "visualRowIndex": 21,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              12,
+              6
+            ],
+            "widthDelta": -79,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          },
+          {
+            "visualRowIndex": 22,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              11,
+              6
+            ],
+            "widthDelta": -80,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          },
+          {
+            "visualRowIndex": 23,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              11,
+              6
+            ],
+            "widthDelta": -80,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          },
+          {
+            "visualRowIndex": 24,
+            "topDelta": 6,
+            "bottomDelta": 6,
+            "bboxDelta": [
+              91,
+              6,
+              323,
+              6
+            ],
+            "widthDelta": 232,
+            "heightDelta": 0,
+            "sameVisibleTextSegment": false
+          }
+        ]
+      }
+    }
+  },
+  "limits": [
+    "Supplied captures and AX only; no GUI/runtime/product/build actions or candidate package identity inspection.",
+    "No image translation, scaling, forced registration or prior measured values reused. Enlarged crop used for manual text reading only; bbox measured from original decoded pixels.",
+    "AX raw body differs by one trailing LF under explicit extraction boundary; trailing empty paragraph semantics not proven by serialized AX text alone.",
+    "Visible clone gold caret lies below paragraph; it is excluded by neutral-ink rule. Gold caret alone does not override HTML-focused AX declaration.",
+    "20 Ag中文 lines and4 wrapped paragraph lines visible in both; wrapped segments differ due unequal captured content frame.",
+    "Right content-box edge and independent scroll offset not measured; original scrollbar AX value0 and all text visible do not establish equal layout frame.",
+    "JPEG-derived threshold ink boxes are approximate; not true baselines and no pixel PASS."
+  ],
+  "sourcesAfter": {
+    "06-original-long.cua-image": {
+      "path": "docs/verification/mac-body-vertical-runtime-03/06-original-long.cua-image",
+      "bytes": 405372,
+      "sha256": "0d8e106b588ec9b24268596dadc0a01e116ee735e2b6cef71702ace7296067ce"
+    },
+    "06-original-long.ax.txt": {
+      "path": "docs/verification/mac-body-vertical-runtime-03/06-original-long.ax.txt",
+      "bytes": 8843,
+      "sha256": "af9d22408fedf0708679d61b4a892cc7989aa547ce13d32c1a760864395d4035"
+    },
+    "07-body03-long.cua-image": {
+      "path": "docs/verification/mac-body-vertical-runtime-03/07-body03-long.cua-image",
+      "bytes": 393398,
+      "sha256": "439cbc689581d7b6e04f72d6fd1aa7dbea225dd1ee8e08187435cf34ff957f61"
+    },
+    "07-body03-long.ax.txt": {
+      "path": "docs/verification/mac-body-vertical-runtime-03/07-body03-long.ax.txt",
+      "bytes": 5665,
+      "sha256": "e33c112f809b26b29475cf9318ead58d830ae28f4c8d8e14b5ac5f2372d4be22"
+    },
+    "long-corpus.txt": {
+      "path": "docs/verification/mac-body-vertical-runtime-03/long-corpus.txt",
+      "bytes": 833,
+      "sha256": "2b2a2e1ecdaf34af8190d55beee7909eb929a84a9c13a8d5a4a9655812f8893a"
+    }
+  },
+  "sourcesUnchanged": true,
+  "verification": {
+    "minimumFreeBytes": 2147483648,
+    "freeBytesBeforeWrite": 77492633600,
+    "outputScope": "Only new README.md and result.json under mac-body-vertical-long-baseline-03; no root manifest.",
+    "independentBboxRecalculationsMatched": 162,
+    "all5InputIdentitiesRechecked": true
+  }
+}

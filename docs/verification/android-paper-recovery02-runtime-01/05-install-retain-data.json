@@ -1,0 +1,51 @@
+{
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "at": "2026-11-04T09:02:34.631982+00:00",
+  "hostFreeBefore": 76285661184,
+  "spaceBefore": {
+    "hostFreeBytes": 76285657088,
+    "deviceDataDf": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 628736   5311196  11% /storage/emulated/0/Android/obb\n"
+  },
+  "apk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/android-paper-recovery02/android-attempt01/android-original.apk",
+    "bytes": 177445114,
+    "sha256": "843e0c01aad154872851664ced574e1fa07544d8fcf874022698c37a3ee160f8"
+  },
+  "status": "PASS",
+  "events": [
+    {
+      "at": "2026-11-04T09:02:34.651085+00:00",
+      "args": [
+        "get-state"
+      ],
+      "exitCode": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T09:02:34.677231+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 628736   5311196  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T09:02:35.868265+00:00",
+      "args": [
+        "install",
+        "-r",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/android-paper-recovery02/android-attempt01/android-original.apk"
+      ],
+      "exitCode": 0,
+      "stdout": "Performing Streamed Install\nSuccess\n",
+      "stderr": ""
+    }
+  ],
+  "hostFreeAfter": 76285644800
+}

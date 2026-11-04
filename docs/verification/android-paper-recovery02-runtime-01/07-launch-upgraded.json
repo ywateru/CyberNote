@@ -1,0 +1,49 @@
+{
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "at": "2026-11-04T09:03:24.958058+00:00",
+  "hostFreeBefore": 76284592128,
+  "spaceBefore": {
+    "hostFreeBytes": 76284592128,
+    "deviceDataDf": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 624428   5315504  11% /storage/emulated/0/Android/obb\n"
+  },
+  "launch": "Starting: Intent { cmp=com.local.notesclone/.MainActivity }\n",
+  "status": "PASS",
+  "events": [
+    {
+      "at": "2026-11-04T09:03:24.976073+00:00",
+      "args": [
+        "get-state"
+      ],
+      "exitCode": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T09:03:24.994770+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 624428   5315504  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T09:03:25.026952+00:00",
+      "args": [
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "com.local.notesclone/.MainActivity"
+      ],
+      "exitCode": 0,
+      "stdout": "Starting: Intent { cmp=com.local.notesclone/.MainActivity }\n",
+      "stderr": ""
+    }
+  ],
+  "hostFreeAfter": 76284592128
+}
