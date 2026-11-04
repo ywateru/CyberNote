@@ -1,0 +1,5646 @@
+{
+  "binary": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-qa-fix-store",
+  "binaryHash": "f43d9695ad1d5cb9a0e0e42bb6af415f6a2e3bf78d65979b57e7ac607b0620cf",
+  "method": "production App/Editor; controlled browser DOM composition with real browser input; only preview action/access transports adapted",
+  "results": [
+    {
+      "name": "independent02-last-reference-repro-now-retained",
+      "stages": [
+        {
+          "before": {
+            "html": "<p><strong><span data-note-tag=\"独审\" class=\"note-tag\">#独</span></strong><em><span data-note-tag=\"独审\" class=\"note-tag\">审</span></em> A</p><h2><strong>保持格式</strong></h2>",
+            "raw": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "#独"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "legal": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "#独"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 3
+            },
+            "domSelection": {
+              "anchorText": "#独",
+              "anchorOffset": 2,
+              "focusText": "#独",
+              "focusOffset": 2,
+              "inside": true
+            },
+            "composing": false,
+            "focused": true,
+            "hasFocus": true,
+            "editable": true,
+            "contentEditable": "true",
+            "hidden": false,
+            "inert": false,
+            "alive": true,
+            "same": true,
+            "events": [],
+            "rows": [
+              "#独审 A09:47保持格式"
+            ],
+            "tags": "⌄ 标签所有标签#独审清除",
+            "bodyText": "浏览器预览 · 独立演示数据\n快速备忘录\n0\n在我的 Mac 上\n全部备忘录\n1\n备忘录\n1\n⌄ 标签\n所有标签\n#独审\n清除\n新建文件夹\n#独审\n1个备忘录\n今天\n#独审 A\n09:47\n保持格式\n格式\n2026年11月4日 09:47\n\n#独审 A\n\n保持格式",
+            "storeResults": []
+          }
+        },
+        {
+          "immediate": {
+            "html": "<p><strong><span data-note-tag=\"独审\" class=\"note-tag\">#独</span></strong><strong><span data-note-tag=\"独审\" class=\"note-tag\">变</span></strong><em><span data-note-tag=\"独审\" class=\"note-tag\">审</span></em> A</p><h2><strong>保持格式</strong></h2>",
+            "raw": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "#独变"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "legal": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "#独变"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 4,
+              "head": 4
+            },
+            "domSelection": {
+              "anchorText": "变",
+              "anchorOffset": 1,
+              "focusText": "变",
+              "focusOffset": 1,
+              "inside": true
+            },
+            "composing": true,
+            "focused": true,
+            "hasFocus": true,
+            "editable": true,
+            "contentEditable": "true",
+            "hidden": false,
+            "inert": false,
+            "alive": true,
+            "same": true,
+            "events": [
+              {
+                "type": "compositionstart",
+                "trusted": false,
+                "data": "",
+                "composing": false,
+                "editable": true
+              },
+              {
+                "type": "beforeinput",
+                "trusted": true,
+                "data": "变",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "input",
+                "trusted": true,
+                "data": "变",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              }
+            ],
+            "rows": [],
+            "tags": "⌄ 标签所有标签清除",
+            "bodyText": "浏览器预览 · 独立演示数据\n快速备忘录\n0\n在我的 Mac 上\n全部备忘录\n1\n备忘录\n1\n⌄ 标签\n所有标签\n清除\n新建文件夹\n#独审\n0个备忘录\n无备忘录\n格式\n2026年11月4日 09:47\n\n#独变审 A\n\n保持格式\n正在保存…",
+            "storeResults": []
+          },
+          "acked": {
+            "html": "<p><strong><span data-note-tag=\"独审\" class=\"note-tag\">#独</span></strong><strong><span data-note-tag=\"独审\" class=\"note-tag\">变</span></strong><em><span data-note-tag=\"独审\" class=\"note-tag\">审</span></em> A</p><h2><strong>保持格式</strong></h2>",
+            "raw": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "#独变"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "legal": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "#独变"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 4,
+              "head": 4
+            },
+            "domSelection": {
+              "anchorText": "变",
+              "anchorOffset": 1,
+              "focusText": "变",
+              "focusOffset": 1,
+              "inside": true
+            },
+            "composing": true,
+            "focused": true,
+            "hasFocus": true,
+            "editable": true,
+            "contentEditable": "true",
+            "hidden": false,
+            "inert": false,
+            "alive": true,
+            "same": true,
+            "events": [
+              {
+                "type": "compositionstart",
+                "trusted": false,
+                "data": "",
+                "composing": false,
+                "editable": true
+              },
+              {
+                "type": "beforeinput",
+                "trusted": true,
+                "data": "变",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "input",
+                "trusted": true,
+                "data": "变",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              }
+            ],
+            "rows": [],
+            "tags": "⌄ 标签所有标签清除",
+            "bodyText": "浏览器预览 · 独立演示数据\n快速备忘录\n0\n在我的 Mac 上\n全部备忘录\n1\n备忘录\n1\n⌄ 标签\n所有标签\n清除\n新建文件夹\n#独审\n0个备忘录\n无备忘录\n格式\n2026年11月4日 09:47\n\n#独变审 A\n\n保持格式",
+            "storeResults": [
+              {
+                "action": {
+                  "type": "saveNote",
+                  "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                  "saveIntent": "01c19fe3-8452-42b4-a4f8-b34cbb45a197",
+                  "document": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "#独变"
+                          },
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "italic"
+                              }
+                            ],
+                            "text": "审"
+                          },
+                          {
+                            "type": "text",
+                            "text": " A"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 2
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "保持格式"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "revision": 1
+                },
+                "result": {
+                  "ok": true,
+                  "value": {
+                    "createdAt": 1793756875844,
+                    "deletedAt": null,
+                    "document": {
+                      "content": [
+                        {
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "#独变",
+                              "type": "text"
+                            },
+                            {
+                              "marks": [
+                                {
+                                  "type": "italic"
+                                }
+                              ],
+                              "text": "审",
+                              "type": "text"
+                            },
+                            {
+                              "text": " A",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "paragraph"
+                        },
+                        {
+                          "attrs": {
+                            "level": 2
+                          },
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "保持格式",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "heading"
+                        }
+                      ],
+                      "type": "doc"
+                    },
+                    "folderId": "default",
+                    "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                    "locked": false,
+                    "originalFolderId": null,
+                    "paperStyle": "plain",
+                    "pinned": false,
+                    "plainText": "#独变审 A\n保持格式",
+                    "revision": 2,
+                    "sealed": null,
+                    "title": "#独变审 A",
+                    "updatedAt": 1793756877298
+                  }
+                }
+              }
+            ]
+          },
+          "continued": {
+            "html": "<p><strong><span data-note-tag=\"独审\" class=\"note-tag\">#独</span></strong><strong><span data-note-tag=\"独审\" class=\"note-tag\">变续</span></strong><em><span data-note-tag=\"独审\" class=\"note-tag\">审</span></em> A</p><h2><strong>保持格式</strong></h2>",
+            "raw": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "#独变续"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "legal": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "#独变续"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 5,
+              "head": 5
+            },
+            "domSelection": {
+              "anchorText": "变续",
+              "anchorOffset": 2,
+              "focusText": "变续",
+              "focusOffset": 2,
+              "inside": true
+            },
+            "composing": true,
+            "focused": true,
+            "hasFocus": true,
+            "editable": true,
+            "contentEditable": "true",
+            "hidden": false,
+            "inert": false,
+            "alive": true,
+            "same": true,
+            "events": [
+              {
+                "type": "compositionstart",
+                "trusted": false,
+                "data": "",
+                "composing": false,
+                "editable": true
+              },
+              {
+                "type": "beforeinput",
+                "trusted": true,
+                "data": "变",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "input",
+                "trusted": true,
+                "data": "变",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "beforeinput",
+                "trusted": true,
+                "data": "续",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "input",
+                "trusted": true,
+                "data": "续",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              }
+            ],
+            "rows": [],
+            "tags": "⌄ 标签所有标签清除",
+            "bodyText": "浏览器预览 · 独立演示数据\n快速备忘录\n0\n在我的 Mac 上\n全部备忘录\n1\n备忘录\n1\n⌄ 标签\n所有标签\n清除\n新建文件夹\n#独审\n0个备忘录\n无备忘录\n格式\n2026年11月4日 09:47\n\n#独变续审 A\n\n保持格式",
+            "storeResults": [
+              {
+                "action": {
+                  "type": "saveNote",
+                  "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                  "saveIntent": "01c19fe3-8452-42b4-a4f8-b34cbb45a197",
+                  "document": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "#独变"
+                          },
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "italic"
+                              }
+                            ],
+                            "text": "审"
+                          },
+                          {
+                            "type": "text",
+                            "text": " A"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 2
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "保持格式"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "revision": 1
+                },
+                "result": {
+                  "ok": true,
+                  "value": {
+                    "createdAt": 1793756875844,
+                    "deletedAt": null,
+                    "document": {
+                      "content": [
+                        {
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "#独变",
+                              "type": "text"
+                            },
+                            {
+                              "marks": [
+                                {
+                                  "type": "italic"
+                                }
+                              ],
+                              "text": "审",
+                              "type": "text"
+                            },
+                            {
+                              "text": " A",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "paragraph"
+                        },
+                        {
+                          "attrs": {
+                            "level": 2
+                          },
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "保持格式",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "heading"
+                        }
+                      ],
+                      "type": "doc"
+                    },
+                    "folderId": "default",
+                    "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                    "locked": false,
+                    "originalFolderId": null,
+                    "paperStyle": "plain",
+                    "pinned": false,
+                    "plainText": "#独变审 A\n保持格式",
+                    "revision": 2,
+                    "sealed": null,
+                    "title": "#独变审 A",
+                    "updatedAt": 1793756877298
+                  }
+                }
+              },
+              {
+                "action": {
+                  "type": "saveNote",
+                  "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                  "saveIntent": "b49b6433-8498-453c-b30d-ddc1122164ef",
+                  "document": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "#独变续"
+                          },
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "italic"
+                              }
+                            ],
+                            "text": "审"
+                          },
+                          {
+                            "type": "text",
+                            "text": " A"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 2
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "保持格式"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "revision": 2
+                },
+                "result": {
+                  "ok": true,
+                  "value": {
+                    "createdAt": 1793756875844,
+                    "deletedAt": null,
+                    "document": {
+                      "content": [
+                        {
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "#独变续",
+                              "type": "text"
+                            },
+                            {
+                              "marks": [
+                                {
+                                  "type": "italic"
+                                }
+                              ],
+                              "text": "审",
+                              "type": "text"
+                            },
+                            {
+                              "text": " A",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "paragraph"
+                        },
+                        {
+                          "attrs": {
+                            "level": 2
+                          },
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "保持格式",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "heading"
+                        }
+                      ],
+                      "type": "doc"
+                    },
+                    "folderId": "default",
+                    "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                    "locked": false,
+                    "originalFolderId": null,
+                    "paperStyle": "plain",
+                    "pinned": false,
+                    "plainText": "#独变续审 A\n保持格式",
+                    "revision": 3,
+                    "sealed": null,
+                    "title": "#独变续审 A",
+                    "updatedAt": 1793756877333
+                  }
+                }
+              }
+            ]
+          },
+          "stored": {
+            "createdAt": 1793756875844,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "content": [
+                    {
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "#独变续",
+                      "type": "text"
+                    },
+                    {
+                      "marks": [
+                        {
+                          "type": "italic"
+                        }
+                      ],
+                      "text": "审",
+                      "type": "text"
+                    },
+                    {
+                      "text": " A",
+                      "type": "text"
+                    }
+                  ],
+                  "type": "paragraph"
+                },
+                {
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式",
+                      "type": "text"
+                    }
+                  ],
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "#独变续审 A\n保持格式",
+            "revision": 3,
+            "sealed": null,
+            "title": "#独变续审 A",
+            "updatedAt": 1793756877333
+          }
+        },
+        {
+          "ended": {
+            "html": "<p><strong>#独变续</strong><em>审</em> A</p><h2><strong>保持格式</strong></h2>",
+            "raw": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "#独变续"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "legal": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "#独变续"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 5,
+              "head": 5
+            },
+            "domSelection": {
+              "anchorText": "#独变续",
+              "anchorOffset": 4,
+              "focusText": "#独变续",
+              "focusOffset": 4,
+              "inside": true
+            },
+            "composing": false,
+            "focused": false,
+            "hasFocus": false,
+            "editable": false,
+            "contentEditable": "false",
+            "hidden": true,
+            "inert": true,
+            "alive": true,
+            "same": true,
+            "events": [
+              {
+                "type": "compositionstart",
+                "trusted": false,
+                "data": "",
+                "composing": false,
+                "editable": true
+              },
+              {
+                "type": "beforeinput",
+                "trusted": true,
+                "data": "变",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "input",
+                "trusted": true,
+                "data": "变",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "beforeinput",
+                "trusted": true,
+                "data": "续",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "input",
+                "trusted": true,
+                "data": "续",
+                "inputType": "insertText",
+                "isComposing": false,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "compositionend",
+                "trusted": false,
+                "data": "变续",
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "blur",
+                "trusted": true,
+                "composing": false,
+                "editable": false
+              }
+            ],
+            "rows": [],
+            "tags": "⌄ 标签所有标签清除",
+            "bodyText": "浏览器预览 · 独立演示数据\n快速备忘录\n0\n在我的 Mac 上\n全部备忘录\n1\n备忘录\n1\n⌄ 标签\n所有标签\n清除\n新建文件夹\n#独审\n0个备忘录\n无备忘录\n正在保存…",
+            "storeResults": [
+              {
+                "action": {
+                  "type": "saveNote",
+                  "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                  "saveIntent": "01c19fe3-8452-42b4-a4f8-b34cbb45a197",
+                  "document": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "#独变"
+                          },
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "italic"
+                              }
+                            ],
+                            "text": "审"
+                          },
+                          {
+                            "type": "text",
+                            "text": " A"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 2
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "保持格式"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "revision": 1
+                },
+                "result": {
+                  "ok": true,
+                  "value": {
+                    "createdAt": 1793756875844,
+                    "deletedAt": null,
+                    "document": {
+                      "content": [
+                        {
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "#独变",
+                              "type": "text"
+                            },
+                            {
+                              "marks": [
+                                {
+                                  "type": "italic"
+                                }
+                              ],
+                              "text": "审",
+                              "type": "text"
+                            },
+                            {
+                              "text": " A",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "paragraph"
+                        },
+                        {
+                          "attrs": {
+                            "level": 2
+                          },
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "保持格式",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "heading"
+                        }
+                      ],
+                      "type": "doc"
+                    },
+                    "folderId": "default",
+                    "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                    "locked": false,
+                    "originalFolderId": null,
+                    "paperStyle": "plain",
+                    "pinned": false,
+                    "plainText": "#独变审 A\n保持格式",
+                    "revision": 2,
+                    "sealed": null,
+                    "title": "#独变审 A",
+                    "updatedAt": 1793756877298
+                  }
+                }
+              },
+              {
+                "action": {
+                  "type": "saveNote",
+                  "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                  "saveIntent": "b49b6433-8498-453c-b30d-ddc1122164ef",
+                  "document": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "#独变续"
+                          },
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "italic"
+                              }
+                            ],
+                            "text": "审"
+                          },
+                          {
+                            "type": "text",
+                            "text": " A"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 2
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "保持格式"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "revision": 2
+                },
+                "result": {
+                  "ok": true,
+                  "value": {
+                    "createdAt": 1793756875844,
+                    "deletedAt": null,
+                    "document": {
+                      "content": [
+                        {
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "#独变续",
+                              "type": "text"
+                            },
+                            {
+                              "marks": [
+                                {
+                                  "type": "italic"
+                                }
+                              ],
+                              "text": "审",
+                              "type": "text"
+                            },
+                            {
+                              "text": " A",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "paragraph"
+                        },
+                        {
+                          "attrs": {
+                            "level": 2
+                          },
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "保持格式",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "heading"
+                        }
+                      ],
+                      "type": "doc"
+                    },
+                    "folderId": "default",
+                    "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                    "locked": false,
+                    "originalFolderId": null,
+                    "paperStyle": "plain",
+                    "pinned": false,
+                    "plainText": "#独变续审 A\n保持格式",
+                    "revision": 3,
+                    "sealed": null,
+                    "title": "#独变续审 A",
+                    "updatedAt": 1793756877333
+                  }
+                }
+              },
+              {
+                "action": {
+                  "type": "saveNote",
+                  "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                  "saveIntent": "3995321e-99c3-4496-b30b-be97ea0dbc9e",
+                  "document": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "#独变续"
+                          },
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "italic"
+                              }
+                            ],
+                            "text": "审"
+                          },
+                          {
+                            "type": "text",
+                            "text": " A"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 2
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "保持格式"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "revision": 3
+                },
+                "result": {
+                  "ok": true,
+                  "value": {
+                    "createdAt": 1793756875844,
+                    "deletedAt": null,
+                    "document": {
+                      "content": [
+                        {
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "#独变续",
+                              "type": "text"
+                            },
+                            {
+                              "marks": [
+                                {
+                                  "type": "italic"
+                                }
+                              ],
+                              "text": "审",
+                              "type": "text"
+                            },
+                            {
+                              "text": " A",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "paragraph"
+                        },
+                        {
+                          "attrs": {
+                            "level": 2
+                          },
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "保持格式",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "heading"
+                        }
+                      ],
+                      "type": "doc"
+                    },
+                    "folderId": "default",
+                    "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+                    "locked": false,
+                    "originalFolderId": null,
+                    "paperStyle": "plain",
+                    "pinned": false,
+                    "plainText": "#独变续审 A\n保持格式",
+                    "revision": 4,
+                    "sealed": null,
+                    "title": "#独变续审 A",
+                    "updatedAt": 1793756877364
+                  }
+                }
+              }
+            ]
+          },
+          "stored": {
+            "createdAt": 1793756875844,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "content": [
+                    {
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "#独变续",
+                      "type": "text"
+                    },
+                    {
+                      "marks": [
+                        {
+                          "type": "italic"
+                        }
+                      ],
+                      "text": "审",
+                      "type": "text"
+                    },
+                    {
+                      "text": " A",
+                      "type": "text"
+                    }
+                  ],
+                  "type": "paragraph"
+                },
+                {
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式",
+                      "type": "text"
+                    }
+                  ],
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "#独变续审 A\n保持格式",
+            "revision": 4,
+            "sealed": null,
+            "title": "#独变续审 A",
+            "updatedAt": 1793756877364
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "engine-composition-multiple-candidates-and-commit",
+      "stages": [
+        {
+          "during": {
+            "html": "<p><strong><span data-note-tag=\"独审\" class=\"note-tag\">#独</span></strong><strong><span data-note-tag=\"独审\" class=\"note-tag\">变化</span></strong><em><span data-note-tag=\"独审\" class=\"note-tag\">审</span></em> A</p><h2><strong>保持格式</strong></h2>",
+            "raw": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "#独变化"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        },
+                        {
+                          "type": "noteTag",
+                          "attrs": {
+                            "name": "独审"
+                          }
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "legal": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "#独变化"
+                    },
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "italic"
+                        }
+                      ],
+                      "text": "审"
+                    },
+                    {
+                      "type": "text",
+                      "text": " A"
+                    }
+                  ]
+                },
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 5,
+              "head": 5
+            },
+            "domSelection": {
+              "anchorText": "变化",
+              "anchorOffset": 2,
+              "focusText": "变化",
+              "focusOffset": 2,
+              "inside": true
+            },
+            "composing": true,
+            "focused": true,
+            "hasFocus": true,
+            "editable": true,
+            "contentEditable": "true",
+            "hidden": false,
+            "inert": false,
+            "alive": true,
+            "same": true,
+            "events": [
+              {
+                "type": "compositionstart",
+                "trusted": true,
+                "data": "",
+                "composing": false,
+                "editable": true
+              },
+              {
+                "type": "compositionupdate",
+                "trusted": true,
+                "data": "bian",
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "beforeinput",
+                "trusted": true,
+                "data": "bian",
+                "inputType": "insertCompositionText",
+                "isComposing": true,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "input",
+                "trusted": true,
+                "data": "bian",
+                "inputType": "insertCompositionText",
+                "isComposing": true,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "compositionupdate",
+                "trusted": true,
+                "data": "变化",
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "beforeinput",
+                "trusted": true,
+                "data": "变化",
+                "inputType": "insertCompositionText",
+                "isComposing": true,
+                "composing": true,
+                "editable": true
+              },
+              {
+                "type": "input",
+                "trusted": true,
+                "data": "变化",
+                "inputType": "insertCompositionText",
+                "isComposing": true,
+                "composing": true,
+                "editable": true
+              }
+            ],
+            "rows": [],
+            "tags": "⌄ 标签所有标签清除",
+            "bodyText": "浏览器预览 · 独立演示数据\n快速备忘录\n0\n在我的 Mac 上\n全部备忘录\n1\n备忘录\n1\n⌄ 标签\n所有标签\n清除\n新建文件夹\n#独审\n0个备忘录\n无备忘录\n格式\n2026年11月4日 09:47\n\n#独变化审 A\n\n保持格式",
+            "storeResults": [
+              {
+                "action": {
+                  "type": "saveNote",
+                  "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+                  "saveIntent": "b0bc6ff1-f5eb-44dd-ba9e-f4e6c9b9de2e",
+                  "document": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "#独bian"
+                          },
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "italic"
+                              }
+                            ],
+                            "text": "审"
+                          },
+                          {
+                            "type": "text",
+                            "text": " A"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 2
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "保持格式"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "revision": 1
+                },
+                "result": {
+                  "ok": true,
+                  "value": {
+                    "createdAt": 1793756877403,
+                    "deletedAt": null,
+                    "document": {
+                      "content": [
+                        {
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "#独bian",
+                              "type": "text"
+                            },
+                            {
+                              "marks": [
+                                {
+                                  "type": "italic"
+                                }
+                              ],
+                              "text": "审",
+                              "type": "text"
+                            },
+                            {
+                              "text": " A",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "paragraph"
+                        },
+                        {
+                          "attrs": {
+                            "level": 2
+                          },
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "保持格式",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "heading"
+                        }
+                      ],
+                      "type": "doc"
+                    },
+                    "folderId": "default",
+                    "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+                    "locked": false,
+                    "originalFolderId": null,
+                    "paperStyle": "plain",
+                    "pinned": false,
+                    "plainText": "#独bian审 A\n保持格式",
+                    "revision": 2,
+                    "sealed": null,
+                    "title": "#独bian审 A",
+                    "updatedAt": 1793756877918
+                  }
+                }
+              },
+              {
+                "action": {
+                  "type": "saveNote",
+                  "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+                  "saveIntent": "7c134656-5b48-4ce9-94f3-34d857c1a529",
+                  "document": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "#独变化"
+                          },
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "italic"
+                              }
+                            ],
+                            "text": "审"
+                          },
+                          {
+                            "type": "text",
+                            "text": " A"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "heading",
+                        "attrs": {
+                          "level": 2
+                        },
+                        "content": [
+                          {
+                            "type": "text",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ],
+                            "text": "保持格式"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "revision": 2
+                },
+                "result": {
+                  "ok": true,
+                  "value": {
+                    "createdAt": 1793756877403,
+                    "deletedAt": null,
+                    "document": {
+                      "content": [
+                        {
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "#独变化",
+                              "type": "text"
+                            },
+                            {
+                              "marks": [
+                                {
+                                  "type": "italic"
+                                }
+                              ],
+                              "text": "审",
+                              "type": "text"
+                            },
+                            {
+                              "text": " A",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "paragraph"
+                        },
+                        {
+                          "attrs": {
+                            "level": 2
+                          },
+                          "content": [
+                            {
+                              "marks": [
+                                {
+                                  "type": "bold"
+                                }
+                              ],
+                              "text": "保持格式",
+                              "type": "text"
+                            }
+                          ],
+                          "type": "heading"
+                        }
+                      ],
+                      "type": "doc"
+                    },
+                    "folderId": "default",
+                    "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+                    "locked": false,
+                    "originalFolderId": null,
+                    "paperStyle": "plain",
+                    "pinned": false,
+                    "plainText": "#独变化审 A\n保持格式",
+                    "revision": 3,
+                    "sealed": null,
+                    "title": "#独变化审 A",
+                    "updatedAt": 1793756877960
+                  }
+                }
+              }
+            ]
+          },
+          "stored": {
+            "createdAt": 1793756877403,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "content": [
+                    {
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "#独变化",
+                      "type": "text"
+                    },
+                    {
+                      "marks": [
+                        {
+                          "type": "italic"
+                        }
+                      ],
+                      "text": "审",
+                      "type": "text"
+                    },
+                    {
+                      "text": " A",
+                      "type": "text"
+                    }
+                  ],
+                  "type": "paragraph"
+                },
+                {
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "text": "保持格式",
+                      "type": "text"
+                    }
+                  ],
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "#独变化审 A\n保持格式",
+            "revision": 3,
+            "sealed": null,
+            "title": "#独变化审 A",
+            "updatedAt": 1793756877960
+          }
+        }
+      ],
+      "pass": false,
+      "error": "page.waitForFunction: Timeout 7000ms exceeded.\n    at parked (/private/tmp/apple-notes-tags-review01/docs/verification/app-003-tags-independent-03/independent-composition.mjs:326:14)\n    at /private/tmp/apple-notes-tags-review01/docs/verification/app-003-tags-independent-03/independent-composition.mjs:403:63\n    at async run (/private/tmp/apple-notes-tags-review01/docs/verification/app-003-tags-independent-03/independent-composition.mjs:349:5)\n    at async file:///private/tmp/apple-notes-tags-review01/docs/verification/app-003-tags-independent-03/independent-composition.mjs:394:3"
+    }
+  ],
+  "records": [
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "createNote"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756875844,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "attrs": {
+                  "level": 1
+                },
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "",
+          "revision": 0,
+          "sealed": null,
+          "title": "新备忘录",
+          "updatedAt": 1793756875844
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "saveNote",
+        "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+        "revision": 0,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "#独",
+                  "marks": [
+                    {
+                      "type": "noteTag",
+                      "attrs": {
+                        "name": "独审"
+                      }
+                    },
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": "审",
+                  "marks": [
+                    {
+                      "type": "noteTag",
+                      "attrs": {
+                        "name": "独审"
+                      }
+                    },
+                    {
+                      "type": "italic"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " A"
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 2
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "保持格式",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756875844,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "attrs": {
+                          "name": "独审"
+                        },
+                        "type": "noteTag"
+                      },
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "#独",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "attrs": {
+                          "name": "独审"
+                        },
+                        "type": "noteTag"
+                      },
+                      {
+                        "type": "italic"
+                      }
+                    ],
+                    "text": "审",
+                    "type": "text"
+                  },
+                  {
+                    "text": " A",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "level": 2
+                },
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "保持格式",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#独审 A\n保持格式",
+          "revision": 1,
+          "sealed": null,
+          "title": "#独审 A",
+          "updatedAt": 1793756875848
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "attrs": {
+                              "name": "独审"
+                            },
+                            "type": "noteTag"
+                          },
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "attrs": {
+                              "name": "独审"
+                            },
+                            "type": "noteTag"
+                          },
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独审 A\n保持格式",
+              "revision": 1,
+              "sealed": null,
+              "title": "#独审 A",
+              "updatedAt": 1793756875848
+            }
+          ],
+          "settings": {
+            "selectedFolder": "default",
+            "selectedNote": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d"
+          }
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "saveNote",
+        "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+        "saveIntent": "01c19fe3-8452-42b4-a4f8-b34cbb45a197",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "#独变"
+                },
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "italic"
+                    }
+                  ],
+                  "text": "审"
+                },
+                {
+                  "type": "text",
+                  "text": " A"
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 2
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "保持格式"
+                }
+              ]
+            }
+          ]
+        },
+        "revision": 1
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756875844,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "#独变",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "type": "italic"
+                      }
+                    ],
+                    "text": "审",
+                    "type": "text"
+                  },
+                  {
+                    "text": " A",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "level": 2
+                },
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "保持格式",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#独变审 A\n保持格式",
+          "revision": 2,
+          "sealed": null,
+          "title": "#独变审 A",
+          "updatedAt": 1793756877298
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变审 A\n保持格式",
+              "revision": 2,
+              "sealed": null,
+              "title": "#独变审 A",
+              "updatedAt": 1793756877298
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变审 A\n保持格式",
+              "revision": 2,
+              "sealed": null,
+              "title": "#独变审 A",
+              "updatedAt": 1793756877298
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变审 A\n保持格式",
+              "revision": 2,
+              "sealed": null,
+              "title": "#独变审 A",
+              "updatedAt": 1793756877298
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "saveNote",
+        "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+        "saveIntent": "b49b6433-8498-453c-b30d-ddc1122164ef",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "#独变续"
+                },
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "italic"
+                    }
+                  ],
+                  "text": "审"
+                },
+                {
+                  "type": "text",
+                  "text": " A"
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 2
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "保持格式"
+                }
+              ]
+            }
+          ]
+        },
+        "revision": 2
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756875844,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "#独变续",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "type": "italic"
+                      }
+                    ],
+                    "text": "审",
+                    "type": "text"
+                  },
+                  {
+                    "text": " A",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "level": 2
+                },
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "保持格式",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#独变续审 A\n保持格式",
+          "revision": 3,
+          "sealed": null,
+          "title": "#独变续审 A",
+          "updatedAt": 1793756877333
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变续",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变续审 A\n保持格式",
+              "revision": 3,
+              "sealed": null,
+              "title": "#独变续审 A",
+              "updatedAt": 1793756877333
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变续",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变续审 A\n保持格式",
+              "revision": 3,
+              "sealed": null,
+              "title": "#独变续审 A",
+              "updatedAt": 1793756877333
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变续",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变续审 A\n保持格式",
+              "revision": 3,
+              "sealed": null,
+              "title": "#独变续审 A",
+              "updatedAt": 1793756877333
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "saveNote",
+        "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+        "saveIntent": "3995321e-99c3-4496-b30b-be97ea0dbc9e",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "#独变续"
+                },
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "italic"
+                    }
+                  ],
+                  "text": "审"
+                },
+                {
+                  "type": "text",
+                  "text": " A"
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 2
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "保持格式"
+                }
+              ]
+            }
+          ]
+        },
+        "revision": 3
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756875844,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "#独变续",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "type": "italic"
+                      }
+                    ],
+                    "text": "审",
+                    "type": "text"
+                  },
+                  {
+                    "text": " A",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "level": 2
+                },
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "保持格式",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#独变续审 A\n保持格式",
+          "revision": 4,
+          "sealed": null,
+          "title": "#独变续审 A",
+          "updatedAt": 1793756877364
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变续",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变续审 A\n保持格式",
+              "revision": 4,
+              "sealed": null,
+              "title": "#独变续审 A",
+              "updatedAt": 1793756877364
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变续",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变续审 A\n保持格式",
+              "revision": 4,
+              "sealed": null,
+              "title": "#独变续审 A",
+              "updatedAt": 1793756877364
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变续",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变续审 A\n保持格式",
+              "revision": 4,
+              "sealed": null,
+              "title": "#独变续审 A",
+              "updatedAt": 1793756877364
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/independent02-last-reference-repro-now-retained",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756875844,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756875844,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756875844,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变续",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "3f6a6dfd-583c-4ebd-87d4-6ea87f576b8d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变续审 A\n保持格式",
+              "revision": 4,
+              "sealed": null,
+              "title": "#独变续审 A",
+              "updatedAt": 1793756877364
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "createNote"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756877403,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "attrs": {
+                  "level": 1
+                },
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "",
+          "revision": 0,
+          "sealed": null,
+          "title": "新备忘录",
+          "updatedAt": 1793756877403
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "saveNote",
+        "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+        "revision": 0,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "#独",
+                  "marks": [
+                    {
+                      "type": "noteTag",
+                      "attrs": {
+                        "name": "独审"
+                      }
+                    },
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": "审",
+                  "marks": [
+                    {
+                      "type": "noteTag",
+                      "attrs": {
+                        "name": "独审"
+                      }
+                    },
+                    {
+                      "type": "italic"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " A"
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 2
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "保持格式",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756877403,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "attrs": {
+                          "name": "独审"
+                        },
+                        "type": "noteTag"
+                      },
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "#独",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "attrs": {
+                          "name": "独审"
+                        },
+                        "type": "noteTag"
+                      },
+                      {
+                        "type": "italic"
+                      }
+                    ],
+                    "text": "审",
+                    "type": "text"
+                  },
+                  {
+                    "text": " A",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "level": 2
+                },
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "保持格式",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#独审 A\n保持格式",
+          "revision": 1,
+          "sealed": null,
+          "title": "#独审 A",
+          "updatedAt": 1793756877407
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756877402,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756877403,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "attrs": {
+                              "name": "独审"
+                            },
+                            "type": "noteTag"
+                          },
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "attrs": {
+                              "name": "独审"
+                            },
+                            "type": "noteTag"
+                          },
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独审 A\n保持格式",
+              "revision": 1,
+              "sealed": null,
+              "title": "#独审 A",
+              "updatedAt": 1793756877407
+            }
+          ],
+          "settings": {
+            "selectedFolder": "default",
+            "selectedNote": "f5989ffb-771c-48f4-aaee-54e9c19a125d"
+          }
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "saveNote",
+        "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+        "saveIntent": "b0bc6ff1-f5eb-44dd-ba9e-f4e6c9b9de2e",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "#独bian"
+                },
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "italic"
+                    }
+                  ],
+                  "text": "审"
+                },
+                {
+                  "type": "text",
+                  "text": " A"
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 2
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "保持格式"
+                }
+              ]
+            }
+          ]
+        },
+        "revision": 1
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756877403,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "#独bian",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "type": "italic"
+                      }
+                    ],
+                    "text": "审",
+                    "type": "text"
+                  },
+                  {
+                    "text": " A",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "level": 2
+                },
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "保持格式",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#独bian审 A\n保持格式",
+          "revision": 2,
+          "sealed": null,
+          "title": "#独bian审 A",
+          "updatedAt": 1793756877918
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756877402,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756877403,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独bian",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独bian审 A\n保持格式",
+              "revision": 2,
+              "sealed": null,
+              "title": "#独bian审 A",
+              "updatedAt": 1793756877918
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756877402,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756877403,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独bian",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独bian审 A\n保持格式",
+              "revision": 2,
+              "sealed": null,
+              "title": "#独bian审 A",
+              "updatedAt": 1793756877918
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "saveNote",
+        "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+        "saveIntent": "7c134656-5b48-4ce9-94f3-34d857c1a529",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "#独变化"
+                },
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "italic"
+                    }
+                  ],
+                  "text": "审"
+                },
+                {
+                  "type": "text",
+                  "text": " A"
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 2
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "保持格式"
+                }
+              ]
+            }
+          ]
+        },
+        "revision": 2
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756877403,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "#独变化",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "type": "italic"
+                      }
+                    ],
+                    "text": "审",
+                    "type": "text"
+                  },
+                  {
+                    "text": " A",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "level": 2
+                },
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "保持格式",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#独变化审 A\n保持格式",
+          "revision": 3,
+          "sealed": null,
+          "title": "#独变化审 A",
+          "updatedAt": 1793756877960
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756877402,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756877403,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变化",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变化审 A\n保持格式",
+              "revision": 3,
+              "sealed": null,
+              "title": "#独变化审 A",
+              "updatedAt": 1793756877960
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756877402,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756877403,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变化",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变化审 A\n保持格式",
+              "revision": 3,
+              "sealed": null,
+              "title": "#独变化审 A",
+              "updatedAt": 1793756877960
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756877402,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756877403,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独变化",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独变化审 A\n保持格式",
+              "revision": 3,
+              "sealed": null,
+              "title": "#独变化审 A",
+              "updatedAt": 1793756877960
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "saveNote",
+        "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+        "saveIntent": "b4a9e042-7144-4dca-8a29-8fbb3e3f1052",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "#独最终"
+                },
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "italic"
+                    }
+                  ],
+                  "text": "审"
+                },
+                {
+                  "type": "text",
+                  "text": " A"
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 2
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "保持格式"
+                }
+              ]
+            }
+          ]
+        },
+        "revision": 3
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756877403,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "#独最终",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "type": "italic"
+                      }
+                    ],
+                    "text": "审",
+                    "type": "text"
+                  },
+                  {
+                    "text": " A",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "level": 2
+                },
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "保持格式",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#独最终审 A\n保持格式",
+          "revision": 4,
+          "sealed": null,
+          "title": "#独最终审 A",
+          "updatedAt": 1793756878002
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756877402,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756877403,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独最终",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独最终审 A\n保持格式",
+              "revision": 4,
+              "sealed": null,
+              "title": "#独最终审 A",
+              "updatedAt": 1793756878002
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "saveNote",
+        "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+        "saveIntent": "3e1d5894-83eb-4c72-a4d6-81dd03b8bac5",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "#独最终"
+                },
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "italic"
+                    }
+                  ],
+                  "text": "审"
+                },
+                {
+                  "type": "text",
+                  "text": " A"
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 2
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ],
+                  "text": "保持格式"
+                }
+              ]
+            }
+          ]
+        },
+        "revision": 4
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793756877403,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "#独最终",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "type": "italic"
+                      }
+                    ],
+                    "text": "审",
+                    "type": "text"
+                  },
+                  {
+                    "text": " A",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "level": 2
+                },
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ],
+                    "text": "保持格式",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#独最终审 A\n保持格式",
+          "revision": 5,
+          "sealed": null,
+          "title": "#独最终审 A",
+          "updatedAt": 1793756878013
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756877402,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756877403,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独最终",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独最终审 A\n保持格式",
+              "revision": 5,
+              "sealed": null,
+              "title": "#独最终审 A",
+              "updatedAt": 1793756878013
+            }
+          ],
+          "settings": {}
+        }
+      }
+    },
+    {
+      "store": "/private/tmp/apple-notes-tags-review01/artifacts/tags-independent03/run01/stores/engine-composition-multiple-candidates-and-commit",
+      "action": {
+        "type": "__workspace"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "attachments": [],
+          "folders": [
+            {
+              "createdAt": 1793756877402,
+              "id": "default",
+              "kind": "default",
+              "name": "备忘录",
+              "parentId": null,
+              "sortOrder": 0
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "quick",
+              "kind": "quick",
+              "name": "快速备忘录",
+              "parentId": null,
+              "sortOrder": -1
+            },
+            {
+              "createdAt": 1793756877403,
+              "id": "trash",
+              "kind": "trash",
+              "name": "最近删除",
+              "parentId": null,
+              "sortOrder": 9999
+            }
+          ],
+          "notes": [
+            {
+              "createdAt": 1793756877403,
+              "deletedAt": null,
+              "document": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "#独最终",
+                        "type": "text"
+                      },
+                      {
+                        "marks": [
+                          {
+                            "type": "italic"
+                          }
+                        ],
+                        "text": "审",
+                        "type": "text"
+                      },
+                      {
+                        "text": " A",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  },
+                  {
+                    "attrs": {
+                      "level": 2
+                    },
+                    "content": [
+                      {
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ],
+                        "text": "保持格式",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "heading"
+                  }
+                ],
+                "type": "doc"
+              },
+              "folderId": "default",
+              "id": "f5989ffb-771c-48f4-aaee-54e9c19a125d",
+              "locked": false,
+              "originalFolderId": null,
+              "paperStyle": "plain",
+              "pinned": false,
+              "plainText": "#独最终审 A\n保持格式",
+              "revision": 5,
+              "sealed": null,
+              "title": "#独最终审 A",
+              "updatedAt": 1793756878013
+            }
+          ],
+          "settings": {}
+        }
+      }
+    }
+  ],
+  "errors": [
+    "page.waitForFunction: Timeout 7000ms exceeded.\n    at parked (/private/tmp/apple-notes-tags-review01/docs/verification/app-003-tags-independent-03/independent-composition.mjs:326:14)\n    at /private/tmp/apple-notes-tags-review01/docs/verification/app-003-tags-independent-03/independent-composition.mjs:403:63\n    at async run (/private/tmp/apple-notes-tags-review01/docs/verification/app-003-tags-independent-03/independent-composition.mjs:349:5)\n    at async file:///private/tmp/apple-notes-tags-review01/docs/verification/app-003-tags-independent-03/independent-composition.mjs:394:3"
+  ],
+  "actionInjection": "  if (!native) { const result=await fetch('/__store-action',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(a)}).then(r=>r.json()); ((window as any).__storeResults ||= []).push({action:a,result}); if(!result.ok)throw result.error; const latest=await fetch('/__store-action',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type:'__workspace'})}).then(r=>r.json()); if(!latest.ok)throw latest.error; preview=latest.value; persist(); return result.value as T; }\n",
+  "accessInjection": "  if (!native) { const receive=(event:Event)=>{const payload=(event as CustomEvent<AccessEvent>).detail;accessGate.invalidate(payload.access);handler(payload);};window.addEventListener('__controlled-access',receive);return()=>window.removeEventListener('__controlled-access',receive); }",
+  "limitations": [
+    "Not native IME, Android, native IPC or Session barrier acceptance",
+    "Only synthetic notes in isolated temporary stores",
+    "No forced DOM flush, manual composing mutation, fake final transaction, build or package change"
+  ]
+}

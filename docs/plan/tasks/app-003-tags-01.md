@@ -44,6 +44,8 @@ depends-on: []
 
 candidate02 `a0989b354b539fc06d794f167cd97af615693d44` 独审另确证：同一真实 App/Editor 在单标签筛选内发生受控 DOM composition，出站投影成功保存，但失配后停车触发真实 blur，Editor 仍 composing 且后续实际键盘文字未进入正文。先按架构新增的局部活动组字保留边界窄修，保持结果投影真实、原目标/历史不变；真实结束后执行停车。必须覆盖单标签及所有标签、多个结果时不跳笔记、真实后续文字、结束后不可写、显式导航、普通无 composition 立即停车，以及 access prepare/abort 优先。受控 DOM composition 不能冒充原生中文输入法验收。不得为此放宽通用搜索停车、授权、保存/ACK 相等，或延迟保护屏障。冻结 candidate02 独审失败后再实施、冻结下一候选，交不同作者复验。
 
+candidate03 `6ce6033d845d15f1b45e074da9171db0c5ffb488` 的 [static-03](../reviews/app-003-tags-static-03.md) 关闭上述受控续字失败，但发现新 P2：浏览器引擎最终提交和实际清理事务已经完成，view.composing=false、合法最终正文已存，结束监听却仍等待另一个 post-end transaction，导致空结果下旧不匹配 Editor 保持可写；后续普通键盘文字继续真实保存。原生系统 IME 未验；CDP 的 start/update/input 可信，end 在本版本非可信，生产不按该标志分支。本轮证据16文件572477B、aggregate c3c269b6…，root已逐文件保全。candidate04 仅窄修真实结束与实际最终事务的识别，不假设事务必须晚于独立 end 监听。两种先后顺序和原02组字中续字均须通过；不得定时器猜测、伪造事务、强制flush或改变通用停车/保存/访问语义。修复后新冻结、不同作者复核，03不授予SOURCE-READY。
+
 ## verification
 
 执行现有依赖下 typecheck、真实 Editor schema crosscheck，以及有意义的生产边界检查。至少覆盖：
