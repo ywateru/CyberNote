@@ -19,11 +19,11 @@ Android前三次失败原样保留：本地socket限制、wrapper意外分发下
 
 最新[candidate04 Mac恢复与实际OCR持久化](docs/verification/candidate04-mac-runtime-recovery-01/README.md)已通过精确安装身份核验、零结果→清空恢复、三行中文实际识别/插入及正常退出后的完整正文冷启恢复。内部document/session ACK未独立追踪，未强制断网，不将结果扩大为首次离线、全OCR、录音或像素通过。旧candidate03仅对精确无响应测试PID发一次SIGTERM，未保存内存状态未知，不能记作旧包正常退出。
 
-candidate04现已完成[Android精确替换安装与指定数据保留核对](docs/verification/unified-candidate04-android-install-01/README.md)：安装字节匹配成品，三条合成笔记、指定附件及数据库校验值保持；新包未启动，不代替真实编辑/冷启/OCR/录音/UI验收。数据核对使用设备内固定ID只读查询，没有复制整份数据库。
+candidate04现已完成[Android精确替换安装与指定数据保留核对](docs/verification/unified-candidate04-android-install-01/README.md)：安装字节匹配成品，三条合成笔记、指定附件及数据库校验值保持。安装后已启动新包，用户明确允许ADB继续验收，独立运行报告正在形成；安装保全本身不代替真实编辑/冷启/OCR/录音/UI验收。数据核对使用设备内固定ID只读查询，没有复制整份数据库。
 
 原生比例PNG取图工具已通过[独立源码审查](docs/plan/reviews/tools-lossless-window-capture-static-01.md)，并从主路径编译为独立工具。[前置Mac有限观察](docs/verification/candidate04-mac-runtime-01/README.md)已能读取原版窗口，原生取图因缺现有屏幕录制权限明确拒绝，未生成PNG；旧包退出和新包未启动属于当时检查点，后续恢复结果见上段。历史与本轮CUA截图实际编码JPEG，旧字节保持，不用于无损像素验收。原版与本批的同条件整窗像素仍未通过。
 
-尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音与暂停试听的设备验收、绘画及附件完整预览、Android实际OCR与更广OCR矩阵、完整文稿扫描主流程、标签/智能文件夹/数学/笔记链接和标准格式导入导出。标签首个源码候选的输入法中间保存与筛选新建问题由[独立审查](docs/plan/reviews/app-003-tags-static-01.md)阻塞，正在隔离分支窄修，未进入candidate04。具体通过子用例和缺口以交付计划与独立报告为准。
+尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音与暂停试听的设备验收、绘画及附件完整预览、Android更广OCR矩阵、完整文稿扫描主流程、标签/智能文件夹/数学/笔记链接和标准格式导入导出。标签candidate02关闭首轮非法出站保存及新建目标问题，但[第二轮独审](docs/plan/reviews/app-003-tags-static-02.md)确证标签失配停车会打断活动组字，已补契约并进入candidate03窄修；未合入主产品或candidate04。具体通过子用例和缺口以交付计划与独立报告为准。
 
 ## 运行与构建
 

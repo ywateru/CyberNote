@@ -23,6 +23,7 @@
 - [标签、智能文件夹、数学与笔记链接](ui/local-features.md)
 - [真实标签与本地标签浏览首批接入](plan/tasks/app-003-tags-01.md)
 - [首个标签候选独审：组合输入保存与筛选新建阻塞](plan/reviews/app-003-tags-static-01.md)
+- [标签候选02独审：合法快照通过、筛选停车打断活动组字](plan/reviews/app-003-tags-static-02.md)
 - [Apple 官方标签与锁定限制补证](research/tag-lock-official-20261104.md)
 - [交互状态矩阵](ui/interaction-matrix.md)
 - [交付计划](plan/README.md)

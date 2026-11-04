@@ -1,0 +1,584 @@
+{
+  "factory": "src/editor-schema.ts",
+  "nodes": 19,
+  "marks": 9,
+  "manifestEqual": true,
+  "cases": [
+    {
+      "name": "legacy-empty-title",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "plain-and-empty-paragraphs",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "default-heading-attributes",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "all-supported-nodes-and-marks",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "schema-allows-empty-table-row",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "default-attachment-and-drawing",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "inline-at-doc-root",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node doc: <\"文字\">"
+    },
+    {
+      "name": "block-inside-paragraph",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node paragraph: <paragraph(\"文字\")>"
+    },
+    {
+      "name": "paragraph-inside-table",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node table: <paragraph(\"文字\")>"
+    },
+    {
+      "name": "empty-doc",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node doc: <>"
+    },
+    {
+      "name": "nested-doc",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node doc: <doc(paragraph)>"
+    },
+    {
+      "name": "list-item-at-doc-root",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node doc: <listItem(paragraph)>"
+    },
+    {
+      "name": "row-at-doc-root",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node doc: <tableRow>"
+    },
+    {
+      "name": "cell-at-doc-root",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node doc: <tableCell(paragraph)>"
+    },
+    {
+      "name": "heading-in-paragraph",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node paragraph: <heading(\"文字\")>"
+    },
+    {
+      "name": "block-in-heading",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node heading: <paragraph(\"文字\")>"
+    },
+    {
+      "name": "empty-blockquote",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node blockquote: <>"
+    },
+    {
+      "name": "empty-bullet-list",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node bulletList: <>"
+    },
+    {
+      "name": "empty-ordered-list",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node orderedList: <>"
+    },
+    {
+      "name": "empty-task-list",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node taskList: <>"
+    },
+    {
+      "name": "paragraph-directly-in-bullet-list",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node bulletList: <paragraph>"
+    },
+    {
+      "name": "task-item-in-ordered-list",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node orderedList: <taskItem(paragraph)>"
+    },
+    {
+      "name": "list-item-in-task-list",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node taskList: <listItem(paragraph)>"
+    },
+    {
+      "name": "list-item-needs-leading-paragraph",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node listItem: <heading(\"文字\")>"
+    },
+    {
+      "name": "task-item-needs-leading-paragraph",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node taskItem: <blockquote(paragraph)>"
+    },
+    {
+      "name": "empty-table",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node table: <>"
+    },
+    {
+      "name": "paragraph-in-row",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node tableRow: <paragraph>"
+    },
+    {
+      "name": "empty-cell",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node tableCell: <>"
+    },
+    {
+      "name": "text-directly-in-cell",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node tableCell: <\"文字\">"
+    },
+    {
+      "name": "content-inside-hard-break",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node hardBreak: <\"文字\">"
+    },
+    {
+      "name": "content-inside-rule",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node horizontalRule: <paragraph>"
+    },
+    {
+      "name": "content-inside-attachment",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node attachment: <paragraph>"
+    },
+    {
+      "name": "content-inside-drawing",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node drawing: <paragraph>"
+    },
+    {
+      "name": "hard-break-in-code-block",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node codeBlock: <hardBreak>"
+    },
+    {
+      "name": "marked-text-in-code-block",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node codeBlock: <bold(\"code\")>"
+    },
+    {
+      "name": "marked-block-at-root",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node doc: <bold(paragraph(\"文字\"))>"
+    },
+    {
+      "name": "duplicate-marks",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid collection of marks for node text: bold,bold"
+    },
+    {
+      "name": "out-of-order-marks",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "code-excludes-other-marks",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid collection of marks for node text: bold,code"
+    },
+    {
+      "name": "unknown-mark",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "There is no mark type unknown in this schema"
+    },
+    {
+      "name": "empty-text",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Empty text nodes are not allowed"
+    },
+    {
+      "name": "non-string-text",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid text node in JSON"
+    },
+    {
+      "name": "text-node-child-content",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "non-text-node-text-field",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "heading-level-string",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "heading-level-outside-config",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "heading-level-null",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "checked-is-not-boolean",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "ordered-start-is-not-integer",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "table-colspan-zero",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "table-rowspan-string",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "table-colwidth-wrong-type",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "table-colwidth-count-mismatch",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "table-align-unknown",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "drawing-strokes-wrong-type",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "drawing-point-wrong-type",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "drawing-tool-unknown",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "link-href-object",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "highlight-color-object",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "attachment-name-object",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "unknown-paragraph-attribute",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "unknown-bold-attribute",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "table-grid-budget",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "dash-list-valid",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "dash-list-invalid-attribute",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-committed",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "tag-bold-split-span",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "tag-name-2",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "tag-name-3",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "tag-name-4",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "tag-name-5",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "tag-name-6",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "tag-name-7",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "tag-name-8",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "tag-name-9",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    },
+    {
+      "name": "tag-bad-name-10",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-bad-name-11",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-bad-name-12",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-bad-name-13",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-bad-name-14",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-bad-name-15",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-bad-name-16",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-bad-name-17",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-wrong-text",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-split-parent",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-unmarked-gap",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-nontext-gap",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-different-name-gap",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-unknown-attr",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-missing-attr",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-wrong-type",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-with-link",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-with-code",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid collection of marks for node text: code,noteTag"
+    },
+    {
+      "name": "tag-on-nontext",
+      "schemaAccepted": true,
+      "importExpected": false,
+      "error": null
+    },
+    {
+      "name": "tag-in-codeblock",
+      "schemaAccepted": false,
+      "importExpected": false,
+      "error": "Invalid content for node codeBlock: <noteTag(\"#UI对照\")>"
+    },
+    {
+      "name": "tag-old-plain-text",
+      "schemaAccepted": true,
+      "importExpected": true,
+      "error": null
+    }
+  ]
+}
