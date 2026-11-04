@@ -185,3 +185,7 @@ QA-OPT41-AB[CD] --OptionTab--> QA-OPT41-AB<TAB>
 ```
 
 [任务42](../plan/tasks/app-mac-ordinary-option-insertion42.md)仅普通native Mac名称输入；独立于37普通Tab策略循环，保真实编辑历史及React同步。readiness40隐藏WK候选不能代替实际新包按键路径；系统导航开启态及其它输入组合仍待证。
+
+## 浅色普通名称选中文字45（待实施）
+
+[视觉准备44](../research/mac-ordinary-visual-readiness44/README.md)在固定原图中区分选中明暗与自然轮廓残差，支持仅浅色普通focus真实选中文字试黑色的最小候选。底色仍保持#fceac1，当前截图偏差来源unknown，不调整常量。自然mask192不随选中字色关闭；具体实施与有限对照见[任务45](../plan/tasks/app-mac-ordinary-selection-ink45.md)，独立审查及准确包实拍后再判改善。

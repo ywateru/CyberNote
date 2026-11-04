@@ -1,0 +1,1084 @@
+{
+  "scope": "One finite saved-image diagnostic only; no WK run/product change/full pixel acceptance",
+  "sources": {
+    "original31-selected": {
+      "path": "docs/research/mac-ordinary-original31/01-name-click-select-all.cua-image",
+      "sha256": "b7e607ad4733e639b9f2fbad846badb2c2d50882b3eaa2595e9886708bbe7099",
+      "format": "JPEG",
+      "size": [
+        800,
+        414
+      ],
+      "crop": [
+        0,
+        0,
+        800,
+        414
+      ],
+      "iccSHA256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf",
+      "jpegComponents": [
+        [
+          1,
+          2,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          1,
+          1
+        ],
+        [
+          3,
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    "original31-caret": {
+      "path": "docs/research/mac-ordinary-original31/02-name-caret-end.cua-image",
+      "sha256": "e9776f0831f779f94108f6bbdfba802f7e721df821c0759e328e33cdc6303bc2",
+      "format": "JPEG",
+      "size": [
+        800,
+        414
+      ],
+      "crop": [
+        0,
+        0,
+        800,
+        414
+      ],
+      "iccSHA256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf",
+      "jpegComponents": [
+        [
+          1,
+          2,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          1,
+          1
+        ],
+        [
+          3,
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    "mac13-selected": {
+      "path": "docs/verification/mac-typography-keyboard-runtime36/11-clean-explicit-name-selected.cua-image",
+      "sha256": "3c5fb141a240fc37929b9b3400deeca32beefcf93f50df7d8f4370904120ffd9",
+      "format": "JPEG",
+      "size": [
+        2176,
+        1320
+      ],
+      "crop": [
+        688,
+        453,
+        1488,
+        867
+      ],
+      "iccSHA256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf",
+      "jpegComponents": [
+        [
+          1,
+          2,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          1,
+          1
+        ],
+        [
+          3,
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    "mac13-caret": {
+      "path": "docs/verification/mac-typography-keyboard-runtime36/12-clean-name-caret-end.cua-image",
+      "sha256": "3dc517e9bff1c5935272460f9a3dc5623c3b9e885f38f1b4be05596f89afd6ee",
+      "format": "JPEG",
+      "size": [
+        2176,
+        1320
+      ],
+      "crop": [
+        688,
+        453,
+        1488,
+        867
+      ],
+      "iccSHA256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf",
+      "jpegComponents": [
+        [
+          1,
+          2,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          1,
+          1
+        ],
+        [
+          3,
+          1,
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "reproduced": {
+    "selectedMask201": true,
+    "naturalMask192": true,
+    "selectionOriginalSrgb": true,
+    "selectionMac13Srgb": true
+  },
+  "fixedRois": {
+    "name": [
+      135,
+      115,
+      268,
+      158
+    ],
+    "nameLabel": [
+      35,
+      115,
+      115,
+      157
+    ],
+    "smartLabel": [
+      75,
+      190,
+      330,
+      230
+    ]
+  },
+  "thresholdCounts": {
+    "selected": {
+      "name": {
+        "100": {
+          "original": 1017,
+          "mac13": 920,
+          "xor": 241,
+          "onlyOriginal": 169,
+          "onlyMac13": 72
+        },
+        "160": {
+          "original": 1229,
+          "mac13": 1184,
+          "xor": 201,
+          "onlyOriginal": 123,
+          "onlyMac13": 78
+        },
+        "200": {
+          "original": 1391,
+          "mac13": 1355,
+          "xor": 200,
+          "onlyOriginal": 118,
+          "onlyMac13": 82
+        }
+      },
+      "nameLabel": {
+        "100": {
+          "original": 374,
+          "mac13": 381,
+          "xor": 7,
+          "onlyOriginal": 0,
+          "onlyMac13": 7
+        },
+        "160": {
+          "original": 497,
+          "mac13": 499,
+          "xor": 6,
+          "onlyOriginal": 2,
+          "onlyMac13": 4
+        },
+        "200": {
+          "original": 571,
+          "mac13": 573,
+          "xor": 6,
+          "onlyOriginal": 2,
+          "onlyMac13": 4
+        }
+      },
+      "smartLabel": {
+        "100": {
+          "original": 1264,
+          "mac13": 1291,
+          "xor": 27,
+          "onlyOriginal": 0,
+          "onlyMac13": 27
+        },
+        "160": {
+          "original": 1636,
+          "mac13": 1658,
+          "xor": 24,
+          "onlyOriginal": 1,
+          "onlyMac13": 23
+        },
+        "200": {
+          "original": 1882,
+          "mac13": 1882,
+          "xor": 16,
+          "onlyOriginal": 8,
+          "onlyMac13": 8
+        }
+      }
+    },
+    "caret": {
+      "name": {
+        "100": {
+          "original": 900,
+          "mac13": 918,
+          "xor": 194,
+          "onlyOriginal": 88,
+          "onlyMac13": 106
+        },
+        "160": {
+          "original": 1162,
+          "mac13": 1166,
+          "xor": 192,
+          "onlyOriginal": 94,
+          "onlyMac13": 98
+        },
+        "200": {
+          "original": 1302,
+          "mac13": 1300,
+          "xor": 216,
+          "onlyOriginal": 109,
+          "onlyMac13": 107
+        }
+      },
+      "nameLabel": {
+        "100": {
+          "original": 374,
+          "mac13": 381,
+          "xor": 7,
+          "onlyOriginal": 0,
+          "onlyMac13": 7
+        },
+        "160": {
+          "original": 497,
+          "mac13": 499,
+          "xor": 6,
+          "onlyOriginal": 2,
+          "onlyMac13": 4
+        },
+        "200": {
+          "original": 571,
+          "mac13": 573,
+          "xor": 6,
+          "onlyOriginal": 2,
+          "onlyMac13": 4
+        }
+      },
+      "smartLabel": {
+        "100": {
+          "original": 1264,
+          "mac13": 1291,
+          "xor": 27,
+          "onlyOriginal": 0,
+          "onlyMac13": 27
+        },
+        "160": {
+          "original": 1636,
+          "mac13": 1658,
+          "xor": 24,
+          "onlyOriginal": 1,
+          "onlyMac13": 23
+        },
+        "200": {
+          "original": 1882,
+          "mac13": 1882,
+          "xor": 16,
+          "onlyOriginal": 8,
+          "onlyMac13": 8
+        }
+      }
+    }
+  },
+  "fixedGlyphCells": {
+    "selected": [
+      {
+        "char": "新",
+        "cell": [
+          141,
+          120,
+          167,
+          153
+        ],
+        "original": {
+          "count160": 296,
+          "bbox160": [
+            142,
+            125,
+            166,
+            149
+          ],
+          "binaryCentroid160": [
+            152.2466216216216,
+            136.47297297297297
+          ]
+        },
+        "mac13": {
+          "count160": 286,
+          "bbox160": [
+            142,
+            125,
+            166,
+            149
+          ],
+          "binaryCentroid160": [
+            152.26573426573427,
+            136.3146853146853
+          ]
+        },
+        "xor160": 10,
+        "centroidDelta": [
+          0.019112644112652788,
+          -0.15828765828766223
+        ]
+      },
+      {
+        "char": "建",
+        "cell": [
+          167,
+          120,
+          193,
+          153
+        ],
+        "original": {
+          "count160": 308,
+          "bbox160": [
+            168,
+            125,
+            191,
+            148
+          ],
+          "binaryCentroid160": [
+            178.7922077922078,
+            136.2694805194805
+          ]
+        },
+        "mac13": {
+          "count160": 299,
+          "bbox160": [
+            168,
+            125,
+            191,
+            148
+          ],
+          "binaryCentroid160": [
+            179.20401337792643,
+            136.32441471571906
+          ]
+        },
+        "xor160": 49,
+        "centroidDelta": [
+          0.4118055857186391,
+          0.05493419623854834
+        ]
+      },
+      {
+        "char": "文",
+        "cell": [
+          193,
+          120,
+          219,
+          153
+        ],
+        "original": {
+          "count160": 195,
+          "bbox160": [
+            194,
+            125,
+            217,
+            149
+          ],
+          "binaryCentroid160": [
+            204.57435897435897,
+            136.3025641025641
+          ]
+        },
+        "mac13": {
+          "count160": 189,
+          "bbox160": [
+            194,
+            125,
+            217,
+            149
+          ],
+          "binaryCentroid160": [
+            205.06349206349208,
+            136.1851851851852
+          ]
+        },
+        "xor160": 38,
+        "centroidDelta": [
+          0.48913308913310516,
+          -0.1173789173789146
+        ]
+      },
+      {
+        "char": "件",
+        "cell": [
+          219,
+          120,
+          245,
+          153
+        ],
+        "original": {
+          "count160": 213,
+          "bbox160": [
+            219,
+            125,
+            242,
+            149
+          ],
+          "binaryCentroid160": [
+            229.67605633802816,
+            135
+          ]
+        },
+        "mac13": {
+          "count160": 210,
+          "bbox160": [
+            219,
+            125,
+            243,
+            149
+          ],
+          "binaryCentroid160": [
+            229.55714285714285,
+            135.38095238095238
+          ]
+        },
+        "xor160": 61,
+        "centroidDelta": [
+          -0.11891348088531117,
+          0.3809523809523796
+        ]
+      },
+      {
+        "char": "夹",
+        "cell": [
+          245,
+          120,
+          268,
+          153
+        ],
+        "original": {
+          "count160": 217,
+          "bbox160": [
+            245,
+            125,
+            268,
+            149
+          ],
+          "binaryCentroid160": [
+            255.93548387096774,
+            136.16129032258064
+          ]
+        },
+        "mac13": {
+          "count160": 200,
+          "bbox160": [
+            246,
+            125,
+            268,
+            148
+          ],
+          "binaryCentroid160": [
+            256.605,
+            136.42
+          ]
+        },
+        "xor160": 43,
+        "centroidDelta": [
+          0.6695161290322744,
+          0.2587096774193469
+        ]
+      }
+    ],
+    "caret": [
+      {
+        "char": "新",
+        "cell": [
+          141,
+          120,
+          167,
+          153
+        ],
+        "original": {
+          "count160": 276,
+          "bbox160": [
+            142,
+            125,
+            166,
+            149
+          ],
+          "binaryCentroid160": [
+            152.44927536231884,
+            136.2427536231884
+          ]
+        },
+        "mac13": {
+          "count160": 278,
+          "bbox160": [
+            142,
+            125,
+            166,
+            149
+          ],
+          "binaryCentroid160": [
+            152.4136690647482,
+            136.27338129496403
+          ]
+        },
+        "xor160": 2,
+        "centroidDelta": [
+          -0.035606297570637935,
+          0.030627671775619092
+        ]
+      },
+      {
+        "char": "建",
+        "cell": [
+          167,
+          120,
+          193,
+          153
+        ],
+        "original": {
+          "count160": 288,
+          "bbox160": [
+            168,
+            125,
+            191,
+            148
+          ],
+          "binaryCentroid160": [
+            179.01388888888889,
+            136.36805555555554
+          ]
+        },
+        "mac13": {
+          "count160": 297,
+          "bbox160": [
+            168,
+            125,
+            191,
+            148
+          ],
+          "binaryCentroid160": [
+            179.21885521885523,
+            136.2828282828283
+          ]
+        },
+        "xor160": 51,
+        "centroidDelta": [
+          0.20496632996633934,
+          -0.08522727272725206
+        ]
+      },
+      {
+        "char": "文",
+        "cell": [
+          193,
+          120,
+          219,
+          153
+        ],
+        "original": {
+          "count160": 185,
+          "bbox160": [
+            194,
+            125,
+            217,
+            149
+          ],
+          "binaryCentroid160": [
+            204.6,
+            136.03783783783783
+          ]
+        },
+        "mac13": {
+          "count160": 188,
+          "bbox160": [
+            194,
+            125,
+            217,
+            149
+          ],
+          "binaryCentroid160": [
+            205.10638297872342,
+            136.2659574468085
+          ]
+        },
+        "xor160": 35,
+        "centroidDelta": [
+          0.5063829787234226,
+          0.22811960897067252
+        ]
+      },
+      {
+        "char": "件",
+        "cell": [
+          219,
+          120,
+          245,
+          153
+        ],
+        "original": {
+          "count160": 204,
+          "bbox160": [
+            219,
+            125,
+            242,
+            149
+          ],
+          "binaryCentroid160": [
+            229.8921568627451,
+            135.0441176470588
+          ]
+        },
+        "mac13": {
+          "count160": 206,
+          "bbox160": [
+            219,
+            125,
+            243,
+            149
+          ],
+          "binaryCentroid160": [
+            229.48058252427185,
+            135.24757281553397
+          ]
+        },
+        "xor160": 58,
+        "centroidDelta": [
+          -0.4115743384732582,
+          0.2034551684751591
+        ]
+      },
+      {
+        "char": "夹",
+        "cell": [
+          245,
+          120,
+          268,
+          153
+        ],
+        "original": {
+          "count160": 209,
+          "bbox160": [
+            245,
+            125,
+            268,
+            148
+          ],
+          "binaryCentroid160": [
+            255.99521531100478,
+            136.03827751196172
+          ]
+        },
+        "mac13": {
+          "count160": 197,
+          "bbox160": [
+            246,
+            125,
+            268,
+            148
+          ],
+          "binaryCentroid160": [
+            256.52284263959393,
+            136.36040609137055
+          ]
+        },
+        "xor160": 46,
+        "centroidDelta": [
+          0.5276273285891477,
+          0.322128579408826
+        ]
+      }
+    ]
+  },
+  "commonDarkCore": {
+    "original31-selected": {
+      "commonCorePixels": 720,
+      "rawMedian": [
+        8.0,
+        1.0,
+        0.0
+      ],
+      "srgbMedian": [
+        10.0,
+        1.0,
+        0.0
+      ]
+    },
+    "original31-caret": {
+      "commonCorePixels": 720,
+      "rawMedian": [
+        40.0,
+        40.0,
+        40.0
+      ],
+      "srgbMedian": [
+        40.0,
+        40.0,
+        40.0
+      ]
+    },
+    "mac13-selected": {
+      "commonCorePixels": 720,
+      "rawMedian": [
+        39.0,
+        32.0,
+        23.0
+      ],
+      "srgbMedian": [
+        40.0,
+        32.0,
+        22.0
+      ]
+    },
+    "mac13-caret": {
+      "commonCorePixels": 720,
+      "rawMedian": [
+        33.0,
+        33.0,
+        33.0
+      ],
+      "srgbMedian": [
+        33.0,
+        33.0,
+        33.0
+      ]
+    }
+  },
+  "selectionPlateau": {
+    "original31-selected": {
+      "raw": {
+        "median": [
+          249.0,
+          235.0,
+          198.0
+        ],
+        "min": [
+          240,
+          225,
+          185
+        ],
+        "max": [
+          255,
+          247,
+          213
+        ]
+      },
+      "srgb": {
+        "median": [
+          252.0,
+          234.0,
+          193.0
+        ],
+        "min": [
+          242,
+          224,
+          179
+        ],
+        "max": [
+          255,
+          247,
+          210
+        ]
+      }
+    },
+    "original31-caret": {
+      "raw": {
+        "median": [
+          254.0,
+          255.0,
+          253.0
+        ],
+        "min": [
+          248,
+          249,
+          245
+        ],
+        "max": [
+          255,
+          255,
+          255
+        ]
+      },
+      "srgb": {
+        "median": [
+          254.0,
+          255.0,
+          253.0
+        ],
+        "min": [
+          248,
+          249,
+          244
+        ],
+        "max": [
+          255,
+          255,
+          255
+        ]
+      }
+    },
+    "mac13-selected": {
+      "raw": {
+        "median": [
+          247.0,
+          233.0,
+          204.0
+        ],
+        "min": [
+          242,
+          228,
+          192
+        ],
+        "max": [
+          255,
+          238,
+          215
+        ]
+      },
+      "srgb": {
+        "median": [
+          250.0,
+          232.0,
+          200.0
+        ],
+        "min": [
+          244,
+          227,
+          187
+        ],
+        "max": [
+          255,
+          237,
+          213
+        ]
+      }
+    },
+    "mac13-caret": {
+      "raw": {
+        "median": [
+          255.0,
+          255.0,
+          253.0
+        ],
+        "min": [
+          250,
+          250,
+          250
+        ],
+        "max": [
+          255,
+          255,
+          255
+        ]
+      },
+      "srgb": {
+        "median": [
+          255.0,
+          255.0,
+          253.0
+        ],
+        "min": [
+          250,
+          250,
+          250
+        ],
+        "max": [
+          255,
+          255,
+          255
+        ]
+      }
+    }
+  },
+  "selectedNaturalMixingDiagnostic": {
+    "original31": {
+      "raw": {
+        "method": "Per-channel selected=(1-alpha)*selectionPlateau+alpha*foreground; alpha=(255-natural)/223 clamped; fixed pixels/no glyph alignment; diagnostic only",
+        "samplePixels": 1302,
+        "channels": [
+          {
+            "foregroundFit": -1.6545705741678505,
+            "MAEForeground0": 3.3926349941104768,
+            "MAEForeground32": 26.88524036838821,
+            "MAEFitted": 3.222103737293249
+          },
+          {
+            "foregroundFit": -7.448601348374424,
+            "MAEForeground0": 6.072575478911366,
+            "MAEForeground32": 31.237895476431554,
+            "MAEFitted": 2.2793143972691445
+          },
+          {
+            "foregroundFit": -9.36498612959986,
+            "MAEForeground0": 8.503416613282115,
+            "MAEForeground32": 32.78924800066108,
+            "MAEFitted": 4.763454542637853
+          }
+        ]
+      },
+      "srgb": {
+        "method": "Per-channel selected=(1-alpha)*selectionPlateau+alpha*foreground; alpha=(255-natural)/223 clamped; fixed pixels/no glyph alignment; diagnostic only",
+        "samplePixels": 1302,
+        "channels": [
+          {
+            "foregroundFit": -0.4344770729660963,
+            "MAEForeground0": 3.7182637267260605,
+            "MAEForeground32": 25.974826586211186,
+            "MAEFitted": 3.720378239100257
+          },
+          {
+            "foregroundFit": -7.403098775446563,
+            "MAEForeground0": 6.035578241133007,
+            "MAEForeground32": 31.161455642578126,
+            "MAEFitted": 2.330584142119585
+          },
+          {
+            "foregroundFit": -9.487153865063277,
+            "MAEForeground0": 8.841175700715688,
+            "MAEForeground32": 32.944376709167564,
+            "MAEFitted": 5.320278095255082
+          }
+        ]
+      }
+    },
+    "mac13": {
+      "raw": {
+        "method": "Per-channel selected=(1-alpha)*selectionPlateau+alpha*foreground; alpha=(255-natural)/223 clamped; fixed pixels/no glyph alignment; diagnostic only",
+        "samplePixels": 1300,
+        "channels": [
+          {
+            "foregroundFit": 36.684504540686525,
+            "MAEForeground0": 29.66254570541572,
+            "MAEForeground32": 4.514949982752672,
+            "MAEFitted": 2.944709083937684
+          },
+          {
+            "foregroundFit": 30.87114580535574,
+            "MAEForeground0": 25.276447050707212,
+            "MAEForeground32": 2.3175232838909943,
+            "MAEFitted": 2.1998507026180736
+          },
+          {
+            "foregroundFit": 21.460100373031285,
+            "MAEForeground0": 17.930417385305287,
+            "MAEForeground32": 9.0988478785788,
+            "MAEFitted": 4.750257366884861
+          }
+        ]
+      },
+      "srgb": {
+        "method": "Per-channel selected=(1-alpha)*selectionPlateau+alpha*foreground; alpha=(255-natural)/223 clamped; fixed pixels/no glyph alignment; diagnostic only",
+        "samplePixels": 1300,
+        "channels": [
+          {
+            "foregroundFit": 37.85530616807994,
+            "MAEForeground0": 30.55921007243888,
+            "MAEForeground32": 5.46767506036564,
+            "MAEFitted": 3.4095480756004948
+          },
+          {
+            "foregroundFit": 30.83486518243093,
+            "MAEForeground0": 25.306033114867237,
+            "MAEForeground32": 2.4479993101069306,
+            "MAEFitted": 2.3304788877386504
+          },
+          {
+            "foregroundFit": 20.114730611616725,
+            "MAEForeground0": 16.960555363918576,
+            "MAEForeground32": 10.256664367023077,
+            "MAEFitted": 5.455625684146188
+          }
+        ]
+      }
+    }
+  },
+  "naturalUniformDensityDiagnostic": {
+    "raw": {
+      "samplePixels": 1409,
+      "channels": [
+        {
+          "darknessScaleFit": 0.9979990822002932,
+          "maeBefore": 30.339247693399575,
+          "maeAfter": 30.53879983620649,
+          "residualFraction": 1.0065773596241916
+        },
+        {
+          "darknessScaleFit": 0.9983033104927833,
+          "maeBefore": 30.310149041873668,
+          "maeAfter": 30.480271968425157,
+          "residualFraction": 1.005612738040861
+        },
+        {
+          "darknessScaleFit": 0.9983800771563013,
+          "maeBefore": 30.20794889992903,
+          "maeAfter": 30.370737924207102,
+          "residualFraction": 1.0053889466251864
+        }
+      ],
+      "meaning": "Diagnostic cannot identify weight/raster/font. High residual rejects a uniform ink-density explanation on this sample."
+    },
+    "srgb": {
+      "samplePixels": 1409,
+      "channels": [
+        {
+          "darknessScaleFit": 0.9979877458420712,
+          "maeBefore": 30.349893541518806,
+          "maeAfter": 30.549929313796007,
+          "residualFraction": 1.0065909876093486
+        },
+        {
+          "darknessScaleFit": 0.998296519831911,
+          "maeBefore": 30.308019872249822,
+          "maeAfter": 30.478827308834276,
+          "residualFraction": 1.0056357174538098
+        },
+        {
+          "darknessScaleFit": 0.9983392760683266,
+          "maeBefore": 30.191625266146204,
+          "maeAfter": 30.358541575804054,
+          "residualFraction": 1.005528563241841
+        }
+      ],
+      "meaning": "Diagnostic cannot identify weight/raster/font. High residual rejects a uniform ink-density explanation on this sample."
+    }
+  },
+  "limits": [
+    "JPEG4:2:0, ICC, text AA and native/WK host remain inseparable in saved images.",
+    "Foreground fit is an approximate pixel-only mixing model, not native foreground or font identity proof.",
+    "No translated/scaled/repaired glyphs, no CSS parameter matrix or extra WK render.",
+    "Five26px character cells are fixed analysis windows, not measured glyph advances or font metrics.",
+    "No evidence here identifies exact native font weight/family or authorizes changing them."
+  ]
+}

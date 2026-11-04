@@ -1,7 +1,7 @@
 ---
 id: ref-mac-ordinary-visual-readiness44
 scope: Saved original and Mac13 ordinary folder name visual residuals
-status: in-progress
+status: done
 depends-on: [app-mac-ordinary-typography31]
 ---
 
@@ -20,3 +20,5 @@ native_ui_research只写docs/research/mac-ordinary-visual-readiness44/，读主�
 ## Verification
 
 保护输入与逐文件索引，解释mask201/natural192与选区色残差可能来源，区分字宽/weight/光栅/色彩与混合像素。现有证据不足应保unknown，不扩大成全像素PASS；输出最小后续候选、阴性对照、实际包验证边界，封索引后STOP。与37/42产品路径隔离，本项不授权CSS实现或新包。
+
+2026-11-05 READY STOP：研究20成员index af12a4a6f82c7cb1cd051c89ca090dd8ca33dcd0f62c0bcd3b3fd7ac65a67c6e。只有light普通focus选中文字黑色有后续候选依据，自然mask192和背景差继续unknown。见研究README；213项仅研究一致性，不是产品通过。
