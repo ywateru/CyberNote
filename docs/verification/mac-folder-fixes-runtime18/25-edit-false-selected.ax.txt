@@ -1,0 +1,51 @@
+Window: "备忘录", App: 备忘录.
+0 standard window 备忘录, Secondary Actions: Raise
+	1 container
+		2 scroll area
+			3 HTML content Description: 备忘录, URL: tauri://localhost
+				4 container 编辑智能文件夹
+					5 container
+						6 heading 编辑智能文件夹, Value: 2
+							7 text 编辑智能文件夹
+						8 text 名称：
+						9 text field (settable) 名称, Value: QA-SMART-U09-Mac
+						10 text 包含匹配下列
+						11 pop up button 组合过滤条件, Value: 全部
+						12 text 过滤条件的备忘录：
+						13 pop up button 过滤条件类型, Value: 标签
+						14 pop up button 标签模式, Value: 任何标签
+						15 button 移除过滤条件
+						16 button 添加过滤条件
+						17 pop up button 过滤条件类型, Value: 置顶备忘录
+						18 pop up button 置顶模式, Value: 包含
+						19 button 移除过滤条件
+						20 button 添加过滤条件
+						21 button 取消
+						22 button 好
+		23 menu Secondary Actions: Cancel
+			24 包含
+			25 (selected) 不包含
+	26 button 显示或隐藏文件夹
+	27 button 文件夹显示选项
+	28 button 新建备忘录
+	29 button 添加附件
+	30 button 核对清单
+	31 button 格式
+	32 button 插入表格
+	33 button 更多备忘录操作
+	34 button 共享备忘录
+	35 button 其他工具
+	36 search text field (settable) Description: 搜索备忘录, Placeholder: 搜索
+		37 button Search
+	38 text Description: QA-SMART-U09-Mac-Selected, Value: QA-SMART-U09-Mac-Selected 1 个备忘录
+	39 close button
+	40 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	41 minimize button
+42 menu bar
+	43 备忘录
+	44 文件
+	45 编辑
+	46 显示
+	47 窗口
+
+The focused UI element is 18 pop up button 置顶模式, Value: 包含

@@ -137,3 +137,9 @@ S7只在未提交草稿中观察创建日期／今天，不作为日期查询保
 [固定原图研究14](../research/mac-smart-u-native-geometry14/README.md)区分普通800×414与智能1368×586原像素表单，不得把普通表单撑到智能宽度。普通底部需水平分隔线，按钮160×48、间隙16、右/下40原图像素。实现前在实际运行引擎证明截图像素和布局单位映射；[geometry15](../plan/tasks/app-mac-folder-form-geometry15.md)仅普通Mac表单改动，不把离屏受控渲染当实际包像素通过。普通→智能根据实际草稿状态切换布局，名称/取消/提交契约保持，错误和窄窗不得裁切。
 
 重开智能定义时，置顶“不包含”必须按持久value:false回填草稿pinned:false，不能套newTagRule的默认true。Android05实测揭示共享映射缺陷，见[hydration16](../plan/tasks/app-smart-draft-hydration16.md)；Mac虽然未在本批操作false，仍受共享源码问题约束，不授完整编辑通过。
+
+## 普通表单实包与表面校准20
+
+Mac10 runtime18已确认普通表单包络800×414、按钮布局与普通↔智能名称保持；false回填/仅改名/新进程保持也已实际复核，见[运行18](../verification/mac-folder-fixes-runtime18/README.md)。[研究19](../verification/mac-ordinary-form-pixels19-research/README.md)仍见表面、角部与checkbox差异。普通Mac面板应接近原版亮底与舒展角部，取消灰色、好暖金，未选中checkbox浅灰实填。截图原始RGB及内缩曲线是比较依据，不能直接写成CSS颜色/radius；按实际渲染验证。
+
+[窄修20](../plan/tasks/app-mac-ordinary-form-surface20.md)仅这些表面/角部/未选中框，保留已对齐几何和所有行为/智能/手机作用域。名称框选区、灰内边、字左缘与字形细差另项；整体像素仍open。

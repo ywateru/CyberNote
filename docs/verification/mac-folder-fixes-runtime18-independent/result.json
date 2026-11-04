@@ -1,0 +1,463 @@
+{
+  "conclusion": "PASS: finite sealed runtime record consistency only; STOP",
+  "sourceHead": "de372d31e0578a7f2619413c0abde6a8439bb3c6",
+  "actualExecutable": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-folder-fixes-build10/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+    "bytes": 16298512,
+    "sha256": "56742e3842b3e3aca03a3bbd3f7fed92f017d5446578334dd7a6cf1b861e1d67"
+  },
+  "sourceIndexSha256": "f6ffdbc70b9caadcc777eeacabdcae1cb2daad78cc3c1cfc0f0072d4583bb0ef",
+  "sourceRecords": 67,
+  "sourceRecordsUnchanged": true,
+  "checks": [
+    {
+      "name": "sealed source index exact SHA256",
+      "passed": true
+    },
+    {
+      "name": "all67 indexed bytes exact",
+      "passed": true
+    },
+    {
+      "name": "index covers every original file except itself",
+      "passed": true
+    },
+    {
+      "name": "accurate actual executable exists and SHA256 matches both records",
+      "passed": true
+    },
+    {
+      "name": "exact new package executable absolute path",
+      "passed": true
+    },
+    {
+      "name": "old09 process observed then empty exit record",
+      "passed": true
+    },
+    {
+      "name": "Mac10 explicit empty exit record",
+      "passed": true
+    },
+    {
+      "name": "new PID same accurate absolute executable path",
+      "passed": true
+    },
+    {
+      "name": "previous independent package pass exact source and executable",
+      "passed": true
+    },
+    {
+      "name": "synthetic baseline body exact",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 08-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 10-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 14-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 15-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 16-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 17-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 23-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 27-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 29-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 31-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 32-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 34-",
+      "passed": true
+    },
+    {
+      "name": "saved AX complete body unchanged 37-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 07-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 10-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 14-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 15-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 16-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 17-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 23-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 27-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 29-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 31-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 34-",
+      "passed": true
+    },
+    {
+      "name": "visible count41 and selected smart1 37-",
+      "passed": true
+    },
+    {
+      "name": "sidebar hidden08 and visible10; toolbar survives",
+      "passed": true
+    },
+    {
+      "name": "dynamic actual menu labels",
+      "passed": true
+    },
+    {
+      "name": "09 display options not sidebar restore",
+      "passed": true
+    },
+    {
+      "name": "ordinary form opened18 not failed17",
+      "passed": true
+    },
+    {
+      "name": "smart toggle20 and ordinary21 preserve draft name",
+      "passed": true
+    },
+    {
+      "name": "post ordinary cancellation visible folder list unchanged",
+      "passed": true
+    },
+    {
+      "name": "true original smart definition",
+      "passed": true
+    },
+    {
+      "name": "25 stale AX and selected native item retained",
+      "passed": true
+    },
+    {
+      "name": "false value explicit 26-",
+      "passed": true
+    },
+    {
+      "name": "false value explicit 28-",
+      "passed": true
+    },
+    {
+      "name": "false value explicit 30-",
+      "passed": true
+    },
+    {
+      "name": "false value explicit 35-",
+      "passed": true
+    },
+    {
+      "name": "false save target count0",
+      "passed": true
+    },
+    {
+      "name": "renamed target count0 preserved 29-",
+      "passed": true
+    },
+    {
+      "name": "renamed target count0 preserved 31-",
+      "passed": true
+    },
+    {
+      "name": "renamed target count0 preserved 34-",
+      "passed": true
+    },
+    {
+      "name": "renamed target count0 preserved 37-",
+      "passed": true
+    },
+    {
+      "name": "rename reopened and after restart exact definition",
+      "passed": true
+    },
+    {
+      "name": "body actual selected text recorded31",
+      "passed": true
+    },
+    {
+      "name": "hidden32 before quit;34 is actually visible",
+      "passed": true
+    },
+    {
+      "name": "final sidebar restored and no draft modal",
+      "passed": true
+    },
+    {
+      "name": "retained failed attempts distinguish correct evidence",
+      "passed": true
+    },
+    {
+      "name": "27 actual JPEG images decode",
+      "passed": true
+    },
+    {
+      "name": "ordinary modal bright component800x414 bbox",
+      "passed": true
+    },
+    {
+      "name": "original captured standalone800x414",
+      "passed": true
+    },
+    {
+      "name": "author retains restart visible and geometry limits",
+      "passed": true
+    },
+    {
+      "name": "original indexed files unchanged at close",
+      "passed": true
+    }
+  ],
+  "assertions": 62,
+  "failed": 0,
+  "recordedProcessIds": {
+    "before": 38681,
+    "after": 39153,
+    "emptyExitRecord": "33-quit-confirmed.json"
+  },
+  "images": [
+    {
+      "path": "00-original-ordinary.cua-image",
+      "format": "JPEG",
+      "width": 800,
+      "height": 414
+    },
+    {
+      "path": "02-old09-before-upgrade.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "07-new10-launched.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "08-sidebar-hidden.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "09-hidden-options.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "10-sidebar-restored.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "14-menu-restored.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "15-sidebar-resized.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "16-list-resized.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "17-ordinary-form.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "18-ordinary-form-open.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "20-form-smart-toggle.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "21-form-ordinary-toggle-back.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "22-smart-context.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "23-smart-context-correct.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "24-edit-smart-initial-true.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "25-edit-false-selected.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "26-false-committed-to-draft.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "27-false-saved-count.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "28-false-reopened.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "29-name-only-save-count0.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "30-name-only-false-reopened.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "31-cancel-and-body-selection.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "32-before-quit-sidebar-hidden.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "34-restarted-hidden.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "35-after-restart-false.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    },
+    {
+      "path": "37-final-sidebar-restored.cua-image",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320
+    }
+  ],
+  "ordinaryModalMeasurement": {
+    "method": "JPEG luminance >=210 connected component seeded within modal, bounded ROI [600,350,1580,950]; excludes shadow, not exact color/corner equivalence",
+    "bbox": [
+      688,
+      453,
+      1488,
+      867
+    ],
+    "size": [
+      800,
+      414
+    ],
+    "originalStandaloneCaptureSize": [
+      800,
+      414
+    ]
+  },
+  "manualVisualReview": "All27 JPEGs: original00/current18/body31/restart34 viewed directly; remaining23 through four labeled derived contact sheets. AX state and endpoint record consistency reviewed.",
+  "findings": [],
+  "limitations": [
+    "Reviewer did not operate GUI or app and did not freshly query live processes; exit/restart conclusions are scoped to stored process records plus current exact file hash.",
+    "31 captures retained -R18 endpoint and selected body. Intermediate -CANCEL18 text and exact cancellation action exist only in author narrative; static files do not independently prove every keystroke.",
+    "Form cancellation supports no new visible directory; no user DB read or complete durable-entity inventory was performed.",
+    "Drag endpoints and body preservation visible, but full back-and-forth gesture trajectory is author narrative. Final list boundary differs from initial; no exact restore or width persistence pass.",
+    "34 filename includes hidden, actual sidebar is visible. No hidden preference persistence acceptance.",
+    "JPEG/active focus/capture scope differ; only finite modal envelope dimension matches, not overall pixels/colors/corners/fonts.",
+    "True is initial reopened state, false save/reopen/rename/newPID state verified. No claim of separately saving true again this round.",
+    "No product edits, original evidence changes, Git, GUI, ADB, DB, platform builds/shared target/cache operations; Android records not read."
+  ],
+  "stop": true
+}

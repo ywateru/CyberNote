@@ -1,7 +1,7 @@
 ---
 id: app-mobile-folder-interactions17
 scope: Visible mobile smart-form rejection and nonselectable folder controls
-status: source-review-pass
+status: done
 priority: P2
 depends-on: [app-smart-draft-hydration16]
 ---
@@ -50,3 +50,9 @@ depends-on: [app-smart-draft-hydration16]
 ## Source acceptance
 
 root接受作者前71项15失败、后71通过及不同作者独立71通过；独审37固定输入保持，原失败留档。root核13项独立索引全部SHA匹配，索引60d21eacb14a0a8da58264ddb2115c23afe493a03955b79db360232d5a8931f9。仅三个UI文件，App/16保持；准确Android系统长按及新包设备反馈仍待18验收，不将受控样本认定为完整Editor或原版像素。
+
+## Actual Android acceptance18
+
+2026-11-05追加：源de372准确APK8609231f…经385项包独核、保数据升级后，root已授权ADB实际观察：04长按合成目录打开正确菜单，无蓝色选区/把手；27正文smart仍有系统选区/把手；19非法空标签即时显示红色错误，20滚动后仍在可见位置；21合法选择清错，22回顶部/23实际确认，24外层取消无新增可见目录。21第二次坐标点击未确认的尝试原样保留。39终态普通8篇/智能1、旧卡37可见。不同作者核83原始文件、37 PNG及99静态检查通过，见[运行记录](../../verification/android-folder-fixes-runtime18/README.md)、[独核](../reviews/android-folder-fixes-runtime18.md)和[根接收](../../verification/folder-fixes-runtime18-root-acceptance.md)。
+
+done仅两个已观察缺陷和上述有限路径；没有把工程错误文案/样式当成iPhone原版像素通过，实际iOS、全部动画与完整功能继续open。

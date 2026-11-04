@@ -1,0 +1,50 @@
+Window: "备忘录", App: 备忘录.
+0 standard window 备忘录, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost
+			3 text 置顶
+			4 button QA-SMART-U09-Mac-Tag 2026/11/5 本地智能文件夹验收。 #QASmartU09
+			5 splitter 调整分栏宽度
+			6 container
+				7 button 2026年11月5日 01:11
+				8 text entry area (settable) 备忘录正文, Value: QA-SMART-U09-Mac-Tag
+本地智能文件夹验收。
+#QASmartU09 
+
+
+					9 text (settable) QA-SMART-U09-Mac-Tag
+					10 text (settable) 本地智能文件夹验收。
+					11 text (settable) #QASmartU09
+	12 button 显示或隐藏文件夹
+	13 button 文件夹显示选项
+		14 menu Secondary Actions: Cancel
+			15 画廊视图, ID: menuClicked:
+			16 排序方式
+				17 menu Secondary Actions: Cancel
+					18 默认（编辑日期）, ID: menuClicked:
+					19 编辑日期, ID: menuClicked:
+					20 创建日期, ID: menuClicked:
+					21 标题, ID: menuClicked:
+			22 按日期分组, ID: menuClicked:
+			23 (disabled) 查看附件, ID: menuClicked:
+	24 button 新建备忘录
+	25 button 添加附件
+	26 button 核对清单
+	27 button 格式
+	28 button 插入表格
+	29 button 更多备忘录操作
+	30 button 共享备忘录
+	31 search text field (settable) Description: 搜索备忘录, Placeholder: 搜索
+		32 button Search
+	33 text Description: QA-SMART-U09-Mac-Selected, Value: QA-SMART-U09-Mac-Selected 1 个备忘录
+	34 close button
+	35 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	36 minimize button
+37 menu bar
+	38 备忘录
+	39 文件
+	40 编辑
+	41 显示
+	42 窗口
+
+The focused UI element is 2 HTML content Description: 备忘录, URL: tauri://localhost

@@ -1,0 +1,719 @@
+{
+  "conclusion": "PASS: sealed finite Android18 record consistency only; STOP",
+  "reviewMode": "static saved records; no device operation or current product source inference",
+  "sourceHeadFromFixedPackageRecords": "de372d31e0578a7f2619413c0abde6a8439bb3c6",
+  "sourceIndexSha256": "8df1ca4d2d328973369bf7933d9a03c95183bfd6207656614055f102bfe153bf",
+  "sourceRecords": 83,
+  "sourceRecordsUnchanged": true,
+  "package": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/android-folder-fixes-build06/android-attempt01/android-original.apk",
+    "bytes": 179247354,
+    "sha256": "8609231ff310ffef028c62b20f9774bcb2968f15d21a95ddf87d3f4eb98951ac"
+  },
+  "recordedInstalledBaseApkPath": "/data/app/~~B5zMuXxCWN9nfLYMwYBptA==/com.local.notesclone-EfjYD9cmvlqN80yaCaYiKg==/base.apk",
+  "recordedColdStartPids": [
+    25977,
+    26347
+  ],
+  "recordedAfterStopExit": 1,
+  "checks": [
+    {
+      "name": "sealed source index exact SHA256",
+      "passed": true
+    },
+    {
+      "name": "all83 indexed byte identities",
+      "passed": true
+    },
+    {
+      "name": "index covers original directory completely",
+      "passed": true
+    },
+    {
+      "name": "exact previously sealed independent package index",
+      "passed": true
+    },
+    {
+      "name": "accurate package source from fixed package records",
+      "passed": true
+    },
+    {
+      "name": "current preserved accurate APK bytes",
+      "passed": true
+    },
+    {
+      "name": "recorded install-r success exact package path",
+      "passed": true
+    },
+    {
+      "name": "recorded installed base.apk exact hash/path",
+      "passed": true
+    },
+    {
+      "name": "package dump and09 match preserved userId",
+      "passed": true
+    },
+    {
+      "name": "package dump and09 match preserved firstInstallTime",
+      "passed": true
+    },
+    {
+      "name": "upgrade identity booleans supported by raw records",
+      "passed": true
+    },
+    {
+      "name": "same recorded package data inode",
+      "passed": true
+    },
+    {
+      "name": "stored cold stop before25977 empty exit1 new26347",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 03-stable-after-upgrade",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 04-longpress-context",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 05-edit-name",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 06-reopened-filters",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 07-filters-confirmed",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 08-name-only-saved",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 10-edit-after-name-only",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 11-name-only-filter-retained",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 12-edit-canceled",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 14-after-cold-start",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 15-cold-edit-name",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 16-cold-filter-retained",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 17-new-form",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 18-empty-tag-filters",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 19-empty-tag-error",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 20-empty-error-after-scroll",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 21-valid-retry",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 22-retry-return-top",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 23-valid-filter-confirmed",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 24-new-draft-canceled",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 25-synthetic-folder-opened",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 26-synthetic-body",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 27-body-selection",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 28-synthetic-note-menu",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 29-synthetic-pinned",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 30-pinned-smart-list",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 31-pinned-folder-count0",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 32-ordinary-pinned-list",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 33-synthetic-pinned-open",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 34-pinned-note-menu",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 35-synthetic-unpinned",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 36-ordinary-restored-unpinned",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 37-old-audio-card-visible",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 38-ordinary-after-audio",
+      "passed": true
+    },
+    {
+      "name": "image has paired action record 39-final-folders-count1",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 03-stable-after-upgrade",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 04-longpress-context",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 05-edit-name",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 06-reopened-filters",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 07-filters-confirmed",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 08-name-only-saved",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 10-edit-after-name-only",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 11-name-only-filter-retained",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 12-edit-canceled",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 14-after-cold-start",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 15-cold-edit-name",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 16-cold-filter-retained",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 17-new-form",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 18-empty-tag-filters",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 19-empty-tag-error",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 20-empty-error-after-scroll",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 21-valid-retry",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 22-retry-return-top",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 23-valid-filter-confirmed",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 24-new-draft-canceled",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 25-synthetic-folder-opened",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 26-synthetic-body",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 27-body-selection",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 28-synthetic-note-menu",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 29-synthetic-pinned",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 30-pinned-smart-list",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 31-pinned-folder-count0",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 32-ordinary-pinned-list",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 33-synthetic-pinned-open",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 34-pinned-note-menu",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 35-synthetic-unpinned",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 36-ordinary-restored-unpinned",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 37-old-audio-card-visible",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 38-ordinary-after-audio",
+      "passed": true
+    },
+    {
+      "name": "captured input JSON valid bounded operations 39-final-folders-count1",
+      "passed": true
+    },
+    {
+      "name": "all37 actual PNG1080x2280 images decode",
+      "passed": true
+    },
+    {
+      "name": "03 and14 intentional no-action stable captures",
+      "passed": true
+    },
+    {
+      "name": "04 exact recorded900ms folder longpress",
+      "passed": true
+    },
+    {
+      "name": "08 name-only input last-character replacement",
+      "passed": true
+    },
+    {
+      "name": "12 recorded two cancellation taps",
+      "passed": true
+    },
+    {
+      "name": "19 confirm then20 actual scroll requests",
+      "passed": true
+    },
+    {
+      "name": "21 attempted tag and confirm preserved",
+      "passed": true
+    },
+    {
+      "name": "22 return top23 confirm24 cancel requests",
+      "passed": true
+    },
+    {
+      "name": "27 actual recorded900ms body selection",
+      "passed": true
+    },
+    {
+      "name": "29 and35 same menu item coordinate requests",
+      "passed": true
+    },
+    {
+      "name": "37 only opened old note;38 returned",
+      "passed": true
+    },
+    {
+      "name": "saved helper fixed emulator and exclusive capture files",
+      "passed": true
+    },
+    {
+      "name": "same exact synthetic visible title/body/tag ROI before after pin/unpin",
+      "passed": true
+    },
+    {
+      "name": "error red line currently visible identical before after scroll",
+      "passed": true
+    },
+    {
+      "name": "README explicitly retains21 partial29 transitional limits",
+      "passed": true
+    },
+    {
+      "name": "all83 source files and old index unchanged at close",
+      "passed": true
+    }
+  ],
+  "assertions": 99,
+  "failed": 0,
+  "actionRecordCount": 43,
+  "images": [
+    {
+      "path": "00-screen-before.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "02-first-after-install.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "03-stable-after-upgrade.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "04-longpress-context.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "05-edit-name.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "06-reopened-filters.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "07-filters-confirmed.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "08-name-only-saved.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "10-edit-after-name-only.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "11-name-only-filter-retained.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "12-edit-canceled.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "14-after-cold-start.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "15-cold-edit-name.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "16-cold-filter-retained.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "17-new-form.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "18-empty-tag-filters.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "19-empty-tag-error.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "20-empty-error-after-scroll.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "21-valid-retry.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "22-retry-return-top.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "23-valid-filter-confirmed.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "24-new-draft-canceled.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "25-synthetic-folder-opened.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "26-synthetic-body.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "27-body-selection.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "28-synthetic-note-menu.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "29-synthetic-pinned.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "30-pinned-smart-list.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "31-pinned-folder-count0.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "32-ordinary-pinned-list.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "33-synthetic-pinned-open.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "34-pinned-note-menu.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "35-synthetic-unpinned.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "36-ordinary-restored-unpinned.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "37-old-audio-card-visible.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "38-ordinary-after-audio.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "39-final-folders-count1.png",
+      "format": "PNG",
+      "width": 1080,
+      "height": 2280
+    }
+  ],
+  "manualVisualReview": "All37 full screenshots reviewed through five labeled derived contact sheets;04 folder menu/27 body selection/37 audio card additionally viewed full-size. Saved actions inspected without executing helper.",
+  "bodyPixelROI": [
+    {
+      "file": "26-synthetic-body.png",
+      "roi": [
+        60,
+        330,
+        1040,
+        680
+      ],
+      "rgbSha256": "aa55e40083002920bcdccbb90e0641d726497d31dbfc8f67dce51bfc774c317e"
+    },
+    {
+      "file": "33-synthetic-pinned-open.png",
+      "roi": [
+        60,
+        330,
+        1040,
+        680
+      ],
+      "rgbSha256": "aa55e40083002920bcdccbb90e0641d726497d31dbfc8f67dce51bfc774c317e"
+    },
+    {
+      "file": "35-synthetic-unpinned.png",
+      "roi": [
+        60,
+        330,
+        1040,
+        680
+      ],
+      "rgbSha256": "aa55e40083002920bcdccbb90e0641d726497d31dbfc8f67dce51bfc774c317e"
+    }
+  ],
+  "errorVisiblePixelEvidence": [
+    {
+      "file": "19-empty-tag-error.png",
+      "redPixelBBox": [
+        70,
+        357,
+        665,
+        388
+      ],
+      "redPixels": 4501,
+      "topHeaderSampleRGB": [
+        49,
+        41,
+        0
+      ]
+    },
+    {
+      "file": "20-empty-error-after-scroll.png",
+      "redPixelBBox": [
+        70,
+        357,
+        665,
+        388
+      ],
+      "redPixels": 4501,
+      "topHeaderSampleRGB": [
+        49,
+        41,
+        0
+      ]
+    }
+  ],
+  "findings": [],
+  "limitations": [
+    "Action exit0 means Android accepted an input command, not semantic completion.21 failed same-step confirmation and29 blank transition retained;23 and30/31 are valid endpoints.",
+    "Reviewer did not operate GUI/ADB or observe live process/device state; installation/hash/UID/PID findings apply to saved records and current host APK bytes.",
+    "37 proves visible old card title/date2:03 only; no playback/export/decode or media-byte integrity test.",
+    "Counts8 and visible synthetic-body endpoints are finite preservation evidence, not all user entities/database/media integrity.",
+    "No true-save-reopen loop, actual iOS host/original touch timing/animation/overall pixel acceptance.",
+    "No current activity worktree/source used to infer Android package provenance. No original evidence edits, source/product modification, Git, DB, media export, builds or shared target/cache operations."
+  ],
+  "stop": true
+}

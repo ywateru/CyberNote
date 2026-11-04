@@ -9,10 +9,11 @@
 | APP-SMART-D1 本地库防损 | done（源码范围，独立pass） | de3c07f严格旧格式、识别版本优先、原子初始化；不代表新平台包 |
 | APP-SMART-D2 真实智能规则与归档 | done（内部源码能力），9bdc441独立pass | 标签四模式/置顶、CAS、同快照、DB2/归档3与旧UI门禁；唯一名称P2修复，作者69pass/独立窄2pass；公开UI、新包/像素仍待O/U |
 | APP-SMART-O 元数据顺序与保存所有权 | done（源码08d2206），独立pass | 最终Rust78/0/3ignored、AccessGate16/0与前端/宿主编译通过；独审最终源10项Rust+8条不同bridge/挂载路径，提交后正文撤权/旧ACK/同seq权威重读通过，实际IPC/设备/像素不外推，U门禁保持关闭 |
-| APP-SMART-U 两端智能界面 | in-progress，准确双端包有限运行；false重开回填P1待修 | d576b50旧九组及peer/O通过事实保留；两项P2经fix13解除，原失败探针、第三行真实保存、TS30/all-any8值/Rust共享corpus通过。Mac09/Android05准确包与有限运行已取得，Android false重开回填缺陷进hydration16；普通Mac过宽进geometry15，完整离线规则/手机未知状态/像素仍open |
-| APP-MAC-FOLDER-FORM-GEOMETRY15 普通新建表单 | source-review-pass，80b01da整合 | 仅普通Mac class/CSS，作者12/独审15React场景及离屏WK800×414；正式包/焦点/像素仍待验 |
-| APP-SMART-DRAFT-HYDRATION16 置顶false回填 | source-review-pass | 一行显式value→pinned；作者280断言前70失败/后0失败、独审329断言通过，Android05原P1保留，准确新包仍待验 |
-| APP-MOBILE-17 错误可见与目录选字 | source-review-pass | [任务](tasks/app-mobile-folder-interactions17.md)；Android05实际11/12、26及独核为缺陷依据；限定三个UI文件，源码与设备验收分开 |
+| APP-SMART-U 两端智能界面 | in-progress，Mac10/Android06有限运行独核pass，整体partial | de372准确包来源分别470/385项独核；runtime18关闭false回填及手机错误/长按选字已观测缺陷；普通Mac实际800×414，剩余表面/焦点及完整离线规则/手机未知状态/像素open。原版删除实验暂停，后续侧栏隐藏偏好差异另修 |
+| APP-MAC-FOLDER-FORM-GEOMETRY15 普通新建表单 | 实包有限几何pass，像素partial | 80b01da整合，Mac10普通包络800×414、普通↔智能名称保持/取消有实际记录及62项静态独核；研究19表面/角部/checkbox/焦点/字左缘仍有差异，进入20 |
+| APP-SMART-DRAFT-HYDRATION16 置顶false回填 | done（false回填窄范围） | 一行显式value→pinned，源码独审329断言；准确双端runtime18改名/新PID重开false保持，Android置顶成员1→0→1恢复，不同作者有限独核pass；原失败保留，无全部规则/像素claim |
+| APP-MOBILE-17 错误可见与目录选字 | done（两项已见缺陷范围） | 三文件源码独审71，Android06实际长按目录无选字/正文仍可选/滚动错误可见与合法重试取消；83原文件/37 PNG/99静态检查独核pass，工程错误样式非原版像素PASS |
+| APP-MAC-ORDINARY-SURFACE20 普通表单表面与角部 | in-progress | 依据研究19，只校准普通Mac表面/角部/未选中checkbox；保留已对齐几何，名称焦点/字左缘和整体像素另项 |
 | REF-001 原版取证/需求/UI/调研 | in-progress | 原视频已保全、抽帧、初始规格已写，持续补证 |
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |

@@ -37,3 +37,7 @@ depends-on: [app-smart-u-platform-ui09]
 
 
 2026-11-05：两文件作者SOURCE-READY，独立15项React与一次真实离屏WK核查pass，见[独审](../reviews/app-mac-folder-form-geometry15.md)。root已核两源码SHA与32项独立证据字节。仅源码/受控几何通过；准确新Mac包与原生焦点/像素仍待构建实测，未标done。
+
+## 准确包实际补证18
+
+源de372的Mac10 exe56742e38…已独立核包并通过Computer Use实际观察，普通表单亮色包络800×414，普通↔智能名称保持及取消后无新可见目录；[运行记录](../../verification/mac-folder-fixes-runtime18/README.md)及[不同作者有限独核](../reviews/mac-folder-fixes-runtime18.md)已封存。仅尺寸/列明行为的实包门槛关闭；[研究19](../../verification/mac-ordinary-form-pixels19-research/README.md)仍确认底色/角部/checkbox/焦点/字左缘差异，后续surface20仅校准表面，完整像素仍open。

@@ -1,0 +1,4684 @@
+{
+  "scope": "Two fixed runtime18 CUA JPEGs; unscaled 800x414 registration; no platform/pixel PASS",
+  "inputs": [
+    {
+      "path": "docs/verification/mac-folder-fixes-runtime18/00-original-ordinary.cua-image",
+      "bytes": 41091,
+      "sha256": "973718945e025e30aa64ea1540872b4ce1f5af67b8f5a085feb7739dc6d56090"
+    },
+    {
+      "path": "docs/verification/mac-folder-fixes-runtime18/18-ordinary-form-open.cua-image",
+      "bytes": 189499,
+      "sha256": "408d494c95b77c53771c211c2469ada5f9081be0bf74aa411a45a2915076e8b1"
+    },
+    {
+      "path": "docs/INDEX.md",
+      "bytes": 21465,
+      "sha256": "0aaeb9e77a4a9033b59247f0d19c9919b21412a8f2aa1f3fe42c0089405458df"
+    },
+    {
+      "path": "docs/plan/tasks/app-mac-folder-form-geometry15.md",
+      "bytes": 3547,
+      "sha256": "51e37ef38bb0ac35f639ac64e0186371e2f2356084938b06316e88780a9bfde5"
+    },
+    {
+      "path": "docs/plan/reviews/app-mac-folder-form-geometry15.md",
+      "bytes": 7451,
+      "sha256": "864ea36b32695daf465f1cb1f88179f4ea8ac2f509ffd5ad180a32d905af4868"
+    }
+  ],
+  "imageMetadata": {
+    "original": {
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        800,
+        414
+      ],
+      "iccBytes": 4064,
+      "iccSha256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf",
+      "jpegComponents": [
+        [
+          1,
+          2,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          1,
+          1
+        ],
+        [
+          3,
+          1,
+          1,
+          1
+        ]
+      ],
+      "jfifDensity": [
+        72,
+        72
+      ]
+    },
+    "cloneFull": {
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2176,
+        1320
+      ],
+      "iccBytes": 4064,
+      "iccSha256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf",
+      "jpegComponents": [
+        [
+          1,
+          2,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          1,
+          1
+        ],
+        [
+          3,
+          1,
+          1,
+          1
+        ]
+      ],
+      "jfifDensity": [
+        72,
+        72
+      ]
+    }
+  },
+  "cloneBoundaryDetection": {
+    "searchROI": [
+      650,
+      400,
+      1520,
+      900
+    ],
+    "seed": [
+      1088,
+      700
+    ],
+    "method": "4-connected pixels with all RGB components >= threshold, selected center component",
+    "results": [
+      {
+        "thresholdMinRGB": 190,
+        "bbox": [
+          688,
+          453,
+          1488,
+          867
+        ]
+      },
+      {
+        "thresholdMinRGB": 195,
+        "bbox": [
+          688,
+          453,
+          1488,
+          867
+        ]
+      },
+      {
+        "thresholdMinRGB": 200,
+        "bbox": [
+          688,
+          453,
+          1488,
+          867
+        ]
+      }
+    ],
+    "coordinateConvention": "integer half-open pixels; painted outer bbox; shadow excluded",
+    "uncertaintyPx": 1
+  },
+  "textROIs": {
+    "title": [
+      35,
+      35,
+      190,
+      80
+    ],
+    "nameLabel": [
+      35,
+      115,
+      115,
+      157
+    ],
+    "nameText": [
+      135,
+      115,
+      280,
+      158
+    ],
+    "smartLabel": [
+      75,
+      190,
+      330,
+      230
+    ],
+    "subtitle": [
+      75,
+      229,
+      500,
+      268
+    ],
+    "cancelText": [
+      450,
+      330,
+      560,
+      370
+    ],
+    "okText": [
+      650,
+      330,
+      710,
+      370
+    ]
+  },
+  "textInk": {
+    "original": {
+      "title": {
+        "100": {
+          "bbox": [
+            41,
+            45,
+            167,
+            69
+          ],
+          "pixels": 1290
+        },
+        "160": {
+          "bbox": [
+            41,
+            45,
+            167,
+            69
+          ],
+          "pixels": 1531
+        },
+        "200": {
+          "bbox": [
+            40,
+            44,
+            167,
+            69
+          ],
+          "pixels": 1688
+        }
+      },
+      "nameLabel": {
+        "100": {
+          "bbox": [
+            41,
+            125,
+            99,
+            148
+          ],
+          "pixels": 374
+        },
+        "160": {
+          "bbox": [
+            41,
+            125,
+            100,
+            149
+          ],
+          "pixels": 497
+        },
+        "200": {
+          "bbox": [
+            41,
+            125,
+            100,
+            149
+          ],
+          "pixels": 571
+        }
+      },
+      "nameText": {
+        "100": {
+          "bbox": [
+            142,
+            125,
+            268,
+            149
+          ],
+          "pixels": 1017
+        },
+        "160": {
+          "bbox": [
+            142,
+            125,
+            268,
+            149
+          ],
+          "pixels": 1229
+        },
+        "200": {
+          "bbox": [
+            141,
+            125,
+            268,
+            149
+          ],
+          "pixels": 1391
+        }
+      },
+      "smartLabel": {
+        "100": {
+          "bbox": [
+            85,
+            197,
+            262,
+            220
+          ],
+          "pixels": 1264
+        },
+        "160": {
+          "bbox": [
+            85,
+            197,
+            262,
+            221
+          ],
+          "pixels": 1636
+        },
+        "200": {
+          "bbox": [
+            85,
+            197,
+            263,
+            221
+          ],
+          "pixels": 1882
+        }
+      },
+      "subtitle": {
+        "100": {
+          "bbox": null,
+          "pixels": 0
+        },
+        "160": {
+          "bbox": [
+            81,
+            233,
+            424,
+            257
+          ],
+          "pixels": 2424
+        },
+        "200": {
+          "bbox": [
+            81,
+            233,
+            424,
+            257
+          ],
+          "pixels": 3173
+        }
+      },
+      "cancelText": {
+        "100": {
+          "bbox": [
+            479,
+            339,
+            527,
+            362
+          ],
+          "pixels": 406
+        },
+        "160": {
+          "bbox": [
+            479,
+            339,
+            528,
+            363
+          ],
+          "pixels": 547
+        },
+        "200": {
+          "bbox": [
+            479,
+            339,
+            528,
+            363
+          ],
+          "pixels": 605
+        }
+      },
+      "okText": {
+        "100": {
+          "bbox": [
+            668,
+            339,
+            691,
+            362
+          ],
+          "pixels": 198
+        },
+        "160": {
+          "bbox": [
+            668,
+            339,
+            692,
+            363
+          ],
+          "pixels": 234
+        },
+        "200": {
+          "bbox": [
+            668,
+            339,
+            692,
+            363
+          ],
+          "pixels": 277
+        }
+      }
+    },
+    "clone": {
+      "title": {
+        "100": {
+          "bbox": [
+            41,
+            45,
+            167,
+            69
+          ],
+          "pixels": 1187
+        },
+        "160": {
+          "bbox": [
+            41,
+            45,
+            167,
+            69
+          ],
+          "pixels": 1402
+        },
+        "200": {
+          "bbox": [
+            41,
+            45,
+            167,
+            69
+          ],
+          "pixels": 1537
+        }
+      },
+      "nameLabel": {
+        "100": {
+          "bbox": [
+            42,
+            125,
+            99,
+            148
+          ],
+          "pixels": 321
+        },
+        "160": {
+          "bbox": [
+            41,
+            125,
+            99,
+            149
+          ],
+          "pixels": 419
+        },
+        "200": {
+          "bbox": [
+            41,
+            125,
+            100,
+            149
+          ],
+          "pixels": 490
+        }
+      },
+      "nameText": {
+        "100": {
+          "bbox": [
+            146,
+            125,
+            272,
+            148
+          ],
+          "pixels": 693
+        },
+        "160": {
+          "bbox": [
+            146,
+            125,
+            272,
+            149
+          ],
+          "pixels": 1010
+        },
+        "200": {
+          "bbox": [
+            146,
+            125,
+            273,
+            149
+          ],
+          "pixels": 1232
+        }
+      },
+      "smartLabel": {
+        "100": {
+          "bbox": [
+            87,
+            197,
+            264,
+            220
+          ],
+          "pixels": 1017
+        },
+        "160": {
+          "bbox": [
+            87,
+            197,
+            264,
+            221
+          ],
+          "pixels": 1427
+        },
+        "200": {
+          "bbox": [
+            87,
+            197,
+            265,
+            221
+          ],
+          "pixels": 1737
+        }
+      },
+      "subtitle": {
+        "100": {
+          "bbox": null,
+          "pixels": 0
+        },
+        "160": {
+          "bbox": [
+            81,
+            233,
+            424,
+            257
+          ],
+          "pixels": 2096
+        },
+        "200": {
+          "bbox": [
+            81,
+            233,
+            425,
+            257
+          ],
+          "pixels": 2849
+        }
+      },
+      "cancelText": {
+        "100": {
+          "bbox": [
+            478,
+            339,
+            529,
+            364
+          ],
+          "pixels": 400
+        },
+        "160": {
+          "bbox": [
+            477,
+            339,
+            529,
+            364
+          ],
+          "pixels": 523
+        },
+        "200": {
+          "bbox": [
+            477,
+            339,
+            529,
+            364
+          ],
+          "pixels": 642
+        }
+      },
+      "okText": {
+        "100": {
+          "bbox": [
+            668,
+            339,
+            692,
+            363
+          ],
+          "pixels": 168
+        },
+        "160": {
+          "bbox": [
+            667,
+            338,
+            692,
+            364
+          ],
+          "pixels": 230
+        },
+        "200": {
+          "bbox": [
+            667,
+            338,
+            692,
+            364
+          ],
+          "pixels": 279
+        }
+      }
+    }
+  },
+  "colorsRawDecodedRGB": {
+    "original": {
+      "panel": {
+        "roi": [
+          200,
+          20,
+          650,
+          90
+        ],
+        "modeRGB": [
+          255,
+          255,
+          255
+        ],
+        "modeCount": 31500,
+        "samples": 31500,
+        "medianRGB": [
+          255.0,
+          255.0,
+          255.0
+        ],
+        "rangeRGB": [
+          [
+            255,
+            255
+          ],
+          [
+            255,
+            255
+          ],
+          [
+            255,
+            255
+          ]
+        ]
+      },
+      "inputInterior": {
+        "roi": [
+          300,
+          122,
+          700,
+          151
+        ],
+        "modeRGB": [
+          255,
+          255,
+          255
+        ],
+        "modeCount": 8000,
+        "samples": 11600,
+        "medianRGB": [
+          255.0,
+          255.0,
+          255.0
+        ],
+        "rangeRGB": [
+          [
+            254,
+            255
+          ],
+          [
+            254,
+            255
+          ],
+          [
+            253,
+            255
+          ]
+        ]
+      },
+      "cancelInterior": {
+        "roi": [
+          440,
+          330,
+          460,
+          365
+        ],
+        "modeRGB": [
+          236,
+          236,
+          236
+        ],
+        "modeCount": 700,
+        "samples": 700,
+        "medianRGB": [
+          236.0,
+          236.0,
+          236.0
+        ],
+        "rangeRGB": [
+          [
+            236,
+            236
+          ],
+          [
+            236,
+            236
+          ],
+          [
+            236,
+            236
+          ]
+        ]
+      },
+      "okInterior": {
+        "roi": [
+          620,
+          330,
+          640,
+          365
+        ],
+        "modeRGB": [
+          243,
+          187,
+          76
+        ],
+        "modeCount": 602,
+        "samples": 700,
+        "medianRGB": [
+          243.0,
+          187.0,
+          76.0
+        ],
+        "rangeRGB": [
+          [
+            241,
+            244
+          ],
+          [
+            186,
+            188
+          ],
+          [
+            74,
+            79
+          ]
+        ]
+      },
+      "checkboxInterior": {
+        "roi": [
+          45,
+          198,
+          67,
+          218
+        ],
+        "modeRGB": [
+          230,
+          230,
+          230
+        ],
+        "modeCount": 352,
+        "samples": 440,
+        "medianRGB": [
+          230.0,
+          230.0,
+          230.0
+        ],
+        "rangeRGB": [
+          [
+            228,
+            232
+          ],
+          [
+            228,
+            232
+          ],
+          [
+            228,
+            232
+          ]
+        ]
+      },
+      "selectionBackground": {
+        "roi": [
+          145,
+          120,
+          265,
+          151
+        ],
+        "modeRGB": [
+          7,
+          0,
+          0
+        ],
+        "modeCount": 75,
+        "samples": 3720,
+        "medianRGB": [
+          245.0,
+          232.0,
+          194.0
+        ],
+        "rangeRGB": [
+          [
+            0,
+            255
+          ],
+          [
+            0,
+            247
+          ],
+          [
+            0,
+            226
+          ]
+        ]
+      },
+      "focusRingTop": {
+        "roi": [
+          200,
+          106,
+          700,
+          112
+        ],
+        "modeRGB": [
+          240,
+          213,
+          160
+        ],
+        "modeCount": 1000,
+        "samples": 3000,
+        "medianRGB": [
+          239.0,
+          213.0,
+          160.0
+        ],
+        "rangeRGB": [
+          [
+            234,
+            244
+          ],
+          [
+            206,
+            214
+          ],
+          [
+            154,
+            177
+          ]
+        ]
+      },
+      "divider": {
+        "roi": [
+          100,
+          291,
+          700,
+          294
+        ],
+        "modeRGB": [
+          230,
+          230,
+          230
+        ],
+        "modeCount": 1200,
+        "samples": 1800,
+        "medianRGB": [
+          230.0,
+          230.0,
+          230.0
+        ],
+        "rangeRGB": [
+          [
+            230,
+            255
+          ],
+          [
+            230,
+            255
+          ],
+          [
+            230,
+            255
+          ]
+        ]
+      }
+    },
+    "clone": {
+      "panel": {
+        "roi": [
+          200,
+          20,
+          650,
+          90
+        ],
+        "modeRGB": [
+          247,
+          247,
+          247
+        ],
+        "modeCount": 31500,
+        "samples": 31500,
+        "medianRGB": [
+          247.0,
+          247.0,
+          247.0
+        ],
+        "rangeRGB": [
+          [
+            247,
+            247
+          ],
+          [
+            247,
+            247
+          ],
+          [
+            247,
+            247
+          ]
+        ]
+      },
+      "inputInterior": {
+        "roi": [
+          300,
+          122,
+          700,
+          151
+        ],
+        "modeRGB": [
+          255,
+          255,
+          255
+        ],
+        "modeCount": 11600,
+        "samples": 11600,
+        "medianRGB": [
+          255.0,
+          255.0,
+          255.0
+        ],
+        "rangeRGB": [
+          [
+            255,
+            255
+          ],
+          [
+            255,
+            255
+          ],
+          [
+            255,
+            255
+          ]
+        ]
+      },
+      "cancelInterior": {
+        "roi": [
+          440,
+          330,
+          460,
+          365
+        ],
+        "modeRGB": [
+          231,
+          231,
+          231
+        ],
+        "modeCount": 700,
+        "samples": 700,
+        "medianRGB": [
+          231.0,
+          231.0,
+          231.0
+        ],
+        "rangeRGB": [
+          [
+            231,
+            231
+          ],
+          [
+            231,
+            231
+          ],
+          [
+            231,
+            231
+          ]
+        ]
+      },
+      "okInterior": {
+        "roi": [
+          620,
+          330,
+          640,
+          365
+        ],
+        "modeRGB": [
+          234,
+          191,
+          63
+        ],
+        "modeCount": 664,
+        "samples": 700,
+        "medianRGB": [
+          234.0,
+          191.0,
+          63.0
+        ],
+        "rangeRGB": [
+          [
+            232,
+            235
+          ],
+          [
+            190,
+            192
+          ],
+          [
+            61,
+            65
+          ]
+        ]
+      },
+      "checkboxInterior": {
+        "roi": [
+          45,
+          198,
+          67,
+          218
+        ],
+        "modeRGB": [
+          255,
+          255,
+          255
+        ],
+        "modeCount": 374,
+        "samples": 440,
+        "medianRGB": [
+          255.0,
+          255.0,
+          255.0
+        ],
+        "rangeRGB": [
+          [
+            249,
+            255
+          ],
+          [
+            249,
+            255
+          ],
+          [
+            249,
+            255
+          ]
+        ]
+      },
+      "selectionBackground": {
+        "roi": [
+          145,
+          120,
+          265,
+          151
+        ],
+        "modeRGB": [
+          190,
+          213,
+          245
+        ],
+        "modeCount": 69,
+        "samples": 3720,
+        "medianRGB": [
+          186.0,
+          212.0,
+          242.0
+        ],
+        "rangeRGB": [
+          [
+            13,
+            205
+          ],
+          [
+            25,
+            223
+          ],
+          [
+            26,
+            255
+          ]
+        ]
+      },
+      "focusRingTop": {
+        "roi": [
+          200,
+          106,
+          700,
+          112
+        ],
+        "modeRGB": [
+          232,
+          218,
+          171
+        ],
+        "modeCount": 907,
+        "samples": 3000,
+        "medianRGB": [
+          232.0,
+          218.0,
+          183.0
+        ],
+        "rangeRGB": [
+          [
+            228,
+            255
+          ],
+          [
+            217,
+            249
+          ],
+          [
+            167,
+            240
+          ]
+        ]
+      },
+      "divider": {
+        "roi": [
+          100,
+          291,
+          700,
+          294
+        ],
+        "modeRGB": [
+          247,
+          247,
+          247
+        ],
+        "modeCount": 600,
+        "samples": 1800,
+        "medianRGB": [
+          246.0,
+          246.0,
+          246.0
+        ],
+        "rangeRGB": [
+          [
+            188,
+            247
+          ],
+          [
+            188,
+            247
+          ],
+          [
+            188,
+            247
+          ]
+        ]
+      }
+    }
+  },
+  "focusRingGoldMask": {
+    "original": {
+      "15": {
+        "bbox": [
+          122,
+          105,
+          766,
+          167
+        ],
+        "pixels": 13762
+      },
+      "25": {
+        "bbox": [
+          122,
+          106,
+          766,
+          166
+        ],
+        "pixels": 12354
+      },
+      "35": {
+        "bbox": [
+          123,
+          106,
+          766,
+          166
+        ],
+        "pixels": 11999
+      }
+    },
+    "clone": {
+      "15": {
+        "bbox": [
+          122,
+          104,
+          767,
+          167
+        ],
+        "pixels": 8193
+      },
+      "25": {
+        "bbox": [
+          122,
+          105,
+          766,
+          167
+        ],
+        "pixels": 7742
+      },
+      "35": {
+        "bbox": [
+          123,
+          106,
+          766,
+          166
+        ],
+        "pixels": 5472
+      }
+    }
+  },
+  "selectionBackgroundMask": {
+    "original": {
+      "bbox": [
+        140,
+        119,
+        270,
+        152
+      ],
+      "pixels": 2840
+    },
+    "clone": {
+      "bbox": [
+        145,
+        120,
+        274,
+        152
+      ],
+      "pixels": 3050
+    }
+  },
+  "paintedComponents": {
+    "original": {
+      "checkbox": {
+        "bbox": [
+          40,
+          192,
+          72,
+          224
+        ],
+        "pixels": 932
+      },
+      "cancelPaint": {
+        "bbox": [
+          424,
+          326,
+          584,
+          374
+        ],
+        "pixels": 7572
+      },
+      "okGoldPaint": {
+        "bbox": [
+          600,
+          326,
+          760,
+          374
+        ],
+        "pixels": 7352
+      },
+      "divider": {
+        "bbox": [
+          40,
+          291,
+          760,
+          293
+        ],
+        "pixels": 1440
+      }
+    },
+    "clone": {
+      "checkbox": {
+        "bbox": [
+          40,
+          192,
+          72,
+          224
+        ],
+        "pixels": 310
+      },
+      "cancelPaint": {
+        "bbox": [
+          424,
+          326,
+          584,
+          374
+        ],
+        "pixels": 7584
+      },
+      "okGoldPaint": {
+        "bbox": [
+          600,
+          326,
+          760,
+          374
+        ],
+        "pixels": 7340
+      },
+      "divider": {
+        "bbox": [
+          40,
+          292,
+          760,
+          293
+        ],
+        "pixels": 720
+      }
+    }
+  },
+  "cornerInsetProfiles": {
+    "original": {
+      "TL": [
+        {
+          "edgeOffsetY": 0,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 58
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 63
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 69
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 1,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 44
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 46
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 47
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 2,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 39
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 40
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 40
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 4,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 32
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 32
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 33
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 8,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 24
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 24
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 24
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 12,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 18
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 19
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 19
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 16,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 15
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 20,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 11
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 11
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 11
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 24,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 8
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 8
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 8
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 32,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 4
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 4
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 5
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 40,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 1
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 2
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 2
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 48,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 56,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 64,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        }
+      ],
+      "TR": [
+        {
+          "edgeOffsetY": 0,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 58
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 63
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 69
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 1,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 44
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 46
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 47
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 2,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 39
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 40
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 40
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 4,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 32
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 32
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 33
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 8,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 24
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 24
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 24
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 12,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 18
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 19
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 19
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 16,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 15
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 20,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 11
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 11
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 11
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 24,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 8
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 8
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 8
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 32,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 4
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 4
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 5
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 40,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 1
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 2
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 2
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 48,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 56,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 64,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        }
+      ],
+      "BL": [
+        {
+          "edgeOffsetY": 0,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 57
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 64
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 68
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 1,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 45
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 46
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 47
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 2,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 39
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 40
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 40
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 4,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 32
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 32
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 33
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 8,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 24
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 24
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 24
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 12,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 18
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 19
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 19
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 16,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 15
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 20,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 11
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 11
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 11
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 24,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 8
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 8
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 8
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 32,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 4
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 4
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 5
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 40,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 1
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 2
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 2
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 48,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 56,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 64,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        }
+      ],
+      "BR": [
+        {
+          "edgeOffsetY": 0,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 57
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 64
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 68
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 1,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 45
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 46
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 47
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 2,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 39
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 39
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 40
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 4,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 32
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 32
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 33
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 8,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 24
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 24
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 24
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 12,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 18
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 19
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 19
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 16,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 15
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 20,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 11
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 11
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 11
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 24,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 8
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 8
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 8
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 32,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 4
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 4
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 5
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 40,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 1
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 2
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 2
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 48,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 56,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 64,
+          "values": [
+            {
+              "thresholdMinRGB": 220,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 230,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 240,
+              "inset": 0
+            }
+          ]
+        }
+      ]
+    },
+    "clone": {
+      "TL": [
+        {
+          "edgeOffsetY": 0,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 19
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 19
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 21
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 1,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 15
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 16
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 18
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 2,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 13
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 16
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 4,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 10
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 10
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 12
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 8,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 5
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 6
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 6
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 12,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 3
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 3
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 4
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 16,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 3
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 20,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 24,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 32,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 40,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 48,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 56,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 64,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        }
+      ],
+      "TR": [
+        {
+          "edgeOffsetY": 0,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 19
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 20
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 21
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 1,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 15
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 16
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 18
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 2,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 13
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 15
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 4,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 10
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 10
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 12
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 8,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 5
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 6
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 6
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 12,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 3
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 3
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 4
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 16,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 3
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 20,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 24,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 32,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 40,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 48,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 56,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 64,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        }
+      ],
+      "BL": [
+        {
+          "edgeOffsetY": 0,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 19
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 20
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 22
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 1,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 16
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 17
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 20
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 2,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 13
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 17
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 4,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 10
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 11
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 12
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 8,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 6
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 6
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 7
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 12,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 3
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 3
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 4
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 16,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 3
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 20,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 24,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 32,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 40,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 48,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 56,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 64,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        }
+      ],
+      "BR": [
+        {
+          "edgeOffsetY": 0,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 19
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 20
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 22
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 1,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 16
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 17
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 20
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 2,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 13
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 14
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 17
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 4,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 10
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 11
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 12
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 8,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 6
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 6
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 7
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 12,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 3
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 3
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 4
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 16,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 3
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 20,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 24,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 32,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 40,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 48,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 56,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        },
+        {
+          "edgeOffsetY": 64,
+          "values": [
+            {
+              "thresholdMinRGB": 190,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 200,
+              "inset": 0
+            },
+            {
+              "thresholdMinRGB": 210,
+              "inset": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "cornerBrightInteriorCommon230": {
+    "original": [
+      {
+        "y": 4,
+        "thresholdMinRGB": 230,
+        "leftInset": 32
+      },
+      {
+        "y": 8,
+        "thresholdMinRGB": 230,
+        "leftInset": 24
+      },
+      {
+        "y": 12,
+        "thresholdMinRGB": 230,
+        "leftInset": 19
+      },
+      {
+        "y": 16,
+        "thresholdMinRGB": 230,
+        "leftInset": 14
+      },
+      {
+        "y": 20,
+        "thresholdMinRGB": 230,
+        "leftInset": 11
+      },
+      {
+        "y": 24,
+        "thresholdMinRGB": 230,
+        "leftInset": 8
+      },
+      {
+        "y": 32,
+        "thresholdMinRGB": 230,
+        "leftInset": 4
+      },
+      {
+        "y": 40,
+        "thresholdMinRGB": 230,
+        "leftInset": 2
+      }
+    ],
+    "clone": [
+      {
+        "y": 4,
+        "thresholdMinRGB": 230,
+        "leftInset": 14
+      },
+      {
+        "y": 8,
+        "thresholdMinRGB": 230,
+        "leftInset": 8
+      },
+      {
+        "y": 12,
+        "thresholdMinRGB": 230,
+        "leftInset": 5
+      },
+      {
+        "y": 16,
+        "thresholdMinRGB": 230,
+        "leftInset": 3
+      },
+      {
+        "y": 20,
+        "thresholdMinRGB": 230,
+        "leftInset": 2
+      },
+      {
+        "y": 24,
+        "thresholdMinRGB": 230,
+        "leftInset": 2
+      },
+      {
+        "y": 32,
+        "thresholdMinRGB": 230,
+        "leftInset": 2
+      },
+      {
+        "y": 40,
+        "thresholdMinRGB": 230,
+        "leftInset": 2
+      }
+    ]
+  },
+  "focusVerticalScans": {
+    "original": {
+      "400": [
+        {
+          "y": 100,
+          "rgb": [
+            254,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 101,
+          "rgb": [
+            254,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 102,
+          "rgb": [
+            255,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 103,
+          "rgb": [
+            255,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 104,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 105,
+          "rgb": [
+            255,
+            252,
+            243
+          ]
+        },
+        {
+          "y": 106,
+          "rgb": [
+            238,
+            212,
+            177
+          ]
+        },
+        {
+          "y": 107,
+          "rgb": [
+            244,
+            214,
+            164
+          ]
+        },
+        {
+          "y": 108,
+          "rgb": [
+            240,
+            213,
+            160
+          ]
+        },
+        {
+          "y": 109,
+          "rgb": [
+            240,
+            213,
+            160
+          ]
+        },
+        {
+          "y": 110,
+          "rgb": [
+            238,
+            208,
+            154
+          ]
+        },
+        {
+          "y": 111,
+          "rgb": [
+            235,
+            207,
+            160
+          ]
+        },
+        {
+          "y": 112,
+          "rgb": [
+            234,
+            214,
+            181
+          ]
+        },
+        {
+          "y": 113,
+          "rgb": [
+            255,
+            253,
+            234
+          ]
+        },
+        {
+          "y": 114,
+          "rgb": [
+            255,
+            254,
+            248
+          ]
+        },
+        {
+          "y": 115,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 116,
+          "rgb": [
+            254,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 117,
+          "rgb": [
+            255,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 118,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 119,
+          "rgb": [
+            255,
+            253,
+            255
+          ]
+        },
+        {
+          "y": 120,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 121,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 122,
+          "rgb": [
+            254,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 123,
+          "rgb": [
+            255,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 124,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 125,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 126,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 127,
+          "rgb": [
+            254,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 128,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 129,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 130,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 131,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 132,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 133,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 134,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 135,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 136,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 137,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 138,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 139,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 140,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 141,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 142,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 143,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 144,
+          "rgb": [
+            254,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 145,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 146,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 147,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 148,
+          "rgb": [
+            255,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 149,
+          "rgb": [
+            254,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 150,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 151,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 152,
+          "rgb": [
+            255,
+            253,
+            255
+          ]
+        },
+        {
+          "y": 153,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 154,
+          "rgb": [
+            255,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 155,
+          "rgb": [
+            254,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 156,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 157,
+          "rgb": [
+            255,
+            254,
+            248
+          ]
+        },
+        {
+          "y": 158,
+          "rgb": [
+            255,
+            253,
+            234
+          ]
+        },
+        {
+          "y": 159,
+          "rgb": [
+            234,
+            214,
+            181
+          ]
+        },
+        {
+          "y": 160,
+          "rgb": [
+            235,
+            207,
+            160
+          ]
+        },
+        {
+          "y": 161,
+          "rgb": [
+            238,
+            208,
+            154
+          ]
+        },
+        {
+          "y": 162,
+          "rgb": [
+            240,
+            213,
+            160
+          ]
+        },
+        {
+          "y": 163,
+          "rgb": [
+            240,
+            213,
+            160
+          ]
+        },
+        {
+          "y": 164,
+          "rgb": [
+            244,
+            214,
+            164
+          ]
+        },
+        {
+          "y": 165,
+          "rgb": [
+            238,
+            212,
+            177
+          ]
+        },
+        {
+          "y": 166,
+          "rgb": [
+            255,
+            252,
+            243
+          ]
+        },
+        {
+          "y": 167,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 168,
+          "rgb": [
+            255,
+            255,
+            253
+          ]
+        },
+        {
+          "y": 169,
+          "rgb": [
+            255,
+            255,
+            253
+          ]
+        }
+      ]
+    },
+    "clone": {
+      "400": [
+        {
+          "y": 100,
+          "rgb": [
+            247,
+            245,
+            246
+          ]
+        },
+        {
+          "y": 101,
+          "rgb": [
+            247,
+            247,
+            247
+          ]
+        },
+        {
+          "y": 102,
+          "rgb": [
+            247,
+            247,
+            247
+          ]
+        },
+        {
+          "y": 103,
+          "rgb": [
+            248,
+            246,
+            249
+          ]
+        },
+        {
+          "y": 104,
+          "rgb": [
+            251,
+            246,
+            242
+          ]
+        },
+        {
+          "y": 105,
+          "rgb": [
+            255,
+            247,
+            228
+          ]
+        },
+        {
+          "y": 106,
+          "rgb": [
+            228,
+            218,
+            183
+          ]
+        },
+        {
+          "y": 107,
+          "rgb": [
+            232,
+            218,
+            171
+          ]
+        },
+        {
+          "y": 108,
+          "rgb": [
+            232,
+            218,
+            171
+          ]
+        },
+        {
+          "y": 109,
+          "rgb": [
+            228,
+            218,
+            183
+          ]
+        },
+        {
+          "y": 110,
+          "rgb": [
+            255,
+            248,
+            227
+          ]
+        },
+        {
+          "y": 111,
+          "rgb": [
+            251,
+            247,
+            238
+          ]
+        },
+        {
+          "y": 112,
+          "rgb": [
+            189,
+            188,
+            186
+          ]
+        },
+        {
+          "y": 113,
+          "rgb": [
+            189,
+            189,
+            189
+          ]
+        },
+        {
+          "y": 114,
+          "rgb": [
+            254,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 115,
+          "rgb": [
+            254,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 116,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 117,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 118,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 119,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 120,
+          "rgb": [
+            255,
+            254,
+            255
+          ]
+        },
+        {
+          "y": 121,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 122,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 123,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 124,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 125,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 126,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 127,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 128,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 129,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 130,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 131,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 132,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 133,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 134,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 135,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 136,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 137,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 138,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 139,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 140,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 141,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 142,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 143,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 144,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 145,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 146,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 147,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 148,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 149,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 150,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 151,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 152,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 153,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 154,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 155,
+          "rgb": [
+            254,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 156,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "y": 157,
+          "rgb": [
+            255,
+            253,
+            254
+          ]
+        },
+        {
+          "y": 158,
+          "rgb": [
+            188,
+            186,
+            187
+          ]
+        },
+        {
+          "y": 159,
+          "rgb": [
+            190,
+            188,
+            189
+          ]
+        },
+        {
+          "y": 160,
+          "rgb": [
+            250,
+            245,
+            241
+          ]
+        },
+        {
+          "y": 161,
+          "rgb": [
+            255,
+            247,
+            230
+          ]
+        },
+        {
+          "y": 162,
+          "rgb": [
+            230,
+            217,
+            185
+          ]
+        },
+        {
+          "y": 163,
+          "rgb": [
+            235,
+            218,
+            172
+          ]
+        },
+        {
+          "y": 164,
+          "rgb": [
+            233,
+            217,
+            168
+          ]
+        },
+        {
+          "y": 165,
+          "rgb": [
+            231,
+            219,
+            181
+          ]
+        },
+        {
+          "y": 166,
+          "rgb": [
+            253,
+            247,
+            223
+          ]
+        },
+        {
+          "y": 167,
+          "rgb": [
+            249,
+            249,
+            241
+          ]
+        },
+        {
+          "y": 168,
+          "rgb": [
+            246,
+            246,
+            248
+          ]
+        },
+        {
+          "y": 169,
+          "rgb": [
+            248,
+            246,
+            247
+          ]
+        }
+      ]
+    }
+  },
+  "highlightTopBar": {
+    "original": {
+      "roi": [
+        145,
+        120,
+        265,
+        124
+      ],
+      "medianRGB": [
+        249.0,
+        235.0,
+        198.0
+      ]
+    },
+    "clone": {
+      "roi": [
+        145,
+        120,
+        265,
+        124
+      ],
+      "medianRGB": [
+        190.0,
+        213.0,
+        247.0
+      ]
+    }
+  },
+  "okGoldThresholdSensitivity": {
+    "original": {
+      "35": {
+        "bbox": [
+          600,
+          326,
+          760,
+          374
+        ],
+        "pixels": 7364
+      },
+      "45": {
+        "bbox": [
+          600,
+          326,
+          760,
+          374
+        ],
+        "pixels": 7358
+      },
+      "65": {
+        "bbox": [
+          600,
+          326,
+          760,
+          374
+        ],
+        "pixels": 7352
+      },
+      "85": {
+        "bbox": [
+          600,
+          326,
+          760,
+          374
+        ],
+        "pixels": 7326
+      },
+      "100": {
+        "bbox": [
+          600,
+          326,
+          760,
+          374
+        ],
+        "pixels": 7294
+      }
+    },
+    "clone": {
+      "35": {
+        "bbox": [
+          599,
+          325,
+          761,
+          375
+        ],
+        "pixels": 7700
+      },
+      "45": {
+        "bbox": [
+          600,
+          325,
+          760,
+          375
+        ],
+        "pixels": 7619
+      },
+      "65": {
+        "bbox": [
+          600,
+          326,
+          760,
+          374
+        ],
+        "pixels": 7340
+      },
+      "85": {
+        "bbox": [
+          600,
+          326,
+          760,
+          374
+        ],
+        "pixels": 7308
+      },
+      "100": {
+        "bbox": [
+          600,
+          327,
+          760,
+          373
+        ],
+        "pixels": 6997
+      }
+    }
+  },
+  "derivedColorHandling": "Native decoded/cropped/composite/overlay views explicitly retain the identical input ICC profile without RGB conversion; diagnostic raw difference has no color meaning.",
+  "differenceImageWarning": "Raw RGB abs difference, amplified4 and clipped; contains color, focus, JPEG, platform and paint differences; no pass score",
+  "cursorWarning": "Clone full image contains outlined pointer near (126,1272), outside dialog crop; exclude it and app background from component comparisons",
+  "closingInputsUnchanged": true,
+  "closingInputChecks": [
+    {
+      "path": "docs/verification/mac-folder-fixes-runtime18/00-original-ordinary.cua-image",
+      "bytes": 41091,
+      "sha256": "973718945e025e30aa64ea1540872b4ce1f5af67b8f5a085feb7739dc6d56090",
+      "unchanged": true
+    },
+    {
+      "path": "docs/verification/mac-folder-fixes-runtime18/18-ordinary-form-open.cua-image",
+      "bytes": 189499,
+      "sha256": "408d494c95b77c53771c211c2469ada5f9081be0bf74aa411a45a2915076e8b1",
+      "unchanged": true
+    },
+    {
+      "path": "docs/INDEX.md",
+      "bytes": 21465,
+      "sha256": "0aaeb9e77a4a9033b59247f0d19c9919b21412a8f2aa1f3fe42c0089405458df",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plan/tasks/app-mac-folder-form-geometry15.md",
+      "bytes": 3547,
+      "sha256": "51e37ef38bb0ac35f639ac64e0186371e2f2356084938b06316e88780a9bfde5",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plan/reviews/app-mac-folder-form-geometry15.md",
+      "bytes": 7451,
+      "sha256": "864ea36b32695daf465f1cb1f88179f4ea8ac2f509ffd5ad180a32d905af4868",
+      "unchanged": true
+    }
+  ],
+  "derivedPngValidation": [
+    {
+      "path": "aligned-overlay.png",
+      "size": [
+        800,
+        414
+      ],
+      "mode": "RGB",
+      "iccBytes": 4064
+    },
+    {
+      "path": "annotated-native.png",
+      "size": [
+        1600,
+        450
+      ],
+      "mode": "RGB",
+      "iccBytes": 4064
+    },
+    {
+      "path": "clone-native-crop.png",
+      "size": [
+        800,
+        414
+      ],
+      "mode": "RGB",
+      "iccBytes": 4064
+    },
+    {
+      "path": "corners-native.png",
+      "size": [
+        640,
+        110
+      ],
+      "mode": "RGB",
+      "iccBytes": 4064
+    },
+    {
+      "path": "corners-nearest2x.png",
+      "size": [
+        1280,
+        220
+      ],
+      "mode": "RGB",
+      "iccBytes": 4064
+    },
+    {
+      "path": "focus-native.png",
+      "size": [
+        800,
+        240
+      ],
+      "mode": "RGB",
+      "iccBytes": 4064
+    },
+    {
+      "path": "native-side-by-side.png",
+      "size": [
+        1600,
+        450
+      ],
+      "mode": "RGB",
+      "iccBytes": 4064
+    },
+    {
+      "path": "original-decoded.png",
+      "size": [
+        800,
+        414
+      ],
+      "mode": "RGB",
+      "iccBytes": 4064
+    },
+    {
+      "path": "raw-difference-amplified4.png",
+      "size": [
+        800,
+        414
+      ],
+      "mode": "RGB",
+      "iccBytes": 4064
+    }
+  ],
+  "readmeLinksResolve": true
+}

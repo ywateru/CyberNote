@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-folder-fixes-independent10/verify.py", line 198, in <module>
+    try:main()
+  File "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-folder-fixes-independent10/verify.py", line 187, in main
+    f,b,c,current=common();detail=mac(f,b,c) if stage=='mac' else android(f,b,c)
+  File "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-folder-fixes-independent10/verify.py", line 82, in common
+    check('canonical tools unchanged from independently reviewed package',f['tools']==oldfreeze['tools'] and len(f['tools'])==7)
+  File "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-folder-fixes-independent10/verify.py", line 34, in check
+    if not condition:raise AssertionError(name)
+AssertionError: canonical tools unchanged from independently reviewed package

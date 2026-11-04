@@ -1,7 +1,7 @@
 ---
 id: app-smart-draft-hydration16
 scope: Preserve persisted pinned false when reopening smart-folder drafts
-status: source-review-pass
+status: done
 priority: P1
 ---
 
@@ -32,3 +32,9 @@ false必须在重开、改名提交和正常/冷重启后保持同一查询；tr
 ## Source acceptance
 
 作者280断言前70失败/后0失败，独立329断言0失败，真实基线反例、非法值拒绝与两端冲突重试通过；root读报告且核12项独立证据全部匹配。仅smart-draft.ts显式value→pinned一行，geometry15源保持。独立报告plan/reviews/app-smart-draft-hydration16.md，索引e598339443c8aaf0118a2137b6f3eb6f26657dfbfd48bef3c50de2fb60a44f64。SOURCE-REVIEW PASS；准确包与实际重开/冷启待验，旧Android05原失败保留。
+
+## Actual package acceptance18
+
+2026-11-05追加：源de372的准确Mac10 exe56742e38…与Android06 APK8609231f…已分别经470/385项包独核；两端实际运行记录及不同作者有限静态复核均pass。Mac26/27保存不包含、28重开、29只改名-R18、30重开与正常退出后新PID35均保持false；Android06/11改名-R2后、16强停新PID后均显示不包含，计数1，合成note置顶后0、取消置顶后1。初始true回填有限观察保持；没有本轮另行true保存重开循环。详见[根接收](../../verification/folder-fixes-runtime18-root-acceptance.md)、[Mac独核](../reviews/mac-folder-fixes-runtime18.md)、[Android独核](../reviews/android-folder-fixes-runtime18.md)。
+
+done仅此false草稿回填及列明实际路径；原失败留档，完整智能功能、日期规则、IME、多窗及像素仍open。
