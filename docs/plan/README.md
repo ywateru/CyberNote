@@ -2,6 +2,8 @@
 
 用户已授权完整 Mac 与 Android 开发。此计划持续执行，不以文档完成替代应用完成。
 
+2026-11-05当前交付为同一d742307产品源的Mac12与Android07：[有限根接收29](../verification/name-mobile29-root-acceptance.md)。准确核包分别494/391项、实际证据独审496/711项通过；侧栏两入口恢复与正常重启偏好、Mac名称操作、手机可见加号及局部几何实际验证通过。Mac文字/选区/环角、手机右下图标及整体像素仍开放；原版删除实验暂停。安装文件见根README当前交付。
+
 2026-11-04 智能文件夹下一批：先执行 [D1本地库防损](tasks/app-smart-d1-storage-open09.md)，再以 [D2真实标签/置顶规则与归档](tasks/app-smart-d2-durable-rules09.md) 接入真实存储，之后完成通知/保存所有权及两端UI。用户选择暂不开展原版删除实验；引用目录删除语义保留待验，继续独立开发，不以静态表单替代功能。既有Mac08侧栏恢复与拖动修复保持交付。
 
 | 任务 | 当前状态 | 交付 |
@@ -15,8 +17,8 @@
 | APP-MOBILE-17 错误可见与目录选字 | done（两项已见缺陷范围） | 三文件源码独审71，Android06实际长按目录无选字/正文仍可选/滚动错误可见与合法重试取消；83原文件/37 PNG/99静态检查独核pass，工程错误样式非原版像素PASS |
 | APP-MAC-ORDINARY-SURFACE20 普通表单表面与角部 | done（有限表面范围），Mac11实际/独核通过 | 准确94fbbb36/3cc7188d新包486项核包、运行23及202项证据独核；量图25平坦色对齐/角差304→8/checkbox实际mask616→8，800×414保持。名称/焦点/标签/字形与全像素仍open |
 | APP-MAC-SIDEBAR-PREFERENCE22 侧栏显隐偏好 | done（有限偏好范围），Mac11实际/独核通过 | 单键本地settings及首次可信恢复；运行23两入口/动态菜单、hidden/visible各正常与紧接CmdQ恢复通过，PID45493→45907→45957→46007→46056/exe同SHA；202项静态独核。无内部ACK/任意退出保证/新增CmdQ握手，全像素与多窗仍open |
-| APP-MAC-ORDINARY-NAME-FOCUS26 名称焦点/选择/对齐 | source-reviewed，实际Mac12待验 | cdbfde60局部CSS；作者23/独立14有限WK通过，Safari暖选区及文字对齐有有限补强，灰内边消除。角/字形/真实App取消与侧栏仍待联合29实包，父目标active |
-| APP-MOBILE-FOLDER-VISUAL28 手机文件夹局部视觉 | source-reviewed，实际Android07待验 | 局部SVG/文字槽/标题候选及plus命中修复；首版P2保留，fix01独立10坐标与9静态检查通过。下一29准确新包触摸/量图，不授整体像素结论 |
+| APP-MAC-ORDINARY-NAME-FOCUS26 名称焦点/选择/对齐 | runtime-verified，像素partial | Mac12准确包494项核包、实际496项证据独核；默认/部分选择、真实输入/往返/取消、侧栏两入口及正常重启显隐保持。bbox对齐/灰内边0，文字仍偏淡、选择色/环角有差；跨应用重激活未验，父目标active |
+| APP-MOBILE-FOLDER-VISUAL28 手机文件夹局部视觉 | runtime-verified，像素partial | Android07准确包391项核包、实际711项证据独核；保数据安装/可见plus触摸/导航Back/长按及COLD启动可见保持。局部几何接近原帧；右下中心差−1.733及非目标ROI变化保留，不授整体像素/iOS结论 |
 | REF-001 原版取证/需求/UI/调研 | in-progress | 原视频已保全、抽帧、初始规格已写，持续补证 |
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |

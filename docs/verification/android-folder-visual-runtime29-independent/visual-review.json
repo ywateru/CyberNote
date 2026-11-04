@@ -1,0 +1,34 @@
+{
+  "method": "Static local display of existing native PNGs and labeled diagnostics only; no device/app input or new rendering.",
+  "runtimeImages": [
+    "03-stable-after-upgrade.png",
+    "05-visible-plus-center-open.png",
+    "07-quick-folder-open.png",
+    "09-ordinary-folder-open.png",
+    "11-ordinary-longpress.png",
+    "14-synthetic-note-open.png",
+    "15-body-selection.png",
+    "19-after-restart.png"
+  ],
+  "analysisImages": [
+    "overview-width-normalized.png",
+    "visible-plus-tap-guide.png",
+    "quick-diagnostic.png",
+    "ordinary-folder-diagnostic.png",
+    "footer-diagnostic.png",
+    "title-diagnostic.png"
+  ],
+  "observations": [
+    "03 is a startup transition, excluded from stable content and geometry claims.",
+    "05 shows new-folder form and keyboard, linked to exact saved125,2059 tap and labeled visible upper-right plus center.",
+    "11 shows folder context menu and underlying ordinary label without visible blue selection/handles;15 body smart word has blue selection, system handles and Cut/Copy/Paste/Select all.",
+    "07 quick list is empty0;09 ordinary list shows8 and existing synthetic/old preview titles;14 synthetic body text and tag visible.",
+    "19 stable homepage shows quick0/all8/ordinary8/smartR2 count1 and two existing tags.",
+    "Labeled width-normalized diagnostics support targeted geometry improvements; reduced original quality prevents exact glyph/path/color acceptance."
+  ],
+  "limits": [
+    "Recorded endpoint visual corroboration, not independent event replay.",
+    "Only fixed raw native ROIs are used for numeric comparisons; scaled diagnostic images are illustrative.",
+    "No full-frame zero difference or universal interaction/data-integrity conclusion."
+  ]
+}

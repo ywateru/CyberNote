@@ -1,0 +1,46 @@
+{
+  "at": "2026-11-04T21:26:39.883244+00:00",
+  "device": "emulator-5580",
+  "records": {
+    "device": {
+      "command": [
+        "get-state"
+      ],
+      "exit": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    "package": {
+      "command": [
+        "shell",
+        "dumpsys",
+        "package",
+        "com.local.notesclone"
+      ],
+      "exit": 0,
+      "stdout": "Activity Resolver Table:\n  Non-Data Actions:\n      android.intent.action.MAIN:\n        9e4f5de com.local.notesclone/.MainActivity filter 11a83bf\n          Action: \"android.intent.action.MAIN\"\n          Category: \"android.intent.category.LAUNCHER\"\n          Category: \"android.intent.category.LEANBACK_LAUNCHER\"\n\nReceiver Resolver Table:\n  Non-Data Actions:\n      androidx.profileinstaller.action.SAVE_PROFILE:\n        1287a8c com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter 8fd9cdb\n          Action: \"androidx.profileinstaller.action.SAVE_PROFILE\"\n      androidx.profileinstaller.action.INSTALL_PROFILE:\n        1287a8c com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter 7db05d5\n          Action: \"androidx.profileinstaller.action.INSTALL_PROFILE\"\n      androidx.profileinstaller.action.SKIP_FILE:\n        1287a8c com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter bc691ea\n          Action: \"androidx.profileinstaller.action.SKIP_FILE\"\n      androidx.profileinstaller.action.BENCHMARK_OPERATION:\n        1287a8c com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter 628b378\n          Action: \"androidx.profileinstaller.action.BENCHMARK_OPERATION\"\n\nPermissions:\n  Permission [com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (cc66668):\n    sourcePackage=com.local.notesclone\n    uid=10169 gids=null type=0 prot=signature\n    perm=Permission{4efece5 com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}\n\nRegistered ContentProviders:\n  com.local.notesclone/androidx.core.content.FileProvider:\n    Provider{24853e3 com.local.notesclone/androidx.core.content.FileProvider}\n  com.local.notesclone/com.google.mlkit.common.internal.MlKitInitProvider:\n    Provider{6ed11e0 com.local.notesclone/com.google.mlkit.common.internal.MlKitInitProvider}\n  com.local.notesclone/androidx.startup.InitializationProvider:\n    Provider{1a30c99 com.local.notesclone/androidx.startup.InitializationProvider}\n\nContentProvider Authorities:\n  [com.local.notesclone.androidx-startup]:\n    Provider{1a30c99 com.local.notesclone/androidx.startup.InitializationProvider}\n      applicationInfo=ApplicationInfo{5ec3c10 com.local.notesclone}\n  [com.local.notesclone.fileprovider]:\n    Provider{24853e3 com.local.notesclone/androidx.core.content.FileProvider}\n      applicationInfo=ApplicationInfo{442a309 com.local.notesclone}\n  [com.local.notesclone.mlkitinitprovider]:\n    Provider{6ed11e0 com.local.notesclone/com.google.mlkit.common.internal.MlKitInitProvider}\n      applicationInfo=ApplicationInfo{2590e com.local.notesclone}\n\nKey Set Manager:\n  [com.local.notesclone]\n      Signing KeySets: 35\n\nPackages:\n  Package [com.local.notesclone] (5460fb2):\n    userId=10169\n    pkg=Package{f0ed955 com.local.notesclone}\n    codePath=/data/app/~~B5zMuXxCWN9nfLYMwYBptA==/com.local.notesclone-EfjYD9cmvlqN80yaCaYiKg==\n    resourcePath=/data/app/~~B5zMuXxCWN9nfLYMwYBptA==/com.local.notesclone-EfjYD9cmvlqN80yaCaYiKg==\n    legacyNativeLibraryDir=/data/app/~~B5zMuXxCWN9nfLYMwYBptA==/com.local.notesclone-EfjYD9cmvlqN80yaCaYiKg==/lib\n    primaryCpuAbi=arm64-v8a\n    secondaryCpuAbi=null\n    versionCode=1000 minSdk=26 targetSdk=36\n    versionName=0.1.0\n    splits=[base]\n    apkSigningVersion=2\n    applicationInfo=ApplicationInfo{f0ed955 com.local.notesclone}\n    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]\n    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]\n    forceQueryable=false\n    queriesPackages=[]\n    dataDir=/data/user/0/com.local.notesclone\n    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]\n    timeStamp=2026-11-05 02:33:45\n    firstInstallTime=2026-11-03 22:09:17\n    lastUpdateTime=2026-11-05 02:33:45\n    signatures=PackageSignatures{c332039 version:2, signatures:[ab2da3b4], past signatures:[]}\n    installPermissionsFixed=true\n    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]\n    declared permissions:\n      com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED\n    requested permissions:\n      android.permission.INTERNET\n      android.permission.RECORD_AUDIO\n      android.permission.MODIFY_AUDIO_SETTINGS\n      android.permission.CAMERA\n      com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION\n      android.permission.ACCESS_NETWORK_STATE\n    install permissions:\n      com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true\n      android.permission.MODIFY_AUDIO_SETTINGS: granted=true\n      android.permission.INTERNET: granted=true\n      android.permission.ACCESS_NETWORK_STATE: granted=true\n    User 0: ceDataInode=123481 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false\n    overlay paths:\n      /product/overlay/EmulationPixel4/EmulationPixel4Overlay.apk\n      gids=[3003]\n      runtime permissions:\n        android.permission.CAMERA: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]\n        android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]\n\nQueries:\n  system apps queryable: false\n  queries via package name:\n  queries via intent:\n  queryable via interaction:\n    User 0:\n      [com.android.keychain,com.android.location.fused,com.android.server.telecom,com.android.emulator.multidisplay,com.android.inputdevices,com.android.providers.settings,com.android.wallpaperbackup,android,com.android.settings,com.android.dynsystem,com.android.localtransport]:\n        com.local.notesclone\n      [com.google.android.gms,com.google.android.gsf]:\n        com.local.notesclone\n      com.google.android.webview:\n        com.local.notesclone\n      com.google.android.inputmethod.latin:\n        com.local.notesclone\n      com.local.notesclone:\n        com.google.android.webview\n\nPackage Changes:\n  Sequence number=17\n  User 0:\n    seq=5, package=com.google.android.gms\n    seq=16, package=com.local.notesclone\n\n\nDexopt state:\n  [com.local.notesclone]\n    path: /data/app/~~B5zMuXxCWN9nfLYMwYBptA==/com.local.notesclone-EfjYD9cmvlqN80yaCaYiKg==/base.apk\n      arm64: [status=run-from-apk] [reason=unknown]\n\n\nCompiler stats:\n  [com.local.notesclone]\n    (No recorded stats)\n\nAPEX session state:\n\nActive APEX packages:\n\n\nInactive APEX packages:\n\n\nFactory APEX packages:\n\n\n",
+      "stderr": ""
+    },
+    "path": {
+      "command": [
+        "shell",
+        "pm",
+        "path",
+        "com.local.notesclone"
+      ],
+      "exit": 0,
+      "stdout": "package:/data/app/~~B5zMuXxCWN9nfLYMwYBptA==/com.local.notesclone-EfjYD9cmvlqN80yaCaYiKg==/base.apk\n",
+      "stderr": ""
+    },
+    "process": {
+      "command": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exit": 0,
+      "stdout": "26347\n",
+      "stderr": ""
+    }
+  }
+}

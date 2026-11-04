@@ -1,0 +1,20 @@
+{
+  "execution": "authorized SDK ADB on emulator-5580; exact root-provided independent PASS gate before install-r",
+  "actualActions": "02-upgrade.json plus same-name per-frame action JSON; cold process18 record",
+  "screenshotMethod": "adb exec-out screencap -p; raw PNG; helper action-capture.py",
+  "measurement": "saved-frame measure.py in new analysis directory only; no later app interaction",
+  "adaptations": [
+    {
+      "artifact": "03-stable-after-upgrade.png",
+      "issue": "startup transition despite filename",
+      "resolution": "preserved; stable04 and19 used"
+    },
+    {
+      "stage": "initial preservation check (stdin)",
+      "exitCode": 1,
+      "error": "KeyError: 'files' for historical runtime18 index root mapping",
+      "resolution": "new check-preservation.py supports root-map and files-list schemas plus relative paths; final check exit0"
+    }
+  ],
+  "prohibitedActionsPerformed": []
+}

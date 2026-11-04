@@ -1,7 +1,7 @@
 ---
 id: app-mobile-folder-visual28
 scope: mobile folders page local vector icons, label spacing and title ink
-status: source-reviewed
+status: runtime-verified-partial
 depends-on: [android-folders-readiness27, app-mobile-folder-interactions17]
 ---
 
@@ -47,3 +47,9 @@ depends-on: [android-folders-readiness27, app-mobile-folder-interactions17]
 ## 源阶段接收
 
 2026-11-05：首版P2可见plus漏点由CSS透明命中层修复；不同作者fix01独审10项fresh App坐标/页面隔离及9项静态检查通过，98项终末保护输入未变。原首版阻断与亚像素外边界失败保留。root重核本轮四索引101引用及研究30四引用字节匹配；源阶段接收，准确Android07实际触摸/Back及原帧量图仍待29，不关闭父目标。
+
+## 准确Android07实际接收29
+
+2026-11-05：固定d742307产品源的Android07已完成离线准确构建、391项独立核包及保数据覆盖安装，设备APK字节匹配。实际可见圆加号中心(125,2059)触摸打开新建表单后取消，快速/普通列表与Back、目录长按无选字/正文可选及force-stop后COLD新PID可见内容保持通过。711项静态证据独核、530保护文件不变，见[实际独审](../reviews/android-folder-visual-runtime29.md)与[root有限接收](../../verification/name-mobile29-root-acceptance.md)。
+
+原低清帧宽度归一下快速文字左缘42.104对原42、标题宽53.926对54、普通folder宽14.933对15、左下中心20.430对20.5；可见加号已实际可点。右下图标中心仍偏左1.733归一图像像素，06→07搜索/计数箭头/右下图标非零变化明确保留，见[实际量图](../../research/android-folder-visual-runtime29-analysis/analysis.md)。本项有限运行通过、全像素partial；不授整个页面、iOS真机或完整父目标通过。

@@ -4,6 +4,23 @@
 
 **当前是可运行开发版，尚未达到原版全部UI、交互及逐像素一致，完整目标仍在进行。** 需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，细分状态见[交付计划](docs/plan/README.md)。
 
+## 当前交付（2026-11-05）
+
+当前本机可用包为 **Mac12 / Android07**，共用固定产品源 `d7423070207684c5a2bb584281350723c44e9d9c`。两端已实际运行，构建产物与有限运行证据分别经独立复核，见[本批有限接收](docs/verification/name-mobile29-root-acceptance.md)。当前包包含本地标签与智能文件夹接入；完整规则、全部交互及像素目标仍按[交付计划](docs/plan/README.md)逐项推进，不能沿用下方旧包的待验状态作为当前结论。
+
+| 平台 | 当前本机交付（未纳入Git） | 本批已验证 |
+| --- | --- | --- |
+| Mac12 | [ZIP](artifacts/unified-candidate06/mac-name-focus-build12/mac-attempt01/mac-sealed.zip) / [应用](artifacts/unified-candidate06/mac-name-focus-build12/mac-attempt01/mac-sealed.app) | arm64，本地完整adhoc签名，未公证；工具栏/菜单恢复侧栏、正常重启显隐保持、名称选择/输入/取消 |
+| Android07 | [APK](artifacts/unified-candidate06/android-folder-visual-build07/android-attempt01/android-original.apk) | arm64-v8a debug；保数据覆盖升级、可见加号真实触摸、目录导航/长按与正文选字、冷启动可见内容保持 |
+
+Mac普通新建表单指定文字位置与原版对齐，文字浓度、选区色与焦点环角部仍有差异。手机快速行文字、标题、普通文件夹及左下新建图标局部几何更接近录屏，右下新建备忘录图标仍有位置差异；原录屏分辨率224×480，不能据局部改善宣称整页逐像素一致。详见[Mac实际复核](docs/plan/reviews/mac-name-focus-runtime29.md)及[Android实际复核](docs/plan/reviews/android-folder-visual-runtime29.md)。
+
+原始移动端录屏已保存在 `references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4`。原版删除/恢复实验按用户要求暂停；Mac对比使用Computer Use，本批未增加系统截图工具权限要求。旧包、缓存及失败证据均保留。
+
+## 早期交付记录
+
+以下candidate03/04/05段落和后面的首轮实现、FIX记录保留当时上下文；其中“当前”“最新”“待验”均指各段记录时点。当前安装包和任务状态以上面的2026-11-05交付及交付计划为准。
+
 2026-11-04双端基线为 **candidate04**，已保存Mac本地完整签名包和Android arm64 debug APK。本批包括暂停录音试听、OCR文字宿主接入及搜索零结果文字位置校准。Mac实际启动、搜索零结果恢复及单张本地图OCR插入/正常退出冷启恢复已有限通过；Android实际输入保存、系统选图OCR、新录音保存/强制停止冷启恢复及新旧录音播放控制已有限通过。完整运行与像素验收仍未完成。[构建记录](docs/verification/unified-candidate04/README.md)和[Android运行记录](docs/verification/candidate04-android-runtime-01/README.md)分别列明范围与限制。
 
 另有仅调整宽三栏工具栏的 **Mac candidate05**，源码已独立审查，完整本地签名包已构建并保全，尚未启动。[构建记录](docs/verification/mac-candidate05-wide-toolbar-build-01/README.md)与[root交接](docs/verification/mac-candidate05-wide-toolbar-root-handoff-01/result.json)记录其独立冻结身份；切换旧包时Mac再次锁定，没有强制退出旧包。它不包含开发中的标签，也不替代Android candidate04的验收身份。
@@ -103,7 +120,9 @@ FIX-03将本地锁授权统一放在Rust进程会话，设置锁/关闭全部锁
 
 FIX-02 已把 Mac 主窗和独立窗顶部接入本地 AppKit 插件，使用真实原生搜索、系统符号和菜单；成功绑定后替换网页顶部，分栏与原生顶部共用实际宽度。该批Cmd+N、Cmd+F、Cmd+Shift+F由原生菜单定向到聚焦窗口，编辑命令恢复对应笔记的有效选区。新增原版证据已纠正目标：全局搜索应为Option+Cmd+F，项目源码已在444f03b最小更正，实际新包待验；历史续输通过不代表快捷键一致。源码、真实 Mac/Android 构建指纹、控制器回归与有限 GUI 自检见`docs/verification/app-001-fix-02/selfcheck.md`。原版/克隆顶部RGB对照仍未通过像素一致。Android长时间组词历史P1与诊断保留在`docs/research/android-ime-diagnosis/analysis.md`，后续FIX04有限修复与当前归因见最新计划，不将旧包状态当作最新候选结果。
 
-## 已知缺口
+## 早期已知缺口记录
+
+下列条目保留早期实现边界；标签、智能文件夹、侧栏等后续进展以当前交付和交付计划为准。整窗像素、完整交互及真机覆盖仍未完成。
 
 - Mac 顶部已使用原生控件和 SF Symbols；字形、中文格式标签、控件内部位置、材质、侧栏间距和画廊卡片仍有实际像素差异。网页内容区域仍含 Lucide 图标。图库双击同窗展开与返回已接入原生顶部，尚待独立验收。
 - 移动端格式面板已改为替代键盘的底部面板，并按录屏排列七种纸张；整体尺寸、系统选择菜单、手势动画和图标仍需逐帧对照。X 恢复键盘与 Android Back 关闭面板并收起键盘属于项目交互约定，录屏没有证明这些触点。

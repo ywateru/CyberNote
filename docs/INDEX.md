@@ -2,6 +2,13 @@
 
 更新：2026-11-05。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
+当前包与有限验收：[名称与手机文件夹29根接收](verification/name-mobile29-root-acceptance.md)。同源Mac12/Android07已实际运行并经独立证据复核，整体像素与完整交互目标继续进行。
+
+- [Mac12准确构建](verification/unified-candidate06/mac-name-focus-build12/README.md)与[独立核包](plan/reviews/mac-name-focus-independent12.md)
+- [Android07准确构建](verification/unified-candidate06/android-folder-visual-build07/README.md)与[独立核包](plan/reviews/android-folder-visual-independent07.md)
+- [Mac12名称/侧栏实际运行](verification/mac-name-focus-runtime29/README.md)、[独立复核](plan/reviews/mac-name-focus-runtime29.md)、[局部量图](research/mac-name-focus-runtime29-analysis/analysis.md)
+- [Android07文件夹实际运行](verification/android-folder-visual-runtime29/README.md)、[独立复核](plan/reviews/android-folder-visual-runtime29.md)、[局部量图](research/android-folder-visual-runtime29-analysis/analysis.md)
+
 - [需求与验收](requirements.md)
 - [架构与数据契约](architecture.md)
 - [参考资料与调研](research/README.md)

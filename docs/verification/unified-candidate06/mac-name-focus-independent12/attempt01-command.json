@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "python3",
+    "docs/verification/unified-candidate06/mac-name-focus-independent12/verify.py"
+  ],
+  "exitCode": 1,
+  "elapsedSeconds": 0.127,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-name-focus-independent12/verify.py\", line 149, in <module>\n    try:main()\n  File \"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-name-focus-independent12/verify.py\", line 100, in main\n    for r in b['generatedOutputs']:check('current generated full identity '+r['source'],snapshot(Path(r['source']))==r['snapshot'])\n  File \"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-name-focus-independent12/verify.py\", line 30, in check\n    if not ok:raise AssertionError(name)\nAssertionError: current generated full identity /Users/water/work/2026/Apple-Notes-Clone/dist\n"
+}

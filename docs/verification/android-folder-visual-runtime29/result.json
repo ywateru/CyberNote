@@ -1,0 +1,75 @@
+{
+  "status": "pass-finite-runtime",
+  "stop": true,
+  "scope": "exact Android07 install-r and bounded real ADB interaction plus saved-frame measurement; no full pixel/iOS PASS",
+  "sourceHead": "d7423070207684c5a2bb584281350723c44e9d9c",
+  "apk": {
+    "bytes": 179247354,
+    "sha256": "e19965fd97c45ac3184e569777146d68b4d312bd561bbb2862d27ad93c6a86c6"
+  },
+  "observations": [
+    {
+      "name": "preserving exact installed identity",
+      "evidence": [
+        "01-device-before.json",
+        "02-upgrade.json"
+      ],
+      "result": "installed bytes/SHA exact; userId10169 and firstInstallTime preserved"
+    },
+    {
+      "name": "visible outer circular plus actual tap",
+      "evidence": [
+        "04-stable-folders.png",
+        "05-visible-plus-center-open.json",
+        "05-visible-plus-center-open.png",
+        "06-new-folder-canceled.png"
+      ],
+      "result": "tap125,2059 opens real new-folder form; canceled without save"
+    },
+    {
+      "name": "quick and ordinary navigation plus Back",
+      "evidence": [
+        "07-quick-folder-open.png",
+        "08-quick-back-folders.png",
+        "09-ordinary-folder-open.png",
+        "10-ordinary-back-folders.png"
+      ],
+      "result": "quick0 and ordinary8 visible; Android Back returns"
+    },
+    {
+      "name": "ordinary longpress no underlying text selection; Back",
+      "evidence": [
+        "11-ordinary-longpress.json",
+        "11-ordinary-longpress.png",
+        "12-longpress-back-dismissed.png"
+      ],
+      "result": "900ms actual longpress opens directory menu without blue selection/handles; Back dismisses"
+    },
+    {
+      "name": "body remains selectable and returns",
+      "evidence": [
+        "14-synthetic-note-open.png",
+        "15-body-selection.json",
+        "15-body-selection.png",
+        "16-body-return-ordinary-list.png"
+      ],
+      "result": "existing smart word shows blue selection/system handles/menu; returns list8; no text command"
+    },
+    {
+      "name": "cold restart visible data preservation",
+      "evidence": [
+        "18-restart-process.json",
+        "19-after-restart.png"
+      ],
+      "result": "PID27516→stopped→27930; COLD; quick0/all8/ordinary8/smartR2=1/tags preserved"
+    }
+  ],
+  "observationMethod": "agent visual review of saved raw PNGs; actual input JSON and installed identity logs; no DOM/product instrumentation",
+  "transitionalEvidence": "03-stable-after-upgrade.png is startup transition despite filename; primary stable04 and19",
+  "measurement": "../../research/android-folder-visual-runtime29-analysis/measurements.json",
+  "limits": [
+    "Finite visible preservation only; no database/complete attachment audit.",
+    "Original recording224x480, unknown device/DPR; no exact full pixel/animation equivalence.",
+    "No true iOS native runtime acceptance."
+  ]
+}

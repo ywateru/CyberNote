@@ -11,3 +11,9 @@ Mac12 Computer Use实测：准确旧进程退出空，再用完整新包启动�
 Android07沿用已授权ADB、保数据install-r，禁止卸载/清数据或读取用户DB/音频导出。记录APK精确身份与设备base.apk一致，再同态文件夹页截图，快速/普通点击、底栏新建取消、长名/大计数受控边界、目录长按无选字及正文仍可选、Back返回、重启可见数据有限保全。原版14/62低清参考及准确06截图分别对比；内容/系统栏不同不混评分，不拉伸y，不以局部改善授整个产品像素PASS。
 
 原版删除/恢复实验继续暂停，保存原视频与全部旧证据。完成设备记录再不同作者复核，由root接收有限交付并继续父目标；不以本批包或计划替代完整Mac/Android交互与像素验收。
+
+## 执行结果（2026-11-05）
+
+安排已执行，产品源固定d7423070207684c5a2bb584281350723c44e9d9c。两端303产品聚合7c83817061c438c388c9c52e8e0207ffb415a0847f9d0a320c59eac5a63363e5、322完整输入聚合ca8f00a42d641cd2693ce43b4794fc03e3c9315a16c7faccdf5d9c59e6f0241f一致。Mac先、Android后，canonical串行出包保全成功；Android种子遗漏sidebar-preference.ts在冻结前补齐。authorization JSON本目录保存，构建记录分别见[Mac12](../mac-name-focus-build12/README.md)、[Android07](../android-folder-visual-build07/README.md)。Mac构建前协作核准、collect后JSON补记的准确时序保留。
+
+两个包准确来源/产物独审494及391项通过；Mac12 Computer Use实际证据496项、Android07保数据ADB实际证据711项静态独核通过。已完成默认/部分选择、真实输入/往返/取消、侧栏恢复和正常重启显隐偏好、手机可见plus触摸/导航/长按/冷启动可见保持。跨应用重激活及立即退出竞态未在本批重验，受控长名/大计数仅源阶段检查不追认为设备通过。详细误操作排除、量图差异及有限结论见[root接收](../../name-mobile29-root-acceptance.md)。当前实际包为Mac12及Android07；整体像素/完整父目标active，原版删除实验暂停。

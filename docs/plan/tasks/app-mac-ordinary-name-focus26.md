@@ -1,7 +1,7 @@
 ---
 id: app-mac-ordinary-name-focus26
 scope: Mac ordinary new-folder name input focus/selection and measured text alignment
-status: source-reviewed
+status: runtime-verified-partial
 depends-on: [app-mac-ordinary-form-surface20, app-mac-sidebar-preference22]
 ---
 
@@ -42,3 +42,9 @@ depends-on: [app-mac-ordinary-form-surface20, app-mac-sidebar-preference22]
 相关生产组件检查应覆盖首次默认聚焦选择、输入替换/部分选择、失焦/再聚焦、普通→智能→普通名称/checkbox语义、取消不提交、窄窗长名称/错误不裁切、智能创建编辑和手机样式隔离、深色可读。只为真实渲染/行为边界做有意义的有限检查，不写复刻CSS常量的假测试；必要typecheck一次。已有可靠离线WK工具可复用；禁止下载或写共享target/cache，若测试需新增临时cache写在本任务目录并排除封存。测试程序内focus作为受控验证，不模拟OS键鼠或切换用户应用。
 
 记录准确源身份和受限范围，SOURCE-READY STOP后不同作者独审，root固定提交再准确Mac12标准freeze/build/collect、独立核包及Computer Use实际复拍。最终要实际默认全选、部分选择/输入替换、重新激活与取消，以及侧栏22的按钮/菜单/重启回归。原版图只有一独立样本、JPEG不是无损，不把离屏通过或金色外包相等扩大成整个产品像素PASS。task26不改Android界面；根已安排与手机28联合准确Mac12/Android07包29，各自实际验收。完整跨端目标保持active。
+
+## 准确Mac12实际接收29
+
+2026-11-05：固定d742307产品源的Mac12已构建、完整本地签名并通过494项独立核包。Computer Use实际默认全选/部分选择、Tab及Shift+Tab、真实名称替换、普通智能往返保留及Escape卸载通过；两条侧栏恢复与hidden/visible观察后正常退出新PID偏好保持。实际证据496项静态独核、391保护文件未变，见[实际独审](../reviews/mac-name-focus-runtime29.md)与[root有限接收](../../verification/name-mobile29-root-acceptance.md)。未验证跨应用失活/重激活及本批即时退出竞态。
+
+实际800×414包络与指定文字bbox对齐，灰内边消除；名称/标签仍偏淡，全选色及焦点环角部残差保留，见[量图](../../research/mac-name-focus-runtime29-analysis/analysis.md)。本项有限运行通过、全像素partial；父目标active，原版删除实验暂停。

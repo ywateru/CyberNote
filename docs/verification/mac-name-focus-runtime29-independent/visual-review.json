@@ -1,0 +1,20 @@
+{
+  "method": "Human-visible static inspection of existing files using local image display; no GUI/app operation, re-render or new image generated.",
+  "files": [
+    "docs/research/mac-name-focus-runtime29-analysis/default-original-mac12-native-srgb.png",
+    "docs/research/mac-name-focus-runtime29-analysis/six-state-focus-native-srgb.png",
+    "docs/research/mac-name-focus-runtime29-analysis/partial-exclusion-guide-srgb.png",
+    "docs/verification/mac-name-focus-runtime29/18-menu-restored-visible.cua-image",
+    "docs/verification/mac-name-focus-runtime29/19-actual-menu-restored-visible-gallery.cua-image",
+    "docs/verification/mac-name-focus-runtime29/27-hidden-after-relaunch.cua-image",
+    "docs/verification/mac-name-focus-runtime29/31-visible-after-relaunch.cua-image"
+  ],
+  "observations": [
+    "Default name warm selection and focus ring visible; original text remains visibly darker.",
+    "Six-state strip supports all/partial selection, gray border at checkbox-focus endpoint and warm ring on refocus.",
+    "Conservative red exclusion box covers cursor halo and intersects partial name/selection ROI; omission of partial coverage/color claims is appropriate.",
+    "18 is a gallery with sidebar absent despite filename;19 restores sidebar while gallery remains.",
+    "27 is hidden with recovery button and three visible synthetic body lines;31 shows sidebar, visible synthetic counts and same three body lines."
+  ],
+  "limit": "Visual corroboration of captured endpoints only, no event replay or complete pixel identity acceptance."
+}

@@ -1,0 +1,64 @@
+{
+  "at": "2026-11-04T21:31:41.607880+00:00",
+  "records": [
+    {
+      "name": "before-pid",
+      "command": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exit": 0,
+      "stdout": "27516\n",
+      "stderr": ""
+    },
+    {
+      "name": "force-stop",
+      "command": [
+        "shell",
+        "am",
+        "force-stop",
+        "com.local.notesclone"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "stopped-pid",
+      "command": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "start",
+      "command": [
+        "shell",
+        "am",
+        "start",
+        "-W",
+        "-n",
+        "com.local.notesclone/.MainActivity"
+      ],
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.local.notesclone/.MainActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.local.notesclone/.MainActivity\nTotalTime: 1021\nWaitTime: 1028\nComplete\n",
+      "stderr": ""
+    },
+    {
+      "name": "after-pid",
+      "command": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exit": 0,
+      "stdout": "27930\n",
+      "stderr": ""
+    }
+  ]
+}

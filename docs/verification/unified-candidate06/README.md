@@ -1,6 +1,12 @@
 # Unified candidate06
 
-## 当前可用包（2026-11-04）
+## 当前可用包（2026-11-05）
+
+当前交付为同一固定产品源d7423070207684c5a2bb584281350723c44e9d9c的[Mac12](mac-name-focus-build12/README.md)及[Android07](android-folder-visual-build07/README.md)。Mac准确核包494项、实际证据496项独立复核通过；Android准确核包391项、实际证据711项独立复核通过。两端包位于各自artifacts run的attempt01，根README提供直接链接。Mac两条侧栏恢复与正常重启偏好、普通名称操作，以及手机可见加号/导航/长按/冷启动可见内容保持均有实际记录；文字/选区/环角、手机右下图标和整体像素仍开放。准确SHA、排除项及限制见[本批根接收](../name-mobile29-root-acceptance.md)。
+
+以下是按时点保留的历史交付；其中“当前”只指对应记录时点。
+
+## 2026-11-04 历史可用包
 
 当前桌面包为[侧栏Mac06](mac-sidebar-optical-build06/README.md)，准确源码09fee3ec05dcf3be22037e0a842ea6d2df275cff。封装应用可执行SHA256 f69b9e3856ebb62ee64c6547d55a420762a31e58ab3b9244391981fff239f8bf，ZIP SHA256 56907af1d0b13ee6807a4236f67644a83b41b2baacf77744ae4931627184447c。[独立产物核验](mac-sidebar-optical-independent06/README.md)975/975通过。root实际新窗口两条恢复入口、208/228栏宽、正常重启再切换已执行，见[运行记录](../mac-sidebar-optical06-runtime-01/README.md)；[独立运行复核](../mac-sidebar-optical06-runtime-independent-01/README.md)有限通过且无阻塞。这是本次“隐藏后无法显示”修复包；[局部对比](../mac-sidebar-optical06-analysis-01/analysis.md)已消除旧文件夹(−3,+2)和隐藏按钮约−9px横向偏差，仍有半像素轮廓与标题纵向差异，整窗像素目标继续开放。
 
