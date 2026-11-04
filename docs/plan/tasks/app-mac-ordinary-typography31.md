@@ -1,7 +1,7 @@
 ---
 id: app-mac-ordinary-typography31
 scope: Ordinary Mac new-folder text rendering, preserving editable controls and measured geometry
-status: source-ready
+status: source-reviewed
 depends-on: [app-mac-ordinary-name-focus26]
 ---
 
@@ -44,5 +44,7 @@ depends-on: [app-mac-ordinary-name-focus26]
 SOURCE-READY STOP后root固定提交，再由不同作者verify_app独审；通过后另安排准确新Mac包、来源核查、Computer Use实际复拍，才能关闭实际差异。源阶段不授全像素/真实App或父目标完成。
 
 ## 作者结果
+
+独立源阶段接收：2026-11-05，固定e687ea6独立审查PASS，312项有限检查、468项保护输入保持；三次fresh WK像素和11项有限输入/隔离检查通过。root复核27项索引全部匹配。见[独立审查](../reviews/app-mac-ordinary-typography31.md)。准确Mac13真实窗口、选中文字、选区与暖环仍待验，本阶段不关闭整体目标。
 
 2026-11-05：仅两个浅色ordinary局部文字选择器改为smoothing:auto，未改字重/颜色/尺寸。自然名称/名称label/智能label raw160覆盖985/419/1392→1167/504/1657，原版02为1162/497/1636；sRGB整ROI MAE11.591/5.363/5.555→8.903/1.369/1.426。选中名称诊断仍1181对原1229，不授零差。13项有限生产检查、外rect相同、checkbox裁片零差、范围外完整computed隔离通过；无效/不足的颜色与渲染候选保留。完整见[作者证据](../../verification/mac-ordinary-typography31/README.md)。CSS SHA7e7a7bfa274858cbb1449e55e96026427dfa398489613dc60592e2608dc48005。root接收后固定提交，等待不同作者窄独审与准确包实际复拍。

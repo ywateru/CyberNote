@@ -1,7 +1,7 @@
 ---
 id: app-mobile-compose-anchor34
 scope: Mobile folders page right compose button layout anchor
-status: pending
+status: in-progress
 depends-on: [app-mac-ordinary-typography31, mobile-compose-readiness32]
 ---
 

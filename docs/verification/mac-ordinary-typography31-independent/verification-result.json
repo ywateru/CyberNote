@@ -1,0 +1,4556 @@
+{
+  "scope": "Independent source and finite offscreen production WK evidence review; not active packaged Mac13 or full pixel acceptance",
+  "commit": "e687ea6ceaa02c57e511c4a97a6187cba5f5acf0",
+  "checks": [
+    {
+      "name": "fixed full commit",
+      "pass": true,
+      "detail": "e687ea6ceaa02c57e511c4a97a6187cba5f5acf0"
+    },
+    {
+      "name": "current CSS equals committed bytes and expected SHA",
+      "pass": true
+    },
+    {
+      "name": "sealed baseline CSS equals exact parent bytes",
+      "pass": true
+    },
+    {
+      "name": "sole CSS addition is two selectors and one smoothing declaration",
+      "pass": true
+    },
+    {
+      "name": "author patch exactly reproduces byte diff",
+      "pass": true
+    },
+    {
+      "name": "initial product list excludes research/task evidence",
+      "pass": true
+    },
+    {
+      "name": "303 current product inputs only CSS changed from baseline",
+      "pass": true,
+      "detail": [
+        "src/smart-folders.css"
+      ]
+    },
+    {
+      "name": "commit product diff only CSS",
+      "pass": true,
+      "detail": [
+        "src/smart-folders.css"
+      ]
+    },
+    {
+      "name": "current initial315 differences limited to CSS and root-updated task",
+      "pass": true,
+      "detail": [
+        "src/smart-folders.css",
+        "docs/plan/tasks/app-mac-ordinary-typography31.md"
+      ]
+    },
+    {
+      "name": "source manifest src/smart-folders.css",
+      "pass": true
+    },
+    {
+      "name": "source manifest src/style.css",
+      "pass": true
+    },
+    {
+      "name": "source manifest src/SmartFolderForm.tsx",
+      "pass": true
+    },
+    {
+      "name": "source manifest src/App.tsx",
+      "pass": true
+    },
+    {
+      "name": "source manifest src/MobileFolderIcons.tsx",
+      "pass": true
+    },
+    {
+      "name": "sealed author index identity",
+      "pass": true
+    },
+    {
+      "name": "sealed author index count78",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/README.md",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-native-command.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-native-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-native-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-native.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-native.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-selected-command.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-selected-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-selected-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-selected.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-selected.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline-smart-folders.css",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/baseline.html",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate-native-command.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate-native-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate-native-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate-native.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate-native.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate-selected-command.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate-selected-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate-selected-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate-selected.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate-selected.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/candidate.html",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/comparison-layout-attempt01.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/execution-record.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/final-glyph-comparison-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/harness-entry.tsx",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/input-close.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/input-initial.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/interaction-final-command.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/interaction-final.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/interaction-final.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/interaction-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/measure.py",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/measurement-stdout.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/measurements.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/prepare.mjs",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-color-black.css",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-color-native-command.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-color-native-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-color-native-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-color-native.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-color-native.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-rendering-geometric.css",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-rendering-native-command.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-rendering-native-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-rendering-native-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-rendering-native.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-rendering-native.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-selection-black.css",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-selection-selected-command.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-selection-selected-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-selection-selected-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-selection-selected.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-selection-selected.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-auto.css",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-native-command.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-native-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-native-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-native.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-native.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-selected-command.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-selected-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-selected-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-selected.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/probe-smoothing-selected.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/ref-all29-raw.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/ref-all29-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/ref-all31-raw.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/ref-all31-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/ref-caret31-raw.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/ref-caret31-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/render-probe-template.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/render.py",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/single-variable-glyph-comparison-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/source-manifest.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-typography31/source.patch",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-typography-readiness30/analysis.md",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-typography-readiness30/input-manifest.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-typography-readiness30/readiness.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-typography-readiness30/source-excerpts.md",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/analysis.md",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/clean-name-smart-label-nearest2x-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/default-original-mac12-native-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/input-manifest.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/mac12-all-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/mac12-blurred-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/mac12-partial-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/mac12-refocused-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/measure.py",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/measurements.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/original-all-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/original-partial-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/partial-exclusion-guide-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/partial-original-mac12-native-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/ring-corners-nearest4x-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-name-focus-runtime29-analysis/six-state-focus-native-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/README.md",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-controlled-wk-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-controlled-wk.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-controlled-wk.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-diagnostic-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-diagnostic-wk.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-diagnostic-wk.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-final-wk.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-form-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-setup2-wk.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-setup2-wk.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-smart-folders.css",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline-wk.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baseline.html",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/baselineDiagnostic-form-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidate-diagnostic-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidate-diagnostic-wk.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidate-diagnostic-wk.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidate-form-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidate-interaction-final-wk.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidate-interaction-final-wk.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidate-interaction-wk-form.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidate-interaction-wk.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidate-interaction-wk.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidate.html",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/candidateDiagnostic-form-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/comparison-srgb.icc",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/diagnostic-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/execution-record.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/fixture-first-failure.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/focus-diagnostic-comparison-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/focus-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/harness-entry.tsx",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/interaction-probe.js",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/measure.py",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/measurements.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/prepare.mjs",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/reference-display.icc",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/reference-focus.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/reference-srgb.png",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/setup-unbound-environment-wk.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/source-manifest.json",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/verification/mac-ordinary-name-focus26/source.patch",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/00-active-full-selected.ax.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/00-active-full-selected.cua-image",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/01-name-click-select-all.ax.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/01-name-click-select-all.cua-image",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/02-name-caret-end.ax.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/02-name-caret-end.cua-image",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/03-after-tab.ax.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/03-after-tab.cua-image",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/04-after-shift-tab.ax.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/04-after-shift-tab.cua-image",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/05-escape-cancelled.ax.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/05-escape-cancelled.cua-image",
+      "pass": true
+    },
+    {
+      "name": "sealed input docs/research/mac-ordinary-original31/README.md",
+      "pass": true
+    },
+    {
+      "name": "baseline HTML style is exact full source CSS",
+      "pass": true
+    },
+    {
+      "name": "baseline embedded baseline exact",
+      "pass": true
+    },
+    {
+      "name": "baseline embedded candidate at creation exact",
+      "pass": true
+    },
+    {
+      "name": "candidate HTML style is exact full source CSS",
+      "pass": true
+    },
+    {
+      "name": "candidate embedded baseline exact",
+      "pass": true
+    },
+    {
+      "name": "candidate embedded candidate at creation exact",
+      "pass": true
+    },
+    {
+      "name": "only compiled fixture difference is disclosed html.dark adaptation",
+      "pass": true
+    },
+    {
+      "name": "actual App theme ownership matches candidate html.dark adaptation",
+      "pass": true
+    },
+    {
+      "name": "fixture retains real component and real name handlers",
+      "pass": true
+    },
+    {
+      "name": "baseline-native author native completion and inactive boundary",
+      "pass": true
+    },
+    {
+      "name": "baseline-native no fixture errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "baseline-native author command successful",
+      "pass": true
+    },
+    {
+      "name": "baseline-native exact rect preservation",
+      "pass": true
+    },
+    {
+      "name": "baseline-native natural versus diagnostic boundary",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected author native completion and inactive boundary",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected no fixture errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected author command successful",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected exact rect preservation",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected natural versus diagnostic boundary",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native author native completion and inactive boundary",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native no fixture errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native author command successful",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native exact rect preservation",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native natural versus diagnostic boundary",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected author native completion and inactive boundary",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected no fixture errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected author command successful",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected exact rect preservation",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected natural versus diagnostic boundary",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native author native completion and inactive boundary",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native no fixture errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native author command successful",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native exact rect preservation",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native natural versus diagnostic boundary",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected author native completion and inactive boundary",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected no fixture errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected author command successful",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected exact rect preservation",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected natural versus diagnostic boundary",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native author native completion and inactive boundary",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native no fixture errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native author command successful",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native exact rect preservation",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native natural versus diagnostic boundary",
+      "pass": true
+    },
+    {
+      "name": "candidate-native author native completion and inactive boundary",
+      "pass": true
+    },
+    {
+      "name": "candidate-native no fixture errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "candidate-native author command successful",
+      "pass": true
+    },
+    {
+      "name": "candidate-native exact rect preservation",
+      "pass": true
+    },
+    {
+      "name": "candidate-native natural versus diagnostic boundary",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected author native completion and inactive boundary",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected no fixture errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected author command successful",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected exact rect preservation",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected natural versus diagnostic boundary",
+      "pass": true
+    },
+    {
+      "name": "interaction-final author native completion and inactive boundary",
+      "pass": true
+    },
+    {
+      "name": "interaction-final no fixture errors or external requests",
+      "pass": true
+    },
+    {
+      "name": "interaction-final author command successful",
+      "pass": true
+    },
+    {
+      "name": "author thirteen finite checks all pass",
+      "pass": true
+    },
+    {
+      "name": "author rect pair exact",
+      "pass": true
+    },
+    {
+      "name": "fresh-baseline-native-attempt02 completed inactive unattached with no visible windows",
+      "pass": true
+    },
+    {
+      "name": "fresh-baseline-native-attempt02 no errors or requests",
+      "pass": true
+    },
+    {
+      "name": "fresh-candidate-native completed inactive unattached with no visible windows",
+      "pass": true
+    },
+    {
+      "name": "fresh-candidate-native no errors or requests",
+      "pass": true
+    },
+    {
+      "name": "fresh-isolation completed inactive unattached with no visible windows",
+      "pass": true
+    },
+    {
+      "name": "fresh-isolation no errors or requests",
+      "pass": true
+    },
+    {
+      "name": "fresh candidate exactly four inherited smoothing differences",
+      "pass": true,
+      "detail": [
+        {
+          "baseline": "antialiased",
+          "candidate": "auto",
+          "index": 4,
+          "key": "-webkit-font-smoothing",
+          "tag": "LABEL",
+          "type": null
+        },
+        {
+          "baseline": "antialiased",
+          "candidate": "auto",
+          "index": 5,
+          "key": "-webkit-font-smoothing",
+          "tag": "INPUT",
+          "type": null
+        },
+        {
+          "baseline": "antialiased",
+          "candidate": "auto",
+          "index": 7,
+          "key": "-webkit-font-smoothing",
+          "tag": "LABEL",
+          "type": null
+        },
+        {
+          "baseline": "antialiased",
+          "candidate": "auto",
+          "index": 8,
+          "key": "-webkit-font-smoothing",
+          "tag": "INPUT",
+          "type": "checkbox"
+        }
+      ]
+    },
+    {
+      "name": "fresh all rectangles and text invariant",
+      "pass": true
+    },
+    {
+      "name": "fresh eleven actual DOM and isolation checks pass",
+      "pass": true
+    },
+    {
+      "name": "ref-all29 raw decoded directly matches sealed derived",
+      "pass": true
+    },
+    {
+      "name": "ref-all29 independently ICC-converted source matches sealed sRGB",
+      "pass": true
+    },
+    {
+      "name": "ref-all31 raw decoded directly matches sealed derived",
+      "pass": true
+    },
+    {
+      "name": "ref-all31 independently ICC-converted source matches sealed sRGB",
+      "pass": true
+    },
+    {
+      "name": "ref-caret31 raw decoded directly matches sealed derived",
+      "pass": true
+    },
+    {
+      "name": "ref-caret31 independently ICC-converted source matches sealed sRGB",
+      "pass": true
+    },
+    {
+      "name": "baseline-native declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "baseline-native direct crop equals author form pixels",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected direct crop equals author form pixels",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native direct crop equals author form pixels",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected direct crop equals author form pixels",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native direct crop equals author form pixels",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected direct crop equals author form pixels",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native direct crop equals author form pixels",
+      "pass": true
+    },
+    {
+      "name": "candidate-native declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "candidate-native direct crop equals author form pixels",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected direct crop equals author form pixels",
+      "pass": true
+    },
+    {
+      "name": "fresh-baseline-native-attempt02 declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "fresh-candidate-native declared sRGB and native800x414 crop",
+      "pass": true
+    },
+    {
+      "name": "ref-all29 all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "ref-all31 all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "ref-caret31 all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "baseline-native all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "candidate-native all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected all raw/sRGB ROI thresholds and bbox reproduced",
+      "pass": true
+    },
+    {
+      "name": "baseline-native name paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native name paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native name paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native name paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "candidate-native name paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "baseline-native nameLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native nameLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native nameLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native nameLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "candidate-native nameLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "baseline-native smartLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-color-native smartLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native smartLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native smartLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "candidate-native smartLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected name paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected name paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected name paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected name paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected nameLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected nameLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected nameLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected nameLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "baseline-selected smartLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-selection-selected smartLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected smartLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "candidate-selected smartLabel paired ROI errors and mask differences reproduced",
+      "pass": true
+    },
+    {
+      "name": "baseline-native versus fresh-baseline-native-attempt02 whole form RGB exact",
+      "pass": true
+    },
+    {
+      "name": "candidate-native versus fresh-candidate-native whole form RGB exact",
+      "pass": true
+    },
+    {
+      "name": "probe-rendering-native versus baseline-native whole form RGB exact",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-native versus candidate-native whole form RGB exact",
+      "pass": true
+    },
+    {
+      "name": "probe-smoothing-selected versus candidate-selected whole form RGB exact",
+      "pass": true
+    },
+    {
+      "name": "baseline-native versus candidate-native checkbox RGB exact",
+      "pass": true
+    },
+    {
+      "name": "fresh-baseline-native-attempt02 versus fresh-candidate-native checkbox RGB exact",
+      "pass": true
+    },
+    {
+      "name": "original31 and29 whole images differ",
+      "pass": true
+    },
+    {
+      "name": "original31 and29 three glyph ROIs exact",
+      "pass": true
+    }
+  ],
+  "checkCount": 312,
+  "passed": 312,
+  "failed": [],
+  "indexCounts": {
+    "docs/verification/mac-ordinary-typography31/evidence-index.json": 78,
+    "docs/research/mac-ordinary-typography-readiness30/evidence-index.json": 4,
+    "docs/research/mac-name-focus-runtime29-analysis/evidence-index.json": 16,
+    "docs/verification/mac-ordinary-name-focus26/evidence-index.json": 43,
+    "docs/research/mac-ordinary-original31/evidence-index.json": 13
+  },
+  "productBaselineChanges": [
+    "src/smart-folders.css"
+  ],
+  "initial315CurrentDifferences": [
+    "src/smart-folders.css",
+    "docs/plan/tasks/app-mac-ordinary-typography31.md"
+  ],
+  "fixtureCssIdentity": {
+    "baseline": {
+      "baselineSha": "ab1071d2216b220994e83b0008ddd3962499806a8c2f8aab5ba27e3e4e06c6f0",
+      "candidateSha": "ab1071d2216b220994e83b0008ddd3962499806a8c2f8aab5ba27e3e4e06c6f0"
+    },
+    "candidate": {
+      "baselineSha": "ab1071d2216b220994e83b0008ddd3962499806a8c2f8aab5ba27e3e4e06c6f0",
+      "candidateSha": "2349eb447bb3a3bac579d48f575d0ce753db042489bb580a32b37612b22eb2a1"
+    }
+  },
+  "freshInteractionChecks": [
+    {
+      "name": "outside ordinary-light full styles {\"dark\":true}",
+      "pass": true
+    },
+    {
+      "detail": {
+        "color": "rgb(238, 238, 238)",
+        "smoothing": "antialiased",
+        "surface": "rgb(44, 44, 46)"
+      },
+      "name": "dark actual html scope and contrast",
+      "pass": true
+    },
+    {
+      "name": "outside ordinary-light full styles {\"mobile\":true}",
+      "pass": true
+    },
+    {
+      "name": "outside ordinary-light full styles {\"mobile\":true,\"dark\":true}",
+      "pass": true
+    },
+    {
+      "name": "outside ordinary-light full styles {\"folder\":{\"id\":\"independent31\",\"kind\":\"smart\",\"parentId\":null,\"name\":\"独立审查\",\"sortOrder\":0,\"createdAt\":1,\"definitionRevision\":1,\"query\":{\"version\":1,\"combine\":\"all\",\"rules\":[{\"type\":\"pinned\",\"value\":true}]}}}",
+      "pass": true
+    },
+    {
+      "name": "new ordinary real input selected",
+      "pass": true
+    },
+    {
+      "name": "actual input replacement persists",
+      "pass": true
+    },
+    {
+      "name": "ordinary to smart preserves edited name",
+      "pass": true
+    },
+    {
+      "name": "smart creation full styles and selection isolated",
+      "pass": true
+    },
+    {
+      "name": "smart to ordinary preserves edited name",
+      "pass": true
+    },
+    {
+      "detail": {
+        "events": {
+          "cancels": 1,
+          "saves": []
+        },
+        "fixtureKeepsMounted": true
+      },
+      "name": "Escape fixture callback once without save",
+      "pass": true
+    }
+  ],
+  "profiles": {
+    "ref-all29": {
+      "source": "docs/verification/mac-name-focus-runtime29/03-original-default-selected.cua-image",
+      "format": "JPEG",
+      "size": [
+        800,
+        414
+      ],
+      "iccSha256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf"
+    },
+    "ref-all31": {
+      "source": "docs/research/mac-ordinary-original31/01-name-click-select-all.cua-image",
+      "format": "JPEG",
+      "size": [
+        800,
+        414
+      ],
+      "iccSha256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf"
+    },
+    "ref-caret31": {
+      "source": "docs/research/mac-ordinary-original31/02-name-caret-end.cua-image",
+      "format": "JPEG",
+      "size": [
+        800,
+        414
+      ],
+      "iccSha256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf"
+    }
+  },
+  "roiMeasurements": {
+    "ref-all29": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 1017,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "160": {
+            "pixels": 1229,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1391,
+            "bbox": [
+              141,
+              125,
+              268,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 374,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 497,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 571,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1264,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1636,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1882,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 1005,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "160": {
+            "pixels": 1221,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1381,
+            "bbox": [
+              141,
+              125,
+              268,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 374,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 497,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 571,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1264,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1636,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1882,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "ref-all31": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 1017,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "160": {
+            "pixels": 1229,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1391,
+            "bbox": [
+              141,
+              125,
+              268,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 374,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 497,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 571,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1264,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1636,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1882,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 1005,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "160": {
+            "pixels": 1221,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1381,
+            "bbox": [
+              141,
+              125,
+              268,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 374,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 497,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 571,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1264,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1636,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1882,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "ref-caret31": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 900,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1162,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1302,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 374,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 497,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 571,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1264,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1636,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1882,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 900,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1162,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1302,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 374,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 497,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 571,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1264,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1636,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1882,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "baseline-native": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 731,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 985,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1190,
+            "bbox": [
+              135,
+              125,
+              268,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 319,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 419,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 485,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1001,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1392,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1693,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 731,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 985,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1190,
+            "bbox": [
+              135,
+              125,
+              268,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 319,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 419,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 485,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1001,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1392,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1693,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "baseline-selected": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 734,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1006,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1198,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 319,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 419,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 485,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1001,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1392,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1693,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 734,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1006,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1198,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 319,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 419,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 485,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1001,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1392,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1693,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "probe-color-native": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 794,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "160": {
+            "pixels": 1067,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1221,
+            "bbox": [
+              135,
+              125,
+              269,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 342,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 433,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 490,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1114,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1488,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1739,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 794,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "160": {
+            "pixels": 1067,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1221,
+            "bbox": [
+              135,
+              125,
+              269,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 342,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 433,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 490,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1114,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1488,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1739,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "probe-selection-selected": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 798,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "160": {
+            "pixels": 1071,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1240,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 319,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 419,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 485,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1001,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1392,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1693,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 798,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "160": {
+            "pixels": 1071,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1240,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 319,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 419,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 485,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1001,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1392,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1693,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "probe-smoothing-native": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 922,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1167,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1307,
+            "bbox": [
+              135,
+              125,
+              269,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 922,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1167,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1307,
+            "bbox": [
+              135,
+              125,
+              269,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "probe-smoothing-selected": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 925,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1181,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1322,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 925,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1181,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1322,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "probe-rendering-native": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 731,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 985,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1190,
+            "bbox": [
+              135,
+              125,
+              268,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 319,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 419,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 485,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1001,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1392,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1693,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 731,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 985,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1190,
+            "bbox": [
+              135,
+              125,
+              268,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 319,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 419,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 485,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1001,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1392,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1693,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "candidate-native": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 922,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1167,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1307,
+            "bbox": [
+              135,
+              125,
+              269,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 922,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1167,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1307,
+            "bbox": [
+              135,
+              125,
+              269,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "candidate-selected": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 925,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1181,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1322,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 925,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1181,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1322,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "fresh-baseline-native-attempt02": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 731,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 985,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1190,
+            "bbox": [
+              135,
+              125,
+              268,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 319,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 419,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 485,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1001,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1392,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1693,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 731,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 985,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1190,
+            "bbox": [
+              135,
+              125,
+              268,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 319,
+            "bbox": [
+              42,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 419,
+            "bbox": [
+              41,
+              125,
+              99,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 485,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1001,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1392,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1693,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          }
+        }
+      }
+    },
+    "fresh-candidate-native": {
+      "raw": {
+        "name": {
+          "100": {
+            "pixels": 922,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1167,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1307,
+            "bbox": [
+              135,
+              125,
+              269,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "srgb": {
+        "name": {
+          "100": {
+            "pixels": 922,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1167,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1307,
+            "bbox": [
+              135,
+              125,
+              269,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      }
+    }
+  },
+  "pairedErrors": {
+    "baseline-native": {
+      "name": {
+        "reference": "ref-caret31",
+        "roi": [
+          135,
+          115,
+          280,
+          158
+        ],
+        "commonCaretExcluded": [
+          268,
+          115,
+          280,
+          158
+        ],
+        "sameSamplePixels": 5719,
+        "fullRoiMeanAbsChannelErrorSrgb": 11.590837559013814,
+        "commonGlyphUnionPixels": 1427,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 40.411819668301796,
+        "maskDisagreementRaw": {
+          "100": 291,
+          "160": 265,
+          "200": 234
+        }
+      },
+      "nameLabel": {
+        "reference": "ref-caret31",
+        "roi": [
+          35,
+          115,
+          115,
+          157
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 3360,
+        "fullRoiMeanAbsChannelErrorSrgb": 5.362896825396826,
+        "commonGlyphUnionPixels": 577,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 25.79896013864818,
+        "maskDisagreementRaw": {
+          "100": 57,
+          "160": 86,
+          "200": 86
+        }
+      },
+      "smartLabel": {
+        "reference": "ref-caret31",
+        "roi": [
+          75,
+          190,
+          330,
+          230
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 10200,
+        "fullRoiMeanAbsChannelErrorSrgb": 5.554803921568627,
+        "commonGlyphUnionPixels": 1913,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 24.66074228959749,
+        "maskDisagreementRaw": {
+          "100": 265,
+          "160": 246,
+          "200": 191
+        }
+      }
+    },
+    "probe-color-native": {
+      "name": {
+        "reference": "ref-caret31",
+        "roi": [
+          135,
+          115,
+          280,
+          158
+        ],
+        "commonCaretExcluded": [
+          268,
+          115,
+          280,
+          158
+        ],
+        "sameSamplePixels": 5719,
+        "fullRoiMeanAbsChannelErrorSrgb": 13.90843387538614,
+        "commonGlyphUnionPixels": 1427,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 49.647745853772484,
+        "maskDisagreementRaw": {
+          "100": 276,
+          "160": 235,
+          "200": 248
+        }
+      },
+      "nameLabel": {
+        "reference": "ref-caret31",
+        "roi": [
+          35,
+          115,
+          115,
+          157
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 3360,
+        "fullRoiMeanAbsChannelErrorSrgb": 6.503373015873016,
+        "commonGlyphUnionPixels": 577,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 32.53726169844021,
+        "maskDisagreementRaw": {
+          "100": 38,
+          "160": 76,
+          "200": 81
+        }
+      },
+      "smartLabel": {
+        "reference": "ref-caret31",
+        "roi": [
+          75,
+          190,
+          330,
+          230
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 10200,
+        "fullRoiMeanAbsChannelErrorSrgb": 6.846666666666667,
+        "commonGlyphUnionPixels": 1913,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 31.61578672242551,
+        "maskDisagreementRaw": {
+          "100": 204,
+          "160": 174,
+          "200": 189
+        }
+      }
+    },
+    "probe-smoothing-native": {
+      "name": {
+        "reference": "ref-caret31",
+        "roi": [
+          135,
+          115,
+          280,
+          158
+        ],
+        "commonCaretExcluded": [
+          268,
+          115,
+          280,
+          158
+        ],
+        "sameSamplePixels": 5719,
+        "fullRoiMeanAbsChannelErrorSrgb": 8.903013347321792,
+        "commonGlyphUnionPixels": 1427,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 30.080588647512265,
+        "maskDisagreementRaw": {
+          "100": 194,
+          "160": 193,
+          "200": 216
+        }
+      },
+      "nameLabel": {
+        "reference": "ref-caret31",
+        "roi": [
+          35,
+          115,
+          115,
+          157
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 3360,
+        "fullRoiMeanAbsChannelErrorSrgb": 1.3685515873015872,
+        "commonGlyphUnionPixels": 577,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 5.622183708838821,
+        "maskDisagreementRaw": {
+          "100": 8,
+          "160": 7,
+          "200": 7
+        }
+      },
+      "smartLabel": {
+        "reference": "ref-caret31",
+        "roi": [
+          75,
+          190,
+          330,
+          230
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 10200,
+        "fullRoiMeanAbsChannelErrorSrgb": 1.4257843137254902,
+        "commonGlyphUnionPixels": 1913,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 5.702038682697334,
+        "maskDisagreementRaw": {
+          "100": 23,
+          "160": 23,
+          "200": 13
+        }
+      }
+    },
+    "probe-rendering-native": {
+      "name": {
+        "reference": "ref-caret31",
+        "roi": [
+          135,
+          115,
+          280,
+          158
+        ],
+        "commonCaretExcluded": [
+          268,
+          115,
+          280,
+          158
+        ],
+        "sameSamplePixels": 5719,
+        "fullRoiMeanAbsChannelErrorSrgb": 11.590837559013814,
+        "commonGlyphUnionPixels": 1427,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 40.411819668301796,
+        "maskDisagreementRaw": {
+          "100": 291,
+          "160": 265,
+          "200": 234
+        }
+      },
+      "nameLabel": {
+        "reference": "ref-caret31",
+        "roi": [
+          35,
+          115,
+          115,
+          157
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 3360,
+        "fullRoiMeanAbsChannelErrorSrgb": 5.362896825396826,
+        "commonGlyphUnionPixels": 577,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 25.79896013864818,
+        "maskDisagreementRaw": {
+          "100": 57,
+          "160": 86,
+          "200": 86
+        }
+      },
+      "smartLabel": {
+        "reference": "ref-caret31",
+        "roi": [
+          75,
+          190,
+          330,
+          230
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 10200,
+        "fullRoiMeanAbsChannelErrorSrgb": 5.554803921568627,
+        "commonGlyphUnionPixels": 1913,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 24.66074228959749,
+        "maskDisagreementRaw": {
+          "100": 265,
+          "160": 246,
+          "200": 191
+        }
+      }
+    },
+    "candidate-native": {
+      "name": {
+        "reference": "ref-caret31",
+        "roi": [
+          135,
+          115,
+          280,
+          158
+        ],
+        "commonCaretExcluded": [
+          268,
+          115,
+          280,
+          158
+        ],
+        "sameSamplePixels": 5719,
+        "fullRoiMeanAbsChannelErrorSrgb": 8.903013347321792,
+        "commonGlyphUnionPixels": 1427,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 30.080588647512265,
+        "maskDisagreementRaw": {
+          "100": 194,
+          "160": 193,
+          "200": 216
+        }
+      },
+      "nameLabel": {
+        "reference": "ref-caret31",
+        "roi": [
+          35,
+          115,
+          115,
+          157
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 3360,
+        "fullRoiMeanAbsChannelErrorSrgb": 1.3685515873015872,
+        "commonGlyphUnionPixels": 577,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 5.622183708838821,
+        "maskDisagreementRaw": {
+          "100": 8,
+          "160": 7,
+          "200": 7
+        }
+      },
+      "smartLabel": {
+        "reference": "ref-caret31",
+        "roi": [
+          75,
+          190,
+          330,
+          230
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 10200,
+        "fullRoiMeanAbsChannelErrorSrgb": 1.4257843137254902,
+        "commonGlyphUnionPixels": 1913,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 5.702038682697334,
+        "maskDisagreementRaw": {
+          "100": 23,
+          "160": 23,
+          "200": 13
+        }
+      }
+    },
+    "baseline-selected": {
+      "name": {
+        "reference": "ref-all31",
+        "roi": [
+          135,
+          115,
+          280,
+          158
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 6235,
+        "fullRoiMeanAbsChannelErrorSrgb": 15.178027265437048,
+        "commonGlyphUnionPixels": 1470,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 54.012471655328795,
+        "maskDisagreementRaw": {
+          "100": 367,
+          "160": 277,
+          "200": 277
+        }
+      },
+      "nameLabel": {
+        "reference": "ref-all31",
+        "roi": [
+          35,
+          115,
+          115,
+          157
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 3360,
+        "fullRoiMeanAbsChannelErrorSrgb": 5.362896825396826,
+        "commonGlyphUnionPixels": 577,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 25.79896013864818,
+        "maskDisagreementRaw": {
+          "100": 57,
+          "160": 86,
+          "200": 86
+        }
+      },
+      "smartLabel": {
+        "reference": "ref-all31",
+        "roi": [
+          75,
+          190,
+          330,
+          230
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 10200,
+        "fullRoiMeanAbsChannelErrorSrgb": 5.554803921568627,
+        "commonGlyphUnionPixels": 1891,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 24.9169751454257,
+        "maskDisagreementRaw": {
+          "100": 265,
+          "160": 246,
+          "200": 191
+        }
+      }
+    },
+    "probe-selection-selected": {
+      "name": {
+        "reference": "ref-all31",
+        "roi": [
+          135,
+          115,
+          280,
+          158
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 6235,
+        "fullRoiMeanAbsChannelErrorSrgb": 12.242608928094093,
+        "commonGlyphUnionPixels": 1470,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 41.53877551020408,
+        "maskDisagreementRaw": {
+          "100": 327,
+          "160": 256,
+          "200": 253
+        }
+      },
+      "nameLabel": {
+        "reference": "ref-all31",
+        "roi": [
+          35,
+          115,
+          115,
+          157
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 3360,
+        "fullRoiMeanAbsChannelErrorSrgb": 5.362896825396826,
+        "commonGlyphUnionPixels": 577,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 25.79896013864818,
+        "maskDisagreementRaw": {
+          "100": 57,
+          "160": 86,
+          "200": 86
+        }
+      },
+      "smartLabel": {
+        "reference": "ref-all31",
+        "roi": [
+          75,
+          190,
+          330,
+          230
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 10200,
+        "fullRoiMeanAbsChannelErrorSrgb": 5.554803921568627,
+        "commonGlyphUnionPixels": 1891,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 24.9169751454257,
+        "maskDisagreementRaw": {
+          "100": 265,
+          "160": 246,
+          "200": 191
+        }
+      }
+    },
+    "probe-smoothing-selected": {
+      "name": {
+        "reference": "ref-all31",
+        "roi": [
+          135,
+          115,
+          280,
+          158
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 6235,
+        "fullRoiMeanAbsChannelErrorSrgb": 12.136273723603315,
+        "commonGlyphUnionPixels": 1470,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 41.034467120181404,
+        "maskDisagreementRaw": {
+          "100": 238,
+          "160": 200,
+          "200": 231
+        }
+      },
+      "nameLabel": {
+        "reference": "ref-all31",
+        "roi": [
+          35,
+          115,
+          115,
+          157
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 3360,
+        "fullRoiMeanAbsChannelErrorSrgb": 1.3685515873015872,
+        "commonGlyphUnionPixels": 577,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 5.622183708838821,
+        "maskDisagreementRaw": {
+          "100": 8,
+          "160": 7,
+          "200": 7
+        }
+      },
+      "smartLabel": {
+        "reference": "ref-all31",
+        "roi": [
+          75,
+          190,
+          330,
+          230
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 10200,
+        "fullRoiMeanAbsChannelErrorSrgb": 1.4257843137254902,
+        "commonGlyphUnionPixels": 1891,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 5.737704918032787,
+        "maskDisagreementRaw": {
+          "100": 23,
+          "160": 23,
+          "200": 13
+        }
+      }
+    },
+    "candidate-selected": {
+      "name": {
+        "reference": "ref-all31",
+        "roi": [
+          135,
+          115,
+          280,
+          158
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 6235,
+        "fullRoiMeanAbsChannelErrorSrgb": 12.136273723603315,
+        "commonGlyphUnionPixels": 1470,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 41.034467120181404,
+        "maskDisagreementRaw": {
+          "100": 238,
+          "160": 200,
+          "200": 231
+        }
+      },
+      "nameLabel": {
+        "reference": "ref-all31",
+        "roi": [
+          35,
+          115,
+          115,
+          157
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 3360,
+        "fullRoiMeanAbsChannelErrorSrgb": 1.3685515873015872,
+        "commonGlyphUnionPixels": 577,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 5.622183708838821,
+        "maskDisagreementRaw": {
+          "100": 8,
+          "160": 7,
+          "200": 7
+        }
+      },
+      "smartLabel": {
+        "reference": "ref-all31",
+        "roi": [
+          75,
+          190,
+          330,
+          230
+        ],
+        "commonCaretExcluded": null,
+        "sameSamplePixels": 10200,
+        "fullRoiMeanAbsChannelErrorSrgb": 1.4257843137254902,
+        "commonGlyphUnionPixels": 1891,
+        "commonGlyphUnionMeanAbsChannelErrorSrgb": 5.737704918032787,
+        "maskDisagreementRaw": {
+          "100": 23,
+          "160": 23,
+          "200": 13
+        }
+      }
+    }
+  },
+  "pixelComparisons": {
+    "baseline-native vs fresh-baseline-native-attempt02": {
+      "changedPixels": 0,
+      "size": [
+        800,
+        414
+      ]
+    },
+    "candidate-native vs fresh-candidate-native": {
+      "changedPixels": 0,
+      "size": [
+        800,
+        414
+      ]
+    },
+    "probe-rendering-native vs baseline-native": {
+      "changedPixels": 0,
+      "size": [
+        800,
+        414
+      ]
+    },
+    "probe-smoothing-native vs candidate-native": {
+      "changedPixels": 0,
+      "size": [
+        800,
+        414
+      ]
+    },
+    "probe-smoothing-selected vs candidate-selected": {
+      "changedPixels": 0,
+      "size": [
+        800,
+        414
+      ]
+    },
+    "baseline-native checkbox candidate-native": {
+      "roi": [
+        38,
+        192,
+        76,
+        230
+      ],
+      "changedPixels": 0
+    },
+    "fresh-baseline-native-attempt02 checkbox fresh-candidate-native": {
+      "roi": [
+        38,
+        192,
+        76,
+        230
+      ],
+      "changedPixels": 0
+    }
+  },
+  "limits": [
+    "Selected captures remap focus declarations into diagnostic class; not actual active-window focus.",
+    "Natural candidates compared with JPEG/ICC original; no glyph font identity or exact equality claim.",
+    "Original gold caret exclusion is identical across natural candidates; no alignment or resizing.",
+    "Fixture cancellation increments callback without unmounting; input and Escape events are scripted DOM operations.",
+    "First restricted helper launch failed; preserved separately; three narrow-authorized launches succeeded.",
+    "Source stage only; accurate new package and Computer Use remain pending."
+  ]
+}

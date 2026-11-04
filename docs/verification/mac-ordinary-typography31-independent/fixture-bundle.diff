@@ -1,0 +1,10 @@
+--- baseline-bundle
++++ candidate-bundle
+@@ -15262,6 +15262,7 @@
+   let key = 0;
+   window.mount = (options = {}) => {
+     window.events = { cancels: 0, saves: [] };
++    document.documentElement.classList.toggle("dark", !!options.dark);
+     document.getElementById("root").className = "app " + (options.mobile ? "mobile" : "desktop native-toolbar") + (options.dark ? " dark" : "");
+     reactDomExports.flushSync(() => root.render(/* @__PURE__ */ jsxRuntimeExports.jsx(SmartFolderForm, { mobile: false, catalog: ["校准"], onHandle: () => {
+     }, ...options, onCancel: () => {
