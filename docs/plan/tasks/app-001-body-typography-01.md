@@ -1,7 +1,7 @@
 ---
 id: app-001-body-typography-01
 scope: mac-main-ordinary-paragraph-size-calibration
-status: in-progress
+status: awaiting-review
 depends-on: []
 ---
 
@@ -25,3 +25,7 @@ depends-on: []
 候选仅 `.desktop.native-toolbar:not(.separate) .note-document .tiptap > p`；13px/17.22px/17.22px，不改祖先字号、系统字体栈、正文内距或transform。实际CSS cascade核对Mac普通段落及带mark继承，并核对手机、宽Android、独立窗、标题/列表/表格/引用/pre不会命中。优先使用已有检查设施，不写仅搜索字符串的同构测试。pnpm build和适当真实渲染样本（已有浏览器设施可用时）检查；不能用Chromium结果冒充AppKit/WebKit或字体身份。
 
 候选提交后由另一代理独审。root合入后新Mac包实际截图，与同三行、同画布/分栏的原版比较行宽、字形框和多行advance；若更差则修改候选，禁止scaleX/配准/缩放掩盖差异。保存原始失败与限制。源码通过不足以关闭运行验收，父目标保持active。
+
+## delivery
+
+产品仅style.css新增6行：精确选择器限定Mac native-toolbar非独立窗note-document内顶层p，13px/17.22px/17.22px。没有改祖先、字体栈、内距、transform、schema或数据。复用已安装Playwright/Chrome离线headless设施，真实createEditorExtensions/Editor生成JSON格式样本，加载完整生产基线/候选CSS，4上下文实际computed对照通过：Mac普通/空段与9种mark继承，手机/宽Android/独立窗不命中，标题/列表/清单/表格/引用/pre/附件等12排除样本及祖先/日期不变，文档JSON不变。pnpm build exit0，既有大chunk提示保留。证据与限制见 `docs/verification/app-001-body-typography-01/README.md`；没有Mac WebKit/AppKit/原版字体或像素结论，等待不同作者审查与root新包真实截图。

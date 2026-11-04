@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "at": "2026-11-04T06:04:20.581508+00:00",
+  "baseline": "e44dba736e377ea7abd2969f6c9ea1a5b24b3cc4",
+  "product": [
+    {
+      "path": "src/style.css",
+      "bytes": 65886,
+      "sha256": "75227796447c2f1404d5bb6e11f5c4663d53035d6cd343c288d92f6302f18bf7"
+    }
+  ],
+  "checkScript": {
+    "path": "scripts/check-body-typography-browser.mjs",
+    "bytes": 11029,
+    "sha256": "bb5047e81b4f96d2c618af9238c66ab928aec401768a732904ef06e14455cc74"
+  },
+  "evidenceFiles": [
+    {
+      "path": "docs/verification/app-001-body-typography-01/README.md",
+      "bytes": 4902,
+      "sha256": "3a51c2e8ada14610fef9388075aa395c06f5c7cbaec5d0e80be0557e0ace2584"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/frontend-build.json",
+      "bytes": 375,
+      "sha256": "a6028e16c7ab44720d45c0b35b159cac85027e557fe207505ac7ae856b343bc3"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/frontend-build.txt",
+      "bytes": 760,
+      "sha256": "495ac34defb417fb1b2659d280f44fcafd0f04425cf7d41780d6ec169635fb74"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run01/independent.json",
+      "bytes": 63033,
+      "sha256": "e38131f764e6dbbc5cc2d728384784e3f1b1191f41b96aa6bd18fc4255b972b0"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run01/mac-main.json",
+      "bytes": 63011,
+      "sha256": "801521f9fa3bc5fb806550df90e0a1180a63440796808f71dfa07789c3c66018"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run01/phone.json",
+      "bytes": 62992,
+      "sha256": "55ff9e17d07f2d55f7d00b1fae76cb066f467114a4de703ca8b55ea68ce85eff"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run01/result.json",
+      "bytes": 1314,
+      "sha256": "30f3f0c739fde6b5bbc29b0e68d8b3281c565d427b8c4787d32dfe8a93fb20f9"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run01/wide-android.json",
+      "bytes": 63011,
+      "sha256": "9e1833750aa3168e5c5bd2887569543611e257dfae5da63be474e943c43592c3"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run01-command.json",
+      "bytes": 795,
+      "sha256": "2b05f5b02080f873671fa22e95ad62d7d983ca80aa1150d426bb0bf964f13be4"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run01.txt",
+      "bytes": 851,
+      "sha256": "385e70f2cec78fababbf55009e6e107ebdcb5c679f715c6c9dd747a7d03b7339"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run02/independent.json",
+      "bytes": 63033,
+      "sha256": "e38131f764e6dbbc5cc2d728384784e3f1b1191f41b96aa6bd18fc4255b972b0"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run02/mac-main.json",
+      "bytes": 63011,
+      "sha256": "801521f9fa3bc5fb806550df90e0a1180a63440796808f71dfa07789c3c66018"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run02/phone.json",
+      "bytes": 62992,
+      "sha256": "55ff9e17d07f2d55f7d00b1fae76cb066f467114a4de703ca8b55ea68ce85eff"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run02/result.json",
+      "bytes": 1314,
+      "sha256": "30f3f0c739fde6b5bbc29b0e68d8b3281c565d427b8c4787d32dfe8a93fb20f9"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run02/wide-android.json",
+      "bytes": 63011,
+      "sha256": "9e1833750aa3168e5c5bd2887569543611e257dfae5da63be474e943c43592c3"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run02-command.json",
+      "bytes": 1131,
+      "sha256": "b0479153fca7174d5d6598444cdb2134a6266750f0100fe98eb14ae1102c39c9"
+    },
+    {
+      "path": "docs/verification/app-001-body-typography-01/render-run02.txt",
+      "bytes": 851,
+      "sha256": "385e70f2cec78fababbf55009e6e107ebdcb5c679f715c6c9dd747a7d03b7339"
+    }
+  ],
+  "evidenceAggregateAlgorithm": "sha256 of sha256 + two spaces + relative path + newline, path sorted, excludes this identity file",
+  "evidenceAggregate": "b08f04836fcf9bc9f96ee631109fa8c469bd0360214aaf49f9793e4a872759e0",
+  "freeBytesAfter": 3025592320,
+  "limits": "CSS experiment; headless Chromium computed cascade and frontend build only, not Mac WebKit or original font/pixel acceptance."
+}
