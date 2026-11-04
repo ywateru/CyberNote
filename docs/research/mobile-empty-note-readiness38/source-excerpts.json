@@ -1,0 +1,227 @@
+{
+  "scope": "Read-only exact current sources; no application execution or SQL/device traces",
+  "files": [
+    {
+      "path": "src/App.tsx",
+      "bytes": 179881,
+      "sha256": "d7b20f13b2ee076ab2708c0e837be60f8b2387a2bdeccc6d2fa8ae9e06526911",
+      "excerpts": [
+        {
+          "startLine": 993,
+          "endLine": 1000,
+          "text": "993:   const flush = useCallback(async () => {\n994:     await Promise.all([...queues.current.values()]);\n995:     if (pendingDocs.current.size || saveFailures.current.size)\n996:       throw Error(\n997:         \"还有未确认保存的更改；锁定未执行，请保持窗口打开并重试编辑保存。\",\n998:       );\n999:   }, []);\n1000:   const refresh = useCallback(async () => {"
+        },
+        {
+          "startLine": 1059,
+          "endLine": 1118,
+          "text": "1059:   const saveDoc = useCallback(\n1060:     (id: string, doc: JSONContent) => {\n1061:       if (blockedNotes.current.has(id)) {\n1062:         const error = Error(\"备忘录正在同步锁定状态\");\n1063:         fail(error);\n1064:         return Promise.resolve<SaveOutcome>({ saved: false, error });\n1065:       }\n1066:       const ticket = registerSaveIntent(id);\n1067:       void ticket.catch(() => {}); // The queued save handles and retains registration failures.\n1068:       pendingDocs.current.set(id, doc);\n1069:       const text = documentText(doc);\n1070:       const updatedAt = Date.now();\n1071:       const optimistic = (prev: Workspace): Workspace => ({\n1072:         ...prev,\n1073:         notes: prev.notes.map((n) =>\n1074:           n.id === id\n1075:             ? {\n1076:                 ...n,\n1077:                 document: doc,\n1078:                 plainText: text,\n1079:                 title: text.split(\"\\n\")[0] || \"新备忘录\",\n1080:                 updatedAt,\n1081:               }\n1082:             : n,\n1083:         ),\n1084:       });\n1085:       // A fast local/IPC ACK may precede React's render. Hydration must compare\n1086:       // against this own submitted body rather than invent an external change.\n1087:       wsRef.current = optimistic(wsRef.current);\n1088:       setWs(optimistic);\n1089:       setSaving((v) => v + 1);\n1090:       const next = enqueueSave(\n1091:         queues.current.get(id),\n1092:         async () => {\n1093:           const delivery = await action<Note>({\n1094:             type: \"saveNote\",\n1095:             id,\n1096:             saveIntent: await ticket,\n1097:             document: doc,\n1098:             revision: revisions.current.expected(id),\n1099:           });\n1100:           if (!delivery.accessAccepted) throw new AccessChanged();\n1101:           const revision =\n1102:             delivery.receipt?.changes.find(\n1103:               (change) => change.kind === \"note\" && change.id === id,\n1104:             )?.revision ?? delivery.value?.revision;\n1105:           if (revision === undefined) throw Error(\"后端未提供保存回执\");\n1106:           // Only the submitted body is used privately for attachment ACK. A stale\n1107:           // server document never publishes through the save response.\n1108:           revisions.current.confirmed(id, revision);\n1109:           for (const submission of attachmentSubmissions.current.values())\n1110:             submission.acknowledge(id, doc);\n1111:           ocrOperation.current?.acknowledgeDocument(id, doc);\n1112:           if (pendingDocs.current.get(id) === doc) {\n1113:             pendingDocs.current.delete(id);\n1114:             saveFailures.current.delete(id);\n1115:           }\n1116:           setWs((prev) => ({\n1117:             ...prev,\n1118:             notes: prev.notes.map((old) =>"
+        },
+        {
+          "startLine": 1697,
+          "endLine": 1745,
+          "text": "1697:   const createNote = useCallback(\n1698:     async (validate?: () => void) => {\n1699:       try {\n1700:         await flush();\n1701:         validate?.();\n1702:         const fid = isPhysicalOwner(\n1703:           wsRef.current.folders.find((f) => f.id === folderId),\n1704:         )\n1705:           ? folderId\n1706:           : \"default\";\n1707:         const created = await action<Note & Pick<Workspace, \"access\">>({\n1708:           type: \"createNote\",\n1709:           folderId: fid,\n1710:         });\n1711:         const createdId = created.receipt?.createdId ?? created.value?.id;\n1712:         if (!createdId) throw Error(\"后端未提供新建收据\");\n1713:         if (created.maintenanceError) fail(created.maintenanceError);\n1714:         // Keep the successful unique ID even if its snapshot is stale. Never\n1715:         // issue create again; only authoritative data can activate the editor.\n1716:         const data = await metadataRefreshRef.current();\n1717:         const n = data?.notes.find((note) => note.id === createdId);\n1718:         if (!n || !accessGate.state?.notes[createdId]?.authorized) {\n1719:           setNotice(\"备忘录已经创建，列表同步后可查看\");\n1720:           return;\n1721:         }\n1722:         revisions.current.confirmed(n.id, n.revision);\n1723:         clearTagComposition();\n1724:         setTagFilter(undefined);\n1725:         setFolderId(fid);\n1726:         setFilter(\"\");\n1727:         setNoteId(n.id);\n1728:         setPage(\"editor\");\n1729:         setGalleryEditor(true);\n1730:         setMenu(null);\n1731:         setQuery(\"\");\n1732:         setSearching(false);\n1733:         setEditing(true);\n1734:         updateSettings({ selectedFolder: fid, selectedNote: n.id });\n1735:         setTimeout(\n1736:           () => document.querySelector<HTMLElement>(\".tiptap\")?.focus(),\n1737:           100,\n1738:         );\n1739:       } catch (e) {\n1740:         fail(e);\n1741:       }\n1742:     },\n1743:     [fail, flush, folderId, updateSettings, clearTagComposition],\n1744:   );\n1745:   const newNote = useCallback(() => createNote(), [createNote]);"
+        },
+        {
+          "startLine": 1820,
+          "endLine": 1865,
+          "text": "1820:   const back = () => {\n1821:     setMenu(null);\n1822:     setEditing(false);\n1823:     setShowFind(false);\n1824:     if (!mobile && view === \"gallery\" && galleryEditor) setGalleryEditor(false);\n1825:     else if (separate && native) getCurrentWindow().close();\n1826:     else if (page === \"editor\") setPage(\"notes\");\n1827:     else {\n1828:       setPage(\"folders\");\n1829:       setSearching(false);\n1830:       setQuery(\"\");\n1831:       setFilter(\"\");\n1832:     }\n1833:   };\n1834:   const androidBack = useRef<() => void>(() => {});\n1835:   androidBack.current = () => {\n1836:     if (folderForm) folderFormHandle.current?.cancel();\n1837:     else if (ocrOperation.current) void cancelOcr().catch(fail);\n1838:     else if (modal === \"paper\") closePaper();\n1839:     else if (modal) setModal(null);\n1840:     else if (menu === \"format\") closeFormat(false);\n1841:     else if (menu) setMenu(null);\n1842:     else if (draw) setDraw(null);\n1843:     else if (record) void cancelRecording().catch(fail);\n1844:     else if (showFind) setShowFind(false);\n1845:     else if (searching) {\n1846:       setSearching(false);\n1847:       setQuery(\"\");\n1848:     } else if (\n1849:       editor?.isFocused &&\n1850:       viewportHeight.current - window.innerHeight > 120\n1851:     ) {\n1852:       editor.commands.blur();\n1853:       keyboard(false);\n1854:       setEditing(false);\n1855:     } else if (page !== \"folders\") back();\n1856:     else {\n1857:       flush()\n1858:         .then(() => {\n1859:           if (!pendingDocs.current.size) void exit(0);\n1860:           else setError(\"还有未保存的更改，请重试保存。\");\n1861:         })\n1862:         .catch(fail);\n1863:     }\n1864:   };\n1865:   useEffect(() => {"
+        },
+        {
+          "startLine": 4104,
+          "endLine": 4121,
+          "text": "4104:         <div className=\"folder-footer\">\n4105:           <button\n4106:             aria-label=\"新建文件夹\"\n4107:             onClick={() => openModal(\"newFolder\")}\n4108:           >\n4109:             {mobile ? <MobileAddFolderIcon /> : <FolderPlus size={21} />}\n4110:             {!mobile && \"新建文件夹\"}\n4111:           </button>\n4112:           <IconButton\n4113:             label={mobile ? \"新建备忘录\" : \"更多设置\"}\n4114:             onClick={\n4115:               mobile ? newNote : () => setMenu(menu === \"app\" ? null : \"app\")\n4116:             }\n4117:           >\n4118:             {mobile ? <SquarePen /> : <MoreHorizontal />}\n4119:           </IconButton>\n4120:         </div>\n4121:       </aside>"
+        },
+        {
+          "startLine": 4359,
+          "endLine": 4367,
+          "text": "4359:             })\n4360:           )}\n4361:         </div>\n4362:         <div className=\"notes-footer\">\n4363:           <span>{listed.length}个备忘录</span>\n4364:           <IconButton label=\"新建备忘录\" onClick={newNote}>\n4365:             <SquarePen />\n4366:           </IconButton>\n4367:         </div>"
+        },
+        {
+          "startLine": 4553,
+          "endLine": 4573,
+          "text": "4553:           ]),\n4554:         ].map((id) => {\n4555:           const note = ws.notes.find((candidate) => candidate.id === id);\n4556:           if (\n4557:             !note ||\n4558:             note.deletedAt ||\n4559:             (note.locked && !unlocked.has(note.id))\n4560:           )\n4561:             return null;\n4562:           return (\n4563:             <SearchEditorHost\n4564:               key={`${note.id}-${ws.access?.sessionId || \"preview\"}-${ws.access?.notes[note.id]?.epoch || 0}-${externalVersions.current.get(note.id) || 0}`}\n4565:               note={note}\n4566:               active={note.id === noteId}\n4567:               blocked={blockedNotes.current.has(note.id)}\n4568:               gate={editorGate}\n4569:               onChange={saveEditorDoc}\n4570:               onReady={onReady}\n4571:               onDate={() => setNotice(`创建于 ${fmtDate(note.createdAt)}`)}\n4572:               onFocus={(focused) => {\n4573:                 setEditing(focused);"
+        },
+        {
+          "startLine": 4406,
+          "endLine": 4415,
+          "text": "4406:                 e.preventDefault();\n4407:             }}\n4408:           >\n4409:             {mobile ? (\n4410:               <>\n4411:                 <button className=\"back-button\" onClick={back}>\n4412:                   <ChevronLeft />\n4413:                   {searching ? \"搜索\" : folderLabel}\n4414:                 </button>\n4415:                 <div className=\"mobile-header-actions\">"
+        }
+      ]
+    },
+    {
+      "path": "src/Editor.tsx",
+      "bytes": 11962,
+      "sha256": "43c332456c159b5951345b3d2244996154a54065e25dfee355f27e8d3586fc32",
+      "excerpts": [
+        {
+          "startLine": 287,
+          "endLine": 301,
+          "text": "287: export default function NoteEditor({\n288:   note,\n289:   onChange,\n290:   onReady,\n291:   onFocus,\n292: }: {\n293:   note: Note;\n294:   onChange: (id: string, doc: JSONContent) => void;\n295:   onReady: (e: Editor | null) => void;\n296:   onFocus: (focus: boolean) => void;\n297: }) {\n298:   const untouched = useRef(note.revision === 0);\n299:   const ref = useRef(onChange);\n300:   ref.current = onChange;\n301:   const editor = useEditor({"
+        },
+        {
+          "startLine": 318,
+          "endLine": 333,
+          "text": "318:       },\n319:       handlePaste: (view, event) => {\n320:         const clipboard = event.clipboardData;\n321:         const doc = view.state.doc;\n322:         // The first explicit plain-text paste into an untouched empty note is\n323:         // body text. Rich HTML and existing documents keep normal paste rules.\n324:         if (\n325:           !untouched.current ||\n326:           !clipboard ||\n327:           clipboard.getData(\"text/html\") ||\n328:           !Array.from(clipboard.types).includes(\"text/plain\") ||\n329:           doc.childCount !== 1 ||\n330:           ![\"heading\", \"paragraph\"].includes(doc.firstChild!.type.name) ||\n331:           doc.firstChild!.content.size\n332:         )\n333:           return false;"
+        },
+        {
+          "startLine": 360,
+          "endLine": 366,
+          "text": "360:     onUpdate: ({ editor: e }) => {\n361:       untouched.current = false;\n362:       ref.current(note.id, editorSaveSnapshot(e.getJSON()));\n363:     },\n364:     onFocus: () => onFocus(true),\n365:     onBlur: () => onFocus(false),\n366:   });"
+        }
+      ]
+    },
+    {
+      "path": "src/bridge.ts",
+      "bytes": 18044,
+      "sha256": "729f7dc797abb762a9382f106b1fad103335e27346e598d9b18c37a2785672fd",
+      "excerpts": [
+        {
+          "startLine": 254,
+          "endLine": 280,
+          "text": "254: export async function action<T = Workspace>(\n255:   a: Record<string, unknown>,\n256: ): Promise<ActionDelivery<T>> {\n257:   if (native) {\n258:     const stamp = accessGate.stamp(typeof a.id === \"string\" ? a.id : undefined);\n259:     const transition = [\n260:       \"lockNote\",\n261:       \"unlockNote\",\n262:       \"removeLock\",\n263:       \"closeLocks\",\n264:       \"deleteNote\",\n265:       \"purgeNote\",\n266:       \"deleteFolder\",\n267:     ].includes(String(a.type));\n268:     return deliverAction<T>(\n269:       stamp,\n270:       a.type === \"saveNote\" ? \"save\" : transition ? \"transition\" : \"read\",\n271:       () =>\n272:         invoke<T>(\"workspace_action\", {\n273:           action: a,\n274:           expected: accessGate.expected(\n275:             a.type === \"recoverConflictCopy\" && typeof a.id === \"string\"\n276:               ? a.id\n277:               : undefined,\n278:           ),\n279:         }),\n280:     );"
+        },
+        {
+          "startLine": 344,
+          "endLine": 363,
+          "text": "344:     case \"createNote\": {\n345:       const note: Note = {\n346:         id: secureId(),\n347:         folderId: String(a.folderId || \"default\"),\n348:         document: structuredClone(blankDoc),\n349:         title: \"新备忘录\",\n350:         plainText: \"\",\n351:         createdAt: Date.now(),\n352:         updatedAt: Date.now(),\n353:         pinned: false,\n354:         deletedAt: null,\n355:         originalFolderId: null,\n356:         locked: false,\n357:         paperStyle: \"plain\",\n358:         revision: 0,\n359:       };\n360:       preview.notes.unshift(note);\n361:       result = note;\n362:       break;\n363:     }"
+        },
+        {
+          "startLine": 434,
+          "endLine": 449,
+          "text": "434:     case \"unlockNote\":\n435:     case \"removeLock\":\n436:       throw Error(\"笔记加密需在已安装的 Mac/Android 应用中使用\");\n437:   }\n438:   persist();\n439:   if (a.type !== \"settings\") previewSequence++;\n440:   const value = structuredClone(result || preview) as T;\n441:   const current = await loadWorkspace();\n442:   const createdId = [\n443:     \"createNote\",\n444:     \"createFolder\",\n445:     \"createSmartFolder\",\n446:     \"recoverConflictCopy\",\n447:   ].includes(String(a.type))\n448:     ? (value as { id?: string }).id\n449:     : undefined;"
+        }
+      ]
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "bytes": 16585,
+      "sha256": "89e8438d82eb5735908e388eb7231af8deb01b754ff0bb628fb7900233ce5790",
+      "excerpts": [
+        {
+          "startLine": 103,
+          "endLine": 124,
+          "text": "103: async fn mutate(\n104:     app: tauri::AppHandle,\n105:     state: &AppState,\n106:     window: &str,\n107:     action: Value,\n108:     expected: Token,\n109: ) -> Result<Value> {\n110:     if action[\"type\"] == \"saveNote\" {\n111:         return session_command(&app, state, |session| session.save(window, action));\n112:     }\n113:     if !Session::requires_barrier(&action) {\n114:         let mut session = state.0 .0.lock().map_err(|_| failure(\"数据锁错误\"))?;\n115:         let result = session.ordinary(action, &expected);\n116:         let metadata = session.take_metadata_event();\n117:         drop(session);\n118:         if let Ok((_, Some(event))) = &result {\n119:             let _ = app.emit(\"notes-access\", event);\n120:         }\n121:         if let Some(event) = metadata {\n122:             let _ = app.emit(\"notes-metadata\", event);\n123:         }\n124:         return result.map(|(value, _)| value);"
+        },
+        {
+          "startLine": 182,
+          "endLine": 192,
+          "text": "182: #[tauri::command]\n183: async fn workspace_action(\n184:     action: Value,\n185:     expected: Token,\n186:     window: tauri::WebviewWindow,\n187:     app: tauri::AppHandle,\n188:     state: State<'_, AppState>,\n189: ) -> Result<Value> {\n190:     mutate(app, &state, window.label(), action, expected).await\n191: }\n192: #[tauri::command]"
+        }
+      ]
+    },
+    {
+      "path": "src-tauri/src/session.rs",
+      "bytes": 19613,
+      "sha256": "b0751c3f0cf52f9cccea343812b96dc4c107fe250d99f7e3b34f64ca381980b6",
+      "excerpts": [
+        {
+          "startLine": 325,
+          "endLine": 350,
+          "text": "325:     pub fn ordinary(&mut self, action: Value, token: &Token) -> Result<(Value, Option<Value>)> {\n326:         if matches!(\n327:             action[\"type\"].as_str(),\n328:             Some(\"createSmartFolder\" | \"updateSmartFolder\" | \"deleteSmartFolder\")\n329:         ) {\n330:             return self.smart_action(action, token).map(|value| (value, None));\n331:         }\n332:         self.prepare_metadata(Self::changes_facts(&action))?;\n333:         self.check(token, None)?;\n334:         if self.pending.is_some() {\n335:             return Err(denied(\"锁定状态正在同步，请稍候\"));\n336:         }\n337:         if Self::requires_barrier(&action) {\n338:             return Err(denied(\"此操作需要所有窗口确认保存\"));\n339:         }\n340:         let unlock = action[\"type\"] == \"unlockNote\";\n341:         let id = action[\"id\"].as_str().unwrap_or_default().to_string();\n342:         if action[\"type\"] == \"recoverConflictCopy\" {\n343:             self.sensitive(&id, token)?;\n344:         }\n345:         let result = self.apply_store(|store| store.action(action));\n346:         let value = self.finish_value(result)?;\n347:         if !unlock {\n348:             return Ok((value, None));\n349:         }\n350:         let event = if unlock {"
+        }
+      ]
+    },
+    {
+      "path": "src-tauri/src/store.rs",
+      "bytes": 51651,
+      "sha256": "0417df9969f30577c0e835fcae915e0296f402b5db89dcaa34544ca07246daba",
+      "excerpts": [
+        {
+          "startLine": 80,
+          "endLine": 82,
+          "text": "80: fn empty_doc() -> Value {\n81:     json!({\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1}}]})\n82: }"
+        },
+        {
+          "startLine": 99,
+          "endLine": 117,
+          "text": "99: pub struct Note {\n100:     pub id: String,\n101:     pub folder_id: String,\n102:     pub document: Value,\n103:     pub title: String,\n104:     pub plain_text: String,\n105:     pub created_at: i64,\n106:     pub updated_at: i64,\n107:     pub pinned: bool,\n108:     pub deleted_at: Option<i64>,\n109:     pub original_folder_id: Option<String>,\n110:     pub locked: bool,\n111:     pub paper_style: String,\n112:     pub revision: i64,\n113:     #[serde(default)]\n114:     pub sealed: Option<Value>,\n115: }\n116: #[derive(Clone, Serialize, Deserialize, PartialEq, Eq)]\n117: #[serde(rename_all = \"camelCase\", try_from = \"AttachmentRecord\")]"
+        },
+        {
+          "startLine": 244,
+          "endLine": 252,
+          "text": "244:     fn put_note(&mut self, n: &Note) -> Result<()> {\n245:         self.db.execute(\n246:             \"INSERT OR REPLACE INTO notes(id,folder_id,body,revision)VALUES(?1,?2,?3,?4)\",\n247:             params![n.id, n.folder_id, serde_json::to_string(n)?, n.revision],\n248:         )?;\n249:         self.committed(\"note\", &n.id, Some(n.revision));\n250:         Ok(())\n251:     }\n252:     fn visible(&self, mut n: Note) -> Result<Note> {"
+        },
+        {
+          "startLine": 391,
+          "endLine": 414,
+          "text": "391:             \"createNote\" => {\n392:                 let folder_id = a[\"folderId\"].as_str().unwrap_or(\"default\");\n393:                 let f = self.folder(folder_id)?;\n394:                 smart::require_live_owner(&f)?;\n395:                 let n = Note {\n396:                     id: id(),\n397:                     folder_id: folder_id.into(),\n398:                     document: empty_doc(),\n399:                     title: \"新备忘录\".into(),\n400:                     plain_text: \"\".into(),\n401:                     created_at: now(),\n402:                     updated_at: now(),\n403:                     pinned: false,\n404:                     deleted_at: None,\n405:                     original_folder_id: None,\n406:                     locked: false,\n407:                     paper_style: \"plain\".into(),\n408:                     revision: 0,\n409:                     sealed: None,\n410:                 };\n411:                 self.put_note(&n)?;\n412:                 self.created(&n.id);\n413:                 return Ok(json!(n));\n414:             }"
+        },
+        {
+          "startLine": 415,
+          "endLine": 440,
+          "text": "415:             \"saveNote\" => {\n416:                 let nid = str_field(&a, \"id\")?;\n417:                 let mut n = self.note(nid)?;\n418:                 if n.deleted_at.is_some() {\n419:                     return Err(err(\"deleted\", \"此备忘录已移到最近删除\"));\n420:                 }\n421:                 let rev = a[\"revision\"]\n422:                     .as_i64()\n423:                     .ok_or_else(|| err(\"invalid\", \"缺少保存版本\"))?;\n424:                 if n.revision != rev {\n425:                     return Err(err(\"conflict\", \"备忘录已更改，请重新打开后重试\"));\n426:                 }\n427:                 let document = a\n428:                     .get(\"document\")\n429:                     .ok_or_else(|| err(\"invalid\", \"缺少文档\"))?\n430:                     .clone();\n431:                 self.validate_document(&document, &n)?;\n432:                 let text = doc_text(&document);\n433:                 n.title = text\n434:                     .lines()\n435:                     .next()\n436:                     .filter(|x| !x.trim().is_empty())\n437:                     .unwrap_or(\"新备忘录\")\n438:                     .chars()\n439:                     .take(150)\n440:                     .collect();"
+        },
+        {
+          "startLine": 841,
+          "endLine": 860,
+          "text": "841: pub fn doc_text(doc: &Value) -> String {\n842:     fn walk(v: &Value, out: &mut String) {\n843:         if let Some(t) = v[\"text\"].as_str() {\n844:             out.push_str(t)\n845:         }\n846:         if let Some(items) = v[\"content\"].as_array() {\n847:             for c in items {\n848:                 walk(c, out)\n849:             }\n850:         }\n851:         if [\"paragraph\", \"heading\", \"listItem\", \"taskItem\", \"tableRow\"]\n852:             .contains(&v[\"type\"].as_str().unwrap_or(\"\"))\n853:         {\n854:             out.push('\\n')\n855:         }\n856:     }\n857:     let mut out = String::new();\n858:     walk(doc, &mut out);\n859:     out.trim_end().into()\n860: }"
+        },
+        {
+          "startLine": 977,
+          "endLine": 1000,
+          "text": "977:     fn persistence_conflicts_delete_restore() {\n978:         let t = tempfile::tempdir().unwrap();\n979:         let nid;\n980:         {\n981:             let mut s = Store::open(t.path()).unwrap();\n982:             let n = s.action(json!({\"type\":\"createNote\"})).unwrap();\n983:             nid = n[\"id\"].as_str().unwrap().to_string();\n984:             s.action(json!({\"type\":\"saveNote\",\"id\":nid,\"revision\":0,\"document\":sample()}))\n985:                 .unwrap();\n986:             assert_eq!(\n987:                 s.action(json!({\"type\":\"saveNote\",\"id\":nid,\"revision\":0,\"document\":sample()}))\n988:                     .unwrap_err()\n989:                     .code,\n990:                 \"conflict\"\n991:             );\n992:             s.action(json!({\"type\":\"deleteNote\",\"id\":nid})).unwrap();\n993:             assert_eq!(s.note(&nid).unwrap().folder_id, \"trash\");\n994:             s.action(json!({\"type\":\"restoreNote\",\"id\":nid})).unwrap();\n995:         }\n996:         let s = Store::open(t.path()).unwrap();\n997:         assert_eq!(s.note(&nid).unwrap().document, sample());\n998:         assert_eq!(s.note(&nid).unwrap().folder_id, \"default\");\n999:         assert_eq!(s.folders().unwrap().len(), 3);\n1000:     }"
+        }
+      ]
+    },
+    {
+      "path": "src/types.ts",
+      "bytes": 3294,
+      "sha256": "0bba2d1b9c0f46388d4a8a7b643e826517faf0e1b4018d947526b737c427a159",
+      "excerpts": [
+        {
+          "startLine": 29,
+          "endLine": 45,
+          "text": "29: export interface Note {\n30:   id: string;\n31:   folderId: string;\n32:   document: JSONContent;\n33:   title: string;\n34:   plainText: string;\n35:   createdAt: number;\n36:   updatedAt: number;\n37:   pinned: boolean;\n38:   deletedAt: number | null;\n39:   originalFolderId: string | null;\n40:   locked: boolean;\n41:   paperStyle: string;\n42:   revision: number;\n43:   sealed?: unknown;\n44: }\n45: export interface Attachment {"
+        }
+      ]
+    },
+    {
+      "path": "src/smart-folders.ts",
+      "bytes": 7196,
+      "sha256": "22a5e1b8b4767cb1a74df5ab9cc680c8aef3f4b62b0ddac72746006fa8d85d53",
+      "excerpts": [
+        {
+          "startLine": 184,
+          "endLine": 227,
+          "text": "184: export function projectFolders(\n185:   workspace: Workspace,\n186:   suspended: readonly string[] = [],\n187:   sort: Settings[\"sort\"] = \"updated\",\n188: ): Map<string, FolderProjection> {\n189:   const blocked = new Set([\n190:     ...suspended,\n191:     ...(workspace.access?.suspended || []),\n192:   ]);\n193:   const ordered = sortNotes(workspace.notes, sort);\n194:   const facts = new Map(\n195:     ordered.map((note) => [\n196:       note.id,\n197:       {\n198:         eligible: note.deletedAt === null && !blocked.has(note.id),\n199:         pinned: note.pinned,\n200:         tags: note.locked ? null : documentTags(note.document),\n201:       },\n202:     ]),\n203:   );\n204:   const result = new Map<string, FolderProjection>();\n205:   const add = (id: string, notes: readonly Note[], revision?: number) => {\n206:     const ids = notes.map((n) => n.id);\n207:     result.set(id, {\n208:       ids,\n209:       count: ids.length,\n210:       firstId: ids[0] ?? null,\n211:       ...(revision === undefined ? {} : { definitionRevision: revision }),\n212:     });\n213:   };\n214:   add(\n215:     \"all\",\n216:     ordered.filter((n) => n.deletedAt === null),\n217:   );\n218:   for (const folder of workspace.folders)\n219:     add(\n220:       folder.id,\n221:       ordered.filter((note) =>\n222:         folder.kind === \"smart\"\n223:           ? matchesSmart(folder.query, facts.get(note.id)!)\n224:           : note.folderId === folder.id,\n225:       ),\n226:       folder.kind === \"smart\" ? folder.definitionRevision : undefined,\n227:     );"
+        }
+      ]
+    },
+    {
+      "path": "src-tauri/src/session/metadata.rs",
+      "bytes": 13781,
+      "sha256": "76b571060e87bbf4a12961430793d6897128852930de22b258111c19b07b0cdc",
+      "excerpts": [
+        {
+          "startLine": 117,
+          "endLine": 141,
+          "text": "117:     }\n118:     fn note(session: &mut Session) -> String {\n119:         let token = token(session, None);\n120:         session\n121:             .ordinary(json!({\"type\":\"createNote\"}), &token)\n122:             .unwrap()\n123:             .0[\"id\"]\n124:             .as_str()\n125:             .unwrap()\n126:             .into()\n127:     }\n128:     #[test]\n129:     fn actual_receipts_sequence_noops_and_event_privacy() {\n130:         let temp = tempfile::tempdir().unwrap();\n131:         let mut session = Session::new(Store::open(temp.path()).unwrap());\n132:         let id = note(&mut session);\n133:         assert_eq!(session.metadata()[\"sequence\"], 1);\n134:         let event = session.take_metadata_event().unwrap();\n135:         assert_eq!(\n136:             event\n137:                 .as_object()\n138:                 .unwrap()\n139:                 .keys()\n140:                 .cloned()\n141:                 .collect::<HashSet<_>>(),"
+        }
+      ]
+    },
+    {
+      "path": "src-tauri/src/store/attachment_operations/tests.rs",
+      "bytes": 21397,
+      "sha256": "f68c4e41dc35d5ee61b2db9e1a20937cef5efdadd2c521c791d81216814452b4",
+      "excerpts": [
+        {
+          "startLine": 222,
+          "endLine": 265,
+          "text": "222: fn cancel_is_narrow_repeatable_and_committed_documents_are_preserved() {\n223:     let (_dir, mut store, note, owner) = fixture();\n224:     let old = legacy(&mut store, &note);\n225:     let op = id();\n226:     let a = attachment(&put(&mut store, &op, &note, &owner));\n227:     assert_eq!(\n228:         store\n229:             .cancel_attachment_operation(&op, &note, &owner)\n230:             .unwrap()[\"status\"],\n231:         \"aborted\"\n232:     );\n233:     assert_eq!(\n234:         store\n235:             .cancel_attachment_operation(&op, &note, &owner)\n236:             .unwrap()[\"status\"],\n237:         \"aborted\"\n238:     );\n239:     assert!(!store.attachment_path(&a.relative_path).unwrap().exists());\n240:     assert!(!store.attachments().unwrap().contains(&a));\n241:     assert_legacy(&store, &old);\n242:     let committed = id();\n243:     let a = attachment(&put(&mut store, &committed, &note, &owner));\n244:     save(&mut store, &note, doc(&a));\n245:     assert_eq!(\n246:         store\n247:             .query_attachment_operation(&committed, &note, &owner)\n248:             .unwrap()[\"status\"],\n249:         \"committed\"\n250:     );\n251:     assert_eq!(\n252:         store\n253:             .cancel_attachment_operation(&committed, &note, &owner)\n254:             .unwrap()[\"status\"],\n255:         \"committed\"\n256:     );\n257:     assert!(store.attachment_path(&a.relative_path).unwrap().exists());\n258:     // Historical successful commits remain terminal even after a later real edit.\n259:     save(&mut store, &note, empty_doc());\n260:     assert_eq!(\n261:         store\n262:             .cancel_attachment_operation(&committed, &note, &owner)\n263:             .unwrap()[\"status\"],\n264:         \"committed\"\n265:     );"
+        }
+      ]
+    },
+    {
+      "path": "scripts/check-document-identity.mjs",
+      "bytes": 13744,
+      "sha256": "1f833f14898643ceadb8fcb40c87bd33ac3610730bad84a8aed012fbe9552a2f",
+      "excerpts": [
+        {
+          "startLine": 360,
+          "endLine": 389,
+          "text": "360:   await fn();\n361:   results.push({ name, status: \"pass\" });\n362: }\n363: await testAsync(\n364:   \"actual create -> first paper hydrate keeps accepted new note epoch and never clears editor\",\n365:   async () => {\n366:     const h = creationHarness();\n367:     await h.create();\n368:     assert.deepEqual(h.failures, []);\n369:     assert.deepEqual(h.selected, [\"created\"]);\n370:     assert.deepEqual(h.wsRef.current.access, h.response.access);\n371:     const beforeKey = keyFor(\n372:       h.wsRef.current.notes[0],\n373:       h.wsRef.current,\n374:       h.externalVersions,\n375:     );\n376:     const next = structuredClone(h.wsRef.current);\n377:     next.notes[0].document = reorder(next.notes[0].document);\n378:     next.notes[0].paperStyle = \"grid-large\";\n379:     next.notes[0].revision++;\n380:     h.hydrate(next);\n381:     assert.deepEqual(h.cleared, []);\n382:     assert.equal(h.externalVersions.current.size, 0);\n383:     assert.equal(\n384:       keyFor(h.wsRef.current.notes[0], h.wsRef.current, h.externalVersions),\n385:       beforeKey,\n386:     );\n387:   },\n388: );\n389: test(\"missing old authorization entry still triggers existing hydrate cleanup\", () => {"
+        }
+      ]
+    }
+  ]
+}
