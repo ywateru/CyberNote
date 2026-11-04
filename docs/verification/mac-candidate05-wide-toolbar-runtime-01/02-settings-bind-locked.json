@@ -1,0 +1,20 @@
+{
+  "recordType": "transcribed tool observation; not a fresh replay",
+  "dateLocal": "2026-11-04",
+  "action": "cua.getApp",
+  "target": "com.apple.systempreferences",
+  "requestedTimeoutMs": 15000,
+  "toolReportedElapsedSeconds": 0.3511,
+  "result": "The Mac is locked and automatic unlock could not unlock it. Ask the user to unlock the Mac manually before continuing.",
+  "userReplyBeforeAttempt": "允许，已完成本机认证",
+  "interpretation": "User consent and reported completion of local authentication are recorded; current grant state cannot be observed while locked.",
+  "actionsAfterFailure": {
+    "permissionUiOperated": false,
+    "permissionDatabaseModified": false,
+    "normalQuitAttempted": false,
+    "signalSent": false,
+    "candidate05LaunchAttempted": false,
+    "windowCaptured": false
+  },
+  "pendingUserInput": "manual unlock; screen permission consent is already explicit and is not requested again"
+}
