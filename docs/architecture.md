@@ -55,7 +55,7 @@ paperStyle 合法值为 plain、lines-small、lines-medium、lines-large、grid-
 | `query_attachment_operation` | operationId、noteId、expected | 同真实owner、当前合法授权查实际持久状态；不以renderer generation当后端身份 |
 | `cancel_attachment_operation` | operationId、noteId、expected | 只取消本操作安全未引用新文件；有权威引用则committed，有在途保存/身份不确定则deferred |
 | `read_attachment` | id、expected | Base64 data、mime、name及access；按附件真实归属note检查 |
-| `export_archive` | 本地 path、expected | 写版本1密文归档；屏障期间拒绝；标题仍可见 |
+| `export_archive` | 本地 path、expected | 当前写版本1；录音日期子任务接入后，有recordedAt写版本2、无日期可写1，详见下文；屏障期间拒绝；标题仍可见 |
 | `import_archive` | 本地 path、expected | 完整校验、冲突副本和设置恢复；先执行全部窗口保存屏障，成功清钥匙并更新epoch |
 
 当前搜索在前端对 Rust 载入的本地笔记正文与元数据做中文子串过滤，没有独立 FTS/search 命令。附件随永久删除清理，没有单独 remove_attachment 命令。MacShell/MobileShell 是概念边界，首轮均由 `src/App.tsx` 分支渲染，富编辑器在 `src/Editor.tsx`，原生存储在 `src-tauri/src/store.rs`。
