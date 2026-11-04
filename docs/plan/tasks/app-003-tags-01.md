@@ -42,6 +42,8 @@ depends-on: []
 
 独审 [static-01](../reviews/app-003-tags-static-01.md) 另有 P2：搜索建议 `filter=tags` 下新建没有清除此筛选，新空白笔记被排除而旧结果仍可能成为当前目标，属于源码状态推导，首轮未界面复现。同批局部修复并以真实 App 验证新建后目标和首次文字归属；新建失败保全原状态。
 
+candidate02 `a0989b354b539fc06d794f167cd97af615693d44` 独审另确证：同一真实 App/Editor 在单标签筛选内发生受控 DOM composition，出站投影成功保存，但失配后停车触发真实 blur，Editor 仍 composing 且后续实际键盘文字未进入正文。先按架构新增的局部活动组字保留边界窄修，保持结果投影真实、原目标/历史不变；真实结束后执行停车。必须覆盖单标签及所有标签、多个结果时不跳笔记、真实后续文字、结束后不可写、显式导航、普通无 composition 立即停车，以及 access prepare/abort 优先。受控 DOM composition 不能冒充原生中文输入法验收。不得为此放宽通用搜索停车、授权、保存/ACK 相等，或延迟保护屏障。冻结 candidate02 独审失败后再实施、冻结下一候选，交不同作者复验。
+
 ## verification
 
 执行现有依赖下 typecheck、真实 Editor schema crosscheck，以及有意义的生产边界检查。至少覆盖：
@@ -56,22 +58,16 @@ depends-on: []
 
 提交后交另一代理独立 review；代码与受控检查通过只记 SOURCE-READY。最终安装包 Mac/Android 操作、真实冷启、字体/间距/颜色与 iOS 手机标签页仍需独立实机/原版对比，不能本任务直接宣称像素一致。
 
-## implementation decisions
+## candidate03 执行记录（2026-11-04）
 
-生产扩展负责空格输入事务和整跨度失效清理，纯投影模块负责 JSON 文档中的合法跨度与授权目录。输入与提交共用一个事务；组合期间不改跨度，实际 compositionend 后只在同一仍存活、可写 Editor 上检查，禁止计时器猜测。link/code 的用户格式优先，由 schema 排他规则和整跨度清理共同去掉旧标签。筛选共用已有 SearchEditorHost 停车逻辑，包括无搜索文字的标签条件；标签选择不持久化。访问 prepare 同步按排除目标后的合法目录降级选择，不保留待 abort 恢复的名称。
+修复从 candidate02 `a0989b354b539fc06d794f167cd97af615693d44` 出发，按 root `4fc78b0ff7b58d77a1a28440c078814b3eec9729` 的活动组合输入保留契约实施。本项仍为 pending-review，未经新一轮独审，不标 SOURCE-READY。candidate02 独审报告和证据逐字保全，未覆盖失败。
 
-## execution candidate01
+生产新增 `TagComposition` 仅观察同一 Editor 的真实 DOM start/end 和 PM root/appended transaction，映射原选区作为最终候选范围；既见真实 end、实际 composing 已结束、后续真实事务已到达且该范围确有 end.data、raw 已到合法表示后，才释放临时保留。微任务仅等待真实 transaction 后的 onUpdate 保存入口，不推测结束，不手改 composing、不 flush DOM、不制造最终正文事务。原合法标签自然恢复匹配时取消不必要的覆盖；空 data 取消不被当成“整个文档应为空”。
 
-已实现 mark/整跨度编辑清理、真实授权乐观文档标签投影、侧栏和搜索过滤停车、UI/Rust 标签与锁定互斥、保存与完整归档入口严格校验。证据在 `docs/verification/app-003-tags-01/source-candidate01/`，产品源码哈希及命令结果见其 README/source-sha256.json。依赖未改，无平台构建。
+App 仅在原本匹配、正在组字且仍有焦点/可写/授权的同一 Editor 经合法出站快照失去标签匹配时捕获临时目标；只覆盖当前显示目标，结果、计数、目录继续按真实合法投影。正常完成后恢复既有停车；显式导航、Editor 销毁、访问 prepare/清除优先撤销保留。既有 access freeze/cover/abort 的实现继续负责保护，abort 不恢复失配编辑器旧焦点。通用 saveDoc、queue、flush、授权、相等/重绑与 Rust 校验均保持原字节。
 
-当前为 SOURCE-CANDIDATE、pending-review，不能称 SOURCE-READY：自查发现真实 IME 在既有 tag 内改字的中间状态可能仍经既有 onUpdate 发送非法跨度到 Rust，短暂制造保存错误；受控浏览器仅验证组合期间不提交新标签、实际 compositionend 后再提交。独审须精确复现并决定阻断；不能用最终清理后能重试成功代替中间合法性。本提交按 root 指示先冻结，不擅自改全局保存队列/flush/授权或跳过所有 composing 保存。
+新增真实 App/Editor→既存精确 Rust Store CLI 的 11 场景通过，149 条实际 Store action：single/all 最后引用、final-before-end、end-before-final replacement、多步替换、空最终删除、非空原选区恢复后的空 data 取消、多个结果不跳转、无 composition 立即停车、显式选别笔记/清筛选、prepare 同步冻结与 abort 后无复活。ACK 前后 raw、PM/DOM 选区、同 DOM 身份保持；实际后续键盘文字归属原 ID，真实结果仍清空或只保留另一笔记；最终正文已被正常保存后才停车，旧目标不可写。
 
-## blocking repair scope
+现有保存边界 11 场景、OCR 37、schema 96、access 16 与最终 typecheck 通过。OCR AST fixture 绑定同一新增 clearTagComposition 闭包和对应空 ref，未替换产品访问处理。前 5 轮检查器/夹具失败及原始日志全部保全，原因和终轮结果见 [candidate03 证据](../../verification/app-003-tags-01/source-candidate03/README.md)。没有编译 Rust、平台构建、依赖改动、外网下载或用户笔记数据。
 
-Scope follows root docs ac79f42/e2fc5cc and frozen independent review static-01. Only trusted Editor onUpdate and same Editor local OCR/attachment transaction snapshots use the outgoing legal copy. Keep raw target.document, bookmarks/version/owner/access, general equality, queues and strict Rust validation. OCR insertedDocument/pending/ACK share the persisted representation. Attachment target.trustedDocument matches the corresponding local outgoing representation after insertion; initial captures keep the original backend/pending body. Clear tag/search conditions only after createNote succeeds; failed creation keeps its original state.
-
-## execution candidate02
-
-按冻结独审的两项 P2 窄修 Editor 出站合法副本及新建成功后内容条件清除；OCR/附件的局部持久表示与 raw 目标身份分别对应，通用 equality/rebind/queue/access 与 Rust 产品保持原样。证据在 `docs/verification/app-003-tags-01/source-candidate02/`：真实 App/Editor 接既有精确 Rust Store binary 的 11 场景、schema96、access16、OCR37、附件提交23、取消8、最终 typecheck 与产品/脚本/报告 diff check 通过（原始日志的结尾空行保全）；早期 fixture 失败全部保留。旧候选 broader tests 未声称本轮重跑，未构建。
-
-当前仍 SOURCE-CANDIDATE / pending-review，待独审新冻结 SHA；作者不自行将旧阻塞标成关闭或宣称 SOURCE-READY。单标签最后引用在 composition 中失效与既有空态停车的交叉行为已回报 root 并在证据限制中明确，未擅自扩展可写筛选例外。移动原生输入法、设备、冷启与原版像素仍 UNKNOWN。
+这些是受控 DOM composition 与实际浏览器输入，Store CLI 为真实持久层但未经过 native IPC/Session。prepare/abort 仅改 transport，实际 App/gate 保护代码执行；它不是多窗口原生 Session 屏障验收。真实 macOS/Android/iOS 中文输入法、平台安装版、冷启和像素对照仍 UNKNOWN，由根任务实机与独审推进。

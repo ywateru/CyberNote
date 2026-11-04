@@ -1,0 +1,83 @@
+{
+  "baseline": "a0989b354b539fc06d794f167cd97af615693d44",
+  "contractDocsSource": "4fc78b0ff7b58d77a1a28440c078814b3eec9729",
+  "status": "SOURCE-CANDIDATE / pending independent review; not SOURCE-READY",
+  "productSources": {
+    "src-tauri/src/store.rs": "1ce42676e8ca6cda36b0b23130da938075deb0beb91c8c0404a9e1f235b1d1c0",
+    "src-tauri/src/store/archive/document-cases.json": "297f9f7cd64b5489f9da69c4a54715f3b934a5634d2ed502c30505a81555e950",
+    "src-tauri/src/store/archive/document-schema.json": "7cd6c3e442d968ef99019b14fcc48cf037693d7daae0506b0c47a2ec00fb007c",
+    "src-tauri/src/store/archive/document.rs": "4fbb93ac37810002e2183e69e309cc306b88babe4e2efe651b9cd40663d2dea4",
+    "src/App.tsx": "03fc8eb9d68439803ebf56b8b217ec9846f6c544fa9aaaf15b213fc63b1707ce",
+    "src/Editor.tsx": "5c6c018d377fa0785691a67897975954bd5c777e911802abff364fb8aa84c5af",
+    "src/editor-save-snapshot.ts": "4ca9f9b64f52c3558b1a843c61f0ef8d810af45743c26f2cf57974c03564d5dd",
+    "src/editor-schema.ts": "daca1ff535d1516a708096d7e600f44ba1dd9510474dc7a65bf3595aea97ce0f",
+    "src/note-tag-extension.ts": "db582a04ce347f9d136186caf2bd7147d0b3fbb7bc12e4174a666be44fc37d8a",
+    "src/note-tags.ts": "2d5460e5a70bcb7b6a5a91631e25ca6ff05c1b3aeeb79b45a4a145415c174a2f",
+    "src/style.css": "6798b08569e22c827500f8126feb2eba71c5cde1dcf7b89fa9ae29e0f3f8cf8b",
+    "src/tag-composition.ts": "4393c059e918e2855e6efd9d913f6cd16a50a23c8ceb9ea13e3dc62bc13c302c"
+  },
+  "aggregateSha256": "18bbd8e3edfc5a30bcc26e9fe509ee51b0ef8c738b3999fd6631320bfdade0ed",
+  "aggregateMethod": "sha256 of sorted relative path + NUL + lowercase file sha256 + LF",
+  "unchangedProductionAndDependencyFiles": {
+    "src/bridge.ts": "693de27d6780e6b1059732df66c0bf9cf37ca438b9176765565593c3d290c9f1",
+    "src/search-editor-gate.ts": "8601b7da9c89e3620583d912c0454cb1a8d70ead5dbe9bd56df393ec3387f888",
+    "src/search-selection.ts": "243d637f056fe8fadd1a5dc1c47c4689c6b865d82a764b6da1a9e44ec91d3a3a",
+    "src/save-queue.ts": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+    "src/document-equality.ts": "629d2729ac47626f6618f13d6858c98dc5a0f654a4b53ba70f6ec0731204db7d",
+    "src/attachment-target.ts": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+    "package.json": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007",
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.toml": "c6f56b877cf36bfb77e199519dfc685df6bb5224b24f30b45114efedc68a08a4",
+    "src-tauri/Cargo.lock": "889b7f449ff4b34263139279cacf57f105fd9c3c6a7099bb56c958f3780ed1b0"
+  },
+  "existingStoreBinary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-qa-fix-store",
+    "sha256": "f43d9695ad1d5cb9a0e0e42bb6af415f6a2e3bf78d65979b57e7ac607b0620cf",
+    "bytes": 5606144,
+    "provenance": "docs/verification/app-003-tags-independent-01/harness-main.rs; exact pre-existing executable, no Rust build"
+  },
+  "tests": {
+    "compositionRetentionScenarios": 11,
+    "compositionStoreActionRecords": 149,
+    "saveRegressionScenarios": 11,
+    "saveRegressionStoreActionRecords": 53,
+    "schemaCases": 96,
+    "accessCases": 16,
+    "ocrHostCases": 37,
+    "typecheck": "pass"
+  },
+  "testScripts": {
+    "scripts/check-tags-composition-retention.mjs": "5235094dc8a339c56003e8443e87555d3bb62d92ff0a97deef95d11413290560",
+    "scripts/check-tags-save-boundary.mjs": "fae1dce3fb26445286b80c50785abdb3e0c33a550ea68296d2d717f5ab65a201",
+    "scripts/check-ocr-host.mjs": "4ed0d16057ac12ce41df641cdf83e5677737374b5771f26363f622c543c36385"
+  },
+  "freeAfterBytes": 5261328384,
+  "preservedEvidenceSha256": {
+    "README.md": "b0291d0d74ca8e8194d4f94d161e7c45ee2043ddd465008fff2abd067fde18f2",
+    "composition-run01-result.json": "a95cef3ecb380456929eb75ec0addcabf49074b1279f6ccad969a69683345ce0",
+    "composition-run01-script.mjs": "d092af4fa7607d42887973782543b65bd41dcdcc8f0e3bf9468819e9371be982",
+    "composition-run02-result.json": "e1a589b580b99e4f8c33bfe5aabc0ec6484306c1f2f3b8896f3cc7ff314af7e1",
+    "composition-run02-script.mjs": "c7b6d71210b45a69a5fcdaafeb13016c8a3b2ce0b0ecc8d709f009b5d0425429",
+    "composition-run03-result.json": "9bd39e12c95f6cd6d5e9fc0a108f58a19b173a0755d429a1529a35f6072ffd18",
+    "composition-run03-script.mjs": "eb1cf08e38fd490b83cfb99c5d0622efef3ef52e964b139bd4e89acf8aaa852b",
+    "composition-run04-result.json": "e6db298ac14e019cc09a21deb11696a0ba334feae5d35acebc37ddbb70df7ece",
+    "composition-run04-script.mjs": "90d6a1ed93bda5e42cc7a3ecaa04de1adf33775be8737bab990dc2ae037f4cf6",
+    "composition-run05-result.json": "94cfdf5020582bb2cb68264b24d8eb7cb8b3b164a537a26ec6cc6ef83faebd4f",
+    "composition-run06-result.json": "9295e1d6bb1fb9f42bca63761d321997a82cfc88f22e7d2e460898afc3d55fc9",
+    "raw/tags-composition-access-run01.txt": "2f26f451d848d758d138c762bfaa104c577ae652b95dbaed5eabbd9a66c45657",
+    "raw/tags-composition-ocr-host-run01.txt": "1d1de1db5cbca024cce33692950305edfc12008c7d6bc8eb6a3c95382177ce7c",
+    "raw/tags-composition-run01.txt": "4842ec931e1c996a710c4f1a3a2f4b580325dd34688d218f284743518f444402",
+    "raw/tags-composition-run02.txt": "7b30ac0fc5a4504aee44cf18a146e081d8d60b8d41d23daea7a7933f33eab98e",
+    "raw/tags-composition-run03.txt": "7b30ac0fc5a4504aee44cf18a146e081d8d60b8d41d23daea7a7933f33eab98e",
+    "raw/tags-composition-run04.txt": "7b30ac0fc5a4504aee44cf18a146e081d8d60b8d41d23daea7a7933f33eab98e",
+    "raw/tags-composition-run05.txt": "7b30ac0fc5a4504aee44cf18a146e081d8d60b8d41d23daea7a7933f33eab98e",
+    "raw/tags-composition-run06.txt": "00a0bac58117e9c69a4394e4256cb9706e2e2535b072d0b1087eef817f298250",
+    "raw/tags-composition-save-regression01.txt": "1c8b93f4f30dcd36376b22e8ad83132301d9b7c4629dafca4284ea1664228099",
+    "raw/tags-composition-schema-run01.txt": "058a9d377a3588a4b2c68c48f7ed86f1ba0ca885b112eb3f6a6818ba5e6feb7b",
+    "raw/tags-composition-typecheck-final.txt": "f5d66a8f8867b9de0d6f6732cdc09069893bd64b4a610136c143298d8e896f35",
+    "raw/tags-composition-typecheck-run01.txt": "f5d66a8f8867b9de0d6f6732cdc09069893bd64b4a610136c143298d8e896f35",
+    "raw/tags-composition-typecheck-run02.txt": "f5d66a8f8867b9de0d6f6732cdc09069893bd64b4a610136c143298d8e896f35",
+    "save-regression-result.json": "8d220c281e10277e6c05906762517f47a9eda4327bcd1b0fe61456fbf863986f",
+    "schema-result.json": "22d3bbc5bc35b5014706f7ba44f8f71bce9c6f2f4e853f73db371a5c46359352"
+  }
+}

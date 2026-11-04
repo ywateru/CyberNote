@@ -140,6 +140,7 @@ const targetEffect = unique(
 ).arguments[0];
 const names = [
   "fail",
+  "clearTagComposition",
   "hydrate",
   "flush",
   "refresh",
@@ -242,6 +243,9 @@ function fixture(options = {}) {
     revisions: { current: new SaveRevisions() },
     externalVersions: { current: new Map() },
     blockedNotes: { current: new Set() },
+    tagCompositionTarget: { current: null },
+    tagCompositionNavigation: { current: 0 },
+    updateTagComposition() {},
     attachmentSubmissions: { current: new Map() },
     attachmentBatches: { current: [] },
     pickerTargets: { current: new Map() },

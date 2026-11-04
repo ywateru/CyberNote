@@ -10,6 +10,7 @@ import {
 } from "react";
 import { type Editor, type JSONContent } from "@tiptap/react";
 import { editorSaveSnapshot } from "./editor-save-snapshot";
+import { TagComposition } from "./tag-composition";
 import {
   documentTags,
   projectTags,
@@ -385,6 +386,25 @@ function App() {
   const [editors, setEditors] = useState<ReadonlyMap<string, Editor>>(
     new Map(),
   );
+  const tagCompositions = useRef(new Map<string, TagComposition>());
+  const tagCompositionTarget = useRef<{
+    noteId: string;
+    composition: TagComposition;
+    cycle: number;
+    scope: string;
+    stamp: AccessStamp;
+  } | null>(null);
+  const tagCompositionNavigation = useRef(0);
+  const [, updateTagComposition] = useState(0);
+  const tagCompositionSettled = useRef(
+    (_id: string, _composition: TagComposition, _cycle: number) => {},
+  );
+  const clearTagComposition = useCallback(() => {
+    tagCompositionNavigation.current++;
+    if (!tagCompositionTarget.current) return;
+    tagCompositionTarget.current = null;
+    updateTagComposition((value) => value + 1);
+  }, []);
   const editorGate = useRef(new SearchEditorGate()).current;
   const editorsRef = useRef(editors);
   editorsRef.current = editors;
@@ -570,12 +590,53 @@ function App() {
     !accessSuspended.length &&
     !accessGate.state?.operationId &&
     listed.length === 0;
-  const noteId = projectSearchNote({
+  const projectedNoteId = projectSearchNote({
     searching: desktopSearch,
     baseNoteId,
     searchNoteId,
     resultIds: listed.map((note) => note.id),
   });
+  const tagCompositionScope = JSON.stringify({
+    folderId,
+    baseNoteId,
+    searchNoteId,
+    page,
+    query,
+    filter,
+    tagFilter,
+    view,
+  });
+  const tagNavigation = tagCompositionNavigation.current;
+  const held = tagCompositionTarget.current;
+  const heldNote = held && ws.notes.find((note) => note.id === held.noteId);
+  const heldStamp = held && accessGate.stamp(held.noteId);
+  const retainTagComposition = !!(
+    held &&
+    projectedNoteId !== held.noteId &&
+    heldNote &&
+    !heldNote.deletedAt &&
+    !heldNote.locked &&
+    desktopSearch &&
+    (filter === "tags" || tagFilter !== undefined) &&
+    held.scope === tagCompositionScope &&
+    held.composition === tagCompositions.current.get(held.noteId) &&
+    held.cycle === held.composition.cycle &&
+    held.composition.pending &&
+    !held.composition.editor.isDestroyed &&
+    held.composition.editor.isEditable &&
+    editors.get(held.noteId) === held.composition.editor &&
+    nativeEditorOwners.current.get(held.composition.editor) === held.noteId &&
+    !blockedNotes.current.has(held.noteId) &&
+    !accessSuspended.includes(held.noteId) &&
+    !accessGate.state?.operationId &&
+    heldStamp?.sessionId === held.stamp.sessionId &&
+    heldStamp?.noteEpoch === held.stamp.noteEpoch &&
+    accessGate.state?.notes[held.noteId]?.authorized !== false
+  );
+  if (held && !retainTagComposition) tagCompositionTarget.current = null;
+  // Only the displayed original target is retained. Results/catalog/counts stay
+  // the real legal projection, and no other matching note becomes active mid-IME.
+  const noteId = retainTagComposition ? held!.noteId : projectedNoteId;
   const current = ws.notes.find((n) => n.id === noteId);
   const currentFolder = ws.folders.find((f) => f.id === folderId);
   const selected = ws.notes.find(
@@ -583,17 +644,44 @@ function App() {
       n.id === (desktopSearch && !listed.length ? null : contextNote || noteId),
   );
   const editor = noteId ? editors.get(noteId) || null : null;
-  const onReady = useCallback((id: string, instance: Editor | null) => {
-    if (instance) nativeEditorOwners.current.set(instance, id);
-    setEditors((previous) => {
-      if (previous.get(id) === instance || (!instance && !previous.has(id)))
-        return previous;
-      const next = new Map(previous);
-      if (instance) next.set(id, instance);
-      else next.delete(id);
-      return next;
-    });
-  }, []);
+  const onReady = useCallback(
+    (id: string, instance: Editor | null) => {
+      const previousComposition = tagCompositions.current.get(id);
+      if (previousComposition && previousComposition.editor !== instance) {
+        if (tagCompositionTarget.current?.composition === previousComposition)
+          clearTagComposition();
+        previousComposition.dispose();
+        tagCompositions.current.delete(id);
+      }
+      if (instance) {
+        nativeEditorOwners.current.set(instance, id);
+        if (!tagCompositions.current.has(id)) {
+          const composition = new TagComposition(
+            instance,
+            (cycle) => tagCompositionSettled.current(id, composition, cycle),
+            () => {
+              const target = tagCompositionTarget.current;
+              if (
+                target?.composition === composition &&
+                target.cycle !== composition.cycle
+              )
+                clearTagComposition();
+            },
+          );
+          tagCompositions.current.set(id, composition);
+        }
+      }
+      setEditors((previous) => {
+        if (previous.get(id) === instance || (!instance && !previous.has(id)))
+          return previous;
+        const next = new Map(previous);
+        if (instance) next.set(id, instance);
+        else next.delete(id);
+        return next;
+      });
+    },
+    [clearTagComposition],
+  );
   const restoreEditor = useCallback(
     (instance: Editor, editable: boolean) => {
       const owner = nativeEditorOwners.current.get(instance);
@@ -805,6 +893,74 @@ function App() {
     },
     [fail],
   );
+  const saveEditorDoc = (id: string, doc: JSONContent) => {
+    const composition = tagCompositions.current.get(id);
+    const instance = composition?.editor;
+    const names = documentTags(doc);
+    const lostTagMatch =
+      !names.length ||
+      (typeof tagFilter === "string" && !names.includes(tagFilter));
+    if (
+      !tagCompositionTarget.current &&
+      tagNavigation === tagCompositionNavigation.current &&
+      desktopSearch &&
+      (filter === "tags" || tagFilter !== undefined) &&
+      noteId === id &&
+      listed.some((note) => note.id === id) &&
+      lostTagMatch &&
+      composition?.pending &&
+      instance &&
+      !instance.isDestroyed &&
+      instance.isEditable &&
+      instance.view.composing &&
+      instance.view.hasFocus() &&
+      nativeEditorOwners.current.get(instance) === id &&
+      !blockedNotes.current.has(id) &&
+      !accessGate.state?.operationId &&
+      accessGate.state?.notes[id]?.authorized !== false
+    ) {
+      tagCompositionTarget.current = {
+        noteId: id,
+        composition,
+        cycle: composition.cycle,
+        scope: tagCompositionScope,
+        stamp: accessGate.stamp(id),
+      };
+    }
+    return saveDoc(id, doc);
+  };
+  tagCompositionSettled.current = (id, composition, cycle) => {
+    const target = tagCompositionTarget.current;
+    if (
+      !target ||
+      target.noteId !== id ||
+      target.composition !== composition ||
+      target.cycle !== cycle
+    )
+      return;
+    const instance = composition.editor;
+    // No invented end/flush/transaction. The observer proves the real final
+    // candidate and tag-cleanup transaction reached this same live Editor.
+    const stamp = accessGate.stamp(id);
+    if (
+      !instance.isDestroyed &&
+      nativeEditorOwners.current.get(instance) === id &&
+      editorsRef.current.get(id) === instance &&
+      stamp.sessionId === target.stamp.sessionId &&
+      stamp.noteEpoch === target.stamp.noteEpoch &&
+      !blockedNotes.current.has(id) &&
+      !accessGate.state?.operationId &&
+      accessGate.state?.notes[id]?.authorized !== false
+    ) {
+      const document = editorSaveSnapshot(instance.getJSON());
+      const outgoing =
+        pendingDocs.current.get(id) ||
+        wsRef.current.notes.find((note) => note.id === id)?.document;
+      if (outgoing && !documentsEqual(outgoing, document))
+        void saveDoc(id, document);
+    }
+    clearTagComposition();
+  };
   const saveConflictCopy = async () => {
     const id = noteId;
     if (!id || blockedNotes.current.has(id)) return;
@@ -910,6 +1066,11 @@ function App() {
   }, [flush, fail]);
   clearSensitive.current = (ids) => {
     if (!ids.length) return;
+    if (
+      tagCompositionTarget.current &&
+      ids.includes(tagCompositionTarget.current.noteId)
+    )
+      clearTagComposition();
     setTagFilter((name) =>
       name === undefined
         ? undefined
@@ -991,6 +1152,11 @@ function App() {
     );
   accessHandler.current = (event) => {
     if (event.phase === "prepare") {
+      if (
+        tagCompositionTarget.current &&
+        event.noteIds.includes(tagCompositionTarget.current.noteId)
+      )
+        clearTagComposition();
       synchronization.invalidate();
       ocrLifecycle.current.suspend(event.noteIds);
       recordingLifecycle.current.suspend(event.noteIds);
@@ -1209,6 +1375,7 @@ function App() {
     }
   }, [noteId]);
   const chooseFolder = (id: string) => {
+    clearTagComposition();
     setTagFilter(undefined);
     setGalleryEditor(false);
     setFolderId(id);
@@ -1222,6 +1389,7 @@ function App() {
     updateSettings({ selectedFolder: id, selectedNote: n?.id || "" });
   };
   const chooseTag = (name: string | null) => {
+    clearTagComposition();
     setTagFilter(name);
     setFilter("");
     setSearchNoteId(null);
@@ -1230,6 +1398,7 @@ function App() {
     setMenu(null);
   };
   const chooseNote = (n: Note) => {
+    clearTagComposition();
     if (!mobile && view === "gallery") setGalleryEditor(true);
     if (desktopSearch) setSearchNoteId(n.id);
     else setNoteId(n.id);
@@ -1259,6 +1428,7 @@ function App() {
           access: n.access ?? prev.access,
           notes: [n, ...prev.notes],
         }));
+        clearTagComposition();
         setTagFilter(undefined);
         setFilter("");
         setNoteId(n.id);
@@ -1277,7 +1447,7 @@ function App() {
         fail(e);
       }
     },
-    [fail, flush, folderId, updateSettings],
+    [fail, flush, folderId, updateSettings, clearTagComposition],
   );
   const newNote = useCallback(() => createNote(), [createNote]);
   const openModal = (type: string, value = "") => {
@@ -3955,7 +4125,7 @@ function App() {
                 active={note.id === noteId}
                 blocked={blockedNotes.current.has(note.id)}
                 gate={editorGate}
-                onChange={saveDoc}
+                onChange={saveEditorDoc}
                 onReady={onReady}
                 onDate={() => setNotice(`创建于 ${fmtDate(note.createdAt)}`)}
                 onFocus={(focused) => {
