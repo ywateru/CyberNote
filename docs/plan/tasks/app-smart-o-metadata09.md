@@ -35,7 +35,7 @@ settings属于纯UI偏好，本批排除metadata通知；unlock/closeLocks仅改
 
 ## Path and verification
 
-允许session.rs/lib.rs、bridge.ts/types.ts、新metadata-client及App窄订阅/hydrate接入；Store显式提交收据可窄改store.rs、store/smart.rs、store/archive.rs、store/attachment_operations.rs及必要小模块，不重写已有导入/文件事务协议。允许必要真实生产测试和挂载/传输测试脚本与固定corpus，不改依赖/lock、原生插件或平台UI样式。不要另造Store/保存队列，保留访问协议和已有unknown边界。实现前按D2最终源码复核具体接缝，root明确START后才编码。
+允许session.rs/lib.rs、bridge.ts/types.ts、新metadata-client及App窄订阅/hydrate接入；access-client.ts可为双门接收拆分无副作用校验与最终发布，授权判定不得放宽。Store显式提交收据可窄改store.rs、store/smart.rs、store/archive.rs、store/attachment_operations.rs及必要小模块，不重写已有导入/文件事务协议。允许必要真实生产测试和挂载/传输测试脚本与固定corpus，不改依赖/lock、原生插件或平台UI样式。不要另造Store/保存队列，保留访问协议和已有unknown边界。实现前按D2最终源码复核具体接缝，root明确START后才编码。
 
 需用真实Store/Session和真实bridge/挂载App接缝验证：两个窗口定义CAS；先新通知后旧workspace；原note有效save ACK落后于新metadata仍正确排空pending且无旧正文发布；ACK先到但同seq事件仍刷新；定义变化期间同Editor/Undo/活动组字保持；lock/delete/import真实屏障回归；新进程/旧token/通知丢失恢复。可控制实际回包交付次序，不能把测试自造模型当生产协议。只执行有区分力的必要测试和typecheck/build；作者STOP、固定commit、不同作者独审后再U，不宣称设备/像素已通过。
 
