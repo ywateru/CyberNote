@@ -31,3 +31,7 @@ depends-on: []
 ## delivery
 
 产品仅窄改toolbar.m布局：隐藏时直接toggleSidebar，newFolder随侧栏移除；160pt可见侧栏优先toggle、新建进overflow；标题/返回避让。110个生产布局状态、36条同控制器隐藏恢复链通过，旧源码36个隐藏失败均复现，正常228pt侧栏三栏与独立窗逐字段回归通过。pnpm build、13项原生toolbar控制器检查、严格ObjC语法均exit0。证据在 `docs/verification/app-001-sidebar-restore-01/`，含两次几何检查接缝失败原始材料。未运行真实包/GUI/Rust target；待不同作者独审和root整合后实际窗口验收。
+
+## 主线源码状态 / 2026-11-04
+
+候选1c835b35经不同作者d3ce0e77独审SOURCE-READY，已合入主线；主线d87bcb1上的最小整合build、toolbar13及生产110状态/36隐藏恢复链全部通过，证据于7496ec2封存。唯一运行产品变更为toolbar.m，SHA0deb20826e37511f0654c1c355901ffe10877416fcf98fa8dd32c2cc88c90588。候选manifest中的任务文档身份以冻结提交为准，后续状态补记不回写旧证据。任务继续partial，等新Mac包实际点击/菜单/画廊/正常冷启，不能以源码通过关闭用户故障验收。
