@@ -1,0 +1,6348 @@
+{
+  "scope": "Actual mounted App and Editor, unchanged browser-preview bridge, observational probes. No native/Rust/APK acceptance.",
+  "sourceRef": null,
+  "observe": false,
+  "sourceSHA256": "6eff8e958057e79fa9968a5e89e936197a78567b1e1e58c101e2e99f74671fd4",
+  "instrumentedSHA256": "0767ae03f380957f77ce853de800ca8ec8fb8012d2c4767c6650db838e00b393",
+  "cssSHA256": "d7facf680ee801c348fd2ed0619213e0fc916d276f8fb3ddef1a78d11acf44d7",
+  "scenarios": [
+    {
+      "scenario": "first-current-plain",
+      "steps": [
+        {
+          "kind": "choose",
+          "style": "plain",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 1,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 1,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              }
+            ]
+          },
+          "preserved": {
+            "identity": true,
+            "key": true,
+            "selection": true,
+            "history": true,
+            "document": true
+          },
+          "actionCount": 0
+        },
+        {
+          "kind": "choose",
+          "style": "plain",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 1,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 1,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              }
+            ]
+          },
+          "preserved": {
+            "identity": true,
+            "key": true,
+            "selection": true,
+            "history": true,
+            "document": true
+          },
+          "actionCount": 0
+        },
+        {
+          "kind": "choose",
+          "style": "grid-large",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 1,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "grid-large",
+              "revision": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "preserved": {
+            "identity": true,
+            "key": true,
+            "selection": true,
+            "history": true,
+            "document": true
+          },
+          "actionCount": 1
+        },
+        {
+          "kind": "choose",
+          "style": "grid-large",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "grid-large",
+              "revision": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "grid-large",
+              "revision": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "preserved": {
+            "identity": true,
+            "key": true,
+            "selection": true,
+            "history": true,
+            "document": true
+          },
+          "actionCount": 0
+        },
+        {
+          "kind": "choose",
+          "style": "plain",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "grid-large",
+              "revision": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "preserved": {
+            "identity": true,
+            "key": true,
+            "selection": true,
+            "history": true,
+            "document": true
+          },
+          "actionCount": 1
+        },
+        {
+          "kind": "close",
+          "method": "cancel",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          }
+        },
+        {
+          "kind": "close",
+          "method": "Escape",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          }
+        },
+        {
+          "kind": "close",
+          "method": "backdrop-handler",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          }
+        },
+        {
+          "kind": "close",
+          "method": "Back-handler",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "1029955492",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "2f3dbe43-d0b4-489a-b439-9973197cbc24-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                "revision": 1,
+                "pending": [
+                  "2f3dbe43-d0b4-489a-b439-9973197cbc24"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "2f3dbe43-d0b4-489a-b439-9973197cbc24": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "2f3dbe43-d0b4-489a-b439-9973197cbc24",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "first-change-grid",
+      "steps": [
+        {
+          "kind": "choose",
+          "style": "grid-large",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 1,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "grid-large",
+              "revision": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "preserved": {
+            "identity": true,
+            "key": true,
+            "selection": true,
+            "history": true,
+            "document": true
+          },
+          "actionCount": 1
+        },
+        {
+          "kind": "choose",
+          "style": "grid-large",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "grid-large",
+              "revision": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "grid-large",
+              "revision": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "preserved": {
+            "identity": true,
+            "key": true,
+            "selection": true,
+            "history": true,
+            "document": true
+          },
+          "actionCount": 0
+        },
+        {
+          "kind": "choose",
+          "style": "plain",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "grid-large",
+              "revision": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "preserved": {
+            "identity": true,
+            "key": true,
+            "selection": true,
+            "history": true,
+            "document": true
+          },
+          "actionCount": 1
+        },
+        {
+          "kind": "close",
+          "method": "cancel",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          }
+        },
+        {
+          "kind": "close",
+          "method": "Escape",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          }
+        },
+        {
+          "kind": "close",
+          "method": "backdrop-handler",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          }
+        },
+        {
+          "kind": "close",
+          "method": "Back-handler",
+          "before": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          },
+          "after": {
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-SAME-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二段：保留正文与撤销记录。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "selection": {
+              "type": "text",
+              "anchor": 3,
+              "head": 8
+            },
+            "editable": true,
+            "focused": false,
+            "identity": {
+              "editor": true,
+              "view": true,
+              "dom": true,
+              "viewDOM": true
+            },
+            "keys": [
+              {
+                "key": "3834070408",
+                "type": "PureEditorContent"
+              },
+              {
+                "key": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50-browser-preview-0-0",
+                "type": "SearchEditorHost"
+              }
+            ],
+            "history": {
+              "done": 1,
+              "undone": 0
+            },
+            "stored": {
+              "paperStyle": "plain",
+              "revision": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-SAME-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第二段：保留正文与撤销记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "trace": [
+              {
+                "stage": "hydrate",
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": []
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "create-response",
+                "noteId": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {},
+                  "suspended": [],
+                  "operationId": null
+                }
+              },
+              {
+                "stage": "save-submit",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "save-ack",
+                "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                "revision": 1,
+                "pending": [
+                  "b5798a05-cef8-4bd2-ae79-3f48c47e2b50"
+                ]
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "grid-large"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              },
+              {
+                "stage": "action-result",
+                "action": {
+                  "type": "patchNote",
+                  "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                  "paperStyle": "plain"
+                },
+                "resultHasWorkspace": false
+              },
+              {
+                "stage": "hydrate",
+                "previousAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "incomingAccess": {
+                  "sessionId": "browser-preview",
+                  "epoch": 1,
+                  "notes": {
+                    "b5798a05-cef8-4bd2-ae79-3f48c47e2b50": {
+                      "epoch": 0,
+                      "authorized": true
+                    }
+                  },
+                  "suspended": [],
+                  "operationId": null
+                },
+                "pending": [],
+                "documents": [
+                  {
+                    "id": "b5798a05-cef8-4bd2-ae79-3f48c47e2b50",
+                    "same": true
+                  }
+                ]
+              },
+              {
+                "stage": "hydrate-access-changed",
+                "changed": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "browser": "156.0.8078.80",
+  "pass": true
+}

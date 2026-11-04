@@ -1,0 +1,22 @@
+diff --git a/src/style.css b/src/style.css
+index 0e51444..44a7723 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -2585,8 +2585,15 @@ a {
+     box-shadow: 0 2px 8px rgb(0 0 0 / 3.5%);
+   }
+   .mobile .modal-paper .paper-option.selected {
+-    outline: 1.5px solid var(--accent);
+-    outline-offset: 0.5px;
++    outline: none;
++  }
++  .mobile .modal-paper .paper-option.selected::after {
++    content: "";
++    position: absolute;
++    inset: -2px;
++    border: 1.5px solid var(--accent);
++    border-radius: 7px;
++    pointer-events: none;
+   }
+   .mobile .modal-paper .paper-blank {
+     grid-column: 1 / -1;

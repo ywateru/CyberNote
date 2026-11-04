@@ -1,0 +1,188 @@
+{
+  "scope": "Independent saved mounted-App results and production-closure test checks. Browser transport and instrumented handler scope; no native acceptance.",
+  "baselineFailures": [
+    {
+      "scenario": "first-current-plain",
+      "firstChoice": "plain",
+      "preserved": {
+        "identity": false,
+        "key": false,
+        "selection": false,
+        "history": false,
+        "document": true
+      },
+      "selectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "selectionAfter": {
+        "type": "text",
+        "anchor": 1,
+        "head": 1
+      },
+      "historyBefore": {
+        "done": 1,
+        "undone": 0
+      },
+      "historyAfter": {
+        "done": 0,
+        "undone": 0
+      },
+      "clearSensitiveCalls": [
+        {
+          "stage": "clearSensitive",
+          "ids": [
+            "9c8bd1ed-5de7-4878-9030-0e49dd99d984"
+          ]
+        }
+      ],
+      "lastHydrate": {
+        "stage": "hydrate",
+        "previousAccess": {
+          "sessionId": "browser-preview",
+          "epoch": 1,
+          "notes": {},
+          "suspended": [],
+          "operationId": null
+        },
+        "incomingAccess": {
+          "sessionId": "browser-preview",
+          "epoch": 1,
+          "notes": {
+            "9c8bd1ed-5de7-4878-9030-0e49dd99d984": {
+              "epoch": 0,
+              "authorized": true
+            }
+          },
+          "suspended": [],
+          "operationId": null
+        },
+        "pending": [],
+        "documents": [
+          {
+            "id": "9c8bd1ed-5de7-4878-9030-0e49dd99d984",
+            "same": true
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "first-change-grid",
+      "firstChoice": "grid-large",
+      "preserved": {
+        "identity": false,
+        "key": false,
+        "selection": false,
+        "history": false,
+        "document": true
+      },
+      "selectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "selectionAfter": {
+        "type": "text",
+        "anchor": 1,
+        "head": 1
+      },
+      "historyBefore": {
+        "done": 1,
+        "undone": 0
+      },
+      "historyAfter": {
+        "done": 0,
+        "undone": 0
+      },
+      "clearSensitiveCalls": [
+        {
+          "stage": "clearSensitive",
+          "ids": [
+            "d20e7926-8f03-441e-b34b-422f067f93fc"
+          ]
+        }
+      ],
+      "lastHydrate": {
+        "stage": "hydrate",
+        "previousAccess": {
+          "sessionId": "browser-preview",
+          "epoch": 1,
+          "notes": {},
+          "suspended": [],
+          "operationId": null
+        },
+        "incomingAccess": {
+          "sessionId": "browser-preview",
+          "epoch": 1,
+          "notes": {
+            "d20e7926-8f03-441e-b34b-422f067f93fc": {
+              "epoch": 0,
+              "authorized": true
+            }
+          },
+          "suspended": [],
+          "operationId": null
+        },
+        "pending": [],
+        "documents": [
+          {
+            "id": "d20e7926-8f03-441e-b34b-422f067f93fc",
+            "same": true
+          }
+        ]
+      }
+    }
+  ],
+  "candidatePaths": [
+    {
+      "scenario": "first-current-plain",
+      "actionCounts": [
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "allRealIdentitiesSelectionsHistoryDocumentsPreserved": true,
+      "closeMethods": [
+        "cancel",
+        "Escape",
+        "backdrop-handler",
+        "Back-handler"
+      ]
+    },
+    {
+      "scenario": "first-change-grid",
+      "actionCounts": [
+        1,
+        0,
+        1
+      ],
+      "allRealIdentitiesSelectionsHistoryDocumentsPreserved": true,
+      "closeMethods": [
+        "cancel",
+        "Escape",
+        "backdrop-handler",
+        "Back-handler"
+      ]
+    }
+  ],
+  "pendingPaths": [
+    {
+      "style": "plain",
+      "entireClosedBeforeACKStateEqual": true,
+      "singleBodyRevisionIncreaseAfterRelease": true,
+      "realUndoRedoPassed": true
+    },
+    {
+      "style": "grid-large",
+      "entireClosedBeforeACKStateEqual": true,
+      "singleBodyRevisionIncreaseAfterRelease": true,
+      "realUndoRedoPassed": true
+    }
+  ],
+  "productionIdentityTests": 30,
+  "productionSaveBoundaryTests": 21,
+  "pass": true
+}

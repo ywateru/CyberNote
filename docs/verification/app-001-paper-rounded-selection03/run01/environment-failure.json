@@ -1,0 +1,10 @@
+{
+  "pass": false,
+  "stage": "isolated loopback fixture startup before browser launch",
+  "commandExitCode": 1,
+  "errors": [
+    "WebSocket server error: listen EPERM: operation not permitted 0.0.0.0:24678",
+    "Error: listen EPERM: operation not permitted 127.0.0.1"
+  ],
+  "meaning": "Default restricted environment denied fixture sockets. No product assertion or native application ran. Retry uses approved isolated loopback access."
+}

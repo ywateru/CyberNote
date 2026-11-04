@@ -1,0 +1,117 @@
+{
+  "at": "2026-11-04T09:29:30.081021+00:00",
+  "conclusion": "Same-plain selected native evidence captured; stable square clone selection contour supports narrow selection-paint candidate, not complete pixel parity",
+  "sourceHead": "347660b352f6becb1f52a9c79fdf5372b50f1f12",
+  "packageIdentity": {
+    "path": "/data/app/~~8-gB99N_rfTWC29kKlqBbg==/com.local.notesclone-GpxZ00-vaYJ_FE_7Posouw==/base.apk",
+    "bytes": 177445114,
+    "sha256": "843e0c01aad154872851664ced574e1fa07544d8fcf874022698c37a3ee160f8"
+  },
+  "operationRecords": [
+    {
+      "path": "docs/verification/android-paper-plain-geometry03/00-package-identity.json",
+      "bytes": 10858,
+      "sha256": "10d283b3316463e88df8e01fb1fb401d63eb41596d05208f13c59c301fb0d206"
+    },
+    {
+      "path": "docs/verification/android-paper-plain-geometry03/01-original-note.json",
+      "bytes": 2240,
+      "sha256": "e1e5004a358f8cc2235b6d13f416325a657a021c592903d30907e3a224c75938"
+    },
+    {
+      "path": "docs/verification/android-paper-plain-geometry03/02-original-grid-large.json",
+      "bytes": 2695,
+      "sha256": "706d2bea3eafd22919d3efb9c3e16928927b64a6b920162ab42df65712859f74"
+    },
+    {
+      "path": "docs/verification/android-paper-plain-geometry03/03-plain-selected-return.json",
+      "bytes": 2472,
+      "sha256": "e8e608e29703780a19e73f064236549afa4a60524c0b2216ec2c5b6c56d569b5"
+    },
+    {
+      "path": "docs/verification/android-paper-plain-geometry03/04-plain-saved-reopened.json",
+      "bytes": 2696,
+      "sha256": "13d7fd3762eac5874c2f2891f5210793778c27de2641846500feb713d289bf74"
+    },
+    {
+      "path": "docs/verification/android-paper-plain-geometry03/05-grid-large-restored-return.json",
+      "bytes": 2478,
+      "sha256": "8f424dd1ddd858b5f2871aa8555c6d3c411a2e1f973153572316458cc53cdae1"
+    },
+    {
+      "path": "docs/verification/android-paper-plain-geometry03/06-grid-large-restored-reopened.json",
+      "bytes": 2704,
+      "sha256": "e4241ea3b462434f6022f6f54f289bb0080d91f22e1bf4542bd6f902bdf674f6"
+    },
+    {
+      "path": "docs/verification/android-paper-plain-geometry03/07-final-cancel-note.json",
+      "bytes": 2467,
+      "sha256": "3c27f4a3e24cd76e66ca545532c9e7fdfe32824d8e16c59bce878caf0cd270f9"
+    }
+  ],
+  "actualChanges": [
+    "grid-large to plain via real card tap; closes, saved selection observed on reopen",
+    "plain to original grid-large via real card tap; saved selection observed on reopen",
+    "cancel returns original note view, keyboard hidden"
+  ],
+  "noteTitle": "QA-PAPER-INDEPENDENT-20261103C",
+  "visibleBody": "Alpha Beta Gamma, Beta bold",
+  "visibleDate": "2026年11月3日23:45",
+  "visibleRegionComparisons": [
+    {
+      "image": "03-plain-selected-return.png",
+      "comparedTo": "01-original-note.png",
+      "roi": [
+        0,
+        240,
+        1080,
+        800
+      ],
+      "differentPixels": 0
+    },
+    {
+      "image": "05-grid-large-restored-return.png",
+      "comparedTo": "01-original-note.png",
+      "roi": [
+        0,
+        240,
+        1080,
+        800
+      ],
+      "differentPixels": 0
+    },
+    {
+      "image": "07-final-cancel-note.png",
+      "comparedTo": "01-original-note.png",
+      "roi": [
+        0,
+        240,
+        1080,
+        800
+      ],
+      "differentPixels": 0
+    }
+  ],
+  "plainNativeImage": {
+    "path": "docs/verification/android-paper-plain-geometry03/04-plain-saved-reopened.png",
+    "bytes": 72747,
+    "sha256": "500073b75bcaa000fd6bfb96c3cd2aae64f3eb2acabda82dee43dfa3aa5b1e40"
+  },
+  "restoredGridNativeImage": {
+    "path": "docs/verification/android-paper-plain-geometry03/06-grid-large-restored-reopened.png",
+    "bytes": 73330,
+    "sha256": "f017a04bebda43deb5d9896fc9189ca7911f69d810dc550842d04e538a079812"
+  },
+  "analysis": {
+    "path": "docs/verification/android-paper-plain-geometry03/analysis.json",
+    "bytes": 40714,
+    "sha256": "41a9611d6932708aba50e85a5784b4382fd925969d57e47bf1962983109f6a1d"
+  },
+  "finalPID": "18341",
+  "deviceReleased": true,
+  "limits": [
+    "Visual same-state sample; no DB/revision/selection/Editor/JSON assertions or process-restart persistence test.",
+    "No native computed CSS, DOM, engine internals or measured original radius/DPR/color.",
+    "No product/native build/download/Mac GUI or private-file export; only authorized QA style changes and restoration."
+  ]
+}

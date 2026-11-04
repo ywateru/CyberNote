@@ -1,0 +1,24 @@
+{
+  "scope": "Production App, Editor and complete stylesheet in isolated headless Chrome. Not Android or Apple pixel acceptance.",
+  "baselineRef": "832be31f13998f20aa87edcd9987831e0a1fed91",
+  "cssSHA256": {
+    "baseline": "de2222e4b3c8e4ccde3af4312e8d0db5480dabea1a3c54fe4a0bf9c2a3feb962",
+    "candidate": "d7facf680ee801c348fd2ed0619213e0fc916d276f8fb3ddef1a78d11acf44d7"
+  },
+  "sourceSHA256": {
+    "src/App.tsx": "99a6df4a9e06998f85122810a61359d251110fe73022e0372fec9ef87a8c0d5e",
+    "src/Editor.tsx": "43c332456c159b5951345b3d2244996154a54065e25dfee355f27e8d3586fc32",
+    "package.json": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007",
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2"
+  },
+  "runs": [],
+  "paintPairs": [],
+  "errors": [],
+  "externalRequests": [],
+  "browser": "156.0.8078.80",
+  "pass": false,
+  "failure": {
+    "message": "Error: page.evaluate: Error: Production stylesheet element missing\n    at eval (eval at evaluate (:311:30), <anonymous>:1:153)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+    "stack": "page.evaluate: Error: Production stylesheet element missing\n    at eval (eval at evaluate (:311:30), <anonymous>:1:153)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at swap (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-paper-rounded-selection-independent03/check-real-app.mjs:35:39)\n    at run (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-paper-rounded-selection-independent03/check-real-app.mjs:36:9)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-paper-rounded-selection-independent03/check-real-app.mjs:63:2"
+  }
+}

@@ -1,0 +1,32 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index 1e84da3..ab53f51 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -1425,12 +1425,15 @@ function App() {
+           type: "createNote",
+           folderId: fid,
+         });
++        // Browser preview returns a Note without access. Adopt a trusted read's
++        // new note epoch before its first refresh, as native responses already do.
++        const createdAccess = n.access ?? (await loadWorkspace()).access;
+         revisions.current.confirmed(n.id, n.revision);
+         // Native action has already accepted this response through AccessGate.
+         // Keep its new note epoch with the note, before the first refresh.
+         setWs((prev) => ({
+           ...prev,
+-          access: n.access ?? prev.access,
++          access: createdAccess ?? prev.access,
+           notes: [n, ...prev.notes],
+         }));
+         clearTagComposition();
+@@ -4327,6 +4330,10 @@ function App() {
+                       data-paper-style={p}
+                       className={`paper-option ${p === "plain" ? "paper-blank" : ""} paper-${p} ${current?.paperStyle === p ? "selected" : ""}`}
+                       onClick={async () => {
++                        if (current?.paperStyle === p) {
++                          closePaper();
++                          return;
++                        }
+                         await patch({
+                           type: "patchNote",
+                           id: current?.id,

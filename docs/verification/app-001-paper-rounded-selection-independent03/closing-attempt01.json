@@ -1,0 +1,7 @@
+{
+  "exitCode": 1,
+  "observedStderr": "AssertionError: src/App.tsx",
+  "phase": "closing identity assertion; before final identity or manifest write",
+  "reason": "Shared next-task App writer changed source after fixed fixture was captured.",
+  "correction": "Verify all frozen fixture source hashes and exact current CSS; separately disclose shared-source drift. No later App acceptance."
+}

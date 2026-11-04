@@ -1,0 +1,1307 @@
+{
+  "scope": "Actual React App, Tiptap, production save closures/SaveQueue and browser persistence. Only saveNote transport ACK timing held; actual pending ref observed read-only. No Rust/native/APK acceptance.",
+  "sourceSHA256": "6eff8e958057e79fa9968a5e89e936197a78567b1e1e58c101e2e99f74671fd4",
+  "bridgeSHA256": "76cf917f754614fbd587e09f220b8abc56403c2429b738d9b690eac9cdaa6292",
+  "instrumentedAppSHA256": "4bb598d19695625b82564459dce39a53a0b6aa8210d8fe10532bb1f2189d2a94",
+  "instrumentedBridgeSHA256": "65c966e76ef8e90ddb9e6162e90a2844b61c4785a111049c34f250c9308c59f6",
+  "cases": [
+    {
+      "style": "plain",
+      "before": {
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 1
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "待确认正文属于原编辑器。 Pending ACK"
+                }
+              ]
+            }
+          ]
+        },
+        "selection": {
+          "type": "text",
+          "anchor": 3,
+          "head": 8
+        },
+        "editable": true,
+        "focused": false,
+        "identity": {
+          "editor": true,
+          "view": true,
+          "dom": true,
+          "viewDOM": true
+        },
+        "keys": [
+          {
+            "key": "2374299047",
+            "type": "PureEditorContent"
+          },
+          {
+            "key": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a-browser-preview-0-0",
+            "type": "SearchEditorHost"
+          }
+        ],
+        "history": {
+          "done": 1,
+          "undone": 0
+        },
+        "stored": {
+          "id": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+          "folderId": "default",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": {
+                  "level": 1
+                },
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "待确认正文属于原编辑器。"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "QA-PAPER-PENDING-03 Alpha Beta",
+          "plainText": "QA-PAPER-PENDING-03 Alpha Beta\n待确认正文属于原编辑器。",
+          "createdAt": 1793785961925,
+          "updatedAt": 1793785962119,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "plain",
+          "revision": 1
+        },
+        "save": {
+          "pending": [
+            [
+              "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+              {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "待确认正文属于原编辑器。 Pending ACK"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "actions": [
+          {
+            "type": "createNote",
+            "folderId": "default"
+          },
+          {
+            "type": "settings",
+            "settings": {
+              "selectedNote": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a"
+            }
+          },
+          {
+            "type": "saveNote",
+            "id": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+            "saveIntent": "d4f31ded-44e0-470d-9f00-a1f9b2396a4e",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 0
+          },
+          {
+            "type": "saveNote",
+            "id": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+            "saveIntent": "0092b0bd-c27c-4a80-905c-1a257c052511",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。 Pending ACK"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 1
+          }
+        ],
+        "waiting": 1
+      },
+      "closedBeforeACK": {
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 1
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "待确认正文属于原编辑器。 Pending ACK"
+                }
+              ]
+            }
+          ]
+        },
+        "selection": {
+          "type": "text",
+          "anchor": 3,
+          "head": 8
+        },
+        "editable": true,
+        "focused": false,
+        "identity": {
+          "editor": true,
+          "view": true,
+          "dom": true,
+          "viewDOM": true
+        },
+        "keys": [
+          {
+            "key": "2374299047",
+            "type": "PureEditorContent"
+          },
+          {
+            "key": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a-browser-preview-0-0",
+            "type": "SearchEditorHost"
+          }
+        ],
+        "history": {
+          "done": 1,
+          "undone": 0
+        },
+        "stored": {
+          "id": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+          "folderId": "default",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": {
+                  "level": 1
+                },
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "待确认正文属于原编辑器。"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "QA-PAPER-PENDING-03 Alpha Beta",
+          "plainText": "QA-PAPER-PENDING-03 Alpha Beta\n待确认正文属于原编辑器。",
+          "createdAt": 1793785961925,
+          "updatedAt": 1793785962119,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "plain",
+          "revision": 1
+        },
+        "save": {
+          "pending": [
+            [
+              "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+              {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "待确认正文属于原编辑器。 Pending ACK"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "actions": [
+          {
+            "type": "createNote",
+            "folderId": "default"
+          },
+          {
+            "type": "settings",
+            "settings": {
+              "selectedNote": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a"
+            }
+          },
+          {
+            "type": "saveNote",
+            "id": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+            "saveIntent": "d4f31ded-44e0-470d-9f00-a1f9b2396a4e",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 0
+          },
+          {
+            "type": "saveNote",
+            "id": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+            "saveIntent": "0092b0bd-c27c-4a80-905c-1a257c052511",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。 Pending ACK"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 1
+          }
+        ],
+        "waiting": 1
+      },
+      "afterACK": {
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 1
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "待确认正文属于原编辑器。 Pending ACK"
+                }
+              ]
+            }
+          ]
+        },
+        "selection": {
+          "type": "text",
+          "anchor": 3,
+          "head": 8
+        },
+        "editable": true,
+        "focused": false,
+        "identity": {
+          "editor": true,
+          "view": true,
+          "dom": true,
+          "viewDOM": true
+        },
+        "keys": [
+          {
+            "key": "2374299047",
+            "type": "PureEditorContent"
+          },
+          {
+            "key": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a-browser-preview-0-0",
+            "type": "SearchEditorHost"
+          }
+        ],
+        "history": {
+          "done": 1,
+          "undone": 0
+        },
+        "stored": {
+          "id": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+          "folderId": "default",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": {
+                  "level": 1
+                },
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "待确认正文属于原编辑器。 Pending ACK"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "QA-PAPER-PENDING-03 Alpha Beta",
+          "plainText": "QA-PAPER-PENDING-03 Alpha Beta\n待确认正文属于原编辑器。 Pending ACK",
+          "createdAt": 1793785961925,
+          "updatedAt": 1793785963147,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "plain",
+          "revision": 2
+        },
+        "save": {
+          "pending": [],
+          "failures": []
+        },
+        "actions": [
+          {
+            "type": "createNote",
+            "folderId": "default"
+          },
+          {
+            "type": "settings",
+            "settings": {
+              "selectedNote": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a"
+            }
+          },
+          {
+            "type": "saveNote",
+            "id": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+            "saveIntent": "d4f31ded-44e0-470d-9f00-a1f9b2396a4e",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 0
+          },
+          {
+            "type": "saveNote",
+            "id": "a47e590f-237d-4ddb-bf31-ac6ff5f3481a",
+            "saveIntent": "0092b0bd-c27c-4a80-905c-1a257c052511",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。 Pending ACK"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 1
+          }
+        ],
+        "waiting": 0
+      },
+      "undoRedo": {
+        "undo": true,
+        "afterUndo": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 1
+              }
+            }
+          ]
+        },
+        "redo": true,
+        "afterRedo": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 1
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "待确认正文属于原编辑器。 Pending ACK"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "style": "grid-large",
+      "before": {
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 1
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "待确认正文属于原编辑器。 Pending ACK"
+                }
+              ]
+            }
+          ]
+        },
+        "selection": {
+          "type": "text",
+          "anchor": 3,
+          "head": 8
+        },
+        "editable": true,
+        "focused": false,
+        "identity": {
+          "editor": true,
+          "view": true,
+          "dom": true,
+          "viewDOM": true
+        },
+        "keys": [
+          {
+            "key": "3928193634",
+            "type": "PureEditorContent"
+          },
+          {
+            "key": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c-browser-preview-0-0",
+            "type": "SearchEditorHost"
+          }
+        ],
+        "history": {
+          "done": 2,
+          "undone": 0
+        },
+        "stored": {
+          "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+          "folderId": "default",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": {
+                  "level": 1
+                },
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "待确认正文属于原编辑器。"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "QA-PAPER-PENDING-03 Alpha Beta",
+          "plainText": "QA-PAPER-PENDING-03 Alpha Beta\n待确认正文属于原编辑器。",
+          "createdAt": 1793785964217,
+          "updatedAt": 1793785964388,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "grid-large",
+          "revision": 2
+        },
+        "save": {
+          "pending": [
+            [
+              "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+              {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "待确认正文属于原编辑器。 Pending ACK"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "actions": [
+          {
+            "type": "createNote",
+            "folderId": "default"
+          },
+          {
+            "type": "settings",
+            "settings": {
+              "selectedNote": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c"
+            }
+          },
+          {
+            "type": "saveNote",
+            "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+            "saveIntent": "fb87927b-53c8-421e-9954-2a611e50dd39",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 0
+          },
+          {
+            "type": "patchNote",
+            "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+            "paperStyle": "grid-large"
+          },
+          {
+            "type": "saveNote",
+            "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+            "saveIntent": "770b8d51-b267-4d7d-af81-9293673b347e",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。 Pending ACK"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 2
+          }
+        ],
+        "waiting": 1
+      },
+      "closedBeforeACK": {
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 1
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "待确认正文属于原编辑器。 Pending ACK"
+                }
+              ]
+            }
+          ]
+        },
+        "selection": {
+          "type": "text",
+          "anchor": 3,
+          "head": 8
+        },
+        "editable": true,
+        "focused": false,
+        "identity": {
+          "editor": true,
+          "view": true,
+          "dom": true,
+          "viewDOM": true
+        },
+        "keys": [
+          {
+            "key": "3928193634",
+            "type": "PureEditorContent"
+          },
+          {
+            "key": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c-browser-preview-0-0",
+            "type": "SearchEditorHost"
+          }
+        ],
+        "history": {
+          "done": 2,
+          "undone": 0
+        },
+        "stored": {
+          "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+          "folderId": "default",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": {
+                  "level": 1
+                },
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "待确认正文属于原编辑器。"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "QA-PAPER-PENDING-03 Alpha Beta",
+          "plainText": "QA-PAPER-PENDING-03 Alpha Beta\n待确认正文属于原编辑器。",
+          "createdAt": 1793785964217,
+          "updatedAt": 1793785964388,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "grid-large",
+          "revision": 2
+        },
+        "save": {
+          "pending": [
+            [
+              "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+              {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "待确认正文属于原编辑器。 Pending ACK"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ],
+          "failures": []
+        },
+        "actions": [
+          {
+            "type": "createNote",
+            "folderId": "default"
+          },
+          {
+            "type": "settings",
+            "settings": {
+              "selectedNote": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c"
+            }
+          },
+          {
+            "type": "saveNote",
+            "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+            "saveIntent": "fb87927b-53c8-421e-9954-2a611e50dd39",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 0
+          },
+          {
+            "type": "patchNote",
+            "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+            "paperStyle": "grid-large"
+          },
+          {
+            "type": "saveNote",
+            "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+            "saveIntent": "770b8d51-b267-4d7d-af81-9293673b347e",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。 Pending ACK"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 2
+          }
+        ],
+        "waiting": 1
+      },
+      "afterACK": {
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 1
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "待确认正文属于原编辑器。 Pending ACK"
+                }
+              ]
+            }
+          ]
+        },
+        "selection": {
+          "type": "text",
+          "anchor": 3,
+          "head": 8
+        },
+        "editable": true,
+        "focused": false,
+        "identity": {
+          "editor": true,
+          "view": true,
+          "dom": true,
+          "viewDOM": true
+        },
+        "keys": [
+          {
+            "key": "3928193634",
+            "type": "PureEditorContent"
+          },
+          {
+            "key": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c-browser-preview-0-0",
+            "type": "SearchEditorHost"
+          }
+        ],
+        "history": {
+          "done": 2,
+          "undone": 0
+        },
+        "stored": {
+          "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+          "folderId": "default",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": {
+                  "level": 1
+                },
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "待确认正文属于原编辑器。 Pending ACK"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "QA-PAPER-PENDING-03 Alpha Beta",
+          "plainText": "QA-PAPER-PENDING-03 Alpha Beta\n待确认正文属于原编辑器。 Pending ACK",
+          "createdAt": 1793785964217,
+          "updatedAt": 1793785966102,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "grid-large",
+          "revision": 3
+        },
+        "save": {
+          "pending": [],
+          "failures": []
+        },
+        "actions": [
+          {
+            "type": "createNote",
+            "folderId": "default"
+          },
+          {
+            "type": "settings",
+            "settings": {
+              "selectedNote": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c"
+            }
+          },
+          {
+            "type": "saveNote",
+            "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+            "saveIntent": "fb87927b-53c8-421e-9954-2a611e50dd39",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 0
+          },
+          {
+            "type": "patchNote",
+            "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+            "paperStyle": "grid-large"
+          },
+          {
+            "type": "saveNote",
+            "id": "dd30dc38-f3d0-4d2e-99cb-10344dd6754c",
+            "saveIntent": "770b8d51-b267-4d7d-af81-9293673b347e",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "待确认正文属于原编辑器。 Pending ACK"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 2
+          }
+        ],
+        "waiting": 0
+      },
+      "undoRedo": {
+        "undo": true,
+        "afterUndo": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 1
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "待确认正文属于原编辑器。"
+                }
+              ]
+            }
+          ]
+        },
+        "redo": true,
+        "afterRedo": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 1
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "QA-PAPER-PENDING-03 Alpha Beta"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "待确认正文属于原编辑器。 Pending ACK"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "browser": "156.0.8078.80",
+  "pass": true
+}
