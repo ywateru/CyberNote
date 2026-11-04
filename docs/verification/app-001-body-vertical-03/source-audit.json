@@ -1,0 +1,41 @@
+{
+  "pass": true,
+  "baseline": "8463ed896847f891fd4fd5579affb253a11d681b",
+  "headAtAudit": "4d86a7d3dc5bb421331527ab88fdf2e056cb0850",
+  "css": {
+    "beforeSHA256": "75227796447c2f1404d5bb6e11f5c4663d53035d6cd343c288d92f6302f18bf7",
+    "afterSHA256": "de2222e4b3c8e4ccde3af4312e8d0db5480dabea1a3c54fe4a0bf9c2a3feb962",
+    "onlyTwoRulesAdded": true,
+    "addition": "/* Vertical candidate only while every direct editor element is a paragraph. */\n.desktop.native-toolbar:not(.separate) .note-document .tiptap:has(> p):not(:has(> :not(p))) {\n  padding-top: 2px;\n}\n.desktop.native-toolbar:not(.separate) .note-document .tiptap:has(> p):not(:has(> :not(p))) > p {\n  line-height: 17px;\n  min-height: 17px;\n}\n"
+  },
+  "productDiffPaths": [
+    "src/style.css"
+  ],
+  "unchanged": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "99a6df4a9e06998f85122810a61359d251110fe73022e0372fec9ef87a8c0d5e"
+    },
+    {
+      "path": "src/editor-schema.ts",
+      "sha256": "daca1ff535d1516a708096d7e600f44ba1dd9510474dc7a65bf3595aea97ce0f"
+    },
+    {
+      "path": "package.json",
+      "sha256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2"
+    }
+  ],
+  "regressionAdaptation": {
+    "originalSHA256": "bb5047e81b4f96d2c618af9238c66ab928aec401768a732904ef06e14455cc74",
+    "adaptedSHA256": "8e0561591ddaa602623d9064411dc6f287d775824326adff83f88504bc4e3183",
+    "onlyChanges": [
+      "import mkdtemp",
+      "create unique /private/tmp cache directory",
+      "use unique cacheDir"
+    ]
+  }
+}

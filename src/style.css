@@ -622,6 +622,14 @@ a {
   line-height: 17.22px;
   min-height: 17.22px;
 }
+/* Vertical candidate only while every direct editor element is a paragraph. */
+.desktop.native-toolbar:not(.separate) .note-document .tiptap:has(> p):not(:has(> :not(p))) {
+  padding-top: 2px;
+}
+.desktop.native-toolbar:not(.separate) .note-document .tiptap:has(> p):not(:has(> :not(p))) > p {
+  line-height: 17px;
+  min-height: 17px;
+}
 .tiptap h1 {
   font-size: 24px;
   line-height: 1.2;
