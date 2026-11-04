@@ -1,0 +1,43 @@
+test_explicit_parameters_and_output_boundary (__main__.Boundaries) ... ERROR
+test_failed_builds_never_collect (__main__.Boundaries) ... ok
+test_freeze_bytes_and_no_overwrite (__main__.Boundaries) ... ok
+test_low_space_and_download_guard (__main__.Boundaries) ... ERROR
+test_owned_init_identity_and_replacements (__main__.Boundaries) ... ok
+test_syntax_without_bytecode (__main__.Boundaries) ... ok
+test_timeout_only_owned_process_group (__main__.Boundaries) ... ok
+
+======================================================================
+ERROR: test_explicit_parameters_and_output_boundary (__main__.Boundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/apple-notes-candidate06-tools-01/docs/verification/unified-candidate06/preparation/check-boundaries.py", line 32, in test_explicit_parameters_and_output_boundary
+    self.assertEqual(c.authorization(p), a)
+  File "/private/tmp/apple-notes-candidate06-tools-01/docs/verification/unified-candidate06/preparation/common.py", line 105, in authorization
+    raise ValueError('Canonical existing absolute source root required')
+ValueError: Canonical existing absolute source root required
+
+======================================================================
+ERROR: test_low_space_and_download_guard (__main__.Boundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/apple-notes-candidate06-tools-01/docs/verification/unified-candidate06/preparation/common.py", line 354, in monitored
+    stop_owned(process, result)
+  File "/private/tmp/apple-notes-candidate06-tools-01/docs/verification/unified-candidate06/preparation/common.py", line 312, in stop_owned
+    os.killpg(process.pid, sig)
+PermissionError: [Errno 1] Operation not permitted
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/apple-notes-candidate06-tools-01/docs/verification/unified-candidate06/preparation/check-boundaries.py", line 93, in test_low_space_and_download_guard
+    c.monitored([sys.executable,'-B','-c','print("Downloading https://invalid.example",flush=True)'],Path(tmp),os.environ.copy(),Path(tmp)/'download',record,poll=0.02)
+  File "/private/tmp/apple-notes-candidate06-tools-01/docs/verification/unified-candidate06/preparation/common.py", line 360, in monitored
+    stop_owned(process, result)
+  File "/private/tmp/apple-notes-candidate06-tools-01/docs/verification/unified-candidate06/preparation/common.py", line 312, in stop_owned
+    os.killpg(process.pid, sig)
+PermissionError: [Errno 1] Operation not permitted
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.201s
+
+FAILED (errors=2)

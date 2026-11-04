@@ -1,0 +1,35 @@
+[
+  {
+    "command": [
+      "python3",
+      "-B",
+      "docs/verification/unified-candidate06/preparation/freeze-inputs.py",
+      "--help"
+    ],
+    "exitCode": 0,
+    "stdout": "usage: freeze-inputs.py [-h] --authorization AUTHORIZATION\n\nFuture explicit platform freeze; runs version tools, never platform builds.\n\noptional arguments:\n  -h, --help            show this help message and exit\n  --authorization AUTHORIZATION\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "docs/verification/unified-candidate06/preparation/run-build.py",
+      "--help"
+    ],
+    "exitCode": 0,
+    "stdout": "usage: run-build.py [-h] --authorization AUTHORIZATION --freeze-sha256\n                    FREEZE_SHA256 --attempt ATTEMPT\n                    --exclusive-target-and-cache\n                    [--allow-scoped-gradle-offline-init]\n\nFuture authorized candidate06 offline build. Never invoked by preparation\nchecks.\n\noptional arguments:\n  -h, --help            show this help message and exit\n  --authorization AUTHORIZATION\n  --freeze-sha256 FREEZE_SHA256\n  --attempt ATTEMPT\n  --exclusive-target-and-cache\n                        root confirms no other operator uses shared target or\n                        Gradle cache\n  --allow-scoped-gradle-offline-init\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "docs/verification/unified-candidate06/preparation/collect-outputs.py",
+      "--help"
+    ],
+    "exitCode": 0,
+    "stdout": "usage: collect-outputs.py [-h] --authorization AUTHORIZATION --freeze-sha256\n                          FREEZE_SHA256 --attempt ATTEMPT\n\nFuture candidate06 preservation and strict acceptance. Never installs or\nlaunches.\n\noptional arguments:\n  -h, --help            show this help message and exit\n  --authorization AUTHORIZATION\n  --freeze-sha256 FREEZE_SHA256\n  --attempt ATTEMPT\n",
+    "stderr": ""
+  }
+]
