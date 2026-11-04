@@ -1,0 +1,86 @@
+{
+  "status": "pass",
+  "scope": "Hydration16 source mapping and isolated actual production React/adapter only",
+  "confirmedFindings": [],
+  "sourceFiles": [
+    {
+      "path": "src/smart-draft.ts",
+      "bytes": 3204,
+      "sha256": "a97480a10d85fcb50091987af187d0132608528349748f6488715988004abca6"
+    },
+    {
+      "path": "src/SmartFolderForm.tsx",
+      "bytes": 27704,
+      "sha256": "41fd3e76ed7d8b53890f51160226871126a0295a9df7be1bed2bf1281746f299"
+    },
+    {
+      "path": "src/smart-folders.css",
+      "bytes": 9975,
+      "sha256": "2174301b19a3d4dbcf709ed52d8a76b766be870ffccd32fad9c5a1adb3419a53"
+    }
+  ],
+  "sourceManifest": {
+    "path": "docs/verification/app-smart-draft-hydration16/source-manifest.json",
+    "bytes": 2429,
+    "sha256": "684ee8f4fb62adf785888267360167f193e5b3b7c1c7482654566110976d95a4"
+  },
+  "summary": {
+    "truthCases": 20,
+    "formCases": 16,
+    "independentCases": 6,
+    "assertions": 329,
+    "failed": 0
+  },
+  "independentCases": [
+    {
+      "name": "independent-baseline-false-counterexample",
+      "checks": 3
+    },
+    {
+      "name": "independent-invalid-values-still-rejected",
+      "checks": 14
+    },
+    {
+      "name": "independent-desktop-false-conflict-retry",
+      "checks": 8
+    },
+    {
+      "name": "independent-desktop-true-conflict-retry",
+      "checks": 8
+    },
+    {
+      "name": "independent-mobile-false-conflict-retry",
+      "checks": 8
+    },
+    {
+      "name": "independent-mobile-true-conflict-retry",
+      "checks": 8
+    }
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "command": {
+    "argv": [
+      "node",
+      "docs/verification/app-smart-draft-hydration16-independent/check-independent.mjs",
+      "docs/verification/app-smart-draft-hydration16-independent/attempt01"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 7.703109583,
+    "deadlineSeconds": 90
+  },
+  "protectedCount": 19,
+  "inputCount": 320,
+  "changedSinceReviewedGeometry15": [
+    "src/smart-draft.ts"
+  ],
+  "originalFailuresPreserved": true,
+  "report": {
+    "path": "docs/plan/reviews/app-smart-draft-hydration16.md",
+    "bytes": 6072,
+    "sha256": "cec4cf7ed8feb041856877ff557cb2e9ba4c259dd4fe71b450a9569b000ab981"
+  },
+  "limits": "No exact package/device/normal or cold restart/backend persistence/CAS/native-input/pixel acceptance. Isolated callbacks and remount only. No Git/platform build/GUI/ADB/DB/download/shared target-cache/source changes.",
+  "stop": true,
+  "sharedTargetAndCache": "not acquired or used; released"
+}

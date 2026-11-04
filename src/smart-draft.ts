@@ -38,6 +38,7 @@ export function folderDraft(folder?: Folder): FolderDraft {
         ? folder.query.rules.map((r, key) => ({
             ...newTagRule(key),
             ...r,
+            ...(r.type === "pinned" ? { pinned: r.value } : {}),
             ...(r.type === "tags" && "names" in r
               ? { names: [...r.names] }
               : {}),

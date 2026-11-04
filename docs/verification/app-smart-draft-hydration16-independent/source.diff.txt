@@ -1,0 +1,10 @@
+--- baseline-smart-draft.ts
++++ src/smart-draft.ts
+@@ -38,6 +38,7 @@
+         ? folder.query.rules.map((r, key) => ({
+             ...newTagRule(key),
+             ...r,
++            ...(r.type === "pinned" ? { pinned: r.value } : {}),
+             ...(r.type === "tags" && "names" in r
+               ? { names: [...r.names] }
+               : {}),

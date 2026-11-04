@@ -1,0 +1,4054 @@
+{
+  "scope": "Production adapter and actual production React form, isolated callbacks in local headless Chromium. No backend, database, App bridge, native GUI, device, or installed-package acceptance.",
+  "hashes": {
+    "src/smart-draft.ts": "7cf895cc26f8113a2017b08a89a14d91acb2af299385ef454ff2aee70074e5ac",
+    "src/SmartFolderForm.tsx": "41fd3e76ed7d8b53890f51160226871126a0295a9df7be1bed2bf1281746f299",
+    "src/smart-folders.css": "2174301b19a3d4dbcf709ed52d8a76b766be870ffccd32fad9c5a1adb3419a53",
+    "docs/verification/app-smart-draft-hydration16/check-hydration.mjs": "334c187875fd9538edaae9cc7109e08c0680ee979d68b927965a6e9c5698848c"
+  },
+  "truth": [
+    {
+      "name": "false-pinned-only-all",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": false,
+          "actual": true,
+          "expected": false,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+        },
+        {
+          "label": "query round trip",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": false,
+          "actual": false,
+          "expected": true,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+        }
+      ]
+    },
+    {
+      "name": "false-pinned-only-any",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": false,
+          "actual": true,
+          "expected": false,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+        },
+        {
+          "label": "query round trip",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": false,
+          "actual": false,
+          "expected": true,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+        }
+      ]
+    },
+    {
+      "name": "false-allSelected-all",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": false,
+          "actual": true,
+          "expected": false,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+        },
+        {
+          "label": "query round trip",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": false,
+          "actual": false,
+          "expected": true,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+        }
+      ]
+    },
+    {
+      "name": "false-allSelected-any",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": false,
+          "actual": true,
+          "expected": false,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+        },
+        {
+          "label": "query round trip",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": false,
+          "actual": false,
+          "expected": true,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+        }
+      ]
+    },
+    {
+      "name": "false-anySelected-all",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": false,
+          "actual": true,
+          "expected": false,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+        },
+        {
+          "label": "query round trip",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "anySelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "anySelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'anySelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": false,
+          "actual": false,
+          "expected": true,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+        }
+      ]
+    },
+    {
+      "name": "false-anySelected-any",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": false,
+          "actual": true,
+          "expected": false,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+        },
+        {
+          "label": "query round trip",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "anySelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "anySelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'anySelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": false,
+          "actual": false,
+          "expected": true,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+        }
+      ]
+    },
+    {
+      "name": "false-anyTag-all",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": false,
+          "actual": true,
+          "expected": false,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+        },
+        {
+          "label": "query round trip",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "anyTag"
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "anyTag"
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'anyTag',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": false,
+          "actual": false,
+          "expected": true,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+        }
+      ]
+    },
+    {
+      "name": "false-anyTag-any",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": false,
+          "actual": true,
+          "expected": false,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+        },
+        {
+          "label": "query round trip",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "anyTag"
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "anyTag"
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'anyTag',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": false,
+          "actual": false,
+          "expected": true,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+        }
+      ]
+    },
+    {
+      "name": "false-noTags-all",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": false,
+          "actual": true,
+          "expected": false,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+        },
+        {
+          "label": "query round trip",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "noTags"
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "noTags"
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'noTags',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": false,
+          "actual": false,
+          "expected": true,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+        }
+      ]
+    },
+    {
+      "name": "false-noTags-any",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": false,
+          "actual": true,
+          "expected": false,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+        },
+        {
+          "label": "query round trip",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "noTags"
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "noTags"
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'noTags',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": false,
+          "actual": false,
+          "expected": true,
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+        }
+      ]
+    },
+    {
+      "name": "true-pinned-only-all",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": true
+        },
+        {
+          "label": "query round trip",
+          "passed": true
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "true-pinned-only-any",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": true
+        },
+        {
+          "label": "query round trip",
+          "passed": true
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "true-allSelected-all",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": true
+        },
+        {
+          "label": "query round trip",
+          "passed": true
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "true-allSelected-any",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": true
+        },
+        {
+          "label": "query round trip",
+          "passed": true
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "true-anySelected-all",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": true
+        },
+        {
+          "label": "query round trip",
+          "passed": true
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "true-anySelected-any",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": true
+        },
+        {
+          "label": "query round trip",
+          "passed": true
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "true-anyTag-all",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": true
+        },
+        {
+          "label": "query round trip",
+          "passed": true
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "true-anyTag-any",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": true
+        },
+        {
+          "label": "query round trip",
+          "passed": true
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "true-noTags-all",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": true
+        },
+        {
+          "label": "query round trip",
+          "passed": true
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "true-noTags-any",
+      "checks": [
+        {
+          "label": "explicit boolean hydrated",
+          "passed": true
+        },
+        {
+          "label": "query round trip",
+          "passed": true
+        },
+        {
+          "label": "identity revision combine retained",
+          "passed": true
+        },
+        {
+          "label": "tag names cloned and input unchanged",
+          "passed": true
+        },
+        {
+          "label": "membership retained across 16 facts",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "forms": [
+    {
+      "name": "desktop-false-pinned-only-all",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        }
+      ],
+      "input": {
+        "id": "hydration-false-false-all",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": false
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-false-false-all",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "all",
+          "rules": [
+            {
+              "key": 0,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": false
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "desktop-false-pinned-only-any",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        }
+      ],
+      "input": {
+        "id": "hydration-false-false-any",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": false
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-false-false-any",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "any",
+          "rules": [
+            {
+              "key": 0,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": false
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "desktop-false-mixed-all",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        }
+      ],
+      "input": {
+        "id": "hydration-false-true-all",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": false
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-false-true-all",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "all",
+          "rules": [
+            {
+              "key": 0,
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ],
+              "pinned": true
+            },
+            {
+              "key": 1,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": false
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "desktop-false-mixed-any",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        }
+      ],
+      "input": {
+        "id": "hydration-false-true-any",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": false
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-false-true-any",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "any",
+          "rules": [
+            {
+              "key": 0,
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ],
+              "pinned": true
+            },
+            {
+              "key": 1,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": false
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "desktop-true-pinned-only-all",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": true
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": true
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": true
+        }
+      ],
+      "input": {
+        "id": "hydration-true-false-all",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-true-false-all",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "all",
+          "rules": [
+            {
+              "key": 0,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": true
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "desktop-true-pinned-only-any",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": true
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": true
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": true
+        }
+      ],
+      "input": {
+        "id": "hydration-true-false-any",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-true-false-any",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "any",
+          "rules": [
+            {
+              "key": 0,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": true
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "desktop-true-mixed-all",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": true
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": true
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": true
+        }
+      ],
+      "input": {
+        "id": "hydration-true-true-all",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-true-true-all",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "all",
+          "rules": [
+            {
+              "key": 0,
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ],
+              "pinned": true
+            },
+            {
+              "key": 1,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": true
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "desktop-true-mixed-any",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": true
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": true
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": true
+        }
+      ],
+      "input": {
+        "id": "hydration-true-true-any",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-true-true-any",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "any",
+          "rules": [
+            {
+              "key": 0,
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ],
+              "pinned": true
+            },
+            {
+              "key": 1,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": true
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "mobile-false-pinned-only-all",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "panel cancel restores persisted boolean",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "confirm unchanged panel retains boolean",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        }
+      ],
+      "input": {
+        "id": "hydration-false-false-all",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": false
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-false-false-all",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "all",
+          "rules": [
+            {
+              "key": 0,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": false
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "mobile-false-pinned-only-any",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "panel cancel restores persisted boolean",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "confirm unchanged panel retains boolean",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        }
+      ],
+      "input": {
+        "id": "hydration-false-false-any",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": false
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-false-false-any",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "any",
+          "rules": [
+            {
+              "key": 0,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": false
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "mobile-false-mixed-all",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "all",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "panel cancel restores persisted boolean",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "panel cancel restores selected tag",
+          "passed": true
+        },
+        {
+          "label": "confirm unchanged panel retains boolean",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        }
+      ],
+      "input": {
+        "id": "hydration-false-true-all",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": false
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-false-true-all",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "all",
+          "rules": [
+            {
+              "key": 0,
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ],
+              "pinned": true
+            },
+            {
+              "key": 1,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": false
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "mobile-false-mixed-any",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": false,
+          "actual": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": true
+              }
+            ]
+          },
+          "expected": {
+            "version": 1,
+            "combine": "any",
+            "rules": [
+              {
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [
+                  "校准",
+                  "保留"
+                ]
+              },
+              {
+                "type": "pinned",
+                "value": false
+              }
+            ]
+          },
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "panel cancel restores persisted boolean",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "panel cancel restores selected tag",
+          "passed": true
+        },
+        {
+          "label": "confirm unchanged panel retains boolean",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": false,
+          "actual": "true",
+          "expected": "false",
+          "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+        }
+      ],
+      "input": {
+        "id": "hydration-false-true-any",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": false
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-false-true-any",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "any",
+          "rules": [
+            {
+              "key": 0,
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ],
+              "pinned": true
+            },
+            {
+              "key": 1,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": false
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "mobile-true-pinned-only-all",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": true
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": true
+        },
+        {
+          "label": "panel cancel restores persisted boolean",
+          "passed": true
+        },
+        {
+          "label": "confirm unchanged panel retains boolean",
+          "passed": true
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": true
+        }
+      ],
+      "input": {
+        "id": "hydration-true-false-all",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-true-false-all",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "all",
+          "rules": [
+            {
+              "key": 0,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": true
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "mobile-true-pinned-only-any",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": true
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": true
+        },
+        {
+          "label": "panel cancel restores persisted boolean",
+          "passed": true
+        },
+        {
+          "label": "confirm unchanged panel retains boolean",
+          "passed": true
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": true
+        }
+      ],
+      "input": {
+        "id": "hydration-true-false-any",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-true-false-any",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "any",
+          "rules": [
+            {
+              "key": 0,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": true
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "mobile-true-mixed-all",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": true
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": true
+        },
+        {
+          "label": "panel cancel restores persisted boolean",
+          "passed": true
+        },
+        {
+          "label": "panel cancel restores selected tag",
+          "passed": true
+        },
+        {
+          "label": "confirm unchanged panel retains boolean",
+          "passed": true
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": true
+        }
+      ],
+      "input": {
+        "id": "hydration-true-true-all",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-true-true-all",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "all",
+          "rules": [
+            {
+              "key": 0,
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ],
+              "pinned": true
+            },
+            {
+              "key": 1,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": true
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "all",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    },
+    {
+      "name": "mobile-true-mixed-any",
+      "checks": [
+        {
+          "label": "reopened UI selected value",
+          "passed": true
+        },
+        {
+          "label": "reopened combination",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit query preserved",
+          "passed": true
+        },
+        {
+          "label": "rename-only submit identity retained",
+          "passed": true
+        },
+        {
+          "label": "one save and no cancel",
+          "passed": true
+        },
+        {
+          "label": "save did not mutate input definition",
+          "passed": true
+        },
+        {
+          "label": "reopen simulated saved definition selected value",
+          "passed": true
+        },
+        {
+          "label": "panel cancel restores persisted boolean",
+          "passed": true
+        },
+        {
+          "label": "panel cancel restores selected tag",
+          "passed": true
+        },
+        {
+          "label": "confirm unchanged panel retains boolean",
+          "passed": true
+        },
+        {
+          "label": "outer cancel submits nothing",
+          "passed": true
+        },
+        {
+          "label": "cancel does not mutate input",
+          "passed": true
+        },
+        {
+          "label": "reopen after outer cancel",
+          "passed": true
+        }
+      ],
+      "input": {
+        "id": "hydration-true-true-any",
+        "name": "原有智能文件夹",
+        "kind": "smart",
+        "parentId": null,
+        "sortOrder": 3,
+        "createdAt": 17,
+        "definitionRevision": 9,
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        }
+      },
+      "saved": {
+        "draft": {
+          "id": "hydration-true-true-any",
+          "expectedDefinitionRevision": 9,
+          "name": "只改名称-R1",
+          "smart": true,
+          "combine": "any",
+          "rules": [
+            {
+              "key": 0,
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ],
+              "pinned": true
+            },
+            {
+              "key": 1,
+              "type": "pinned",
+              "mode": "allSelected",
+              "names": [],
+              "pinned": true,
+              "value": true
+            }
+          ]
+        },
+        "query": {
+          "version": 1,
+          "combine": "any",
+          "rules": [
+            {
+              "type": "tags",
+              "mode": "allSelected",
+              "names": [
+                "校准",
+                "保留"
+              ]
+            },
+            {
+              "type": "pinned",
+              "value": true
+            }
+          ]
+        },
+        "committedId": null
+      }
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "summary": {
+    "truthCases": 20,
+    "formCases": 16,
+    "assertions": 280,
+    "failed": 70
+  },
+  "failures": [
+    {
+      "case": "false-pinned-only-all",
+      "label": "explicit boolean hydrated",
+      "passed": false,
+      "actual": true,
+      "expected": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+    },
+    {
+      "case": "false-pinned-only-all",
+      "label": "query round trip",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "false-pinned-only-all",
+      "label": "membership retained across 16 facts",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "case": "false-pinned-only-any",
+      "label": "explicit boolean hydrated",
+      "passed": false,
+      "actual": true,
+      "expected": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+    },
+    {
+      "case": "false-pinned-only-any",
+      "label": "query round trip",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "false-pinned-only-any",
+      "label": "membership retained across 16 facts",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "case": "false-allSelected-all",
+      "label": "explicit boolean hydrated",
+      "passed": false,
+      "actual": true,
+      "expected": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+    },
+    {
+      "case": "false-allSelected-all",
+      "label": "query round trip",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "false-allSelected-all",
+      "label": "membership retained across 16 facts",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "case": "false-allSelected-any",
+      "label": "explicit boolean hydrated",
+      "passed": false,
+      "actual": true,
+      "expected": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+    },
+    {
+      "case": "false-allSelected-any",
+      "label": "query round trip",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "false-allSelected-any",
+      "label": "membership retained across 16 facts",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "case": "false-anySelected-all",
+      "label": "explicit boolean hydrated",
+      "passed": false,
+      "actual": true,
+      "expected": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+    },
+    {
+      "case": "false-anySelected-all",
+      "label": "query round trip",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anySelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anySelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'anySelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "false-anySelected-all",
+      "label": "membership retained across 16 facts",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "case": "false-anySelected-any",
+      "label": "explicit boolean hydrated",
+      "passed": false,
+      "actual": true,
+      "expected": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+    },
+    {
+      "case": "false-anySelected-any",
+      "label": "query round trip",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anySelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anySelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'anySelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "false-anySelected-any",
+      "label": "membership retained across 16 facts",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "case": "false-anyTag-all",
+      "label": "explicit boolean hydrated",
+      "passed": false,
+      "actual": true,
+      "expected": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+    },
+    {
+      "case": "false-anyTag-all",
+      "label": "query round trip",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'anyTag',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "false-anyTag-all",
+      "label": "membership retained across 16 facts",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "case": "false-anyTag-any",
+      "label": "explicit boolean hydrated",
+      "passed": false,
+      "actual": true,
+      "expected": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+    },
+    {
+      "case": "false-anyTag-any",
+      "label": "query round trip",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'anyTag',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "false-anyTag-any",
+      "label": "membership retained across 16 facts",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "case": "false-noTags-all",
+      "label": "explicit boolean hydrated",
+      "passed": false,
+      "actual": true,
+      "expected": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+    },
+    {
+      "case": "false-noTags-all",
+      "label": "query round trip",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "noTags"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "noTags"
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'noTags',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "false-noTags-all",
+      "label": "membership retained across 16 facts",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "case": "false-noTags-any",
+      "label": "explicit boolean hydrated",
+      "passed": false,
+      "actual": true,
+      "expected": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\ntrue !== false\n"
+    },
+    {
+      "case": "false-noTags-any",
+      "label": "query round trip",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "noTags"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "noTags"
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'noTags',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "false-noTags-any",
+      "label": "membership retained across 16 facts",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "case": "desktop-false-pinned-only-all",
+      "label": "reopened UI selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-pinned-only-all",
+      "label": "rename-only submit query preserved",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "desktop-false-pinned-only-all",
+      "label": "reopen simulated saved definition selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-pinned-only-all",
+      "label": "reopen after outer cancel",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-pinned-only-any",
+      "label": "reopened UI selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-pinned-only-any",
+      "label": "rename-only submit query preserved",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "desktop-false-pinned-only-any",
+      "label": "reopen simulated saved definition selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-pinned-only-any",
+      "label": "reopen after outer cancel",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-mixed-all",
+      "label": "reopened UI selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-mixed-all",
+      "label": "rename-only submit query preserved",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "desktop-false-mixed-all",
+      "label": "reopen simulated saved definition selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-mixed-all",
+      "label": "reopen after outer cancel",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-mixed-any",
+      "label": "reopened UI selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-mixed-any",
+      "label": "rename-only submit query preserved",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "desktop-false-mixed-any",
+      "label": "reopen simulated saved definition selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "desktop-false-mixed-any",
+      "label": "reopen after outer cancel",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-all",
+      "label": "reopened UI selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-all",
+      "label": "rename-only submit query preserved",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-all",
+      "label": "reopen simulated saved definition selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-all",
+      "label": "panel cancel restores persisted boolean",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-all",
+      "label": "confirm unchanged panel retains boolean",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-all",
+      "label": "reopen after outer cancel",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-any",
+      "label": "reopened UI selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-any",
+      "label": "rename-only submit query preserved",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-any",
+      "label": "reopen simulated saved definition selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-any",
+      "label": "panel cancel restores persisted boolean",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-any",
+      "label": "confirm unchanged panel retains boolean",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-pinned-only-any",
+      "label": "reopen after outer cancel",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-mixed-all",
+      "label": "reopened UI selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-mixed-all",
+      "label": "rename-only submit query preserved",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'all',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "mobile-false-mixed-all",
+      "label": "reopen simulated saved definition selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-mixed-all",
+      "label": "panel cancel restores persisted boolean",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-mixed-all",
+      "label": "confirm unchanged panel retains boolean",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-mixed-all",
+      "label": "reopen after outer cancel",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-mixed-any",
+      "label": "reopened UI selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-mixed-any",
+      "label": "rename-only submit query preserved",
+      "passed": false,
+      "actual": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "校准",
+              "保留"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    combine: 'any',\n    rules: [\n      {\n        mode: 'allSelected',\n...\n        type: 'pinned',\n+       value: true\n-       value: false\n      }\n    ],\n    version: 1\n  }\n"
+    },
+    {
+      "case": "mobile-false-mixed-any",
+      "label": "reopen simulated saved definition selected value",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-mixed-any",
+      "label": "panel cancel restores persisted boolean",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-mixed-any",
+      "label": "confirm unchanged panel retains boolean",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    },
+    {
+      "case": "mobile-false-mixed-any",
+      "label": "reopen after outer cancel",
+      "passed": false,
+      "actual": "true",
+      "expected": "false",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'true' !== 'false'\n"
+    }
+  ],
+  "status": "fail"
+}

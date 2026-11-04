@@ -1,0 +1,59 @@
+{
+  "task": "app-smart-draft-hydration16",
+  "status": "SOURCE-READY STOP; independent review pending",
+  "baselineHead": "80b01da97db32904b38bea915b61812f5d486528",
+  "productChange": [
+    "src/smart-draft.ts"
+  ],
+  "sourceSha256": {
+    "src/smart-draft.ts": "a97480a10d85fcb50091987af187d0132608528349748f6488715988004abca6",
+    "src/SmartFolderForm.tsx": "41fd3e76ed7d8b53890f51160226871126a0295a9df7be1bed2bf1281746f299",
+    "src/smart-folders.css": "2174301b19a3d4dbcf709ed52d8a76b766be870ffccd32fad9c5a1adb3419a53"
+  },
+  "baselineSmartDraftSha256": "7cf895cc26f8113a2017b08a89a14d91acb2af299385ef454ff2aee70074e5ac",
+  "geometry15Unchanged": {
+    "src/SmartFolderForm.tsx": true,
+    "src/smart-folders.css": true
+  },
+  "checks": {
+    "before": {
+      "exitCode": 1,
+      "truthCases": 20,
+      "formCases": 16,
+      "assertions": 280,
+      "failed": 70
+    },
+    "after": {
+      "exitCode": 0,
+      "truthCases": 20,
+      "formCases": 16,
+      "assertions": 280,
+      "failed": 0
+    },
+    "typecheck": {
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    "existingContract": {
+      "command": "node scripts/check-smart-contract.mjs",
+      "exitCode": 0,
+      "passed": 30
+    }
+  },
+  "evidenceSha256": {
+    "README.md": "d7e08ab45278c6e0423961b6017f6d851d7ac4574320a96e05aa2386790497bf",
+    "after-attempt01/desktop-persisted-false.png": "94f6b581330394f55837daaf539a0e8b485eaa5cf4387f9657a20b4e8256602c",
+    "after-attempt01/mobile-persisted-false.png": "73d0482c757c5696c33f4dc5845c877862ba5c13d33c424a25c82f4dd2d2a4bd",
+    "after-attempt01/result.json": "ddc7b27269695b4ca677b5bc3d92e7600fcca63e7d16f3c99782a6f998eac9f0",
+    "baseline-smart-draft.ts": "7cf895cc26f8113a2017b08a89a14d91acb2af299385ef454ff2aee70074e5ac",
+    "before-attempt01/desktop-persisted-false.png": "04519bd776377ae45c20df20a31379df3f6569968a927ce7cc96faca2912ba0c",
+    "before-attempt01/mobile-persisted-false.png": "031819c5f84875f08e3551439882665231aaeec61081eb9a4eb87e4503db100c",
+    "before-attempt01/result.json": "1db0d4ce9bc312c4335fc0298124554af7546e1281346c93c6827acbed0ff0ad",
+    "check-hydration.mjs": "334c187875fd9538edaae9cc7109e08c0680ee979d68b927965a6e9c5698848c"
+  },
+  "limits": [
+    "No platform build/install/device/cold-start acceptance",
+    "No backend, DB, native GUI, ADB, downloads or Git mutation",
+    "Isolated in-memory callbacks; remount models reopen only"
+  ]
+}
