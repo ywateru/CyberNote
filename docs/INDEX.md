@@ -17,6 +17,7 @@
 - [原版空标签草稿验证09](research/smart-folder-empty-tags-runtime09/README.md)
 - [原版标签候选、胶囊与模式往返草稿10](research/smart-folder-tag-picker-runtime10/README.md)
 - [原版规则新增位置、日期默认及已用类型禁用11](research/smart-folder-rule-add-runtime11/README.md)
+- [三行规则节奏、加减视觉中心与日期框测量12](research/smart-folder-rule-add-measurements12.md)
 - [后续日期规则菜单、范围和相对单位未保存草稿12](research/smart-folder-date-draft-runtime12/README.md)
 - [智能界面准确双端包与有限设备验收准备](plan/tasks/app-smart-u-device09.md)
 - [Mac智能文件夹表单布局](ui/smart-folders-macos.md)
