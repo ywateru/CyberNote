@@ -1,7 +1,7 @@
 ---
 id: app-smart-d2-durable-rules09
 scope: Durable smart definitions, real queries and archive compatibility
-status: pending
+status: in-progress
 depends-on: [app-smart-d1-storage-open09]
 ---
 
@@ -17,6 +17,8 @@ depends-on: [app-smart-d1-storage-open09]
 
 严格物理/智能 Folder 分支：物理六字段保留兼容，禁止 query/definitionRevision（含null）；smart保留六公共字段，parentId必须null，query和definitionRevision必需。自定义 ID 不占 default/quick/trash/all，系统身份固定；不允许normal↔smart转换。定义revision初值1、上限JS安全整数，更新名称与规则共用CAS，缺实体not_found、旧版本smart_conflict、溢出明确失败，不UPSERT复活。
 
+更新与删除都必须携带 expectedDefinitionRevision 并在同SQLite事务中比较；删除也不能以旧版本执行。64KiB上限按query规范JSON序列化后的UTF-8字节计算，不按含空白的输入原文或JS字符数。
+
 query version1闭合形状为 `{version:1,combine:"all"|"any",rules:[...]}`；rule为 `{type:"tags",mode:"allSelected"|"anySelected",names:[...]}`、`{type:"tags",mode:"anyTag"|"noTags"}` 或 `{type:"pinned",value:boolean}`。禁止未知字段、names出现在无需token模式、空selected names、重复name/type、未知mode/version和空rules；当前最多两条不同类型，names最多128，定义query JSON最多64KiB。name复用现合法标签跨度语义：不带#、1..64、精确大小写、不normalize；已选名称可以暂时没有笔记引用。未来规则以显式query版本/capability扩展，不能保存未知opaque值。
 
 求值从真实已校验文档noteTag spans提取，不能按plainText正则。全集排deleted和显式suspended；pinned读取公开元数据。locked行（包括已临时解锁）对tags取unavailable，不假作无标签。all遇false为false、全true才true；any遇true为true、全false才false；其他unavailable，最终仅true入列。未锁普通空文档可命中noTags。成员不持久化；内部生产API返回同一快照的 `{definitionRevision,ids}`，后续列表与计数共用。顺序可沿Store稳定输入顺序，UI排序另层处理。
@@ -28,6 +30,8 @@ query version1闭合形状为 `{version:1,combine:"all"|"any",rules:[...]}`；ru
 ## Version, archive and exposure
 
 DB目标2，D1的识别/事务/未来拒绝继续保留；1→2在同事务校验旧图并提交版本，合法JSON/笔记不重写；2严格两分支。未来版在恢复前拒绝。新归档3接受严格两分支及recordedAt；1/2仍严格旧物理格式，1禁止非空recordedAt，2含义不变。无smart导出仍沿既有1/2；含smart才3。journal版本保持1。导入先映射全部自定义normal+smart，再映射parent、note owner/original owner、selectedFolder/selectedNote、附件和正文既有引用；系统复用，碰撞创建副本，smart revision保留。两次导入的定义/实体互不覆盖。沿原文件journal和SQLite事务，不另写演示导入器。
+
+版本0空库和完整可识别旧0库在同一初始化/整图检查事务中直接提交目标2；既有1走1→2；2重开只校验、不反复赋版本。不先提交1再另开事务升2。智能求值显式接收suspended ID集合，在同一SQLite读快照取得定义与笔记；不调用visible/decrypt提取锁定正文。导入只读preflight与实际finish共用生产Archive预算/版本/格式解析；begin先拒绝含smart再建立Pending/发prepare，finish再次按同策略检查，防止其间源文件被替换。
 
 此批内部Store方法供O复用与真实测试，不接入generic workspace action公开分发，也不新增UI菜单。Session公开导入含smart归档时，在prepare屏障或文件写入前明确 capability_unavailable；公开workspace若库含smart同样明确拒绝，让旧UI不能把smart当物理目录。包含smart活库的其他公开读写不能绕过该检查；现有普通数据不受影响。必须列明lib/Session与Store所有公开接入链及其gate，不只在workspace加一次检查。内部Store真实测试可创建、重开、导出/导入smart；这不是第二套Store。O/U贯通时移除临时capability gate。
 

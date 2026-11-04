@@ -174,6 +174,10 @@ ID 冲突采用导入副本：既有普通文件夹、笔记、附件保留原 I
 
 Folder 旧物理六字段严格解码，未知字段和类型不能忽略，缺省 parentId 仍为 None。default/quick/trash 必须分别使用固定同名 ID、对应 kind 和根层级；自定义仅 normal，all 只作导航。行主键必须等于 JSON id。已有坏 JSON、错 ID/kind、系统非法 parent 或读取错误都报错保全；只有 SQL 真正无行才允许补建。此批不新增旧 normal parent/笔记 owner 能力限制，不重写合法实体、正文、版本、录音日期或设置，不提前开放 smart UI。事务中途失败全部 rollback；原 archive1/2 兼容及恢复语义保持，Folder 的未知字段也不能在归档解码时被丢弃。具体实现及实际测试结果见 plan/tasks/app-smart-d1-storage-open09.md；本节是契约，不能当成已通过证据。
 
+### 智能定义数据接入（APP-SMART-D2，实施中）
+
+下一批契约以 [D2任务](plan/tasks/app-smart-d2-durable-rules09.md) 为准：DB目标2、智能归档3，严格智能分支，标签四模式及置顶all/any真实求值，定义更新/删除CAS，统一物理owner/parent能力，沿现归档冲突映射与事务。旧1/2归档语义保留。公开Session在UI适配完成前明确拒绝含smart工作区及导入；内部真实Store完成持久化、重开和归档测试，不能把旧UI直接暴露给新数据。完整离线规则与两端入口仍为目标；用户选择暂不进行原版删除实验，文件夹引用规则及删除联动后续补齐。D2是实施契约，未完成前不作为已交付能力。
+
 必须逐项验证真实链路：Shell 选择→Editor 初始化；Editor transaction→保存队列→Rust→SQLite→重启；文件选择→Rust 附件复制→编辑器节点→重启预览；搜索→本地数据→列表选择；删除→最近删除→恢复；移动→计数/列表；录音→实际媒体→附件保存→播放；绘画→JSON/图片→重启编辑。先做核心闭环，然后以同一契约补齐功能，不隐藏未实现入口。
 
 

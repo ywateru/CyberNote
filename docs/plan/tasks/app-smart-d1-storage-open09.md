@@ -1,7 +1,7 @@
 ---
 id: app-smart-d1-storage-open09
 scope: Store initialization and strict physical folder decoding
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -30,3 +30,7 @@ depends-on: []
 作者可运行离线、限制jobs=2的窄 Rust 测试及相关现有 Store/archive/Session 回归；先检查至少2GiB空间，独占共享host target，禁止删除cache、下载、升级、平台构建/安装、用户DB和GUI/ADB。如现有正式cargo test成本不适合，复用仓库实际 Store/Session 直引的现有 harness，注明边界并验证使用本次源码；不能复用旧二进制冒称新源码测试。记录实际命令和失败，不扩大重复测试。
 
 作者完成停止写入；root提交固定源后，由不同作者独立检查和必要重跑，再进入D2。root负责commit，作者不stage/commit。当前共享分支串行开发，不切换分支覆盖已有任务。仅此源码前置批不发布替换用户包，不宣称智能功能或像素通过。
+
+## Actual delivery
+
+固定源码提交de3c07f，生产仅store.rs/open.rs/open_tests.rs。作者真实Store/Session回归58通过、0失败、3既有忽略；不同作者复核固定产品blob并实际重跑11项open及3项旧归档/日期用例，14通过、0失败，未见blocking，target已释放。详见作者verification/app-smart-d1-storage-open09和独立review app-smart-d1-storage-open09.md。仅Store初始化源码子任务完成，未打包替换用户应用，DB仍1；D2另批升级格式。
