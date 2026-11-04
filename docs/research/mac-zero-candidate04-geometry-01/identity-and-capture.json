@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-04",
+  "timezone": "Asia/Shanghai",
+  "candidateAppPath": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app",
+  "candidateExecutableSha256": "c1bece8821acb4df552da6b66664a4dec35b6ab136d8922932f92aea31929bbd",
+  "verifiedProcess": {
+    "pid": 56019,
+    "start": "Wed Nov 4 06:19:45 2026",
+    "command": "/private/tmp/notes-unified-candidate04-build-01-mac-sealed.app/Contents/MacOS/notes-clone",
+    "verification": "ps -p 56019 -o pid=,lstart=,command=; read-only escalation after sandbox ps denial"
+  },
+  "originalBinding": "com.apple.Notes",
+  "cloneBinding": "full sealed app path",
+  "query": "QA-NO-MATCH-20261103-2301-ABCDEFGHIJKLMNOPQRSTUVWXYZ-NEVER-EXISTS-7f62c83e9d4a",
+  "freeBeforeKiB": 2179904,
+  "freeBeforeBytes": 2232221696,
+  "freeAtReportBytes": 2220146688,
+  "limitAdditionalBytes": 10485760,
+  "screenOrigin": "not provided by formal CUA screenshot/state API",
+  "windowBounds": "not provided by formal CUA API",
+  "captureFormat": "original returned JPEG bytes, no conversion/re-encoding",
+  "captures": [
+    {
+      "file": "clone-before.jpg",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "bytes": 121550,
+      "sha256": "61dfb1edfd8352aacd97266aab986d611489b842992e4c18ad75bae94424d52f"
+    },
+    {
+      "file": "clone-fill.jpg",
+      "format": "JPEG",
+      "width": 2784,
+      "height": 1806,
+      "bytes": 169956,
+      "sha256": "7dd96e990e562032c6df7cd217e6ff943a16ac654af90c3c3ab9a945b6c17788"
+    },
+    {
+      "file": "original-before.jpg",
+      "format": "JPEG",
+      "width": 2784,
+      "height": 1806,
+      "bytes": 122073,
+      "sha256": "f4390d1a24167d1c13393e1d780d2d14343318777ad82c0de3ec51fe6b2c0439"
+    },
+    {
+      "file": "original-fill.jpg",
+      "format": "JPEG",
+      "width": 2784,
+      "height": 1806,
+      "bytes": 145596,
+      "sha256": "e322a1a7e88b526ae9af1caffa56063ffa3e5ade9b193570734c5e208cdc021e"
+    }
+  ]
+}

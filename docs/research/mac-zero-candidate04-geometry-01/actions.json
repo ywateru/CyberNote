@@ -1,0 +1,38 @@
+[
+  {
+    "action": "read documented CUA capabilities",
+    "result": "no window bounds read/write; getAXStateAndScreenshot returns only state and screenshot bytes on this route"
+  },
+  {
+    "action": "bind original by com.apple.Notes and clone by sealed app full path",
+    "result": "both successful, <20s; no locked screen or timeout"
+  },
+  {
+    "action": "original Raise and read AX+JPEG",
+    "result": "existing explicit query, zero state retained"
+  },
+  {
+    "action": "clone Raise; click current AX search field; type identical explicit query; click list heading",
+    "result": "zero state; search field blurred; no body operation"
+  },
+  {
+    "action": "inspect original Window menu; click enabled Fill at observed index7",
+    "result": "Window menu contained 填充; AX+rawJPEG saved"
+  },
+  {
+    "action": "inspect clone Window menu; click enabled Fill at observed index7",
+    "result": "Window menu contained Fill; AX+rawJPEG saved"
+  },
+  {
+    "action": "original Raise then one click([650,400]) intended to move title pointer to blank area",
+    "result": "CUA returned Computer Use server error -10005: windowNotFoundAtPosition((373.0, 229.0)); no retry or further GUI action; existing fill capture kept with cursor glow"
+  },
+  {
+    "action": "persist returned raw bytes and AX without transformation",
+    "result": "4 JPEG files / 559175 B; total evidence safely under10MiB"
+  },
+  {
+    "action": "release GUI to root",
+    "result": "no build/download/attachment click/Dock/permission change/native body editing"
+  }
+]
