@@ -1,0 +1,22 @@
+{
+  "scriptUnchangedFromRecordedCommand": true,
+  "runs": [
+    {
+      "attempt": 1,
+      "exitCode": 1,
+      "stage": "local listener before entering App",
+      "log": "fresh-production-listen-permission-failure.log",
+      "reason": "listen EPERM 127.0.0.1"
+    },
+    {
+      "attempt": 2,
+      "sameScript": true,
+      "permission": "tool-approved local listener escalation",
+      "exitCode": 0,
+      "log": "fresh-production.log",
+      "result": "fresh-production.json",
+      "status": "pass"
+    }
+  ],
+  "onlyOneRunEnteredApp": true
+}

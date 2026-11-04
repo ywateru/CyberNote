@@ -1,0 +1,12 @@
+--- preserved-baseline/src/style.css
++++ fixed-candidate/src/style.css
+@@ -1993,6 +1993,9 @@
+   .mobile .folder-footer > button {
+     color: var(--accent);
+   }
++  .mobile.page-folders .folder-footer {
++    padding-right: 14px;
++  }
+   .mobile.page-folders .folder-footer > button:first-child {
+     position: relative;
+   }

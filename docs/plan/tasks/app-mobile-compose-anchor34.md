@@ -1,7 +1,7 @@
 ---
 id: app-mobile-compose-anchor34
 scope: Mobile folders page right compose button layout anchor
-status: source-ready
+status: source-reviewed
 depends-on: [app-mac-ordinary-typography31, mobile-compose-readiness32]
 ---
 
@@ -22,6 +22,8 @@ depends-on: [app-mac-ordinary-typography31, mobile-compose-readiness32]
 ```
 
 ## Verification and gate
+
+独立源阶段接收：固定e194753，不同作者一次fresh窄生产运行及独立ROI/差异复核通过；新命中条带触发真实newNote、旧条带拒绝，左plus保留。root复核19项独审索引全部匹配。见[独立审查](../reviews/app-mobile-compose-anchor34.md)。准确Android08实际位移、触摸与重启仍待验，路径及整体像素继续partial。
 
 2026-11-05作者STOP：唯一候选局部padding-right 17→14，button/SVG/path共同右移3CSS；8项有限真实回调/坐标边界通过，Mac及稳定手机列表样式/几何/PNG保持。宿主中心205.972→207.734，原208；实际07平移模型207.978只属模型，尚无新设备结果。root核30项索引匹配，等待固定提交与不同作者独审。详见[作者证据](../../verification/mobile-compose-anchor34/README.md)，原进场动画/端口冲突等工具失败保留。
 
