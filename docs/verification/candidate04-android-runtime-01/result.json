@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-04",
+  "status": "SCOPED_RUNTIME_CHECKS_COMPLETE_WITH_LIMITATIONS",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "apk": {
+    "bytes": 304110831,
+    "sha256": "bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2"
+  },
+  "checks": {
+    "exactInstalledCandidate04": "PASS",
+    "realLaunch": "PASS",
+    "realInputSaveAndColdRestore": "PASS",
+    "systemPickerOcrInsertAndColdRestore": "PASS_WITH_RECORDED_INSERTION_POSITION",
+    "specifiedOldAudioTransport": "PASS",
+    "newRecordingStartPausePreviewComplete": "PASS",
+    "newRecordingDocumentAttachmentAndFileColdPersistence": "PASS",
+    "originalThreeRowsOldAttachmentAndAudioUnchanged": "PASS",
+    "newRecordingDecodeNonzeroTrack": "BLOCKED_AUTO_REVIEW_NO_EXPORT_EXECUTED",
+    "previewPauseAtStep52": "NOT_PROVEN_STEP_RESTARTED_PLAYBACK",
+    "actualAudibility": "UNKNOWN",
+    "pixelFidelity": "UNKNOWN",
+    "normalProcessExit": "NOT_PROVEN_FORCE_STOP_USED",
+    "firstOfflineOcr": "NOT_EXECUTED_NETWORK_NOT_DISABLED",
+    "nativeIos": "NOT_EXECUTED",
+    "physicalMobileDevice": "NOT_EXECUTED",
+    "newRecordingSavedCardTransport": "PASS_PROGRESS_0_TO_10_SECONDS_PAUSED_AT_23_SECONDS"
+  },
+  "newNoteId": "2e1d2253-a332-42cc-85ad-0f66752e6498",
+  "finalRevision": 71,
+  "newAudio": {
+    "id": "6771077d-eee5-4c9a-875b-e9b7445cf516",
+    "bytes": 168397,
+    "sha256": "6e145210f656836e9f1260f8e349af1ab8737e52885b27ed70fba80bf15fb32c",
+    "payloadExported": false
+  },
+  "lastPid": 15156,
+  "productCodeChanged": false,
+  "databaseOrWalTransferred": false,
+  "oldAudioTransferred": false,
+  "deviceAudioSourceOrPermissionConfigurationChanged": false,
+  "budgetBytes": 15728640,
+  "minimumHostFreeBytes": 2147483648,
+  "deviceReleasedAfterStep": "67-final-new-audio-device",
+  "finalUi": "New synthetic note, expanded new recording card, paused at 0:23"
+}

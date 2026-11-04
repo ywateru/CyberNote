@@ -1,0 +1,38 @@
+[
+  {
+    "at": "2026-11-04T01:08:21.802421+00:00",
+    "args": [
+      "shell",
+      "input",
+      "tap",
+      "590",
+      "1795"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:08:23.010477+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-16-scan-text-picker.xml"
+    ],
+    "exit": 137,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:08:23.038244+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "13392\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "docs/verification/unified-candidate04/preparation/seal-mac.py",
+    "5201d3151462211e51d357f1f8ecc778269a3859",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-candidate05-wide-toolbar-build-01"
+  ],
+  "exitCode": 0,
+  "stdout": "{'at': '2026-11-04T01:29:21.972826+00:00', 'expectedHead': '5201d3151462211e51d357f1f8ecc778269a3859', 'sourceAggregate': 'e78df0710e6229ad4062079010b7e416cb5849d0c6f74eb0ba87254da6e7bd90', 'sourceApp': '/private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-original-b96ca225.app', 'derivedApp': '/private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-sealed.app', 'preservedOriginalUnchanged': True, 'executable': {'path': '/private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-sealed.app/Contents/MacOS/notes-clone', 'bytes': 16005376, 'sha256': 'c4a433e1930bd4bbc07bfb0baa70e0293a28fdba32bd4882a46332176d13c96c'}, 'bundleAggregate': '25317e694a6cebbd862e0433f5196fec013dd08005ffc4877716af3940564e52', 'archive': {'path': '/private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-sealed.zip', 'bytes': 4751477, 'sha256': 'ed29e5d4bf37bf478deca691096acb05360beedc861718fa23e3bd4067b19f13'}, 'scope': 'Complete local adhoc bundle signature only. No Developer ID, notarization, distribution, TCC permission or runtime acceptance claim.'}\n",
+  "stderr": ""
+}

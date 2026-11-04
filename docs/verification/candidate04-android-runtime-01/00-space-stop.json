@@ -1,0 +1,20 @@
+{
+  "at": "2026-11-04T01:01:25.279627+00:00",
+  "phase": "after",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "hostFreeBytes": 2106560512,
+  "status": "FAIL_STOP",
+  "error": "Host free space below 2 GiB",
+  "copyHandling": "Existing device sqlite3 -readonly queried exactly three synthetic note IDs and one attachment ID. No DB/WAL or audio bytes copied to host; whole-file DB/WAL and audio identities computed on device only.",
+  "notExecuted": [
+    "app launch",
+    "UI input",
+    "force-stop",
+    "mirror",
+    "microphone configuration",
+    "permission operation",
+    "uninstall",
+    "clear data"
+  ]
+}

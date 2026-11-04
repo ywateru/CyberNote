@@ -1,0 +1,32 @@
+{
+  "startedAt": "2026-11-04T01:28:36.750019+00:00",
+  "stage": "mac",
+  "expectedHead": "5201d3151462211e51d357f1f8ecc778269a3859",
+  "sourceAggregate": "e78df0710e6229ad4062079010b7e416cb5849d0c6f74eb0ba87254da6e7bd90",
+  "attempt": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-candidate05-wide-toolbar-build-01/mac-attempt01",
+  "exitCode": 0,
+  "diskFreeBefore": 5319520256,
+  "explicitEnvironmentOverrides": {
+    "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+    "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+    "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+    "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "command": [
+    "pnpm",
+    "mac:build"
+  ],
+  "inputComparisons": {
+    "head": true,
+    "files": true,
+    "toolVersions": true,
+    "relevantEnvironment": true,
+    "selectedParentEnvironment": true,
+    "effectiveBuildEnvironment": true,
+    "ocrCache": true
+  },
+  "endedAt": "2026-11-04T01:29:07.775886+00:00",
+  "diskFreeAfter": 5285810176
+}

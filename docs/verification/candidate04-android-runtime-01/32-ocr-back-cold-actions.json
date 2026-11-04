@@ -1,0 +1,52 @@
+[
+  {
+    "at": "2026-11-04T01:16:13.823545+00:00",
+    "args": [
+      "shell",
+      "input",
+      "tap",
+      "117",
+      "145"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:16:13.929964+00:00",
+    "args": [
+      "shell",
+      "am",
+      "force-stop",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:16:14.640975+00:00",
+    "args": [
+      "shell",
+      "am",
+      "start",
+      "-W",
+      "-n",
+      "com.local.notesclone/.MainActivity"
+    ],
+    "exit": 0,
+    "stdout": "Starting: Intent { cmp=com.local.notesclone/.MainActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.local.notesclone/.MainActivity\nTotalTime: 628\nWaitTime: 629\nComplete\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:16:15.023115+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "14468\n",
+    "stderr": ""
+  }
+]

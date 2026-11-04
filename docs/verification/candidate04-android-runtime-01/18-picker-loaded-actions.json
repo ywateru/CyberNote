@@ -1,0 +1,40 @@
+[
+  {
+    "at": "2026-11-04T01:09:16.567444+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-18-picker-loaded.xml"
+    ],
+    "exit": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c04-18-picker-loaded.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:09:16.594088+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c04-18-picker-loaded.xml"
+    ],
+    "exit": 0,
+    "stdout": {
+      "savedAs": "18-picker-loaded.xml",
+      "bytes": 25764,
+      "sha256": "85bcdce13e57a8d78e50b19adb158f4f79159df915b4c25228b95b970708649b"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:09:16.618399+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "13392\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "at": "2026-11-04T01:06:26.345918+00:00",
+    "args": [
+      "shell",
+      "am",
+      "force-stop",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:06:27.114111+00:00",
+    "args": [
+      "shell",
+      "am",
+      "start",
+      "-W",
+      "-n",
+      "com.local.notesclone/.MainActivity"
+    ],
+    "exit": 0,
+    "stdout": "Starting: Intent { cmp=com.local.notesclone/.MainActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.local.notesclone/.MainActivity\nTotalTime: 667\nWaitTime: 667\nComplete\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:06:28.981197+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-09-cold-relaunch.xml"
+    ],
+    "exit": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c04-09-cold-relaunch.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:06:29.004297+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c04-09-cold-relaunch.xml"
+    ],
+    "exit": 0,
+    "stdout": {
+      "savedAs": "09-cold-relaunch.xml",
+      "bytes": 2483,
+      "sha256": "167836c1a5aa22170491dd6836341d206706cb84d94525f54632974690a010a2"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:06:29.022319+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "13392\n",
+    "stderr": ""
+  }
+]

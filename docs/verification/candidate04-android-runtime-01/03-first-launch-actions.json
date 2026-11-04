@@ -1,0 +1,39 @@
+[
+  {
+    "at": "2026-11-04T01:03:41.916777+00:00",
+    "args": [
+      "shell",
+      "am",
+      "start",
+      "-W",
+      "-n",
+      "com.local.notesclone/.MainActivity"
+    ],
+    "exit": 0,
+    "stdout": "Starting: Intent { cmp=com.local.notesclone/.MainActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.local.notesclone/.MainActivity\nTotalTime: 606\nWaitTime: 610\nComplete\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:03:43.981668+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/dev/tty"
+    ],
+    "exit": 0,
+    "stdout": "UI hierchary dumped to: /dev/tty\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:03:44.257020+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "13017\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,64 @@
+{
+  "host": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/qa-scan-plugin/chinese-fixture.png",
+  "remote": "/sdcard/Download/notes-clone-qa/candidate04-runtime-20261104A-chinese-fixture.png",
+  "existedBefore": false,
+  "pushed": true,
+  "bytes": 70361,
+  "sha256": "53e4caa8f5d48a7a3bbb55ba0b72b93a33bf3def9418142edbbe9f8a35facda9",
+  "events": [
+    {
+      "args": [
+        "shell",
+        "test",
+        "-e",
+        "/sdcard/Download/notes-clone-qa/candidate04-runtime-20261104A-chinese-fixture.png"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "mkdir",
+        "-p",
+        "/sdcard/Download/notes-clone-qa"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "push",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/qa-scan-plugin/chinese-fixture.png",
+        "/sdcard/Download/notes-clone-qa/candidate04-runtime-20261104A-chinese-fixture.png"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/qa-scan-plugin/chinese-fixture.png: 1 file pushed, 0 skipped. 21.4 MB/s (70361 bytes in 0.003s)\n"
+    },
+    {
+      "args": [
+        "shell",
+        "stat",
+        "-c",
+        "%s",
+        "/sdcard/Download/notes-clone-qa/candidate04-runtime-20261104A-chinese-fixture.png"
+      ],
+      "exit": 0,
+      "stdout": "70361\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "sha256sum",
+        "/sdcard/Download/notes-clone-qa/candidate04-runtime-20261104A-chinese-fixture.png"
+      ],
+      "exit": 0,
+      "stdout": "53e4caa8f5d48a7a3bbb55ba0b72b93a33bf3def9418142edbbe9f8a35facda9  /sdcard/Download/notes-clone-qa/candidate04-runtime-20261104A-chinese-fixture.png\n",
+      "stderr": ""
+    }
+  ]
+}

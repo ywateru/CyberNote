@@ -1,0 +1,53 @@
+[
+  {
+    "at": "2026-11-04T01:26:12.568566+00:00",
+    "args": [
+      "shell",
+      "input",
+      "tap",
+      "538",
+      "1940"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:26:14.167914+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-50-recording-pause.xml"
+    ],
+    "exit": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c04-50-recording-pause.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:26:14.193145+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c04-50-recording-pause.xml"
+    ],
+    "exit": 0,
+    "stdout": {
+      "savedAs": "50-recording-pause.xml",
+      "bytes": 8237,
+      "sha256": "73da69859161079ea726a82075490d0347980438e463b668a90f214ed5a4eb8b"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:26:14.210841+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "14468\n",
+    "stderr": ""
+  }
+]

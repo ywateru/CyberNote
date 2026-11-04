@@ -1,0 +1,49 @@
+[
+  {
+    "at": "2026-11-04T01:13:57.486091+00:00",
+    "args": [
+      "shell",
+      "input",
+      "keyevent",
+      "20"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:13:57.992080+00:00",
+    "args": [
+      "shell",
+      "input",
+      "keyevent",
+      "66"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:13:59.378707+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-28-picker-key-select.xml"
+    ],
+    "exit": 137,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:13:59.402665+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "13392\n",
+    "stderr": ""
+  }
+]

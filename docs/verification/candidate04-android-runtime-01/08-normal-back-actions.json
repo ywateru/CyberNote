@@ -1,0 +1,50 @@
+[
+  {
+    "at": "2026-11-04T01:05:57.798976+00:00",
+    "args": [
+      "shell",
+      "input",
+      "keyevent",
+      "4"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:05:58.290507+00:00",
+    "args": [
+      "shell",
+      "input",
+      "tap",
+      "115",
+      "145"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:05:59.482081+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-08-normal-back.xml"
+    ],
+    "exit": 137,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:05:59.503430+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "13017\n",
+    "stderr": ""
+  }
+]

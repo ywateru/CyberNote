@@ -1,0 +1,40 @@
+[
+  {
+    "at": "2026-11-04T01:14:21.447508+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-29-ocr-result.xml"
+    ],
+    "exit": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c04-29-ocr-result.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:14:21.466834+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c04-29-ocr-result.xml"
+    ],
+    "exit": 0,
+    "stdout": {
+      "savedAs": "29-ocr-result.xml",
+      "bytes": 2809,
+      "sha256": "128fe4823f6523411d79b28aef84167d189845ea8a0aaa2b77f0057281315c8c"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:14:21.487539+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "13392\n",
+    "stderr": ""
+  }
+]

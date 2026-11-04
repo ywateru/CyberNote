@@ -1,0 +1,31 @@
+{
+  "expectedHead": "5201d3151462211e51d357f1f8ecc778269a3859",
+  "candidate": "Mac-only candidate05",
+  "productFile": "plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+  "productSha256": "14f9d44bdd7b890aee5f190650ad1356904c3495240299f732e758dade2e710d",
+  "tools": [
+    {
+      "path": "docs/verification/unified-candidate04/preparation/common.py",
+      "sha256": "0c18524b106fce0c4331e000a61018f2aa0b071054024738c94dbd32c5377d21"
+    },
+    {
+      "path": "docs/verification/unified-candidate04/preparation/capture-inputs.py",
+      "sha256": "3d6e76d545e1c8d053ff778cbca2481dcadd148db7a4d427d3c1b8ce35575bb7"
+    },
+    {
+      "path": "docs/verification/unified-candidate04/preparation/run-build-safe-cleanup.py",
+      "sha256": "3b7248eea0a7030b0447cf999d6ace3292d3e0287ec41abe6d777451763c7f1e"
+    },
+    {
+      "path": "docs/verification/unified-candidate04/preparation/capture-outputs.py",
+      "sha256": "599a5f27fc23a4f70c2355976e8a49598599c783f5e6cd1ee6889d4639d00463"
+    },
+    {
+      "path": "docs/verification/unified-candidate04/preparation/seal-mac.py",
+      "sha256": "4a8383971bd1cf56aef238cc4886e88153bc61e03846031669eb7432121da93c"
+    }
+  ],
+  "freeBytes": 5319917568,
+  "authorTargetCoordination": "develop_app confirmed tags03 only frontend and existing Store CLI; no Rust compilation or target writes",
+  "scope": "No GUI/install/device/Android/recovery/target copy/cleanup/download; tool candidate04 strings retained as original tool identity."
+}

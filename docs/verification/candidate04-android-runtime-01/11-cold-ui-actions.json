@@ -1,0 +1,40 @@
+[
+  {
+    "at": "2026-11-04T01:06:54.727390+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-11-cold-ui.xml"
+    ],
+    "exit": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c04-11-cold-ui.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:06:54.743135+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c04-11-cold-ui.xml"
+    ],
+    "exit": 0,
+    "stdout": {
+      "savedAs": "11-cold-ui.xml",
+      "bytes": 8732,
+      "sha256": "96f621890a4b359bf5cc20afa7328831bef182f2ed0e291f175d8260dd8fae47"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:06:54.761910+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "13392\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "at": "2026-11-04T01:35:41.203761+00:00",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "noteId": "2e1d2253-a332-42cc-85ad-0f66752e6498",
+  "attachmentId": "6771077d-eee5-4c9a-875b-e9b7445cf516",
+  "remote": "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob",
+  "bytes": 168397,
+  "sha256": "6e145210f656836e9f1260f8e349af1ab8737e52885b27ed70fba80bf15fb32c",
+  "events": [
+    {
+      "args": [
+        "shell",
+        "run-as",
+        "com.local.notesclone",
+        "stat",
+        "-c",
+        "%s",
+        "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob"
+      ],
+      "exit": 0,
+      "stdout": "168397",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "shell",
+        "run-as",
+        "com.local.notesclone",
+        "sha256sum",
+        "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob"
+      ],
+      "exit": 0,
+      "stdout": "6e145210f656836e9f1260f8e349af1ab8737e52885b27ed70fba80bf15fb32c  /data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob",
+      "stderr": ""
+    }
+  ],
+  "scope": "Device-side stat and sha256sum of this exact new attachment only. No audio payload or database transferred."
+}

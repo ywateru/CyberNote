@@ -1,0 +1,53 @@
+[
+  {
+    "at": "2026-11-04T01:25:05.810665+00:00",
+    "args": [
+      "shell",
+      "input",
+      "tap",
+      "592",
+      "1288"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:25:07.411765+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-48-recording-idle.xml"
+    ],
+    "exit": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c04-48-recording-idle.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:25:07.437316+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c04-48-recording-idle.xml"
+    ],
+    "exit": 0,
+    "stdout": {
+      "savedAs": "48-recording-idle.xml",
+      "bytes": 12888,
+      "sha256": "63de1ba86c0cd6e267208f8643c9a18f99ea6be97c76712cf4d18f486bf4a1fa"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:25:07.456294+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "14468\n",
+    "stderr": ""
+  }
+]

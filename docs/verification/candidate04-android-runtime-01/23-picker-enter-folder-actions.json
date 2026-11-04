@@ -1,0 +1,53 @@
+[
+  {
+    "at": "2026-11-04T01:11:57.066397+00:00",
+    "args": [
+      "shell",
+      "input",
+      "tap",
+      "100",
+      "785"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:11:58.672072+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-23-picker-enter-folder.xml"
+    ],
+    "exit": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c04-23-picker-enter-folder.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:11:58.691167+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c04-23-picker-enter-folder.xml"
+    ],
+    "exit": 0,
+    "stdout": {
+      "savedAs": "23-picker-enter-folder.xml",
+      "bytes": 23012,
+      "sha256": "3d3be01a14334baa40ce1be6441db4abf1cf6ee84b1c1276e999cd268a1ea04e"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:11:58.708204+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "13392\n",
+    "stderr": ""
+  }
+]

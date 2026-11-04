@@ -1,0 +1,53 @@
+[
+  {
+    "at": "2026-11-04T01:21:18.037629+00:00",
+    "args": [
+      "shell",
+      "input",
+      "tap",
+      "482",
+      "688"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:21:19.831795+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c04-35-ocr-cold-visible.xml"
+    ],
+    "exit": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c04-35-ocr-cold-visible.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:21:19.848376+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c04-35-ocr-cold-visible.xml"
+    ],
+    "exit": 0,
+    "stdout": {
+      "savedAs": "35-ocr-cold-visible.xml",
+      "bytes": 2482,
+      "sha256": "7bd3d7c7e2d992a7e312de45c30de682e2c15dea53e22890e5a60c38b424544e"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T01:21:19.867354+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exit": 0,
+    "stdout": "14468\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "at": "2026-11-04T01:29:59.898325+00:00",
+  "stage": "Mac formal candidate05 only",
+  "head": "5201d3151462211e51d357f1f8ecc778269a3859",
+  "sourceCount": 285,
+  "sourceAggregate": "e78df0710e6229ad4062079010b7e416cb5849d0c6f74eb0ba87254da6e7bd90",
+  "inputComparisons": {
+    "head": true,
+    "files": true,
+    "toolVersions": true,
+    "relevantEnvironment": true,
+    "selectedParentEnvironment": true,
+    "effectiveBuildEnvironment": true,
+    "ocrCache": true
+  },
+  "originalBundleStillMatchesIdentity": true,
+  "sealedBundleMatchesIdentity": true,
+  "archivesStillMatchIdentities": true,
+  "originalStrictVerifyExit": 1,
+  "sealedStrictVerifyExit": 0,
+  "sealingChangedPaths": [
+    "Contents/MacOS/notes-clone",
+    "Contents/_CodeSignature/CodeResources"
+  ],
+  "originalExecutable": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app/Contents/MacOS/notes-clone",
+    "bytes": 16080752,
+    "sha256": "b96ca225c7848b9d6afc4755fd5ae037aab2558b3773c378eecb16ae2ea36eef"
+  },
+  "sealedExecutable": {
+    "path": "/private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-sealed.app/Contents/MacOS/notes-clone",
+    "bytes": 16005376,
+    "sha256": "c4a433e1930bd4bbc07bfb0baa70e0293a28fdba32bd4882a46332176d13c96c"
+  },
+  "originalArchive": {
+    "path": "/private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-original-b96ca225.zip",
+    "bytes": 4821559,
+    "sha256": "a27b887a4f45537e6f7ca0f439c843d73f4068417829411d5dfc0202757efc40"
+  },
+  "sealedArchive": {
+    "path": "/private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-sealed.zip",
+    "bytes": 4751477,
+    "sha256": "ed29e5d4bf37bf478deca691096acb05360beedc861718fa23e3bd4067b19f13"
+  },
+  "derivedApp": "/private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-sealed.app",
+  "buildElapsedSeconds": 32.094,
+  "minimumObservedFreeBytes": 5185052672,
+  "diskFreeAfter": 5325426688,
+  "trackedDiffAfter": [],
+  "toolsUnchanged": true,
+  "sharedTarget": "Build complete; final independent process precheck pending before release.",
+  "limits": "No launch/GUI/install/device/Android build or runtime/pixel acceptance. Android candidate04 remains a separate source/artifact/runtime identity. Original linker signature strict failure preserved; sealed derivative local adhoc strict pass only. Old candidate04 tool names retained as original tool identity, not a candidate04 runtime claim."
+}

@@ -1,7 +1,7 @@
 ---
 id: app-001-wide-toolbar-runtime-01
 scope: mac-only-wide-toolbar-candidate05-build-and-runtime
-status: ready
+status: in-progress
 depends-on: [app-001-wide-toolbar-geometry-01]
 ---
 
@@ -26,6 +26,8 @@ root 先整合独审通过的宽窗源码，核对唯一产品文件及依赖不
 保存原始完整 .app/ZIP，另从它生成完整本地 adhoc 签名副本/ZIP，严格验证；不可只复制可执行文件或将签名变化冒充原始源。收集实际二进制/资源/签名哈希与冻结输入。使用新临时输出名，主线 artifacts/mac-candidate05-wide-toolbar/ 中保留可审阅交付文件；不覆盖 candidate04。任何失败和变更都使用新的尝试目录，旧记录保留。产物构建不等于启动、无损采图、像素或交互通过。
 
 ## runtime boundary
+
+2026-11-04构建阶段已完成：精确5201d3151462211e51d357f1f8ecc778269a3859，285列明输入e78df071…，完整本地签名ZIP ed29e5d4…保存在artifacts/mac-candidate05-wide-toolbar/。root核24证据及完整包/ZIP。首次CUA绑定旧04返回Mac已锁定；旧04未退出、新05未启动。原始记录见verification/mac-candidate05-wide-toolbar-runtime-01/01-old-bind-locked.json，等待用户解锁后续跑，本项不因此标verified。
 
 构建操作者不使用 GUI 或安装，由 root 串行安排 CUA：核精确包/进程身份，保存现有合成正文后正常退出旧克隆，启动确切新包；新建、表格/清单/附件/共享各组布局和搜索入口按权限/当前内容选择可用状态。三栏有/无侧栏的宽窗与窄窗、galleryBrowse/galleryExpanded、搜索续输/清除、菜单锚点和拖宽连续均需分别记录。只读原版与克隆同尺寸、同内容、主题、布局及焦点条件后才做比较。
 
