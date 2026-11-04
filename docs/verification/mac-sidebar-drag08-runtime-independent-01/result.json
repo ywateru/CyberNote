@@ -1,0 +1,925 @@
+{
+  "verdict": "PASS_FINITE_EXACT_PACKAGE_DRAG_SELECTION_AND_RECOVERY",
+  "rawFiles": 45,
+  "inputs": 51,
+  "formats": [
+    {
+      "path": "03-initial-visible.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2176,
+        1320
+      ]
+    },
+    {
+      "path": "04-visible-wide.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "05-sidebar-narrow.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "06-sidebar-restored.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "07-body-selection.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "08-selected-sidebar-narrow.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "09-selected-sidebar-restored.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "10-selected-list-narrow.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "11-selected-list-restored.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "12-hidden.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "13-direct-restored.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "15-menu-hidden.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "17-menu-restored.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2788,
+        1806
+      ]
+    },
+    {
+      "path": "20-cold-visible.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2176,
+        1320
+      ]
+    },
+    {
+      "path": "21-cold-hidden.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2176,
+        1320
+      ]
+    },
+    {
+      "path": "22-cold-direct-restored.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2176,
+        1320
+      ]
+    },
+    {
+      "path": "23-cold-hidden-again.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2176,
+        1320
+      ]
+    },
+    {
+      "path": "25-cold-menu-restored.cua-image",
+      "format": "JPEG",
+      "mode": "RGB",
+      "size": [
+        2176,
+        1320
+      ]
+    }
+  ],
+  "exeSha256": "9de0996603eaa91d4185a85f462ae73e3adaa6c22b8320de339208622143b65b",
+  "processChain": [
+    "Mac07 95696",
+    "exited",
+    "Mac08 4556",
+    "normal quit exited",
+    "Mac08 4772"
+  ],
+  "bodyCorpus": [
+    {
+      "path": "03-initial-visible.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "04-visible-wide.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "05-sidebar-narrow.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "06-sidebar-restored.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "07-body-selection.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": [
+        "ABCDE"
+      ]
+    },
+    {
+      "path": "08-selected-sidebar-narrow.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": [
+        "ABCDE"
+      ]
+    },
+    {
+      "path": "09-selected-sidebar-restored.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": [
+        "ABCDE"
+      ]
+    },
+    {
+      "path": "10-selected-list-narrow.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": [
+        "ABCDE"
+      ]
+    },
+    {
+      "path": "11-selected-list-restored.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": [
+        "ABCDE"
+      ]
+    },
+    {
+      "path": "12-hidden.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "13-direct-restored.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "15-menu-hidden.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "17-menu-restored.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "20-cold-visible.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "21-cold-hidden.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "22-cold-direct-restored.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "23-cold-hidden-again.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    },
+    {
+      "path": "25-cold-menu-restored.ax.txt",
+      "codepoints": 257,
+      "utf8Bytes": 547,
+      "sha256": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "selectedText": []
+    }
+  ],
+  "menuOnlyAX": [
+    "14-menu-visible",
+    "16-menu-hidden-label",
+    "24-cold-menu-show"
+  ],
+  "geometry": {
+    "04-visible-wide": {
+      "rootRecordedSidebarBoundary": 456,
+      "dateLeftInkAnchor": 489,
+      "listRightDarkColumn": [
+        1178
+      ],
+      "profileScope": "Raw screenshot pixels, no image registration or internal clone frame read"
+    },
+    "05-sidebar-narrow": {
+      "rootRecordedSidebarBoundary": 416,
+      "dateLeftInkAnchor": 449,
+      "listRightDarkColumn": [
+        1138
+      ],
+      "profileScope": "Raw screenshot pixels, no image registration or internal clone frame read"
+    },
+    "06-sidebar-restored": {
+      "rootRecordedSidebarBoundary": 456,
+      "dateLeftInkAnchor": 489,
+      "listRightDarkColumn": [
+        1178
+      ],
+      "profileScope": "Raw screenshot pixels, no image registration or internal clone frame read"
+    },
+    "07-body-selection": {
+      "rootRecordedSidebarBoundary": 456,
+      "dateLeftInkAnchor": 489,
+      "listRightDarkColumn": [
+        1178
+      ],
+      "profileScope": "Raw screenshot pixels, no image registration or internal clone frame read"
+    },
+    "08-selected-sidebar-narrow": {
+      "rootRecordedSidebarBoundary": 416,
+      "dateLeftInkAnchor": 449,
+      "listRightDarkColumn": [
+        1138
+      ],
+      "profileScope": "Raw screenshot pixels, no image registration or internal clone frame read"
+    },
+    "09-selected-sidebar-restored": {
+      "rootRecordedSidebarBoundary": 456,
+      "dateLeftInkAnchor": 489,
+      "listRightDarkColumn": [
+        1178
+      ],
+      "profileScope": "Raw screenshot pixels, no image registration or internal clone frame read"
+    },
+    "10-selected-list-narrow": {
+      "rootRecordedSidebarBoundary": 456,
+      "dateLeftInkAnchor": 489,
+      "listRightDarkColumn": [
+        1138
+      ],
+      "profileScope": "Raw screenshot pixels, no image registration or internal clone frame read"
+    },
+    "11-selected-list-restored": {
+      "rootRecordedSidebarBoundary": 456,
+      "dateLeftInkAnchor": 489,
+      "listRightDarkColumn": [
+        1178
+      ],
+      "profileScope": "Raw screenshot pixels, no image registration or internal clone frame read"
+    }
+  },
+  "blueDiagnostic": {
+    "03-initial-visible": {
+      "interface": {
+        "roi": [
+          472,
+          104,
+          1162,
+          1280
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "footer": {
+        "roi": [
+          0,
+          1114,
+          456,
+          1320
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "body": {
+        "roi": [
+          1130,
+          240,
+          1500,
+          340
+        ],
+        "pixels": 0,
+        "bbox": null
+      }
+    },
+    "04-visible-wide": {
+      "interface": {
+        "roi": [
+          472,
+          104,
+          1162,
+          1766
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "footer": {
+        "roi": [
+          0,
+          1600,
+          456,
+          1806
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "body": {
+        "roi": [
+          1130,
+          240,
+          1500,
+          340
+        ],
+        "pixels": 0,
+        "bbox": null
+      }
+    },
+    "05-sidebar-narrow": {
+      "interface": {
+        "roi": [
+          432,
+          104,
+          1122,
+          1766
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "footer": {
+        "roi": [
+          0,
+          1600,
+          416,
+          1806
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "body": {
+        "roi": [
+          1130,
+          240,
+          1500,
+          340
+        ],
+        "pixels": 0,
+        "bbox": null
+      }
+    },
+    "06-sidebar-restored": {
+      "interface": {
+        "roi": [
+          472,
+          104,
+          1162,
+          1766
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "footer": {
+        "roi": [
+          0,
+          1600,
+          456,
+          1806
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "body": {
+        "roi": [
+          1130,
+          240,
+          1500,
+          340
+        ],
+        "pixels": 0,
+        "bbox": null
+      }
+    },
+    "07-body-selection": {
+      "interface": {
+        "roi": [
+          472,
+          104,
+          1162,
+          1766
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "footer": {
+        "roi": [
+          0,
+          1600,
+          456,
+          1806
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "body": {
+        "roi": [
+          1130,
+          240,
+          1500,
+          340
+        ],
+        "pixels": 1609,
+        "bbox": [
+          1225,
+          270,
+          1313,
+          304
+        ]
+      }
+    },
+    "08-selected-sidebar-narrow": {
+      "interface": {
+        "roi": [
+          432,
+          104,
+          1122,
+          1766
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "footer": {
+        "roi": [
+          0,
+          1600,
+          416,
+          1806
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "body": {
+        "roi": [
+          1130,
+          240,
+          1500,
+          340
+        ],
+        "pixels": 2046,
+        "bbox": [
+          1185,
+          270,
+          1272,
+          302
+        ]
+      }
+    },
+    "09-selected-sidebar-restored": {
+      "interface": {
+        "roi": [
+          472,
+          104,
+          1162,
+          1766
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "footer": {
+        "roi": [
+          0,
+          1600,
+          456,
+          1806
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "body": {
+        "roi": [
+          1130,
+          240,
+          1500,
+          340
+        ],
+        "pixels": 2050,
+        "bbox": [
+          1225,
+          270,
+          1312,
+          302
+        ]
+      }
+    },
+    "10-selected-list-narrow": {
+      "interface": {
+        "roi": [
+          472,
+          104,
+          1122,
+          1766
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "footer": {
+        "roi": [
+          0,
+          1600,
+          456,
+          1806
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "body": {
+        "roi": [
+          1130,
+          240,
+          1500,
+          340
+        ],
+        "pixels": 2046,
+        "bbox": [
+          1185,
+          270,
+          1272,
+          302
+        ]
+      }
+    },
+    "11-selected-list-restored": {
+      "interface": {
+        "roi": [
+          472,
+          104,
+          1162,
+          1766
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "footer": {
+        "roi": [
+          0,
+          1600,
+          456,
+          1806
+        ],
+        "pixels": 0,
+        "bbox": null
+      },
+      "body": {
+        "roi": [
+          1130,
+          240,
+          1500,
+          340
+        ],
+        "pixels": 2050,
+        "bbox": [
+          1225,
+          270,
+          1312,
+          302
+        ]
+      }
+    }
+  },
+  "old07FailurePositiveControls": {
+    "19-mac07-sidebar208": {
+      "roi": [
+        0,
+        1600,
+        416,
+        1806
+      ],
+      "pixels": 2500,
+      "bbox": [
+        90,
+        1738,
+        209,
+        1768
+      ]
+    },
+    "20-mac07-sidebar228-restored": {
+      "roi": [
+        476,
+        110,
+        760,
+        170
+      ],
+      "pixels": 15622,
+      "bbox": [
+        488,
+        110,
+        760,
+        170
+      ]
+    }
+  },
+  "blueRule": "B>=220 G>=170 B-R>=25 G-R>=12 B-G>=10 R>=100; fixed local raw RGB diagnostic, not complete visual/selection oracle",
+  "cropMaps": {
+    "body-selection-contact.png": [
+      {
+        "source": "docs/verification/mac-sidebar-drag08-runtime-01/07-body-selection.cua-image",
+        "roi": [
+          1130,
+          248,
+          1470,
+          318
+        ],
+        "outputBox": [
+          8,
+          33,
+          348,
+          103
+        ],
+        "decodedPixelsExact": true
+      },
+      {
+        "source": "docs/verification/mac-sidebar-drag08-runtime-01/08-selected-sidebar-narrow.cua-image",
+        "roi": [
+          1130,
+          248,
+          1470,
+          318
+        ],
+        "outputBox": [
+          8,
+          137,
+          348,
+          207
+        ],
+        "decodedPixelsExact": true
+      },
+      {
+        "source": "docs/verification/mac-sidebar-drag08-runtime-01/09-selected-sidebar-restored.cua-image",
+        "roi": [
+          1130,
+          248,
+          1470,
+          318
+        ],
+        "outputBox": [
+          8,
+          241,
+          348,
+          311
+        ],
+        "decodedPixelsExact": true
+      },
+      {
+        "source": "docs/verification/mac-sidebar-drag08-runtime-01/10-selected-list-narrow.cua-image",
+        "roi": [
+          1130,
+          248,
+          1470,
+          318
+        ],
+        "outputBox": [
+          8,
+          345,
+          348,
+          415
+        ],
+        "decodedPixelsExact": true
+      },
+      {
+        "source": "docs/verification/mac-sidebar-drag08-runtime-01/11-selected-list-restored.cua-image",
+        "roi": [
+          1130,
+          248,
+          1470,
+          318
+        ],
+        "outputBox": [
+          8,
+          449,
+          348,
+          519
+        ],
+        "decodedPixelsExact": true
+      }
+    ],
+    "date-selection-before-after.png": [
+      {
+        "source": "docs/verification/mac-list-heading07-runtime-01/20-mac07-sidebar228-restored.cua-image",
+        "roi": [
+          416,
+          104,
+          800,
+          205
+        ],
+        "outputBox": [
+          8,
+          33,
+          392,
+          134
+        ],
+        "decodedPixelsExact": true
+      },
+      {
+        "source": "docs/verification/mac-sidebar-drag08-runtime-01/05-sidebar-narrow.cua-image",
+        "roi": [
+          416,
+          104,
+          800,
+          205
+        ],
+        "outputBox": [
+          8,
+          168,
+          392,
+          269
+        ],
+        "decodedPixelsExact": true
+      },
+      {
+        "source": "docs/verification/mac-sidebar-drag08-runtime-01/06-sidebar-restored.cua-image",
+        "roi": [
+          416,
+          104,
+          800,
+          205
+        ],
+        "outputBox": [
+          8,
+          303,
+          392,
+          404
+        ],
+        "decodedPixelsExact": true
+      }
+    ],
+    "footer-selection-before-after.png": [
+      {
+        "source": "docs/verification/mac-list-heading07-runtime-01/19-mac07-sidebar208.cua-image",
+        "roi": [
+          0,
+          1650,
+          600,
+          1806
+        ],
+        "outputBox": [
+          8,
+          33,
+          608,
+          189
+        ],
+        "decodedPixelsExact": true
+      },
+      {
+        "source": "docs/verification/mac-sidebar-drag08-runtime-01/05-sidebar-narrow.cua-image",
+        "roi": [
+          0,
+          1650,
+          600,
+          1806
+        ],
+        "outputBox": [
+          8,
+          223,
+          608,
+          379
+        ],
+        "decodedPixelsExact": true
+      },
+      {
+        "source": "docs/verification/mac-sidebar-drag08-runtime-01/06-sidebar-restored.cua-image",
+        "roi": [
+          0,
+          1650,
+          600,
+          1806
+        ],
+        "outputBox": [
+          8,
+          413,
+          608,
+          569
+        ],
+        "decodedPixelsExact": true
+      }
+    ]
+  },
+  "limits": [
+    "Root authored live CUA; independent audit only re-read saved exact-package evidence and decoded raw images.",
+    "No screenshot exists for menu14/16/24; AX-only labels preserved, no reconstructed menu image.",
+    "Specific ABCDE selection/drag paths only, no all focus/IME/history/capture lifecycle proof or DB/revision/ACK export.",
+    "Normal quit/reopen tested with sidebar visible at exit; hidden-state persistence not claimed.",
+    "All images JPEG; no font/full-window/Apple pixel parity re-audit."
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "policy": "atomic-rename-final-output-and-dist",
+  "sourcePathsAbsentBeforeCommand": true,
+  "outputs": [
+    {
+      "name": "application",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-sidebar-drag-build08/mac-attempt01/prior-outputs/application",
+      "kind": "directory",
+      "before": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 29028032,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "Contents",
+            "mode": 493
+          },
+          {
+            "path": "Contents/MacOS",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "Contents/Info.plist",
+            "bytes": 1193,
+            "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "Contents/MacOS/notes-clone",
+            "bytes": 16090480,
+            "sha256": "17db9522917a682b7f35b14d5dc4e87a811a8747b434bc9c2ed45f41a367db3b",
+            "type": "file",
+            "mode": 493
+          }
+        ]
+      }
+    },
+    {
+      "name": "dist",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-sidebar-drag-build08/mac-attempt01/prior-outputs/dist",
+      "kind": "directory",
+      "before": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 29027542,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "assets",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "assets/index-2u4uUqzB.js",
+            "bytes": 936888,
+            "sha256": "b9de60483112c1fe381027254b701317cf27c4d71c7f3b058d60b6d146c0b95c",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/index-dflHZwDn.css",
+            "bytes": 57623,
+            "sha256": "458d1a32dbb7deff753bc8bcc29d98d82da379f65fe96dcd855864c9d081e622",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "index.html",
+            "bytes": 498,
+            "sha256": "babe1f49c49364740d17c08562706fd549fdc4510348996291316d8864b06404",
+            "type": "file",
+            "mode": 420
+          }
+        ]
+      }
+    }
+  ]
+}
