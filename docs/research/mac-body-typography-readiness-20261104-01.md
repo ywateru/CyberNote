@@ -93,3 +93,61 @@ Mac普通主窗最小宽700配置在[tauri.conf.json](../../src-tauri/tauri.conf
 | `docs/ui/macos.md` | 11087 | `7fdfea80d0ee27ecafe2973f9e7d4264d98366fb0c20b5134df9e6173970f935` |
 | `references/desktop/macos26-settings.png` | 156606 | `6ba126b220155be9be39cac52dc2c2c2076b1f80a9f2db8b9440ed451942de9b` |
 | `docs/research/mac-candidate05-wide-runtime-geometry-01/result.json` | 11773 | `184ed8cec791ea2d409c738b7ccaaff09dc8769370b5f908462cd31e637f0fd4` |
+
+## 当前主线补审：d6c97fb（2026-11-04）
+
+本节为后续只读复核，前文旧HEAD与历史观察保持原样，不将它们追认为当前包运行证据。补审HEAD准确为`d6c97fb7dbe0a23ac670c772a4c3b4abddbda680`。只读当前Editor、schema、App、native-toolbar、CSS、既有UI研究与geometry01；未操作GUI/REA会话，未构建、访问target、安装下载、读笔记数据库或修改产品。开始及写入前空间门为至少2GiB，本次源身份读数时为3,280,068,608 B。未提交main。
+
+`git diff 4dbdbd25238c430f7800cb286b642577a09ccf50 d6c97fb7dbe0a23ac670c772a4c3b4abddbda680 -- src/style.css src/Editor.tsx src/editor-schema.ts`为空；本轮也没有这三个文件的工作区修改。当前`style.css`、`Editor.tsx`、`editor-schema.ts`、`App.tsx`、`types.ts`的完整字节与前文身份表相同。新增核对`src/native-toolbar.ts`为1,090 B / SHA-256 `c70c97cdd7d84cad8a7bb3587687afb43a87d3cf371740830d4bd63f2dcf423e`。这使前文14px/1.23与schema分析在当前源码继续成立，仍不能把candidate05旧截图等同当前主线运行。
+
+### 已知、推断与未观测
+
+| 类别 | 本轮可成立的结论 |
+| --- | --- |
+| 源码已知 | 根系统字体栈和400字重；`.tiptap`14px/1.23；普通`p`无margin、最小1.23em；最终h1/h2/h3为20/17/15px；`strong`650；`pre`13px等宽。日期、工具栏和列表另有自己的字号。 |
+| 源码已知 | schema注册StarterKit、TextStyle与Color、Highlight、NoteTag等，没有应用层FontSize/FontFamily/LineHeight扩展；Editor以`note.document`作为content，没有inline字体样式注入。`styleBody`转paragraph；`styleMonospaced`切codeBlock，不是全局更换普通正文family。 |
+| 冻结观察已知 | geometry01三行墨迹宽度原版/克隆为286/306、290/314、188/203；JPEG解码图像像素中尺寸偏大且起点较高，左右内距接近；不重复改算旧几何或作像素PASS。 |
+| 候选推断 | `14 × 原版行宽 / 克隆行宽`约13.08、12.93、12.97，13 CSS px值得作为首个尺寸实验点。尚未排除fallback、字距、原版设置和渲染影响，不等于原版精确13pt。 |
+| 需root实际观测 | 原版同期选中普通正文的Fonts面板family/style/size、是否mixed、默认文本大小当前值，以及克隆实际computed style、节点/mark、viewport/zoom/DPR。以上都没有在本补审取得。 |
+
+### 最小13px候选及平台边界
+
+只作为下一轮可审查的CSS尺寸候选，建议追加到现有样式之后，作用于Mac原生工具栏普通主窗中，实际正文编辑器的**顶层paragraph**：
+
+```css
+/* Candidate only: not applied or executed in this audit. */
+.desktop.native-toolbar:not(.separate) .note-document .tiptap > p {
+  font-size: 13px;
+  line-height: 17.22px;
+  min-height: 17.22px;
+}
+```
+
+这个选择器是候选范围建议，不是已证明的运行态匹配结果。13px只改字形尺寸；17.22px是旧普通段落`14 × 1.23`的静态值，用来暂时隔离行距变量，不是原版行高认证。直接把`.tiptap`整体改13px/1.23会同时把段落行距变为15.99px，并影响嵌套块的继承，不能用于单变量尺寸比较。也不应为了跟随字号把日期、左距、顶部保留条、letter-spacing、weight或字体栈一起改动。
+
+平台范围必须按实际类来源理解：`App.tsx:526/774`仅用`innerWidth < 700 && !separate`决定mobile，`.desktop`本身不是Mac身份；Android横屏或宽屏可能得到desktop类。因此候选不能只写`.desktop .tiptap`或媒体查询min-width。当前`native-toolbar.ts:15`的`macNative`要求navigator.platform匹配Mac且UA排除Android/iPhone/iPad，`App.tsx:3396`只在native+macNative时挂原生工具栏，`3476/3479`以`!mobile && !!nativeInfo`挂`.native-toolbar`。依此当前生产路径，以上选择器排除Android的手机和宽布局，同时排除独立笔记窗；浏览器桌面演示也不会被当作Mac正式候选。后续核验仍须确认准确运行包的实际class，不把静态推断冒充设备实测。
+
+选择顶层`> p`意味着候选不匹配h1/h2/h3、pre/codeBlock、blockquote中的段落、列表/清单段落、表格单元格段落或附件卡片。画廊展开使用同一真实NoteEditor时可匹配，画廊卡片预览不在`.note-document .tiptap`链中；这点必须在实际候选验收中确认。独立窗、嵌套段落和手机继续沿用当前规则，不在本轮尺寸候选的结论范围。
+
+### 富文本mark的影响与保全
+
+| 内容 | 候选的预期影响与必须保留的边界 |
+| --- | --- |
+| 普通顶层p | 目标文字13px，显式旧17.22px行高/空段最小高度；重排与光标几何可能改变，需要真实比较。 |
+| bold/italic/underline/strike | 文档mark仍保留；`strong`650及其他原有表现不重置。位于目标p内的文字会继承13px，不能宣称粗体/斜体字形尺寸不变；异常高字形仍可能扩大实际line box。 |
+| textStyle/Color、Highlight | 颜色/高亮数据和原有mark样式保留，候选不使用`font`简写或通配`span`重置。现有schema没有应用层显式字号/字体族属性，不因安装依赖提供工具便假定已保存自定义字号。 |
+| NoteTag/link | 标签仅由`.note-tag`设颜色，标签及链接位于目标p时也继承13px；原有标签name、链接地址与行为不动。不能据CSS变更声称真实标签/链接输入链已经回归。 |
+| inline code | StarterKit允许code mark，当前CSS没有专门`.tiptap code`字体规则；其最终UA/继承表现尚未取得computed style。目标p中的inline code须单独观察；codeBlock的pre不匹配候选。 |
+| 标题、列表、清单、表格、引用、附件 | 不匹配这一顶层p候选；不能将有限普通正文改善扩张为这些格式的排版通过。 |
+
+因此“保留既存格式”应写成**不改schema、JSON、节点/mark、不做文档迁移或保存重写，保留现有格式规则**；不能承诺目标p内所有带mark字符的显示尺寸不变。不要用`:has(strong/mark/span)`按是否存在mark动态切换13/14，否则输入或应用mark即可使整段跳变，扩大本轮改动。若产品要求任何带mark段落视觉尺寸完全不动，应另立明确格式契约，本候选不能作此保证。
+
+### 需root补齐的原版Fonts UI观测
+
+由root继续持有GUI会话，本审计不打开面板或更改原版。建议在原版既有同文QA笔记选取一个明确普通段落的完整文本，打开公开Fonts面板，只读保存原始AX与截图。需记录可读取的family、typeface/style、size、选区内容和段落位置；若字段为空、多值、不可访问或面板未定位，按原始结果登记，不能用系统字体栈或旧14pt估计补填。中英混排时面板显示family也未必代表每个fallback字形，要保留这一限制。不要点击字号、family、style或修改滑块。
+
+同期只读查看默认文本大小设置与新备忘录开头格式，记录实际值并区别“当前文档选区属性”和“新建默认”；滑块AX值没有已知单位映射。旧CmdT准备动作仍没有实际字体值，不能升级为完成观测。完成后取消选区/面板，并记录没有更改格式；不要为了建立样本重写用户笔记。
+
+### 后续最小验证边界
+
+先得到同期原版Fonts值及准确克隆段落/mark与computed style，再由root派发尺寸候选实现。比较同一普通三行、相同输入方式、窗口/分栏/主题/活动态与截图流程；关注行宽、独立中英字形、连续多行advance和首行起点。保留标题、带mark普通p、空段、嵌套列表/清单、表格和Android17px/1.35作为有限防串改观察；不需要为本准备审计跑构建或大矩阵。只有新真实结果支持后，才另行决定行高或垂直起点；不顺带改负字距、scaleX、padding或DPR换算。源码样式候选成功也不等于原版精确字体身份或整窗像素PASS。
