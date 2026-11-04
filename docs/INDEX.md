@@ -42,6 +42,7 @@
 - [录音面板初始、暂停完成与活动计时](plan/tasks/app-002-recording-state-01.md)
 - [录音局部状态与父保存接线差距](research/mobile-recording-next-01/analysis.md)
 - [原录屏录音初始、暂停与完成逐帧补证](research/mobile-recording-sequence-01/README.md)
+- [手机保存后录音卡片可见范围、原比例帧与校准入口](research/mobile-saved-audio-card-20261104-01/README.md)
 - [Mac搜索结果与零结果恢复](plan/tasks/app-001-search-results-01.md)
 - [Mac零结果列表文案与分组校准](plan/tasks/app-001-search-zero-ui-01.md)
 - [candidate03零结果局部截图测量](research/mac-zero-roi-candidate03-01/README.md)

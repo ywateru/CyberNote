@@ -1,0 +1,112 @@
+{
+  "source": "references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4",
+  "sourceBytes": 8452211,
+  "sourceSha256": "2bed50027479becf059cc32b68c361107a0c3f840f027f79933a4b99bc4e394d",
+  "sourceSize": [
+    224,
+    480
+  ],
+  "sampleMethod": "Exact source frame indices via select; PTS read from ffprobe; no resizing, interpolation, audio extraction or video copy. 11 retained-contact samples from 35.5 to 50s; three full frames retained. Existing frames-2s frame019..058 visually inspected separately, nominal times not treated as exact PTS.",
+  "samples": [
+    {
+      "sourceFrameIndexZeroBased": 1065,
+      "ptsSeconds": 35.5,
+      "decodedSha256": "93f7b7b3100798166b60847e95fb559d31560bb478b5f4039a83bf1650f0638d",
+      "retainedPath": "original-n1065.png"
+    },
+    {
+      "sourceFrameIndexZeroBased": 1080,
+      "ptsSeconds": 36.0,
+      "decodedSha256": "2ddbb6c2591b1ee0a9940a0a835111f740ea29d28bba667b02cf534d9068fff5",
+      "retainedPath": null
+    },
+    {
+      "sourceFrameIndexZeroBased": 1110,
+      "ptsSeconds": 37.0,
+      "decodedSha256": "442ae08aaed7bae4dc912020d7f28fe683570b02d0ea4dc0d9c830dce9d1fd09",
+      "retainedPath": null
+    },
+    {
+      "sourceFrameIndexZeroBased": 1140,
+      "ptsSeconds": 38.0,
+      "decodedSha256": "ab7266477814d9f1132f011dd5a5aa84f2190bb010d83b497d0c8d1796409345",
+      "retainedPath": null
+    },
+    {
+      "sourceFrameIndexZeroBased": 1170,
+      "ptsSeconds": 39.0,
+      "decodedSha256": "0cc4f8cbed36e07f6598810a1f7b04fbb699ddfecc364aa3e4a7d70711a24e20",
+      "retainedPath": null
+    },
+    {
+      "sourceFrameIndexZeroBased": 1200,
+      "ptsSeconds": 40.0,
+      "decodedSha256": "2268ca57d989ca0fbb76b835fb17cdf7bbf707305fb1e79637d5c2d62fc59225",
+      "retainedPath": "original-n1200.png"
+    },
+    {
+      "sourceFrameIndexZeroBased": 1260,
+      "ptsSeconds": 42.0,
+      "decodedSha256": "236e66595c1e71b794c44f838d86f98f0d27414fe0d17e2d89c24fe1a96674a2",
+      "retainedPath": null
+    },
+    {
+      "sourceFrameIndexZeroBased": 1320,
+      "ptsSeconds": 44.0,
+      "decodedSha256": "12da363277082ad49eb367f34d7c7617a570f6bca47fed7f90d25af6df79ca9e",
+      "retainedPath": null
+    },
+    {
+      "sourceFrameIndexZeroBased": 1380,
+      "ptsSeconds": 46.0,
+      "decodedSha256": "dd58b5a53178f924e2ec40ec8d5bf9548fd73692a646ef1fe1a5a40933f56b76",
+      "retainedPath": null
+    },
+    {
+      "sourceFrameIndexZeroBased": 1440,
+      "ptsSeconds": 48.0,
+      "decodedSha256": "36ee544744b7d07433c5c6e7e2cccd461b489e5de6f01025b85c3ed021e39650",
+      "retainedPath": "original-n1440.png"
+    },
+    {
+      "sourceFrameIndexZeroBased": 1500,
+      "ptsSeconds": 50.0,
+      "decodedSha256": "d33a9ac87414efbbddfc106a0d19b8e63e3ff782b50dca361fc13785c04b9140",
+      "retainedPath": null
+    }
+  ],
+  "crops": [
+    {
+      "file": "original-card-native-crop.png",
+      "source": "original-n1065.png",
+      "boundsXYXY": [
+        15,
+        176,
+        203,
+        218
+      ]
+    },
+    {
+      "file": "clone-collapsed-native-crop.png",
+      "source": "docs/verification/candidate04-android-runtime-01/61-recording-cold-visible.png",
+      "sourceSha256": "bcd8bea5f04f708c13f3bee3e39e3d1321c61227c1e12a066fdf9689bc95a841",
+      "boundsXYXY": [
+        66,
+        336,
+        1015,
+        499
+      ]
+    },
+    {
+      "file": "clone-expanded-native-crop.png",
+      "source": "docs/verification/candidate04-android-runtime-01/65-new-audio-pause.png",
+      "sourceSha256": "edd0a2df296901922ae51f66c9b32c4789dda00c71cde645724be9ab6e75e791",
+      "boundsXYXY": [
+        66,
+        336,
+        1015,
+        652
+      ]
+    }
+  ]
+}

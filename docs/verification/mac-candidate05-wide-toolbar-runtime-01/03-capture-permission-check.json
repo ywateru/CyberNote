@@ -1,0 +1,23 @@
+{
+  "recordType": "transcribed exact command result; not a fresh replay",
+  "dateLocal": "2026-11-04",
+  "command": [
+    "python3", "scripts/run-window-capture.py",
+    "--build-dir", "/private/tmp/notes-window-capture-main-083a8d4",
+    "--timeout-seconds", "15", "--", "list", "--bundle", "com.apple.Notes"
+  ],
+  "commandExitCode": 2,
+  "supervision": {
+    "deadlineSeconds": 15.0,
+    "elapsedSeconds": 0.016713041,
+    "timedOut": false,
+    "termination": "SIGKILL on timeout; observer starts no child processes"
+  },
+  "observer": {
+    "exitCode": 2,
+    "stdout": "",
+    "stderr": "{\n  \"code\" : \"permission_required\",\n  \"message\" : \"Existing Screen Capture permission is required; no request was made.\",\n  \"status\" : \"error\",\n  \"successManifestWritten\" : false\n}\n"
+  },
+  "acceptOutput": false,
+  "interpretation": "Explicit user consent and reported local authentication are retained; exact helper preflight still reports permission missing. No permission request, window listing or capture succeeded. Complete existing authorized settings flow after manual unlock."
+}
