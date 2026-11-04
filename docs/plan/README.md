@@ -39,7 +39,7 @@
 | APP-001-SEARCH-FOCUS-01 Mac菜单搜索焦点 | in-progress，源d9bc5a4独立SOURCE-READY、主175cd1f | plugin精确MenuEvent同步请求真实唯一focused main当前enabled绑定，与IPC共body；独立与主cargo13/13通过、两产品hash同。无新包快输入/marked text实测，异常原因unknown和Tauri排队仍保留，不承诺已修复 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
 | APP-002-AUDIO-CARD-01 手机紧凑录音卡 | 源9303b48独审b477f79 SOURCE-READY，主线4dbdbd整合回归通过 | 首次实际start日期贯通同RecordingResult/票据/operation/受权read/归档1与2；独立Rust47+额外5/Session权限8通过。主线238产品/11改动脚本逐字同冻结；build、schema96/access16/toolbar13/OCR37、Panel到准确Rust5/卡片8、当前App/Editor标签浏览27/保存11与53条/组合12与170条Store action通过，CLI身份分列。仅源码及列明受控链通过，新包/有效音轨/设备冷启/原版取时与像素仍unknown；见audio-card-main-integration-01 |
-| REF-SMART-FOLDERS-RUNTIME-01 原版智能视图 | in-progress，00–22本批封存；PIN/目录/全部任意/搜索/新建已观察 | A/A1/B合成样本已建；PIN计数1→0→1；包含A仅直属两篇，全部(A且置顶)一篇、任意两篇（未覆盖A外置顶）；顶部搜索切iCloud全部/取消恢复，新建转普通备忘录。目录以候选token选择，非自由文本成功；21是摘录。未exclude/多选/移动/改名保存/删除/冷启，无像素PASS。Raise不证明前台，capture权限未证实；研究见smart-folder-original-runtime-01 |
+| REF-SMART-FOLDERS-RUNTIME-01 原版智能视图 | in-progress，01与补证03封存；删除/引用生命周期与冷启仍未知 | A/A1/B样本已有目录/PIN/搜索/新建观察；03另实存A+B token三条/改名、A外B置顶任意三条/全部一条、不含A且置顶仅B，智能移动目标存在disabled。09/10切换失败保留、11首次成功AND；最终恢复原定义两条与B未置顶。未实际移动/删除/冷启，无像素PASS，克隆智能查询尚未实现 |
 | APP-003-TAGS-01 真实标签 | in-progress，候选04独审SOURCE-READY、主b598a74整合通过，设备待验 | 37ee2bd的12产品aggregate438a0cc3…逐字合入；独审12场景159 action关闭旧02活动组字丢输入和03结束后旧编辑器滞留。主build/schema96/access16/toolbar13/OCR37/标签27/save-boundary11（53 Store action）/composition12（170 action）/Rust指定1例通过；3次监听EPERM原日志保留、独立run02成功。root核68证据2517706B、aggregate632a5664…。历史失败保留；未进安装包，原生IME/native IPC/Session及像素unknown，不关闭父任务 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004-OCR-HOST-01 OCR主App文字接入 | in-progress，主cd7c94e，04双端单图实际OCR/正文冷启有限pass | 源5b707ae独审02及主接线保持。Mac本地fixture三行中文识别→插入→正常CmdQ→新PID完整正文恢复；Android系统picker选同图→三行识别→插入→force-stop新PID完整JSON恢复通过，实际插入位置/空首段及末行空格差异已记录。内部session ACK未直接追踪、未强制断网；完整矩阵/320图/像素unknown，完整文稿/PDF另批 |
@@ -49,9 +49,13 @@
 | APP-001-BODY-TYPOGRAPHY-01 Mac普通正文尺寸 | in-progress，源码独审通过，build03/同文有限运行完成 | 仅Mac主窗顶层p实验13px，受控CSS排除Android/独立窗/结构块；a90e55f准确新包产物929项独核。PID88780→正常退出→89698后人工重选完整corpus、侧栏按钮/菜单回归通过。07↔03同画布JPEG前三行宽差+1/+2/+2、高度相同；标点+74宽差和首行提前4仍未修，保留实验继续校准，不判像素通过 |
 | APP-001-SIDEBAR-RESTORE-01 桌面文件夹恢复 | done（本次功能故障范围），整窗像素仍open | 菜单补包实际列表工具栏/菜单、画廊与冷启通过；最新Mac04 exe db921823…再次实际两条恢复路径通过，QA正文/计数保持。隐藏后保留左上直接按钮、菜单动态文字同原版。JPEG非像素通过，连续窄窗/完整焦点与DB未全验 |
 | APP-001-SIDEBAR-MENU-LABEL-01 侧栏菜单状态文字 | done（主窗状态文案范围） | 源8bfeb43独审72ad237 SOURCE-READY；准确b5063fd新Mac实际可见“隐藏文件夹”/隐藏“显示文件夹”及菜单恢复、画廊与冷启通过。独立源码16/host/guard1与实际记录28有限通过；独立窗口真实焦点与整窗像素未认证 |
+| APP-001-SIDEBAR-VISIBLE-GEOMETRY05 可见侧栏按钮 | 源0b9604…独审SOURCE-READY，准确新Mac待验 | 原版228/208补证支持sidebar44pt槽/right-anchor/透明宿主候选，隐藏36pt入口保持、toggle labelColor。独立390layout/120链与真实AppKit三套390态、clang/controller13/build通过；AppKit无真实窗口，4态旧标题6pt重叠保留。尚未出新包或像素通过 |
+| APP-001-PAPER-ROUNDED-SELECTION03 纸张选框圆角 | 源码独审SOURCE-READY，准确APK待验 | CSS d7facf…仅手机选框伪元素，独立真实App七态/短屏/桌面不变；Chrome旧新像素相同，Android旧plain方角对照成立。必须新APK实机确认，不追认设备修复 |
+| APP-001-PAPER-SAME-STYLE-SELECTION03 同样式选纸 | 源码独审SOURCE-READY，准确APK待验 | App6eff8…同样式close、预览新建缺access可信补齐；旧预览首次plain/grid重建均复现，新8选择/8关闭/pending2/undo redo、identity30/保存21/build通过。原生创建自带access；系统Back/继续输入/冷启仍待设备 |
 | APP-001-MOBILE-PAPER-ORDER-02 手机纸张顺序 | 有限顺序缺陷关闭，完整选区/像素partial | 仅重排mobile选项，源码与真实App独审通过。recovery02包843e0c01…独核881断言并实际install -r；原QA正文/可见粗体/日期与grid-large保留，新7卡顺序同参考，取消/重开仍grid-large。未点卡、未新验保存/选区JSON；旧新Chrome首plain均移选区观察保留，不扩张为七态原生或像素通过 |
 | APP-001-BODY-VERTICAL-03 Mac普通段落纵向 | partial，Mac04实际纵向改善，宽度/输入仍open | b2f3570仅全p守卫17px与2pxpadding，开发/独审各72受控检查通过；准确62244d4包db921823…独核929断言。完整窗口20Ag与原版逐行对齐、两空段推进102，长段起点改善6图像像素，wrap保持旧clone；连续标点/Latin阈值与宽度分栏差异保留。直接中文键入两边失败，不能称IME或整窗像素通过 |
 | REF-MAC-PUNCTUATION-CONTROLS-03 标点特性 | 有限运行完成，无可用产品修正 | Safari六组摘要宽度与推进相同；trim不支持，chws/palt仅语法支持。18块AX均512字符截断、JSON不能解析，聚焦/多行导出无改善；不声称computed或特性实际应用，不据此加入无效CSS |
+| REF-MAC-BODY-WEBKIT-CONTROLS04 系统文本样式 | 实际Safari完整短JSON独立解析，无可用字体修正 | 26块全部可解析，UICTFontTextStyleBody/ShortBody只改变computed family，其余14属性相同、三串宽度Δ0。运行prepared输入快照与当前CSS分开记账；无产品字体更改或像素通过 |
 
 docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，docs/ui 是视觉证据。实现阶段遵循 docs-sprint 的 develop/verify 分离。空仓库先建立 Git 基线，串行实施开发/验证；不要求用户批准已授权的常规设计补全。测试必须覆盖真实持久化边界和 UI 用户路径，不能只测试同实现的常量。
 

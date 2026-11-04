@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-04",
+  "runtimeStatus": "not run; root owns GUI",
+  "sources": [
+    {
+      "id": "webkit-system-2015",
+      "url": "https://webkit.org/blog/3709/using-the-system-font-in-web-content/",
+      "published": "2015-07-27",
+      "observed": "Historical article distinguishes -apple-system family from font shorthand text styles that include size/weight; it introduces text styles in the iOS dynamic-type context, which is not proof of current Mac support."
+    },
+    {
+      "id": "webkit-source-main",
+      "url": "https://raw.githubusercontent.com/WebKit/WebKit/main/Source/WebCore/platform/graphics/cocoa/SystemFontDatabaseCoreText.cpp",
+      "lines": "48-113,158-169,251-292,362-407",
+      "observed": "Main maps body/short-body system shorthand to text-style families and routes TextStyle and SystemUI separately; text-style result has a cascade list. Moving main is not the installed Safari revision.",
+      "retrieval": "Official WebKit raw source returned 431 lines on 2026-11-04; main remains moving and is not the installed Safari revision."
+    },
+    {
+      "id": "sdk-coretext",
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/CoreText.framework/Versions/A/Headers/CTFont.h",
+      "lines": "152-158,295-297,379-405",
+      "observed": "Public header directs system UI font creation to public UI factory; reserved dot names should not be requested. UI role remapping may vary by OS/platform."
+    },
+    {
+      "id": "sdk-appkit",
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSFont.h",
+      "lines": "45-68,184-186",
+      "observed": "Public AppKit separates system/UI factories and preferred text-style factory. No assertion that Notes uses a particular factory."
+    },
+    {
+      "id": "sdk-appkit-styles",
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSFontDescriptor.h",
+      "lines": "181-200",
+      "observed": "Public Mac text-style constants include Body and Caption1; does not establish CSS body syntax support."
+    }
+  ],
+  "inference": "A shorthand text-style request may take a distinct public-facing CSS path and is a new discriminating experiment. No claim it selects UI Chinese fallback, fixes punctuation, or matches Notes. Installed Safari CSS.supports and complete Range widths must decide whether this page exposes an effect."
+}

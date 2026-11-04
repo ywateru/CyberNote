@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "createdUtc": "2026-11-04T09:52:44.427496+00:00",
+  "scope": "controls04 frozen preparation, root runtime captures and ledger, independent runtime analysis; self excluded",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 5499,
+      "sha256": "7e428fa7be2afe68616e18a59a6ba663286657eeedbc34b00b0bbd9beb2503e2"
+    },
+    {
+      "path": "controls.html",
+      "bytes": 9315,
+      "sha256": "7c6373f14015dd2f8be326cb80f2fc8ac4cb369808d2dd344178a049f192ec25"
+    },
+    {
+      "path": "fixture.json",
+      "bytes": 3226,
+      "sha256": "e4be57941010d859316ab01598d34bc94355938aa4d199b1582af4769c76959e"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 1110,
+      "sha256": "b9ae50063669bb66f248ceb71e34ce667f7deea7d65b048b4a5a130bff67aabd"
+    },
+    {
+      "path": "references.json",
+      "bytes": 2520,
+      "sha256": "c6f4b4afced01947df48d39056806bebc2366236c44735a11c96ede7e260bb99"
+    },
+    {
+      "path": "root-runtime-ledger.md",
+      "bytes": 1444,
+      "sha256": "a5c9b6e57e8035f8c0403e0327f3d679d0767c2b4152aeacf4d4554d4aa2c57c"
+    },
+    {
+      "path": "runtime-analysis.json",
+      "bytes": 28789,
+      "sha256": "6227865c3b350d4e26a9220f287ff7745473e5bffc1ea839baa2f487be511232"
+    },
+    {
+      "path": "runtime-analysis.md",
+      "bytes": 4832,
+      "sha256": "2c3adb66b5d6287cdd8d2a99fde5b8a106d1a4c04cfda7909d2dc78ca41a6a1a"
+    },
+    {
+      "path": "runtime01.ax.txt",
+      "bytes": 2620,
+      "sha256": "0c92d178c08c1fa10469ca3a59cccae45c7535c8e17125f69b562f2508287bf9"
+    },
+    {
+      "path": "runtime01.cua-image",
+      "bytes": 122199,
+      "sha256": "8437e409afbea27a2887989053f81f5b971437753ffd060ee5c6dfe182894adf"
+    },
+    {
+      "path": "runtime02.ax.txt",
+      "bytes": 13566,
+      "sha256": "6498f0427090512a8265b40cb26557590f9ce16ca86ee6b1da889c53426029b2"
+    },
+    {
+      "path": "runtime02.cua-image",
+      "bytes": 637481,
+      "sha256": "c182039487030127b94071785164c6078b6ef9026690e68b6bd07e8cf466645b"
+    },
+    {
+      "path": "static-check.cjs",
+      "bytes": 3724,
+      "sha256": "568f940a610dc511e0596d69961cffeb6b57ecc0d56a6adfb7fe02b653fae011"
+    },
+    {
+      "path": "static-validation.json",
+      "bytes": 3559,
+      "sha256": "012d5e6f48760bbf30f30c74dff67f8ca91d902529c1fdd61f492a3dc778933a"
+    }
+  ],
+  "aggregateRule": "SHA256(UTF8(concat(sorted relative path + TAB + bytes + TAB + sha256 + LF)))",
+  "aggregateSha256": "6324c4c8451d22bcad18b2b41ec62f6d3092f3563c927af50e3ef3fbe62bc989",
+  "originalFilesUnchanged": 12
+}

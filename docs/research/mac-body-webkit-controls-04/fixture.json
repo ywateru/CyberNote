@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "font": "-apple-system, BlinkMacSystemFont, \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+  "controls": [
+    [
+      "b",
+      "F",
+      "font-family",
+      "-apple-system, BlinkMacSystemFont, \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif"
+    ],
+    [
+      "body",
+      "B",
+      "font",
+      "-apple-system-body"
+    ],
+    [
+      "short",
+      "S",
+      "font",
+      "-apple-system-short-body"
+    ]
+  ],
+  "samples": [
+    "0123456789 中文标点，。！？；：《》 — () []",
+    "，。！？；：《》",
+    "中，中。中！中？中；中：中《中》中"
+  ],
+  "sampleOrder": [
+    "old-mixed",
+    "adjacent",
+    "han-separated"
+  ],
+  "sources": [
+    {
+      "p": "docs/verification/mac-body-typography-runtime-01/corpus.json",
+      "n": 1446,
+      "h": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"
+    },
+    {
+      "p": "docs/verification/mac-punctuation-context-runtime-02/corpus.json",
+      "n": 393,
+      "h": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"
+    },
+    {
+      "p": "src/style.css",
+      "n": 66223,
+      "h": "de2222e4b3c8e4ccde3af4312e8d0db5480dabea1a3c54fe4a0bf9c2a3feb962"
+    },
+    {
+      "p": "docs/research/mac-body-webkit-controls-02/README.md",
+      "n": 5251,
+      "h": "b6b4b3957ffcaa52d79aab8bc2f0fb861f8345d930e7b1926888f6bf258e6d4d"
+    },
+    {
+      "p": "docs/research/mac-body-webkit-controls-03/runtime-analysis.md",
+      "n": 5726,
+      "h": "0aa95947f56874a1358cd52afb4e0254ed5ab76d3e288d98f552f5ca4d9a5524"
+    },
+    {
+      "p": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/CoreText.framework/Versions/A/Headers/CTFont.h",
+      "n": 83565,
+      "h": "e9c47f154ed3f6267556f04bde22c5a3f6f08748b8c87f7c6ff0f3f8165c4bb7"
+    },
+    {
+      "p": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSFont.h",
+      "n": 10711,
+      "h": "b9168401a1e5c1ba85043bdd58b3b3baf6fee1f4b9fad2900edf4c61bdafdb29"
+    },
+    {
+      "p": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSFontDescriptor.h",
+      "n": 13745,
+      "h": "2b92b27437053858d0ce879f8d1164182100097a192ee2a84001898ed6f66f60"
+    }
+  ],
+  "computedOrder": [
+    "font-family",
+    "font-size",
+    "line-height",
+    "font-weight",
+    "font-style",
+    "font-stretch",
+    "font-variant",
+    "font-kerning",
+    "font-feature-settings",
+    "font-variant-east-asian",
+    "font-synthesis",
+    "letter-spacing",
+    "word-spacing",
+    "text-rendering",
+    "-webkit-font-smoothing"
+  ],
+  "fixed": {
+    "font-size": "13px",
+    "line-height": "17px",
+    "font-weight": "400",
+    "font-style": "normal",
+    "font-stretch": "normal",
+    "font-variant": "normal",
+    "font-kerning": "auto",
+    "font-feature-settings": "normal",
+    "font-variant-east-asian": "normal",
+    "font-synthesis": "none",
+    "letter-spacing": "normal",
+    "word-spacing": "normal",
+    "text-rendering": "optimizeLegibility",
+    "-webkit-font-smoothing": "antialiased"
+  }
+}

@@ -1,0 +1,856 @@
+{
+  "schema": 1,
+  "createdUtc": "2026-11-04T09:52:44.427496+00:00",
+  "authorRole": "independent static evidence analysis; root performed Safari GUI capture",
+  "scope": "All 26 complete runtime02 AX JSON blocks, image endpoints, fixture identity and current source identity; no product changes or runtime replay",
+  "verdict": "PASS_COMPLETE_EXPORT_NEGATIVE_WIDTH_RESULT",
+  "runtime01": {
+    "state": "blank untitled tab before successful load; not a valid experiment",
+    "jsonBlockCount": 0
+  },
+  "runtime02": {
+    "title": "Mac WebKit 系统文字样式控制04",
+    "jsonBlockCount": 26,
+    "controls": 3,
+    "metadata": 23,
+    "maxJsLength": 322,
+    "errorBlocks": 0,
+    "extractionMethod": "Only full-line AX text children matching ^\\s*(\\d+) 文本 (\\{.*\\})$, preceding line must identify a textarea; direct JSON parse, no repair or truncation",
+    "blocks": [
+      {
+        "axFileLine": 14,
+        "axNode": 12,
+        "jsLength": 322,
+        "raw": "{\"id\":\"b\",\"q\":\"F\",\"a\":true,\"s\":true,\"c\":[\"-apple-system, BlinkMacSystemFont, \\\"Helvetica Neue\\\", \\\"PingFang SC\\\", \\\"Noto Sans CJK SC\\\", Arial, sans-serif\",\"13px\",\"17px\",\"400\",\"normal\",\"100%\",\"normal\",\"auto\",\"normal\",\"normal\",\"none\",\"normal\",\"0px\",\"optimizelegibility\",\"antialiased\"],\"w\":[276.742432,103.190659,219.280151]}",
+        "value": {
+          "id": "b",
+          "q": "F",
+          "a": true,
+          "s": true,
+          "c": [
+            "-apple-system, BlinkMacSystemFont, \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "13px",
+            "17px",
+            "400",
+            "normal",
+            "100%",
+            "normal",
+            "auto",
+            "normal",
+            "normal",
+            "none",
+            "normal",
+            "0px",
+            "optimizelegibility",
+            "antialiased"
+          ],
+          "w": [
+            276.742432,
+            103.190659,
+            219.280151
+          ]
+        }
+      },
+      {
+        "axFileLine": 17,
+        "axNode": 15,
+        "jsLength": 235,
+        "raw": "{\"id\":\"body\",\"q\":\"B\",\"a\":true,\"s\":true,\"c\":[\"UICTFontTextStyleBody\",\"13px\",\"17px\",\"400\",\"normal\",\"100%\",\"normal\",\"auto\",\"normal\",\"normal\",\"none\",\"normal\",\"0px\",\"optimizelegibility\",\"antialiased\"],\"w\":[276.742432,103.190659,219.280151]}",
+        "value": {
+          "id": "body",
+          "q": "B",
+          "a": true,
+          "s": true,
+          "c": [
+            "UICTFontTextStyleBody",
+            "13px",
+            "17px",
+            "400",
+            "normal",
+            "100%",
+            "normal",
+            "auto",
+            "normal",
+            "normal",
+            "none",
+            "normal",
+            "0px",
+            "optimizelegibility",
+            "antialiased"
+          ],
+          "w": [
+            276.742432,
+            103.190659,
+            219.280151
+          ]
+        }
+      },
+      {
+        "axFileLine": 20,
+        "axNode": 18,
+        "jsLength": 241,
+        "raw": "{\"id\":\"short\",\"q\":\"S\",\"a\":true,\"s\":true,\"c\":[\"UICTFontTextStyleShortBody\",\"13px\",\"17px\",\"400\",\"normal\",\"100%\",\"normal\",\"auto\",\"normal\",\"normal\",\"none\",\"normal\",\"0px\",\"optimizelegibility\",\"antialiased\"],\"w\":[276.742432,103.190659,219.280151]}",
+        "value": {
+          "id": "short",
+          "q": "S",
+          "a": true,
+          "s": true,
+          "c": [
+            "UICTFontTextStyleShortBody",
+            "13px",
+            "17px",
+            "400",
+            "normal",
+            "100%",
+            "normal",
+            "auto",
+            "normal",
+            "normal",
+            "none",
+            "normal",
+            "0px",
+            "optimizelegibility",
+            "antialiased"
+          ],
+          "w": [
+            276.742432,
+            103.190659,
+            219.280151
+          ]
+        }
+      },
+      {
+        "axFileLine": 25,
+        "axNode": 23,
+        "jsLength": 142,
+        "raw": "{\"k\":\"schema\",\"schema\":1,\"scope\":\"Safari DOM Range only; no glyph-font identity or Notes parity claim\",\"units\":\"CSS px, 6 decimals\",\"max\":350}",
+        "value": {
+          "k": "schema",
+          "schema": 1,
+          "scope": "Safari DOM Range only; no glyph-font identity or Notes parity claim",
+          "units": "CSS px, 6 decimals",
+          "max": 350
+        }
+      },
+      {
+        "axFileLine": 28,
+        "axNode": 26,
+        "jsLength": 111,
+        "raw": "{\"k\":\"q\",\"F\":[\"font-family\",\"$font\"],\"B\":[\"font\",\"-apple-system-body\"],\"S\":[\"font\",\"-apple-system-short-body\"]}",
+        "value": {
+          "k": "q",
+          "F": [
+            "font-family",
+            "$font"
+          ],
+          "B": [
+            "font",
+            "-apple-system-body"
+          ],
+          "S": [
+            "font",
+            "-apple-system-short-body"
+          ]
+        }
+      },
+      {
+        "axFileLine": 31,
+        "axNode": 29,
+        "jsLength": 134,
+        "raw": "{\"k\":\"font\",\"value\":\"-apple-system, BlinkMacSystemFont, \\\"Helvetica Neue\\\", \\\"PingFang SC\\\", \\\"Noto Sans CJK SC\\\", Arial, sans-serif\"}",
+        "value": {
+          "k": "font",
+          "value": "-apple-system, BlinkMacSystemFont, \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif"
+        }
+      },
+      {
+        "axFileLine": 34,
+        "axNode": 32,
+        "jsLength": 272,
+        "raw": "{\"k\":\"c\",\"order\":[\"font-family\",\"font-size\",\"line-height\",\"font-weight\",\"font-style\",\"font-stretch\",\"font-variant\",\"font-kerning\",\"font-feature-settings\",\"font-variant-east-asian\",\"font-synthesis\",\"letter-spacing\",\"word-spacing\",\"text-rendering\",\"-webkit-font-smoothing\"]}",
+        "value": {
+          "k": "c",
+          "order": [
+            "font-family",
+            "font-size",
+            "line-height",
+            "font-weight",
+            "font-style",
+            "font-stretch",
+            "font-variant",
+            "font-kerning",
+            "font-feature-settings",
+            "font-variant-east-asian",
+            "font-synthesis",
+            "letter-spacing",
+            "word-spacing",
+            "text-rendering",
+            "-webkit-font-smoothing"
+          ]
+        }
+      },
+      {
+        "axFileLine": 37,
+        "axNode": 35,
+        "jsLength": 58,
+        "raw": "{\"k\":\"w\",\"order\":[\"old-mixed\",\"adjacent\",\"han-separated\"]}",
+        "value": {
+          "k": "w",
+          "order": [
+            "old-mixed",
+            "adjacent",
+            "han-separated"
+          ]
+        }
+      },
+      {
+        "axFileLine": 40,
+        "axNode": 38,
+        "jsLength": 172,
+        "raw": "{\"k\":\"fixed1\",\"v\":{\"font-size\":\"13px\",\"line-height\":\"17px\",\"font-weight\":\"400\",\"font-style\":\"normal\",\"font-stretch\":\"normal\",\"font-variant\":\"normal\",\"font-kerning\":\"auto\"}}",
+        "value": {
+          "k": "fixed1",
+          "v": {
+            "font-size": "13px",
+            "line-height": "17px",
+            "font-weight": "400",
+            "font-style": "normal",
+            "font-stretch": "normal",
+            "font-variant": "normal",
+            "font-kerning": "auto"
+          }
+        }
+      },
+      {
+        "axFileLine": 43,
+        "axNode": 41,
+        "jsLength": 239,
+        "raw": "{\"k\":\"fixed2\",\"v\":{\"font-feature-settings\":\"normal\",\"font-variant-east-asian\":\"normal\",\"font-synthesis\":\"none\",\"letter-spacing\":\"normal\",\"word-spacing\":\"normal\",\"text-rendering\":\"optimizeLegibility\",\"-webkit-font-smoothing\":\"antialiased\"}}",
+        "value": {
+          "k": "fixed2",
+          "v": {
+            "font-feature-settings": "normal",
+            "font-variant-east-asian": "normal",
+            "font-synthesis": "none",
+            "letter-spacing": "normal",
+            "word-spacing": "normal",
+            "text-rendering": "optimizeLegibility",
+            "-webkit-font-smoothing": "antialiased"
+          }
+        }
+      },
+      {
+        "axFileLine": 46,
+        "axNode": 44,
+        "jsLength": 138,
+        "raw": "{\"k\":\"ua\",\"value\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4 Safari/605.1.15\"}",
+        "value": {
+          "k": "ua",
+          "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4 Safari/605.1.15"
+        }
+      },
+      {
+        "axFileLine": 49,
+        "axNode": 47,
+        "jsLength": 125,
+        "raw": "{\"k\":\"url\",\"value\":\"file:///Users/water/work/2026/Apple-Notes-Clone/docs/research/mac-body-webkit-controls-04/controls.html\"}",
+        "value": {
+          "k": "url",
+          "value": "file:///Users/water/work/2026/Apple-Notes-Clone/docs/research/mac-body-webkit-controls-04/controls.html"
+        }
+      },
+      {
+        "axFileLine": 52,
+        "axNode": 50,
+        "jsLength": 108,
+        "raw": "{\"k\":\"screen\",\"width\":1440,\"height\":932,\"availWidth\":1394,\"availHeight\":903,\"colorDepth\":24,\"pixelDepth\":24}",
+        "value": {
+          "k": "screen",
+          "width": 1440,
+          "height": 932,
+          "availWidth": 1394,
+          "availHeight": 903,
+          "colorDepth": 24,
+          "pixelDepth": 24
+        }
+      },
+      {
+        "axFileLine": 55,
+        "axNode": 53,
+        "jsLength": 94,
+        "raw": "{\"k\":\"language\",\"platform\":\"MacIntel\",\"lang\":\"zh-CN\",\"language\":\"zh-CN\",\"languages\":[\"zh-CN\"]}",
+        "value": {
+          "k": "language",
+          "platform": "MacIntel",
+          "lang": "zh-CN",
+          "language": "zh-CN",
+          "languages": [
+            "zh-CN"
+          ]
+        }
+      },
+      {
+        "axFileLine": 58,
+        "axNode": 56,
+        "jsLength": 119,
+        "raw": "{\"k\":\"view\",\"dpr\":2,\"viewport\":[1324,813],\"visualViewport\":[1324,813,1],\"fonts\":\"loaded\",\"ready\":\"complete\",\"zoom\":\"1\"}",
+        "value": {
+          "k": "view",
+          "dpr": 2,
+          "viewport": [
+            1324,
+            813
+          ],
+          "visualViewport": [
+            1324,
+            813,
+            1
+          ],
+          "fonts": "loaded",
+          "ready": "complete",
+          "zoom": "1"
+        }
+      },
+      {
+        "axFileLine": 61,
+        "axNode": 59,
+        "jsLength": 72,
+        "raw": "{\"k\":\"sample\",\"id\":\"old-mixed\",\"text\":\"0123456789 中文标点，。！？；：《》 — () []\"}",
+        "value": {
+          "k": "sample",
+          "id": "old-mixed",
+          "text": "0123456789 中文标点，。！？；：《》 — () []"
+        }
+      },
+      {
+        "axFileLine": 64,
+        "axNode": 62,
+        "jsLength": 48,
+        "raw": "{\"k\":\"sample\",\"id\":\"adjacent\",\"text\":\"，。！？；：《》\"}",
+        "value": {
+          "k": "sample",
+          "id": "adjacent",
+          "text": "，。！？；：《》"
+        }
+      },
+      {
+        "axFileLine": 67,
+        "axNode": 65,
+        "jsLength": 62,
+        "raw": "{\"k\":\"sample\",\"id\":\"han-separated\",\"text\":\"中，中。中！中？中；中：中《中》中\"}",
+        "value": {
+          "k": "sample",
+          "id": "han-separated",
+          "text": "中，中。中！中？中；中：中《中》中"
+        }
+      },
+      {
+        "axFileLine": 70,
+        "axNode": 68,
+        "jsLength": 160,
+        "raw": "{\"k\":\"input\",\"p\":\"docs/verification/mac-body-typography-runtime-01/corpus.json\",\"n\":1446,\"h\":\"bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19\"}",
+        "value": {
+          "k": "input",
+          "p": "docs/verification/mac-body-typography-runtime-01/corpus.json",
+          "n": 1446,
+          "h": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"
+        }
+      },
+      {
+        "axFileLine": 73,
+        "axNode": 71,
+        "jsLength": 163,
+        "raw": "{\"k\":\"input\",\"p\":\"docs/verification/mac-punctuation-context-runtime-02/corpus.json\",\"n\":393,\"h\":\"572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17\"}",
+        "value": {
+          "k": "input",
+          "p": "docs/verification/mac-punctuation-context-runtime-02/corpus.json",
+          "n": 393,
+          "h": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"
+        }
+      },
+      {
+        "axFileLine": 76,
+        "axNode": 74,
+        "jsLength": 114,
+        "raw": "{\"k\":\"input\",\"p\":\"src/style.css\",\"n\":66223,\"h\":\"de2222e4b3c8e4ccde3af4312e8d0db5480dabea1a3c54fe4a0bf9c2a3feb962\"}",
+        "value": {
+          "k": "input",
+          "p": "src/style.css",
+          "n": 66223,
+          "h": "de2222e4b3c8e4ccde3af4312e8d0db5480dabea1a3c54fe4a0bf9c2a3feb962"
+        }
+      },
+      {
+        "axFileLine": 79,
+        "axNode": 77,
+        "jsLength": 151,
+        "raw": "{\"k\":\"input\",\"p\":\"docs/research/mac-body-webkit-controls-02/README.md\",\"n\":5251,\"h\":\"b6b4b3957ffcaa52d79aab8bc2f0fb861f8345d930e7b1926888f6bf258e6d4d\"}",
+        "value": {
+          "k": "input",
+          "p": "docs/research/mac-body-webkit-controls-02/README.md",
+          "n": 5251,
+          "h": "b6b4b3957ffcaa52d79aab8bc2f0fb861f8345d930e7b1926888f6bf258e6d4d"
+        }
+      },
+      {
+        "axFileLine": 82,
+        "axNode": 80,
+        "jsLength": 161,
+        "raw": "{\"k\":\"input\",\"p\":\"docs/research/mac-body-webkit-controls-03/runtime-analysis.md\",\"n\":5726,\"h\":\"0aa95947f56874a1358cd52afb4e0254ed5ab76d3e288d98f552f5ca4d9a5524\"}",
+        "value": {
+          "k": "input",
+          "p": "docs/research/mac-body-webkit-controls-03/runtime-analysis.md",
+          "n": 5726,
+          "h": "0aa95947f56874a1358cd52afb4e0254ed5ab76d3e288d98f552f5ca4d9a5524"
+        }
+      },
+      {
+        "axFileLine": 85,
+        "axNode": 83,
+        "jsLength": 229,
+        "raw": "{\"k\":\"input\",\"p\":\"/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/CoreText.framework/Versions/A/Headers/CTFont.h\",\"n\":83565,\"h\":\"e9c47f154ed3f6267556f04bde22c5a3f6f08748b8c87f7c6ff0f3f8165c4bb7\"}",
+        "value": {
+          "k": "input",
+          "p": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/CoreText.framework/Versions/A/Headers/CTFont.h",
+          "n": 83565,
+          "h": "e9c47f154ed3f6267556f04bde22c5a3f6f08748b8c87f7c6ff0f3f8165c4bb7"
+        }
+      },
+      {
+        "axFileLine": 88,
+        "axNode": 86,
+        "jsLength": 227,
+        "raw": "{\"k\":\"input\",\"p\":\"/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSFont.h\",\"n\":10711,\"h\":\"b9168401a1e5c1ba85043bdd58b3b3baf6fee1f4b9fad2900edf4c61bdafdb29\"}",
+        "value": {
+          "k": "input",
+          "p": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSFont.h",
+          "n": 10711,
+          "h": "b9168401a1e5c1ba85043bdd58b3b3baf6fee1f4b9fad2900edf4c61bdafdb29"
+        }
+      },
+      {
+        "axFileLine": 91,
+        "axNode": 89,
+        "jsLength": 237,
+        "raw": "{\"k\":\"input\",\"p\":\"/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSFontDescriptor.h\",\"n\":13745,\"h\":\"2b92b27437053858d0ce879f8d1164182100097a192ee2a84001898ed6f66f60\"}",
+        "value": {
+          "k": "input",
+          "p": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSFontDescriptor.h",
+          "n": 13745,
+          "h": "2b92b27437053858d0ce879f8d1164182100097a192ee2a84001898ed6f66f60"
+        }
+      }
+    ]
+  },
+  "environment": {
+    "ua": {
+      "k": "ua",
+      "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4 Safari/605.1.15"
+    },
+    "url": {
+      "k": "url",
+      "value": "file:///Users/water/work/2026/Apple-Notes-Clone/docs/research/mac-body-webkit-controls-04/controls.html"
+    },
+    "screen": {
+      "k": "screen",
+      "width": 1440,
+      "height": 932,
+      "availWidth": 1394,
+      "availHeight": 903,
+      "colorDepth": 24,
+      "pixelDepth": 24
+    },
+    "language": {
+      "k": "language",
+      "platform": "MacIntel",
+      "lang": "zh-CN",
+      "language": "zh-CN",
+      "languages": [
+        "zh-CN"
+      ]
+    },
+    "view": {
+      "k": "view",
+      "dpr": 2,
+      "viewport": [
+        1324,
+        813
+      ],
+      "visualViewport": [
+        1324,
+        813,
+        1
+      ],
+      "fonts": "loaded",
+      "ready": "complete",
+      "zoom": "1"
+    }
+  },
+  "computedOrder": [
+    "font-family",
+    "font-size",
+    "line-height",
+    "font-weight",
+    "font-style",
+    "font-stretch",
+    "font-variant",
+    "font-kerning",
+    "font-feature-settings",
+    "font-variant-east-asian",
+    "font-synthesis",
+    "letter-spacing",
+    "word-spacing",
+    "text-rendering",
+    "-webkit-font-smoothing"
+  ],
+  "computedByControl": {
+    "b": {
+      "font-family": "-apple-system, BlinkMacSystemFont, \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+      "font-size": "13px",
+      "line-height": "17px",
+      "font-weight": "400",
+      "font-style": "normal",
+      "font-stretch": "100%",
+      "font-variant": "normal",
+      "font-kerning": "auto",
+      "font-feature-settings": "normal",
+      "font-variant-east-asian": "normal",
+      "font-synthesis": "none",
+      "letter-spacing": "normal",
+      "word-spacing": "0px",
+      "text-rendering": "optimizelegibility",
+      "-webkit-font-smoothing": "antialiased"
+    },
+    "body": {
+      "font-family": "UICTFontTextStyleBody",
+      "font-size": "13px",
+      "line-height": "17px",
+      "font-weight": "400",
+      "font-style": "normal",
+      "font-stretch": "100%",
+      "font-variant": "normal",
+      "font-kerning": "auto",
+      "font-feature-settings": "normal",
+      "font-variant-east-asian": "normal",
+      "font-synthesis": "none",
+      "letter-spacing": "normal",
+      "word-spacing": "0px",
+      "text-rendering": "optimizelegibility",
+      "-webkit-font-smoothing": "antialiased"
+    },
+    "short": {
+      "font-family": "UICTFontTextStyleShortBody",
+      "font-size": "13px",
+      "line-height": "17px",
+      "font-weight": "400",
+      "font-style": "normal",
+      "font-stretch": "100%",
+      "font-variant": "normal",
+      "font-kerning": "auto",
+      "font-feature-settings": "normal",
+      "font-variant-east-asian": "normal",
+      "font-synthesis": "none",
+      "letter-spacing": "normal",
+      "word-spacing": "0px",
+      "text-rendering": "optimizelegibility",
+      "-webkit-font-smoothing": "antialiased"
+    }
+  },
+  "computedDifferenceProperties": [
+    "font-family"
+  ],
+  "fixedRequestSerializationDifferences": [
+    {
+      "property": "font-stretch",
+      "requested": "normal",
+      "actualAllControls": "100%"
+    },
+    {
+      "property": "word-spacing",
+      "requested": "normal",
+      "actualAllControls": "0px"
+    },
+    {
+      "property": "text-rendering",
+      "requested": "optimizeLegibility",
+      "actualAllControls": "optimizelegibility"
+    }
+  ],
+  "sampleOrder": [
+    "old-mixed",
+    "adjacent",
+    "han-separated"
+  ],
+  "samples": [
+    "0123456789 中文标点，。！？；：《》 — () []",
+    "，。！？；：《》",
+    "中，中。中！中？中；中：中《中》中"
+  ],
+  "widthsByControl": {
+    "b": [
+      276.742432,
+      103.190659,
+      219.280151
+    ],
+    "body": [
+      276.742432,
+      103.190659,
+      219.280151
+    ],
+    "short": [
+      276.742432,
+      103.190659,
+      219.280151
+    ]
+  },
+  "widthDeltaVsBaseline": {
+    "b": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "body": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "short": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "inputIdentity": [
+    {
+      "path": "docs/verification/mac-body-typography-runtime-01/corpus.json",
+      "fixture": {
+        "bytes": 1446,
+        "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"
+      },
+      "runtimeEmbedded": {
+        "bytes": 1446,
+        "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"
+      },
+      "current": {
+        "bytes": 1446,
+        "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"
+      },
+      "embeddedMatchesFixture": true,
+      "currentMatchesFixture": true
+    },
+    {
+      "path": "docs/verification/mac-punctuation-context-runtime-02/corpus.json",
+      "fixture": {
+        "bytes": 393,
+        "sha256": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"
+      },
+      "runtimeEmbedded": {
+        "bytes": 393,
+        "sha256": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"
+      },
+      "current": {
+        "bytes": 393,
+        "sha256": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"
+      },
+      "embeddedMatchesFixture": true,
+      "currentMatchesFixture": true
+    },
+    {
+      "path": "src/style.css",
+      "fixture": {
+        "bytes": 66223,
+        "sha256": "de2222e4b3c8e4ccde3af4312e8d0db5480dabea1a3c54fe4a0bf9c2a3feb962"
+      },
+      "runtimeEmbedded": {
+        "bytes": 66223,
+        "sha256": "de2222e4b3c8e4ccde3af4312e8d0db5480dabea1a3c54fe4a0bf9c2a3feb962"
+      },
+      "current": {
+        "bytes": 66381,
+        "sha256": "d7facf680ee801c348fd2ed0619213e0fc916d276f8fb3ddef1a78d11acf44d7"
+      },
+      "embeddedMatchesFixture": true,
+      "currentMatchesFixture": false
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-02/README.md",
+      "fixture": {
+        "bytes": 5251,
+        "sha256": "b6b4b3957ffcaa52d79aab8bc2f0fb861f8345d930e7b1926888f6bf258e6d4d"
+      },
+      "runtimeEmbedded": {
+        "bytes": 5251,
+        "sha256": "b6b4b3957ffcaa52d79aab8bc2f0fb861f8345d930e7b1926888f6bf258e6d4d"
+      },
+      "current": {
+        "bytes": 5251,
+        "sha256": "b6b4b3957ffcaa52d79aab8bc2f0fb861f8345d930e7b1926888f6bf258e6d4d"
+      },
+      "embeddedMatchesFixture": true,
+      "currentMatchesFixture": true
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime-analysis.md",
+      "fixture": {
+        "bytes": 5726,
+        "sha256": "0aa95947f56874a1358cd52afb4e0254ed5ab76d3e288d98f552f5ca4d9a5524"
+      },
+      "runtimeEmbedded": {
+        "bytes": 5726,
+        "sha256": "0aa95947f56874a1358cd52afb4e0254ed5ab76d3e288d98f552f5ca4d9a5524"
+      },
+      "current": {
+        "bytes": 5726,
+        "sha256": "0aa95947f56874a1358cd52afb4e0254ed5ab76d3e288d98f552f5ca4d9a5524"
+      },
+      "embeddedMatchesFixture": true,
+      "currentMatchesFixture": true
+    },
+    {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/CoreText.framework/Versions/A/Headers/CTFont.h",
+      "fixture": {
+        "bytes": 83565,
+        "sha256": "e9c47f154ed3f6267556f04bde22c5a3f6f08748b8c87f7c6ff0f3f8165c4bb7"
+      },
+      "runtimeEmbedded": {
+        "bytes": 83565,
+        "sha256": "e9c47f154ed3f6267556f04bde22c5a3f6f08748b8c87f7c6ff0f3f8165c4bb7"
+      },
+      "current": {
+        "bytes": 83565,
+        "sha256": "e9c47f154ed3f6267556f04bde22c5a3f6f08748b8c87f7c6ff0f3f8165c4bb7"
+      },
+      "embeddedMatchesFixture": true,
+      "currentMatchesFixture": true
+    },
+    {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSFont.h",
+      "fixture": {
+        "bytes": 10711,
+        "sha256": "b9168401a1e5c1ba85043bdd58b3b3baf6fee1f4b9fad2900edf4c61bdafdb29"
+      },
+      "runtimeEmbedded": {
+        "bytes": 10711,
+        "sha256": "b9168401a1e5c1ba85043bdd58b3b3baf6fee1f4b9fad2900edf4c61bdafdb29"
+      },
+      "current": {
+        "bytes": 10711,
+        "sha256": "b9168401a1e5c1ba85043bdd58b3b3baf6fee1f4b9fad2900edf4c61bdafdb29"
+      },
+      "embeddedMatchesFixture": true,
+      "currentMatchesFixture": true
+    },
+    {
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSFontDescriptor.h",
+      "fixture": {
+        "bytes": 13745,
+        "sha256": "2b92b27437053858d0ce879f8d1164182100097a192ee2a84001898ed6f66f60"
+      },
+      "runtimeEmbedded": {
+        "bytes": 13745,
+        "sha256": "2b92b27437053858d0ce879f8d1164182100097a192ee2a84001898ed6f66f60"
+      },
+      "current": {
+        "bytes": 13745,
+        "sha256": "2b92b27437053858d0ce879f8d1164182100097a192ee2a84001898ed6f66f60"
+      },
+      "embeddedMatchesFixture": true,
+      "currentMatchesFixture": true
+    }
+  ],
+  "currentSourceSnapshotUtc": "2026-11-04T09:52:44.427496+00:00",
+  "preparedManifestVerified": {
+    "files": 6,
+    "aggregateSha256": "4e5431663383eedb5cd94cf3b39ad014ee9129c2b84c0ece6e690c18a734b9ea",
+    "controlsHtmlFixtureExactlyMatchesFixtureJson": true
+  },
+  "images": [
+    {
+      "path": "runtime01.cua-image",
+      "format": "JPEG",
+      "width": 2648,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "runtime02.cua-image",
+      "format": "JPEG",
+      "width": 2648,
+      "height": 1806,
+      "mode": "RGB"
+    }
+  ],
+  "interpretation": [
+    "All 26 AX short blocks are independently parsed complete JSON, not inferred from the page completion claim.",
+    "The shorthand controls are syntactically supported and retain distinct computed text-style family strings, while other 14 computed properties and all three rounded CSS-px widths equal baseline.",
+    "No width improvement was observed for these three samples at fixed 13px/17px in Safari 26.4.",
+    "a records initial inline request serialization equality before common longhand restoration; s records CSS syntax support. Neither identifies a rendered glyph font.",
+    "The 8 input hashes are frozen preparation metadata, not runtime file reads. Seven current files match; src/style.css differs after mobile changes reported by root.",
+    "This Safari result does not establish the Notes font implementation, actual glyph fallback, product WKWebView result, Android/iOS result, full text-layout equivalence or pixel parity.",
+    "JPEG image geometry is recorded only; CSS px were not converted to screenshot pixels.",
+    "The analyst reviewed saved endpoints and root ledger; did not replay root GUI actions or independently verify intermediate open-panel inputs."
+  ],
+  "unchangedOriginals": [
+    {
+      "path": "README.md",
+      "bytes": 5499,
+      "sha256": "7e428fa7be2afe68616e18a59a6ba663286657eeedbc34b00b0bbd9beb2503e2"
+    },
+    {
+      "path": "controls.html",
+      "bytes": 9315,
+      "sha256": "7c6373f14015dd2f8be326cb80f2fc8ac4cb369808d2dd344178a049f192ec25"
+    },
+    {
+      "path": "fixture.json",
+      "bytes": 3226,
+      "sha256": "e4be57941010d859316ab01598d34bc94355938aa4d199b1582af4769c76959e"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 1110,
+      "sha256": "b9ae50063669bb66f248ceb71e34ce667f7deea7d65b048b4a5a130bff67aabd"
+    },
+    {
+      "path": "references.json",
+      "bytes": 2520,
+      "sha256": "c6f4b4afced01947df48d39056806bebc2366236c44735a11c96ede7e260bb99"
+    },
+    {
+      "path": "root-runtime-ledger.md",
+      "bytes": 1444,
+      "sha256": "a5c9b6e57e8035f8c0403e0327f3d679d0767c2b4152aeacf4d4554d4aa2c57c"
+    },
+    {
+      "path": "runtime01.ax.txt",
+      "bytes": 2620,
+      "sha256": "0c92d178c08c1fa10469ca3a59cccae45c7535c8e17125f69b562f2508287bf9"
+    },
+    {
+      "path": "runtime01.cua-image",
+      "bytes": 122199,
+      "sha256": "8437e409afbea27a2887989053f81f5b971437753ffd060ee5c6dfe182894adf"
+    },
+    {
+      "path": "runtime02.ax.txt",
+      "bytes": 13566,
+      "sha256": "6498f0427090512a8265b40cb26557590f9ce16ca86ee6b1da889c53426029b2"
+    },
+    {
+      "path": "runtime02.cua-image",
+      "bytes": 637481,
+      "sha256": "c182039487030127b94071785164c6078b6ef9026690e68b6bd07e8cf466645b"
+    },
+    {
+      "path": "static-check.cjs",
+      "bytes": 3724,
+      "sha256": "568f940a610dc511e0596d69961cffeb6b57ecc0d56a6adfb7fe02b653fae011"
+    },
+    {
+      "path": "static-validation.json",
+      "bytes": 3559,
+      "sha256": "012d5e6f48760bbf30f30c74dff67f8ca91d902529c1fdd61f492a3dc778933a"
+    }
+  ],
+  "freeGiBBeforeWrite": 70.731
+}
