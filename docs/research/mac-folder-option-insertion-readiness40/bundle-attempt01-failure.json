@@ -1,0 +1,13 @@
+{
+  "status": "FAIL",
+  "stage": "bundle",
+  "command": [
+    "node",
+    "docs/research/mac-folder-option-insertion-readiness40/bundle.mjs"
+  ],
+  "exitCode": 1,
+  "error": "Error [ERR_MODULE_NOT_FOUND]: Cannot find module /Users/water/work/2026/node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js imported from /Users/water/work/2026/Apple-Notes-Clone/docs/research/mac-folder-option-insertion-readiness40/bundle.mjs",
+  "runtime": "Node.js v22.16.0",
+  "cause": "Relative import traversed four parents instead of three. Failure happened before any bundle output.",
+  "preservedFrom": "Pre-compaction tool result"
+}

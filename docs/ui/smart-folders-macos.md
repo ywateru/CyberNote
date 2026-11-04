@@ -173,3 +173,15 @@ checkbox：保持原位；后标签文字左2图像px，说明仍原位
 ```
 
 OptionTab字面插入仍另项；Android、智能规则、普通文本输入与原生搜索不接入本局部循环。实际文字31改善见research/mac-ordinary-typography36-runtime-analysis，名称与选区残差保持开放。
+
+## 普通名称Option插入42（待实施）
+
+原版40/41未保存草稿实际显示：OptionTab在caret插入单TAB，局部CD被TAB替换；CmdZ恢复完整名称及CD选区，CmdShiftZ重做TAB。末尾OptionShiftTab也见单TAB。
+
+```text
+QA-OPT41-AB[CD] --OptionTab--> QA-OPT41-AB<TAB>
+              <--CmdZ------  （恢复CD选区）
+              --CmdShiftZ-->  （恢复TAB结果）
+```
+
+[任务42](../plan/tasks/app-mac-ordinary-option-insertion42.md)仅普通native Mac名称输入；独立于37普通Tab策略循环，保真实编辑历史及React同步。readiness40隐藏WK候选不能代替实际新包按键路径；系统导航开启态及其它输入组合仍待证。

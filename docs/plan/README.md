@@ -86,3 +86,5 @@ docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，do
 2026-11-05后续37：同源Mac13/Android08已构建并独立核包通过。Mac13侧栏两入口、菜单动态文字、hidden/visible正常重启实际36有限通过；文字31实际量图改善但仍残差。普通Tab/OptionTab仍差异，新增[局部循环37](tasks/app-mac-ordinary-tab-loop37.md)继续。Android08保数据设备记录进行中，空白新建无输入返回后8→9，保留现场、不删除，不追认为原版语义一致。
 
 2026-11-05只读38：Android空白新建返回8→9由创建时立即持久化实体、返回仅导航的调用链解释；既有录屏未形成完全无输入同路径证据，原版策略UNKNOWN。见[准备38](../research/mobile-empty-note-readiness38/README.md)。不以plainText或revision0删除空实体，保持现场；这不是已确定的产品缺陷或取消通过。
+
+2026-11-05后续40–42：原版未保存草稿已观察OptionTab中间插入、选区替换及一次真实撤销/重做；隐藏WK候选保留真实React输入和编辑历史，但未验证产品按键路由。[任务42](tasks/app-mac-ordinary-option-insertion42.md)依赖37合入，当前pending，不与37重叠实施。用户再次明确“先不删除，继续其他开发”，原版删除/恢复实验和Android新空笔记清理继续暂停。Android08实际36有限运行及独立证据复核已经完成，当前包不改，计数9保留。

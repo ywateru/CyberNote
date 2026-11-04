@@ -1,0 +1,574 @@
+{
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+  "status": "COMPLETE",
+  "rows": [
+    {
+      "before": {
+        "output": "QA-OPT40-ABCD",
+        "end": 3,
+        "start": 3,
+        "redoEnabled": false,
+        "value": "QA-OPT40-ABCD",
+        "direction": "none",
+        "undoEnabled": false,
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "redo": {
+        "output": "QA-\tOPT40-ABCD",
+        "end": 4,
+        "start": 4,
+        "redoEnabled": false,
+        "value": "QA-\tOPT40-ABCD",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-\tOPT40-ABCD",
+        "focused": true
+      },
+      "insertEvents": [
+        {
+          "end": 3,
+          "start": 3,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT40-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 4,
+          "start": 4,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-\tOPT40-ABCD",
+          "kind": "input"
+        },
+        {
+          "inputType": "insertText",
+          "kind": "react-onChange",
+          "value": "QA-\tOPT40-ABCD",
+          "isTrusted": true
+        }
+      ],
+      "insertReturn": true,
+      "afterUnrelatedRender": {
+        "end": 4,
+        "output": "QA-\tOPT40-ABCD",
+        "start": 4,
+        "redoEnabled": false,
+        "value": "QA-\tOPT40-ABCD",
+        "direction": "none",
+        "undoEnabled": true,
+        "state": "QA-\tOPT40-ABCD",
+        "focused": true
+      },
+      "redoReturn": true,
+      "undoReturn": true,
+      "redoEvents": [
+        {
+          "end": 3,
+          "start": 3,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "QA-OPT40-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 4,
+          "start": 4,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "QA-\tOPT40-ABCD",
+          "kind": "input"
+        },
+        {
+          "inputType": "historyRedo",
+          "value": "QA-\tOPT40-ABCD",
+          "kind": "react-onChange",
+          "isTrusted": true
+        }
+      ],
+      "undoEvents": [
+        {
+          "end": 4,
+          "start": 4,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-\tOPT40-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 3,
+          "start": 3,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT40-ABCD",
+          "kind": "input"
+        },
+        {
+          "value": "QA-OPT40-ABCD",
+          "kind": "react-onChange",
+          "inputType": "historyUndo",
+          "isTrusted": true
+        }
+      ],
+      "scenario": {
+        "name": "caret-middle",
+        "start": 3,
+        "end": 3
+      },
+      "undo": {
+        "output": "QA-OPT40-ABCD",
+        "end": 3,
+        "start": 3,
+        "redoEnabled": true,
+        "value": "QA-OPT40-ABCD",
+        "undoEnabled": false,
+        "direction": "none",
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "after": {
+        "output": "QA-\tOPT40-ABCD",
+        "end": 4,
+        "start": 4,
+        "redoEnabled": false,
+        "value": "QA-\tOPT40-ABCD",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-\tOPT40-ABCD",
+        "focused": true
+      }
+    },
+    {
+      "before": {
+        "end": 13,
+        "output": "QA-OPT40-ABCD",
+        "start": 11,
+        "redoEnabled": false,
+        "value": "QA-OPT40-ABCD",
+        "direction": "none",
+        "undoEnabled": true,
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "insertEvents": [
+        {
+          "end": 13,
+          "start": 11,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT40-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 12,
+          "start": 12,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT40-AB\t",
+          "kind": "input"
+        },
+        {
+          "inputType": "insertText",
+          "kind": "react-onChange",
+          "value": "QA-OPT40-AB\t",
+          "isTrusted": true
+        }
+      ],
+      "redo": {
+        "output": "QA-OPT40-AB\t",
+        "end": 12,
+        "start": 12,
+        "redoEnabled": false,
+        "value": "QA-OPT40-AB\t",
+        "direction": "none",
+        "undoEnabled": true,
+        "state": "QA-OPT40-AB\t",
+        "focused": true
+      },
+      "insertReturn": true,
+      "afterUnrelatedRender": {
+        "end": 12,
+        "output": "QA-OPT40-AB\t",
+        "start": 12,
+        "redoEnabled": false,
+        "value": "QA-OPT40-AB\t",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-AB\t",
+        "focused": true
+      },
+      "redoReturn": true,
+      "undoReturn": true,
+      "redoEvents": [
+        {
+          "end": 13,
+          "start": 11,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "QA-OPT40-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 12,
+          "start": 12,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "QA-OPT40-AB\t",
+          "kind": "input"
+        },
+        {
+          "inputType": "historyRedo",
+          "kind": "react-onChange",
+          "value": "QA-OPT40-AB\t",
+          "isTrusted": true
+        }
+      ],
+      "undoEvents": [
+        {
+          "end": 12,
+          "start": 12,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT40-AB\t",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 13,
+          "start": 11,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT40-ABCD",
+          "kind": "input"
+        },
+        {
+          "value": "QA-OPT40-ABCD",
+          "kind": "react-onChange",
+          "inputType": "historyUndo",
+          "isTrusted": true
+        }
+      ],
+      "scenario": {
+        "start": 11,
+        "end": 13,
+        "name": "replace-CD"
+      },
+      "undo": {
+        "end": 13,
+        "output": "QA-OPT40-ABCD",
+        "start": 11,
+        "redoEnabled": true,
+        "value": "QA-OPT40-ABCD",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "after": {
+        "output": "QA-OPT40-AB\t",
+        "end": 12,
+        "start": 12,
+        "redoEnabled": false,
+        "value": "QA-OPT40-AB\t",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-AB\t",
+        "focused": true
+      }
+    },
+    {
+      "before": {
+        "output": "QA-OPT40-ABCD",
+        "end": 13,
+        "start": 13,
+        "redoEnabled": false,
+        "value": "QA-OPT40-ABCD",
+        "direction": "none",
+        "undoEnabled": true,
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "redo": {
+        "output": "QA-OPT40-ABCD\t",
+        "end": 14,
+        "start": 14,
+        "redoEnabled": false,
+        "value": "QA-OPT40-ABCD\t",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-ABCD\t",
+        "focused": true
+      },
+      "insertReturn": true,
+      "insertEvents": [
+        {
+          "end": 13,
+          "start": 13,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT40-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 14,
+          "start": 14,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT40-ABCD\t",
+          "kind": "input"
+        },
+        {
+          "value": "QA-OPT40-ABCD\t",
+          "kind": "react-onChange",
+          "inputType": "insertText",
+          "isTrusted": true
+        }
+      ],
+      "afterUnrelatedRender": {
+        "output": "QA-OPT40-ABCD\t",
+        "end": 14,
+        "start": 14,
+        "redoEnabled": false,
+        "value": "QA-OPT40-ABCD\t",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-ABCD\t",
+        "focused": true
+      },
+      "redoReturn": true,
+      "undoReturn": true,
+      "redoEvents": [
+        {
+          "end": 13,
+          "start": 13,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "QA-OPT40-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 14,
+          "start": 14,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "QA-OPT40-ABCD\t",
+          "kind": "input"
+        },
+        {
+          "value": "QA-OPT40-ABCD\t",
+          "inputType": "historyRedo",
+          "kind": "react-onChange",
+          "isTrusted": true
+        }
+      ],
+      "scenario": {
+        "start": 13,
+        "name": "append",
+        "end": 13
+      },
+      "undoEvents": [
+        {
+          "end": 14,
+          "start": 14,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT40-ABCD\t",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 13,
+          "start": 13,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT40-ABCD",
+          "kind": "input"
+        },
+        {
+          "value": "QA-OPT40-ABCD",
+          "inputType": "historyUndo",
+          "kind": "react-onChange",
+          "isTrusted": true
+        }
+      ],
+      "undo": {
+        "end": 13,
+        "output": "QA-OPT40-ABCD",
+        "start": 13,
+        "redoEnabled": true,
+        "value": "QA-OPT40-ABCD",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "after": {
+        "output": "QA-OPT40-ABCD\t",
+        "end": 14,
+        "start": 14,
+        "redoEnabled": false,
+        "value": "QA-OPT40-ABCD\t",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-ABCD\t",
+        "focused": true
+      }
+    },
+    {
+      "before": {
+        "output": "QA-OPT40-ABCD",
+        "end": 13,
+        "start": 11,
+        "redoEnabled": false,
+        "value": "QA-OPT40-ABCD",
+        "direction": "none",
+        "undoEnabled": true,
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "redo": {
+        "output": "QA-OPT40-ABCD",
+        "end": 13,
+        "start": 13,
+        "redoEnabled": false,
+        "value": "QA-OPT40-ABCD",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "insertReturn": "void",
+      "insertEvents": [],
+      "afterUnrelatedRender": {
+        "output": "QA-OPT40-ABCD",
+        "end": 13,
+        "start": 13,
+        "redoEnabled": false,
+        "value": "QA-OPT40-ABCD",
+        "direction": "none",
+        "undoEnabled": true,
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "redoReturn": true,
+      "undoReturn": true,
+      "redoEvents": [],
+      "undo": {
+        "output": "QA-OPT40-ABCD",
+        "end": 13,
+        "start": 13,
+        "redoEnabled": true,
+        "value": "QA-OPT40-ABCD",
+        "direction": "none",
+        "undoEnabled": true,
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "undoEvents": [],
+      "scenario": {
+        "method": "setRangeText",
+        "end": 13,
+        "name": "setRangeText-control",
+        "start": 11
+      },
+      "after": {
+        "output": "QA-OPT40-ABCD",
+        "end": 12,
+        "start": 12,
+        "redoEnabled": false,
+        "value": "QA-OPT40-AB\t",
+        "direction": "none",
+        "undoEnabled": true,
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      }
+    },
+    {
+      "before": {
+        "output": "QA-OPT40-ABCD",
+        "end": 13,
+        "start": 11,
+        "redoEnabled": false,
+        "value": "QA-OPT40-ABCD",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-ABCD",
+        "focused": true
+      },
+      "redo": {
+        "end": 12,
+        "output": "QA-OPT40-AB\t",
+        "start": 12,
+        "redoEnabled": false,
+        "value": "QA-OPT40-AB\t",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-AB\t",
+        "focused": true
+      },
+      "insertReturn": "state-update",
+      "insertEvents": [],
+      "afterUnrelatedRender": {
+        "end": 12,
+        "output": "QA-OPT40-AB\t",
+        "start": 12,
+        "redoEnabled": false,
+        "value": "QA-OPT40-AB\t",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-AB\t",
+        "focused": true
+      },
+      "redoReturn": true,
+      "undoReturn": true,
+      "redoEvents": [],
+      "undo": {
+        "end": 12,
+        "output": "QA-OPT40-AB\t",
+        "start": 12,
+        "redoEnabled": true,
+        "value": "QA-OPT40-AB\t",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-AB\t",
+        "focused": true
+      },
+      "undoEvents": [],
+      "scenario": {
+        "end": 13,
+        "method": "setDraft",
+        "name": "setDraft-control",
+        "start": 11
+      },
+      "after": {
+        "end": 12,
+        "output": "QA-OPT40-AB\t",
+        "start": 12,
+        "redoEnabled": false,
+        "value": "QA-OPT40-AB\t",
+        "undoEnabled": true,
+        "direction": "none",
+        "state": "QA-OPT40-AB\t",
+        "focused": true
+      }
+    }
+  ],
+  "scope": "Own invisible WKWebView, controlled React19 input, document editing commands only; no OS keyboard or user app"
+}
