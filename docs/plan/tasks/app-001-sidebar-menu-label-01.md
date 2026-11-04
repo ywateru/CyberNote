@@ -1,7 +1,7 @@
 ---
 id: app-001-sidebar-menu-label-01
 scope: mac-sidebar-menu-state-label
-status: awaiting-review
+status: done
 depends-on: [app-001-sidebar-restore-01]
 ---
 
@@ -24,3 +24,7 @@ depends-on: [app-001-sidebar-restore-01]
 ## delivery
 
 生产仅3个文件：菜单初始文字“隐藏文件夹”；原生模块复用当前main绑定的columns.sidebar_visible，在bind/update成功后与Focused(true)同步既有子菜单内sidebar标题。独立窗不写主窗菜单；不新增IPC、状态副本、存储字段，不改布局/启用/动作。菜单错误单独记录，不改变成功toolbar结果。插件离线16项测试和桌面宿主cargo check --lib通过；新增3项生产投影/受控菜单sink检查覆盖主窗三布局显示→隐藏→恢复与重新投影、独立窗口与未绑定隔离、真实revision/绑定门禁和菜单错误不变更当前状态。精确命令/日志/身份及限制见 `docs/verification/app-001-sidebar-menu-label-01/`。仅编译API，不创建真实AppKit菜单或GUI；root需出新Mac包完成两种入口、画廊、切窗、冷启实际验证。等待不同作者审查。
+
+## 实际包交付
+
+8bfeb43经72ad237独审SOURCE-READY后合入主线，准确b5063fd实际离线Mac补包exe731695ca…已构建/独核。root在真实新包中验证可见“隐藏文件夹”→隐藏“显示文件夹”→恢复，工具栏/菜单双路径、画廊浏览/展开与正常冷启通过；candidate06-mac-sidebar-menu-independent-02对28项有限记录断言支持。仅完成此状态文案子项，独立窗实际焦点与完整像素未追认。

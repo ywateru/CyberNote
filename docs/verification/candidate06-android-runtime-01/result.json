@@ -1,0 +1,218 @@
+{
+  "schema": "notesclone.android.runtime.limited-verification.v1",
+  "date": "2026-11-04",
+  "rootStatus": "partial",
+  "sourceHead": "f18da0ccf8bb6e131e80e22b9752f0df2725245d",
+  "apk": {
+    "path": "artifacts/unified-candidate06/android-build01/android-attempt01/android-original.apk",
+    "bytes": 177445114,
+    "sha256": "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4"
+  },
+  "provenance": "package-provenance.json",
+  "device": {
+    "serial": "emulator-5580",
+    "properties": {
+      "ro.product.model": "sdk_gphone_arm64",
+      "ro.product.device": "emulator_arm64",
+      "ro.build.fingerprint": "google/sdk_gphone_arm64/emulator_arm64:11/RSR1.240422.006/12134477:userdebug/dev-keys",
+      "ro.kernel.qemu": "1"
+    },
+    "package": "com.local.notesclone",
+    "installedApk": {
+      "path": "/data/app/~~eb5P2bS7ZSfexzMHy-g4uA==/com.local.notesclone-zgT9fwv3c8LKq4bjcHFRQg==/base.apk",
+      "bytes": 177445114,
+      "sha256": "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4"
+    },
+    "packageFields": {
+      "userId": "10169",
+      "firstInstallTime": "2026-11-03 22:09:17",
+      "lastUpdateTime": "2026-11-04 13:02:44"
+    },
+    "lastObservedPid": "16712"
+  },
+  "checks": [
+    {
+      "name": "Exact candidate06 install -r replacement",
+      "status": "PASS",
+      "evidence": [
+        "02-install-replace.json",
+        "03-after-upgrade.json",
+        "24-final-old-data-package.json"
+      ]
+    },
+    {
+      "name": "Fixed four old complete note rows, two attachment metadata rows, two device-side audio hashes unchanged against candidate04 baseline",
+      "status": "PASS",
+      "evidence": [
+        "01-before-upgrade.json",
+        "03-after-upgrade.json",
+        "14-old-data-after-cold.json",
+        "24-final-old-data-package.json"
+      ]
+    },
+    {
+      "name": "Actual Android input of ASCII tag saved through production editor/store",
+      "status": "PASS",
+      "evidence": [
+        "07-tag-typed.png",
+        "07-tag-typed-actions.json",
+        "08-tag-saved.json"
+      ]
+    },
+    {
+      "name": "Actual tag selection returns unique new note before and after force-stop cold start",
+      "status": "PASS",
+      "evidence": [
+        "11-tag-selected.png",
+        "12-tag-cold-relaunch-actions.json",
+        "13-tag-after-cold.json",
+        "16-tag-reselected-after-cold.png",
+        "17-tag-note-after-cold.png",
+        "25-final-tag-note.json"
+      ]
+    },
+    {
+      "name": "New full note row is exactly equal at initial save, after cold start, final",
+      "status": "PASS",
+      "evidence": [
+        "08-tag-saved.json",
+        "13-tag-after-cold.json",
+        "25-final-tag-note.json"
+      ]
+    },
+    {
+      "name": "Two specified old compact audio cards have no invented recording date",
+      "status": "PASS",
+      "evidence": [
+        "21-old-audio-card.png",
+        "23-candidate04-audio-card.png",
+        "24-final-old-data-package.json"
+      ]
+    }
+  ],
+  "baseline": "docs/verification/candidate04-android-runtime-01/66-final-store.json",
+  "preservedNotes": [
+    {
+      "id": "1a0718dd-c71c-4192-89b6-bd58cb9ba475",
+      "revision": 58
+    },
+    {
+      "id": "a9d1bbe7-a0ee-4f46-ba3e-e0889085cac3",
+      "revision": 30
+    },
+    {
+      "id": "a5a92add-fdb9-4b7f-9836-e7e4a930b2c2",
+      "revision": 25
+    },
+    {
+      "id": "2e1d2253-a332-42cc-85ad-0f66752e6498",
+      "revision": 71
+    }
+  ],
+  "preservedAttachmentRows": [
+    {
+      "id": "cb3fa001-9d73-4580-b959-38481fbba90b",
+      "note_id": "a9d1bbe7-a0ee-4f46-ba3e-e0889085cac3",
+      "body": {
+        "id": "cb3fa001-9d73-4580-b959-38481fbba90b",
+        "noteId": "a9d1bbe7-a0ee-4f46-ba3e-e0889085cac3",
+        "kind": "audio",
+        "relativePath": "cb3fa001-9d73-4580-b959-38481fbba90b.webm",
+        "mime": "audio/webm;codecs=opus",
+        "displayName": "新录音.webm",
+        "size": 429547
+      }
+    },
+    {
+      "id": "6771077d-eee5-4c9a-875b-e9b7445cf516",
+      "note_id": "2e1d2253-a332-42cc-85ad-0f66752e6498",
+      "body": {
+        "id": "6771077d-eee5-4c9a-875b-e9b7445cf516",
+        "noteId": "2e1d2253-a332-42cc-85ad-0f66752e6498",
+        "kind": "audio",
+        "relativePath": "op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob",
+        "mime": "audio/webm;codecs=opus",
+        "displayName": "新录音.webm",
+        "size": 168397
+      }
+    }
+  ],
+  "preservedAudioFileIdentities": [
+    {
+      "path": "/data/user/0/com.local.notesclone/attachments/cb3fa001-9d73-4580-b959-38481fbba90b.webm",
+      "bytes": 429547,
+      "sha256": "cd7ee9692361fb3502775e8b7efc87ba0957ee22835f10e6d7335b09980fdf4f"
+    },
+    {
+      "path": "/data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob",
+      "bytes": 168397,
+      "sha256": "6e145210f656836e9f1260f8e349af1ab8737e52885b27ed70fba80bf15fb32c"
+    }
+  ],
+  "newFixture": {
+    "id": "ce2884c3-841a-44d6-bfb3-615cf2e1ab84",
+    "revision": 82,
+    "title": "QA-CANDIDATE06-ANDROID-RUNTIME-20261104A",
+    "plainText": "QA-CANDIDATE06-ANDROID-RUNTIME-20261104A\nTag #QA06Tag \nPersisted via Android input",
+    "noteTagMarks": [
+      {
+        "attrs": {
+          "name": "QA06Tag"
+        },
+        "type": "noteTag"
+      }
+    ],
+    "fullRowEqualAcrossSaveColdFinal": true
+  },
+  "oldAudioCardObservations": [
+    {
+      "noteId": "a9d1bbe7-a0ee-4f46-ba3e-e0889085cac3",
+      "title": "新录音",
+      "detail": "音频 · 1:06",
+      "recordingDateVisible": false,
+      "metadataRecordedAtPresent": false,
+      "screenshot": "21-old-audio-card.png"
+    },
+    {
+      "noteId": "2e1d2253-a332-42cc-85ad-0f66752e6498",
+      "title": "新录音",
+      "detail": "音频 · 26秒",
+      "recordingDateVisible": false,
+      "metadataRecordedAtPresent": false,
+      "screenshot": "23-candidate04-audio-card.png"
+    }
+  ],
+  "limitations": [
+    "ASCII Android input path only; native Chinese IME/preedit and composition parking unverified",
+    "Undo/Redo, tag deletion/last reference and all tag behaviors unverified",
+    "Force-stop cold start is not normal process exit",
+    "No new recording, actual recording timestamp capture, valid microphone capture, playback, decoding or audibility verified",
+    "No offline OCR, physical device, iOS or Apple pixel comparison executed in this round",
+    "Initial launch screenshots 04 and 12 were too early and blank; loaded screenshots 05 and 15 show content",
+    "UI dump 06/09/10/11 exited137; 15 contains host tree only; PNG/actions retained without invented semantic tree",
+    "09 filename back-list still shows viewer;10 is folders;19 is suggestions;20 is actual unique result"
+  ],
+  "release": {
+    "deviceOperationsComplete": true,
+    "deviceReleasedToRoot": true,
+    "noFurtherAdbPlanned": true,
+    "lastObservedPid": "16712",
+    "lastScreen": "Specified candidate04 synthetic note, compact audio card, no playback"
+  },
+  "scope": {
+    "uninstall": false,
+    "clearData": false,
+    "reset": false,
+    "downgrade": false,
+    "newRecording": false,
+    "audioExport": false,
+    "databaseWalCopy": false,
+    "deviceApkCopy": false,
+    "unrelatedPrivateNoteReads": false,
+    "productSourceModificationByThisTask": false,
+    "headModificationByThisTask": false,
+    "mainCommitByThisTask": false
+  },
+  "diskFreeBeforeLocalSeal": 3470168064,
+  "minimumFreeBytesPerOutputStage": 2147483648
+}

@@ -1,0 +1,40 @@
+[
+  {
+    "at": "2026-11-04T05:11:50.590360+00:00",
+    "args": [
+      "shell",
+      "input",
+      "tap",
+      "323",
+      "1292"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:11:50.749945+00:00",
+    "args": [
+      "exec-out",
+      "screencap",
+      "-p"
+    ],
+    "exitCode": 0,
+    "stdout": {
+      "bytes": 92193,
+      "sha256": "7113a03ccc9140993e1a0ef1d2e29629808148532fb09a1f0442b3f322e6abe1"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:11:50.783424+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exitCode": 0,
+    "stdout": "16712\n",
+    "stderr": ""
+  }
+]

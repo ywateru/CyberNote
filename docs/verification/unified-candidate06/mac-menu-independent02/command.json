@@ -1,0 +1,32 @@
+{
+  "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+  "argv": [
+    "python3",
+    "docs/verification/unified-candidate06/mac-menu-independent02/verify.py"
+  ],
+  "reusedVerifier": {
+    "path": "docs/verification/unified-candidate06/mac-independent01/verify.py",
+    "bytes": 11043,
+    "sha256": "ed6220d3bae279994d38abc0de3f7e7e0048e537275c63ab367c39c44725495b"
+  },
+  "authorization": {
+    "path": "docs/verification/unified-candidate06/root-authorization-mac-menu-build02.json",
+    "bytes": 30241,
+    "sha256": "59368eed7e48091154df32521cc505fe986236da4e7701356147ff7ef92d0fa7"
+  },
+  "initialRun": {
+    "exitCode": 1,
+    "reason": "Adapted RUN source constants but ART still referenced old mac-build01. Initial original bundle equality assertion correctly rejected that mismatch; corrected ART to mac-menu-build02. No product or source evidence changed."
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "assertionsPassed": 925,
+    "result": {
+      "path": "docs/verification/unified-candidate06/mac-menu-independent02/result.json",
+      "bytes": 122711,
+      "sha256": "d1fb16a4995d3947cfccb2e463ea18fa9674f445fc7afacb0290a0cd66bd189a"
+    }
+  },
+  "platformCommandsExecuted": false,
+  "mainCommit": false
+}

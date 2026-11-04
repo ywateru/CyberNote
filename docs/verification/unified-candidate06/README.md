@@ -12,4 +12,8 @@
 
 Mac原始包strict签名exit1（原始错误保留），sealed派生包既有strict检查exit0；不可把原件称为通过。Android既有apksigner exit0/v2=true，证书与04一致；独核直接解析06与04当前v2证书DER身份，未重新密码学验签。25OCR模型2490310B与冻结AAR及04记录相等，ABI仅arm64-v8a。
 
-Mac实际侧栏有限验收在../candidate06-mac-sidebar-runtime-01/，待菜单补丁再出Mac包。Android保数据升级/标签运行另在进行，不由本报告提前追认；有效收音与整窗像素均未通过。
+初始Mac06实际侧栏有限验收在../candidate06-mac-sidebar-runtime-01/，动态菜单补包及Android后续有限运行结果见下节。有效收音与整窗像素均未通过。
+
+## Mac菜单补包
+
+侧栏动态菜单补丁已独审并合入准确b5063fd，独立构建于[mac-menu-build02](mac-menu-build02/README.md)，是当前Mac实际运行版；上表原Mac06产物继续保留自身准确来源。新Mac exe731695ca…，菜单和直接恢复实际有限验收见../candidate06-mac-sidebar-menu-runtime-02/。Android06已完成保数据升级、ASCII标签输入保存/选择/强停冷启与旧未知日期录音卡有限验收，见../candidate06-android-runtime-01/及其独立复核；仍不扩张为全部标签/新音频有效收音/像素通过。

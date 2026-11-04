@@ -1,0 +1,60 @@
+{
+  "schema": "notesclone.android.runtime.package-provenance.v1",
+  "recordedAt": "2026-11-04T05:28:48.021458+00:00",
+  "sourceHead": "f18da0ccf8bb6e131e80e22b9752f0df2725245d",
+  "apk": {
+    "path": "artifacts/unified-candidate06/android-build01/android-attempt01/android-original.apk",
+    "bytes": 177445114,
+    "sha256": "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4"
+  },
+  "hostRuntimeIdentityEvidence": "01-before-upgrade.json",
+  "independentResult": {
+    "path": "docs/verification/unified-candidate06/android-independent01/result.json",
+    "bytes": 114974,
+    "sha256": "a572bd0e86ec4ac92ac16955dae5274d869a9243eaf99605610c1bf1814fdbee"
+  },
+  "independentConclusion": "PASS: current preserved Android APK bytes and recorded source/signature/model provenance",
+  "currentV2CertificateParse": {
+    "signingBlockSha256": "ef22c968645282f6b4a6d6ceb94244455c74dcdede1da622b612048ef398c94d",
+    "pairIds": [
+      "0x7109871a",
+      "0x42726577"
+    ],
+    "signerCertificates": [
+      [
+        {
+          "bytes": 744,
+          "sha256": "e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79"
+        }
+      ]
+    ]
+  },
+  "candidate04Apk": {
+    "path": "artifacts/unified-candidate04/NotesClone-android-arm64.apk",
+    "bytes": 304110831,
+    "sha256": "bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2"
+  },
+  "candidate04CurrentV2CertificateParse": {
+    "signingBlockSha256": "ea965479d078bfdf8f9e0d0595b91eb1ca08e69cff58a06f2163638ded216162",
+    "pairIds": [
+      "0x7109871a",
+      "0x42726577"
+    ],
+    "signerCertificates": [
+      [
+        {
+          "bytes": 744,
+          "sha256": "e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79"
+        }
+      ]
+    ]
+  },
+  "sameV2CertificateAsCandidate04": true,
+  "method": "Reuse existing independent v2 certificate parse and exact source/package evidence; host APK hash was recomputed in 01. No new apksigner invocation and no signature cryptographic verification claim beyond referenced independent result.",
+  "actualInstalledPackage": {
+    "path": "/data/app/~~eb5P2bS7ZSfexzMHy-g4uA==/com.local.notesclone-zgT9fwv3c8LKq4bjcHFRQg==/base.apk",
+    "bytes": 177445114,
+    "sha256": "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4"
+  },
+  "actualInstalledEvidence": "24-final-old-data-package.json"
+}

@@ -1,0 +1,801 @@
+{
+  "date": "2026-11-04T05:32:07.461493+00:00",
+  "conclusion": "SUPPORTED LIMITED OBSERVATIONS; overall acceptance remains partial",
+  "sourceManifest": {
+    "path": "docs/verification/candidate06-android-runtime-01/manifest.json",
+    "bytes": 9284,
+    "sha256": "3cd7652013d0bb176859da53426bb4bd7cafdd76702ed26b91bd464268fd3de3"
+  },
+  "sourceAggregate": "63c4ac0c48f6878be5ebd9d057907f6da9a680cc104b436361d3ec45a71a8664",
+  "sourceCount": 56,
+  "sourceBytes": 1807834,
+  "assertionsPassed": 166,
+  "checks": [
+    {
+      "name": "source manifest exact frozen SHA",
+      "pass": true
+    },
+    {
+      "name": "source file 01-before-upgrade.json",
+      "pass": true
+    },
+    {
+      "name": "source file 02-install-replace.json",
+      "pass": true
+    },
+    {
+      "name": "source file 03-after-upgrade.json",
+      "pass": true
+    },
+    {
+      "name": "source file 04-first-launch-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 04-first-launch.png",
+      "pass": true
+    },
+    {
+      "name": "source file 04-first-launch.xml",
+      "pass": true
+    },
+    {
+      "name": "source file 05-loaded-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 05-loaded.png",
+      "pass": true
+    },
+    {
+      "name": "source file 05-loaded.xml",
+      "pass": true
+    },
+    {
+      "name": "source file 06-new-note-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 06-new-note.dump-error.txt",
+      "pass": true
+    },
+    {
+      "name": "source file 06-new-note.png",
+      "pass": true
+    },
+    {
+      "name": "source file 07-tag-typed-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 07-tag-typed.png",
+      "pass": true
+    },
+    {
+      "name": "source file 08-tag-saved.json",
+      "pass": true
+    },
+    {
+      "name": "source file 09-back-list-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 09-back-list.dump-error.txt",
+      "pass": true
+    },
+    {
+      "name": "source file 09-back-list.png",
+      "pass": true
+    },
+    {
+      "name": "source file 10-note-list-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 10-note-list.dump-error.txt",
+      "pass": true
+    },
+    {
+      "name": "source file 10-note-list.png",
+      "pass": true
+    },
+    {
+      "name": "source file 11-tag-selected-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 11-tag-selected.dump-error.txt",
+      "pass": true
+    },
+    {
+      "name": "source file 11-tag-selected.png",
+      "pass": true
+    },
+    {
+      "name": "source file 12-tag-cold-relaunch-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 12-tag-cold-relaunch.png",
+      "pass": true
+    },
+    {
+      "name": "source file 13-tag-after-cold.json",
+      "pass": true
+    },
+    {
+      "name": "source file 14-old-data-after-cold.json",
+      "pass": true
+    },
+    {
+      "name": "source file 15-cold-loaded-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 15-cold-loaded.png",
+      "pass": true
+    },
+    {
+      "name": "source file 15-cold-loaded.xml",
+      "pass": true
+    },
+    {
+      "name": "source file 16-tag-reselected-after-cold-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 16-tag-reselected-after-cold.png",
+      "pass": true
+    },
+    {
+      "name": "source file 17-tag-note-after-cold-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 17-tag-note-after-cold.png",
+      "pass": true
+    },
+    {
+      "name": "source file 18-return-folders-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 18-return-folders.png",
+      "pass": true
+    },
+    {
+      "name": "source file 19-exact-old-search-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 19-exact-old-search.png",
+      "pass": true
+    },
+    {
+      "name": "source file 20-old-audio-search-result-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 20-old-audio-search-result.png",
+      "pass": true
+    },
+    {
+      "name": "source file 21-old-audio-card-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 21-old-audio-card.png",
+      "pass": true
+    },
+    {
+      "name": "source file 22-candidate04-exact-search-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 22-candidate04-exact-search.png",
+      "pass": true
+    },
+    {
+      "name": "source file 23-candidate04-audio-card-actions.json",
+      "pass": true
+    },
+    {
+      "name": "source file 23-candidate04-audio-card.png",
+      "pass": true
+    },
+    {
+      "name": "source file 24-final-old-data-package.json",
+      "pass": true
+    },
+    {
+      "name": "source file 25-final-tag-note.json",
+      "pass": true
+    },
+    {
+      "name": "source file README.md",
+      "pass": true
+    },
+    {
+      "name": "source file device-check.py",
+      "pass": true
+    },
+    {
+      "name": "source file device-step.py",
+      "pass": true
+    },
+    {
+      "name": "source file new-note-identity.json",
+      "pass": true
+    },
+    {
+      "name": "source file package-provenance.json",
+      "pass": true
+    },
+    {
+      "name": "source file result.json",
+      "pass": true
+    },
+    {
+      "name": "source file tag-store.py",
+      "pass": true
+    },
+    {
+      "name": "exact source file set",
+      "pass": true
+    },
+    {
+      "name": "source aggregate/count/bytes",
+      "pass": true
+    },
+    {
+      "name": "baseline limited fixed count",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json selected complete notes baseline equality",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json selected complete attachment baseline equality",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json device-side audio file baseline equality",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json raw hex output equals declared note rows",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json raw hex output equals declared attachment rows",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json raw audio stat/hash /data/user/0/com.local.notesclone/attachments/cb3fa001-9d73-4580-b959-38481fbba90b.webm",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json raw audio stat/hash /data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json actual installed APK raw identity",
+      "pass": true
+    },
+    {
+      "name": "01-before-upgrade.json raw package user/install identity",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json selected complete notes baseline equality",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json selected complete attachment baseline equality",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json device-side audio file baseline equality",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json raw hex output equals declared note rows",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json raw hex output equals declared attachment rows",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json raw audio stat/hash /data/user/0/com.local.notesclone/attachments/cb3fa001-9d73-4580-b959-38481fbba90b.webm",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json raw audio stat/hash /data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json actual installed APK raw identity",
+      "pass": true
+    },
+    {
+      "name": "03-after-upgrade.json raw package user/install identity",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json selected complete notes baseline equality",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json selected complete attachment baseline equality",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json device-side audio file baseline equality",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json raw hex output equals declared note rows",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json raw hex output equals declared attachment rows",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json raw audio stat/hash /data/user/0/com.local.notesclone/attachments/cb3fa001-9d73-4580-b959-38481fbba90b.webm",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json raw audio stat/hash /data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json actual installed APK raw identity",
+      "pass": true
+    },
+    {
+      "name": "14-old-data-after-cold.json raw package user/install identity",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json selected complete notes baseline equality",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json selected complete attachment baseline equality",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json device-side audio file baseline equality",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json bounded readonly SELECT",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json raw hex output equals declared note rows",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json raw hex output equals declared attachment rows",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json raw audio stat/hash /data/user/0/com.local.notesclone/attachments/cb3fa001-9d73-4580-b959-38481fbba90b.webm",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json raw audio stat/hash /data/user/0/com.local.notesclone/attachments/op-109f65df-0ac3-4f50-90e7-12665a22e060-6771077d-eee5-4c9a-875b-e9b7445cf516.blob",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json actual installed APK raw identity",
+      "pass": true
+    },
+    {
+      "name": "24-final-old-data-package.json raw package user/install identity",
+      "pass": true
+    },
+    {
+      "name": "package retains user/first install across upgrade",
+      "pass": true
+    },
+    {
+      "name": "current host APK exact SHA/bytes",
+      "pass": true
+    },
+    {
+      "name": "installed candidate06 identity all after stages",
+      "pass": true
+    },
+    {
+      "name": "pre-upgrade candidate04 identity",
+      "pass": true
+    },
+    {
+      "name": "actual install -r exact candidate command result",
+      "pass": true
+    },
+    {
+      "name": "prior independent provenance result identity",
+      "pass": true
+    },
+    {
+      "name": "APK source remains f18 candidate06",
+      "pass": true
+    },
+    {
+      "name": "08-tag-saved.json readonly query/raw full row",
+      "pass": true
+    },
+    {
+      "name": "08-tag-saved.json exact new row identity/revision",
+      "pass": true
+    },
+    {
+      "name": "08-tag-saved.json actual noteTag mark",
+      "pass": true
+    },
+    {
+      "name": "13-tag-after-cold.json readonly query/raw full row",
+      "pass": true
+    },
+    {
+      "name": "13-tag-after-cold.json exact new row identity/revision",
+      "pass": true
+    },
+    {
+      "name": "13-tag-after-cold.json actual noteTag mark",
+      "pass": true
+    },
+    {
+      "name": "25-final-tag-note.json readonly query/raw full row",
+      "pass": true
+    },
+    {
+      "name": "25-final-tag-note.json exact new row identity/revision",
+      "pass": true
+    },
+    {
+      "name": "25-final-tag-note.json actual noteTag mark",
+      "pass": true
+    },
+    {
+      "name": "full new row identical save/cold/final",
+      "pass": true
+    },
+    {
+      "name": "new body exact input text",
+      "pass": true
+    },
+    {
+      "name": "actual input actions title/tag/body with Enter",
+      "pass": true
+    },
+    {
+      "name": "force-stop then COLD restart actual actions",
+      "pass": true
+    },
+    {
+      "name": "fresh PID after force-stop",
+      "pass": true
+    },
+    {
+      "name": "04-first-launch-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "05-loaded-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "06-new-note-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "07-tag-typed-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "09-back-list-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "10-note-list-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "11-tag-selected-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "12-tag-cold-relaunch-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "15-cold-loaded-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "16-tag-reselected-after-cold-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "17-tag-note-after-cold-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "18-return-folders-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "19-exact-old-search-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "20-old-audio-search-result-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "21-old-audio-card-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "22-candidate04-exact-search-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "23-candidate04-audio-card-actions.json PNG linked to raw action",
+      "pass": true
+    },
+    {
+      "name": "06-new-note original dump exit137 retained",
+      "pass": true
+    },
+    {
+      "name": "09-back-list original dump exit137 retained",
+      "pass": true
+    },
+    {
+      "name": "10-note-list original dump exit137 retained",
+      "pass": true
+    },
+    {
+      "name": "11-tag-selected original dump exit137 retained",
+      "pass": true
+    },
+    {
+      "name": "old attachment metadata has no recordedAt",
+      "pass": true
+    },
+    {
+      "name": "readme preserves limits",
+      "pass": true
+    },
+    {
+      "name": "frozen manifest stable at end",
+      "pass": true
+    },
+    {
+      "name": "source files stable at end",
+      "pass": true
+    }
+  ],
+  "baselineIdentities": [
+    {
+      "path": "docs/verification/candidate04-android-runtime-01/66-final-store.json",
+      "bytes": 7666,
+      "sha256": "e6b8aeb08d12e7776eb7221da3da9e13e4174ebe5dbd88a1d1378773138b1c8f"
+    },
+    {
+      "path": "docs/verification/candidate04-android-runtime-01/67-final-new-audio-device.json",
+      "bytes": 1467,
+      "sha256": "aeeff196553f3bd2429c7c741cbe7d2cb7a9b34e5e1e15e3851770066bff2e7e"
+    }
+  ],
+  "currentHostApk": {
+    "path": "artifacts/unified-candidate06/android-build01/android-attempt01/android-original.apk",
+    "bytes": 177445114,
+    "sha256": "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4"
+  },
+  "priorIndependentResult": {
+    "path": "docs/verification/unified-candidate06/android-independent01/result.json",
+    "bytes": 114974,
+    "sha256": "a572bd0e86ec4ac92ac16955dae5274d869a9243eaf99605610c1bf1814fdbee"
+  },
+  "pngDimensions": [
+    {
+      "path": "04-first-launch.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "05-loaded.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "06-new-note.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "07-tag-typed.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "09-back-list.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "10-note-list.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "11-tag-selected.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "12-tag-cold-relaunch.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "15-cold-loaded.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "16-tag-reselected-after-cold.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "17-tag-note-after-cold.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "18-return-folders.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "19-exact-old-search.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "20-old-audio-search-result.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "21-old-audio-card.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "22-candidate04-exact-search.png",
+      "width": 1080,
+      "height": 2280
+    },
+    {
+      "path": "23-candidate04-audio-card.png",
+      "width": 1080,
+      "height": 2280
+    }
+  ],
+  "newNote": {
+    "id": "ce2884c3-841a-44d6-bfb3-615cf2e1ab84",
+    "revision": 82,
+    "fullRowEqual": true
+  },
+  "manualImageObservations": [
+    "07 shows system keyboard, entered ASCII title/body and gold #QA06Tag",
+    "11 and 16 each show #QA06Tag and exactly 1 note;17 opens the full entered text after cold start",
+    "04 and12 are blank early screens;05 and15 show loaded folders; no launch latency claim",
+    "21 card: 新录音 / 音频 · 1:06;23 card: 新录音 / 音频 · 26秒; no recording date visible; top note dates excluded"
+  ],
+  "scope": "Read existing frozen JSON/XML/PNG/scripts and current preserved APK bytes only. No ADB, GUI, DB, platform tool, target, build, install or product edit. Actions and device identity are recorded evidence, not a newly witnessed live session. No new signature crypto verification, playback/recording, IME/preedit, normal quit, iOS or pixel acceptance.",
+  "freeBytesAfter": 3297792000
+}

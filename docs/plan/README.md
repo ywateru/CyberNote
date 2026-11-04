@@ -45,9 +45,9 @@
 | APP-004-OCR-HOST-01 OCR主App文字接入 | in-progress，主cd7c94e，04双端单图实际OCR/正文冷启有限pass | 源5b707ae独审02及主接线保持。Mac本地fixture三行中文识别→插入→正常CmdQ→新PID完整正文恢复；Android系统picker选同图→三行识别→插入→force-stop新PID完整JSON恢复通过，实际插入位置/空首段及末行空格差异已记录。内部session ACK未直接追踪、未强制断网；完整矩阵/320图/像素unknown，完整文稿/PDF另批 |
 | APP-004 原生模块 | ec6b6dc运行修复独立通过，待接入 | 首次离线中文OCR、透视/两页PDF、10项路径边界独立通过；原目录P1关闭，主App/实体相机/noGMS/像素仍未验收 |
 | PARITY-001 修正差异 | pending，依赖顶部/媒体/本地功能/扫描接入 | 逐页几何、菜单、手势/动画、字体与材料校准；明确原图/叠图/差分和未知项 |
-| APP-005-UNIFIED-CANDIDATE06-01 下一批双端包 | preparing，录音卡片源码与主整合已通过；新工具独审中 | 标签/录音日期/宽工具栏同包，追加用户新报侧栏修复后冻结Mac源；分平台离线构建及保留数据升级，尚未派发真实编译。05已有限运行，新元数据写入后不降级旧包操作同一数据库 |
-| APP-001-SIDEBAR-RESTORE-01 桌面文件夹恢复 | candidate06实际直接恢复/菜单动作/画廊/冷启有限通过，动态菜单文字另修 | exact06 sealed152ad9e5…已运行；普通与宽窗隐藏→直接恢复、画廊浏览与展开、正常CmdQ新PID冷启均保留三行合成正文。JPEG非像素通过，窄窗/连续拖动未实际验；菜单固定文字差异追加sidebar-menu-label-01，不称完全同原版 |
-| APP-001-SIDEBAR-MENU-LABEL-01 侧栏菜单状态文字 | developing | 原版可见“隐藏文件夹”、隐藏“显示文件夹”；06仍固定文字，复用main当前绑定状态最小投影，独审与新Mac包实际验收待完成 |
+| APP-005-UNIFIED-CANDIDATE06-01 双端候选与Mac侧栏补包 | built，双端有限运行已独核，整体partial | f18源Mac06/Android06已构建；Android06保数据升级、ASCII标签保存/筛选/强停冷启及旧未知日期录音卡有限通过（166记录断言）。Mac当前为b5063fd菜单补包，exe731695ca…，主窗侧栏恢复/动态菜单/画廊/正常冷启有限通过。不同来源逐包保留，不能追认为同一APK源码或全像素/全部新元数据设备验收 |
+| APP-001-SIDEBAR-RESTORE-01 桌面文件夹恢复 | done（本次功能故障范围），整窗像素仍open | 新Mac菜单补包exe731695ca…实际列表工具栏/菜单、画廊浏览/展开及正常退出新PID冷启恢复通过，独立28项记录复核支持；隐藏后保留左上直接按钮，菜单动态文字同原版。JPEG非像素通过，连续窄窗/完整焦点与DB未全验 |
+| APP-001-SIDEBAR-MENU-LABEL-01 侧栏菜单状态文字 | done（主窗状态文案范围） | 源8bfeb43独审72ad237 SOURCE-READY；准确b5063fd新Mac实际可见“隐藏文件夹”/隐藏“显示文件夹”及菜单恢复、画廊与冷启通过。独立源码16/host/guard1与实际记录28有限通过；独立窗口真实焦点与整窗像素未认证 |
 
 docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，docs/ui 是视觉证据。实现阶段遵循 docs-sprint 的 develop/verify 分离。空仓库先建立 Git 基线，串行实施开发/验证；不要求用户批准已授权的常规设计补全。测试必须覆盖真实持久化边界和 UI 用户路径，不能只测试同实现的常量。
 

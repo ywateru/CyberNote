@@ -1,0 +1,52 @@
+[
+  {
+    "at": "2026-11-04T05:09:02.773191+00:00",
+    "args": [
+      "shell",
+      "input",
+      "tap",
+      "323",
+      "1292"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:09:02.968023+00:00",
+    "args": [
+      "exec-out",
+      "screencap",
+      "-p"
+    ],
+    "exitCode": 0,
+    "stdout": {
+      "bytes": 93646,
+      "sha256": "a96abec58801e589a1e4e52edb1e921b6af7ee21eb820c40a8b9940d5f4aa2a1"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:09:04.124677+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c06-11-tag-selected.xml"
+    ],
+    "exitCode": 137,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:09:04.151859+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exitCode": 0,
+    "stdout": "16275\n",
+    "stderr": ""
+  }
+]

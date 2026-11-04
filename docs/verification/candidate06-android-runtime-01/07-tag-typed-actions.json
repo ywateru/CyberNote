@@ -1,0 +1,100 @@
+[
+  {
+    "at": "2026-11-04T05:05:54.110860+00:00",
+    "args": [
+      "shell",
+      "input",
+      "tap",
+      "106",
+      "373"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:05:58.064596+00:00",
+    "args": [
+      "shell",
+      "input",
+      "text",
+      "QA-CANDIDATE06-ANDROID-RUNTIME-20261104A"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:05:58.601583+00:00",
+    "args": [
+      "shell",
+      "input",
+      "keyevent",
+      "66"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:05:59.461802+00:00",
+    "args": [
+      "shell",
+      "input",
+      "text",
+      "Tag%s#QA06Tag%s"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:05:59.961229+00:00",
+    "args": [
+      "shell",
+      "input",
+      "keyevent",
+      "66"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:06:01.597249+00:00",
+    "args": [
+      "shell",
+      "input",
+      "text",
+      "Persisted%svia%sAndroid%sinput"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:06:01.825005+00:00",
+    "args": [
+      "exec-out",
+      "screencap",
+      "-p"
+    ],
+    "exitCode": 0,
+    "stdout": {
+      "bytes": 170446,
+      "sha256": "36fd5619a553bb04ab440e540505949c0b44e6cb2d67fbf78f80bfa18010726d"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:06:01.860185+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exitCode": 0,
+    "stdout": "16275\n",
+    "stderr": ""
+  }
+]

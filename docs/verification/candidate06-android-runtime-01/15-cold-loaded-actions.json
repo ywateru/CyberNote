@@ -1,0 +1,53 @@
+[
+  {
+    "at": "2026-11-04T05:10:44.520927+00:00",
+    "args": [
+      "exec-out",
+      "screencap",
+      "-p"
+    ],
+    "exitCode": 0,
+    "stdout": {
+      "bytes": 100707,
+      "sha256": "60a7559544e7989e013a0f65a3b25084e13a2c1f66ee371f15275482a7d49360"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:10:46.042578+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c06-15-cold-loaded.xml"
+    ],
+    "exitCode": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c06-15-cold-loaded.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:10:46.076635+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c06-15-cold-loaded.xml"
+    ],
+    "exitCode": 0,
+    "stdout": {
+      "bytes": 2483,
+      "sha256": "167836c1a5aa22170491dd6836341d206706cb84d94525f54632974690a010a2"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:10:46.119890+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exitCode": 0,
+    "stdout": "16712\n",
+    "stderr": ""
+  }
+]

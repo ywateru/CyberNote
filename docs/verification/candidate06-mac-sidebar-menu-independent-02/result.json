@@ -1,0 +1,253 @@
+{
+  "schema": "notesclone.mac.sidebar-menu.runtime-independent.v1",
+  "recordedAt": "2026-11-04T05:42:55.400443+00:00",
+  "conclusion": "PASS: bounded recorded sidebar/menu runtime evidence; overall product remains partial",
+  "rootStatus": "partial",
+  "sourceHead": "b5063fd246c3433881ce9c35729389a7d87e0f2e",
+  "executable": {
+    "path": "artifacts/unified-candidate06/mac-menu-build02/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+    "bytes": 16013344,
+    "sha256": "731695caf7c83a3db3bfd047da9705e0e73fd4791f048b7f21e4c9a17e502ffb"
+  },
+  "recordedFirstPid": 85974,
+  "recordedColdPid": 86273,
+  "checks": [
+    {
+      "name": "visible sidebar and same three-line editor: 01-new-visible.ax.txt",
+      "pass": true,
+      "evidence": [
+        "01-new-visible.ax.txt"
+      ]
+    },
+    {
+      "name": "visible sidebar and same three-line editor: 05-menu-restored.ax.txt",
+      "pass": true,
+      "evidence": [
+        "05-menu-restored.ax.txt"
+      ]
+    },
+    {
+      "name": "visible sidebar and same three-line editor: 15-list-restored.ax.txt",
+      "pass": true,
+      "evidence": [
+        "15-list-restored.ax.txt"
+      ]
+    },
+    {
+      "name": "visible sidebar and same three-line editor: 16-list-direct-restored.ax.txt",
+      "pass": true,
+      "evidence": [
+        "16-list-direct-restored.ax.txt"
+      ]
+    },
+    {
+      "name": "visible sidebar and same three-line editor: 18-cold-loaded.ax.txt",
+      "pass": true,
+      "evidence": [
+        "18-cold-loaded.ax.txt"
+      ]
+    },
+    {
+      "name": "visible sidebar and same three-line editor: 21-cold-restored.ax.txt",
+      "pass": true,
+      "evidence": [
+        "21-cold-restored.ax.txt"
+      ]
+    },
+    {
+      "name": "hidden sidebar retains direct toggle: 03-menu-hidden-direct-toggle.ax.txt",
+      "pass": true,
+      "evidence": [
+        "03-menu-hidden-direct-toggle.ax.txt"
+      ]
+    },
+    {
+      "name": "hidden sidebar retains direct toggle: 06-toolbar-hidden.ax.txt",
+      "pass": true,
+      "evidence": [
+        "06-toolbar-hidden.ax.txt"
+      ]
+    },
+    {
+      "name": "hidden sidebar retains direct toggle: 08-gallery-hidden.ax.txt",
+      "pass": true,
+      "evidence": [
+        "08-gallery-hidden.ax.txt"
+      ]
+    },
+    {
+      "name": "hidden sidebar retains direct toggle: 11-expanded-hidden.ax.txt",
+      "pass": true,
+      "evidence": [
+        "11-expanded-hidden.ax.txt"
+      ]
+    },
+    {
+      "name": "hidden sidebar retains direct toggle: 19-cold-hidden.ax.txt",
+      "pass": true,
+      "evidence": [
+        "19-cold-hidden.ax.txt"
+      ]
+    },
+    {
+      "name": "visible menu says hide: 02-visible-menu-hide-label.ax.txt",
+      "pass": true,
+      "evidence": [
+        "02-visible-menu-hide-label.ax.txt"
+      ]
+    },
+    {
+      "name": "visible menu says hide: 10-gallery-visible-menu.ax.txt",
+      "pass": true,
+      "evidence": [
+        "10-gallery-visible-menu.ax.txt"
+      ]
+    },
+    {
+      "name": "visible menu says hide: 22-cold-visible-menu.ax.txt",
+      "pass": true,
+      "evidence": [
+        "22-cold-visible-menu.ax.txt"
+      ]
+    },
+    {
+      "name": "hidden menu says show: 04-hidden-menu-show-label.ax.txt",
+      "pass": true,
+      "evidence": [
+        "04-hidden-menu-show-label.ax.txt"
+      ]
+    },
+    {
+      "name": "hidden menu says show: 07-refocused-hidden-menu.ax.txt",
+      "pass": true,
+      "evidence": [
+        "07-refocused-hidden-menu.ax.txt"
+      ]
+    },
+    {
+      "name": "hidden menu says show: 12-expanded-hidden-menu.ax.txt",
+      "pass": true,
+      "evidence": [
+        "12-expanded-hidden-menu.ax.txt"
+      ]
+    },
+    {
+      "name": "hidden menu says show: 20-cold-hidden-menu.ax.txt",
+      "pass": true,
+      "evidence": [
+        "20-cold-hidden-menu.ax.txt"
+      ]
+    },
+    {
+      "name": "gallery browse restored sidebar and same synthetic card text",
+      "pass": true,
+      "evidence": [
+        "08-gallery-hidden.ax.txt",
+        "09-gallery-restored.ax.txt",
+        "10-gallery-visible-menu.ax.txt"
+      ]
+    },
+    {
+      "name": "gallery expanded retains back button and same editor through restore",
+      "pass": true,
+      "evidence": [
+        "11-expanded-hidden.ax.txt",
+        "12-expanded-hidden-menu.ax.txt",
+        "13-expanded-menu-restored.ax.txt"
+      ]
+    },
+    {
+      "name": "exact preserved executable and recorded source",
+      "pass": true,
+      "evidence": [
+        "01-process-identity.json",
+        "18-cold-process-identity.json"
+      ]
+    },
+    {
+      "name": "recorded argv and distinct cold PID refer to exact executable",
+      "pass": true,
+      "evidence": [
+        "01-process-identity.json",
+        "18-cold-process-identity.json"
+      ]
+    },
+    {
+      "name": "recorded normal CmdQ followed by exact PID absent: 82135",
+      "pass": true,
+      "evidence": [
+        "00-prior-normal-quit.json"
+      ]
+    },
+    {
+      "name": "recorded normal CmdQ followed by exact PID absent: 85974",
+      "pass": true,
+      "evidence": [
+        "17-normal-quit.json"
+      ]
+    },
+    {
+      "name": "21 path correction entries retain exact bytes and hashes",
+      "pass": true,
+      "evidence": [
+        "14-evidence-path-correction.json"
+      ]
+    },
+    {
+      "name": "old tracked frozen evidence has no diff against HEAD",
+      "pass": true,
+      "evidence": [
+        "old-frozen-diff.json"
+      ]
+    },
+    {
+      "name": "all CUA image records are JPEG, no lossless pixel claim",
+      "pass": true,
+      "evidence": [
+        "13-expanded-menu-restored.cua-image",
+        "06-toolbar-hidden.cua-image",
+        "11-expanded-hidden.cua-image",
+        "21-cold-restored.cua-image",
+        "03-menu-hidden-direct-toggle.cua-image",
+        "15-list-restored.cua-image",
+        "19-cold-hidden.cua-image",
+        "08-gallery-hidden.cua-image",
+        "01-new-visible.cua-image",
+        "05-menu-restored.cua-image",
+        "09-gallery-restored.cua-image",
+        "18-cold-loaded.cua-image",
+        "16-list-direct-restored.cua-image"
+      ]
+    },
+    {
+      "name": "existing package independent review source linkage",
+      "pass": true,
+      "evidence": [
+        "docs/verification/unified-candidate06/mac-menu-independent02/result.json"
+      ]
+    }
+  ],
+  "inputAggregateSha256": "40ffbef8e4c8aa2dd0b95e0e34ccb428b03ac647b553a1d928a313a6ce2b272c",
+  "packageIndependentResult": {
+    "path": "docs/verification/unified-candidate06/mac-menu-independent02/result.json",
+    "bytes": 122711,
+    "sha256": "d1fb16a4995d3947cfccb2e463ea18fa9674f445fc7afacb0290a0cd66bd189a"
+  },
+  "pathCorrection": {
+    "entries": 21,
+    "hashesMatch": true,
+    "oldTrackedDiffEmpty": true,
+    "note": "CUA helper retained earlier lexical path; only new untracked records were atomically renamed, original frozen records unchanged"
+  },
+  "limits": [
+    "Only recorded AX/JPEG/identity evidence reviewed; no GUI, ADB, platform command, target or build run",
+    "JPEG does not establish lossless pixel equality",
+    "OS frontmost/Focused event timing was not directly tracked",
+    "Full DB/JSON preservation not verified; only visible same synthetic three-line editor/card text checked",
+    "Hidden-state persistence across restart has no established original-app contract in this round",
+    "Runtime assertions concern recorded states, not independent replay or current live PID observation",
+    "Prior runtime source records preserved; 21 new records were atomically renamed as documented; rename operation is reported provenance, while current bytes and old tracked diff are independently checked"
+  ],
+  "freeBytes": 3267821568,
+  "mainCommitByReviewer": false
+}

@@ -1,7 +1,7 @@
 ---
 id: app-001-sidebar-restore-01
 scope: mac-sidebar-toggle-visibility-and-layout
-status: awaiting-review
+status: done
 depends-on: []
 ---
 
@@ -39,3 +39,7 @@ depends-on: []
 ## candidate06 实际窗口 / 2026-11-04
 
 准确f18源sealed可执行152ad9e5…已实际启动；列表普通与宽窗隐藏→直接按钮恢复、菜单恢复、画廊浏览/展开、正常CmdQ新PID重启后再次恢复均有限通过。原始证据candidate06-mac-sidebar-runtime-01经不同作者candidate06-mac-sidebar-independent-01只读复核支持；20JPEG不是像素认证，连续窄窗/分栏拖动未验。新发现显示菜单仍固定文案，已追加sidebar-menu-label-01并待新Mac包实际验收后再关闭本用户故障子项。
+
+## 本次用户恢复故障交付
+
+菜单补包准确b5063fd、sealed exe731695ca…实际列表工具栏/菜单双入口、画廊浏览/展开及正常退出冷启恢复通过，独立证据复核candidate06-mac-sidebar-menu-independent-02支持关闭本次功能故障。新包已保留运行。此done仅指本用户报告的隐藏后无直接恢复入口与菜单文案修复；全窗口像素、连续窄窗拖动及完整Notes交互仍属父任务partial。

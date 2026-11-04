@@ -1,0 +1,53 @@
+[
+  {
+    "at": "2026-11-04T05:04:29.985818+00:00",
+    "args": [
+      "exec-out",
+      "screencap",
+      "-p"
+    ],
+    "exitCode": 0,
+    "stdout": {
+      "bytes": 84542,
+      "sha256": "16c1b0a12cee50d4000e9092dbd59857b9555708282befdaf2b48e6dc244845c"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:04:31.531277+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c06-05-loaded.xml"
+    ],
+    "exitCode": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c06-05-loaded.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:04:31.549614+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c06-05-loaded.xml"
+    ],
+    "exitCode": 0,
+    "stdout": {
+      "bytes": 8732,
+      "sha256": "96f621890a4b359bf5cc20afa7328831bef182f2ed0e291f175d8260dd8fae47"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:04:31.572229+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exitCode": 0,
+    "stdout": "16275\n",
+    "stderr": ""
+  }
+]

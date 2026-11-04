@@ -1,0 +1,94 @@
+{
+  "at": "2026-11-04T05:07:08.752083+00:00",
+  "command": [
+    "/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb",
+    "-s",
+    "emulator-5580",
+    "shell",
+    "run-as com.local.notesclone /system/bin/sqlite3 -readonly /data/user/0/com.local.notesclone/notes.sqlite3 'SELECT hex(id)||'\"'\"'|'\"'\"'||hex(folder_id)||'\"'\"'|'\"'\"'||hex(body)||'\"'\"'|'\"'\"'||hex(revision) FROM notes WHERE body LIKE '\"'\"'%QA-CANDIDATE06-ANDROID-RUNTIME-20261104A%'\"'\"';'"
+  ],
+  "exitCode": 0,
+  "stdout": "63653238383463332D383431612D343464362D626662332D363135636632653161623834|64656661756C74|7B226964223A2263653238383463332D383431612D343464362D626662332D363135636632653161623834222C22666F6C6465724964223A2264656661756C74222C22646F63756D656E74223A7B22636F6E74656E74223A5B7B226174747273223A7B226C6576656C223A317D2C22636F6E74656E74223A5B7B2274657874223A2251412D43414E44494441544530362D414E44524F49442D52554E54494D452D323032363131303441222C2274797065223A2274657874227D5D2C2274797065223A2268656164696E67227D2C7B22636F6E74656E74223A5B7B2274657874223A2254616720222C2274797065223A2274657874227D2C7B226D61726B73223A5B7B226174747273223A7B226E616D65223A2251413036546167227D2C2274797065223A226E6F7465546167227D5D2C2274657874223A222351413036546167222C2274797065223A2274657874227D2C7B2274657874223A2220222C2274797065223A2274657874227D5D2C2274797065223A22706172616772617068227D2C7B22636F6E74656E74223A5B7B2274657874223A225065727369737465642076696120416E64726F696420696E707574222C2274797065223A2274657874227D5D2C2274797065223A22706172616772617068227D5D2C2274797065223A22646F63227D2C227469746C65223A2251412D43414E44494441544530362D414E44524F49442D52554E54494D452D323032363131303441222C22706C61696E54657874223A2251412D43414E44494441544530362D414E44524F49442D52554E54494D452D3230323631313034415C6E546167202351413036546167205C6E5065727369737465642076696120416E64726F696420696E707574222C22637265617465644174223A313739333736383731393239322C22757064617465644174223A313739333736383736303735392C2270696E6E6564223A66616C73652C2264656C657465644174223A6E756C6C2C226F726967696E616C466F6C6465724964223A6E756C6C2C226C6F636B6564223A66616C73652C2270617065725374796C65223A22706C61696E222C227265766973696F6E223A38322C227365616C6564223A6E756C6C7D|3832\n",
+  "stderr": "",
+  "note": {
+    "id": "ce2884c3-841a-44d6-bfb3-615cf2e1ab84",
+    "folder_id": "default",
+    "body": {
+      "id": "ce2884c3-841a-44d6-bfb3-615cf2e1ab84",
+      "folderId": "default",
+      "document": {
+        "content": [
+          {
+            "attrs": {
+              "level": 1
+            },
+            "content": [
+              {
+                "text": "QA-CANDIDATE06-ANDROID-RUNTIME-20261104A",
+                "type": "text"
+              }
+            ],
+            "type": "heading"
+          },
+          {
+            "content": [
+              {
+                "text": "Tag ",
+                "type": "text"
+              },
+              {
+                "marks": [
+                  {
+                    "attrs": {
+                      "name": "QA06Tag"
+                    },
+                    "type": "noteTag"
+                  }
+                ],
+                "text": "#QA06Tag",
+                "type": "text"
+              },
+              {
+                "text": " ",
+                "type": "text"
+              }
+            ],
+            "type": "paragraph"
+          },
+          {
+            "content": [
+              {
+                "text": "Persisted via Android input",
+                "type": "text"
+              }
+            ],
+            "type": "paragraph"
+          }
+        ],
+        "type": "doc"
+      },
+      "title": "QA-CANDIDATE06-ANDROID-RUNTIME-20261104A",
+      "plainText": "QA-CANDIDATE06-ANDROID-RUNTIME-20261104A\nTag #QA06Tag \nPersisted via Android input",
+      "createdAt": 1793768719292,
+      "updatedAt": 1793768760759,
+      "pinned": false,
+      "deletedAt": null,
+      "originalFolderId": null,
+      "locked": false,
+      "paperStyle": "plain",
+      "revision": 82,
+      "sealed": null
+    },
+    "revision": 82
+  },
+  "noteTagMarks": [
+    {
+      "attrs": {
+        "name": "QA06Tag"
+      },
+      "type": "noteTag"
+    }
+  ],
+  "freeBytes": 3817443328,
+  "scope": "Only exact new QA06 marker once, then fixed returned synthetic note ID. No DB/WAL/audio transfer or writes."
+}

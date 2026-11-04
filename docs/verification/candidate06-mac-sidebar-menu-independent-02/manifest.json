@@ -1,0 +1,39 @@
+{
+  "schema": "notesclone.evidence-manifest.v1",
+  "algorithm": "sha256",
+  "sort": "complete relative path string",
+  "exclude": [
+    "manifest.json"
+  ],
+  "aggregateEncoding": "UTF-8 <sha256>  <relativePath>\\n",
+  "aggregateSha256": "8594def7cb234c216be470f552a1d1a6e9a33017c76297e652113921dab756bc",
+  "fileCount": 5,
+  "totalBytes": 28058,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2680,
+      "sha256": "25e5ca62579ffe6d390eafea87cd4b1bd634feec79b397d62b74cb7f6085884f"
+    },
+    {
+      "path": "input-files.json",
+      "bytes": 8736,
+      "sha256": "9ad3025906879b934b43e4219016b3e726f1649bcdbdd1afe0f9f3efb853f79a"
+    },
+    {
+      "path": "old-frozen-diff.json",
+      "bytes": 192,
+      "sha256": "5844a9c395313f51874c58fbdeb066de1270ed815305f8c24f3bd2863c92f850"
+    },
+    {
+      "path": "result.json",
+      "bytes": 7715,
+      "sha256": "97603dd22f84e83660cde8abe29c492aba5efa633d069f0836bf868dd65c1d6b"
+    },
+    {
+      "path": "verify.py",
+      "bytes": 8735,
+      "sha256": "bca72c854e373af7574bd9df08e802b17197608400bd244680c9f2db4afc3922"
+    }
+  ]
+}

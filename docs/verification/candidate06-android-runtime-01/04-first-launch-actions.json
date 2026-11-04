@@ -1,0 +1,67 @@
+[
+  {
+    "at": "2026-11-04T05:03:45.607585+00:00",
+    "args": [
+      "shell",
+      "am",
+      "start",
+      "-W",
+      "-n",
+      "com.local.notesclone/.MainActivity"
+    ],
+    "exitCode": 0,
+    "stdout": "Starting: Intent { cmp=com.local.notesclone/.MainActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.local.notesclone/.MainActivity\nTotalTime: 804\nWaitTime: 805\nComplete\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:03:46.085839+00:00",
+    "args": [
+      "exec-out",
+      "screencap",
+      "-p"
+    ],
+    "exitCode": 0,
+    "stdout": {
+      "bytes": 20955,
+      "sha256": "189e8839b6a6caba0e8ccc3c2efd5a0b062cc46e9801fb5572db268087f380ca"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:03:47.701003+00:00",
+    "args": [
+      "shell",
+      "uiautomator",
+      "dump",
+      "/data/local/tmp/notes-clone-c06-04-first-launch.xml"
+    ],
+    "exitCode": 0,
+    "stdout": "UI hierchary dumped to: /data/local/tmp/notes-clone-c06-04-first-launch.xml\n",
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:03:47.720289+00:00",
+    "args": [
+      "exec-out",
+      "cat",
+      "/data/local/tmp/notes-clone-c06-04-first-launch.xml"
+    ],
+    "exitCode": 0,
+    "stdout": {
+      "bytes": 2483,
+      "sha256": "167836c1a5aa22170491dd6836341d206706cb84d94525f54632974690a010a2"
+    },
+    "stderr": ""
+  },
+  {
+    "at": "2026-11-04T05:03:47.752558+00:00",
+    "args": [
+      "shell",
+      "pidof",
+      "com.local.notesclone"
+    ],
+    "exitCode": 0,
+    "stdout": "16275\n",
+    "stderr": ""
+  }
+]
