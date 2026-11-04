@@ -1,0 +1,668 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "  recordingLifecycle.current = {",
+      "pass": true,
+      "detail": {
+        "baselineBytes": 1056,
+        "currentBytes": 1056,
+        "sha256": "d3638b5ac72b1cca291a8c06c90313bdf59825230314d17e2373cfd604248aa3"
+      }
+    },
+    {
+      "name": "close order",
+      "pass": true,
+      "detail": [
+        "const ocrClosing = ocrLifecycle.current.close();",
+        "const recordingClosing = recordingLifecycle.current.close();",
+        "await Promise.all([ocrClosing, recordingClosing]);",
+        "if (ownsSidebarPreference) await sidebarPreference.flush();",
+        "await flush();",
+        "!pendingDocs.current.size &&\n                !recordingLifecycle.current.active() &&\n                !ocrLifecycle.current.active()",
+        "await getCurrentWindow().destroy();"
+      ]
+    },
+    {
+      "name": "32 app cases",
+      "pass": true,
+      "detail": [
+        "restore-0-__missing",
+        "restore-1-false",
+        "restore-2-true",
+        "restore-3-false",
+        "restore-4-0",
+        "restore-5-null",
+        "restore-6-xx",
+        "restore-7-xx",
+        "initial-read-retry",
+        "four-entries",
+        "dom-entries",
+        "ordered-old-new",
+        "superseded-reject",
+        "uncertain-no-value",
+        "uncertain-unaccepted",
+        "uncertain-maintenance",
+        "dirty-unaccepted",
+        "dirty-maintenance",
+        "dirty-close-retry",
+        "close-old-new",
+        "body-close-protection",
+        "later-hydration",
+        "android-scope",
+        "ios-scope",
+        "separate-scope",
+        "process-reopen-false",
+        "process-reopen-true",
+        "independent-mismatched-delivery",
+        "independent-untrusted-reread",
+        "independent-reread-mismatch-close",
+        "independent-coalesced-three-intents",
+        "independent-narrow-mac-owner"
+      ]
+    },
+    {
+      "name": "no browser errors/external",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "all workers closed",
+      "pass": true,
+      "detail": {
+        "workers": 34
+      }
+    },
+    {
+      "name": "single boolean patch four-entries snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch four-entries snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "name": "single boolean patch dom-entries snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dom-entries snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "name": "single boolean patch ordered-old-new snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch ordered-old-new snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "name": "single boolean patch superseded-reject snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch superseded-reject snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "name": "single boolean patch uncertain-no-value snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch uncertain-unaccepted snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch uncertain-maintenance snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-unaccepted snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-unaccepted snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-unaccepted failed",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-maintenance snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-maintenance snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-maintenance failed",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-close-retry snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-close-retry snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-close-retry snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-close-retry failed",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch dirty-close-retry failed",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch close-old-new snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch close-old-new snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "name": "single boolean patch body-close-protection snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-mismatched-delivery snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-untrusted-reread snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-untrusted-reread snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-untrusted-reread failed",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-reread-mismatch-close snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-reread-mismatch-close snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-reread-mismatch-close snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-reread-mismatch-close failed",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-reread-mismatch-close failed",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-coalesced-three-intents snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-coalesced-three-intents snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "single boolean patch independent-narrow-mac-owner snapshot",
+      "pass": true,
+      "detail": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "name": "new process restore False",
+      "pass": true,
+      "detail": {
+        "beforePid": 44133,
+        "afterPid": 44139,
+        "settings": {
+          "listWidth": 292,
+          "macSidebarVisible": false,
+          "selectedFolder": "default",
+          "selectedNote": "",
+          "sidebarWidth": 245,
+          "theme": "dark",
+          "unknownSidebar22": {
+            "preserve": [
+              "x",
+              7
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "new process restore True",
+      "pass": true,
+      "detail": {
+        "beforePid": 44146,
+        "afterPid": 44150,
+        "settings": {
+          "listWidth": 292,
+          "macSidebarVisible": true,
+          "selectedFolder": "default",
+          "selectedNote": "",
+          "sidebarWidth": 245,
+          "theme": "dark",
+          "unknownSidebar22": {
+            "preserve": [
+              "x",
+              7
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "actual Rust transport calls",
+      "pass": true,
+      "detail": {
+        "rpcRecords": 162,
+        "allRoots": "own independent directory"
+      }
+    },
+    {
+      "name": "OCR lifecycle unchanged",
+      "pass": true,
+      "detail": {
+        "baselineBytes": 1041,
+        "currentBytes": 1041,
+        "sha256": "36925b6272a61f430a4612fd939a9947cdf8a5067613b84503826982464a070c"
+      }
+    },
+    {
+      "name": "body flush unchanged",
+      "pass": true,
+      "detail": {
+        "baselineBytes": 304,
+        "currentBytes": 304,
+        "sha256": "57a4f95779eb8e71b26ab1c07ba1a22a68edc849c082a5b3b86ee658d18046a0"
+      }
+    }
+  ],
+  "patchObservations": [
+    {
+      "case": "four-entries",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "four-entries",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "case": "dom-entries",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dom-entries",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "case": "ordered-old-new",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "ordered-old-new",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "case": "superseded-reject",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "superseded-reject",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "case": "uncertain-no-value",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "uncertain-unaccepted",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "uncertain-maintenance",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-unaccepted",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-unaccepted",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-unaccepted",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-maintenance",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-maintenance",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-maintenance",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-close-retry",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-close-retry",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-close-retry",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-close-retry",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-close-retry",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "close-old-new",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "close-old-new",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "case": "body-close-protection",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-mismatched-delivery",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-untrusted-reread",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-untrusted-reread",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-untrusted-reread",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-reread-mismatch-close",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-reread-mismatch-close",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-reread-mismatch-close",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-reread-mismatch-close",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-reread-mismatch-close",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-coalesced-three-intents",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-coalesced-three-intents",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "independent-narrow-mac-owner",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    }
+  ],
+  "limits": "Synthetic App/bridge/Session/Store and headless browser; not actual native menu/host quit/real media proof."
+}

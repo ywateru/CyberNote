@@ -1,0 +1,40 @@
+{
+  "status": "pass",
+  "scope": "Actual production helper, transpiled without semantic rewrite; controlled delivery ports only, supplement to 27 real App/bridge/Rust cases.",
+  "sourceSha256": "02efda1c3dd671475fd4c0c229b6aa242c0ec1485253ad2a0371721cb2c4a13d",
+  "typescriptVersion": "5.7.3",
+  "cases": [
+    {
+      "mode": "maintenance-with-value",
+      "writes": 1,
+      "reads": 1,
+      "dirty": true,
+      "failure": "Error: 侧栏显示偏好未确认保存：Controlled trusted read failure",
+      "pass": true
+    },
+    {
+      "mode": "unaccepted-with-value",
+      "writes": 1,
+      "reads": 1,
+      "dirty": false,
+      "failure": null,
+      "pass": true
+    },
+    {
+      "mode": "strict-boolean-read",
+      "writes": 1,
+      "reads": 1,
+      "dirty": true,
+      "failure": "Error: 侧栏显示偏好未确认保存：读取结果与最后请求的显示状态不符",
+      "pass": true
+    },
+    {
+      "mode": "accepted-exact",
+      "writes": 1,
+      "reads": 0,
+      "dirty": false,
+      "failure": null,
+      "pass": true
+    }
+  ]
+}

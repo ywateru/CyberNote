@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "node",
+    "docs/verification/mac-sidebar-preference22-independent/check-delivery-independent.mjs"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 0.194553333,
+  "stdout": "{\"status\":\"pass\",\"scope\":\"Actual production helper, transpiled without semantic rewrite; controlled delivery ports only, supplement to 27 real App/bridge/Rust cases.\",\"sourceSha256\":\"02efda1c3dd671475fd4c0c229b6aa242c0ec1485253ad2a0371721cb2c4a13d\",\"typescriptVersion\":\"5.7.3\",\"cases\":[{\"mode\":\"maintenance-with-value\",\"writes\":1,\"reads\":1,\"dirty\":true,\"failure\":\"Error: \u4fa7\u680f\u663e\u793a\u504f\u597d\u672a\u786e\u8ba4\u4fdd\u5b58\uff1aControlled trusted read failure\",\"pass\":true},{\"mode\":\"unaccepted-with-value\",\"writes\":1,\"reads\":1,\"dirty\":false,\"failure\":null,\"pass\":true},{\"mode\":\"strict-boolean-read\",\"writes\":1,\"reads\":1,\"dirty\":true,\"failure\":\"Error: \u4fa7\u680f\u663e\u793a\u504f\u597d\u672a\u786e\u8ba4\u4fdd\u5b58\uff1a\u8bfb\u53d6\u7ed3\u679c\u4e0e\u6700\u540e\u8bf7\u6c42\u7684\u663e\u793a\u72b6\u6001\u4e0d\u7b26\",\"pass\":true},{\"mode\":\"accepted-exact\",\"writes\":1,\"reads\":0,\"dirty\":false,\"failure\":null,\"pass\":true}]}\n",
+  "stderr": ""
+}

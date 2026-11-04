@@ -1,7 +1,7 @@
 ---
 id: app-mac-sidebar-preference22
 scope: Persist and restore the Mac main-window folder-sidebar visibility
-status: source-ready
+status: source-review-pass
 depends-on: [app-mac-ordinary-form-surface20]
 ---
 
@@ -50,3 +50,7 @@ Mac main 首次可信workspace
 ## 退出边界决定（开发前只读评估后）
 
 作者只读锁定依赖与宿主确认：muda0.20.0 Mac CloseWindow走performClose:，Quit走terminate:；现App onCloseRequested只保护窗口关闭，Builder.run无新的退出握手。root决定本项不扩展宿主退出协议，保持所列最小路径。新增持久化承诺是准确已确认偏好跨正常退出；窗口close的pending/dirty必须等待。保留立即CmdQ并非此guard保护的源码边界，准确Mac11单列快速实际观察，若出现丢失再以最小后续修复处理并保持此场景partial；不通过长等待将其混入已确认正常重启结论。这不构成已验收或保证任意未交付事件在进程退出前落盘。
+
+## 根接收源码独审（2026-11-05）
+
+候选6b02fd9d30139ffee63226bb057e9a54bc913e4f，不同作者独审PASS/STOP。root读报告并重核独审50项大小/SHA全部匹配；索引71b24541b7eb73c94c1be32ada60478e7664d1118e5b7d53bb4e89898801876c。独立32个生产App→未改桥接→真实Rust合成库场景、4端口、47项核验及一次typecheck通过，源码身份准确。接收范围为源码/隔离链路，允许准确Mac11冻结构建；真正Mac应用退出、工具栏/动态菜单和像素仍待本轮新包记录。立即CmdQ限制及既有媒体/完整归档未重跑边界继续保留。见[独审报告](../reviews/app-mac-sidebar-preference22.md)。

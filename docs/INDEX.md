@@ -52,6 +52,7 @@
 - [原版侧栏隐藏偏好正常重启补证21](research/mac-sidebar-restart21/README.md)
 - [Mac主窗侧栏偏好最小接入准备22](research/mac-sidebar-preference22-readiness/analysis.md)
 - [Mac侧栏显隐偏好本地恢复修复22](plan/tasks/app-mac-sidebar-preference22.md)
+- [Mac侧栏偏好22独立源码与隔离链路审查](plan/reviews/app-mac-sidebar-preference22.md)
 - [普通表单与侧栏偏好下一准确Mac包准备23](verification/unified-candidate06/mac-ordinary-sidebar23-preparation/README.md)
 - [Android05实际运行独立证据核对](verification/android-smart-u-runtime09-independent/README.md)
 - [Mac09实际运行独立证据核对](verification/mac-smart-u-runtime09-independent/README.md)

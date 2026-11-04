@@ -1,0 +1,46 @@
+{
+  "status": "pass",
+  "stop": true,
+  "reviewer": "verify_app; different from develop_app",
+  "candidateCommitSuppliedByParent": "6b02fd9d30139ffee63226bb057e9a54bc913e4f",
+  "gitObjectRead": false,
+  "products": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "1f33d51d58f52bb01d283d80ceb856d6e6ba6a8c1b99214d1938c922f751fd37"
+    },
+    {
+      "path": "src/types.ts",
+      "sha256": "0bba2d1b9c0f46388d4a8a7b643e826517faf0e1b4018d947526b737c427a159"
+    },
+    {
+      "path": "src/sidebar-preference.ts",
+      "sha256": "02efda1c3dd671475fd4c0c229b6aa242c0ec1485253ad2a0371721cb2c4a13d"
+    }
+  ],
+  "authorIndexSHA256": "85b943ff1fcb2faad557f1674b3c3a31fb633365b77759507abccee82a506ed1",
+  "authorEvidenceVerified": 73,
+  "protectedInputs": 114,
+  "reusedRustToolSHA256": "19624791900fc9ae10bb5d174749949809856e9fec45d27399d655e3b62a21d0",
+  "productionAppCases": 32,
+  "productionHelperPortCases": 4,
+  "independentEvidenceChecks": 47,
+  "appSingleKeyBooleanPatchObservations": 37,
+  "rustRPCRecords": 162,
+  "rustWorkersExitedZero": 34,
+  "typecheckExitCode": 0,
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "failures": "Author first fixture failure and original script preserved by SHA; independent replay and delivery check each passed once. Controlled rejection cases are expected and asserted.",
+  "resources": "Browser/HTTP/Vite finally closed; all34 Rust subprocesses exit0. No formal build or GUI. Own Vite cache retained, excluded from index. No shared target/cache operations.",
+  "limits": [
+    "Only source and isolated production App→unchanged bridge→actual Rust Session/Store pass; not formal Tauri/AppKit/installed package.",
+    "Pending/dirty window close guarded. Immediate CmdQ remains explicitly approved unguarded host path; root must record separately.",
+    "Confirmed false/true process reopen proven only in synthetic Rust/App, accurate Mac11 runtime remains next gate.",
+    "Body rejection protection exercised; OCR/recording code preserved without real media activity/export.",
+    "Archive import, multiwindow, abnormal exit and whole pixel parity not accepted."
+  ]
+}
