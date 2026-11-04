@@ -11,7 +11,8 @@
 - [普通Mac文字绘制校准31](plan/tasks/app-mac-ordinary-typography31.md)、[原版额外同态与Tab观察31](research/mac-ordinary-original31/README.md)
 - [手机右下新建图标只读定位32](research/mobile-compose-readiness32/analysis.md)与[局部锚点修复34](plan/tasks/app-mobile-compose-anchor34.md)
 - [Mac Tab策略与系统键盘导航只读准备33](research/mac-folder-keyboard-readiness33/README.md)
-- [Mac原生键盘导航策略修复35实施中](plan/tasks/app-mac-keyboard-policy35.md)
+- [Mac原生键盘导航策略修复35源阶段通过](plan/tasks/app-mac-keyboard-policy35.md)、[独立审查](plan/reviews/app-mac-keyboard-policy35.md)
+- [文字、手机锚点及Mac键盘下一准确包准备36](verification/unified-candidate06/typography-compose-keyboard36-preparation/README.md)
 - [普通Mac文字31独立源阶段审查](plan/reviews/app-mac-ordinary-typography31.md)
 - [原版Option-Tab未提交草稿观察35](research/mac-folder-keyboard-original35/README.md)
 

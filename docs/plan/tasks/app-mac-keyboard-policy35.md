@@ -1,7 +1,7 @@
 ---
 id: app-mac-keyboard-policy35
 scope: Native Mac WebView keyboard navigation policy follows current system setting
-status: in-progress
+status: source-reviewed
 depends-on: [mac-folder-keyboard-readiness33]
 ---
 
@@ -24,6 +24,8 @@ Mac真实WKWebView应采用当次系统键盘导航策略，而非固定所有�
 插件on_webview_ready在macOS通过构建后with_webview，同一回调取得真实WK与NSWindow，独立policy控制器不依附toolbar bind/unbind/显隐。原生控制器主线程弱持有WK/window；初始、所属窗口key/应用激活和own-window下一次Tab分发前直接读系统值并设置公开pref。自有app-local KeyDown monitor仅处理keyCode48的策略更新，原样返回同一NSEvent、不记录按键、不自行反转Option。WillClose/Destroyed/drop幂等释放自有monitor/observer及controller。enqueue与实际attach失败分开记录，不能把调度成功当完成。Mac target依赖对同一已锁定tauri显式开启wry，保证默认Mac插件独立编译；Android不加该feature。无需新版本/锁/宿主变更。
 
 ## Implementation and verification gate
+
+源阶段接收：隔离产品cbcf592、证据45fdc698经不同作者独审86/86、31/31原生有限检查通过，71项保护输入保持；root复核作者21和独审28项索引均匹配。实现及独审已主线cherry-pick，不改变产品字节。见[独立审查](../reviews/app-mac-keyboard-policy35.md)。真实AppKit送达、名称焦点及Option插入不由此关闭，准确Mac13实际CUA仍待验。
 
 由上述作者实施、不同作者独审。有限真实原生机制检查覆盖false/true输入的策略更新、读取时机、正确WK目标/主线程、销毁释放及返回原始按键；假系统值仅用于受控边界，不冒称真实系统切换。必要Rust检查只用自有新target，离线且不写共享cache。准确新Mac包实际Computer Use对比普通/智能、Tab/Shift+Tab/Option、正常输入/取消、搜索及独立窗口；若同步系统值仍不同须保留证据再定位。系统设置改变的实际验证另按既有授权与界面规则安排，当前不自行改变设置。源码与部分机制通过不关闭全部键盘差异。
 

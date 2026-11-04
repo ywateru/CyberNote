@@ -4,7 +4,9 @@
 
 输入门槛：31局部文字源阶段已在e687ea6固定、不同作者独审通过；34手机文件夹页右下新建锚点和35原生WK系统键盘导航策略仍待作者STOP、固定提交和不同作者窄独审。35在隔离worktree，不得在作者活动时合入。原版Option-Tab在普通名称中插入字面TAB已另记original35，35的系统策略接入不能关闭该局部差异。
 
-予定唯一run/artifact为`mac-typography-keyboard-build13`和`android-compose-anchor-build08`，attempt01。依赖门槛满足后root才生成各九字段authorization、准确40位sourceHead及产品/完整输入聚合。优先同一整合源串行构建；若实际采用不同源，必须分别明确身份。沿用canonical preparation工具和29的两个完整路径种子，保留全部303产品/322完整输入，新增35原生helper及所有新tracked产品路径，不能只使用Git tracked列表代替完整输入。
+计划唯一run/artifact为`mac-typography-keyboard-build13`和`android-compose-anchor-build08`，attempt01。依赖门槛满足后root才生成各九字段authorization、准确40位sourceHead及产品/完整输入聚合。优先同一整合源串行构建；若实际采用不同源，必须分别明确身份。沿用canonical preparation工具和29的两个完整路径种子，保留全部303产品/322完整输入，新增35原生helper及所有新tracked产品路径，不能只使用Git tracked列表代替完整输入。
+
+2026-11-05源门槛进展：34固定e194753、独立19项索引75625a13通过；35隔离cbcf592/45fdc698、独立28项索引2268f5ff通过并cherry-pick主线7d32960/3400069/a4a602f。root逐项复核30/19/21/28证据成员匹配。未运行准确新包，不扩大源码与受控机制结论。
 
 主线tracked文件干净后，root先freeze、核冻结字节/精确源码/清单/聚合并记录核准实际时间，再START。串行独占共享target/Gradle缓存，使用固定离线工具链；Android保留scoped offline init标记。旧包、输出、失败、缓存和prior-outputs保留。collect仅授来源/签名可审，不授实际界面验收；不同作者准确核包后才启动/保数据升级。
 
