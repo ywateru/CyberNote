@@ -9,6 +9,7 @@
 - S3：[运行03](../research/smart-folder-original-runtime03/README.md)：03 两目录 token、04 改名保存、06 已有目录类型禁用、11 成功全部结果、12/13 排除保存。09/10 是未成功切换的三条结果，不作为“全部成功”依据。
 - S4：[运行07](../research/smart-folder-original-runtime07/README.md)：02/05/10 同一定义、03 QA 候选、04 取消、08 正常重开结果；[独立复核](../research/smart-folder-original-runtime07-independent-01/README.md)保留相应边界。
 - S5：[空标签09](../research/smart-folder-empty-tags-runtime09/README.md)：01 默认、02/03 空标签拒绝、04/05 无 token 输入、06 取消。01–05 的 AX/JPEG 为主要实现对照。
+- S6：[标签草稿10](../research/smart-folder-tag-picker-runtime10/README.md)：输入前缀候选、键盘选择既有token，以及anyTag往返后恢复token；最后取消，未保存实体。
 
 下述“已见”指这些保存记录；没有新增现场操作。S2–S5 的 CUA 图像是 JPEG，不能当无损 PNG 或零差证据。
 
@@ -67,7 +68,7 @@
 | 任何标签 | 不显示 token 输入 | 只验证了控件隐藏，未实际提交此模式，保存和成员求值待证。 |
 | 仅不含标签的备忘录 | 不显示 token 输入 | 同上。 |
 
-四种模式文字来自 S1；隐藏与拒绝来自 S5。模式间已有 token 是否保留、标签候选/键盘选取、切回时的草稿恢复均待证。
+四种模式文字来自 S1；隐藏与拒绝来自 S5。S6实际输入UI时显示“创建新标签 ‘UI’”及既有#UI对照候选，下拉浮层未在AX中列行；Down两次/Return选择既有标签形成胶囊。allSelected→anyTag→allSelected的本次草稿往返保留该token，anyTag下AX仍有disabled输入但图片不可见。新标签创建持久化、其他模式往返、胶囊箭头菜单和完整键盘行为仍待证。
 
 ## 空标签警告、取消与保存
 
