@@ -1,12 +1,31 @@
 import type { JSONContent } from "@tiptap/react";
-export interface Folder {
+export type TagMode = "allSelected" | "anySelected" | "anyTag" | "noTags";
+export type SmartRule =
+  | { type: "tags"; mode: "allSelected" | "anySelected"; names: string[] }
+  | { type: "tags"; mode: "anyTag" | "noTags" }
+  | { type: "pinned"; value: boolean };
+export interface SmartQuery {
+  version: 1;
+  combine: "all" | "any";
+  rules: SmartRule[];
+}
+interface FolderFields {
   id: string;
   name: string;
-  parentId: string | null;
-  kind: string;
   sortOrder: number;
   createdAt: number;
 }
+export interface PhysicalFolder extends FolderFields {
+  kind: "default" | "normal" | "quick" | "trash";
+  parentId: string | null;
+}
+export interface SmartFolder extends FolderFields {
+  kind: "smart";
+  parentId: null;
+  query: SmartQuery;
+  definitionRevision: number;
+}
+export type Folder = PhysicalFolder | SmartFolder;
 export interface Note {
   id: string;
   folderId: string;

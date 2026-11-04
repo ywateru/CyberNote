@@ -1,5 +1,10 @@
 import { listen } from "@tauri-apps/api/event";
 import { MetadataGate, MetadataStale } from "./metadata-client";
+import {
+  parseFolder,
+  parseSmartQuery,
+  validateWorkspace,
+} from "./smart-folders";
 import { AccessGate } from "./access-client";
 import { secureId } from "./secure-id";
 import { attachmentRecordedAt } from "./recording-metadata";
@@ -173,7 +178,7 @@ const persist = () =>
 export async function loadWorkspace(trusted = false): Promise<Workspace> {
   const stamp = accessGate.stamp();
   if (native) {
-    const value = await invoke<Workspace>("load_workspace");
+    const value = validateWorkspace(await invoke<Workspace>("load_workspace"));
     if (
       trusted &&
       stamp.generation === accessGate.generation &&
@@ -205,6 +210,8 @@ async function deliverAction<T>(
   let value: T;
   try {
     value = await run();
+    if (value && typeof value === "object" && "folders" in value)
+      value = validateWorkspace(value as unknown as Workspace) as T;
   } catch (error) {
     const commit = (
       error as { commit?: { metadata: MetadataState; receipt: CommitReceipt } }
@@ -275,6 +282,65 @@ export async function action<T = Workspace>(
   const n = preview.notes.find((x) => x.id === a.id);
   let result: unknown;
   switch (a.type) {
+    case "createSmartFolder": {
+      const input = a.input as { name: string; query: unknown };
+      const folder = parseFolder({
+        id: secureId(),
+        name: input.name.trim(),
+        parentId: null,
+        kind: "smart",
+        sortOrder: Date.now(),
+        createdAt: Date.now(),
+        query: parseSmartQuery(input.query),
+        definitionRevision: 1,
+      });
+      preview.folders.push(folder);
+      result = folder;
+      break;
+    }
+    case "updateSmartFolder": {
+      const input = a.input as {
+        id: string;
+        name: string;
+        query: unknown;
+        expectedDefinitionRevision: number;
+      };
+      const previous = preview.folders.find((f) => f.id === input.id);
+      if (
+        previous?.kind !== "smart" ||
+        previous.definitionRevision !== input.expectedDefinitionRevision
+      )
+        throw Object.assign(Error("智能文件夹已改变，请重新载入"), {
+          code: "smart_conflict",
+        });
+      const folder = parseFolder({
+        ...previous,
+        name: input.name.trim(),
+        query: parseSmartQuery(input.query),
+        definitionRevision: previous.definitionRevision + 1,
+      });
+      preview.folders = preview.folders.map((f) =>
+        f.id === folder.id ? folder : f,
+      );
+      result = folder;
+      break;
+    }
+    case "deleteSmartFolder": {
+      const input = a.input as {
+        id: string;
+        expectedDefinitionRevision: number;
+      };
+      const previous = preview.folders.find((f) => f.id === input.id);
+      if (
+        previous?.kind !== "smart" ||
+        previous.definitionRevision !== input.expectedDefinitionRevision
+      )
+        throw Object.assign(Error("智能文件夹已改变，请重新载入"), {
+          code: "smart_conflict",
+        });
+      preview.folders = preview.folders.filter((f) => f.id !== input.id);
+      break;
+    }
     case "createNote": {
       const note: Note = {
         id: secureId(),
@@ -337,7 +403,7 @@ export async function action<T = Workspace>(
       const f = {
         id: secureId(),
         name: String(a.name),
-        kind: "normal",
+        kind: "normal" as const,
         parentId: (a.parentId as string | null) || null,
         sortOrder: Date.now(),
         createdAt: Date.now(),
@@ -376,6 +442,7 @@ export async function action<T = Workspace>(
   const createdId = [
     "createNote",
     "createFolder",
+    "createSmartFolder",
     "recoverConflictCopy",
   ].includes(String(a.type))
     ? (value as { id?: string }).id

@@ -248,16 +248,6 @@ pub(crate) struct SmartMembership {
 }
 
 impl Store {
-    /// Temporary boundary until the real UI and ordering protocol understand smart definitions.
-    pub(crate) fn ensure_legacy_capability(&self) -> Result<()> {
-        if self.folders()?.iter().any(|f| f.kind == "smart") {
-            return Err(err(
-                "capability_unavailable",
-                "此界面尚未支持智能文件夹，请使用支持该功能的版本",
-            ));
-        }
-        Ok(())
-    }
     pub(crate) fn create_smart_folder(&mut self, input: Value) -> Result<Folder> {
         let input: Create = parse(input)?;
         let folder = Folder {

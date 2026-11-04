@@ -68,7 +68,7 @@ impl Session {
         });
         self.finish_value(result)
     }
-    /// Internal production integration for U. No renderer command registers this method.
+    /// Production smart actions share the ordinary Session metadata/access boundary.
     pub(crate) fn smart_action(&mut self, action: Value, token: &Token) -> Result<Value> {
         self.prepare_metadata(true)?;
         self.check_core(token, None)?;
@@ -184,7 +184,7 @@ mod tests {
         assert!(restarted.check(&t, None).is_err());
     }
     #[test]
-    fn two_window_internal_smart_cas_projection_and_renderer_gate() {
+    fn two_window_smart_cas_projection_and_public_workspace() {
         let temp = tempfile::tempdir().unwrap();
         let mut session = Session::new(Store::open(temp.path()).unwrap());
         let id = note(&mut session);
@@ -213,17 +213,12 @@ mod tests {
         assert_eq!(projection["ids"], json!([id]));
         assert_eq!(projection["count"], 1);
         assert_eq!(projection["metadata"], session.metadata());
-        assert_eq!(
-            session.workspace().unwrap_err().code,
-            "capability_unavailable"
-        );
-        assert_eq!(
-            session
-                .ordinary(json!({"type":"createNote"}), &a)
-                .unwrap_err()
-                .code,
-            "capability_unavailable"
-        );
+        assert!(session.workspace().unwrap()["folders"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|f| f["id"] == fid));
+        assert!(session.ordinary(json!({"type":"createNote"}), &a).is_ok());
     }
     #[test]
     fn safe_integer_overflow_precedes_intents_files_and_public_writes() {

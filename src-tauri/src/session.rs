@@ -73,7 +73,6 @@ impl Session {
         *self.note_epochs.get(id).unwrap_or(&0)
     }
     pub fn check(&self, token: &Token, note: Option<&str>) -> Result<()> {
-        self.store.ensure_legacy_capability()?;
         self.check_core(token, note)
     }
     fn check_core(&self, token: &Token, note: Option<&str>) -> Result<()> {
@@ -88,7 +87,6 @@ impl Session {
         Ok(())
     }
     pub fn snapshot(&self) -> Result<Value> {
-        self.store.ensure_legacy_capability()?;
         self.snapshot_core()
     }
     fn snapshot_core(&self) -> Result<Value> {
@@ -104,7 +102,6 @@ impl Session {
         )
     }
     pub fn tagged(&self, value: Value) -> Result<Value> {
-        self.store.ensure_legacy_capability()?;
         self.tagged_core(value)
     }
     fn tagged_core(&self, mut value: Value) -> Result<Value> {
@@ -133,7 +130,6 @@ impl Session {
         Ok(value)
     }
     pub fn workspace(&self) -> Result<Value> {
-        self.store.ensure_legacy_capability()?;
         self.tagged(self.store.workspace()?)
     }
     pub fn export_archive(&self, path: &std::path::Path, token: &Token) -> Result<()> {
@@ -269,7 +265,6 @@ impl Session {
     }
     pub fn save(&mut self, window: &str, mut action: Value) -> Result<Value> {
         self.prepare_metadata(true)?;
-        self.store.ensure_legacy_capability()?;
         let id = action["id"]
             .as_str()
             .ok_or_else(|| denied("缺少笔记ID"))?
@@ -328,6 +323,12 @@ impl Session {
         )
     }
     pub fn ordinary(&mut self, action: Value, token: &Token) -> Result<(Value, Option<Value>)> {
+        if matches!(
+            action["type"].as_str(),
+            Some("createSmartFolder" | "updateSmartFolder" | "deleteSmartFolder")
+        ) {
+            return self.smart_action(action, token).map(|value| (value, None));
+        }
         self.prepare_metadata(Self::changes_facts(&action))?;
         self.check(token, None)?;
         if self.pending.is_some() {
@@ -369,7 +370,6 @@ impl Session {
         participants.sort();
         let access = match self.snapshot() {
             Ok(access) => access,
-            Err(error) if error.code == "capability_unavailable" => return Err(error),
             Err(_) => {
                 // If response reads fail after commit, publish a conservative access
                 // boundary. Unknown/missing notes remain unauthorized until trusted read.
@@ -404,8 +404,7 @@ impl Session {
             let path = action["path"]
                 .as_str()
                 .ok_or_else(|| denied("缺少归档路径"))?;
-            self.store
-                .preflight_legacy_archive(std::path::Path::new(path))?;
+            self.store.preflight_archive(std::path::Path::new(path))?;
         }
         let targets = match op {
             "lockNote" | "removeLock" | "deleteNote" | "purgeNote" => vec![action["id"]
@@ -474,7 +473,6 @@ impl Session {
         live_windows: &HashSet<String>,
         timeout: bool,
     ) -> Result<(Result<Value>, Value)> {
-        self.store.ensure_legacy_capability()?;
         if self.pending.as_ref().is_none_or(|p| p.id != operation) {
             return Err(denied("锁定操作已结束"));
         }
@@ -504,7 +502,7 @@ impl Session {
                 let path = p.action["path"]
                     .as_str()
                     .ok_or_else(|| denied("缺少归档路径"))?;
-                store.import_legacy_archive(std::path::Path::new(path))?;
+                store.import_archive(std::path::Path::new(path))?;
                 store.workspace()
             } else {
                 store.action(p.action)

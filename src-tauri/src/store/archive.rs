@@ -431,15 +431,6 @@ fn read_archive(path: &Path) -> Result<Archive> {
     validate_archive_version(&archive)?;
     Ok(archive)
 }
-fn require_legacy_archive(archive: &Archive) -> Result<()> {
-    if archive.folders.iter().any(|f| f.kind == "smart") {
-        return Err(err(
-            "capability_unavailable",
-            "此界面尚未支持导入智能文件夹",
-        ));
-    }
-    Ok(())
-}
 
 impl Store {
     fn prepare_archive(&self, mut archive: Archive, transaction_id: &str) -> Result<ImportPlan> {
@@ -647,22 +638,11 @@ impl Store {
         result
     }
 
-    pub(crate) fn preflight_legacy_archive(&self, path: &Path) -> Result<()> {
-        self.ensure_legacy_capability()?;
-        require_legacy_archive(&read_archive(path)?)
-    }
-    pub(crate) fn import_legacy_archive(&mut self, path: &Path) -> Result<()> {
-        self.ensure_legacy_capability()?;
-        self.import_archive_policy(path, false)
+    pub(crate) fn preflight_archive(&self, path: &Path) -> Result<()> {
+        read_archive(path).map(|_| ())
     }
     pub fn import_archive(&mut self, path: &Path) -> Result<()> {
-        self.import_archive_policy(path, true)
-    }
-    fn import_archive_policy(&mut self, path: &Path, allow_smart: bool) -> Result<()> {
         let archive = read_archive(path)?;
-        if !allow_smart {
-            require_legacy_archive(&archive)?;
-        }
         let transaction_id = id();
         let plan = self.prepare_archive(archive, &transaction_id)?;
         self.recover_imports()?;

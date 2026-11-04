@@ -1,0 +1,36 @@
+{
+  "binaryHash": "4749999bb8276541cd5285fc2368a37a3605ba0060dc2a9ce011860523766384",
+  "observedApp": true,
+  "results": [
+    {
+      "name": "mac-default-warning-cancel-addrow-real-create-once",
+      "saved": {
+        "id": "53b4c6c8-39e1-4242-852a-73ea0ce890a1",
+        "revision": 1,
+        "count": 1,
+        "creates": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "mac-edit-cas-cancel-zero-and-same-editor-undo",
+      "editor": {
+        "same": true,
+        "undo": 1,
+        "before": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "smart-search-cancel-newnote-default-move-and-definition-delete",
+      "created": "104a3703-a01b-44ea-b478-e0273d3ec459",
+      "passed": true
+    },
+    {
+      "name": "mobile-two-stage-confirm-panel-back-cancel-and-real-save",
+      "passed": false,
+      "error": "Error: locator.click: Error: strict mode violation: getByRole('button', { name: '#A', exact: true }) resolved to 2 elements:\n    1) <button class=\"\" title=\"1个备忘录\">#A</button> aka getByRole('button', { name: '#A', description: '1个备忘录' })\n    2) <button class=\"\" type=\"button\">#A</button> aka getByLabel('过滤条件', { exact: true }).getByRole('button', { name: '#A' })\n\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '#A', exact: true })\u001b[22m\n"
+    }
+  ],
+  "errors": []
+}

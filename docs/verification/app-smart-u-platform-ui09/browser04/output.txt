@@ -1,0 +1,19 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+false !== true
+
+    at file:///Users/water/work/2026/Apple-Notes-Clone/scripts/check-smart-ui.mjs:690:14
+    at async run (file:///Users/water/work/2026/Apple-Notes-Clone/scripts/check-smart-ui.mjs:290:5)
+    at async file:///Users/water/work/2026/Apple-Notes-Clone/scripts/check-smart-ui.mjs:652:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

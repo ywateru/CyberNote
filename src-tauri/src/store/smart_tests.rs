@@ -752,3 +752,56 @@ fn archive_three_double_import_remaps_real_entities_dates_and_selection() {
         before
     );
 }
+
+#[test]
+fn shared_ui_corpus_runs_actual_persisted_rules_and_legal_tag_facts() {
+    let corpus: Value = serde_json::from_str(include_str!(
+        "../../../docs/fixtures/smart-projection09.json"
+    ))
+    .unwrap();
+    let temp = tempfile::tempdir().unwrap();
+    let mut store = Store::open(temp.path()).unwrap();
+    let mut ids = BTreeMap::new();
+    let mut suspended = HashSet::new();
+    for fact in corpus["notes"].as_array().unwrap() {
+        let names: Vec<&str> = fact["tags"]
+            .as_array()
+            .map(|a| a.iter().map(|v| v.as_str().unwrap()).collect())
+            .unwrap_or_default();
+        let id = note(&mut store, &names, fact["pinned"].as_bool().unwrap());
+        if fact["tags"].is_null() {
+            store
+                .action(json!({"type":"lockNote","id":id,"password":"password"}))
+                .unwrap();
+        }
+        if fact["deleted"] == true {
+            store.action(json!({"type":"deleteNote","id":id})).unwrap();
+        }
+        if fact["suspended"] == true {
+            suspended.insert(id.clone());
+        }
+        ids.insert(fact["id"].as_str().unwrap().to_string(), id);
+    }
+    for case in corpus["cases"].as_array().unwrap() {
+        let f = create(&mut store, case["query"].clone());
+        let actual = store.evaluate_smart_folder(&f.id, &suspended).unwrap();
+        let actual: HashSet<_> = actual.ids.iter().cloned().collect();
+        let expected: HashSet<_> = case["expected"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|n| ids[n.as_str().unwrap()].clone())
+            .collect();
+        assert_eq!(actual, expected, "{}", case["name"]);
+    }
+    for invalid in corpus["invalid"].as_array().unwrap() {
+        assert_eq!(
+            store
+                .create_smart_folder(json!({"name":"reject","query":invalid}))
+                .err()
+                .unwrap()
+                .code,
+            "smart_invalid"
+        );
+    }
+}

@@ -1,0 +1,120 @@
+{
+  "binaryHash": "943c2aa1a53828087037cdcec3ebf4f9db68aecef13d2fd35076d4450a344fd4",
+  "observedApp": true,
+  "results": [
+    {
+      "name": "mac-default-warning-cancel-addrow-real-create-once",
+      "geometry": {
+        "viewport": {
+          "width": 1280,
+          "height": 900
+        },
+        "dialog": {
+          "x": 300,
+          "y": 269,
+          "width": 680,
+          "height": 362
+        },
+        "checkbox": {
+          "x": 321,
+          "y": 384,
+          "width": 14,
+          "height": 14
+        },
+        "description": {
+          "x": 343,
+          "y": 404,
+          "width": 616,
+          "height": 17
+        },
+        "rules": [
+          {
+            "x": 321,
+            "y": 491,
+            "width": 112,
+            "height": 25
+          },
+          {
+            "x": 321,
+            "y": 533,
+            "width": 112,
+            "height": 25
+          }
+        ]
+      },
+      "saved": {
+        "id": "2801d64a-9abf-4e39-9f17-1fa7e4b864c1",
+        "revision": 1,
+        "count": 1,
+        "creates": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "mac-edit-cas-cancel-zero-and-same-editor-undo",
+      "editor": {
+        "same": true,
+        "undo": 1,
+        "before": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "smart-search-cancel-newnote-default-move-and-definition-delete",
+      "created": "9bba1b55-5da7-423d-853d-3cb7c39aa0c1",
+      "passed": true
+    },
+    {
+      "name": "mobile-two-stage-confirm-panel-back-cancel-and-real-save",
+      "id": "7f3113a8-76a1-4085-b23c-eb30bf3591e1",
+      "passed": true
+    },
+    {
+      "name": "smart-ime-loses-tag-keeps-original-owner-until-real-end",
+      "during": {
+        "same": true,
+        "dom": true,
+        "composing": true,
+        "editable": true,
+        "pending": true,
+        "ids": [],
+        "owner": "default"
+      },
+      "passed": true
+    },
+    {
+      "name": "peer-definition-change-keeps-preference-pending-composition-and-undo",
+      "during": {
+        "same": true,
+        "composing": true,
+        "undo": 1,
+        "beforeUndo": 1,
+        "settings": "{\"selectedFolder\":\"c93a5d82-0512-4017-b6cc-32417c97fa11\",\"selectedNote\":\"10eda872-3aee-4661-8a06-37d0f7083f13\",\"sort\":\"title\",\"theme\":\"light\"}",
+        "beforeSettings": "{\"selectedFolder\":\"c93a5d82-0512-4017-b6cc-32417c97fa11\",\"selectedNote\":\"10eda872-3aee-4661-8a06-37d0f7083f13\",\"sort\":\"title\",\"theme\":\"light\"}",
+        "ids": [],
+        "pending": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "created-definition-receipt-retries-sync-without-second-create",
+      "id": "d53b92bd-3df1-4c6a-8d58-0f6650937eb4",
+      "passed": true
+    },
+    {
+      "name": "cold-and-explicit-archive-restore-smart-selection",
+      "restored": {
+        "folder": "40398551-c9ac-4b94-82ca-d6af47f877e2",
+        "note": "3773f559-af8a-4a7f-9dda-173a422982eb",
+        "unknownFallback": "default"
+      },
+      "passed": true
+    },
+    {
+      "name": "only-pinned-unpin-and-delete-definition-keep-pending-owner",
+      "owner": "03b861f1-2edb-4393-9b33-fa3ac48a15b4",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

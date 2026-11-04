@@ -15,6 +15,14 @@ import {
   type RecordingResult,
 } from "./recording-metadata";
 import { TagComposition } from "./tag-composition";
+import { SmartFolderForm, type FolderFormHandle } from "./SmartFolderForm";
+import { draftQuery, type FolderDraft } from "./smart-draft";
+import {
+  isPhysicalOwner,
+  matchesSmart,
+  projectFolders,
+  sortNotes,
+} from "./smart-folders";
 import {
   documentTags,
   projectTags,
@@ -67,6 +75,7 @@ import {
   PanelLeft,
   Folder,
   FolderOpen,
+  FolderCog,
   StickyNote,
   Trash2,
   Pin,
@@ -393,6 +402,19 @@ function App() {
   const [modalValue, setModalValue] = useState("");
   const [contextNote, setContextNote] = useState<string | null>(null);
   const [contextFolder, setContextFolder] = useState<string | null>(null);
+  const [folderForm, setFolderForm] = useState<{ folder?: FolderData } | null>(
+    null,
+  );
+  const folderFormHandle = useRef<FolderFormHandle | null>(null);
+  const smartDeleteTarget = useRef<{ id: string; revision: number } | null>(
+    null,
+  );
+  const parkedSmartEditors = useRef(new Set<string>());
+  const smartDisplayed = useRef<{
+    folderId: string;
+    noteId: string;
+    navigation: number;
+  } | null>(null);
   const [editors, setEditors] = useState<ReadonlyMap<string, Editor>>(
     new Map(),
   );
@@ -552,13 +574,19 @@ function App() {
   const view = settings.view || "list";
   const sort = settings.sort || "updated";
   const tags = projectTags(ws, accessSuspended);
-  const listed = ws.notes
-    .filter((n) => {
+  const currentFolder = ws.folders.find((f) => f.id === folderId);
+  const smartFolder =
+    currentFolder?.kind === "smart" ? currentFolder : undefined;
+  const folderProjection = projectFolders(ws, accessSuspended, sort);
+  const currentProjection = folderProjection.get(folderId);
+  const contentSearch =
+    !separate && (!!query || !!filter || tagFilter !== undefined);
+  const folderMembers = new Set(currentProjection?.ids || []);
+  const listed = sortNotes(
+    ws.notes.filter((n) => {
       if (query || filter || tagFilter !== undefined) {
         if (n.deletedAt) return false;
-      } else if (folderId === "all") {
-        if (n.deletedAt) return false;
-      } else if (n.folderId !== folderId) return false;
+      } else if (!folderMembers.has(n.id)) return false;
       if (
         query &&
         !`${n.title}\n${n.plainText}`
@@ -583,19 +611,10 @@ function App() {
       )
         return false;
       return true;
-    })
-    .sort(
-      (a, b) =>
-        Number(b.pinned) - Number(a.pinned) ||
-        (sort === "title"
-          ? a.title.localeCompare(b.title, "zh")
-          : sort === "created"
-            ? b.createdAt - a.createdAt
-            : b.updatedAt - a.updatedAt),
-    );
-  const desktopSearch =
-    !separate &&
-    ((!mobile && !!query) || filter === "tags" || tagFilter !== undefined);
+    }),
+    sort,
+  );
+  const desktopSearch = !separate && (contentSearch || !!smartFolder);
   const desktopSearchZero =
     desktopSearch &&
     !!query &&
@@ -608,12 +627,17 @@ function App() {
     !accessSuspended.length &&
     !accessGate.state?.operationId &&
     listed.length === 0;
-  const projectedNoteId = projectSearchNote({
-    searching: desktopSearch,
-    baseNoteId,
-    searchNoteId,
-    resultIds: listed.map((note) => note.id),
-  });
+  const projectedNoteId =
+    !contentSearch && smartFolder
+      ? baseNoteId && folderMembers.has(baseNoteId)
+        ? baseNoteId
+        : (currentProjection?.firstId ?? null)
+      : projectSearchNote({
+          searching: contentSearch,
+          baseNoteId,
+          searchNoteId,
+          resultIds: listed.map((note) => note.id),
+        });
   const tagCompositionScope = JSON.stringify({
     folderId,
     baseNoteId,
@@ -625,6 +649,39 @@ function App() {
     view,
   });
   const tagNavigation = tagCompositionNavigation.current;
+  const previousSmart = smartDisplayed.current;
+  if (
+    smartFolder &&
+    !contentSearch &&
+    previousSmart?.folderId === folderId &&
+    previousSmart.navigation === tagNavigation &&
+    previousSmart.noteId !== projectedNoteId &&
+    !tagCompositionTarget.current
+  ) {
+    const composition = tagCompositions.current.get(previousSmart.noteId),
+      instance = composition?.editor;
+    const previousNote = ws.notes.find((n) => n.id === previousSmart.noteId);
+    if (
+      composition?.pending &&
+      instance?.view.composing &&
+      instance.view.hasFocus() &&
+      instance.isEditable &&
+      !instance.isDestroyed &&
+      previousNote &&
+      !previousNote.deletedAt &&
+      !previousNote.locked &&
+      !blockedNotes.current.has(previousNote.id) &&
+      !accessGate.state?.operationId
+    ) {
+      tagCompositionTarget.current = {
+        noteId: previousNote.id,
+        composition,
+        cycle: composition.cycle,
+        scope: tagCompositionScope,
+        stamp: accessGate.stamp(previousNote.id),
+      };
+    }
+  }
   const held = tagCompositionTarget.current;
   const heldNote = held && ws.notes.find((note) => note.id === held.noteId);
   const heldStamp = held && accessGate.stamp(held.noteId);
@@ -635,7 +692,7 @@ function App() {
     !heldNote.deletedAt &&
     !heldNote.locked &&
     desktopSearch &&
-    (filter === "tags" || tagFilter !== undefined) &&
+    (filter === "tags" || tagFilter !== undefined || !!smartFolder) &&
     held.scope === tagCompositionScope &&
     held.composition === tagCompositions.current.get(held.noteId) &&
     held.cycle === held.composition.cycle &&
@@ -656,7 +713,14 @@ function App() {
   // the real legal projection, and no other matching note becomes active mid-IME.
   const noteId = retainTagComposition ? held!.noteId : projectedNoteId;
   const current = ws.notes.find((n) => n.id === noteId);
-  const currentFolder = ws.folders.find((f) => f.id === folderId);
+  if (smartFolder) {
+    if (baseNoteId) parkedSmartEditors.current.add(baseNoteId);
+    if (noteId) parkedSmartEditors.current.add(noteId);
+  }
+  smartDisplayed.current =
+    smartFolder && noteId
+      ? { folderId, noteId, navigation: tagNavigation }
+      : null;
   const selected = ws.notes.find(
     (n) =>
       n.id === (desktopSearch && !listed.length ? null : contextNote || noteId),
@@ -769,6 +833,24 @@ function App() {
     markWorkspaceApplied(next);
     return true;
   }, []);
+  const restoreSelection = useCallback(
+    (data: Workspace) => {
+      const restoredFolder = String(data.settings.selectedFolder || "default");
+      setFolderId(
+        restoredFolder === "all" ||
+          data.folders.some((f) => f.id === restoredFolder)
+          ? restoredFolder
+          : "default",
+      );
+      const selectedId = separate || String(data.settings.selectedNote || "");
+      setNoteId(
+        data.notes.some((n) => n.id === selectedId) ? selectedId : null,
+      );
+      if (separate && data.notes.some((n) => n.id === selectedId))
+        setPage("editor");
+    },
+    [separate],
+  );
   metadataRefreshRef.current = (force = true) => {
     metadataRefreshAgain.current ||= force;
     if (metadataRefreshRunning.current) return metadataRefreshRunning.current;
@@ -920,6 +1002,31 @@ function App() {
     },
     [fail],
   );
+  useEffect(() => {
+    if (!workspaceLoaded || folderId === "all" || currentFolder) return;
+    const original = ws.notes.find((n) => n.id === baseNoteId && !n.deletedAt);
+    const source =
+      original && ws.folders.find((f) => f.id === original.folderId);
+    const destination = isPhysicalOwner(source) ? source!.id : "default";
+    // Definitions are views. Deleting one neither drains nor reassigns the
+    // parked note's pending document, revision baseline, or physical owner.
+    setFolderId(destination);
+    if (!original)
+      setNoteId(folderProjection.get(destination)?.firstId ?? null);
+    updateSettings({
+      selectedFolder: destination,
+      ...(!original
+        ? { selectedNote: folderProjection.get(destination)?.firstId ?? "" }
+        : {}),
+    });
+  }, [
+    workspaceLoaded,
+    folderId,
+    currentFolder,
+    ws.folders,
+    baseNoteId,
+    updateSettings,
+  ]);
   const saveDoc = useCallback(
     (id: string, doc: JSONContent) => {
       if (blockedNotes.current.has(id)) {
@@ -1010,13 +1117,19 @@ function App() {
     const instance = composition?.editor;
     const names = documentTags(doc);
     const lostTagMatch =
-      !names.length ||
-      (typeof tagFilter === "string" && !names.includes(tagFilter));
+      smartFolder && !contentSearch
+        ? !matchesSmart(smartFolder.query, {
+            eligible: true,
+            pinned: current?.pinned ?? false,
+            tags: names,
+          })
+        : !names.length ||
+          (typeof tagFilter === "string" && !names.includes(tagFilter));
     if (
       !tagCompositionTarget.current &&
       tagNavigation === tagCompositionNavigation.current &&
       desktopSearch &&
-      (filter === "tags" || tagFilter !== undefined) &&
+      (filter === "tags" || tagFilter !== undefined || !!smartFolder) &&
       noteId === id &&
       listed.some((note) => note.id === id) &&
       lostTagMatch &&
@@ -1255,13 +1368,7 @@ function App() {
         if (!hydrate(data)) throw new MetadataStale();
         if (!initializedSelection.current) {
           initializedSelection.current = true;
-          setFolderId(String(data.settings.selectedFolder || "default"));
-          const selectedId =
-            separate || String(data.settings.selectedNote || "");
-          if (data.notes.some((n) => n.id === selectedId)) {
-            setNoteId(selectedId);
-            if (separate) setPage("editor");
-          }
+          restoreSelection(data);
         }
         blockedNotes.current = new Set(data.access?.suspended || []);
         setAccessSuspended([...blockedNotes.current]);
@@ -1512,9 +1619,16 @@ function App() {
     setFilter("");
     setSearching(false);
     setMenu(null);
-    const n = ws.notes.find((n) => n.folderId === id);
-    setNoteId(n?.id || null);
-    updateSettings({ selectedFolder: id, selectedNote: n?.id || "" });
+    if (noteId && ws.folders.find((f) => f.id === id)?.kind === "smart")
+      parkedSmartEditors.current.add(noteId);
+    const first =
+      projectFolders(
+        wsRef.current,
+        blockedNotes.current.size ? [...blockedNotes.current] : [],
+        sort,
+      ).get(id)?.firstId ?? null;
+    setNoteId(first);
+    updateSettings({ selectedFolder: id, selectedNote: first || "" });
   };
   const chooseTag = (name: string | null) => {
     clearTagComposition();
@@ -1528,22 +1642,25 @@ function App() {
   const chooseNote = (n: Note) => {
     clearTagComposition();
     if (!mobile && view === "gallery") setGalleryEditor(true);
-    if (desktopSearch) setSearchNoteId(n.id);
+    if (contentSearch) setSearchNoteId(n.id);
     else setNoteId(n.id);
     setPage("editor");
     setMenu(null);
     setSwiped(null);
     setShowFind(false);
     setEditing(false);
-    if (!desktopSearch) updateSettings({ selectedNote: n.id });
+    if (!contentSearch) updateSettings({ selectedNote: n.id });
   };
   const createNote = useCallback(
     async (validate?: () => void) => {
       try {
         await flush();
         validate?.();
-        const fid =
-          folderId === "all" || folderId === "trash" ? "default" : folderId;
+        const fid = isPhysicalOwner(
+          wsRef.current.folders.find((f) => f.id === folderId),
+        )
+          ? folderId
+          : "default";
         const created = await action<Note & Pick<Workspace, "access">>({
           type: "createNote",
           folderId: fid,
@@ -1562,6 +1679,7 @@ function App() {
         revisions.current.confirmed(n.id, n.revision);
         clearTagComposition();
         setTagFilter(undefined);
+        setFolderId(fid);
         setFilter("");
         setNoteId(n.id);
         setPage("editor");
@@ -1570,7 +1688,7 @@ function App() {
         setQuery("");
         setSearching(false);
         setEditing(true);
-        updateSettings({ selectedNote: n.id });
+        updateSettings({ selectedFolder: fid, selectedNote: n.id });
         setTimeout(
           () => document.querySelector<HTMLElement>(".tiptap")?.focus(),
           100,
@@ -1582,7 +1700,58 @@ function App() {
     [fail, flush, folderId, updateSettings, clearTagComposition],
   );
   const newNote = useCallback(() => createNote(), [createNote]);
+  const saveFolderDraft = async (draft: FolderDraft, committedId?: string) => {
+    let id = committedId;
+    if (!id) {
+      const delivery = await action<FolderData>(
+        draft.smart
+          ? {
+              type: draft.id ? "updateSmartFolder" : "createSmartFolder",
+              input: {
+                name: draft.name,
+                query: draftQuery(draft),
+                ...(draft.id
+                  ? {
+                      id: draft.id,
+                      expectedDefinitionRevision:
+                        draft.expectedDefinitionRevision,
+                    }
+                  : {}),
+              },
+            }
+          : { type: "createFolder", name: draft.name, parentId: null },
+      );
+      id = delivery.receipt?.createdId ?? delivery.value?.id ?? draft.id;
+      if (!id) throw Error("后端未提供文件夹保存收据，草稿仍保留。");
+      if (delivery.maintenanceError) fail(delivery.maintenanceError);
+    }
+    const data = await metadataRefreshRef.current();
+    if (!data?.folders.some((f) => f.id === id)) return { id, complete: false };
+    setFolderForm(null);
+    if (!draft.id) chooseFolder(id);
+    return { id, complete: true };
+  };
   const openModal = (type: string, value = "") => {
+    if (type === "deleteSmartFolder") {
+      const f = wsRef.current.folders.find((f) => f.id === contextFolder);
+      smartDeleteTarget.current =
+        f?.kind === "smart"
+          ? { id: f.id, revision: f.definitionRevision }
+          : null;
+    }
+    if (type === "newFolder") {
+      setFolderForm({});
+      setMenu(null);
+      return;
+    }
+    if (type === "renameFolder") {
+      const folder = wsRef.current.folders.find((f) => f.id === contextFolder);
+      if (folder?.kind === "smart") {
+        setFolderForm({ folder });
+        setMenu(null);
+        return;
+      }
+    }
     if (type === "lock" && selected && documentTags(selected.document).length) {
       fail(Error("含标签的备忘录不能锁定，请先移除标签。"));
       return;
@@ -1621,7 +1790,8 @@ function App() {
   };
   const androidBack = useRef<() => void>(() => {});
   androidBack.current = () => {
-    if (ocrOperation.current) void cancelOcr().catch(fail);
+    if (folderForm) folderFormHandle.current?.cancel();
+    else if (ocrOperation.current) void cancelOcr().catch(fail);
     else if (modal === "paper") closePaper();
     else if (modal) setModal(null);
     else if (menu === "format") closeFormat(false);
@@ -1666,7 +1836,30 @@ function App() {
   }, [fail]);
   const patch = async (a: Record<string, unknown>) => {
     try {
+      const original = wsRef.current.notes.find((n) => n.id === a.id);
+      const leavePinnedView =
+        smartFolder?.query.rules.length === 1 &&
+        smartFolder.query.rules[0].type === "pinned" &&
+        smartFolder.query.rules[0].value &&
+        a.type === "patchNote" &&
+        a.pinned === false &&
+        currentProjection?.count === 1 &&
+        currentProjection.ids[0] === a.id;
       await doAction(a);
+      if (
+        leavePinnedView &&
+        original &&
+        isPhysicalOwner(
+          wsRef.current.folders.find((f) => f.id === original.folderId),
+        )
+      ) {
+        setFolderId(original.folderId);
+        setNoteId(original.id);
+        updateSettings({
+          selectedFolder: original.folderId,
+          selectedNote: original.id,
+        });
+      }
       setMenu(null);
     } catch (e) {
       fail(e);
@@ -1697,8 +1890,14 @@ function App() {
           setNotice("本地备份已导出");
         } else {
           const imported = await importArchive(path);
-          if (imported.value) hydrate(imported.value);
-          else await synchronizeRef.current();
+          if (imported.value && hydrate(imported.value)) {
+            restoreSelection(imported.value);
+          } else {
+            const synced = await synchronizeRef.current();
+            if (!synced.success) throw synced.error;
+            if (!synchronization.current(synced)) throw new MetadataStale();
+            restoreSelection(synced.snapshot);
+          }
           if (imported.maintenanceError) fail(imported.maintenanceError);
           setNotice("本地备份已导入");
         }
@@ -1706,7 +1905,7 @@ function App() {
         fail(e);
       }
     },
-    [flush, hydrate, fail],
+    [flush, hydrate, restoreSelection, synchronization, fail],
   );
   const openSeparate = async (n: Note) => {
     if (!native) {
@@ -1737,6 +1936,7 @@ function App() {
   }, [fail]);
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (folderForm) return;
       if (ocrOperation.current && e.key !== "Escape") return;
       // AppKit menu accelerators also work while NSSearchField owns first responder.
       if (
@@ -1782,6 +1982,7 @@ function App() {
     return () => window.removeEventListener("keydown", handler);
   }, [
     newNote,
+    folderForm,
     page,
     mobile,
     modal,
@@ -2184,10 +2385,7 @@ function App() {
             ? "过去30天"
             : `${date.getFullYear()}年${date.getMonth() + 1}月`;
   };
-  const count = (id: string) =>
-    id === "all"
-      ? ws.notes.filter((n) => !n.deletedAt).length
-      : ws.notes.filter((n) => n.folderId === id).length;
+  const count = (id: string) => folderProjection.get(id)?.count ?? 0;
   const folderLabel =
     tagFilter !== undefined
       ? tagFilter === null
@@ -2230,7 +2428,9 @@ function App() {
         onTouchEnd={stopLong}
         onTouchMove={stopLong}
       >
-        {f.kind === "quick" ? (
+        {f.kind === "smart" ? (
+          <FolderCog />
+        ) : f.kind === "quick" ? (
           <StickyNote />
         ) : f.kind === "trash" ? (
           <Trash2 />
@@ -2768,6 +2968,17 @@ function App() {
       } else if (modal === "deleteFolder") {
         await doAction({ type: "deleteFolder", id: contextFolder });
         if (folderId === contextFolder) chooseFolder("default");
+      } else if (modal === "deleteSmartFolder") {
+        const target = smartDeleteTarget.current;
+        if (!target) throw Error("智能文件夹已不存在");
+        await action({
+          type: "deleteSmartFolder",
+          input: {
+            id: target.id,
+            expectedDefinitionRevision: target.revision,
+          },
+        });
+        await metadataRefreshRef.current();
       } else if (modal === "purge") {
         await doAction({ type: "purgeNote", id: selected?.id });
         setNoteId(null);
@@ -3135,7 +3346,10 @@ function App() {
                   )
                 }
               >
-                重新命名
+                {ws.folders.find((f) => f.id === contextFolder)?.kind ===
+                "smart"
+                  ? "编辑智能文件夹"
+                  : "重新命名"}
               </MenuRow>
               <MenuRow
                 icon={<FolderPlus size={18} />}
@@ -3146,7 +3360,14 @@ function App() {
               <MenuRow
                 danger
                 icon={<Trash2 size={18} />}
-                onClick={() => openModal("deleteFolder")}
+                onClick={() =>
+                  openModal(
+                    ws.folders.find((f) => f.id === contextFolder)?.kind ===
+                      "smart"
+                      ? "deleteSmartFolder"
+                      : "deleteFolder",
+                  )
+                }
               >
                 删除文件夹
               </MenuRow>
@@ -3205,10 +3426,15 @@ function App() {
     scope: JSON.stringify([nativeScope, page]),
     noteId,
     editor,
-    available: pickerBaseAvailable && !modal,
+    available: pickerBaseAvailable && !modal && !folderForm,
     ocrAvailable:
-      attachmentBaseAvailable && !record && !modal && !!ocrOperation.current,
-    recordingAvailable: attachmentBaseAvailable && !modal && !menu && !ocr,
+      attachmentBaseAvailable &&
+      !record &&
+      !modal &&
+      !folderForm &&
+      !!ocrOperation.current,
+    recordingAvailable:
+      attachmentBaseAvailable && !modal && !folderForm && !menu && !ocr,
   };
   const recording = record ? recordingTicket.current : null;
   useEffect(() => {
@@ -3246,7 +3472,8 @@ function App() {
       (context.noteId &&
         (blockedNotes.current.has(context.noteId) ||
           accessGate.state?.suspended.includes(context.noteId))) ||
-      (!overlay && (modal || draw || record || ocrOperation.current))
+      (!overlay &&
+        (modal || folderForm || draw || record || ocrOperation.current))
     )
       throw new Error("备忘录或授权状态已改变，请重新执行操作");
     if (
@@ -3822,7 +4049,10 @@ function App() {
           </div>
         )}
         <div className="folder-footer">
-          <button onClick={() => openModal("newFolder")}>
+          <button
+            aria-label="新建文件夹"
+            onClick={() => openModal("newFolder")}
+          >
             <FolderPlus size={21} />
             {!mobile && "新建文件夹"}
           </button>
@@ -4263,36 +4493,39 @@ function App() {
             </div>
           </div>
         ) : null}
-        {[...new Set(desktopSearch ? [baseNoteId, noteId] : [noteId])].map(
-          (id) => {
-            const note = ws.notes.find((candidate) => candidate.id === id);
-            if (
-              !note ||
-              note.deletedAt ||
-              (note.locked && !unlocked.has(note.id))
-            )
-              return null;
-            return (
-              <SearchEditorHost
-                key={`${note.id}-${ws.access?.sessionId || "preview"}-${ws.access?.notes[note.id]?.epoch || 0}-${externalVersions.current.get(note.id) || 0}`}
-                note={note}
-                active={note.id === noteId}
-                blocked={blockedNotes.current.has(note.id)}
-                gate={editorGate}
-                onChange={saveEditorDoc}
-                onReady={onReady}
-                onDate={() => setNotice(`创建于 ${fmtDate(note.createdAt)}`)}
-                onFocus={(focused) => {
-                  setEditing(focused);
-                  if (focused && mobile && menu === "format") {
-                    setMenu(null);
-                    formatTarget.current = null;
-                  }
-                }}
-              />
-            );
-          },
-        )}
+        {[
+          ...new Set([
+            ...parkedSmartEditors.current,
+            ...(desktopSearch ? [baseNoteId, noteId] : [noteId]),
+          ]),
+        ].map((id) => {
+          const note = ws.notes.find((candidate) => candidate.id === id);
+          if (
+            !note ||
+            note.deletedAt ||
+            (note.locked && !unlocked.has(note.id))
+          )
+            return null;
+          return (
+            <SearchEditorHost
+              key={`${note.id}-${ws.access?.sessionId || "preview"}-${ws.access?.notes[note.id]?.epoch || 0}-${externalVersions.current.get(note.id) || 0}`}
+              note={note}
+              active={note.id === noteId}
+              blocked={blockedNotes.current.has(note.id)}
+              gate={editorGate}
+              onChange={saveEditorDoc}
+              onReady={onReady}
+              onDate={() => setNotice(`创建于 ${fmtDate(note.createdAt)}`)}
+              onFocus={(focused) => {
+                setEditing(focused);
+                if (focused && mobile && menu === "format") {
+                  setMenu(null);
+                  formatTarget.current = null;
+                }
+              }}
+            />
+          );
+        })}
         {mobile &&
           current &&
           !current.deletedAt &&
@@ -4306,6 +4539,25 @@ function App() {
         )}
       </main>
       {renderMenu()}
+      {folderForm && (
+        <SmartFolderForm
+          mobile={mobile}
+          folder={folderForm.folder}
+          catalog={tags.catalog.map(([name]) => name)}
+          onCancel={() => setFolderForm(null)}
+          onHandle={(handle) => {
+            folderFormHandle.current = handle;
+          }}
+          onSave={saveFolderDraft}
+          onRefresh={async (id) => {
+            const data = await metadataRefreshRef.current();
+            const folder = data?.folders.find((f) => f.id === id);
+            if (folder?.kind !== "smart")
+              throw Error("智能文件夹已不存在，当前草稿仍保留。");
+            return folder;
+          }}
+        />
+      )}
       {(synchronizing || accessSuspended.length > 0) && (
         <div className="access-cover" role="status">
           <div>
@@ -4339,6 +4591,7 @@ function App() {
               "lock",
               "unlock",
               "deleteFolder",
+              "deleteSmartFolder",
               "purge",
             ].includes(modal) ? (
               <form
@@ -4356,16 +4609,21 @@ function App() {
                         lock: "设置备忘录密码",
                         unlock: "输入密码",
                         deleteFolder: "删除文件夹？",
+                        deleteSmartFolder: "删除智能文件夹？",
                         purge: "永久删除备忘录？",
                       } as Record<string, string>
                     )[modal]
                   }
                 </h2>
-                {["deleteFolder", "purge"].includes(modal) ? (
+                {["deleteFolder", "deleteSmartFolder", "purge"].includes(
+                  modal,
+                ) ? (
                   <p>
-                    {modal === "deleteFolder"
-                      ? "文件夹中的备忘录将移到“最近删除”。"
-                      : "此操作无法撤销。"}
+                    {modal === "deleteSmartFolder"
+                      ? "只删除此智能文件夹，备忘录仍保留在原文件夹中。"
+                      : modal === "deleteFolder"
+                        ? "文件夹中的备忘录将移到“最近删除”。"
+                        : "此操作无法撤销。"}
                   </p>
                 ) : (
                   <>
@@ -4398,12 +4656,16 @@ function App() {
                   <button
                     type="submit"
                     className={
-                      modal === "purge" || modal === "deleteFolder"
+                      modal === "purge" ||
+                      modal === "deleteFolder" ||
+                      modal === "deleteSmartFolder"
                         ? "danger"
                         : "primary"
                     }
                   >
-                    {modal === "purge" || modal === "deleteFolder"
+                    {modal === "purge" ||
+                    modal === "deleteFolder" ||
+                    modal === "deleteSmartFolder"
                       ? "删除"
                       : "好"}
                   </button>
@@ -4414,25 +4676,23 @@ function App() {
               <>
                 <h2>移动备忘录</h2>
                 <div className="move-list">
-                  {ws.folders
-                    .filter((f) => f.kind !== "trash")
-                    .map((f) => (
-                      <MenuRow
-                        key={f.id}
-                        icon={<Folder size={20} />}
-                        onClick={async () => {
-                          await patch({
-                            type: "patchNote",
-                            id: selected?.id,
-                            folderId: f.id,
-                          });
-                          setModal(null);
-                          if (mobile) setPage("notes");
-                        }}
-                      >
-                        {f.name}
-                      </MenuRow>
-                    ))}
+                  {ws.folders.filter(isPhysicalOwner).map((f) => (
+                    <MenuRow
+                      key={f.id}
+                      icon={<Folder size={20} />}
+                      onClick={async () => {
+                        await patch({
+                          type: "patchNote",
+                          id: selected?.id,
+                          folderId: f.id,
+                        });
+                        setModal(null);
+                        if (mobile) setPage("notes");
+                      }}
+                    >
+                      {f.name}
+                    </MenuRow>
+                  ))}
                 </div>
                 <button className="modal-cancel" onClick={() => setModal(null)}>
                   取消

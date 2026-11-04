@@ -1,0 +1,18 @@
+   Compiling notes-qa-fix-store v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-u-platform-ui09/harness)
+error[E0277]: `store::Folder` doesn't implement `Debug`
+   --> src/store/smart_tests.rs:801:18
+    |
+801 |                 .unwrap_err()
+    |                  ^^^^^^^^^^ unsatisfied trait bound
+    |
+help: the trait `Debug` is not implemented for `store::Folder`
+   --> src/store.rs:85:1
+    |
+ 85 | pub struct Folder {
+    | ^^^^^^^^^^^^^^^^^
+    = note: add `#[derive(Debug)]` to `store::Folder` or manually `impl Debug for store::Folder`
+note: required by a bound in `std::result::Result::<T, E>::unwrap_err`
+   --> /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/core/src/result.rs:1324:4
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `notes-qa-fix-store` (bin "notes-qa-fix-store" test) due to 1 previous error

@@ -1,0 +1,152 @@
+   Compiling notes-qa-fix-store v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-u-platform-ui09/harness)
+warning: methods `attachment_note`, `store_attachment`, and `read_attachment` are never used
+   --> ../harness/src/store.rs:303:19
+    |
+174 | impl Store {
+    | ---------- methods in this implementation
+...
+303 |     pub(crate) fn attachment_note(&self, aid: &str) -> Result<String> {
+    |                   ^^^^^^^^^^^^^^^
+...
+763 |     pub fn store_attachment(
+    |            ^^^^^^^^^^^^^^^^
+...
+818 |     pub fn read_attachment(&self, aid: &str) -> Result<Value> {
+    |            ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `validated_tags` is never used
+  --> ../harness/src/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+
+warning: method `export_archive` is never used
+   --> ../harness/src/store/archive.rs:564:12
+    |
+435 | impl Store {
+    | ---------- method in this implementation
+...
+564 |     pub fn export_archive(&self, path: &Path) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+
+warning: constant `MAX_BYTES` is never used
+ --> ../harness/src/store/attachment_operations.rs:6:7
+  |
+6 | const MAX_BYTES: usize = 100 * 1024 * 1024;
+  |       ^^^^^^^^^
+
+warning: constant `MAX_OPERATIONS` is never used
+ --> ../harness/src/store/attachment_operations.rs:7:7
+  |
+7 | const MAX_OPERATIONS: i64 = 10_000;
+  |       ^^^^^^^^^^^^^^
+
+warning: fields `owner` and `reason` are never read
+  --> ../harness/src/store/attachment_operations.rs:17:5
+   |
+14 | struct Operation {
+   |        --------- fields in this struct
+...
+17 |     owner: AttachmentOwner,
+   |     ^^^^^
+...
+20 |     reason: Option<String>,
+   |     ^^^^^^
+
+warning: function `valid_operation` is never used
+  --> ../harness/src/store/attachment_operations.rs:27:4
+   |
+27 | fn valid_operation(value: &str) -> Result<()> {
+   |    ^^^^^^^^^^^^^^^
+
+warning: methods `owned_operation`, `store_attachment_operation`, `query_attachment_operation`, `defer_attachment_operation`, and `cancel_attachment_operation` are never used
+   --> ../harness/src/store/attachment_operations.rs:74:8
+    |
+ 52 | impl Store {
+    | ---------- methods in this implementation
+...
+ 74 |     fn owned_operation(
+    |        ^^^^^^^^^^^^^^^
+...
+153 |     pub(crate) fn store_attachment_operation(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+283 |     pub(crate) fn query_attachment_operation(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+317 |     pub(crate) fn defer_attachment_operation(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+333 |     pub(crate) fn cancel_attachment_operation(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> ../harness/src/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `evaluate_smart_folder` is never used
+   --> ../harness/src/store/smart.rs:314:19
+    |
+250 | impl Store {
+    | ---------- method in this implementation
+...
+314 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: field `attachment_windows` is never read
+  --> ../harness/src/session.rs:51:5
+   |
+45 | pub struct Session {
+   |            ------- field in this struct
+...
+51 |     attachment_windows: HashMap<String, String>,
+   |     ^^^^^^^^^^^^^^^^^^
+
+warning: multiple methods are never used
+   --> ../harness/src/session.rs:135:12
+    |
+ 57 | impl Session {
+    | ------------ methods in this implementation
+...
+135 |     pub fn export_archive(&self, path: &std::path::Path, token: &Token) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+...
+160 |     fn attachment_owner(&mut self, window: &str) -> Result<AttachmentOwner> {
+    |        ^^^^^^^^^^^^^^^^
+...
+175 |     pub fn forget_attachment_window(&mut self, window: &str) {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+178 |     pub fn store_attachment_operation(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+205 |     pub fn query_attachment_operation(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+220 |     pub fn cancel_attachment_operation(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+446 |     pub fn acknowledge(&mut self, operation: &str, window: &str, success: bool) -> Result<()> {
+    |            ^^^^^^^^^^^
+...
+465 |     pub fn ready(&self) -> bool {
+    |            ^^^^^
+
+warning: methods `store_attachment` and `smart_projection` are never used
+  --> ../harness/src/session/metadata.rs:54:19
+   |
+ 4 | impl Session {
+   | ------------ methods in this implementation
+...
+54 |     pub(crate) fn store_attachment(
+   |                   ^^^^^^^^^^^^^^^^
+...
+98 |     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: `notes-qa-fix-store` (bin "notes-u-session-transport") generated 13 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.50s
