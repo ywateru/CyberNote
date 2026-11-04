@@ -1,0 +1,187 @@
+{
+  "baselineBehaviorPass": true,
+  "candidateBehaviorPass": true,
+  "candidateReferenceOrderMatches": true,
+  "baselineReferenceOrderMatches": false,
+  "choiceComparison": [
+    {
+      "style": "plain",
+      "oldSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "oldSelectionAfter": {
+        "type": "text",
+        "anchor": 1,
+        "head": 1
+      },
+      "candidateSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionAfter": {
+        "type": "text",
+        "anchor": 1,
+        "head": 1
+      },
+      "selectionPreserved": false,
+      "matchesBaseline": true
+    },
+    {
+      "style": "lines-small",
+      "oldSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "oldSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "selectionPreserved": true,
+      "matchesBaseline": true
+    },
+    {
+      "style": "lines-medium",
+      "oldSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "oldSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "selectionPreserved": true,
+      "matchesBaseline": true
+    },
+    {
+      "style": "lines-large",
+      "oldSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "oldSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "selectionPreserved": true,
+      "matchesBaseline": true
+    },
+    {
+      "style": "grid-small",
+      "oldSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "oldSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "selectionPreserved": true,
+      "matchesBaseline": true
+    },
+    {
+      "style": "grid-medium",
+      "oldSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "oldSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "selectionPreserved": true,
+      "matchesBaseline": true
+    },
+    {
+      "style": "grid-large",
+      "oldSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "oldSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionBefore": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "candidateSelectionAfter": {
+        "type": "text",
+        "anchor": 3,
+        "head": 8
+      },
+      "selectionPreserved": true,
+      "matchesBaseline": true
+    }
+  ],
+  "independentRisk": "Headless preview first choose of already-selected plain resets selection 3..8 to1..1 in both baseline and candidate. All six subsequent styles preserve selection; no selection fix attempted. Native Android Back/IME/selection not verified by this browser check.",
+  "candidateErrors": [],
+  "candidateExternalRequests": [],
+  "desktopAndCancelEscapeBackdropChecks": "Both controlled runs reach all 12 steps; backdrop is DOM-dispatched production handler, not native user gesture."
+}

@@ -184,10 +184,10 @@ type PaperOption = (typeof desktopPaperOptions)[number];
 const mobilePaperOptions = [
   "plain",
   "lines-small",
-  "grid-small",
   "lines-medium",
-  "grid-medium",
   "lines-large",
+  "grid-small",
+  "grid-medium",
   "grid-large",
 ] as const satisfies readonly PaperOption[];
 const paperOptionLabels: Record<PaperOption, string> = {
