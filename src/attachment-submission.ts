@@ -1,5 +1,6 @@
 import type { JSONContent } from "@tiptap/react";
 import type { Attachment } from "./types";
+import { attachmentRecordedAt } from "./recording-metadata";
 
 export interface AttachmentOperationResult {
   operationId: string;
@@ -49,13 +50,20 @@ export class AttachmentSubmission<Target> {
   refreshed = false;
   invalidated = false;
   private running?: Promise<void>;
+  readonly recordedAt: number | undefined;
 
   constructor(
     readonly operationId: string,
     readonly noteId: string,
     readonly target: Target,
     readonly file: File,
-  ) {}
+    recordedAt?: number,
+  ) {
+    this.recordedAt = attachmentRecordedAt(
+      recordedAt,
+      file.type.startsWith("audio/") ? "audio" : "file",
+    );
+  }
 
   invalidate() {
     this.invalidated = true;
@@ -103,7 +111,16 @@ export class AttachmentSubmission<Target> {
       );
     if (this.attachment && this.attachment.id !== result.attachment.id)
       throw Error("附件身份已改变，请保持窗口打开");
+    this.acceptDate(result.attachment);
     return result.attachment;
+  }
+
+  private acceptDate(attachment: Attachment) {
+    if (
+      attachmentRecordedAt(attachment.recordedAt, attachment.kind) !==
+      this.recordedAt
+    )
+      throw Error("附件录音日期已改变，请保持窗口打开");
   }
 
   run(ports: AttachmentSubmissionPorts): Promise<void> {
@@ -135,7 +152,9 @@ export class AttachmentSubmission<Target> {
     if (!this.attachment) {
       if (ports.storage.kind === "preview") {
         this.storageAttempted = true;
-        this.attachment = await ports.storage.store();
+        const attachment = await ports.storage.store();
+        this.acceptDate(attachment);
+        this.attachment = attachment;
       } else {
         // A rejected response may still have written bytes. Only an accepted
         // authoritative query can establish that the same operation did not.

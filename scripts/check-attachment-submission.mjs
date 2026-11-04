@@ -19,6 +19,14 @@ async function production(name) {
       module: ts.ModuleKind.ESNext,
     },
   }).outputText;
+  for (const dependency of ["recording-metadata", "audio-playback"]) {
+    if (!output.includes(`"./${dependency}"`)) continue;
+    await production(dependency);
+    output = output.replaceAll(
+      `"./${dependency}"`,
+      JSON.stringify(modules.get(dependency).url),
+    );
+  }
   if (name === "bridge" || name === "proof-access") {
     for (const dependency of [
       "access-client",
@@ -105,7 +113,7 @@ const stored = {
   attachment,
 };
 function fixture() {
-  const op = new AttachmentSubmission("op-a", "note-a", {}, {});
+  const op = new AttachmentSubmission("op-a", "note-a", {}, { type: "" });
   const counts = {
     validate: 0,
     store: 0,
@@ -174,6 +182,43 @@ function fixture() {
     },
   };
 }
+await test("actual submission refuses changed/unknown/invalid response date before insertion", async () => {
+  for (const date of [
+    undefined,
+    null,
+    1793743199124,
+    "bad",
+    1.5,
+    -1,
+    253402300800000,
+  ]) {
+    const f = fixture(),
+      op = new AttachmentSubmission(
+        "op-a",
+        "note-a",
+        {},
+        { type: "audio/webm" },
+        1793743199123,
+      );
+    const reply = {
+      ...stored,
+      attachment: { ...attachment, kind: "audio", recordedAt: date },
+    };
+    f.ports.storage.store = async () => reply;
+    f.ports.storage.query = async () => reply;
+    await assert.rejects(op.run(f.ports));
+    assert.equal(f.counts.insert, 0);
+    assert.equal(op.attachment, undefined);
+  }
+  const f = fixture();
+  f.ports.storage.store = async () => ({
+    ...stored,
+    attachment: { ...attachment, kind: "audio", recordedAt: 1793743199123 },
+  });
+  f.ports.storage.query = f.ports.storage.store;
+  await assert.rejects(f.op.run(f.ports));
+  assert.equal(f.counts.insert, 0);
+});
 await test("normal journal -> real queue ACK -> refresh", async () => {
   const f = fixture();
   await f.op.run(f.ports);
@@ -652,6 +697,46 @@ class BoundaryFileReader {
 }
 globalThis.FileReader = BoundaryFileReader;
 try {
+  await test("external audio File.lastModified never becomes recordedAt", async () => {
+    const state = {
+      sessionId: "mtime-test",
+      epoch: 1,
+      notes: { "note-a": { epoch: 0, authorized: true } },
+      suspended: [],
+      operationId: null,
+    };
+    bridge.accessGate.state = state;
+    let request;
+    globalThis.__attachmentBridgeBoundary = {
+      invoke: async (command, params) => {
+        request = { command, params };
+        return {
+          ...stored,
+          attachment: {
+            ...attachment,
+            kind: "audio",
+            displayName: "external.webm",
+            mime: "audio/webm",
+          },
+          access: state,
+        };
+      },
+    };
+    const file = new File(["synthetic-external-only"], "external.webm", {
+      type: "audio/webm",
+      lastModified: 1793743199123,
+    });
+    const pending = bridge.storeAttachmentOperation("op-a", "note-a", file);
+    readerQueue.shift().complete("c3ludGhldGljLWV4dGVybmFsLW9ubHk=");
+    const result = await pending;
+    assert.equal(file.lastModified, 1793743199123);
+    assert.equal(Object.hasOwn(request.params, "recordedAt"), false);
+    assert.equal(result.attachment.recordedAt, undefined);
+    assert.equal(
+      new AttachmentSubmission("op-a", "note-a", {}, file).recordedAt,
+      undefined,
+    );
+  });
   await test("actual bridge captures token before FileReader and query recovers rejected response", async () => {
     const state = {
       sessionId: "bridge-session",
@@ -675,7 +760,11 @@ try {
         return { ...stored, access: state };
       },
     };
-    const file = { name: "a.pdf", type: "application/pdf" };
+    const file = {
+      name: "a.pdf",
+      type: "application/pdf",
+      lastModified: 1793743199123,
+    };
     const pending = bridge.storeAttachmentOperation("op-a", "note-a", file);
     const reader = readerQueue.shift();
     assert.equal(reader.file, file);

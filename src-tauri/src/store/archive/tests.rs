@@ -182,7 +182,7 @@ fn invalid_archive_graphs_and_metadata_never_mutate_existing_workspace() {
     let valid = read_json(&f.archive);
     type Mutation = (&'static str, Box<dyn Fn(&mut Value)>);
     let cases: Vec<Mutation> = vec![
-        ("unsupported version", Box::new(|v| v["version"] = json!(2))),
+        ("unsupported version", Box::new(|v| v["version"] = json!(99))),
         (
             "duplicate folder",
             Box::new(|v| {

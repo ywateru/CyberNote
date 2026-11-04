@@ -6,6 +6,10 @@ import {
   initialRecordingPlaybackState,
 } from "./recording-playback";
 import { RecordingClock, recordingTime } from "./recording-clock";
+import {
+  attachmentRecordedAt,
+  type RecordingResult,
+} from "./recording-metadata";
 import "./RecordingPanel.css";
 
 type Phase =
@@ -53,7 +57,7 @@ export default function RecordingPanel({
   onDone,
 }: {
   onCancel: () => void;
-  onDone: (file: File) => Promise<void>;
+  onDone: (result: RecordingResult) => Promise<void>;
 }) {
   const [status, setStatus] = useState<Phase>("idle");
   const phase = useRef<Phase>("idle");
@@ -63,7 +67,8 @@ export default function RecordingPanel({
   const [elapsed, setElapsed] = useState(0);
   const [error, setError] = useState("");
   const [levels, setLevels] = useState<number[]>([]);
-  const finalFile = useRef<File | null>(null);
+  const recordedAt = useRef<number | undefined>(undefined);
+  const finalResult = useRef<RecordingResult | null>(null);
   const previewGeneration = useRef(0);
   const previewPlayer = useRef<ReturnType<
     typeof createRecordingPlayback
@@ -114,19 +119,22 @@ export default function RecordingPanel({
     setError(errText(e));
     transition("error");
   };
-  const submit = async (file: File) => {
+  const submit = async (result: RecordingResult) => {
     if (!live.current) return;
     clearPlayback();
     transition("saving");
     setError("");
     try {
-      await done.current(file);
+      await done.current(result);
       if (live.current && phase.current === "saving") transition("submitted");
     } catch (e) {
       if (!live.current || phase.current !== "saving") return;
       setError(errText(e));
       transition("retry");
-      setPreviewSource({ blob: file, generation: previewGeneration.current });
+      setPreviewSource({
+        blob: result.file,
+        generation: previewGeneration.current,
+      });
     }
   };
   useEffect(() => {
@@ -220,6 +228,10 @@ export default function RecordingPanel({
     const capture = new RecordingSession({
       onRecording: () => {
         if (!live.current || phase.current !== "requesting") return;
+        // Called only after the first actual recorder.start succeeds. This is
+        // independent of panel mount, permission wait and the activity clock.
+        if (recordedAt.current === undefined)
+          recordedAt.current = attachmentRecordedAt(Date.now(), "audio");
         clock.current.resume();
         transition("recording");
       },
@@ -232,8 +244,14 @@ export default function RecordingPanel({
         clearDeadline();
         try {
           const file = recordingFile(blob);
-          finalFile.current = file;
-          void submit(file);
+          if (recordedAt.current === undefined)
+            throw Error("录音尚未确认开始时间，请重新录制。");
+          const result = Object.freeze({
+            file,
+            recordedAt: recordedAt.current,
+          });
+          finalResult.current = result;
+          void submit(result);
         } catch (e) {
           fail(e);
         }
@@ -267,8 +285,8 @@ export default function RecordingPanel({
   };
   const finish = () => {
     if (!live.current) return;
-    if (phase.current === "retry" && finalFile.current) {
-      void submit(finalFile.current);
+    if (phase.current === "retry" && finalResult.current) {
+      void submit(finalResult.current);
       return;
     }
     if (phase.current !== "paused") return;

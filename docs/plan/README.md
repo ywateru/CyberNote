@@ -38,7 +38,7 @@
 | APP-002-RECORDING-PREVIEW-01 暂停回放 | in-progress，源e01c90a独立SOURCE-READY、主e9e426f | 原P2重载就绪门禁关闭；独立repro/恢复4/模块16/有界提交后Panel25通过，原脚本两次时点失败保留非阻塞。主6源码同/build/preview16/父20通过；candidate03不含此实现。WK/Android真实前缀可播/可定位/可听与像素仍待后包 |
 | APP-001-SEARCH-FOCUS-01 Mac菜单搜索焦点 | in-progress，源d9bc5a4独立SOURCE-READY、主175cd1f | plugin精确MenuEvent同步请求真实唯一focused main当前enabled绑定，与IPC共body；独立与主cargo13/13通过、两产品hash同。无新包快输入/marked text实测，异常原因unknown和Tauri排队仍保留，不承诺已修复 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
-| APP-002-AUDIO-CARD-01 手机紧凑录音卡 | in-progress，标签源码整合门槛已通过，新主线隔离开发 | 原片35.5秒证三行标题/日期/音频·2秒与白播放按钮；recordedAt首次实际开始、operation重试/受权read/归档1与2兼容契约明确。尚未交付日期实现或新安装包；展开/原版取时/像素仍unknown |
+| APP-002-AUDIO-CARD-01 手机紧凑录音卡 | source-candidate，开发完成待不同作者独审 | 固定首次start日期已贯通RecordingResult/票据/operation/受权read与归档1/2；开发Rust47、Panel25、实际Panel到Rust5与真实卡片8场景通过，见verification/app-002-audio-card-01。尚无新安装包；展开/原版取时/像素仍unknown |
 | REF-SMART-FOLDERS-RUNTIME-01 原版智能视图 | ready，Mac当前锁定待解锁 | 已有表单选项证据不代表创建后结果；按专用合成目录/置顶/全部任意/搜索/新建/正常冷启步骤补证。存储与归档准备审计已保全，不把建议当原版行为 |
 | APP-003-TAGS-01 真实标签 | in-progress，候选04独审SOURCE-READY、主b598a74整合通过，设备待验 | 37ee2bd的12产品aggregate438a0cc3…逐字合入；独审12场景159 action关闭旧02活动组字丢输入和03结束后旧编辑器滞留。主build/schema96/access16/toolbar13/OCR37/标签27/save-boundary11（53 Store action）/composition12（170 action）/Rust指定1例通过；3次监听EPERM原日志保留、独立run02成功。root核68证据2517706B、aggregate632a5664…。历史失败保留；未进安装包，原生IME/native IPC/Session及像素unknown，不关闭父任务 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |

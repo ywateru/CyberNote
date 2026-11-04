@@ -1,0 +1,23 @@
+   Compiling notes-audio-card-store v0.1.0 (/private/tmp/apple-notes-audio-card-01/artifacts/audio-card-rust/run03/harness)
+warning: unused `std::result::Result` in tuple element 0 that must be used
+   --> src/session/tests.rs:591:5
+    |
+591 |     s.finish(&barrier, &windows(), false).unwrap();
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+    = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+
+warning: `notes-audio-card-store` (bin "notes-audio-card-store" test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.81s
+     Running unittests src/main.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/notes_audio_card_store-45a2b8af97fd77b9)
+
+running 5 tests
+test session::tests::recorded_at_retains_session_and_note_authority ... ok
+test store::recorded_at_tests::recorded_at_operation_snapshot_reopen_and_full_identity ... ok
+test store::recorded_at_tests::recorded_at_old_unknown_and_invalid_persisted_values_are_not_rewritten ... ok
+test store::recorded_at_tests::recorded_at_invalid_archives_reject_atomically_and_v1_stays_unknown ... ok
+test store::recorded_at_tests::recorded_at_archive_v2_twice_remaps_ids_and_preserves_date_and_bytes ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 42 filtered out; finished in 0.19s
+

@@ -366,8 +366,11 @@ fn copy_ids<'a>(
 
 impl Store {
     fn prepare_archive(&self, mut archive: Archive, transaction_id: &str) -> Result<ImportPlan> {
-        if archive.version != 1 {
+        if !matches!(archive.version, 1 | 2) {
             return Err(invalid("不支持此备份版本"));
+        }
+        if archive.version == 1 && archive.attachments.iter().any(|a| a.recorded_at.is_some()) {
+            return Err(invalid("版本1备份不能包含录音日期"));
         }
         if archive.folders.len() + archive.notes.len() + archive.attachments.len() > MAX_ENTITIES {
             return Err(limit("归档实体超过 10,000 项上限"));
@@ -522,7 +525,11 @@ impl Store {
             self.db
                 .query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
         let archive = Archive {
-            version: 1,
+            version: if attachments.iter().any(|a| a.recorded_at.is_some()) {
+                2
+            } else {
+                1
+            },
             folders,
             notes,
             attachments,

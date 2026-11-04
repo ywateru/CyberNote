@@ -1,0 +1,26 @@
+node:internal/modules/esm/resolve:839
+      const error = new ERR_UNSUPPORTED_RESOLVE_REQUEST(specifier, base);
+                    ^
+
+TypeError [ERR_UNSUPPORTED_RESOLVE_REQUEST]: Failed to resolve module specifier "./note-tags" from "data:text/javascript;base64,aW1wb3J0IHsgdmlzaXRUYWdTcGFucyB9IGZyb20gIi4vbm90ZS10YWdzIjsKLyoqIE9ubHkgZm9yIGEgdHJ1c3RlZCBsaXZlIEVkaXRvci9sb2NhbCB0cmFuc2FjdGlvbidzIG91dGdvaW5nIHNhdmUgYm9keS4KICogSU1FIHByZWVkaXQgY2FuIHRlbXBvcmFyaWx5IGludmFsaWRhdGUgYSB0YWcgaW4gdGhlIGFjdGl2ZSBkb2N1bWVudC4gS2VlcAogKiBldmVyeSBjaGFyYWN0ZXIgYW5kIG90aGVyIGZvcm1hdCBpbiBhIHNlcGFyYXRlIHNhdmUgcmVwcmVzZW50YXRpb24gd2l0aG91dAogKiB0b3VjaGluZyB0aGF0IEVkaXRvcidzIERPTSwgc2VsZWN0aW9uLCBjb21wb3NpdGlvbiwgaGlzdG9yeSwgb3IgaWRlbnRpdHkuCiAqIE5ldmVyIHVzZSB0aGlzIHRvIHJlcGFpciBleHRlcm5hbCBkb2N1bWVudHMsIElQQywgaW1wb3J0cyBvciBjaXBoZXJ0ZXh0LgogKi8KZXhwb3J0IGZ1bmN0aW9uIGVkaXRvclNhdmVTbmFwc2hvdChkb2N1bWVudCkgewogICAgY29uc3Qgc25hcHNob3QgPSBzdHJ1Y3R1cmVkQ2xvbmUoZG9jdW1lbnQpOwogICAgdmlzaXRUYWdTcGFucyhzbmFwc2hvdCwgKG5vZGVzLCBfbmFtZSwgbGVnYWwpID0+IHsKICAgICAgICBpZiAobGVnYWwpCiAgICAgICAgICAgIHJldHVybjsKICAgICAgICBmb3IgKGNvbnN0IG5vZGUgb2Ygbm9kZXMpIHsKICAgICAgICAgICAgY29uc3QgbWFya3MgPSBub2RlLm1hcmtzPy5maWx0ZXIoKG1hcmspID0+IG1hcmsudHlwZSAhPT0gIm5vdGVUYWciKTsKICAgICAgICAgICAgaWYgKG1hcmtzPy5sZW5ndGgpCiAgICAgICAgICAgICAgICBub2RlLm1hcmtzID0gbWFya3M7CiAgICAgICAgICAgIGVsc2UKICAgICAgICAgICAgICAgIGRlbGV0ZSBub2RlLm1hcmtzOwogICAgICAgIH0KICAgIH0pOwogICAgcmV0dXJuIHNuYXBzaG90Owp9Cg==": Invalid relative URL or base scheme is not hierarchical.
+    at moduleResolve (node:internal/modules/esm/resolve:839:21)
+    at defaultResolve (node:internal/modules/esm/resolve:984:11)
+    ... 4 lines matching cause stack trace ...
+    at ModuleJob._link (node:internal/modules/esm/module_job:137:49) {
+  code: 'ERR_UNSUPPORTED_RESOLVE_REQUEST',
+  cause: TypeError: Invalid URL
+      at new URL (node:internal/url:818:25)
+      at moduleResolve (node:internal/modules/esm/resolve:837:18)
+      at defaultResolve (node:internal/modules/esm/resolve:984:11)
+      at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:780:12)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:704:25)
+      at ModuleLoader.resolve (node:internal/modules/esm/loader:687:38)
+      at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:305:38)
+      at ModuleJob._link (node:internal/modules/esm/module_job:137:49) {
+    code: 'ERR_INVALID_URL',
+    input: './note-tags',
+    base: 'data:text/javascript;base64,aW1wb3J0IHsgdmlzaXRUYWdTcGFucyB9IGZyb20gIi4vbm90ZS10YWdzIjsKLyoqIE9ubHkgZm9yIGEgdHJ1c3RlZCBsaXZlIEVkaXRvci9sb2NhbCB0cmFuc2FjdGlvbidzIG91dGdvaW5nIHNhdmUgYm9keS4KICogSU1FIHByZWVkaXQgY2FuIHRlbXBvcmFyaWx5IGludmFsaWRhdGUgYSB0YWcgaW4gdGhlIGFjdGl2ZSBkb2N1bWVudC4gS2VlcAogKiBldmVyeSBjaGFyYWN0ZXIgYW5kIG90aGVyIGZvcm1hdCBpbiBhIHNlcGFyYXRlIHNhdmUgcmVwcmVzZW50YXRpb24gd2l0aG91dAogKiB0b3VjaGluZyB0aGF0IEVkaXRvcidzIERPTSwgc2VsZWN0aW9uLCBjb21wb3NpdGlvbiwgaGlzdG9yeSwgb3IgaWRlbnRpdHkuCiAqIE5ldmVyIHVzZSB0aGlzIHRvIHJlcGFpciBleHRlcm5hbCBkb2N1bWVudHMsIElQQywgaW1wb3J0cyBvciBjaXBoZXJ0ZXh0LgogKi8KZXhwb3J0IGZ1bmN0aW9uIGVkaXRvclNhdmVTbmFwc2hvdChkb2N1bWVudCkgewogICAgY29uc3Qgc25hcHNob3QgPSBzdHJ1Y3R1cmVkQ2xvbmUoZG9jdW1lbnQpOwogICAgdmlzaXRUYWdTcGFucyhzbmFwc2hvdCwgKG5vZGVzLCBfbmFtZSwgbGVnYWwpID0+IHsKICAgICAgICBpZiAobGVnYWwpCiAgICAgICAgICAgIHJldHVybjsKICAgICAgICBmb3IgKGNvbnN0IG5vZGUgb2Ygbm9kZXMpIHsKICAgICAgICAgICAgY29uc3QgbWFya3MgPSBub2RlLm1hcmtzPy5maWx0ZXIoKG1hcmspID0+IG1hcmsudHlwZSAhPT0gIm5vdGVUYWciKTsKICAgICAgICAgICAgaWYgKG1hcmtzPy5sZW5ndGgpCiAgICAgICAgICAgICAgICBub2RlLm1hcmtzID0gbWFya3M7CiAgICAgICAgICAgIGVsc2UKICAgICAgICAgICAgICAgIGRlbGV0ZSBub2RlLm1hcmtzOwogICAgICAgIH0KICAgIH0pOwogICAgcmV0dXJuIHNuYXBzaG90Owp9Cg=='
+  }
+}
+
+Node.js v22.16.0

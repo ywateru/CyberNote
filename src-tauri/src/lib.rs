@@ -214,6 +214,7 @@ fn store_attachment_operation(
     name: String,
     mime: String,
     data: String,
+    recorded_at: Option<u64>,
     expected: Token,
     window: tauri::WebviewWindow,
     state: State<AppState>,
@@ -242,6 +243,7 @@ fn store_attachment_operation(
             &mime,
             &bytes,
             &expected,
+            recorded_at,
         )
         .map_err(attachment_operation_error)
 }

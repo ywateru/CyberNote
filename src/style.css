@@ -809,6 +809,10 @@ a {
   font-size: 11px;
   color: var(--secondary);
 }
+.audio-recorded-at,
+.audio-duration-mobile {
+  display: none;
+}
 .audio-summary > .audio-play-toggle,
 .audio-summary > .audio-expand {
   background: #fff;
@@ -2276,16 +2280,29 @@ a {
   }
   .mobile .audio-summary {
     padding: 12px;
+    gap: 12px;
   }
   .mobile .audio-title-toggle {
     margin-block: -12px;
     padding-block: 12px;
   }
   .mobile .audio-summary strong {
-    font-size: 13px;
+    font-size: 15px;
+    line-height: 19px;
   }
   .mobile .audio-summary small {
-    font-size: 11px;
+    font-size: 12px;
+    line-height: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mobile .audio-recorded-at,
+  .mobile .audio-duration-mobile {
+    display: block;
+  }
+  .mobile .audio-duration-desktop {
+    display: none;
   }
   .mobile .audio-summary > button {
     font-size: 13px;

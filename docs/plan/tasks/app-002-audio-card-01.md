@@ -1,7 +1,7 @@
 ---
 id: app-002-audio-card-01
 scope: saved-recording-timestamp-and-mobile-compact-card
-status: in-progress
+status: source-candidate
 depends-on: [app-003-tags-01]
 ---
 
@@ -38,3 +38,11 @@ RecordingSession/Panel完成结果、App录音票据和提交batch、AttachmentS
 UI仅对新紧凑卡作真实组件检查：三行、未知日期两行、独立短总时长及既有进度表达不变、读失败/换ID/卸载/权限变化不串旧值、长标题/窄屏。执行typecheck、相关生产边界回归与必要Rust定向检查，不为可逆样式变化写镜像测试。共享Rust target需root明确分配；每输出阶段≥2GiB，无下载/升级/平台构建、target复制或泛清缓存。
 
 开发完成精确冻结SHA和证据，交不同作者独审后才能SOURCE-READY；root再按受影响平台构建安装，实际新录音保存/正常退出或force-stop冷启、日期/文件/正文复核并据原片作有边界对照。源码/有限功能通过不等于全卡交互或像素通过。原录屏低分辨率、未知长时长/深色/展开和原版取时规则均继续记录。
+
+## execution 2026-11-04
+
+从96b2263隔离于`task/app-002-audio-card-01`开发，源码候选已接通第一次成功start后的固定UTC毫秒→RecordingResult→原票据/operation→preparing及公开元数据→同权限read→手机日期行；旧未知无回填，外部mtime不取值。归档1/2与严格非法持久值拒绝同步实现，完整Attachment Eq、目标身份、正文ACK、补偿及播放器不放宽。
+
+开发检查使用准确本树offline/locked Rust Session/Store、新命名CLI和纯合成字节；真实Panel/Session→实际App闭包→production Submission/bridge/SaveQueue→真实Rust临时DB覆盖权限等待、跨日长暂停、响应丢失、正文ACK失败、refresh失败和旧目标晚响应。另有实际Editor NodeView卡片320/390与桌面检查、原有录音及附件回归。精确命令、失败首轮、最终源码哈希和边界在`docs/verification/app-002-audio-card-01/README.md`。
+
+此记录仅为开发交付候选，待不同作者独立源码审查；SOURCE-READY、合入、Mac/Android新包、真实有效音轨、设备冷启与原版像素对照由root后续完成。原片取时规则、长时长格式、深色、展开及所有像素一致性继续unknown。未运行平台构建、GUI/ADB、下载、依赖升级或设备数据复制。

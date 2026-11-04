@@ -151,12 +151,19 @@ impl Session {
         mime: &str,
         bytes: &[u8],
         token: &Token,
+        recorded_at: Option<u64>,
     ) -> Result<Value> {
         self.sensitive(note, token)?;
         let owner = self.attachment_owner(window)?;
-        let value = self
-            .store
-            .store_attachment_operation(operation, note, &owner, name, mime, bytes)?;
+        let value = self.store.store_attachment_operation(
+            operation,
+            note,
+            &owner,
+            name,
+            mime,
+            bytes,
+            recorded_at,
+        )?;
         self.tagged(value)
     }
     pub fn query_attachment_operation(

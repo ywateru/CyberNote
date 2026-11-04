@@ -1,0 +1,16 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: false == true
+    at file:///private/tmp/apple-notes-audio-card-01/scripts/check-recording-panel-browser.mjs:673:12
+    at async test (file:///private/tmp/apple-notes-audio-card-01/scripts/check-recording-panel-browser.mjs:128:5)
+    at async file:///private/tmp/apple-notes-audio-card-01/scripts/check-recording-panel-browser.mjs:630:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '=='
+}
+
+Node.js v22.16.0

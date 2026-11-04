@@ -1,0 +1,171 @@
+{
+  "status": "passed",
+  "groups": 8,
+  "results": [
+    {
+      "name": "cancel waits across actual FileReader before authoritative terminal cancellation",
+      "calls": [
+        {
+          "command": "store_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        },
+        {
+          "command": "cancel_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        }
+      ],
+      "final": {
+        "backendStoredOperations": 0,
+        "frontendBatches": 0,
+        "frontendSubmissions": 0,
+        "targetInvalidated": true
+      }
+    },
+    {
+      "name": "cancel waits for already-dispatched native IPC to settle",
+      "calls": [
+        {
+          "command": "store_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        },
+        {
+          "command": "cancel_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        }
+      ],
+      "final": {
+        "backendStoredOperations": 0,
+        "frontendBatches": 0,
+        "frontendSubmissions": 0,
+        "targetInvalidated": true
+      }
+    },
+    {
+      "name": "store response loss after write still waits then cancels actual original operation",
+      "calls": [
+        {
+          "command": "store_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        },
+        {
+          "command": "cancel_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        }
+      ],
+      "final": {
+        "backendStoredOperations": 0,
+        "frontendBatches": 0,
+        "frontendSubmissions": 0,
+        "targetInvalidated": true
+      }
+    },
+    {
+      "name": "FileReader failure settles before notPersisted may release identity",
+      "calls": [
+        {
+          "command": "cancel_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        }
+      ],
+      "final": {
+        "backendStoredOperations": 0,
+        "frontendBatches": 0,
+        "frontendSubmissions": 0,
+        "targetInvalidated": true
+      }
+    },
+    {
+      "name": "deferred cancellation retains every unresolved identity and retries cancellation",
+      "firstCancellation": {
+        "success": false,
+        "message": "附件已保留待恢复（save_pending）"
+      },
+      "calls": [
+        {
+          "command": "store_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        },
+        {
+          "command": "cancel_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        },
+        {
+          "command": "cancel_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        }
+      ],
+      "final": {
+        "backendStoredOperations": 0,
+        "frontendBatches": 0,
+        "frontendSubmissions": 0,
+        "targetInvalidated": true
+      }
+    },
+    {
+      "name": "cancel response rejected after backend deletion keeps identity until fresh terminal response",
+      "calls": [
+        {
+          "command": "store_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        },
+        {
+          "command": "cancel_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        },
+        {
+          "command": "cancel_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        }
+      ],
+      "final": {
+        "backendStoredOperations": 0,
+        "frontendBatches": 0,
+        "frontendSubmissions": 0,
+        "targetInvalidated": true
+      }
+    },
+    {
+      "name": "target invalidation while storage settles retains recovery identity and refuses unrelated authority",
+      "calls": [
+        {
+          "command": "store_attachment_operation",
+          "operationId": "4b462c24-3a75-47fe-8b9f-259214cfd720"
+        }
+      ],
+      "final": {
+        "backendStoredOperations": 1,
+        "frontendBatches": 1,
+        "frontendSubmissions": 1,
+        "targetInvalidated": true
+      }
+    },
+    {
+      "name": "known local insertion rejects cancellation before sealing or backend cleanup",
+      "cancellation": {
+        "success": false,
+        "message": "附件已在本窗口正文中，须先确认保存；不会删除待保存的附件"
+      },
+      "final": {
+        "backendStoredOperations": 0,
+        "frontendBatches": 1,
+        "frontendSubmissions": 1,
+        "targetInvalidated": false
+      }
+    }
+  ],
+  "sourceSha256": {
+    "attachment-submission": "4c44ecd682e8f2fa04d40a87445d6dfe47e1cc7f40dac6691367e75a74225833",
+    "recording-metadata": "4630348ffaab79e799e5417b1b256e4957df5460fda8c3966482d0ad766d3131",
+    "audio-playback": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+    "trusted-synchronization": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128",
+    "attachment-target": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+    "document-equality": "629d2729ac47626f6618f13d6858c98dc5a0f654a4b53ba70f6ec0731204db7d",
+    "bridge": "dd4235c56649a0bee8b69abd8f51863c4927cc83859f42915cdc5799b65fd483",
+    "access-client": "fb3a9a062fbee9b5b68ca5a8bcbd8cb0de49170b5af35f907d95d09a0ba70d10",
+    "secure-id": "04eb982510ffd3b6a6931f3f61ddbf1cc53d981d2e8aac281a5110c7c112c3ab",
+    "proof-access": "64b235d209e03649d340354b1aa187efd2fe872cfbc9e007951306359c3ca3ca",
+    "types": "bf762765cba32b67751ac62b25bfc358b053a627d7866df929337f12e1b79c03",
+    "App": "162799db0e605bdc1419f39fd0561e71d07de5bb8d3cfde468b3e9e5e5833c67"
+  },
+  "execution": "AST-extracted production App validate/submit/cancel + production submission/bridge/trusted synchronization/AccessGate + real ProseMirror bookmark; controlled FileReader/invoke; no Rust DB, device, picker or GUI acceptance."
+}

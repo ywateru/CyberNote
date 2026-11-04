@@ -1,0 +1,22 @@
+   Compiling notes-audio-card-store v0.1.0 (/private/tmp/apple-notes-audio-card-01/artifacts/audio-card-rust/run02/harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.85s
+     Running unittests src/main.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/notes_audio_card_store-45a2b8af97fd77b9)
+
+running 4 tests
+
+thread 'store::recorded_at_tests::recorded_at_operation_snapshot_reopen_and_full_identity' (36627848) panicked at src/store/recorded_at_tests.rs:29:10:
+called `Result::unwrap()` on an `Err` value: AppError { code: "attachment_operation_incomplete", message: "本次附件操作未完成或已取消，请查询状态后处理" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test store::recorded_at_tests::recorded_at_operation_snapshot_reopen_and_full_identity ... FAILED
+test store::recorded_at_tests::recorded_at_old_unknown_and_invalid_persisted_values_are_not_rewritten ... ok
+test store::recorded_at_tests::recorded_at_invalid_archives_reject_atomically_and_v1_stays_unknown ... ok
+test store::recorded_at_tests::recorded_at_archive_v2_twice_remaps_ids_and_preserves_date_and_bytes ... ok
+
+failures:
+
+failures:
+    store::recorded_at_tests::recorded_at_operation_snapshot_reopen_and_full_identity
+
+test result: FAILED. 3 passed; 1 failed; 0 ignored; 0 measured; 42 filtered out; finished in 0.20s
+
+error: test failed, to rerun pass `--bin notes-audio-card-store`

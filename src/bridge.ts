@@ -1,6 +1,7 @@
 import { listen } from "@tauri-apps/api/event";
 import { AccessGate } from "./access-client";
 import { secureId } from "./secure-id";
+import { attachmentRecordedAt } from "./recording-metadata";
 import type { AttachmentOperationResult } from "./attachment-submission";
 import type { AccessEvent, AccessState } from "./types";
 import { invoke as nativeInvoke, isTauri } from "@tauri-apps/api/core";
@@ -285,7 +286,14 @@ export async function action<T = Workspace>(
 export async function storeAttachment(
   noteId: string,
   file: File,
+  recordedAt?: number,
 ): Promise<Attachment> {
+  const date = attachmentRecordedAt(
+    recordedAt,
+    file.type.startsWith("audio/") ? "audio" : "file",
+  );
+  if (native && date !== undefined)
+    throw Error("录音日期必须通过原附件持久操作提交");
   const data = await fileBase64(file);
   if (native) {
     const stamp = accessGate.stamp(noteId);
@@ -316,6 +324,7 @@ export async function storeAttachment(
     mime: file.type,
     displayName: file.name,
     size: file.size,
+    ...(date === undefined ? {} : { recordedAt: date }),
   };
   preview.attachments.push(a);
   localStorage.setItem(`preview-file-${a.id}`, data);
@@ -326,12 +335,17 @@ export async function storeAttachmentOperation(
   operationId: string,
   noteId: string,
   file: File,
+  recordedAt?: number,
 ): Promise<AttachmentOperationResult> {
   if (!native) throw Error("附件持久提交请在已安装的应用中使用");
   // Capture before file reading: a focus/access change during FileReader
   // must reject the result, even if the backend has already stored bytes.
   const stamp = accessGate.stamp(noteId);
   const expected = accessGate.expected(noteId);
+  const date = attachmentRecordedAt(
+    recordedAt,
+    file.type.startsWith("audio/") ? "audio" : "file",
+  );
   const data = await fileBase64(file);
   const result = accept<AttachmentOperationResult>(
     await invoke("store_attachment_operation", {
@@ -341,6 +355,7 @@ export async function storeAttachmentOperation(
       mime: file.type || "application/octet-stream",
       data,
       expected,
+      ...(date === undefined ? {} : { recordedAt: date }),
     }),
     stamp,
   );
@@ -380,7 +395,12 @@ export const cancelAttachmentOperation = (
   );
 export async function readAttachment(
   id: string,
-): Promise<{ data: string; mime: string; name: string }> {
+): Promise<{
+  data: string;
+  mime: string;
+  name: string;
+  recordedAt?: number | null;
+}> {
   if (native) {
     const noteId = attachmentOwners.get(id);
     if (!noteId) throw Error("附件不存在");
@@ -398,6 +418,7 @@ export async function readAttachment(
     data: localStorage.getItem(`preview-file-${id}`) || "",
     mime: a?.mime || "",
     name: a?.displayName || "",
+    recordedAt: attachmentRecordedAt(a?.recordedAt, a?.kind || "file"),
   };
 }
 export function fileBase64(file: Blob): Promise<string> {

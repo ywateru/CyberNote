@@ -26,6 +26,7 @@
 - [手机已保存录音卡片结构与证据边界](ui/audio-card-mobile.md)
 - [已保存录音真实日期接入准备审计](research/saved-audio-timestamp-readiness-20261104-01.md)
 - [录音日期与手机紧凑卡片校准任务](plan/tasks/app-002-audio-card-01.md)
+- [录音日期源码候选开发检查、原始失败与证据](verification/app-002-audio-card-01/README.md)
 - [本地OCR文字确认界面（工程预览，原版待证）](ui/ocr-text.md)
 - [手机纸张选择页几何测量](research/mobile-paper-calibration/analysis.md)
 - [标签、智能文件夹、数学与笔记链接](ui/local-features.md)

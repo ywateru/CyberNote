@@ -29,6 +29,7 @@ fn put(store: &mut Store, op: &str, note: &str, owner: &AttachmentOwner) -> Valu
             "sample.pdf",
             "application/pdf",
             b"owned-new-file",
+            None,
         )
         .unwrap()
 }
@@ -95,7 +96,7 @@ fn duplicate_response_loss_and_foreign_identity_do_not_create_or_overwrite() {
     ] {
         assert_eq!(
             store
-                .store_attachment_operation(&op, &note, &owner, name, mime, bytes)
+                .store_attachment_operation(&op, &note, &owner, name, mime, bytes, None)
                 .unwrap_err()
                 .code,
             "attachment_operation_conflict"
@@ -130,7 +131,8 @@ fn duplicate_response_loss_and_foreign_identity_do_not_create_or_overwrite() {
                     identity,
                     "sample.pdf",
                     "application/pdf",
-                    b"owned-new-file"
+                    b"owned-new-file",
+                    None
                 )
                 .unwrap_err()
                 .code,
@@ -168,7 +170,8 @@ fn invalid_operation_shape_and_history_limit_fail_before_new_file_creation() {
                     &owner,
                     "proof.pdf",
                     "application/pdf",
-                    b"data"
+                    b"data",
+                    None
                 )
                 .unwrap_err()
                 .code,
@@ -182,7 +185,8 @@ fn invalid_operation_shape_and_history_limit_fail_before_new_file_creation() {
             &owner,
             "bad\nname",
             "application/pdf",
-            b"data"
+            b"data",
+            None
         )
         .is_err());
     let operation = id();
@@ -197,7 +201,8 @@ fn invalid_operation_shape_and_history_limit_fail_before_new_file_creation() {
                 &owner,
                 "proof.pdf",
                 "application/pdf",
-                b"data"
+                b"data",
+                None
             )
             .unwrap_err()
             .code,
@@ -312,7 +317,8 @@ fn filesystem_and_sqlite_failures_keep_recoverable_private_records() {
             &owner,
             "sample.pdf",
             "application/pdf",
-            b"owned-new-file"
+            b"owned-new-file",
+            None
         )
         .is_err());
     let pending = store.attachment_operation(&op).unwrap().unwrap();
@@ -335,7 +341,8 @@ fn filesystem_and_sqlite_failures_keep_recoverable_private_records() {
                 &owner,
                 "sample.pdf",
                 "application/pdf",
-                b"owned-new-file"
+                b"owned-new-file",
+                None
             )
             .unwrap_err()
             .code,
@@ -397,7 +404,8 @@ fn filesystem_and_sqlite_failures_keep_recoverable_private_records() {
             &owner,
             "sample.pdf",
             "application/pdf",
-            b"owned-new-file"
+            b"owned-new-file",
+            None
         )
         .is_err());
     assert_eq!(
@@ -559,7 +567,8 @@ fn locked_owner_defers_cold_cleanup_and_pending_purge_collects_its_new_file() {
             &owner,
             "sample.pdf",
             "application/pdf",
-            b"owned-new-file"
+            b"owned-new-file",
+            None
         )
         .is_err());
     store
@@ -606,7 +615,8 @@ fn locked_owner_defers_cold_cleanup_and_pending_purge_collects_its_new_file() {
             &owner,
             "sample.pdf",
             "application/pdf",
-            b"owned-new-file"
+            b"owned-new-file",
+            None
         )
         .is_err());
     store
