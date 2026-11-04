@@ -1,7 +1,7 @@
 ---
 id: app-smart-o-metadata09
 scope: Session metadata ordering and editor ownership
-status: in-progress
+status: done
 depends-on: [app-smart-d2-durable-rules09]
 ---
 
@@ -40,3 +40,7 @@ settings属于纯UI偏好，本批排除metadata通知；unlock/closeLocks仅改
 需用真实Store/Session和真实bridge/挂载App接缝验证：两个窗口定义CAS；先新通知后旧workspace；原note有效save ACK落后于新metadata仍正确排空pending且无旧正文发布；ACK先到但同seq事件仍刷新；定义变化期间同Editor/Undo/活动组字保持；lock/delete/import真实屏障回归；新进程/旧token/通知丢失恢复。可控制实际回包交付次序，不能把测试自造模型当生产协议。只执行有区分力的必要测试和typecheck/build；作者STOP、固定commit、不同作者独审后再U，不宣称设备/像素已通过。
 
 检查保持locked/offline、jobs2、至少2GiB、共享hosttarget独占与每次600秒有界；触及lib后允许一次真实宿主cargo check --locked --offline --lib，前端typecheck/build及必要受控测试允许。禁止下载/升级依赖、清缓存、GUI/ADB/用户库、平台打包/安装；正式双端包待U源码通过后串行执行。
+
+## Accepted source milestone
+
+2026-11-04，固定产品源码`08d2206`经不同作者独审pass，无已确认finding；[作者证据](../../verification/app-smart-o-metadata09/README.md)记录最终完整Rust78/0/3既有ignored、AccessGate16/0、前端build及真实宿主check通过。[独立审查](../reviews/app-smart-o-metadata09.md)补最终源码10项Rust窄测试、8条不同bridge/实际App挂载路径，31项固定输入与准确transport前后不变；两次独立probe的fixture/预期修正原样保留，不将整体exit1冒称exit0。作者早期browser04不代替最终覆盖，最终路径由独审补齐。此done仅指O源码契约通过；公开smart门禁保持关闭，U接入、真实双端包/多原生窗/设备IME/像素仍待验证。

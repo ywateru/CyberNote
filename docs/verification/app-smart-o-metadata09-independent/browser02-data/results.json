@@ -1,0 +1,19 @@
+{
+  "binaryHash": "036d509015f9dfde7f2fd0a82826da6e02857785a92b6bc7752d721b788e906c",
+  "observedApp": true,
+  "results": [
+    {
+      "name": "independent-mounted-save-ack-after-lock-commit-cannot-publish-body",
+      "before": {
+        "oldDestroyed": true,
+        "authorized": false,
+        "body": "{\"content\":[{\"attrs\":{\"level\":1},\"type\":\"heading\"}],\"type\":\"doc\"}",
+        "pending": true,
+        "applied": 5
+      },
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\ntrue !== false\n"
+    }
+  ],
+  "errors": []
+}

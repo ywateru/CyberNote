@@ -1,7 +1,7 @@
 ---
 id: app-smart-u-platform-ui09
 scope: Real Mac and Android smart folder forms and navigation
-status: pending
+status: in-progress
 depends-on: [app-smart-o-metadata09]
 ---
 

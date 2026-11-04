@@ -178,6 +178,12 @@ Folder 旧物理六字段严格解码，未知字段和类型不能忽略，缺�
 
 当前源码契约以 [D2任务](plan/tasks/app-smart-d2-durable-rules09.md) 为准：DB2、智能归档3，严格智能分支，标签四模式及置顶all/any真实求值，定义更新/删除CAS，统一物理owner/parent能力，沿现归档冲突映射与事务。旧1/2归档语义保留。普通与智能名称trim后均限1..4096 UTF-8字节，创建/改名在写入前拒绝超限，与live open一致。公开Session在UI适配完成前明确拒绝含smart工作区及导入；内部真实Store已通过持久化、重开和归档测试及独立审查，不能把旧UI直接暴露给新数据。完整离线规则与两端入口仍为目标；用户选择暂不进行原版删除实验，文件夹引用规则及删除联动后续补齐。此处是内部源码交付，不代表新平台包、端到端交互或像素验收；O通知/保存所有权与U双端界面继续推进。
 
+### 元数据顺序与被动刷新（APP-SMART-O，源码通过）
+
+源码`08d2206`的[O契约](plan/tasks/app-smart-o-metadata09.md)及[独立审查](plan/reviews/app-smart-o-metadata09.md)为当前准则：Store在真实public提交后形成调用隔离收据，独立于Result；Session在现mutex内持有同access进程身份和0..JS安全整数的metadata sequence，每次有public提交的命令推进一次，容量在文件/intent/数据库效果前检查。维护或响应读取失败保留错误、成功事实、必要新ID/保存revision，不发假abort。设置与纯access不推进；私有附件journal/幂等确认排除。事件只含序号、种类、ID和必要revision，锁内定序、释放mutex后发送。
+
+Renderer区分observed和实际hydrate后的applied，先无副作用验证access及metadata再发布；旧workspace不能污染授权/附件owner缓存。合法旧save ACK确认原revision并清对应pending，不发布旧正文；pending overlay清除后即使同seq也再读权威数据。普通metadata刷新不flush或完整权限同步，保留本窗偏好、Editor、Undo、组字和书签；真实access失效仍遮挡并沿既有屏障，新进程必须可信同步。屏障提交后先撤权再重读工作区，不能复用撤权前的解密响应。O作者与不同作者独立验证均通过，尚无真实多原生窗/设备/像素结论；U适配完成前renderer智能能力继续关闭。
+
 必须逐项验证真实链路：Shell 选择→Editor 初始化；Editor transaction→保存队列→Rust→SQLite→重启；文件选择→Rust 附件复制→编辑器节点→重启预览；搜索→本地数据→列表选择；删除→最近删除→恢复；移动→计数/列表；录音→实际媒体→附件保存→播放；绘画→JSON/图片→重启编辑。先做核心闭环，然后以同一契约补齐功能，不隐藏未实现入口。
 
 

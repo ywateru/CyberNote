@@ -25,6 +25,8 @@
 - [真实智能规则与归档接入任务09](plan/tasks/app-smart-d2-durable-rules09.md)
 - [智能规则通知与保存所有权任务09](plan/tasks/app-smart-o-metadata09.md)
 - [通知与保存所有权源码08d2206作者记录及覆盖限制](verification/app-smart-o-metadata09/README.md)
+- [通知与保存所有权最终源码独立审查](plan/reviews/app-smart-o-metadata09.md)
+- [最终源码10项Rust与8条不同挂载/桥接路径独立证据](verification/app-smart-o-metadata09-independent/README.md)
 - [智能规则两端真实界面任务09](plan/tasks/app-smart-u-platform-ui09.md)
 - [原版智能规则取消、候选与正常冷启补证07](research/smart-folder-original-runtime07/README.md)
 - [原版智能规则补证07独立核查](research/smart-folder-original-runtime07-independent-01/README.md)

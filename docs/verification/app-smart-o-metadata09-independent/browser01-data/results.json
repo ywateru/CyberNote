@@ -1,0 +1,118 @@
+{
+  "binaryHash": "036d509015f9dfde7f2fd0a82826da6e02857785a92b6bc7752d721b788e906c",
+  "observedApp": true,
+  "results": [
+    {
+      "name": "observed-ack-does-not-consume-equal-event",
+      "result": {
+        "before": 3,
+        "observed": 4,
+        "applied": 3,
+        "needed": true,
+        "after": 4,
+        "revision": 2
+      },
+      "passed": true
+    },
+    {
+      "name": "old-workspace-cannot-remove-created-access-before-save-ack",
+      "result": {
+        "id": "19c1c91b-6ff3-4323-8d16-0510df008f17",
+        "before": {
+          "authorized": true,
+          "epoch": 0
+        },
+        "after": {
+          "authorized": true,
+          "epoch": 0
+        },
+        "old": "metadata_stale",
+        "accepted": true,
+        "revision": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "successful-create-id-survives-newer-access",
+      "result": {
+        "id": "472818ae-23d7-4996-822a-536c7fa438f0",
+        "accessAccepted": false,
+        "hasValue": false,
+        "creates": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "mounted-metadata-keeps-editor-composition-undo-bookmarks-pending",
+      "result": {
+        "same": true,
+        "sameDom": true,
+        "composing": true,
+        "editable": true,
+        "undo": 1,
+        "beforeUndo": 1,
+        "bookmark": true,
+        "pending": true,
+        "baseline": 1,
+        "beforeBaseline": 1,
+        "settings": {
+          "selectedFolder": "default",
+          "selectedNote": "f8f1ea2c-634f-4e3f-a336-89ffa6328c24",
+          "sort": "title",
+          "theme": "light"
+        },
+        "synchronizing": false
+      },
+      "passed": true
+    },
+    {
+      "name": "mounted-newer-hydrate-overlay-then-older-save-ack-reveals-authority",
+      "before": {
+        "pending": true,
+        "text": "local pending",
+        "baseline": 1
+      },
+      "after": {
+        "saved": {
+          "saved": true
+        },
+        "baseline": 3,
+        "revision": 3,
+        "applied": 5,
+        "observed": 5
+      },
+      "passed": true
+    },
+    {
+      "name": "mounted-lost-event-focus-recovery-preserves-editor",
+      "result": {
+        "same": true,
+        "folder": "lost event recovered",
+        "synchronizing": false
+      },
+      "passed": true
+    },
+    {
+      "name": "mounted-new-process-requires-trusted-sync-before-publishing",
+      "before": {
+        "covered": true,
+        "session": "3b96334f-32e9-4c9c-a0e1-d44bea2c088f"
+      },
+      "after": {
+        "session": "b25eb657-504d-4aa0-beb1-35f6060176fb",
+        "metadata": {
+          "sequence": 1,
+          "sessionId": "b25eb657-504d-4aa0-beb1-35f6060176fb"
+        },
+        "folder": "new process folder"
+      },
+      "passed": true
+    },
+    {
+      "name": "independent-mounted-save-ack-after-lock-commit-cannot-publish-body",
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(!JSON.stringify(locked).includes(\"PRIVATE ORDERING MARKER\"))\n"
+    }
+  ],
+  "errors": []
+}

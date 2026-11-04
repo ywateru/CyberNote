@@ -1,0 +1,65 @@
+{
+  "reviewedSourceCommit": "08d220664c28a7bd8647e27d3bf1e73f823c4c89",
+  "currentHead": "51b2cdfdf7479801563d3d0dd94c32decf6e0500",
+  "fixedSourceInputs": 31,
+  "authorFinalEvidenceRecordsVerified": [
+    "run05-final-regression",
+    "host-check01",
+    "frontend-build01",
+    "transport-build03",
+    "access-regression01"
+  ],
+  "distinctPassedRustTests": 10,
+  "distinctPassedBrowserScenarios": 8,
+  "retainedProbeFixtureFailures": [
+    "browser01: private marker was also the public title",
+    "browser02: invalid access ACK was incorrectly expected to clear pre-existing pending without delivered prepare"
+  ],
+  "allProductionInputsUnchanged": true,
+  "finalBinarySha256": "036d509015f9dfde7f2fd0a82826da6e02857785a92b6bc7752d721b788e906c",
+  "runs": {
+    "browser01": {
+      "exitCode": 1,
+      "seconds": 8.372,
+      "sourceUnchanged": true,
+      "freeBefore": 70327066624,
+      "freeAfter": 70326554624
+    },
+    "browser02": {
+      "exitCode": 1,
+      "seconds": 4.093,
+      "sourceUnchanged": true,
+      "freeBefore": 70143725568,
+      "freeAfter": 70140563456
+    },
+    "browser03": {
+      "exitCode": 0,
+      "seconds": 4.24,
+      "sourceUnchanged": true,
+      "freeBefore": 70137884672,
+      "freeAfter": 70137503744
+    },
+    "rust01": {
+      "exitCode": 0,
+      "seconds": 0.414,
+      "sourceUnchanged": true,
+      "freeBefore": 70132625408,
+      "freeAfter": 70132899840
+    },
+    "rust02": {
+      "exitCode": 0,
+      "seconds": 0.527,
+      "sourceUnchanged": true,
+      "freeBefore": 70149509120,
+      "freeAfter": 70149476352
+    },
+    "rust03": {
+      "exitCode": 0,
+      "seconds": 1.176,
+      "sourceUnchanged": true,
+      "freeBefore": 70149451776,
+      "freeAfter": 70149365760
+    }
+  },
+  "scope": "Real Store/Session and mounted production bridge/App/Editor; controlled transport, not native Tauri IPC or device IME."
+}
