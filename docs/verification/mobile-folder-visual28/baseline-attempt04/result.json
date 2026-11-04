@@ -1,0 +1,464 @@
+{
+  "phase": "baseline",
+  "scope": "Actual production App/Editor/bridge browser-preview transport, isolated localStorage, complete production CSS plus candidate delta until style freeze lifted; headless Chrome on macOS, simulated viewport/DPR, no actual Android host/native touch proof",
+  "checks": [
+    "quick button enters actual notes page",
+    "ordinary folder enters actual notes page"
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "snapshots": {
+    "mobile": {
+      "viewport": [
+        390,
+        746
+      ],
+      "dpr": 2.769230842590332,
+      "root": "app   mobile   page-folders  ",
+      "title": {
+        "tag": "H1",
+        "class": "folder-large-title",
+        "rect": {
+          "x": 16,
+          "y": 46,
+          "width": 358,
+          "height": 41
+        },
+        "styles": {
+          "font": "700 34px / 41px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "41px",
+          "letterSpacing": "0.3px",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "search": {
+        "tag": "DIV",
+        "class": "mobile-folder-search",
+        "rect": {
+          "x": 0,
+          "y": 96,
+          "width": 390,
+          "height": 36
+        },
+        "styles": {
+          "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "rows": [
+        {
+          "text": "快速备忘录0",
+          "tag": "BUTTON",
+          "class": "folder-row ",
+          "rect": {
+            "x": 16,
+            "y": 148,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": "lucide lucide-sticky-note",
+              "rect": {
+                "x": 32,
+                "y": 158,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 158,
+                "width": 254.71875,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 330.71875,
+                "y": 160,
+                "width": 10.28125,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 162.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "全部备忘录8",
+          "tag": "BUTTON",
+          "class": "folder-row selected",
+          "rect": {
+            "x": 16,
+            "y": 255,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": "lucide lucide-folder-open",
+              "rect": {
+                "x": 32,
+                "y": 265,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 265,
+                "width": 254.5625,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 330.5625,
+                "y": 267,
+                "width": 10.4375,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 269.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "备忘录8",
+          "tag": "BUTTON",
+          "class": "folder-row ",
+          "rect": {
+            "x": 16,
+            "y": 299,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": "lucide lucide-folder",
+              "rect": {
+                "x": 32,
+                "y": 309,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 309,
+                "width": 254.5625,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 330.5625,
+                "y": 311,
+                "width": 10.4375,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 313.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "QA-Smart1",
+          "tag": "BUTTON",
+          "class": "folder-row ",
+          "rect": {
+            "x": 16,
+            "y": 343,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": "lucide lucide-folder-cog",
+              "rect": {
+                "x": 32,
+                "y": 353,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 355,
+                "width": 257.53125,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 333.53125,
+                "y": 355,
+                "width": 7.46875,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 357.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        }
+      ],
+      "footer": {
+        "tag": "DIV",
+        "class": "folder-footer",
+        "rect": {
+          "x": 0,
+          "y": 694,
+          "width": 390,
+          "height": 52
+        },
+        "styles": {
+          "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "class": null,
+          "rect": {
+            "x": 17,
+            "y": 708,
+            "width": 24,
+            "height": 24
+          },
+          "styles": {
+            "font": "12px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "class": "icon-button  ",
+          "rect": {
+            "x": 343,
+            "y": 702.5,
+            "width": 30,
+            "height": 35
+          },
+          "styles": {
+            "font": "12px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          }
+        }
+      ],
+      "selectedText": ""
+    }
+  },
+  "status": "fail",
+  "failure": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '取消', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" aria-label=\"取消\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"mobile-folder-nav\">…</div> from <aside class=\"sidebar\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"mobile-folder-nav\">…</div> from <aside class=\"sidebar\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"mobile-folder-nav\">…</div> from <aside class=\"sidebar\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+}

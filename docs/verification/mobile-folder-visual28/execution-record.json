@@ -1,0 +1,62 @@
+{
+  "scope": "Actual recorded author invocations, no invented timing; platform builds not run",
+  "finalCommands": [
+    {
+      "argv": [
+        "node",
+        "docs/verification/mobile-folder-visual28/check-app.mjs",
+        "docs/verification/mobile-folder-visual28/baseline-attempt06",
+        "baseline"
+      ],
+      "exitCode": 0,
+      "checks": 7
+    },
+    {
+      "argv": [
+        "node",
+        "docs/verification/mobile-folder-visual28/check-app.mjs",
+        "docs/verification/mobile-folder-visual28/candidate-attempt03",
+        "candidate"
+      ],
+      "exitCode": 0,
+      "checks": 7
+    },
+    {
+      "argv": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exitCode": 0
+    },
+    {
+      "argv": [
+        "python3",
+        "docs/verification/mobile-folder-visual28/measure.py"
+      ],
+      "exitCode": 0
+    },
+    {
+      "argv": [
+        "node",
+        "docs/verification/mobile-folder-visual28/finalize.mjs"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "environmentPaths": {
+    "PLAYWRIGHT_CORE_PATH": "/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/index.mjs",
+    "CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  },
+  "cleanup": "All browser/server/Vite instances finished through finally; task-local run caches retained and excluded from index, no shared cache touched",
+  "notesPngDifference": {
+    "changedPixels": 8,
+    "bbox": [
+      175,
+      291,
+      188,
+      325
+    ],
+    "maxChannelDelta": 1,
+    "noZeroDifferenceRerun": true
+  }
+}

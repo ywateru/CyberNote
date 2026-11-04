@@ -1,0 +1,191 @@
+{
+  "scope": "Narrow fix01 independent actual App/fullCSS coordinate hit and page isolation; no native device or OS input.",
+  "checks": [
+    {
+      "name": "original24x24 button and34x24 extension",
+      "pass": true
+    },
+    {
+      "name": "plus-center actual coordinate opens exactly expected dialog",
+      "pass": true
+    },
+    {
+      "name": "circle-near-right-inside actual coordinate opens exactly expected dialog",
+      "pass": true
+    },
+    {
+      "name": "original-button-center actual coordinate opens exactly expected dialog",
+      "pass": true
+    },
+    {
+      "name": "one-pixel-outside-right actual coordinate opens exactly expected dialog",
+      "pass": true
+    },
+    {
+      "name": "one-pixel-outside-top actual coordinate opens exactly expected dialog",
+      "pass": true
+    },
+    {
+      "name": "one-pixel-outside-bottom actual coordinate opens exactly expected dialog",
+      "pass": true
+    },
+    {
+      "name": "notes has no pseudo and unchanged static position",
+      "pass": true
+    },
+    {
+      "name": "desktop has no pseudo and unchanged static position",
+      "pass": true
+    },
+    {
+      "name": "no JS errors or external requests",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "mobile": {
+    "rect": {
+      "x": 17,
+      "y": 708,
+      "width": 24,
+      "height": 24
+    },
+    "position": "relative",
+    "pseudo": {
+      "content": "\"\"",
+      "width": "34px",
+      "height": "24px",
+      "right": "-10px",
+      "top": "0px",
+      "bottom": "0px",
+      "left": "0px"
+    },
+    "svg": "<svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><path d=\"M24 5.6h-9l-2.5-2.5H6.2a1.6 1.6 0 0 0-1.6 1.6v14.7A1.6 1.6 0 0 0 6.2 21h19.2a1.6 1.6 0 0 0 1.6-1.6v-8.1M4.6 8.8h18.2\"></path><circle cx=\"28.6\" cy=\"5\" r=\"4\"></circle><path d=\"M26.6 5h4m-2-2v4\"></path></svg>"
+  },
+  "clicks": [
+    {
+      "name": "plus-center",
+      "point": {
+        "x": 45.6,
+        "y": 713
+      },
+      "element": {
+        "tag": "BUTTON",
+        "class": "",
+        "label": "新建文件夹"
+      },
+      "expectedOpen": true,
+      "actualDialogs": 1
+    },
+    {
+      "name": "circle-near-right-inside",
+      "point": {
+        "x": 49,
+        "y": 713
+      },
+      "element": {
+        "tag": "BUTTON",
+        "class": "",
+        "label": "新建文件夹"
+      },
+      "expectedOpen": true,
+      "actualDialogs": 1
+    },
+    {
+      "name": "original-button-center",
+      "point": {
+        "x": 29,
+        "y": 720
+      },
+      "element": {
+        "tag": "BUTTON",
+        "class": "",
+        "label": "新建文件夹"
+      },
+      "expectedOpen": true,
+      "actualDialogs": 1
+    },
+    {
+      "name": "one-pixel-outside-right",
+      "point": {
+        "x": 52,
+        "y": 713
+      },
+      "element": {
+        "tag": "DIV",
+        "class": "folder-footer",
+        "label": null
+      },
+      "expectedOpen": false,
+      "actualDialogs": 0
+    },
+    {
+      "name": "one-pixel-outside-top",
+      "point": {
+        "x": 45.6,
+        "y": 707
+      },
+      "element": {
+        "tag": "DIV",
+        "class": "folder-footer",
+        "label": null
+      },
+      "expectedOpen": false,
+      "actualDialogs": 0
+    },
+    {
+      "name": "one-pixel-outside-bottom",
+      "point": {
+        "x": 45.6,
+        "y": 733
+      },
+      "element": {
+        "tag": "DIV",
+        "class": "folder-footer",
+        "label": null
+      },
+      "expectedOpen": false,
+      "actualDialogs": 0
+    }
+  ],
+  "notes": {
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "position": "static",
+    "pseudo": {
+      "content": "none",
+      "width": "auto",
+      "height": "auto",
+      "right": "auto",
+      "top": "auto",
+      "bottom": "auto",
+      "left": "auto"
+    },
+    "svg": "<svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><path d=\"M24 5.6h-9l-2.5-2.5H6.2a1.6 1.6 0 0 0-1.6 1.6v14.7A1.6 1.6 0 0 0 6.2 21h19.2a1.6 1.6 0 0 0 1.6-1.6v-8.1M4.6 8.8h18.2\"></path><circle cx=\"28.6\" cy=\"5\" r=\"4\"></circle><path d=\"M26.6 5h4m-2-2v4\"></path></svg>"
+  },
+  "desktop": {
+    "rect": {
+      "x": 17,
+      "y": 623,
+      "width": 88,
+      "height": 21
+    },
+    "position": "static",
+    "pseudo": {
+      "content": "none",
+      "width": "auto",
+      "height": "auto",
+      "right": "auto",
+      "top": "auto",
+      "bottom": "auto",
+      "left": "auto"
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder-plus\"><path d=\"M12 10v6\"></path><path d=\"M9 13h6\"></path><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path></svg>"
+  },
+  "status": "pass"
+}

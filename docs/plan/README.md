@@ -16,7 +16,7 @@
 | APP-MAC-ORDINARY-SURFACE20 普通表单表面与角部 | done（有限表面范围），Mac11实际/独核通过 | 准确94fbbb36/3cc7188d新包486项核包、运行23及202项证据独核；量图25平坦色对齐/角差304→8/checkbox实际mask616→8，800×414保持。名称/焦点/标签/字形与全像素仍open |
 | APP-MAC-SIDEBAR-PREFERENCE22 侧栏显隐偏好 | done（有限偏好范围），Mac11实际/独核通过 | 单键本地settings及首次可信恢复；运行23两入口/动态菜单、hidden/visible各正常与紧接CmdQ恢复通过，PID45493→45907→45957→46007→46056/exe同SHA；202项静态独核。无内部ACK/任意退出保证/新增CmdQ握手，全像素与多窗仍open |
 | APP-MAC-ORDINARY-NAME-FOCUS26 名称焦点/选择/对齐 | source-reviewed，实际Mac12待验 | cdbfde60局部CSS；作者23/独立14有限WK通过，Safari暖选区及文字对齐有有限补强，灰内边消除。角/字形/真实App取消与侧栏仍待联合29实包，父目标active |
-| APP-MOBILE-FOLDER-VISUAL28 手机文件夹局部视觉 | ready | 准确06研究27定位quick文字/图形、普通folder宽、footer形状锚点、标题墨迹；局部生产渲染→独审→新Android07实际触摸/量图，不扩张整体像素结论 |
+| APP-MOBILE-FOLDER-VISUAL28 手机文件夹局部视觉 | source-reviewed，实际Android07待验 | 局部SVG/文字槽/标题候选及plus命中修复；首版P2保留，fix01独立10坐标与9静态检查通过。下一29准确新包触摸/量图，不授整体像素结论 |
 | REF-001 原版取证/需求/UI/调研 | in-progress | 原视频已保全、抽帧、初始规格已写，持续补证 |
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |

@@ -1,0 +1,652 @@
+{
+  "phase": "candidate",
+  "scope": "task28 CSS hit extension only: actual App and full CSS, isolated browser preview; no native Android or OS input proof",
+  "checks": [
+    "visible circle center, inner right/top/bottom, outer right stroke and original center plus outside bounds",
+    "notes page has no expanded pseudo or positioning",
+    "desktop has no expanded pseudo or positioning"
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "snapshots": {
+    "mobile": {
+      "viewport": [
+        390,
+        746
+      ],
+      "dpr": 2.769230842590332,
+      "root": "app   mobile   page-folders  ",
+      "title": {
+        "tag": "H1",
+        "class": "folder-large-title",
+        "rect": {
+          "x": 16,
+          "y": 46,
+          "width": 358,
+          "height": 41
+        },
+        "styles": {
+          "font": "700 31.5px / 41px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "41px",
+          "letterSpacing": "0.3px",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "search": {
+        "tag": "DIV",
+        "class": "mobile-folder-search",
+        "rect": {
+          "x": 0,
+          "y": 96,
+          "width": 390,
+          "height": 36
+        },
+        "styles": {
+          "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "rows": [
+        {
+          "text": "快速备忘录0",
+          "tag": "BUTTON",
+          "class": "folder-row mobile-quick-folder-row ",
+          "rect": {
+            "x": 16,
+            "y": 148,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": null,
+              "rect": {
+                "x": 32,
+                "y": 158,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 73,
+                "y": 158,
+                "width": 247.71875,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 330.71875,
+                "y": 160,
+                "width": 10.28125,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 162.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "全部备忘录8",
+          "tag": "BUTTON",
+          "class": "folder-row selected",
+          "rect": {
+            "x": 16,
+            "y": 255,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": "lucide lucide-folder-open",
+              "rect": {
+                "x": 32,
+                "y": 265,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 265,
+                "width": 254.5625,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 330.5625,
+                "y": 267,
+                "width": 10.4375,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 269.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "备忘录8",
+          "tag": "BUTTON",
+          "class": "folder-row  ",
+          "rect": {
+            "x": 16,
+            "y": 299,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": null,
+              "rect": {
+                "x": 32,
+                "y": 309,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 309,
+                "width": 254.5625,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 330.5625,
+                "y": 311,
+                "width": 10.4375,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 313.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "QA-Smart1",
+          "tag": "BUTTON",
+          "class": "folder-row  ",
+          "rect": {
+            "x": 16,
+            "y": 343,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": "lucide lucide-folder-cog",
+              "rect": {
+                "x": 32,
+                "y": 353,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 355,
+                "width": 257.53125,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 333.53125,
+                "y": 355,
+                "width": 7.46875,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 357.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        }
+      ],
+      "footer": {
+        "tag": "DIV",
+        "class": "folder-footer",
+        "rect": {
+          "x": 0,
+          "y": 694,
+          "width": 390,
+          "height": 52
+        },
+        "styles": {
+          "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "class": null,
+          "rect": {
+            "x": 17,
+            "y": 708,
+            "width": 24,
+            "height": 24
+          },
+          "styles": {
+            "font": "12px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "class": "icon-button  ",
+          "rect": {
+            "x": 343,
+            "y": 702.5,
+            "width": 30,
+            "height": 35
+          },
+          "styles": {
+            "font": "12px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          }
+        }
+      ],
+      "selectedText": ""
+    }
+  },
+  "beforeHit": {
+    "rect": {
+      "x": 17,
+      "y": 708,
+      "width": 24,
+      "height": 24
+    },
+    "position": "relative",
+    "pseudo": {
+      "content": "\"\"",
+      "position": "absolute",
+      "top": "0px",
+      "right": "-10px",
+      "bottom": "0px",
+      "left": "0px",
+      "width": "34px",
+      "height": "24px"
+    },
+    "svg": "<svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><path d=\"M24 5.6h-9l-2.5-2.5H6.2a1.6 1.6 0 0 0-1.6 1.6v14.7A1.6 1.6 0 0 0 6.2 21h19.2a1.6 1.6 0 0 0 1.6-1.6v-8.1M4.6 8.8h18.2\"></path><circle cx=\"28.6\" cy=\"5\" r=\"4\"></circle><path d=\"M26.6 5h4m-2-2v4\"></path></svg>"
+  },
+  "clicks": [
+    {
+      "name": "plus-center",
+      "point": {
+        "x": 45.6,
+        "y": 713
+      },
+      "element": {
+        "tag": "BUTTON",
+        "class": "",
+        "label": "新建文件夹"
+      },
+      "expectedOpen": true,
+      "actualDialogs": 1
+    },
+    {
+      "name": "circle-right-inner",
+      "point": {
+        "x": 49,
+        "y": 713
+      },
+      "element": {
+        "tag": "BUTTON",
+        "class": "",
+        "label": "新建文件夹"
+      },
+      "expectedOpen": true,
+      "actualDialogs": 1
+    },
+    {
+      "name": "circle-top-inner",
+      "point": {
+        "x": 45.6,
+        "y": 709.6
+      },
+      "element": {
+        "tag": "BUTTON",
+        "class": "",
+        "label": "新建文件夹"
+      },
+      "expectedOpen": true,
+      "actualDialogs": 1
+    },
+    {
+      "name": "circle-bottom-inner",
+      "point": {
+        "x": 45.6,
+        "y": 716.4
+      },
+      "element": {
+        "tag": "BUTTON",
+        "class": "",
+        "label": "新建文件夹"
+      },
+      "expectedOpen": true,
+      "actualDialogs": 1
+    },
+    {
+      "name": "circle-right-outer-stroke",
+      "point": {
+        "x": 50.1,
+        "y": 713
+      },
+      "element": {
+        "tag": "BUTTON",
+        "class": "",
+        "label": "新建文件夹"
+      },
+      "expectedOpen": true,
+      "actualDialogs": 1
+    },
+    {
+      "name": "original-center",
+      "point": {
+        "x": 29,
+        "y": 720
+      },
+      "element": {
+        "tag": "BUTTON",
+        "class": "",
+        "label": "新建文件夹"
+      },
+      "expectedOpen": true,
+      "actualDialogs": 1
+    },
+    {
+      "name": "outside-right",
+      "point": {
+        "x": 51.25,
+        "y": 713
+      },
+      "element": {
+        "tag": "DIV",
+        "class": "folder-footer",
+        "label": null
+      },
+      "expectedOpen": false,
+      "actualDialogs": 0
+    },
+    {
+      "name": "outside-top",
+      "point": {
+        "x": 45.6,
+        "y": 707
+      },
+      "element": {
+        "tag": "DIV",
+        "class": "folder-footer",
+        "label": null
+      },
+      "expectedOpen": false,
+      "actualDialogs": 0
+    },
+    {
+      "name": "outside-bottom",
+      "point": {
+        "x": 45.6,
+        "y": 733
+      },
+      "element": {
+        "tag": "DIV",
+        "class": "folder-footer",
+        "label": null
+      },
+      "expectedOpen": false,
+      "actualDialogs": 0
+    }
+  ],
+  "notesHit": {
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "position": "static",
+    "pseudo": {
+      "content": "none",
+      "position": "static",
+      "top": "auto",
+      "right": "auto",
+      "bottom": "auto",
+      "left": "auto",
+      "width": "auto",
+      "height": "auto"
+    },
+    "svg": "<svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><path d=\"M24 5.6h-9l-2.5-2.5H6.2a1.6 1.6 0 0 0-1.6 1.6v14.7A1.6 1.6 0 0 0 6.2 21h19.2a1.6 1.6 0 0 0 1.6-1.6v-8.1M4.6 8.8h18.2\"></path><circle cx=\"28.6\" cy=\"5\" r=\"4\"></circle><path d=\"M26.6 5h4m-2-2v4\"></path></svg>"
+  },
+  "desktopHit": {
+    "rect": {
+      "x": 17,
+      "y": 623,
+      "width": 88,
+      "height": 21
+    },
+    "position": "static",
+    "pseudo": {
+      "content": "none",
+      "position": "static",
+      "top": "auto",
+      "right": "auto",
+      "bottom": "auto",
+      "left": "auto",
+      "width": "auto",
+      "height": "auto"
+    },
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder-plus\"><path d=\"M12 10v6\"></path><path d=\"M9 13h6\"></path><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path></svg>"
+  },
+  "status": "pass"
+}

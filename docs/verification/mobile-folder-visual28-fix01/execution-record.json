@@ -1,0 +1,42 @@
+{
+  "scope": "CSS-only task28 fix01 finite actual-App hit testing; no repeated old seven tests/typecheck/native build",
+  "runs": [
+    {
+      "directory": "baseline-attempt01",
+      "script": "check-hit-attempt01.mjs",
+      "phase": "baseline",
+      "exitCode": 0,
+      "result": "pass; reproduces dead visible plus"
+    },
+    {
+      "directory": "candidate-attempt01",
+      "script": "check-hit-attempt01.mjs",
+      "phase": "candidate",
+      "exitCode": 1,
+      "result": "failed outside-top at 0.25 CSS px exterior; preserved"
+    },
+    {
+      "directory": "baseline-boundary-probe01",
+      "script": "check-hit.mjs",
+      "phase": "baseline",
+      "extraArgument": "boundary-probe",
+      "exitCode": 0,
+      "result": "finite diagnostic; original button also hits upper 0.25px exterior but not 1px exterior"
+    },
+    {
+      "directory": "candidate-attempt02",
+      "script": "check-hit.mjs",
+      "phase": "candidate",
+      "exitCode": 0,
+      "result": "9 actual-coordinate checks and notes/desktop isolation passed"
+    }
+  ],
+  "runtime": {
+    "PLAYWRIGHT_CORE_PATH": "/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/index.mjs",
+    "CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "network": "ephemeral 127.0.0.1 Vite/HTTP; external requests aborted",
+    "data": "isolated browser-preview localStorage"
+  },
+  "comparison": "comparison.json",
+  "sealedEvidence": "sealed-input-check.json"
+}

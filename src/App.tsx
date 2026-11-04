@@ -16,6 +16,11 @@ import {
 } from "./recording-metadata";
 import { TagComposition } from "./tag-composition";
 import { SmartFolderForm, type FolderFormHandle } from "./SmartFolderForm";
+import {
+  MobileQuickFolderIcon,
+  MobileClosedFolderIcon,
+  MobileAddFolderIcon,
+} from "./MobileFolderIcons";
 import { draftQuery, type FolderDraft } from "./smart-draft";
 import {
   isPhysicalOwner,
@@ -2457,7 +2462,7 @@ function App() {
   const folderRow = (f: FolderData, depth = 0) => (
     <div key={f.id}>
       <button
-        className={`folder-row ${tagFilter === undefined && folderId === f.id ? "selected" : ""}`}
+        className={`folder-row ${mobile && f.kind === "quick" ? "mobile-quick-folder-row" : ""} ${tagFilter === undefined && folderId === f.id ? "selected" : ""}`}
         style={{ paddingLeft: mobile ? 16 : 16 + depth * 14 }}
         onClick={() => chooseFolder(f.id)}
         onContextMenu={(e) => {
@@ -2477,9 +2482,11 @@ function App() {
         {f.kind === "smart" ? (
           <FolderCog />
         ) : f.kind === "quick" ? (
-          <StickyNote />
+          mobile ? <MobileQuickFolderIcon /> : <StickyNote />
         ) : f.kind === "trash" ? (
           <Trash2 />
+        ) : mobile ? (
+          <MobileClosedFolderIcon />
         ) : (
           <Folder />
         )}
@@ -4099,7 +4106,7 @@ function App() {
             aria-label="新建文件夹"
             onClick={() => openModal("newFolder")}
           >
-            <FolderPlus size={21} />
+            {mobile ? <MobileAddFolderIcon /> : <FolderPlus size={21} />}
             {!mobile && "新建文件夹"}
           </button>
           <IconButton

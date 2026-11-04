@@ -105,3 +105,5 @@ recovery02已实机保存plain并重开，和原86秒帧均为空白纸张选中
 ## 文件夹首页局部校准28（2026-11-05）
 
 准确Android06与原视频共享ROI准备见[研究27](../research/android-folders-readiness27/analysis.md)，实现边界及ASCII布局见[任务28](../plan/tasks/app-mobile-folder-visual28.md)。保留卡片/搜索/行高/计数右锚与真实目录，只校准快速行文字槽距、三类手机本地SVG、底栏图标绘制和标题行内墨迹；Mac/all/smart/trash不改。参考低清且不同内容，不拉伸纵向、伪造目录或判整页像素通过。新准确APK的触摸/长按和复拍仍是交付门槛。
+
+28源阶段已独审接收。底栏外侧plus超出原24px按钮，已以仅文件夹页透明伪元素向右扩10px补齐命中；可见几何和原按钮布局不变。模拟宿主plus中心/右内部与原中心可开，外1px不误开，实际Android07仍待验。详见[fix01独审](../plan/reviews/app-mobile-folder-visual28-fix01.md)。

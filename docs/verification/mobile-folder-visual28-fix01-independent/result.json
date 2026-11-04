@@ -1,0 +1,53 @@
+{
+  "at": "2026-11-05T05:12:44.324841+08:00",
+  "status": "pass",
+  "readyStop": true,
+  "scope": "Narrow CSS-only mobile folder add-button hit correction and finite drawing preservation; no native device or complete pixel acceptance.",
+  "p2": "closed",
+  "counts": {
+    "identityPassed": 98,
+    "staticPassed": 9,
+    "freshAppPassed": 10,
+    "protectedUnchanged": 98
+  },
+  "sourceFiles": [
+    {
+      "path": "src/App.tsx",
+      "bytes": 179881,
+      "sha256": "d7b20f13b2ee076ab2708c0e837be60f8b2387a2bdeccc6d2fa8ae9e06526911",
+      "unchanged": true
+    },
+    {
+      "path": "src/MobileFolderIcons.tsx",
+      "bytes": 1673,
+      "sha256": "bcfb1e37dc95761342ec3c4669c3444a432c7236c90ea239160f5b9d4283395f",
+      "unchanged": true
+    },
+    {
+      "path": "src/SmartFolderForm.tsx",
+      "bytes": 27898,
+      "sha256": "b2e4d60e5cbe0265b1bca7a67cd5c2d7412b3697e34152d870c0d0344770c15c",
+      "unchanged": true
+    },
+    {
+      "path": "src/smart-folders.css",
+      "bytes": 11044,
+      "sha256": "cdbfde60942488be5e9b4002924162d4d21850a1d71fc352176e86cb122a160c",
+      "unchanged": true
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 67180,
+      "sha256": "5a2b7d26059476f68ebc88319467acd339bee3acf299e6f20007459eb0b35c25",
+      "unchanged": true
+    }
+  ],
+  "report": "docs/plan/reviews/app-mobile-folder-visual28-fix01.md",
+  "limits": [
+    "macOS Chrome mock mobile host only; Android07/native touch/Back/OS keyboard unverified",
+    "Author quarter-pixel exterior failure and matching baseline boundary observation retained; one CSS px exterior passed",
+    "Only three sealed mock-host screenshot pairs decode pixel-identically",
+    "Existing title, low-resolution recording, icon/font, notes eight pixels max-channel-one limitations remain",
+    "No rerun of previous seven cases or typecheck; no product/Git/task/shared evidence mutation"
+  ]
+}

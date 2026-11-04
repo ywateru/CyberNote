@@ -1,0 +1,126 @@
+{
+  "checks": [
+    {
+      "name": "App has only declared import/class/mobile icon changes",
+      "pass": true
+    },
+    {
+      "name": "CSS only two page-folders declarations inside existing mobile media",
+      "pass": true
+    },
+    {
+      "name": "exact src/App.tsx",
+      "pass": true
+    },
+    {
+      "name": "exact src/style.css",
+      "pass": true
+    },
+    {
+      "name": "exact src/MobileFolderIcons.tsx",
+      "pass": true
+    },
+    {
+      "name": "exact src/smart-folders.css",
+      "pass": true
+    },
+    {
+      "name": "independent AST all seven event bodies preserved",
+      "pass": true
+    },
+    {
+      "name": "long press timeout remains520ms",
+      "pass": true
+    },
+    {
+      "name": "three local decorative SVG trees without own events or external refs",
+      "pass": true
+    },
+    {
+      "name": "author seven-class actual App records bounded pass",
+      "pass": true
+    },
+    {
+      "name": "title41px row/search/footer and footer button rectangles preserved",
+      "pass": true
+    },
+    {
+      "name": "only quick text slot moves; rows/counts/chevrons remain",
+      "pass": true
+    },
+    {
+      "name": "five fresh bounded checks pass",
+      "pass": true
+    },
+    {
+      "name": "dead plus reproduced by coordinate click and hit-test",
+      "pass": true
+    }
+  ],
+  "failed": 0,
+  "eventChecks": [
+    {
+      "name": "onClick",
+      "unchanged": true,
+      "sha256": "d4d08d78838e35087b017f6a2d38731c4f86dcf355836e295168b9ffc7291732"
+    },
+    {
+      "name": "onContextMenu",
+      "unchanged": true,
+      "sha256": "759728a9e5e019836834a4020096bd76feeb47d32d3662b8bfe701dbca02d337"
+    },
+    {
+      "name": "onTouchEnd",
+      "unchanged": true,
+      "sha256": "454eaa75d4b1257aa80fb7782660ce9dbfd6f9103a3ecc6105f4c5b714291a44"
+    },
+    {
+      "name": "onTouchMove",
+      "unchanged": true,
+      "sha256": "454eaa75d4b1257aa80fb7782660ce9dbfd6f9103a3ecc6105f4c5b714291a44"
+    },
+    {
+      "name": "onTouchStart",
+      "unchanged": true,
+      "sha256": "1540acd33bdbc4f7567a24ca1656a901d51c8cfc5991dd640637643329404782"
+    },
+    {
+      "name": "startLong",
+      "unchanged": true,
+      "sha256": "8e72fd326bdae64cd462ad4c42861700ad5ff9a0a3af901862330c0d9305ee4d"
+    },
+    {
+      "name": "stopLong",
+      "unchanged": true,
+      "sha256": "b05e36dcc85d9679e252ad51642748adf5bd48acffe57f16ad47adb1b14b234d"
+    }
+  ],
+  "blocker": {
+    "severity": "P2",
+    "blocking": true,
+    "name": "Painted add-folder plus is outside production button hit region",
+    "confirmed": true,
+    "record": {
+      "buttonRect": {
+        "x": 17,
+        "y": 708,
+        "width": 24,
+        "height": 24
+      },
+      "svgRect": {
+        "x": 17,
+        "y": 708,
+        "width": 24,
+        "height": 24
+      },
+      "paintedPlusCenter": {
+        "x": 45.60000000000001,
+        "y": 713
+      },
+      "plusCenterWithinButton": false,
+      "elementAtPlusCenter": "<div class=\"folder-footer\"><button aria-label=\"新建文件夹\"><svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><path d=\"M24 5.6h-9l-2.5-2.5H6.2a1.6 1.",
+      "plusCenterResolvesToButton": false,
+      "plusCenterClickOpensDialog": false
+    }
+  }
+}

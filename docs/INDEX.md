@@ -66,6 +66,8 @@
 - [名称与手机文件夹下一准确双端包准备29](verification/unified-candidate06/name-mobile29-preparation/README.md)
 - [Android文件夹首页准确06差异准备27](research/android-folders-readiness27/analysis.md)
 - [手机文件夹首页局部图标、文字与标题校准28](plan/tasks/app-mobile-folder-visual28.md)
+- [手机可见加号命中修复28独立复核](plan/reviews/app-mobile-folder-visual28-fix01.md)
+- [手机文件夹28源阶段根接收](verification/mobile-folder-visual28-root-acceptance.md)
 - [Android05实际运行独立证据核对](verification/android-smart-u-runtime09-independent/README.md)
 - [Mac09实际运行独立证据核对](verification/mac-smart-u-runtime09-independent/README.md)
 - [Mac智能文件夹表单布局](ui/smart-folders-macos.md)

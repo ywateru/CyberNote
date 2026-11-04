@@ -1,0 +1,17 @@
+--- a/src/style.css (sealed first task28 candidate)
++++ b/src/style.css (fix01)
+@@ -1993,6 +1993,14 @@
+   .mobile .folder-footer > button {
+     color: var(--accent);
+   }
++  .mobile.page-folders .folder-footer > button:first-child {
++    position: relative;
++  }
++  .mobile.page-folders .folder-footer > button:first-child::before {
++    content: "";
++    position: absolute;
++    inset: 0 -10px 0 0;
++  }
+   .mobile .folder-footer .icon-button {
+     height: 35px;
+     width: 30px;

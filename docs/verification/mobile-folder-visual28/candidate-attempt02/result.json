@@ -1,0 +1,919 @@
+{
+  "phase": "candidate",
+  "scope": "Actual production App/Editor/bridge browser-preview transport, isolated localStorage, complete actual production CSS; baseline only replaces its saved style.css and App source; headless Chrome on macOS, simulated viewport/DPR, no actual Android host/native touch proof",
+  "checks": [
+    "quick button enters actual notes page",
+    "ordinary folder enters actual notes page",
+    "actual footer opens new folder and cancel unmounts without folder mutation",
+    "unchanged 520ms long press opens actual menu, no DOM selection, scrim dismisses",
+    "touchmove cancels original long press",
+    "touchend cancels original long press",
+    "long name and actual 1234 count retain ellipsis and count/chevron anchors on 280 viewport"
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "snapshots": {
+    "mobile": {
+      "viewport": [
+        390,
+        746
+      ],
+      "dpr": 2.769230842590332,
+      "root": "app   mobile   page-folders  ",
+      "title": {
+        "tag": "H1",
+        "class": "folder-large-title",
+        "rect": {
+          "x": 16,
+          "y": 46,
+          "width": 358,
+          "height": 41
+        },
+        "styles": {
+          "font": "700 31.5px / 41px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "41px",
+          "letterSpacing": "0.3px",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "search": {
+        "tag": "DIV",
+        "class": "mobile-folder-search",
+        "rect": {
+          "x": 0,
+          "y": 96,
+          "width": 390,
+          "height": 36
+        },
+        "styles": {
+          "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "rows": [
+        {
+          "text": "快速备忘录0",
+          "tag": "BUTTON",
+          "class": "folder-row mobile-quick-folder-row ",
+          "rect": {
+            "x": 16,
+            "y": 148,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": null,
+              "rect": {
+                "x": 32,
+                "y": 158,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 73,
+                "y": 158,
+                "width": 247.71875,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 330.71875,
+                "y": 160,
+                "width": 10.28125,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 162.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "全部备忘录8",
+          "tag": "BUTTON",
+          "class": "folder-row selected",
+          "rect": {
+            "x": 16,
+            "y": 255,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": "lucide lucide-folder-open",
+              "rect": {
+                "x": 32,
+                "y": 265,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 265,
+                "width": 254.5625,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 330.5625,
+                "y": 267,
+                "width": 10.4375,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 269.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "备忘录8",
+          "tag": "BUTTON",
+          "class": "folder-row  ",
+          "rect": {
+            "x": 16,
+            "y": 299,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": null,
+              "rect": {
+                "x": 32,
+                "y": 309,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 309,
+                "width": 254.5625,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 330.5625,
+                "y": 311,
+                "width": 10.4375,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 313.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "QA-Smart1",
+          "tag": "BUTTON",
+          "class": "folder-row  ",
+          "rect": {
+            "x": 16,
+            "y": 343,
+            "width": 358,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": "lucide lucide-folder-cog",
+              "rect": {
+                "x": 32,
+                "y": 353,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 355,
+                "width": 257.53125,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 333.53125,
+                "y": 355,
+                "width": 7.46875,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 346,
+                "y": 357.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        }
+      ],
+      "footer": {
+        "tag": "DIV",
+        "class": "folder-footer",
+        "rect": {
+          "x": 0,
+          "y": 694,
+          "width": 390,
+          "height": 52
+        },
+        "styles": {
+          "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "class": null,
+          "rect": {
+            "x": 17,
+            "y": 708,
+            "width": 24,
+            "height": 24
+          },
+          "styles": {
+            "font": "12px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "class": "icon-button  ",
+          "rect": {
+            "x": 343,
+            "y": 702.5,
+            "width": 30,
+            "height": 35
+          },
+          "styles": {
+            "font": "12px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          }
+        }
+      ],
+      "selectedText": ""
+    },
+    "stress": {
+      "viewport": [
+        280,
+        500
+      ],
+      "dpr": 2,
+      "root": "app   mobile   page-folders  ",
+      "title": {
+        "tag": "H1",
+        "class": "folder-large-title",
+        "rect": {
+          "x": 16,
+          "y": 46,
+          "width": 248,
+          "height": 41
+        },
+        "styles": {
+          "font": "700 31.5px / 41px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "41px",
+          "letterSpacing": "0.3px",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "search": {
+        "tag": "DIV",
+        "class": "mobile-folder-search",
+        "rect": {
+          "x": 0,
+          "y": 96,
+          "width": 280,
+          "height": 36
+        },
+        "styles": {
+          "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "rows": [
+        {
+          "text": "快速备忘录0",
+          "tag": "BUTTON",
+          "class": "folder-row mobile-quick-folder-row ",
+          "rect": {
+            "x": 16,
+            "y": 148,
+            "width": 248,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": null,
+              "rect": {
+                "x": 32,
+                "y": 158,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 73,
+                "y": 158,
+                "width": 137.71875,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 220.71875,
+                "y": 160,
+                "width": 10.28125,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 236,
+                "y": 162.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "全部备忘录1234",
+          "tag": "BUTTON",
+          "class": "folder-row selected",
+          "rect": {
+            "x": 16,
+            "y": 255,
+            "width": 248,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": "lucide lucide-folder-open",
+              "rect": {
+                "x": 32,
+                "y": 265,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 265,
+                "width": 116.96875,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 192.96875,
+                "y": 267,
+                "width": 38.03125,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 236,
+                "y": 269.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称长文件夹名称1234",
+          "tag": "BUTTON",
+          "class": "folder-row  ",
+          "rect": {
+            "x": 16,
+            "y": 299,
+            "width": 248,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": null,
+              "rect": {
+                "x": 32,
+                "y": 309,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 309,
+                "width": 116.96875,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 192.96875,
+                "y": 311,
+                "width": 38.03125,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 236,
+                "y": 313.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        },
+        {
+          "text": "QA-Smart1",
+          "tag": "BUTTON",
+          "class": "folder-row  ",
+          "rect": {
+            "x": 16,
+            "y": 343,
+            "width": 248,
+            "height": 44
+          },
+          "styles": {
+            "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          },
+          "children": [
+            {
+              "tag": "svg",
+              "class": "lucide lucide-folder-cog",
+              "rect": {
+                "x": 32,
+                "y": 353,
+                "width": 24,
+                "height": 24
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": null,
+              "rect": {
+                "x": 66,
+                "y": 355,
+                "width": 147.53125,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis"
+              }
+            },
+            {
+              "tag": "SPAN",
+              "class": "count",
+              "rect": {
+                "x": 223.53125,
+                "y": 355,
+                "width": 7.46875,
+                "height": 20
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "visible",
+                "textOverflow": "clip"
+              }
+            },
+            {
+              "tag": "svg",
+              "class": "lucide lucide-chevron-right chevron",
+              "rect": {
+                "x": 236,
+                "y": 357.5,
+                "width": 12,
+                "height": 15
+              },
+              "styles": {
+                "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+                "lineHeight": "normal",
+                "letterSpacing": "normal",
+                "overflow": "hidden",
+                "textOverflow": "clip"
+              }
+            }
+          ]
+        }
+      ],
+      "footer": {
+        "tag": "DIV",
+        "class": "folder-footer",
+        "rect": {
+          "x": 0,
+          "y": 448,
+          "width": 280,
+          "height": 52
+        },
+        "styles": {
+          "font": "17px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "overflow": "visible",
+          "textOverflow": "clip"
+        }
+      },
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "class": null,
+          "rect": {
+            "x": 17,
+            "y": 462,
+            "width": 24,
+            "height": 24
+          },
+          "styles": {
+            "font": "12px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          }
+        },
+        {
+          "tag": "BUTTON",
+          "class": "icon-button  ",
+          "rect": {
+            "x": 233,
+            "y": 456.5,
+            "width": 30,
+            "height": 35
+          },
+          "styles": {
+            "font": "12px -apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+            "lineHeight": "normal",
+            "letterSpacing": "normal",
+            "overflow": "visible",
+            "textOverflow": "clip"
+          }
+        }
+      ],
+      "selectedText": ""
+    }
+  },
+  "status": "fail",
+  "failure": "Error: page.evaluate: TypeError: Cannot read properties of null (reading 'tagName')\n    at inspect (eval at evaluate (:311:30), <anonymous>:1:131)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:573)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+}

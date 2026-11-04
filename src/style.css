@@ -1885,6 +1885,12 @@ a {
     letter-spacing: 0.3px;
     flex-shrink: 0;
   }
+  .mobile.page-folders .folder-large-title {
+    font-size: 31.5px;
+  }
+  .mobile.page-folders .mobile-quick-folder-row > svg:first-child {
+    margin-right: 7px;
+  }
   .mobile-folder-search,
   .mobile-list-search {
     display: flex;
@@ -1986,6 +1992,14 @@ a {
   }
   .mobile .folder-footer > button {
     color: var(--accent);
+  }
+  .mobile.page-folders .folder-footer > button:first-child {
+    position: relative;
+  }
+  .mobile.page-folders .folder-footer > button:first-child::before {
+    content: "";
+    position: absolute;
+    inset: 0 -10px 0 0;
   }
   .mobile .folder-footer .icon-button {
     height: 35px;

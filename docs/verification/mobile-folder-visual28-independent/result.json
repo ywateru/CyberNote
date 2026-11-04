@@ -1,0 +1,77 @@
+{
+  "status": "blocked",
+  "stop": true,
+  "scope": "Task28 independent source review and small actual production App/fullCSS browser-host verification",
+  "protectedFiles": 70,
+  "protectedInputsUnchanged": true,
+  "identityChecks": 69,
+  "identityFailures": 0,
+  "staticChecks": 14,
+  "staticFailures": 0,
+  "freshBoundedChecks": 5,
+  "freshBoundedChecksPass": true,
+  "blockingFindings": [
+    {
+      "severity": "P2",
+      "blocking": true,
+      "name": "Painted add-folder plus is outside production button hit region",
+      "confirmed": true,
+      "record": {
+        "buttonRect": {
+          "x": 17,
+          "y": 708,
+          "width": 24,
+          "height": 24
+        },
+        "svgRect": {
+          "x": 17,
+          "y": 708,
+          "width": 24,
+          "height": 24
+        },
+        "paintedPlusCenter": {
+          "x": 45.60000000000001,
+          "y": 713
+        },
+        "plusCenterWithinButton": false,
+        "elementAtPlusCenter": "<div class=\"folder-footer\"><button aria-label=\"新建文件夹\"><svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><path d=\"M24 5.6h-9l-2.5-2.5H6.2a1.6 1.",
+        "plusCenterResolvesToButton": false,
+        "plusCenterClickOpensDialog": false
+      }
+    }
+  ],
+  "product": [
+    {
+      "path": "src/App.tsx",
+      "bytes": 179881,
+      "sha256": "d7b20f13b2ee076ab2708c0e837be60f8b2387a2bdeccc6d2fa8ae9e06526911"
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 66953,
+      "sha256": "df752ab5f04beb94372b25349a78e027028818eb6c4d75b25c77f46634916008"
+    },
+    {
+      "path": "src/MobileFolderIcons.tsx",
+      "bytes": 1673,
+      "sha256": "bcfb1e37dc95761342ec3c4669c3444a432c7236c90ea239160f5b9d4283395f"
+    },
+    {
+      "path": "src/smart-folders.css",
+      "bytes": 11044,
+      "sha256": "cdbfde60942488be5e9b4002924162d4d21850a1d71fc352176e86cb122a160c"
+    }
+  ],
+  "report": {
+    "path": "docs/plan/reviews/app-mobile-folder-visual28.md",
+    "bytes": 4822,
+    "sha256": "d38c7983fdee4c43921fb888a6c270366d6be985e32547f7f2483c52e9486de8"
+  },
+  "limits": [
+    "Five helper checks passing does not override confirmed painted-plus hit blocker.",
+    "No new all-seven/typecheck rerun, native touch/Back, actual Android07/Mac12 package or full-pixel acceptance.",
+    "CurrentColor SVG shape/ROI and mock-host title metrics remain finite; notes8px maxChannelDelta1 retained.",
+    "Browser, HTTP, Vite closed via finally; only new dedicated vite-cache retained/excluded.",
+    "No GUI, ADB, userDB, Git, download, formal platform build or old artifact/cache deletion."
+  ]
+}
