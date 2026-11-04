@@ -1,0 +1,14 @@
+{
+  "startedAt": "2026-11-04T12:08:53.561800+00:00",
+  "argv": [
+    "python3",
+    "docs/verification/app-001-list-heading07/analyze-webkit.py"
+  ],
+  "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+  "freeBefore": 74776772608,
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-list-heading07/analyze-webkit.py\", line 24, in <module>\n    assert candidate['bbox'][1]==original['bbox'][1] and candidate['height']==original['height'],'Same-text candidate top/height must match this original ROI'\nAssertionError: Same-text candidate top/height must match this original ROI\n",
+  "seconds": 0.21953416700000003,
+  "freeAfter": 74776793088
+}

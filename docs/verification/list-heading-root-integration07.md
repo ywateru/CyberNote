@@ -1,0 +1,13 @@
+# Mac标题与首组日期07主线整合
+
+2026-11-04。基线HEAD48b651df7644d27dd0b699273f0a09e79f97723d。用户要求修复桌面隐藏文件夹后无法恢复，并继续原版UI/交互一致目标。此前Mac06已实际验证按钮/菜单恢复、栏宽与正常冷启。本批继续校准列表标题与首组日期；整体Mac/Android功能与像素目标保持进行中。
+
+产品仅toolbar.m与style.css：三栏标题/计数y11/27，首结构日期15.25px/top9.5px，保持line20/height40/border.5及主题色。作者最终产品SHA分别be75271f92f9e3d58476962d1a06d7c4a4285c68d5bafa1c9e2d25151a2825c0、eeff3cc31a139fe48543ed9f7daf013c470fee5d703968acdb61d5c583f7262d；patch0d8fc16f581cc21d6da4ef24e14cef72186cf28655bd1020c4faca021f36c87e。
+
+作者app-001-list-heading07目录146文件封存，manifest8c254927c715f40661b2b247e7ce3737cbed82ce92bfa1be2323f46f27654dc0。不同作者app-001-list-heading07-independent-01结论SOURCE-READY，无源码阻塞；163有限输入开关保持、146作者输出逐字节一致，实际重跑52个AppKit状态与WK14case/PNG三阈值重算通过。独审manifest ed7c95b5ec12f6c2cde416b9b896736cf81af62e675ce3270764897948bf680d。root曾在作者封存后澄清macos.md主题色措辞，独审保留具体文档补丁和旧新hash，没有将它说成全部输入不变。
+
+真实WK160阈值“今天”字框57×28/y130、分隔线183与已存原版局部一致；墨迹549/610、灰度38/41及其他阈值宽差仍未关闭。该结论不是安装新包、原版内部字体属性、完整页面或整窗像素通过。正式Mac07还须准确commit/freeze/build、不同作者核包、root实际GUI运行及两条侧栏恢复回归。
+
+用户最新要求使用Computer Use。原生PNG helper的系统认证弹窗已消失，当前系统权限列表仍无本项目helper；本批改用Computer Use截图与操作，不再继续该helper授权流程。CUA原图按实际JPEG保全，不因改扩展名而称无损。已启动一小时caffeinate -diu临时保持唤醒，不改永久认证/锁定设置。
+
+同批其他进展分开记账：Android07准确d6350a新录音/真实预览控制/保存/正常重开/冷启有限通过，最终媒体时长Infinity与可听未知仍保留；原版smart-runtime07候选/取消/正常冷启证据由另一作者独核，克隆智能目录尚未实现。以上都不能扩大为本批Mac07或完整应用通过。

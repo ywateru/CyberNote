@@ -1,0 +1,38 @@
+diff --git a/plugins/tauri-plugin-notes-ui/macos/toolbar.m b/plugins/tauri-plugin-notes-ui/macos/toolbar.m
+index 2729557..df03027 100644
+--- a/plugins/tauri-plugin-notes-ui/macos/toolbar.m
++++ b/plugins/tauri-plugin-notes-ui/macos/toolbar.m
+@@ -462,10 +462,10 @@ static NSPoint contentOffsetFor(NSString *action) {
+     self.title.hidden=self.count.hidden=(!three&&!gallery&&!browse)||titleWidth<24;
+     BOOL zeroSearchGeometry=three && sidebar && [self.state[@"folderTitle"] isEqual:@"搜索"]
+         && [self.state[@"folderCount"] unsignedLongLongValue]==0 && hasSearch && [self.state[@"search"][@"value"] length]>0;
+-    // This root is flipped: the confirmed zero-result title moves down, its subtitle up.
++    // This root is flipped; three-column headings share the measured vertical baseline.
+     CGFloat textX=titleX-(zeroSearchGeometry?1:0);
+-    self.title.frame=NSMakeRect(textX,zeroSearchGeometry?11:9,titleWidth,18);
+-    self.count.frame=NSMakeRect(textX,zeroSearchGeometry?27:28,titleWidth,15);
++    self.title.frame=NSMakeRect(textX,three?11:9,titleWidth,18);
++    self.count.frame=NSMakeRect(textX,three?27:28,titleWidth,15);
+ }
+ - (NSDictionary *)information {
+     [self layout];
+diff --git a/src/style.css b/src/style.css
+index 44a7723..79330ac 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -359,6 +359,15 @@ a {
+   padding-top: 19px;
+   height: 49px;
+ }
++/* First date group in the measured Mac native list; later groups keep their spacing. */
++.desktop.native-toolbar:not(.gallery-browse):not(.gallery-edit):not(.separate)
++  .notes-scroll:not(.gallery) > .note-entry:first-child > .date-section {
++  font-size: 15.25px;
++  line-height: 20px;
++  height: 40px;
++  padding-top: 9.5px;
++  border-bottom-width: 0.5px;
++}
+ .note-row-wrap {
+   margin: 10px 10px 0;
+   position: relative;

@@ -1,0 +1,14 @@
+{
+  "startedAt": "2026-11-04T11:59:47.503516+00:00",
+  "argv": [
+    "python3",
+    "docs/verification/app-001-list-heading07/check-layout.py"
+  ],
+  "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+  "freeBefore": 74540249088,
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-list-heading07/check-layout.py\", line 38, in <module>\n    a=dict(by[chain+'-visible']);b=dict(by[chain+'-restored']);a.pop('name');b.pop('name');assert a==b,(label,chain,'restore')\nAssertionError: ('baseline', 'narrow160', 'restore')\n",
+  "seconds": 7.822904542,
+  "freeAfter": 74538881024
+}

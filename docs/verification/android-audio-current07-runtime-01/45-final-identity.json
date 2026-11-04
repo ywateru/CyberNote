@@ -1,0 +1,210 @@
+{
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "startedUtc": "2026-11-04T12:15:54.182110+00:00",
+  "events": [
+    {
+      "atUtc": "2026-11-04T12:15:54.210450+00:00",
+      "args": [
+        "devices",
+        "-l"
+      ],
+      "globalAdb": true,
+      "exitCode": 0,
+      "stdout": "List of devices attached\nemulator-5580          device product:sdk_gphone_arm64 model:sdk_gphone_arm64 device:emulator_arm64 transport_id:81\n\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.226171+00:00",
+      "args": [
+        "get-state"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.262656+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 629972   5309960  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.287239+00:00",
+      "args": [
+        "shell",
+        "getprop",
+        "ro.product.model"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "sdk_gphone_arm64\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.311406+00:00",
+      "args": [
+        "shell",
+        "getprop",
+        "ro.product.device"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "emulator_arm64\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.338861+00:00",
+      "args": [
+        "shell",
+        "getprop",
+        "ro.kernel.qemu"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.363781+00:00",
+      "args": [
+        "shell",
+        "getprop",
+        "ro.build.fingerprint"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "google/sdk_gphone_arm64/emulator_arm64:11/RSR1.240422.006/12134477:userdebug/dev-keys\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.402181+00:00",
+      "args": [
+        "shell",
+        "pm",
+        "path",
+        "com.local.notesclone"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "package:/data/app/~~hOHHoDrsHngH1bKyMQBuWw==/com.local.notesclone-jqr8OHuRWD_FvfatYZ1gVg==/base.apk\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.432231+00:00",
+      "args": [
+        "shell",
+        "stat",
+        "-c",
+        "%s",
+        "/data/app/~~hOHHoDrsHngH1bKyMQBuWw==/com.local.notesclone-jqr8OHuRWD_FvfatYZ1gVg==/base.apk"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "177445114\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.836460+00:00",
+      "args": [
+        "shell",
+        "sha256sum",
+        "/data/app/~~hOHHoDrsHngH1bKyMQBuWw==/com.local.notesclone-jqr8OHuRWD_FvfatYZ1gVg==/base.apk"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "d6350a35374a8fa05c836e26f361dfb3d4834882fd4a360ad7a7ebbedf2d123c  /data/app/~~hOHHoDrsHngH1bKyMQBuWw==/com.local.notesclone-jqr8OHuRWD_FvfatYZ1gVg==/base.apk\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.868089+00:00",
+      "args": [
+        "shell",
+        "dumpsys",
+        "package",
+        "com.local.notesclone"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "Activity Resolver Table:\n  Non-Data Actions:\n      android.intent.action.MAIN:\n        d826e30 com.local.notesclone/.MainActivity filter 73bbaa9\n          Action: \"android.intent.action.MAIN\"\n          Category: \"android.intent.category.LAUNCHER\"\n          Category: \"android.intent.category.LEANBACK_LAUNCHER\"\n\nReceiver Resolver Table:\n  Non-Data Actions:\n      androidx.profileinstaller.action.SAVE_PROFILE:\n        f04282e com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter ec5865\n          Action: \"androidx.profileinstaller.action.SAVE_PROFILE\"\n      androidx.profileinstaller.action.INSTALL_PROFILE:\n        f04282e com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter a974fcf\n          Action: \"androidx.profileinstaller.action.INSTALL_PROFILE\"\n      androidx.profileinstaller.action.SKIP_FILE:\n        f04282e com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter 5d83d5c\n          Action: \"androidx.profileinstaller.action.SKIP_FILE\"\n      androidx.profileinstaller.action.BENCHMARK_OPERATION:\n        f04282e com.local.notesclone/androidx.profileinstaller.ProfileInstallReceiver filter aae993a\n          Action: \"androidx.profileinstaller.action.BENCHMARK_OPERATION\"\n\nPermissions:\n  Permission [com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (cc66668):\n    sourcePackage=com.local.notesclone\n    uid=10169 gids=null type=0 prot=signature\n    perm=Permission{161fbf9 com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}\n\nRegistered ContentProviders:\n  com.local.notesclone/androidx.core.content.FileProvider:\n    Provider{d14573e com.local.notesclone/androidx.core.content.FileProvider}\n  com.local.notesclone/com.google.mlkit.common.internal.MlKitInitProvider:\n    Provider{c32399f com.local.notesclone/com.google.mlkit.common.internal.MlKitInitProvider}\n  com.local.notesclone/androidx.startup.InitializationProvider:\n    Provider{eeb2aec com.local.notesclone/androidx.startup.InitializationProvider}\n\nContentProvider Authorities:\n  [com.local.notesclone.androidx-startup]:\n    Provider{eeb2aec com.local.notesclone/androidx.startup.InitializationProvider}\n      applicationInfo=ApplicationInfo{985648 com.local.notesclone}\n  [com.local.notesclone.fileprovider]:\n    Provider{d14573e com.local.notesclone/androidx.core.content.FileProvider}\n      applicationInfo=ApplicationInfo{ed6dce1 com.local.notesclone}\n  [com.local.notesclone.mlkitinitprovider]:\n    Provider{c32399f com.local.notesclone/com.google.mlkit.common.internal.MlKitInitProvider}\n      applicationInfo=ApplicationInfo{fceca06 com.local.notesclone}\n\nKey Set Manager:\n  [com.local.notesclone]\n      Signing KeySets: 35\n\nPackages:\n  Package [com.local.notesclone] (5460fb2):\n    userId=10169\n    pkg=Package{7d609d8 com.local.notesclone}\n    codePath=/data/app/~~hOHHoDrsHngH1bKyMQBuWw==/com.local.notesclone-jqr8OHuRWD_FvfatYZ1gVg==\n    resourcePath=/data/app/~~hOHHoDrsHngH1bKyMQBuWw==/com.local.notesclone-jqr8OHuRWD_FvfatYZ1gVg==\n    legacyNativeLibraryDir=/data/app/~~hOHHoDrsHngH1bKyMQBuWw==/com.local.notesclone-jqr8OHuRWD_FvfatYZ1gVg==/lib\n    primaryCpuAbi=arm64-v8a\n    secondaryCpuAbi=null\n    versionCode=1000 minSdk=26 targetSdk=36\n    versionName=0.1.0\n    splits=[base]\n    apkSigningVersion=2\n    applicationInfo=ApplicationInfo{7d609d8 com.local.notesclone}\n    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]\n    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]\n    forceQueryable=false\n    queriesPackages=[]\n    dataDir=/data/user/0/com.local.notesclone\n    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]\n    timeStamp=2026-11-04 18:41:55\n    firstInstallTime=2026-11-03 22:09:17\n    lastUpdateTime=2026-11-04 18:41:56\n    signatures=PackageSignatures{c332039 version:2, signatures:[ab2da3b4], past signatures:[]}\n    installPermissionsFixed=true\n    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]\n    declared permissions:\n      com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED\n    requested permissions:\n      android.permission.INTERNET\n      android.permission.RECORD_AUDIO\n      android.permission.MODIFY_AUDIO_SETTINGS\n      android.permission.CAMERA\n      com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION\n      android.permission.ACCESS_NETWORK_STATE\n    install permissions:\n      com.local.notesclone.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true\n      android.permission.MODIFY_AUDIO_SETTINGS: granted=true\n      android.permission.INTERNET: granted=true\n      android.permission.ACCESS_NETWORK_STATE: granted=true\n    User 0: ceDataInode=123481 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false\n    overlay paths:\n      /product/overlay/EmulationPixel4/EmulationPixel4Overlay.apk\n      gids=[3003]\n      runtime permissions:\n        android.permission.CAMERA: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]\n        android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]\n\nQueries:\n  system apps queryable: false\n  queries via package name:\n  queries via intent:\n  queryable via interaction:\n    User 0:\n      [com.android.keychain,com.android.location.fused,com.android.server.telecom,com.android.emulator.multidisplay,com.android.inputdevices,com.android.providers.settings,com.android.wallpaperbackup,android,com.android.settings,com.android.dynsystem,com.android.localtransport]:\n        com.local.notesclone\n      [com.google.android.gms,com.google.android.gsf]:\n        com.local.notesclone\n      com.google.android.webview:\n        com.local.notesclone\n      com.google.android.inputmethod.latin:\n        com.local.notesclone\n      com.local.notesclone:\n        com.google.android.webview\n\nPackage Changes:\n  Sequence number=15\n  User 0:\n    seq=5, package=com.google.android.gms\n    seq=14, package=com.local.notesclone\n\n\nDexopt state:\n  [com.local.notesclone]\n    path: /data/app/~~hOHHoDrsHngH1bKyMQBuWw==/com.local.notesclone-jqr8OHuRWD_FvfatYZ1gVg==/base.apk\n      arm64: [status=run-from-apk] [reason=unknown]\n\n\nCompiler stats:\n  [com.local.notesclone]\n    (No recorded stats)\n\nAPEX session state:\n\nActive APEX packages:\n\n\nInactive APEX packages:\n\n\nFactory APEX packages:\n\n\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:54.896203+00:00",
+      "args": [
+        "shell",
+        "date",
+        "+%Y-%m-%dT%H:%M:%S%z"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "2026-11-04T20:15:54+0800\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:55.146025+00:00",
+      "args": [
+        "exec-out",
+        "screencap",
+        "-p"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": {
+        "bytes": 98303,
+        "sha256": "9b53601f94fe0d8f50f3bf21bb57129727a1071616d153598d5c081c324b77e3"
+      },
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:15:55.179509+00:00",
+      "args": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "21594\n",
+      "stderr": ""
+    }
+  ],
+  "devices": "List of devices attached\nemulator-5580          device product:sdk_gphone_arm64 model:sdk_gphone_arm64 device:emulator_arm64 transport_id:81\n\n",
+  "space": {
+    "hostFreeBytes": 74007003136,
+    "deviceDataDf": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 629972   5309960  11% /storage/emulated/0/Android/obb\n"
+  },
+  "properties": {
+    "ro.product.model": "sdk_gphone_arm64",
+    "ro.product.device": "emulator_arm64",
+    "ro.kernel.qemu": "1",
+    "ro.build.fingerprint": "google/sdk_gphone_arm64/emulator_arm64:11/RSR1.240422.006/12134477:userdebug/dev-keys"
+  },
+  "installedApk": {
+    "path": "/data/app/~~hOHHoDrsHngH1bKyMQBuWw==/com.local.notesclone-jqr8OHuRWD_FvfatYZ1gVg==/base.apk",
+    "bytes": 177445114,
+    "sha256": "d6350a35374a8fa05c836e26f361dfb3d4834882fd4a360ad7a7ebbedf2d123c"
+  },
+  "packageFields": {
+    "userId": "10169",
+    "firstInstallTime": "2026-11-03 22:09:17",
+    "lastUpdateTime": "2026-11-04 18:41:56"
+  },
+  "deviceDate": "2026-11-04T20:15:54+0800",
+  "png": {
+    "path": "45-final-identity.png",
+    "bytes": 98303,
+    "sha256": "9b53601f94fe0d8f50f3bf21bb57129727a1071616d153598d5c081c324b77e3"
+  },
+  "pidof": "21594",
+  "status": "PASS",
+  "finishedUtc": "2026-11-04T12:15:55.179631+00:00"
+}

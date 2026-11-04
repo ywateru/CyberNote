@@ -157,3 +157,24 @@ Mac主窗 + native-toolbar + note-document
 05实际包的隐藏/恢复已通过，原版fresh17/18与克隆04/05/11/12的2xJPEG局部测量仍见微小光学与背景宽度偏差。候选只校准顶部两个符号的绘制位置：newFolder(+1.5,-1)pt，可见toggle(+.75,-.25)pt，保留44pt右锚槽；三栏fullSize隐藏面候选40pt宽、x=traffic+2，高36/y8不变，toggle绘制(+.5,-.25)pt，标题间隔18以保持title frame154pt。其他布局隐藏仍原36pt及原位置，不由单个三栏原图推断。稳定背景/按钮/搜索对象、直接恢复和动态菜单保持。详见任务app-001-sidebar-optical06；这些是待实际新包验证的参数，不是原版内部frame断言。
 
 06色调补充：原版普通Aqua图标中位灰77附近；候选仅两个sidebar按钮使用appearance内动态解析label并在普通Aqua设alpha.70，深色/高对比保留原label。必须保留动态色解析，不将浅色解析结果跨appearance缓存；深色原版尚未量测。
+
+## 普通列表标题与首个日期分组校准07
+
+依据准确Mac06新包与原版的可见/隐藏、228/208pt端点，见research/mac-list-heading-readiness07。普通三栏原生标题墨迹稳定比原版上4图像像素、副标题下2；两者墨迹高度相同，暂无字号变更依据。下一候选统一三栏title frame y=11pt/count y=27pt，替代普通9/28，保留字号13/11、x和宽度规则。已有零结果标题已用11/27，保持其textX−1规则；galleryBrowse/galleryExpanded/independentNote非三栏保持9/28，不据列表外推。
+
+```text
+Mac native 三栏（侧栏可见/隐藏）
+顶栏52pt
+  title y11 / height18   ← 普通与零结果共用纵向基线
+  count y27 / height15
+列表首个分组：font15 / line20 / top padding9 / height40 / border .5
+  后续分组的额外间距与其他平台保持既有规则，后续单独校准
+```
+
+原版首个“今天”墨迹高28px、起y130；Mac06高29px、起y122。候选仅Mac native普通列表首个date-section使用font15px、line-height20px、height40px、padding-top9px、border-bottom.5px（左右16、其余padding保持），复用真实生产零结果分组已用的基线参数。文字不同，不能据零结果渲染直接判今天像素通过；必须以真实WebKit同文候选或准确新包量图验证。不要整体移动notes-scroll或全部笔记行以掩盖后续行高差。手机、浏览器、画廊、独立窗、后续日期分组以及零结果分组不改。
+
+### 07真实WK同文候选后的收敛
+
+作者使用真实WKWebView（非Chrome）同文测量，基线复现60×29/y122。15px候选字框56×27/y130；15.25字框57×28/y129（160阈值），15.5为58×28/y129；原版57×28/y130。三候选divider均183。按有区分力的两次额外渲染选择15.25px，并把文字padding-top9→9.5px以补1图像像素纵向差，line20/height40/border.5保持。clone组墨迹中位灰38、原版41；最终不添加固定color，保留现有主题色并披露浅色3级残差，避免将浅色JPEG局部测值外推至深色主题。
+
+本收敛替代本节前述首组15px/top9的起始候选；字号15.25/top9.5是当前待新包实际验收候选。其他范围守卫与排除不变。

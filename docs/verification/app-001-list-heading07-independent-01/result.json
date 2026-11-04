@@ -1,0 +1,105 @@
+{
+  "status": "pass-source-ready-no-blocker",
+  "head": "48b651df7644d27dd0b699273f0a09e79f97723d",
+  "authorManifestSha256": "8c254927c715f40661b2b247e7ce3737cbed82ce92bfa1be2323f46f27654dc0",
+  "authorFiles": 146,
+  "authorAggregateSha256": "3f93a692d0583a14301c3b490d1d41f863a9b666d234bcea9a7adcf34c44d8b3",
+  "inputCount": 163,
+  "appkitIndependentExecutedStates": 52,
+  "appkitOutputExactToAuthor": true,
+  "wkRecomputedCases": [
+    {
+      "name": "native-visible",
+      "eligible": true
+    },
+    {
+      "name": "native-hidden",
+      "eligible": true
+    },
+    {
+      "name": "native-compact",
+      "eligible": true
+    },
+    {
+      "name": "browser",
+      "eligible": false
+    },
+    {
+      "name": "phone",
+      "eligible": false
+    },
+    {
+      "name": "wide-android",
+      "eligible": false
+    },
+    {
+      "name": "gallery-browse",
+      "eligible": false
+    },
+    {
+      "name": "gallery-edit",
+      "eligible": false
+    },
+    {
+      "name": "separate",
+      "eligible": false
+    },
+    {
+      "name": "native-restored",
+      "eligible": true
+    },
+    {
+      "name": "native-pinned-first",
+      "eligible": true
+    },
+    {
+      "name": "native-first-without-date",
+      "eligible": false
+    },
+    {
+      "name": "native-true-zero",
+      "eligible": false
+    },
+    {
+      "name": "native-final-restored",
+      "eligible": true
+    }
+  ],
+  "sourceDeltaExact": true,
+  "sourceHashes": {
+    "plugins/tauri-plugin-notes-ui/macos/toolbar.m": "be75271f92f9e3d58476962d1a06d7c4a4285c68d5bafa1c9e2d25151a2825c0",
+    "src/style.css": "eeff3cc31a139fe48543ed9f7daf013c470fee5d703968acdb61d5c583f7262d",
+    "src/App.tsx": "6eff8e958057e79fa9968a5e89e936197a78567b1e1e58c101e2e99f74671fd4"
+  },
+  "openingOtherInputsUnchanged": [
+    "plugins/tauri-plugin-notes-ui/macos/format.m",
+    "plugins/tauri-plugin-notes-ui/macos/format.h",
+    "src/App.tsx",
+    "scripts/check-native-toolbar.mjs",
+    "scripts/check-wide-toolbar-geometry.py",
+    "docs/verification/app-001-sidebar-optical06/check-geometry.py",
+    "docs/verification/app-001-sidebar-optical06/appkit-main.m"
+  ],
+  "postSealContractChanges": [
+    {
+      "path": "docs/ui/macos.md",
+      "authorSealed": {
+        "path": "docs/ui/macos.md",
+        "bytes": 20833,
+        "sha256": "1d31d230db8716c2b3019a94462f27a1ef124f169eb40134b358ba2004669d96"
+      },
+      "current": {
+        "path": "docs/ui/macos.md",
+        "bytes": 20670,
+        "sha256": "11b236a3934091b176ae6eb8d753580e53761e98234b9e24b5549d053fb53b73"
+      }
+    }
+  ],
+  "limits": [
+    "No WK rerender; independently checked frozen actual WK artifacts, provenance, metrics and image pixels.",
+    "Existing AppKit exact binaries independently executed with 26 original finite cases each; stub host/no real NSWindow/input/field editor.",
+    "WK fixed viewport1394x500, classes emulate excluded phone/Android modes without device or React runtime.",
+    "160-threshold bbox equality is not raster/color/font identity. Ink549 vs610 and median38 vs41 persist;120/200 widths differ.",
+    "Source-ready only; new exact package and same-condition original/runtime GUI remain pending; no full pixel PASS."
+  ]
+}

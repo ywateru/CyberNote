@@ -1,0 +1,62 @@
+{
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "startedUtc": "2026-11-04T12:05:42.877843+00:00",
+  "events": [
+    {
+      "atUtc": "2026-11-04T12:05:42.903318+00:00",
+      "args": [
+        "get-state"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:05:42.936859+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 629912   5310020  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:05:43.071576+00:00",
+      "args": [
+        "shell",
+        "am",
+        "force-stop",
+        "com.local.notesclone"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:05:44.108553+00:00",
+      "args": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "globalAdb": false,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "space": {
+    "hostFreeBytes": 74786160640,
+    "deviceDataDf": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 629912   5310020  11% /storage/emulated/0/Android/obb\n"
+  },
+  "pidof": "",
+  "status": "PASS",
+  "finishedUtc": "2026-11-04T12:05:44.108662+00:00"
+}

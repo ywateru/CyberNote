@@ -1,0 +1,14 @@
+{
+  "startedAt": "2026-11-04T12:04:01.138025+00:00",
+  "argv": [
+    "python3",
+    "docs/verification/app-001-list-heading07/check-webkit.py"
+  ],
+  "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+  "freeBefore": 74774675456,
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-list-heading07/check-webkit.py\", line 18, in <module>\n    assert all(x.get('status')=='metrics-ok' for x in result.values()),'Offscreen WebKit unavailable; preserve outputs and defer real render to root'\nAssertionError: Offscreen WebKit unavailable; preserve outputs and defer real render to root\n",
+  "seconds": 2.518092792,
+  "freeAfter": 74782527488
+}

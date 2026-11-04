@@ -1,0 +1,284 @@
+{
+  "verdict": "SUPPORTED_FINITE_ORIGINAL_ENDPOINTS_WITH_EXPLICIT_EVIDENCE_GAPS",
+  "definitions": [
+    {
+      "file": "02-definition-reopened.ax.txt",
+      "sha256": "0c5fd89c72df9fab6524957fb0a543bd86dcac07e76862cfeca056db0ecab63a",
+      "name": "QA-SMART-20261104-IN-A",
+      "popups": [
+        "任意",
+        "文件夹",
+        "包含",
+        "置顶备忘录",
+        "包含"
+      ],
+      "folderTokens": [
+        "QA-SMART-20261104-A"
+      ],
+      "buttons": [
+        "移除",
+        "添加",
+        "移除",
+        "添加",
+        "取消",
+        "好"
+      ]
+    },
+    {
+      "file": "05-definition-after-cancel.ax.txt",
+      "sha256": "0c5fd89c72df9fab6524957fb0a543bd86dcac07e76862cfeca056db0ecab63a",
+      "name": "QA-SMART-20261104-IN-A",
+      "popups": [
+        "任意",
+        "文件夹",
+        "包含",
+        "置顶备忘录",
+        "包含"
+      ],
+      "folderTokens": [
+        "QA-SMART-20261104-A"
+      ],
+      "buttons": [
+        "移除",
+        "添加",
+        "移除",
+        "添加",
+        "取消",
+        "好"
+      ]
+    },
+    {
+      "file": "10-cold-definition.ax.txt",
+      "sha256": "0c5fd89c72df9fab6524957fb0a543bd86dcac07e76862cfeca056db0ecab63a",
+      "name": "QA-SMART-20261104-IN-A",
+      "popups": [
+        "任意",
+        "文件夹",
+        "包含",
+        "置顶备忘录",
+        "包含"
+      ],
+      "folderTokens": [
+        "QA-SMART-20261104-A"
+      ],
+      "buttons": [
+        "移除",
+        "添加",
+        "移除",
+        "添加",
+        "取消",
+        "好"
+      ]
+    }
+  ],
+  "definitionAxBytesEqual": true,
+  "resultStates": [
+    {
+      "file": "01-in-a-current.ax.txt",
+      "selectedSmartFolder": "QA-SMART-20261104-IN-A",
+      "selectedCount": 2,
+      "results": [
+        "QA-SMART-20261104-A-PIN",
+        "QA-SMART-20261104-A-PLAIN"
+      ],
+      "otherSmartFolder": "QA-SMART-20261104-PIN",
+      "otherSmartFolderCount": 1,
+      "sha256": "86b4435c61cf65c01a9484d29210d0d873aa607be3d9b73456a93f06fcd00788"
+    },
+    {
+      "file": "04-cancelled-results.ax.txt",
+      "selectedSmartFolder": "QA-SMART-20261104-IN-A",
+      "selectedCount": 2,
+      "results": [
+        "QA-SMART-20261104-A-PIN",
+        "QA-SMART-20261104-A-PLAIN"
+      ],
+      "otherSmartFolder": "QA-SMART-20261104-PIN",
+      "otherSmartFolderCount": 1,
+      "sha256": "86b4435c61cf65c01a9484d29210d0d873aa607be3d9b73456a93f06fcd00788"
+    },
+    {
+      "file": "08-cold-in-a-results.ax.txt",
+      "selectedSmartFolder": "QA-SMART-20261104-IN-A",
+      "selectedCount": 2,
+      "results": [
+        "QA-SMART-20261104-A-PIN",
+        "QA-SMART-20261104-A-PLAIN"
+      ],
+      "otherSmartFolder": "QA-SMART-20261104-PIN",
+      "otherSmartFolderCount": 1,
+      "sha256": "056b89919d96c15e82ce741481ac874b62dbe23c8678561f85bcf3645ad85658"
+    }
+  ],
+  "resultAxBytesEqual": false,
+  "resultAxDifferences": {
+    "01_vs_04_equal": true,
+    "01_vs_08_diff": [
+      "--- 01\n",
+      "+++ 08\n",
+      "@@ -87,3 +87,3 @@\n",
+      " \t\t76 按钮 Description: 新建备忘录, Help: 创建备忘录, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除",
+      "-\t\t77 按钮 Description: 格式, Help: 选取要应用到文本的样式, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除",
+      "+\t\t77 按钮 (disabled) Description: 格式, Help: 选取要应用到文本的样式, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除",
+      " \t\t78 按钮 Description: 核对清单, Help: 制作核对清单, Value: 关, Secondary Actions: 移到上一项, 移到下一项, 从工具栏移除",
+      "@@ -94,4 +94,4 @@\n",
+      " \t\t\t83 菜单按钮 更多",
+      "-\t\t84 搜索文本栏 (settable)",
+      "-\t\t\t85 按钮 搜索",
+      "+\t\t84 搜索文本栏 (disabled)",
+      "+\t\t\t85 按钮 (disabled) 搜索",
+      " \t86 关闭按钮",
+      "@@ -110,3 +110,3 @@\n",
+      " Selected:",
+      "-\t29 row (selected)",
+      "+\t48 row (selected) Secondary Actions: 移除置顶, 共享, 删除",
+      " "
+    ],
+    "scope": "Cold08 has disabled Format/Search declarations and different selected-row footer; only result names/counts and saved definition equality accepted, not whole AX/window state equality."
+  },
+  "candidate": {
+    "queryFromAx": "QA",
+    "queryFocused": true,
+    "selectedFolderTokenPresent": false,
+    "visibleCandidateNamesManualImageRead": [
+      "QA-SMART-20261104-A",
+      "QA-SMART-20261104-A1",
+      "QA-SMART-20261104-B"
+    ],
+    "existingMatchingSmartFoldersFrom01Ax": [
+      "QA-SMART-20261104-IN-A",
+      "QA-SMART-20261104-PIN"
+    ],
+    "smartNamesVisibleIn03Popup": false,
+    "scope": "Manual read of frozen03 image plus AX query; AX omits candidate rows. Only this visible QA-prefix popup is supported; no global folder capability claim, no candidate selection/commit."
+  },
+  "identity": {
+    "before": {
+      "phase": "before-normal-quit",
+      "executable": "/System/Applications/Notes.app/Contents/MacOS/Notes",
+      "sha256": "9e20c23a979367362c50edf8fb28bb1988be7e7384254cc3dce38a4a8373df02",
+      "processes": [
+        "70207 /System/Applications/Notes.app/Contents/MacOS/Notes"
+      ]
+    },
+    "exit": {
+      "phase": "after-CUA-normal-CmdQ",
+      "knownPID": 70207,
+      "psExitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "cold": {
+      "phase": "after-normal-reopen",
+      "executable": "/System/Applications/Notes.app/Contents/MacOS/Notes",
+      "sha256": "9e20c23a979367362c50edf8fb28bb1988be7e7384254cc3dce38a4a8373df02",
+      "processes": [
+        "86322 /System/Applications/Notes.app/Contents/MacOS/Notes"
+      ],
+      "priorPID70207Exited": true
+    },
+    "scope": "Saved identity and ps result reviewed, normal CmdQ action described in README/phase. No live executable read or process query/replay; no independent timestamps or full action journal."
+  },
+  "restoredQa": {
+    "file": "11-original-qa-restored.ax.txt",
+    "splitterValues": [
+      228,
+      360
+    ],
+    "bodyCodePoints": 257,
+    "bodyUtf8Bytes": 547,
+    "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+    "scope": "Visible final synthetic QA body; no write-count or all-note integrity assertion."
+  },
+  "images": [
+    {
+      "file": "01-in-a-current.cua-image",
+      "format": "JPEG",
+      "size": [
+        2788,
+        1806
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "02-definition-reopened.cua-image",
+      "format": "JPEG",
+      "size": [
+        1368,
+        636
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "03-qa-folder-candidates.cua-image",
+      "format": "JPEG",
+      "size": [
+        1368,
+        634
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "04-cancelled-results.cua-image",
+      "format": "JPEG",
+      "size": [
+        2788,
+        1806
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "05-definition-after-cancel.cua-image",
+      "format": "JPEG",
+      "size": [
+        1368,
+        636
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "08-cold-in-a-results.cua-image",
+      "format": "JPEG",
+      "size": [
+        2788,
+        1806
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "10-cold-definition.cua-image",
+      "format": "JPEG",
+      "size": [
+        1368,
+        636
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "11-original-qa-restored.cua-image",
+      "format": "JPEG",
+      "size": [
+        2788,
+        1806
+      ],
+      "mode": "RGB"
+    }
+  ],
+  "authorRecollectionsWithoutDedicatedRawFiles": [
+    "Initial zero-size CUA capture error and bound-surface refresh.",
+    "End/typeText produced QASMART and no match; select-all/paste did not replace text.",
+    "BackSpace then typeText QA; exact gesture order is author narrative;03 finalQA state is captured.",
+    "Wrong context menu from reused row index, Escape and corrected folder index.",
+    "No create/delete/rule-submit/body-edit and final form cancellation are action-scope narratives, with finite endpoints consistent but no exhaustive write audit.",
+    "Project screenshot preflight permission_required; no preflight raw file in this input set."
+  ],
+  "limits": [
+    "Original Notes only; no clone behavior or Apple pixel parity verdict.",
+    "Definitions/results at finite endpoints plus recorded process change support persistence of existing saved definition; no new changed rule was submitted.",
+    "Cancel path is endpoint-supported plus root action narrative; no database revision/no-write proof.",
+    "iCloud account may be active; no independent offline-local database conclusion.",
+    "Physical-folder deletion, smart-definition deletion, all filters, all candidate sources and mobile form remain unknown.",
+    "No GUI/ADB/DB/build/product/stage/commit in this review."
+  ],
+  "inputsUnchanged": 20
+}

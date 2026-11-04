@@ -359,6 +359,15 @@ a {
   padding-top: 19px;
   height: 49px;
 }
+/* First date group in the measured Mac native list; later groups keep their spacing. */
+.desktop.native-toolbar:not(.gallery-browse):not(.gallery-edit):not(.separate)
+  .notes-scroll:not(.gallery) > .note-entry:first-child > .date-section {
+  font-size: 15.25px;
+  line-height: 20px;
+  height: 40px;
+  padding-top: 9.5px;
+  border-bottom-width: 0.5px;
+}
 .note-row-wrap {
   margin: 10px 10px 0;
   position: relative;

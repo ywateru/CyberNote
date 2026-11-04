@@ -1,0 +1,84 @@
+{
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "startedUtc": "2026-11-04T11:49:52.265722+00:00",
+  "events": [
+    {
+      "atUtc": "2026-11-04T11:49:52.293688+00:00",
+      "args": [
+        "get-state"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T11:49:52.316144+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 628948   5310984  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T11:49:53.005533+00:00",
+      "args": [
+        "shell",
+        "input",
+        "tap",
+        "1000",
+        "2074"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T11:49:53.806269+00:00",
+      "args": [
+        "exec-out",
+        "screencap",
+        "-p"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": {
+        "bytes": 124461,
+        "sha256": "5d0ced0fc7dfee8fc9dd8df6df2520f212c32fa504f76e7560147dd63ef73a9c"
+      },
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T11:49:53.838798+00:00",
+      "args": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "19635\n",
+      "stderr": ""
+    }
+  ],
+  "space": {
+    "hostFreeBytes": 74659573760,
+    "deviceDataDf": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 628948   5310984  11% /storage/emulated/0/Android/obb\n"
+  },
+  "waitSeconds": 0.5,
+  "png": {
+    "path": "03-new-note.png",
+    "bytes": 124461,
+    "sha256": "5d0ced0fc7dfee8fc9dd8df6df2520f212c32fa504f76e7560147dd63ef73a9c"
+  },
+  "pidof": "19635",
+  "status": "PASS",
+  "finishedUtc": "2026-11-04T11:49:53.838856+00:00"
+}

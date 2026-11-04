@@ -1,0 +1,70 @@
+{
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "startedUtc": "2026-11-04T12:07:11.858357+00:00",
+  "events": [
+    {
+      "atUtc": "2026-11-04T12:07:11.885625+00:00",
+      "args": [
+        "get-state"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:07:11.915391+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 629932   5310000  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:07:13.249289+00:00",
+      "args": [
+        "exec-out",
+        "screencap",
+        "-p"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": {
+        "bytes": 101166,
+        "sha256": "32e6a14b371cd01fc7dc30379a22835afb05a020120400f8c02307ae1d189938"
+      },
+      "stderr": ""
+    },
+    {
+      "atUtc": "2026-11-04T12:07:13.324812+00:00",
+      "args": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "globalAdb": false,
+      "exitCode": 0,
+      "stdout": "21594\n",
+      "stderr": ""
+    }
+  ],
+  "space": {
+    "hostFreeBytes": 74779652096,
+    "deviceDataDf": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 629932   5310000  11% /storage/emulated/0/Android/obb\n"
+  },
+  "waitSeconds": 1.0,
+  "png": {
+    "path": "43-cold-stable.png",
+    "bytes": 101166,
+    "sha256": "32e6a14b371cd01fc7dc30379a22835afb05a020120400f8c02307ae1d189938"
+  },
+  "pidof": "21594",
+  "status": "PASS",
+  "finishedUtc": "2026-11-04T12:07:13.324957+00:00"
+}
