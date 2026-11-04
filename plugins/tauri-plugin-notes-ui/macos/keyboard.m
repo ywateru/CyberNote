@@ -101,7 +101,6 @@ int notes_ui_keyboard_attach(void *rawView, void *rawWindow,
         if (![view isKindOfClass:WKWebView.class] || ![window isKindOfClass:NSWindow.class] ||
             view.window != window || !viewLabel.length || !windowLabel.length || !NSApp) return 2;
         observeKeyboardWindowClose();
-        if ([closedKeyboardWindows containsObject:window]) return 2;
         if (!keyboardPolicies) keyboardPolicies = [NSMutableDictionary dictionary];
         NotesUIKeyboardPolicy *existing = keyboardPolicies[viewLabel];
         if (existing) {
