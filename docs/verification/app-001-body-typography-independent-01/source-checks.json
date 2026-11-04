@@ -1,0 +1,741 @@
+{
+  "candidateCommit": "0d3d52776f92503b356449ae651853565b9c025f",
+  "baselineCommit": "e44dba736e377ea7abd2969f6c9ea1a5b24b3cc4",
+  "decision": "SOURCE-READY for experimental CSS only; native WebKit and Apple comparison remain open",
+  "checks": [
+    {
+      "name": "only exact six-line CSS addition",
+      "pass": true
+    },
+    {
+      "name": "CSS exact candidate commit bytes",
+      "pass": true
+    },
+    {
+      "name": "sole product delta is shared CSS",
+      "pass": true
+    },
+    {
+      "name": "current exact candidate src/style.css",
+      "pass": true
+    },
+    {
+      "name": "current exact candidate scripts/check-body-typography-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current exact candidate src/editor-schema.ts",
+      "pass": true
+    },
+    {
+      "name": "current exact candidate src/Editor.tsx",
+      "pass": true
+    },
+    {
+      "name": "current exact candidate src/App.tsx",
+      "pass": true
+    },
+    {
+      "name": "current exact candidate src/native-toolbar.ts",
+      "pass": true
+    },
+    {
+      "name": "current exact candidate package.json",
+      "pass": true
+    },
+    {
+      "name": "current exact candidate pnpm-lock.yaml",
+      "pass": true
+    },
+    {
+      "name": "unchanged production context src/editor-schema.ts",
+      "pass": true
+    },
+    {
+      "name": "unchanged production context src/Editor.tsx",
+      "pass": true
+    },
+    {
+      "name": "unchanged production context src/App.tsx",
+      "pass": true
+    },
+    {
+      "name": "unchanged production context src/native-toolbar.ts",
+      "pass": true
+    },
+    {
+      "name": "unchanged production context package.json",
+      "pass": true
+    },
+    {
+      "name": "unchanged production context pnpm-lock.yaml",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity src/style.css",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity scripts/check-body-typography-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/README.md",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/frontend-build.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/frontend-build.txt",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run01/independent.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run01/mac-main.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run01/phone.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run01/result.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run01/wide-android.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run01-command.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run01.txt",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run02/independent.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run02/mac-main.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run02/phone.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run02/result.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run02/wide-android.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run02-command.json",
+      "pass": true
+    },
+    {
+      "name": "author frozen identity docs/verification/app-001-body-typography-01/render-run02.txt",
+      "pass": true
+    },
+    {
+      "name": "author recorded aggregate reproduces array order",
+      "pass": true
+    },
+    {
+      "name": "author order label discrepancy identified",
+      "pass": true
+    },
+    {
+      "name": "existing frontend build succeeds with cleanup and space",
+      "pass": true
+    },
+    {
+      "name": "existing build raw TS/Vite result and warning retained",
+      "pass": true
+    },
+    {
+      "name": "independent actual run completed with cleanup",
+      "pass": true
+    },
+    {
+      "name": "no node_modules link remains",
+      "pass": true
+    },
+    {
+      "name": "new rendering records exact CSS and baseline identity",
+      "pass": true
+    },
+    {
+      "name": "mac-main document preserved",
+      "pass": true
+    },
+    {
+      "name": "mac-main exclusions and ancestors preserved",
+      "pass": true
+    },
+    {
+      "name": "mac-main count5 paragraphs9 marks",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph0 matching scope",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph013px/17.22px",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph0 other samples equal",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph1 matching scope",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph113px/17.22px",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph1 other samples equal",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph2 matching scope",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph213px/17.22px",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph2 other samples equal",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph3 matching scope",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph313px/17.22px",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph3 other samples equal",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph4 matching scope",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph413px/17.22px",
+      "pass": true
+    },
+    {
+      "name": "mac-main paragraph4 other samples equal",
+      "pass": true
+    },
+    {
+      "name": "mac-main mark0 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "mac-main mark1 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "mac-main mark2 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "mac-main mark3 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "mac-main mark4 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "mac-main mark5 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "mac-main mark6 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "mac-main mark7 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "mac-main mark8 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "mac-main excluded nodes do not match target",
+      "pass": true
+    },
+    {
+      "name": "main width actually smaller",
+      "pass": true
+    },
+    {
+      "name": "phone document preserved",
+      "pass": true
+    },
+    {
+      "name": "phone exclusions and ancestors preserved",
+      "pass": true
+    },
+    {
+      "name": "phone count5 paragraphs9 marks",
+      "pass": true
+    },
+    {
+      "name": "phone paragraph0 matching scope",
+      "pass": true
+    },
+    {
+      "name": "phone paragraph0 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "phone paragraph1 matching scope",
+      "pass": true
+    },
+    {
+      "name": "phone paragraph1 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "phone paragraph2 matching scope",
+      "pass": true
+    },
+    {
+      "name": "phone paragraph2 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "phone paragraph3 matching scope",
+      "pass": true
+    },
+    {
+      "name": "phone paragraph3 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "phone paragraph4 matching scope",
+      "pass": true
+    },
+    {
+      "name": "phone paragraph4 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "phone mark0 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "phone mark1 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "phone mark2 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "phone mark3 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "phone mark4 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "phone mark5 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "phone mark6 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "phone mark7 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "phone mark8 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "phone excluded nodes do not match target",
+      "pass": true
+    },
+    {
+      "name": "phone width unchanged",
+      "pass": true
+    },
+    {
+      "name": "wide-android document preserved",
+      "pass": true
+    },
+    {
+      "name": "wide-android exclusions and ancestors preserved",
+      "pass": true
+    },
+    {
+      "name": "wide-android count5 paragraphs9 marks",
+      "pass": true
+    },
+    {
+      "name": "wide-android paragraph0 matching scope",
+      "pass": true
+    },
+    {
+      "name": "wide-android paragraph0 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "wide-android paragraph1 matching scope",
+      "pass": true
+    },
+    {
+      "name": "wide-android paragraph1 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "wide-android paragraph2 matching scope",
+      "pass": true
+    },
+    {
+      "name": "wide-android paragraph2 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "wide-android paragraph3 matching scope",
+      "pass": true
+    },
+    {
+      "name": "wide-android paragraph3 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "wide-android paragraph4 matching scope",
+      "pass": true
+    },
+    {
+      "name": "wide-android paragraph4 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "wide-android mark0 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "wide-android mark1 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "wide-android mark2 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "wide-android mark3 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "wide-android mark4 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "wide-android mark5 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "wide-android mark6 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "wide-android mark7 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "wide-android mark8 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "wide-android excluded nodes do not match target",
+      "pass": true
+    },
+    {
+      "name": "wide-android width unchanged",
+      "pass": true
+    },
+    {
+      "name": "independent document preserved",
+      "pass": true
+    },
+    {
+      "name": "independent exclusions and ancestors preserved",
+      "pass": true
+    },
+    {
+      "name": "independent count5 paragraphs9 marks",
+      "pass": true
+    },
+    {
+      "name": "independent paragraph0 matching scope",
+      "pass": true
+    },
+    {
+      "name": "independent paragraph0 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "independent paragraph1 matching scope",
+      "pass": true
+    },
+    {
+      "name": "independent paragraph1 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "independent paragraph2 matching scope",
+      "pass": true
+    },
+    {
+      "name": "independent paragraph2 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "independent paragraph3 matching scope",
+      "pass": true
+    },
+    {
+      "name": "independent paragraph3 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "independent paragraph4 matching scope",
+      "pass": true
+    },
+    {
+      "name": "independent paragraph4 complete sampled object equal",
+      "pass": true
+    },
+    {
+      "name": "independent mark0 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "independent mark1 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "independent mark2 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "independent mark3 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "independent mark4 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "independent mark5 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "independent mark6 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "independent mark7 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "independent mark8 sampled preservation",
+      "pass": true
+    },
+    {
+      "name": "independent excluded nodes do not match target",
+      "pass": true
+    },
+    {
+      "name": "independent width unchanged",
+      "pass": true
+    },
+    {
+      "name": "CSS stable after independent render",
+      "pass": true
+    }
+  ],
+  "assertionsPassed": 145,
+  "sourceIdentities": [
+    {
+      "path": "src/style.css",
+      "bytes": 65886,
+      "sha256": "75227796447c2f1404d5bb6e11f5c4663d53035d6cd343c288d92f6302f18bf7"
+    },
+    {
+      "path": "scripts/check-body-typography-browser.mjs",
+      "bytes": 11029,
+      "sha256": "bb5047e81b4f96d2c618af9238c66ab928aec401768a732904ef06e14455cc74"
+    },
+    {
+      "path": "src/editor-schema.ts",
+      "bytes": 2859,
+      "sha256": "daca1ff535d1516a708096d7e600f44ba1dd9510474dc7a65bf3595aea97ce0f"
+    },
+    {
+      "path": "src/Editor.tsx",
+      "bytes": 11962,
+      "sha256": "43c332456c159b5951345b3d2244996154a54065e25dfee355f27e8d3586fc32"
+    },
+    {
+      "path": "src/App.tsx",
+      "bytes": 163582,
+      "sha256": "44324ee08867f08fd10c9825eb6637545255a5eb30bf0badfde123c71dd8210e"
+    },
+    {
+      "path": "src/native-toolbar.ts",
+      "bytes": 1090,
+      "sha256": "c70c97cdd7d84cad8a7bb3587687afb43a87d3cf371740830d4bd63f2dcf423e"
+    },
+    {
+      "path": "package.json",
+      "bytes": 1820,
+      "sha256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 69103,
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2"
+    }
+  ],
+  "authorIdentity": {
+    "path": "docs/verification/app-001-body-typography-01/identity.json",
+    "bytes": 4347,
+    "sha256": "af76af4e5f5a8d04066c50206016df02d476c345ae4a4f4b6120615cbc90a801"
+  },
+  "authorAggregate": {
+    "recordedArrayOrder": "b08f04836fcf9bc9f96ee631109fa8c469bd0360214aaf49f9793e4a872759e0",
+    "independentlyPathSorted": "8566c746e4c3ba39f6257bc2280e860972ac46f264683726587f86884e146581",
+    "metadataIssue": "evidenceAggregateAlgorithm says path sorted, but recorded aggregate follows evidenceFiles array order; all individual files match"
+  },
+  "independentRunResult": {
+    "path": "docs/verification/app-001-body-typography-independent-01/render-run01/result.json",
+    "bytes": 1314,
+    "sha256": "30f3f0c739fde6b5bbc29b0e68d8b3281c565d427b8c4787d32dfe8a93fb20f9"
+  },
+  "observations": [
+    {
+      "name": "mac-main",
+      "classes": "app desktop native-toolbar page-editor",
+      "width": 1088,
+      "paragraphFontSize": "13px",
+      "paragraphLineHeight": "17.22px",
+      "firstLineWidthBefore": 154.546875,
+      "firstLineWidthAfter": 144.71875,
+      "excludedTags": [
+        "H1",
+        "H2",
+        "H3",
+        "P",
+        "P",
+        "P",
+        "P",
+        "P",
+        "PRE",
+        "CODE",
+        "DIV",
+        "DIV"
+      ]
+    },
+    {
+      "name": "phone",
+      "classes": "app mobile page-editor",
+      "width": 390,
+      "paragraphFontSize": "17px",
+      "paragraphLineHeight": "22.95px",
+      "firstLineWidthBefore": 182.9375,
+      "firstLineWidthAfter": 182.9375,
+      "excludedTags": [
+        "H1",
+        "H2",
+        "H3",
+        "P",
+        "P",
+        "P",
+        "P",
+        "P",
+        "PRE",
+        "CODE",
+        "DIV",
+        "DIV"
+      ]
+    },
+    {
+      "name": "wide-android",
+      "classes": "app desktop page-editor",
+      "width": 1088,
+      "paragraphFontSize": "14px",
+      "paragraphLineHeight": "17.22px",
+      "firstLineWidthBefore": 154.546875,
+      "firstLineWidthAfter": 154.546875,
+      "excludedTags": [
+        "H1",
+        "H2",
+        "H3",
+        "P",
+        "P",
+        "P",
+        "P",
+        "P",
+        "PRE",
+        "CODE",
+        "DIV",
+        "DIV"
+      ]
+    },
+    {
+      "name": "independent",
+      "classes": "app desktop native-toolbar separate page-editor",
+      "width": 900,
+      "paragraphFontSize": "14px",
+      "paragraphLineHeight": "17.22px",
+      "firstLineWidthBefore": 154.546875,
+      "firstLineWidthAfter": 154.546875,
+      "excludedTags": [
+        "H1",
+        "H2",
+        "H3",
+        "P",
+        "P",
+        "P",
+        "P",
+        "P",
+        "PRE",
+        "CODE",
+        "DIV",
+        "DIV"
+      ]
+    }
+  ],
+  "freeBytesAfter": 3025104896,
+  "limits": "Complete shared CSS and real production schema rendered in isolated Chromium samples. Not a React NodeView, native input, persisted row, WebKit/font identity, actual AppKit sample, or Apple pixel acceptance. Inline style fields are sampled, not an exhaustive CSS style enumeration."
+}
