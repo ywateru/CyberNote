@@ -19,6 +19,8 @@ depends-on: [app-mac-ordinary-tab-loop37]
 
 允许依据readiness40的当前真实WK证据，在输入仍聚焦时使用同步浏览器insertText编辑命令插入单TAB，通过真实beforeinput/input和现有onChange→update→draft链，按当前selectionStart/End自然替换。不用setRangeText、直接setDraft、合成InputEvent或重放OS键作为伪原生历史后备。不自行全选/移焦点，不改名字trim/保存验证，也不把TAB变为空格或文本\t。命令失败或异常不能伪称成功或重发第二次插入；保草稿/选区、显式沿现有错误路径给出可理解反馈，不泄露工程细节。实际控制流和错误边界由作者报告后固定。
 
+失败边界（root在START前明确）：能力/目标/选区预检失败不得调用编辑命令；命令返回false或抛异常且未变更时保留原值和选区。浏览器命令若异常地已经部分修改或发出真实input，不承诺无法实现的事务回滚；保留其可见现值、真实输入状态链和已有历史，显示错误，停止本次操作，不自动重发/手工重置/额外undo。核查要分别记录无变更失败与部分生效异常，后者不得标成功或原快照零变更。此为显式失败处理，不是允许正常路径缺少React同步或历史。
+
 原生编辑历史必须有真实WK受控生产表单证据：局部CD替换后undo恢复完整值和CD选区，redo恢复TAB结果；不能只测value最终相同。普通输入混合与至少连续两次插入/撤销边界有限检查，避免跨场景共享undo历史假阳性。该API的当前可用性来自本机实测，不据此保证所有未来WebKit版本，失败不得静默破坏草稿。
 
 原版[连续草稿43](../../research/mac-folder-option-sequence-original43/README.md)补证：默认全选后键入QA-OPT43-ABCD、Right、两次OptionTab，一次CmdZ回默认名称且全选，一次重做恢复合成名和两个TAB。不得自行强制每次TAB独立undo分组；41的局部CD替换历史及43的连续同组历史须分别有限验证并披露差异。
