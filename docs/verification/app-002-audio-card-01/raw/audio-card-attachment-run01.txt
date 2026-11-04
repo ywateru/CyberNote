@@ -1,0 +1,51 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    command: 'store_attachment_operation',
+    params: {
+      data: 'JVBERg==',
+      expected: {
+...
+      operationId: 'op-a',
++     recordedAt: undefined
+    }
+  }
+
+    at file:///private/tmp/apple-notes-audio-card-01/scripts/check-attachment-submission.mjs:693:12
+    at async test (file:///private/tmp/apple-notes-audio-card-01/scripts/check-attachment-submission.mjs:82:3)
+    at async file:///private/tmp/apple-notes-audio-card-01/scripts/check-attachment-submission.mjs:663:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: {
+    command: 'store_attachment_operation',
+    params: {
+      operationId: 'op-a',
+      noteId: 'note-a',
+      name: 'a.pdf',
+      mime: 'application/pdf',
+      data: 'JVBERg==',
+      expected: { sessionId: 'bridge-session', epoch: 4, noteEpoch: 7 },
+      recordedAt: undefined
+    }
+  },
+  expected: {
+    command: 'store_attachment_operation',
+    params: {
+      operationId: 'op-a',
+      noteId: 'note-a',
+      name: 'a.pdf',
+      mime: 'application/pdf',
+      data: 'JVBERg==',
+      expected: { sessionId: 'bridge-session', epoch: 4, noteEpoch: 7 }
+    }
+  },
+  operator: 'deepStrictEqual'
+}
+
+Node.js v22.16.0

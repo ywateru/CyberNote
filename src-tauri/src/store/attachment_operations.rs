@@ -158,8 +158,18 @@ impl Store {
         name: &str,
         mime: &str,
         bytes: &[u8],
+        recorded_at: Option<u64>,
     ) -> Result<Value> {
         valid_operation(operation)?;
+        validate_recorded_at(
+            if mime.starts_with("audio/") {
+                "audio"
+            } else {
+                "file"
+            },
+            mime,
+            recorded_at,
+        )?;
         if bytes.len() > MAX_BYTES {
             return Err(err("too_large", "附件不能超过100 MB"));
         }
@@ -183,6 +193,7 @@ impl Store {
             if op.attachment.display_name != display
                 || op.attachment.mime != mime
                 || op.attachment.size != bytes.len() as u64
+                || op.attachment.recorded_at != recorded_at
             {
                 return Err(conflict());
             }
@@ -229,6 +240,7 @@ impl Store {
                 mime: mime.into(),
                 display_name: display.into(),
                 size: bytes.len() as u64,
+                recorded_at,
             },
         };
         // SQLite identity is durable before the first possible file write.

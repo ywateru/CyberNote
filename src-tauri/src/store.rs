@@ -20,6 +20,9 @@ mod archive;
 #[path = "store/attachment_operations.rs"]
 mod attachment_operations;
 pub(crate) use attachment_operations::AttachmentOwner;
+#[cfg(test)]
+#[path = "store/recorded_at_tests.rs"]
+mod recorded_at_tests;
 
 #[derive(Debug, Serialize)]
 pub struct AppError {
@@ -90,7 +93,7 @@ pub struct Note {
     pub sealed: Option<Value>,
 }
 #[derive(Clone, Serialize, Deserialize, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", try_from = "AttachmentRecord")]
 pub struct Attachment {
     pub id: String,
     pub note_id: String,
@@ -99,6 +102,47 @@ pub struct Attachment {
     pub mime: String,
     pub display_name: String,
     pub size: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub recorded_at: Option<u64>,
+}
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct AttachmentRecord {
+    id: String,
+    note_id: String,
+    kind: String,
+    relative_path: String,
+    mime: String,
+    display_name: String,
+    size: u64,
+    #[serde(default)]
+    recorded_at: Option<u64>,
+}
+const MAX_RECORDED_AT: u64 = 253_402_300_799_999;
+fn validate_recorded_at(kind: &str, mime: &str, recorded_at: Option<u64>) -> Result<()> {
+    if recorded_at.is_some_and(|date| {
+        date > MAX_RECORDED_AT || kind != "audio" || !mime.starts_with("audio/")
+    }) {
+        return Err(err("invalid", "附件录音日期无效"));
+    }
+    Ok(())
+}
+impl TryFrom<AttachmentRecord> for Attachment {
+    type Error = String;
+    fn try_from(value: AttachmentRecord) -> std::result::Result<Self, String> {
+        validate_recorded_at(&value.kind, &value.mime, value.recorded_at)
+            .map_err(|error| error.message)?;
+        Ok(Self {
+            id: value.id,
+            note_id: value.note_id,
+            kind: value.kind,
+            relative_path: value.relative_path,
+            mime: value.mime,
+            display_name: value.display_name,
+            size: value.size,
+            recorded_at: value.recorded_at,
+        })
+    }
 }
 pub struct Store {
     db: Connection,
@@ -711,6 +755,7 @@ impl Store {
                 .unwrap_or("附件")
                 .into(),
             size: bytes.len() as u64,
+            recorded_at: None,
         };
         fs::write(self.attachment_path(&path)?, bytes)?;
         if let Err(e) = self.db.execute(
@@ -736,7 +781,9 @@ impl Store {
             return Err(err("locked", "请先解锁"));
         }
         let bytes = fs::read(self.attachment_path(&a.relative_path)?)?;
-        Ok(json!({"data":B64.encode(bytes),"mime":a.mime,"name":a.display_name}))
+        Ok(
+            json!({"data":B64.encode(bytes),"mime":a.mime,"name":a.display_name,"recordedAt":a.recorded_at}),
+        )
     }
 }
 fn str_field<'a>(a: &'a Value, k: &str) -> Result<&'a str> {

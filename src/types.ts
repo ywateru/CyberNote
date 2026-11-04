@@ -31,6 +31,7 @@ export interface Attachment {
   mime: string;
   displayName: string;
   size: number;
+  recordedAt?: number | null;
 }
 export interface Settings {
   theme?: "system" | "light" | "dark";

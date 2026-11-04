@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "folders": [
+    {
+      "id": "default",
+      "name": "备忘录",
+      "parentId": null,
+      "kind": "default",
+      "sortOrder": 0,
+      "createdAt": 1793682863269
+    },
+    {
+      "id": "quick",
+      "name": "快速备忘录",
+      "parentId": null,
+      "kind": "quick",
+      "sortOrder": -1,
+      "createdAt": 1793682863269
+    },
+    {
+      "id": "trash",
+      "name": "最近删除",
+      "parentId": null,
+      "kind": "trash",
+      "sortOrder": 9999,
+      "createdAt": 1793682863269
+    },
+    {
+      "id": "200b83dd-a71f-4146-8b4f-c0ca9d0c6ae8",
+      "name": "独立父目录",
+      "parentId": null,
+      "kind": "normal",
+      "sortOrder": 1793682863270,
+      "createdAt": 1793682863270
+    },
+    {
+      "id": "7f5db3a0-e7ca-4fc7-95cd-cb8e5f15b862",
+      "name": "独立子目录",
+      "parentId": "200b83dd-a71f-4146-8b4f-c0ca9d0c6ae8",
+      "kind": "normal",
+      "sortOrder": 1793682863270,
+      "createdAt": 1793682863270
+    }
+  ],
+  "notes": [
+    {
+      "id": "24abd028-287f-4276-8030-281dfdd91e03",
+      "folderId": "7f5db3a0-e7ca-4fc7-95cd-cb8e5f15b862",
+      "document": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "text",
+            "text": "TEXT DIRECTLY IN DOC"
+          }
+        ]
+      },
+      "title": "独立归档正文",
+      "plainText": "独立归档正文",
+      "createdAt": 1793682863270,
+      "updatedAt": 1793682863271,
+      "pinned": false,
+      "deletedAt": null,
+      "originalFolderId": null,
+      "locked": false,
+      "paperStyle": "plain",
+      "revision": 1,
+      "sealed": null
+    }
+  ],
+  "attachments": [
+    {
+      "id": "f31225e2-f769-4b70-882f-bc879b156c73",
+      "noteId": "24abd028-287f-4276-8030-281dfdd91e03",
+      "kind": "file",
+      "relativePath": "f31225e2-f769-4b70-882f-bc879b156c73.txt",
+      "mime": "text/plain",
+      "displayName": "first.txt",
+      "size": 14
+    },
+    {
+      "id": "da61a02c-ae2e-4e3d-83f6-6b8b00cce38a",
+      "noteId": "24abd028-287f-4276-8030-281dfdd91e03",
+      "kind": "file",
+      "relativePath": "da61a02c-ae2e-4e3d-83f6-6b8b00cce38a.txt",
+      "mime": "text/plain",
+      "displayName": "second.txt",
+      "size": 15
+    }
+  ],
+  "settings": {
+    "custom": {
+      "value": "保留未知设置"
+    },
+    "selectedFolder": "7f5db3a0-e7ca-4fc7-95cd-cb8e5f15b862",
+    "selectedNote": "24abd028-287f-4276-8030-281dfdd91e03",
+    "theme": "dark",
+    "view": "gallery"
+  },
+  "blobs": {
+    "da61a02c-ae2e-4e3d-83f6-6b8b00cce38a": "U0VDT05EIE9SSUdJTkFM",
+    "f31225e2-f769-4b70-882f-bc879b156c73": "RklSU1QgT1JJR0lOQUw="
+  }
+}

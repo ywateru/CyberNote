@@ -1,0 +1,143 @@
+{
+  "status": "pass",
+  "browser": "156.0.8078.80",
+  "results": [
+    "Known date/actual title, short total floors 2.60 while progress remains mm:ss",
+    "Narrow/normal mobile actual three rows and reachable white play capsule",
+    "Unknown old/external audio omits date; independent duration >=60 uses existing mm:ss",
+    "Late successful read after ID switch cannot restore previous date",
+    "Read failure clears metadata and reports actual error; subsequent known read recovers",
+    "Authority invalidation rejects pending authorized response without showing its date",
+    "Unmount rejects late read and no card/date revives",
+    "Desktop keeps its existing title/录音 mm:ss row and hides mobile metadata"
+  ],
+  "geometry": [
+    {
+      "width": 320,
+      "card": {
+        "x": 16,
+        "y": 50.9375,
+        "width": 288,
+        "height": 81,
+        "right": 304,
+        "bottom": 131.9375
+      },
+      "title": {
+        "x": 16,
+        "y": 50.9375,
+        "width": 205,
+        "height": 81,
+        "right": 221,
+        "bottom": 131.9375
+      },
+      "strong": {
+        "x": 28,
+        "y": 62.9375,
+        "width": 193,
+        "height": 19,
+        "right": 221,
+        "bottom": 81.9375
+      },
+      "date": {
+        "x": 28,
+        "y": 84.9375,
+        "width": 193,
+        "height": 16,
+        "right": 221,
+        "bottom": 100.9375
+      },
+      "duration": {
+        "x": 28,
+        "y": 103.9375,
+        "width": 193,
+        "height": 16,
+        "right": 221,
+        "bottom": 119.9375
+      },
+      "play": {
+        "x": 233,
+        "y": 77.65625,
+        "width": 59,
+        "height": 27.546875,
+        "right": 292,
+        "bottom": 105.203125
+      },
+      "playBackground": "rgb(255, 255, 255)",
+      "playHitHeight": 44,
+      "scrollWidth": 320,
+      "desktopDuration": "none"
+    },
+    {
+      "width": 390,
+      "card": {
+        "x": 16,
+        "y": 50.9375,
+        "width": 358,
+        "height": 81,
+        "right": 374,
+        "bottom": 131.9375
+      },
+      "title": {
+        "x": 16,
+        "y": 50.9375,
+        "width": 275,
+        "height": 81,
+        "right": 291,
+        "bottom": 131.9375
+      },
+      "strong": {
+        "x": 28,
+        "y": 62.9375,
+        "width": 263,
+        "height": 19,
+        "right": 291,
+        "bottom": 81.9375
+      },
+      "date": {
+        "x": 28,
+        "y": 84.9375,
+        "width": 263,
+        "height": 16,
+        "right": 291,
+        "bottom": 100.9375
+      },
+      "duration": {
+        "x": 28,
+        "y": 103.9375,
+        "width": 263,
+        "height": 16,
+        "right": 291,
+        "bottom": 119.9375
+      },
+      "play": {
+        "x": 303,
+        "y": 77.65625,
+        "width": 59,
+        "height": 27.546875,
+        "right": 362,
+        "bottom": 105.203125
+      },
+      "playBackground": "rgb(255, 255, 255)",
+      "playHitHeight": 44,
+      "scrollWidth": 390,
+      "desktopDuration": "none"
+    }
+  ],
+  "sources": {
+    "src/Editor.tsx": "43c332456c159b5951345b3d2244996154a54065e25dfee355f27e8d3586fc32",
+    "src/bridge.ts": "76cf917f754614fbd587e09f220b8abc56403c2429b738d9b690eac9cdaa6292",
+    "src/recording-metadata.ts": "4630348ffaab79e799e5417b1b256e4957df5460fda8c3966482d0ad766d3131",
+    "src/audio-playback.ts": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+    "src/style.css": "d4edf1303d5659a1ac8e93d5ff0cc9f75c1afe1eb23b2c4ba19e68381f627c7d"
+  },
+  "binarySHA256": "a2df38d0b246c8128985ceb911f7dc5cb25fe8745e05c4f131fdaf67d1fc14fe",
+  "errors": [],
+  "external": [],
+  "limits": [
+    "Actual mounted Editor/ReactNodeView/MediaView/AudioPlayer, production bridge metadata and access gate; shim only host IPC transport.",
+    "Controlled HTML media readiness/progress, synthetic bytes, no decoder/microphone/device acceptance.",
+    "Known and unknown metadata come from actual newly compiled Rust Session/Store reads; host errors/delays injected explicitly.",
+    "Candidate layout at 320/390 CSS px and desktop1280; no original pixel measurement, dark/expanded interaction parity remains unknown.",
+    "Authority test invalidates an in-flight bridge request; App teardown on access changes is covered by existing App boundary checks, not mounted here."
+  ]
+}

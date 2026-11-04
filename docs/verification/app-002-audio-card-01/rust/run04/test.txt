@@ -1,0 +1,196 @@
+   Compiling notes-audio-card-store v0.1.0 (/private/tmp/apple-notes-audio-card-01/artifacts/audio-card-rust/run04/harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.29s
+     Running unittests src/main.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/notes_audio_card_store-45a2b8af97fd77b9)
+
+running 50 tests
+test session::tests::live_schema_rejects_invalid_saves_without_changing_revision_or_body ... ok
+test session::tests::pending_intent_cannot_ack_and_failed_barrier_preserves_authorization_and_retry ... ok
+test session::tests::real_revision_conflict_forces_abort_even_if_window_claims_success ... ok
+test store::archive::tests::crash_worker ... ignored, subprocess worker; invoked by real_subprocess_interruption_recovers_before_and_after_sqlite_commit
+test session::tests::conflict_copy_obeys_live_session_source_epoch_and_prepare ... ok
+test session::tests::recorded_at_retains_session_and_note_authority ... ok
+test session::tests::attachment_owner_uses_real_session_window_incarnation_and_current_access ... ok
+test session::tests::attachment_cancel_waits_for_other_windows_registered_save_and_retains_committed_ref ... ok
+test session::tests::window_identity_and_session_identity_cannot_be_supplied_by_saved_action ... ok
+test session::tests::timeout_missing_window_and_failed_ack_never_commit ... ok
+test store::archive::tests::export_failure_preserves_previous_archive_and_cannot_replace_live_store ... ok
+test store::archive::tests::file_publish_failure_preserves_old_bytes_and_recovery_cleans_only_new_paths ... ok
+test store::archive::tests::database_failure_after_files_publish_rolls_back_all_entities_and_settings ... ok
+
+thread 'store::archive::tests::invalid_archive_graphs_and_metadata_never_mutate_existing_workspace' (36647406) panicked at src/store/archive/tests.rs:288:9:
+accepted unsupported version
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test store::archive::tests::invalid_archive_graphs_and_metadata_never_mutate_existing_workspace ... FAILED
+
+running 1 test
+test store::archive::tests::input_limits_are_explicit_and_leave_workspace_unchanged ... ok
+test store::archive::tests::independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads ... ok
+test store::archive::tests::recovery_refuses_journal_path_that_could_delete_an_old_file ... ok
+test store::archive::tests::qa_bad_second_blob_preserves_existing_attachment_database_settings_and_source ... ok
+test store::archive::tests::seven_papers_and_dash_lists_preserve_drawings_through_save_reopen_and_archive ... ok
+test store::attachment_operations::tests::crash_worker ... ignored, real subprocess worker invoked by boundary test
+test store::attachment_operations::tests::cancel_is_narrow_repeatable_and_committed_documents_are_preserved ... ok
+
+running 1 test
+test store::attachment_operations::tests::cold_reopen_preserves_actual_reference_and_purge_retires_old_path ... ok
+test store::attachment_operations::tests::duplicate_response_loss_and_foreign_identity_do_not_create_or_overwrite ... ok
+test store::archive::tests::stale_selection_defaults_without_losing_other_settings ... ok
+test session::tests::registered_save_drains_before_two_window_commit_and_old_access_expires ... ok
+
+thread 'session::tests::frozen_ciphertexts_validate_after_decrypt_before_publishing_key' (36647393) panicked at src/session/tests.rs:294:72:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+test session::tests::frozen_ciphertexts_validate_after_decrypt_before_publishing_key ... FAILEDpublic archive corpus: legacy-empty-title: accepted; document unchanged; export/import/bytes/reopen preserved
+
+
+running 1 test
+test store::attachment_operations::tests::inconsistent_identity_is_deferred_and_never_treated_as_safe_absence ... ok
+test store::recorded_at_tests::recorded_at_crash_worker ... ignored
+test store::archive::tests::valid_import_restores_settings_hierarchy_bytes_and_preserves_colliding_entities ... ok
+test store::attachment_operations::tests::filesystem_and_sqlite_failures_keep_recoverable_private_records ... ok
+
+running 1 test
+
+running 1 test
+test store::recorded_at_tests::recorded_at_old_unknown_and_invalid_persisted_values_are_not_rewritten ... ok
+test session::tests::close_locks_rejects_late_commands_and_delete_response_cannot_publish_decrypted_body ... ok
+test store::recorded_at_tests::recorded_at_operation_snapshot_reopen_and_full_identity ... ok
+
+running 1 test
+test store::recorded_at_tests::recorded_at_invalid_archives_reject_atomically_and_v1_stays_unknown ... ok
+test store::recorded_at_tests::recorded_at_zero_null_and_invalid_direct_requests ... ok
+test store::recorded_at_tests::recorded_at_archive_v2_twice_remaps_ids_and_preserves_date_and_bytes ... ok
+
+running 1 test
+
+running 1 test
+public archive corpus: plain-and-empty-paragraphs: accepted; document unchanged; export/import/bytes/reopen preserved
+test store::attachment_operations::tests::invalid_operation_shape_and_history_limit_fail_before_new_file_creation ... ok
+
+running 1 test
+test store::recorded_at_tests::recorded_at_preparing_and_public_are_the_same_durable_snapshot ... ok
+test store::tests::conflict_copy_sqlite_failure_keeps_source_and_creates_nothing ... ok
+test store::tests::conflict_copy_validates_and_never_changes_the_confirmed_source ... ok
+test store::tests::archive_attachments_and_cycle_guards ... ok
+test store::tests::persistence_conflicts_delete_restore ... ok
+
+running 1 test
+
+running 1 test
+
+running 1 test
+test store::tests::checkpoint_failure_after_durable_lock_commits_authorization_boundary ... ok
+public archive corpus: default-heading-attributes: accepted; document unchanged; export/import/bytes/reopen preserved
+test store::attachment_operations::tests::locked_owner_defers_cold_cleanup_and_pending_purge_collects_its_new_file ... ok
+
+running 1 test
+
+running 1 test
+test store::attachment_operations::tests::true_process_crashes_recover_at_file_and_sqlite_boundaries_preserving_legacy ... ok
+test store::archive::tests::real_subprocess_interruption_recovers_before_and_after_sqlite_commit ... ok
+public archive corpus: all-supported-nodes-and-marks: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: schema-allows-empty-table-row: accepted; document unchanged; export/import/bytes/reopen preserved
+test store::tests::conflict_copy_rejects_locked_and_attachment_sources_without_a_new_note ... ok
+public archive corpus: default-attachment-and-drawing: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: inline-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: block-inside-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: paragraph-inside-table: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-doc: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: nested-doc: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: list-item-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: row-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: cell-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-in-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: block-in-heading: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-blockquote: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-bullet-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-ordered-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-task-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: paragraph-directly-in-bullet-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: task-item-in-ordered-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: list-item-in-task-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: list-item-needs-leading-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: task-item-needs-leading-paragraph: rejected; workspace/files/settings/reopen unchanged
+test store::tests::encrypted_data_and_unlock ... ok
+public archive corpus: empty-table: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: paragraph-in-row: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-cell: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: text-directly-in-cell: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-hard-break: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-rule: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-attachment: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-drawing: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: hard-break-in-code-block: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: marked-text-in-code-block: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: marked-block-at-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: duplicate-marks: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: out-of-order-marks: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: code-excludes-other-marks: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: unknown-mark: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-text: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: non-string-text: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: text-node-child-content: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: non-text-node-text-field: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-level-string: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-level-outside-config: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-level-null: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: checked-is-not-boolean: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: ordered-start-is-not-integer: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-colspan-zero: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-rowspan-string: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-colwidth-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-colwidth-count-mismatch: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-align-unknown: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: drawing-strokes-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: drawing-point-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: drawing-tool-unknown: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: link-href-object: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: highlight-color-object: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: attachment-name-object: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: unknown-paragraph-attribute: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: unknown-bold-attribute: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-grid-budget: rejected; workspace/files/settings/reopen unchanged
+test store::tests::tags_store_reopen_rejection_lock_and_full_archive ... ok
+public archive corpus: dash-list-valid: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: dash-list-invalid-attribute: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-committed: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-bold-split-span: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-2: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-3: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-4: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-5: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-6: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-7: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-8: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-9: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-bad-name-10: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-11: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-12: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-13: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-14: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-15: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-16: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-17: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-wrong-text: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-split-parent: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-unmarked-gap: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-nontext-gap: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-different-name-gap: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-unknown-attr: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-missing-attr: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-with-link: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-with-code: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-on-nontext: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-in-codeblock: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-old-plain-text: accepted; document unchanged; export/import/bytes/reopen preserved
+test store::archive::tests::shared_editor_schema_corpus_uses_public_import_and_preserves_state_on_rejection ... ok
+
+failures:
+
+failures:
+    session::tests::frozen_ciphertexts_validate_after_decrypt_before_publishing_key
+    store::archive::tests::invalid_archive_graphs_and_metadata_never_mutate_existing_workspace
+
+test result: FAILED. 45 passed; 2 failed; 3 ignored; 0 measured; 0 filtered out; finished in 3.67s
+
+error: test failed, to rerun pass `--bin notes-audio-card-store`

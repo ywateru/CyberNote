@@ -1,6 +1,7 @@
 // Actual RecordingPanel + RecordingSession; only media platform and monotonic time
 // are controlled. No microphone, encoder, App/IPC, device, or pixel-parity claim.
 import assert from "node:assert/strict";
+import { installControlledRecording } from "./recording-platform-fixture.mjs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -17,7 +18,7 @@ const { chromium } = await import(
 const output = resolve(process.argv[2] || "artifacts/recording-panel-browser");
 await mkdir(output, { recursive: true });
 const entry = `import React from 'react';import {createRoot} from 'react-dom/client';import RecordingPanel from '/src/RecordingPanel.tsx';import '/src/style.css';
-const root=createRoot(document.querySelector('#root'));window.mountPanel=()=>root.render(React.createElement(React.StrictMode,null,React.createElement('div',{className:'app mobile',style:{position:'relative',height:'100vh',width:'100vw',padding:0}},React.createElement(RecordingPanel,{onCancel:()=>{window.platform.cancels++;root.render(null)},onDone:file=>{const p=window.platform;p.files.push(file);return new Promise((resolve,reject)=>p.saves.push({resolve,reject}));}}))));window.unmountPanel=()=>root.render(null);`;
+const root=createRoot(document.querySelector('#root'));window.mountPanel=()=>root.render(React.createElement(React.StrictMode,null,React.createElement('div',{className:'app mobile',style:{position:'relative',height:'100vh',width:'100vw',padding:0}},React.createElement(RecordingPanel,{onCancel:()=>{window.platform.cancels++;root.render(null)},onDone:result=>{const p=window.platform;p.results.push(result);p.files.push(result.file);return new Promise((resolve,reject)=>p.saves.push({resolve,reject}));}}))));window.unmountPanel=()=>root.render(null);`;
 const vite = await createViteServer({
   configFile: false,
   cacheDir: resolve("artifacts/recording-panel-vite-cache"),
@@ -63,212 +64,7 @@ try {
     hasTouch: true,
     isMobile: true,
   });
-  await context.addInitScript(() => {
-    const p = (window.platform = {
-      now: 0,
-      requests: 0,
-      starts: 0,
-      pauses: 0,
-      resumes: 0,
-      stops: 0,
-      trackStops: 0,
-      closes: 0,
-      disconnects: 0,
-      cancels: 0,
-      files: [],
-      saves: [],
-      recorders: [],
-      intervals: new Map(),
-      timeouts: new Map(),
-      urls: [],
-      revoked: [],
-      config: {},
-      snapshots: 0,
-      audios: [],
-      blobs: [],
-      seq: 1,
-    });
-    Object.defineProperty(performance, "now", { value: () => p.now });
-    window.setInterval = (fn, ms) => {
-      const id = p.seq++;
-      if (ms !== 50 && ms !== 100) return id;
-      p.intervals.set(id, fn);
-      return id;
-    };
-    window.clearInterval = (id) => p.intervals.delete(id);
-    const realTimeout = window.setTimeout.bind(window),
-      realClear = window.clearTimeout.bind(window);
-    window.setTimeout = (fn, ms, ...args) => {
-      if (ms !== 15000 && ms !== 5000) return realTimeout(fn, ms, ...args);
-      const id = p.seq++;
-      p.timeouts.set(id, fn);
-      return id;
-    };
-    window.clearTimeout = (id) => {
-      if (!p.timeouts.delete(id)) realClear(id);
-    };
-    p.advance = (ms, redraw = true) => {
-      p.now += ms;
-      if (redraw) [...p.intervals.values()].forEach((fn) => fn());
-    };
-    const track = {
-      readyState: "live",
-      addEventListener() {},
-      removeEventListener() {},
-      stop() {
-        p.trackStops++;
-      },
-    };
-    const stream = { getTracks: () => [track] };
-    Object.defineProperty(navigator, "mediaDevices", {
-      value: {
-        getUserMedia: () => {
-          p.requests++;
-          return new Promise((resolve, reject) => {
-            p.permission = { resolve: () => resolve(stream), reject };
-            if (!p.config.deferPermission) resolve(stream);
-          });
-        },
-      },
-    });
-    class ControlledRecorder {
-      static isTypeSupported() {
-        return true;
-      }
-      constructor() {
-        this.state = "inactive";
-        this.mimeType = p.config.mime ?? "audio/webm;codecs=opus";
-        p.recorders.push(this);
-      }
-      start() {
-        p.starts++;
-        this.state = "recording";
-        queueMicrotask(() => {
-          p.lateData = this.ondataavailable;
-          p.lateStop = this.onstop;
-          p.lateError = this.onerror;
-        });
-      }
-      pause() {
-        p.pauses++;
-        if (p.config.pauseError) throw Error("pause failed");
-        this.state = "paused";
-      }
-      requestData() {
-        p.snapshots++;
-        if (p.config.snapshotError) throw Error("snapshot failed");
-      }
-      resume() {
-        p.resumes++;
-        this.state = "recording";
-      }
-      stop() {
-        p.stops++;
-        if (p.config.stopError) throw Error("stop failed");
-        this.state = "inactive";
-      }
-    }
-    window.MediaRecorder = ControlledRecorder;
-    const NativeAudio = window.Audio;
-    class ControlledAudio extends EventTarget {
-      constructor() {
-        super();
-        this.src = "";
-        this.duration = NaN;
-        this.readyState = 0;
-        this.position = 0;
-        this.paused = true;
-        this.seeking = false;
-        this.error = null;
-        this.ranges = [];
-        this.requests = [];
-        p.audios.push(this);
-      }
-      get currentTime() {
-        return this.position;
-      }
-      set currentTime(value) {
-        this.requests.push(value);
-        this.seeking = true;
-      }
-      get seekable() {
-        const r = this.ranges;
-        return { length: r.length, start: (i) => r[i][0], end: (i) => r[i][1] };
-      }
-      emit(name) {
-        this.dispatchEvent(new Event(name));
-      }
-      load() {
-        this.error = null;
-        this.readyState = 0;
-        this.duration = NaN;
-        this.ranges = [];
-      }
-      removeAttribute(name) {
-        if (name === "src") this.src = "";
-      }
-      pause() {
-        this.paused = true;
-        this.emit("pause");
-      }
-      play() {
-        if (p.config.holdPlay)
-          return new Promise((resolve) => {
-            this.resolvePlay = resolve;
-          });
-        this.paused = false;
-        this.emit("play");
-        return Promise.resolve();
-      }
-      ready(duration = 45, ranges = [[0, 45]]) {
-        this.duration = duration;
-        this.ranges = ranges;
-        this.readyState = 2;
-        this.emit("loadedmetadata");
-        this.emit("canplay");
-      }
-      confirm(time) {
-        this.position = time;
-        this.seeking = false;
-        this.emit("seeked");
-      }
-    }
-    window.Audio = function (...args) {
-      return p.config.preview
-        ? new ControlledAudio()
-        : new NativeAudio(...args);
-    };
-    p.pauseEvent = () => p.recorders.at(-1).onpause?.();
-    window.AudioContext = class {
-      createAnalyser() {
-        return {
-          frequencyBinCount: 32,
-          disconnect: () => p.disconnects++,
-          getByteFrequencyData: (array) => array.fill(12),
-        };
-      }
-      createMediaStreamSource() {
-        return { connect() {}, disconnect: () => p.disconnects++ };
-      }
-      close() {
-        p.closes++;
-        return Promise.resolve();
-      }
-    };
-    p.emit = (text = "last bytes", stopped = true) => {
-      const r = p.recorders.at(-1);
-      r.ondataavailable?.({ data: new Blob([text], { type: r.mimeType }) });
-      if (stopped) r.onstop?.();
-    };
-    p.timeout = () => [...p.timeouts.values()].forEach((fn) => fn());
-    URL.createObjectURL = (blob) => {
-      p.blobs.push(blob);
-      const url = "blob:controlled-" + p.urls.length;
-      p.urls.push(url);
-      return url;
-    };
-    URL.revokeObjectURL = (url) => p.revoked.push(url);
-  });
+  await context.addInitScript(installControlledRecording);
   const page = await context.newPage(),
     origin = `http://127.0.0.1:${server.address().port}`;
   await page.route("**/*", (route) => {
@@ -840,6 +636,7 @@ try {
     });
     await page.waitForFunction(() => window.platform.audios.length === 1);
     await page.evaluate(() => window.platform.audios[0].ready());
+    await page.waitForFunction(()=>!document.querySelector('[aria-label="播放录音"]').disabled);
     assert.ok(
       await page
         .getByRole("button", { name: "播放录音", exact: true })
@@ -874,6 +671,7 @@ try {
         .isDisabled(),
     );
     await page.evaluate(() => window.platform.audios[0].ready());
+    await page.waitForFunction(()=>!document.querySelector('[aria-label="播放录音"]').disabled);
     assert.ok(
       await page
         .getByRole("button", { name: "播放录音", exact: true })

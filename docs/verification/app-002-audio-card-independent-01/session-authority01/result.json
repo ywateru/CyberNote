@@ -1,0 +1,41 @@
+{
+  "status": "pass",
+  "binarySHA256": "a2df38d0b246c8128985ceb911f7dc5cb25fe8745e05c4f131fdaf67d1fc14fe",
+  "cases": [
+    {
+      "name": "unauthorized read rejects before returning date or bytes",
+      "tokenVariant": "wrong session"
+    },
+    {
+      "name": "unauthorized read rejects before returning date or bytes",
+      "tokenVariant": "999"
+    },
+    {
+      "name": "unauthorized read rejects before returning date or bytes",
+      "tokenVariant": "null"
+    },
+    {
+      "name": "invalid direct date rejects atomically",
+      "value": true
+    },
+    {
+      "name": "invalid direct date rejects atomically",
+      "value": "1793721599123"
+    },
+    {
+      "name": "invalid direct date rejects atomically",
+      "value": 1.5
+    },
+    {
+      "name": "invalid direct date rejects atomically",
+      "value": -1
+    },
+    {
+      "name": "invalid direct date rejects atomically",
+      "value": 253402300800000
+    }
+  ],
+  "authorizedDate": 1793721599123,
+  "bytesSHA256": "1a41d8e6d0445b4912c797ff98961343f5c64249bf0a69d47b37137afb64ea09",
+  "limits": "Exact independent CLI command routing mirrors lib.rs read_attachment: actual attachment_note -> Session.sensitive -> Store.read_attachment -> Session.tagged. CLI substitutes transport only; no Tauri macro/native permission or device claim."
+}

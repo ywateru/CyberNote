@@ -22,6 +22,11 @@ import {
 import { native, readAttachment } from "./bridge";
 import type { Note, DrawingStroke } from "./types";
 import {
+  attachmentRecordedAt,
+  compactAudioDuration,
+  recordingDate,
+} from "./recording-metadata";
+import {
   createAudioPlayback,
   formatAudioTime,
   initialAudioPlaybackState,
@@ -29,21 +34,42 @@ import {
 
 function MediaView({ node }: NodeViewProps) {
   const { id, name, kind } = node.attrs;
-  const [src, setSrc] = useState("");
-  const [error, setError] = useState("");
+  const [media, setMedia] = useState<{
+    id: string;
+    src: string;
+    name: string;
+    recordedAt?: number;
+  } | null>(null);
+  const [failure, setFailure] = useState<{
+    id: string;
+    message: string;
+  } | null>(null);
+  const src = media && media.id === id ? media.src : "";
+  const error = failure && failure.id === id ? failure.message : "";
   useEffect(() => {
     let live = true;
+    setMedia(null);
+    setFailure(null);
     readAttachment(id)
       .then((x) => {
-        if (live) setSrc(`data:${x.mime};base64,${x.data}`);
+        if (live)
+          setMedia({
+            id,
+            src: `data:${x.mime};base64,${x.data}`,
+            name: x.name,
+            recordedAt: attachmentRecordedAt(x.recordedAt, kind),
+          });
       })
       .catch((e) => {
-        if (live) setError(e.message || String(e));
+        if (live) {
+          setMedia(null);
+          setFailure({ id, message: e.message || String(e) });
+        }
       });
     return () => {
       live = false;
     };
-  }, [id]);
+  }, [id, kind]);
   return (
     <NodeViewWrapper
       className={`attachment-node ${kind}`}
@@ -54,7 +80,12 @@ function MediaView({ node }: NodeViewProps) {
       ) : kind === "image" ? (
         <img src={src} alt={name} draggable={false} />
       ) : kind === "audio" ? (
-        <AudioPlayer src={src} name={name} />
+        <AudioPlayer
+          key={id}
+          src={src}
+          name={media && media.id === id ? media.name : name}
+          recordedAt={media && media.id === id ? media.recordedAt : undefined}
+        />
       ) : kind === "video" ? (
         <video src={src} controls />
       ) : (
@@ -70,12 +101,20 @@ function MediaView({ node }: NodeViewProps) {
     </NodeViewWrapper>
   );
 }
-export function AudioPlayer({ src, name }: { src: string; name: string }) {
+type AudioPlayerProps = { src: string; name: string; recordedAt?: number };
+export function AudioPlayer({ src, name, recordedAt }: AudioPlayerProps) {
   // Different attachments get different media elements and controller lifetimes.
   // In-flight events or play promises from the previous source cannot affect it.
-  return <AudioPlayerSession key={src} src={src} name={name} />;
+  return (
+    <AudioPlayerSession
+      key={src}
+      src={src}
+      name={name}
+      recordedAt={recordedAt}
+    />
+  );
 }
-function AudioPlayerSession({ src, name }: { src: string; name: string }) {
+function AudioPlayerSession({ src, name, recordedAt }: AudioPlayerProps) {
   const audio = useRef<HTMLAudioElement>(null);
   const controller = useRef<ReturnType<typeof createAudioPlayback> | null>(
     null,
@@ -128,7 +167,17 @@ function AudioPlayerSession({ src, name }: { src: string; name: string }) {
           }}
         >
           <strong>{name.replace(/\.[^.]+$/, "")}</strong>
-          <small>录音 · {formatAudioTime(duration)}</small>
+          {recordedAt !== undefined && (
+            <small className="audio-recorded-at">
+              {recordingDate(recordedAt)}
+            </small>
+          )}
+          <small className="audio-duration-desktop">
+            录音 · {formatAudioTime(duration)}
+          </small>
+          <small className="audio-duration-mobile">
+            {compactAudioDuration(duration)}
+          </small>
         </button>
         <button
           type="button"

@@ -1,0 +1,43 @@
+{
+  "sourceRoot": "/private/tmp/apple-notes-audio-card-01",
+  "target": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target",
+  "freeBefore": 5762772992,
+  "sources": {
+    "src-tauri/src/lib.rs": "d3de3259fb728a7a46141b26f727a2c673f5df9420453a174d2375dbb954b5e9",
+    "src-tauri/src/main.rs": "63b87d68a89b9c9643ccbb2ec5149ebec8a665f95adf54504bf099e4fc68aceb",
+    "src-tauri/src/media_permission.rs": "0008e0f343c15e0019bdb86c44b6423d07b477ca1206bd38ed40be1487bb7ad6",
+    "src-tauri/src/session/tests.rs": "7ea15ad0018510b14fd0c8738bbf86b8867dabbedecd1c245d5093c6be26c6fb",
+    "src-tauri/src/session.rs": "9e2b353e760f635c725653e34a4e78c3223fc4aae132649f570930aeac433085",
+    "src-tauri/src/store/archive/document.rs": "4fbb93ac37810002e2183e69e309cc306b88babe4e2efe651b9cd40663d2dea4",
+    "src-tauri/src/store/archive/tests.rs": "6d5189fe570ce8d740734c336741ed53dac96748848cc5da4157ea4f12a9b4bf",
+    "src-tauri/src/store/archive.rs": "d77a63e8aa0c8b69f4e8b090f8f890af7b5f428870793c6726a6d227c81c856b",
+    "src-tauri/src/store/attachment_operations/tests.rs": "f68c4e41dc35d5ee61b2db9e1a20937cef5efdadd2c521c791d81216814452b4",
+    "src-tauri/src/store/attachment_operations.rs": "cadc56df7fbb904f3c59e63ac98828bba482f12002182b510ccd2e8b5afdc109",
+    "src-tauri/src/store/recorded_at_tests.rs": "df5b8e1af195ffba034f0709715a5e3b701417ce1bb1669ff7b8e892d5606ec0",
+    "src-tauri/src/store.rs": "18dc96f17f674440037c33ffe8bb12678713c3eecd6a9154a7a1f6377f18bea1"
+  },
+  "harness": {
+    "harness/Cargo.toml": "4fb21507c4288ae3770c097ee98aee8bd2ab87489346f70d0363f3ed8484bec5",
+    "harness/Cargo.lock": "f1cf033f740d1c76a8d53469c5f3fd4e996589a5f76212348f7b9d671a514aa3",
+    "harness/src/main.rs": "f4fe5512d66feab90263547ba17f2cac11af4d41016fc60df21903c10cfb8832"
+  },
+  "commands": [
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "rusqlite/hooks",
+        "--manifest-path",
+        "/private/tmp/apple-notes-audio-card-01/artifacts/audio-card-rust/run02/harness/Cargo.toml",
+        "recorded_at",
+        "--",
+        "--nocapture"
+      ],
+      "exitCode": 101,
+      "freeAfter": 5717430272
+    }
+  ]
+}

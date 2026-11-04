@@ -384,6 +384,7 @@ fn attachment_owner_uses_real_session_window_incarnation_and_current_access() {
             "application/pdf",
             b"local-only",
             &token(&s, Some(&id)),
+            None,
         )
         .unwrap();
     assert_eq!(value["status"], "stored");
@@ -463,6 +464,7 @@ fn attachment_cancel_waits_for_other_windows_registered_save_and_retains_committ
             "application/pdf",
             b"local-only",
             &token(&s, Some(&id)),
+            None,
         )
         .unwrap();
     let attachment = value["attachment"].clone();
@@ -502,6 +504,7 @@ fn attachment_cancel_waits_for_other_windows_registered_save_and_retains_committ
             "application/pdf",
             b"local-only",
             &token(&s, Some(&id)),
+            None,
         )
         .unwrap()["attachment"]
         .clone();
@@ -523,4 +526,74 @@ fn attachment_cancel_waits_for_other_windows_registered_save_and_retains_committ
         .store
         .read_attachment(attachment["id"].as_str().unwrap())
         .is_ok());
+}
+
+#[test]
+fn recorded_at_retains_session_and_note_authority() {
+    let (_dir, mut s, id) = setup();
+    let op = Uuid::new_v4().to_string();
+    let initial = token(&s, Some(&id));
+    let stored = s
+        .store_attachment_operation(
+            "main",
+            &op,
+            &id,
+            "新录音.webm",
+            "audio/webm",
+            b"synthetic-only",
+            &initial,
+            Some(1793743199123),
+        )
+        .unwrap();
+    let aid = stored["attachment"]["id"].as_str().unwrap();
+    s.sensitive(&s.store.attachment_note(aid).unwrap(), &initial)
+        .unwrap();
+    assert_eq!(
+        s.store.read_attachment(aid).unwrap()["recordedAt"],
+        1793743199123u64
+    );
+    assert_eq!(
+        s.query_attachment_operation("note-real-second", &op, &id, &initial)
+            .unwrap_err()
+            .code,
+        "attachment_operation_conflict"
+    );
+    let barrier = begin(
+        &mut s,
+        json!({"type":"lockNote", "id":id, "password":PASSWORD}),
+    );
+    assert_eq!(
+        s.sensitive(&id, &initial).unwrap_err().code,
+        "access_changed"
+    );
+    assert_eq!(
+        s.query_attachment_operation("main", &op, &id, &initial)
+            .unwrap_err()
+            .code,
+        "access_changed"
+    );
+    assert_eq!(
+        s.store_attachment_operation(
+            "main",
+            &op,
+            &id,
+            "新录音.webm",
+            "audio/webm",
+            b"synthetic-only",
+            &initial,
+            Some(1793743199123)
+        )
+        .unwrap_err()
+        .code,
+        "access_changed"
+    );
+    s.acknowledge(&barrier, "main", false).unwrap();
+    assert!(s.finish(&barrier, &windows(), false).unwrap().0.is_err());
+    let fresh = token(&s, Some(&id));
+    s.sensitive(&id, &fresh).unwrap();
+    assert_eq!(
+        s.query_attachment_operation("main", &op, &id, &fresh)
+            .unwrap()["attachment"]["recordedAt"],
+        1793743199123u64
+    );
 }

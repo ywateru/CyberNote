@@ -10,6 +10,10 @@ import {
 } from "react";
 import { type Editor, type JSONContent } from "@tiptap/react";
 import { editorSaveSnapshot } from "./editor-save-snapshot";
+import {
+  attachmentRecordedAt,
+  type RecordingResult,
+} from "./recording-metadata";
 import { TagComposition } from "./tag-composition";
 import {
   documentTags,
@@ -44,6 +48,7 @@ type RecordingTicket = {
   accepting: boolean;
   detached: boolean;
   file?: File;
+  recordedAt?: number;
   running?: Promise<void>;
   cancelling?: Promise<void>;
 };
@@ -1824,6 +1829,7 @@ function App() {
           target.noteId,
           target,
           file,
+          batch.recording?.recordedAt,
         );
         attachmentSubmissions.current.set(operationId, submission);
       }
@@ -1835,12 +1841,18 @@ function App() {
           ? {
               kind: "journal",
               store: () =>
-                storeAttachmentOperation(operationId, target.noteId, file),
+                storeAttachmentOperation(
+                  operationId,
+                  target.noteId,
+                  file,
+                  operation.recordedAt,
+                ),
               query: () => queryAttachmentOperation(operationId, target.noteId),
             }
           : {
               kind: "preview",
-              store: () => storeAttachment(target.noteId, file),
+              store: () =>
+                storeAttachment(target.noteId, file, operation.recordedAt),
             },
         insert: (attachment) => {
           const instance = target.editor;
@@ -2296,8 +2308,9 @@ function App() {
   };
   const submitRecording = (
     ticket: RecordingTicket,
-    file: File,
+    result: RecordingResult,
   ): Promise<void> => {
+    const { file } = result;
     if (
       !ticket.accepting ||
       recordingTicket.current !== ticket ||
@@ -2306,8 +2319,19 @@ function App() {
       return Promise.reject(Error("原录音会话已关闭，不会提交到其他备忘录"));
     if (ticket.file && ticket.file !== file)
       return Promise.reject(Error("录音文件身份已改变，请保留原录音重试"));
+    let recordedAt: number | undefined;
+    try {
+      recordedAt = attachmentRecordedAt(result.recordedAt, "audio");
+    } catch (error) {
+      return Promise.reject(error);
+    }
+    if (recordedAt === undefined)
+      return Promise.reject(Error("录音开始时间缺失，请保留原录音"));
+    if (ticket.file && ticket.recordedAt !== recordedAt)
+      return Promise.reject(Error("录音开始时间已改变，请保留原录音重试"));
     if (ticket.running) return ticket.running;
     ticket.file = file;
+    ticket.recordedAt = recordedAt;
     ticket.batch.files = [file];
     attachmentBatches.current.add(ticket.batch);
     const work = (async () => {
@@ -4441,7 +4465,7 @@ function App() {
         <RecordingPanel
           key={recording.batch.operationIds[0]}
           onCancel={() => void cancelRecording(recording).catch(fail)}
-          onDone={(file) => submitRecording(recording, file)}
+          onDone={(result) => submitRecording(recording, result)}
         />
       )}
     </div>

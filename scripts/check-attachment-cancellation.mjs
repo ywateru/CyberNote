@@ -26,6 +26,8 @@ async function production(name) {
     "proof-access",
     "types",
     "document-equality",
+    "recording-metadata",
+    "audio-playback",
   ]) {
     if (!output.includes(`"./${dependency}"`)) continue;
     await production(dependency);

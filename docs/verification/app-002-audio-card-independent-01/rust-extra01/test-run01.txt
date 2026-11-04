@@ -1,0 +1,33 @@
+   Compiling notes-audio-card-store v0.1.0 (/private/tmp/apple-notes-audio-card-review01/docs/verification/app-002-audio-card-independent-01/rust-extra01/harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.53s
+     Running unittests src/main.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/notes_audio_card_store-45a2b8af97fd77b9)
+
+running 5 tests
+independent public date difference null: query/cancel deferred, complete identity guard retains all rows/bytes
+independent persisted public true: cold read/workspace explicit error, all rows/bytes/mtime unchanged
+independent persisted journal false: explicit cold-open error, all rows/media unchanged
+independent public date difference 1793721599124: query/cancel deferred, complete identity guard retains all rows/bytes
+independent persisted public []: cold read/workspace explicit error, all rows/bytes/mtime unchanged
+test store::review_date_probes::independent_date_difference_keeps_full_eq_guard_and_cannot_cancel_bytes ... ok
+independent v1 explicit_null=false: imported twice, disjoint ids/paths, exact bytes, unknown retained, v1 re-export
+independent persisted journal []: explicit cold-open error, all rows/media unchanged
+independent persisted public {}: cold read/workspace explicit error, all rows/bytes/mtime unchanged
+independent v2 date=0/MAX: import twice four distinct paths, two dates each, references/bytes, cold re-export=2, source unchanged
+test store::review_date_probes::independent_v2_zero_and_max_dates_twice_remap_and_survive_cold_reexport ... ok
+independent persisted journal {}: explicit cold-open error, all rows/media unchanged
+independent persisted public "0": cold read/workspace explicit error, all rows/bytes/mtime unchanged
+independent persisted public -1: cold read/workspace explicit error, all rows/bytes/mtime unchanged
+independent persisted journal "0": explicit cold-open error, all rows/media unchanged
+independent persisted public 1.0: cold read/workspace explicit error, all rows/bytes/mtime unchanged
+independent v1 explicit_null=true: imported twice, disjoint ids/paths, exact bytes, unknown retained, v1 re-export
+independent persisted journal -1: explicit cold-open error, all rows/media unchanged
+test store::review_date_probes::independent_v1_absent_and_explicit_null_dates_import_twice_with_disjoint_ids_and_paths ... ok
+independent persisted public 253402300800000: cold read/workspace explicit error, all rows/bytes/mtime unchanged
+independent persisted journal 1.0: explicit cold-open error, all rows/media unchanged
+independent persisted public 18446744073709551615: cold read/workspace explicit error, all rows/bytes/mtime unchanged
+test store::review_date_probes::independent_invalid_public_dates_fail_after_cold_open_without_rewriting_any_rows_or_media ... ok
+independent persisted journal 253402300800000: explicit cold-open error, all rows/media unchanged
+test store::review_date_probes::independent_invalid_nonterminal_journal_dates_fail_open_without_cancellation_or_rewrite ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.34s
+

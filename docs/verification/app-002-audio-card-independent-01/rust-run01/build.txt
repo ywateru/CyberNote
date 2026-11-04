@@ -1,0 +1,169 @@
+   Compiling notes-audio-card-store v0.1.0 (/private/tmp/apple-notes-audio-card-review01/docs/verification/app-002-audio-card-independent-01/rust-run01/harness)
+warning: methods `revoke_keys`, `folder_note_ids`, `note_text`, and `store_attachment` are never used
+   --> src/store.rs:265:19
+    |
+152 | impl Store {
+    | ---------- methods in this implementation
+...
+265 |     pub(crate) fn revoke_keys(&mut self, ids: &[String]) {
+    |                   ^^^^^^^^^^^
+...
+270 |     pub(crate) fn folder_note_ids(&self, fid: &str) -> Result<Vec<String>> {
+    |                   ^^^^^^^^^^^^^^^
+...
+301 |     pub(crate) fn note_text(&self, nid: &str) -> Result<Value> {
+    |                   ^^^^^^^^^
+...
+716 |     pub fn store_attachment(
+    |            ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `MAX_ARCHIVE` is never used
+  --> src/store/archive.rs:23:7
+   |
+23 | const MAX_ARCHIVE: u64 = 256 * 1024 * 1024;
+   |       ^^^^^^^^^^^
+
+warning: constant `MAX_ATTACHMENT` is never used
+  --> src/store/archive.rs:24:7
+   |
+24 | const MAX_ATTACHMENT: u64 = 100 * 1024 * 1024;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `MAX_DECODED` is never used
+  --> src/store/archive.rs:25:7
+   |
+25 | const MAX_DECODED: u64 = 128 * 1024 * 1024;
+   |       ^^^^^^^^^^^
+
+warning: constant `MAX_JSON_VALUES` is never used
+  --> src/store/archive.rs:28:7
+   |
+28 | const MAX_JSON_VALUES: usize = 500_000;
+   |       ^^^^^^^^^^^^^^^
+
+warning: struct `JsonBudget` is never constructed
+  --> src/store/archive.rs:33:8
+   |
+33 | struct JsonBudget<'a> {
+   |        ^^^^^^^^^^
+
+warning: function `validate_json_budget` is never used
+  --> src/store/archive.rs:95:4
+   |
+95 | fn validate_json_budget(bytes: &[u8]) -> Result<()> {
+   |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `Archive` is never constructed
+   --> src/store/archive.rs:115:8
+    |
+115 | struct Archive {
+    |        ^^^^^^^
+
+warning: struct `ImportPlan` is never constructed
+   --> src/store/archive.rs:129:8
+    |
+129 | struct ImportPlan {
+    |        ^^^^^^^^^^
+
+warning: function `write_new` is never used
+   --> src/store/archive.rs:159:4
+    |
+159 | fn write_new(path: &Path, bytes: &[u8]) -> Result<()> {
+    |    ^^^^^^^^^
+
+warning: function `valid_id` is never used
+   --> src/store/archive.rs:165:4
+    |
+165 | fn valid_id(value: &str) -> bool {
+    |    ^^^^^^^^
+
+warning: function `unique_ids` is never used
+   --> src/store/archive.rs:171:4
+    |
+171 | fn unique_ids<'a>(values: impl Iterator<Item = &'a str>, label: &str) -> Result<()> {
+    |    ^^^^^^^^^^
+
+warning: function `validate_folders` is never used
+   --> src/store/archive.rs:180:4
+    |
+180 | fn validate_folders(folders: &[Folder]) -> Result<()> {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `validate_settings` is never used
+   --> src/store/archive.rs:215:4
+    |
+215 | fn validate_settings(settings: &Value) -> Result<()> {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `validate_graph` is never used
+   --> src/store/archive.rs:250:4
+    |
+250 | fn validate_graph(folders: &[Folder], notes: &[Note], attachments: &[Attachment]) -> Result<()> {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `remap_document` is never used
+   --> src/store/archive.rs:339:4
+    |
+339 | fn remap_document(doc: &mut Value, ids: &HashMap<String, String>) {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `copy_ids` is never used
+   --> src/store/archive.rs:351:4
+    |
+351 | fn copy_ids<'a>(
+    |    ^^^^^^^^
+
+warning: methods `prepare_archive`, `export_archive`, and `import_archive` are never used
+   --> src/store/archive.rs:368:8
+    |
+367 | impl Store {
+    | ---------- methods in this implementation
+368 |     fn prepare_archive(&self, mut archive: Archive, transaction_id: &str) -> Result<ImportPlan> {
+    |        ^^^^^^^^^^^^^^^
+...
+501 |     pub fn export_archive(&self, path: &Path) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+...
+576 |     pub fn import_archive(&mut self, path: &Path) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+
+warning: function `import_checkpoint` is never used
+   --> src/store/archive.rs:729:4
+    |
+729 | fn import_checkpoint(_: &str) {}
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: field `action` is never read
+  --> src/session.rs:37:5
+   |
+30 | pub struct Pending {
+   |            ------- field in this struct
+...
+37 |     action: Value,
+   |     ^^^^^^
+
+warning: methods `forget_attachment_window`, `begin`, `acknowledge`, `ready`, and `finish` are never used
+   --> src/session.rs:142:12
+    |
+ 48 | impl Session {
+    | ------------ methods in this implementation
+...
+142 |     pub fn forget_attachment_window(&mut self, window: &str) {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+322 |     pub fn begin(
+    |            ^^^^^
+...
+373 |     pub fn acknowledge(&mut self, operation: &str, window: &str, success: bool) -> Result<()> {
+    |            ^^^^^^^^^^^
+...
+392 |     pub fn ready(&self) -> bool {
+    |            ^^^^^
+...
+397 |     pub fn finish(
+    |            ^^^^^^
+
+warning: `notes-audio-card-store` (bin "notes-audio-card-store") generated 21 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.00s

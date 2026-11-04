@@ -25,7 +25,7 @@ Tauri 2 同时构建 macOS 和 Android；pnpm 管理前端与 Tauri CLI。React/
 - Folder：id、name、parentId?、kind(default/normal/quick/trash)、sortOrder、createdAt。
 - Note：id、folderId、document（富文本 JSON）、title、plainText、createdAt、updatedAt、pinned、deletedAt?、originalFolderId?、locked、paperStyle、revision、sealed?（加密正文/盐/随机 nonce）。
 - Attachment：id、noteId、kind、relativePath、mime、displayName、size。
-- 录音日期子任务接入后，Attachment 可选 `recordedAt`：设备墙钟 UTC 毫秒，缺失/null 表示未知；仅本次应用录音从首次 `recorder.start` 成功的应用观察点固定一次，暂停/继续/完成/重试不重算。旧附件、旧操作及外部导入音频不推断、不回填。详细边界见下述“保存后录音日期与紧凑卡片”。
+- 录音日期源码候选已接入，Attachment 可选 `recordedAt`：设备墙钟 UTC 毫秒，缺失/null 表示未知；仅本次应用录音从首次 `recorder.start` 成功的应用观察点固定一次，暂停/继续/完成/重试不重算。旧附件、旧操作及外部导入音频不推断、不回填。详细边界见下述“保存后录音日期与紧凑卡片”。
 - Settings：theme、list/gallery、sort、dateGrouping、sidebarWidth、listWidth、selection、locale。
 
 ID 由 Rust 生成；时间为 UTC 毫秒，UI 按设备本地时区显示。title 从首段提取，空笔记显示“新备忘录”；摘要跳过标题。删除移到最近删除，保存 originalFolderId；恢复回原文件夹，文件夹不存在则回默认。永久删除为明确确认操作。持久文档包含表格/任务/绘画和附件引用，不能仅保存 innerText。
@@ -88,7 +88,7 @@ paperStyle 合法值为 plain、lines-small、lines-medium、lines-large、grid-
 
 Rust 错误应结构化：code/message，UI 显示错误并保留未保存内容。自动保存做按笔记串行队列/版本校验，避免切笔记或慢写导致旧内容覆盖新内容。输入法 composition 过程中不改写光标/文档。退出/失焦前清空队列并验证重启内容。附件内容 URL 只从受管路径生成。
 
-### 保存后录音日期与紧凑卡片（APP-002-AUDIO-CARD-01，待实现）
+### 保存后录音日期与紧凑卡片（APP-002-AUDIO-CARD-01，源码候选待独审）
 
 原录屏已证正文紧凑卡包含标题、卡内日期时间、“音频 · 2秒”和右侧播放按钮；保存后展开/回放/菜单手势仍未取证，不能用录制面板的控件补造目标。规格见 `ui/audio-card-mobile.md`。日期行采用下面明确的工程时间含义，不冒充原版尚未证实的取时规则。
 

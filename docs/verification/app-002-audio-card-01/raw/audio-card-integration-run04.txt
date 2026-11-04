@@ -1,0 +1,17 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /刷新失败/. Input:
+
+''
+
+    at file:///private/tmp/apple-notes-audio-card-01/scripts/check-audio-card-integration.mjs:219:16 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '',
+  expected: /刷新失败/,
+  operator: 'match'
+}
+
+Node.js v22.16.0

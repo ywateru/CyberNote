@@ -1,0 +1,21 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: ID swap synchronous render cannot retain old date
++ actual - expected
+
++ '2026年11月3日 23:59'
+- null
+
+    at file:///private/tmp/apple-notes-audio-card-01/scripts/check-audio-card-ui.mjs:280:12
+    at async test (file:///private/tmp/apple-notes-audio-card-01/scripts/check-audio-card-ui.mjs:195:5)
+    at async file:///private/tmp/apple-notes-audio-card-01/scripts/check-audio-card-ui.mjs:278:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '2026年11月3日 23:59',
+  expected: null,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

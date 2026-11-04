@@ -1,0 +1,165 @@
+{
+  "status": "pass",
+  "browser": "156.0.8078.80",
+  "results": [
+    {
+      "scenario": "permission-cross-day-long-pause",
+      "recordedAt": 1793721599000,
+      "dateISO": "2026-11-03T15:59:59.000Z",
+      "operationId": "32458a61-51a9-4578-8741-b4267976fe1f",
+      "attachmentId": "66271356-4ae7-443e-aa17-737100e185a6",
+      "status": "committed",
+      "submitCount": 1,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      },
+      "cold": {
+        "date": 1793721599000,
+        "bytesSHA256": "b731d9ed1df929ade184b93630b0a6bff1a1366b04712cc7afdf6dc8c6cec491"
+      },
+      "byteSHA256": "b731d9ed1df929ade184b93630b0a6bff1a1366b04712cc7afdf6dc8c6cec491"
+    },
+    {
+      "scenario": "lost-first-store-response",
+      "recordedAt": 1793721599000,
+      "dateISO": "2026-11-03T15:59:59.000Z",
+      "operationId": "d337aa41-2f2c-4710-b8f7-7c233cfa4a05",
+      "attachmentId": "d36c6e06-f688-452b-9876-ef75fe7f091f",
+      "status": "committed",
+      "submitCount": 1,
+      "counts": {
+        "stores": 1,
+        "queries": 1,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      },
+      "cold": {
+        "date": 1793721599000,
+        "bytesSHA256": "b731d9ed1df929ade184b93630b0a6bff1a1366b04712cc7afdf6dc8c6cec491"
+      },
+      "byteSHA256": "b731d9ed1df929ade184b93630b0a6bff1a1366b04712cc7afdf6dc8c6cec491"
+    },
+    {
+      "scenario": "body-ack-failure",
+      "recordedAt": 1793721599000,
+      "dateISO": "2026-11-03T15:59:59.000Z",
+      "operationId": "45125630-05b2-48b5-9f47-c57e1367dadd",
+      "attachmentId": "27beba9b-f698-4562-901b-995fabe705d4",
+      "status": "committed",
+      "submitCount": 2,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 3,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      },
+      "cold": {
+        "date": 1793721599000,
+        "bytesSHA256": "b731d9ed1df929ade184b93630b0a6bff1a1366b04712cc7afdf6dc8c6cec491"
+      },
+      "byteSHA256": "b731d9ed1df929ade184b93630b0a6bff1a1366b04712cc7afdf6dc8c6cec491"
+    },
+    {
+      "scenario": "refresh-failure",
+      "recordedAt": 1793721599000,
+      "dateISO": "2026-11-03T15:59:59.000Z",
+      "operationId": "fc1b43d9-d717-4eaf-9a7c-b0834b8bf585",
+      "attachmentId": "e9d459bf-1b74-471a-a072-4dc200c168b2",
+      "status": "committed",
+      "submitCount": 1,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      },
+      "cold": {
+        "date": 1793721599000,
+        "bytesSHA256": "b731d9ed1df929ade184b93630b0a6bff1a1366b04712cc7afdf6dc8c6cec491"
+      },
+      "byteSHA256": "b731d9ed1df929ade184b93630b0a6bff1a1366b04712cc7afdf6dc8c6cec491"
+    },
+    {
+      "scenario": "old-target-late-store",
+      "recordedAt": 1793721599000,
+      "dateISO": "2026-11-03T15:59:59.000Z",
+      "operationId": "3588e0e1-7dcc-4f8c-8d68-71061ba6bc9c",
+      "attachmentId": "d33f6bec-ba7c-4a42-afea-6e4c77e6df64",
+      "status": "stored",
+      "submitCount": 1,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": false,
+        "active": true
+      },
+      "cold": null,
+      "byteSHA256": "b731d9ed1df929ade184b93630b0a6bff1a1366b04712cc7afdf6dc8c6cec491"
+    }
+  ],
+  "sourceHashes": {
+    "attachment-submission": "4c44ecd682e8f2fa04d40a87445d6dfe47e1cc7f40dac6691367e75a74225833",
+    "recording-metadata": "4630348ffaab79e799e5417b1b256e4957df5460fda8c3966482d0ad766d3131",
+    "audio-playback": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+    "trusted-synchronization": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128",
+    "attachment-target": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+    "document-equality": "629d2729ac47626f6618f13d6858c98dc5a0f654a4b53ba70f6ec0731204db7d",
+    "bridge": "76cf917f754614fbd587e09f220b8abc56403c2429b738d9b690eac9cdaa6292",
+    "access-client": "fb3a9a062fbee9b5b68ca5a8bcbd8cb0de49170b5af35f907d95d09a0ba70d10",
+    "secure-id": "04eb982510ffd3b6a6931f3f61ddbf1cc53d981d2e8aac281a5110c7c112c3ab",
+    "proof-access": "64b235d209e03649d340354b1aa187efd2fe872cfbc9e007951306359c3ca3ca",
+    "types": "bf762765cba32b67751ac62b25bfc358b053a627d7866df929337f12e1b79c03",
+    "save-queue": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+    "save-revisions": "3fbf025c8c57cbcc78cdc13d8b62962b0235feb89ea3cd23b5af8547bc940d6a",
+    "editor-save-snapshot": "4ca9f9b64f52c3558b1a843c61f0ef8d810af45743c26f2cf57974c03564d5dd",
+    "note-tags": "2d5460e5a70bcb7b6a5a91631e25ca6ff05c1b3aeeb79b45a4a145415c174a2f",
+    "App": "44324ee08867f08fd10c9825eb6637545255a5eb30bf0badfde123c71dd8210e",
+    "RecordingPanel": "d195446e7d930d56ef186ad4eddcd5e6a3d0ba97e2b308b07706a3f59e6e92d0",
+    "RecordingSession": "59b4520d7ba6b90a305e1ebd61e0fedba800df031ac55f2eb6f5e6fee51472d8"
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-audio-card-store",
+    "sha256": "a2df38d0b246c8128985ceb911f7dc5cb25fe8745e05c4f131fdaf67d1fc14fe"
+  },
+  "pageErrors": [],
+  "external": [],
+  "limits": [
+    "Actual mounted Panel/Session, AST-extracted production App closures and PM document/bookmark; React setters and Editor command host controlled. App shell not mounted.",
+    "Transport replacement invokes actual Rust Session/Store in a fresh isolated temporary database, including real access tokens/window owner/save intent and full body ACK. No Tauri IPC serialization/native GUI/device build.",
+    "Synthetic controlled bytes, no microphone/codec/audibility/native media acceptance.",
+    "Old target late response retains original attachment without insertion; unreferenced operation deliberately not cold-reopened because existing Store recovery compensates it."
+  ]
+}
