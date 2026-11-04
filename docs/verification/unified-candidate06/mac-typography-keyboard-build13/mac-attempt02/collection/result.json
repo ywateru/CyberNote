@@ -1,0 +1,558 @@
+{
+  "schema": 1,
+  "startedAt": "2026-11-04T22:45:30.301605+00:00",
+  "stage": "mac",
+  "expectedHead": "182464bcc3055caadcd78fe4c7ce1a0ec31eea6a",
+  "productAggregate": "6b1cda6557ff292326617bd2fdf8750ba37d700eb460e2d6cdb1ac2da80848ad",
+  "sourceAggregate": "0769da604be0d4d3087771b948477e9c96c45992f0e75b81298465cdaa9d290e",
+  "freezeSha256": "6da4a0f5cd6c24eee6f77560063af67519202bbba983b883772394f31f40261d",
+  "buildResult": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/result.json",
+    "bytes": 5852,
+    "sha256": "c22e4bbdf52e82021bcda6eca7d1f836ae0d6ea9c9349d65613ca3152eea0cf9"
+  },
+  "buildNonce": "c9de0b0de55b4747b0ea094697d4e29a",
+  "artifactDirectory": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02",
+  "ready": true,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/ditto",
+        "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-01.txt",
+      "diskFreeBefore": 62600601600,
+      "minimumFreeBytes": 62584176640,
+      "deadlineSeconds": 599.9889705,
+      "ownedProcessGroup": 60742,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.288,
+      "exitCode": 0,
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/ditto",
+        "-c",
+        "-k",
+        "--sequesterRsrc",
+        "--keepParent",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.zip"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-02.txt",
+      "diskFreeBefore": 62584168448,
+      "minimumFreeBytes": 62579060736,
+      "deadlineSeconds": 599.641863917,
+      "ownedProcessGroup": 60748,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.496,
+      "exitCode": 0,
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-03.txt",
+      "diskFreeBefore": 62579060736,
+      "minimumFreeBytes": 62579052544,
+      "deadlineSeconds": 599.100266292,
+      "ownedProcessGroup": 60753,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.281,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app/Contents/MacOS/notes-clone\nIdentifier=notes_clone-d3015a5dc8a7adce\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=127128 flags=0x20002(adhoc,linker-signed) hashes=3969+0 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=72e8e1fbfec862988b052af96542e8b094c113b7\nCandidateCDHashFull sha256=72e8e1fbfec862988b052af96542e8b094c113b75ed25f9440a79bdb3bb91784\nHash choices=sha256\nCMSDigest=72e8e1fbfec862988b052af96542e8b094c113b75ed25f9440a79bdb3bb91784\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11337728\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=72e8e1fbfec862988b052af96542e8b094c113b7\nSignature=adhoc\nInfo.plist=not bound\nTeamIdentifier=not set\nSealed Resources=none\nInternal requirements=none\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-04.txt",
+      "diskFreeBefore": 62579052544,
+      "minimumFreeBytes": 62579052544,
+      "deadlineSeconds": 598.783728084,
+      "ownedProcessGroup": 60761,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.28,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-05.txt",
+      "diskFreeBefore": 62579052544,
+      "minimumFreeBytes": 62579032064,
+      "deadlineSeconds": 598.473739834,
+      "ownedProcessGroup": 60766,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.281,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app/Contents/MacOS/notes-clone\n# designated => cdhash H\"72e8e1fbfec862988b052af96542e8b094c113b7\"\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-06.txt",
+      "diskFreeBefore": 62579032064,
+      "minimumFreeBytes": 62578999296,
+      "deadlineSeconds": 598.165560084,
+      "ownedProcessGroup": 60771,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.274,
+      "exitCode": 1,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app: code has no resources but signature indicates they must be present\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/ditto",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-07.txt",
+      "diskFreeBefore": 62578995200,
+      "minimumFreeBytes": 62562578432,
+      "deadlineSeconds": 597.863908125,
+      "ownedProcessGroup": 60776,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.282,
+      "exitCode": 0,
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--force",
+        "--sign",
+        "-",
+        "--timestamp=none",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-08.txt",
+      "diskFreeBefore": 62562865152,
+      "minimumFreeBytes": 62562848768,
+      "deadlineSeconds": 597.554337625,
+      "ownedProcessGroup": 60783,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.283,
+      "exitCode": 0,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app: replacing existing signature\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-09.txt",
+      "diskFreeBefore": 62562938880,
+      "minimumFreeBytes": 62562918400,
+      "deadlineSeconds": 597.245020417,
+      "ownedProcessGroup": 60789,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.281,
+      "exitCode": 0,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app: valid on disk\n/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app: satisfies its Designated Requirement\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-10.txt",
+      "diskFreeBefore": 62562918400,
+      "minimumFreeBytes": 62562902016,
+      "deadlineSeconds": 596.9371355,
+      "ownedProcessGroup": 60795,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.275,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app/Contents/MacOS/notes-clone\nIdentifier=com.local.notesclone\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=31981 flags=0x2(adhoc) hashes=993+3 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=21ac36c66998a188fe8a4ce000c158db49daa78d\nCandidateCDHashFull sha256=21ac36c66998a188fe8a4ce000c158db49daa78d75f9bae535bc3ce999a69ff6\nHash choices=sha256\nCMSDigest=21ac36c66998a188fe8a4ce000c158db49daa78d75f9bae535bc3ce999a69ff6\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11337728\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=21ac36c66998a188fe8a4ce000c158db49daa78d\nSignature=adhoc\nInfo.plist entries=16\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=0\nInternal requirements count=0 size=12\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-11.txt",
+      "diskFreeBefore": 62562902016,
+      "minimumFreeBytes": 62562889728,
+      "deadlineSeconds": 596.635414792,
+      "ownedProcessGroup": 60801,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.278,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-12.txt",
+      "diskFreeBefore": 62562889728,
+      "minimumFreeBytes": 62562869248,
+      "deadlineSeconds": 596.330026709,
+      "ownedProcessGroup": 60808,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.277,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app/Contents/MacOS/notes-clone\n# designated => cdhash H\"21ac36c66998a188fe8a4ce000c158db49daa78d\"\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/ditto",
+        "-c",
+        "-k",
+        "--sequesterRsrc",
+        "--keepParent",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.zip"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-13.txt",
+      "diskFreeBefore": 62562865152,
+      "minimumFreeBytes": 62557888512,
+      "deadlineSeconds": 595.9921065,
+      "ownedProcessGroup": 60813,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.495,
+      "exitCode": 0,
+      "stdout": ""
+    }
+  ],
+  "original": {
+    "sourceApp": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+    "preservedApp": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app",
+    "bundleFiles": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+        "type": "file",
+        "mode": 420
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16383024,
+        "sha256": "c1b3d1fa0de4b4d0bec8031c5ce0981f98ca910a991c69b814c4f069d475f833",
+        "type": "file",
+        "mode": 493
+      }
+    ],
+    "bundleAggregate": "e9fba6a69eb626232425345078572dce4f8bb87f575800024291c0ef1ec76419",
+    "archive": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.zip",
+      "bytes": 4946672,
+      "sha256": "c14c88272a683eeedb37c9a1ce04ad8edd6bca383b1a967fd9784588d860ffd1"
+    },
+    "executable": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app/Contents/MacOS/notes-clone",
+      "bytes": 16383024,
+      "sha256": "c1b3d1fa0de4b4d0bec8031c5ce0981f98ca910a991c69b814c4f069d475f833"
+    }
+  },
+  "originalSignature": [
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-03.txt",
+      "diskFreeBefore": 62579060736,
+      "minimumFreeBytes": 62579052544,
+      "deadlineSeconds": 599.100266292,
+      "ownedProcessGroup": 60753,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.281,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app/Contents/MacOS/notes-clone\nIdentifier=notes_clone-d3015a5dc8a7adce\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=127128 flags=0x20002(adhoc,linker-signed) hashes=3969+0 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=72e8e1fbfec862988b052af96542e8b094c113b7\nCandidateCDHashFull sha256=72e8e1fbfec862988b052af96542e8b094c113b75ed25f9440a79bdb3bb91784\nHash choices=sha256\nCMSDigest=72e8e1fbfec862988b052af96542e8b094c113b75ed25f9440a79bdb3bb91784\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11337728\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=72e8e1fbfec862988b052af96542e8b094c113b7\nSignature=adhoc\nInfo.plist=not bound\nTeamIdentifier=not set\nSealed Resources=none\nInternal requirements=none\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-04.txt",
+      "diskFreeBefore": 62579052544,
+      "minimumFreeBytes": 62579052544,
+      "deadlineSeconds": 598.783728084,
+      "ownedProcessGroup": 60761,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.28,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-05.txt",
+      "diskFreeBefore": 62579052544,
+      "minimumFreeBytes": 62579032064,
+      "deadlineSeconds": 598.473739834,
+      "ownedProcessGroup": 60766,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.281,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app/Contents/MacOS/notes-clone\n# designated => cdhash H\"72e8e1fbfec862988b052af96542e8b094c113b7\"\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-06.txt",
+      "diskFreeBefore": 62579032064,
+      "minimumFreeBytes": 62578999296,
+      "deadlineSeconds": 598.165560084,
+      "ownedProcessGroup": 60771,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.274,
+      "exitCode": 1,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app: code has no resources but signature indicates they must be present\n"
+    }
+  ],
+  "sealedSign": {
+    "argv": [
+      "/usr/bin/codesign",
+      "--force",
+      "--sign",
+      "-",
+      "--timestamp=none",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+    ],
+    "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-08.txt",
+    "diskFreeBefore": 62562865152,
+    "minimumFreeBytes": 62562848768,
+    "deadlineSeconds": 597.554337625,
+    "ownedProcessGroup": 60783,
+    "ownedGroupStopped": true,
+    "remainingOwnedGroupMembers": [],
+    "elapsedSeconds": 0.283,
+    "exitCode": 0,
+    "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app: replacing existing signature\n"
+  },
+  "sealedVerify": {
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+    ],
+    "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-09.txt",
+    "diskFreeBefore": 62562938880,
+    "minimumFreeBytes": 62562918400,
+    "deadlineSeconds": 597.245020417,
+    "ownedProcessGroup": 60789,
+    "ownedGroupStopped": true,
+    "remainingOwnedGroupMembers": [],
+    "elapsedSeconds": 0.281,
+    "exitCode": 0,
+    "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app: valid on disk\n/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app: satisfies its Designated Requirement\n"
+  },
+  "sealedDisplays": [
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-10.txt",
+      "diskFreeBefore": 62562918400,
+      "minimumFreeBytes": 62562902016,
+      "deadlineSeconds": 596.9371355,
+      "ownedProcessGroup": 60795,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.275,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app/Contents/MacOS/notes-clone\nIdentifier=com.local.notesclone\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=31981 flags=0x2(adhoc) hashes=993+3 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=21ac36c66998a188fe8a4ce000c158db49daa78d\nCandidateCDHashFull sha256=21ac36c66998a188fe8a4ce000c158db49daa78d75f9bae535bc3ce999a69ff6\nHash choices=sha256\nCMSDigest=21ac36c66998a188fe8a4ce000c158db49daa78d75f9bae535bc3ce999a69ff6\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11337728\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=21ac36c66998a188fe8a4ce000c158db49daa78d\nSignature=adhoc\nInfo.plist entries=16\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=0\nInternal requirements count=0 size=12\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-11.txt",
+      "diskFreeBefore": 62562902016,
+      "minimumFreeBytes": 62562889728,
+      "deadlineSeconds": 596.635414792,
+      "ownedProcessGroup": 60801,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.278,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/command-12.txt",
+      "diskFreeBefore": 62562889728,
+      "minimumFreeBytes": 62562869248,
+      "deadlineSeconds": 596.330026709,
+      "ownedProcessGroup": 60808,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.277,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app/Contents/MacOS/notes-clone\n# designated => cdhash H\"21ac36c66998a188fe8a4ce000c158db49daa78d\"\n"
+    }
+  ],
+  "sealingChanges": [
+    {
+      "path": "Contents/MacOS/notes-clone",
+      "before": {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16383024,
+        "sha256": "c1b3d1fa0de4b4d0bec8031c5ce0981f98ca910a991c69b814c4f069d475f833",
+        "type": "file",
+        "mode": 493
+      },
+      "after": {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16305920,
+        "sha256": "b24f87623e49781859166d798dec052cb987692469ad2741847392b13e127812",
+        "type": "file",
+        "mode": 493
+      }
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "before": null,
+      "after": {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b",
+        "type": "file",
+        "mode": 420
+      }
+    }
+  ],
+  "sealed": {
+    "derivedApp": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app",
+    "bundleFiles": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+        "type": "file",
+        "mode": 420
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16305920,
+        "sha256": "b24f87623e49781859166d798dec052cb987692469ad2741847392b13e127812",
+        "type": "file",
+        "mode": 493
+      },
+      {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b",
+        "type": "file",
+        "mode": 420
+      }
+    ],
+    "bundleAggregate": "c37691422c79458aeb1d4e4d132bcfda2c6ef63e8616cc27e5175c47e7d85953",
+    "archive": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.zip",
+      "bytes": 4874380,
+      "sha256": "91dec624ade286756cd2eec5b8c0768c738821c8c2829b9089e42fa491001ae6"
+    },
+    "executable": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app/Contents/MacOS/notes-clone",
+      "bytes": 16305920,
+      "sha256": "b24f87623e49781859166d798dec052cb987692469ad2741847392b13e127812"
+    }
+  },
+  "preservedOriginalUnchanged": true,
+  "limits": "Complete original plus local adhoc derived bundle only. No DeveloperID, notarization, TCC, launch, persistence or pixel acceptance.",
+  "inputComparisons": {
+    "schema": true,
+    "authorization": true,
+    "head": true,
+    "stage": true,
+    "productFiles": true,
+    "productAggregate": true,
+    "files": true,
+    "aggregate": true,
+    "toolVersions": true,
+    "tools": true,
+    "selectedParentEnvironment": true,
+    "effectiveBuildEnvironment": true,
+    "ocrCache": true,
+    "supplementalInputs": true,
+    "scope": true
+  },
+  "supplementalInputsUnchangedDuringCollection": true,
+  "endedAt": "2026-11-04T22:45:36.768176+00:00"
+}

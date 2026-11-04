@@ -1,0 +1,104 @@
+{
+  "at": "2026-11-04T23:04:02.665593+00:00",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "mode": "restart",
+  "events": [
+    {
+      "at": "2026-11-04T23:04:02.688767+00:00",
+      "args": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.023,
+      "deadlineSeconds": 20,
+      "stdout": "28752\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T23:04:02.760443+00:00",
+      "args": [
+        "shell",
+        "am",
+        "force-stop",
+        "com.local.notesclone"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.072,
+      "deadlineSeconds": 20,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T23:04:02.793113+00:00",
+      "args": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.033,
+      "deadlineSeconds": 20,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T23:04:03.887101+00:00",
+      "args": [
+        "shell",
+        "am",
+        "start",
+        "-W",
+        "-n",
+        "com.local.notesclone/.MainActivity"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.094,
+      "deadlineSeconds": 20,
+      "stdout": "Starting: Intent { cmp=com.local.notesclone/.MainActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.local.notesclone/.MainActivity\nTotalTime: 1043\nWaitTime: 1046\nComplete\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T23:04:05.117911+00:00",
+      "args": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.026,
+      "deadlineSeconds": 20,
+      "stdout": "29053\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T23:04:05.249397+00:00",
+      "args": [
+        "exec-out",
+        "screencap",
+        "-p"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.131,
+      "deadlineSeconds": 20,
+      "stdout": {
+        "bytes": 114625,
+        "sha256": "e591efb67390058effae64af9c76b3ec75686799abcafe2f1b2615b422fd77b4"
+      },
+      "stderr": ""
+    }
+  ],
+  "hostFreeBytes": 62111113216,
+  "oldPid": "28752",
+  "stoppedPid": "",
+  "newPid": "29053",
+  "png": {
+    "path": "docs/verification/android-compose-anchor-runtime36/15-force-stop-reopen.png",
+    "bytes": 114625,
+    "sha256": "e591efb67390058effae64af9c76b3ec75686799abcafe2f1b2615b422fd77b4"
+  },
+  "status": "PASS",
+  "endedAt": "2026-11-04T23:04:05.250097+00:00"
+}

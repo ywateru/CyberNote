@@ -161,3 +161,15 @@ checkbox：保持原位；后标签文字左2图像px，说明仍原位
 ```
 
 先受控真实WK复现，再依据原参考校准，最后准确Mac12 Computer Use验证。选择色仅此input；智能/编辑/手机/正文、20表面及22侧栏不改。失焦/重新激活和深色需记录，可读不等于未知原版深色像素通过。详见[任务26](../plan/tasks/app-mac-ordinary-name-focus26.md)。
+
+## 普通名称Tab循环37
+
+准确Mac13实际36显示系统策略35同步后仍普通Tab离开名称；原版37紧随连续Right/Tab与直接Tab均名称全选。下一[局部循环37](../plan/tasks/app-mac-ordinary-tab-loop37.md)只承担普通Mac创建对话框内的Tab，按当次公开系统策略决定名称或完整可用控件循环。
+
+```text
+系统键盘导航关：名称 --Tab/ShiftTab--> 名称（全选）
+系统键盘导航开：表单内实际可见可用控件正反循环（原版开启态待实证）
+关闭/转智能/用户另行操作：取消旧异步导航，不夺焦点
+```
+
+OptionTab字面插入仍另项；Android、智能规则、普通文本输入与原生搜索不接入本局部循环。实际文字31改善见research/mac-ordinary-typography36-runtime-analysis，名称与选区残差保持开放。

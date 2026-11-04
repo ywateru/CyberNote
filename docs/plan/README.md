@@ -82,3 +82,5 @@
 docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，docs/ui 是视觉证据。实现阶段遵循 docs-sprint 的 develop/verify 分离。空仓库先建立 Git 基线，串行实施开发/验证；不要求用户批准已授权的常规设计补全。测试必须覆盖真实持久化边界和 UI 用户路径，不能只测试同实现的常量。
 
 具体模块边界与必须实证的调用链见 [交付分解](analysis/delivery-map.md)。后续每项阻塞差异建立最小可验收任务，先修再复核。
+
+2026-11-05后续37：同源Mac13/Android08已构建并独立核包通过。Mac13侧栏两入口、菜单动态文字、hidden/visible正常重启实际36有限通过；文字31实际量图改善但仍残差。普通Tab/OptionTab仍差异，新增[局部循环37](tasks/app-mac-ordinary-tab-loop37.md)继续。Android08保数据设备记录进行中，空白新建无输入返回后8→9，保留现场、不删除，不追认为原版语义一致。

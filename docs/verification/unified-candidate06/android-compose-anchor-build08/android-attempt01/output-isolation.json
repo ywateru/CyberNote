@@ -1,0 +1,61 @@
+{
+  "policy": "atomic-rename-final-output-and-dist",
+  "sourcePathsAbsentBeforeCommand": true,
+  "outputs": [
+    {
+      "name": "application",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-compose-anchor-build08/android-attempt01/prior-outputs/application",
+      "kind": "file",
+      "before": {
+        "kind": "file",
+        "device": 16777233,
+        "inode": 29522276,
+        "mode": 420,
+        "bytes": 179247354,
+        "sha256": "e19965fd97c45ac3184e569777146d68b4d312bd561bbb2862d27ad93c6a86c6"
+      }
+    },
+    {
+      "name": "dist",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-compose-anchor-build08/android-attempt01/prior-outputs/dist",
+      "kind": "directory",
+      "before": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 29576856,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "assets",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "assets/index-B5XVqrGq.js",
+            "bytes": 968181,
+            "sha256": "9d8e413f4f8e547779949f72100c0de34ccfafaf99537e39f59b1b99fa05336d",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/index-CcN0EZLg.css",
+            "bytes": 67171,
+            "sha256": "edec1dbfce2ad941bd9f66fbadcf2821852463341fcb07a59ce2936dfde52ca8",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "index.html",
+            "bytes": 498,
+            "sha256": "f6e22931df5b688de0351a5192381899d246c906a9f6c0a22f70d159561b872f",
+            "type": "file",
+            "mode": 420
+          }
+        ]
+      }
+    }
+  ]
+}

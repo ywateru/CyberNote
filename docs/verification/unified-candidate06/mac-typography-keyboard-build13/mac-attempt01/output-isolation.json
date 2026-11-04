@@ -1,0 +1,85 @@
+{
+  "policy": "atomic-rename-final-output-and-dist",
+  "sourcePathsAbsentBeforeCommand": true,
+  "outputs": [
+    {
+      "name": "application",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-typography-keyboard-build13/mac-attempt01/prior-outputs/application",
+      "kind": "directory",
+      "before": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 29520140,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "Contents",
+            "mode": 493
+          },
+          {
+            "path": "Contents/MacOS",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "Contents/Info.plist",
+            "bytes": 1193,
+            "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "Contents/MacOS/notes-clone",
+            "bytes": 16375584,
+            "sha256": "085d1fc6a9dfd324523c0ea7bff28446ad45de85fcc956b8f8b382822cb97a68",
+            "type": "file",
+            "mode": 493
+          }
+        ]
+      }
+    },
+    {
+      "name": "dist",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-typography-keyboard-build13/mac-attempt01/prior-outputs/dist",
+      "kind": "directory",
+      "before": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 29521484,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "assets",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "assets/index-BHqD24ML.css",
+            "bytes": 66970,
+            "sha256": "ede9bf5001b6b10ea7bf9b6ea32b306b4c0187f91ca466ecb0f2988cd159b2e8",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/index-DLxI8T6h.js",
+            "bytes": 968181,
+            "sha256": "9d8e413f4f8e547779949f72100c0de34ccfafaf99537e39f59b1b99fa05336d",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "index.html",
+            "bytes": 498,
+            "sha256": "99b6717470ff4d067c89711ffc09ba8abf4e75adba98910e818219848bff9aca",
+            "type": "file",
+            "mode": 420
+          }
+        ]
+      }
+    }
+  ]
+}

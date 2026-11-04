@@ -1,0 +1,265 @@
+{
+  "scope": "Compose-only fixed ROI threshold measures plus three finite same-device RGB controls; no full pixel acceptance",
+  "ratio": 4.821428571428571,
+  "coordinateRule": "Half-open native image bboxes; 1080/224 is width normalization only; no original CSS/dp/pt/DPR inferred",
+  "records": {
+    "original14": {
+      "source": "references/mobile/frames-2s/frame-008.png",
+      "size": [
+        224,
+        480
+      ],
+      "roi": [
+        192,
+        434,
+        220,
+        463
+      ],
+      "masks": {
+        "gold_strict": {
+          "nativeBbox": [
+            202,
+            442,
+            214,
+            454
+          ],
+          "pixels": 39,
+          "widthInReferencePx": 12.0,
+          "heightInReferencePx": 12.0,
+          "centerXInReferencePx": 208.0
+        },
+        "gold_loose": {
+          "nativeBbox": [
+            202,
+            442,
+            214,
+            454
+          ],
+          "pixels": 92,
+          "widthInReferencePx": 12.0,
+          "heightInReferencePx": 12.0,
+          "centerXInReferencePx": 208.0
+        }
+      }
+    },
+    "original62": {
+      "source": "references/mobile/frames-2s/frame-032.png",
+      "size": [
+        224,
+        480
+      ],
+      "roi": [
+        192,
+        434,
+        220,
+        463
+      ],
+      "masks": {
+        "gold_strict": {
+          "nativeBbox": [
+            202,
+            442,
+            214,
+            454
+          ],
+          "pixels": 39,
+          "widthInReferencePx": 12.0,
+          "heightInReferencePx": 12.0,
+          "centerXInReferencePx": 208.0
+        },
+        "gold_loose": {
+          "nativeBbox": [
+            202,
+            442,
+            214,
+            454
+          ],
+          "pixels": 99,
+          "widthInReferencePx": 12.0,
+          "heightInReferencePx": 12.0,
+          "centerXInReferencePx": 208.0
+        }
+      }
+    },
+    "android07-19": {
+      "source": "docs/verification/android-folder-visual-runtime29/19-after-restart.png",
+      "size": [
+        1080,
+        2280
+      ],
+      "roi": [
+        930,
+        2020,
+        1060,
+        2130
+      ],
+      "masks": {
+        "gold_strict": {
+          "nativeBbox": [
+            966,
+            2049,
+            1023,
+            2105
+          ],
+          "pixels": 1050,
+          "widthInReferencePx": 11.822222222222223,
+          "heightInReferencePx": 11.614814814814816,
+          "centerXInReferencePx": 206.26666666666668
+        },
+        "gold_loose": {
+          "nativeBbox": [
+            966,
+            2049,
+            1023,
+            2105
+          ],
+          "pixels": 1050,
+          "widthInReferencePx": 11.822222222222223,
+          "heightInReferencePx": 11.614814814814816,
+          "centerXInReferencePx": 206.26666666666668
+        }
+      }
+    },
+    "android08-04": {
+      "source": "docs/verification/android-compose-anchor-runtime36/04-launch.png",
+      "size": [
+        1080,
+        2280
+      ],
+      "roi": [
+        930,
+        2020,
+        1060,
+        2130
+      ],
+      "masks": {
+        "gold_strict": {
+          "nativeBbox": [
+            974,
+            2049,
+            1031,
+            2105
+          ],
+          "pixels": 1050,
+          "widthInReferencePx": 11.822222222222223,
+          "heightInReferencePx": 11.614814814814816,
+          "centerXInReferencePx": 207.92592592592592
+        },
+        "gold_loose": {
+          "nativeBbox": [
+            974,
+            2049,
+            1031,
+            2105
+          ],
+          "pixels": 1050,
+          "widthInReferencePx": 11.822222222222223,
+          "heightInReferencePx": 11.614814814814816,
+          "centerXInReferencePx": 207.92592592592592
+        }
+      }
+    },
+    "android08-15": {
+      "source": "docs/verification/android-compose-anchor-runtime36/15-force-stop-reopen.png",
+      "size": [
+        1080,
+        2280
+      ],
+      "roi": [
+        930,
+        2020,
+        1060,
+        2130
+      ],
+      "masks": {
+        "gold_strict": {
+          "nativeBbox": [
+            974,
+            2049,
+            1031,
+            2105
+          ],
+          "pixels": 1050,
+          "widthInReferencePx": 11.822222222222223,
+          "heightInReferencePx": 11.614814814814816,
+          "centerXInReferencePx": 207.92592592592592
+        },
+        "gold_loose": {
+          "nativeBbox": [
+            974,
+            2049,
+            1031,
+            2105
+          ],
+          "pixels": 1050,
+          "widthInReferencePx": 11.822222222222223,
+          "heightInReferencePx": 11.614814814814816,
+          "centerXInReferencePx": 207.92592592592592
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "old07_to_exact08_outside_compose": {
+      "a": "docs/verification/android-folder-visual-runtime29/19-after-restart.png",
+      "b": "docs/verification/android-compose-anchor-runtime36/04-launch.png",
+      "roi": [
+        0,
+        83,
+        1080,
+        2148
+      ],
+      "exclusions": [
+        [
+          930,
+          2020,
+          1060,
+          2130
+        ]
+      ],
+      "changedPixels": 0,
+      "diffBboxWithinRoi": null,
+      "exactRGB": true
+    },
+    "qa_body_before_after_restart": {
+      "a": "docs/verification/android-compose-anchor-runtime36/12-existing-qa.png",
+      "b": "docs/verification/android-compose-anchor-runtime36/17-reopened-qa.png",
+      "roi": [
+        0,
+        83,
+        1080,
+        2148
+      ],
+      "exclusions": [],
+      "changedPixels": 0,
+      "diffBboxWithinRoi": null,
+      "exactRGB": true
+    },
+    "08_before_to_after_restart_except_observed_8_to_9": {
+      "a": "docs/verification/android-compose-anchor-runtime36/04-launch.png",
+      "b": "docs/verification/android-compose-anchor-runtime36/15-force-stop-reopen.png",
+      "roi": [
+        0,
+        83,
+        1080,
+        2148
+      ],
+      "exclusions": [
+        [
+          900,
+          810,
+          970,
+          1010
+        ]
+      ],
+      "changedPixels": 0,
+      "diffBboxWithinRoi": null,
+      "exactRGB": true
+    }
+  },
+  "limits": [
+    "Original224x480 video frames are low resolution and compressed.",
+    "Gold thresholds do not identify the original vector path, true stroke, exact color or original slot.",
+    "Only fixed regions and captures listed here compared; no complete interface/interaction PASS."
+  ]
+}

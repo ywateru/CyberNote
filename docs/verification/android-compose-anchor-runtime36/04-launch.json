@@ -1,0 +1,62 @@
+{
+  "at": "2026-11-04T23:01:05.324778+00:00",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "mode": "launch",
+  "events": [
+    {
+      "at": "2026-11-04T23:01:05.930593+00:00",
+      "args": [
+        "shell",
+        "am",
+        "start",
+        "-W",
+        "-n",
+        "com.local.notesclone/.MainActivity"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.606,
+      "deadlineSeconds": 20,
+      "stdout": "Starting: Intent { cmp=com.local.notesclone/.MainActivity }\nStatus: ok\nLaunchState: COLD\nActivity: com.local.notesclone/.MainActivity\nTotalTime: 589\nWaitTime: 590\nComplete\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T23:01:07.161202+00:00",
+      "args": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.026,
+      "deadlineSeconds": 20,
+      "stdout": "28752\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T23:01:07.259629+00:00",
+      "args": [
+        "exec-out",
+        "screencap",
+        "-p"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.098,
+      "deadlineSeconds": 20,
+      "stdout": {
+        "bytes": 114640,
+        "sha256": "2c7c92d50e32d019ec148f00f7b7181c0eaa9434731c071bbd9c053d84c873a4"
+      },
+      "stderr": ""
+    }
+  ],
+  "hostFreeBytes": 62143766528,
+  "pid": "28752",
+  "png": {
+    "path": "docs/verification/android-compose-anchor-runtime36/04-launch.png",
+    "bytes": 114640,
+    "sha256": "2c7c92d50e32d019ec148f00f7b7181c0eaa9434731c071bbd9c053d84c873a4"
+  },
+  "status": "PASS",
+  "endedAt": "2026-11-04T23:01:07.263814+00:00"
+}

@@ -1,0 +1,47 @@
+{
+  "at": "2026-11-04T23:03:56.158807+00:00",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "mode": "capture",
+  "events": [
+    {
+      "at": "2026-11-04T23:03:56.652629+00:00",
+      "args": [
+        "shell",
+        "input tap 120 140"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.494,
+      "deadlineSeconds": 20,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "waitSeconds": 0.4
+    },
+    {
+      "at": "2026-11-04T23:03:57.546490+00:00",
+      "args": [
+        "exec-out",
+        "screencap",
+        "-p"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.138,
+      "deadlineSeconds": 20,
+      "stdout": {
+        "bytes": 114992,
+        "sha256": "d5b8621f9cd76f9d58f311cf7259d658d4c05b656336f8fee24f91f3979cd268"
+      },
+      "stderr": ""
+    }
+  ],
+  "hostFreeBytes": 62112223232,
+  "png": {
+    "path": "docs/verification/android-compose-anchor-runtime36/14-before-restart-folders.png",
+    "bytes": 114992,
+    "sha256": "d5b8621f9cd76f9d58f311cf7259d658d4c05b656336f8fee24f91f3979cd268"
+  },
+  "status": "PASS",
+  "endedAt": "2026-11-04T23:03:57.547750+00:00"
+}

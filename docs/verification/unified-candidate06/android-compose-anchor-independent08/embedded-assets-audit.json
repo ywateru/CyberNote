@@ -1,0 +1,64 @@
+{
+  "status": "DECODED",
+  "library": "lib/arm64-v8a/libnotes_clone_lib.so",
+  "librarySha256": "f20b7cd18675c9571ca69906582b1cc082459f93fa981fd15d7c2518c79112e7",
+  "assets": [
+    {
+      "path": "assets/index-CcN0EZLg.css",
+      "expectedBytes": 67171,
+      "expectedSha256": "edec1dbfce2ad941bd9f66fbadcf2821852463341fcb07a59ce2936dfde52ca8",
+      "filenameOffsets": [
+        3038718
+      ],
+      "exactMatch": {
+        "offset": 3038736,
+        "bytes": 67171,
+        "sha256": "edec1dbfce2ad941bd9f66fbadcf2821852463341fcb07a59ce2936dfde52ca8",
+        "compressedBytes": 16081
+      },
+      "otherDecoded": []
+    },
+    {
+      "path": "assets/index-B5XVqrGq.js",
+      "expectedBytes": 968181,
+      "expectedSha256": "9d8e413f4f8e547779949f72100c0de34ccfafaf99537e39f59b1b99fa05336d",
+      "filenameOffsets": [
+        2722318
+      ],
+      "exactMatch": {
+        "offset": 2722335,
+        "bytes": 968181,
+        "sha256": "9d8e413f4f8e547779949f72100c0de34ccfafaf99537e39f59b1b99fa05336d",
+        "compressedBytes": 316032
+      },
+      "otherDecoded": []
+    },
+    {
+      "path": "index.html",
+      "expectedBytes": 498,
+      "expectedSha256": "f6e22931df5b688de0351a5192381899d246c906a9f6c0a22f70d159561b872f",
+      "filenameOffsets": [
+        1580874,
+        1584676,
+        1658317,
+        3038368,
+        3056539,
+        3056741,
+        3056791,
+        3072359,
+        3386124,
+        3485089,
+        3490320,
+        3491928
+      ],
+      "exactMatch": {
+        "offset": 3038378,
+        "bytes": 478,
+        "sha256": "a5e0d579cdd3f191f022b69355672e3927ea6d20555e8303c37e04b3041981a8",
+        "compressedBytes": 332
+      },
+      "otherDecoded": []
+    }
+  ],
+  "method": "Bounded Brotli streams following asset filenames; CSS/JS exact byte candidates, HTML candidate requires exact JS/CSS filenames and later full canonical token comparison. No execution/injection."
+}

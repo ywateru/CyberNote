@@ -1,0 +1,195 @@
+{
+  "schema": 1,
+  "at": "2026-11-04T23:06:55.999422+00:00",
+  "status": "LIMITED_PASS_WITH_OPEN_PARITY_DIFFERENCE",
+  "stop": true,
+  "device": "emulator-5580",
+  "package": "com.local.notesclone",
+  "sourceHead": "182464bcc3055caadcd78fe4c7ce1a0ec31eea6a",
+  "apk": {
+    "path": "artifacts/unified-candidate06/android-compose-anchor-build08/android-attempt01/android-original.apk",
+    "bytes": 179247354,
+    "sha256": "a7ba557478e42da0a7f0e387a772bf764b067bfe082553e765603ca700385632"
+  },
+  "independentPackageGate": {
+    "path": "docs/verification/unified-candidate06/android-compose-anchor-independent08/result.json",
+    "sha256": "d5c9246555b114107fea0b4d956058a0ca09d358e42e676638e7079c180755d5"
+  },
+  "checks": [
+    {
+      "name": "accurate installed APK after upgrade and close",
+      "passed": true,
+      "evidence": [
+        "03-upgrade.json",
+        "19-final-identity.json"
+      ]
+    },
+    {
+      "name": "preserve-data install-r succeeded and original identity kept",
+      "passed": true,
+      "evidence": [
+        "03-upgrade.json"
+      ]
+    },
+    {
+      "name": "new compose visible figure real touch opens editor and keyboard",
+      "passed": true,
+      "evidence": [
+        "04-launch.png",
+        "06-compose-tap.json",
+        "06-compose-tap.png"
+      ]
+    },
+    {
+      "name": "empty editor had no input commands before normal back",
+      "passed": true,
+      "evidence": [
+        "06-compose-tap.json",
+        "07-empty-draft-return.json"
+      ]
+    },
+    {
+      "name": "left visible circular plus real touch opens new-folder form",
+      "passed": true,
+      "evidence": [
+        "09-visible-left-plus.json",
+        "09-visible-left-plus.png"
+      ]
+    },
+    {
+      "name": "folder form cancellation retains original folders",
+      "passed": true,
+      "evidence": [
+        "10-folder-cancel.png",
+        "14-before-restart-folders.png"
+      ]
+    },
+    {
+      "name": "old QA visible title body and tag retained before restart",
+      "passed": true,
+      "evidence": [
+        "12-existing-qa.png"
+      ]
+    },
+    {
+      "name": "normal QA back returns list with old previews",
+      "passed": true,
+      "evidence": [
+        "13-qa-return-list.png"
+      ]
+    },
+    {
+      "name": "force-stop ends old process and cold start creates new process",
+      "passed": true,
+      "evidence": [
+        "15-force-stop-reopen.json"
+      ]
+    },
+    {
+      "name": "post-restart visible counts preserve observed 0 9 9 1",
+      "passed": true,
+      "evidence": [
+        "15-force-stop-reopen.png",
+        "18-final-folders.png"
+      ]
+    },
+    {
+      "name": "post-restart old QA entire app ROI RGB identical",
+      "passed": true,
+      "evidence": [
+        "12-existing-qa.png",
+        "17-reopened-qa.png",
+        "measurements.json"
+      ]
+    },
+    {
+      "name": "same-device noncompose screenshot control unchanged",
+      "passed": true,
+      "evidence": [
+        "measurements.json"
+      ]
+    },
+    {
+      "name": "restart screenshot control except observed counter difference unchanged",
+      "passed": true,
+      "evidence": [
+        "measurements.json"
+      ]
+    },
+    {
+      "name": "all331 protected files unchanged",
+      "passed": true,
+      "evidence": [
+        "input-open.json",
+        "input-close.json"
+      ]
+    },
+    {
+      "name": "all323 frozen source inputs unchanged",
+      "passed": true,
+      "evidence": [
+        "input-close.json"
+      ]
+    }
+  ],
+  "finiteChecksPassed": 15,
+  "failedFiniteChecks": 0,
+  "blankDraftReturnObservation": {
+    "originalParity": "PENDING_ORIGINAL_SAME_PATH_EVIDENCE",
+    "initialAllAndOrdinaryCount": 8,
+    "afterEmptyCreateThenNormalBackCount": 9,
+    "finalAllAndOrdinaryCount": 9,
+    "inputTextSent": false,
+    "newBlankEntryVisible": true,
+    "retainedWithoutDeleteOrUndo": true,
+    "rootDirection": "Preserve blank entry and observed8-to9; no deletion or rollback; mark parity difference pending original same-path evidence.",
+    "evidence": [
+      "06-compose-tap.png",
+      "07-empty-draft-return.png",
+      "08-folders-after-empty-return.png",
+      "15-force-stop-reopen.png"
+    ]
+  },
+  "composeThresholdCenterInReferencePx": {
+    "original14And62": 208,
+    "old07": 206.26666666666668,
+    "new08": 207.92592592592592,
+    "nativeShiftRightPx": 8,
+    "exact208Claim": false
+  },
+  "retainedQa": {
+    "title": "QA-SMART-U09-Android-Tag",
+    "body": "Local smart folder validation.",
+    "tag": "#QASmartU09Android"
+  },
+  "finalState": {
+    "page": "folders",
+    "pid": "29053",
+    "counts": {
+      "quick": 0,
+      "all": 9,
+      "ordinary": 9,
+      "smartR2": 1
+    },
+    "userId": "10169",
+    "firstInstallTime": "2026-11-03 22:09:17"
+  },
+  "recordedFailures": [
+    {
+      "file": "00-before-identity.json",
+      "stage": "Host ADB socket access denied before device connection; same exact read-only preflight retried with authorized permission."
+    },
+    {
+      "file": "05-compose-tap.json",
+      "stage": "Local coordinate-to-shell conversion TypeError before any ADB input; numeric conversion fixed only in new evidence helper, successful tap recorded06."
+    }
+  ],
+  "limits": [
+    "User-visible screenshots and actual input only; no DB audit or full attachment preservation claim.",
+    "No uninstall, reset, DB access, entity deletion, source changes, Git, audio playback/export, downloads or shared cache cleanup.",
+    "No DOM click, script injection or product hooks; ADB tap/keyevent navigation only.",
+    "Width-only image normalization from1080to224; low-resolution original cannot establish exact native path, original slot, stroke or color.",
+    "Full cross-platform UI/interaction pixel acceptance remains open; blank draft return semantics need original same-path comparison."
+  ],
+  "deviceOperationsEndedAt": "2026-11-04T23:04:55.119025+00:00"
+}

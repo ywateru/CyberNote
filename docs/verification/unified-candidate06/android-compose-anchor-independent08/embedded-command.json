@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "node",
+    "docs/verification/unified-candidate06/android-compose-anchor-independent08/verify-embedded-assets.mjs"
+  ],
+  "startedAt": "2026-11-04T22:53:40.194260+00:00",
+  "exitCode": 0,
+  "elapsedSeconds": 1.147,
+  "deadlineSeconds": 60,
+  "stdout": "{\n  \"status\": \"DECODED\",\n  \"library\": \"lib/arm64-v8a/libnotes_clone_lib.so\",\n  \"librarySha256\": \"f20b7cd18675c9571ca69906582b1cc082459f93fa981fd15d7c2518c79112e7\",\n  \"assets\": [\n    {\n      \"path\": \"assets/index-CcN0EZLg.css\",\n      \"expectedBytes\": 67171,\n      \"expectedSha256\": \"edec1dbfce2ad941bd9f66fbadcf2821852463341fcb07a59ce2936dfde52ca8\",\n      \"filenameOffsets\": [\n        3038718\n      ],\n      \"exactMatch\": {\n        \"offset\": 3038736,\n        \"bytes\": 67171,\n        \"sha256\": \"edec1dbfce2ad941bd9f66fbadcf2821852463341fcb07a59ce2936dfde52ca8\",\n        \"compressedBytes\": 16081\n      },\n      \"otherDecoded\": []\n    },\n    {\n      \"path\": \"assets/index-B5XVqrGq.js\",\n      \"expectedBytes\": 968181,\n      \"expectedSha256\": \"9d8e413f4f8e547779949f72100c0de34ccfafaf99537e39f59b1b99fa05336d\",\n      \"filenameOffsets\": [\n        2722318\n      ],\n      \"exactMatch\": {\n        \"offset\": 2722335,\n        \"bytes\": 968181,\n        \"sha256\": \"9d8e413f4f8e547779949f72100c0de34ccfafaf99537e39f59b1b99fa05336d\",\n        \"compressedBytes\": 316032\n      },\n      \"otherDecoded\": []\n    },\n    {\n      \"path\": \"index.html\",\n      \"expectedBytes\": 498,\n      \"expectedSha256\": \"f6e22931df5b688de0351a5192381899d246c906a9f6c0a22f70d159561b872f\",\n      \"filenameOffsets\": [\n        1580874,\n        1584676,\n        1658317,\n        3038368,\n        3056539,\n        3056741,\n        3056791,\n        3072359,\n        3386124,\n        3485089,\n        3490320,\n        3491928\n      ],\n      \"exactMatch\": {\n        \"offset\": 3038378,\n        \"bytes\": 478,\n        \"sha256\": \"a5e0d579cdd3f191f022b69355672e3927ea6d20555e8303c37e04b3041981a8\",\n        \"compressedBytes\": 332\n      },\n      \"otherDecoded\": []\n    }\n  ],\n  \"method\": \"Bounded Brotli streams following asset filenames; CSS/JS exact byte candidates, HTML candidate requires exact JS/CSS filenames and later full canonical token comparison. No execution/injection.\"\n}\n",
+  "stderr": ""
+}

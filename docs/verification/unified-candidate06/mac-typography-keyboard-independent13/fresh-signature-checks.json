@@ -1,0 +1,44 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.04916325000000005,
+      "stdout": "",
+      "stderr": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-original.app: code has no resources but signature indicates they must be present\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.020932542,
+      "stdout": "",
+      "stderr": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app: valid on disk\n/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app: satisfies its Designated Requirement\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.008095709000000006,
+      "stdout": "",
+      "stderr": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app/Contents/MacOS/notes-clone\nIdentifier=com.local.notesclone\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=31981 flags=0x2(adhoc) hashes=993+3 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=21ac36c66998a188fe8a4ce000c158db49daa78d\nCandidateCDHashFull sha256=21ac36c66998a188fe8a4ce000c158db49daa78d75f9bae535bc3ce999a69ff6\nHash choices=sha256\nCMSDigest=21ac36c66998a188fe8a4ce000c158db49daa78d75f9bae535bc3ce999a69ff6\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11337728\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=21ac36c66998a188fe8a4ce000c158db49daa78d\nSignature=adhoc\nInfo.plist entries=16\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=0\nInternal requirements count=0 size=12\n"
+    }
+  ]
+}

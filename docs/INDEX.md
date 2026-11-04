@@ -16,6 +16,9 @@
 - [普通Mac文字31独立源阶段审查](plan/reviews/app-mac-ordinary-typography31.md)
 - [原版Option-Tab未提交草稿观察35](research/mac-folder-keyboard-original35/README.md)
 
+- [Mac13实际有限运行36](verification/mac-typography-keyboard-runtime36/README.md)、[实际文字量图36](research/mac-ordinary-typography36-runtime-analysis/README.md)
+- [普通名称Tab原版补证37](research/mac-folder-tab-loop-original37/README.md)与[局部循环修复任务37](plan/tasks/app-mac-ordinary-tab-loop37.md)
+
 - [需求与验收](requirements.md)
 - [架构与数据契约](architecture.md)
 - [参考资料与调研](research/README.md)

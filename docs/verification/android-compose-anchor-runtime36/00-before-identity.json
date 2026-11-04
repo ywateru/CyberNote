@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-04T23:00:06.739503+00:00",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "mode": "old-identity",
+  "events": [
+    {
+      "at": "2026-11-04T23:00:07.352486+00:00",
+      "args": [
+        "get-state"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.613,
+      "deadlineSeconds": 20,
+      "stdout": "",
+      "stderr": "* daemon not running; starting now at tcp:5037\nADB server didn't ACK\nFull server startup log: /var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T//adb.501.log\nServer had pid: 62503\n--- adb starting (pid 62503) ---\n11-05 07:00:06.767 62503 38559656 I adb     : main.cpp:66 Android Debug Bridge version 1.0.41\n11-05 07:00:06.767 62503 38559656 I adb     : main.cpp:66 Version 37.0.0-14910828\n11-05 07:00:06.767 62503 38559656 I adb     : main.cpp:66 Installed as /Users/water/Library/Android/sdk/platform-tools/adb\n11-05 07:00:06.767 62503 38559656 I adb     : main.cpp:66 Running on Darwin 25.4.0 (arm64)\n11-05 07:00:06.767 62503 38559656 I adb     : main.cpp:66 \n11-05 07:00:07.279 62503 38559656 F adb     : main.cpp:165 could not install *smartsocket* listener: Operation not permitted\n\n* failed to start daemon\nerror: cannot connect to daemon\n"
+    }
+  ],
+  "hostFreeBytes": 62148268032,
+  "status": "FAIL_STOP",
+  "error": "AssertionError({'at': '2026-11-04T23:00:07.352486+00:00', 'args': ['get-state'], 'exitCode': 1, 'elapsedSeconds': 0.613, 'deadlineSeconds': 20, 'stdout': '', 'stderr': \"* daemon not running; starting now at tcp:5037\\nADB server didn't ACK\\nFull server startup log: /var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T//adb.501.log\\nServer had pid: 62503\\n--- adb starting (pid 62503) ---\\n11-05 07:00:06.767 62503 38559656 I adb     : main.cpp:66 Android Debug Bridge version 1.0.41\\n11-05 07:00:06.767 62503 38559656 I adb     : main.cpp:66 Version 37.0.0-14910828\\n11-05 07:00:06.767 62503 38559656 I adb     : main.cpp:66 Installed as /Users/water/Library/Android/sdk/platform-tools/adb\\n11-05 07:00:06.767 62503 38559656 I adb     : main.cpp:66 Running on Darwin 25.4.0 (arm64)\\n11-05 07:00:06.767 62503 38559656 I adb     : main.cpp:66 \\n11-05 07:00:07.279 62503 38559656 F adb     : main.cpp:165 could not install *smartsocket* listener: Operation not permitted\\n\\n* failed to start daemon\\nerror: cannot connect to daemon\\n\"})",
+  "endedAt": "2026-11-04T23:00:07.352540+00:00"
+}

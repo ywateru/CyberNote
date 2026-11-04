@@ -1,0 +1,62 @@
+{
+  "at": "2026-11-04T23:04:47.424548+00:00",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "mode": "capture",
+  "events": [
+    {
+      "at": "2026-11-04T23:04:47.998249+00:00",
+      "args": [
+        "shell",
+        "input tap 120 145"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.574,
+      "deadlineSeconds": 20,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "waitSeconds": 0.3
+    },
+    {
+      "at": "2026-11-04T23:04:48.840460+00:00",
+      "args": [
+        "shell",
+        "input tap 120 140"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.539,
+      "deadlineSeconds": 20,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "waitSeconds": 0.4
+    },
+    {
+      "at": "2026-11-04T23:04:49.742675+00:00",
+      "args": [
+        "exec-out",
+        "screencap",
+        "-p"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.15,
+      "deadlineSeconds": 20,
+      "stdout": {
+        "bytes": 114625,
+        "sha256": "e591efb67390058effae64af9c76b3ec75686799abcafe2f1b2615b422fd77b4"
+      },
+      "stderr": ""
+    }
+  ],
+  "hostFreeBytes": 62110912512,
+  "png": {
+    "path": "docs/verification/android-compose-anchor-runtime36/18-final-folders.png",
+    "bytes": 114625,
+    "sha256": "e591efb67390058effae64af9c76b3ec75686799abcafe2f1b2615b422fd77b4"
+  },
+  "status": "PASS",
+  "endedAt": "2026-11-04T23:04:49.747289+00:00"
+}
