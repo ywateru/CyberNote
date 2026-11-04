@@ -1,0 +1,21 @@
+{
+  "command": [
+    "xcrun",
+    "clang",
+    "-fsyntax-only",
+    "-fobjc-arc",
+    "-fblocks",
+    "-mmacosx-version-min=12.0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "plugins/tauri-plugin-notes-ui/macos/format.m",
+    "plugins/tauri-plugin-notes-ui/macos/toolbar.m"
+  ],
+  "exitCode": 0,
+  "seconds": 0.7894085,
+  "freeBefore": 4957388800,
+  "freeAfter": 4957384704,
+  "stdout": "",
+  "stderr": ""
+}

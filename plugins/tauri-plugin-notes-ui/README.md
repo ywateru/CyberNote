@@ -41,6 +41,10 @@ guest `NotesToolbar.listen` 在 bind 响应前尚无 UUID，会过滤早期事�
 
 格式按钮拒绝 first responder，代码不调用焦点或选区 setter。宿主须为每个 state revision 保存 noteId、授权 token、Editor 实例及选区 bookmark，在命令返回时重新验证并恢复选区。AppKit 显示浮层本身的焦点、中文组字、键盘导航、菜单选区与 Undo/Redo 行为仍为 not-run；静态代码不能证明实际选区不变。语义相同的宿主状态不应重复 update，因为更新会关闭弹层/菜单。插件定向检查见 `verification/format-gallery/README.md`。
 
+## 文件夹隐藏与直接恢复
+
+主窗 threeColumn、galleryBrowse、galleryExpanded 始终保留直接 toggleSidebar。隐藏文件夹时不显示 newFolder，也不把它放进overflow；可见文件夹列过窄时先将 newFolder 放进overflow，toggleSidebar保留36pt直接命中框。标题与画廊返回为直接按钮留出间距；隐藏三栏标题frame154pt是原版墨迹约156pt的有限校准候选，不构成像素通过。independentNote不增加侧栏动作。复用原动作/窗口绑定/宿主React状态与菜单切换，不重建搜索或编辑器。受控生产布局回放和当前包/GUI证据明确分开，见 `docs/verification/app-001-sidebar-restore-01/README.md`。
+
 ## 搜索聚焦入口
 
 `NotesToolbar.focusSearch(): Promise<BindingInfo>` 对应固定 IPC `focus_search`，Rust 宿主调用 `NotesUiExt::notes_ui().focus_search(window, binding_id)`。沿用调用方 Window、精确 windowLabel 与当前绑定 UUID 校验，在主线程解析该窗口绑定并检查搜索存在且 enabled 后，请求该绑定的 NSSearchField 成为 first responder。返回同一 bindingId、revision 与当前原生诊断，不更新查询、不递增 revision、不重绑、不主动发搜索意图。

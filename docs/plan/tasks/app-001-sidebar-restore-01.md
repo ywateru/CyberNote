@@ -1,7 +1,7 @@
 ---
 id: app-001-sidebar-restore-01
 scope: mac-sidebar-toggle-visibility-and-layout
-status: in-progress
+status: awaiting-review
 depends-on: []
 ---
 
@@ -27,3 +27,7 @@ depends-on: []
 - pnpm build、原生toolbar检查、严格ObjC语法和相应生产几何检查。仅必要有意义测试，不扩展大量同构检查。
 - 保留原失败/限制；不把源码受控检查称为安装版或像素通过。源码提交后由不同代理审查。
 - 不下载/升级/清理/平台构建；不占Rust共享target。输出前>=2GiB；待root合入、统一构建和实际窗口往返/菜单/重启验收。
+
+## delivery
+
+产品仅窄改toolbar.m布局：隐藏时直接toggleSidebar，newFolder随侧栏移除；160pt可见侧栏优先toggle、新建进overflow；标题/返回避让。110个生产布局状态、36条同控制器隐藏恢复链通过，旧源码36个隐藏失败均复现，正常228pt侧栏三栏与独立窗逐字段回归通过。pnpm build、13项原生toolbar控制器检查、严格ObjC语法均exit0。证据在 `docs/verification/app-001-sidebar-restore-01/`，含两次几何检查接缝失败原始材料。未运行真实包/GUI/Rust target；待不同作者独审和root整合后实际窗口验收。
