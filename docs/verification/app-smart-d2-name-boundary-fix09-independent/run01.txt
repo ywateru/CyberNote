@@ -1,0 +1,12 @@
+   Compiling notes-qa-fix-store v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-d2-name-boundary-fix09-independent/harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.63s
+     Running unittests src/main.rs (src-tauri/target/debug/deps/notes_qa_fix_store-275dda0e5f1d05fc)
+
+running 2 tests
+createFolder: rejected invalid; workspace/files unchanged; cold reopen unchanged
+renameFolder: rejected invalid; workspace/files unchanged; cold reopen unchanged
+test fixed_original::fixed_original_folder_name_4097_create_and_rename_reject_and_remain_openable ... ok
+test store::folder_name_tests::ordinary_folder_name_utf8_boundaries_reject_before_write_and_cold_reopen ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 71 filtered out; finished in 0.04s
+

@@ -1,7 +1,7 @@
 ---
 id: app-smart-d2-durable-rules09
 scope: Durable smart definitions, real queries and archive compatibility
-status: in-progress
+status: done
 depends-on: [app-smart-d1-storage-open09]
 ---
 
@@ -50,3 +50,5 @@ root追加实际宿主适配器编译检查：本批触及lib.rs，允许一次 
 ## Independent review correction
 
 98fc5b8独审实际复现P2：普通createFolder/renameFolder允许4097字节名称并返回成功，D2新增open整图校验却以graph_invalid拒绝重开。修复范围仅将普通create/rename的trim后UTF-8名称限制与既有graph/智能名称边界统一为1..4096字节，超限在写入前明确拒绝，不能通过放宽open校验绕过。覆盖4096成功可重开、4097拒绝且全库状态不变及中文多字节按字节计数；保留原run04失败。不得自动改名或重写用户旧数据。D2须在该阻塞修复并独立复验通过后才done，O暂不开始。
+
+2026-11-04源码交付通过：98fc5b8实现、9bdc441窄修复。首轮独审12通过/1真实失败，作者修复后完整69通过/0失败/3既有忽略；名称独立复验2通过/0失败，前批其他九项D2散列不变，唯一P2关闭。详见 reviews/app-smart-d2-durable-rules09.md、reviews/app-smart-d2-name-boundary-fix09.md及相应verification目录。D2仅内部生产能力通过，公开smart gate保留；没有新平台包、设备或像素验收。O现可开始，U仍依赖O。

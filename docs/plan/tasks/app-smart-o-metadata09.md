@@ -1,7 +1,7 @@
 ---
 id: app-smart-o-metadata09
 scope: Session metadata ordering and editor ownership
-status: pending
+status: in-progress
 depends-on: [app-smart-d2-durable-rules09]
 ---
 
