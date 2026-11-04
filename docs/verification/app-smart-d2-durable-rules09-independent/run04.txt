@@ -1,0 +1,21 @@
+   Compiling notes-qa-fix-store v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-d2-durable-rules09-independent/harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.07s
+     Running unittests src/main.rs (src-tauri/target/debug/deps/notes_qa_fix_store-275dda0e5f1d05fc)
+
+running 1 test
+createFolder: successfulWrite=true, reopenError=Some("graph_invalid")
+renameFolder: successfulWrite=true, reopenError=Some("graph_invalid")
+
+thread 'oversized::independent_successful_ordinary_folder_writes_must_not_make_database_unopenable' (37884299) panicked at src/oversized.rs:25:5:
+successful ordinary writes made local database unopenable: ["createFolder", "renameFolder"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test oversized::independent_successful_ordinary_folder_writes_must_not_make_database_unopenable ... FAILED
+
+failures:
+
+failures:
+    oversized::independent_successful_ordinary_folder_writes_must_not_make_database_unopenable
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 73 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--bin notes-qa-fix-store`

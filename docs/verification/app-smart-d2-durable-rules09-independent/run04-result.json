@@ -1,0 +1,43 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--locked",
+    "--offline",
+    "--features",
+    "rusqlite/hooks",
+    "--manifest-path",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-d2-durable-rules09-independent/harness/Cargo.toml",
+    "oversized::",
+    "--",
+    "--nocapture"
+  ],
+  "probeSha256": "c456306b85403bde42aad657a2a46a4d90448140828196b2488f04d347b1536b",
+  "expected": "Public normal-folder writes must reject invalid names before changing data, or successfully written data must reopen",
+  "sourceBefore": {
+    "src-tauri/src/store.rs": "17445864d311f9e1b9a90ff1c76f8e2f3f5c940f4151c8b8f36b57c910edcb57",
+    "src-tauri/src/session.rs": "3c79301c886df9feb899dfd4866019596790f524d0f49b9528cc3e570068e808",
+    "src-tauri/src/lib.rs": "577163834b41c923f2d0054d3069b86d2f4a774773ede14f7c21c5c2b4723836",
+    "src-tauri/src/store/archive/document-cases.json": "297f9f7cd64b5489f9da69c4a54715f3b934a5634d2ed502c30505a81555e950",
+    "src-tauri/src/store/archive/document-schema.json": "7cd6c3e442d968ef99019b14fcc48cf037693d7daae0506b0c47a2ec00fb007c",
+    "src-tauri/src/store/archive/document.rs": "6dd018af7abb782fced57a7f46594fe8a39701777f976af34d5b6162e2daa611",
+    "src-tauri/src/store/archive/tests.rs": "4dfa432e123f4b9c71e2af3ab9a10796d21f2edf7adf101ee8dbacde4bc42f43",
+    "src-tauri/src/store/archive.rs": "1d527ecc21d1f4593e75952693d171d48eaa951b9e7b35daea9a21fd22540532",
+    "src-tauri/src/store/attachment_operations/tests.rs": "f68c4e41dc35d5ee61b2db9e1a20937cef5efdadd2c521c791d81216814452b4",
+    "src-tauri/src/store/attachment_operations.rs": "cadc56df7fbb904f3c59e63ac98828bba482f12002182b510ccd2e8b5afdc109",
+    "src-tauri/src/store/open.rs": "dffa8804c67b1786ac4134e1aef56a5bfa9502b323fe6676117075ea68ce4442",
+    "src-tauri/src/store/open_tests.rs": "13b2a33a6d4c9329fb9821412b4810f364cf1481a5a3fa378b0bf2ac1d936a07",
+    "src-tauri/src/store/recorded_at_tests.rs": "d774fa8d7d4bff638797dd42cf6e98b0830f8ccc7e14a9685eac9c2b8c8eda2a",
+    "src-tauri/src/store/smart.rs": "3590e564d823fc1be098b9cf417bb2aef898ff5d4f9be5c7c6d3747acb551c0b",
+    "src-tauri/src/store/smart_tests.rs": "ae6fe98c7f7dfb66419c452a1780e2906927b06af277a180de0d002594c7668b",
+    "src-tauri/src/session/smart_tests.rs": "a5c84d01b32a79b91b1b4bde564e1f32d50abae01130b58677368045cfd5f526",
+    "src-tauri/src/session/tests.rs": "e47c13dc71db3d173e90a8140863411d974db4717f1a25372f8f909689b21b83"
+  },
+  "freeBefore": 70620884992,
+  "jobs": 2,
+  "offline": true,
+  "exitCode": 101,
+  "seconds": 3.805,
+  "sourceUnchanged": true,
+  "freeAfter": 70613622784
+}

@@ -46,3 +46,7 @@ DB目标2，D1的识别/事务/未来拒绝继续保留；1→2在同事务校�
 只运行必要离线Rust测试、现有Store/archive/Session/日期回归；jobs2、至少2GiB、独占hosttarget、禁止cache清理/升级下载/平台build。若动TS边界，另pnpm typecheck及真实跨语言固定corpus；不写镜像求值器自证。完成后STOP，root固定commit，不同作者独立审查与必要实测。D/O/U全通过和准确双端新包验收前，不称智能功能或像素完成。
 
 root追加实际宿主适配器编译检查：本批触及lib.rs，允许一次 `cargo check --locked --offline --lib --manifest-path src-tauri/Cargo.toml`，同hosttarget/jobs2/至少2GiB，600秒有界。只验证宿主Rust库接入，不打包/安装Mac或Android，不作为设备/IPC运行通过。失败保留真实原因，不改依赖或下载绕路。
+
+## Independent review correction
+
+98fc5b8独审实际复现P2：普通createFolder/renameFolder允许4097字节名称并返回成功，D2新增open整图校验却以graph_invalid拒绝重开。修复范围仅将普通create/rename的trim后UTF-8名称限制与既有graph/智能名称边界统一为1..4096字节，超限在写入前明确拒绝，不能通过放宽open校验绕过。覆盖4096成功可重开、4097拒绝且全库状态不变及中文多字节按字节计数；保留原run04失败。不得自动改名或重写用户旧数据。D2须在该阻塞修复并独立复验通过后才done，O暂不开始。

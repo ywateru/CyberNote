@@ -21,6 +21,18 @@ renderer先订阅access与metadata再读初始workspace；metadata门独立于Ac
 
 接入真实Session定义CAS和SmartProjection，受现token/pending门禁约束；定义删除不按匹配成员设置保存屏障。公开UI开关未启用时继续D2能力gate；不得通过新命令绕过。普通元数据动作不强制别窗导航、关闭草稿或清搜索；当前目录失效在U的导航契约处理。
 
+## Implementation decisions
+
+root于2026-11-04根据真实接缝预查定稿：序号为0..9_007_199_254_740_991，不回绕；任何可能提交public facts的调用在数据库、文件或save intent变更前预检容量，允许对最后可能为no-op的调用保守拒绝。一次命令只要发生public facts提交便推进一次；冲突、取消、回滚、纯查询和仅确认既有幂等结果不推进。序号不持久化，进程重启由新session身份区分。
+
+settings属于纯UI偏好，本批排除metadata通知；unlock/closeLocks仅改变access，不推进metadata。新建/保存/物理归属或置顶/恢复/删除、目录与智能定义持久变化、归档导入、attachment公开行真实insert/delete计metadata；附件私有journal状态、重复query/已完成操作的幂等确认不计。普通metadata hydrate保留本窗导航和UI偏好，不能把别窗selectedFolder/selectedNote强加给本窗。
+
+提交判据独立于Result：Store在真实public SQL autocommit或tx.commit成功后立即形成显式提交收据，早于维护、文件清理、visible/workspace/tagged组装；读事务commit不算变更。不得使用total_changes推断提交，因为回滚和私有日志都会影响它。调用隔离的收据必须保留真实变化种类/ID和必要的新实体ID、保存revision，不携带正文/tag文字/key；不能把上次调用的收据重复用于下一次命令。purge附件清理、cancel附件补偿、lock checkpoint以及提交后的响应组装失败均按实际提交处理，保留原错误及成功持久事实。需要access转换时，真实提交后的维护失败不能发abort假装回滚。
+
+动作收据与可发布快照分开。save合法ACK先确认原note revision/pending；create等已成功动作保留唯一新ID，即使相应workspace已旧也不重发创建。失去access时不得根据旧响应正文激活Editor或回填附件缓存。metadata gate只有实际hydrate发布成功后才推进applied workspace序号；观察ACK或通知只推进observed，不能代替已应用工作区。
+
+内部Session智能通路须为U可复用的生产接缝。可整理内外能力检查位置，但全部renderer可达入口在U接通前仍明确拒绝smart工作区/导入/CRUD，不能新增可由renderer传参开启的绕行开关，也不能用仅测试专用通道证明接入。
+
 ## Path and verification
 
 预计session.rs/lib.rs、bridge.ts/types.ts、新metadata-client及App窄订阅/hydrate接入；必要真实生产测试与固定corpus。不要另造Store/保存队列，保留访问协议和已有unknown边界。实现前按D2最终源码复核具体接缝，root明确START后才编码。
