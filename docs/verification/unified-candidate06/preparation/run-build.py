@@ -145,7 +145,7 @@ def main():
                     init = c.CACHE / 'init.d' / ('candidate06-offline-' + result['nonce'] + '.gradle')
                     init.parent.mkdir(exist_ok=True)
                     c.check_space(init.parent)
-                    text = 'gradle.startParameter.offline = true\ngradle.startParameter.maxWorkerCount = 2\nprintln("CANDIDATE06_OFFLINE=" + gradle.startParameter.offline)\n'
+                    text = c.android_offline_init(result['nonce'])
                     with init.open('x') as stream:
                         created = os.fstat(stream.fileno())
                         owned = {'path': str(init), 'device': created.st_dev, 'inode': created.st_ino,
@@ -161,8 +161,13 @@ def main():
                     result.update(c.cleanup_owned_init(init, owned))
                 elif owned is not None:
                     result['cleanupError'] = 'Owned group cleanup unconfirmed; preserve offline init'
-            if a['stage'] == 'android' and (not (attempt / 'build.txt').exists() or 'CANDIDATE06_OFFLINE=true' not in (attempt / 'build.txt').read_text(errors='replace')):
-                result['offlineMarkerMissing'] = True
+            if a['stage'] == 'android':
+                try:
+                    result['androidOfflineProof'] = c.android_offline_proof(
+                        (attempt / 'build.txt').read_text(errors='replace'), result['nonce'], env)
+                except (OSError, RuntimeError) as error:
+                    result['offlineMarkerMissing'] = True
+                    result['androidOfflineProofError'] = repr(error)
             after = c.capture(a)
             c.write_new(attempt / 'inputs-after.json', after)
             result['inputComparisons'] = c.same_inputs(before, after)

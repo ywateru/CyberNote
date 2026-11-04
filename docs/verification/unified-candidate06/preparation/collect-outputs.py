@@ -72,8 +72,14 @@ def validate_built(a, before, digest, attempt, built):
         if not all(c.same_inputs(before, c.load(attempt / name)).values()):
             raise RuntimeError('Actual attempt input evidence differs from frozen inputs')
     if a['stage'] == 'android':
-        if not built.get('temporaryGradleInitRemoved') or 'CANDIDATE06_OFFLINE=true' not in (attempt / 'build.txt').read_text(errors='replace'):
-            raise RuntimeError('Android offline marker or owned init cleanup missing')
+        if not built.get('temporaryGradleInitRemoved'):
+            raise RuntimeError('Android owned init cleanup missing')
+        if built.get('explicitEnvironmentOverrides') != before['effectiveBuildEnvironment']:
+            raise RuntimeError('Android child environment differs from frozen environment')
+        proof = c.android_offline_proof((attempt / 'build.txt').read_text(errors='replace'),
+                                        built['nonce'], before['effectiveBuildEnvironment'])
+        if proof != built.get('androidOfflineProof'):
+            raise RuntimeError('Android init proof differs from the current raw build log')
 
 
 def collect_mac(a, before, budget, result):

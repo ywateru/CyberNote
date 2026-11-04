@@ -15,6 +15,7 @@ import zipfile
 
 MIN_FREE = 2 * 1024**3
 DEADLINE = 600
+ANDROID_GRADLE_OPTS = '-Dorg.gradle.daemon=false -Dorg.gradle.configuration-cache=false'
 CACHE = Path('/private/tmp/notes-scan-gradle-home')
 OVERLAY = Path('/private/tmp/notes-lifecycle-cache-overlay-01/overlay-ro')
 LOCK = Path('/private/tmp/notes-unified-candidate04-build.lock')
@@ -136,11 +137,42 @@ def effective_environment(stage):
            'JAVA_HOME': '/opt/zerobrew/opt/openjdk@17', 'GRADLE_USER_HOME': str(CACHE),
            'CARGO_NET_OFFLINE': 'true', 'CARGO_BUILD_JOBS': '2'}
     if stage == 'android':
-        env.update(GRADLE_RO_DEP_CACHE=str(OVERLAY), GRADLE_OPTS='-Dorg.gradle.daemon=false')
+        env.update(GRADLE_RO_DEP_CACHE=str(OVERLAY), GRADLE_OPTS=ANDROID_GRADLE_OPTS)
     required = [Path(env['ANDROID_HOME']) / 'platforms/android-36/android.jar', Path(env['ANDROID_HOME']) / 'build-tools/36.0.0/apksigner', Path(env['NDK_HOME']), Path(env['JAVA_HOME']) / 'bin/java', CACHE]
     if any(not p.exists() for p in required):
         raise RuntimeError('Existing tool/cache missing; acquisition forbidden')
     return env
+
+
+def android_offline_init(nonce):
+    if not re.fullmatch('[0-9a-f]{32}', nonce):
+        raise ValueError('Scoped Android init requires the current attempt nonce')
+    return ('gradle.startParameter.offline = true\n'
+            'gradle.startParameter.maxWorkerCount = 2\n'
+            'if (!gradle.startParameter.offline || gradle.startParameter.maxWorkerCount != 2 || '
+            'System.getProperty("org.gradle.configuration-cache") != "false") {\n'
+            '    throw new GradleException("Candidate06 requires offline/jobs2/configuration-cache=false")\n'
+            '}\n'
+            'println("CANDIDATE06_OFFLINE=" + gradle.startParameter.offline + '
+            '" workers=" + gradle.startParameter.maxWorkerCount + '
+            '" configurationCacheJvmProperty=" + System.getProperty("org.gradle.configuration-cache") + '
+            '" nonce=' + nonce + '")\n')
+
+
+def android_offline_proof(content, nonce, environment):
+    """Same fail-closed gate for the runner and collector; never substitutes for Gradle."""
+    if not re.fullmatch('[0-9a-f]{32}', nonce):
+        raise RuntimeError('Invalid Android proof nonce')
+    if environment.get('GRADLE_OPTS') != ANDROID_GRADLE_OPTS:
+        raise RuntimeError('Android startup environment lacks the configuration-cache=false JVM option')
+    if re.search(r'reusing\s+(?:the\s+)?configuration cache|configuration cache(?: entry)?\s+(?:was\s+)?reused', content, re.IGNORECASE):
+        raise RuntimeError('Android configuration cache reuse is forbidden')
+    expected = 'CANDIDATE06_OFFLINE=true workers=2 configurationCacheJvmProperty=false nonce=' + nonce
+    markers = [line.strip() for line in content.splitlines() if 'CANDIDATE06_OFFLINE=' in line]
+    if not markers or any(line != expected for line in markers):
+        raise RuntimeError('Android current init proof missing or has wrong offline/workers/cache/nonce value')
+    return {'nonce': nonce, 'offline': True, 'workers': 2, 'configurationCacheJvmProperty': 'false',
+            'markerCount': len(markers)}
 
 
 def tree(path):

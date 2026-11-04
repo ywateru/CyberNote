@@ -42,9 +42,11 @@ python3 -B docs/verification/unified-candidate06/preparation/collect-outputs.py 
 
 Android 构建命令另带 `--allow-scoped-gradle-offline-init`。freeze 会启动 node/pnpm/cargo/rustc/Java 的版本命令；本次开发检查没有执行 freeze。运行只调用固定入口 `pnpm mac:build` 或 `pnpm android:build --debug`，没有任意命令、编译 flag 或 proof 开关。
 
-有效环境明确固定 SDK `/Users/water/Library/Android/sdk`、NDK `27.2.12479018`、Java `/opt/zerobrew/opt/openjdk@17`、Gradle cache `/private/tmp/notes-scan-gradle-home`、`CARGO_NET_OFFLINE=true`、`CARGO_BUILD_JOBS=2`。Android 另固定 `GRADLE_RO_DEP_CACHE=/private/tmp/notes-lifecycle-cache-overlay-01/overlay-ro` 与 `GRADLE_OPTS=-Dorg.gradle.daemon=false`；不继承当前28.2 NDK为有效版本。完整 distribution 与 `.ok` 复用现有 wrapper 链接，缺失时失败，不获取网络资源。
+有效环境明确固定 SDK `/Users/water/Library/Android/sdk`、NDK `27.2.12479018`、Java `/opt/zerobrew/opt/openjdk@17`、Gradle cache `/private/tmp/notes-scan-gradle-home`、`CARGO_NET_OFFLINE=true`、`CARGO_BUILD_JOBS=2`。Android 另固定 `GRADLE_RO_DEP_CACHE=/private/tmp/notes-lifecycle-cache-overlay-01/overlay-ro` 与 `GRADLE_OPTS=-Dorg.gradle.daemon=false -Dorg.gradle.configuration-cache=false`；不继承当前28.2 NDK为有效版本。Mac有效环境不变。完整 distribution 与 `.ok` 复用现有 wrapper 链接，缺失时失败，不获取网络资源。
 
-Android 在已选 cache 的 init.d 独占创建带随机 nonce 的 `candidate06-offline-<nonce>.gradle`，设置 offline=true、maxWorkerCount=2；要求原始日志出现 `CANDIDATE06_OFFLINE=true`。清理在共享锁内进行，必须 device/inode/size/SHA 与普通文件身份一致，删除前重核 inode；被替换/修改/变成符号链接则保留并失败。
+Android 在已选 cache 的 init.d 独占创建带随机 nonce 的 `candidate06-offline-<nonce>.gradle`。启动层通过GRADLE_OPTS禁用配置缓存；init实际设置offline=true、maxWorkerCount=2，再断言这两个真实属性及JVM系统属性org.gradle.configuration-cache=false，随后读取属性输出`CANDIDATE06_OFFLINE=true workers=2 configurationCacheJvmProperty=false nonce=<本次nonce>`。runner与collector共用同一失败拒绝检查：完整原始日志必须至少有一条精确的本次证明，所有证明行都必须一致；缺失、错值、旧nonce、错误启动环境或`Reusing configuration cache`/`Configuration cache entry reused`日志均拒绝。collector还比较冻结环境、实际子进程环境记录及日志重新解析的证明。清理在共享锁内进行，必须 device/inode/size/SHA 与普通文件身份一致，删除前重核 inode；被替换/修改/变成符号链接则保留并失败。
+
+窄修14依据：本机gradlew明确将GRADLE_OPTS解析成wrapper JVM参数，android.mjs保留父环境；官方current文档说明configuration-cache的-D开关及命中时跳过init配置阶段。9.6.1 bin分发未附完整源码/用户文档，native CLI中间段和本机9.6.1实际行为尚待新授权attempt验证。纯Python检查仅验证工具传参与拒绝边界；不能作为Gradle执行或离线构建证明。原build04失败attempt与Mac封存记录保持历史字节，不能用新工具追认旧结果。真实新attempt必须单独冻结、授权并START。
 
 ## 资源与成功条件
 
@@ -66,3 +68,5 @@ candidate05 已有有限实际运行证据。06 写入新元数据后不能对�
 `python3 -B docs/verification/unified-candidate06/preparation/check-boundaries.py` 为受控 Python-only 检查。7项覆盖语法、显式参数与输出路径、冻结字节/独占写、init删除归属、超时只停自有进程、模拟低空间/下载提示及失败/身份错配阻断收集。未运行 Rust/Gradle/版本命令/平台构建/真实签名/设备操作。
 
 `evidence/check-attempt01.txt` 保留 canonical 临时路径失败和已退出子进程组信号失败；02 修正路径后仍暴露已退出进程信号问题；03 修正只对尚存活的 leader 停止后全部通过。工具语法和受控安全边界通过不代替实际平台工具差异审查、实际构建和独立审查。`evidence/tool-manifest.json` 保存本轮工具、说明与检查记录的字节身份；manifest自身不纳入自身聚合。
+
+窄修14新增`check-android-offline-init.py <新证据JSON路径>`：仅用Python子进程和临时输出替代平台入口，观察真正传入子进程的环境与当次init文本，并检查runner/collector的失败拒绝。10个runner场景包括正确值、缺失、offline/workers/JVM属性错值、旧nonce、两种cache-reuse句式、混合证明和缺失启动开关；collector另对成功记录对应的原始日志、证明、环境及清理记录做9项独立篡改拒绝。Mac有效环境与历史冻结完全一致，Android仅GRADLE_OPTS变化。最终检查和既有7项安全边界均通过，证据见`../../tools-android-offline-init14/`。模拟证明不是Gradle真实执行证据；旧检查与旧结果仍保留原样，不追认build04失败包。

@@ -1,0 +1,31 @@
+{
+  "scope": "Observed author commands only; Python children and temporary fixtures, no Gradle/version/platform command.",
+  "checks": [
+    {
+      "argv": ["python3", "-B", "docs/verification/unified-candidate06/preparation/check-android-offline-init.py", "docs/verification/tools-android-offline-init14/check-attempt01.json"],
+      "exitCode": 0,
+      "runnerCases": 10,
+      "collectorMutationRejections": 9,
+      "note": "Before evidence field was clarified to configurationCacheJvmProperty. Retained without rewrite."
+    },
+    {
+      "argv": ["python3", "-B", "docs/verification/unified-candidate06/preparation/check-android-offline-init.py", "docs/verification/tools-android-offline-init14/check-final02.json"],
+      "exitCode": 0,
+      "runnerCases": 10,
+      "collectorMutationRejections": 9
+    },
+    {
+      "argv": ["python3", "-B", "docs/verification/unified-candidate06/preparation/check-boundaries.py"],
+      "exitCode": 0,
+      "passed": [
+        "explicit_parameters_and_output_boundary",
+        "failed_builds_never_collect",
+        "freeze_bytes_and_no_overwrite",
+        "low_space_and_download_guard",
+        "owned_init_identity_and_replacements",
+        "syntax_without_bytecode",
+        "timeout_only_owned_process_group"
+      ]
+    }
+  ]
+}
