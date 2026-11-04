@@ -515,6 +515,10 @@
 .smart-mac .smart-ordinary .smart-name {
   gap: 6px;
 }
+:root:not(.dark) .smart-mac .smart-ordinary .smart-name,
+:root:not(.dark) .smart-mac .smart-ordinary .smart-make label {
+  -webkit-font-smoothing: auto;
+}
 .smart-mac .smart-ordinary .smart-name input {
   height: 24px;
   padding-inline: 5px;

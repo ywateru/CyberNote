@@ -19,6 +19,8 @@
 | APP-MAC-SIDEBAR-PREFERENCE22 侧栏显隐偏好 | done（有限偏好范围），Mac11实际/独核通过 | 单键本地settings及首次可信恢复；运行23两入口/动态菜单、hidden/visible各正常与紧接CmdQ恢复通过，PID45493→45907→45957→46007→46056/exe同SHA；202项静态独核。无内部ACK/任意退出保证/新增CmdQ握手，全像素与多窗仍open |
 | APP-MAC-ORDINARY-NAME-FOCUS26 名称焦点/选择/对齐 | runtime-verified，像素partial | Mac12准确包494项核包、实际496项证据独核；默认/部分选择、真实输入/往返/取消、侧栏两入口及正常重启显隐保持。bbox对齐/灰内边0，文字仍偏淡、选择色/环角有差；跨应用重激活未验，父目标active |
 | APP-MOBILE-FOLDER-VISUAL28 手机文件夹局部视觉 | runtime-verified，像素partial | Android07准确包391项核包、实际711项证据独核；保数据安装/可见plus触摸/导航Back/长按及COLD启动可见保持。局部几何接近原帧；右下中心差−1.733及非目标ROI变化保留，不授整体像素/iOS结论 |
+| APP-MAC-ORDINARY-TYPOGRAPHY31 普通表单文字绘制 | source-ready，待不同作者独审 | 两个浅色ordinary文字局部smoothing:auto使三ROI同时接近原版，13项有限生产检查通过；布局/输入/checkbox/范围外保持，真实新Mac包仍待后续 |
+| APP-MOBILE-COMPOSE-ANCHOR34 手机右下新建锚点 | pending | 研究32准确07只读DOM解释slot左偏；31独审固定后局部调整右侧布局锚点，路径形状与整体像素仍open |
 | REF-001 原版取证/需求/UI/调研 | in-progress | 原视频已保全、抽帧、初始规格已写，持续补证 |
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |

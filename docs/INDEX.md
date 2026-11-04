@@ -8,6 +8,9 @@
 - [Android07准确构建](verification/unified-candidate06/android-folder-visual-build07/README.md)与[独立核包](plan/reviews/android-folder-visual-independent07.md)
 - [Mac12名称/侧栏实际运行](verification/mac-name-focus-runtime29/README.md)、[独立复核](plan/reviews/mac-name-focus-runtime29.md)、[局部量图](research/mac-name-focus-runtime29-analysis/analysis.md)
 - [Android07文件夹实际运行](verification/android-folder-visual-runtime29/README.md)、[独立复核](plan/reviews/android-folder-visual-runtime29.md)、[局部量图](research/android-folder-visual-runtime29-analysis/analysis.md)
+- [普通Mac文字绘制校准31](plan/tasks/app-mac-ordinary-typography31.md)、[原版额外同态与Tab观察31](research/mac-ordinary-original31/README.md)
+- [手机右下新建图标只读定位32](research/mobile-compose-readiness32/analysis.md)与[局部锚点修复34](plan/tasks/app-mobile-compose-anchor34.md)
+- [Mac Tab策略与系统键盘导航只读准备33](research/mac-folder-keyboard-readiness33/README.md)
 
 - [需求与验收](requirements.md)
 - [架构与数据契约](architecture.md)

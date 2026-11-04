@@ -1,0 +1,60 @@
+{
+  "scope": "task31 bounded nine render runs plus one final interaction run; no font-weight/family expansion",
+  "commands": [
+    {
+      "record": "docs/verification/mac-ordinary-typography31/baseline-native-command.json",
+      "exitCode": 0
+    },
+    {
+      "record": "docs/verification/mac-ordinary-typography31/baseline-selected-command.json",
+      "exitCode": 0
+    },
+    {
+      "record": "docs/verification/mac-ordinary-typography31/candidate-native-command.json",
+      "exitCode": 0
+    },
+    {
+      "record": "docs/verification/mac-ordinary-typography31/candidate-selected-command.json",
+      "exitCode": 0
+    },
+    {
+      "record": "docs/verification/mac-ordinary-typography31/interaction-final-command.json",
+      "exitCode": 0
+    },
+    {
+      "record": "docs/verification/mac-ordinary-typography31/probe-color-native-command.json",
+      "exitCode": 0
+    },
+    {
+      "record": "docs/verification/mac-ordinary-typography31/probe-rendering-native-command.json",
+      "exitCode": 0
+    },
+    {
+      "record": "docs/verification/mac-ordinary-typography31/probe-selection-selected-command.json",
+      "exitCode": 0
+    },
+    {
+      "record": "docs/verification/mac-ordinary-typography31/probe-smoothing-native-command.json",
+      "exitCode": 0
+    },
+    {
+      "record": "docs/verification/mac-ordinary-typography31/probe-smoothing-selected-command.json",
+      "exitCode": 0
+    }
+  ],
+  "allNativeHelpersReturned": true,
+  "interactionChecks": 13,
+  "interactionAllPass": true,
+  "cssOnlyNoTypecheck": true,
+  "harnessThemeAdaptation": "new fixture mirrors actual App html.dark; no product theme edit",
+  "preservedUnfavorableResults": [
+    "color alone insufficient",
+    "selection foreground alone insufficient",
+    "geometricPrecision exactly no effect",
+    "selected name48 raw160 pixels below original",
+    "comparison-layout-attempt01 overlaps columns; not used"
+  ],
+  "measurementNarrationCorrection": "original31 vs29 full image false, fixed glyph ROIs true; numbers unchanged; no new render",
+  "runtimeBoundary": "unattached inactive WK snapshots, selected test class only; no OS/actual package acceptance",
+  "temporaryExcluded": "temporary/"
+}

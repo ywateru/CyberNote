@@ -1,0 +1,72 @@
+{
+  "at": "2026-11-05T05:55:49.952220+08:00",
+  "scope": "read-only already-running device/package/PID and existing-forward identity; no start/install/restart or app data read",
+  "records": [
+    {
+      "argv": [
+        "/Users/water/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "get-state"
+      ],
+      "exitCode": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/water/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exitCode": 0,
+      "stdout": "27930\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/water/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "pm",
+        "path",
+        "com.local.notesclone"
+      ],
+      "exitCode": 0,
+      "stdout": "package:/data/app/~~DqAsIIPbgAP7XEYEEJjnSg==/com.local.notesclone-SashFcFbaA5XGmTZ7pm9Mw==/base.apk\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/water/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "shell",
+        "sha256sum",
+        "/data/app/~~DqAsIIPbgAP7XEYEEJjnSg==/com.local.notesclone-SashFcFbaA5XGmTZ7pm9Mw==/base.apk"
+      ],
+      "exitCode": 0,
+      "stdout": "e19965fd97c45ac3184e569777146d68b4d312bd561bbb2862d27ad93c6a86c6  /data/app/~~DqAsIIPbgAP7XEYEEJjnSg==/com.local.notesclone-SashFcFbaA5XGmTZ7pm9Mw==/base.apk\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/water/Library/Android/sdk/platform-tools/adb",
+        "-s",
+        "emulator-5580",
+        "forward",
+        "--list"
+      ],
+      "exitCode": 0,
+      "stdout": "\n",
+      "stderr": ""
+    }
+  ],
+  "exact07": true,
+  "pid": "27930",
+  "apkPath": "/data/app/~~DqAsIIPbgAP7XEYEEJjnSg==/com.local.notesclone-SashFcFbaA5XGmTZ7pm9Mw==/base.apk"
+}

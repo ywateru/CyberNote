@@ -1,0 +1,884 @@
+[
+  {
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/wry-0.57.1/src/wkwebview/mod.rs",
+    "startLine": 250,
+    "endLine": 266,
+    "lines": [
+      {
+        "line": 250,
+        "text": "    // Safety: objc runtime calls are unsafe"
+      },
+      {
+        "line": 251,
+        "text": "    unsafe {"
+      },
+      {
+        "line": 252,
+        "text": "      #[cfg(target_os = \"macos\")]"
+      },
+      {
+        "line": 253,
+        "text": "      let using_existing_config = pl_attrs.webview_configuration.is_some();"
+      },
+      {
+        "line": 254,
+        "text": "      #[cfg(target_os = \"ios\")]"
+      },
+      {
+        "line": 255,
+        "text": "      let using_existing_config = false;"
+      },
+      {
+        "line": 256,
+        "text": "      #[cfg(target_os = \"macos\")]"
+      },
+      {
+        "line": 257,
+        "text": "      let config = pl_attrs"
+      },
+      {
+        "line": 258,
+        "text": "        .webview_configuration"
+      },
+      {
+        "line": 259,
+        "text": "        .unwrap_or_else(|| WKWebViewConfiguration::new(mtm));"
+      },
+      {
+        "line": 260,
+        "text": "      #[cfg(target_os = \"ios\")]"
+      },
+      {
+        "line": 261,
+        "text": "      let config = WKWebViewConfiguration::new(mtm);"
+      },
+      {
+        "line": 262,
+        "text": ""
+      },
+      {
+        "line": 263,
+        "text": "      // Incognito mode"
+      },
+      {
+        "line": 264,
+        "text": "      let (os_major_version, _, _) = util::operating_system_version();"
+      },
+      {
+        "line": 265,
+        "text": "      #[cfg(target_os = \"macos\")]"
+      },
+      {
+        "line": 266,
+        "text": "      let custom_data_store_available = os_major_version >= 14;"
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/wry-0.57.1/src/wkwebview/mod.rs",
+    "startLine": 353,
+    "endLine": 362,
+    "lines": [
+      {
+        "line": 353,
+        "text": "        #[cfg(target_os = \"ios\")]"
+      },
+      {
+        "line": 354,
+        "text": "        input_accessory_view_builder: pl_attrs.input_accessory_view_builder,"
+      },
+      {
+        "line": 355,
+        "text": "        custom_protocol_task_ids: Default::default(),"
+      },
+      {
+        "line": 356,
+        "text": "      });"
+      },
+      {
+        "line": 357,
+        "text": ""
+      },
+      {
+        "line": 358,
+        "text": "      let _preference = config.preferences();"
+      },
+      {
+        "line": 359,
+        "text": "      let _yes = NSNumber::numberWithBool(true);"
+      },
+      {
+        "line": 360,
+        "text": ""
+      },
+      {
+        "line": 361,
+        "text": "      #[cfg(target_os = \"ios\")]"
+      },
+      {
+        "line": 362,
+        "text": "      {"
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/wry-0.57.1/src/wkwebview/mod.rs",
+    "startLine": 542,
+    "endLine": 560,
+    "lines": [
+      {
+        "line": 542,
+        "text": "      #[cfg(target_os = \"macos\")]"
+      },
+      {
+        "line": 543,
+        "text": "      {"
+      },
+      {
+        "line": 544,
+        "text": "        if is_child {"
+      },
+      {
+        "line": 545,
+        "text": "          // fixed element"
+      },
+      {
+        "line": 546,
+        "text": "          webview.setAutoresizingMask(NSAutoresizingMaskOptions::ViewMinYMargin);"
+      },
+      {
+        "line": 547,
+        "text": "        } else {"
+      },
+      {
+        "line": 548,
+        "text": "          // Auto-resize"
+      },
+      {
+        "line": 549,
+        "text": "          webview.setAutoresizingMask("
+      },
+      {
+        "line": 550,
+        "text": "            NSAutoresizingMaskOptions::ViewHeightSizable"
+      },
+      {
+        "line": 551,
+        "text": "              | NSAutoresizingMaskOptions::ViewWidthSizable,"
+      },
+      {
+        "line": 552,
+        "text": "          );"
+      },
+      {
+        "line": 553,
+        "text": "        }"
+      },
+      {
+        "line": 554,
+        "text": ""
+      },
+      {
+        "line": 555,
+        "text": "        webview.setAllowsBackForwardNavigationGestures(attributes.back_forward_navigation_gestures);"
+      },
+      {
+        "line": 556,
+        "text": ""
+      },
+      {
+        "line": 557,
+        "text": "        // <https://developer.apple.com/documentation/webkit/wkpreferences/tabfocuseslinks>"
+      },
+      {
+        "line": 558,
+        "text": "        // Available: macOS 12+"
+      },
+      {
+        "line": 559,
+        "text": "        _preference.setValue_forKey(Some(&_yes), ns_string!(\"tabFocusesLinks\"));"
+      },
+      {
+        "line": 560,
+        "text": "      }"
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/mod.rs",
+    "startLine": 198,
+    "endLine": 207,
+    "lines": [
+      {
+        "line": 198,
+        "text": ""
+      },
+      {
+        "line": 199,
+        "text": "  /// Returns the [WKWebView] handle."
+      },
+      {
+        "line": 200,
+        "text": "  ///"
+      },
+      {
+        "line": 201,
+        "text": "  /// [WKWebView]: https://developer.apple.com/documentation/webkit/wkwebview"
+      },
+      {
+        "line": 202,
+        "text": "  #[cfg(any(target_os = \"macos\", target_os = \"ios\"))]"
+      },
+      {
+        "line": 203,
+        "text": "  #[cfg_attr(docsrs, doc(cfg(any(target_os = \"macos\", target_os = \"ios\"))))]"
+      },
+      {
+        "line": 204,
+        "text": "  pub fn inner(&self) -> *mut std::ffi::c_void {"
+      },
+      {
+        "line": 205,
+        "text": "    self.0.webview"
+      },
+      {
+        "line": 206,
+        "text": "  }"
+      },
+      {
+        "line": 207,
+        "text": ""
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/mod.rs",
+    "startLine": 1410,
+    "endLine": 1426,
+    "lines": [
+      {
+        "line": 1410,
+        "text": ""
+      },
+      {
+        "line": 1411,
+        "text": "  /// Set the webview configuration."
+      },
+      {
+        "line": 1412,
+        "text": "  /// Useful if you need to share the use a predefined webview configuration, for instance when using the [`Self::on_new_window`]."
+      },
+      {
+        "line": 1413,
+        "text": "  #[cfg(target_os = \"macos\")]"
+      },
+      {
+        "line": 1414,
+        "text": "  pub fn with_webview_configuration("
+      },
+      {
+        "line": 1415,
+        "text": "    mut self,"
+      },
+      {
+        "line": 1416,
+        "text": "    webview_configuration: objc2::rc::Retained<objc2_web_kit::WKWebViewConfiguration>,"
+      },
+      {
+        "line": 1417,
+        "text": "  ) -> Self {"
+      },
+      {
+        "line": 1418,
+        "text": "    self"
+      },
+      {
+        "line": 1419,
+        "text": "      .webview_attributes"
+      },
+      {
+        "line": 1420,
+        "text": "      .webview_configuration"
+      },
+      {
+        "line": 1421,
+        "text": "      .replace(webview_configuration);"
+      },
+      {
+        "line": 1422,
+        "text": "    self"
+      },
+      {
+        "line": 1423,
+        "text": "  }"
+      },
+      {
+        "line": 1424,
+        "text": "}"
+      },
+      {
+        "line": 1425,
+        "text": ""
+      },
+      {
+        "line": 1426,
+        "text": "/// Webview."
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/mod.rs",
+    "startLine": 1854,
+    "endLine": 1867,
+    "lines": [
+      {
+        "line": 1854,
+        "text": "  )]"
+      },
+      {
+        "line": 1855,
+        "text": "  #[cfg(feature = \"wry\")]"
+      },
+      {
+        "line": 1856,
+        "text": "  #[cfg_attr(docsrs, doc(cfg(feature = \"wry\")))]"
+      },
+      {
+        "line": 1857,
+        "text": "  pub fn with_webview<F: FnOnce(PlatformWebview) + Send + 'static>("
+      },
+      {
+        "line": 1858,
+        "text": "    &self,"
+      },
+      {
+        "line": 1859,
+        "text": "    f: F,"
+      },
+      {
+        "line": 1860,
+        "text": "  ) -> crate::Result<()> {"
+      },
+      {
+        "line": 1861,
+        "text": "    self"
+      },
+      {
+        "line": 1862,
+        "text": "      .webview"
+      },
+      {
+        "line": 1863,
+        "text": "      .dispatcher"
+      },
+      {
+        "line": 1864,
+        "text": "      .with_webview(|w| f(PlatformWebview(*w.downcast().unwrap())))"
+      },
+      {
+        "line": 1865,
+        "text": "      .map_err(Into::into)"
+      },
+      {
+        "line": 1866,
+        "text": "  }"
+      },
+      {
+        "line": 1867,
+        "text": ""
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/webview_window.rs",
+    "startLine": 2494,
+    "endLine": 2505,
+    "lines": [
+      {
+        "line": 2494,
+        "text": "  /// ```"
+      },
+      {
+        "line": 2495,
+        "text": "  #[allow(clippy::needless_doctest_main)] // To avoid a large diff"
+      },
+      {
+        "line": 2496,
+        "text": "  #[cfg(feature = \"wry\")]"
+      },
+      {
+        "line": 2497,
+        "text": "  #[cfg_attr(docsrs, doc(cfg(feature = \"wry\")))]"
+      },
+      {
+        "line": 2498,
+        "text": "  pub fn with_webview<F: FnOnce(crate::webview::PlatformWebview) + Send + 'static>("
+      },
+      {
+        "line": 2499,
+        "text": "    &self,"
+      },
+      {
+        "line": 2500,
+        "text": "    f: F,"
+      },
+      {
+        "line": 2501,
+        "text": "  ) -> crate::Result<()> {"
+      },
+      {
+        "line": 2502,
+        "text": "    self.webview.with_webview(f)"
+      },
+      {
+        "line": 2503,
+        "text": "  }"
+      },
+      {
+        "line": 2504,
+        "text": ""
+      },
+      {
+        "line": 2505,
+        "text": "  /// Returns the current url of the webview."
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-runtime-wry-2.12.3/src/lib.rs",
+    "startLine": 1552,
+    "endLine": 1559,
+    "lines": [
+      {
+        "line": 1552,
+        "text": "  fn with_webview<F: FnOnce(Box<dyn std::any::Any>) + Send + 'static>(&self, f: F) -> Result<()> {"
+      },
+      {
+        "line": 1553,
+        "text": "    self.context.send_user_message(Message::Webview("
+      },
+      {
+        "line": 1554,
+        "text": "      *self.window_id.lock().unwrap(),"
+      },
+      {
+        "line": 1555,
+        "text": "      self.webview_id,"
+      },
+      {
+        "line": 1556,
+        "text": "      WebviewMessage::WithWebview(Box::new(move |webview| f(Box::new(webview)))),"
+      },
+      {
+        "line": 1557,
+        "text": "    ))"
+      },
+      {
+        "line": 1558,
+        "text": "  }"
+      },
+      {
+        "line": 1559,
+        "text": ""
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-runtime-wry-2.12.3/src/lib.rs",
+    "startLine": 3891,
+    "endLine": 3915,
+    "lines": [
+      {
+        "line": 3891,
+        "text": "          WebviewMessage::WithWebview(f) => {"
+      },
+      {
+        "line": 3892,
+        "text": "            #[cfg(any("
+      },
+      {
+        "line": 3893,
+        "text": "              target_os = \"linux\","
+      },
+      {
+        "line": 3894,
+        "text": "              target_os = \"dragonfly\","
+      },
+      {
+        "line": 3895,
+        "text": "              target_os = \"freebsd\","
+      },
+      {
+        "line": 3896,
+        "text": "              target_os = \"netbsd\","
+      },
+      {
+        "line": 3897,
+        "text": "              target_os = \"openbsd\""
+      },
+      {
+        "line": 3898,
+        "text": "            ))]"
+      },
+      {
+        "line": 3899,
+        "text": "            {"
+      },
+      {
+        "line": 3900,
+        "text": "              f(webview.webview());"
+      },
+      {
+        "line": 3901,
+        "text": "            }"
+      },
+      {
+        "line": 3902,
+        "text": "            #[cfg(target_os = \"macos\")]"
+      },
+      {
+        "line": 3903,
+        "text": "            {"
+      },
+      {
+        "line": 3904,
+        "text": "              use wry::WebViewExtMacOS;"
+      },
+      {
+        "line": 3905,
+        "text": "              let platform_webview = webview.webview();"
+      },
+      {
+        "line": 3906,
+        "text": "              let manager = webview.manager();"
+      },
+      {
+        "line": 3907,
+        "text": "              let ns_window = webview.ns_window();"
+      },
+      {
+        "line": 3908,
+        "text": "              f(Webview {"
+      },
+      {
+        "line": 3909,
+        "text": "                webview: Retained::as_ptr(&platform_webview).cast_mut() as *mut std::ffi::c_void,"
+      },
+      {
+        "line": 3910,
+        "text": "                manager: Retained::as_ptr(&manager).cast_mut() as *mut std::ffi::c_void,"
+      },
+      {
+        "line": 3911,
+        "text": "                ns_window: Retained::as_ptr(&ns_window).cast_mut() as *mut std::ffi::c_void,"
+      },
+      {
+        "line": 3912,
+        "text": "              });"
+      },
+      {
+        "line": 3913,
+        "text": "            }"
+      },
+      {
+        "line": 3914,
+        "text": "            #[cfg(target_os = \"ios\")]"
+      },
+      {
+        "line": 3915,
+        "text": "            {"
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-ui/src/macos.rs",
+    "startLine": 212,
+    "endLine": 232,
+    "lines": [
+      {
+        "line": 212,
+        "text": ") -> Result<BindingInfo> {"
+      },
+      {
+        "line": 213,
+        "text": "    on_main(app, move || {"
+      },
+      {
+        "line": 214,
+        "text": "        let label = window.label().to_owned();"
+      },
+      {
+        "line": 215,
+        "text": "        if map"
+      },
+      {
+        "line": 216,
+        "text": "            .lock()"
+      },
+      {
+        "line": 217,
+        "text": "            .map_err(|_| Error::new(\"state\", \"顶部绑定锁损坏\"))?"
+      },
+      {
+        "line": 218,
+        "text": "            .contains_key(&label)"
+      },
+      {
+        "line": 219,
+        "text": "        {"
+      },
+      {
+        "line": 220,
+        "text": "            return Err(Error::new("
+      },
+      {
+        "line": 221,
+        "text": "                \"already_bound\","
+      },
+      {
+        "line": 222,
+        "text": "                \"窗口已绑定顶部；请更新状态或先解除旧绑定\","
+      },
+      {
+        "line": 223,
+        "text": "            ));"
+      },
+      {
+        "line": 224,
+        "text": "        }"
+      },
+      {
+        "line": 225,
+        "text": "        let native_window = window"
+      },
+      {
+        "line": 226,
+        "text": "            .ns_window()"
+      },
+      {
+        "line": 227,
+        "text": "            .map_err(|e| Error::new(\"window\", e.to_string()))?;"
+      },
+      {
+        "line": 228,
+        "text": "        if native_window.is_null() {"
+      },
+      {
+        "line": 229,
+        "text": "            return Err(Error::new(\"window\", \"窗口已经关闭\"));"
+      },
+      {
+        "line": 230,
+        "text": "        }"
+      },
+      {
+        "line": 231,
+        "text": "        let id = uuid::Uuid::new_v4().to_string();"
+      },
+      {
+        "line": 232,
+        "text": "        let label_c = cstr(&label)?;"
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-ui/build.rs",
+    "startLine": 1,
+    "endLine": 55,
+    "lines": [
+      {
+        "line": 1,
+        "text": "fn main() {"
+      },
+      {
+        "line": 2,
+        "text": "    tauri_plugin::Builder::new(&[\"bind\", \"update\", \"unbind\", \"inspect\", \"focus_search\"]).build();"
+      },
+      {
+        "line": 3,
+        "text": "    if std::env::var(\"CARGO_CFG_TARGET_OS\").as_deref() == Ok(\"macos\") {"
+      },
+      {
+        "line": 4,
+        "text": "        cc::Build::new()"
+      },
+      {
+        "line": 5,
+        "text": "            .file(\"macos/toolbar.m\")"
+      },
+      {
+        "line": 6,
+        "text": "            .file(\"macos/format.m\")"
+      },
+      {
+        "line": 7,
+        "text": "            .flag(\"-fobjc-arc\")"
+      },
+      {
+        "line": 8,
+        "text": "            .flag(\"-fblocks\")"
+      },
+      {
+        "line": 9,
+        "text": "            .flag(\"-mmacosx-version-min=12.0\")"
+      },
+      {
+        "line": 10,
+        "text": "            .warnings(true)"
+      },
+      {
+        "line": 11,
+        "text": "            .compile(\"notes_ui_toolbar\");"
+      },
+      {
+        "line": 12,
+        "text": "        for framework in [\"AppKit\", \"Foundation\", \"QuartzCore\"] {"
+      },
+      {
+        "line": 13,
+        "text": "            println!(\"cargo:rustc-link-lib=framework={framework}\");"
+      },
+      {
+        "line": 14,
+        "text": "        }"
+      },
+      {
+        "line": 15,
+        "text": "        println!(\"cargo:rerun-if-changed=macos/toolbar.m\");"
+      },
+      {
+        "line": 16,
+        "text": "        println!(\"cargo:rerun-if-changed=macos/format.m\");"
+      },
+      {
+        "line": 17,
+        "text": "        println!(\"cargo:rerun-if-changed=macos/format.h\");"
+      },
+      {
+        "line": 18,
+        "text": "    }"
+      },
+      {
+        "line": 19,
+        "text": "}"
+      }
+    ]
+  },
+  {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/src/lib.rs",
+    "startLine": 425,
+    "endLine": 436,
+    "lines": [
+      {
+        "line": 425,
+        "text": "                    }"
+      },
+      {
+        "line": 426,
+        "text": "                });"
+      },
+      {
+        "line": 427,
+        "text": "            }"
+      },
+      {
+        "line": 428,
+        "text": "            Ok(())"
+      },
+      {
+        "line": 429,
+        "text": "        });"
+      },
+      {
+        "line": 430,
+        "text": "    #[cfg(target_os = \"macos\")]"
+      },
+      {
+        "line": 431,
+        "text": "    let builder = builder.plugin(tauri_plugin_notes_ui::init());"
+      },
+      {
+        "line": 432,
+        "text": "    #[cfg(not(feature = \"access-boundary-proof\"))]"
+      },
+      {
+        "line": 433,
+        "text": "    let builder = builder.invoke_handler(tauri::generate_handler!["
+      },
+      {
+        "line": 434,
+        "text": "        load_workspace,"
+      },
+      {
+        "line": 435,
+        "text": "        register_save_intent,"
+      },
+      {
+        "line": 436,
+        "text": "        acknowledge_access,"
+      }
+    ]
+  },
+  {
+    "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSApplication.h",
+    "startLine": 376,
+    "endLine": 380,
+    "lines": [
+      {
+        "line": 376,
+        "text": "@interface NSApplication(NSFullKeyboardAccess)"
+      },
+      {
+        "line": 377,
+        "text": "/// A Boolean value indicating whether keyboard navigation is enabled in System Settings > Keyboard."
+      },
+      {
+        "line": 378,
+        "text": "/// - Note: The value of this property is `YES` if keyboard navigation is enabled or `NO` if it’s not. You might use this value to implement your own key loop or to implement in-control tabbing behavior similar to `NSTableView`. Because of the nature of the preference storage, you won’t be notified of changes to this property if you attempt to observe it through key-value observing; however, accessing this property is fairly inexpensive, so you can access it directly rather than caching it."
+      },
+      {
+        "line": 379,
+        "text": "/// - Note: This property’s value isn’t necessarily reflective of the separate accessibility setting named “Full Keyboard Access” in System Settings > Accessibility > Keyboard."
+      },
+      {
+        "line": 380,
+        "text": "@property (getter=isFullKeyboardAccessEnabled, readonly) BOOL fullKeyboardAccessEnabled API_AVAILABLE(macos(10.6));"
+      }
+    ]
+  },
+  {
+    "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/WebKit.framework/Headers/WKPreferences.h",
+    "startLine": 60,
+    "endLine": 66,
+    "lines": [
+      {
+        "line": 60,
+        "text": "#if !TARGET_OS_IPHONE"
+      },
+      {
+        "line": 61,
+        "text": "/*!"
+      },
+      {
+        "line": 62,
+        "text": " @property tabFocusesLinks"
+      },
+      {
+        "line": 63,
+        "text": " @abstract If tabFocusesLinks is YES, the tab key will focus links and form controls."
+      },
+      {
+        "line": 64,
+        "text": " The Option key temporarily reverses this preference."
+      },
+      {
+        "line": 65,
+        "text": " */"
+      },
+      {
+        "line": 66,
+        "text": "@property (nonatomic) BOOL tabFocusesLinks API_AVAILABLE(macos(10.12.4));"
+      }
+    ]
+  }
+]
