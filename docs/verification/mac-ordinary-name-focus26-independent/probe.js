@@ -1,0 +1,35 @@
+await document.fonts.ready;
+const pause=()=>new Promise(r=>setTimeout(r,40));
+await pause();
+const checks=[];const check=(name,condition,detail)=>checks.push({name,pass:!!condition,detail});
+const name=()=>document.querySelector('.smart-name input')||document.querySelector('input[aria-label="名称"]');
+const sheet=document.querySelector('style');
+const css=value=>sheet.textContent=value;
+const rects=()=>[...document.querySelectorAll('.smart-form,.smart-form *')].map(e=>{const r=e.getBoundingClientRect();return [e.tagName,r.x,r.y,r.width,r.height]});
+const styles=()=>[...document.querySelectorAll('.smart-form,.smart-form *')].map(e=>{const s=getComputedStyle(e);return [...s].map(k=>[k,s.getPropertyValue(k)])});
+let input=name();
+check('production native input autofocus and select',input instanceof HTMLInputElement&&document.activeElement===input&&input.value==='新建文件夹'&&input.selectionStart===0&&input.selectionEnd===5);
+const before=rects();css(window.baselineCss);const baseline=rects();css(window.candidateCss);
+check('complete ordinary element rectangles preserved',JSON.stringify(before)===JSON.stringify(baseline));
+input.setSelectionRange(1,3);
+check('native partial selection range',input.value.slice(input.selectionStart,input.selectionEnd)==='建文');
+input.setRangeText('验收');input.dispatchEvent(new Event('input',{bubbles:true}));await pause();
+check('native range replacement reflected in controlled input',name().value==='新验收件夹');
+document.querySelector('.smart-make input').click();await pause();
+check('smart switch keeps replacement state',name().value==='新验收件夹'&&document.querySelector('.smart-make input').checked&&!document.querySelector('.smart-ordinary'));
+const smart=styles();css(window.baselineCss);check('smart creation entire computed styles unchanged',JSON.stringify(smart)===JSON.stringify(styles()));css(window.candidateCss);
+document.querySelector('.smart-make input').click();await pause();input=name();
+check('ordinary switch keeps replacement and checkbox state',input.value==='新验收件夹'&&!document.querySelector('.smart-make input').checked&&!!document.querySelector('.smart-ordinary'));
+input.blur();check('DOM blur',document.activeElement!==input);input.focus();
+check('existing refocus handler selects full value',input.selectionStart===0&&input.selectionEnd===input.value.length);
+window.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));await pause();
+check('Escape invokes cancel only; fixture retains form',window.events.cancels===1&&window.events.saves.length===0&&!!document.querySelector('.smart-form'));
+for(const options of [{mobile:true,dark:true},{folder:{id:'independent-smart',kind:'smart',parentId:null,name:'不含置顶',sortOrder:0,createdAt:1,definitionRevision:1,query:{version:1,combine:'all',rules:[{type:'pinned',value:false}]}}}]){
+ window.mount(options);await pause();const current=styles();css(window.baselineCss);check('complete CSS isolation '+JSON.stringify(options),JSON.stringify(current)===JSON.stringify(styles()));css(window.candidateCss);
+}
+window.mount();await pause();const backdrop=document.querySelector('.smart-form-backdrop');backdrop.style.width='280px';backdrop.style.height='180px';
+input=name();Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'长名称'.repeat(80));input.dispatchEvent(new Event('input',{bubbles:true}));await pause();input.focus();input.setSelectionRange(input.value.length,input.value.length);input.scrollLeft=input.scrollWidth;
+const panel=document.querySelector('.smart-form');check('narrow long name scrolls within unchanged panel',input.scrollLeft>0&&panel.scrollWidth<=panel.clientWidth,{scrollLeft:input.scrollLeft,panelScrollWidth:panel.scrollWidth,panelClientWidth:panel.clientWidth});
+window.mount({dark:true});await pause();input=name();const dark={text:getComputedStyle(input).color,surface:getComputedStyle(input).backgroundColor};check('dark text and surface remain distinct',dark.text!==dark.surface,dark);
+window.mount();await pause();input=name();
+return {checks,pass:checks.every(x=>x.pass),errors:window.fixtureErrors,requests:performance.getEntriesByType('resource').map(x=>x.name),documentFocus:document.hasFocus(),matchesRealFocus:input.matches(':focus'),activeInput:document.activeElement===input,selection:[input.selectionStart,input.selectionEnd],geometry:{candidate:before,baseline},scope:'Production component, complete CSS, real DOM input range replacement. Unattached inactive WK: no OS keyboard, no active focus/selection paint or production App cancellation claim.'};

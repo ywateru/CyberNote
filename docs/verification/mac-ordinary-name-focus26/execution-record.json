@@ -1,0 +1,49 @@
+{
+  "commands": [
+    {
+      "command": "node docs/verification/mac-ordinary-name-focus26/prepare.mjs baseline",
+      "exitCode": 0
+    },
+    {
+      "command": "node docs/verification/mac-ordinary-name-focus26/prepare.mjs candidate",
+      "exitCode": 0
+    },
+    {
+      "command": "existing webkit-render baseline.html baseline-controlled-wk focus-probe.js",
+      "exitCode": 0
+    },
+    {
+      "command": "existing webkit-render candidate.html candidate-interaction-final-wk interaction-probe.js",
+      "exitCode": 0,
+      "checks": 23,
+      "allPass": true
+    },
+    {
+      "command": "existing webkit-render baseline.html baseline-diagnostic-wk diagnostic-probe.js",
+      "exitCode": 0
+    },
+    {
+      "command": "existing webkit-render candidate.html candidate-diagnostic-wk diagnostic-probe.js",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 docs/verification/mac-ordinary-name-focus26/measure.py",
+      "exitCode": 0
+    }
+  ],
+  "provenance": "Recorded from actual tool return codes. Not a rerun or invented timing. WK paths and native diagnostics stored alongside each output.",
+  "setupFailures": [
+    "Initial JSX fixture bracket fixed before HTML generated",
+    "Vite library build result array handled; missing NODE_ENV definition fixed",
+    "First real React render omitted required onHandle fixture callback; added no-op callback",
+    "requestAnimationFrame does not fire in inactive unattached WK: one saved timeout; finite timers used instead"
+  ],
+  "cleanup": {
+    "httpServersStarted": 0,
+    "browsersStarted": 0,
+    "nativeHelpersAllReturned": true,
+    "taskCacheExists": false,
+    "sharedCacheTouched": false,
+    "platformBuild": false
+  }
+}

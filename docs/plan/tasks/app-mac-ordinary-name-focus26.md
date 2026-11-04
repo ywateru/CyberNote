@@ -1,7 +1,7 @@
 ---
 id: app-mac-ordinary-name-focus26
 scope: Mac ordinary new-folder name input focus/selection and measured text alignment
-status: ready
+status: source-reviewed
 depends-on: [app-mac-ordinary-form-surface20, app-mac-sidebar-preference22]
 ---
 
@@ -41,4 +41,4 @@ depends-on: [app-mac-ordinary-form-surface20, app-mac-sidebar-preference22]
 
 相关生产组件检查应覆盖首次默认聚焦选择、输入替换/部分选择、失焦/再聚焦、普通→智能→普通名称/checkbox语义、取消不提交、窄窗长名称/错误不裁切、智能创建编辑和手机样式隔离、深色可读。只为真实渲染/行为边界做有意义的有限检查，不写复刻CSS常量的假测试；必要typecheck一次。已有可靠离线WK工具可复用；禁止下载或写共享target/cache，若测试需新增临时cache写在本任务目录并排除封存。测试程序内focus作为受控验证，不模拟OS键鼠或切换用户应用。
 
-记录准确源身份和受限范围，SOURCE-READY STOP后不同作者独审，root固定提交再准确Mac12标准freeze/build/collect、独立核包及Computer Use实际复拍。最终要实际默认全选、部分选择/输入替换、重新激活与取消，以及侧栏22的按钮/菜单/重启回归。原版图只有一独立样本、JPEG不是无损，不把离屏通过或金色外包相等扩大成整个产品像素PASS。Android本批不重建，但根另行继续其差异任务；完整跨端目标保持active。
+记录准确源身份和受限范围，SOURCE-READY STOP后不同作者独审，root固定提交再准确Mac12标准freeze/build/collect、独立核包及Computer Use实际复拍。最终要实际默认全选、部分选择/输入替换、重新激活与取消，以及侧栏22的按钮/菜单/重启回归。原版图只有一独立样本、JPEG不是无损，不把离屏通过或金色外包相等扩大成整个产品像素PASS。task26不改Android界面；根已安排与手机28联合准确Mac12/Android07包29，各自实际验收。完整跨端目标保持active。

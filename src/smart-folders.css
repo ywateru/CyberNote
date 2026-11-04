@@ -517,14 +517,22 @@
 }
 .smart-mac .smart-ordinary .smart-name input {
   height: 24px;
+  padding-inline: 5px;
 }
 .smart-mac .smart-ordinary .smart-name input:focus {
-  outline-width: 2px;
+  border-color: transparent;
+  outline: 3.5px solid #f6d499;
+  outline-offset: -0.5px;
+}
+.smart-mac .smart-ordinary .smart-name input:focus::selection {
+  background: #fceac1;
+  color: #202020;
 }
 .smart-mac .smart-ordinary .smart-make {
   margin: 16px 0 0;
 }
 .smart-mac .smart-ordinary .smart-make label {
+  gap: 6px;
   line-height: 16px;
 }
 .smart-mac .smart-ordinary .smart-make input {

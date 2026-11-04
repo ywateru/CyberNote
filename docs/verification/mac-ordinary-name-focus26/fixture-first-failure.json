@@ -1,0 +1,10 @@
+{
+  "stage": "baseline harness bundle",
+  "status": "failed",
+  "reason": "Missing JSX closing brace in onSave fixture callback; no product change, no rendering occurred",
+  "correction": "Added fixture-only closing brace before rerun",
+  "additionalSetupFailures": [
+    "Vite library result is an array; corrected fixture result access before HTML existed",
+    "First WK invocation before valid HTML was generated and without required local WebKit process permissions; no valid rendering result"
+  ]
+}

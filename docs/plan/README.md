@@ -15,7 +15,7 @@
 | APP-MOBILE-17 错误可见与目录选字 | done（两项已见缺陷范围） | 三文件源码独审71，Android06实际长按目录无选字/正文仍可选/滚动错误可见与合法重试取消；83原文件/37 PNG/99静态检查独核pass，工程错误样式非原版像素PASS |
 | APP-MAC-ORDINARY-SURFACE20 普通表单表面与角部 | done（有限表面范围），Mac11实际/独核通过 | 准确94fbbb36/3cc7188d新包486项核包、运行23及202项证据独核；量图25平坦色对齐/角差304→8/checkbox实际mask616→8，800×414保持。名称/焦点/标签/字形与全像素仍open |
 | APP-MAC-SIDEBAR-PREFERENCE22 侧栏显隐偏好 | done（有限偏好范围），Mac11实际/独核通过 | 单键本地settings及首次可信恢复；运行23两入口/动态菜单、hidden/visible各正常与紧接CmdQ恢复通过，PID45493→45907→45957→46007→46056/exe同SHA；202项静态独核。无内部ACK/任意退出保证/新增CmdQ握手，全像素与多窗仍open |
-| APP-MAC-ORDINARY-NAME-FOCUS26 名称焦点/选择/对齐 | ready | 准确Mac11/研究25确认名称右4px、标签右2px、蓝选区/灰内边。仅ordinary局部CSS，保留真实输入与主布局，先开发/独审再准确Mac12。整体父目标active |
+| APP-MAC-ORDINARY-NAME-FOCUS26 名称焦点/选择/对齐 | source-reviewed，实际Mac12待验 | cdbfde60局部CSS；作者23/独立14有限WK通过，Safari暖选区及文字对齐有有限补强，灰内边消除。角/字形/真实App取消与侧栏仍待联合29实包，父目标active |
 | APP-MOBILE-FOLDER-VISUAL28 手机文件夹局部视觉 | ready | 准确06研究27定位quick文字/图形、普通folder宽、footer形状锚点、标题墨迹；局部生产渲染→独审→新Android07实际触摸/量图，不扩张整体像素结论 |
 | REF-001 原版取证/需求/UI/调研 | in-progress | 原视频已保全、抽帧、初始规格已写，持续补证 |
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
