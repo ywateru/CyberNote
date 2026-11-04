@@ -1,0 +1,12 @@
+<anonymous_script>:45
+        filter !== "tags" &&
+        ^
+
+ReferenceError: filter is not defined
+    at clearSensitive.current (eval at execute (file:///private/tmp/apple-notes-tags-01/scripts/check-ocr-host.mjs:117:3), <anonymous>:45:9)
+    at accessHandler.current (eval at execute (file:///private/tmp/apple-notes-tags-01/scripts/check-ocr-host.mjs:117:3), <anonymous>:102:20)
+    at file:///private/tmp/apple-notes-tags-01/scripts/check-ocr-host.mjs:998:23
+    at async test (file:///private/tmp/apple-notes-tags-01/scripts/check-ocr-host.mjs:173:3)
+    at async file:///private/tmp/apple-notes-tags-01/scripts/check-ocr-host.mjs:974:1
+
+Node.js v22.16.0

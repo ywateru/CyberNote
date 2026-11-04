@@ -9,6 +9,13 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { type Editor, type JSONContent } from "@tiptap/react";
+import { editorSaveSnapshot } from "./editor-save-snapshot";
+import { TagComposition } from "./tag-composition";
+import {
+  documentTags,
+  projectTags,
+  tagSelectionAfterAccess,
+} from "./note-tags";
 import { SaveRevisions } from "./save-revisions";
 import { secureId } from "./secure-id";
 import { enqueueSave, type SaveOutcome } from "./save-queue";
@@ -369,6 +376,8 @@ function App() {
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
   const [filter, setFilter] = useState("");
+  // undefined = physical folder; null = all committed tags; name = exact tag.
+  const [tagFilter, setTagFilter] = useState<string | null | undefined>();
   const [menu, setMenu] = useState<string | null>(null);
   const [modal, setModal] = useState<string | null>(null);
   const [modalValue, setModalValue] = useState("");
@@ -377,6 +386,25 @@ function App() {
   const [editors, setEditors] = useState<ReadonlyMap<string, Editor>>(
     new Map(),
   );
+  const tagCompositions = useRef(new Map<string, TagComposition>());
+  const tagCompositionTarget = useRef<{
+    noteId: string;
+    composition: TagComposition;
+    cycle: number;
+    scope: string;
+    stamp: AccessStamp;
+  } | null>(null);
+  const tagCompositionNavigation = useRef(0);
+  const [, updateTagComposition] = useState(0);
+  const tagCompositionSettled = useRef(
+    (_id: string, _composition: TagComposition, _cycle: number) => {},
+  );
+  const clearTagComposition = useCallback(() => {
+    tagCompositionNavigation.current++;
+    if (!tagCompositionTarget.current) return;
+    tagCompositionTarget.current = null;
+    updateTagComposition((value) => value + 1);
+  }, []);
   const editorGate = useRef(new SearchEditorGate()).current;
   const editorsRef = useRef(editors);
   editorsRef.current = editors;
@@ -505,9 +533,10 @@ function App() {
   const theme = settings.theme || "system";
   const view = settings.view || "list";
   const sort = settings.sort || "updated";
+  const tags = projectTags(ws, accessSuspended);
   const listed = ws.notes
     .filter((n) => {
-      if (query || filter) {
+      if (query || filter || tagFilter !== undefined) {
         if (n.deletedAt) return false;
       } else if (folderId === "all") {
         if (n.deletedAt) return false;
@@ -525,7 +554,11 @@ function App() {
         !JSON.stringify(n.document).includes("taskItem")
       )
         return false;
-      if (filter === "tags" && !n.plainText.includes("#")) return false;
+      const names = tags.notes.get(n.id) || [];
+      if ((filter === "tags" || tagFilter !== undefined) && !names.length)
+        return false;
+      if (typeof tagFilter === "string" && !names.includes(tagFilter))
+        return false;
       if (
         ["audio", "image", "file", "video"].includes(filter) &&
         !ws.attachments.some((a) => a.noteId === n.id && a.kind === filter)
@@ -542,9 +575,13 @@ function App() {
             ? b.createdAt - a.createdAt
             : b.updatedAt - a.updatedAt),
     );
-  const desktopSearch = !mobile && !separate && !!query;
+  const desktopSearch =
+    !separate &&
+    ((!mobile && !!query) || filter === "tags" || tagFilter !== undefined);
   const desktopSearchZero =
     desktopSearch &&
+    !!query &&
+    !mobile &&
     view === "list" &&
     workspaceLoaded &&
     !loading &&
@@ -553,12 +590,53 @@ function App() {
     !accessSuspended.length &&
     !accessGate.state?.operationId &&
     listed.length === 0;
-  const noteId = projectSearchNote({
+  const projectedNoteId = projectSearchNote({
     searching: desktopSearch,
     baseNoteId,
     searchNoteId,
     resultIds: listed.map((note) => note.id),
   });
+  const tagCompositionScope = JSON.stringify({
+    folderId,
+    baseNoteId,
+    searchNoteId,
+    page,
+    query,
+    filter,
+    tagFilter,
+    view,
+  });
+  const tagNavigation = tagCompositionNavigation.current;
+  const held = tagCompositionTarget.current;
+  const heldNote = held && ws.notes.find((note) => note.id === held.noteId);
+  const heldStamp = held && accessGate.stamp(held.noteId);
+  const retainTagComposition = !!(
+    held &&
+    projectedNoteId !== held.noteId &&
+    heldNote &&
+    !heldNote.deletedAt &&
+    !heldNote.locked &&
+    desktopSearch &&
+    (filter === "tags" || tagFilter !== undefined) &&
+    held.scope === tagCompositionScope &&
+    held.composition === tagCompositions.current.get(held.noteId) &&
+    held.cycle === held.composition.cycle &&
+    held.composition.pending &&
+    !held.composition.editor.isDestroyed &&
+    held.composition.editor.isEditable &&
+    editors.get(held.noteId) === held.composition.editor &&
+    nativeEditorOwners.current.get(held.composition.editor) === held.noteId &&
+    !blockedNotes.current.has(held.noteId) &&
+    !accessSuspended.includes(held.noteId) &&
+    !accessGate.state?.operationId &&
+    heldStamp?.sessionId === held.stamp.sessionId &&
+    heldStamp?.noteEpoch === held.stamp.noteEpoch &&
+    accessGate.state?.notes[held.noteId]?.authorized !== false
+  );
+  if (held && !retainTagComposition) tagCompositionTarget.current = null;
+  // Only the displayed original target is retained. Results/catalog/counts stay
+  // the real legal projection, and no other matching note becomes active mid-IME.
+  const noteId = retainTagComposition ? held!.noteId : projectedNoteId;
   const current = ws.notes.find((n) => n.id === noteId);
   const currentFolder = ws.folders.find((f) => f.id === folderId);
   const selected = ws.notes.find(
@@ -566,17 +644,44 @@ function App() {
       n.id === (desktopSearch && !listed.length ? null : contextNote || noteId),
   );
   const editor = noteId ? editors.get(noteId) || null : null;
-  const onReady = useCallback((id: string, instance: Editor | null) => {
-    if (instance) nativeEditorOwners.current.set(instance, id);
-    setEditors((previous) => {
-      if (previous.get(id) === instance || (!instance && !previous.has(id)))
-        return previous;
-      const next = new Map(previous);
-      if (instance) next.set(id, instance);
-      else next.delete(id);
-      return next;
-    });
-  }, []);
+  const onReady = useCallback(
+    (id: string, instance: Editor | null) => {
+      const previousComposition = tagCompositions.current.get(id);
+      if (previousComposition && previousComposition.editor !== instance) {
+        if (tagCompositionTarget.current?.composition === previousComposition)
+          clearTagComposition();
+        previousComposition.dispose();
+        tagCompositions.current.delete(id);
+      }
+      if (instance) {
+        nativeEditorOwners.current.set(instance, id);
+        if (!tagCompositions.current.has(id)) {
+          const composition = new TagComposition(
+            instance,
+            (cycle) => tagCompositionSettled.current(id, composition, cycle),
+            () => {
+              const target = tagCompositionTarget.current;
+              if (
+                target?.composition === composition &&
+                target.cycle !== composition.cycle
+              )
+                clearTagComposition();
+            },
+          );
+          tagCompositions.current.set(id, composition);
+        }
+      }
+      setEditors((previous) => {
+        if (previous.get(id) === instance || (!instance && !previous.has(id)))
+          return previous;
+        const next = new Map(previous);
+        if (instance) next.set(id, instance);
+        else next.delete(id);
+        return next;
+      });
+    },
+    [clearTagComposition],
+  );
   const restoreEditor = useCallback(
     (instance: Editor, editable: boolean) => {
       const owner = nativeEditorOwners.current.get(instance);
@@ -596,7 +701,7 @@ function App() {
       setShowFind(false);
       setEditing(false);
     }
-  }, [desktopSearch, query]);
+  }, [desktopSearch, query, filter, tagFilter]);
   const fail = useCallback((e: unknown) => setError(errText(e)), []);
   const hydrate = useCallback((data: Workspace) => {
     const previous = wsRef.current;
@@ -788,6 +893,74 @@ function App() {
     },
     [fail],
   );
+  const saveEditorDoc = (id: string, doc: JSONContent) => {
+    const composition = tagCompositions.current.get(id);
+    const instance = composition?.editor;
+    const names = documentTags(doc);
+    const lostTagMatch =
+      !names.length ||
+      (typeof tagFilter === "string" && !names.includes(tagFilter));
+    if (
+      !tagCompositionTarget.current &&
+      tagNavigation === tagCompositionNavigation.current &&
+      desktopSearch &&
+      (filter === "tags" || tagFilter !== undefined) &&
+      noteId === id &&
+      listed.some((note) => note.id === id) &&
+      lostTagMatch &&
+      composition?.pending &&
+      instance &&
+      !instance.isDestroyed &&
+      instance.isEditable &&
+      instance.view.composing &&
+      instance.view.hasFocus() &&
+      nativeEditorOwners.current.get(instance) === id &&
+      !blockedNotes.current.has(id) &&
+      !accessGate.state?.operationId &&
+      accessGate.state?.notes[id]?.authorized !== false
+    ) {
+      tagCompositionTarget.current = {
+        noteId: id,
+        composition,
+        cycle: composition.cycle,
+        scope: tagCompositionScope,
+        stamp: accessGate.stamp(id),
+      };
+    }
+    return saveDoc(id, doc);
+  };
+  tagCompositionSettled.current = (id, composition, cycle) => {
+    const target = tagCompositionTarget.current;
+    if (
+      !target ||
+      target.noteId !== id ||
+      target.composition !== composition ||
+      target.cycle !== cycle
+    )
+      return;
+    const instance = composition.editor;
+    // No invented end/flush/transaction. The observer proves the real final
+    // candidate and tag-cleanup transaction reached this same live Editor.
+    const stamp = accessGate.stamp(id);
+    if (
+      !instance.isDestroyed &&
+      nativeEditorOwners.current.get(instance) === id &&
+      editorsRef.current.get(id) === instance &&
+      stamp.sessionId === target.stamp.sessionId &&
+      stamp.noteEpoch === target.stamp.noteEpoch &&
+      !blockedNotes.current.has(id) &&
+      !accessGate.state?.operationId &&
+      accessGate.state?.notes[id]?.authorized !== false
+    ) {
+      const document = editorSaveSnapshot(instance.getJSON());
+      const outgoing =
+        pendingDocs.current.get(id) ||
+        wsRef.current.notes.find((note) => note.id === id)?.document;
+      if (outgoing && !documentsEqual(outgoing, document))
+        void saveDoc(id, document);
+    }
+    clearTagComposition();
+  };
   const saveConflictCopy = async () => {
     const id = noteId;
     if (!id || blockedNotes.current.has(id)) return;
@@ -893,6 +1066,16 @@ function App() {
   }, [flush, fail]);
   clearSensitive.current = (ids) => {
     if (!ids.length) return;
+    if (
+      tagCompositionTarget.current &&
+      ids.includes(tagCompositionTarget.current.noteId)
+    )
+      clearTagComposition();
+    setTagFilter((name) =>
+      name === undefined
+        ? undefined
+        : tagSelectionAfterAccess(name, wsRef.current, ids),
+    );
     nativeToolbar.current?.invalidate((context) => {
       context.editor = null;
       context.bookmark = null;
@@ -924,7 +1107,11 @@ function App() {
     }
     // An unrelated parked note changed. Keep the still-valid visible search
     // target and its overlay; clearing here would silently retarget B to A.
-    if (shouldClearSearchAfterAccessChange(desktopSearch, noteId, ids)) {
+    if (
+      tagFilter === undefined &&
+      filter !== "tags" &&
+      shouldClearSearchAfterAccessChange(desktopSearch, noteId, ids)
+    ) {
       setQuery("");
       setSearching(false);
     }
@@ -965,11 +1152,21 @@ function App() {
     );
   accessHandler.current = (event) => {
     if (event.phase === "prepare") {
+      if (
+        tagCompositionTarget.current &&
+        event.noteIds.includes(tagCompositionTarget.current.noteId)
+      )
+        clearTagComposition();
       synchronization.invalidate();
       ocrLifecycle.current.suspend(event.noteIds);
       recordingLifecycle.current.suspend(event.noteIds);
       blockedNotes.current = new Set(event.noteIds);
       setAccessSuspended(event.noteIds);
+      setTagFilter((name) =>
+        name === undefined
+          ? undefined
+          : tagSelectionAfterAccess(name, wsRef.current, event.noteIds),
+      );
       if (
         noteId &&
         blockedNotes.current.has(noteId) &&
@@ -1002,6 +1199,15 @@ function App() {
       if (frozen && !frozen.editor.isDestroyed)
         restoreEditor(frozen.editor, frozen.editable);
       barrierEditor.current = null;
+      setTagFilter((name) =>
+        name === undefined
+          ? undefined
+          : tagSelectionAfterAccess(
+              name,
+              { ...wsRef.current, access: event.access },
+              [],
+            ),
+      );
       setWs((prev) => ({ ...prev, access: event.access }));
       fail(Error("锁定未执行：请检查所有窗口是否有未保存的更改，再重试。"));
       void synchronizeRef.current();
@@ -1169,6 +1375,8 @@ function App() {
     }
   }, [noteId]);
   const chooseFolder = (id: string) => {
+    clearTagComposition();
+    setTagFilter(undefined);
     setGalleryEditor(false);
     setFolderId(id);
     setPage("notes");
@@ -1180,7 +1388,17 @@ function App() {
     setNoteId(n?.id || null);
     updateSettings({ selectedFolder: id, selectedNote: n?.id || "" });
   };
+  const chooseTag = (name: string | null) => {
+    clearTagComposition();
+    setTagFilter(name);
+    setFilter("");
+    setSearchNoteId(null);
+    setGalleryEditor(false);
+    setPage("notes");
+    setMenu(null);
+  };
   const chooseNote = (n: Note) => {
+    clearTagComposition();
     if (!mobile && view === "gallery") setGalleryEditor(true);
     if (desktopSearch) setSearchNoteId(n.id);
     else setNoteId(n.id);
@@ -1210,6 +1428,9 @@ function App() {
           access: n.access ?? prev.access,
           notes: [n, ...prev.notes],
         }));
+        clearTagComposition();
+        setTagFilter(undefined);
+        setFilter("");
         setNoteId(n.id);
         setPage("editor");
         setGalleryEditor(true);
@@ -1226,10 +1447,14 @@ function App() {
         fail(e);
       }
     },
-    [fail, flush, folderId, updateSettings],
+    [fail, flush, folderId, updateSettings, clearTagComposition],
   );
   const newNote = useCallback(() => createNote(), [createNote]);
   const openModal = (type: string, value = "") => {
+    if (type === "lock" && selected && documentTags(selected.document).length) {
+      fail(Error("含标签的备忘录不能锁定，请先移除标签。"));
+      return;
+    }
     if (type === "paper" && mobile && editor && noteId) {
       paperTarget.current = {
         noteId,
@@ -1518,7 +1743,10 @@ function App() {
         !pending ||
         !documentsEqual(pending, ocr.insertedDocument) ||
         target.editor.isDestroyed ||
-        !documentsEqual(target.editor.getJSON(), ocr.insertedDocument)
+        !documentsEqual(
+          editorSaveSnapshot(target.editor.getJSON()),
+          ocr.insertedDocument,
+        )
       )
         throw Error("原识别文字的待保存正文已改变，请保持窗口打开");
     } else await flush();
@@ -1642,7 +1870,7 @@ function App() {
               target.documentVersion =
                 nativeDocumentVersions.current.get(instance) || 0;
               target.document = instance.getJSON();
-              target.trustedDocument = target.document;
+              target.trustedDocument = editorSaveSnapshot(target.document);
             }
           }
         },
@@ -1820,7 +2048,13 @@ function App() {
       ? ws.notes.filter((n) => !n.deletedAt).length
       : ws.notes.filter((n) => n.folderId === id).length;
   const folderLabel =
-    folderId === "all" ? "全部备忘录" : currentFolder?.name || "备忘录";
+    tagFilter !== undefined
+      ? tagFilter === null
+        ? "所有标签"
+        : `#${tagFilter}`
+      : folderId === "all"
+        ? "全部备忘录"
+        : currentFolder?.name || "备忘录";
   const listTitle = desktopSearchZero
     ? "搜索"
     : query
@@ -1838,7 +2072,7 @@ function App() {
   const folderRow = (f: FolderData, depth = 0) => (
     <div key={f.id}>
       <button
-        className={`folder-row ${folderId === f.id ? "selected" : ""}`}
+        className={`folder-row ${tagFilter === undefined && folderId === f.id ? "selected" : ""}`}
         style={{ paddingLeft: mobile ? 16 : 16 + depth * 14 }}
         onClick={() => chooseFolder(f.id)}
         onContextMenu={(e) => {
@@ -1882,7 +2116,7 @@ function App() {
         onFocus={() => setSearching(true)}
         onChange={(e) => {
           setQuery(e.target.value);
-          setFilter("");
+          setFilter((value) => (value === "tags" ? value : ""));
         }}
       />
       {query ? (
@@ -2201,16 +2435,16 @@ function App() {
           const transaction = instance.state.tr
             .setSelection(target.bookmark.resolve(instance.state.doc))
             .replaceSelection(new Slice(Fragment.fromArray(nodes), 0, 0));
-          const document = transaction.doc.toJSON();
+          const document = editorSaveSnapshot(transaction.doc.toJSON());
           try {
             instance.view.dispatch(transaction);
           } finally {
             if (
               !instance.isDestroyed &&
-              documentsEqual(instance.getJSON(), document)
+              documentsEqual(editorSaveSnapshot(instance.getJSON()), document)
             ) {
               inserted(document);
-              target.document = document;
+              target.document = instance.getJSON();
               target.bookmark = instance.state.selection.getBookmark();
               target.documentVersion =
                 nativeDocumentVersions.current.get(instance) || 0;
@@ -2891,7 +3125,7 @@ function App() {
       setNativeSearchAck(sequence);
       setQuery(intent.phase === "cancel" ? "" : intent.value);
       setSearching(intent.phase !== "cancel");
-      setFilter("");
+      setFilter((value) => (value === "tags" ? value : ""));
       return;
     }
     if (intent.kind === "windowActivity") return;
@@ -3376,7 +3610,7 @@ function App() {
             </div>
             <div className="folder-group">
               <button
-                className={`folder-row ${folderId === "all" ? "selected" : ""}`}
+                className={`folder-row ${tagFilter === undefined && folderId === "all" ? "selected" : ""}`}
                 onClick={() => chooseFolder("all")}
               >
                 <FolderOpen />
@@ -3395,6 +3629,42 @@ function App() {
                   .filter((f) => f.kind === "trash")
                   .map((f) => folderRow(f))}
             </div>
+            {(tags.catalog.length > 0 ||
+              tagFilter !== undefined ||
+              filter === "tags") && (
+              <section className="tag-browser" aria-label="标签">
+                <div className="account-title">⌄ 标签</div>
+                <div className="tag-chips">
+                  <button
+                    className={tagFilter === null ? "selected" : ""}
+                    onClick={() => chooseTag(null)}
+                  >
+                    所有标签
+                  </button>
+                  {tags.catalog.map(([name, count]) => (
+                    <button
+                      key={name}
+                      className={tagFilter === name ? "selected" : ""}
+                      title={`${count}个备忘录`}
+                      onClick={() => chooseTag(name)}
+                    >
+                      #{name}
+                    </button>
+                  ))}
+                  {(tagFilter !== undefined || filter === "tags") && (
+                    <button
+                      aria-label="清除标签筛选"
+                      onClick={() => {
+                        setTagFilter(undefined);
+                        setFilter("");
+                      }}
+                    >
+                      清除
+                    </button>
+                  )}
+                </div>
+              </section>
+            )}
           </div>
         )}
         <div className="folder-footer">
@@ -3855,7 +4125,7 @@ function App() {
                 active={note.id === noteId}
                 blocked={blockedNotes.current.has(note.id)}
                 gate={editorGate}
-                onChange={saveDoc}
+                onChange={saveEditorDoc}
                 onReady={onReady}
                 onDate={() => setNotice(`创建于 ${fmtDate(note.createdAt)}`)}
                 onFocus={(focused) => {

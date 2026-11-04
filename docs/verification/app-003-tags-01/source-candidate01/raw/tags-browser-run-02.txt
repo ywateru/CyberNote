@@ -1,0 +1,16 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: '备忘录', exact: true })[22m
+
+    at /private/tmp/apple-notes-tags-01/scripts/check-tags-browser.mjs:51:57 {
+  log: [
+    "  - waiting for getByRole('button', { name: '备忘录', exact: true })"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.16.0

@@ -9,6 +9,7 @@ import {
   type NodeViewProps,
 } from "@tiptap/react";
 import { createEditorExtensions } from "./editor-schema";
+import { editorSaveSnapshot } from "./editor-save-snapshot";
 export { AttachmentNode, DrawingNode } from "./editor-schema";
 import {
   Play,
@@ -249,10 +250,13 @@ export default function NoteEditor({
   const ref = useRef(onChange);
   ref.current = onChange;
   const editor = useEditor({
-    extensions: createEditorExtensions({
-      attachment: ReactNodeViewRenderer(MediaView),
-      drawing: ReactNodeViewRenderer(DrawingView),
-    }),
+    extensions: createEditorExtensions(
+      {
+        attachment: ReactNodeViewRenderer(MediaView),
+        drawing: ReactNodeViewRenderer(DrawingView),
+      },
+      { allowTags: !note.locked },
+    ),
     content: note.document,
     editorProps: {
       // Fixed PM 1.42.9 opt-in: trusted Android preedit survives the idle
@@ -306,7 +310,7 @@ export default function NoteEditor({
     },
     onUpdate: ({ editor: e }) => {
       untouched.current = false;
-      ref.current(note.id, e.getJSON());
+      ref.current(note.id, editorSaveSnapshot(e.getJSON()));
     },
     onFocus: () => onFocus(true),
     onBlur: () => onFocus(false),

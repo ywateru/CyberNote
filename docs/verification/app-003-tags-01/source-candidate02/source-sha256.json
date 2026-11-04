@@ -1,0 +1,66 @@
+{
+  "baseline": "96584b74d2356c361e897ed5ad275b15823c21a0",
+  "contractDocsSource": "e2fc5cc",
+  "sourceRoot": "/private/tmp/apple-notes-tags-01",
+  "status": "SOURCE-CANDIDATE / pending independent review; not SOURCE-READY",
+  "productSources": {
+    "src-tauri/src/store.rs": "1ce42676e8ca6cda36b0b23130da938075deb0beb91c8c0404a9e1f235b1d1c0",
+    "src-tauri/src/store/archive/document-cases.json": "297f9f7cd64b5489f9da69c4a54715f3b934a5634d2ed502c30505a81555e950",
+    "src-tauri/src/store/archive/document-schema.json": "7cd6c3e442d968ef99019b14fcc48cf037693d7daae0506b0c47a2ec00fb007c",
+    "src-tauri/src/store/archive/document.rs": "4fbb93ac37810002e2183e69e309cc306b88babe4e2efe651b9cd40663d2dea4",
+    "src/App.tsx": "e9e9755ec674088c306de68d87e93903580b3d3778288a3b050115379fa8c5e7",
+    "src/Editor.tsx": "5c6c018d377fa0785691a67897975954bd5c777e911802abff364fb8aa84c5af",
+    "src/editor-save-snapshot.ts": "4ca9f9b64f52c3558b1a843c61f0ef8d810af45743c26f2cf57974c03564d5dd",
+    "src/editor-schema.ts": "daca1ff535d1516a708096d7e600f44ba1dd9510474dc7a65bf3595aea97ce0f",
+    "src/note-tag-extension.ts": "db582a04ce347f9d136186caf2bd7147d0b3fbb7bc12e4174a666be44fc37d8a",
+    "src/note-tags.ts": "2d5460e5a70bcb7b6a5a91631e25ca6ff05c1b3aeeb79b45a4a145415c174a2f",
+    "src/style.css": "6798b08569e22c827500f8126feb2eba71c5cde1dcf7b89fa9ae29e0f3f8cf8b"
+  },
+  "aggregateSha256": "392aa3228b93cc3a06441bc4f874417f7ed019e5af9b73eaabb3bed98c426937",
+  "aggregateMethod": "sha256 of sorted relative path + NUL + lowercase file sha256 + LF",
+  "dependenciesUnchanged": true,
+  "rustProductSourcesUnchanged": true,
+  "noRustOrPlatformBuildThisRepair": true,
+  "freeAfterBytes": 2188468224,
+  "existingStoreBinary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-qa-fix-store",
+    "sha256": "f43d9695ad1d5cb9a0e0e42bb6af415f6a2e3bf78d65979b57e7ac607b0620cf",
+    "bytes": 5606144,
+    "provenance": "docs/verification/app-003-tags-independent-01/harness-main.rs; exact pre-existing reviewer binary, product Rust source unchanged"
+  },
+  "tests": {
+    "typecheck": "pass",
+    "schemaCases": 96,
+    "accessCases": 16,
+    "realAppEditorStoreBoundaryScenarios": 11,
+    "storeActionRecords": 53,
+    "ocrHostBoundaryCases": 37,
+    "attachmentSubmissionCases": 23,
+    "attachmentCancellationCases": 8,
+    "diffCheck": "pass excluding preserved raw; original typecheck log retains trailing blank line"
+  },
+  "notRerun": [
+    "candidate01 27 browser scenarios",
+    "candidate01 40 Store/Session tests"
+  ],
+  "testScripts": {
+    "scripts/check-tags-save-boundary.mjs": "fae1dce3fb26445286b80c50785abdb3e0c33a550ea68296d2d717f5ab65a201",
+    "scripts/check-ocr-host.mjs": "9410efa92192e993a3a8e682d8bdb6d0d623f4af47794b4cfb5925d0b7d9c28c"
+  },
+  "preservedEvidenceSha256": {
+    "boundary-result.json": "64c8d19416a710f61dc8a22dfe4277e0b0a367d7e0f6d6bcbbb1e7b0044ae49c",
+    "boundary-run01-failure.json": "a16369521fcabcf57bc79d88dcd0126bae614f4fb62f198c7d97ab7aab25bc27",
+    "raw/tags-repair-access.txt": "1490869c8795283d0ad9782076e32e2f0bc6ae6d32cc45f36356e35aa3b70d8b",
+    "raw/tags-repair-attachment.txt": "a510ebf3b95fbc7be923b77750d412f2aefc45bafbf299d9896c6d6f785a714e",
+    "raw/tags-repair-cancellation.txt": "e34ca9b40505fc12add026517f948ed28424e6416ea542b349108a3fd766f761",
+    "raw/tags-repair-ocr-host-run02.txt": "0f677c913a49d432e9da09b917f46cc31978eaef3ec4181bb331672872c7ac56",
+    "raw/tags-repair-ocr-host-run03.txt": "030e64f575b07c305b89c2a8c7dac8238105bcf08a04c41e1b140ac8998d4f94",
+    "raw/tags-repair-ocr-host-run04.txt": "202b2e4cb673d7f683fb8de8d4c7047bee3631d0d34a2e001e9bb6f008ca25ca",
+    "raw/tags-repair-ocr-host.txt": "7f91c014d43d5532511c24e2779d53cab60b000ffefd870fddf20840ee06ffc5",
+    "raw/tags-repair-run01.txt": "0746f4bf1d253ef2732258ad4f05f2ab356555195daaa8ed0bea784e0db17e2b",
+    "raw/tags-repair-run02.txt": "273f2526a4cd1ee2a6b883ae6ae4d48a71f5d6ebc1581a5d9486ed321af078d1",
+    "raw/tags-repair-schema.txt": "93a522e34a5cadc1e55f108c9255d784f6207a046ca8fe9706ec4898fe1e900b",
+    "raw/tags-repair-typecheck-final.txt": "f5d66a8f8867b9de0d6f6732cdc09069893bd64b4a610136c143298d8e896f35",
+    "schema-result.json": "22d3bbc5bc35b5014706f7ba44f8f71bce9c6f2f4e853f73db371a5c46359352"
+  }
+}

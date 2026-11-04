@@ -1,0 +1,16 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByText('controlled-save-failure') to be visible[22m
+
+    at /private/tmp/apple-notes-tags-01/scripts/check-tags-browser.mjs:63:866 {
+  log: [
+    "  - waiting for getByText('controlled-save-failure') to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.16.0
