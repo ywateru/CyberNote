@@ -1,7 +1,7 @@
 ---
 id: app-mac-ordinary-tab-loop37
 scope: Ordinary Mac folder dialog Tab focus loop
-status: ready
+status: in-progress
 depends-on: [app-mac-keyboard-policy35]
 ---
 
@@ -30,3 +30,5 @@ Enter/Escape、普通输入/选择/组字、正常保存/取消、原生搜索�
 ## Verification
 
 作者离线typecheck/必要Rust检查，使用已有依赖和独立自有target。真实App生产表单受控测试覆盖false Tab/Shift/Right后Tab、true正反顺序与disabled、每次系统值变化、快速连续导航/逆序异步回复、取消/模式切换/其他点击键入后迟到reply、失败保草稿、组字/修饰键/Android/智能/搜索边界。真实原生查询/主线程/window身份及closed失败需有限原生或集成证据，mock不能替代整条接线。不同作者独立审查已提交源码；之后准确新包Computer Use再比较原版，源阶段不得关闭实际差异。记录全部失败和限制，保留既有缓存/数据/输出，不下载或改系统设置。
+
+2026-11-05 root START37：隔离/private/tmp/apple-notes-ordinary-tab-loop37-01，分支task/mac-ordinary-tab-loop37，基线26648d88021adf3abdcfdfe879453a3b36866613。实际桥接拆分src/native-keyboard.ts与src/ordinary-folder-keyboard.ts，插件build.rs/自动生成权限加入新只读command，宿主capability不改。node_modules只读复用，独占Rust target；作者待固定提交/不同作者独审，尚未准确包验收。
