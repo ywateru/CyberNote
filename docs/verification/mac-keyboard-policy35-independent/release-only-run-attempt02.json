@@ -1,0 +1,24 @@
+[
+  {
+    "argv": [
+      "/usr/bin/xcrun",
+      "clang",
+      "-fobjc-arc",
+      "-fblocks",
+      "-mmacosx-version-min=12.0",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "/private/tmp/apple-notes-mac-keyboard35-01/docs/verification/mac-keyboard-policy35-independent/release-only.m",
+      "-framework",
+      "AppKit",
+      "-framework",
+      "WebKit",
+      "-o",
+      "/private/tmp/apple-notes-mac-keyboard35-01/docs/verification/mac-keyboard-policy35-independent/release-only"
+    ],
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": "/private/tmp/apple-notes-mac-keyboard35-01/docs/verification/mac-keyboard-policy35-independent/release-only.m:20:21: error: passing 'NotesUIKeyboardPolicy *__strong *' to parameter of type 'NotesUIKeyboardPolicy *__weak *' changes retain/release properties of pointer\n   20 |     exercise(&weakA,&weakB);\n      |                     ^~~~~~\n/private/tmp/apple-notes-mac-keyboard35-01/docs/verification/mac-keyboard-policy35-independent/release-only.m:2:89: note: passing argument to parameter 'outB' here\n    2 | static void exercise(NotesUIKeyboardPolicy *__weak *outA,NotesUIKeyboardPolicy *__weak *outB) {\n      |                                                                                         ^\n1 error generated.\n"
+  }
+]

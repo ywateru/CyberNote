@@ -1,0 +1,438 @@
+{
+  "status": "PASS source/mechanism scope only",
+  "identity": {
+    "method": "Read-only metadata files, no Git command or mutation",
+    "gitDir": "/Users/water/work/2026/Apple-Notes-Clone/.git/worktrees/apple-notes-mac-keyboard35-01",
+    "headText": "ref: refs/heads/task/mac-keyboard-policy35",
+    "resolvedHead": "45fdc698154e23d7efac5661cb62641311cd5b17",
+    "expectedHead": "45fdc698154e23d7efac5661cb62641311cd5b17",
+    "productCommitAssigned": "cbcf592d464a57cc04cbe40894d0b8b48f6fb3ee",
+    "baseAssigned": "e687ea6ceaa02c57e511c4a97a6187cba5f5acf0"
+  },
+  "commitObjects": {
+    "45fdc698154e23d7efac5661cb62641311cd5b17": {
+      "kind": "commit",
+      "tree": "a262c7dbee17e8a8aec356df61817c58c956dacd",
+      "parents": [
+        "cbcf592d464a57cc04cbe40894d0b8b48f6fb3ee"
+      ]
+    },
+    "cbcf592d464a57cc04cbe40894d0b8b48f6fb3ee": {
+      "kind": "commit",
+      "tree": "5aa6b7d41e62d367ed768b5071ba8618a0b046f2",
+      "parents": [
+        "e687ea6ceaa02c57e511c4a97a6187cba5f5acf0"
+      ]
+    }
+  },
+  "basePluginFileCount": 33,
+  "baseEvidence": "Sealed task31 initial303 product snapshot, prior31 source delta CSS-only; task35 initial old-path hashes also cross-checked. e687 base object packed, no Git command used.",
+  "sixProductChanges": [
+    "plugins/tauri-plugin-notes-ui/Cargo.toml",
+    "plugins/tauri-plugin-notes-ui/README.md",
+    "plugins/tauri-plugin-notes-ui/build.rs",
+    "plugins/tauri-plugin-notes-ui/macos/keyboard.m",
+    "plugins/tauri-plugin-notes-ui/src/lib.rs",
+    "plugins/tauri-plugin-notes-ui/src/macos.rs"
+  ],
+  "checks": [
+    {
+      "name": "fixed worktree HEAD",
+      "pass": true
+    },
+    {
+      "name": "HEAD is log-preservation child of product commit",
+      "pass": true
+    },
+    {
+      "name": "product commit directly follows assigned base",
+      "pass": true
+    },
+    {
+      "name": "sealed prior31 base evidence index identity",
+      "pass": true
+    },
+    {
+      "name": "sealed prior31 product manifest exact",
+      "pass": true
+    },
+    {
+      "name": "complete sealed33-file plugin baseline differs only at six approved paths",
+      "pass": true,
+      "detail": [
+        "plugins/tauri-plugin-notes-ui/Cargo.toml",
+        "plugins/tauri-plugin-notes-ui/README.md",
+        "plugins/tauri-plugin-notes-ui/build.rs",
+        "plugins/tauri-plugin-notes-ui/macos/keyboard.m",
+        "plugins/tauri-plugin-notes-ui/src/lib.rs",
+        "plugins/tauri-plugin-notes-ui/src/macos.rs"
+      ]
+    },
+    {
+      "name": "product commit exact bytes plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "product commit exact bytes plugins/tauri-plugin-notes-ui/README.md",
+      "pass": true
+    },
+    {
+      "name": "product commit exact bytes plugins/tauri-plugin-notes-ui/build.rs",
+      "pass": true
+    },
+    {
+      "name": "product commit exact bytes plugins/tauri-plugin-notes-ui/macos/keyboard.m",
+      "pass": true
+    },
+    {
+      "name": "product commit exact bytes plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "product commit exact bytes plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "pass": true
+    },
+    {
+      "name": "product identity plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "product identity plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "pass": true
+    },
+    {
+      "name": "product identity plugins/tauri-plugin-notes-ui/build.rs",
+      "pass": true
+    },
+    {
+      "name": "product identity plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "product identity plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "product identity plugins/tauri-plugin-notes-ui/README.md",
+      "pass": true
+    },
+    {
+      "name": "product identity plugins/tauri-plugin-notes-ui/macos/keyboard.m",
+      "pass": true
+    },
+    {
+      "name": "manifest has exactly six changed paths including new helper",
+      "pass": true
+    },
+    {
+      "name": "author21 sealed index SHA",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/README.md",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/android-check.log",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/android-normal-dependencies.log",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/build-boundaries.json",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/checks.json",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/external-reference.json",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/inputs.before.json",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/integrity-result.json",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/native-compile.log",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/native-event-diagnostic.log",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/native-mechanism",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/native-mechanism-first-failure.log",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/native-mechanism-second-failure.log",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/native-mechanism.log",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/native-mechanism.m",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/product-files.json",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/product.diff",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/rust-check.log",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/rust-test.log",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/source-boundaries.json",
+      "pass": true
+    },
+    {
+      "name": "sealed author evidence docs/verification/mac-keyboard-policy35/task.current.md",
+      "pass": true
+    },
+    {
+      "name": "author index has21 files",
+      "pass": true
+    },
+    {
+      "name": "protected baseline input plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "protected baseline input src-tauri/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "protected baseline input src-tauri/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "protected baseline input src-tauri/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "protected baseline input docs/research/mac-folder-keyboard-readiness33/README.md",
+      "pass": true
+    },
+    {
+      "name": "protected baseline input docs/research/mac-ordinary-original31/README.md",
+      "pass": true
+    },
+    {
+      "name": "fixed primary API source tauri-plugin-api",
+      "pass": true
+    },
+    {
+      "name": "primary API excerpt tauri-plugin-api 512",
+      "pass": true
+    },
+    {
+      "name": "fixed primary API source tauri-platform-webview",
+      "pass": true
+    },
+    {
+      "name": "primary API excerpt tauri-platform-webview 196",
+      "pass": true
+    },
+    {
+      "name": "primary API excerpt tauri-platform-webview 1853",
+      "pass": true
+    },
+    {
+      "name": "fixed primary API source runtime-main-thread",
+      "pass": true
+    },
+    {
+      "name": "primary API excerpt runtime-main-thread 263",
+      "pass": true
+    },
+    {
+      "name": "primary API excerpt runtime-main-thread 1552",
+      "pass": true
+    },
+    {
+      "name": "fixed primary API source appkit-getter",
+      "pass": true
+    },
+    {
+      "name": "primary API excerpt appkit-getter 376",
+      "pass": true
+    },
+    {
+      "name": "fixed primary API source webkit-policy",
+      "pass": true
+    },
+    {
+      "name": "primary API excerpt webkit-policy 60",
+      "pass": true
+    },
+    {
+      "name": "fixed primary API source appkit-local-monitor",
+      "pass": true
+    },
+    {
+      "name": "primary API excerpt appkit-local-monitor 540",
+      "pass": true
+    },
+    {
+      "name": "ready hook Mac-only and separate from toolbar binding",
+      "pass": true
+    },
+    {
+      "name": "native pair comes from one with_webview callback",
+      "pass": true
+    },
+    {
+      "name": "dispatch failure separate from native completion",
+      "pass": true
+    },
+    {
+      "name": "destroyed and drop invoke independent keyboard cleanup",
+      "pass": true
+    },
+    {
+      "name": "native cleanup scheduled on main thread",
+      "pass": true
+    },
+    {
+      "name": "same pinned Tauri Mac-only wry feature",
+      "pass": true
+    },
+    {
+      "name": "native helper and WebKit build gated by Mac",
+      "pass": true
+    },
+    {
+      "name": "system property queried directly into public preference",
+      "pass": true
+    },
+    {
+      "name": "event identity preserved without modifier or DOM rewrite",
+      "pass": true
+    },
+    {
+      "name": "weak native targets and weak callback ownership",
+      "pass": true
+    },
+    {
+      "name": "own token cleanup idempotent and registry removal explicit",
+      "pass": true
+    },
+    {
+      "name": "fixed lifecycle creates registered Webview then calls plugins on main",
+      "pass": true
+    },
+    {
+      "name": "fixed runtime main-thread dispatcher inline otherwise enqueues",
+      "pass": true
+    },
+    {
+      "name": "fresh strict native compile succeeds",
+      "pass": true
+    },
+    {
+      "name": "fresh independent31 runtime checks pass",
+      "pass": true
+    },
+    {
+      "name": "fresh actual system query remained false with no toggle",
+      "pass": true
+    },
+    {
+      "name": "fresh explicit weak references both clear",
+      "pass": true
+    },
+    {
+      "name": "independent function-scope cleanup check passes",
+      "pass": true
+    },
+    {
+      "name": "original checker weak declaration bug has compiler evidence",
+      "pass": true
+    },
+    {
+      "name": "final references separately declared weak",
+      "pass": true
+    },
+    {
+      "name": "sealed author27 controlled checks recorded",
+      "pass": true
+    },
+    {
+      "name": "sealed author existing16 Rust tests recorded",
+      "pass": true
+    },
+    {
+      "name": "sealed retained original factory-event failures remain explicit",
+      "pass": true
+    }
+  ],
+  "checkCount": 86,
+  "passed": 86,
+  "failed": [],
+  "freshNativeChecks": [
+    "main thread, inactive real offscreen pairs",
+    "actual system getter delegates to AppKit and changes real WK preference",
+    "actual system getter reread rather than remembered WK value",
+    "second real WK receives controlled false independently",
+    "two independent real monitor registrations and observer sets",
+    "same identity rereads without another registration",
+    "owned Tab refreshes only its window and preserves exact identity",
+    "production does not inspect or invert modifiers",
+    "same-process controlled true-to-false reread on next owned Tab",
+    "non-Tab, keyUp and missing owner do not read provider",
+    "owned-window notification refreshes only B",
+    "controlled app activation refreshes only controlled key window",
+    "null native targets explicitly rejected",
+    "wrong native view class rejected",
+    "real WK to wrong NSWindow rejected",
+    "duplicate identity cannot change window label or native target",
+    "invalid labels fail without accepting cleanup-all",
+    "native preference failure returned through status five",
+    "refresh failure keeps original event identity",
+    "background ownership check started",
+    "off-main native attach and cleanup reject before target access",
+    "unknown owner cleanup is harmless",
+    "close notification disposes A while preserving B",
+    "disposed observer and navigation paths no longer read provider",
+    "label cleanup disposes B",
+    "cleanup-all idempotent",
+    "controlled monitor registration failure returns four with no registry leak",
+    "initial refresh exception leaves no partial registration",
+    "fresh registration works after failures and cleanup",
+    "no activation, visible windows or page loads",
+    "controllers released after pool drain, no persistent block retain cycles"
+  ],
+  "sourceReviewLimits": [
+    "Native pointer/thread/error lifecycle reviewed against fixed Tauri sources; no actual Tauri/Wry product runtime instantiated.",
+    "Real system getter delegates to AppKit and remains false; subsequent true/false/key/notification/event ownership are controlled values.",
+    "Actual local monitor registration exists but real AppKit delivery and resulting WebKit focus movement are not exercised.",
+    "Status4 is injected by temporary process-local method implementation replacement, restored before next operation; not an observed AppKit failure.",
+    "Status5 uses process-local WK subclass configuration exception; not an observed product exception.",
+    "Original Option-Tab TAB insertion remains open; event identity/modifiers preserved is not insertion parity.",
+    "Fresh early retention failures were checker declaration errors, explicitly evidenced by Clang and retained with originals.",
+    "No system settings/GUI/ADB/DB/downloads/product/Git mutations or broad Rust/platform builds."
+  ]
+}
