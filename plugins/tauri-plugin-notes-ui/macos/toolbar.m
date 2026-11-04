@@ -392,6 +392,12 @@ static NSPoint contentOffsetFor(NSString *action) {
             if([visible containsObject:drop]){[visible removeObject:drop];[hidden addObject:drop];}
         }
         searchWidth=MIN(searchWidth,MAX(0,available-[self widthFor:visible search:hasSearch?1:0 overflow:hidden.count>0]+(hasSearch?1:0)));
+        CGFloat groupGap=18;
+        // Candidate wide three-column geometry; drop/overflow decisions above stay unchanged.
+        if(three && hasSearch && visible.count==7 && hidden.count==0) {
+            searchWidth=MIN(searchWidth,325);
+            groupGap+=MAX(0,available-[self widthFor:visible search:searchWidth overflow:NO])/2;
+        }
         CGFloat total=[self widthFor:visible search:searchWidth overflow:hidden.count>0];
         if(gallery)start=MAX(start,w-8-total);
         CGFloat left=start;BOOL any=NO;
@@ -400,7 +406,7 @@ static NSPoint contentOffsetFor(NSString *action) {
             NSMutableArray *actions=[NSMutableArray array];for(NSString *action in candidates)if([visible containsObject:action])[actions addObject:action];
             if(!actions.count)continue;
             CGFloat width=[name isEqual:@"new"]?36:actions.count*40+([name isEqual:@"edit"]?1:0);
-            if(any)left+=18;[self placeGroup:name x:left width:width actions:actions];left+=width;any=YES;
+            if(any)left+=groupGap;[self placeGroup:name x:left width:width actions:actions];left+=width;any=YES;
         }
         if(hidden.count){if(any)left+=10;[self placeGroup:@"overflow" x:left width:36 actions:@[@"overflow"]];left+=36;any=YES;}
         if(hasSearch && searchWidth>0){if(any)left+=16;[self placeGroup:@"search" x:left width:searchWidth actions:@[]];

@@ -1,0 +1,5 @@
+{
+  "exitCode": -6,
+  "stdout": "",
+  "stderr": "*** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[GeometryView isFlipped]: unrecognized selector sent to instance 0x1007be4e0'\n*** First throw call stack:\n(\n\t0   CoreFoundation                      0x000000018e502bf0 __exceptionPreprocess + 176\n\t1   libobjc.A.dylib                     0x000000018df8e91c objc_exception_throw + 88\n\t2   CoreFoundation                      0x000000018e5c3c6c -[NSObject(NSObject) __retain_OA] + 0\n\t3   CoreFoundation                      0x000000018e473bc8 ___forwarding___ + 1480\n\t4   CoreFoundation                      0x000000018e473540 _CF_forwarding_prep_0 + 96\n\t5   baseline                            0x00000001000818c8 -[GeometryController layout] + 504\n\t6   baseline                            0x00000001000858a8 main + 2768\n\t7   dyld                                0x000000018e01bda4 start + 6992\n)\nlibc++abi: terminating due to uncaught exception of type NSException\n"
+}

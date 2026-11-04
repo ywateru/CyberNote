@@ -1,0 +1,48 @@
+{
+  "baseline": "f8bff9d11583a06ae0eefa9fa1bd1e38f0e616d8",
+  "date": "2026-11-04",
+  "sourceRoot": "/private/tmp/apple-notes-wide-toolbar-01",
+  "status": "SOURCE-CANDIDATE / pending independent review",
+  "productSources": {
+    "plugins/tauri-plugin-notes-ui/macos/toolbar.m": "14f9d44bdd7b890aee5f190650ad1356904c3495240299f732e758dade2e710d"
+  },
+  "aggregateSha256": "feb5f45fd4fa56cfa4b7886fa138eff469b3684aaff8c5a9e409203c35003145",
+  "aggregateMethod": "sha256 of sorted relative path + NUL + lowercase file sha256 + LF",
+  "verificationScriptSha256": "4e304916df896b927631292f68e8e429cc9965cb01f4d47789575ba4813fe6ab",
+  "tests": {
+    "exactProductionLayoutCases": 44,
+    "changedEligibleWideCases": 7,
+    "exactBaselineLayoutCases": 37,
+    "nativeToolbarCases": 13,
+    "clangStrictSyntaxExitCode": 0,
+    "diffCheck": "pass"
+  },
+  "protectedProductSourcesUnchanged": true,
+  "dependenciesUnchanged": true,
+  "noRustTargetUsed": true,
+  "noGuiOrPlatformBuild": true,
+  "freeBytesAtEvidenceFreeze": 3979079680,
+  "rawEvidenceSha256": {
+    "baseline.m": "13b7d4ebcfacbef75b661cff0ceddc142c6d6db92e1ed9e02da305055396e1dd",
+    "candidate.m": "082ffa3c5910da24b7fc19038fd9bd098ccb450e690036d94a2d6e1e4fd5e39b",
+    "raw/clang.json": "8c0f001eb872445b48b09d4e47806c9761b578a542b742636193838e70525219",
+    "raw/native-toolbar.json": "d10be3a0291c95c6ff98da676bf2c05dfcf1713f5af816367f1980d331d4ff24",
+    "raw/run01/baseline-compile.json": "a93d6e116da3cf4f633023538f3634d892e6b7e8f2424728412f4b2e7688fc13",
+    "raw/run01/baseline-run.json": "fbb2b6cdd505e1d74d7498e2acd7887af3bcfb03c4bb2c73cc3814e896b6b31f",
+    "raw/run01/baseline.m": "89406f6aead8e253e8eae4574fd1fd503adcabd430f99898f881a6ec4ef1d8b1",
+    "raw/run01/failure.json": "10e6958f9d1fdd75cc2ae7717c9340671a8b48f6d4deb529cd4a50a4b00a1423",
+    "raw/run01/stdout-stderr.txt": "b5062e5a825d678be057ebf3acaf8e0a0bf0397d03b01ae4dcb3b2af459a1f68",
+    "raw/run02/baseline-compile.json": "bd6ad4ba82c6bf48a9a63ae8d9e9d63e971304ea63f652a592cf598ab3655925",
+    "raw/run02/baseline-run.json": "a3fd9e9870a73111abd897b916316c4fcc290740f29d49c227f27386c6a15145",
+    "raw/run02/candidate-compile.json": "1d27157a2a88b9a0f98fa73272283c45a46756cf4ec54f88922f7ee17db55748",
+    "raw/run02/candidate-run.json": "07f2a4fb4a5a509642fe495eb328d00ef339e423aca94eaa74eb91040fc25448",
+    "raw/run02/failure.json": "edaa1e501791831a912c31c66cc935579f6d7ec8743f192dbc9579f6c67a5a51",
+    "raw/run02/stdout-stderr.txt": "feec0912b9e759903ea3d61bd7498d4cc900fb82ba79e5e2539b5a0134117cf9",
+    "raw/run03/baseline-compile.json": "2a54142e27702a96d8f1f6ed59c7fe8933d2ae7f37cce422d30cfbf6d23aacd6",
+    "raw/run03/baseline-run.json": "a3fd9e9870a73111abd897b916316c4fcc290740f29d49c227f27386c6a15145",
+    "raw/run03/candidate-compile.json": "5a5d54a7f632c2a527150b97e071e13b1bc6fd5edeae53c783667ff4821443e0",
+    "raw/run03/candidate-run.json": "07f2a4fb4a5a509642fe495eb328d00ef339e423aca94eaa74eb91040fc25448",
+    "raw/run03/stdout-stderr.txt": "4609faab31072f3f730418d9766547f523b3dd9c38162a1c594787becf8e8b78",
+    "result.json": "3d6805e323b5b9023622160bd6e73d95f8a5ee1695f81d29883d5160a5a8d84a"
+  }
+}
