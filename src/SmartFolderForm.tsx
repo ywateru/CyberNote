@@ -17,6 +17,7 @@ import {
 import { validTagName } from "./note-tags";
 import {
   addDraftRule,
+  nextDraftRuleType,
   draftQuery,
   folderDraft,
   newTagRule,
@@ -740,10 +741,7 @@ export function SmartFolderForm({
                           <button
                             type="button"
                             aria-label="添加过滤条件"
-                            disabled={
-                              draft.rules.some((r) => r.type === "tags") &&
-                              draft.rules.some((r) => r.type === "creationDate")
-                            }
+                            disabled={!nextDraftRuleType(draft)}
                             onClick={() => setDraft(addDraftRule(draft, r.key))}
                           >
                             <Plus />

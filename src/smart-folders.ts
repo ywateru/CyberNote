@@ -29,7 +29,8 @@ export function parseSmartQuery(value: unknown): SmartQuery {
   closed(q, ["version", "combine", "rules"]);
   if (
     q.version !== 1 ||
-    !["all", "any"].includes(String(q.combine)) ||
+    typeof q.combine !== "string" ||
+    (q.combine !== "all" && q.combine !== "any") ||
     !Array.isArray(q.rules) ||
     q.rules.length < 1 ||
     q.rules.length > 2
@@ -65,7 +66,7 @@ export function parseSmartQuery(value: unknown): SmartQuery {
   });
   const result: SmartQuery = {
     version: 1,
-    combine: q.combine as "all" | "any",
+    combine: q.combine,
     rules,
   };
   if (bytes(JSON.stringify(result)) > 64 * 1024) throw new SmartInvalid();

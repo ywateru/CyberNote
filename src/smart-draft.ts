@@ -77,14 +77,22 @@ export function draftQuery(draft: FolderDraft): SmartQuery {
     ),
   });
 }
-export function addDraftRule(draft: FolderDraft, after: number): FolderDraft {
+export function nextDraftRuleType(
+  draft: FolderDraft,
+): DraftRule["type"] | undefined {
   const used = new Set(draft.rules.map((r) => r.type));
-  const next: DraftRule | undefined = !used.has("tags")
-    ? newTagRule(Date.now())
-    : !used.has("creationDate")
-      ? { ...newTagRule(Date.now()), type: "creationDate", period: "today" }
-      : undefined;
-  if (!next) return draft;
+  return (["tags", "creationDate", "pinned"] as const).find(
+    (type) => !used.has(type),
+  );
+}
+export function addDraftRule(draft: FolderDraft, after: number): FolderDraft {
+  const type = nextDraftRuleType(draft);
+  if (!type) return draft;
+  const base = newTagRule(Math.max(-1, ...draft.rules.map((r) => r.key)) + 1);
+  const next: DraftRule =
+    type === "creationDate"
+      ? { ...base, type, period: "today" }
+      : { ...base, type };
   const rules = [...draft.rules];
   rules.splice(rules.findIndex((r) => r.key === after) + 1, 0, next);
   return { ...draft, rules };

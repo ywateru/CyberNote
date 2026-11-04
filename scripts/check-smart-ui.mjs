@@ -374,6 +374,103 @@ try {
     headless: true,
     args: ["--disk-cache-size=1048576", "--media-cache-size=1048576"],
   });
+  await run(
+    "draft-third-type-insertion-disabled-and-unsupported-recovery",
+    async (r) => {
+      await seedTagged();
+      const p = await page(true);
+      await p.getByRole("button", { name: "新建文件夹", exact: true }).click();
+      await p.getByRole("checkbox", { name: "制作智能文件夹" }).check();
+      await p
+        .getByRole("textbox", { name: "名称", exact: true })
+        .fill("三条草稿边界");
+      await p.getByRole("textbox", { name: "标签", exact: true }).fill("A");
+      await p.getByRole("option", { name: "#A", exact: true }).click();
+      const types = () =>
+        p
+          .getByLabel("过滤条件类型")
+          .evaluateAll((els) => els.map((e) => e.value));
+      const plusDisabled = () =>
+        p
+          .getByRole("button", { name: "添加过滤条件" })
+          .evaluateAll((els) => els.map((e) => e.disabled));
+      await p.getByRole("button", { name: "添加过滤条件" }).click();
+      assert.deepEqual(await types(), ["tags", "creationDate"]);
+      assert.deepEqual(await plusDisabled(), [false, false]);
+      await p.getByRole("button", { name: "添加过滤条件" }).first().click();
+      assert.deepEqual(await types(), ["tags", "pinned", "creationDate"]);
+      assert.deepEqual(await plusDisabled(), [true, true, true]);
+      assert.equal(await p.getByLabel("创建日期模式").inputValue(), "today");
+      assert.equal(await p.getByLabel("置顶模式").inputValue(), "true");
+      assert.equal(await p.locator(".smart-token").textContent(), "#A×");
+      for (let i = 0; i < 3; i++) {
+        const options = await p
+          .getByLabel("过滤条件类型")
+          .nth(i)
+          .locator("option")
+          .evaluateAll((els) =>
+            els.map((e) => ({ value: e.value, disabled: e.disabled })),
+          );
+        for (const value of ["tags", "pinned", "creationDate"])
+          if (value !== (await types())[i])
+            assert.equal(options.find((o) => o.value === value).disabled, true);
+      }
+      await p.getByRole("button", { name: "好", exact: true }).click();
+      await p
+        .getByRole("alert")
+        .filter({ hasText: "尚未接入本地规则" })
+        .waitFor();
+      assert.deepEqual(await types(), ["tags", "pinned", "creationDate"]);
+      assert.equal(
+        await p
+          .getByRole("textbox", { name: "名称", exact: true })
+          .inputValue(),
+        "三条草稿边界",
+      );
+      assert.equal(await p.locator(".smart-token").textContent(), "#A×");
+      assert.equal(
+        (await must("load_workspace")).value.folders.filter(
+          (f) => f.kind === "smart",
+        ).length,
+        0,
+      );
+      assert.equal(
+        await p.evaluate(
+          () =>
+            window.__control.requests.filter(
+              (r) => r.args.action?.type === "createSmartFolder",
+            ).length,
+        ),
+        0,
+      );
+      await p.screenshot({
+        path: resolve(out, "three-draft-rules-rejected-preserved.png"),
+      });
+      await p.getByRole("button", { name: "移除过滤条件" }).nth(2).click();
+      assert.deepEqual(await types(), ["tags", "pinned"]);
+      assert.deepEqual(await plusDisabled(), [false, false]);
+      await p.getByRole("button", { name: "添加过滤条件" }).first().click();
+      assert.deepEqual(await types(), ["tags", "creationDate", "pinned"]);
+      await p.getByRole("button", { name: "移除过滤条件" }).nth(2).click();
+      assert.deepEqual(await types(), ["tags", "creationDate"]);
+      assert.deepEqual(await plusDisabled(), [false, false]);
+      await p.getByRole("button", { name: "添加过滤条件" }).nth(1).click();
+      assert.deepEqual(await types(), ["tags", "creationDate", "pinned"]);
+      assert.deepEqual(await plusDisabled(), [true, true, true]);
+      assert.equal(await p.locator(".smart-token").textContent(), "#A×");
+      await p.getByRole("button", { name: "移除过滤条件" }).nth(1).click();
+      await p.getByRole("button", { name: "好", exact: true }).click();
+      await p.waitForFunction(() => !document.querySelector(".smart-form"));
+      const saved = (await must("load_workspace")).value.folders.find(
+        (f) => f.name === "三条草稿边界",
+      );
+      assert.deepEqual(saved.query.rules, [
+        { type: "tags", mode: "allSelected", names: ["A"] },
+        { type: "pinned", value: true },
+      ]);
+      r.saved = { id: saved.id, rules: saved.query.rules };
+    },
+  );
   await run("mac-default-warning-cancel-addrow-real-create-once", async (r) => {
     const { n } = await seedTagged(),
       p = await page(true);

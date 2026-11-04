@@ -1,0 +1,199 @@
+{
+  "results": [
+    {
+      "input": {
+        "version": 1,
+        "combine": [
+          "all"
+        ],
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "tsAccepted": false,
+      "tsError": {
+        "code": "smart_invalid",
+        "message": "智能文件夹数据无效或版本不受支持"
+      },
+      "rustAccepted": false,
+      "rustError": {
+        "code": "smart_invalid",
+        "message": "智能文件夹输入、名称、规则或版本无效"
+      }
+    },
+    {
+      "input": {
+        "version": 1,
+        "combine": [
+          "any"
+        ],
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "tsAccepted": false,
+      "tsError": {
+        "code": "smart_invalid",
+        "message": "智能文件夹数据无效或版本不受支持"
+      },
+      "rustAccepted": false,
+      "rustError": {
+        "code": "smart_invalid",
+        "message": "智能文件夹输入、名称、规则或版本无效"
+      }
+    }
+  ],
+  "transcript": [
+    {
+      "requestId": 1,
+      "command": "load_workspace",
+      "args": {},
+      "window": "independent"
+    },
+    {
+      "events": [],
+      "ok": true,
+      "requestId": 1,
+      "value": {
+        "access": {
+          "epoch": 1,
+          "notes": {},
+          "operationId": null,
+          "sessionId": "e71a0a4f-0f65-4e85-b217-36ed6e185fb3",
+          "suspended": []
+        },
+        "attachments": [],
+        "folders": [
+          {
+            "createdAt": 1793809348246,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793809348246,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793809348246,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "metadata": {
+          "sequence": 0,
+          "sessionId": "e71a0a4f-0f65-4e85-b217-36ed6e185fb3"
+        },
+        "notes": [],
+        "settings": {}
+      }
+    },
+    {
+      "requestId": 2,
+      "command": "workspace_action",
+      "args": {
+        "action": {
+          "type": "createSmartFolder",
+          "input": {
+            "name": "must reject array",
+            "query": {
+              "version": 1,
+              "combine": [
+                "all"
+              ],
+              "rules": [
+                {
+                  "type": "tags",
+                  "mode": "anyTag"
+                },
+                {
+                  "type": "pinned",
+                  "value": true
+                }
+              ]
+            }
+          }
+        },
+        "expected": {
+          "sessionId": "e71a0a4f-0f65-4e85-b217-36ed6e185fb3",
+          "epoch": 1
+        }
+      },
+      "window": "independent"
+    },
+    {
+      "error": {
+        "code": "smart_invalid",
+        "message": "智能文件夹输入、名称、规则或版本无效"
+      },
+      "events": [],
+      "ok": false,
+      "requestId": 2
+    },
+    {
+      "requestId": 3,
+      "command": "workspace_action",
+      "args": {
+        "action": {
+          "type": "createSmartFolder",
+          "input": {
+            "name": "must reject array",
+            "query": {
+              "version": 1,
+              "combine": [
+                "any"
+              ],
+              "rules": [
+                {
+                  "type": "tags",
+                  "mode": "anyTag"
+                },
+                {
+                  "type": "pinned",
+                  "value": true
+                }
+              ]
+            }
+          }
+        },
+        "expected": {
+          "sessionId": "e71a0a4f-0f65-4e85-b217-36ed6e185fb3",
+          "epoch": 1
+        }
+      },
+      "window": "independent"
+    },
+    {
+      "error": {
+        "code": "smart_invalid",
+        "message": "智能文件夹输入、名称、规则或版本无效"
+      },
+      "events": [],
+      "ok": false,
+      "requestId": 3
+    }
+  ]
+}

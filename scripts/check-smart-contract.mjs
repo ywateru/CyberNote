@@ -23,9 +23,8 @@ const {
   projectFolders,
   SmartInvalid,
 } = await import(await compiled("smart-folders"));
-const { folderDraft, draftQuery, addDraftRule } = await import(
-  await compiled("smart-draft")
-);
+const { folderDraft, draftQuery, addDraftRule, nextDraftRuleType } =
+  await import(await compiled("smart-draft"));
 const corpus = JSON.parse(
   await readFile("docs/fixtures/smart-projection09.json", "utf8"),
 );
@@ -112,6 +111,43 @@ test("draft-cache-cancel-and-unsupported-insertion", () => {
   existing.name = "cancelled";
   existing.rules[0].names.push("B");
   assert.deepEqual(smart.query.rules[0].names, ["A"]);
+});
+test("draft-third-type-capability-insertion-and-removal", () => {
+  const base = folderDraft();
+  base.rules[0].names = ["A"];
+  assert.equal(nextDraftRuleType(base), "creationDate");
+  const two = addDraftRule(base, base.rules[0].key);
+  assert.equal(nextDraftRuleType(two), "pinned");
+  const three = addDraftRule(two, two.rules[0].key);
+  assert.deepEqual(
+    three.rules.map((r) => r.type),
+    ["tags", "pinned", "creationDate"],
+  );
+  assert.equal(three.rules[1].pinned, true);
+  assert.deepEqual(three.rules[0].names, ["A"]);
+  assert.equal(new Set(three.rules.map((r) => r.key)).size, 3);
+  assert.equal(nextDraftRuleType(three), undefined);
+  assert.equal(addDraftRule(three, three.rules[0].key), three);
+  assert.throws(() => draftQuery(three), /尚未接入/);
+  for (const type of ["tags", "creationDate", "pinned"]) {
+    const removed = {
+      ...three,
+      rules: three.rules.filter((r) => r.type !== type),
+    };
+    assert.equal(nextDraftRuleType(removed), type);
+    const restored = addDraftRule(removed, removed.rules[1].key);
+    assert.equal(restored.rules[2].type, type);
+    assert.deepEqual(restored.rules.slice(0, 2), removed.rules);
+    assert.equal(nextDraftRuleType(restored), undefined);
+  }
+  const supported = {
+    ...three,
+    rules: three.rules.filter((r) => r.type !== "creationDate"),
+  };
+  assert.deepEqual(draftQuery(supported).rules, [
+    { type: "tags", mode: "allSelected", names: ["A"] },
+    { type: "pinned", value: true },
+  ]);
 });
 test("unified-projection-count-first-sorted-legal-mark-only", () => {
   const make = (id, pinned, document, plainText) => ({

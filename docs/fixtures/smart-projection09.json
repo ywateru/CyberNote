@@ -270,6 +270,48 @@
       "expected": [
         "alpha"
       ]
+    },
+    {
+      "name": "mixed-all-tag-pinned",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": [
+        "alpha"
+      ]
+    },
+    {
+      "name": "mixed-any-tag-pinned",
+      "query": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": [
+        "alpha",
+        "beta",
+        "locked"
+      ]
     }
   ],
   "invalid": [
@@ -380,6 +422,38 @@
           "names": [
             "123"
           ]
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": [
+        "all"
+      ],
+      "rules": [
+        {
+          "type": "tags",
+          "mode": "anyTag"
+        },
+        {
+          "type": "pinned",
+          "value": true
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": [
+        "any"
+      ],
+      "rules": [
+        {
+          "type": "tags",
+          "mode": "anyTag"
+        },
+        {
+          "type": "pinned",
+          "value": true
         }
       ]
     }
