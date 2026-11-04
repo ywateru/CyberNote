@@ -50,7 +50,7 @@
 | APP-001-SIDEBAR-RESTORE-01 桌面文件夹恢复 | done（本次功能故障范围），整窗像素仍open | 菜单补包实际列表工具栏/菜单、画廊与冷启通过；最新Mac04 exe db921823…再次实际两条恢复路径通过，QA正文/计数保持。隐藏后保留左上直接按钮、菜单动态文字同原版。JPEG非像素通过，连续窄窗/完整焦点与DB未全验 |
 | APP-001-SIDEBAR-MENU-LABEL-01 侧栏菜单状态文字 | done（主窗状态文案范围） | 源8bfeb43独审72ad237 SOURCE-READY；准确b5063fd新Mac实际可见“隐藏文件夹”/隐藏“显示文件夹”及菜单恢复、画廊与冷启通过。独立源码16/host/guard1与实际记录28有限通过；独立窗口真实焦点与整窗像素未认证 |
 | APP-001-SIDEBAR-VISIBLE-GEOMETRY05 可见侧栏按钮 | 准确Mac05已运行、两入口与冷启再切换通过，局部像素仍partial | 源0b9604…/HEAD093986d新包333b356a…933项产物独核；真实top/menu隐藏恢复、228→208→228与正常退出后再切换成功，正文257码点保持。去共同胶囊/黄色且右锚随宽移动；独立JPEG仍见folder(-3,+2)px、toggle(-1.5,+.5)、隐藏面72vs80px与色深差，进入06。重启回visible不宣称隐藏状态持久化，非整窗像素PASS |
-| APP-001-SIDEBAR-OPTICAL06 顶部光学与隐藏面 | in-progress | 仅两图标偏移、三栏fullSize隐藏40pt@96/title154保持及普通Aqua动态alpha.70；Dark/HC保留原label。作者/独审与准确新包实际复验待完成，不追认05截图 |
+| APP-001-SIDEBAR-OPTICAL06 顶部光学与隐藏面 | 限定实施完成，像素partial | 源09fee3e/准确Mac06 f69b9e…经975项产物独核；实际新包按钮/菜单恢复、拖动后复位与正常冷启再切换成功。独立JPEG文件夹框重合、隐藏横差−9→0/背景约80px，仍切换半像素轮廓、标题上4px和今天上8px；保留open，不授全像素PASS。11–13冷启快速备忘录/未有效隐藏排除，14–16才为QA再切换 |
 | APP-001-PAPER-ROUNDED-SELECTION03 纸张选框圆角 | 新APK与设备有限通过，完整像素partial | 093986d新APK d6350a…独立882来源+原生库内Brotli资源逐字节/签名门槛通过，install-r保数据；grid-large/plain实际四角圆角可见，旧方角同设备图保留。全部七态/录屏高清像素仍unknown |
 | APP-001-PAPER-SAME-STYLE-SELECTION03 同样式选纸 | 新APK与设备有限交互通过，内部identity/revision未实证 | 源6eff8…经源码独审，新APK d6350a…真实plain/grid-large重复选纸保留Beta蓝选区，临时输入undo（grid另redo/undo）、system Back、正常完成离开重开保存通过。测试字符已删除、Alpha粗体Beta Gamma与grid-large恢复，日期随实际输入更新18:54。无WebView/DB注入，未声称内部PM对象/history JSON或零revision写 |
 | APP-001-MOBILE-PAPER-ORDER-02 手机纸张顺序 | 有限顺序缺陷关闭，完整选区/像素partial | 仅重排mobile选项，源码与真实App独审通过。recovery02包843e0c01…独核881断言并实际install -r；原QA正文/可见粗体/日期与grid-large保留，新7卡顺序同参考，取消/重开仍grid-large。未点卡、未新验保存/选区JSON；旧新Chrome首plain均移选区观察保留，不扩张为七态原生或像素通过 |

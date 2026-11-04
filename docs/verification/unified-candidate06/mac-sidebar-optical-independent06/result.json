@@ -1,0 +1,4237 @@
+{
+  "schema": 1,
+  "startedAt": "2026-11-04T11:17:33.269259+00:00",
+  "endedAt": "2026-11-04T11:17:33.610968+00:00",
+  "conclusion": "PASS: preserved Mac artifact bytes and recorded source/signature provenance",
+  "sourceHead": "09fee3ec05dcf3be22037e0a842ea6d2df275cff",
+  "freezeSHA256": "739e4028d29874e2dedd6d578342b700fffc7d9554d3e1aced4b7dc50c7c378a",
+  "productFiles": 238,
+  "inputFiles": 302,
+  "productAggregate": "3ae36caf283a87e0e661b535bdffe7352af9d6b989c913c19c70bdafca298041",
+  "inputAggregate": "3093bdb667ef8458c7d3f15f1f89118ec68ad77f6b0249eabb751bf41d8a207d",
+  "diskFreeBefore": 74814435328,
+  "checks": [
+    {
+      "name": "free space >=2GiB",
+      "pass": true
+    },
+    {
+      "name": "exact build result SHA256",
+      "pass": true
+    },
+    {
+      "name": "exact collection result SHA256",
+      "pass": true
+    },
+    {
+      "name": "freeze summary linkage",
+      "pass": true
+    },
+    {
+      "name": "exact freeze SHA256",
+      "pass": true
+    },
+    {
+      "name": "exact root authorization SHA256",
+      "pass": true
+    },
+    {
+      "name": "current HEAD exact source",
+      "pass": true
+    },
+    {
+      "name": "exact source and Mac stage",
+      "pass": true
+    },
+    {
+      "name": "authorization and input paths",
+      "pass": true
+    },
+    {
+      "name": "explicit expected aggregates",
+      "pass": true
+    },
+    {
+      "name": "source/freeze/aggregate linkage",
+      "pass": true
+    },
+    {
+      "name": "build result exact collector identity",
+      "pass": true
+    },
+    {
+      "name": "build nonce and exact command",
+      "pass": true
+    },
+    {
+      "name": "build success gates",
+      "pass": true
+    },
+    {
+      "name": "collector success gates",
+      "pass": true
+    },
+    {
+      "name": "output provenance JSON linkage",
+      "pass": true
+    },
+    {
+      "name": "recorded freeze equality: inputs-before.json",
+      "pass": true
+    },
+    {
+      "name": "recorded freeze equality: inputs-after.json",
+      "pass": true
+    },
+    {
+      "name": "recorded freeze equality: collection/inputs-before-collection.json",
+      "pass": true
+    },
+    {
+      "name": "recorded freeze equality: collection/inputs-after-collection.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: assets/mobile-paper-previews/README.md",
+      "pass": true
+    },
+    {
+      "name": "current input identity: assets/mobile-paper-previews/README.md",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: assets/mobile-paper-previews/grid-large.svg",
+      "pass": true
+    },
+    {
+      "name": "current input identity: assets/mobile-paper-previews/grid-large.svg",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: assets/mobile-paper-previews/grid-medium.svg",
+      "pass": true
+    },
+    {
+      "name": "current input identity: assets/mobile-paper-previews/grid-medium.svg",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: assets/mobile-paper-previews/grid-small.svg",
+      "pass": true
+    },
+    {
+      "name": "current input identity: assets/mobile-paper-previews/grid-small.svg",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: assets/mobile-paper-previews/lines-large.svg",
+      "pass": true
+    },
+    {
+      "name": "current input identity: assets/mobile-paper-previews/lines-large.svg",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: assets/mobile-paper-previews/lines-medium.svg",
+      "pass": true
+    },
+    {
+      "name": "current input identity: assets/mobile-paper-previews/lines-medium.svg",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: assets/mobile-paper-previews/lines-small.svg",
+      "pass": true
+    },
+    {
+      "name": "current input identity: assets/mobile-paper-previews/lines-small.svg",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: index.html",
+      "pass": true
+    },
+    {
+      "name": "current input identity: index.html",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.cjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.cjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.d.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.d.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.js",
+      "pass": true
+    },
+    {
+      "name": "current input identity: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.js",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/index.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/index.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/input.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/input.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: package.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: package.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: patches/prosemirror-view@1.42.9.patch",
+      "pass": true
+    },
+    {
+      "name": "current input identity: patches/prosemirror-view@1.42.9.patch",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/README.md",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/README.md",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/consumer-rules.pro",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/consumer-rules.pro",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/gradle.lockfile",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/gradle.lockfile",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/gradle.properties",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/gradle.properties",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/harness/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/harness/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/harness/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/harness/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/blank-fixture.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/blank-fixture.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/chinese-fixture.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/chinese-fixture.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/settings.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/settings.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/deviceFixture/java/com/local/notesscan/DeviceFixtureActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/deviceFixture/java/com/local/notesscan/DeviceFixtureActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ChineseOcr.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ChineseOcr.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/CropView.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/CropView.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/Images.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/Images.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ProbeActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ProbeActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ScanActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ScanActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/main/res/values/styles.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/main/res/values/styles.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/android/src/test/java/com/local/notesscan/GeometryTest.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/android/src/test/java/com/local/notesscan/GeometryTest.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/build.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/build.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/examples/host_copy_probe.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/examples/host_copy_probe.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/examples/macos_probe.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/examples/macos_probe.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/guest-js/index.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/guest-js/index.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/macos/vision.m",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/macos/vision.m",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/package.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/package.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/permissions/autogenerated/commands/execute.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/permissions/autogenerated/commands/execute.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/permissions/autogenerated/reference.md",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/permissions/autogenerated/reference.md",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/permissions/default.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/permissions/default.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/permissions/schemas/schema.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/permissions/schemas/schema.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/scripts/artifact-inventory.py",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/scripts/artifact-inventory.py",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/scripts/check-android.sh",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/scripts/check-android.sh",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/scripts/generate-fixture.swift",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/scripts/generate-fixture.swift",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-scan/src/session.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-scan/src/session.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/README.md",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/README.md",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/build.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/build.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/examples/demo.html",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/examples/demo.html",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/examples/state.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/examples/state.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/macos/format.h",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/macos/format.h",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/macos/format.m",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/macos/format.m",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/package.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/package.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/bind.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/bind.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/focus_search.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/focus_search.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/inspect.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/inspect.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/unbind.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/unbind.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/update.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/update.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/permissions/default.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/permissions/default.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/src/model.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/src/model.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/src/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/src/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/verification/format-gallery/README.md",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/README.md",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/verification/format-gallery/android-check.txt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/android-check.txt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/verification/format-gallery/checks.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/checks.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/verification/format-gallery/guest-typecheck.txt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/guest-typecheck.txt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/verification/format-gallery/inputs.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/inputs.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/verification/format-gallery/objc-syntax.txt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/objc-syntax.txt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/verification/format-gallery/rust-test.txt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/rust-test.txt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: plugins/tauri-plugin-notes-ui/verification/format-gallery/source-isolation.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/source-isolation.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: pnpm-lock.yaml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: pnpm-lock.yaml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: pnpm-workspace.yaml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: pnpm-workspace.yaml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/android-fix01.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/android-fix01.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/android-ime-regression.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/android-ime-regression.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/android-smoke.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/android-smoke.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/android.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/android.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/audio-card-rust-fixture.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/audio-card-rust-fixture.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/build-window-capture.py",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/build-window-capture.py",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-access-boundary.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-access-boundary.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-android-composition.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-android-composition.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-attachment-cancellation.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-attachment-cancellation.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-attachment-submission.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-attachment-submission.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-audio-card-integration.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-audio-card-integration.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-audio-card-store.py",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-audio-card-store.py",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-audio-card-ui.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-audio-card-ui.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-audio-controls-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-audio-controls-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-audio-playback-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-audio-playback-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-audio-playback.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-audio-playback.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-body-typography-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-body-typography-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-document-identity.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-document-identity.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-editor-actions.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-editor-actions.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-editor-schema.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-editor-schema.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-native-toolbar.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-native-toolbar.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-ocr-host.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-ocr-host.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-ocr-panel-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-ocr-panel-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-recording-panel-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-recording-panel-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-recording-preview.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-recording-preview.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-recording-session.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-recording-session.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-recording-submit.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-recording-submit.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-search-selection.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-search-selection.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-search-zero-startup.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-search-zero-startup.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-search-zero-ui.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-search-zero-ui.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-secure-id.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-secure-id.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-sidebar-restore-geometry.py",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-sidebar-restore-geometry.py",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-tags-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-tags-browser.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-tags-composition-retention.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-tags-composition-retention.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-tags-save-boundary.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-tags-save-boundary.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-tags-store.py",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-tags-store.py",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-wide-toolbar-geometry.py",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-wide-toolbar-geometry.py",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/check-window-capture.swift",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/check-window-capture.swift",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/compare-fix02-toolbar.py",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/compare-fix02-toolbar.py",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/recording-platform-fixture.mjs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/recording-platform-fixture.mjs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/run-window-capture.py",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/run-window-capture.py",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/window-capture.md",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/window-capture.md",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: scripts/window-capture.swift",
+      "pass": true
+    },
+    {
+      "name": "current input identity: scripts/window-capture.swift",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/Info.plist",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/Info.plist",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/app-icon.svg",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/app-icon.svg",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/build.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/build.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/capabilities/default.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/capabilities/default.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/capabilities/macos-notes-ui.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/capabilities/macos-notes-ui.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/.editorconfig",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/.editorconfig",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/proguard-rules.pro",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/proguard-rules.pro",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/proguard-tauri.pro",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/proguard-tauri.pro",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Ipc.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Ipc.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Logger.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Logger.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/PermissionHelper.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/PermissionHelper.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Rust.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Rust.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebChromeClient.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebChromeClient.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebView.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebView.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebViewClient.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebViewClient.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/TauriActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/TauriActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/WryActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/WryActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/proguard-wry.pro",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/proguard-wry.pro",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/layout/activity_main.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/layout/activity_main.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/values-night/themes.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/values-night/themes.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/values/colors.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/values/colors.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/values/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/values/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/values/strings.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/values/strings.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/values/themes.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/values/themes.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/src/main/res/xml/file_paths.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/src/main/res/xml/file_paths.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/tauri.build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/tauri.build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/app/tauri.properties",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/app/tauri.properties",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/BuildTask.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/BuildTask.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/RustPlugin.kt",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/RustPlugin.kt",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/gradle.properties",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/gradle.properties",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/gradle/wrapper/gradle-wrapper.properties",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/gradle/wrapper/gradle-wrapper.properties",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/gradlew",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/gradlew",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/gradlew.bat",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/gradlew.bat",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/settings.gradle",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/settings.gradle",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/gen/android/tauri.settings.gradle",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/gen/android/tauri.settings.gradle",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/128x128.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/128x128.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/128x128@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/128x128@2x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/32x32.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/32x32.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/64x64.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/64x64.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/Square107x107Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/Square107x107Logo.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/Square142x142Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/Square142x142Logo.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/Square150x150Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/Square150x150Logo.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/Square284x284Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/Square284x284Logo.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/Square30x30Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/Square30x30Logo.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/Square310x310Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/Square310x310Logo.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/Square44x44Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/Square44x44Logo.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/Square71x71Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/Square71x71Logo.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/Square89x89Logo.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/Square89x89Logo.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/StoreLogo.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/StoreLogo.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/android/values/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/android/values/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/icon.icns",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/icon.icns",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/icon.ico",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/icon.ico",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/icon.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/icon.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-20x20@1x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-20x20@1x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-20x20@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-20x20@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-20x20@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-20x20@2x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-20x20@3x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-20x20@3x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-29x29@1x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-29x29@1x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-29x29@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-29x29@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-29x29@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-29x29@2x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-29x29@3x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-29x29@3x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-40x40@1x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-40x40@1x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-40x40@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-40x40@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-40x40@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-40x40@2x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-40x40@3x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-40x40@3x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-512@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-512@2x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-60x60@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-60x60@2x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-60x60@3x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-60x60@3x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-76x76@1x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-76x76@1x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-76x76@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-76x76@2x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/icons/ios/AppIcon-83.5x83.5@2x.png",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/icons/ios/AppIcon-83.5x83.5@2x.png",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/main.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/main.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/media_permission.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/media_permission.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/session.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/session.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/session/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/session/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/store.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/store.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/store/archive.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/store/archive.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/store/archive/document-cases.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/store/archive/document-cases.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/store/archive/document-schema.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/store/archive/document-schema.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/store/archive/document.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/store/archive/document.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/store/archive/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/store/archive/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/store/attachment_operations.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/store/attachment_operations.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/store/attachment_operations/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/store/attachment_operations/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/src/store/recorded_at_tests.rs",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/src/store/recorded_at_tests.rs",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src-tauri/tauri.conf.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src-tauri/tauri.conf.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/App.tsx",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/App.tsx",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/Editor.tsx",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/Editor.tsx",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/OcrPanel.css",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/OcrPanel.css",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/OcrPanel.tsx",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/OcrPanel.tsx",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/RecordingPanel.css",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/RecordingPanel.css",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/RecordingPanel.tsx",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/RecordingPanel.tsx",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/access-client.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/access-client.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/attachment-submission.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/attachment-submission.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/attachment-target.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/attachment-target.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/audio-playback.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/audio-playback.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/bridge.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/bridge.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/document-equality.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/document-equality.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/editor-actions.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/editor-actions.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/editor-save-snapshot.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/editor-save-snapshot.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/editor-schema.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/editor-schema.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/main.tsx",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/main.tsx",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/native-toolbar-controller.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/native-toolbar-controller.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/native-toolbar-state.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/native-toolbar-state.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/native-toolbar.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/native-toolbar.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/note-tag-extension.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/note-tag-extension.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/note-tags.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/note-tags.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/ocr-host.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/ocr-host.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/ocr-native.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/ocr-native.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/proof-access.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/proof-access.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/recording-clock.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/recording-clock.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/recording-metadata.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/recording-metadata.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/recording-playback.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/recording-playback.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/recording-session.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/recording-session.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/save-queue.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/save-queue.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/save-revisions.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/save-revisions.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/search-editor-gate.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/search-editor-gate.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/search-selection.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/search-selection.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/secure-id.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/secure-id.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/style.css",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/style.css",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/tag-composition.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/tag-composition.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/trusted-synchronization.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/trusted-synchronization.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/types.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/types.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: src/vite-env.d.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: src/vite-env.d.ts",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: tsconfig.json",
+      "pass": true
+    },
+    {
+      "name": "current input identity: tsconfig.json",
+      "pass": true
+    },
+    {
+      "name": "input outside target/cache: vite.config.ts",
+      "pass": true
+    },
+    {
+      "name": "current input identity: vite.config.ts",
+      "pass": true
+    },
+    {
+      "name": "current302 aggregate",
+      "pass": true
+    },
+    {
+      "name": "current238 product aggregate",
+      "pass": true
+    },
+    {
+      "name": "all238 product paths in exact source commit",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: assets/mobile-paper-previews/README.md",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: assets/mobile-paper-previews/grid-large.svg",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: assets/mobile-paper-previews/grid-medium.svg",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: assets/mobile-paper-previews/grid-small.svg",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: assets/mobile-paper-previews/lines-large.svg",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: assets/mobile-paper-previews/lines-medium.svg",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: assets/mobile-paper-previews/lines-small.svg",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: index.html",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: package.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/README.md",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/consumer-rules.pro",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/gradle.lockfile",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/gradle.properties",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/harness/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/harness/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/blank-fixture.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/chinese-fixture.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/settings.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/deviceFixture/java/com/local/notesscan/DeviceFixtureActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ChineseOcr.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/CropView.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/Images.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ProbeActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ScanActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/main/res/values/styles.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/android/src/test/java/com/local/notesscan/GeometryTest.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/build.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/examples/host_copy_probe.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/examples/macos_probe.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/guest-js/index.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/macos/vision.m",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/package.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/permissions/autogenerated/commands/execute.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/permissions/autogenerated/reference.md",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/permissions/default.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/permissions/schemas/schema.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/scripts/artifact-inventory.py",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/scripts/check-android.sh",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/scripts/generate-fixture.swift",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-scan/src/session.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/README.md",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/build.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/examples/demo.html",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/examples/state.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/macos/format.h",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/macos/format.m",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/package.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/bind.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/focus_search.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/inspect.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/unbind.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/update.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/permissions/default.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/src/model.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/src/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/README.md",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/android-check.txt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/checks.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/guest-typecheck.txt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/inputs.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/objc-syntax.txt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/rust-test.txt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: plugins/tauri-plugin-notes-ui/verification/format-gallery/source-isolation.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: pnpm-lock.yaml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/Cargo.lock",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/Cargo.toml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/Info.plist",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/app-icon.svg",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/build.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/capabilities/default.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/capabilities/macos-notes-ui.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/.editorconfig",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/.gitignore",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/proguard-rules.pro",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/layout/activity_main.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/values-night/themes.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/values/colors.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/values/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/values/strings.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/values/themes.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/app/src/main/res/xml/file_paths.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/BuildTask.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/RustPlugin.kt",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/gradle.properties",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/gradle/wrapper/gradle-wrapper.properties",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/gradlew",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/gradlew.bat",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/gen/android/settings.gradle",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/128x128.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/128x128@2x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/32x32.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/64x64.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/Square107x107Logo.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/Square142x142Logo.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/Square150x150Logo.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/Square284x284Logo.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/Square30x30Logo.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/Square310x310Logo.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/Square44x44Logo.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/Square71x71Logo.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/Square89x89Logo.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/StoreLogo.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/android/values/ic_launcher_background.xml",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/icon.icns",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/icon.ico",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/icon.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-20x20@1x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-20x20@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-20x20@2x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-20x20@3x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-29x29@1x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-29x29@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-29x29@2x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-29x29@3x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-40x40@1x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-40x40@2x-1.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-40x40@2x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-40x40@3x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-512@2x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-60x60@2x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-60x60@3x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-76x76@1x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-76x76@2x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/icons/ios/AppIcon-83.5x83.5@2x.png",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/lib.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/main.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/media_permission.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/session.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/session/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/store.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/store/archive.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/store/archive/document-cases.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/store/archive/document-schema.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/store/archive/document.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/store/archive/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/store/attachment_operations.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/store/attachment_operations/tests.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/src/store/recorded_at_tests.rs",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src-tauri/tauri.conf.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/App.tsx",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/Editor.tsx",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/OcrPanel.css",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/OcrPanel.tsx",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/RecordingPanel.css",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/RecordingPanel.tsx",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/access-client.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/attachment-submission.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/attachment-target.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/audio-playback.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/bridge.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/document-equality.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/editor-actions.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/editor-save-snapshot.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/editor-schema.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/main.tsx",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/native-toolbar-controller.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/native-toolbar-state.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/native-toolbar.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/note-tag-extension.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/note-tags.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/ocr-host.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/ocr-native.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/proof-access.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/recording-clock.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/recording-metadata.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/recording-playback.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/recording-session.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/save-queue.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/save-revisions.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/search-editor-gate.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/search-selection.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/secure-id.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/style.css",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/tag-composition.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/trusted-synchronization.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/types.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: src/vite-env.d.ts",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: tsconfig.json",
+      "pass": true
+    },
+    {
+      "name": "source commit blob identity: vite.config.ts",
+      "pass": true
+    },
+    {
+      "name": "frozen tool identity: check-boundaries.py",
+      "pass": true
+    },
+    {
+      "name": "frozen tool identity: check-review-fixes.py",
+      "pass": true
+    },
+    {
+      "name": "frozen tool identity: collect-outputs.py",
+      "pass": true
+    },
+    {
+      "name": "frozen tool identity: common.py",
+      "pass": true
+    },
+    {
+      "name": "frozen tool identity: freeze-inputs.py",
+      "pass": true
+    },
+    {
+      "name": "frozen tool identity: run-build.py",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry: mac-original.app/Contents",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry: mac-original.app/Contents/Info.plist",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry: mac-original.app/Contents/MacOS",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry: mac-original.app/Contents/MacOS/notes-clone",
+      "pass": true
+    },
+    {
+      "name": "original complete bundle identity",
+      "pass": true
+    },
+    {
+      "name": "original executable identity",
+      "pass": true
+    },
+    {
+      "name": "original ZIP current identity",
+      "pass": true
+    },
+    {
+      "name": "original ZIP no duplicate names",
+      "pass": true
+    },
+    {
+      "name": "original ZIP CRC",
+      "pass": true
+    },
+    {
+      "name": "original ZIP member rooted in bundle",
+      "pass": true
+    },
+    {
+      "name": "original ZIP member rooted in bundle",
+      "pass": true
+    },
+    {
+      "name": "original ZIP complete payload matches current bundle",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry: mac-sealed.app/Contents",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry: mac-sealed.app/Contents/Info.plist",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry: mac-sealed.app/Contents/MacOS",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry: mac-sealed.app/Contents/MacOS/notes-clone",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry: mac-sealed.app/Contents/_CodeSignature",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry: mac-sealed.app/Contents/_CodeSignature/CodeResources",
+      "pass": true
+    },
+    {
+      "name": "sealed complete bundle identity",
+      "pass": true
+    },
+    {
+      "name": "sealed executable identity",
+      "pass": true
+    },
+    {
+      "name": "sealed ZIP current identity",
+      "pass": true
+    },
+    {
+      "name": "sealed ZIP no duplicate names",
+      "pass": true
+    },
+    {
+      "name": "sealed ZIP CRC",
+      "pass": true
+    },
+    {
+      "name": "sealed ZIP member rooted in bundle",
+      "pass": true
+    },
+    {
+      "name": "sealed ZIP member rooted in bundle",
+      "pass": true
+    },
+    {
+      "name": "sealed ZIP member rooted in bundle",
+      "pass": true
+    },
+    {
+      "name": "sealed ZIP complete payload matches current bundle",
+      "pass": true
+    },
+    {
+      "name": "original matches actual generated output record",
+      "pass": true
+    },
+    {
+      "name": "only recorded sealing changes",
+      "pass": true
+    },
+    {
+      "name": "sealed executable expected exact bytes",
+      "pass": true
+    },
+    {
+      "name": "sealed ZIP exact expected bytes",
+      "pass": true
+    },
+    {
+      "name": "actual collector command structure",
+      "pass": true
+    },
+    {
+      "name": "exact recorded sealed signing argv",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 01",
+      "pass": true
+    },
+    {
+      "name": "command completion 01",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 02",
+      "pass": true
+    },
+    {
+      "name": "command completion 02",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 03",
+      "pass": true
+    },
+    {
+      "name": "command completion 03",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 04",
+      "pass": true
+    },
+    {
+      "name": "command completion 04",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 05",
+      "pass": true
+    },
+    {
+      "name": "command completion 05",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 06",
+      "pass": true
+    },
+    {
+      "name": "command completion 06",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 07",
+      "pass": true
+    },
+    {
+      "name": "command completion 07",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 08",
+      "pass": true
+    },
+    {
+      "name": "command completion 08",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 09",
+      "pass": true
+    },
+    {
+      "name": "command completion 09",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 10",
+      "pass": true
+    },
+    {
+      "name": "command completion 10",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 11",
+      "pass": true
+    },
+    {
+      "name": "command completion 11",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 12",
+      "pass": true
+    },
+    {
+      "name": "command completion 12",
+      "pass": true
+    },
+    {
+      "name": "command raw log linkage 13",
+      "pass": true
+    },
+    {
+      "name": "command completion 13",
+      "pass": true
+    },
+    {
+      "name": "original strict failure retained",
+      "pass": true
+    },
+    {
+      "name": "sealed signing and strict pass retained",
+      "pass": true
+    },
+    {
+      "name": "strict command arguments",
+      "pass": true
+    },
+    {
+      "name": "exact sealed author delivery manifest",
+      "pass": true
+    },
+    {
+      "name": "delivery exact source attempt nonce count",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-01.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-02.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-03.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-04.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-05.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-06.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-07.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-08.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-09.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-10.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-11.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-12.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-13.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-original.app/Contents/Info.plist",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-original.zip",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-sealed.app/Contents/Info.plist",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-sealed.app/Contents/_CodeSignature/CodeResources",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-sealed.zip",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/README.md",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/freeze-summary.json",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/input-freeze.json",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/build.txt",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/collection/inputs-after-collection.json",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/collection/inputs-before-collection.json",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/collection/result.json",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/generated-outputs.json",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/inputs-after.json",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/inputs-before.json",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/output-isolation.json",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/prior-outputs/application/Contents/Info.plist",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/prior-outputs/application/Contents/MacOS/notes-clone",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/prior-outputs/dist/assets/index-B6ehXP_1.css",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/prior-outputs/dist/assets/index-DJ-LyOuL.js",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/prior-outputs/dist/index.html",
+      "pass": true
+    },
+    {
+      "name": "sealed delivery file identity: docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/result.json",
+      "pass": true
+    },
+    {
+      "name": "delivery complete37 aggregate",
+      "pass": true
+    },
+    {
+      "name": "original executable explicit expected",
+      "pass": true
+    },
+    {
+      "name": "original ZIP explicit expected",
+      "pass": true
+    }
+  ],
+  "bundles": {
+    "original": {
+      "files": [
+        {
+          "path": "Contents/Info.plist",
+          "bytes": 1193,
+          "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+          "type": "file",
+          "mode": 420
+        },
+        {
+          "path": "Contents/MacOS/notes-clone",
+          "bytes": 16090480,
+          "sha256": "d0f43257222db608608e20c2e07868c85200e1f5e3a75212d7e5cedcbfccee88",
+          "type": "file",
+          "mode": 493
+        }
+      ],
+      "aggregate": "3727d6a0d40834e288f112fc88122d9e29cda9aa200d5544ee05619febb02d2f"
+    },
+    "sealed": {
+      "files": [
+        {
+          "path": "Contents/Info.plist",
+          "bytes": 1193,
+          "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+          "type": "file",
+          "mode": 420
+        },
+        {
+          "path": "Contents/MacOS/notes-clone",
+          "bytes": 16015072,
+          "sha256": "f69b9e3856ebb62ee64c6547d55a420762a31e58ab3b9244391981fff239f8bf",
+          "type": "file",
+          "mode": 493
+        },
+        {
+          "path": "Contents/_CodeSignature/CodeResources",
+          "bytes": 2200,
+          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b",
+          "type": "file",
+          "mode": 420
+        }
+      ],
+      "aggregate": "b45566a2f2ae44f3b68622b300013f7253b1960052374dd8bbbd1cf010001ccb"
+    }
+  },
+  "archives": {
+    "original": {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-original.zip",
+      "bytes": 4823521,
+      "sha256": "8be164891f3bc50066f32c739a86d59601d004022cf8874bbdce3c233f337bfb",
+      "entries": [
+        {
+          "path": "mac-original.app/",
+          "bytes": 0
+        },
+        {
+          "path": "mac-original.app/Contents/",
+          "bytes": 0
+        },
+        {
+          "path": "mac-original.app/Contents/MacOS/",
+          "bytes": 0
+        },
+        {
+          "path": "mac-original.app/Contents/MacOS/notes-clone",
+          "bytes": 16090480
+        },
+        {
+          "path": "__MACOSX/",
+          "bytes": 0
+        },
+        {
+          "path": "__MACOSX/mac-original.app/",
+          "bytes": 0
+        },
+        {
+          "path": "__MACOSX/mac-original.app/Contents/",
+          "bytes": 0
+        },
+        {
+          "path": "__MACOSX/mac-original.app/Contents/MacOS/",
+          "bytes": 0
+        },
+        {
+          "path": "__MACOSX/mac-original.app/Contents/MacOS/._notes-clone",
+          "bytes": 163
+        },
+        {
+          "path": "__MACOSX/mac-original.app/Contents/._MacOS",
+          "bytes": 163
+        },
+        {
+          "path": "mac-original.app/Contents/Info.plist",
+          "bytes": 1193
+        },
+        {
+          "path": "__MACOSX/mac-original.app/Contents/._Info.plist",
+          "bytes": 163
+        },
+        {
+          "path": "__MACOSX/mac-original.app/._Contents",
+          "bytes": 163
+        }
+      ]
+    },
+    "sealed": {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-sealed.zip",
+      "bytes": 4753057,
+      "sha256": "56907af1d0b13ee6807a4236f67644a83b41b2baacf77744ae4931627184447c",
+      "entries": [
+        {
+          "path": "mac-sealed.app/",
+          "bytes": 0
+        },
+        {
+          "path": "mac-sealed.app/Contents/",
+          "bytes": 0
+        },
+        {
+          "path": "mac-sealed.app/Contents/_CodeSignature/",
+          "bytes": 0
+        },
+        {
+          "path": "mac-sealed.app/Contents/_CodeSignature/CodeResources",
+          "bytes": 2200
+        },
+        {
+          "path": "__MACOSX/",
+          "bytes": 0
+        },
+        {
+          "path": "__MACOSX/mac-sealed.app/",
+          "bytes": 0
+        },
+        {
+          "path": "__MACOSX/mac-sealed.app/Contents/",
+          "bytes": 0
+        },
+        {
+          "path": "__MACOSX/mac-sealed.app/Contents/_CodeSignature/",
+          "bytes": 0
+        },
+        {
+          "path": "__MACOSX/mac-sealed.app/Contents/_CodeSignature/._CodeResources",
+          "bytes": 163
+        },
+        {
+          "path": "__MACOSX/mac-sealed.app/Contents/.__CodeSignature",
+          "bytes": 163
+        },
+        {
+          "path": "mac-sealed.app/Contents/MacOS/",
+          "bytes": 0
+        },
+        {
+          "path": "mac-sealed.app/Contents/MacOS/notes-clone",
+          "bytes": 16015072
+        },
+        {
+          "path": "__MACOSX/mac-sealed.app/Contents/MacOS/",
+          "bytes": 0
+        },
+        {
+          "path": "__MACOSX/mac-sealed.app/Contents/MacOS/._notes-clone",
+          "bytes": 163
+        },
+        {
+          "path": "__MACOSX/mac-sealed.app/Contents/._MacOS",
+          "bytes": 163
+        },
+        {
+          "path": "mac-sealed.app/Contents/Info.plist",
+          "bytes": 1193
+        },
+        {
+          "path": "__MACOSX/mac-sealed.app/Contents/._Info.plist",
+          "bytes": 163
+        },
+        {
+          "path": "__MACOSX/mac-sealed.app/._Contents",
+          "bytes": 163
+        }
+      ]
+    }
+  },
+  "sourceEvidence": [
+    {
+      "path": "docs/verification/unified-candidate06/root-authorization-mac-sidebar-optical-build06.json",
+      "bytes": 30312,
+      "sha256": "76537ad40ba7171f48513e1debeb539dff36e8580d26c05731afc2b582ca775b"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/input-freeze.json",
+      "bytes": 306035,
+      "sha256": "739e4028d29874e2dedd6d578342b700fffc7d9554d3e1aced4b7dc50c7c378a"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/freeze-summary.json",
+      "bytes": 649,
+      "sha256": "ec9877dd13e70384ac318fd7773be13bf3e734b3a351e12696afe22e42fd845e"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/delivery-manifest.json",
+      "bytes": 8950,
+      "sha256": "82385d8309312bc59d08d319adc22ee780b74c2ef9dc129edf9e950d00fc61c7"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/result.json",
+      "bytes": 7763,
+      "sha256": "e218be54ce5b7b53d5fd68f3394d6a5cc3f46cd22d90654d60febf1e806fd90b"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/output-isolation.json",
+      "bytes": 2589,
+      "sha256": "8c350a87fb756c2ec2f667b6617bcc31ee87ec3712c03e45daeb7cfeabe985ea"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/generated-outputs.json",
+      "bytes": 1899,
+      "sha256": "42d069a9c9d7043bb2e5172265fd790111dad909c24a4309dba861a429175684"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/build.txt",
+      "bytes": 1616,
+      "sha256": "a7ac4601c6c72b1c4668d72e89719e3c764463086d52acbadac2b16945263495"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/collection/result.json",
+      "bytes": 28110,
+      "sha256": "88fe5d00bf1c34102f64cf7514540b80ac1df62f86be97db0ee54702959c82aa"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/inputs-before.json",
+      "bytes": 306035,
+      "sha256": "bc1fca947e4e3ed0d019a76bb9c8f9da0cdc75a9a1bbe378cdfa2b47ba7f12f7"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/inputs-after.json",
+      "bytes": 306035,
+      "sha256": "7de78fbd8f16060de430f26c9ace97fe7fb9cfe7adff8e7c1185df9b329a1039"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/collection/inputs-before-collection.json",
+      "bytes": 306035,
+      "sha256": "d06261884eeddf0afcfac0bb05b2d3c1d57fcf6537b32f42bc0876a7c116d948"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/collection/inputs-after-collection.json",
+      "bytes": 306035,
+      "sha256": "6bb72b91a1caad75850fcaebc96359c0f76e7bfac1b765c2de0ee4491e8fd3b9"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-01.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-02.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-03.txt",
+      "bytes": 960,
+      "sha256": "333cd26e2a695a0e9f8c66eb5cc3b4f49ecaa2f3a8bb941d5c7747dc340c74a6"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-04.txt",
+      "bytes": 168,
+      "sha256": "7823ddab5b9a71fa9cd283d4e5a1f85da59b84c77b70ba3d9febe92a373a94ba"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-05.txt",
+      "bytes": 235,
+      "sha256": "275dc60efa1a359121c4fe4c14eafb39dc29a03af5538218ba63fb5c1a139f1a"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-06.txt",
+      "bytes": 198,
+      "sha256": "68ea50904f0421d4989a4a85fb3860468176f0826599cc1f0f4e9095012aba2e"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-07.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-08.txt",
+      "bytes": 158,
+      "sha256": "df8e4f250c627fb48867bcd675fb3fe4cf551558f6ac22a2a4e441b570df24eb"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-09.txt",
+      "bytes": 309,
+      "sha256": "00b46d88e03203d94fd9948fec075b472785215cbd4a77a5d699cf25b97fba8b"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-10.txt",
+      "bytes": 965,
+      "sha256": "33420c0a3439fc28b4cb496d999dd10ffb7d7ef63ca251957e145d65bdac5e8d"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-11.txt",
+      "bytes": 166,
+      "sha256": "7a3c79cdde4f98a5321d3561abc7f1373d58b360f99d4deb6f1312aaab154d7e"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-12.txt",
+      "bytes": 233,
+      "sha256": "6d4d2d4243b58faaceb2a1144599277e138ff72477f78a7798d7f8a25188546f"
+    },
+    {
+      "path": "artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/command-13.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "originalStrictExitCodeRecorded": 1,
+  "sealedStrictExitCodeRecorded": 0,
+  "limits": "No build/sign/verify/launch command executed. Signature result is independently linked to raw existing logs and exact current signed bytes; not a new codesign verification. No target/cache read. No GUI, user-directory, persistence, TCC, DeveloperID, notarization, Android or pixel acceptance."
+}

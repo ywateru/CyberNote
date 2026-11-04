@@ -1,7 +1,7 @@
 ---
 id: app-001-sidebar-optical06
 scope: mac-sidebar-optical-and-hidden-three-column-surface
-status: in-progress
+status: done
 ---
 
 ## 依据与范围
@@ -28,3 +28,11 @@ hidden3/full: [traffic94][2][ glass toggle40 ][18][title154...]
 ## 固定候选及独审
 
 唯一产品toolbar SHA99a24b1ec902c16bb32fe9d2a5cc82887aec62424d9c00c690a464dbf66db46b，作者app-001-sidebar-optical06与不同作者app-001-sidebar-optical06-independent-01均封口，独审SOURCE-READY。实际生产401态/122链，独立真实AppKit三binary51连续态通过；无真NSWindow。HC appearance请求被系统归一化，公开workspace守卫受控往返验证通过，不称真HC像素。仍待准确新Mac包实际三态对照。
+
+## 准确构建与实际新包 / 2026-11-04
+
+源码09fee3ec05dcf3be22037e0a842ea6d2df275cff已提交并冻结；准确构建mac-sidebar-optical-build06离线成功，sealed exe f69b9e3856ebb62ee64c6547d55a420762a31e58ab3b9244391981fff239f8bf，独立975/975产物核验通过。root已实际启动PID73909、验证直接与菜单两路隐藏恢复并拖动侧栏228↔208；正常退出后PID74182重新选择QA-TYPE，再次隐藏恢复成功。启动11–13快速备忘录空正文不算有效隐藏/正文保存证据，保留原始记录；14–16才是稳定QA切换。原版17–19新截图保持228/360并恢复可见。运行与光学独立审阅另存新目录，原始JPEG不是lossless像素证明。
+
+## 限定实施关闭与剩余差异
+
+独立实际截图分析mac-sidebar-optical06-analysis-01已封口：21固定输入未变，文件夹160阈值框/中心与原版一致；隐藏按钮横向差−9→0px，背景主要宽度72→80px。仍可见toggle中心(−.5,+.5)、hidden下.5、背景亮边1px、标题上4和“今天”上8px。此done只关闭明确06按钮光学/隐藏面候选的实施及新包交付，不关闭父任务pixel parity；不将JPEG容器派生PNG称无损原生截图。

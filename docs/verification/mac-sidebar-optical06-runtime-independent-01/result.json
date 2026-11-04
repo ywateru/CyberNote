@@ -1,0 +1,783 @@
+{
+  "verdict": "PASS_FINITE_ENDPOINTS_WITH_EXPLICIT_COLD_START_EXCLUSIONS",
+  "sourceHeadAtFreeze": "09fee3ec05dcf3be22037e0a842ea6d2df275cff",
+  "frozenInputCount": 38,
+  "corpus": {
+    "path": "docs/verification/mac-body-typography-runtime-01/corpus.json",
+    "bytes": 1446,
+    "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19",
+    "textCodePoints": 257,
+    "textUtf8Bytes": 547,
+    "textSha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82"
+  },
+  "executableCurrentRead": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+    "bytes": 16015072,
+    "sha256": "f69b9e3856ebb62ee64c6547d55a420762a31e58ab3b9244391981fff239f8bf"
+  },
+  "identityEvidence": {
+    "initial": {
+      "executable": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+      "sha256": "f69b9e3856ebb62ee64c6547d55a420762a31e58ab3b9244391981fff239f8bf",
+      "processes": [
+        "73909 /Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone"
+      ],
+      "oldPID57962Exited": true
+    },
+    "cold": {
+      "executable": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+      "sha256": "f69b9e3856ebb62ee64c6547d55a420762a31e58ab3b9244391981fff239f8bf",
+      "processes": [
+        "74182 /Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-sidebar-optical-build06/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone"
+      ],
+      "initialPID73909Exited": true
+    },
+    "scope": "Recorded process identities and recorded exit booleans; no independent replay/live process query in this review."
+  },
+  "states": [
+    {
+      "file": "02-visible228.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "15 splitter 调整分栏宽度",
+        "25 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "40 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [
+        "13 button 新建文件夹",
+        "39 button 新建文件夹"
+      ],
+      "folderTitleDeclarations": [
+        "51 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 7 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "03-hidden.ax.txt",
+      "splitterCount": 1,
+      "splitterDeclarations": [
+        "12 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": false,
+      "directToggleDeclarations": [
+        "26 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [],
+      "folderTitleDeclarations": [
+        "37 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 7 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "04-direct-restored.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "15 splitter 调整分栏宽度",
+        "25 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "40 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [
+        "13 button 新建文件夹",
+        "39 button 新建文件夹"
+      ],
+      "folderTitleDeclarations": [
+        "51 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 7 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "05-menu-visible.ax.txt",
+      "splitterCount": 0,
+      "splitterDeclarations": [],
+      "nativeSplitterValues": [],
+      "folderTreePresent": false,
+      "directToggleDeclarations": [],
+      "newFolderButtonDeclarations": [],
+      "folderTitleDeclarations": [],
+      "bodyPresent": false,
+      "bodyCodePoints": null,
+      "bodyUtf8Bytes": null,
+      "bodySha256Utf8": null,
+      "bodyEqualsCorpus": null,
+      "bodyHasNonWhitespace": null,
+      "bodyFocused": false,
+      "focusedValueEqualsCorpus": null,
+      "menuActionLabels": [
+        "隐藏文件夹"
+      ],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "06-menu-hidden.ax.txt",
+      "splitterCount": 1,
+      "splitterDeclarations": [
+        "12 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": false,
+      "directToggleDeclarations": [
+        "26 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [],
+      "folderTitleDeclarations": [
+        "37 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 7 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "07-menu-hidden-label.ax.txt",
+      "splitterCount": 0,
+      "splitterDeclarations": [],
+      "nativeSplitterValues": [],
+      "folderTreePresent": false,
+      "directToggleDeclarations": [],
+      "newFolderButtonDeclarations": [],
+      "folderTitleDeclarations": [],
+      "bodyPresent": false,
+      "bodyCodePoints": null,
+      "bodyUtf8Bytes": null,
+      "bodySha256Utf8": null,
+      "bodyEqualsCorpus": null,
+      "bodyHasNonWhitespace": null,
+      "bodyFocused": false,
+      "focusedValueEqualsCorpus": null,
+      "menuActionLabels": [
+        "显示文件夹"
+      ],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "08-menu-restored.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "15 splitter 调整分栏宽度",
+        "25 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "40 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [
+        "13 button 新建文件夹",
+        "39 button 新建文件夹"
+      ],
+      "folderTitleDeclarations": [
+        "51 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 7 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "09-visible208.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "15 splitter 调整分栏宽度",
+        "25 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "40 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [
+        "13 button 新建文件夹",
+        "39 button 新建文件夹"
+      ],
+      "folderTitleDeclarations": [
+        "51 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 7 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "10-visible228-restored.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "15 splitter 调整分栏宽度",
+        "25 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "40 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [
+        "13 button 新建文件夹",
+        "39 button 新建文件夹"
+      ],
+      "folderTitleDeclarations": [
+        "51 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 7 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "11-cold-visible.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "15 splitter 调整分栏宽度",
+        "20 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "32 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [
+        "13 button 新建文件夹",
+        "31 button 新建文件夹"
+      ],
+      "folderTitleDeclarations": [
+        "43 text Description: 快速备忘录, Value: 快速备忘录 3 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 4,
+      "bodyUtf8Bytes": 4,
+      "bodySha256Utf8": "545c38b0922de19734fbffde62792c37c2aef6a3216cfa472449173165220f7d",
+      "bodyEqualsCorpus": false,
+      "bodyHasNonWhitespace": false,
+      "bodyFocused": false,
+      "focusedValueEqualsCorpus": null,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": true
+    },
+    {
+      "file": "12-cold-hidden.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "16 splitter 调整分栏宽度",
+        "21 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "44 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [
+        "14 button 新建文件夹",
+        "43 button 新建文件夹"
+      ],
+      "folderTitleDeclarations": [
+        "55 text Description: 快速备忘录, Value: 快速备忘录 3 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 4,
+      "bodyUtf8Bytes": 4,
+      "bodySha256Utf8": "545c38b0922de19734fbffde62792c37c2aef6a3216cfa472449173165220f7d",
+      "bodyEqualsCorpus": false,
+      "bodyHasNonWhitespace": false,
+      "bodyFocused": false,
+      "focusedValueEqualsCorpus": null,
+      "menuActionLabels": [],
+      "sharePopoverPresent": true,
+      "acceptanceExcluded": true
+    },
+    {
+      "file": "13-cold-hidden-stable.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "15 splitter 调整分栏宽度",
+        "20 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "32 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [
+        "13 button 新建文件夹",
+        "31 button 新建文件夹"
+      ],
+      "folderTitleDeclarations": [
+        "43 text Description: 快速备忘录, Value: 快速备忘录 3 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 4,
+      "bodyUtf8Bytes": 4,
+      "bodySha256Utf8": "545c38b0922de19734fbffde62792c37c2aef6a3216cfa472449173165220f7d",
+      "bodyEqualsCorpus": false,
+      "bodyHasNonWhitespace": false,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": false,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": true
+    },
+    {
+      "file": "14-cold-qa-visible.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "15 splitter 调整分栏宽度",
+        "25 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "40 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [
+        "13 button 新建文件夹",
+        "39 button 新建文件夹"
+      ],
+      "folderTitleDeclarations": [
+        "51 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 7 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": false,
+      "focusedValueEqualsCorpus": null,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "15-cold-qa-hidden.ax.txt",
+      "splitterCount": 1,
+      "splitterDeclarations": [
+        "12 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": false,
+      "directToggleDeclarations": [
+        "26 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [],
+      "folderTitleDeclarations": [
+        "37 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 7 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "16-cold-qa-restored.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "15 splitter 调整分栏宽度",
+        "25 splitter 调整分栏宽度"
+      ],
+      "nativeSplitterValues": [],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "40 button 显示或隐藏文件夹"
+      ],
+      "newFolderButtonDeclarations": [
+        "13 button 新建文件夹",
+        "39 button 新建文件夹"
+      ],
+      "folderTitleDeclarations": [
+        "51 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 7 个备忘录"
+      ],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "17-original-visible228.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "41 分离器 (disabled, settable, float) 228",
+        "116 分离器 (disabled, settable, float) 360"
+      ],
+      "nativeSplitterValues": [
+        228.0,
+        360.0
+      ],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "123 按钮 Description: 文件夹, Help: 隐藏文件夹, Secondary Actions: 移到下一项"
+      ],
+      "newFolderButtonDeclarations": [
+        "122 按钮 Description: 添加文件夹, Secondary Actions: 移到下一项"
+      ],
+      "folderTitleDeclarations": [],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "18-original-hidden.ax.txt",
+      "splitterCount": 1,
+      "splitterDeclarations": [
+        "76 分离器 (disabled, settable, float) 361"
+      ],
+      "nativeSplitterValues": [
+        361.0
+      ],
+      "folderTreePresent": false,
+      "directToggleDeclarations": [
+        "82 按钮 Description: 文件夹, Help: 隐藏文件夹, Secondary Actions: 移到下一项"
+      ],
+      "newFolderButtonDeclarations": [],
+      "folderTitleDeclarations": [],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    },
+    {
+      "file": "19-original-restored.ax.txt",
+      "splitterCount": 2,
+      "splitterDeclarations": [
+        "41 分离器 (disabled, settable, float) 228",
+        "116 分离器 (disabled, settable, float) 360"
+      ],
+      "nativeSplitterValues": [
+        228.0,
+        360.0
+      ],
+      "folderTreePresent": true,
+      "directToggleDeclarations": [
+        "123 按钮 Description: 文件夹, Help: 隐藏文件夹, Secondary Actions: 移到下一项"
+      ],
+      "newFolderButtonDeclarations": [
+        "122 按钮 Description: 添加文件夹, Secondary Actions: 移到下一项"
+      ],
+      "folderTitleDeclarations": [],
+      "bodyPresent": true,
+      "bodyCodePoints": 257,
+      "bodyUtf8Bytes": 547,
+      "bodySha256Utf8": "69fc53a7926291444f2a846074f92f625c945d997fa8e33c7c957038ff90cd82",
+      "bodyEqualsCorpus": true,
+      "bodyHasNonWhitespace": true,
+      "bodyFocused": true,
+      "focusedValueEqualsCorpus": true,
+      "menuActionLabels": [],
+      "sharePopoverPresent": false,
+      "acceptanceExcluded": false
+    }
+  ],
+  "qaBodyEqualFileNumbers": [
+    2,
+    3,
+    4,
+    6,
+    8,
+    9,
+    10,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "qaBodyEqualCount": 13,
+  "qaFocusedEqualCount": 12,
+  "cloneWidthEvidence": "AX has unnamed-value splitter declarations only; 09/10 preserve visible state/body. Separate optical report proves both icons restore rightward by 40 image pixels, without independently segmenting the first divider. 208/228 point labels also use root action ledger, not filenames alone.",
+  "coldExclusions": "11–13 all show quick notes, visible folder tree, two splitters and whitespace-only body. 12 also has a share popover. They are not hidden-state passes. 14–16 follow manual QA re-selection.",
+  "inputClose": [
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/00-status.md",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/01-identity.json",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/02-visible228.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/02-visible228.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/03-hidden.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/03-hidden.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/04-direct-restored.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/04-direct-restored.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/05-menu-visible.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/06-menu-hidden.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/06-menu-hidden.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/07-menu-hidden-label.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/08-menu-restored.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/08-menu-restored.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/09-visible208.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/09-visible208.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/10-visible228-restored.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/10-visible228-restored.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/11-cold-visible.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/11-cold-visible.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/12-cold-hidden.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/12-cold-hidden.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/13-cold-hidden-stable.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/13-cold-hidden-stable.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/14-cold-qa-visible.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/14-cold-qa-visible.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/15-cold-qa-hidden.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/15-cold-qa-hidden.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/16-cold-qa-restored.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/16-cold-qa-restored.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/17-original-visible228.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/17-original-visible228.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/18-original-hidden.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/18-original-hidden.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/19-original-restored.ax.txt",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/19-original-restored.cua-image",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/20-cold-identity.json",
+      "bytesEqual": true,
+      "sha256Equal": true
+    },
+    {
+      "path": "docs/verification/mac-sidebar-optical06-runtime-01/README.md",
+      "bytesEqual": true,
+      "sha256Equal": true
+    }
+  ],
+  "allFrozenInputsUnchanged": true,
+  "limits": [
+    "Endpoints reviewed; GUI actions not independently replayed.",
+    "Exit evidence is identity JSON declaration, not an independently captured ps transcript.",
+    "No navigation retention, hidden-state persistence, DB-wide integrity, editor object identity, or full-window pixel parity claim.",
+    "No GUI/ADB/build/product edit/stage/commit performed."
+  ]
+}

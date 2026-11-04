@@ -1,0 +1,32 @@
+
+> notes-clone@0.1.0 mac:build /Users/water/work/2026/Apple-Notes-Clone
+> tauri build --bundles app
+
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `pnpm build`
+
+> notes-clone@0.1.0 build /Users/water/work/2026/Apple-Notes-Clone
+> tsc -b && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 1886 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.50 kB │ gzip:   0.33 kB
+dist/assets/index-B6ehXP_1.css   57.39 kB │ gzip:  11.79 kB
+dist/assets/index-DJ-LyOuL.js   936.87 kB │ gzip: 294.70 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.60s
+   Compiling tauri-plugin-notes-ui v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-ui)
+   Compiling notes-clone v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/src-tauri)
+    Finished `release` profile [optimized] target(s) in 33.71s
+       Built application at: /Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/notes-clone
+    Bundling 备忘录.app (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app)
+    Finished 1 bundle at:
+        /Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app (15.35 MiB)
+
