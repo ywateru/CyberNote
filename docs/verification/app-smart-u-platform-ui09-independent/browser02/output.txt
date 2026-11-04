@@ -1,0 +1,19 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: pinned has a draft representation and is unused: the plus must remain enabled
+
+true !== false
+
+    at file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-u-platform-ui09-independent/check-extra-ui.mjs:1003:12
+    at async run (file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-u-platform-ui09-independent/check-extra-ui.mjs:292:5)
+    at async file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-u-platform-ui09-independent/check-extra-ui.mjs:992:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

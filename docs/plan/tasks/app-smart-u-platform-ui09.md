@@ -69,3 +69,7 @@ Mac按已采表单和菜单结构：新建切换制作智能、默认标签行�
 允许`src/App.tsx`、`src/bridge.ts`、`src/types.ts`、`src/style.css`及必要的智能实体解析/求值/草稿/两端表单小模块与专用样式；Rust允许`src-tauri/src/{store.rs,session.rs,lib.rs,store/smart.rs,session/metadata.rs}`中的真实动作/查询接入和临时legacy能力gate移除，归档仅将既有严格智能格式接到已适配UI，不重写迁移/归档事务。可新增真实接入测试、共享corpus与`docs/verification/app-smart-u-platform-ui09/`。保留O提交收据/访问屏障/被动刷新契约，禁止修改Editor、录音/OCR/绘画插件协议或顺带修复其他模块。
 
 依赖与生产lock保持不变，无下载/升级/清缓存。检查保持locked/offline、jobs2、至少2GiB、共享host target独占及每条600秒有界；真实Store/Session窄回归、实际挂载App/bridge和两端布局的受控检查、pnpm typecheck/build以及触及lib后的必要一次宿主cargo check允许。作者阶段无GUI/ADB/用户库/正式平台包；源码独审通过后root另行派发准确双端构建并用Computer Use/已授权ADB验收。所有失败与旧证据保留，不能覆盖上批记录。
+
+## 2026-11-05 独审回流
+
+候选`d576b50`准确源独审blocked，报告[app-smart-u-platform-ui09](../reviews/app-smart-u-platform-ui09.md)。最终九组及新增peer/O路径通过，但新增规则提前禁用、combine数组被TS接纳两项P2仍阻断。按[boundary-fix13](app-smart-u-boundary-fix13.md)窄修并重新固定源；不提前构建双端包，不将旧blocked证据改写成pass。

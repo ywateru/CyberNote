@@ -1,0 +1,21 @@
+warning: method `store_attachment` is never used
+  --> src/session/metadata.rs:54:19
+   |
+ 4 | impl Session {
+   | ------------ method in this implementation
+...
+54 |     pub(crate) fn store_attachment(
+   |                   ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `notes-qa-fix-store` (bin "notes-qa-fix-store" test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running unittests src/main.rs (src-tauri/target/debug/deps/notes_qa_fix_store-275dda0e5f1d05fc)
+
+running 2 tests
+test session::smart_tests::public_smart_crud_cas_and_physical_ownership_are_one_session ... ok
+test session::smart_tests::smart_archive_public_import_restart_and_replaced_invalid_bytes ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 80 filtered out; finished in 0.04s
+

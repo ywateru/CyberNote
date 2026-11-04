@@ -1,0 +1,46 @@
+{
+  "binaryHash": "943c2aa1a53828087037cdcec3ebf4f9db68aecef13d2fd35076d4450a344fd4",
+  "observedApp": true,
+  "results": [
+    {
+      "name": "independent-o-valid-old-ack-rereads-equal-sequence-authority",
+      "before": {
+        "pending": true,
+        "text": "local pending",
+        "baseline": 1
+      },
+      "after": {
+        "saved": {
+          "saved": true
+        },
+        "baseline": 3,
+        "revision": 3,
+        "applied": 5,
+        "observed": 5
+      },
+      "passed": true
+    },
+    {
+      "name": "independent-o-revoked-old-ack-cannot-publish-body",
+      "before": {
+        "oldDestroyed": true,
+        "authorized": false,
+        "body": "{\"content\":[{\"attrs\":{\"level\":1},\"type\":\"heading\"}],\"type\":\"doc\"}",
+        "pending": true,
+        "applied": 5
+      },
+      "after": {
+        "saved": false,
+        "error": "access_changed",
+        "authorized": false,
+        "body": "{\"content\":[{\"attrs\":{\"level\":1},\"type\":\"heading\"}],\"type\":\"doc\"}",
+        "pending": true,
+        "samePending": true,
+        "applied": 5,
+        "saves": 1
+      },
+      "passed": true
+    }
+  ],
+  "errors": []
+}

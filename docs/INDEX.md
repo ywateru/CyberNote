@@ -19,6 +19,8 @@
 - [原版规则新增位置、日期默认及已用类型禁用11](research/smart-folder-rule-add-runtime11/README.md)
 - [三行规则节奏、加减视觉中心与日期框测量12](research/smart-folder-rule-add-measurements12.md)
 - [后续日期规则菜单、范围和相对单位未保存草稿12](research/smart-folder-date-draft-runtime12/README.md)
+- [智能界面候选独审：第三规则与非法组合值P2](plan/reviews/app-smart-u-platform-ui09.md)
+- [智能界面两项边界窄修13](plan/tasks/app-smart-u-boundary-fix13.md)
 - [智能界面准确双端包与有限设备验收准备](plan/tasks/app-smart-u-device09.md)
 - [Mac智能文件夹表单布局](ui/smart-folders-macos.md)
 - [Mac智能表单原图像素测量与捕获范围](research/smart-folder-form-measurements09/README.md)

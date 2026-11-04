@@ -9,7 +9,7 @@
 | APP-SMART-D1 本地库防损 | done（源码范围，独立pass） | de3c07f严格旧格式、识别版本优先、原子初始化；不代表新平台包 |
 | APP-SMART-D2 真实智能规则与归档 | done（内部源码能力），9bdc441独立pass | 标签四模式/置顶、CAS、同快照、DB2/归档3与旧UI门禁；唯一名称P2修复，作者69pass/独立窄2pass；公开UI、新包/像素仍待O/U |
 | APP-SMART-O 元数据顺序与保存所有权 | done（源码08d2206），独立pass | 最终Rust78/0/3ignored、AccessGate16/0与前端/宿主编译通过；独审最终源10项Rust+8条不同bridge/挂载路径，提交后正文撤权/旧ACK/同seq权威重读通过，实际IPC/设备/像素不外推，U门禁保持关闭 |
-| APP-SMART-U 两端智能界面 | in-progress，O已独立通过 | 开始真实严格实体、统一投影、Mac原版表单与手机独立面板；完整离线规则/手机未知状态/准确新包/像素对照仍open |
+| APP-SMART-U 两端智能界面 | in-progress，候选d576b50独审blocked | 最终九组与新增peer/O路径通过，但U-F1第三规则提前禁用、U-F2非法combine数组被TS接纳两项P2阻断；按boundary-fix13窄修。完整离线规则/手机未知状态/准确新包/像素对照仍open |
 | REF-001 原版取证/需求/UI/调研 | in-progress | 原视频已保全、抽帧、初始规格已写，持续补证 |
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |
