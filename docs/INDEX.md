@@ -59,6 +59,7 @@
 - [Mac11运行23不同作者有限复核](plan/reviews/mac-ordinary-sidebar-runtime23.md)
 - [Mac11实际表单量图25与原旧新对照](research/mac-ordinary-surface25-runtime-analysis/analysis.md)
 - [Mac11侧栏偏好与普通表面根接收23](verification/mac-ordinary-sidebar23-root-acceptance.md)
+- [Mac普通新建名称焦点、选区与文字对齐26](plan/tasks/app-mac-ordinary-name-focus26.md)
 - [Android05实际运行独立证据核对](verification/android-smart-u-runtime09-independent/README.md)
 - [Mac09实际运行独立证据核对](verification/mac-smart-u-runtime09-independent/README.md)
 - [Mac智能文件夹表单布局](ui/smart-folders-macos.md)

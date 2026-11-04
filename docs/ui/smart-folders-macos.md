@@ -147,3 +147,15 @@ Mac10 runtime18已确认普通表单包络800×414、按钮布局与普通↔智
 ### 20准确Mac11实际量图25
 
 [研究25](../research/mac-ordinary-surface25-runtime-analysis/analysis.md)以准确Mac11 Computer Use JPEG统一ICC→sRGB，普通面板800×414及主要位置保持；四平坦色中位值与原参考相同，角部有限总差304→8、复选框固定阈值mask差616→8。普通/智能往返名称与取消有运行23端点。名称仍右4图像px、智能标签右2px、蓝选区/灰内边/焦点和字形细差继续开放；不将离屏20的零mask差或bbox相同当完整像素一致。
+
+## 普通新建名称框与标签对齐26
+
+[准确Mac11研究25](../research/mac-ordinary-surface25-runtime-analysis/analysis.md)确认名称墨迹左缘146对原142、智能标签87对原85，纵向与字符外包不需改。下一修正仅ordinary局部名称input内边距/焦点/selection及label gap，保持可编辑input和现有聚焦全选逻辑。
+
+```text
+名称 input：保留外框位置/尺寸/y，文字左缘对齐原142
+激活焦点：连续暖环，消退现有灰内边；全选/部分选择暖色
+checkbox：保持原位；后标签文字左2图像px，说明仍原位
+```
+
+先受控真实WK复现，再依据原参考校准，最后准确Mac12 Computer Use验证。选择色仅此input；智能/编辑/手机/正文、20表面及22侧栏不改。失焦/重新激活和深色需记录，可读不等于未知原版深色像素通过。详见[任务26](../plan/tasks/app-mac-ordinary-name-focus26.md)。
