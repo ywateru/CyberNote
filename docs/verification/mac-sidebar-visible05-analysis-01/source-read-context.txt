@@ -1,0 +1,113 @@
+Read-only source context SHA256 2eae297cc249d270991ad6bf6df7c28998bc24d131a5ca3851be47fda1d07b1d
+
+45: @end
+46: // These offsets calibrate visible content only; the control frames and menu anchors stay put.
+47: // Values use the top-left coordinate convention of the retained 2x toolbar measurements.
+48: static NSPoint contentOffsetFor(NSString *action) {
+49:     if([action isEqual:@"newFolder"])return NSMakePoint(1.5,-1);
+50:     if([action isEqual:@"toggleSidebar"])return NSMakePoint(0.75,-0.25);
+51:     if([action isEqual:@"newNote"])return NSMakePoint(0,-1.5);
+52:     if([action isEqual:@"format"])return NSMakePoint(2.625,0);
+53:     if([action isEqual:@"checklist"] || [action isEqual:@"table"])return NSMakePoint(4.75,0);
+54:     if([action isEqual:@"attachment"])return NSMakePoint(2.25,0);
+55:     if([action isEqual:@"share"])return NSMakePoint(-2,-1.75);
+56:     if([action isEqual:@"more"])return NSMakePoint(2.25,-0.5);
+57:     return NSZeroPoint;
+58: }
+59: @interface NotesUIButtonCell : NSButtonCell
+60: @property NSPoint notesContentOffset;
+61: @end
+62: @implementation NotesUIButtonCell
+63: - (NSRect)contentFrame:(NSRect)frame inView:(NSView *)view {
+64:     return NSOffsetRect(frame,self.notesContentOffset.x,view.isFlipped?self.notesContentOffset.y:-self.notesContentOffset.y);
+65: }
+66: - (void)drawImage:(NSImage *)image withFrame:(NSRect)frame inView:(NSView *)view {
+67:     [super drawImage:image withFrame:[self contentFrame:frame inView:view] inView:view];
+68: }
+270: - (NSDictionary *)apply:(NSDictionary *)state {
+271:     NSDictionary *searchState=state[@"search"];
+272:     BOOL hasSearch=searchState && (id)searchState!=NSNull.null;
+273:     if(hasSearch && [searchState[@"acknowledgedEvent"] unsignedLongLongValue]<self.searchSequence)
+274:         return @{@"code":@"stale_search",@"message":@"请先合并最新原生搜索事件"};
+275:     if(hasSearch && self.search.currentEditor && [self.search.currentEditor isKindOfClass:NSTextView.class]) {
+276:         NSTextView *editor=(NSTextView *)self.search.currentEditor;
+277:         if(editor.hasMarkedText && ![searchState[@"value"] isEqual:self.search.stringValue])
+278:             return @{@"code":@"search_composition",@"message":@"搜索正在输入法组字，请等待提交后更新文字"};
+279:     }
+280:     // Resolve every symbol before changing existing controls. The only documented icon fallback is
+281:     // the focused-table badge to tablecells on an older runtime where the badge does not exist.
+282:     NSMutableDictionary *images=[NSMutableDictionary dictionary];NSMutableArray *fallbacks=[NSMutableArray array];
+283:     for(NSDictionary *item in state[@"actions"]) {
+284:         NSString *action=item[@"action"];
+285:         if([action isEqual:@"format"])continue; // This action is a localized text button, not an SF Symbol.
+286:         NSString *symbol=symbolFor(action,[state[@"tableFocused"] boolValue]);
+287:         NSString *label=labelFor(action,[state[@"tableFocused"] boolValue]);
+288:         NSImage *image=[NSImage imageWithSystemSymbolName:symbol accessibilityDescription:label];
+289:         if(!image && [symbol isEqual:@"tablecells.badge.ellipsis"]) {image=[NSImage imageWithSystemSymbolName:@"tablecells" accessibilityDescription:label];
+290:             [fallbacks addObject:@{@"action":action,@"requested":symbol,@"used":@"tablecells"}];}
+291:         if(!image) return @{@"code":@"symbol_unavailable",@"message":[@"系统符号不可用：" stringByAppendingString:symbol]};
+292:         CGFloat point=([@[@"newNote",@"table",@"share"] containsObject:action])?16.5:17;
+293:         image=[image imageWithSymbolConfiguration:[NSImageSymbolConfiguration configurationWithPointSize:point weight:NSFontWeightRegular scale:NSImageSymbolScaleMedium]];
+294:         if(!image) return @{@"code":@"symbol_unavailable",@"message":@"系统符号配置失败"};image.template=YES;images[action]=image;
+295:     }
+296:     self.suppress=YES;
+297:     [self.formatPopover close];self.formatPopover=nil;
+298:     [self.activeMenu cancelTracking];
+299:     for(NSMenu *menu in self.menus.allValues) [menu cancelTracking];
+300:     self.state=state;self.symbolFallbacks=fallbacks;
+301:     [self.actionStates removeAllObjects];[self.menus removeAllObjects];
+302:     self.formatEntries=@{};
+303:     for(NSDictionary *item in state[@"actions"]) self.actionStates[item[@"action"]]=item;
+304:     for(NSDictionary *menu in state[@"menus"]) {
+305:         if([menu[@"owner"] isEqual:@"format"])self.formatEntries=notesUIFormatEntries(menu[@"items"]);
+306:         else self.menus[menu[@"owner"]]=[self menuEntries:menu[@"items"] owner:menu[@"owner"]];
+307:     }
+308:     for(NSString *action in self.buttons) {
+309:         if([action isEqual:@"overflow"])continue;
+310:         NotesUIButton *button=self.buttons[action];NSDictionary *item=self.actionStates[action];button.hidden=item==nil;
+311:         button.enabled=[item[@"enabled"] boolValue];button.state=[item[@"selected"] boolValue]?NSControlStateValueOn:NSControlStateValueOff;
+312:         if(item) {button.image=images[action];NSString *label=labelFor(action,[state[@"tableFocused"] boolValue]);button.toolTip=label;[button setAccessibilityLabel:label];}
+313:         button.contentTintColor=![action isEqual:@"toggleSidebar"] && [item[@"selected"] boolValue]?NSColor.systemYellowColor:NSColor.labelColor;
+314:     }
+315:     self.title.stringValue=state[@"folderTitle"];[self.title setAccessibilityLabel:state[@"folderTitle"]];
+329:     [self layout];self.suppress=NO;return nil;
+330: }
+331: - (void)placeGroup:(NSString *)name x:(CGFloat)x width:(CGFloat)width actions:(NSArray<NSString *> *)actions {
+332:     NSView *group=self.groups[name];
+333:     if(width>0)[self.layoutGroups addObject:name];
+334:     group.frame=NSMakeRect(x,8,MAX(0,width),36);self.contents[name].frame=NSMakeRect(0,0,MAX(0,width),36);
+335:     if([name isEqual:@"sidebar"])self.sidebarBackground.frame=self.contents[name].bounds;
+336:     CGFloat itemWidth=actions.count?width/actions.count:0;
+337:     for(NSUInteger i=0;i<actions.count;i++) {NotesUIButton *button=self.buttons[actions[i]];
+338:         if(button.superview!=self.contents[name])[self.contents[name] addSubview:button];
+339:         button.hidden=NO;button.frame=NSMakeRect(i*itemWidth,0,itemWidth,36);}
+340: }
+355:     self.layoutGroups=[NSMutableSet set];
+356:     for(NotesUIButton *button in self.buttons.allValues)button.hidden=YES;
+357:     BOOL full=(self.window.styleMask&NSWindowStyleMaskFullSizeContentView)!=0;self.root.reserveTrafficLights=full;
+358:     CGFloat traffic=full?94:12;NSDictionary *columns=self.state[@"columns"];
+359:     BOOL sidebar=[columns[@"sidebarVisible"] boolValue];CGFloat side=sidebar?[columns[@"sidebarWidth"] doubleValue]:0;
+360:     self.sidebarBackground.hidden=sidebar;
+361:     NSString *layout=self.state[@"layout"];BOOL three=[layout isEqual:@"threeColumn"];
+362:     BOOL hiddenThree=three && full && !sidebar;
+363:     ((NotesUIButtonCell *)self.buttons[@"toggleSidebar"].cell).notesContentOffset=sidebar?contentOffsetFor(@"toggleSidebar"):
+364:         (hiddenThree?NSMakePoint(0.5,-0.25):NSZeroPoint);
+365:     BOOL browse=[layout isEqual:@"galleryBrowse"],gallery=[layout isEqual:@"galleryExpanded"];
+366:     CGFloat boundary=three?side+[columns[@"listWidth"] doubleValue]:traffic;
+367:     // 649c24e measures ink/surfaces, not internal AppKit frames. These are calibration starts.
+368:     CGFloat titleX=three?(side>0?side+19:traffic+8):MAX(side+11,traffic+8);
+369:     NSMutableArray *hidden=[NSMutableArray array];
+370:     CGFloat sidebarRight=traffic;
+371:     if(![layout isEqual:@"independentNote"]) {
+372:         NSMutableArray *actions=[NSMutableArray array];
+373:         if(sidebar && self.actionStates[@"newFolder"])[actions addObject:@"newFolder"];
+374:         if(self.actionStates[@"toggleSidebar"])[actions addObject:@"toggleSidebar"];
+375:         // The direct restore control survives a hidden or narrow folder column.
+376:         // Adding folders follows the visible column; only that action may overflow.
+377:         CGFloat itemWidth=sidebar?44:(hiddenThree?40:36);
+378:         if(sidebar && traffic+actions.count*itemWidth>side && [actions containsObject:@"newFolder"]) {
+379:             [actions removeObject:@"newFolder"];[hidden addObject:@"newFolder"];
+380:         }
+381:         if(actions.count) {
+382:             CGFloat width=actions.count*itemWidth;
+383:             CGFloat x=sidebar?MAX(traffic,side-width):traffic+(hiddenThree?2:0);

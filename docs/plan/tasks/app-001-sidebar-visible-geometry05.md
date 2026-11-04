@@ -1,7 +1,7 @@
 ---
 id: app-001-sidebar-visible-geometry05
 scope: mac-visible-sidebar-toolbar-placement-and-background
-status: in-progress
+status: verified-functional-and-limited-geometry
 depends-on: [app-001-sidebar-restore-01, app-001-sidebar-menu-label-01]
 ---
 
@@ -26,3 +26,7 @@ depends-on: [app-001-sidebar-restore-01, app-001-sidebar-menu-label-01]
 toolbar SHA256 `0b9604a73df6f2b1756cfd8489fff133a97c2cc3810df67372ec5ab878067da5` 已由不同作者SOURCE-READY，报告 `../reviews/app-001-sidebar-visible-geometry05.md`。独立390生产layout/120连续链、真实AppKit旧/新glass/受控fallback三套各390态、strict ObjC/controller13/隔离前端build均通过。侧栏背景显式frame同步修复已纳入；旧无窗口glass命中返回effect与fixture失败保留，不当原包点击失败。实际AppKit仍使用fake NSObject窗口端口、0 NSWindow，AX仅控件label、field editor=nil，不能代替真实窗口点击/玻璃合成/IME/像素。
 
 已知threeColumn700/side273/fullSize有无的visible/restored四态，旧标题与view重叠6pt，新旧字段相同，作为范围外限制保留。隐藏布局逐字段保持、可见候选靠右；仍待准确新Mac包对照208/228和隐藏恢复，未关闭整窗像素目标。
+
+## 准确包实际结果05
+
+093986d准确sealed exe333b356a…经不同作者933项产物核验后，root CUA实际top隐藏/恢复、菜单两种文字/隐藏恢复、228→208→228和正常退出新进程再隐藏恢复成功。有限正文257码点同；隐藏状态不持久化，冷启回visible，不能宣称隐藏状态冷恢复。运行docs/verification/mac-sidebar-visible05-runtime-01；独立局部分析mac-sidebar-visible05-analysis-01表明按边界移动、去共同玻璃与去黄已实现，但光学/隐藏宽度/灰度仍有差异，转任务optical06；整窗像素仍open。

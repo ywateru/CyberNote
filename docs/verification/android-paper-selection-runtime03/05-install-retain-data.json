@@ -1,0 +1,74 @@
+{
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "artifactGate": "docs/verification/unified-candidate06/android-paper-selection-independent03/artifact-gate.json",
+  "status": "PASS",
+  "events": [
+    {
+      "at": "2026-11-04T10:41:55.637818+00:00",
+      "args": [
+        "get-state"
+      ],
+      "exitCode": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T10:41:55.655012+00:00",
+      "args": [
+        "shell",
+        "getprop",
+        "ro.kernel.qemu"
+      ],
+      "exitCode": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T10:41:55.677210+00:00",
+      "args": [
+        "shell",
+        "pm",
+        "path",
+        "com.local.notesclone"
+      ],
+      "exitCode": 0,
+      "stdout": "package:/data/app/~~8-gB99N_rfTWC29kKlqBbg==/com.local.notesclone-GpxZ00-vaYJ_FE_7Posouw==/base.apk\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T10:41:55.946628+00:00",
+      "args": [
+        "shell",
+        "sha256sum",
+        "/data/app/~~8-gB99N_rfTWC29kKlqBbg==/com.local.notesclone-GpxZ00-vaYJ_FE_7Posouw==/base.apk"
+      ],
+      "exitCode": 0,
+      "stdout": "843e0c01aad154872851664ced574e1fa07544d8fcf874022698c37a3ee160f8  /data/app/~~8-gB99N_rfTWC29kKlqBbg==/com.local.notesclone-GpxZ00-vaYJ_FE_7Posouw==/base.apk\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T10:41:55.964552+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 628776   5311156  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T10:41:56.727925+00:00",
+      "args": [
+        "install",
+        "-r",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/android-paper-selection-build03/android-attempt01/android-original.apk"
+      ],
+      "exitCode": 0,
+      "stdout": "Performing Streamed Install\nSuccess\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "scripts/check-native-toolbar.mjs"
+  ],
+  "exitCode": 0,
+  "seconds": 0.368642042,
+  "freeBefore": 75095248896,
+  "freeAfter": 75095400448,
+  "stdout": "{\n  \"tests\": 13,\n  \"results\": [\n    {\n      \"name\": \"listen precedes bind; only own binding early events replay\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"caret context refresh does not update controls or close a menu\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"one update in flight coalesces latest desired state\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"native query arriving during update wins over stale React query\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"missing native search event waits, then resumes with exact acknowledgment\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"composition preserves pending state until actual committed search event\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"old note revision, duplicate sequence, and wrong window are rejected\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"dispose during bind releases the eventual binding and listener\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"unbind rejection still releases listener and rejects late events\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"invalidation clears retained editor targets and refuses old events\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"inconsistent stale search cannot spin forever\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"host projections distinguish browse, open, focused table, and independent window\",\n      \"status\": \"pass\"\n    },\n    {\n      \"name\": \"local OCR has its own typed native command; Continuity stays disabled and unavailable targets cannot recognize\",\n      \"status\": \"pass\"\n    }\n  ]\n}\n",
+  "stderr": ""
+}

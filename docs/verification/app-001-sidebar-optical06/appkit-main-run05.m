@@ -1,0 +1,107 @@
+// Full production controller, real AppKit views and controls, no NSWindow constructed.
+// AppKit may create NSApplication implicitly while instantiating controls.
+@interface HarnessWindow : NSObject
+@property NSView *contentView;
+@property NSWindowStyleMask styleMask;
+@end
+@implementation HarnessWindow @end
+static NSArray *r(NSRect f){return @[@(f.origin.x),@(f.origin.y),@(f.size.width),@(f.size.height)];}
+static void check(BOOL pass,NSString *message){if(!pass)@throw [NSException exceptionWithName:@"HarnessAssertion" reason:message userInfo:nil];}
+static void checkTint(NSColor *color,BOOL candidate) {
+ for(NSString *name in @[NSAppearanceNameAqua,NSAppearanceNameDarkAqua,NSAppearanceNameAccessibilityHighContrastAqua,NSAppearanceNameAccessibilityHighContrastDarkAqua,NSAppearanceNameAqua,NSAppearanceNameDarkAqua,NSAppearanceNameAqua]) {
+  NSAppearance *appearance=[NSAppearance appearanceNamed:name];
+  [appearance performAsCurrentDrawingAppearance:^{
+   NSColor *actual=[color colorUsingColorSpace:NSColorSpace.sRGBColorSpace],*label=[NSColor.labelColor colorUsingColorSpace:NSColorSpace.sRGBColorSpace];
+   CGFloat ar,ag,ab,aa,lr,lg,lb,la;[actual getRed:&ar green:&ag blue:&ab alpha:&aa];[label getRed:&lr green:&lg blue:&lb alpha:&la];
+   CGFloat expected=candidate&&[appearance.name isEqual:NSAppearanceNameAqua]&&!NSWorkspace.sharedWorkspace.accessibilityDisplayShouldIncreaseContrast?.70:la;
+   check(fabs(ar-lr)<1e-8&&fabs(ag-lg)<1e-8&&fabs(ab-lb)<1e-8&&fabs(aa-expected)<1e-8,@"dynamic tint RGB/alpha in appearance roundtrip");
+  }];
+ }
+}
+static NSDictionary *stateFor(NSDictionary *item) {
+ NSMutableArray *actions=[NSMutableArray array];
+ for(NSString *a in item[@"actions"])[actions addObject:@{@"action":a,@"enabled":@YES,@"selected":@([a isEqual:@"toggleSidebar"]&&[item[@"sidebarVisible"] boolValue])}];
+ return @{@"revision":@1,@"layout":item[@"layout"],@"columns":@{@"sidebarVisible":item[@"sidebarVisible"],@"sidebarWidth":item[@"sidebarWidth"],@"listWidth":item[@"listWidth"]},@"folderTitle":@"搜索",@"folderCount":@0,@"tableFocused":@NO,@"actions":actions,@"menus":@[],@"search":@{@"value":@"controlled-query",@"enabled":@YES,@"acknowledgedEvent":@0},@"glassStyle":[item[@"phase"] isEqual:@"hidden"]?@"clear":@"regular"};
+}
+int main(void) {@autoreleasepool {@try {
+ check(NSApp==nil,@"No existing application expected");
+ NSArray *cases=[NSJSONSerialization JSONObjectWithData:[[NSFileHandle fileHandleWithStandardInput] readDataToEndOfFile] options:0 error:nil];
+ NSMutableArray *results=[NSMutableArray array];NSMutableDictionary *retained=[NSMutableDictionary dictionary];
+ for(NSDictionary *item in cases) {
+  NSMutableDictionary *entry=retained[item[@"chain"]];NotesUIController *c=entry[@"controller"];HarnessWindow *window=entry[@"window"];
+  if(!c) {
+   c=[NotesUIController new];window=[HarnessWindow new];window.contentView=[[NSView alloc] initWithFrame:NSMakeRect(0,0,[item[@"width"] doubleValue],900)];
+   window.styleMask=[item[@"fullSize"] boolValue]?NSWindowStyleMaskFullSizeContentView:0;c.window=(NSWindow *)(id)window;c.state=stateFor(item);[c build];
+   entry=[@{@"controller":c,@"window":window,@"buttons":[c.buttons copy],@"contents":[c.contents copy],@"groups":[c.groups copy],@"search":c.search,@"title":c.title,@"count":c.count,@"root":c.root} mutableCopy];
+#ifdef CANDIDATE
+   entry[@"background"]=c.sidebarBackground;
+#endif
+   retained[item[@"chain"]]=entry;
+  }
+  window.contentView.frame=NSMakeRect(0,0,[item[@"width"] doubleValue],900);window.styleMask=[item[@"fullSize"] boolValue]?NSWindowStyleMaskFullSizeContentView:0;
+  window.contentView.appearance=[NSAppearance appearanceNamed:[item[@"phase"] isEqual:@"hidden"]?NSAppearanceNameDarkAqua:NSAppearanceNameAqua];
+  NSDictionary *error=[c apply:stateFor(item)];check(error==nil,[NSString stringWithFormat:@"apply: %@",error]);
+  for(NSString *a in c.buttons)check(c.buttons[a]==entry[@"buttons"][a],@"button identity changed");
+  for(NSString *a in c.contents)check(c.contents[a]==entry[@"contents"][a],@"content identity changed");
+  for(NSString *a in c.groups)check(c.groups[a]==entry[@"groups"][a],@"group identity changed");
+  check(c.root==entry[@"root"]&&c.title==entry[@"title"]&&c.count==entry[@"count"]&&c.search==entry[@"search"],@"retained non-sidebar objects changed");
+  check([c.search.stringValue isEqual:@"controlled-query"]&&c.search.currentEditor==nil,@"search value/editor state");
+  BOOL visible=[item[@"sidebarVisible"] boolValue];(void)visible;BOOL independent=[item[@"layout"] isEqual:@"independentNote"];
+  
+  for(NSUInteger repeat=0;repeat<5;repeat++)[c layout];
+  NSPoint expectedFolder=NSZeroPoint,expectedToggle=NSZeroPoint;
+#ifdef CANDIDATE
+  expectedFolder=NSMakePoint(1.5,-1);
+  expectedToggle=visible?NSMakePoint(.75,-.25):([item[@"layout"] isEqual:@"threeColumn"]&&[item[@"fullSize"] boolValue]?NSMakePoint(.5,-.25):NSZeroPoint);
+#endif
+  check(NSEqualPoints(((NotesUIButtonCell *)c.buttons[@"newFolder"].cell).notesContentOffset,expectedFolder),@"newFolder optical offset");
+  check(NSEqualPoints(((NotesUIButtonCell *)c.buttons[@"toggleSidebar"].cell).notesContentOffset,expectedToggle),@"toggle optical offset exact/no accumulation");
+  for(NSString *action in @[@"newFolder",@"toggleSidebar"]) {
+   NotesUIButton *button=c.buttons[action];NotesUIButtonCell *cell=(NotesUIButtonCell *)button.cell;NSPoint offset=cell.notesContentOffset;
+   NSRect base=NSMakeRect(2,3,20,17),content=[cell contentFrame:base inView:button];
+   check(NSEqualRects(content,NSOffsetRect(base,offset.x,button.isFlipped?offset.y:-offset.y)),@"cell optical coordinate adapter");
+  }
+
+  NSMutableDictionary *groups=[NSMutableDictionary dictionary];
+  for(NSString *name in c.groups)if(!c.groups[name].hidden){NSMutableArray *aa=[NSMutableArray array];for(NSString *a in c.buttons)if(!c.buttons[a].hidden&&c.buttons[a].superview==c.contents[name])[aa addObject:a];[aa sortUsingComparator:^NSComparisonResult(NSString *a,NSString *b){CGFloat ax=c.buttons[a].frame.origin.x,bx=c.buttons[b].frame.origin.x;return ax<bx?NSOrderedAscending:ax>bx?NSOrderedDescending:NSOrderedSame;}];groups[name]=@{@"frame":r(c.groups[name].frame),@"actions":aa};}
+#ifdef CANDIDATE
+  check(c.sidebarBackground==entry[@"background"],@"background identity changed");
+  check(c.sidebarBackground.hidden==visible,@"background visible state");
+  check(c.contents[@"sidebar"].superview==c.groups[@"sidebar"]&&c.sidebarBackground.superview==c.groups[@"sidebar"],@"sidebar siblings");
+  check(![c.contents[@"sidebar"] isDescendantOf:c.sidebarBackground],@"content incorrectly under background");
+  check(NSEqualRects(c.sidebarBackground.frame,c.groups[@"sidebar"].bounds),@"background autoresize");
+  checkTint(c.buttons[@"toggleSidebar"].contentTintColor,YES);checkTint(c.buttons[@"newFolder"].contentTintColor,YES);
+  if(@available(macOS 26.0,*))if([c.sidebarBackground isKindOfClass:NSClassFromString(@"NSGlassEffectView")])check(((NSGlassEffectView *)c.sidebarBackground).style==([item[@"phase"] isEqual:@"hidden"]?NSGlassEffectViewStyleClear:NSGlassEffectViewStyleRegular),@"background glassStyle");
+#endif
+  check(c.groups[@"sidebar"].hidden==independent,@"sidebar group availability");
+  NSMutableDictionary *hits=[NSMutableDictionary dictionary];
+  for(NSString *a in @[@"newFolder",@"toggleSidebar"]) {
+   NSButton *b=c.buttons[a];if(b.hidden||c.groups[@"sidebar"].hidden)continue;
+   check(b.enabled&&b.target==c&&b.action==@selector(buttonClicked:),@"button route/enable");
+   check([b.accessibilityLabel isEqual:labelFor(a,NO)],@"button AX label");
+   NSPoint center=[b convertPoint:NSMakePoint(NSMidX(b.bounds),NSMidY(b.bounds)) toView:c.root.superview];
+   NSView *hit=[c.root hitTest:center];BOOL rootHitsButton=hit==b||[hit isDescendantOf:b];
+   NSPoint local=[b convertPoint:NSMakePoint(NSMidX(b.bounds),NSMidY(b.bounds)) toView:b.superview];check([b hitTest:local]==b,@"actual button local hit");
+#ifdef CANDIDATE
+   if(visible)check(rootHitsButton,@"visible transparent host must pass hit to retained button");
+#endif
+   hits[a]=@{@"rootHitsButton":@(rootHitsButton),@"rootHitClass":hit?NSStringFromClass(hit.class):@"nil",@"localButtonHit":@YES};
+  }
+  #ifndef CANDIDATE
+  checkTint(c.buttons[@"toggleSidebar"].contentTintColor,NO);checkTint(c.buttons[@"newFolder"].contentTintColor,NO);
+#endif
+  for(NSString *action in c.buttons)if(![action isEqual:@"newFolder"]&&![action isEqual:@"toggleSidebar"]&&![action isEqual:@"overflow"])
+    check([c.buttons[action].contentTintColor isEqual:NSColor.labelColor],@"other action tint unchanged");
+  check(NSApp.windows.count==0,@"No actual windows should be created");
+  [results addObject:@{@"name":item[@"name"],@"hits":hits,@"groups":groups,@"overflow":c.overflow,@"titleFrame":r(c.title.frame),@"countFrame":r(c.count.frame),@"titleHidden":@(c.title.hidden),@"searchFieldFrame":r(c.search.frame),@"rootFrame":r(c.root.frame),@"backgroundClass":
+#ifdef CANDIDATE
+    NSStringFromClass(c.sidebarBackground.class)
+#else
+    NSStringFromClass(c.groups[@"sidebar"].class)
+#endif
+  }];
+ }
+ for(NSDictionary *entry in retained.allValues)[entry[@"controller"] dispose];
+ NSData *data=[NSJSONSerialization dataWithJSONObject:@{@"status":@"pass",@"states":@(cases.count),@"chains":@(retained.count),@"implicitNSApplication":@(NSApp!=nil),@"createdNSWindow":@NO,@"results":results} options:NSJSONWritingPrettyPrinted|NSJSONWritingSortedKeys error:nil];[[NSFileHandle fileHandleWithStandardOutput] writeData:data];return 0;
+ }@catch(NSException *e){fprintf(stderr,"%s: %s\n",e.name.UTF8String,e.reason.UTF8String);return 1;}
+}}

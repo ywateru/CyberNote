@@ -1,0 +1,56 @@
+{
+  "status": "pass",
+  "comparisons": [
+    {
+      "kind": "baseline",
+      "states": 401,
+      "chains": 122,
+      "backgroundClasses": [
+        "NotesUIRoot"
+      ],
+      "rootHitClasses": [
+        "NotesUIButton"
+      ]
+    },
+    {
+      "kind": "candidate",
+      "states": 401,
+      "chains": 122,
+      "backgroundClasses": [
+        "NSGlassEffectView"
+      ],
+      "rootHitClasses": [
+        "NotesUIButton"
+      ]
+    },
+    {
+      "kind": "candidate-fallback",
+      "states": 401,
+      "chains": 122,
+      "backgroundClasses": [
+        "NSVisualEffectView"
+      ],
+      "rootHitClasses": [
+        "NotesUIButton"
+      ]
+    },
+    {
+      "kind": "candidate-contrast-policy",
+      "states": 401,
+      "chains": 122,
+      "backgroundClasses": [
+        "NSGlassEffectView"
+      ],
+      "rootHitClasses": [
+        "NotesUIButton"
+      ]
+    }
+  ],
+  "limits": [
+    "Recording ports use flipped parent; actual NSView parent is unflipped, production rootFrame y848 is checked explicitly. Full production source compiled with real AppKit views/buttons/search/glass and actual placeGroup/layout/apply, under fake NSObject window exposing real contentView/styleMask.",
+    "Root hits through NSGlassEffectView may return glass in this no-window setup, baseline no-window glass returns effect while candidate sibling content allows root to hit retained button in visible and hidden states; all candidate root/local button hits required.",
+    "AppKit implicitly initializes NSApplication while creating controls; no real NSWindow created and windows.count remains0; no field editor, real window rendering, user event, device, package or pixel acceptance.",
+    "Actual HC appearance requests normalize to Aqua/Dark in this system; no real HC window or system setting changed. Fourth binary mocks only public workspace contrast property true to verify conservative policy.",
+    "Fallback uses explicit Class resolver seam returning Nil only for NSGlassEffectView; not execution on older macOS."
+  ]
+}

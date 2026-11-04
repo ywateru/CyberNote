@@ -1,0 +1,37 @@
+{
+  "status": "pass",
+  "sourceSha256": "99a24b1ec902c16bb32fe9d2a5cc82887aec62424d9c00c690a464dbf66db46b",
+  "authorFilesVerified": 152,
+  "preservedProductionStates": 401,
+  "preservedRestoredChains": 122,
+  "preservedAppKitStates": 1604,
+  "freshIndependentAppKit": [
+    {
+      "kind": "glass",
+      "states": 17,
+      "status": "pass",
+      "windows": 0,
+      "retainedContrastResolutions": 0
+    },
+    {
+      "kind": "fallback",
+      "states": 17,
+      "status": "pass",
+      "windows": 0,
+      "retainedContrastResolutions": 0
+    },
+    {
+      "kind": "mutable-contrast",
+      "states": 17,
+      "status": "pass",
+      "windows": 0,
+      "retainedContrastResolutions": 5
+    }
+  ],
+  "inputFilesRechecked": 158,
+  "limits": [
+    "No real NSWindow, GUI rendering, IME, real field editor, or pixel acceptance.",
+    "High contrast appearance requests normalize on current OS; mutable contrast checks the public-property seam, not real settings.",
+    "Fallback explicitly masks only NSGlassEffectView class lookup, not execution on old macOS."
+  ]
+}

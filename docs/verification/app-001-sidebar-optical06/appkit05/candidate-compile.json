@@ -1,0 +1,26 @@
+{
+  "command": [
+    "xcrun",
+    "clang",
+    "-fobjc-arc",
+    "-fblocks",
+    "-mmacosx-version-min=12.0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-I",
+    "/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-ui/macos",
+    "-framework",
+    "AppKit",
+    "-framework",
+    "QuartzCore",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-sidebar-optical06/appkit05/candidate.m",
+    "/Users/water/work/2026/Apple-Notes-Clone/plugins/tauri-plugin-notes-ui/macos/format.m",
+    "-o",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-sidebar-optical06/appkit05/candidate"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "",
+  "sourceSha256": "ea88713d0a50e3825176084b9c79b498cfe00d1972bf4d58e85fa6192792a324"
+}

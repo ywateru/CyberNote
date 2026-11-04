@@ -1,0 +1,66 @@
+{
+  "createdUtc": "2026-11-04T10:31:44.564021+00:00",
+  "phase": "Read-only new pinned collection inspection and verifier preparation; no verifier execution yet",
+  "explicitRootAuthorization": {
+    "sourceHead": "093986d170ef279fbce0f66e59891fd5f94aecad",
+    "rootAuthPath": "docs/verification/unified-candidate06/root-authorization-mac-sidebar-build05.json",
+    "rootAuthSHA256": "10dc74c888702d06a7dfa568c13db8e18f5b9d56d0bf35a9a4147ce9dccb01bb",
+    "freezeSHA256": "1060739979cefa530c3f9a50debb32091c6e5f72e7da98c6294ba4b70e42d1fe",
+    "buildResultSHA256": "c17d4f8a5b5228003e5887e411136fefe3807127204f6a8d3a0cac5aa55cc1d8",
+    "collectionSHA256": "de4112837c1d56848b7440f48ac172dcd796e0ea3076b90e0a6a5386f4118aee"
+  },
+  "actualObservedCollector": {
+    "commands": 13,
+    "exitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "originalStrict": {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-sidebar-build05/mac-attempt02/mac-original.app"
+      ],
+      "exitCode": 1,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-sidebar-build05/mac-attempt02/mac-original.app: code has no resources but signature indicates they must be present\n"
+    },
+    "sealedStrict": {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-sidebar-build05/mac-attempt02/mac-sealed.app"
+      ],
+      "exitCode": 0,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-sidebar-build05/mac-attempt02/mac-sealed.app: valid on disk\n/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-sidebar-build05/mac-attempt02/mac-sealed.app: satisfies its Designated Requirement\n"
+    },
+    "sealingChangePaths": [
+      "Contents/MacOS/notes-clone",
+      "Contents/_CodeSignature/CodeResources"
+    ]
+  },
+  "frozenCountsRetainedAfterInspection": {
+    "inputs": 302,
+    "product": 238,
+    "tools": 6
+  },
+  "freeBytesBefore": 75665432576,
+  "noPriorAttemptInThisDirectory": true,
+  "limits": "No build, target/cache read, codesign, app launch, GUI, dependency installation, download, stage or commit; Python compile checks syntax only"
+}

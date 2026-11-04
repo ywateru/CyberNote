@@ -1,0 +1,99 @@
+{
+  "createdUtc": "2026-11-04T10:31:44.562951+00:00",
+  "derivedFrom": "docs/verification/unified-candidate06/mac-body-independent04/verify.py",
+  "sourceSHA256": "1240c70d609a8f1acf7f5804de9aed22dd1eb2ba23c4677a258a5eaedbc0129f",
+  "literalReplacements": [
+    {
+      "before": "candidate06 body-build04 preserved",
+      "after": "candidate06 sidebar-build05 preserved",
+      "occurrences": 1
+    },
+    {
+      "before": "mac-body-independent04",
+      "after": "mac-sidebar-independent05",
+      "occurrences": 1
+    },
+    {
+      "before": "mac-body-build04",
+      "after": "mac-sidebar-build05",
+      "occurrences": 3
+    },
+    {
+      "before": "mac-attempt01",
+      "after": "mac-attempt02",
+      "occurrences": 2
+    },
+    {
+      "before": "62244d445b19321a3fe773ffa074563c56970595",
+      "after": "093986d170ef279fbce0f66e59891fd5f94aecad",
+      "occurrences": 1
+    },
+    {
+      "before": "0d3917a81a90ff6ad41d44df534bf77002bf9db9e929c2dc598c60f6e10a0f2c",
+      "after": "1060739979cefa530c3f9a50debb32091c6e5f72e7da98c6294ba4b70e42d1fe",
+      "occurrences": 1
+    },
+    {
+      "before": "da5715bae1b9eb75f1d3d78b022855f38f904c5a7ee567d036b44782d4726276",
+      "after": "c17d4f8a5b5228003e5887e411136fefe3807127204f6a8d3a0cac5aa55cc1d8",
+      "occurrences": 1
+    },
+    {
+      "before": "87a04f899bb6df8909001b5a7a65c7fb007f445965261bdc9fd483ea36318bf9",
+      "after": "de4112837c1d56848b7440f48ac172dcd796e0ea3076b90e0a6a5386f4118aee",
+      "occurrences": 1
+    },
+    {
+      "before": "560f9826b44320f184493f8f522a2cfefaf78a7e4e7c1faad8fa001e1190583d",
+      "after": "c888cc902f9f05da636c827c2b030200732967bcfd4fb52743000e877333bc60",
+      "occurrences": 1
+    },
+    {
+      "before": "2131ac2abe616b6599b2f7c77665ec095874b2c37cbb2e8be2b5450e4dcffc3f",
+      "after": "aa8a862312b923f56bb4046dbacd780175a79bf080991647a38e5d121392ea28",
+      "occurrences": 1
+    },
+    {
+      "before": "c['sealed']['executable']['bytes'] == 16013344",
+      "after": "c['sealed']['executable']['bytes'] == 16013696",
+      "occurrences": 1
+    },
+    {
+      "before": "db92182330f81f0adfef38d5a9a103e705f166c27c3ff5d3578a8a0e0df85a8e",
+      "after": "333b356ab62a0f0c55a8f67c9d7bc51bf424eb1f37dccdcb40f4b9b140bc7be7",
+      "occurrences": 1
+    },
+    {
+      "before": "archives['sealed']['bytes'] == 4751359",
+      "after": "archives['sealed']['bytes'] == 4751569",
+      "occurrences": 1
+    },
+    {
+      "before": "8410de42fa8dc5aa3da0e64a1a45c976563c537eb6506ea6ac4ed5a904534f46",
+      "after": "ff3317642232bc1ae6aace93f910c5754b032ea086590649409790eb008d1898",
+      "occurrences": 1
+    }
+  ],
+  "structuralAdditions": [
+    {
+      "before": "check('exact freeze SHA256', ident(RUN / 'input-freeze.json')['sha256'] == FREEZE)",
+      "after": "check('exact freeze SHA256', ident(RUN / 'input-freeze.json')['sha256'] == FREEZE)\ncheck('exact root authorization SHA256', ident(ROOT / 'docs/verification/unified-candidate06/root-authorization-mac-sidebar-build05.json')['sha256'] == '10dc74c888702d06a7dfa568c13db8e18f5b9d56d0bf35a9a4147ce9dccb01bb')\ncheck('current HEAD exact source', subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT).decode().strip() == SOURCE)",
+      "occurrences": 1,
+      "reason": "Pin explicit root authorization identity and current frozen HEAD, beyond source blob linkage"
+    },
+    {
+      "before": "for i, command in enumerate(c['commands'], 1):",
+      "after": "check('actual collector command structure', len(c['commands']) == 13 and [x['exitCode'] for x in c['commands']] == [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0])\ncheck('exact recorded sealed signing argv', c['sealedSign']['argv'] == ['/usr/bin/codesign', '--force', '--sign', '-', '--timestamp=none', str(ART / 'mac-sealed.app')])\nfor i, command in enumerate(c['commands'], 1):",
+      "occurrences": 1,
+      "reason": "Observed new pinned collection has this actual structure; not inherited without inspection"
+    },
+    {
+      "before": "evidence = [RUN / 'input-freeze.json'",
+      "after": "evidence = [ROOT / 'docs/verification/unified-candidate06/root-authorization-mac-sidebar-build05.json', RUN / 'input-freeze.json'",
+      "occurrences": 1,
+      "reason": "Record exact root authorization file in source evidence inventory"
+    }
+  ],
+  "outputSHA256": "a912df32fc7d9bd09be6b2d55bbc59ccb5bfd0c8c7a599f8976a155bd5616c58",
+  "scope": "Exact new sibling paths, root-provided identities and artifact sizes; preserve every old assertion, add four explicit checks and auth evidence"
+}

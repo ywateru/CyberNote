@@ -1,0 +1,20 @@
+{
+  "command": [
+    "xcrun",
+    "clang",
+    "-fobjc-arc",
+    "-fblocks",
+    "-mmacosx-version-min=12.0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-framework",
+    "AppKit",
+    "docs/verification/app-001-sidebar-optical06/tint-colors.m",
+    "-o",
+    "docs/verification/app-001-sidebar-optical06/tint-colors"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": ""
+}

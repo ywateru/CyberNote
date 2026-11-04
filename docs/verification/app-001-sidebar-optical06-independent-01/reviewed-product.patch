@@ -1,0 +1,69 @@
+diff --git a/plugins/tauri-plugin-notes-ui/macos/toolbar.m b/plugins/tauri-plugin-notes-ui/macos/toolbar.m
+index 21921b5..2729557 100644
+--- a/plugins/tauri-plugin-notes-ui/macos/toolbar.m
++++ b/plugins/tauri-plugin-notes-ui/macos/toolbar.m
+@@ -29,6 +29,15 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
+         @"table":tableFocused?@"tablecells.badge.ellipsis":@"tablecells",@"attachment":@"paperclip",@"share":@"square.and.arrow.up",@"more":@"ellipsis"};
+     return symbols[action];
+ }
++static NSColor *sidebarTintColor(void) {
++    return [NSColor colorWithName:@"NotesSidebarSymbol" dynamicProvider:^NSColor *(NSAppearance *appearance) {
++        __block NSColor *label;
++        [appearance performAsCurrentDrawingAppearance:^{label=[NSColor.labelColor colorUsingColorSpace:NSColorSpace.sRGBColorSpace];}];
++        // Only ordinary light appearance has a measured Notes reference.
++        return !NSWorkspace.sharedWorkspace.accessibilityDisplayShouldIncreaseContrast && [appearance.name isEqual:NSAppearanceNameAqua]?
++            [label colorWithAlphaComponent:0.70]:label;
++    }];
++}
+ 
+ @interface NotesUIRoot : NSView
+ @property BOOL reserveTrafficLights;
+@@ -46,6 +55,8 @@ static NSString *symbolFor(NSString *action,BOOL tableFocused) {
+ // These offsets calibrate visible content only; the control frames and menu anchors stay put.
+ // Values use the top-left coordinate convention of the retained 2x toolbar measurements.
+ static NSPoint contentOffsetFor(NSString *action) {
++    if([action isEqual:@"newFolder"])return NSMakePoint(1.5,-1);
++    if([action isEqual:@"toggleSidebar"])return NSMakePoint(0.75,-0.25);
+     if([action isEqual:@"newNote"])return NSMakePoint(0,-1.5);
+     if([action isEqual:@"format"])return NSMakePoint(2.625,0);
+     if([action isEqual:@"checklist"] || [action isEqual:@"table"])return NSMakePoint(4.75,0);
+@@ -308,7 +319,8 @@ static NSPoint contentOffsetFor(NSString *action) {
+         NotesUIButton *button=self.buttons[action];NSDictionary *item=self.actionStates[action];button.hidden=item==nil;
+         button.enabled=[item[@"enabled"] boolValue];button.state=[item[@"selected"] boolValue]?NSControlStateValueOn:NSControlStateValueOff;
+         if(item) {button.image=images[action];NSString *label=labelFor(action,[state[@"tableFocused"] boolValue]);button.toolTip=label;[button setAccessibilityLabel:label];}
+-        button.contentTintColor=![action isEqual:@"toggleSidebar"] && [item[@"selected"] boolValue]?NSColor.systemYellowColor:NSColor.labelColor;
++        button.contentTintColor=([action isEqual:@"toggleSidebar"] || ([action isEqual:@"newFolder"] && ![item[@"selected"] boolValue]))?sidebarTintColor():
++            ([item[@"selected"] boolValue]?NSColor.systemYellowColor:NSColor.labelColor);
+     }
+     self.title.stringValue=state[@"folderTitle"];[self.title setAccessibilityLabel:state[@"folderTitle"]];
+     BOOL zeroSearch=[state[@"folderTitle"] isEqual:@"搜索"] && [state[@"folderCount"] unsignedLongLongValue]==0
+@@ -357,6 +369,9 @@ static NSPoint contentOffsetFor(NSString *action) {
+     BOOL sidebar=[columns[@"sidebarVisible"] boolValue];CGFloat side=sidebar?[columns[@"sidebarWidth"] doubleValue]:0;
+     self.sidebarBackground.hidden=sidebar;
+     NSString *layout=self.state[@"layout"];BOOL three=[layout isEqual:@"threeColumn"];
++    BOOL hiddenThree=three && full && !sidebar;
++    ((NotesUIButtonCell *)self.buttons[@"toggleSidebar"].cell).notesContentOffset=sidebar?contentOffsetFor(@"toggleSidebar"):
++        (hiddenThree?NSMakePoint(0.5,-0.25):NSZeroPoint);
+     BOOL browse=[layout isEqual:@"galleryBrowse"],gallery=[layout isEqual:@"galleryExpanded"];
+     CGFloat boundary=three?side+[columns[@"listWidth"] doubleValue]:traffic;
+     // 649c24e measures ink/surfaces, not internal AppKit frames. These are calibration starts.
+@@ -369,16 +384,16 @@ static NSPoint contentOffsetFor(NSString *action) {
+         if(self.actionStates[@"toggleSidebar"])[actions addObject:@"toggleSidebar"];
+         // The direct restore control survives a hidden or narrow folder column.
+         // Adding folders follows the visible column; only that action may overflow.
+-        CGFloat itemWidth=sidebar?44:36;
++        CGFloat itemWidth=sidebar?44:(hiddenThree?40:36);
+         if(sidebar && traffic+actions.count*itemWidth>side && [actions containsObject:@"newFolder"]) {
+             [actions removeObject:@"newFolder"];[hidden addObject:@"newFolder"];
+         }
+         if(actions.count) {
+             CGFloat width=actions.count*itemWidth;
+-            CGFloat x=sidebar?MAX(traffic,side-width):traffic;
++            CGFloat x=sidebar?MAX(traffic,side-width):traffic+(hiddenThree?2:0);
+             [self placeGroup:@"sidebar" x:x width:width actions:actions];sidebarRight=x+width;
+             // Hidden-list reference ink starts near156pt; its label frame is a154pt candidate.
+-            titleX=MAX(titleX,sidebarRight+(three&&!sidebar?24:8));
++            titleX=MAX(titleX,sidebarRight+(three&&!sidebar?(hiddenThree?18:24):8));
+         }
+     }
+     if(gallery && self.actionStates[@"backToGallery"]) {

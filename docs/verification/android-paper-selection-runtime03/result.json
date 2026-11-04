@@ -1,0 +1,268 @@
+{
+  "status": "PASS: bounded exact-APK retained-data upgrade and paper selection runtime",
+  "sourceHead": "093986d170ef279fbce0f66e59891fd5f94aecad",
+  "freezeSha256": "39190998b264a76345eebe66bcd39642ff4c512f1422ec65b88399b644369d9d",
+  "apkSha256": "d6350a35374a8fa05c836e26f361dfb3d4834882fd4a360ad7a7ebbedf2d123c",
+  "device": "emulator-5580",
+  "package": "com.local.notesclone",
+  "qaTitle": "QA-PAPER-INDEPENDENT-20261103C",
+  "body": "Alpha Beta Gamma",
+  "boldWord": "Beta",
+  "initialStyle": "grid-large",
+  "finalStyle": "grid-large",
+  "beforePackageFields": {
+    "userId": "10169",
+    "firstInstallTime": "2026-11-03 22:09:17",
+    "lastUpdateTime": "2026-11-04 17:02:35"
+  },
+  "afterPackageFields": {
+    "userId": "10169",
+    "firstInstallTime": "2026-11-03 22:09:17",
+    "lastUpdateTime": "2026-11-04 18:41:56"
+  },
+  "retainedUserIdAndFirstInstallTime": true,
+  "inputOperations": [
+    {
+      "path": "00-before-identity.json",
+      "status": "FAIL_STOP",
+      "events": 1
+    },
+    {
+      "path": "01-before-identity.json",
+      "status": "PASS",
+      "events": 11
+    },
+    {
+      "path": "02-before-note.json",
+      "status": "PASS",
+      "events": 5
+    },
+    {
+      "path": "03-before-grid-large.json",
+      "status": "PASS",
+      "events": 7
+    },
+    {
+      "path": "04-before-cancel.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "05-install-retain-data.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "06-after-identity.json",
+      "status": "PASS",
+      "events": 11
+    },
+    {
+      "path": "07-launch-upgraded.json",
+      "status": null,
+      "events": 0
+    },
+    {
+      "path": "08-upgraded-launch.json",
+      "status": "PASS",
+      "events": 5
+    },
+    {
+      "path": "09-notes-list.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "10-upgraded-qa-note.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "11-upgraded-grid-large.json",
+      "status": "PASS",
+      "events": 7
+    },
+    {
+      "path": "12-first-current-grid-return.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "13-editor-focus.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "14-grid-edit-x.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "15-grid-beta-selected.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "16-grid-selected-more.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "17-grid-history-paper.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "18-grid-same-style-return.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "19-grid-resume-edit.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "20-grid-undo-after-same.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "21-grid-redo-after-same.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "22-grid-restored-text.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "23-grid-done-paper.json",
+      "status": "PASS",
+      "events": 8
+    },
+    {
+      "path": "24-plain-selected-return.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "25-plain-rounded-reopened.json",
+      "status": "PASS",
+      "events": 7
+    },
+    {
+      "path": "26-plain-system-back.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "27-plain-edit-y.json",
+      "status": "PASS",
+      "events": 7
+    },
+    {
+      "path": "28-plain-beta-selected.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "29-plain-history-paper.json",
+      "status": "PASS",
+      "events": 7
+    },
+    {
+      "path": "30-plain-same-style-return.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "31-plain-undo-after-same.json",
+      "status": "PASS",
+      "events": 7
+    },
+    {
+      "path": "32-plain-continued-input-z.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "33-plain-save-leave-note.json",
+      "status": "PASS",
+      "events": 7
+    },
+    {
+      "path": "34-plain-saved-note-reopened.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "35-plain-after-note-reopen.json",
+      "status": "PASS",
+      "events": 7
+    },
+    {
+      "path": "36-restored-original-body.json",
+      "status": "PASS",
+      "events": 8
+    },
+    {
+      "path": "37-original-body-done-paper.json",
+      "status": "PASS",
+      "events": 8
+    },
+    {
+      "path": "38-grid-large-restored-return.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "39-restored-save-leave.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "40-restored-note-reopened.json",
+      "status": "PASS",
+      "events": 6
+    },
+    {
+      "path": "41-restored-grid-large-reopened.json",
+      "status": "PASS",
+      "events": 7
+    },
+    {
+      "path": "42-final-cancel-note.json",
+      "status": "PASS",
+      "events": 6
+    }
+  ],
+  "originalPngCount": 38,
+  "allPngIdentitiesVerified": true,
+  "observations": {
+    "upgradeTitleDateBodyROIExact": true,
+    "firstCurrentGridVisibleNoteROIExact": true,
+    "roundedPlainAndGridCornersVerified": true,
+    "currentGridBetaVisibleRangeRetained": true,
+    "currentPlainBetaVisibleRangeRetained": true,
+    "gridInputXUndoRedoUndoPassed": true,
+    "plainInputYUndoPassed": true,
+    "systemBackClosesPlainPaper": true,
+    "continuedInputZSavedAndReopened": true,
+    "temporaryXYZRemoved": true,
+    "restoredBodyAndTitlePixelROIsExact": true,
+    "restoredGridConfirmedAfterNoteReopen": true,
+    "finalKeyboardHidden": true,
+    "deviceReleased": true
+  },
+  "qaModificationTimeFinal": "2026年11月4日18:54",
+  "limits": [
+    "Physical input/click/system Back with original screencap, no WebView/DB injection.",
+    "Visible selection/actual undo and redo support bounded retention; no internal ProseMirror key/selection/history JSON or zero-IPC/revision assertion.",
+    "Input updates QA modification date; title/body/bold/style restored, old timestamp intentionally not rewritten.",
+    "Same process normal save/note reopen, no post-edit process restart/force-stop.",
+    "Finite plain/grid styles only; no seven-style saving matrix, IME/offline OCR/audio/whole-Apple pixel acceptance.",
+    "Initial restricted ADB attempt could not bind listener; preserved00 failure; authorized elevated call succeeded. No device operation from failed initial call established."
+  ]
+}

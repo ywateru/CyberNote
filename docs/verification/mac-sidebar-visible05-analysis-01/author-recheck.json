@@ -1,0 +1,115 @@
+{
+  "kind": "author recheck, not independent external audit",
+  "unchangedInputs": 35,
+  "cropPixelIdentityChecks": [
+    {
+      "output": "visible228.png",
+      "source": "docs/verification/mac-sidebar-visible05-runtime-01/17-original-visible228.cua-image",
+      "sourceRoi": [
+        180,
+        0,
+        480,
+        110
+      ],
+      "destinationXY": [
+        12,
+        90
+      ],
+      "decodedPixelsExactlyEqual": true
+    },
+    {
+      "output": "visible228.png",
+      "source": "docs/verification/mac-sidebar-visible05-runtime-01/04-new-visible-focused.cua-image",
+      "sourceRoi": [
+        180,
+        0,
+        480,
+        110
+      ],
+      "destinationXY": [
+        12,
+        242
+      ],
+      "decodedPixelsExactlyEqual": true
+    },
+    {
+      "output": "visible208.png",
+      "source": "docs/verification/mac-same-columns-runtime05/06-original-narrow.cua-image",
+      "sourceRoi": [
+        180,
+        0,
+        480,
+        110
+      ],
+      "destinationXY": [
+        12,
+        90
+      ],
+      "decodedPixelsExactlyEqual": true
+    },
+    {
+      "output": "visible208.png",
+      "source": "docs/verification/mac-sidebar-visible05-runtime-01/11-visible-narrow.cua-image",
+      "sourceRoi": [
+        180,
+        0,
+        480,
+        110
+      ],
+      "destinationXY": [
+        12,
+        242
+      ],
+      "decodedPixelsExactlyEqual": true
+    },
+    {
+      "output": "hidden-context.png",
+      "source": "docs/verification/mac-same-columns-runtime05/05-original-hidden.cua-image",
+      "sourceRoi": [
+        0,
+        0,
+        550,
+        90
+      ],
+      "destinationXY": [
+        12,
+        90
+      ],
+      "decodedPixelsExactlyEqual": true
+    },
+    {
+      "output": "hidden-context.png",
+      "source": "docs/verification/mac-sidebar-visible05-runtime-01/18-original-hidden.cua-image",
+      "sourceRoi": [
+        0,
+        0,
+        550,
+        90
+      ],
+      "destinationXY": [
+        12,
+        222
+      ],
+      "decodedPixelsExactlyEqual": true
+    },
+    {
+      "output": "hidden-context.png",
+      "source": "docs/verification/mac-sidebar-visible05-runtime-01/05-top-hide.cua-image",
+      "sourceRoi": [
+        0,
+        0,
+        550,
+        90
+      ],
+      "destinationXY": [
+        12,
+        354
+      ],
+      "decodedPixelsExactlyEqual": true
+    }
+  ],
+  "fullAXCorpusMatches": 14,
+  "unchangedDeltaAX": 1,
+  "menuOnlyAX": 2,
+  "noWholeWindowPixelPass": true
+}

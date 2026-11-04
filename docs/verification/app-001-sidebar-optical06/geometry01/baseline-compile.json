@@ -1,0 +1,21 @@
+{
+  "command": [
+    "xcrun",
+    "clang",
+    "-fobjc-arc",
+    "-fblocks",
+    "-mmacosx-version-min=12.0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-framework",
+    "AppKit",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-sidebar-optical06/geometry01/baseline.m",
+    "-o",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-sidebar-optical06/geometry01/baseline"
+  ],
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-001-sidebar-optical06/geometry01/baseline.m:45:16: error: unused function 'contentOffsetFor' [-Werror,-Wunused-function]\n   45 | static NSPoint contentOffsetFor(NSString *action) {\n      |                ^~~~~~~~~~~~~~~~\n1 error generated.\n",
+  "productionMethodSha256": "7ab37e3b17fc3ab973c9dec406a71df02bb9f75b8e1672e72ea0b379603375fe"
+}

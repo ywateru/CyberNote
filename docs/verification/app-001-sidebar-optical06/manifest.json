@@ -1,0 +1,768 @@
+{
+  "schema": 1,
+  "sourceSha256": "99a24b1ec902c16bb32fe9d2a5cc82887aec62424d9c00c690a464dbf66db46b",
+  "fileCount": 152,
+  "aggregate": "d7f2e3b62147cfd9d5ba85a1484efae11edd07689d2435b0871426e0b2c602ad",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 6428,
+      "sha256": "0a65e1d0b5f458081168f9ee6831d0044fedbb539adeacac289a364e8f7a85ce"
+    },
+    {
+      "path": "appkit-main-failed03.m",
+      "bytes": 9457,
+      "sha256": "0cf104ac1bc8a499d6a86411fae23d86361635ead8356d96b023ee8b3216a77a"
+    },
+    {
+      "path": "appkit-main-failed04.m",
+      "bytes": 9457,
+      "sha256": "0cf104ac1bc8a499d6a86411fae23d86361635ead8356d96b023ee8b3216a77a"
+    },
+    {
+      "path": "appkit-main-run05.m",
+      "bytes": 9580,
+      "sha256": "6da916da490501121d04b047a8e5739bae64576753d202afd561b2a025efcf5b"
+    },
+    {
+      "path": "appkit-main.m",
+      "bytes": 10208,
+      "sha256": "6d976f7728520bc74908082c348fb9b00329cfa5dbbda791bd82730c9e4b9234"
+    },
+    {
+      "path": "appkit01/baseline",
+      "bytes": 221112,
+      "sha256": "0532a92db4d6e6cace93ce2d2e2cab0d3e752df8898ec4282526be6066fccb0e"
+    },
+    {
+      "path": "appkit01/baseline-compile.json",
+      "bytes": 780,
+      "sha256": "32438135ecbe53f466292707e4a6a3a59dcd31549216532eb7a842e0609e74ea"
+    },
+    {
+      "path": "appkit01/baseline-run.json",
+      "bytes": 785410,
+      "sha256": "e38108d14ac797fe3cd86afcba8bfd3c04f8a1cae52bfde070bed1d2e9e4ea39"
+    },
+    {
+      "path": "appkit01/baseline.m",
+      "bytes": 51172,
+      "sha256": "f0657121d4673fd129a700558d1b203259a67bed4d90daaef9d8371b0827615b"
+    },
+    {
+      "path": "appkit01/candidate",
+      "bytes": 221192,
+      "sha256": "31b811e5b3fb83b5978abc11ac6a4cfab01e2e0b67a857964919fd29b5c708dd"
+    },
+    {
+      "path": "appkit01/candidate-compile.json",
+      "bytes": 782,
+      "sha256": "b35cf258ac464e7d8a32963d9caa2182cfc02c00116c3dfce1bf423f9b52a73c"
+    },
+    {
+      "path": "appkit01/candidate-fallback",
+      "bytes": 221248,
+      "sha256": "9160b6148c4ef0f3164937af9f23ac7071fc4866fec7d9075fa3e71db9098c8e"
+    },
+    {
+      "path": "appkit01/candidate-fallback-compile.json",
+      "bytes": 800,
+      "sha256": "7b4062918973f9bd02717fd64b59e79cdd5f1dfeab6dc4b131298fd7836afeff"
+    },
+    {
+      "path": "appkit01/candidate-fallback-run.json",
+      "bytes": 788140,
+      "sha256": "91c15eb967b476b65f69478e2fe13f7062b3d55c9ad7c9a66cf00e66a40da947"
+    },
+    {
+      "path": "appkit01/candidate-fallback.m",
+      "bytes": 51794,
+      "sha256": "db7e23e5bdc5f4a5c0e1bac6087a64888728fa0b997a0e336d4e2ebb55587ae1"
+    },
+    {
+      "path": "appkit01/candidate-run.json",
+      "bytes": 787750,
+      "sha256": "dd6eea809b1af4b4851f2606a787dfb8a762656313bba4c74bf4d594e3793156"
+    },
+    {
+      "path": "appkit01/candidate.m",
+      "bytes": 51614,
+      "sha256": "42fe9dd9ed70540e9f3e7f0d8013a2484238aee12d3a15339b1f8193a36bd1d7"
+    },
+    {
+      "path": "appkit01/failure.json",
+      "bytes": 147,
+      "sha256": "9c2e2a4c54a69018eb0665eb9fbbaf0d1172bb922145758c54f8c4ed56360130"
+    },
+    {
+      "path": "appkit02/baseline",
+      "bytes": 221112,
+      "sha256": "0532a92db4d6e6cace93ce2d2e2cab0d3e752df8898ec4282526be6066fccb0e"
+    },
+    {
+      "path": "appkit02/baseline-compile.json",
+      "bytes": 780,
+      "sha256": "34b228f736dfc40fa312a744f3ed58a8c2f7ca85c928c761da6af0ae53b9636d"
+    },
+    {
+      "path": "appkit02/baseline-run.json",
+      "bytes": 785410,
+      "sha256": "e38108d14ac797fe3cd86afcba8bfd3c04f8a1cae52bfde070bed1d2e9e4ea39"
+    },
+    {
+      "path": "appkit02/baseline.m",
+      "bytes": 51172,
+      "sha256": "f0657121d4673fd129a700558d1b203259a67bed4d90daaef9d8371b0827615b"
+    },
+    {
+      "path": "appkit02/candidate",
+      "bytes": 221192,
+      "sha256": "31b811e5b3fb83b5978abc11ac6a4cfab01e2e0b67a857964919fd29b5c708dd"
+    },
+    {
+      "path": "appkit02/candidate-compile.json",
+      "bytes": 782,
+      "sha256": "2421e7e783d942dcb8f83b013abdd3fcabca7184389660c7a0ee159941af0dca"
+    },
+    {
+      "path": "appkit02/candidate-fallback",
+      "bytes": 221248,
+      "sha256": "9160b6148c4ef0f3164937af9f23ac7071fc4866fec7d9075fa3e71db9098c8e"
+    },
+    {
+      "path": "appkit02/candidate-fallback-compile.json",
+      "bytes": 800,
+      "sha256": "f8b923b2f2d4200f61e33ea8f42aebeeccca5304cc6be659d5f84ecb20fd3124"
+    },
+    {
+      "path": "appkit02/candidate-fallback-run.json",
+      "bytes": 788140,
+      "sha256": "91c15eb967b476b65f69478e2fe13f7062b3d55c9ad7c9a66cf00e66a40da947"
+    },
+    {
+      "path": "appkit02/candidate-fallback.m",
+      "bytes": 51794,
+      "sha256": "db7e23e5bdc5f4a5c0e1bac6087a64888728fa0b997a0e336d4e2ebb55587ae1"
+    },
+    {
+      "path": "appkit02/candidate-run.json",
+      "bytes": 787750,
+      "sha256": "dd6eea809b1af4b4851f2606a787dfb8a762656313bba4c74bf4d594e3793156"
+    },
+    {
+      "path": "appkit02/candidate.m",
+      "bytes": 51614,
+      "sha256": "42fe9dd9ed70540e9f3e7f0d8013a2484238aee12d3a15339b1f8193a36bd1d7"
+    },
+    {
+      "path": "appkit02/result.json",
+      "bytes": 1597,
+      "sha256": "9db58c7f3435a96dfe2df95b6ee8ada13686f7cac3676fe5e06eb7cced9ae277"
+    },
+    {
+      "path": "appkit03/baseline",
+      "bytes": 221928,
+      "sha256": "40196ec3353aae23224c85a4c806a60f0bfb8be74555e782d15c26719bd7c413"
+    },
+    {
+      "path": "appkit03/baseline-compile.json",
+      "bytes": 780,
+      "sha256": "db3406d5b225f1d3d8bb573078129fdafee51c179872099f7dc246cdb4a5b977"
+    },
+    {
+      "path": "appkit03/baseline-run.json",
+      "bytes": 799841,
+      "sha256": "2073b047860d89d5ab9d04f4041c500d055bf010155dcee4bd2292be76971597"
+    },
+    {
+      "path": "appkit03/baseline.m",
+      "bytes": 52450,
+      "sha256": "65ed546435f1eb7a948e0a408f5c440849eea86f8451c4931fcb9d5ad4e9b310"
+    },
+    {
+      "path": "appkit03/candidate",
+      "bytes": 222904,
+      "sha256": "0d63427b9c70597be7ff6236b6d4c78b3bbf48de8545a4f7417e784fdb376f5b"
+    },
+    {
+      "path": "appkit03/candidate-compile.json",
+      "bytes": 782,
+      "sha256": "29d54f207171208c879f096a31122e4412ce9eff3f1df81109a75ece3e9dbe99"
+    },
+    {
+      "path": "appkit03/candidate-run.json",
+      "bytes": 118,
+      "sha256": "85b66c75f9dd58350cf6d746f77fe3fcdc9c8e536aa3e86bc3a8106a37ff1148"
+    },
+    {
+      "path": "appkit03/candidate.m",
+      "bytes": 53687,
+      "sha256": "ae09e2aa363fe8daa0a55900ead9407fefa562574d6d8dd679cc4abf45924b67"
+    },
+    {
+      "path": "appkit03/failure.json",
+      "bytes": 91,
+      "sha256": "4873fc289c1ea0eb00f7dd59950792d469643d10a7f759903f5bf62e35792055"
+    },
+    {
+      "path": "appkit04/baseline",
+      "bytes": 221928,
+      "sha256": "40196ec3353aae23224c85a4c806a60f0bfb8be74555e782d15c26719bd7c413"
+    },
+    {
+      "path": "appkit04/baseline-compile.json",
+      "bytes": 780,
+      "sha256": "62b9e6513051500ac1e7c1787403be25ff0f9a9372166f74a2ec0152407e3b17"
+    },
+    {
+      "path": "appkit04/baseline-run.json",
+      "bytes": 799841,
+      "sha256": "2073b047860d89d5ab9d04f4041c500d055bf010155dcee4bd2292be76971597"
+    },
+    {
+      "path": "appkit04/baseline.m",
+      "bytes": 52450,
+      "sha256": "65ed546435f1eb7a948e0a408f5c440849eea86f8451c4931fcb9d5ad4e9b310"
+    },
+    {
+      "path": "appkit04/candidate",
+      "bytes": 222840,
+      "sha256": "24f5a64939d169f9994286ca8b906206c5c7166c5cf3aa364ac3a8294b36a6c9"
+    },
+    {
+      "path": "appkit04/candidate-compile.json",
+      "bytes": 782,
+      "sha256": "d8e9f1feae2b94f8042d35c7330534a29fac1a7aaf5df6ceb1066c9528b6515a"
+    },
+    {
+      "path": "appkit04/candidate-run.json",
+      "bytes": 118,
+      "sha256": "85b66c75f9dd58350cf6d746f77fe3fcdc9c8e536aa3e86bc3a8106a37ff1148"
+    },
+    {
+      "path": "appkit04/candidate.m",
+      "bytes": 53467,
+      "sha256": "f37ead5567cb7a70df8c3b475167b10554459318a9f09cf1c488c96272e6139c"
+    },
+    {
+      "path": "appkit04/failure.json",
+      "bytes": 91,
+      "sha256": "4873fc289c1ea0eb00f7dd59950792d469643d10a7f759903f5bf62e35792055"
+    },
+    {
+      "path": "appkit05/baseline",
+      "bytes": 222120,
+      "sha256": "9f4b9bdab52104fdd6ed5318209728b58c6e7437326f9d2f175f77e7d2aa2ad7"
+    },
+    {
+      "path": "appkit05/baseline-compile.json",
+      "bytes": 780,
+      "sha256": "a5eef25d48c35ef54d564fe0027743a4efca250a678c2c3b9e64261d7b688bb4"
+    },
+    {
+      "path": "appkit05/baseline-run.json",
+      "bytes": 799841,
+      "sha256": "2073b047860d89d5ab9d04f4041c500d055bf010155dcee4bd2292be76971597"
+    },
+    {
+      "path": "appkit05/baseline.m",
+      "bytes": 52573,
+      "sha256": "25d8c1e2c1412eb8fe0fab1c6cb2219fded7f76e8c68333596af47402caed24e"
+    },
+    {
+      "path": "appkit05/candidate",
+      "bytes": 223016,
+      "sha256": "c0db085e4677b72e9be237439da231a58b7af691ec64472e51321b7574f0d3d2"
+    },
+    {
+      "path": "appkit05/candidate-compile.json",
+      "bytes": 782,
+      "sha256": "19d105c448c781bdc4c264c3e27560436eb5492197d45099b6145bc62e8a1494"
+    },
+    {
+      "path": "appkit05/candidate-contrast-policy",
+      "bytes": 223592,
+      "sha256": "91bc601a3a35811cf1ff1de4aa9dad391d456a469c4af7e13fc8368436ca6881"
+    },
+    {
+      "path": "appkit05/candidate-contrast-policy-compile.json",
+      "bytes": 814,
+      "sha256": "f8a5c9eeb85fa9bf0be9a58a58953931e2b4bc74a3ec7002404510013f9b9a17"
+    },
+    {
+      "path": "appkit05/candidate-contrast-policy-run.json",
+      "bytes": 802223,
+      "sha256": "50702570e27ea9732a070e6008a6321e8156b65e19baa7ecf2bc2c553a532750"
+    },
+    {
+      "path": "appkit05/candidate-contrast-policy.m",
+      "bytes": 54092,
+      "sha256": "2292cb72e44fbdd3ba8535c947fea6091bf80b5d7362d5fa063d9c4242e89217"
+    },
+    {
+      "path": "appkit05/candidate-fallback",
+      "bytes": 223088,
+      "sha256": "734be5c2d4c2bee7381edf8bc6f0dd8529d2a5c18b6b72f5a3c0fadebb663e7d"
+    },
+    {
+      "path": "appkit05/candidate-fallback-compile.json",
+      "bytes": 800,
+      "sha256": "2b9750ed93db2fc1e9283778cf545afd405e618226770f7a91cdf8d04641a5d7"
+    },
+    {
+      "path": "appkit05/candidate-fallback-run.json",
+      "bytes": 802620,
+      "sha256": "b4142f38638a54a335d8b2a0c5253d97506bdd91bf6a20bffc31dff0f51ba1bd"
+    },
+    {
+      "path": "appkit05/candidate-fallback.m",
+      "bytes": 53858,
+      "sha256": "abe6f3840809c34bcdfa662c49831dfee72bb855cd1cf64ca38cf57456bdf3fb"
+    },
+    {
+      "path": "appkit05/candidate-run.json",
+      "bytes": 802223,
+      "sha256": "50702570e27ea9732a070e6008a6321e8156b65e19baa7ecf2bc2c553a532750"
+    },
+    {
+      "path": "appkit05/candidate.m",
+      "bytes": 53678,
+      "sha256": "d33aaf85d6ffafcbc9a18ede2b4eefe0625014562a835cf519648f1a659b1481"
+    },
+    {
+      "path": "appkit05/failure.json",
+      "bytes": 1042,
+      "sha256": "93857e6c2c18cdf935ef10d32cf933ffe023c69d61b0a1049279fb6c600516ae"
+    },
+    {
+      "path": "appkit06/baseline",
+      "bytes": 222120,
+      "sha256": "4b47524e105d77b970110d4690e9c7ed58532a469415fce4335170828a31b1c8"
+    },
+    {
+      "path": "appkit06/baseline-compile.json",
+      "bytes": 780,
+      "sha256": "1b87cb7659f09d550355d256fafe08dded4a8d48c73c9d7e3475cf09682a1a2c"
+    },
+    {
+      "path": "appkit06/baseline-run.json",
+      "bytes": 808993,
+      "sha256": "9ec754c92a116cc36e7a4ecfa1a7c482f4a2507a43fe9804619c608486fdb0a3"
+    },
+    {
+      "path": "appkit06/baseline.m",
+      "bytes": 53201,
+      "sha256": "10d538c9ed2bf129a0617c59497ed99e1861296e011dbdd1c639866547543b5e"
+    },
+    {
+      "path": "appkit06/candidate",
+      "bytes": 239528,
+      "sha256": "0312686ed4b4363fabec359c1fb8a4321855e27542c4b45340d7e66cbcf4b28f"
+    },
+    {
+      "path": "appkit06/candidate-compile.json",
+      "bytes": 782,
+      "sha256": "59ede686c12cca2bf1d0d6b4f96986123dbf17139ba2f2fdd93840a5c82b1023"
+    },
+    {
+      "path": "appkit06/candidate-contrast-policy",
+      "bytes": 240104,
+      "sha256": "1d31b1bfc69c354830c7673808868cd9cac40761c390ac66efb5be03b3879ea1"
+    },
+    {
+      "path": "appkit06/candidate-contrast-policy-compile.json",
+      "bytes": 814,
+      "sha256": "311731b7ff2d38b0ca635909ac549c95d4af283d77687126c70a580adfb43028"
+    },
+    {
+      "path": "appkit06/candidate-contrast-policy-run.json",
+      "bytes": 811399,
+      "sha256": "66e43e1c60ba045a92837d0972fef2d972a526f8a3f976386047d7086fa558b9"
+    },
+    {
+      "path": "appkit06/candidate-contrast-policy.m",
+      "bytes": 54756,
+      "sha256": "d6687ddc6be8e5038e6aeb819dbb3663b5e44afb8720edf9c4624bbbf6647abe"
+    },
+    {
+      "path": "appkit06/candidate-fallback",
+      "bytes": 239600,
+      "sha256": "72b21b05719acec70e36570a7112587fa1b7311e36436659935a13f8e98e1ad8"
+    },
+    {
+      "path": "appkit06/candidate-fallback-compile.json",
+      "bytes": 800,
+      "sha256": "e6f1f006f840b3a40e7f9e1f4fb268f9a17a19816cf25061f00aef4c811ad0c1"
+    },
+    {
+      "path": "appkit06/candidate-fallback-run.json",
+      "bytes": 811800,
+      "sha256": "1ed1cab1eef49dc45585d67aa15958aaeaf0804a1ded7df7f80d41c3c96cde35"
+    },
+    {
+      "path": "appkit06/candidate-fallback.m",
+      "bytes": 54522,
+      "sha256": "0e02d7e868533448d4edafbb1d35653b7de0398c59a25e3ad69311ed965669d3"
+    },
+    {
+      "path": "appkit06/candidate-run.json",
+      "bytes": 811399,
+      "sha256": "66e43e1c60ba045a92837d0972fef2d972a526f8a3f976386047d7086fa558b9"
+    },
+    {
+      "path": "appkit06/candidate.m",
+      "bytes": 54342,
+      "sha256": "f741f1fc0664df20c394e9c644402a4c189b2eb9d9291f48ffb02897b35b015e"
+    },
+    {
+      "path": "appkit06/result.json",
+      "bytes": 2036,
+      "sha256": "00a1e106ec11829d0b8e22a3af8aa73b3b69226021c20779c1aad37636a5e87b"
+    },
+    {
+      "path": "baseline-toolbar.m",
+      "bytes": 42992,
+      "sha256": "0b9604a73df6f2b1756cfd8489fff133a97c2cc3810df67372ec5ab878067da5"
+    },
+    {
+      "path": "build.json",
+      "bytes": 969,
+      "sha256": "c2fea9d4ad25607f8f64dd3ae0fe10d7d7621ab8efdafbe823815f93a45e9d8b"
+    },
+    {
+      "path": "candidate-before-high-contrast-guard.m",
+      "bytes": 44209,
+      "sha256": "922b630e95b056292fdf258a4ad258b520716b85f7d08fb61aa6036df92efbfb"
+    },
+    {
+      "path": "candidate-before-system-contrast-guard.m",
+      "bytes": 43989,
+      "sha256": "84afcea8377088e17f62f943ab25de01fbc8f029f87cf48f307ace283aa3bec3"
+    },
+    {
+      "path": "check-appkit-failed01.py",
+      "bytes": 4161,
+      "sha256": "6225f85da1bb013373add2f79017198961531bc10f05b131a4e225d06fb484c2"
+    },
+    {
+      "path": "check-appkit-failed03.py",
+      "bytes": 4161,
+      "sha256": "18adcd663e7480ea49aaf69490acda3851e6c9964362d320a872a4328cd82981"
+    },
+    {
+      "path": "check-appkit-failed04.py",
+      "bytes": 4161,
+      "sha256": "4c1cffaef1339aa0610087088ea77b6bc0f33740f0088b2288f79cfa7655944a"
+    },
+    {
+      "path": "check-appkit-failed05.py",
+      "bytes": 4930,
+      "sha256": "8890896f4b056490a2376016a870c3dd35c8f0f20e938764f481be5b7c022da8"
+    },
+    {
+      "path": "check-appkit-run02.py",
+      "bytes": 4161,
+      "sha256": "159fccc0a01f07dee7d226b7e8a4297b800166fd88130678966b4af1b68a1900"
+    },
+    {
+      "path": "check-appkit.py",
+      "bytes": 4930,
+      "sha256": "89495306ae06ccc6b6e890c1960aad7f314ace778f460b07d1d677874434bcdb"
+    },
+    {
+      "path": "check-geometry-failed01.py",
+      "bytes": 8793,
+      "sha256": "e8f2fabd56bc457ca32ab24fdde79c88ed63439f7cb918fabd978a9ef3cbe2e5"
+    },
+    {
+      "path": "check-geometry-run02.py",
+      "bytes": 8837,
+      "sha256": "ed819d19f051604135c61014ee995363d9414995acbaf5c8ba23179c914051e5"
+    },
+    {
+      "path": "check-geometry-run03.py",
+      "bytes": 9557,
+      "sha256": "9594502e34d9d3e2aaa2e21727ad0d1d96975934821a24c4fd64a162a0807ba3"
+    },
+    {
+      "path": "check-geometry.py",
+      "bytes": 10082,
+      "sha256": "cf20052d6b21a524cad07ed9207cf9d9cffeadf1d5db456680bf7a040d49b73d"
+    },
+    {
+      "path": "geometry-cases.json",
+      "bytes": 187976,
+      "sha256": "1236050d1b7db89541b81a8644f7d195bf4743efeb38c3021cdb35b17a1e5e2b"
+    },
+    {
+      "path": "geometry01/baseline-compile.json",
+      "bytes": 878,
+      "sha256": "1b542fa23717ea931edc4ae6567a4833439a8f7f49e7a49ebaaf779ba781bfc4"
+    },
+    {
+      "path": "geometry01/baseline.m",
+      "bytes": 13629,
+      "sha256": "9160dc119db1357c694d60762f425c8fcfe783b3e3c702aeba87d39777600947"
+    },
+    {
+      "path": "geometry01/failure.json",
+      "bytes": 51,
+      "sha256": "610ca0751be4c497cb95b49a0dad3e4adc84effc44ba4abfa80546fb12b33d77"
+    },
+    {
+      "path": "geometry02/baseline",
+      "bytes": 94824,
+      "sha256": "d80a17d8bf1f20a0171302a8c3313362c96060dc5f167e90aabfca05be351014"
+    },
+    {
+      "path": "geometry02/baseline-compile.json",
+      "bytes": 571,
+      "sha256": "7462abc8f6fe3f6f6cc413974ed4d4f26ebfac0b4c8459f84d05bf48bc6e2863"
+    },
+    {
+      "path": "geometry02/baseline-run.json",
+      "bytes": 702976,
+      "sha256": "318f5299c545cbfb8defb6afa03e8c646a8f973bc409d0ce438a51ae2bbfa944"
+    },
+    {
+      "path": "geometry02/baseline.m",
+      "bytes": 13139,
+      "sha256": "d2e87d75a0f431d94a6929051d76a2ed6e75043ebf233432b1cfd88ed6f45b0e"
+    },
+    {
+      "path": "geometry02/candidate",
+      "bytes": 95000,
+      "sha256": "1e095e5e1915f9fac75241f4c3fef9a64cd9fe987d76ff5d12bb80cae0f97a32"
+    },
+    {
+      "path": "geometry02/candidate-compile.json",
+      "bytes": 573,
+      "sha256": "7cba7ab408bb120ab4b80c1e90ba762a35c6045eb897f8f1ec4707f966bfcf20"
+    },
+    {
+      "path": "geometry02/candidate-run.json",
+      "bytes": 702976,
+      "sha256": "374eff178a675000514d358697c23f845b65b61ce1d4af1c141b8b6419bc92c7"
+    },
+    {
+      "path": "geometry02/candidate.m",
+      "bytes": 14051,
+      "sha256": "9054861b8a0b5648b73999c2b97cf17b68c2d71acb9369b15e2c960358ec00dd"
+    },
+    {
+      "path": "geometry02/result.json",
+      "bytes": 1374260,
+      "sha256": "0f09a9b400984d3ea3cd355e730aeb6a4acbb376f2058be246fbd1e5a93ea351"
+    },
+    {
+      "path": "geometry03/baseline",
+      "bytes": 94824,
+      "sha256": "d80a17d8bf1f20a0171302a8c3313362c96060dc5f167e90aabfca05be351014"
+    },
+    {
+      "path": "geometry03/baseline-compile.json",
+      "bytes": 571,
+      "sha256": "b0c42feae2ff488b6afec210e453c58c531fb61b88fdd3427af1a7098681448c"
+    },
+    {
+      "path": "geometry03/baseline-run.json",
+      "bytes": 716118,
+      "sha256": "b92781fb3710079c4d523457c05bcbcc74ff8911de8299eb9ce4c2a6133f6c6c"
+    },
+    {
+      "path": "geometry03/baseline.m",
+      "bytes": 13139,
+      "sha256": "d2e87d75a0f431d94a6929051d76a2ed6e75043ebf233432b1cfd88ed6f45b0e"
+    },
+    {
+      "path": "geometry03/candidate",
+      "bytes": 95000,
+      "sha256": "1e095e5e1915f9fac75241f4c3fef9a64cd9fe987d76ff5d12bb80cae0f97a32"
+    },
+    {
+      "path": "geometry03/candidate-compile.json",
+      "bytes": 573,
+      "sha256": "e935e301a33681352429654d91b9cdd554a02a73269596f366f674890d35c965"
+    },
+    {
+      "path": "geometry03/candidate-run.json",
+      "bytes": 716118,
+      "sha256": "50eb1f02d59e1238eb539763a984ed5392d4525222cf19091ae2fdc65db827aa"
+    },
+    {
+      "path": "geometry03/candidate.m",
+      "bytes": 14051,
+      "sha256": "9054861b8a0b5648b73999c2b97cf17b68c2d71acb9369b15e2c960358ec00dd"
+    },
+    {
+      "path": "geometry03/result.json",
+      "bytes": 1400102,
+      "sha256": "f9653855e6ce655fac19066e8d2d4f4a7f29dad42c0f56ca4b6a64d7fbfbc55d"
+    },
+    {
+      "path": "geometry04/baseline",
+      "bytes": 94824,
+      "sha256": "76293c892bf83c0eed483ac21204ac17af3f1587dd16e3f804dbfb142ec902d9"
+    },
+    {
+      "path": "geometry04/baseline-compile.json",
+      "bytes": 571,
+      "sha256": "8b7979f031fdc42d3297f8fadfe04a3d4f0974d2dea926d9b00b51f0761b2919"
+    },
+    {
+      "path": "geometry04/baseline-run.json",
+      "bytes": 723985,
+      "sha256": "b27d3aa4e469a3fb552d75ea98e18634853bd548c831585f27ba017a85f08939"
+    },
+    {
+      "path": "geometry04/baseline.m",
+      "bytes": 13305,
+      "sha256": "cb1b2c7bc6cf363d89f0808b727b2ee1d93da227827c16b82930fca3e6c28697"
+    },
+    {
+      "path": "geometry04/candidate",
+      "bytes": 95000,
+      "sha256": "b664caabbad39206b3859e02dfaf50737fa6715e75df3f6c32dc18639a8a590b"
+    },
+    {
+      "path": "geometry04/candidate-compile.json",
+      "bytes": 573,
+      "sha256": "92b8e95713faef06ec12923309736977a692d664bc5aee58a72f169e08f1d842"
+    },
+    {
+      "path": "geometry04/candidate-run.json",
+      "bytes": 723985,
+      "sha256": "fa011f937bf1526caba5cda44786c43b0d9efb753d389f65260937a59c443c7c"
+    },
+    {
+      "path": "geometry04/candidate.m",
+      "bytes": 14217,
+      "sha256": "37069784c8ea3205e7bf5864b46723e9fbd49b7a25b144b0c26a06fb8dd8584e"
+    },
+    {
+      "path": "geometry04/result.json",
+      "bytes": 1415632,
+      "sha256": "c931d8d4eb2fad99179d6415c458747bee112e2f7fb5cfda37473a2dc3f55d6c"
+    },
+    {
+      "path": "identity-open.json",
+      "bytes": 1220668,
+      "sha256": "de7aa81d438c25d4e6a9724b51bf9b9e4eaf813112ef9594989189cff765914d"
+    },
+    {
+      "path": "native-toolbar.json",
+      "bytes": 1983,
+      "sha256": "13010862369eecb35eac462f7f95a3327158173ef956ca04785b5051df8dd900"
+    },
+    {
+      "path": "product.patch",
+      "bytes": 5122,
+      "sha256": "b413517bb5e215e5a28c7649b4c323f078e01eec931f74f7d717c63468247ba5"
+    },
+    {
+      "path": "source-audit-first-assumption.json",
+      "bytes": 1113,
+      "sha256": "1a4b556769cb459670c354a30964fa0805fbc294ad0260f7a168b962738cc0b5"
+    },
+    {
+      "path": "source-audit.json",
+      "bytes": 1432,
+      "sha256": "f1be0b67649c93d9a66c91c56900ad1136c3f1f051a7e8537772b5038817b780"
+    },
+    {
+      "path": "strict-objc.json",
+      "bytes": 416,
+      "sha256": "fb696da1da11bf524790bd7f9488541fe02bfa17fdeedf08e4c2bbbd1219f467"
+    },
+    {
+      "path": "tint-colors",
+      "bytes": 53256,
+      "sha256": "a86a236f954b7f72edc330da49c0d297fb6ab9ea534614d5d338ad3828d8ec34"
+    },
+    {
+      "path": "tint-colors-compile.json",
+      "bytes": 377,
+      "sha256": "24e517e52b7773d12c506273cf8628192bab9b962fbc39c99981fe91d5f97576"
+    },
+    {
+      "path": "tint-colors-production",
+      "bytes": 54440,
+      "sha256": "062572eea6f99f60084f787fe2630419a42c4f85c9c626eb592c007abf8c81da"
+    },
+    {
+      "path": "tint-colors-production-compile.json",
+      "bytes": 481,
+      "sha256": "cf09ec00506355bce49630d89c015f92cc4748ae20171a2d4805472c3312b10f"
+    },
+    {
+      "path": "tint-colors-production-run.json",
+      "bytes": 9627,
+      "sha256": "8b8436724a3fc2cc741383ee88db62bf7a495c98d713aade65383fc1dcfb0774"
+    },
+    {
+      "path": "tint-colors-production.json",
+      "bytes": 8698,
+      "sha256": "58d5fb11e395d571e34368f721e5f40030b55fa34236f5d9c0aeaf822327c7ed"
+    },
+    {
+      "path": "tint-colors-production.m",
+      "bytes": 2415,
+      "sha256": "1f1976ffb62b3ad803de10bdf4610dd4327c53f2693fac80e7ceb50aee5f4781"
+    },
+    {
+      "path": "tint-colors-provider",
+      "bytes": 54280,
+      "sha256": "d4f6be240c938dbe5d9a30ff6d3fb197c87b7f85888692167e42f1390df77a26"
+    },
+    {
+      "path": "tint-colors-provider-compile.json",
+      "bytes": 395,
+      "sha256": "8903cb2ca9b662b281dbc7528ca2c6b9b9801e79d2c674b6fac6cb5b247863ec"
+    },
+    {
+      "path": "tint-colors-provider-run.json",
+      "bytes": 9635,
+      "sha256": "4829aca4381739bd71b3a31a72c767c82a74cc1639266f4c87ec8393a573dca9"
+    },
+    {
+      "path": "tint-colors-provider.json",
+      "bytes": 8706,
+      "sha256": "ee3d9df957c2416f21432de8cf5f13f7ce9d394d557e06e1a941e64df2b02234"
+    },
+    {
+      "path": "tint-colors-provider.m",
+      "bytes": 2009,
+      "sha256": "03437dc6c644251565951bea90ec90d6be315fa698a41c4a4579a3359b5307fd"
+    },
+    {
+      "path": "tint-colors-run.json",
+      "bytes": 7983,
+      "sha256": "29310ac8250adc7a6279d151ff5a492aa158d63fb4fee44888107cd9c21b7b7d"
+    },
+    {
+      "path": "tint-colors.json",
+      "bytes": 7198,
+      "sha256": "572ca70c6c2b75886842c6a606ee992a254f21092eca03fa39f127fa164e5e63"
+    },
+    {
+      "path": "tint-colors.m",
+      "bytes": 1642,
+      "sha256": "d5755518ca9f9e90e6670df99bca4bd958c795c1e2cf4c1e276c83f7ed0238d2"
+    },
+    {
+      "path": "tint-diagnostic",
+      "bytes": 54672,
+      "sha256": "0d400fd473f9c42030c940dee0c48d06ead88d129e517dc9b3a85ce3227fcfb1"
+    },
+    {
+      "path": "tint-diagnostic-run.json",
+      "bytes": 10157,
+      "sha256": "6f281ce7bfcf53971be00ff8a67208cd5c3afdda6167012a9f1e3bc84b92bdc9"
+    },
+    {
+      "path": "tint-diagnostic.m",
+      "bytes": 2412,
+      "sha256": "2b93524ef2214991175b4b08fe185774d535f66abf7e8f63e6547f066030f761"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "status": "INCOMPLETE",
+  "library": "lib/arm64-v8a/libnotes_clone_lib.so",
+  "librarySha256": "f25e35afd135f57069d1410734533a48f94b73a3701f6ef4b88173ea3679ef4f",
+  "assets": [
+    {
+      "path": "assets/index-B6ehXP_1.css",
+      "expectedBytes": 57388,
+      "expectedSha256": "f656b0340a3276cbcaf91518468dda58a1396ae002b94398991e4f6d9a893ebe",
+      "filenameOffsets": [
+        2694515
+      ],
+      "exactMatch": {
+        "offset": 2694533,
+        "bytes": 57388,
+        "sha256": "f656b0340a3276cbcaf91518468dda58a1396ae002b94398991e4f6d9a893ebe",
+        "compressedBytes": 13800
+      },
+      "otherDecoded": []
+    },
+    {
+      "path": "assets/index-DJ-LyOuL.js",
+      "expectedBytes": 936869,
+      "expectedSha256": "7360fb711564032aaa66f1259d738e502369e051ecd971278049ded74e3c7fa6",
+      "filenameOffsets": [
+        2708341
+      ],
+      "exactMatch": {
+        "offset": 2708358,
+        "bytes": 936869,
+        "sha256": "7360fb711564032aaa66f1259d738e502369e051ecd971278049ded74e3c7fa6",
+        "compressedBytes": 306362
+      },
+      "otherDecoded": []
+    },
+    {
+      "path": "index.html",
+      "expectedBytes": 498,
+      "expectedSha256": "1a6b8fbdff3283afdefb99be3825d4efd256c5b5184713ba267f1a235d602ad2",
+      "filenameOffsets": [
+        1553537,
+        1557197,
+        1630177,
+        3014721,
+        3015587,
+        3015876,
+        3015926,
+        3030666,
+        3342444,
+        3441409,
+        3446640,
+        3448248
+      ],
+      "exactMatch": null,
+      "otherDecoded": [
+        {
+          "offset": 3014731,
+          "bytes": 478,
+          "sha256": "8e45ecd828bf323df3aceeb31c7a6fb5d6ff745dbfac5f010e60518fdf63278a",
+          "compressedBytes": 331
+        }
+      ]
+    }
+  ],
+  "method": "Decode Brotli streams immediately following embedded asset filenames; compare complete decoded bytes to exact dist files and build-record SHA. No execution/injection."
+}
