@@ -1,0 +1,14 @@
+diff --git a/src/style.css b/src/style.css
+index 2b1c3ab..fbcc54f 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -1993,6 +1993,9 @@ a {
+   .mobile .folder-footer > button {
+     color: var(--accent);
+   }
++  .mobile.page-folders .folder-footer {
++    padding-right: 14px;
++  }
+   .mobile.page-folders .folder-footer > button:first-child {
+     position: relative;
+   }

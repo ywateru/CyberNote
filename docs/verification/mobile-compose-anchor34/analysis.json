@@ -1,0 +1,383 @@
+{
+  "scope": "Single layout candidate; full production App rendering and finite callbacks in isolated Chrome; saved native Android07 reference is baseline only",
+  "phaseStatuses": {
+    "baseline": "pass",
+    "candidate": "pass"
+  },
+  "chosenCandidate": {
+    "selector": ".mobile.page-folders .folder-footer",
+    "property": "padding-right",
+    "before": 17,
+    "after": 14,
+    "buttonAndSvgShiftCssPx": 3,
+    "selectionReason": "Actual Android07 reference-normalized center deficit1.7333 corresponds to3.03896 current CSS px. Choose integer3 CSS shift; do not optimize against host capture rounding or resize SVG."
+  },
+  "elementCount": 345,
+  "allDifferences": [
+    {
+      "index": 77,
+      "tag": "DIV",
+      "class": "folder-footer",
+      "computed": {
+        "padding-inline-end": [
+          "17px",
+          "14px"
+        ],
+        "padding-right": [
+          "17px",
+          "14px"
+        ]
+      },
+      "beforeRect": {
+        "x": 0,
+        "y": 699,
+        "width": 393,
+        "height": 52
+      },
+      "afterRect": {
+        "x": 0,
+        "y": 699,
+        "width": 393,
+        "height": 52
+      }
+    },
+    {
+      "index": 83,
+      "tag": "BUTTON",
+      "class": "icon-button  ",
+      "computed": {},
+      "beforeRect": {
+        "x": 346,
+        "y": 707.5,
+        "width": 30,
+        "height": 35
+      },
+      "afterRect": {
+        "x": 349,
+        "y": 707.5,
+        "width": 30,
+        "height": 35
+      }
+    },
+    {
+      "index": 84,
+      "tag": "svg",
+      "class": "lucide lucide-square-pen",
+      "computed": {},
+      "beforeRect": {
+        "x": 349,
+        "y": 713,
+        "width": 24,
+        "height": 24
+      },
+      "afterRect": {
+        "x": 352,
+        "y": 713,
+        "width": 24,
+        "height": 24
+      }
+    },
+    {
+      "index": 85,
+      "tag": "path",
+      "class": null,
+      "computed": {},
+      "beforeRect": {
+        "x": 352,
+        "y": 716,
+        "width": 18,
+        "height": 18
+      },
+      "afterRect": {
+        "x": 355,
+        "y": 716,
+        "width": 18,
+        "height": 18
+      }
+    },
+    {
+      "index": 86,
+      "tag": "path",
+      "class": null,
+      "computed": {},
+      "beforeRect": {
+        "x": 356.9960021972656,
+        "y": 715.00439453125,
+        "width": 13.999603271484375,
+        "height": 13.9996337890625
+      },
+      "afterRect": {
+        "x": 359.9960021972656,
+        "y": 715.00439453125,
+        "width": 13.999603271484375,
+        "height": 13.9996337890625
+      }
+    }
+  ],
+  "leftButtonAllFieldsUnchanged": true,
+  "pathsUnchanged": true,
+  "candidateBBoxMatchesReadiness32": true,
+  "initialBaselineBBoxLimitation": "Initial snapshot used JSON.stringify(SVGRect), yielding{}. Candidate capture explicitly serializes geometry; baseline path strings and computed/rect equality remain available, plus sealed readiness32 actual getBBox. No baseline geometry is invented.",
+  "controls": {
+    "desktop": {
+      "elementsCompared": 315,
+      "allElementsComputedRectTextEqual": true,
+      "leftViewportAppAndStorageEqual": true,
+      "pixelDifference": null,
+      "baseline": "baseline/desktop.png",
+      "candidate": "candidate/desktop.png"
+    },
+    "notes": {
+      "elementsCompared": 133,
+      "allElementsComputedRectTextEqual": true,
+      "leftViewportAppAndStorageEqual": true,
+      "pixelDifference": null,
+      "baseline": "baseline-stable-notes-retry01/notes.png",
+      "candidate": "candidate-stable-notes/notes.png"
+    }
+  },
+  "folderPixelDifferenceBbox": [
+    966,
+    1964,
+    1031,
+    2021
+  ],
+  "hostInitialNotesTransition": "Initial notes captures at200ms were still inside original240ms animation. Those raw files retained. Only notes controls rerun after waiting for actual animation.finished.",
+  "stableNotesAttempt01": "Parallel control attempt hit local Vite connection port collision in baseline only; its JSON and PNG retained. Candidate passed; baseline retry01 ran alone and passed. No product change arose from transport error.",
+  "records": {
+    "original14": {
+      "path": "references/mobile/frames-2s/frame-008.png",
+      "imageSize": [
+        224,
+        480
+      ],
+      "roi": [
+        192,
+        434,
+        220,
+        463
+      ],
+      "widthRatio": 1.0,
+      "masks": {
+        "gold_strict": {
+          "nativeBbox": [
+            202,
+            442,
+            214,
+            454
+          ],
+          "pixels": 39,
+          "leftInReferencePx": 202.0,
+          "rightInReferencePx": 214.0,
+          "centerXInReferencePx": 208.0,
+          "widthInReferencePx": 12.0,
+          "heightInReferencePx": 12.0
+        },
+        "gold_loose": {
+          "nativeBbox": [
+            202,
+            442,
+            214,
+            454
+          ],
+          "pixels": 92,
+          "leftInReferencePx": 202.0,
+          "rightInReferencePx": 214.0,
+          "centerXInReferencePx": 208.0,
+          "widthInReferencePx": 12.0,
+          "heightInReferencePx": 12.0
+        }
+      }
+    },
+    "original62": {
+      "path": "references/mobile/frames-2s/frame-032.png",
+      "imageSize": [
+        224,
+        480
+      ],
+      "roi": [
+        192,
+        434,
+        220,
+        463
+      ],
+      "widthRatio": 1.0,
+      "masks": {
+        "gold_strict": {
+          "nativeBbox": [
+            202,
+            442,
+            214,
+            454
+          ],
+          "pixels": 39,
+          "leftInReferencePx": 202.0,
+          "rightInReferencePx": 214.0,
+          "centerXInReferencePx": 208.0,
+          "widthInReferencePx": 12.0,
+          "heightInReferencePx": 12.0
+        },
+        "gold_loose": {
+          "nativeBbox": [
+            202,
+            442,
+            214,
+            454
+          ],
+          "pixels": 99,
+          "leftInReferencePx": 202.0,
+          "rightInReferencePx": 214.0,
+          "centerXInReferencePx": 208.0,
+          "widthInReferencePx": 12.0,
+          "heightInReferencePx": 12.0
+        }
+      }
+    },
+    "android07": {
+      "path": "docs/verification/android-folder-visual-runtime29/19-after-restart.png",
+      "imageSize": [
+        1080,
+        2280
+      ],
+      "roi": [
+        930,
+        2020,
+        1060,
+        2130
+      ],
+      "widthRatio": 4.821428571428571,
+      "masks": {
+        "gold_strict": {
+          "nativeBbox": [
+            966,
+            2049,
+            1023,
+            2105
+          ],
+          "pixels": 1050,
+          "leftInReferencePx": 200.35555555555555,
+          "rightInReferencePx": 212.17777777777778,
+          "centerXInReferencePx": 206.26666666666668,
+          "widthInReferencePx": 11.822222222222223,
+          "heightInReferencePx": 11.614814814814816
+        },
+        "gold_loose": {
+          "nativeBbox": [
+            966,
+            2049,
+            1023,
+            2105
+          ],
+          "pixels": 1050,
+          "leftInReferencePx": 200.35555555555555,
+          "rightInReferencePx": 212.17777777777778,
+          "centerXInReferencePx": 206.26666666666668,
+          "widthInReferencePx": 11.822222222222223,
+          "heightInReferencePx": 11.614814814814816
+        }
+      }
+    },
+    "host-baseline": {
+      "path": "docs/verification/mobile-compose-anchor34/baseline/folders.png",
+      "imageSize": [
+        1081,
+        2065
+      ],
+      "roi": [
+        930,
+        1935,
+        1060,
+        2045
+      ],
+      "widthRatio": 4.825892857142857,
+      "masks": {
+        "gold_strict": {
+          "nativeBbox": [
+            966,
+            1964,
+            1022,
+            2021
+          ],
+          "pixels": 1108,
+          "leftInReferencePx": 200.17021276595747,
+          "rightInReferencePx": 211.77428307123037,
+          "centerXInReferencePx": 205.97224791859392,
+          "widthInReferencePx": 11.604070305272897,
+          "heightInReferencePx": 11.811285846438484
+        },
+        "gold_loose": {
+          "nativeBbox": [
+            966,
+            1964,
+            1022,
+            2021
+          ],
+          "pixels": 1134,
+          "leftInReferencePx": 200.17021276595747,
+          "rightInReferencePx": 211.77428307123037,
+          "centerXInReferencePx": 205.97224791859392,
+          "widthInReferencePx": 11.604070305272897,
+          "heightInReferencePx": 11.811285846438484
+        }
+      }
+    },
+    "host-candidate": {
+      "path": "docs/verification/mobile-compose-anchor34/candidate/folders.png",
+      "imageSize": [
+        1081,
+        2065
+      ],
+      "roi": [
+        930,
+        1935,
+        1060,
+        2045
+      ],
+      "widthRatio": 4.825892857142857,
+      "masks": {
+        "gold_strict": {
+          "nativeBbox": [
+            974,
+            1964,
+            1031,
+            2021
+          ],
+          "pixels": 1066,
+          "leftInReferencePx": 201.82793709528215,
+          "rightInReferencePx": 213.63922294172065,
+          "centerXInReferencePx": 207.7335800185014,
+          "widthInReferencePx": 11.811285846438484,
+          "heightInReferencePx": 11.811285846438484
+        },
+        "gold_loose": {
+          "nativeBbox": [
+            974,
+            1964,
+            1031,
+            2021
+          ],
+          "pixels": 1209,
+          "leftInReferencePx": 201.82793709528215,
+          "rightInReferencePx": 213.63922294172065,
+          "centerXInReferencePx": 207.7335800185014,
+          "widthInReferencePx": 11.811285846438484,
+          "heightInReferencePx": 11.811285846438484
+        }
+      }
+    }
+  },
+  "androidTranslationModelNotDeviceProof": {
+    "nativeDelta": 8.25,
+    "referenceDelta": 1.7111111111111112,
+    "referenceCenterBefore": 206.26666666666668,
+    "referenceCenterAfter": 207.9777777777778,
+    "residualFrom208": -0.022222222222211485
+  },
+  "limitations": [
+    "No new Android or iOS native render, package, GUI, ADB, or user database operations.",
+    "Chrome integer viewport393x751 DPR2.75 differs from saved Android fractional visualViewport393.0909x751.2727; host capture1081x2065 versus native capture1080x2280 includes different system chrome.",
+    "Width normalization uses each image width/224 only; no inferred original CSS/dp/pt/DPR or vertical fitting.",
+    "Raster bbox width can change one host pixel when fractional edges translate, while actual SVG/button dimensions, paths/stroke/colors remain equal.",
+    "Original224x480 recording is compressed; path topology, line weight/color, cap/corners and native button slot remain unknown. No path-perfect or full pixel acceptance."
+  ]
+}

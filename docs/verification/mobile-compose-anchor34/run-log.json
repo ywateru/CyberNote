@@ -1,0 +1,45 @@
+{
+  "environment": {
+    "PLAYWRIGHT_CORE_PATH": "/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/index.mjs",
+    "CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  },
+  "commandPattern": "node docs/verification/mobile-compose-anchor34/<runner> <args>",
+  "productionCandidateCount": 1,
+  "runs": [
+    {
+      "runner": "check-production-initial.mjs",
+      "args": "baseline",
+      "output": "baseline",
+      "exitCode": 0
+    },
+    {
+      "runner": "check-production-candidate.mjs",
+      "args": "candidate",
+      "output": "candidate",
+      "exitCode": 0
+    },
+    {
+      "runner": "check-stable-notes-attempt01.mjs",
+      "args": "baseline",
+      "output": "baseline-stable-notes",
+      "exitCode": 1,
+      "stderr": "WebSocket server error: Port 24678 is already in use; pageerror Error: WebSocket closed without opened.",
+      "parallelGroup": "stable-notes-attempt01"
+    },
+    {
+      "runner": "check-stable-notes-attempt01.mjs",
+      "args": "candidate",
+      "output": "candidate-stable-notes",
+      "exitCode": 0,
+      "parallelGroup": "stable-notes-attempt01"
+    },
+    {
+      "runner": "check-stable-notes.mjs",
+      "args": "baseline -retry01",
+      "output": "baseline-stable-notes-retry01",
+      "exitCode": 0
+    }
+  ],
+  "analysisAttempt01": "Asserted allSnapshotFieldsEqual but baseline compose.bbox was{}; failed before any result written. Initial script retained.",
+  "analysisFinal": "python3 docs/verification/mobile-compose-anchor34/analyze.py; exit0; full element computed/rect/text comparisons and explicit initial baseline bbox limitation."
+}
