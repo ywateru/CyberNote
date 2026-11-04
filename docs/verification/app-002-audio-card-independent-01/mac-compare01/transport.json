@@ -1,0 +1,394 @@
+[
+  {
+    "request": {
+      "command": "load_workspace",
+      "params": {}
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {},
+          "operationId": null,
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "suspended": []
+        },
+        "attachments": [],
+        "folders": [
+          {
+            "createdAt": 1793762646142,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793762646142,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793762646143,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "notes": [],
+        "settings": {}
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "workspace_action",
+      "params": {
+        "action": {
+          "type": "createNote"
+        },
+        "expected": {
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "epoch": 1,
+          "noteEpoch": null
+        }
+      }
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "bf7ab74c-9315-4d19-8912-e4b5ecf48083": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "suspended": []
+        },
+        "createdAt": 1793762646170,
+        "deletedAt": null,
+        "document": {
+          "content": [
+            {
+              "attrs": {
+                "level": 1
+              },
+              "type": "heading"
+            }
+          ],
+          "type": "doc"
+        },
+        "folderId": "default",
+        "id": "bf7ab74c-9315-4d19-8912-e4b5ecf48083",
+        "locked": false,
+        "originalFolderId": null,
+        "paperStyle": "plain",
+        "pinned": false,
+        "plainText": "",
+        "revision": 0,
+        "sealed": null,
+        "title": "新备忘录",
+        "updatedAt": 1793762646170
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "store_attachment_operation",
+      "params": {
+        "operationId": "c62f4aef-fa10-410f-a14f-5e61862653f4",
+        "noteId": "bf7ab74c-9315-4d19-8912-e4b5ecf48083",
+        "name": "这是非常长的真实录音标题用于验证窄屏下文字省略与播放按钮可达.webm",
+        "mime": "audio/webm",
+        "data": "aW5kZXBlbmRlbnQgc3ludGhldGljIG1hYyBjb21wYXJl",
+        "recordedAt": 1793721599123,
+        "expected": {
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "bf7ab74c-9315-4d19-8912-e4b5ecf48083": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "suspended": []
+        },
+        "attachment": {
+          "displayName": "这是非常长的真实录音标题用于验证窄屏下文字省略与播放按钮可达.webm",
+          "id": "eb45c67c-aca6-4034-aa89-89d504a7257a",
+          "kind": "audio",
+          "mime": "audio/webm",
+          "noteId": "bf7ab74c-9315-4d19-8912-e4b5ecf48083",
+          "recordedAt": 1793721599123,
+          "relativePath": "op-c62f4aef-fa10-410f-a14f-5e61862653f4-eb45c67c-aca6-4034-aa89-89d504a7257a.blob",
+          "size": 33
+        },
+        "noteId": "bf7ab74c-9315-4d19-8912-e4b5ecf48083",
+        "operationId": "c62f4aef-fa10-410f-a14f-5e61862653f4",
+        "status": "stored"
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "load_workspace",
+      "params": {}
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "bf7ab74c-9315-4d19-8912-e4b5ecf48083": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "suspended": []
+        },
+        "attachments": [
+          {
+            "displayName": "这是非常长的真实录音标题用于验证窄屏下文字省略与播放按钮可达.webm",
+            "id": "eb45c67c-aca6-4034-aa89-89d504a7257a",
+            "kind": "audio",
+            "mime": "audio/webm",
+            "noteId": "bf7ab74c-9315-4d19-8912-e4b5ecf48083",
+            "recordedAt": 1793721599123,
+            "relativePath": "op-c62f4aef-fa10-410f-a14f-5e61862653f4-eb45c67c-aca6-4034-aa89-89d504a7257a.blob",
+            "size": 33
+          }
+        ],
+        "folders": [
+          {
+            "createdAt": 1793762646142,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793762646142,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793762646143,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "notes": [
+          {
+            "createdAt": 1793762646170,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "bf7ab74c-9315-4d19-8912-e4b5ecf48083",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793762646170
+          }
+        ],
+        "settings": {}
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "read_attachment",
+      "params": {
+        "id": "eb45c67c-aca6-4034-aa89-89d504a7257a",
+        "expected": {
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "bf7ab74c-9315-4d19-8912-e4b5ecf48083": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "suspended": []
+        },
+        "data": "aW5kZXBlbmRlbnQgc3ludGhldGljIG1hYyBjb21wYXJl",
+        "mime": "audio/webm",
+        "name": "这是非常长的真实录音标题用于验证窄屏下文字省略与播放按钮可达.webm",
+        "recordedAt": 1793721599123
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "load_workspace",
+      "params": {}
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "bf7ab74c-9315-4d19-8912-e4b5ecf48083": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "suspended": []
+        },
+        "attachments": [
+          {
+            "displayName": "这是非常长的真实录音标题用于验证窄屏下文字省略与播放按钮可达.webm",
+            "id": "eb45c67c-aca6-4034-aa89-89d504a7257a",
+            "kind": "audio",
+            "mime": "audio/webm",
+            "noteId": "bf7ab74c-9315-4d19-8912-e4b5ecf48083",
+            "recordedAt": 1793721599123,
+            "relativePath": "op-c62f4aef-fa10-410f-a14f-5e61862653f4-eb45c67c-aca6-4034-aa89-89d504a7257a.blob",
+            "size": 33
+          }
+        ],
+        "folders": [
+          {
+            "createdAt": 1793762646142,
+            "id": "default",
+            "kind": "default",
+            "name": "备忘录",
+            "parentId": null,
+            "sortOrder": 0
+          },
+          {
+            "createdAt": 1793762646142,
+            "id": "quick",
+            "kind": "quick",
+            "name": "快速备忘录",
+            "parentId": null,
+            "sortOrder": -1
+          },
+          {
+            "createdAt": 1793762646143,
+            "id": "trash",
+            "kind": "trash",
+            "name": "最近删除",
+            "parentId": null,
+            "sortOrder": 9999
+          }
+        ],
+        "notes": [
+          {
+            "createdAt": 1793762646170,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "type": "heading"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "bf7ab74c-9315-4d19-8912-e4b5ecf48083",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "",
+            "revision": 0,
+            "sealed": null,
+            "title": "新备忘录",
+            "updatedAt": 1793762646170
+          }
+        ],
+        "settings": {}
+      }
+    }
+  },
+  {
+    "request": {
+      "command": "read_attachment",
+      "params": {
+        "id": "eb45c67c-aca6-4034-aa89-89d504a7257a",
+        "expected": {
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    "response": {
+      "ok": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "bf7ab74c-9315-4d19-8912-e4b5ecf48083": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "32c1c9b2-1ab0-44f7-94d7-0123e8325b10",
+          "suspended": []
+        },
+        "data": "aW5kZXBlbmRlbnQgc3ludGhldGljIG1hYyBjb21wYXJl",
+        "mime": "audio/webm",
+        "name": "这是非常长的真实录音标题用于验证窄屏下文字省略与播放按钮可达.webm",
+        "recordedAt": 1793721599123
+      }
+    }
+  }
+]
