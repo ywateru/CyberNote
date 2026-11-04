@@ -331,6 +331,18 @@
           "markdownDescription": "Denies the inspect command without any pre-configured scope."
         },
         {
+          "description": "Enables the keyboard_navigation command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-keyboard-navigation",
+          "markdownDescription": "Enables the keyboard_navigation command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the keyboard_navigation command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-keyboard-navigation",
+          "markdownDescription": "Denies the keyboard_navigation command without any pre-configured scope."
+        },
+        {
           "description": "Enables the unbind command without any pre-configured scope.",
           "type": "string",
           "const": "allow-unbind",
@@ -355,10 +367,10 @@
           "markdownDescription": "Denies the update command without any pre-configured scope."
         },
         {
-          "description": "Own-window toolbar binding, state updates, inspection, search focus and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`",
+          "description": "Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`\n- `allow-keyboard-navigation`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Own-window toolbar binding, state updates, inspection, search focus and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`"
+          "markdownDescription": "Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`\n- `allow-keyboard-navigation`"
         }
       ]
     }

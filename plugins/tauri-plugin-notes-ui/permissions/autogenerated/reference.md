@@ -1,6 +1,6 @@
 ## Default Permission
 
-Own-window toolbar binding, state updates, inspection, search focus and teardown. No note storage access.
+Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy and teardown. No note storage access.
 
 #### This default permission set includes the following:
 
@@ -9,6 +9,7 @@ Own-window toolbar binding, state updates, inspection, search focus and teardown
 - `allow-unbind`
 - `allow-inspect`
 - `allow-focus-search`
+- `allow-keyboard-navigation`
 
 ## Permission Table
 
@@ -93,6 +94,32 @@ Enables the inspect command without any pre-configured scope.
 <td>
 
 Denies the inspect command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`notes-ui:allow-keyboard-navigation`
+
+</td>
+<td>
+
+Enables the keyboard_navigation command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`notes-ui:deny-keyboard-navigation`
+
+</td>
+<td>
+
+Denies the keyboard_navigation command without any pre-configured scope.
 
 </td>
 </tr>

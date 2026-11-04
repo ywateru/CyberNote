@@ -27,6 +27,37 @@ extern "C" {
         window_label: *const c_char,
     ) -> i32;
     fn notes_ui_keyboard_destroy(window_label: *const c_char) -> i32;
+    fn notes_ui_keyboard_navigation(window: *mut c_void, enabled: *mut i32) -> i32;
+}
+
+pub(super) async fn keyboard_navigation<R: Runtime>(
+    app: &AppHandle<R>,
+    window: Window<R>,
+) -> Result<KeyboardNavigation> {
+    let current_app = app.clone();
+    on_main(app, move || {
+        let current = current_app
+            .get_webview_window(window.label())
+            .ok_or_else(|| Error::new("window_closed", "所属窗口已关闭"))?;
+        let native = window
+            .ns_window()
+            .map_err(|e| Error::new("window_closed", e.to_string()))?;
+        let current_native = current
+            .ns_window()
+            .map_err(|e| Error::new("window_closed", e.to_string()))?;
+        if current_native != native {
+            return Err(Error::new("window_mismatch", "所属窗口已改变"));
+        }
+        let mut enabled = -1;
+        keyboard_status(unsafe { notes_ui_keyboard_navigation(native, &mut enabled) })?;
+        match enabled {
+            0 | 1 => Ok(KeyboardNavigation {
+                enabled: enabled == 1,
+            }),
+            _ => Err(Error::new("keyboard_native", "无法读取键盘导航设置")),
+        }
+    })
+    .await
 }
 
 fn keyboard_status(status: i32) -> Result<()> {

@@ -15,6 +15,10 @@ use tauri::{
 
 pub const EVENT_NAME: &str = "notes-ui://intent";
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct KeyboardNavigation {
+    pub enabled: bool,
+}
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Error {
     pub code: String,
     pub message: String,
@@ -65,6 +69,21 @@ pub struct NotesUi<R: Runtime> {
     bindings: Bindings,
 }
 impl<R: Runtime> NotesUi<R> {
+    /// Current main-window system policy. This never requires a toolbar binding.
+    pub async fn keyboard_navigation(&self, window: Window<R>) -> Result<KeyboardNavigation> {
+        if window.label() != "main" {
+            return Err(Error::new("window_mismatch", "此操作仅支持主窗口"));
+        }
+        #[cfg(target_os = "macos")]
+        {
+            macos::keyboard_navigation(&self.app, window).await
+        }
+        #[cfg(not(target_os = "macos"))]
+        {
+            let _ = window;
+            Err(unsupported())
+        }
+    }
     pub async fn bind(&self, window: Window<R>, state: ToolbarState) -> Result<BindingInfo> {
         state.validate()?;
         #[cfg(target_os = "macos")]
@@ -209,6 +228,15 @@ async fn focus_search<R: Runtime>(
     own_window(&window, &window_label)?;
     state.focus_search(window, binding_id).await
 }
+#[tauri::command]
+async fn keyboard_navigation<R: Runtime>(
+    window: Window<R>,
+    state: State<'_, NotesUi<R>>,
+    window_label: String,
+) -> Result<KeyboardNavigation> {
+    own_window(&window, &window_label)?;
+    state.keyboard_navigation(window).await
+}
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("notes-ui")
         .invoke_handler(tauri::generate_handler![
@@ -216,7 +244,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             update,
             unbind,
             inspect,
-            focus_search
+            focus_search,
+            keyboard_navigation
         ])
         .setup(|app, _| {
             app.manage(NotesUi {
@@ -270,3 +299,43 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
 }
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod keyboard_query_tests {
+    use super::*;
+
+    #[test]
+    fn keyboard_query_rejects_foreign_label_and_independent_window_before_dispatch() {
+        let app = tauri::test::mock_app();
+        app.manage(NotesUi {
+            app: app.handle().clone(),
+            bindings: Arc::new(Mutex::new(HashMap::new())),
+        });
+        let independent = tauri::WebviewWindowBuilder::new(
+            &app,
+            "note-keyboard-test",
+            tauri::WebviewUrl::App("index.html".into()),
+        )
+        .build()
+        .unwrap();
+        let window = independent.as_ref().window();
+        let foreign = tauri::async_runtime::block_on(keyboard_navigation(
+            window.clone(),
+            app.state(),
+            "main".into(),
+        ));
+        assert_eq!(foreign.unwrap_err().code, "window_mismatch");
+        let own_independent = tauri::async_runtime::block_on(keyboard_navigation(
+            window.clone(),
+            app.state(),
+            window.label().into(),
+        ));
+        assert_eq!(own_independent.unwrap_err().code, "window_mismatch");
+        assert!(app
+            .state::<NotesUi<tauri::test::MockRuntime>>()
+            .bindings
+            .lock()
+            .unwrap()
+            .is_empty());
+    }
+}

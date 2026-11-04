@@ -1,5 +1,13 @@
 fn main() {
-    tauri_plugin::Builder::new(&["bind", "update", "unbind", "inspect", "focus_search"]).build();
+    tauri_plugin::Builder::new(&[
+        "bind",
+        "update",
+        "unbind",
+        "inspect",
+        "focus_search",
+        "keyboard_navigation",
+    ])
+    .build();
     if std::env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("macos") {
         cc::Build::new()
             .file("macos/toolbar.m")

@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { currentKeyboardNavigation, nativeMainKeyboardAvailable } from "./native-keyboard";
+import { OrdinaryFolderKeyboard } from "./ordinary-folder-keyboard";
 import {
   Check,
   X,
@@ -185,6 +187,25 @@ export function SmartFolderForm({
     panelRef = useRef(panel);
   draftRef.current = draft;
   panelRef.current = panel;
+  const ordinaryForm = useRef<HTMLFormElement>(null);
+  const ordinaryKeyboard = useRef<OrdinaryFolderKeyboard | null>(null);
+  const keyboardActive = nativeMainKeyboardAvailable() && !mobile && !folder && !draft.smart && !busy;
+  const keyboardActiveRef = useRef(keyboardActive);
+  keyboardActiveRef.current = keyboardActive;
+  useLayoutEffect(() => {
+    if (!keyboardActive || !ordinaryForm.current) return;
+    const controller = new OrdinaryFolderKeyboard(
+      ordinaryForm.current,
+      () => keyboardActiveRef.current && !busyRef.current,
+      currentKeyboardNavigation,
+      () => setError("无法切换输入位置，请重试。"),
+    );
+    ordinaryKeyboard.current = controller;
+    return () => {
+      controller.dispose();
+      if (ordinaryKeyboard.current === controller) ordinaryKeyboard.current = null;
+    };
+  }, [keyboardActive]);
   const cancel = () => {
     if (busyRef.current) return;
     if (panelRef.current) {
@@ -581,6 +602,8 @@ export function SmartFolderForm({
             </>
           ) : (
             <form
+              ref={ordinaryForm}
+              onKeyDown={(event) => ordinaryKeyboard.current?.handle(event.nativeEvent)}
               onSubmit={(e) => {
                 e.preventDefault();
                 void submit();

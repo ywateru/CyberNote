@@ -99,3 +99,14 @@ bind/update/inspect/unbind 先做自身参数校验，对有效调用均返回 `
 原生控制器只弱持有视图和窗口，强持有自己的 monitor/通知令牌。所属窗口 WillClose 会移除这些令牌并删除控制器；Rust Destroyed 按窗口 label 清理，插件 drop 清理全部，均可重复调用。工具栏解绑不清除此策略。回调内的原生安装结果才表示完成；调度失败与回调内的 thread/target/identity/monitor/native 失败分别记录，不能将成功排队当作安装完成。通知或 Tab 边界同步失败会记录通用错误，不记录按键内容。
 
 有限受控检查见 `docs/verification/mac-keyboard-policy35/README.md`。真实离屏 WKPreferences 的 false/true 更新、通知边界、两窗过滤、原事件身份和释放可检查；系统 getter 值与事件所属窗口在测试中明确模拟，不代表真实系统开关或 AppKit 按键送达已验。原版普通名称 Option-Tab 已观测为插入制表符；此策略保持公开 WebKit 行为，不承诺该局部原版行为已一致。准确产品包中的普通/智能表单、Tab/Shift+Tab、输入/组字、Enter/Escape、原生搜索、独立窗口及真正系统切换仍须另行验证，整体状态为 partial。
+
+
+## 普通主窗文件夹的当次键盘策略（37，源码候选）
+
+`keyboardNavigation()` 对应固定只读命令 `keyboard_navigation`，返回 `{enabled: boolean}`。guest 传当前 windowLabel；Rust 先核对调用方 Window 与该参数，再限定 main，在主线程核对该 label 仍属于同一真实 NSWindow 后读取公开的 `NSApplication.isFullKeyboardAccessEnabled`。查询不要求 toolbar bind，不读写笔记、不更新 WKPreferences，也不更改系统设置。主线程、当前窗口、关闭通知或原生读取失败均返回明确错误，不造 false。`notes-ui:default` 额外含 `allow-keyboard-navigation`；非 Mac 对合法 main 调用返回 unsupported。
+
+原生关闭通知弱记录已关闭窗口；这是因为被其他对象保留的 NSWindow 关闭后仍可能出现在 NSApplication.windows。观察器在首次查询或 WK 策略安装时建立，不保留窗口。Rust 的当前窗口核对同时拒绝第一次查询前已经销毁以及 label 重用后的旧 Window。35 的 Tab monitor 仍返回原始 NSEvent，系统策略读取与 WK 更新契约不变。
+
+生产前端只在 native Mac main、普通新建文件夹表单拥有局部 Tab/ShiftTab 控制器。同步取消该表单的默认 Tab 后，按序为每次导航重新查询；false 只回名称并 select，true 在表单实际可用可见控件按 DOM 顺序正反循环。Shift 本身允许继续准备反向 Tab；其他输入、点击、另行聚焦、窗口失焦/隐藏、模式切换、busy 或卸载都会使旧回复失效。查询失败沿既有可访问错误区域显示通用提示并保持草稿。浏览器预览、独立窗、手机、智能/编辑表单、搜索及修饰 Tab 保留原处理。
+
+受控组件链与有限原生查询证据见 `docs/verification/mac-ordinary-tab-loop37/`。真实开启态原版顺序仍未观测，此处 true 顺序只是受控可访问性契约；源码阶段不声明准确新包运行、AppKit 按键送达或像素一致。OptionTab 原版插入字面 TAB 仍为独立开放项。

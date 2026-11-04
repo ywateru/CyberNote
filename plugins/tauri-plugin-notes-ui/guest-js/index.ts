@@ -47,6 +47,11 @@ export interface NativeInfo {
 export interface BindingInfo { windowLabel: string; bindingId: string; stateRevision: number; native: NativeInfo }
 export interface NativeUiError { code: string; message: string }
 
+/** Read the current system policy for this main window; independent of toolbar bindings. */
+export async function keyboardNavigation(): Promise<{ enabled: boolean }> {
+  return invoke('plugin:notes-ui|keyboard_navigation', { windowLabel: getCurrentWindow().label });
+}
+
 /** A handle to THIS Tauri window; IPC refuses any cross-window label. Subscribe before bind. */
 export class NotesToolbar {
   readonly windowLabel = getCurrentWindow().label;

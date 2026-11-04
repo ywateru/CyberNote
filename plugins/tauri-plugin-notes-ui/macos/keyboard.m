@@ -5,6 +5,37 @@
 @class NotesUIKeyboardPolicy;
 static NSMutableDictionary<NSString *, NotesUIKeyboardPolicy *> *keyboardPolicies;
 
+// Retained closed NSWindows can remain in NSApplication.windows. Remember real close
+// notifications weakly; this never keeps windows alive or changes keyboard preferences.
+static NSHashTable<NSWindow *> *closedKeyboardWindows;
+static id keyboardCloseObserver;
+static void observeKeyboardWindowClose(void) {
+    if (keyboardCloseObserver) return;
+    closedKeyboardWindows = NSHashTable.weakObjectsHashTable;
+    keyboardCloseObserver = [NSNotificationCenter.defaultCenter
+        addObserverForName:NSWindowWillCloseNotification object:nil queue:NSOperationQueue.mainQueue
+        usingBlock:^(NSNotification *notification) {
+            if ([notification.object isKindOfClass:NSWindow.class])
+                [closedKeyboardWindows addObject:notification.object];
+        }];
+}
+
+// Read-only query, independent from toolbar bindings and WK navigation configuration.
+int notes_ui_keyboard_navigation(void *rawWindow, int *enabled) {
+    if (!NSThread.isMainThread) return 1;
+    @try {
+        NSWindow *window = (__bridge NSWindow *)rawWindow;
+        if (!enabled || !NSApp || ![window isKindOfClass:NSWindow.class] ||
+            ![NSApp.windows containsObject:window] || [closedKeyboardWindows containsObject:window]) return 2;
+        observeKeyboardWindowClose();
+        *enabled = NSApp.isFullKeyboardAccessEnabled ? 1 : 0;
+        return 0;
+    } @catch (NSException *exception) {
+        (void)exception;
+        return 5;
+    }
+}
+
 @interface NotesUIKeyboardPolicy : NSObject
 @property(nonatomic, weak) WKWebView *webview;
 @property(nonatomic, weak) NSWindow *window;
@@ -69,6 +100,8 @@ int notes_ui_keyboard_attach(void *rawView, void *rawWindow,
         NSString *windowLabel = rawWindowLabel ? [NSString stringWithUTF8String:rawWindowLabel] : nil;
         if (![view isKindOfClass:WKWebView.class] || ![window isKindOfClass:NSWindow.class] ||
             view.window != window || !viewLabel.length || !windowLabel.length || !NSApp) return 2;
+        observeKeyboardWindowClose();
+        if ([closedKeyboardWindows containsObject:window]) return 2;
         if (!keyboardPolicies) keyboardPolicies = [NSMutableDictionary dictionary];
         NotesUIKeyboardPolicy *existing = keyboardPolicies[viewLabel];
         if (existing) {
