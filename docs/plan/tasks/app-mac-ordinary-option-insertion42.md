@@ -21,6 +21,8 @@ depends-on: [app-mac-ordinary-tab-loop37]
 
 原生编辑历史必须有真实WK受控生产表单证据：局部CD替换后undo恢复完整值和CD选区，redo恢复TAB结果；不能只测value最终相同。普通输入混合与至少连续两次插入/撤销边界有限检查，避免跨场景共享undo历史假阳性。该API的当前可用性来自本机实测，不据此保证所有未来WebKit版本，失败不得静默破坏草稿。
 
+原版[连续草稿43](../../research/mac-folder-option-sequence-original43/README.md)补证：默认全选后键入QA-OPT43-ABCD、Right、两次OptionTab，一次CmdZ回默认名称且全选，一次重做恢复合成名和两个TAB。不得自行强制每次TAB独立undo分组；41的局部CD替换历史及43的连续同组历史须分别有限验证并披露差异。
+
 root创建独立worktree后，产品仅src/SmartFolderForm.tsx、必要窄src/ordinary-folder-option.ts新helper及37的native-keyboard.ts可读复用；原则上不改37controller/native插件/权限/样式/依赖/锁。新增路径若确有必要先报告。证据只在docs/verification/mac-ordinary-option-insertion42/。不读用户DB、不删除或改系统设置。
 
 ## Verification

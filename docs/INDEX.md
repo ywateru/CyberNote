@@ -21,6 +21,7 @@
 - [普通名称Tab原版补证37](research/mac-folder-tab-loop-original37/README.md)与[局部循环修复任务37](plan/tasks/app-mac-ordinary-tab-loop37.md)
 - [手机空白新建返回只读定位38](research/mobile-empty-note-readiness38/README.md)：先创建真实本地实体，原版相同路径语义未证，未实施空笔记删除
 - [原版Option-Tab插入40](research/mac-folder-option-insertion-original40/README.md)、[撤销重做41](research/mac-folder-option-history-original41/README.md)、[受控WK实现准备40](research/mac-folder-option-insertion-readiness40/README.md)与[待实施任务42](plan/tasks/app-mac-ordinary-option-insertion42.md)
+- [原版连续Option-Tab同组撤销43](research/mac-folder-option-sequence-original43/README.md)：连续输入与两次插入可被一次撤销恢复到默认名，不假设逐次独立历史
 
 - [需求与验收](requirements.md)
 - [架构与数据契约](architecture.md)
