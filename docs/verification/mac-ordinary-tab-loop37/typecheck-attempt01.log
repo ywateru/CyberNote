@@ -1,0 +1,10 @@
+
+> notes-clone@0.1.0 typecheck /private/tmp/apple-notes-ordinary-tab-loop37-01
+> tsc --noEmit
+
+src/ordinary-folder-keyboard.ts(35,43): error TS2339: Property 'HTMLElement' does not exist on type 'Window'.
+src/ordinary-folder-keyboard.ts(36,26): error TS2345: Argument of type 'EventTarget | null' is not assignable to parameter of type 'Node | null'.
+  Type 'EventTarget' is missing the following properties from type 'Node': baseURI, childNodes, firstChild, isConnected, and 43 more.
+src/ordinary-folder-keyboard.ts(107,47): error TS2339: Property 'HTMLInputElement' does not exist on type 'Window'.
+src/ordinary-folder-keyboard.ts(108,22): error TS2551: Property 'select' does not exist on type 'HTMLElement'. Did you mean 'onselect'?
+ ELIFECYCLE  Command failed with exit code 2.

@@ -1,0 +1,254 @@
+{
+  "scope": "Real production SmartFolderForm, complete production CSS and native-keyboard/guest invoke chain; controlled transport policy, not OS focus/package proof.",
+  "checks": [
+    {
+      "name": "false Tab selects name",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "false Right then Tab reselects",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 2,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "false ShiftTab selects name",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 3,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "one exact main command per accepted Tab",
+      "pass": true,
+      "detail": [
+        {
+          "cmd": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        },
+        {
+          "cmd": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        },
+        {
+          "cmd": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        }
+      ]
+    },
+    {
+      "name": "true name to checkbox",
+      "pass": true,
+      "detail": {
+        "focus": "",
+        "type": "checkbox",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 4,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "true checkbox to cancel",
+      "pass": true,
+      "detail": {
+        "focus": "取消",
+        "type": "button",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 5,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "true cancel to submit",
+      "pass": true,
+      "detail": {
+        "focus": "好",
+        "type": "submit",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 6,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "true forward wraps name",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 7,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "true reverse wraps submit",
+      "pass": true,
+      "detail": {
+        "focus": "好",
+        "type": "submit",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 8,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "fresh true to false returns name",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 9,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "true skips disabled and hidden controls",
+      "pass": true,
+      "detail": {
+        "focus": "好",
+        "type": "submit",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 10,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "rapid tabs have single outstanding query",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 1,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "queued query ordered 1",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 2,
+        "pending": 1,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "queued query ordered 2",
+      "pass": false,
+      "detail": {
+        "focus": "好",
+        "type": "submit",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 2,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "status": "FAIL",
+  "failure": "AssertionError [ERR_ASSERTION]: queued query ordered 2 {\"focus\":\"好\",\"type\":\"submit\",\"start\":0,\"end\":5,\"value\":\"新建文件夹\",\"calls\":2,\"pending\":0,\"events\":{\"cancels\":0,\"saves\":[]}}"
+}

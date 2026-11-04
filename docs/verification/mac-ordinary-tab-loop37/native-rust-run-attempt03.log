@@ -1,0 +1,8 @@
+notes-ui: keyboard policy installation completed for main
+notes-ui: keyboard policy installation completed for note-probe
+PASS real Wry windows remain hidden
+PASS real main command -> main-thread window validation -> native query enabled=false
+PASS real invoking main rejects foreign windowLabel
+PASS real independent native window rejects main-only query
+PASS real destroyed main command rejects stale Window code=window_closed
+PASS real Rust/native chain total=5

@@ -1,0 +1,70 @@
+{
+  "policy": "保留失败与中间受控记录，不以最终成功覆盖先前失败。",
+  "items": [
+    {
+      "path": "typecheck-attempt01.log",
+      "status": "FAIL",
+      "reason": "Window类型不包含DOM构造器；改为Window & typeof globalThis。"
+    },
+    {
+      "path": "component-attempt01.log",
+      "status": "FAIL",
+      "reason": "harness脚本语法；保留attempt01脚本。"
+    },
+    {
+      "path": "component-attempt02.log",
+      "status": "FAIL",
+      "reason": "esbuild非直接依赖，改精确使用既有pnpm transitive路径。"
+    },
+    {
+      "path": "component-attempt03.log",
+      "status": "FAIL",
+      "reason": "受限环境Chromium启动SIGABRT，未执行组件断言；自动审查后重跑。"
+    },
+    {
+      "path": "component-attempt04/result.json",
+      "status": "FAIL",
+      "reason": "真实Shift keydown取消旧Tab队列；补document modifier-only Shift边界。"
+    },
+    {
+      "path": "component-attempt05/result.json",
+      "status": "FAIL",
+      "reason": "React form入口仍取消modifier-only Shift；补form入口，06通过。"
+    },
+    {
+      "path": "native-query-attempt01.log",
+      "status": "FAIL",
+      "reason": "NSApp.windows不足以识别保留的closed NSWindow；添加弱通知记录和当前Tauri身份。"
+    },
+    {
+      "path": "rust-test-attempt02.log",
+      "status": "FAIL",
+      "reason": "当前Tauri无get_window；改用get_webview_window。"
+    },
+    {
+      "path": "native-rust-builder-attempt01.json",
+      "status": "FAIL",
+      "reason": "harness首次找到多个serde rlib，不能随意挑选。"
+    },
+    {
+      "path": "native-rust-builder-attempt02.log",
+      "status": "FAIL",
+      "reason": "harness按固定profile筛选不匹配tauri；改按Cargo依赖指纹匹配。"
+    },
+    {
+      "path": "native-rust-compile-attempt01.log",
+      "status": "FAIL",
+      "reason": "rustc单独编译缺CARGO_PKG_NAME，Tauri command macro无法展开；补准确包环境。"
+    },
+    {
+      "path": "native-rust-run-attempt01.log",
+      "status": "INCOMPLETE",
+      "reason": "受限环境系统服务连接失败卡住，仅终止自己PID67413，授权后有界runner成功。"
+    },
+    {
+      "path": "native-policy35-regression.log",
+      "status": "FAIL",
+      "reason": "新增closed拒绝误扩张既有attach；追加单行产品纠正，query闭窗身份约束保留，回归27项通过。"
+    }
+  ]
+}

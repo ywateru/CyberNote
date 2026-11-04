@@ -1,0 +1,910 @@
+{
+  "scope": "Real production SmartFolderForm, complete production CSS and native-keyboard/guest invoke chain; controlled transport policy, not OS focus/package proof.",
+  "checks": [
+    {
+      "name": "false Tab selects name",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "false Right then Tab reselects",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 2,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "false ShiftTab selects name",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 3,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "one exact main command per accepted Tab",
+      "pass": true,
+      "detail": [
+        {
+          "cmd": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        },
+        {
+          "cmd": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        },
+        {
+          "cmd": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        }
+      ]
+    },
+    {
+      "name": "true name to checkbox",
+      "pass": true,
+      "detail": {
+        "focus": "",
+        "type": "checkbox",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 4,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "true checkbox to cancel",
+      "pass": true,
+      "detail": {
+        "focus": "取消",
+        "type": "button",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 5,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "true cancel to submit",
+      "pass": true,
+      "detail": {
+        "focus": "好",
+        "type": "submit",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 6,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "true forward wraps name",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 7,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "true reverse wraps submit",
+      "pass": true,
+      "detail": {
+        "focus": "好",
+        "type": "submit",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 8,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "fresh true to false returns name",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 9,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "true skips disabled and hidden controls",
+      "pass": true,
+      "detail": {
+        "focus": "好",
+        "type": "submit",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 10,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "rapid tabs have single outstanding query",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 1,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "queued query ordered 1",
+      "pass": true,
+      "detail": {
+        "focus": "",
+        "type": "checkbox",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 2,
+        "pending": 1,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "queued query ordered 2",
+      "pass": true,
+      "detail": {
+        "focus": "取消",
+        "type": "button",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 3,
+        "pending": 1,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "queued query ordered 3",
+      "pass": true,
+      "detail": {
+        "focus": "",
+        "type": "checkbox",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 3,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "queued forward forward reverse resolves checkbox",
+      "pass": true,
+      "detail": {
+        "focus": "",
+        "type": "checkbox",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 3,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "full reverse DOM order 好",
+      "pass": true,
+      "detail": {
+        "focus": "好",
+        "type": "submit",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "full reverse DOM order 取消",
+      "pass": true,
+      "detail": {
+        "focus": "取消",
+        "type": "button",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 2,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "full reverse DOM order checkbox",
+      "pass": true,
+      "detail": {
+        "focus": "",
+        "type": "checkbox",
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 3,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "full reverse DOM order 名称",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 4,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "new generation waits behind old query",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 5,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 1,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "stale result ignored and new generation queried",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 5,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 2,
+        "pending": 1,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "new generation navigates using fresh result",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 2,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "visibility change invalidates late reply",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by pointer",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by otherKey",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by beforeinput",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by composition",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by otherFocus",
+      "pass": true,
+      "detail": {
+        "focus": "外部搜索",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by blur",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by pagehide",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by mode",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 7,
+        "end": 7,
+        "value": "新建智能文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by unmount",
+      "pass": true,
+      "detail": {
+        "focus": "BODY",
+        "type": null,
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by cancel",
+      "pass": true,
+      "detail": {
+        "focus": "BODY",
+        "type": null,
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 1,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "late reply cancelled by busy",
+      "pass": true,
+      "detail": {
+        "focus": "BODY",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 1,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": [
+            {
+              "name": "新建文件夹",
+              "smart": false,
+              "combine": "all",
+              "rules": [
+                {
+                  "key": 0,
+                  "type": "tags",
+                  "mode": "allSelected",
+                  "names": [],
+                  "pinned": true
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "failure shows accessible failure and preserves draft",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 4,
+        "end": 4,
+        "value": "草稿保留",
+        "calls": 1,
+        "pending": 0,
+        "error": "无法切换输入位置，请重试。",
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "malformed shows accessible failure and preserves draft",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 4,
+        "end": 4,
+        "value": "草稿保留",
+        "calls": 1,
+        "pending": 0,
+        "error": "无法切换输入位置，请重试。",
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "excluded form {\"native\":false}",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "excluded form {\"label\":\"note-controlled\"}",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "excluded form {\"ua\":\"Android\",\"platform\":\"Linux armv8l\",\"mobile\":true}",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 5,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "excluded form {\"mobile\":true}",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 5,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "excluded form {\"folder\":{\"id\":\"synthetic\",\"name\":\"编辑\",\"kind\":\"smart\",\"query\":{\"version\":1,\"combine\":\"all\",\"rules\":[]}}}",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 2,
+        "value": "编辑",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "smart mode no query",
+      "pass": true,
+      "detail": {
+        "focus": "组合过滤条件",
+        "type": null,
+        "start": 7,
+        "end": 7,
+        "value": "新建智能文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "modified/composing/prevented passes {\"altKey\":true}",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "modified/composing/prevented passes {\"ctrlKey\":true}",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "modified/composing/prevented passes {\"metaKey\":true}",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "modified/composing/prevented passes {\"isComposing\":true}",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "modified/composing/prevented passes {\"prevented\":true}",
+      "pass": true,
+      "detail": {
+        "focus": "名称",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "outside search Tab untouched",
+      "pass": true,
+      "detail": {
+        "focus": "外部搜索",
+        "type": null,
+        "start": 0,
+        "end": 5,
+        "value": "新建文件夹",
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "normal Enter saves existing draft",
+      "pass": true,
+      "detail": {
+        "focus": "BODY",
+        "type": null,
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 0,
+          "saves": [
+            {
+              "name": "正常保存",
+              "smart": false,
+              "combine": "all",
+              "rules": [
+                {
+                  "key": 0,
+                  "type": "tags",
+                  "mode": "allSelected",
+                  "names": [],
+                  "pinned": true
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "normal Escape cancels once",
+      "pass": true,
+      "detail": {
+        "focus": "BODY",
+        "type": null,
+        "calls": 0,
+        "pending": 0,
+        "events": {
+          "cancels": 1,
+          "saves": []
+        }
+      }
+    },
+    {
+      "name": "no browser errors or network requests",
+      "pass": true,
+      "detail": {
+        "errors": [],
+        "requests": []
+      }
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "status": "PASS"
+}

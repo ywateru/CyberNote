@@ -1,0 +1,33 @@
+2026-11-05 07:33:22.195 native-policy35-regression[67761:38628532] IOPMScheduleUserActivityLevelNotification returned 0
+2026-11-05 07:33:22.195 native-policy35-regression[67761:38628532] IOPMScheduleUserActivityLevelNotification returned 0
+Could not create a 'com.apple.coreservices.launchservicesd' sandbox extension
+2026-11-05 07:33:22.213 native-policy35-regression[67761:38628532] IOPMScheduleUserActivityLevelNotification returned 0
+2026-11-05 07:33:22.213 native-policy35-regression[67761:38628532] IOPMScheduleUserActivityLevelNotification returned 0
+PASS real WK views remain offscreen
+PASS initial native attachment succeeds
+PASS initial false directly read into real WKPreferences
+PASS one local monitor and three observers installed
+PASS duplicate same target refreshes without duplicate lifecycle
+PASS other window activation does not refresh this view
+PASS own window activation directly rereads true
+PASS app activation ignores non-key owner
+PASS app activation directly rereads false for key owner
+PASS Tab boundary returns exact event and rereads true
+PASS Option event preserved with false policy; no manual inversion
+PASS Shift Tab uses same live policy and exact original event
+PASS other-window Tab, non-Tab and key-up untouched without system read
+PASS mismatched WK window rejected
+PASS missing label rejected
+PASS same view identity cannot target another window
+PASS controlled background check starts
+PASS controlled background check completes
+PASS off-main attach and cleanup explicitly rejected
+PASS close releases lifecycle and removes registry entry
+PASS disposed controller no longer refreshes
+PASS close destroy and drop cleanup idempotent
+PASS removed controller is not retained by monitor or observer blocks
+PASS independent window receives its own policy without toolbar bindings
+PASS destroy by owner label preserves independent window lifecycle
+PASS drop releases remaining lifecycle
+PASS no windows shown or pages loaded
+RESULT 27 controlled checks passed; fake system true/false and event ownership; no actual system setting changed

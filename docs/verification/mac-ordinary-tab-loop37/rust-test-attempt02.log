@@ -1,0 +1,16 @@
+   Compiling tauri-plugin-notes-ui v0.1.0 (/private/tmp/apple-notes-ordinary-tab-loop37-01/plugins/tauri-plugin-notes-ui)
+error[E0599]: no method named `get_window` found for struct `tauri::AppHandle<R>` in the current scope
+  --> src/macos.rs:40:14
+   |
+39 |           let current = current_app
+   |  _______________________-
+40 | |             .get_window(window.label())
+   | |_____________-^^^^^^^^^^
+   |
+help: there is a method `get_webview_window` with a similar name
+   |
+40 |             .get_webview_window(window.label())
+   |                   ++++++++
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `tauri-plugin-notes-ui` (lib test) due to 1 previous error

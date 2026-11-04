@@ -1,0 +1,225 @@
+error: custom attribute panicked
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:180:1
+    |
+180 | #[tauri::command]
+    | ^^^^^^^^^^^^^^^^^
+    |
+    = help: message: missing `CARGO_PKG_NAME` environment variable: NotPresent
+
+error: custom attribute panicked
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:190:1
+    |
+190 | #[tauri::command]
+    | ^^^^^^^^^^^^^^^^^
+    |
+    = help: message: missing `CARGO_PKG_NAME` environment variable: NotPresent
+
+error: custom attribute panicked
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:201:1
+    |
+201 | #[tauri::command]
+    | ^^^^^^^^^^^^^^^^^
+    |
+    = help: message: missing `CARGO_PKG_NAME` environment variable: NotPresent
+
+error: custom attribute panicked
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:211:1
+    |
+211 | #[tauri::command]
+    | ^^^^^^^^^^^^^^^^^
+    |
+    = help: message: missing `CARGO_PKG_NAME` environment variable: NotPresent
+
+error: custom attribute panicked
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:221:1
+    |
+221 | #[tauri::command]
+    | ^^^^^^^^^^^^^^^^^
+    |
+    = help: message: missing `CARGO_PKG_NAME` environment variable: NotPresent
+
+error: custom attribute panicked
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:231:1
+    |
+231 | #[tauri::command]
+    | ^^^^^^^^^^^^^^^^^
+    |
+    = help: message: missing `CARGO_PKG_NAME` environment variable: NotPresent
+
+error: cannot find macro `__tauri_command_name_bind` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:242:25
+    |
+242 |           .invoke_handler(tauri::generate_handler![
+    |  _________________________^
+243 | |             bind,
+244 | |             update,
+245 | |             unbind,
+...   |
+248 | |             keyboard_navigation
+249 | |         ])
+    | |_________^
+    |
+    = note: this error originates in the macro `tauri::generate_handler` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `__cmd__bind` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:243:13
+    |
+243 |             bind,
+    |             ^^^^
+
+error: cannot find macro `__tauri_command_name_update` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:242:25
+    |
+242 |           .invoke_handler(tauri::generate_handler![
+    |  _________________________^
+243 | |             bind,
+244 | |             update,
+245 | |             unbind,
+...   |
+248 | |             keyboard_navigation
+249 | |         ])
+    | |_________^
+    |
+    = note: this error originates in the macro `tauri::generate_handler` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `__cmd__update` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:244:13
+    |
+244 |             update,
+    |             ^^^^^^
+
+error: cannot find macro `__tauri_command_name_unbind` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:242:25
+    |
+242 |           .invoke_handler(tauri::generate_handler![
+    |  _________________________^
+243 | |             bind,
+244 | |             update,
+245 | |             unbind,
+...   |
+248 | |             keyboard_navigation
+249 | |         ])
+    | |_________^
+    |
+    = note: this error originates in the macro `tauri::generate_handler` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `__cmd__unbind` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:245:13
+    |
+245 |             unbind,
+    |             ^^^^^^
+
+error: cannot find macro `__tauri_command_name_inspect` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:242:25
+    |
+242 |           .invoke_handler(tauri::generate_handler![
+    |  _________________________^
+243 | |             bind,
+244 | |             update,
+245 | |             unbind,
+...   |
+248 | |             keyboard_navigation
+249 | |         ])
+    | |_________^
+    |
+    = note: this error originates in the macro `tauri::generate_handler` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `__cmd__inspect` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:246:13
+    |
+246 |             inspect,
+    |             ^^^^^^^
+
+error: cannot find macro `__tauri_command_name_focus_search` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:242:25
+    |
+242 |           .invoke_handler(tauri::generate_handler![
+    |  _________________________^
+243 | |             bind,
+244 | |             update,
+245 | |             unbind,
+...   |
+248 | |             keyboard_navigation
+249 | |         ])
+    | |_________^
+    |
+    = note: this error originates in the macro `tauri::generate_handler` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `__cmd__focus_search` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:247:13
+    |
+247 |             focus_search,
+    |             ^^^^^^^^^^^^
+
+error: cannot find macro `__tauri_command_name_keyboard_navigation` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:242:25
+    |
+242 |           .invoke_handler(tauri::generate_handler![
+    |  _________________________^
+243 | |             bind,
+244 | |             update,
+245 | |             unbind,
+...   |
+248 | |             keyboard_navigation
+249 | |         ])
+    | |_________^
+    |
+    = note: this error originates in the macro `tauri::generate_handler` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `__cmd__keyboard_navigation` in this scope
+   --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:248:13
+    |
+248 |             keyboard_navigation
+    |             ^^^^^^^^^^^^^^^^^^^
+
+error[E0425]: cannot find function `keyboard_navigation` in this scope
+  --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/native-rust-chain.rs:22:29
+   |
+22 |                     let own=keyboard_navigation(main.as_ref().window().clone(),handle.state(),"main".into()).await?;
+   |                             ^^^^^^^^^^^^^^^^^^^ not found in this scope
+   |
+help: consider importing this function
+  --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:2:1
+   |
+ 2 + use crate::macos::keyboard_navigation;
+   |
+
+error[E0425]: cannot find function `keyboard_navigation` in this scope
+  --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/native-rust-chain.rs:24:33
+   |
+24 | ...   let foreign=keyboard_navigation(main.as_ref().window().clone(),handle.state(),"note-probe".into()).await.unwrap_err();
+   |                   ^^^^^^^^^^^^^^^^^^^ not found in this scope
+   |
+help: consider importing this function
+  --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:2:1
+   |
+ 2 + use crate::macos::keyboard_navigation;
+   |
+
+error[E0425]: cannot find function `keyboard_navigation` in this scope
+  --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/native-rust-chain.rs:27:37
+   |
+27 | ...   let independent=keyboard_navigation(other.as_ref().window().clone(),handle.state(),"note-probe".into()).await.unwrap_err();
+   |                       ^^^^^^^^^^^^^^^^^^^ not found in this scope
+   |
+help: consider importing this function
+  --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:2:1
+   |
+ 2 + use crate::macos::keyboard_navigation;
+   |
+
+error[E0425]: cannot find function `keyboard_navigation` in this scope
+  --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/native-rust-chain.rs:33:32
+   |
+33 |                     let closed=keyboard_navigation(stale,handle.state(),"main".into()).await.unwrap_err();
+   |                                ^^^^^^^^^^^^^^^^^^^ not found in this scope
+   |
+help: consider importing this function
+  --> /private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/../../../plugins/tauri-plugin-notes-ui/src/lib.rs:2:1
+   |
+ 2 + use crate::macos::keyboard_navigation;
+   |
+
+error: aborting due to 22 previous errors
+
+For more information about this error, try `rustc --explain E0425`.

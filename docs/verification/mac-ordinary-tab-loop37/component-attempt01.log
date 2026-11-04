@@ -1,0 +1,12 @@
+file:///private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/component-check.mjs:33
+ for(const mode of ['failure','malformed']){await mount();await page.getByLabel('名称',{exact:true}).fill('草稿保留');await ev(()=>{window[window.testMode]=true}.toString()).catch(()=>{});await page.evaluate(mode=>window[mode]=true,mode);await tab();const s=await state();check(mode+' shows accessible failure and preserves draft',s.error?.includes('无法切换输入位置')&&s.value==='草稿保留'&&s.events.saves.length===0,s)}
+                                                                                                                                                          ^
+
+SyntaxError: missing ) after argument list
+    at compileSourceTextModule (node:internal/modules/esm/utils:344:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:105:18)
+    at #translate (node:internal/modules/esm/loader:534:12)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:581:27)
+    at async ModuleJob._link (node:internal/modules/esm/module_job:116:19)
+
+Node.js v22.16.0

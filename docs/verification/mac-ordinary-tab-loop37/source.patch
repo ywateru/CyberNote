@@ -1,0 +1,592 @@
+diff --git a/plugins/tauri-plugin-notes-ui/README.md b/plugins/tauri-plugin-notes-ui/README.md
+index ce685d8d..3fa07635 100644
+--- a/plugins/tauri-plugin-notes-ui/README.md
++++ b/plugins/tauri-plugin-notes-ui/README.md
+@@ -99,3 +99,14 @@ bind/update/inspect/unbind 先做自身参数校验，对有效调用均返回 `
+ 原生控制器只弱持有视图和窗口，强持有自己的 monitor/通知令牌。所属窗口 WillClose 会移除这些令牌并删除控制器；Rust Destroyed 按窗口 label 清理，插件 drop 清理全部，均可重复调用。工具栏解绑不清除此策略。回调内的原生安装结果才表示完成；调度失败与回调内的 thread/target/identity/monitor/native 失败分别记录，不能将成功排队当作安装完成。通知或 Tab 边界同步失败会记录通用错误，不记录按键内容。
+ 
+ 有限受控检查见 `docs/verification/mac-keyboard-policy35/README.md`。真实离屏 WKPreferences 的 false/true 更新、通知边界、两窗过滤、原事件身份和释放可检查；系统 getter 值与事件所属窗口在测试中明确模拟，不代表真实系统开关或 AppKit 按键送达已验。原版普通名称 Option-Tab 已观测为插入制表符；此策略保持公开 WebKit 行为，不承诺该局部原版行为已一致。准确产品包中的普通/智能表单、Tab/Shift+Tab、输入/组字、Enter/Escape、原生搜索、独立窗口及真正系统切换仍须另行验证，整体状态为 partial。
++
++
++## 普通主窗文件夹的当次键盘策略（37，源码候选）
++
++`keyboardNavigation()` 对应固定只读命令 `keyboard_navigation`，返回 `{enabled: boolean}`。guest 传当前 windowLabel；Rust 先核对调用方 Window 与该参数，再限定 main，在主线程核对该 label 仍属于同一真实 NSWindow 后读取公开的 `NSApplication.isFullKeyboardAccessEnabled`。查询不要求 toolbar bind，不读写笔记、不更新 WKPreferences，也不更改系统设置。主线程、当前窗口、关闭通知或原生读取失败均返回明确错误，不造 false。`notes-ui:default` 额外含 `allow-keyboard-navigation`；非 Mac 对合法 main 调用返回 unsupported。
++
++原生关闭通知弱记录已关闭窗口；这是因为被其他对象保留的 NSWindow 关闭后仍可能出现在 NSApplication.windows。观察器在首次查询或 WK 策略安装时建立，不保留窗口。Rust 的当前窗口核对同时拒绝第一次查询前已经销毁以及 label 重用后的旧 Window。35 的 Tab monitor 仍返回原始 NSEvent，系统策略读取与 WK 更新契约不变。
++
++生产前端只在 native Mac main、普通新建文件夹表单拥有局部 Tab/ShiftTab 控制器。同步取消该表单的默认 Tab 后，按序为每次导航重新查询；false 只回名称并 select，true 在表单实际可用可见控件按 DOM 顺序正反循环。Shift 本身允许继续准备反向 Tab；其他输入、点击、另行聚焦、窗口失焦/隐藏、模式切换、busy 或卸载都会使旧回复失效。查询失败沿既有可访问错误区域显示通用提示并保持草稿。浏览器预览、独立窗、手机、智能/编辑表单、搜索及修饰 Tab 保留原处理。
++
++受控组件链与有限原生查询证据见 `docs/verification/mac-ordinary-tab-loop37/`。真实开启态原版顺序仍未观测，此处 true 顺序只是受控可访问性契约；源码阶段不声明准确新包运行、AppKit 按键送达或像素一致。OptionTab 原版插入字面 TAB 仍为独立开放项。
+diff --git a/plugins/tauri-plugin-notes-ui/build.rs b/plugins/tauri-plugin-notes-ui/build.rs
+index cec6b2ed..ae88535f 100644
+--- a/plugins/tauri-plugin-notes-ui/build.rs
++++ b/plugins/tauri-plugin-notes-ui/build.rs
+@@ -1,5 +1,13 @@
+ fn main() {
+-    tauri_plugin::Builder::new(&["bind", "update", "unbind", "inspect", "focus_search"]).build();
++    tauri_plugin::Builder::new(&[
++        "bind",
++        "update",
++        "unbind",
++        "inspect",
++        "focus_search",
++        "keyboard_navigation",
++    ])
++    .build();
+     if std::env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("macos") {
+         cc::Build::new()
+             .file("macos/toolbar.m")
+diff --git a/plugins/tauri-plugin-notes-ui/guest-js/index.ts b/plugins/tauri-plugin-notes-ui/guest-js/index.ts
+index 600b7f8a..49e82ca1 100644
+--- a/plugins/tauri-plugin-notes-ui/guest-js/index.ts
++++ b/plugins/tauri-plugin-notes-ui/guest-js/index.ts
+@@ -47,6 +47,11 @@ export interface NativeInfo {
+ export interface BindingInfo { windowLabel: string; bindingId: string; stateRevision: number; native: NativeInfo }
+ export interface NativeUiError { code: string; message: string }
+ 
++/** Read the current system policy for this main window; independent of toolbar bindings. */
++export async function keyboardNavigation(): Promise<{ enabled: boolean }> {
++  return invoke('plugin:notes-ui|keyboard_navigation', { windowLabel: getCurrentWindow().label });
++}
++
+ /** A handle to THIS Tauri window; IPC refuses any cross-window label. Subscribe before bind. */
+ export class NotesToolbar {
+   readonly windowLabel = getCurrentWindow().label;
+diff --git a/plugins/tauri-plugin-notes-ui/macos/keyboard.m b/plugins/tauri-plugin-notes-ui/macos/keyboard.m
+index 67848164..c081f032 100644
+--- a/plugins/tauri-plugin-notes-ui/macos/keyboard.m
++++ b/plugins/tauri-plugin-notes-ui/macos/keyboard.m
+@@ -5,6 +5,37 @@
+ @class NotesUIKeyboardPolicy;
+ static NSMutableDictionary<NSString *, NotesUIKeyboardPolicy *> *keyboardPolicies;
+ 
++// Retained closed NSWindows can remain in NSApplication.windows. Remember real close
++// notifications weakly; this never keeps windows alive or changes keyboard preferences.
++static NSHashTable<NSWindow *> *closedKeyboardWindows;
++static id keyboardCloseObserver;
++static void observeKeyboardWindowClose(void) {
++    if (keyboardCloseObserver) return;
++    closedKeyboardWindows = NSHashTable.weakObjectsHashTable;
++    keyboardCloseObserver = [NSNotificationCenter.defaultCenter
++        addObserverForName:NSWindowWillCloseNotification object:nil queue:NSOperationQueue.mainQueue
++        usingBlock:^(NSNotification *notification) {
++            if ([notification.object isKindOfClass:NSWindow.class])
++                [closedKeyboardWindows addObject:notification.object];
++        }];
++}
++
++// Read-only query, independent from toolbar bindings and WK navigation configuration.
++int notes_ui_keyboard_navigation(void *rawWindow, int *enabled) {
++    if (!NSThread.isMainThread) return 1;
++    @try {
++        NSWindow *window = (__bridge NSWindow *)rawWindow;
++        if (!enabled || !NSApp || ![window isKindOfClass:NSWindow.class] ||
++            ![NSApp.windows containsObject:window] || [closedKeyboardWindows containsObject:window]) return 2;
++        observeKeyboardWindowClose();
++        *enabled = NSApp.isFullKeyboardAccessEnabled ? 1 : 0;
++        return 0;
++    } @catch (NSException *exception) {
++        (void)exception;
++        return 5;
++    }
++}
++
+ @interface NotesUIKeyboardPolicy : NSObject
+ @property(nonatomic, weak) WKWebView *webview;
+ @property(nonatomic, weak) NSWindow *window;
+@@ -69,6 +100,7 @@ int notes_ui_keyboard_attach(void *rawView, void *rawWindow,
+         NSString *windowLabel = rawWindowLabel ? [NSString stringWithUTF8String:rawWindowLabel] : nil;
+         if (![view isKindOfClass:WKWebView.class] || ![window isKindOfClass:NSWindow.class] ||
+             view.window != window || !viewLabel.length || !windowLabel.length || !NSApp) return 2;
++        observeKeyboardWindowClose();
+         if (!keyboardPolicies) keyboardPolicies = [NSMutableDictionary dictionary];
+         NotesUIKeyboardPolicy *existing = keyboardPolicies[viewLabel];
+         if (existing) {
+diff --git a/plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml b/plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml
+new file mode 100644
+index 00000000..28269900
+--- /dev/null
++++ b/plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml
+@@ -0,0 +1,13 @@
++# Automatically generated - DO NOT EDIT!
++
++"$schema" = "../../schemas/schema.json"
++
++[[permission]]
++identifier = "allow-keyboard-navigation"
++description = "Enables the keyboard_navigation command without any pre-configured scope."
++commands.allow = ["keyboard_navigation"]
++
++[[permission]]
++identifier = "deny-keyboard-navigation"
++description = "Denies the keyboard_navigation command without any pre-configured scope."
++commands.deny = ["keyboard_navigation"]
+diff --git a/plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md b/plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md
+index d83dc11e..a1809227 100644
+--- a/plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md
++++ b/plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md
+@@ -1,6 +1,6 @@
+ ## Default Permission
+ 
+-Own-window toolbar binding, state updates, inspection, search focus and teardown. No note storage access.
++Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy and teardown. No note storage access.
+ 
+ #### This default permission set includes the following:
+ 
+@@ -9,6 +9,7 @@ Own-window toolbar binding, state updates, inspection, search focus and teardown
+ - `allow-unbind`
+ - `allow-inspect`
+ - `allow-focus-search`
++- `allow-keyboard-navigation`
+ 
+ ## Permission Table
+ 
+@@ -100,6 +101,32 @@ Denies the inspect command without any pre-configured scope.
+ <tr>
+ <td>
+ 
++`notes-ui:allow-keyboard-navigation`
++
++</td>
++<td>
++
++Enables the keyboard_navigation command without any pre-configured scope.
++
++</td>
++</tr>
++
++<tr>
++<td>
++
++`notes-ui:deny-keyboard-navigation`
++
++</td>
++<td>
++
++Denies the keyboard_navigation command without any pre-configured scope.
++
++</td>
++</tr>
++
++<tr>
++<td>
++
+ `notes-ui:allow-unbind`
+ 
+ </td>
+diff --git a/plugins/tauri-plugin-notes-ui/permissions/default.toml b/plugins/tauri-plugin-notes-ui/permissions/default.toml
+index 6521f4d7..212d2eba 100644
+--- a/plugins/tauri-plugin-notes-ui/permissions/default.toml
++++ b/plugins/tauri-plugin-notes-ui/permissions/default.toml
+@@ -1,3 +1,3 @@
+ [default]
+-description = "Own-window toolbar binding, state updates, inspection, search focus and teardown. No note storage access."
+-permissions = ["allow-bind", "allow-update", "allow-unbind", "allow-inspect", "allow-focus-search"]
++description = "Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy and teardown. No note storage access."
++permissions = ["allow-bind", "allow-update", "allow-unbind", "allow-inspect", "allow-focus-search", "allow-keyboard-navigation"]
+diff --git a/plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json b/plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json
+index 38cfd0cb..efbce0a8 100644
+--- a/plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json
++++ b/plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json
+@@ -330,6 +330,18 @@
+           "const": "deny-inspect",
+           "markdownDescription": "Denies the inspect command without any pre-configured scope."
+         },
++        {
++          "description": "Enables the keyboard_navigation command without any pre-configured scope.",
++          "type": "string",
++          "const": "allow-keyboard-navigation",
++          "markdownDescription": "Enables the keyboard_navigation command without any pre-configured scope."
++        },
++        {
++          "description": "Denies the keyboard_navigation command without any pre-configured scope.",
++          "type": "string",
++          "const": "deny-keyboard-navigation",
++          "markdownDescription": "Denies the keyboard_navigation command without any pre-configured scope."
++        },
+         {
+           "description": "Enables the unbind command without any pre-configured scope.",
+           "type": "string",
+@@ -355,10 +367,10 @@
+           "markdownDescription": "Denies the update command without any pre-configured scope."
+         },
+         {
+-          "description": "Own-window toolbar binding, state updates, inspection, search focus and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`",
++          "description": "Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`\n- `allow-keyboard-navigation`",
+           "type": "string",
+           "const": "default",
+-          "markdownDescription": "Own-window toolbar binding, state updates, inspection, search focus and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`"
++          "markdownDescription": "Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`\n- `allow-keyboard-navigation`"
+         }
+       ]
+     }
+diff --git a/plugins/tauri-plugin-notes-ui/src/lib.rs b/plugins/tauri-plugin-notes-ui/src/lib.rs
+index c1b64457..7465f85b 100644
+--- a/plugins/tauri-plugin-notes-ui/src/lib.rs
++++ b/plugins/tauri-plugin-notes-ui/src/lib.rs
+@@ -15,6 +15,10 @@ use tauri::{
+ 
+ pub const EVENT_NAME: &str = "notes-ui://intent";
+ #[derive(Debug, Clone, Serialize, Deserialize)]
++pub struct KeyboardNavigation {
++    pub enabled: bool,
++}
++#[derive(Debug, Clone, Serialize, Deserialize)]
+ pub struct Error {
+     pub code: String,
+     pub message: String,
+@@ -65,6 +69,21 @@ pub struct NotesUi<R: Runtime> {
+     bindings: Bindings,
+ }
+ impl<R: Runtime> NotesUi<R> {
++    /// Current main-window system policy. This never requires a toolbar binding.
++    pub async fn keyboard_navigation(&self, window: Window<R>) -> Result<KeyboardNavigation> {
++        if window.label() != "main" {
++            return Err(Error::new("window_mismatch", "此操作仅支持主窗口"));
++        }
++        #[cfg(target_os = "macos")]
++        {
++            macos::keyboard_navigation(&self.app, window).await
++        }
++        #[cfg(not(target_os = "macos"))]
++        {
++            let _ = window;
++            Err(unsupported())
++        }
++    }
+     pub async fn bind(&self, window: Window<R>, state: ToolbarState) -> Result<BindingInfo> {
+         state.validate()?;
+         #[cfg(target_os = "macos")]
+@@ -209,6 +228,15 @@ async fn focus_search<R: Runtime>(
+     own_window(&window, &window_label)?;
+     state.focus_search(window, binding_id).await
+ }
++#[tauri::command]
++async fn keyboard_navigation<R: Runtime>(
++    window: Window<R>,
++    state: State<'_, NotesUi<R>>,
++    window_label: String,
++) -> Result<KeyboardNavigation> {
++    own_window(&window, &window_label)?;
++    state.keyboard_navigation(window).await
++}
+ pub fn init<R: Runtime>() -> TauriPlugin<R> {
+     Builder::new("notes-ui")
+         .invoke_handler(tauri::generate_handler![
+@@ -216,7 +244,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
+             update,
+             unbind,
+             inspect,
+-            focus_search
++            focus_search,
++            keyboard_navigation
+         ])
+         .setup(|app, _| {
+             app.manage(NotesUi {
+@@ -270,3 +299,43 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
+ }
+ #[cfg(test)]
+ mod tests;
++
++#[cfg(test)]
++mod keyboard_query_tests {
++    use super::*;
++
++    #[test]
++    fn keyboard_query_rejects_foreign_label_and_independent_window_before_dispatch() {
++        let app = tauri::test::mock_app();
++        app.manage(NotesUi {
++            app: app.handle().clone(),
++            bindings: Arc::new(Mutex::new(HashMap::new())),
++        });
++        let independent = tauri::WebviewWindowBuilder::new(
++            &app,
++            "note-keyboard-test",
++            tauri::WebviewUrl::App("index.html".into()),
++        )
++        .build()
++        .unwrap();
++        let window = independent.as_ref().window();
++        let foreign = tauri::async_runtime::block_on(keyboard_navigation(
++            window.clone(),
++            app.state(),
++            "main".into(),
++        ));
++        assert_eq!(foreign.unwrap_err().code, "window_mismatch");
++        let own_independent = tauri::async_runtime::block_on(keyboard_navigation(
++            window.clone(),
++            app.state(),
++            window.label().into(),
++        ));
++        assert_eq!(own_independent.unwrap_err().code, "window_mismatch");
++        assert!(app
++            .state::<NotesUi<tauri::test::MockRuntime>>()
++            .bindings
++            .lock()
++            .unwrap()
++            .is_empty());
++    }
++}
+diff --git a/plugins/tauri-plugin-notes-ui/src/macos.rs b/plugins/tauri-plugin-notes-ui/src/macos.rs
+index 0089ea6a..e3555693 100644
+--- a/plugins/tauri-plugin-notes-ui/src/macos.rs
++++ b/plugins/tauri-plugin-notes-ui/src/macos.rs
+@@ -27,6 +27,37 @@ extern "C" {
+         window_label: *const c_char,
+     ) -> i32;
+     fn notes_ui_keyboard_destroy(window_label: *const c_char) -> i32;
++    fn notes_ui_keyboard_navigation(window: *mut c_void, enabled: *mut i32) -> i32;
++}
++
++pub(super) async fn keyboard_navigation<R: Runtime>(
++    app: &AppHandle<R>,
++    window: Window<R>,
++) -> Result<KeyboardNavigation> {
++    let current_app = app.clone();
++    on_main(app, move || {
++        let current = current_app
++            .get_webview_window(window.label())
++            .ok_or_else(|| Error::new("window_closed", "所属窗口已关闭"))?;
++        let native = window
++            .ns_window()
++            .map_err(|e| Error::new("window_closed", e.to_string()))?;
++        let current_native = current
++            .ns_window()
++            .map_err(|e| Error::new("window_closed", e.to_string()))?;
++        if current_native != native {
++            return Err(Error::new("window_mismatch", "所属窗口已改变"));
++        }
++        let mut enabled = -1;
++        keyboard_status(unsafe { notes_ui_keyboard_navigation(native, &mut enabled) })?;
++        match enabled {
++            0 | 1 => Ok(KeyboardNavigation {
++                enabled: enabled == 1,
++            }),
++            _ => Err(Error::new("keyboard_native", "无法读取键盘导航设置")),
++        }
++    })
++    .await
+ }
+ 
+ fn keyboard_status(status: i32) -> Result<()> {
+diff --git a/src/SmartFolderForm.tsx b/src/SmartFolderForm.tsx
+index b4ac8669..57203c7d 100644
+--- a/src/SmartFolderForm.tsx
++++ b/src/SmartFolderForm.tsx
+@@ -1,4 +1,6 @@
+-import { useEffect, useRef, useState } from "react";
++import { useEffect, useLayoutEffect, useRef, useState } from "react";
++import { currentKeyboardNavigation, nativeMainKeyboardAvailable } from "./native-keyboard";
++import { OrdinaryFolderKeyboard } from "./ordinary-folder-keyboard";
+ import {
+   Check,
+   X,
+@@ -185,6 +187,25 @@ export function SmartFolderForm({
+     panelRef = useRef(panel);
+   draftRef.current = draft;
+   panelRef.current = panel;
++  const ordinaryForm = useRef<HTMLFormElement>(null);
++  const ordinaryKeyboard = useRef<OrdinaryFolderKeyboard | null>(null);
++  const keyboardActive = nativeMainKeyboardAvailable() && !mobile && !folder && !draft.smart && !busy;
++  const keyboardActiveRef = useRef(keyboardActive);
++  keyboardActiveRef.current = keyboardActive;
++  useLayoutEffect(() => {
++    if (!keyboardActive || !ordinaryForm.current) return;
++    const controller = new OrdinaryFolderKeyboard(
++      ordinaryForm.current,
++      () => keyboardActiveRef.current && !busyRef.current,
++      currentKeyboardNavigation,
++      () => setError("无法切换输入位置，请重试。"),
++    );
++    ordinaryKeyboard.current = controller;
++    return () => {
++      controller.dispose();
++      if (ordinaryKeyboard.current === controller) ordinaryKeyboard.current = null;
++    };
++  }, [keyboardActive]);
+   const cancel = () => {
+     if (busyRef.current) return;
+     if (panelRef.current) {
+@@ -581,6 +602,8 @@ export function SmartFolderForm({
+             </>
+           ) : (
+             <form
++              ref={ordinaryForm}
++              onKeyDown={(event) => ordinaryKeyboard.current?.handle(event.nativeEvent)}
+               onSubmit={(e) => {
+                 e.preventDefault();
+                 void submit();
+diff --git a/src/native-keyboard.ts b/src/native-keyboard.ts
+new file mode 100644
+index 00000000..605ccb0d
+--- /dev/null
++++ b/src/native-keyboard.ts
+@@ -0,0 +1,22 @@
++import { isTauri } from "@tauri-apps/api/core";
++import { getCurrentWindow } from "@tauri-apps/api/window";
++import { keyboardNavigation } from "../plugins/tauri-plugin-notes-ui/guest-js";
++
++// A Mac browser preview and independent note windows must keep their native Tab handling.
++export function nativeMainKeyboardAvailable(): boolean {
++  return (
++    typeof window !== "undefined" &&
++    typeof navigator !== "undefined" &&
++    /Mac/.test(navigator.platform) &&
++    !/Android|iPhone|iPad/.test(navigator.userAgent) &&
++    isTauri() &&
++    getCurrentWindow().label === "main"
++  );
++}
++
++export async function currentKeyboardNavigation(): Promise<boolean> {
++  if (!nativeMainKeyboardAvailable()) throw Error("键盘导航不可用");
++  const result = await keyboardNavigation();
++  if (typeof result?.enabled !== "boolean") throw Error("无法读取键盘导航设置");
++  return result.enabled;
++}
+diff --git a/src/ordinary-folder-keyboard.ts b/src/ordinary-folder-keyboard.ts
+new file mode 100644
+index 00000000..03c9edaf
+--- /dev/null
++++ b/src/ordinary-folder-keyboard.ts
+@@ -0,0 +1,140 @@
++/** Only an ordinary native Mac folder form owns this controller, never a window shortcut. */
++export class OrdinaryFolderKeyboard {
++  private generation = 0;
++  private disposed = false;
++  private running = false;
++  private ownFocus = false;
++  private expectedFocus: Element | null = null;
++  private queue: { reverse: boolean; generation: number }[] = [];
++  private readonly document: Document;
++  private readonly window: Window & typeof globalThis;
++
++  constructor(
++    private form: HTMLFormElement,
++    private active: () => boolean,
++    private query: () => Promise<boolean>,
++    private failure: () => void,
++  ) {
++    this.document = form.ownerDocument;
++    this.window = this.document.defaultView!;
++    this.document.addEventListener("pointerdown", this.cancel, true);
++    this.document.addEventListener("beforeinput", this.cancel, true);
++    this.document.addEventListener("compositionstart", this.cancel, true);
++    this.document.addEventListener("keydown", this.otherKey, true);
++    this.document.addEventListener("focusin", this.otherFocus, true);
++    this.document.addEventListener("visibilitychange", this.cancel);
++    this.window.addEventListener("blur", this.cancel);
++    this.window.addEventListener("pagehide", this.cancel);
++  }
++
++  private plainTab(event: KeyboardEvent) {
++    return (
++      event.key === "Tab" &&
++      !event.altKey && !event.ctrlKey && !event.metaKey &&
++      !event.isComposing && !event.defaultPrevented &&
++      event.target instanceof this.window.HTMLElement &&
++      this.form.contains(event.target)
++    );
++  }
++
++  private otherKey = (event: KeyboardEvent) => {
++    // Holding Shift prepares reverse Tab; it does not itself change focus or draft.
++    if (event.key !== "Shift" && !this.plainTab(event)) this.cancel();
++  };
++
++  private otherFocus = () => {
++    if (!this.ownFocus) this.cancel();
++  };
++
++  private cancel = () => {
++    this.generation++;
++    this.queue = [];
++    this.expectedFocus = null;
++  };
++
++  handle(event: KeyboardEvent) {
++    if (event.key === "Shift") return;
++    if (this.disposed || !this.active() || !this.plainTab(event)) {
++      this.cancel();
++      return;
++    }
++    event.preventDefault(); // The native default cannot be cancelled after an IPC await.
++    if (!this.expectedFocus) this.expectedFocus = this.document.activeElement;
++    this.queue.push({ reverse: event.shiftKey, generation: this.generation });
++    void this.pump();
++  }
++
++  private valid(generation: number) {
++    return (
++      generation === this.generation && !this.disposed && this.active() &&
++      this.form.isConnected && this.document.visibilityState !== "hidden" &&
++      this.document.hasFocus() && this.document.activeElement === this.expectedFocus &&
++      !!this.expectedFocus && this.form.contains(this.expectedFocus)
++    );
++  }
++
++  private controls(enabled: boolean) {
++    return [...this.form.querySelectorAll<HTMLElement>(
++      enabled ? "input, button, select, textarea, a[href], [tabindex]" : 'input[aria-label="名称"]',
++    )].filter((element) => {
++      const style = this.window.getComputedStyle(element);
++      return element.tabIndex >= 0 && !element.matches(":disabled") &&
++        !element.closest("[hidden], [inert]") && element.getClientRects().length > 0 &&
++        style.display !== "none" && style.visibility !== "hidden" && style.visibility !== "collapse";
++    });
++  }
++
++  private async pump() {
++    if (this.running) return;
++    this.running = true;
++    try {
++      while (this.queue.length && !this.disposed) {
++        const item = this.queue.shift()!;
++        if (!this.valid(item.generation)) continue;
++        try {
++          // Exactly one live query per accepted navigation, with no concurrent replies to reorder.
++          const enabled = await this.query();
++          if (!this.valid(item.generation)) continue;
++          if (typeof enabled !== "boolean") throw Error("invalid keyboard policy");
++          const controls = this.controls(enabled);
++          if (!controls.length) throw Error("no available form control");
++          const index = controls.indexOf(this.expectedFocus as HTMLElement);
++          const next = item.reverse
++            ? (index <= 0 ? controls.length - 1 : index - 1)
++            : (index + 1) % controls.length;
++          const target = controls[next];
++          this.ownFocus = true;
++          try {
++            target.focus();
++            if (target instanceof this.window.HTMLInputElement && target.getAttribute("aria-label") === "名称")
++              target.select();
++          } finally {
++            this.ownFocus = false;
++          }
++          if (this.document.activeElement !== target) throw Error("form focus unavailable");
++          this.expectedFocus = target;
++        } catch {
++          if (this.valid(item.generation)) {
++            this.cancel();
++            this.failure();
++          }
++        }
++      }
++    } finally {
++      this.running = false;
++    }
++  }
++
++  dispose() {
++    this.disposed = true;
++    this.cancel();
++    this.document.removeEventListener("pointerdown", this.cancel, true);
++    this.document.removeEventListener("beforeinput", this.cancel, true);
++    this.document.removeEventListener("compositionstart", this.cancel, true);
++    this.document.removeEventListener("keydown", this.otherKey, true);
++    this.document.removeEventListener("focusin", this.otherFocus, true);
++    this.document.removeEventListener("visibilitychange", this.cancel);
++    this.window.removeEventListener("blur", this.cancel);
++    this.window.removeEventListener("pagehide", this.cancel);
++  }
++}

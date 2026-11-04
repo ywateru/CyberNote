@@ -1,0 +1,15 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: queued query ordered 2 {"focus":"好","type":"submit","start":0,"end":5,"value":"新建文件夹","calls":2,"pending":0,"events":{"cancels":0,"saves":[]}}
+    at check (file:///private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/component-check.mjs:20:84)
+    at file:///private/tmp/apple-notes-ordinary-tab-loop37-01/docs/verification/mac-ordinary-tab-loop37/component-check.mjs:26:389 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '=='
+}
+
+Node.js v22.16.0
