@@ -1,0 +1,622 @@
+{
+  "reviewCommit": "c4125411e09655eb14f6c1092e761d561403b798",
+  "sourceBase": "b5c0aef86edec3988691c73dfe5c83bd1dc0363f",
+  "scope": "Pure Python/temporary fixtures only. Authorization/capture/lock isolated; requested pnpm never executed. No real target/cache/build/sign.",
+  "leaderExitedChild": {
+    "record": {
+      "diskFreeBefore": 5788114944,
+      "minimumFreeBytes": 5788106752,
+      "deadlineSeconds": 2,
+      "ownedProcessGroup": 79176,
+      "stopReason": "download-prompt",
+      "ownedGroupStopped": true,
+      "terminationSignals": [
+        "SIGTERM"
+      ],
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.189,
+      "exitCode": 0
+    },
+    "caught": "RuntimeError('Owned command stopped: download-prompt')",
+    "unrelatedAlive": true,
+    "log": "Downloading https://controlled.invalid\n"
+  },
+  "normalExitWithChild": {
+    "record": {
+      "diskFreeBefore": 5788110848,
+      "minimumFreeBytes": 5788102656,
+      "deadlineSeconds": 2,
+      "ownedProcessGroup": 79184,
+      "stopReason": "orphaned-build-children",
+      "ownedGroupStopped": true,
+      "terminationSignals": [
+        "SIGTERM"
+      ],
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.209,
+      "exitCode": 0
+    },
+    "caught": "RuntimeError('Owned command stopped: orphaned-build-children')",
+    "unrelatedAlive": true,
+    "log": "CONTROLLED CHILD\n"
+  },
+  "provenance": [
+    {
+      "stage": "mac",
+      "regenerateIdenticalBytes": false,
+      "runnerExit": 1,
+      "success": false,
+      "priorBytesAndInodePreserved": true,
+      "collectorProvenanceGateVerified": true,
+      "result": {
+        "schema": 1,
+        "startedAt": "2026-11-04T04:30:20.942987+00:00",
+        "stage": "mac",
+        "expectedHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "productAggregate": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "sourceAggregate": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "freezeSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "attempt": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-3bk_f860/docs/verification/unified-candidate06/controlled/mac-noop",
+        "nonce": "c1f4508d5d454dfc8c4af4fd866769f8",
+        "command": [
+          "pnpm",
+          "mac:build"
+        ],
+        "exitCode": 0,
+        "explicitEnvironmentOverrides": {},
+        "outputIsolation": {
+          "policy": "atomic-rename-final-output-and-dist",
+          "sourcePathsAbsentBeforeCommand": true,
+          "outputs": [
+            {
+              "name": "application",
+              "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-3bk_f860/src-tauri/target/release/bundle/macos/备忘录.app",
+              "preserved": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-3bk_f860/docs/verification/unified-candidate06/controlled/mac-noop/prior-outputs/application",
+              "kind": "directory",
+              "before": {
+                "kind": "directory",
+                "device": 16777233,
+                "inode": 28272863,
+                "mode": 493,
+                "directories": [
+                  {
+                    "path": "Contents",
+                    "mode": 493
+                  },
+                  {
+                    "path": "Contents/MacOS",
+                    "mode": 493
+                  }
+                ],
+                "files": [
+                  {
+                    "path": "Contents/MacOS/notes-clone",
+                    "bytes": 51,
+                    "sha256": "00179d6dbb6fedc70aeab27941057b8eca59b375e0aa5bbe1df765ca1a598ee4",
+                    "type": "file",
+                    "mode": 420
+                  }
+                ]
+              }
+            },
+            {
+              "name": "dist",
+              "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-3bk_f860/dist",
+              "preserved": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-3bk_f860/docs/verification/unified-candidate06/controlled/mac-noop/prior-outputs/dist",
+              "kind": "directory",
+              "before": {
+                "kind": "directory",
+                "device": 16777233,
+                "inode": 28272867,
+                "mode": 493,
+                "directories": [],
+                "files": [
+                  {
+                    "path": "index.html",
+                    "bytes": 25,
+                    "sha256": "4f5708c494a944e53a49329a81a3773be4bcef8ef9778c4b1954749f86de440a",
+                    "type": "file",
+                    "mode": 420
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "diskFreeBefore": 5788086272,
+        "minimumFreeBytes": 5788082176,
+        "deadlineSeconds": 2,
+        "ownedProcessGroup": 79192,
+        "ownedGroupStopped": true,
+        "remainingOwnedGroupMembers": [],
+        "elapsedSeconds": 0.085,
+        "inputComparisons": {
+          "authorization": true,
+          "aggregate": true,
+          "effectiveBuildEnvironment": true,
+          "supplementalInputs": true
+        },
+        "supplementalInputsUnchanged": true,
+        "error": "RuntimeError('Command did not generate required fresh output: /private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-3bk_f860/src-tauri/target/release/bundle/macos/备忘录.app')",
+        "endedAt": "2026-11-04T04:30:21.054857+00:00"
+      },
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "mac:build"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "from pathlib import Path\nprint(\"CANDIDATE06_OFFLINE=true\",flush=True)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "stage": "mac",
+      "regenerateIdenticalBytes": true,
+      "runnerExit": 0,
+      "success": true,
+      "priorBytesAndInodePreserved": true,
+      "collectorProvenanceGateVerified": true,
+      "result": {
+        "schema": 1,
+        "startedAt": "2026-11-04T04:30:21.059427+00:00",
+        "stage": "mac",
+        "expectedHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "productAggregate": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "sourceAggregate": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "freezeSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "attempt": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-a1z7ymwn/docs/verification/unified-candidate06/controlled/mac-fresh",
+        "nonce": "d2abf7b6f9cd487a9dafe8b744dc93f0",
+        "command": [
+          "pnpm",
+          "mac:build"
+        ],
+        "exitCode": 0,
+        "explicitEnvironmentOverrides": {},
+        "outputIsolation": {
+          "policy": "atomic-rename-final-output-and-dist",
+          "sourcePathsAbsentBeforeCommand": true,
+          "outputs": [
+            {
+              "name": "application",
+              "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-a1z7ymwn/src-tauri/target/release/bundle/macos/备忘录.app",
+              "preserved": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-a1z7ymwn/docs/verification/unified-candidate06/controlled/mac-fresh/prior-outputs/application",
+              "kind": "directory",
+              "before": {
+                "kind": "directory",
+                "device": 16777233,
+                "inode": 28272887,
+                "mode": 493,
+                "directories": [
+                  {
+                    "path": "Contents",
+                    "mode": 493
+                  },
+                  {
+                    "path": "Contents/MacOS",
+                    "mode": 493
+                  }
+                ],
+                "files": [
+                  {
+                    "path": "Contents/MacOS/notes-clone",
+                    "bytes": 51,
+                    "sha256": "00179d6dbb6fedc70aeab27941057b8eca59b375e0aa5bbe1df765ca1a598ee4",
+                    "type": "file",
+                    "mode": 420
+                  }
+                ]
+              }
+            },
+            {
+              "name": "dist",
+              "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-a1z7ymwn/dist",
+              "preserved": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-a1z7ymwn/docs/verification/unified-candidate06/controlled/mac-fresh/prior-outputs/dist",
+              "kind": "directory",
+              "before": {
+                "kind": "directory",
+                "device": 16777233,
+                "inode": 28272891,
+                "mode": 493,
+                "directories": [],
+                "files": [
+                  {
+                    "path": "index.html",
+                    "bytes": 25,
+                    "sha256": "4f5708c494a944e53a49329a81a3773be4bcef8ef9778c4b1954749f86de440a",
+                    "type": "file",
+                    "mode": 420
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "diskFreeBefore": 5788082176,
+        "minimumFreeBytes": 5788061696,
+        "deadlineSeconds": 2,
+        "ownedProcessGroup": 79197,
+        "ownedGroupStopped": true,
+        "remainingOwnedGroupMembers": [],
+        "elapsedSeconds": 0.082,
+        "inputComparisons": {
+          "authorization": true,
+          "aggregate": true,
+          "effectiveBuildEnvironment": true,
+          "supplementalInputs": true
+        },
+        "supplementalInputsUnchanged": true,
+        "generatedOutputs": [
+          {
+            "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-a1z7ymwn/src-tauri/target/release/bundle/macos/备忘录.app",
+            "snapshot": {
+              "kind": "directory",
+              "device": 16777233,
+              "inode": 28272899,
+              "mode": 493,
+              "directories": [
+                {
+                  "path": "Contents",
+                  "mode": 493
+                },
+                {
+                  "path": "Contents/MacOS",
+                  "mode": 493
+                }
+              ],
+              "files": [
+                {
+                  "path": "Contents/MacOS/notes-clone",
+                  "bytes": 51,
+                  "sha256": "00179d6dbb6fedc70aeab27941057b8eca59b375e0aa5bbe1df765ca1a598ee4",
+                  "type": "file",
+                  "mode": 420
+                }
+              ]
+            }
+          },
+          {
+            "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-a1z7ymwn/dist",
+            "snapshot": {
+              "kind": "directory",
+              "device": 16777233,
+              "inode": 28272903,
+              "mode": 493,
+              "directories": [],
+              "files": [
+                {
+                  "path": "index.html",
+                  "bytes": 25,
+                  "sha256": "4f5708c494a944e53a49329a81a3773be4bcef8ef9778c4b1954749f86de440a",
+                  "type": "file",
+                  "mode": 420
+                }
+              ]
+            }
+          }
+        ],
+        "buildOutputIdentity": {
+          "path": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-a1z7ymwn/src-tauri/target/release/bundle/macos/备忘录.app",
+          "bundleFiles": [
+            {
+              "path": "Contents/MacOS/notes-clone",
+              "bytes": 51,
+              "sha256": "00179d6dbb6fedc70aeab27941057b8eca59b375e0aa5bbe1df765ca1a598ee4",
+              "type": "file",
+              "mode": 420
+            }
+          ]
+        },
+        "dist": [
+          {
+            "path": "index.html",
+            "bytes": 25,
+            "sha256": "4f5708c494a944e53a49329a81a3773be4bcef8ef9778c4b1954749f86de440a",
+            "type": "file",
+            "mode": 420
+          }
+        ],
+        "endedAt": "2026-11-04T04:30:21.167775+00:00"
+      },
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "mac:build"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "from pathlib import Path\np=Path('/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-a1z7ymwn/src-tauri/target/release/bundle/macos/备忘录.app/Contents/MacOS/notes-clone');p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b'CONTROLLED IDENTICAL OUTPUT; NOT A REAL APPLICATION')\np=Path('/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-a1z7ymwn/dist/index.html');p.parent.mkdir(parents=True,exist_ok=True);p.write_text('CONTROLLED IDENTICAL DIST')\nprint(\"CANDIDATE06_OFFLINE=true\",flush=True)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "stage": "android",
+      "regenerateIdenticalBytes": false,
+      "runnerExit": 1,
+      "success": false,
+      "priorBytesAndInodePreserved": true,
+      "collectorProvenanceGateVerified": true,
+      "result": {
+        "schema": 1,
+        "startedAt": "2026-11-04T04:30:21.175911+00:00",
+        "stage": "android",
+        "expectedHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "productAggregate": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "sourceAggregate": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "freezeSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "attempt": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-m51pfi41/docs/verification/unified-candidate06/controlled/android-noop",
+        "nonce": "9735c532dfcf407090d086c86f0a7567",
+        "command": [
+          "pnpm",
+          "android:build",
+          "--debug"
+        ],
+        "exitCode": 0,
+        "explicitEnvironmentOverrides": {},
+        "outputIsolation": {
+          "policy": "atomic-rename-final-output-and-dist",
+          "sourcePathsAbsentBeforeCommand": true,
+          "outputs": [
+            {
+              "name": "application",
+              "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-m51pfi41/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+              "preserved": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-m51pfi41/docs/verification/unified-candidate06/controlled/android-noop/prior-outputs/application",
+              "kind": "file",
+              "before": {
+                "kind": "file",
+                "device": 16777233,
+                "inode": 28272923,
+                "mode": 420,
+                "bytes": 51,
+                "sha256": "00179d6dbb6fedc70aeab27941057b8eca59b375e0aa5bbe1df765ca1a598ee4"
+              }
+            },
+            {
+              "name": "dist",
+              "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-m51pfi41/dist",
+              "preserved": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-m51pfi41/docs/verification/unified-candidate06/controlled/android-noop/prior-outputs/dist",
+              "kind": "directory",
+              "before": {
+                "kind": "directory",
+                "device": 16777233,
+                "inode": 28272924,
+                "mode": 493,
+                "directories": [],
+                "files": [
+                  {
+                    "path": "index.html",
+                    "bytes": 25,
+                    "sha256": "4f5708c494a944e53a49329a81a3773be4bcef8ef9778c4b1954749f86de440a",
+                    "type": "file",
+                    "mode": 420
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "temporaryGradleInit": {
+          "path": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-m51pfi41/controlled-cache/init.d/candidate06-offline-9735c532dfcf407090d086c86f0a7567.gradle",
+          "device": 16777233,
+          "inode": 28272932,
+          "bytes": 142,
+          "sha256": "6edb2488955a85fa35423768d7fa97efc216f61e966656ae047e51f1c327fb0a"
+        },
+        "diskFreeBefore": 5788069888,
+        "minimumFreeBytes": 5788065792,
+        "deadlineSeconds": 2,
+        "ownedProcessGroup": 79202,
+        "ownedGroupStopped": true,
+        "remainingOwnedGroupMembers": [],
+        "elapsedSeconds": 0.086,
+        "temporaryGradleInitRemoved": true,
+        "temporaryGradleInitBeforeCleanup": {
+          "path": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-m51pfi41/controlled-cache/init.d/candidate06-offline-9735c532dfcf407090d086c86f0a7567.gradle",
+          "device": 16777233,
+          "inode": 28272932,
+          "bytes": 142,
+          "regularFile": true,
+          "sha256": "6edb2488955a85fa35423768d7fa97efc216f61e966656ae047e51f1c327fb0a"
+        },
+        "inputComparisons": {
+          "authorization": true,
+          "aggregate": true,
+          "effectiveBuildEnvironment": true,
+          "supplementalInputs": true
+        },
+        "supplementalInputsUnchanged": true,
+        "error": "RuntimeError('Command did not generate required fresh output: /private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-m51pfi41/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk')",
+        "endedAt": "2026-11-04T04:30:21.287316+00:00"
+      },
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "from pathlib import Path\nprint(\"CANDIDATE06_OFFLINE=true\",flush=True)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "stage": "android",
+      "regenerateIdenticalBytes": true,
+      "runnerExit": 0,
+      "success": true,
+      "priorBytesAndInodePreserved": true,
+      "collectorProvenanceGateVerified": true,
+      "result": {
+        "schema": 1,
+        "startedAt": "2026-11-04T04:30:21.291853+00:00",
+        "stage": "android",
+        "expectedHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "productAggregate": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "sourceAggregate": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "freezeSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "attempt": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/docs/verification/unified-candidate06/controlled/android-fresh",
+        "nonce": "67756e29760d4bf9bf500e49088135f6",
+        "command": [
+          "pnpm",
+          "android:build",
+          "--debug"
+        ],
+        "exitCode": 0,
+        "explicitEnvironmentOverrides": {},
+        "outputIsolation": {
+          "policy": "atomic-rename-final-output-and-dist",
+          "sourcePathsAbsentBeforeCommand": true,
+          "outputs": [
+            {
+              "name": "application",
+              "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+              "preserved": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/docs/verification/unified-candidate06/controlled/android-fresh/prior-outputs/application",
+              "kind": "file",
+              "before": {
+                "kind": "file",
+                "device": 16777233,
+                "inode": 28272952,
+                "mode": 420,
+                "bytes": 51,
+                "sha256": "00179d6dbb6fedc70aeab27941057b8eca59b375e0aa5bbe1df765ca1a598ee4"
+              }
+            },
+            {
+              "name": "dist",
+              "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/dist",
+              "preserved": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/docs/verification/unified-candidate06/controlled/android-fresh/prior-outputs/dist",
+              "kind": "directory",
+              "before": {
+                "kind": "directory",
+                "device": 16777233,
+                "inode": 28272953,
+                "mode": 493,
+                "directories": [],
+                "files": [
+                  {
+                    "path": "index.html",
+                    "bytes": 25,
+                    "sha256": "4f5708c494a944e53a49329a81a3773be4bcef8ef9778c4b1954749f86de440a",
+                    "type": "file",
+                    "mode": 420
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "temporaryGradleInit": {
+          "path": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/controlled-cache/init.d/candidate06-offline-67756e29760d4bf9bf500e49088135f6.gradle",
+          "device": 16777233,
+          "inode": 28272961,
+          "bytes": 142,
+          "sha256": "6edb2488955a85fa35423768d7fa97efc216f61e966656ae047e51f1c327fb0a"
+        },
+        "diskFreeBefore": 5788037120,
+        "minimumFreeBytes": 5788016640,
+        "deadlineSeconds": 2,
+        "ownedProcessGroup": 79207,
+        "ownedGroupStopped": true,
+        "remainingOwnedGroupMembers": [],
+        "elapsedSeconds": 0.086,
+        "temporaryGradleInitRemoved": true,
+        "temporaryGradleInitBeforeCleanup": {
+          "path": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/controlled-cache/init.d/candidate06-offline-67756e29760d4bf9bf500e49088135f6.gradle",
+          "device": 16777233,
+          "inode": 28272961,
+          "bytes": 142,
+          "regularFile": true,
+          "sha256": "6edb2488955a85fa35423768d7fa97efc216f61e966656ae047e51f1c327fb0a"
+        },
+        "inputComparisons": {
+          "authorization": true,
+          "aggregate": true,
+          "effectiveBuildEnvironment": true,
+          "supplementalInputs": true
+        },
+        "supplementalInputsUnchanged": true,
+        "generatedOutputs": [
+          {
+            "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+            "snapshot": {
+              "kind": "file",
+              "device": 16777233,
+              "inode": 28272963,
+              "mode": 420,
+              "bytes": 51,
+              "sha256": "00179d6dbb6fedc70aeab27941057b8eca59b375e0aa5bbe1df765ca1a598ee4"
+            }
+          },
+          {
+            "source": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/dist",
+            "snapshot": {
+              "kind": "directory",
+              "device": 16777233,
+              "inode": 28272964,
+              "mode": 493,
+              "directories": [],
+              "files": [
+                {
+                  "path": "index.html",
+                  "bytes": 25,
+                  "sha256": "4f5708c494a944e53a49329a81a3773be4bcef8ef9778c4b1954749f86de440a",
+                  "type": "file",
+                  "mode": 420
+                }
+              ]
+            }
+          }
+        ],
+        "buildOutputIdentity": {
+          "path": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+          "bytes": 51,
+          "sha256": "00179d6dbb6fedc70aeab27941057b8eca59b375e0aa5bbe1df765ca1a598ee4"
+        },
+        "dist": [
+          {
+            "path": "index.html",
+            "bytes": 25,
+            "sha256": "4f5708c494a944e53a49329a81a3773be4bcef8ef9778c4b1954749f86de440a",
+            "type": "file",
+            "mode": 420
+          }
+        ],
+        "endedAt": "2026-11-04T04:30:21.403724+00:00"
+      },
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "from pathlib import Path\np=Path('/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk');p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b'CONTROLLED IDENTICAL OUTPUT; NOT A REAL APPLICATION')\np=Path('/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-fix-provenance-i0rn7cdb/dist/index.html');p.parent.mkdir(parents=True,exist_ok=True);p.write_text('CONTROLLED IDENTICAL DIST')\nprint(\"CANDIDATE06_OFFLINE=true\",flush=True)\n"
+          ]
+        }
+      ]
+    }
+  ],
+  "symlink": {
+    "externalSymlinkRejected": true,
+    "externalBytesUntouched": true
+  },
+  "status": "pass"
+}

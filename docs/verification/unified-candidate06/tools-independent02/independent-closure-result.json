@@ -1,0 +1,28 @@
+{
+  "sourceCommit": "da9d0053d28f77f41398767c7f400c7ab39b6c9c",
+  "exceptionGroupCleanup": {
+    "record": {
+      "diskFreeBefore": 5785063424,
+      "minimumFreeBytes": 5785063424,
+      "deadlineSeconds": 2,
+      "ownedProcessGroup": 79261,
+      "ownedGroupStopped": true,
+      "terminationSignals": [
+        "SIGTERM"
+      ],
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.106,
+      "exitCode": -15
+    },
+    "caught": "ValueError('CONTROLLED monitor read failure')",
+    "unrelatedAliveAfterCleanup": true
+  },
+  "atomicDirectoryIdentity": {
+    "atomicPriorSnapshotEqual": true,
+    "oldRootInodePreserved": true,
+    "internalRelativeSymlinkAndEmptyDirectoryPreserved": true,
+    "originalFixedPathsAbsent": true,
+    "missingNewOutputRejected": "RuntimeError('Command did not generate required fresh output: /private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/independent06-rename-er_2kxw4/src-tauri/target/release/bundle/macos/备忘录.app')"
+  },
+  "scope": "No actual build/version/Gradle/cargo/signing/GUI/target/cache. Temporary fake output paths only."
+}
