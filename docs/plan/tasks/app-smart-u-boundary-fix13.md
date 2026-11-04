@@ -1,7 +1,7 @@
 ---
 id: app-smart-u-boundary-fix13
 scope: U-F1 draft addition and U-F2 strict combine rejection
-status: in-progress
+status: done
 depends-on: [app-smart-u-platform-ui09]
 ---
 
@@ -22,3 +22,9 @@ depends-on: [app-smart-u-platform-ui09]
 用真实挂载生产表单复现第三行：tags+date时可增加pinned、按点击行之后插入、三种全占禁+、date仍拒绝且不丢稿；同时测试移除已占类型后重新可新增。共享corpus覆盖非法数组combine，实际TS parser和临时Rust Session一致拒绝；合法all/any混合facts保留区别。复用独审失败探针作为回归，不改独审原文件。必要一次共享Rust corpus窄测试可用现harness/target，实际Rust生产字节不变，不重复宿主check/全Rust或完整九组，仅在失败/额外变更有依据时拓宽。最终稳定源码pnpm build及diff检查，所有新失败保留。
 
 作者完成前目标独占；每条600s、locked/offline、jobs2、≥2GiB，无GUI/ADB/用户库/平台构建/下载/清缓存。最终source identity逐项核查，说明与旧Rust/transport的准确对应。SOURCE-READY STOP释放target，root固定commit后交不同作者按新准确源复验U-F1/U-F2及必要受影响路径；通过前不构建平台包，不关闭U/F17/总目标。
+
+## Accepted source
+
+2026-11-05，产品固定为`8e8fe7e320e34a2b9c27bf7c7e794662ad988da4`，不同作者[窄复验pass](../reviews/app-smart-u-boundary-fix13.md)。原两个失败探针原样复跑通过；实际第三行、插入、已用类型、日期拒绝保留/零create、移除重加和最终真实Rust保存通过；TS30、独立all/any8值、共享Rust1项通过，作者最终build身份相同。466项当前文件/固定blob/manifest一致；root复核新独立封存30项无hash差异。原d576b50 blocked报告及失败证据保留。
+
+仅关闭U-F1/U-F2源码阻断，不代表完整U、设备、输入法或像素通过。共享target已释放，可以按设备任务由root固定准确构建源和平台输入后START出包。

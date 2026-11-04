@@ -1,6 +1,6 @@
 # Apple Notes Clone
 
-更新：2026-11-04。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
+更新：2026-11-05。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
 - [需求与验收](requirements.md)
 - [架构与数据契约](architecture.md)
@@ -21,7 +21,10 @@
 - [后续日期规则菜单、范围和相对单位未保存草稿12](research/smart-folder-date-draft-runtime12/README.md)
 - [智能界面候选独审：第三规则与非法组合值P2](plan/reviews/app-smart-u-platform-ui09.md)
 - [智能界面两项边界窄修13](plan/tasks/app-smart-u-boundary-fix13.md)
+- [两项窄修准确源码独立通过](plan/reviews/app-smart-u-boundary-fix13.md)
+- [后续纯本地智能规则的数据准备13](research/smart-local-rules-readiness13.md)
 - [智能界面准确双端包与有限设备验收准备](plan/tasks/app-smart-u-device09.md)
+- [智能双端包输入清单与串行安排](verification/unified-candidate06/smart-u-device09-preparation/README.md)
 - [Mac智能文件夹表单布局](ui/smart-folders-macos.md)
 - [Mac智能表单原图像素测量与捕获范围](research/smart-folder-form-measurements09/README.md)
 - [手机智能文件夹官方文字与原图依据09](research/mobile-smart-folder-official09.md)

@@ -73,3 +73,5 @@ Mac按已采表单和菜单结构：新建切换制作智能、默认标签行�
 ## 2026-11-05 独审回流
 
 候选`d576b50`准确源独审blocked，报告[app-smart-u-platform-ui09](../reviews/app-smart-u-platform-ui09.md)。最终九组及新增peer/O路径通过，但新增规则提前禁用、combine数组被TS接纳两项P2仍阻断。按[boundary-fix13](app-smart-u-boundary-fix13.md)窄修并重新固定源；不提前构建双端包，不将旧blocked证据改写成pass。
+
+2026-11-05后续：fix13准确源`8e8fe7e320e34a2b9c27bf7c7e794662ad988da4`[不同作者窄复验pass](../reviews/app-smart-u-boundary-fix13.md)，两项源码阻断已解除。结合旧最终九组及peer/O检查，当前标签/置顶接入可以推进准确双端包与有限设备验收；完整U、其他本地规则、手机未知状态及像素仍in-progress。历史blocked报告与失败证据保持原版本结论。
