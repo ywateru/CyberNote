@@ -7,6 +7,7 @@
 - [参考资料与调研](research/README.md)
 - [本地标签、智能文件夹、数学、链接与格式接入分析](research/local-feature-integration.md)
 - [智能文件夹存储、归档、查询与访问边界准备审计](research/smart-folder-readiness-20261104-01.md)
+- [原版智能文件夹实际保存、求值与导航补证任务](plan/tasks/ref-smart-folders-runtime-01.md)
 - [离线扫描与媒体接入研究](research/offline-media-scanning.md)
 - [现有录音与本地播放链准备审计](research/media-roundtrip-readiness/analysis.md)
 - [录音链当前源码差异与受控音轨基线](research/media-roundtrip-readiness/current-source-delta.md)
