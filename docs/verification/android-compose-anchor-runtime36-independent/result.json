@@ -1,0 +1,461 @@
+{
+  "status": "PASS_WITH_OPEN_PARITY_OBSERVATION",
+  "stop": true,
+  "reviewScope": "Independent saved-evidence review only, no ADB/GUI/DB/build/source/Git operations",
+  "sourceHead": "182464bcc3055caadcd78fe4c7ce1a0ec31eea6a",
+  "authorIndexSha256": "a7d1caf870a28c5b815e276375f3d968837b62fbd106241cb3da17ff93e7166d",
+  "authorResultSha256": "b38a32345cecc6066ca84f8c0913788013d35ad89bb37a2e13ffb67e22a1a9a4",
+  "checks": [
+    {
+      "name": "exact author evidence index and result",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "authorIndex exact identities",
+      "passed": true,
+      "details": 51
+    },
+    {
+      "name": "protectedInputs exact identities",
+      "passed": true,
+      "details": 331
+    },
+    {
+      "name": "331 initial and close input protection matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "323 actual frozen files and product304 aggregate",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "old07 exact installed identity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "exact install-r command succeeds",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "after and final baseAPK equal accurate08 bytes and hash",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "userId and firstInstallTime remain",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "02-before-screen PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "04-launch PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "06-compose-tap PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "07-empty-draft-return PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "08-folders-after-empty-return PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "09-visible-left-plus PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "10-folder-cancel PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "11-existing-list PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "12-existing-qa PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "13-qa-return-list PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "14-before-restart-folders PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "15-force-stop-reopen PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "16-reopened-list PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "17-reopened-qa PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "18-final-folders PNG matches raw screencap",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "06-compose-tap.json actual finite input",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "07-empty-draft-return.json actual finite input",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "09-visible-left-plus.json actual finite input",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "10-folder-cancel.json actual finite input",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "no text input or destructive database commands in recorded event stream",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "00-before-identity.json failure preserved before successful device input",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "05-compose-tap.json failure preserved before successful device input",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "real cold restart new PID",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "original14 image dimensions",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "original14/gold_strict independent measurement matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "original14/gold_loose independent measurement matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "original62 image dimensions",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "original62/gold_strict independent measurement matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "original62/gold_loose independent measurement matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "android07-19 image dimensions",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "android07-19/gold_strict independent measurement matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "android07-19/gold_loose independent measurement matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "android08-04 image dimensions",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "android08-04/gold_strict independent measurement matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "android08-04/gold_loose independent measurement matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "android08-15 image dimensions",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "android08-15/gold_strict independent measurement matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "android08-15/gold_loose independent measurement matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "old07_to_exact08_outside_compose independent RGB control",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "qa_body_before_after_restart independent RGB control",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "08_before_to_after_restart_except_observed_8_to_9 independent RGB control",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "compose full RGB paint translated by8 within common strip",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "blank new note observation is open and8to9 retained",
+      "passed": true,
+      "details": null
+    }
+  ],
+  "assertions": 52,
+  "captureRecordsVerified": 15,
+  "remeasured": {
+    "original14": {
+      "gold_strict": {
+        "nativeBbox": [
+          202,
+          442,
+          214,
+          454
+        ],
+        "pixels": 39,
+        "widthInReferencePx": 12.0,
+        "heightInReferencePx": 12.0,
+        "centerXInReferencePx": 208.0
+      },
+      "gold_loose": {
+        "nativeBbox": [
+          202,
+          442,
+          214,
+          454
+        ],
+        "pixels": 92,
+        "widthInReferencePx": 12.0,
+        "heightInReferencePx": 12.0,
+        "centerXInReferencePx": 208.0
+      }
+    },
+    "original62": {
+      "gold_strict": {
+        "nativeBbox": [
+          202,
+          442,
+          214,
+          454
+        ],
+        "pixels": 39,
+        "widthInReferencePx": 12.0,
+        "heightInReferencePx": 12.0,
+        "centerXInReferencePx": 208.0
+      },
+      "gold_loose": {
+        "nativeBbox": [
+          202,
+          442,
+          214,
+          454
+        ],
+        "pixels": 99,
+        "widthInReferencePx": 12.0,
+        "heightInReferencePx": 12.0,
+        "centerXInReferencePx": 208.0
+      }
+    },
+    "android07-19": {
+      "gold_strict": {
+        "nativeBbox": [
+          966,
+          2049,
+          1023,
+          2105
+        ],
+        "pixels": 1050,
+        "widthInReferencePx": 11.822222222222223,
+        "heightInReferencePx": 11.614814814814816,
+        "centerXInReferencePx": 206.26666666666668
+      },
+      "gold_loose": {
+        "nativeBbox": [
+          966,
+          2049,
+          1023,
+          2105
+        ],
+        "pixels": 1050,
+        "widthInReferencePx": 11.822222222222223,
+        "heightInReferencePx": 11.614814814814816,
+        "centerXInReferencePx": 206.26666666666668
+      }
+    },
+    "android08-04": {
+      "gold_strict": {
+        "nativeBbox": [
+          974,
+          2049,
+          1031,
+          2105
+        ],
+        "pixels": 1050,
+        "widthInReferencePx": 11.822222222222223,
+        "heightInReferencePx": 11.614814814814816,
+        "centerXInReferencePx": 207.92592592592592
+      },
+      "gold_loose": {
+        "nativeBbox": [
+          974,
+          2049,
+          1031,
+          2105
+        ],
+        "pixels": 1050,
+        "widthInReferencePx": 11.822222222222223,
+        "heightInReferencePx": 11.614814814814816,
+        "centerXInReferencePx": 207.92592592592592
+      }
+    },
+    "android08-15": {
+      "gold_strict": {
+        "nativeBbox": [
+          974,
+          2049,
+          1031,
+          2105
+        ],
+        "pixels": 1050,
+        "widthInReferencePx": 11.822222222222223,
+        "heightInReferencePx": 11.614814814814816,
+        "centerXInReferencePx": 207.92592592592592
+      },
+      "gold_loose": {
+        "nativeBbox": [
+          974,
+          2049,
+          1031,
+          2105
+        ],
+        "pixels": 1050,
+        "widthInReferencePx": 11.822222222222223,
+        "heightInReferencePx": 11.614814814814816,
+        "centerXInReferencePx": 207.92592592592592
+      }
+    }
+  },
+  "pixelControls": {
+    "old07_to_exact08_outside_compose": {
+      "roi": [
+        0,
+        83,
+        1080,
+        2148
+      ],
+      "exclusions": [
+        [
+          930,
+          2020,
+          1060,
+          2130
+        ]
+      ],
+      "changedPixels": 0
+    },
+    "qa_body_before_after_restart": {
+      "roi": [
+        0,
+        83,
+        1080,
+        2148
+      ],
+      "exclusions": [],
+      "changedPixels": 0
+    },
+    "08_before_to_after_restart_except_observed_8_to_9": {
+      "roi": [
+        0,
+        83,
+        1080,
+        2148
+      ],
+      "exclusions": [
+        [
+          900,
+          810,
+          970,
+          1010
+        ]
+      ],
+      "changedPixels": 0
+    }
+  },
+  "composeTranslationNativePx": 8,
+  "newCenterMinusOriginalReferencePx": -0.07407407407407618,
+  "observation": "Empty create with no text then normal back retains one new blank entry; counts8to9. Original same-path parity unproven; no cancel-no-create PASS.",
+  "visualReview": "Viewed six-state contact sheet and native QA screenshot. Initial0/8/8/1, new editor+keyboard, blank list entry+count9, newfolderdialog then cancel/folders0/9/9/1 visible. QA complete title/body/tag visible; independently exactRGB matched after restart.",
+  "limits": [
+    "Only saved evidence reviewed; no second live replay.",
+    "Near-right left-plus edge was not separately tapped in runtime36; visible-circle center tap only.",
+    "Visible counts and one old QA do not establish all records/attachments/database integrity.",
+    "Width-only1080/224 normalization; original compressed224x480 cannot prove path/stroke/color/native slot pixel equivalence.",
+    "No original same-path empty-back proof; entire project acceptance remains open."
+  ]
+}

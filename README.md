@@ -6,14 +6,14 @@
 
 ## 当前交付（2026-11-05）
 
-当前本机可用包为 **Mac12 / Android07**，共用固定产品源 `d7423070207684c5a2bb584281350723c44e9d9c`。两端已实际运行，构建产物与有限运行证据分别经独立复核，见[本批有限接收](docs/verification/name-mobile29-root-acceptance.md)。当前包包含本地标签与智能文件夹接入；完整规则、全部交互及像素目标仍按[交付计划](docs/plan/README.md)逐项推进，不能沿用下方旧包的待验状态作为当前结论。
+当前本机可用包为 **Mac13 / Android08**，共用固定产品源 `182464bcc3055caadcd78fe4c7ce1a0ec31eea6a`。两端已实际运行，准确构建、有限设备记录及局部量图均有不同作者复核，见[本批有限接收](docs/verification/typography-compose-keyboard36-root-acceptance.md)。本地标签与智能文件夹已接入；完整规则、全部交互及像素目标继续按[交付计划](docs/plan/README.md)推进。
 
 | 平台 | 当前本机交付（未纳入Git） | 本批已验证 |
 | --- | --- | --- |
-| Mac12 | [ZIP](artifacts/unified-candidate06/mac-name-focus-build12/mac-attempt01/mac-sealed.zip) / [应用](artifacts/unified-candidate06/mac-name-focus-build12/mac-attempt01/mac-sealed.app) | arm64，本地完整adhoc签名，未公证；工具栏/菜单恢复侧栏、正常重启显隐保持、名称选择/输入/取消 |
-| Android07 | [APK](artifacts/unified-candidate06/android-folder-visual-build07/android-attempt01/android-original.apk) | arm64-v8a debug；保数据覆盖升级、可见加号真实触摸、目录导航/长按与正文选字、冷启动可见内容保持 |
+| Mac13 | [ZIP](artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.zip) / [应用](artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app) | arm64，本地完整adhoc签名、未公证；两条侧栏恢复、动态菜单、显隐偏好正常重启保持、普通文字绘制改善 |
+| Android08 | [APK](artifacts/unified-candidate06/android-compose-anchor-build08/android-attempt01/android-original.apk) | arm64-v8a debug；保数据覆盖升级、右下新建真实触摸、左侧plus取消、旧QA正文/标签冷启保持，图标实际右移8px |
 
-Mac普通新建表单指定文字位置与原版对齐，文字浓度、选区色与焦点环角部仍有差异。手机快速行文字、标题、普通文件夹及左下新建图标局部几何更接近录屏，右下新建备忘录图标仍有位置差异；原录屏分辨率224×480，不能据局部改善宣称整页逐像素一致。详见[Mac实际复核](docs/plan/reviews/mac-name-focus-runtime29.md)及[Android实际复核](docs/plan/reviews/android-folder-visual-runtime29.md)。
+Mac普通表单名称和标签局部更接近原版，字形、选区色与焦点环仍有残差。普通Tab/OptionTab仍不一致，正按[局部循环任务37](docs/plan/tasks/app-mac-ordinary-tab-loop37.md)修复。Android右下图标宽归一中心已从206.2667改善至207.9259，录屏为208；原视频224×480，不能据此授精确path或全页像素PASS。空白新建无输入返回后8→9的条目保留，原版相同路径语义待证，不授取消不新增。详见[Mac实际复核](docs/plan/reviews/mac-typography-keyboard-runtime36.md)及[Android实际复核](docs/plan/reviews/android-compose-anchor-runtime36.md)。
 
 原始移动端录屏已保存在 `references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4`。原版删除/恢复实验按用户要求暂停；Mac对比使用Computer Use，本批未增加系统截图工具权限要求。旧包、缓存及失败证据均保留。
 
