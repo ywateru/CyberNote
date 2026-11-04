@@ -225,6 +225,12 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             });
             Ok(())
         })
+        .on_webview_ready(|webview| {
+            #[cfg(target_os = "macos")]
+            macos::install_keyboard_policy(webview);
+            #[cfg(not(target_os = "macos"))]
+            let _ = webview;
+        })
         .on_event(|app, event| {
             #[cfg(target_os = "macos")]
             match event {
@@ -242,7 +248,10 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
                     label,
                     event: tauri::WindowEvent::Destroyed,
                     ..
-                } => macos::destroy_label(app, label),
+                } => {
+                    macos::destroy_keyboard_policy(app, Some(label));
+                    macos::destroy_label(app, label);
+                }
                 _ => {}
             }
             #[cfg(not(target_os = "macos"))]
@@ -250,7 +259,10 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
         })
         .on_drop(|app| {
             #[cfg(target_os = "macos")]
-            macos::destroy_all(&app);
+            {
+                macos::destroy_keyboard_policy(&app, None);
+                macos::destroy_all(&app);
+            }
             #[cfg(not(target_os = "macos"))]
             let _ = app;
         })

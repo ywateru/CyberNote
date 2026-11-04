@@ -20,6 +20,86 @@ extern "C" {
     fn notes_ui_focus_search(id: *const c_char) -> *mut c_char;
     fn notes_ui_destroy(id: *const c_char);
     fn notes_ui_free(value: *mut c_char);
+    fn notes_ui_keyboard_attach(
+        webview: *mut c_void,
+        window: *mut c_void,
+        webview_label: *const c_char,
+        window_label: *const c_char,
+    ) -> i32;
+    fn notes_ui_keyboard_destroy(window_label: *const c_char) -> i32;
+}
+
+fn keyboard_status(status: i32) -> Result<()> {
+    match status {
+        0 => Ok(()),
+        1 => Err(Error::new("thread", "键盘导航策略必须在主线程同步")),
+        2 => Err(Error::new(
+            "keyboard_target",
+            "键盘导航策略没有有效的所属 WKWebView/NSWindow",
+        )),
+        3 => Err(Error::new(
+            "keyboard_identity",
+            "键盘导航策略的视图标识已用于其他目标",
+        )),
+        4 => Err(Error::new(
+            "keyboard_monitor",
+            "无法创建窗口内的键盘导航监听",
+        )),
+        _ => Err(Error::new("keyboard_native", "原生键盘导航策略同步失败")),
+    }
+}
+
+pub(super) fn install_keyboard_policy<R: Runtime>(webview: tauri::Webview<R>) {
+    let labels = cstr(webview.label()).and_then(|view_label| {
+        cstr(webview.window().label()).map(|window_label| (view_label, window_label))
+    });
+    let (view_label, window_label) = match labels {
+        Ok(labels) => labels,
+        Err(error) => {
+            eprintln!("notes-ui: keyboard policy identity failed: {error}");
+            return;
+        }
+    };
+    // Completion is the native result inside this callback, not successful enqueueing.
+    if let Err(error) = webview.with_webview(move |native| {
+        let result = keyboard_status(unsafe {
+            notes_ui_keyboard_attach(
+                native.inner(),
+                native.ns_window(),
+                view_label.as_ptr(),
+                window_label.as_ptr(),
+            )
+        });
+        match result {
+            Ok(()) => eprintln!(
+                "notes-ui: keyboard policy installation completed for {}",
+                view_label.to_string_lossy()
+            ),
+            Err(error) => eprintln!("notes-ui: keyboard policy installation failed: {error}"),
+        }
+    }) {
+        eprintln!("notes-ui: keyboard policy dispatch failed: {error}");
+    }
+}
+
+pub(super) fn destroy_keyboard_policy<R: Runtime>(app: &AppHandle<R>, label: Option<&str>) {
+    let label = match label.map(cstr).transpose() {
+        Ok(label) => label,
+        Err(error) => {
+            eprintln!("notes-ui: keyboard policy cleanup identity failed: {error}");
+            return;
+        }
+    };
+    if let Err(error) = app.run_on_main_thread(move || {
+        let result = keyboard_status(unsafe {
+            notes_ui_keyboard_destroy(label.as_ref().map_or(std::ptr::null(), |s| s.as_ptr()))
+        });
+        if let Err(error) = result {
+            eprintln!("notes-ui: keyboard policy cleanup failed: {error}");
+        }
+    }) {
+        eprintln!("notes-ui: keyboard policy cleanup dispatch failed: {error}");
+    }
 }
 struct Callback<R: Runtime> {
     window: Window<R>,

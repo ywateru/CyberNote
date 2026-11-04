@@ -1,0 +1,325 @@
+--- baseline/plugins/tauri-plugin-notes-ui/src/lib.rs
++++ candidate/plugins/tauri-plugin-notes-ui/src/lib.rs
+@@ -224,6 +224,12 @@
+                 bindings: Arc::new(Mutex::new(HashMap::new())),
+             });
+             Ok(())
++        })
++        .on_webview_ready(|webview| {
++            #[cfg(target_os = "macos")]
++            macos::install_keyboard_policy(webview);
++            #[cfg(not(target_os = "macos"))]
++            let _ = webview;
+         })
+         .on_event(|app, event| {
+             #[cfg(target_os = "macos")]
+@@ -242,7 +248,10 @@
+                     label,
+                     event: tauri::WindowEvent::Destroyed,
+                     ..
+-                } => macos::destroy_label(app, label),
++                } => {
++                    macos::destroy_keyboard_policy(app, Some(label));
++                    macos::destroy_label(app, label);
++                }
+                 _ => {}
+             }
+             #[cfg(not(target_os = "macos"))]
+@@ -250,7 +259,10 @@
+         })
+         .on_drop(|app| {
+             #[cfg(target_os = "macos")]
+-            macos::destroy_all(&app);
++            {
++                macos::destroy_keyboard_policy(&app, None);
++                macos::destroy_all(&app);
++            }
+             #[cfg(not(target_os = "macos"))]
+             let _ = app;
+         })
+--- baseline/plugins/tauri-plugin-notes-ui/src/macos.rs
++++ candidate/plugins/tauri-plugin-notes-ui/src/macos.rs
+@@ -20,6 +20,86 @@
+     fn notes_ui_focus_search(id: *const c_char) -> *mut c_char;
+     fn notes_ui_destroy(id: *const c_char);
+     fn notes_ui_free(value: *mut c_char);
++    fn notes_ui_keyboard_attach(
++        webview: *mut c_void,
++        window: *mut c_void,
++        webview_label: *const c_char,
++        window_label: *const c_char,
++    ) -> i32;
++    fn notes_ui_keyboard_destroy(window_label: *const c_char) -> i32;
++}
++
++fn keyboard_status(status: i32) -> Result<()> {
++    match status {
++        0 => Ok(()),
++        1 => Err(Error::new("thread", "键盘导航策略必须在主线程同步")),
++        2 => Err(Error::new(
++            "keyboard_target",
++            "键盘导航策略没有有效的所属 WKWebView/NSWindow",
++        )),
++        3 => Err(Error::new(
++            "keyboard_identity",
++            "键盘导航策略的视图标识已用于其他目标",
++        )),
++        4 => Err(Error::new(
++            "keyboard_monitor",
++            "无法创建窗口内的键盘导航监听",
++        )),
++        _ => Err(Error::new("keyboard_native", "原生键盘导航策略同步失败")),
++    }
++}
++
++pub(super) fn install_keyboard_policy<R: Runtime>(webview: tauri::Webview<R>) {
++    let labels = cstr(webview.label()).and_then(|view_label| {
++        cstr(webview.window().label()).map(|window_label| (view_label, window_label))
++    });
++    let (view_label, window_label) = match labels {
++        Ok(labels) => labels,
++        Err(error) => {
++            eprintln!("notes-ui: keyboard policy identity failed: {error}");
++            return;
++        }
++    };
++    // Completion is the native result inside this callback, not successful enqueueing.
++    if let Err(error) = webview.with_webview(move |native| {
++        let result = keyboard_status(unsafe {
++            notes_ui_keyboard_attach(
++                native.inner(),
++                native.ns_window(),
++                view_label.as_ptr(),
++                window_label.as_ptr(),
++            )
++        });
++        match result {
++            Ok(()) => eprintln!(
++                "notes-ui: keyboard policy installation completed for {}",
++                view_label.to_string_lossy()
++            ),
++            Err(error) => eprintln!("notes-ui: keyboard policy installation failed: {error}"),
++        }
++    }) {
++        eprintln!("notes-ui: keyboard policy dispatch failed: {error}");
++    }
++}
++
++pub(super) fn destroy_keyboard_policy<R: Runtime>(app: &AppHandle<R>, label: Option<&str>) {
++    let label = match label.map(cstr).transpose() {
++        Ok(label) => label,
++        Err(error) => {
++            eprintln!("notes-ui: keyboard policy cleanup identity failed: {error}");
++            return;
++        }
++    };
++    if let Err(error) = app.run_on_main_thread(move || {
++        let result = keyboard_status(unsafe {
++            notes_ui_keyboard_destroy(label.as_ref().map_or(std::ptr::null(), |s| s.as_ptr()))
++        });
++        if let Err(error) = result {
++            eprintln!("notes-ui: keyboard policy cleanup failed: {error}");
++        }
++    }) {
++        eprintln!("notes-ui: keyboard policy cleanup dispatch failed: {error}");
++    }
+ }
+ struct Callback<R: Runtime> {
+     window: Window<R>,
+--- baseline/plugins/tauri-plugin-notes-ui/build.rs
++++ candidate/plugins/tauri-plugin-notes-ui/build.rs
+@@ -4,16 +4,18 @@
+         cc::Build::new()
+             .file("macos/toolbar.m")
+             .file("macos/format.m")
++            .file("macos/keyboard.m")
+             .flag("-fobjc-arc")
+             .flag("-fblocks")
+             .flag("-mmacosx-version-min=12.0")
+             .warnings(true)
+             .compile("notes_ui_toolbar");
+-        for framework in ["AppKit", "Foundation", "QuartzCore"] {
++        for framework in ["AppKit", "Foundation", "QuartzCore", "WebKit"] {
+             println!("cargo:rustc-link-lib=framework={framework}");
+         }
+         println!("cargo:rerun-if-changed=macos/toolbar.m");
+         println!("cargo:rerun-if-changed=macos/format.m");
+         println!("cargo:rerun-if-changed=macos/format.h");
++        println!("cargo:rerun-if-changed=macos/keyboard.m");
+     }
+ }
+--- baseline/plugins/tauri-plugin-notes-ui/Cargo.toml
++++ candidate/plugins/tauri-plugin-notes-ui/Cargo.toml
+@@ -18,6 +18,10 @@
+ serde_json = "1"
+ uuid = { version = "1", features = ["v4"] }
+ 
++[target.'cfg(target_os = "macos")'.dependencies]
++# Native WKWebView access is part of the Mac plugin contract, including standalone builds.
++tauri = { version = "=2.12.5", default-features = false, features = ["wry"] }
++
+ [build-dependencies]
+ tauri-plugin = { version = "=2.7.2", features = ["build"] }
+ cc = "1"
+--- baseline/plugins/tauri-plugin-notes-ui/README.md
++++ candidate/plugins/tauri-plugin-notes-ui/README.md
+@@ -88,3 +88,14 @@
+ bind/update/inspect/unbind 先做自身参数校验，对有效调用均返回 `{code:"unsupported",message:"此原生顶部模块仅支持 macOS"}`。此为编译与源码契约验证，未执行Android invoke；不声称此模块提供手机原生顶部栏。guest严格TypeScript检查再次通过。所有代码/Cargo/锁相对adc544a未变化，证据见 docs/verification/app-001-native-toolbar-plugin/android-compile-audit.json、android-check.txt、android-build-script-output.txt、android-module-inputs.txt 和 android-normal-dependencies.txt。
+ 
+ 2026-11-03 focusSearch 后续候选的接口、8项Rust检查、strict TS、Wry构建和Android条件编译记录单独保存在 `docs/verification/app-001-native-toolbar-plugin/focus-search/`；本段 adc544a/7760bb7 的历史日志不替代新候选的运行证据。新入口在非Mac同样先校验调用窗口及UUID，对有效调用明确返回 unsupported；Android invoke仍未运行。
++
++
++## Mac 系统键盘导航策略（35，源码候选）
++
++插件在 `on_webview_ready` 后通过 `with_webview` 的同一次原生回调取得真实 WKWebView 和显式所属 NSWindow。独立 `macos/keyboard.m` 控制器在主线程注册，不依赖工具栏的 bind/update/unbind、可见性或绑定表，主窗与独立笔记窗各有自己的生命周期。Mac target 显式启用当前已锁定 Tauri 的 wry feature；版本、锁文件及宿主无需修改。非 Mac 不编译此控制器或链接 WebKit。
++
++控制器每次直接读取公开的 `NSApp.isFullKeyboardAccessEnabled`，写入该 WKWebView 的 `configuration.preferences.tabFocusesLinks`：创建完成时、所属窗口变为 key 时、应用重新激活且所属窗口为 key 时，以及所属窗口的下一次 Tab keyDown 分发前。没有 defaults、KVO 或系统值缓存。一次视图注册一个应用内 local monitor，先核对事件的所属 NSWindow 和 Tab keyCode；不捕获其他应用，不保存按键，不改系统设置。返回原始 NSEvent，保持修饰键和原生 WebKit 处理；不吞 DOM Tab、不强制名称焦点，也不自行反转 Option。
++
++原生控制器只弱持有视图和窗口，强持有自己的 monitor/通知令牌。所属窗口 WillClose 会移除这些令牌并删除控制器；Rust Destroyed 按窗口 label 清理，插件 drop 清理全部，均可重复调用。工具栏解绑不清除此策略。回调内的原生安装结果才表示完成；调度失败与回调内的 thread/target/identity/monitor/native 失败分别记录，不能将成功排队当作安装完成。通知或 Tab 边界同步失败会记录通用错误，不记录按键内容。
++
++有限受控检查见 `docs/verification/mac-keyboard-policy35/README.md`。真实离屏 WKPreferences 的 false/true 更新、通知边界、两窗过滤、原事件身份和释放可检查；系统 getter 值与事件所属窗口在测试中明确模拟，不代表真实系统开关或 AppKit 按键送达已验。原版普通名称 Option-Tab 已观测为插入制表符；此策略保持公开 WebKit 行为，不承诺该局部原版行为已一致。准确产品包中的普通/智能表单、Tab/Shift+Tab、输入/组字、Enter/Escape、原生搜索、独立窗口及真正系统切换仍须另行验证，整体状态为 partial。
+--- /dev/null
++++ candidate/plugins/tauri-plugin-notes-ui/macos/keyboard.m
+@@ -0,0 +1,142 @@
++#import <AppKit/AppKit.h>
++#import <WebKit/WebKit.h>
++
++// Separate from toolbar controllers: hiding/unbinding a toolbar cannot disable this policy.
++@class NotesUIKeyboardPolicy;
++static NSMutableDictionary<NSString *, NotesUIKeyboardPolicy *> *keyboardPolicies;
++
++@interface NotesUIKeyboardPolicy : NSObject
++@property(nonatomic, weak) WKWebView *webview;
++@property(nonatomic, weak) NSWindow *window;
++@property(nonatomic, copy) NSString *webviewLabel;
++@property(nonatomic, copy) NSString *windowLabel;
++@property(nonatomic, strong) id monitor;
++@property(nonatomic, strong) NSMutableArray *observers;
++@property(nonatomic) BOOL disposed;
++- (int)refresh;
++- (NSEvent *)navigationEvent:(NSEvent *)event;
++- (void)dispose;
++@end
++
++@implementation NotesUIKeyboardPolicy
++- (int)refresh {
++    if (!NSThread.isMainThread) return 1;
++    WKWebView *view = self.webview;
++    NSWindow *window = self.window;
++    if (self.disposed || !view || !window || view.window != window || !NSApp) return 2;
++    @try {
++        // Read each time. AppKit explicitly does not provide KVO changes for this property.
++        view.configuration.preferences.tabFocusesLinks = NSApp.isFullKeyboardAccessEnabled;
++        return 0;
++    } @catch (NSException *exception) {
++        (void)exception;
++        return 5;
++    }
++}
++- (void)refreshFromNotification {
++    if ([self refresh] != 0) NSLog(@"notes-ui: keyboard policy refresh failed");
++}
++- (NSEvent *)navigationEvent:(NSEvent *)event {
++    if (!self.disposed && self.window && event.window == self.window &&
++        event.type == NSEventTypeKeyDown && event.keyCode == 48) {
++        [self refreshFromNotification];
++    }
++    // Preserve event identity, modifiers and native WebKit handling, including Option.
++    return event;
++}
++- (void)dispose {
++    if (self.disposed) return;
++    self.disposed = YES;
++    if (self.monitor) [NSEvent removeMonitor:self.monitor];
++    self.monitor = nil;
++    for (id observer in self.observers) [NSNotificationCenter.defaultCenter removeObserver:observer];
++    [self.observers removeAllObjects];
++    self.webview = nil;
++    self.window = nil;
++}
++- (void)dealloc { [self dispose]; }
++@end
++
++// Statuses are shared with Rust keyboard_status; no Objective-C exception crosses the ABI.
++int notes_ui_keyboard_attach(void *rawView, void *rawWindow,
++                             const char *rawViewLabel, const char *rawWindowLabel) {
++    if (!NSThread.isMainThread) return 1;
++    NotesUIKeyboardPolicy *policy = nil;
++    @try {
++        WKWebView *view = (__bridge WKWebView *)rawView;
++        NSWindow *window = (__bridge NSWindow *)rawWindow;
++        NSString *viewLabel = rawViewLabel ? [NSString stringWithUTF8String:rawViewLabel] : nil;
++        NSString *windowLabel = rawWindowLabel ? [NSString stringWithUTF8String:rawWindowLabel] : nil;
++        if (![view isKindOfClass:WKWebView.class] || ![window isKindOfClass:NSWindow.class] ||
++            view.window != window || !viewLabel.length || !windowLabel.length || !NSApp) return 2;
++        if (!keyboardPolicies) keyboardPolicies = [NSMutableDictionary dictionary];
++        NotesUIKeyboardPolicy *existing = keyboardPolicies[viewLabel];
++        if (existing) {
++            if (existing.webview != view || existing.window != window ||
++                ![existing.windowLabel isEqual:windowLabel]) return 3;
++            return [existing refresh];
++        }
++        policy = [NotesUIKeyboardPolicy new];
++        policy.webview = view;
++        policy.window = window;
++        policy.webviewLabel = viewLabel;
++        policy.windowLabel = windowLabel;
++        policy.observers = [NSMutableArray array];
++        int status = [policy refresh];
++        if (status != 0) { [policy dispose]; return status; }
++        __weak NotesUIKeyboardPolicy *weakPolicy = policy;
++        policy.monitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskKeyDown
++            handler:^NSEvent *(NSEvent *event) {
++                NotesUIKeyboardPolicy *owner = weakPolicy;
++                return owner ? [owner navigationEvent:event] : event;
++            }];
++        if (!policy.monitor) { [policy dispose]; return 4; }
++        NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
++        [policy.observers addObject:[center addObserverForName:NSWindowDidBecomeKeyNotification
++            object:window queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *notification) {
++                (void)notification;
++                [weakPolicy refreshFromNotification];
++            }]];
++        [policy.observers addObject:[center addObserverForName:NSApplicationDidBecomeActiveNotification
++            object:NSApp queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *notification) {
++                (void)notification;
++                NotesUIKeyboardPolicy *owner = weakPolicy;
++                if (owner.window.isKeyWindow) [owner refreshFromNotification];
++            }]];
++        [policy.observers addObject:[center addObserverForName:NSWindowWillCloseNotification
++            object:window queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification *notification) {
++                (void)notification;
++                NotesUIKeyboardPolicy *owner = weakPolicy;
++                if (owner) {
++                    [owner dispose];
++                    if (keyboardPolicies[owner.webviewLabel] == owner)
++                        [keyboardPolicies removeObjectForKey:owner.webviewLabel];
++                }
++            }]];
++        keyboardPolicies[viewLabel] = policy;
++        return 0;
++    } @catch (NSException *exception) {
++        (void)exception;
++        [policy dispose];
++        return 5;
++    }
++}
++
++int notes_ui_keyboard_destroy(const char *rawWindowLabel) {
++    if (!NSThread.isMainThread) return 1;
++    @try {
++        NSString *label = rawWindowLabel ? [NSString stringWithUTF8String:rawWindowLabel] : nil;
++        if (rawWindowLabel && !label.length) return 2;
++        for (NSString *key in keyboardPolicies.allKeys) {
++            NotesUIKeyboardPolicy *policy = keyboardPolicies[key];
++            if (!label || [policy.windowLabel isEqual:label]) {
++                [policy dispose];
++                [keyboardPolicies removeObjectForKey:key];
++            }
++        }
++        return 0;
++    } @catch (NSException *exception) {
++        (void)exception;
++        return 5;
++    }
++}

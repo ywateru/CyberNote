@@ -1,0 +1,96 @@
+[
+  {
+    "label": "tauri-plugin-api",
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs",
+    "resolvedPath": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs",
+    "bytes": 34621,
+    "sha256": "8c8a9c3cdb93d1d149f1f1822e5bf8cd5e454f1ce7f3e57a427b97ba59f52a9f",
+    "excerpts": [
+      {
+        "from": 512,
+        "to": 537,
+        "text": "512:     self\n513:   }\n514: \n515:   /// Callback invoked when the webview is created.\n516:   ///\n517:   /// # Examples\n518:   ///\n519:   /// ```rust\n520:   /// use tauri::{plugin::{Builder, TauriPlugin}, Runtime};\n521:   ///\n522:   /// fn init<R: Runtime>() -> TauriPlugin<R> {\n523:   ///   Builder::new(\"example\")\n524:   ///     .on_webview_ready(|webview| {\n525:   ///       println!(\"created webview {}\", webview.label());\n526:   ///     })\n527:   ///     .build()\n528:   /// }\n529:   /// ```\n530:   #[must_use]\n531:   pub fn on_webview_ready<F>(mut self, on_webview_ready: F) -> Self\n532:   where\n533:     F: FnMut(Webview<R>) + Send + 'static,\n534:   {\n535:     self.on_webview_ready = Box::new(on_webview_ready);\n536:     self\n537:   }"
+      }
+    ]
+  },
+  {
+    "label": "tauri-platform-webview",
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/mod.rs",
+    "resolvedPath": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/mod.rs",
+    "bytes": 96498,
+    "sha256": "b5319b171c09a8e652d75585be39d92b387df370340ca90b58141b501c17009a",
+    "excerpts": [
+      {
+        "from": 196,
+        "to": 225,
+        "text": "196:     self.0.environment.clone()\n197:   }\n198: \n199:   /// Returns the [WKWebView] handle.\n200:   ///\n201:   /// [WKWebView]: https://developer.apple.com/documentation/webkit/wkwebview\n202:   #[cfg(any(target_os = \"macos\", target_os = \"ios\"))]\n203:   #[cfg_attr(docsrs, doc(cfg(any(target_os = \"macos\", target_os = \"ios\"))))]\n204:   pub fn inner(&self) -> *mut std::ffi::c_void {\n205:     self.0.webview\n206:   }\n207: \n208:   /// Returns WKWebView [controller] handle.\n209:   ///\n210:   /// [controller]: https://developer.apple.com/documentation/webkit/wkusercontentcontroller\n211:   #[cfg(any(target_os = \"macos\", target_os = \"ios\"))]\n212:   #[cfg_attr(docsrs, doc(cfg(any(target_os = \"macos\", target_os = \"ios\"))))]\n213:   pub fn controller(&self) -> *mut std::ffi::c_void {\n214:     self.0.manager\n215:   }\n216: \n217:   /// Returns [NSWindow] associated with the WKWebView webview.\n218:   ///\n219:   /// [NSWindow]: https://developer.apple.com/documentation/appkit/nswindow\n220:   #[cfg(target_os = \"macos\")]\n221:   #[cfg_attr(docsrs, doc(cfg(target_os = \"macos\")))]\n222:   pub fn ns_window(&self) -> *mut std::ffi::c_void {\n223:     self.0.ns_window\n224:   }\n225: "
+      },
+      {
+        "from": 1853,
+        "to": 1868,
+        "text": "1853:   \"####\n1854:   )]\n1855:   #[cfg(feature = \"wry\")]\n1856:   #[cfg_attr(docsrs, doc(cfg(feature = \"wry\")))]\n1857:   pub fn with_webview<F: FnOnce(PlatformWebview) + Send + 'static>(\n1858:     &self,\n1859:     f: F,\n1860:   ) -> crate::Result<()> {\n1861:     self\n1862:       .webview\n1863:       .dispatcher\n1864:       .with_webview(|w| f(PlatformWebview(*w.downcast().unwrap())))\n1865:       .map_err(Into::into)\n1866:   }\n1867: \n1868:   /// Returns the current url of the webview."
+      }
+    ]
+  },
+  {
+    "label": "runtime-main-thread",
+    "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-runtime-wry-2.12.3/src/lib.rs",
+    "resolvedPath": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-runtime-wry-2.12.3/src/lib.rs",
+    "bytes": 168926,
+    "sha256": "ec343fc347aff1fb5327100df2541992e47eb6be1ddb55102170e2253b9c6d59",
+    "excerpts": [
+      {
+        "from": 263,
+        "to": 279,
+        "text": "263:   fn send_user_message(&self, message: Message<T>) -> Result<()> {\n264:     if current_thread().id() == self.main_thread_id {\n265:       handle_user_message(\n266:         &self.main_thread.window_target,\n267:         message,\n268:         UserMessageContext {\n269:           window_id_map: &self.window_id_map,\n270:           windows: &self.main_thread.windows,\n271:         },\n272:       );\n273:       Ok(())\n274:     } else {\n275:       self\n276:         .proxy\n277:         .send_event(message)\n278:         .map_err(|_| Error::FailedToSendMessage)\n279:     }"
+      },
+      {
+        "from": 1552,
+        "to": 1572,
+        "text": "1552:   fn with_webview<F: FnOnce(Box<dyn std::any::Any>) + Send + 'static>(&self, f: F) -> Result<()> {\n1553:     self.context.send_user_message(Message::Webview(\n1554:       *self.window_id.lock().unwrap(),\n1555:       self.webview_id,\n1556:       WebviewMessage::WithWebview(Box::new(move |webview| f(Box::new(webview)))),\n1557:     ))\n1558:   }\n1559: \n1560:   #[cfg(any(debug_assertions, feature = \"devtools\"))]\n1561:   fn open_devtools(&self) {\n1562:     let _ = self.context.send_user_message(Message::Webview(\n1563:       *self.window_id.lock().unwrap(),\n1564:       self.webview_id,\n1565:       WebviewMessage::OpenDevTools,\n1566:     ));\n1567:   }\n1568: \n1569:   #[cfg(any(debug_assertions, feature = \"devtools\"))]\n1570:   fn close_devtools(&self) {\n1571:     let _ = self.context.send_user_message(Message::Webview(\n1572:       *self.window_id.lock().unwrap(),"
+      }
+    ]
+  },
+  {
+    "label": "appkit-getter",
+    "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSApplication.h",
+    "resolvedPath": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSApplication.h",
+    "bytes": 46099,
+    "sha256": "5c2dc8fef80f61f45ef54e8ae8a62a7fc31481d890919c87bae4045cd3effb85",
+    "excerpts": [
+      {
+        "from": 376,
+        "to": 381,
+        "text": "376: @interface NSApplication(NSFullKeyboardAccess)\n377: /// A Boolean value indicating whether keyboard navigation is enabled in System Settings > Keyboard.\n378: /// - Note: The value of this property is `YES` if keyboard navigation is enabled or `NO` if it’s not. You might use this value to implement your own key loop or to implement in-control tabbing behavior similar to `NSTableView`. Because of the nature of the preference storage, you won’t be notified of changes to this property if you attempt to observe it through key-value observing; however, accessing this property is fairly inexpensive, so you can access it directly rather than caching it.\n379: /// - Note: This property’s value isn’t necessarily reflective of the separate accessibility setting named “Full Keyboard Access” in System Settings > Accessibility > Keyboard.\n380: @property (getter=isFullKeyboardAccessEnabled, readonly) BOOL fullKeyboardAccessEnabled API_AVAILABLE(macos(10.6));\n381: @end"
+      }
+    ]
+  },
+  {
+    "label": "webkit-policy",
+    "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/WebKit.framework/Headers/WKPreferences.h",
+    "resolvedPath": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Cryptexes/OS/System/Library/Frameworks/WebKit.framework/Versions/A/Headers/WKPreferences.h",
+    "bytes": 5907,
+    "sha256": "37c0389ba45bb1f6bf9bce1898e23568c1d36dcbf3280ecd8b1d46f6e34e22b8",
+    "excerpts": [
+      {
+        "from": 60,
+        "to": 66,
+        "text": "60: #if !TARGET_OS_IPHONE\n61: /*!\n62:  @property tabFocusesLinks\n63:  @abstract If tabFocusesLinks is YES, the tab key will focus links and form controls.\n64:  The Option key temporarily reverses this preference.\n65:  */\n66: @property (nonatomic) BOOL tabFocusesLinks API_AVAILABLE(macos(10.12.4));"
+      }
+    ]
+  },
+  {
+    "label": "appkit-local-monitor",
+    "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSEvent.h",
+    "resolvedPath": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSEvent.h",
+    "bytes": 47753,
+    "sha256": "3bae8e2b417445cd671180931527b75a4c94d79d10587acf05fef9e26930d48a",
+    "excerpts": [
+      {
+        "from": 540,
+        "to": 552,
+        "text": "540: \n541:    Use +addGlobal to install an event monitor that receives copies of events posted to other applications. Events are delivered asynchronously to your app and you can only observe the event; you cannot modify or otherwise prevent the event from being delivered to its original target application. Key-related events may only be monitored if accessibility is enabled or if your application is trusted for accessibility access (see AXIsProcessTrusted in AXUIElement.h). Note that your handler will not be called for events that are sent to your own application.\n542: \n543:    Use +addLocal to install an event monitor that receives events before they are dispatched by -[NSApplication sendEvent:]. In this case, your block should either return a valid NSEvent (which may be the same as the incoming NSEvent, or may be a newly created NSEvent) to cause the event to be dispatched, or it may return nil to stop dispatching of the event. Note that your handler will not be called for events that are consumed by nested event-tracking loops such as control tracking, menu tracking, or window dragging; only events that are dispatched through -[NSApplication sendEvent:] will be passed to your handler.\n544: \n545:    In either case, the return value of the API is a retained NSObject. You typically do not need to retain and release the event monitor yourself, since the implementation will retain it while needed.\n546:    \n547:    To remove the event monitor, under both garbage collection and non-GC, pass the return value from the +add API to +removeMonitor.\n548: */\n549: + (nullable id)addGlobalMonitorForEventsMatchingMask:(NSEventMask)mask handler:(void (^)(NSEvent *event))block API_AVAILABLE(macos(10.6));\n550: + (nullable id)addLocalMonitorForEventsMatchingMask:(NSEventMask)mask handler:(NSEvent* _Nullable (^)(NSEvent *event))block API_AVAILABLE(macos(10.6));\n551: + (void)removeMonitor:(id)eventMonitor API_AVAILABLE(macos(10.6));\n552: "
+      }
+    ]
+  }
+]

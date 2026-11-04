@@ -1,0 +1,164 @@
+{
+  "status": "SOURCE-READY STOP",
+  "overall": "partial",
+  "authorRole": "implementation; root will commit, distinct author will independently review",
+  "commands": [
+    {
+      "name": "mac-lib-check",
+      "command": "env CARGO_NET_OFFLINE=true CARGO_TARGET_DIR=/private/tmp/apple-notes-mac-keyboard35-target-01 cargo check --manifest-path plugins/tauri-plugin-notes-ui/Cargo.toml --locked --offline --lib",
+      "exit": 0,
+      "log": "rust-check.log"
+    },
+    {
+      "name": "rust-lib-tests",
+      "command": "env CARGO_NET_OFFLINE=true CARGO_TARGET_DIR=/private/tmp/apple-notes-mac-keyboard35-target-01 cargo test --manifest-path plugins/tauri-plugin-notes-ui/Cargo.toml --locked --offline --lib",
+      "exit": 0,
+      "passed": 16,
+      "log": "rust-test.log"
+    },
+    {
+      "name": "android-lib-check",
+      "command": "env CARGO_NET_OFFLINE=true CARGO_TARGET_DIR=/private/tmp/apple-notes-mac-keyboard35-target-01 cargo check --manifest-path plugins/tauri-plugin-notes-ui/Cargo.toml --locked --offline --lib --target aarch64-linux-android",
+      "exit": 0,
+      "log": "android-check.log"
+    },
+    {
+      "name": "strict-native-compile",
+      "command": "clang -fobjc-arc -fblocks -mmacosx-version-min=12.0 -Wall -Wextra -Werror docs/verification/mac-keyboard-policy35/native-mechanism.m -framework AppKit -framework WebKit -o docs/verification/mac-keyboard-policy35/native-mechanism",
+      "exit": 0,
+      "log": "native-compile.log"
+    },
+    {
+      "name": "native-mechanism-controlled",
+      "command": "docs/verification/mac-keyboard-policy35/native-mechanism",
+      "exit": 0,
+      "passed": 27,
+      "fakeInputs": [
+        "NSApplication system getter",
+        "NSEvent ownership/type/code/flags",
+        "window key state",
+        "notification triggers"
+      ],
+      "realBoundary": "actual WKWebView/WKPreferences, actual production helper, actual local monitor registration and observer tokens",
+      "notVerified": [
+        "AppKit event delivery",
+        "native focus",
+        "actual system true/false switch",
+        "Option original parity"
+      ],
+      "log": "native-mechanism.log"
+    },
+    {
+      "name": "rustfmt",
+      "command": "cargo fmt --manifest-path plugins/tauri-plugin-notes-ui/Cargo.toml -- --check",
+      "exit": 0
+    }
+  ],
+  "retainedFailures": [
+    "native-mechanism-first-failure.log",
+    "native-mechanism-second-failure.log",
+    "native-event-diagnostic.log"
+  ],
+  "closing": {
+    "at": "2026-11-05T06:22:09.297439+08:00",
+    "productManifestMatchesFinalBytes": true,
+    "markdownLinks": [
+      {
+        "source": "README.md",
+        "target": "product-files.json",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "product.diff",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "rust-check.log",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "rust-test.log",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "android-check.log",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "android-normal-dependencies.log",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "build-boundaries.json",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "native-compile.log",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "native-mechanism.m",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "native-mechanism.log",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "native-mechanism-first-failure.log",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "native-mechanism-second-failure.log",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "native-event-diagnostic.log",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "source-boundaries.json",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "inputs.before.json",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "integrity-result.json",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "task.current.md",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "build-boundaries.json",
+        "existsOrIndexPending": true
+      },
+      {
+        "source": "README.md",
+        "target": "evidence-index.json",
+        "existsOrIndexPending": true
+      }
+    ],
+    "status": "SOURCE-READY STOP"
+  }
+}

@@ -88,3 +88,14 @@ plugins/tauri-plugin-notes-scan/target/debug/examples/toolbar_demo > docs/verifi
 bind/update/inspect/unbind 先做自身参数校验，对有效调用均返回 `{code:"unsupported",message:"此原生顶部模块仅支持 macOS"}`。此为编译与源码契约验证，未执行Android invoke；不声称此模块提供手机原生顶部栏。guest严格TypeScript检查再次通过。所有代码/Cargo/锁相对adc544a未变化，证据见 docs/verification/app-001-native-toolbar-plugin/android-compile-audit.json、android-check.txt、android-build-script-output.txt、android-module-inputs.txt 和 android-normal-dependencies.txt。
 
 2026-11-03 focusSearch 后续候选的接口、8项Rust检查、strict TS、Wry构建和Android条件编译记录单独保存在 `docs/verification/app-001-native-toolbar-plugin/focus-search/`；本段 adc544a/7760bb7 的历史日志不替代新候选的运行证据。新入口在非Mac同样先校验调用窗口及UUID，对有效调用明确返回 unsupported；Android invoke仍未运行。
+
+
+## Mac 系统键盘导航策略（35，源码候选）
+
+插件在 `on_webview_ready` 后通过 `with_webview` 的同一次原生回调取得真实 WKWebView 和显式所属 NSWindow。独立 `macos/keyboard.m` 控制器在主线程注册，不依赖工具栏的 bind/update/unbind、可见性或绑定表，主窗与独立笔记窗各有自己的生命周期。Mac target 显式启用当前已锁定 Tauri 的 wry feature；版本、锁文件及宿主无需修改。非 Mac 不编译此控制器或链接 WebKit。
+
+控制器每次直接读取公开的 `NSApp.isFullKeyboardAccessEnabled`，写入该 WKWebView 的 `configuration.preferences.tabFocusesLinks`：创建完成时、所属窗口变为 key 时、应用重新激活且所属窗口为 key 时，以及所属窗口的下一次 Tab keyDown 分发前。没有 defaults、KVO 或系统值缓存。一次视图注册一个应用内 local monitor，先核对事件的所属 NSWindow 和 Tab keyCode；不捕获其他应用，不保存按键，不改系统设置。返回原始 NSEvent，保持修饰键和原生 WebKit 处理；不吞 DOM Tab、不强制名称焦点，也不自行反转 Option。
+
+原生控制器只弱持有视图和窗口，强持有自己的 monitor/通知令牌。所属窗口 WillClose 会移除这些令牌并删除控制器；Rust Destroyed 按窗口 label 清理，插件 drop 清理全部，均可重复调用。工具栏解绑不清除此策略。回调内的原生安装结果才表示完成；调度失败与回调内的 thread/target/identity/monitor/native 失败分别记录，不能将成功排队当作安装完成。通知或 Tab 边界同步失败会记录通用错误，不记录按键内容。
+
+有限受控检查见 `docs/verification/mac-keyboard-policy35/README.md`。真实离屏 WKPreferences 的 false/true 更新、通知边界、两窗过滤、原事件身份和释放可检查；系统 getter 值与事件所属窗口在测试中明确模拟，不代表真实系统开关或 AppKit 按键送达已验。原版普通名称 Option-Tab 已观测为插入制表符；此策略保持公开 WebKit 行为，不承诺该局部原版行为已一致。准确产品包中的普通/智能表单、Tab/Shift+Tab、输入/组字、Enter/Escape、原生搜索、独立窗口及真正系统切换仍须另行验证，整体状态为 partial。
