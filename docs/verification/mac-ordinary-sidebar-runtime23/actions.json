@@ -1,0 +1,132 @@
+{
+  "createdAt": "2026-11-04T19:33:37.927182+00:00",
+  "method": "Computer Use only for Mac UI",
+  "status": "sealed; finite Mac11 sidebar/ordinary-form runtime completed; full pixel parity open",
+  "original": [
+    {
+      "record": "00-original-ordinary",
+      "action": "getApp com.apple.Notes; fresh AX showed selected synthetic folder11 and body QA-TYPE-20261104-01; click toolbar 添加文件夹122; save AX and CUA screenshot",
+      "observation": "800x414 sheet; inactive gray selection/buttons; no draft text edited"
+    },
+    {
+      "record": "01-original-ordinary-active",
+      "action": "fresh AX; click name2, Cmd+A; save AX and screenshot",
+      "observation": "same default name selected, active warm focus and warm primary"
+    },
+    {
+      "record": "02-original-cancelled",
+      "action": "fresh AX; click取消5; save AX and screenshot",
+      "observation": "ordinary draft cancelled, synthetic selected folder11/body retained, sidebar visible"
+    }
+  ],
+  "constraints": "No original deletion experiment, no user DB reads, no recording export. Separate fresh directory; sealed prior evidence untouched.",
+  "priorMac10": [
+    {
+      "record": "03-prior-mac10-before-quit",
+      "action": "bind exact mac10 sealed app full path; save fresh AX/CUA image, then CmdQ",
+      "observation": "all41, smart0/selected1, synthetic QA-SMART-U09-Mac-Tag body; sidebar visible"
+    },
+    {
+      "record": "04-prior-mac10-after-quit.json",
+      "action": "exact executable identity and scoped process check; no AX after quit",
+      "observation": "matchingRows empty; old package executable SHA retained"
+    }
+  ],
+  "sourceCommit": "94fbbb36fe94a7f291edf34e618091a0cec8da63",
+  "mac11": [
+    {
+      "records": [
+        "05-mac11-launched-visible",
+        "05a-mac11-process.json"
+      ],
+      "action": "Computer Use getApp exact Mac11 sealed full path; capture full AX/image; independently scoped ps/executable hash",
+      "observation": "PID45493, exe3cc7188d…; sidebar visible, all41 / smart0 / selected1, synthetic QA-SMART-U09-Mac-Tag body"
+    },
+    {
+      "records": [
+        "06-toolbar-hidden",
+        "07-view-menu-hidden.ax.txt",
+        "08-menu-restored-visible"
+      ],
+      "action": "click native sidebar toggle; click current 显示 menu; click 显示文件夹",
+      "observation": "sidebar hidden then restored; direct toggle retained; 07 screenshot unavailable, full menu AX saved"
+    },
+    {
+      "records": [
+        "09-view-menu-visible.ax.txt",
+        "10-menu-hidden",
+        "11-toolbar-restored-visible"
+      ],
+      "action": "click current 显示 menu; click 隐藏文件夹; restore using native toolbar toggle",
+      "observation": "visible menu hides, hidden toolbar restores; counts/body retained; 09 intentionally AX only"
+    },
+    {
+      "records": [
+        "12-mac11-ordinary-open",
+        "13-mac11-ordinary-active"
+      ],
+      "action": "click 新建文件夹; capture; click name and Cmd+A; capture",
+      "observation": "ordinary default name selected, real checkbox unchecked; 12 clean form image, 13 cursor halo in middle name field"
+    },
+    {
+      "records": [
+        "14-ordinary-draft",
+        "15-smart-draft-retained",
+        "16-ordinary-draft-returned",
+        "17-draft-cancelled"
+      ],
+      "action": "type QA-SURFACE-23-CANCEL into selected name; toggle smart on, off using fresh AX; Cancel",
+      "observation": "same draft name through ordinary-smart-ordinary; no creation submitted; final all41 / smart0 / selected1 and synthetic body retained"
+    },
+    {
+      "records": [
+        "18-hidden-before-normal-quit",
+        "19-normal-hidden-quit-process.json",
+        "20-normal-relaunch-hidden",
+        "21-normal-hidden-relaunched-process.json"
+      ],
+      "action": "hide; capture full AX/image; Cmd+Q; scoped process empty; getApp exact full path; capture and scoped process",
+      "observation": "PID45493 ended; PID45907 same exeSHA; sidebar remains hidden and synthetic body retained"
+    },
+    {
+      "records": [
+        "22-visible-before-normal-quit",
+        "23-normal-visible-quit-process.json",
+        "24-normal-relaunch-visible",
+        "25-normal-visible-relaunched-process.json"
+      ],
+      "action": "show; capture full AX/image; Cmd+Q; scoped process empty; exact full path relaunch; capture and process",
+      "observation": "PID45907 ended; PID45957 same exeSHA; sidebar remains visible, counts/body retained"
+    },
+    {
+      "records": [
+        "26-fast-hide-quit-action.json",
+        "27-fast-hidden-quit-process.json",
+        "28-fast-relaunch-hidden",
+        "29-fast-hidden-relaunched-process.json"
+      ],
+      "action": "in one CUA call click toggle then immediately Cmd+Q, no intervening screenshot/AX/deliberate delay; scoped empty; exact relaunch",
+      "observation": "PID45957 ended; PID46007 same exeSHA; sidebar hidden, body retained"
+    },
+    {
+      "records": [
+        "30-fast-show-quit-action.json",
+        "31-fast-visible-quit-process.json",
+        "32-fast-relaunch-visible-final",
+        "33-final-process.json"
+      ],
+      "action": "in one CUA call click toggle then immediately Cmd+Q, no intervening screenshot/AX/deliberate delay; scoped empty; exact relaunch",
+      "observation": "PID46007 ended; final PID46056 same exeSHA; sidebar visible, all41 / smart0 / selected1, synthetic body retained"
+    }
+  ],
+  "limitations": [
+    "00 inactive original not active color target. 01 newly captured bytes duplicate runtime18 original reference; one image sample, not independent statistical weight.",
+    "03 saved AX is diff no-change, not complete original text evidence; screenshot and initial CUA output support observation. Later Mac11 endpoint AX full.",
+    "07 CUA screenshot threw Screenshot unavailable; retry AXAndScreenshot also supplied no image. 07/09 are AX-only menu evidence; no menu PNG claim.",
+    "CUA images are lossy JPEG with embedded display ICC, not lossless PNG. Native app sheet crop compared in analysis25 only after ICC-to-sRGB conversion.",
+    "Normal sequences include endpoint capture before Cmd+Q but no internal persistence ACK observation. Fast sequences have tool-level timestamps; not zero-latency or arbitrary timing guarantees.",
+    "Existing window close guard is source-reviewed; native Cmd+Q terminate path has no added pending-write quit handshake. Two finite fast observations passed, not proof for all races.",
+    "No original deletion/recovery, no note data submission/deletion, no user DB reads, no audio export, no ADB, no broad media/archive rerun.",
+    "Android06 not rebuilt; Mac11 exact source must not be assigned to Android06. All-app/pixel parity open."
+  ]
+}

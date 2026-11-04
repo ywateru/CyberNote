@@ -1,7 +1,7 @@
 ---
 id: app-mac-sidebar-preference22
 scope: Persist and restore the Mac main-window folder-sidebar visibility
-status: source-review-pass
+status: done
 depends-on: [app-mac-ordinary-form-surface20]
 ---
 
@@ -54,3 +54,7 @@ Mac main 首次可信workspace
 ## 根接收源码独审（2026-11-05）
 
 候选6b02fd9d30139ffee63226bb057e9a54bc913e4f，不同作者独审PASS/STOP。root读报告并重核独审50项大小/SHA全部匹配；索引71b24541b7eb73c94c1be32ada60478e7664d1118e5b7d53bb4e89898801876c。独立32个生产App→未改桥接→真实Rust合成库场景、4端口、47项核验及一次typecheck通过，源码身份准确。接收范围为源码/隔离链路，允许准确Mac11冻结构建；真正Mac应用退出、工具栏/动态菜单和像素仍待本轮新包记录。立即CmdQ限制及既有媒体/完整归档未重跑边界继续保留。见[独审报告](../reviews/app-mac-sidebar-preference22.md)。
+
+## 准确Mac11有限运行根接收23
+
+2026-11-05，准确源94fbbb36/Mac11 exe3cc7188d经独立486项核包后Computer Use实际按钮/菜单两条恢复及动态文案通过。隐藏和显示正常退出重开保持，另外两次单调用最后click→立即Cmd+Q亦分别恢复隐藏/显示，完整新PID链和可见三行合成正文/有限计数保持。不同作者202项静态复核通过，根核索引。限定偏好交付完成；未直接观察内部ACK，快路径仅有限本机结果，不保证未交付事件/任意时序，原生Cmd+Q无新增待写退出握手。全侧栏/多窗/像素仍开放。见[根接收23](../../verification/mac-ordinary-sidebar23-root-acceptance.md)。

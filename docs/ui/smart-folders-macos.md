@@ -143,3 +143,7 @@ S7只在未提交草稿中观察创建日期／今天，不作为日期查询保
 Mac10 runtime18已确认普通表单包络800×414、按钮布局与普通↔智能名称保持；false回填/仅改名/新进程保持也已实际复核，见[运行18](../verification/mac-folder-fixes-runtime18/README.md)。[研究19](../verification/mac-ordinary-form-pixels19-research/README.md)仍见表面、角部与checkbox差异。普通Mac面板应接近原版亮底与舒展角部，取消灰色、好暖金，未选中checkbox浅灰实填。截图原始RGB及内缩曲线是比较依据，不能直接写成CSS颜色/radius；按实际渲染验证。
 
 [窄修20](../plan/tasks/app-mac-ordinary-form-surface20.md)仅这些表面/角部/未选中框，保留已对齐几何和所有行为/智能/手机作用域。名称框选区、灰内边、字左缘与字形细差另项；整体像素仍open。
+
+### 20准确Mac11实际量图25
+
+[研究25](../research/mac-ordinary-surface25-runtime-analysis/analysis.md)以准确Mac11 Computer Use JPEG统一ICC→sRGB，普通面板800×414及主要位置保持；四平坦色中位值与原参考相同，角部有限总差304→8、复选框固定阈值mask差616→8。普通/智能往返名称与取消有运行23端点。名称仍右4图像px、智能标签右2px、蓝选区/灰内边/焦点和字形细差继续开放；不将离屏20的零mask差或bbox相同当完整像素一致。

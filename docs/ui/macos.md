@@ -202,3 +202,7 @@ Mac native 三栏（侧栏可见/隐藏）
 ```
 
 [任务22](../plan/tasks/app-mac-sidebar-preference22.md)限定Mac主窗偏好，严格boolean恢复，无启动默认写；手机导航、独立窗无写入。窄宽resize不是显隐动作。保存失败保持可操作布局并显示既有错误，不能悄悄覆盖本地值。已确认偏好的正常重启与立即退出待写边界分别验收；没有原版多窗/画廊全矩阵或像素通过声明。
+
+### 22准确Mac11有限运行23
+
+准确Mac11源94fbbb36、exe3cc7188d已通过Computer Use两入口/动态菜单及隐藏、显示正常重启；另两次无中间观察的click→Cmd+Q也各恢复同一状态，最终侧栏可见且合成正文/有限计数保持。不同作者静态复核通过；没有内部写入ACK或任意时序保证，原生Cmd+Q无新增待写握手。见[根接收23](../verification/mac-ordinary-sidebar23-root-acceptance.md)。此处更新已见状态，不授全侧栏/多窗或像素PASS。

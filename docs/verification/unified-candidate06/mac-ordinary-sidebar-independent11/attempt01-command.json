@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "python3",
+    "docs/verification/unified-candidate06/mac-ordinary-sidebar-independent11/verify.py"
+  ],
+  "exitCode": 1,
+  "elapsedSeconds": 0.12061175000000002,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-ordinary-sidebar-independent11/verify.py\", line 144, in <module>\n    try:main()\n  File \"/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-ordinary-sidebar-independent11/verify.py\", line 104, in main\n    check('current dist matches build and collection',tree(ROOT/'dist')==b['dist']==b['generatedOutputs'][1]['snapshot']['files']==c['dist'])\nKeyError: 'dist'\n"
+}

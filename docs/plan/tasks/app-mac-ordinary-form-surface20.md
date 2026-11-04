@@ -1,7 +1,7 @@
 ---
 id: app-mac-ordinary-form-surface20
 scope: Mac ordinary creation form surface, corner contour and unchecked checkbox
-status: source-review-pass
+status: done
 depends-on: [app-mac-folder-form-geometry15]
 ---
 
@@ -49,3 +49,7 @@ depends-on: [app-mac-folder-form-geometry15]
 ## 根接收源码独审（2026-11-05）
 
 候选dbb594a8e7e807e211aac2ce36156c935162f2c1，经不同作者独审PASS并STOP。root已读报告并重新核对独审36项索引全部大小/SHA，索引c409e6f08b75240438be453d9866092825b0fa52f9dafc1ef0bb23236520884f；当前CSS f18dfeb0b6c9d52d66b4d4ad78016bd234c2763b38ae9ba0f09a4b7410881186准确匹配。仅接收局部源码和受控生产组件/离屏WebKit结果，允许22启动及后续Mac11准确包；真实新包复拍、原生焦点/选区/文字左缘和整体像素仍open。见[独审报告](../reviews/app-mac-ordinary-form-surface20.md)。
+
+## 准确Mac11有限运行根接收23
+
+2026-11-05，准确源94fbbb36/Mac11 exe3cc7188d经独立486项核包后Computer Use实拍；研究25支持800×414/主要位置保持及局部表面/角部/未选中框改善。不同作者202项运行证据静态复核通过，根重核索引身份。限定本任务表面改善交付完成；名称/标签偏移、蓝选区/焦点/字形及实际JPEG有限mask差8继续开放，非全像素PASS。见[根接收23](../../verification/mac-ordinary-sidebar23-root-acceptance.md)。

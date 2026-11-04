@@ -13,8 +13,8 @@
 | APP-MAC-FOLDER-FORM-GEOMETRY15 普通新建表单 | 实包有限几何pass，像素partial | 80b01da整合，Mac10普通包络800×414、普通↔智能名称保持/取消有实际记录及62项静态独核；研究19表面/角部/checkbox/焦点/字左缘仍有差异，进入20 |
 | APP-SMART-DRAFT-HYDRATION16 置顶false回填 | done（false回填窄范围） | 一行显式value→pinned，源码独审329断言；准确双端runtime18改名/新PID重开false保持，Android置顶成员1→0→1恢复，不同作者有限独核pass；原失败保留，无全部规则/像素claim |
 | APP-MOBILE-17 错误可见与目录选字 | done（两项已见缺陷范围） | 三文件源码独审71，Android06实际长按目录无选字/正文仍可选/滚动错误可见与合法重试取消；83原文件/37 PNG/99静态检查独核pass，工程错误样式非原版像素PASS |
-| APP-MAC-ORDINARY-SURFACE20 普通表单表面与角部 | source-review-pass，待Mac11实包 | 依据研究19，只校准普通Mac表面/角部/未选中checkbox；保留已对齐几何，名称焦点/字左缘和整体像素另项 |
-| APP-MAC-SIDEBAR-PREFERENCE22 侧栏显隐偏好 | source-review-pass，待准确Mac11 | 原版21hidden跨新PID保持，克隆18回visible；只复用本地settings单键、首次可信只读恢复、Mac主窗所有权及有序确认，不改手机/独立窗；正常与快速退出分别验证 |
+| APP-MAC-ORDINARY-SURFACE20 普通表单表面与角部 | done（有限表面范围），Mac11实际/独核通过 | 准确94fbbb36/3cc7188d新包486项核包、运行23及202项证据独核；量图25平坦色对齐/角差304→8/checkbox实际mask616→8，800×414保持。名称/焦点/标签/字形与全像素仍open |
+| APP-MAC-SIDEBAR-PREFERENCE22 侧栏显隐偏好 | done（有限偏好范围），Mac11实际/独核通过 | 单键本地settings及首次可信恢复；运行23两入口/动态菜单、hidden/visible各正常与紧接CmdQ恢复通过，PID45493→45907→45957→46007→46056/exe同SHA；202项静态独核。无内部ACK/任意退出保证/新增CmdQ握手，全像素与多窗仍open |
 | REF-001 原版取证/需求/UI/调研 | in-progress | 原视频已保全、抽帧、初始规格已写，持续补证 |
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |

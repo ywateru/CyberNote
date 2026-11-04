@@ -1,0 +1,558 @@
+{
+  "schema": 1,
+  "startedAt": "2026-11-04T19:56:16.167885+00:00",
+  "stage": "mac",
+  "expectedHead": "94fbbb36fe94a7f291edf34e618091a0cec8da63",
+  "productAggregate": "2f2c55e776312df3dcaa1ff5bdf87b20f17fe6f127027577cfb57e5bb8ce87b7",
+  "sourceAggregate": "86f2fe89729abeeb69b58875a34e55d67ca7e68d2442e494fbaa861a77dc6332",
+  "freezeSha256": "aef21d9d46cd578c44a4eed72479da545f343fb52c02b466e81b29e809b1d68b",
+  "buildResult": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/result.json",
+    "bytes": 7766,
+    "sha256": "c886ade5cb5b6234e6e6307a1214d9047e96ccb553d9fc071017e70df39c52f5"
+  },
+  "buildNonce": "56a819d840894a629249874bdf20efda",
+  "artifactDirectory": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01",
+  "ready": true,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/ditto",
+        "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-01.txt",
+      "diskFreeBefore": 68056989696,
+      "minimumFreeBytes": 68040581120,
+      "deadlineSeconds": 599.991386666,
+      "ownedProcessGroup": 45037,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.269,
+      "exitCode": 0,
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/ditto",
+        "-c",
+        "-k",
+        "--sequesterRsrc",
+        "--keepParent",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.zip"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-02.txt",
+      "diskFreeBefore": 68040572928,
+      "minimumFreeBytes": 68035555328,
+      "deadlineSeconds": 599.676673166,
+      "ownedProcessGroup": 45043,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.477,
+      "exitCode": 0,
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-03.txt",
+      "diskFreeBefore": 68035555328,
+      "minimumFreeBytes": 68035555328,
+      "deadlineSeconds": 599.167277791,
+      "ownedProcessGroup": 45048,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.266,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone\nIdentifier=notes_clone-d3015a5dc8a7adce\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=127064 flags=0x20002(adhoc,linker-signed) hashes=3967+0 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=8c8f29242ea668f84a204ca22b4312496dfa64ef\nCandidateCDHashFull sha256=8c8f29242ea668f84a204ca22b4312496dfa64eff5c45f7b89440565fdd09fb8\nHash choices=sha256\nCMSDigest=8c8f29242ea668f84a204ca22b4312496dfa64eff5c45f7b89440565fdd09fb8\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11337728\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=8c8f29242ea668f84a204ca22b4312496dfa64ef\nSignature=adhoc\nInfo.plist=not bound\nTeamIdentifier=not set\nSealed Resources=none\nInternal requirements=none\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-04.txt",
+      "diskFreeBefore": 68035801088,
+      "minimumFreeBytes": 68035784704,
+      "deadlineSeconds": 598.877736708,
+      "ownedProcessGroup": 45056,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.267,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-05.txt",
+      "diskFreeBefore": 68035784704,
+      "minimumFreeBytes": 68035772416,
+      "deadlineSeconds": 598.588516416,
+      "ownedProcessGroup": 45061,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.27,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone\n# designated => cdhash H\"8c8f29242ea668f84a204ca22b4312496dfa64ef\"\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-06.txt",
+      "diskFreeBefore": 68035760128,
+      "minimumFreeBytes": 68035751936,
+      "deadlineSeconds": 598.297309666,
+      "ownedProcessGroup": 45066,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.266,
+      "exitCode": 1,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app: code has no resources but signature indicates they must be present\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/ditto",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-07.txt",
+      "diskFreeBefore": 68035579904,
+      "minimumFreeBytes": 68019310592,
+      "deadlineSeconds": 598.010525916,
+      "ownedProcessGroup": 45071,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.269,
+      "exitCode": 0,
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--force",
+        "--sign",
+        "-",
+        "--timestamp=none",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-08.txt",
+      "diskFreeBefore": 68019310592,
+      "minimumFreeBytes": 68019310592,
+      "deadlineSeconds": 597.720273583,
+      "ownedProcessGroup": 45076,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.27,
+      "exitCode": 0,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app: replacing existing signature\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-09.txt",
+      "diskFreeBefore": 68019486720,
+      "minimumFreeBytes": 68019437568,
+      "deadlineSeconds": 597.430323375,
+      "ownedProcessGroup": 45084,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.271,
+      "exitCode": 0,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app: valid on disk\n/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app: satisfies its Designated Requirement\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-10.txt",
+      "diskFreeBefore": 68019482624,
+      "minimumFreeBytes": 68019458048,
+      "deadlineSeconds": 597.139221666,
+      "ownedProcessGroup": 45090,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.264,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone\nIdentifier=com.local.notesclone\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=31949 flags=0x2(adhoc) hashes=992+3 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=30a555fd0b70e2460bb7cb2d99c40e83eb725daa\nCandidateCDHashFull sha256=30a555fd0b70e2460bb7cb2d99c40e83eb725daa632a8353945c9aaadd68687f\nHash choices=sha256\nCMSDigest=30a555fd0b70e2460bb7cb2d99c40e83eb725daa632a8353945c9aaadd68687f\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11337728\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=30a555fd0b70e2460bb7cb2d99c40e83eb725daa\nSignature=adhoc\nInfo.plist entries=16\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=0\nInternal requirements count=0 size=12\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-11.txt",
+      "diskFreeBefore": 68019458048,
+      "minimumFreeBytes": 68018360320,
+      "deadlineSeconds": 596.854746625,
+      "ownedProcessGroup": 45096,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.276,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-12.txt",
+      "diskFreeBefore": 68018360320,
+      "minimumFreeBytes": 68018339840,
+      "deadlineSeconds": 596.55716325,
+      "ownedProcessGroup": 45104,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.264,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone\n# designated => cdhash H\"30a555fd0b70e2460bb7cb2d99c40e83eb725daa\"\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/ditto",
+        "-c",
+        "-k",
+        "--sequesterRsrc",
+        "--keepParent",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.zip"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-13.txt",
+      "diskFreeBefore": 68018339840,
+      "minimumFreeBytes": 68013375488,
+      "deadlineSeconds": 596.250458291,
+      "ownedProcessGroup": 45111,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.478,
+      "exitCode": 0,
+      "stdout": ""
+    }
+  ],
+  "original": {
+    "sourceApp": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+    "preservedApp": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app",
+    "bundleFiles": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+        "type": "file",
+        "mode": 420
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16375584,
+        "sha256": "5d29577346501daa1496184986e57a8704d52dd16473b1452883f59627ee4c0a",
+        "type": "file",
+        "mode": 493
+      }
+    ],
+    "bundleAggregate": "0b1a835117a6c031c66a4c2204a78f956cf8f4504ed925febba8fb9c6cea3b7f",
+    "archive": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.zip",
+      "bytes": 4939151,
+      "sha256": "2452151186f269f928e9765d6b46521eab4f7808fac0b909c50d14935aeae900"
+    },
+    "executable": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone",
+      "bytes": 16375584,
+      "sha256": "5d29577346501daa1496184986e57a8704d52dd16473b1452883f59627ee4c0a"
+    }
+  },
+  "originalSignature": [
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-03.txt",
+      "diskFreeBefore": 68035555328,
+      "minimumFreeBytes": 68035555328,
+      "deadlineSeconds": 599.167277791,
+      "ownedProcessGroup": 45048,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.266,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone\nIdentifier=notes_clone-d3015a5dc8a7adce\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=127064 flags=0x20002(adhoc,linker-signed) hashes=3967+0 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=8c8f29242ea668f84a204ca22b4312496dfa64ef\nCandidateCDHashFull sha256=8c8f29242ea668f84a204ca22b4312496dfa64eff5c45f7b89440565fdd09fb8\nHash choices=sha256\nCMSDigest=8c8f29242ea668f84a204ca22b4312496dfa64eff5c45f7b89440565fdd09fb8\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11337728\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=8c8f29242ea668f84a204ca22b4312496dfa64ef\nSignature=adhoc\nInfo.plist=not bound\nTeamIdentifier=not set\nSealed Resources=none\nInternal requirements=none\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-04.txt",
+      "diskFreeBefore": 68035801088,
+      "minimumFreeBytes": 68035784704,
+      "deadlineSeconds": 598.877736708,
+      "ownedProcessGroup": 45056,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.267,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-05.txt",
+      "diskFreeBefore": 68035784704,
+      "minimumFreeBytes": 68035772416,
+      "deadlineSeconds": 598.588516416,
+      "ownedProcessGroup": 45061,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.27,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone\n# designated => cdhash H\"8c8f29242ea668f84a204ca22b4312496dfa64ef\"\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-06.txt",
+      "diskFreeBefore": 68035760128,
+      "minimumFreeBytes": 68035751936,
+      "deadlineSeconds": 598.297309666,
+      "ownedProcessGroup": 45066,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.266,
+      "exitCode": 1,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-original.app: code has no resources but signature indicates they must be present\n"
+    }
+  ],
+  "sealedSign": {
+    "argv": [
+      "/usr/bin/codesign",
+      "--force",
+      "--sign",
+      "-",
+      "--timestamp=none",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+    ],
+    "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-08.txt",
+    "diskFreeBefore": 68019310592,
+    "minimumFreeBytes": 68019310592,
+    "deadlineSeconds": 597.720273583,
+    "ownedProcessGroup": 45076,
+    "ownedGroupStopped": true,
+    "remainingOwnedGroupMembers": [],
+    "elapsedSeconds": 0.27,
+    "exitCode": 0,
+    "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app: replacing existing signature\n"
+  },
+  "sealedVerify": {
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+    ],
+    "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-09.txt",
+    "diskFreeBefore": 68019486720,
+    "minimumFreeBytes": 68019437568,
+    "deadlineSeconds": 597.430323375,
+    "ownedProcessGroup": 45084,
+    "ownedGroupStopped": true,
+    "remainingOwnedGroupMembers": [],
+    "elapsedSeconds": 0.271,
+    "exitCode": 0,
+    "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app: valid on disk\n/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app: satisfies its Designated Requirement\n"
+  },
+  "sealedDisplays": [
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-10.txt",
+      "diskFreeBefore": 68019482624,
+      "minimumFreeBytes": 68019458048,
+      "deadlineSeconds": 597.139221666,
+      "ownedProcessGroup": 45090,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.264,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone\nIdentifier=com.local.notesclone\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=31949 flags=0x2(adhoc) hashes=992+3 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=30a555fd0b70e2460bb7cb2d99c40e83eb725daa\nCandidateCDHashFull sha256=30a555fd0b70e2460bb7cb2d99c40e83eb725daa632a8353945c9aaadd68687f\nHash choices=sha256\nCMSDigest=30a555fd0b70e2460bb7cb2d99c40e83eb725daa632a8353945c9aaadd68687f\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11337728\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=30a555fd0b70e2460bb7cb2d99c40e83eb725daa\nSignature=adhoc\nInfo.plist entries=16\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=0\nInternal requirements count=0 size=12\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-11.txt",
+      "diskFreeBefore": 68019458048,
+      "minimumFreeBytes": 68018360320,
+      "deadlineSeconds": 596.854746625,
+      "ownedProcessGroup": 45096,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.276,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app"
+      ],
+      "log": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/command-12.txt",
+      "diskFreeBefore": 68018360320,
+      "minimumFreeBytes": 68018339840,
+      "deadlineSeconds": 596.55716325,
+      "ownedProcessGroup": 45104,
+      "ownedGroupStopped": true,
+      "remainingOwnedGroupMembers": [],
+      "elapsedSeconds": 0.264,
+      "exitCode": 0,
+      "stdout": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone\n# designated => cdhash H\"30a555fd0b70e2460bb7cb2d99c40e83eb725daa\"\n"
+    }
+  ],
+  "sealingChanges": [
+    {
+      "path": "Contents/MacOS/notes-clone",
+      "before": {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16375584,
+        "sha256": "5d29577346501daa1496184986e57a8704d52dd16473b1452883f59627ee4c0a",
+        "type": "file",
+        "mode": 493
+      },
+      "after": {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16298512,
+        "sha256": "3cc7188dff3213fdf1e7ca7c85373d3fe937ff8de8158fb187cb8679614e200d",
+        "type": "file",
+        "mode": 493
+      }
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "before": null,
+      "after": {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b",
+        "type": "file",
+        "mode": 420
+      }
+    }
+  ],
+  "sealed": {
+    "derivedApp": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app",
+    "bundleFiles": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+        "type": "file",
+        "mode": 420
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16298512,
+        "sha256": "3cc7188dff3213fdf1e7ca7c85373d3fe937ff8de8158fb187cb8679614e200d",
+        "type": "file",
+        "mode": 493
+      },
+      {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b",
+        "type": "file",
+        "mode": 420
+      }
+    ],
+    "bundleAggregate": "9521aae5d2dd816709d3d5ee39488619ea6ff61dec43e2d3e2b319cfa67c5b28",
+    "archive": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.zip",
+      "bytes": 4866968,
+      "sha256": "d09aab449229a517b78302ac22ba6794a451abb2679441dc8035b7eeef660d9d"
+    },
+    "executable": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-sidebar-build11/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+      "bytes": 16298512,
+      "sha256": "3cc7188dff3213fdf1e7ca7c85373d3fe937ff8de8158fb187cb8679614e200d"
+    }
+  },
+  "preservedOriginalUnchanged": true,
+  "limits": "Complete original plus local adhoc derived bundle only. No DeveloperID, notarization, TCC, launch, persistence or pixel acceptance.",
+  "inputComparisons": {
+    "schema": true,
+    "authorization": true,
+    "head": true,
+    "stage": true,
+    "productFiles": true,
+    "productAggregate": true,
+    "files": true,
+    "aggregate": true,
+    "toolVersions": true,
+    "tools": true,
+    "selectedParentEnvironment": true,
+    "effectiveBuildEnvironment": true,
+    "ocrCache": true,
+    "supplementalInputs": true,
+    "scope": true
+  },
+  "supplementalInputsUnchangedDuringCollection": true,
+  "endedAt": "2026-11-04T19:56:21.981691+00:00"
+}
