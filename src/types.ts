@@ -50,6 +50,31 @@ export interface Workspace {
   attachments: Attachment[];
   settings: Settings;
   access?: AccessState;
+  metadata?: MetadataState;
+}
+export interface MetadataState {
+  sessionId: string;
+  sequence: number;
+}
+export interface CommittedChange {
+  kind: "note" | "folder" | "attachment";
+  id: string;
+  revision?: number;
+}
+export interface CommitReceipt {
+  changes: CommittedChange[];
+  createdId?: string;
+}
+export interface MetadataEvent {
+  metadata: MetadataState;
+  changes: CommittedChange[];
+}
+export interface ActionDelivery<T> {
+  value?: T;
+  receipt?: CommitReceipt;
+  metadata?: MetadataState;
+  accessAccepted: boolean;
+  maintenanceError?: unknown;
 }
 export interface AccessState {
   sessionId: string;

@@ -9,9 +9,12 @@ fn denied(message: &str) -> AppError {
     AppError {
         code: "access_changed".into(),
         message: message.into(),
+        commit: None,
     }
 }
 
+#[path = "session/metadata.rs"]
+mod metadata;
 #[cfg(test)]
 #[path = "session/smart_tests.rs"]
 mod smart_tests;
@@ -47,6 +50,9 @@ pub struct Session {
     intents: HashMap<String, SaveIntent>,
     attachment_windows: HashMap<String, String>,
     pub pending: Option<Pending>,
+    metadata_sequence: u64,
+    metadata_event: Option<Value>,
+    last_commit: Option<Value>,
 }
 impl Session {
     pub fn new(store: Store) -> Self {
@@ -58,6 +64,9 @@ impl Session {
             intents: HashMap::new(),
             attachment_windows: HashMap::new(),
             pending: None,
+            metadata_sequence: 0,
+            metadata_event: None,
+            last_commit: None,
         }
     }
     fn note_epoch(&self, id: &str) -> u64 {
@@ -65,6 +74,9 @@ impl Session {
     }
     pub fn check(&self, token: &Token, note: Option<&str>) -> Result<()> {
         self.store.ensure_legacy_capability()?;
+        self.check_core(token, note)
+    }
+    fn check_core(&self, token: &Token, note: Option<&str>) -> Result<()> {
         if token.session_id != self.id
             || match note {
                 Some(id) => token.note_epoch != Some(self.note_epoch(id)),
@@ -77,6 +89,9 @@ impl Session {
     }
     pub fn snapshot(&self) -> Result<Value> {
         self.store.ensure_legacy_capability()?;
+        self.snapshot_core()
+    }
+    fn snapshot_core(&self) -> Result<Value> {
         let mut notes = BTreeMap::new();
         for n in self.store.notes()? {
             notes.insert(
@@ -88,7 +103,11 @@ impl Session {
             json!({"sessionId":self.id,"epoch":self.epoch,"notes":notes,"suspended":self.pending.as_ref().map(|p|p.targets.clone()).unwrap_or_default(),"operationId":self.pending.as_ref().map(|p|p.id.clone())}),
         )
     }
-    pub fn tagged(&self, mut value: Value) -> Result<Value> {
+    pub fn tagged(&self, value: Value) -> Result<Value> {
+        self.store.ensure_legacy_capability()?;
+        self.tagged_core(value)
+    }
+    fn tagged_core(&self, mut value: Value) -> Result<Value> {
         if let Some(pending) = &self.pending {
             let redact = |n: &mut Value| {
                 if n["id"]
@@ -109,7 +128,8 @@ impl Session {
                 redact(&mut value);
             }
         }
-        value["access"] = self.snapshot()?;
+        value["access"] = self.snapshot_core()?;
+        value["metadata"] = self.metadata();
         Ok(value)
     }
     pub fn workspace(&self) -> Result<Value> {
@@ -122,6 +142,7 @@ impl Session {
             return Err(AppError {
                 code: "internal".into(),
                 message: "锁定状态正在同步，请稍后导出".into(),
+                commit: None,
             });
         }
         self.store.export_archive(path)
@@ -169,18 +190,21 @@ impl Session {
         token: &Token,
         recorded_at: Option<u64>,
     ) -> Result<Value> {
+        self.prepare_metadata(true)?;
         self.sensitive(note, token)?;
         let owner = self.attachment_owner(window)?;
-        let value = self.store.store_attachment_operation(
-            operation,
-            note,
-            &owner,
-            name,
-            mime,
-            bytes,
-            recorded_at,
-        )?;
-        self.tagged(value)
+        let result = self.apply_store(|store| {
+            store.store_attachment_operation(
+                operation,
+                note,
+                &owner,
+                name,
+                mime,
+                bytes,
+                recorded_at,
+            )
+        });
+        self.finish_value(result)
     }
     pub fn query_attachment_operation(
         &mut self,
@@ -189,6 +213,7 @@ impl Session {
         note: &str,
         token: &Token,
     ) -> Result<Value> {
+        self.prepare_metadata(false)?;
         self.sensitive(note, token)?;
         let owner = self.attachment_owner(window)?;
         let value = self
@@ -203,20 +228,22 @@ impl Session {
         note: &str,
         token: &Token,
     ) -> Result<Value> {
+        self.prepare_metadata(true)?;
         self.sensitive(note, token)?;
         let owner = self.attachment_owner(window)?;
         // Every registered save from every real window is checked while the
         // caller holds the same Session/Store mutex as the cleanup decision.
         // Renderer pendingDocs that have not registered an intent are not
         // visible here: the frontend must roll back/drain before cancelling.
-        let value = if self.intents.values().any(|intent| intent.note == note) {
-            self.store
-                .defer_attachment_operation(operation, note, &owner, "save_pending")?
-        } else {
-            self.store
-                .cancel_attachment_operation(operation, note, &owner)?
-        };
-        self.tagged(value)
+        let pending = self.intents.values().any(|intent| intent.note == note);
+        let result = self.apply_store(|store| {
+            if pending {
+                store.defer_attachment_operation(operation, note, &owner, "save_pending")
+            } else {
+                store.cancel_attachment_operation(operation, note, &owner)
+            }
+        });
+        self.finish_value(result)
     }
     pub fn register_save(
         &mut self,
@@ -225,6 +252,7 @@ impl Session {
         intent: &str,
         token: Token,
     ) -> Result<()> {
+        self.prepare_metadata(true)?;
         self.sensitive(note, &token)?;
         if self.intents.len() >= 10000 || self.intents.contains_key(intent) {
             return Err(denied("保存请求无效或过多"));
@@ -240,6 +268,7 @@ impl Session {
         Ok(())
     }
     pub fn save(&mut self, window: &str, mut action: Value) -> Result<Value> {
+        self.prepare_metadata(true)?;
         self.store.ensure_legacy_capability()?;
         let id = action["id"]
             .as_str()
@@ -270,8 +299,9 @@ impl Session {
             }
         }
         action.as_object_mut().unwrap().remove("saveIntent");
-        match self.store.action(action) {
-            Ok(value) => self.tagged(value),
+        let result = self.apply_store(|store| store.action(action));
+        match self.finish_value(result) {
+            Ok(value) => Ok(value),
             Err(error) => {
                 if let Some(p) = self.pending.as_mut() {
                     if p.targets.contains(&id) {
@@ -298,6 +328,7 @@ impl Session {
         )
     }
     pub fn ordinary(&mut self, action: Value, token: &Token) -> Result<(Value, Option<Value>)> {
+        self.prepare_metadata(Self::changes_facts(&action))?;
         self.check(token, None)?;
         if self.pending.is_some() {
             return Err(denied("锁定状态正在同步，请稍候"));
@@ -310,14 +341,18 @@ impl Session {
         if action["type"] == "recoverConflictCopy" {
             self.sensitive(&id, token)?;
         }
-        let value = self.store.action(action)?;
+        let result = self.apply_store(|store| store.action(action));
+        let value = self.finish_value(result)?;
+        if !unlock {
+            return Ok((value, None));
+        }
         let event = if unlock {
             self.bump(std::slice::from_ref(&id));
             Some(self.event("commit", "unlock", &[id])?)
         } else {
             None
         };
-        Ok((self.tagged(value)?, event))
+        Ok((self.finish_value(Ok(value))?, event))
     }
     fn bump(&mut self, targets: &[String]) {
         self.epoch += 1;
@@ -332,8 +367,22 @@ impl Session {
             .map(|p| p.participants.iter().cloned().collect())
             .unwrap_or_default();
         participants.sort();
+        let access = match self.snapshot() {
+            Ok(access) => access,
+            Err(error) if error.code == "capability_unavailable" => return Err(error),
+            Err(_) => {
+                // If response reads fail after commit, publish a conservative access
+                // boundary. Unknown/missing notes remain unauthorized until trusted read.
+                let notes: BTreeMap<_, _> = self
+                    .note_epochs
+                    .iter()
+                    .map(|(id, epoch)| (id.clone(), json!({"epoch":epoch,"authorized":false})))
+                    .collect();
+                json!({"sessionId":self.id,"epoch":self.epoch,"notes":notes,"suspended":[],"operationId":null})
+            }
+        };
         Ok(
-            json!({"phase":phase,"operationId":id,"noteIds":targets,"participantWindows":participants,"access":self.snapshot()?}),
+            json!({"phase":phase,"operationId":id,"noteIds":targets,"participantWindows":participants,"access":access}),
         )
     }
     pub fn begin(
@@ -342,6 +391,7 @@ impl Session {
         participants: HashSet<String>,
         token: &Token,
     ) -> Result<Value> {
+        self.prepare_metadata(Self::changes_facts(&action))?;
         self.check(token, None)?;
         if self.pending.is_some() {
             return Err(denied("已有锁定操作正在等待保存"));
@@ -445,38 +495,60 @@ impl Session {
                 self.event("abort", &p.id, &p.targets)?,
             ));
         }
+        if let Err(error) = self.prepare_metadata(Self::changes_facts(&p.action)) {
+            return Ok((Err(error), self.event("abort", &p.id, &p.targets)?));
+        }
         let importing = p.action["type"] == "importArchive";
-        let result = if importing {
-            let path = p.action["path"]
-                .as_str()
-                .ok_or_else(|| denied("缺少归档路径"))?;
-            self.store
-                .import_legacy_archive(std::path::Path::new(path))
-                .and_then(|()| self.store.workspace())
-        } else {
-            self.store.action(p.action)
-        };
-        match result {
-            Ok(_) => {
-                let mut targets = p.targets;
-                // Include newly imported IDs in the committed epoch boundary.
-                for note in self.store.notes()? {
-                    if importing && !targets.contains(&note.id) {
-                        targets.push(note.id);
+        let result = self.apply_store(|store| {
+            if importing {
+                let path = p.action["path"]
+                    .as_str()
+                    .ok_or_else(|| denied("缺少归档路径"))?;
+                store.import_legacy_archive(std::path::Path::new(path))?;
+                store.workspace()
+            } else {
+                store.action(p.action)
+            }
+        });
+        if result.is_ok() || self.last_commit.is_some() {
+            let mut targets = p.targets;
+            // The receipt survives workspace/maintenance failures after import.
+            if importing {
+                if let Some(changes) = self
+                    .last_commit
+                    .as_ref()
+                    .and_then(|c| c["receipt"]["changes"].as_array())
+                {
+                    for change in changes {
+                        if change["kind"] == "note" {
+                            if let Some(id) = change["id"].as_str() {
+                                if !targets.iter().any(|target| target == id) {
+                                    targets.push(id.into());
+                                }
+                            }
+                        }
                     }
                 }
-                self.bump(&targets);
-                self.store.revoke_keys(&targets);
-                self.intents.retain(|_, i| !targets.contains(&i.note));
-                Ok((self.workspace(), self.event("commit", &p.id, &targets)?))
             }
-            Err(error) if error.code == "lock_committed" => {
-                self.bump(&p.targets);
-                self.store.revoke_keys(&p.targets);
-                self.intents.retain(|_, i| !p.targets.contains(&i.note));
-                Ok((Err(error), self.event("commit", &p.id, &p.targets)?))
-            }
-            Err(error) => Ok((Err(error), self.event("abort", &p.id, &p.targets)?)),
+            self.bump(&targets);
+            self.store.revoke_keys(&targets);
+            self.intents.retain(|_, i| !targets.contains(&i.note));
+            // Store.action may have read/decrypted a workspace before keys were
+            // revoked. Never publish that pre-boundary body. Rebuild only after
+            // the committed access transition, retaining its independent receipt.
+            let result = result.and_then(|value| {
+                let receipt = value["receipt"].clone();
+                self.store.workspace().map(|mut workspace| {
+                    workspace["receipt"] = receipt;
+                    workspace
+                })
+            });
+            Ok((
+                self.finish_value(result),
+                self.event("commit", &p.id, &targets)?,
+            ))
+        } else {
+            Ok((result, self.event("abort", &p.id, &p.targets)?))
         }
     }
 }

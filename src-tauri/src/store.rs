@@ -19,23 +19,31 @@ use uuid::Uuid;
 mod archive;
 #[path = "store/attachment_operations.rs"]
 mod attachment_operations;
+#[path = "store/commits.rs"]
+mod commits;
 #[path = "store/open.rs"]
 mod open;
 #[path = "store/smart.rs"]
 mod smart;
 pub(crate) use attachment_operations::AttachmentOwner;
+pub(crate) use commits::CommitReceipt;
 pub(crate) use smart::{SmartMembership, SmartQuery};
-#[cfg(test)]
-#[path = "store/recorded_at_tests.rs"]
-mod recorded_at_tests;
 #[cfg(test)]
 #[path = "store/folder_name_tests.rs"]
 mod folder_name_tests;
+#[cfg(test)]
+#[path = "store/metadata_tests.rs"]
+mod metadata_tests;
+#[cfg(test)]
+#[path = "store/recorded_at_tests.rs"]
+mod recorded_at_tests;
 
 #[derive(Debug, Serialize)]
 pub struct AppError {
     pub code: String,
     pub message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit: Option<Value>,
 }
 pub type Result<T> = std::result::Result<T, AppError>;
 impl From<rusqlite::Error> for AppError {
@@ -57,6 +65,7 @@ fn err(code: &str, message: impl Into<String>) -> AppError {
     AppError {
         code: code.into(),
         message: message.into(),
+        commit: None,
     }
 }
 fn now() -> i64 {
@@ -160,6 +169,7 @@ pub struct Store {
     db: Connection,
     root: PathBuf,
     keys: HashMap<String, [u8; 32]>,
+    receipt: Option<CommitReceipt>,
 }
 impl Store {
     pub fn open(root: impl AsRef<Path>) -> Result<Self> {
@@ -169,6 +179,7 @@ impl Store {
             db,
             root: root.as_ref().into(),
             keys: HashMap::new(),
+            receipt: None,
         };
         s.initialize_storage()?;
         s.db.execute_batch(
@@ -184,6 +195,7 @@ impl Store {
             "INSERT OR REPLACE INTO folders(id,body)VALUES(?1,?2)",
             params![f.id, serde_json::to_string(f)?],
         )?;
+        self.committed("folder", &f.id, None);
         Ok(())
     }
     fn folder(&self, fid: &str) -> Result<Folder> {
@@ -234,6 +246,7 @@ impl Store {
             "INSERT OR REPLACE INTO notes(id,folder_id,body,revision)VALUES(?1,?2,?3,?4)",
             params![n.id, n.folder_id, serde_json::to_string(n)?, n.revision],
         )?;
+        self.committed("note", &n.id, Some(n.revision));
         Ok(())
     }
     fn visible(&self, mut n: Note) -> Result<Note> {
@@ -371,6 +384,8 @@ impl Store {
                         copy.revision
                     ],
                 )?;
+                self.committed("note", &copy.id, Some(copy.revision));
+                self.created(&copy.id);
                 return Ok(json!(copy));
             }
             "createNote" => {
@@ -394,6 +409,7 @@ impl Store {
                     sealed: None,
                 };
                 self.put_note(&n)?;
+                self.created(&n.id);
                 return Ok(json!(n));
             }
             "saveNote" => {
@@ -516,6 +532,7 @@ impl Store {
                     .into_iter()
                     .filter(|x| x.note_id == nid)
                     .collect::<Vec<_>>();
+                let public_attachments: Vec<_> = files.iter().map(|file| file.id.clone()).collect();
                 for attachment in self.operation_files_for_purge(nid)? {
                     if !files
                         .iter()
@@ -531,6 +548,10 @@ impl Store {
                 tx.execute("DELETE FROM attachments WHERE note_id=?1", [nid])?;
                 tx.execute("DELETE FROM notes WHERE id=?1", [nid])?;
                 tx.commit()?;
+                self.committed("note", nid, None);
+                for id in public_attachments {
+                    self.committed("attachment", &id, None);
+                }
                 for f in files {
                     let path = self.attachment_path(&f.relative_path)?;
                     if path.exists() {
@@ -562,6 +583,7 @@ impl Store {
                     created_at: now(),
                 };
                 self.put_folder(&f)?;
+                self.created(&f.id);
                 return Ok(json!(f));
             }
             "renameFolder" => {
@@ -576,8 +598,10 @@ impl Store {
                 if name.len() > 4096 {
                     return Err(err("invalid", "文件夹名称不能超过 4096 字节"));
                 }
-                f.name = name.into();
-                self.put_folder(&f)?;
+                if f.name != name {
+                    f.name = name.into();
+                    self.put_folder(&f)?;
+                }
             }
             "moveFolder" => {
                 let mut f = self.folder(str_field(&a, "id")?)?;
@@ -594,8 +618,10 @@ impl Store {
                     smart::require_parent(&ancestor)?;
                     cursor = ancestor.parent_id;
                 }
-                f.parent_id = parent;
-                self.put_folder(&f)?;
+                if f.parent_id != parent {
+                    f.parent_id = parent;
+                    self.put_folder(&f)?;
+                }
             }
             "deleteFolder" => {
                 let fid = str_field(&a, "id")?;
@@ -615,6 +641,7 @@ impl Store {
                     i += 1;
                 }
                 let mut notes = self.notes()?;
+                let mut changed_notes = Vec::new();
                 let tx = self.db.transaction()?;
                 for n in &mut notes {
                     if ids.contains(&n.folder_id) {
@@ -626,12 +653,19 @@ impl Store {
                             "UPDATE notes SET folder_id=?1,body=?2,revision=?3 WHERE id=?4",
                             params![n.folder_id, serde_json::to_string(n)?, n.revision, n.id],
                         )?;
+                        changed_notes.push((n.id.clone(), n.revision));
                     }
                 }
-                for f in ids {
+                for f in &ids {
                     tx.execute("DELETE FROM folders WHERE id=?1", [f])?;
                 }
                 tx.commit()?;
+                for f in ids {
+                    self.committed("folder", &f, None);
+                }
+                for (id, revision) in changed_notes {
+                    self.committed("note", &id, Some(revision));
+                }
             }
             "settings" => {
                 let old: String =
@@ -778,6 +812,7 @@ impl Store {
             let _ = fs::remove_file(self.attachment_path(&path)?);
             return Err(e.into());
         }
+        self.committed("attachment", &a.id, None);
         Ok(a)
     }
     pub fn read_attachment(&self, aid: &str) -> Result<Value> {

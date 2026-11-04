@@ -1,0 +1,372 @@
+   Compiling rusqlite v0.32.1
+   Compiling notes-qa-fix-store v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-o-metadata09/harness)
+error[E0583]: file not found for module `metadata`
+  --> ../harness/src/session.rs:16:1
+   |
+16 | mod metadata;
+   | ^^^^^^^^^^^^^
+   |
+   = help: to create the module `metadata`, create file "../harness/src/metadata.rs" or "../harness/src/metadata/mod.rs"
+   = note: if there is a `mod metadata` elsewhere in the crate already, import it with `use crate::...` instead
+
+error[E0599]: no method named `metadata` found for reference `&Session` in the current scope
+   --> ../harness/src/session.rs:131:34
+    |
+131 |         value["metadata"] = self.metadata();
+    |                                  ^^^^^^^^ method not found in `&Session`
+
+error[E0599]: no method named `prepare_metadata` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:192:14
+    |
+192 |         self.prepare_metadata(true)?;
+    |              ^^^^^^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no method named `apply_store` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:195:27
+    |
+195 |         let result = self.apply_store(|store| {
+    |                      -----^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no method named `finish_value` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:206:14
+    |
+206 |         self.finish_value(result)
+    |              ^^^^^^^^^^^^
+    |
+help: there is a method `finish` with a similar name, but with different arguments
+   --> ../harness/src/session.rs:467:5
+    |
+467 | /     pub fn finish(
+468 | |         &mut self,
+469 | |         operation: &str,
+470 | |         live_windows: &HashSet<String>,
+471 | |         timeout: bool,
+472 | |     ) -> Result<(Result<Value>, Value)> {
+    | |_______________________________________^
+
+error[E0599]: no method named `prepare_metadata` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:215:14
+    |
+215 |         self.prepare_metadata(false)?;
+    |              ^^^^^^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no method named `prepare_metadata` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:230:14
+    |
+230 |         self.prepare_metadata(true)?;
+    |              ^^^^^^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no method named `apply_store` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:238:27
+    |
+238 |         let result = self.apply_store(|store| {
+    |                      -----^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no method named `finish_value` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:245:14
+    |
+245 |         self.finish_value(result)
+    |              ^^^^^^^^^^^^
+    |
+help: there is a method `finish` with a similar name, but with different arguments
+   --> ../harness/src/session.rs:467:5
+    |
+467 | /     pub fn finish(
+468 | |         &mut self,
+469 | |         operation: &str,
+470 | |         live_windows: &HashSet<String>,
+471 | |         timeout: bool,
+472 | |     ) -> Result<(Result<Value>, Value)> {
+    | |_______________________________________^
+
+error[E0599]: no method named `prepare_metadata` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:254:14
+    |
+254 |         self.prepare_metadata(true)?;
+    |              ^^^^^^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no method named `prepare_metadata` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:270:14
+    |
+270 |         self.prepare_metadata(true)?;
+    |              ^^^^^^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no method named `apply_store` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:301:27
+    |
+301 |         let result = self.apply_store(|store| store.action(action));
+    |                           ^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no method named `finish_value` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:302:20
+    |
+302 |         match self.finish_value(result) {
+    |                    ^^^^^^^^^^^^
+    |
+help: there is a method `finish` with a similar name, but with different arguments
+   --> ../harness/src/session.rs:467:5
+    |
+467 | /     pub fn finish(
+468 | |         &mut self,
+469 | |         operation: &str,
+470 | |         live_windows: &HashSet<String>,
+471 | |         timeout: bool,
+472 | |     ) -> Result<(Result<Value>, Value)> {
+    | |_______________________________________^
+
+error[E0599]: no method named `prepare_metadata` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:330:14
+    |
+330 |         self.prepare_metadata(Self::changes_facts(&action))?;
+    |              ^^^^^^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no associated function or constant named `changes_facts` found for struct `Session` in the current scope
+   --> ../harness/src/session.rs:330:37
+    |
+ 44 | pub struct Session {
+    | ------------------ associated function or constant `changes_facts` not found for this struct
+...
+330 |         self.prepare_metadata(Self::changes_facts(&action))?;
+    |                                     ^^^^^^^^^^^^^ associated function or constant not found in `Session`
+    |
+note: if you're trying to build a new `Session`, consider using `Session::new` which returns `Session`
+   --> ../harness/src/session.rs:57:5
+    |
+ 57 |     pub fn new(store: Store) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `apply_store` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:343:27
+    |
+343 |         let result = self.apply_store(|store| store.action(action));
+    |                           ^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no method named `finish_value` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:344:26
+    |
+344 |         let value = self.finish_value(result)?;
+    |                          ^^^^^^^^^^^^
+    |
+help: there is a method `finish` with a similar name, but with different arguments
+   --> ../harness/src/session.rs:467:5
+    |
+467 | /     pub fn finish(
+468 | |         &mut self,
+469 | |         operation: &str,
+470 | |         live_windows: &HashSet<String>,
+471 | |         timeout: bool,
+472 | |     ) -> Result<(Result<Value>, Value)> {
+    | |_______________________________________^
+
+error[E0599]: no method named `prepare_metadata` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:390:14
+    |
+390 |         self.prepare_metadata(Self::changes_facts(&action))?;
+    |              ^^^^^^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no associated function or constant named `changes_facts` found for struct `Session` in the current scope
+   --> ../harness/src/session.rs:390:37
+    |
+ 44 | pub struct Session {
+    | ------------------ associated function or constant `changes_facts` not found for this struct
+...
+390 |         self.prepare_metadata(Self::changes_facts(&action))?;
+    |                                     ^^^^^^^^^^^^^ associated function or constant not found in `Session`
+    |
+note: if you're trying to build a new `Session`, consider using `Session::new` which returns `Session`
+   --> ../harness/src/session.rs:57:5
+    |
+ 57 |     pub fn new(store: Store) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `prepare_metadata` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:494:34
+    |
+494 |         if let Err(error) = self.prepare_metadata(Self::changes_facts(&p.action)) {
+    |                                  ^^^^^^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no associated function or constant named `changes_facts` found for struct `Session` in the current scope
+   --> ../harness/src/session.rs:494:57
+    |
+ 44 | pub struct Session {
+    | ------------------ associated function or constant `changes_facts` not found for this struct
+...
+494 |         if let Err(error) = self.prepare_metadata(Self::changes_facts(&p.action)) {
+    |                                                         ^^^^^^^^^^^^^ associated function or constant not found in `Session`
+    |
+note: if you're trying to build a new `Session`, consider using `Session::new` which returns `Session`
+   --> ../harness/src/session.rs:57:5
+    |
+ 57 |     pub fn new(store: Store) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `apply_store` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:498:27
+    |
+498 |         let result = self.apply_store(|store| {
+    |                      -----^^^^^^^^^^^ method not found in `&mut Session`
+
+error[E0599]: no method named `finish_value` found for mutable reference `&mut Session` in the current scope
+   --> ../harness/src/session.rs:533:22
+    |
+533 |                 self.finish_value(result),
+    |                      ^^^^^^^^^^^^
+    |
+help: there is a method `finish` with a similar name, but with different arguments
+   --> ../harness/src/session.rs:467:5
+    |
+467 | /     pub fn finish(
+468 | |         &mut self,
+469 | |         operation: &str,
+470 | |         live_windows: &HashSet<String>,
+471 | |         timeout: bool,
+472 | |     ) -> Result<(Result<Value>, Value)> {
+    | |_______________________________________^
+
+error[E0282]: type annotations needed
+  --> ../transport.rs:12:86
+   |
+12 |     let token = || serde_json::from_value::<Token>(args["expected"].clone()).map_err(Into::into);
+   |                                                                                      ^^^^^^^^^^ cannot infer type of the type parameter `T` declared on the trait `Into`
+   |
+help: consider specifying a concrete type for the type parameter `T`
+   |
+12 |     let token = || serde_json::from_value::<Token>(args["expected"].clone()).map_err(Into::</* Type */>::into);
+   |                                                                                          ++++++++++++++
+
+error[E0283]: type annotations needed
+  --> ../transport.rs:12:86
+   |
+12 |     let token = || serde_json::from_value::<Token>(args["expected"].clone()).map_err(Into::into);
+   |                                                                                      ^^^^^^^^^^ cannot infer type of the type parameter `T` declared on the trait `Into`
+   |
+note: multiple `impl`s satisfying `_: From<serde_json::Error>` found
+  --> ../harness/src/store.rs:59:1
+   |
+59 | impl From<serde_json::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: and another `impl` found in the `serde_json` crate: `impl From<serde_json::Error> for std::io::Error;`
+   = note: required for `serde_json::Error` to implement `Into<_>`
+help: consider specifying a concrete type for the type parameter `T`
+   |
+12 |     let token = || serde_json::from_value::<Token>(args["expected"].clone()).map_err(Into::</* Type */>::into);
+   |                                                                                          ++++++++++++++
+
+error[E0283]: type annotations needed
+  --> ../transport.rs:12:86
+   |
+12 | ...d"].clone()).map_err(Into::into);
+   |                         ^^^^^^^^^^ cannot infer type of the type parameter `T` declared on the trait `Into`
+...
+15 | ...,args["noteId"].as_str().unwrap(),args["intent"].as_str().unwrap(),token()?)?; Ok(Value::Null) },
+   |                                                                              - type must be known at this point
+   |
+note: multiple `impl`s satisfying `store::AppError: From<_>` found
+  --> ../harness/src/store.rs:49:1
+   |
+49 | impl From<rusqlite::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+54 | impl From<std::io::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+59 | impl From<serde_json::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: and another `impl` found in the `core` crate: `impl<T> From<T> for T;`
+help: consider specifying a concrete type for the type parameter `T`
+   |
+12 |     let token = || serde_json::from_value::<Token>(args["expected"].clone()).map_err(Into::</* Type */>::into);
+   |                                                                                          ++++++++++++++
+
+error[E0283]: type annotations needed
+  --> ../transport.rs:12:86
+   |
+12 |     let token = || serde_json::from_value::<Token>(args["expected"].clone()).map_err(Into::into);
+   |                                                                                      ^^^^^^^^^^ cannot infer type of the type parameter `T` declared on the trait `Into`
+...
+20 |                 let prepare = session.begin(action,Default::default(),&token()?)?;
+   |                                                                               - type must be known at this point
+   |
+note: multiple `impl`s satisfying `store::AppError: From<_>` found
+  --> ../harness/src/store.rs:49:1
+   |
+49 | impl From<rusqlite::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+54 | impl From<std::io::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+59 | impl From<serde_json::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: and another `impl` found in the `core` crate: `impl<T> From<T> for T;`
+help: consider specifying a concrete type for the type parameter `T`
+   |
+12 |     let token = || serde_json::from_value::<Token>(args["expected"].clone()).map_err(Into::</* Type */>::into);
+   |                                                                                          ++++++++++++++
+
+error[E0283]: type annotations needed
+  --> ../transport.rs:12:86
+   |
+12 |     let token = || serde_json::from_value::<Token>(args["expected"].clone()).map_err(Into::into);
+   |                                                                                      ^^^^^^^^^^ cannot infer type of the type parameter `T` declared on the trait `Into`
+...
+24 |                 let (value,event) = session.ordinary(action,&token()?)?; *access=event; Ok(value)
+   |                                                                     - type must be known at this point
+   |
+note: multiple `impl`s satisfying `store::AppError: From<_>` found
+  --> ../harness/src/store.rs:49:1
+   |
+49 | impl From<rusqlite::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+54 | impl From<std::io::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+59 | impl From<serde_json::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: and another `impl` found in the `core` crate: `impl<T> From<T> for T;`
+help: consider specifying a concrete type for the type parameter `T`
+   |
+12 |     let token = || serde_json::from_value::<Token>(args["expected"].clone()).map_err(Into::</* Type */>::into);
+   |                                                                                          ++++++++++++++
+
+error[E0283]: type annotations needed
+  --> ../transport.rs:12:86
+   |
+12 | ...ted"].clone()).map_err(Into::into);
+   |                           ^^^^^^^^^^ cannot infer type of the type parameter `T` declared on the trait `Into`
+...
+28 | ...str().unwrap(),&token()?)?; session.tagged(session.store.note_text(args["id"].as_str().unwrap())?) },
+   |                           - type must be known at this point
+   |
+note: multiple `impl`s satisfying `store::AppError: From<_>` found
+  --> ../harness/src/store.rs:49:1
+   |
+49 | impl From<rusqlite::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+54 | impl From<std::io::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+59 | impl From<serde_json::Error> for AppError {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: and another `impl` found in the `core` crate: `impl<T> From<T> for T;`
+help: consider specifying a concrete type for the type parameter `T`
+   |
+12 |     let token = || serde_json::from_value::<Token>(args["expected"].clone()).map_err(Into::</* Type */>::into);
+   |                                                                                          ++++++++++++++
+
+error[E0599]: no method named `take_metadata_event` found for struct `Session` in the current scope
+  --> ../transport.rs:41:36
+   |
+41 |         if let Some(event)=session.take_metadata_event() { events.push(json!({"name":"notes-metadata","payload":event})); }
+   |                                    ^^^^^^^^^^^^^^^^^^^ method not found in `Session`
+   |
+  ::: ../harness/src/session.rs:44:1
+   |
+44 | pub struct Session {
+   | ------------------ method `take_metadata_event` not found for this struct
+
+Some errors have detailed explanations: E0282, E0283, E0583, E0599.
+For more information about an error, try `rustc --explain E0282`.
+error: could not compile `notes-qa-fix-store` (bin "notes-o-session-transport") due to 30 previous errors

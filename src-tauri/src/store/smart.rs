@@ -274,6 +274,8 @@ impl Store {
             "INSERT INTO folders(id,body)VALUES(?1,?2)",
             params![folder.id, serde_json::to_string(&folder)?],
         )?;
+        self.committed("folder", &folder.id, None);
+        self.created(&folder.id);
         Ok(folder)
     }
     pub(crate) fn update_smart_folder(&mut self, input: Value) -> Result<Folder> {
@@ -294,6 +296,7 @@ impl Store {
             params![serde_json::to_string(&folder)?, folder.id],
         )?;
         tx.commit()?;
+        self.committed("folder", &folder.id, None);
         Ok(folder)
     }
     pub(crate) fn delete_smart_folder(&mut self, input: Value) -> Result<()> {
@@ -302,6 +305,7 @@ impl Store {
         self.smart_for_cas(&input.id, input.expected_definition_revision)?;
         tx.execute("DELETE FROM folders WHERE id=?1", [&input.id])?;
         tx.commit()?;
+        self.committed("folder", &input.id, None);
         Ok(())
     }
     fn smart_for_cas(&self, id: &str, expected: u64) -> Result<Folder> {

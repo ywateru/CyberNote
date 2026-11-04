@@ -705,23 +705,29 @@ impl Store {
             sync_dir(&self.root.join("attachments"))?;
             import_checkpoint("files");
             let tx = self.db.transaction()?;
+            let mut changes = Vec::new();
             for f in &plan.archive.folders {
-                tx.execute(
+                let inserted = tx.execute(
                     "INSERT OR IGNORE INTO folders(id,body)VALUES(?1,?2)",
                     params![f.id, serde_json::to_string(f)?],
                 )?;
+                if inserted != 0 {
+                    changes.push(("folder", f.id.clone(), None));
+                }
             }
             for n in &plan.archive.notes {
                 tx.execute(
                     "INSERT INTO notes(id,folder_id,body,revision)VALUES(?1,?2,?3,?4)",
                     params![n.id, n.folder_id, serde_json::to_string(n)?, n.revision],
                 )?;
+                changes.push(("note", n.id.clone(), Some(n.revision)));
             }
             for a in &plan.archive.attachments {
                 tx.execute(
                     "INSERT INTO attachments(id,note_id,body)VALUES(?1,?2,?3)",
                     params![a.id, a.note_id, serde_json::to_string(a)?],
                 )?;
+                changes.push(("attachment", a.id.clone(), None));
             }
             tx.execute(
                 "UPDATE settings SET body=?1 WHERE id=1",
@@ -729,6 +735,9 @@ impl Store {
             )?;
             import_checkpoint("before_commit");
             tx.commit()?;
+            for (kind, id, revision) in changes {
+                self.committed(kind, &id, revision);
+            }
             import_checkpoint("after_commit");
             Ok(())
         })();

@@ -34,6 +34,7 @@ export class AccessGate {
     state: AccessState,
     stamp: AccessStamp,
     mode: "read" | "save" | "transition" = "read",
+    publish = true,
   ) {
     if (mode === "save") {
       if (
@@ -55,7 +56,7 @@ export class AccessGate {
       (mode !== "transition" || this.state?.operationId || state.operationId)
     )
       throw new AccessChanged();
-    this.state = state;
+    if (publish) this.state = state;
   }
   expected(noteId?: string) {
     if (!this.state) throw new AccessChanged();

@@ -57,6 +57,7 @@ fn failure(message: impl Into<String>) -> AppError {
     AppError {
         code: "internal".into(),
         message: message.into(),
+        commit: None,
     }
 }
 #[tauri::command]
@@ -107,24 +108,20 @@ async fn mutate(
     expected: Token,
 ) -> Result<Value> {
     if action["type"] == "saveNote" {
-        return state
-            .0
-             .0
-            .lock()
-            .map_err(|_| failure("数据锁错误"))?
-            .save(window, action);
+        return session_command(&app, state, |session| session.save(window, action));
     }
     if !Session::requires_barrier(&action) {
-        let (value, event) = state
-            .0
-             .0
-            .lock()
-            .map_err(|_| failure("数据锁错误"))?
-            .ordinary(action, &expected)?;
-        if let Some(event) = event {
+        let mut session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
+        let result = session.ordinary(action, &expected);
+        let metadata = session.take_metadata_event();
+        drop(session);
+        if let Ok((_, Some(event))) = &result {
             let _ = app.emit("notes-access", event);
         }
-        return Ok(value);
+        if let Some(event) = metadata {
+            let _ = app.emit("notes-metadata", event);
+        }
+        return result.map(|(value, _)| value);
     }
     let participants: HashSet<_> = app.webview_windows().into_keys().collect();
     let event = state
@@ -156,13 +153,31 @@ async fn mutate(
             .map_err(|_| failure("数据锁错误"))?;
         let live = app.webview_windows().into_keys().collect();
         let (result, event) = guard.finish(&operation, &live, wait.timed_out())?;
+        let metadata = guard.take_metadata_event();
         drop(guard);
         let _ = app.emit("notes-access", event);
+        if let Some(event) = metadata {
+            let _ = app.emit("notes-metadata", event);
+        }
         Ok(result)
     })
     .await
     .map_err(|e| failure(e.to_string()))?;
     outcome?
+}
+fn session_command(
+    app: &tauri::AppHandle,
+    state: &AppState,
+    operation: impl FnOnce(&mut Session) -> Result<Value>,
+) -> Result<Value> {
+    let mut session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
+    let result = operation(&mut session);
+    let event = session.take_metadata_event();
+    drop(session);
+    if let Some(event) = event {
+        let _ = app.emit("notes-metadata", event);
+    }
+    result
 }
 #[tauri::command]
 async fn workspace_action(
@@ -182,16 +197,12 @@ fn store_attachment(
     data: String,
     expected: Token,
     state: State<AppState>,
+    app: tauri::AppHandle,
 ) -> Result<Value> {
     let bytes = B64.decode(data).map_err(|_| failure("文件编码错误"))?;
-    let mut session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
-    session.sensitive(&note_id, &expected)?;
-    let value = serde_json::to_value(
-        session
-            .store
-            .store_attachment(&note_id, &name, &mime, bytes)?,
-    )?;
-    session.tagged(value)
+    session_command(&app, &state, |session| {
+        session.store_attachment(&note_id, &name, &mime, bytes, &expected)
+    })
 }
 // Preserve the real failure category while keeping private journal/database
 // details out of renderer errors, including failures before owner comparison.
@@ -205,6 +216,7 @@ fn attachment_operation_error(error: AppError) -> AppError {
     AppError {
         code: error.code,
         message: message.into(),
+        commit: error.commit,
     }
 }
 #[tauri::command]
@@ -218,24 +230,23 @@ fn store_attachment_operation(
     expected: Token,
     window: tauri::WebviewWindow,
     state: State<AppState>,
+    app: tauri::AppHandle,
 ) -> Result<Value> {
     const MAX_ENCODED: usize = ((100 * 1024 * 1024 + 2) / 3) * 4;
     if data.len() > MAX_ENCODED {
         return Err(AppError {
             code: "too_large".into(),
             message: "附件不能超过100 MB".into(),
+            commit: None,
         });
     }
     let bytes = B64.decode(data).map_err(|_| AppError {
         code: "invalid".into(),
         message: "文件编码错误".into(),
+        commit: None,
     })?;
-    state
-        .0
-         .0
-        .lock()
-        .map_err(|_| failure("数据锁错误"))?
-        .store_attachment_operation(
+    session_command(&app, &state, |session| {
+        session.store_attachment_operation(
             window.label(),
             &operation_id,
             &note_id,
@@ -245,7 +256,8 @@ fn store_attachment_operation(
             &expected,
             recorded_at,
         )
-        .map_err(attachment_operation_error)
+    })
+    .map_err(attachment_operation_error)
 }
 #[tauri::command]
 fn query_attachment_operation(
@@ -254,14 +266,12 @@ fn query_attachment_operation(
     expected: Token,
     window: tauri::WebviewWindow,
     state: State<AppState>,
+    app: tauri::AppHandle,
 ) -> Result<Value> {
-    state
-        .0
-         .0
-        .lock()
-        .map_err(|_| failure("数据锁错误"))?
-        .query_attachment_operation(window.label(), &operation_id, &note_id, &expected)
-        .map_err(attachment_operation_error)
+    session_command(&app, &state, |session| {
+        session.query_attachment_operation(window.label(), &operation_id, &note_id, &expected)
+    })
+    .map_err(attachment_operation_error)
 }
 #[tauri::command]
 fn cancel_attachment_operation(
@@ -270,14 +280,12 @@ fn cancel_attachment_operation(
     expected: Token,
     window: tauri::WebviewWindow,
     state: State<AppState>,
+    app: tauri::AppHandle,
 ) -> Result<Value> {
-    state
-        .0
-         .0
-        .lock()
-        .map_err(|_| failure("数据锁错误"))?
-        .cancel_attachment_operation(window.label(), &operation_id, &note_id, &expected)
-        .map_err(attachment_operation_error)
+    session_command(&app, &state, |session| {
+        session.cancel_attachment_operation(window.label(), &operation_id, &note_id, &expected)
+    })
+    .map_err(attachment_operation_error)
 }
 #[tauri::command]
 fn read_attachment(id: String, expected: Token, state: State<AppState>) -> Result<Value> {
@@ -467,6 +475,7 @@ mod attachment_command_tests {
             let result = attachment_operation_error(AppError {
                 code: code.into(),
                 message: "PRIVATE foreign owner path SQL bytes".into(),
+                commit: None,
             });
             assert_eq!(result.code, code);
             assert!(!result.message.contains("PRIVATE"));
@@ -475,6 +484,7 @@ mod attachment_command_tests {
         let result = attachment_operation_error(AppError {
             code: "attachment_operation_conflict".into(),
             message: "附件操作身份或内容不匹配".into(),
+            commit: None,
         });
         assert_eq!(result.code, "attachment_operation_conflict");
         assert_eq!(result.message, "附件操作身份或内容不匹配");

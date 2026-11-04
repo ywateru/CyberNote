@@ -1,0 +1,24 @@
+{
+  "binaryHash": "b21d8f5f127c344fdbd2fa8ce1d3052df17b582d6b47163fc3bf4294de4b89b2",
+  "observedApp": true,
+  "results": [
+    {
+      "name": "observed-ack-does-not-consume-equal-event",
+      "result": {
+        "before": 3,
+        "observed": 4,
+        "applied": 3,
+        "needed": true,
+        "after": 4,
+        "revision": 2
+      },
+      "passed": true
+    },
+    {
+      "name": "old-workspace-cannot-remove-created-access-before-save-ack",
+      "passed": false,
+      "error": "Error: page.evaluate: Object"
+    }
+  ],
+  "errors": []
+}

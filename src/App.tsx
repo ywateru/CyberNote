@@ -124,6 +124,9 @@ import {
   subscribeAccess,
   invalidateAccessRequests,
   accessGate,
+  metadataGate,
+  subscribeMetadata,
+  markWorkspaceApplied,
 } from "./bridge";
 import {
   NativeToolbar,
@@ -134,6 +137,8 @@ import {
 } from "./native-toolbar";
 import { toolbarState } from "./native-toolbar-state";
 import type { BindingInfo } from "../plugins/tauri-plugin-notes-ui/guest-js";
+import { AccessChanged } from "./access-client";
+import { MetadataStale } from "./metadata-client";
 import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
 import { documentsEqual } from "./document-equality";
@@ -512,6 +517,14 @@ function App() {
   ).current;
   const synchronizingRef = useRef(false);
   const initializedSelection = useRef(false);
+  const metadataRefreshRef = useRef<
+    (force?: boolean) => Promise<Workspace | undefined>
+  >(async () => undefined);
+  const metadataRefreshRunning = useRef<
+    Promise<Workspace | undefined> | undefined
+  >(undefined);
+  const metadataRefreshAgain = useRef(false);
+  const metadataDisposed = useRef(false);
   const barrierEditor = useRef<{ editor: Editor; editable: boolean } | null>(
     null,
   );
@@ -708,7 +721,8 @@ function App() {
     }
   }, [desktopSearch, query, filter, tagFilter]);
   const fail = useCallback((e: unknown) => setError(errText(e)), []);
-  const hydrate = useCallback((data: Workspace) => {
+  const hydrate = useCallback((data: Workspace, passive = false) => {
+    if (!metadataGate.canPublish(data.metadata)) return false;
     const previous = wsRef.current;
     const changed = previous.notes
       .filter(
@@ -744,17 +758,85 @@ function App() {
         title: text.split("\n")[0] || "新备忘录",
       };
     });
-    const next = { ...data, notes };
+    const next = {
+      ...data,
+      notes,
+      ...(passive ? { settings: wsRef.current.settings } : {}),
+    };
     wsRef.current = next;
     setWs(next);
-    setSettings(data.settings);
+    if (!passive) setSettings(data.settings);
+    markWorkspaceApplied(next);
+    return true;
   }, []);
+  metadataRefreshRef.current = (force = true) => {
+    metadataRefreshAgain.current ||= force;
+    if (metadataRefreshRunning.current) return metadataRefreshRunning.current;
+    const work = (async () => {
+      await Promise.resolve();
+      let latest: Workspace | undefined;
+      do {
+        metadataRefreshAgain.current = false;
+        if (
+          !initializedSelection.current ||
+          metadataDisposed.current ||
+          synchronizingRef.current ||
+          accessGate.state?.operationId
+        )
+          return;
+        try {
+          const data = await loadWorkspace();
+          if (
+            metadataDisposed.current ||
+            synchronizingRef.current ||
+            accessGate.state?.operationId
+          )
+            return;
+          if (!hydrate(data, true)) {
+            metadataRefreshAgain.current = true;
+            continue;
+          }
+          latest = data;
+        } catch (error) {
+          if (error instanceof MetadataStale) {
+            metadataRefreshAgain.current = true;
+            continue;
+          }
+          if (error instanceof AccessChanged) {
+            await synchronizeRef.current();
+            return;
+          }
+          fail(error);
+          return;
+        }
+      } while (metadataRefreshAgain.current || metadataGate.needsRefresh);
+      return latest;
+    })();
+    metadataRefreshRunning.current = work;
+    void work
+      .finally(() => {
+        if (metadataRefreshRunning.current === work)
+          metadataRefreshRunning.current = undefined;
+      })
+      .catch(fail);
+    return work;
+  };
   useEffect(() => {
     let disposed = false;
     let unlisten: (() => void) | undefined;
+    let unlistenMetadata: (() => void) | undefined;
+    metadataDisposed.current = false;
     (async () => {
       unlisten = await subscribeAccess((event) => accessHandler.current(event));
+      unlistenMetadata = await subscribeMetadata((event) => {
+        if (event.metadata.sessionId !== accessGate.state?.sessionId) {
+          void synchronizeRef.current();
+          return;
+        }
+        if (metadataGate.needsRefresh) void metadataRefreshRef.current(false);
+      });
       if (disposed) {
+        unlistenMetadata();
         unlisten();
         return;
       }
@@ -766,7 +848,9 @@ function App() {
       });
     return () => {
       disposed = true;
+      metadataDisposed.current = true;
       unlisten?.();
+      unlistenMetadata?.();
     };
   }, [hydrate, fail, separate]);
   useEffect(() => {
@@ -811,9 +895,14 @@ function App() {
       await flush();
       validate?.();
       const result = await action(a);
-      if (result && typeof result === "object" && "notes" in result)
-        hydrate(result as Workspace);
-      else await refresh();
+      if (
+        result.value &&
+        typeof result.value === "object" &&
+        "notes" in result.value
+      )
+        hydrate(result.value as Workspace, true);
+      else await metadataRefreshRef.current();
+      if (result.maintenanceError) fail(result.maintenanceError);
       return result;
     },
     [flush, hydrate, refresh],
@@ -821,6 +910,10 @@ function App() {
   const updateSettings = useCallback(
     (patch: Settings) => {
       if (patch.view) setGalleryEditor(false);
+      wsRef.current = {
+        ...wsRef.current,
+        settings: { ...wsRef.current.settings, ...patch },
+      };
       setSettings((prev) => ({ ...prev, ...patch }));
       setWs((prev) => ({ ...prev, settings: { ...prev.settings, ...patch } }));
       action({ type: "settings", settings: patch }).catch(fail);
@@ -861,17 +954,25 @@ function App() {
       const next = enqueueSave(
         queues.current.get(id),
         async () => {
-          const n = await action<Note>({
+          const delivery = await action<Note>({
             type: "saveNote",
             id,
             saveIntent: await ticket,
             document: doc,
             revision: revisions.current.expected(id),
           });
-          revisions.current.confirmed(id, n.revision);
+          if (!delivery.accessAccepted) throw new AccessChanged();
+          const revision =
+            delivery.receipt?.changes.find(
+              (change) => change.kind === "note" && change.id === id,
+            )?.revision ?? delivery.value?.revision;
+          if (revision === undefined) throw Error("后端未提供保存回执");
+          // Only the submitted body is used privately for attachment ACK. A stale
+          // server document never publishes through the save response.
+          revisions.current.confirmed(id, revision);
           for (const submission of attachmentSubmissions.current.values())
-            submission.acknowledge(id, n.document);
-          ocrOperation.current?.acknowledgeDocument(id, n.document);
+            submission.acknowledge(id, doc);
+          ocrOperation.current?.acknowledgeDocument(id, doc);
           if (pendingDocs.current.get(id) === doc) {
             pendingDocs.current.delete(id);
             saveFailures.current.delete(id);
@@ -879,9 +980,15 @@ function App() {
           setWs((prev) => ({
             ...prev,
             notes: prev.notes.map((old) =>
-              old.id === id ? { ...old, revision: n.revision } : old,
+              old.id === id
+                ? { ...old, revision: Math.max(old.revision, revision) }
+                : old,
             ),
           }));
+          // A newer workspace may have been hydrated while pending overlaid its
+          // body. After ACK removes that overlay, read even at the same sequence.
+          void metadataRefreshRef.current();
+          if (delivery.maintenanceError) fail(delivery.maintenanceError);
         },
         (e) => {
           saveFailures.current.set(id, e);
@@ -992,21 +1099,26 @@ function App() {
         throw Error(
           "锁定或含附件的备忘录暂不能另存冲突副本。未保存内容仍保留，请保持此窗口打开。",
         );
-      const copy = await action<Note>({
+      const recovered = await action<Note>({
         type: "recoverConflictCopy",
         id,
         revision: revisions.current.expected(id),
         document: doc,
       });
+      const copyId = recovered.receipt?.createdId ?? recovered.value?.id;
+      if (!copyId) throw Error("后端未提供副本回执");
       copyConfirmed = true;
-      const data = await loadWorkspace();
+      const data = await metadataRefreshRef.current();
+      const copy = data?.notes.find((note) => note.id === copyId);
+      if (!copy || !accessGate.state?.notes[copyId]?.authorized)
+        throw new AccessChanged();
       // Only a confirmed, durable new note releases the original pending body.
       if (pendingDocs.current.get(id) === doc) {
         pendingDocs.current.delete(id);
         saveFailures.current.delete(id);
       }
+      void metadataRefreshRef.current();
       revisions.current.confirmed(copy.id, copy.revision);
-      hydrate(data);
       setNoteId(copy.id);
       setGalleryEditor(true);
       setPage("editor");
@@ -1130,9 +1242,17 @@ function App() {
         setSynchronizing(true);
         setSyncError("");
       },
-      loadWorkspace,
+      async () => {
+        for (;;) {
+          try {
+            return await loadWorkspace(true);
+          } catch (error) {
+            if (!(error instanceof MetadataStale)) throw error;
+          }
+        }
+      },
       (data) => {
-        hydrate(data);
+        if (!hydrate(data)) throw new MetadataStale();
         if (!initializedSelection.current) {
           initializedSelection.current = true;
           setFolderId(String(data.settings.selectedFolder || "default"));
@@ -1232,14 +1352,16 @@ function App() {
   };
   useEffect(() => {
     const visible = () => {
-      if (document.visibilityState === "visible") void synchronizeRef.current();
+      if (document.visibilityState === "visible")
+        void metadataRefreshRef.current();
     };
     document.addEventListener("visibilitychange", visible);
+    window.addEventListener("online", visible);
     let unlisten: (() => void) | undefined;
     if (native)
       getCurrentWindow()
         .onFocusChanged(({ payload }) => {
-          if (payload) void synchronizeRef.current();
+          if (payload) void metadataRefreshRef.current();
         })
         .then((fn) => {
           unlisten = fn;
@@ -1247,6 +1369,7 @@ function App() {
         .catch(fail);
     return () => {
       document.removeEventListener("visibilitychange", visible);
+      window.removeEventListener("online", visible);
       unlisten?.();
     };
   }, [fail]);
@@ -1421,21 +1544,22 @@ function App() {
         validate?.();
         const fid =
           folderId === "all" || folderId === "trash" ? "default" : folderId;
-        const n = await action<Note & Pick<Workspace, "access">>({
+        const created = await action<Note & Pick<Workspace, "access">>({
           type: "createNote",
           folderId: fid,
         });
-        // Browser preview returns a Note without access. Adopt a trusted read's
-        // new note epoch before its first refresh, as native responses already do.
-        const createdAccess = n.access ?? (await loadWorkspace()).access;
+        const createdId = created.receipt?.createdId ?? created.value?.id;
+        if (!createdId) throw Error("后端未提供新建收据");
+        if (created.maintenanceError) fail(created.maintenanceError);
+        // Keep the successful unique ID even if its snapshot is stale. Never
+        // issue create again; only authoritative data can activate the editor.
+        const data = await metadataRefreshRef.current();
+        const n = data?.notes.find((note) => note.id === createdId);
+        if (!n || !accessGate.state?.notes[createdId]?.authorized) {
+          setNotice("备忘录已经创建，列表同步后可查看");
+          return;
+        }
         revisions.current.confirmed(n.id, n.revision);
-        // Native action has already accepted this response through AccessGate.
-        // Keep its new note epoch with the note, before the first refresh.
-        setWs((prev) => ({
-          ...prev,
-          access: createdAccess ?? prev.access,
-          notes: [n, ...prev.notes],
-        }));
         clearTagComposition();
         setTagFilter(undefined);
         setFilter("");
@@ -1572,8 +1696,10 @@ function App() {
           await exportArchive(path);
           setNotice("本地备份已导出");
         } else {
-          const data = await importArchive(path);
-          hydrate(data);
+          const imported = await importArchive(path);
+          if (imported.value) hydrate(imported.value);
+          else await synchronizeRef.current();
+          if (imported.maintenanceError) fail(imported.maintenanceError);
           setNotice("本地备份已导入");
         }
       } catch (e) {
@@ -3498,6 +3624,7 @@ function App() {
           <button
             onClick={() => {
               setError("");
+              void metadataRefreshRef.current();
               void retryAttachments().catch(fail);
             }}
           >

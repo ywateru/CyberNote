@@ -1,0 +1,32 @@
+   Compiling notes-qa-fix-store v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-o-metadata09/harness)
+warning: method `store_attachment` is never used
+  --> src/session/metadata.rs:54:19
+   |
+ 4 | impl Session {
+   | ------------ method in this implementation
+...
+54 |     pub(crate) fn store_attachment(
+   |                   ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `notes-qa-fix-store` (bin "notes-qa-fix-store" test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.09s
+     Running unittests src/main.rs (src-tauri/target/debug/deps/notes_qa_fix_store-275dda0e5f1d05fc)
+
+running 12 tests
+test session::tests::real_revision_conflict_forces_abort_even_if_window_claims_success ... ok
+test session::tests::live_schema_rejects_invalid_saves_without_changing_revision_or_body ... ok
+test session::tests::pending_intent_cannot_ack_and_failed_barrier_preserves_authorization_and_retry ... ok
+test session::tests::conflict_copy_obeys_live_session_source_epoch_and_prepare ... ok
+test session::tests::recorded_at_retains_session_and_note_authority ... ok
+test session::tests::attachment_owner_uses_real_session_window_incarnation_and_current_access ... ok
+test session::tests::window_identity_and_session_identity_cannot_be_supplied_by_saved_action ... ok
+test session::tests::attachment_cancel_waits_for_other_windows_registered_save_and_retains_committed_ref ... ok
+test session::tests::timeout_missing_window_and_failed_ack_never_commit ... ok
+test session::tests::registered_save_drains_before_two_window_commit_and_old_access_expires ... ok
+test session::tests::close_locks_rejects_late_commands_and_delete_response_cannot_publish_decrypted_body ... ok
+test session::tests::frozen_ciphertexts_validate_after_decrypt_before_publishing_key ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 69 filtered out; finished in 3.73s
+

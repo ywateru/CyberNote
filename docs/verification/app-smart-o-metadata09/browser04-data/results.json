@@ -1,0 +1,97 @@
+{
+  "binaryHash": "b21d8f5f127c344fdbd2fa8ce1d3052df17b582d6b47163fc3bf4294de4b89b2",
+  "observedApp": true,
+  "results": [
+    {
+      "name": "observed-ack-does-not-consume-equal-event",
+      "result": {
+        "before": 3,
+        "observed": 4,
+        "applied": 3,
+        "needed": true,
+        "after": 4,
+        "revision": 2
+      },
+      "passed": true
+    },
+    {
+      "name": "old-workspace-cannot-remove-created-access-before-save-ack",
+      "result": {
+        "id": "dfccf9d1-b586-44b8-a903-232046b136c7",
+        "before": {
+          "authorized": true,
+          "epoch": 0
+        },
+        "after": {
+          "authorized": true,
+          "epoch": 0
+        },
+        "old": "metadata_stale",
+        "accepted": true,
+        "revision": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "successful-create-id-survives-newer-access",
+      "result": {
+        "id": "cc60809a-1f1e-4061-9b41-8229e78f7ae6",
+        "accessAccepted": false,
+        "hasValue": false,
+        "creates": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "mounted-metadata-keeps-editor-composition-undo-bookmarks-pending",
+      "result": {
+        "same": true,
+        "sameDom": true,
+        "composing": true,
+        "editable": true,
+        "undo": 1,
+        "beforeUndo": 1,
+        "bookmark": true,
+        "pending": true,
+        "baseline": 1,
+        "beforeBaseline": 1,
+        "settings": {
+          "selectedFolder": "default",
+          "selectedNote": "451399ce-3877-41f7-b6b5-4054cb17056d",
+          "sort": "title",
+          "theme": "light"
+        },
+        "synchronizing": false
+      },
+      "passed": true
+    },
+    {
+      "name": "mounted-newer-hydrate-overlay-then-older-save-ack-reveals-authority",
+      "before": {
+        "pending": true,
+        "text": "local pending",
+        "baseline": 1
+      },
+      "after": {
+        "saved": {
+          "saved": true
+        },
+        "baseline": 3,
+        "revision": 3,
+        "applied": 5,
+        "observed": 5
+      },
+      "passed": true
+    },
+    {
+      "name": "mounted-lost-event-focus-recovery-preserves-editor",
+      "result": {
+        "same": true,
+        "folder": "lost event recovered",
+        "synchronizing": false
+      },
+      "passed": true
+    }
+  ],
+  "errors": []
+}

@@ -1,9 +1,17 @@
 import { listen } from "@tauri-apps/api/event";
+import { MetadataGate, MetadataStale } from "./metadata-client";
 import { AccessGate } from "./access-client";
 import { secureId } from "./secure-id";
 import { attachmentRecordedAt } from "./recording-metadata";
 import type { AttachmentOperationResult } from "./attachment-submission";
-import type { AccessEvent, AccessState } from "./types";
+import type {
+  AccessEvent,
+  AccessState,
+  ActionDelivery,
+  CommitReceipt,
+  MetadataEvent,
+  MetadataState,
+} from "./types";
 import { invoke as nativeInvoke, isTauri } from "@tauri-apps/api/core";
 import { createProofInvoker, proofReceive, proofVerdict } from "./proof-access";
 import {
@@ -19,6 +27,7 @@ const invoke =
     ? createProofInvoker(nativeInvoke)
     : nativeInvoke;
 export const accessGate = new AccessGate();
+export const metadataGate = new MetadataGate();
 const attachmentOwners = new Map<string, string>();
 export const invalidateAccessRequests = () => accessGate.invalidate();
 export async function subscribeAccess(handler: (event: AccessEvent) => void) {
@@ -33,6 +42,25 @@ export async function subscribeAccess(handler: (event: AccessEvent) => void) {
     handler(payload);
   });
 }
+export async function subscribeMetadata(
+  handler: (event: MetadataEvent) => void,
+) {
+  if (!native) return () => {};
+  return listen<MetadataEvent>("notes-metadata", ({ payload }) => {
+    try {
+      metadataGate.observe(payload.metadata, accessGate.state?.sessionId);
+    } catch {
+      handler(payload);
+      return;
+    } // Unknown process requires trusted synchronization.
+    handler(payload);
+  });
+}
+export function markWorkspaceApplied(value: Workspace) {
+  metadataGate.markApplied(value.metadata);
+  attachmentOwners.clear();
+  value.attachments.forEach((a) => attachmentOwners.set(a.id, a.noteId));
+}
 function accept<T>(
   value: T,
   stamp: ReturnType<AccessGate["stamp"]>,
@@ -41,6 +69,13 @@ function accept<T>(
   const state = (value as { access?: AccessState }).access;
   if (!state) throw Error("后端未提供授权状态");
   try {
+    // Validate both gates before publishing either global access state or caches.
+    // Same-epoch old workspaces may omit a newly created note's access entry.
+    accessGate.accept(state, stamp, mode, false);
+    const metadata = (value as { metadata?: MetadataState }).metadata;
+    metadataGate.observe(metadata, state.sessionId);
+    if (mode !== "save" && !metadataGate.canPublish(metadata))
+      throw new MetadataStale();
     accessGate.accept(state, stamp, mode);
     if (import.meta.env.VITE_ACCESS_BOUNDARY_PROOF === "1")
       proofVerdict(value, true, mode);
@@ -48,11 +83,6 @@ function accept<T>(
     if (import.meta.env.VITE_ACCESS_BOUNDARY_PROOF === "1")
       proofVerdict(value, false, mode, error);
     throw error;
-  }
-  const attachments = (value as { attachments?: Attachment[] }).attachments;
-  if (attachments) {
-    attachmentOwners.clear();
-    attachments.forEach((a) => attachmentOwners.set(a.id, a.noteId));
   }
   return value;
 }
@@ -86,12 +116,12 @@ export async function readNoteText(
 export async function exportArchive(path: string) {
   await invoke("export_archive", { path, expected: accessGate.expected() });
 }
-export async function importArchive(path: string): Promise<Workspace> {
+export async function importArchive(
+  path: string,
+): Promise<ActionDelivery<Workspace>> {
   const stamp = accessGate.stamp();
-  return accept(
-    await invoke("import_archive", { path, expected: accessGate.expected() }),
-    stamp,
-    "transition",
+  return deliverAction<Workspace>(stamp, "transition", () =>
+    invoke("import_archive", { path, expected: accessGate.expected() }),
   );
 }
 const initial = (): Workspace => ({
@@ -137,11 +167,21 @@ function readPreview(): Workspace {
   }
 }
 let preview: Workspace = readPreview();
+let previewSequence = 0;
 const persist = () =>
   localStorage.setItem("notes-browser-preview", JSON.stringify(preview));
-export async function loadWorkspace(): Promise<Workspace> {
+export async function loadWorkspace(trusted = false): Promise<Workspace> {
   const stamp = accessGate.stamp();
-  if (native) return accept(await invoke("load_workspace"), stamp);
+  if (native) {
+    const value = await invoke<Workspace>("load_workspace");
+    if (
+      trusted &&
+      stamp.generation === accessGate.generation &&
+      value.access?.sessionId !== accessGate.state?.sessionId
+    )
+      accessGate.state = undefined;
+    return accept(value, stamp);
+  }
   const value = structuredClone(preview);
   value.access = {
     sessionId: "browser-preview",
@@ -152,12 +192,61 @@ export async function loadWorkspace(): Promise<Workspace> {
     suspended: [],
     operationId: null,
   };
+  value.metadata = { sessionId: "browser-preview", sequence: previewSequence };
   accessGate.accept(value.access, stamp);
+  metadataGate.observe(value.metadata, value.access.sessionId);
   return value;
+}
+async function deliverAction<T>(
+  stamp: ReturnType<AccessGate["stamp"]>,
+  mode: "read" | "save" | "transition",
+  run: () => Promise<T>,
+): Promise<ActionDelivery<T>> {
+  let value: T;
+  try {
+    value = await run();
+  } catch (error) {
+    const commit = (
+      error as { commit?: { metadata: MetadataState; receipt: CommitReceipt } }
+    )?.commit;
+    if (!commit) throw error;
+    let accessAccepted = false;
+    if (mode === "save" && accessGate.state) {
+      try {
+        accessGate.accept(accessGate.state, stamp, "save");
+        accessAccepted = true;
+      } catch {}
+    }
+    try {
+      metadataGate.observe(commit.metadata, accessGate.state?.sessionId);
+    } catch {}
+    return { ...commit, accessAccepted, maintenanceError: error };
+  }
+  const response = value as {
+    receipt?: CommitReceipt;
+    metadata?: MetadataState;
+  };
+  let accepted = false;
+  try {
+    accept(value, stamp, mode);
+    accepted = true;
+  } catch (error) {
+    if (error instanceof MetadataStale) accepted = true;
+    // The committed result/ID survives rejection of its access or metadata snapshot.
+  }
+  return {
+    receipt: response.receipt,
+    metadata: response.metadata,
+    accessAccepted: accepted,
+    ...(accepted &&
+    (mode === "save" || metadataGate.canPublish(response.metadata))
+      ? { value }
+      : {}),
+  };
 }
 export async function action<T = Workspace>(
   a: Record<string, unknown>,
-): Promise<T> {
+): Promise<ActionDelivery<T>> {
   if (native) {
     const stamp = accessGate.stamp(typeof a.id === "string" ? a.id : undefined);
     const transition = [
@@ -169,18 +258,18 @@ export async function action<T = Workspace>(
       "purgeNote",
       "deleteFolder",
     ].includes(String(a.type));
-    const value = await invoke<T>("workspace_action", {
-      action: a,
-      expected: accessGate.expected(
-        a.type === "recoverConflictCopy" && typeof a.id === "string"
-          ? a.id
-          : undefined,
-      ),
-    });
-    return accept(
-      value,
+    return deliverAction<T>(
       stamp,
       a.type === "saveNote" ? "save" : transition ? "transition" : "read",
+      () =>
+        invoke<T>("workspace_action", {
+          action: a,
+          expected: accessGate.expected(
+            a.type === "recoverConflictCopy" && typeof a.id === "string"
+              ? a.id
+              : undefined,
+          ),
+        }),
     );
   }
   const n = preview.notes.find((x) => x.id === a.id);
@@ -281,7 +370,22 @@ export async function action<T = Workspace>(
       throw Error("笔记加密需在已安装的 Mac/Android 应用中使用");
   }
   persist();
-  return structuredClone(result || preview) as T;
+  if (a.type !== "settings") previewSequence++;
+  const value = structuredClone(result || preview) as T;
+  const current = await loadWorkspace();
+  const createdId = [
+    "createNote",
+    "createFolder",
+    "recoverConflictCopy",
+  ].includes(String(a.type))
+    ? (value as { id?: string }).id
+    : undefined;
+  return {
+    value,
+    accessAccepted: true,
+    metadata: current.metadata,
+    receipt: { changes: [], ...(createdId ? { createdId } : {}) },
+  };
 }
 export async function storeAttachment(
   noteId: string,
@@ -393,9 +497,7 @@ export const cancelAttachmentOperation = (
     operationId,
     noteId,
   );
-export async function readAttachment(
-  id: string,
-): Promise<{
+export async function readAttachment(id: string): Promise<{
   data: string;
   mime: string;
   name: string;

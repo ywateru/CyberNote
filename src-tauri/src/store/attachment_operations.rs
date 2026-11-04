@@ -276,6 +276,7 @@ impl Store {
         )?;
         checkpoint("before_store_commit");
         tx.commit()?;
+        self.committed("attachment", &op.attachment.id, None);
         checkpoint("after_store_commit");
         response(&op, "stored", None)
     }
@@ -359,12 +360,15 @@ impl Store {
         // Withdraw metadata first: a later newly registered save cannot refer
         // to an attachment whose cancellation has already begun.
         let tx = self.db.transaction()?;
-        tx.execute(
+        let removed = tx.execute(
             "DELETE FROM attachments WHERE id=?1 AND note_id=?2",
             params![op.attachment.id, op.note],
         )?;
         tx.execute("UPDATE attachment_operations SET state='aborting',reason='cleanup_pending' WHERE operation_id=?1",[&op.id])?;
         tx.commit()?;
+        if removed != 0 {
+            self.committed("attachment", &op.attachment.id, None);
+        }
         checkpoint("after_cancel_metadata");
         match fs::remove_file(self.attachment_path(&op.attachment.relative_path)?) {
             Ok(()) => {}
