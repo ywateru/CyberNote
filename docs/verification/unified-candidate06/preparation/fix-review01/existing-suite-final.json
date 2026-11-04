@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "docs/verification/unified-candidate06/preparation/check-boundaries.py"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "test_explicit_parameters_and_output_boundary (__main__.Boundaries) ... ok\ntest_failed_builds_never_collect (__main__.Boundaries) ... ok\ntest_freeze_bytes_and_no_overwrite (__main__.Boundaries) ... ok\ntest_low_space_and_download_guard (__main__.Boundaries) ... ok\ntest_owned_init_identity_and_replacements (__main__.Boundaries) ... ok\ntest_syntax_without_bytecode (__main__.Boundaries) ... ok\ntest_timeout_only_owned_process_group (__main__.Boundaries) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.506s\n\nOK\n"
+}

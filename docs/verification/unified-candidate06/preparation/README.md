@@ -48,7 +48,9 @@ Android 在已选 cache 的 init.d 独占创建带随机 nonce 的 `candidate06-
 
 ## 资源与成功条件
 
-每个输出阶段及0.2秒构建轮询检查至少2GiB空闲。构建固定600秒 deadline；收集命令共享600秒预算。捕获下载提示时也停止，只有本轮创建的会话进程组可被终止，先TERM等5秒再KILL；已退出的 leader 不再发送信号。失败 result 允许在空间保护触发后以小 JSON 保全，避免保护本身丢失错误；不继续写候选产物。所有 run/attempt/收集目录使用独占创建，拒绝覆盖。失败产物、原始日志、退出码、stopReason、清理错误保留。
+每个输出阶段及0.2秒构建轮询检查至少2GiB空闲。构建固定600秒 deadline；收集命令共享600秒预算。捕获下载提示时也停止，只有本轮创建的会话进程组可被终止，先TERM等5秒再KILL。独审01修正后，leader已退出仍核对并清理本组活成员；正常结束但有残留child也失败并清理。用`/bin/ps`仅读取pid/pgid/state，启动前先验证读取权限；不能核实清理时失败，不能据leader exit0清除offline init。僵尸成员不能写输出、不能被信号终止，由其父进程负责回收，不计作存活写入者。失败 result 允许在空间保护触发后以小 JSON 保全，避免保护本身丢失错误；不继续写候选产物。所有 run/attempt/收集目录使用独占创建，拒绝覆盖。失败产物、原始日志、退出码、stopReason、组清理/临时init清理错误保留。
+
+独审01的来源修复按root已选定策略，在共享锁内把当前平台固定最终`.app`/APK与主线`dist`完整身份/类型核验后，同文件系统原子rename到本次新attempt的`prior-outputs/application`与`prior-outputs/dist`。不接受任意源/目的路径，不追随根/祖先或外部bundle符号链接，不改中间target/cache，不删除或复制旧输出；失败不回滚覆盖后续输出。确认固定源路径不存在并保全`output-isolation.json`后才启动命令；成功必须在两处固定源路径新生成完整非空输出。相同字节合法，单mtime/日志不作来源证据。`generated-outputs.json`与结果保存新生成身份；collector核隔离前记录、保全旧件、当前新件一致。原始b5冻结与首次独审失败证据保持历史身份，修复证据见`fix-review01/README.md`。
 
 收集要求 exitCode=0，没有 error/invalidated/offlineMarkerMissing/cleanupError/stopReason，完整输入前后一致且 `supplementalInputsUnchanged=true`；还核 stage/SHA/产品聚合/完整聚合/freeze SHA/attempt/固定命令/nonce，实际前后输入文件及刚完成输出的字节身份。不能拿另一次的结果或已被下一次构建替换的输出授予 ready。收集前后再核完整输入及补充输入；失败 ready=false。
 

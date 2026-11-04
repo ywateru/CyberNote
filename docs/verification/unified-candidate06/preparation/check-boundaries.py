@@ -9,6 +9,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 import common as c
 
 spec = importlib.util.spec_from_file_location('collector', Path(__file__).with_name('collect-outputs.py'))
@@ -94,7 +95,7 @@ class Boundaries(unittest.TestCase):
             self.assertEqual(record['stopReason'],'download-prompt')
 
     def test_failed_builds_never_collect(self):
-        base=dict(exitCode=0,supplementalInputsUnchanged=True,inputComparisons={'files':True})
+        base=dict(exitCode=0,ownedGroupStopped=True,generatedOutputs=['controlled'],supplementalInputsUnchanged=True,inputComparisons={'files':True})
         self.assertTrue(c.success(base))
         for key in ['error','invalidated','offlineMarkerMissing','cleanupError','stopReason']:
             self.assertFalse(c.success({**base,key:'failure'}))
@@ -107,14 +108,18 @@ class Boundaries(unittest.TestCase):
                 (attempt/name).write_text(json.dumps(before))
             built={**base,'stage':'mac','expectedHead':a['sourceHead'],'productAggregate':a['productAggregate'],
                    'sourceAggregate':before['aggregate'],'freezeSha256':'d'*64,'attempt':str(attempt),
-                   'command':['pnpm','mac:build'],'nonce':'e'*32}
-            collector.validate_built(a,before,'d'*64,attempt,built)
-            for key,value in [('stage','android'),('freezeSha256','0'*64),('expectedHead','f'*40),('nonce',''),('command',['pnpm','dev'])]:
-                with self.assertRaises(RuntimeError):
-                    collector.validate_built(a,before,'d'*64,attempt,{**built,key:value})
-            (attempt/'inputs-after.json').write_text(json.dumps({**before,'files':['changed']}))
-            with self.assertRaises(RuntimeError):
+                   'command':['pnpm','mac:build'],'nonce':'e'*32,'outputIsolation':{'controlled':True}}
+            (attempt/'output-isolation.json').write_text(json.dumps(built['outputIsolation']))
+            (attempt/'generated-outputs.json').write_text(json.dumps(built['generatedOutputs']))
+            # This older case isolates stage/freeze gates; check-review-fixes exercises real provenance.
+            with patch.object(collector.runner,'generated_outputs',return_value=built['generatedOutputs']):
                 collector.validate_built(a,before,'d'*64,attempt,built)
+                for key,value in [('stage','android'),('freezeSha256','0'*64),('expectedHead','f'*40),('nonce',''),('command',['pnpm','dev'])]:
+                    with self.assertRaises(RuntimeError):
+                        collector.validate_built(a,before,'d'*64,attempt,{**built,key:value})
+                (attempt/'inputs-after.json').write_text(json.dumps({**before,'files':['changed']}))
+                with self.assertRaises(RuntimeError):
+                    collector.validate_built(a,before,'d'*64,attempt,built)
 
 
 if __name__ == '__main__':

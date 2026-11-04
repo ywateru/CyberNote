@@ -5,10 +5,95 @@ import hashlib
 import os
 from pathlib import Path
 import re
+import stat
 import uuid
 import common as c
 
 COMMANDS = {'mac': ['pnpm', 'mac:build'], 'android': ['pnpm', 'android:build', '--debug']}
+
+
+def output_paths(a):
+    root = Path(a['root'])
+    final = root / ('src-tauri/target/release/bundle/macos/备忘录.app' if a['stage'] == 'mac'
+                    else 'src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk')
+    return [('application', final, 'directory' if a['stage'] == 'mac' else 'file'),
+            ('dist', root / 'dist', 'directory')]
+
+
+def output_snapshot(path, kind):
+    """Never follow an output root/ancestor or an external bundle symlink."""
+    for parent in [path, *path.parents]:
+        if parent.is_symlink():
+            raise RuntimeError('Output or ancestor symlink rejected: ' + str(parent))
+    if not os.path.lexists(path):
+        return None
+    info = path.lstat()
+    if ((kind == 'directory' and not stat.S_ISDIR(info.st_mode))
+            or (kind == 'file' and not stat.S_ISREG(info.st_mode))):
+        raise RuntimeError('Unexpected final output type: ' + str(path))
+    payload = {'kind': kind, 'device': info.st_dev, 'inode': info.st_ino, 'mode': info.st_mode & 0o777}
+    if kind == 'directory':
+        payload['directories'] = []
+        for p in path.rglob('*'):
+            if p.is_symlink():
+                target = p.resolve(strict=True)
+                if path not in target.parents:
+                    raise RuntimeError('External output symlink rejected: ' + str(p))
+            elif p.is_dir():
+                payload['directories'].append({'path': str(p.relative_to(path)), 'mode': p.stat().st_mode & 0o777})
+            elif not p.is_file():
+                raise RuntimeError('Special file in final output rejected: ' + str(p))
+        payload['directories'].sort(key=lambda row: row['path'])
+        payload['files'] = c.tree(path)
+    else:
+        payload.update(bytes=info.st_size, sha256=c.sha_file(path))
+    return payload
+
+
+def isolate_outputs(a, attempt, result):
+    """Root-selected provenance gate: rename final outputs only; never clean caches."""
+    prior = attempt / 'prior-outputs'
+    prior.mkdir(exist_ok=False)
+    proof = {'policy': 'atomic-rename-final-output-and-dist', 'sourcePathsAbsentBeforeCommand': False, 'outputs': []}
+    result['outputIsolation'] = proof
+    # Validate every path/type/device before moving either output.
+    for name, source, kind in output_paths(a):
+        snapshot = output_snapshot(source, kind)
+        if snapshot is not None and source.stat().st_dev != prior.stat().st_dev:
+            raise RuntimeError('Atomic output preservation requires the same filesystem')
+        proof['outputs'].append({'name': name, 'source': str(source), 'preserved': str(prior / name),
+                                 'kind': kind, 'before': snapshot})
+    for row in proof['outputs']:
+        source, preserved = Path(row['source']), Path(row['preserved'])
+        c.check_space(attempt)
+        if output_snapshot(source, row['kind']) != row['before']:
+            raise RuntimeError('Output changed before atomic preservation')
+        if row['before'] is not None:
+            source.rename(preserved)
+            if output_snapshot(preserved, row['kind']) != row['before']:
+                raise RuntimeError('Preserved prior output identity mismatch')
+        if os.path.lexists(source):
+            raise RuntimeError('Final source output still present before command')
+    proof['sourcePathsAbsentBeforeCommand'] = True
+    c.write_new(attempt / 'output-isolation.json', proof)
+
+
+def generated_outputs(a, attempt, isolation):
+    expected = output_paths(a)
+    if isolation.get('policy') != 'atomic-rename-final-output-and-dist' or isolation.get('sourcePathsAbsentBeforeCommand') is not True or len(isolation.get('outputs', [])) != len(expected):
+        raise RuntimeError('Missing exact output-isolation proof')
+    generated = []
+    for (name, source, kind), row in zip(expected, isolation['outputs']):
+        preserved = attempt / 'prior-outputs' / name
+        if any(row.get(k) != v for k, v in {'name': name, 'source': str(source), 'preserved': str(preserved), 'kind': kind}.items()):
+            raise RuntimeError('Output-isolation proof belongs to different fixed paths')
+        if output_snapshot(preserved, kind) != row['before']:
+            raise RuntimeError('Prior preserved output changed or missing')
+        fresh = output_snapshot(source, kind)
+        if fresh is None:
+            raise RuntimeError('Command did not generate required fresh output: ' + str(source))
+        generated.append({'source': str(source), 'snapshot': fresh})
+    return generated
 
 
 def output_identity(a):
@@ -55,6 +140,7 @@ def main():
             env.update(before['effectiveBuildEnvironment'])
             result['explicitEnvironmentOverrides'] = before['effectiveBuildEnvironment']
             try:
+                isolate_outputs(a, attempt, result)
                 if a['stage'] == 'android':
                     init = c.CACHE / 'init.d' / ('candidate06-offline-' + result['nonce'] + '.gradle')
                     init.parent.mkdir(exist_ok=True)
@@ -71,8 +157,10 @@ def main():
                 result['error'] = repr(error)
             finally:
                 # Cleanup stays under the shared lock; never expose init to a second build.
-                if owned is not None:
+                if owned is not None and ('ownedProcessGroup' not in result or result.get('ownedGroupStopped') is True):
                     result.update(c.cleanup_owned_init(init, owned))
+                elif owned is not None:
+                    result['cleanupError'] = 'Owned group cleanup unconfirmed; preserve offline init'
             if a['stage'] == 'android' and (not (attempt / 'build.txt').exists() or 'CANDIDATE06_OFFLINE=true' not in (attempt / 'build.txt').read_text(errors='replace')):
                 result['offlineMarkerMissing'] = True
             after = c.capture(a)
@@ -82,6 +170,8 @@ def main():
             if not all(result['inputComparisons'].values()):
                 result['invalidated'] = 'Frozen inputs/environment changed; failed evidence retained'
             if result.get('exitCode') == 0:
+                result['generatedOutputs'] = generated_outputs(a, attempt, result.get('outputIsolation', {}))
+                c.write_new(attempt / 'generated-outputs.json', result['generatedOutputs'])
                 result['buildOutputIdentity'] = output_identity(a)
                 result['dist'] = c.tree(Path(a['root']) / 'dist')
             c.check_space(run)

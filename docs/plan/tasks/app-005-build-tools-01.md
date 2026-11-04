@@ -37,3 +37,5 @@ Mac使用现有pnpm mac:build；Android显式固定已验证NDK27.2.12479018、J
 ## delivery
 
 已新增 `docs/verification/unified-candidate06/preparation/`，以显式平台授权和精确冻结文件SHA控制来源。开发检查仅运行Python；7项受控边界检查通过，前两次失败保留。未执行真实Rust/Gradle/平台构建、下载、安装、依赖复制或生成扫描注册。工具说明、旧参考身份、检查原始记录与工具manifest在该目录。等待不同作者审查；未自行合并或授予产品/构建ready。
+
+独审01 `c4125411e09655eb14f6c1092e761d561403b798` 对b5工具提出P1残留同组子进程、P2预存输出来源两项阻塞。后续只修这两项，按root选定的最终app/APK与dist原子rename保全来源门实现，不新增用户确认门；新检查证据在preparation/fix-review01，旧冻结和失败保持原样。修复后仍待不同作者复审及root准确主线/平台冻结，不执行真实构建。

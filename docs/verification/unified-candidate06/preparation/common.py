@@ -280,7 +280,7 @@ def frozen(a, digest):
 
 
 def success(result):
-    return result.get('exitCode') == 0 and result.get('supplementalInputsUnchanged') is True and result.get('inputComparisons') and all(result['inputComparisons'].values()) and not any(k in result for k in ['error', 'invalidated', 'offlineMarkerMissing', 'cleanupError', 'stopReason'])
+    return result.get('exitCode') == 0 and result.get('ownedGroupStopped') is True and result.get('generatedOutputs') and result.get('supplementalInputsUnchanged') is True and result.get('inputComparisons') and all(result['inputComparisons'].values()) and not any(k in result for k in ['error', 'invalidated', 'offlineMarkerMissing', 'cleanupError', 'stopReason', 'groupCleanupError'])
 
 
 def inspect_init(path):
@@ -308,27 +308,45 @@ def cleanup_owned_init(path, owned):
     return outcome
 
 
+def process_listing():
+    return subprocess.run(['/bin/ps', '-axo', 'pid=,pgid=,state='], capture_output=True, text=True, timeout=5, check=True).stdout
+
+
+def owned_group_members(process):
+    """Only inspect the group of the Popen we created with start_new_session=True."""
+    members = []
+    for line in process_listing().splitlines():
+        pid, pgid, state = line.split()
+        # A zombie cannot write output/cache and cannot be killed; its parent owns reaping.
+        if int(pgid) == process.pid and not state.startswith('Z'):
+            members.append({'pid': int(pid), 'pgid': int(pgid), 'state': state})
+    return members
+
+
 def stop_owned(process, result):
-    """Caller creates a fresh session. Never accept an externally supplied PID."""
-    for sig, timeout in [(signal.SIGTERM, 5), (signal.SIGKILL, 5)]:
-        try:
-            os.killpg(process.pid, sig)
-            result.setdefault('terminationSignals', []).append(sig.name)
-        except ProcessLookupError:
-            pass
-        try:
-            process.wait(timeout=timeout)
-        except subprocess.TimeoutExpired:
-            continue
-        # Kill lingering descendants even if the leader exited after TERM.
-        if sig == signal.SIGTERM:
+    """Leader exit does not establish group exit. Signal only our newly created group."""
+    result['ownedGroupStopped'] = False
+    try:
+        for sig in [signal.SIGTERM, signal.SIGKILL]:
+            members = owned_group_members(process)
+            if not members:
+                break
             try:
-                os.killpg(process.pid, signal.SIGKILL)
-                result.setdefault('terminationSignals', []).append('SIGKILL descendants')
+                os.killpg(process.pid, sig)
+                result.setdefault('terminationSignals', []).append(sig.name)
             except ProcessLookupError:
                 pass
-        return
-    raise RuntimeError('Owned build process did not exit')
+            until = time.monotonic() + 5
+            while owned_group_members(process) and time.monotonic() < until:
+                time.sleep(0.05)
+        result['remainingOwnedGroupMembers'] = owned_group_members(process)
+        process.wait(timeout=5)
+        if result['remainingOwnedGroupMembers']:
+            raise RuntimeError('Owned group still has live members after bounded cleanup')
+        result['ownedGroupStopped'] = True
+    except BaseException as error:
+        result['groupCleanupError'] = repr(error)
+        raise
 
 
 def monitored(argv, root, env, log_path, result, deadline=DEADLINE, free=check_space, poll=0.2):
@@ -338,6 +356,8 @@ def monitored(argv, root, env, log_path, result, deadline=DEADLINE, free=check_s
     result['diskFreeBefore'] = free(root)
     result['minimumFreeBytes'] = result['diskFreeBefore']
     result['deadlineSeconds'] = deadline
+    # Refuse to start if the OS will not let us verify group cleanup afterwards.
+    process_listing()
     with Path(log_path).open('x') as log:
         process = subprocess.Popen(argv, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
         result['ownedProcessGroup'] = process.pid
@@ -354,14 +374,16 @@ def monitored(argv, root, env, log_path, result, deadline=DEADLINE, free=check_s
                 if time.monotonic() - start >= deadline:
                     result['stopReason'] = 'deadline'
                 if result.get('stopReason'):
-                    if process.poll() is None:
-                        stop_owned(process, result)
+                    stop_owned(process, result)
                     break
                 if process.poll() is not None:
+                    if owned_group_members(process):
+                        result['stopReason'] = 'orphaned-build-children'
+                    stop_owned(process, result)
                     break
                 time.sleep(poll)
         except BaseException:
-            if process.poll() is None:
+            if result.get('ownedGroupStopped') is not True:
                 stop_owned(process, result)
             raise
         finally:

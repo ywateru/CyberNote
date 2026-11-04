@@ -62,6 +62,12 @@ def validate_built(a, before, digest, attempt, built):
                 'command': runner.COMMANDS[a['stage']]}
     if any(built.get(k) != v for k, v in expected.items()) or not re.fullmatch('[0-9a-f]{32}', built.get('nonce', '')):
         raise RuntimeError('Build result differs from exact authorized attempt/freeze/source/stage/command')
+    if c.load(attempt / 'output-isolation.json') != built.get('outputIsolation'):
+        raise RuntimeError('Output-isolation evidence differs from build result')
+    if c.load(attempt / 'generated-outputs.json') != built.get('generatedOutputs'):
+        raise RuntimeError('Generated-output evidence differs from build result')
+    if runner.generated_outputs(a, attempt, built['outputIsolation']) != built['generatedOutputs']:
+        raise RuntimeError('Fresh output or preserved prior output identity changed')
     for name in ['inputs-before.json', 'inputs-after.json']:
         if not all(c.same_inputs(before, c.load(attempt / name)).values()):
             raise RuntimeError('Actual attempt input evidence differs from frozen inputs')
@@ -187,6 +193,8 @@ def main():
                 raise RuntimeError('Full source/environment/supplemental inputs changed during collection')
             if c.identity(built_path) != result['buildResult'] or runner.output_identity(a) != built['buildOutputIdentity']:
                 raise RuntimeError('Build result/source artifact changed during collection')
+            if runner.generated_outputs(a, attempt, built['outputIsolation']) != built['generatedOutputs']:
+                raise RuntimeError('Generated or prior preserved output changed during collection')
             budget.check()
             result['ready'] = True
     except BaseException as error:
