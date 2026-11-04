@@ -1,0 +1,12 @@
+   Compiling notes-qa-fix-store v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-d1-storage-open09/harness)
+error[E0583]: file not found for module `tests`
+  --> /Users/water/work/2026/Apple-Notes-Clone/src-tauri/src/session.rs:16:1
+   |
+16 | mod tests;
+   | ^^^^^^^^^^
+   |
+   = help: to create the module `tests`, create file "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/src/tests.rs" or "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/src/tests/mod.rs"
+   = note: if there is a `mod tests` elsewhere in the crate already, import it with `use crate::...` instead
+
+For more information about this error, try `rustc --explain E0583`.
+error: could not compile `notes-qa-fix-store` (bin "notes-qa-fix-store" test) due to 1 previous error

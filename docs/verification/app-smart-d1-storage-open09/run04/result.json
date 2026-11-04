@@ -1,0 +1,61 @@
+{
+  "sourceHead": "ca92b9ee82dc2b9cd8e5ac05f499e2305aeeb41c",
+  "sourceBefore": {
+    "src-tauri/src/store.rs": "2d8eedaa0809e131ac25f8aca9f40073e8981d20cb78d31de309bb1603ccc00c",
+    "src-tauri/src/session.rs": "9e2b353e760f635c725653e34a4e78c3223fc4aae132649f570930aeac433085",
+    "src-tauri/src/store/archive/document-cases.json": "297f9f7cd64b5489f9da69c4a54715f3b934a5634d2ed502c30505a81555e950",
+    "src-tauri/src/store/archive/document-schema.json": "7cd6c3e442d968ef99019b14fcc48cf037693d7daae0506b0c47a2ec00fb007c",
+    "src-tauri/src/store/archive/document.rs": "4fbb93ac37810002e2183e69e309cc306b88babe4e2efe651b9cd40663d2dea4",
+    "src-tauri/src/store/archive/tests.rs": "4dfa432e123f4b9c71e2af3ab9a10796d21f2edf7adf101ee8dbacde4bc42f43",
+    "src-tauri/src/store/archive.rs": "d77a63e8aa0c8b69f4e8b090f8f890af7b5f428870793c6726a6d227c81c856b",
+    "src-tauri/src/store/attachment_operations/tests.rs": "f68c4e41dc35d5ee61b2db9e1a20937cef5efdadd2c521c791d81216814452b4",
+    "src-tauri/src/store/attachment_operations.rs": "cadc56df7fbb904f3c59e63ac98828bba482f12002182b510ccd2e8b5afdc109",
+    "src-tauri/src/store/open.rs": "f90c25a8851cd7168dfd524eca7863f526f5bebc5af4d6e438d47e8442d21f0b",
+    "src-tauri/src/store/open_tests.rs": "6301c39cbcf2d9242a18595073711f3909f05913c1281aba84b37bd50e2d8823",
+    "src-tauri/src/store/recorded_at_tests.rs": "d774fa8d7d4bff638797dd42cf6e98b0830f8ccc7e14a9685eac9c2b8c8eda2a",
+    "src-tauri/src/session/tests.rs": "e47c13dc71db3d173e90a8140863411d974db4717f1a25372f8f909689b21b83"
+  },
+  "directProductionModules": true,
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "--offline",
+    "--features",
+    "rusqlite/hooks",
+    "--manifest-path",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-d1-storage-open09/harness02/Cargo.toml",
+    "--",
+    "--nocapture"
+  ],
+  "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+  "target": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target",
+  "jobs": 2,
+  "freeBefore": 71879667712,
+  "harness": {
+    "harness02/Cargo.toml": "46dcac9261216e068c04db42ba8949404e7d5fcfe5e055899390d435b0a6791e",
+    "harness02/Cargo.lock": "66c00622e6c40b61212517ac93d24f93399424f80cbf481cf6cb7ccfa97aabae",
+    "harness02/src/session.rs": "9e2b353e760f635c725653e34a4e78c3223fc4aae132649f570930aeac433085",
+    "harness02/src/store.rs": "2d8eedaa0809e131ac25f8aca9f40073e8981d20cb78d31de309bb1603ccc00c",
+    "harness02/src/main.rs": "0f6a201425c665aead53c7e18bc211eae4a7205843d4441df3a01bed08766477"
+  },
+  "exitCode": 0,
+  "seconds": 8.304,
+  "sourceAfter": {
+    "src-tauri/src/store.rs": "2d8eedaa0809e131ac25f8aca9f40073e8981d20cb78d31de309bb1603ccc00c",
+    "src-tauri/src/session.rs": "9e2b353e760f635c725653e34a4e78c3223fc4aae132649f570930aeac433085",
+    "src-tauri/src/store/archive/document-cases.json": "297f9f7cd64b5489f9da69c4a54715f3b934a5634d2ed502c30505a81555e950",
+    "src-tauri/src/store/archive/document-schema.json": "7cd6c3e442d968ef99019b14fcc48cf037693d7daae0506b0c47a2ec00fb007c",
+    "src-tauri/src/store/archive/document.rs": "4fbb93ac37810002e2183e69e309cc306b88babe4e2efe651b9cd40663d2dea4",
+    "src-tauri/src/store/archive/tests.rs": "4dfa432e123f4b9c71e2af3ab9a10796d21f2edf7adf101ee8dbacde4bc42f43",
+    "src-tauri/src/store/archive.rs": "d77a63e8aa0c8b69f4e8b090f8f890af7b5f428870793c6726a6d227c81c856b",
+    "src-tauri/src/store/attachment_operations/tests.rs": "f68c4e41dc35d5ee61b2db9e1a20937cef5efdadd2c521c791d81216814452b4",
+    "src-tauri/src/store/attachment_operations.rs": "cadc56df7fbb904f3c59e63ac98828bba482f12002182b510ccd2e8b5afdc109",
+    "src-tauri/src/store/open.rs": "f90c25a8851cd7168dfd524eca7863f526f5bebc5af4d6e438d47e8442d21f0b",
+    "src-tauri/src/store/open_tests.rs": "6301c39cbcf2d9242a18595073711f3909f05913c1281aba84b37bd50e2d8823",
+    "src-tauri/src/store/recorded_at_tests.rs": "d774fa8d7d4bff638797dd42cf6e98b0830f8ccc7e14a9685eac9c2b8c8eda2a",
+    "src-tauri/src/session/tests.rs": "e47c13dc71db3d173e90a8140863411d974db4717f1a25372f8f909689b21b83"
+  },
+  "freeAfter": 71849771008,
+  "sourceUnchanged": true
+}

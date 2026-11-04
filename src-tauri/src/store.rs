@@ -19,6 +19,8 @@ use uuid::Uuid;
 mod archive;
 #[path = "store/attachment_operations.rs"]
 mod attachment_operations;
+#[path = "store/open.rs"]
+mod open;
 pub(crate) use attachment_operations::AttachmentOwner;
 #[cfg(test)]
 #[path = "store/recorded_at_tests.rs"]
@@ -64,7 +66,7 @@ fn empty_doc() -> Value {
     json!({"type":"doc","content":[{"type":"heading","attrs":{"level":1}}]})
 }
 #[derive(Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", try_from = "FolderRecord")]
 pub struct Folder {
     pub id: String,
     pub name: String,
@@ -72,6 +74,39 @@ pub struct Folder {
     pub kind: String,
     pub sort_order: i64,
     pub created_at: i64,
+}
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct FolderRecord {
+    id: String,
+    name: String,
+    parent_id: Option<String>,
+    kind: String,
+    sort_order: i64,
+    created_at: i64,
+}
+impl TryFrom<FolderRecord> for Folder {
+    type Error = &'static str;
+    fn try_from(value: FolderRecord) -> std::result::Result<Self, Self::Error> {
+        match value.id.as_str() {
+            "default" | "quick" | "trash" => {
+                if value.kind != value.id || value.parent_id.is_some() {
+                    return Err("系统文件夹身份或层级无效");
+                }
+            }
+            "all" => return Err("全部备忘录不是文件夹实体"),
+            _ if value.kind != "normal" => return Err("自定义文件夹类型无效"),
+            _ => {}
+        }
+        Ok(Self {
+            id: value.id,
+            name: value.name,
+            parent_id: value.parent_id,
+            kind: value.kind,
+            sort_order: value.sort_order,
+            created_at: value.created_at,
+        })
+    }
 }
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -151,34 +186,20 @@ pub struct Store {
 }
 impl Store {
     pub fn open(root: impl AsRef<Path>) -> Result<Self> {
-        fs::create_dir_all(root.as_ref().join("attachments"))?;
+        fs::create_dir_all(root.as_ref())?;
         let db = Connection::open(root.as_ref().join("notes.sqlite3"))?;
-        db.execute_batch("PRAGMA journal_mode=WAL; PRAGMA secure_delete=ON; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS folders(id TEXT PRIMARY KEY, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS notes(id TEXT PRIMARY KEY, folder_id TEXT NOT NULL, body TEXT NOT NULL, revision INTEGER NOT NULL); CREATE TABLE IF NOT EXISTS attachments(id TEXT PRIMARY KEY, note_id TEXT NOT NULL, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS settings(id INTEGER PRIMARY KEY CHECK(id=1), body TEXT NOT NULL); PRAGMA user_version=1;")?;
         let mut s = Self {
             db,
             root: root.as_ref().into(),
             keys: HashMap::new(),
         };
-        s.initialize_attachment_operations()?;
+        s.initialize_storage()?;
+        s.db.execute_batch(
+            "PRAGMA journal_mode=WAL; PRAGMA secure_delete=ON; PRAGMA foreign_keys=ON;",
+        )?;
+        fs::create_dir_all(s.root.join("attachments"))?;
         s.recover_imports()?;
         s.recover_attachment_operations()?;
-        for (fid, name, kind, order) in [
-            ("default", "备忘录", "default", 0),
-            ("quick", "快速备忘录", "quick", -1),
-            ("trash", "最近删除", "trash", 9999),
-        ] {
-            if s.folder(fid).is_err() {
-                s.put_folder(&Folder {
-                    id: fid.into(),
-                    name: name.into(),
-                    parent_id: None,
-                    kind: kind.into(),
-                    sort_order: order,
-                    created_at: now(),
-                })?;
-            }
-        }
-        s.db.execute("INSERT OR IGNORE INTO settings(id,body)VALUES(1,'{}')", [])?;
         Ok(s)
     }
     fn put_folder(&mut self, f: &Folder) -> Result<()> {
@@ -189,12 +210,14 @@ impl Store {
         Ok(())
     }
     fn folder(&self, fid: &str) -> Result<Folder> {
-        let x: Option<String> = self
+        let x: Option<(i64, String, String)> = self
             .db
-            .query_row("SELECT body FROM folders WHERE id=?1", [fid], |r| r.get(0))
+            .query_row("SELECT rowid,id,body FROM folders WHERE id=?1", [fid], |r| {
+                Ok((r.get(0)?, r.get(1)?, r.get(2)?))
+            })
             .optional()?;
-        serde_json::from_str(&x.ok_or_else(|| err("not_found", "文件夹不存在"))?)
-            .map_err(Into::into)
+        let (row, key, body) = x.ok_or_else(|| err("not_found", "文件夹不存在"))?;
+        open::decode_folder(row, &key, &body)
     }
     pub(crate) fn note(&self, nid: &str) -> Result<Note> {
         let x: Option<String> = self
@@ -205,13 +228,7 @@ impl Store {
             .map_err(Into::into)
     }
     fn folders(&self) -> Result<Vec<Folder>> {
-        let mut q = self.db.prepare("SELECT body FROM folders ORDER BY rowid")?;
-        let rows = q
-            .query_map([], |r| r.get::<_, String>(0))?
-            .collect::<std::result::Result<Vec<_>, _>>()?;
-        rows.into_iter()
-            .map(|s| serde_json::from_str(&s).map_err(Into::into))
-            .collect()
+        open::read_folders(&self.db)
     }
     pub(crate) fn notes(&self) -> Result<Vec<Note>> {
         let mut q = self

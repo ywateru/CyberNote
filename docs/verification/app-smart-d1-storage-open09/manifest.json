@@ -1,0 +1,155 @@
+{
+  "algorithm": "sha256",
+  "symlinks": "record target; do not follow",
+  "excluded": [
+    "manifest.json",
+    "seal.json"
+  ],
+  "entries": [
+    {
+      "path": "README.md",
+      "type": "file",
+      "bytes": 4726,
+      "sha256": "316942eaf46ce6215944cea8158d8164082414120bc61c8174e13aba3786790d"
+    },
+    {
+      "path": "docs",
+      "type": "symlink",
+      "target": "/Users/water/work/2026/Apple-Notes-Clone/docs"
+    },
+    {
+      "path": "harness/Cargo.lock",
+      "type": "file",
+      "bytes": 19000,
+      "sha256": "66c00622e6c40b61212517ac93d24f93399424f80cbf481cf6cb7ccfa97aabae"
+    },
+    {
+      "path": "harness/Cargo.toml",
+      "type": "file",
+      "bytes": 330,
+      "sha256": "46dcac9261216e068c04db42ba8949404e7d5fcfe5e055899390d435b0a6791e"
+    },
+    {
+      "path": "harness/src/main.rs",
+      "type": "file",
+      "bytes": 191,
+      "sha256": "d0b3c49de9fa33d9c63af44cb7172eb34e194e7ae43a7165a77a156783516fba"
+    },
+    {
+      "path": "harness02/Cargo.lock",
+      "type": "file",
+      "bytes": 19000,
+      "sha256": "66c00622e6c40b61212517ac93d24f93399424f80cbf481cf6cb7ccfa97aabae"
+    },
+    {
+      "path": "harness02/Cargo.toml",
+      "type": "file",
+      "bytes": 330,
+      "sha256": "46dcac9261216e068c04db42ba8949404e7d5fcfe5e055899390d435b0a6791e"
+    },
+    {
+      "path": "harness02/src/main.rs",
+      "type": "file",
+      "bytes": 37,
+      "sha256": "0f6a201425c665aead53c7e18bc211eae4a7205843d4441df3a01bed08766477"
+    },
+    {
+      "path": "harness02/src/session",
+      "type": "symlink",
+      "target": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/src/session"
+    },
+    {
+      "path": "harness02/src/session.rs",
+      "type": "symlink",
+      "target": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/src/session.rs"
+    },
+    {
+      "path": "harness02/src/store",
+      "type": "symlink",
+      "target": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/src/store"
+    },
+    {
+      "path": "harness02/src/store.rs",
+      "type": "symlink",
+      "target": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/src/store.rs"
+    },
+    {
+      "path": "product.patch",
+      "type": "file",
+      "bytes": 32416,
+      "sha256": "aa656d7ff5679056c048207609b5d85eb251a38e507b77d86b5c52cbc51e7339"
+    },
+    {
+      "path": "run-rust.py",
+      "type": "file",
+      "bytes": 2982,
+      "sha256": "11d3944268cbe729af485caf84beff82bf0c3807b01ff8dcc4207d6d52d98713"
+    },
+    {
+      "path": "run01/cargo-test.txt",
+      "type": "file",
+      "bytes": 775,
+      "sha256": "6035f00fa573e65632b68adc81c83fea71e245dc5f13529bcc209d6007d715cf"
+    },
+    {
+      "path": "run01/result.json",
+      "type": "file",
+      "bytes": 3933,
+      "sha256": "b9b259a00f1fe40e3dfae4e0b525e73e4019f488a87916d221e59607c5922ed6"
+    },
+    {
+      "path": "run02/cargo-test.txt",
+      "type": "file",
+      "bytes": 1420,
+      "sha256": "5c3723448b27ea3add7054742593f5c0cdc4bec34e719dd360e9be59d2eb792d"
+    },
+    {
+      "path": "run02/result.json",
+      "type": "file",
+      "bytes": 4137,
+      "sha256": "5ecf9ce736357b9e2f07ce172e7f8055371f5b96227ba9d8bdf15cdcf8ece2e5"
+    },
+    {
+      "path": "run03/cargo-test.txt",
+      "type": "file",
+      "bytes": 16022,
+      "sha256": "ddbee5ea5521d7a62f6d9e53be3bdc760c010cf33721485f2fc563a42cdc63ec"
+    },
+    {
+      "path": "run03/result.json",
+      "type": "file",
+      "bytes": 4111,
+      "sha256": "1a5ac2cf451d239417247f2bc517e901e8e7f2a1fdc969480e3984280ebf29ac"
+    },
+    {
+      "path": "run04/cargo-test.txt",
+      "type": "file",
+      "bytes": 16254,
+      "sha256": "981ca03e04e7ed5843a846a38ca2ea69c757fa2563feca3aa1ccd0fbe77f3512"
+    },
+    {
+      "path": "run04/result.json",
+      "type": "file",
+      "bytes": 4111,
+      "sha256": "1d46400bf21c3258ba163e16a212cae5e396124fce2b02aef77cc3926578274b"
+    },
+    {
+      "path": "run05/cargo-test.txt",
+      "type": "file",
+      "bytes": 16254,
+      "sha256": "bebb9e8516adedc652580455baeed2520ecbef6553084eca3dfab58f7709258a"
+    },
+    {
+      "path": "run05/result.json",
+      "type": "file",
+      "bytes": 4111,
+      "sha256": "480ed7c17adf2d20fcb2495a7df0b1703291d5b51363cc1f2cc597bcb620415f"
+    },
+    {
+      "path": "source-identity.json",
+      "type": "file",
+      "bytes": 884,
+      "sha256": "193ace34bdb8b71bd37aeeb973740dce1d031a872c2963311122fcf7e5f30ddc"
+    }
+  ]
+}

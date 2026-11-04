@@ -1,0 +1,18 @@
+   Compiling notes-qa-fix-store v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/docs/verification/app-smart-d1-storage-open09/harness02)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.82s
+     Running unittests src/main.rs (src-tauri/target/debug/deps/notes_qa_fix_store-275dda0e5f1d05fc)
+
+running 10 tests
+test store::open::tests::runtime_single_and_all_folder_reads_reject_key_mismatch_and_unknown_fields ... ok
+test store::open::tests::current_missing_system_rows_and_settings_are_filled_without_rewriting_custom ... ok
+test store::open::tests::complete_legacy_zero_preserves_rows_and_only_fills_real_missing_system_rows ... ok
+test store::open::tests::new_database_initializes_current_schema_and_reopens_without_rewriting_rows ... ok
+test store::open::tests::valid_recovery_still_runs_after_successful_initialization ... ok
+test store::open::tests::archive_one_and_two_reject_hidden_folder_fields_without_changing_target ... ok
+test store::open::tests::unsupported_versions_do_not_initialize_or_recover ... ok
+test store::open::tests::partial_unknown_and_mismatched_schemas_are_preserved ... ok
+test store::open::tests::sql_failure_rolls_back_schema_system_settings_and_version_then_retry_works ... ok
+test store::open::tests::every_folder_row_is_strict_before_any_missing_row_is_created ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.27s
+
