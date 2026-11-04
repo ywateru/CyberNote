@@ -1,0 +1,59 @@
+{
+  "pass": true,
+  "scope": "Controlled Python-only; no freeze, version/build/Gradle commands, target/cache access or dependency acquisition.",
+  "copies": [
+    {
+      "file": "common.py",
+      "sourceSha256": "e2beeea6317faa01eb4330cd86fd107548c32400f492f0907306fd709574654d",
+      "newSha256": "11dfce693463a5ffa9272199d5b1a8c1241a10c6cac1444b17a91f7a1a56bb54",
+      "byteIdenticalExceptSpecifiedAndroidString": true
+    },
+    {
+      "file": "freeze-inputs.py",
+      "sourceSha256": "01ed7127603ff6637f78044c45577827967e5e7c22cd0875ec9dd54008dbf683",
+      "newSha256": "01ed7127603ff6637f78044c45577827967e5e7c22cd0875ec9dd54008dbf683",
+      "byteIdenticalExceptSpecifiedAndroidString": true
+    },
+    {
+      "file": "run-build.py",
+      "sourceSha256": "7b1ff0d7cafa24e56220632c30a2ccb3d44c4b9ecfdffad74460ba82604b1abf",
+      "newSha256": "7b1ff0d7cafa24e56220632c30a2ccb3d44c4b9ecfdffad74460ba82604b1abf",
+      "byteIdenticalExceptSpecifiedAndroidString": true
+    },
+    {
+      "file": "collect-outputs.py",
+      "sourceSha256": "41937111248283f7c9c35d7723773c1ce99dc2703ad328d5b7b35d5175db3b3b",
+      "newSha256": "41937111248283f7c9c35d7723773c1ce99dc2703ad328d5b7b35d5175db3b3b",
+      "byteIdenticalExceptSpecifiedAndroidString": true
+    }
+  ],
+  "controlledEffectiveEnvironment": {
+    "android": {
+      "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+      "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+      "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+      "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+      "CARGO_NET_OFFLINE": "true",
+      "CARGO_BUILD_JOBS": "2",
+      "GRADLE_RO_DEP_CACHE": "/private/tmp/notes-lifecycle-cache-overlay-01/overlay-ro",
+      "GRADLE_OPTS": "-Dorg.gradle.daemon=false -Dorg.gradle.configuration-cache=false"
+    },
+    "mac": {
+      "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+      "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+      "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+      "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+      "CARGO_NET_OFFLINE": "true",
+      "CARGO_BUILD_JOBS": "2"
+    },
+    "availabilityChecksStubbed": true
+  },
+  "failedBuildRejectionUnchanged": true,
+  "historicalReferenceFilesUnchanged": 33,
+  "product": {
+    "files": 238,
+    "aggregate": "560f9826b44320f184493f8f522a2cfefaf78a7e4e7c1faad8fa001e1190583d",
+    "unchangedFromFrozenSourceHead": "62244d445b19321a3fe773ffa074563c56970595"
+  },
+  "headAtCheck": "62244d445b19321a3fe773ffa074563c56970595"
+}

@@ -1,0 +1,11 @@
+--- preparation/common.py
++++ android-paper-recovery-preparation02/common.py
+@@ -136,7 +136,7 @@
+            'JAVA_HOME': '/opt/zerobrew/opt/openjdk@17', 'GRADLE_USER_HOME': str(CACHE),
+            'CARGO_NET_OFFLINE': 'true', 'CARGO_BUILD_JOBS': '2'}
+     if stage == 'android':
+-        env.update(GRADLE_RO_DEP_CACHE=str(OVERLAY), GRADLE_OPTS='-Dorg.gradle.daemon=false')
++        env.update(GRADLE_RO_DEP_CACHE=str(OVERLAY), GRADLE_OPTS='-Dorg.gradle.daemon=false -Dorg.gradle.configuration-cache=false')
+     required = [Path(env['ANDROID_HOME']) / 'platforms/android-36/android.jar', Path(env['ANDROID_HOME']) / 'build-tools/36.0.0/apksigner', Path(env['NDK_HOME']), Path(env['JAVA_HOME']) / 'bin/java', CACHE]
+     if any(not p.exists() for p in required):
+         raise RuntimeError('Existing tool/cache missing; acquisition forbidden')

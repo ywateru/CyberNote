@@ -1,0 +1,18 @@
+{
+  "checkedOn": "2026-11-04",
+  "publisher": "Gradle",
+  "displayedVersion": "9.6.1",
+  "sources": [
+    {
+      "url": "https://docs.gradle.org/current/userguide/configuration_cache_enabling.html",
+      "title": "Enabling and Configuring the Configuration Cache",
+      "finding": "The org.gradle.configuration-cache=false system property can disable configuration caching for a specific build even when globally enabled."
+    },
+    {
+      "url": "https://docs.gradle.org/current/userguide/build_environment.html",
+      "title": "Build Environment Configuration",
+      "finding": "GRADLE_OPTS supplies JVM arguments to Gradle; org.gradle.configuration-cache is the configuration-cache setting."
+    }
+  ],
+  "scope": "Official implementation reference only; no execution authority. No full article copied; actual recovery build not yet run."
+}
