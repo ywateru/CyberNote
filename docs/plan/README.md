@@ -38,6 +38,8 @@
 | APP-002-RECORDING-PREVIEW-01 暂停回放 | in-progress，源e01c90a独立SOURCE-READY、主e9e426f | 原P2重载就绪门禁关闭；独立repro/恢复4/模块16/有界提交后Panel25通过，原脚本两次时点失败保留非阻塞。主6源码同/build/preview16/父20通过；candidate03不含此实现。WK/Android真实前缀可播/可定位/可听与像素仍待后包 |
 | APP-001-SEARCH-FOCUS-01 Mac菜单搜索焦点 | in-progress，源d9bc5a4独立SOURCE-READY、主175cd1f | plugin精确MenuEvent同步请求真实唯一focused main当前enabled绑定，与IPC共body；独立与主cargo13/13通过、两产品hash同。无新包快输入/marked text实测，异常原因unknown和Tauri排队仍保留，不承诺已修复 |
 | APP-003 本地高级功能 | pending，依赖APP-002 | 标签/智能文件夹、数学/笔记链接、Markdown/PDF与类型浏览；分步实施验收 |
+| APP-002-AUDIO-CARD-01 手机紧凑录音卡 | pending，等待标签源码整合后串行开发 | 原片35.5秒证三行标题/日期/音频·2秒与白播放按钮；新增可选recordedAt的首次实际开始工程契约、operation重试/受权read/归档1与2兼容已明确。未实现日期、未改安装包；展开/原版取时/像素仍unknown |
+| REF-SMART-FOLDERS-RUNTIME-01 原版智能视图 | ready，Mac当前锁定待解锁 | 已有表单选项证据不代表创建后结果；按专用合成目录/置顶/全部任意/搜索/新建/正常冷启步骤补证。存储与归档准备审计已保全，不把建议当原版行为 |
 | APP-003-TAGS-01 真实标签 | in-progress，candidate03独审结束后旧编辑器滞留P2阻塞，04窄修中 | a0989b3出站合法快照关闭旧archive_invalid，三种标签筛选入口新建目标有限通过；独审真实App→Store确证活动composition失去最后匹配后被park/真实blur，后续输入未进入原正文。root核22证据631964B，aggregate cfa14ea4…；03关闭受控续字但浏览器引擎最终事务先于end监听后仍hold，普通续字继续写空结果旧目标；root核16新证据572477B、aggregate c3c269b6…。4fc78b0补齐局部组字保留/访问屏障优先契约，开发04修复。受控DOM非nativeIME，未合入/未进安装包、像素未验，不关闭智能文件夹及父任务 |
 | APP-004 离线扫描与文字识别 | pending，依赖APP-002 | 真实相机/文稿裁边/多页PDF、随包中文OCR、Mac本地Vision；未实现 |
 | APP-004-OCR-HOST-01 OCR主App文字接入 | in-progress，主cd7c94e，04双端单图实际OCR/正文冷启有限pass | 源5b707ae独审02及主接线保持。Mac本地fixture三行中文识别→插入→正常CmdQ→新PID完整正文恢复；Android系统picker选同图→三行识别→插入→force-stop新PID完整JSON恢复通过，实际插入位置/空首段及末行空格差异已记录。内部session ACK未直接追踪、未强制断网；完整矩阵/320图/像素unknown，完整文稿/PDF另批 |

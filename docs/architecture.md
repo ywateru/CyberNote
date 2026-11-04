@@ -25,6 +25,7 @@ Tauri 2 同时构建 macOS 和 Android；pnpm 管理前端与 Tauri CLI。React/
 - Folder：id、name、parentId?、kind(default/normal/quick/trash)、sortOrder、createdAt。
 - Note：id、folderId、document（富文本 JSON）、title、plainText、createdAt、updatedAt、pinned、deletedAt?、originalFolderId?、locked、paperStyle、revision、sealed?（加密正文/盐/随机 nonce）。
 - Attachment：id、noteId、kind、relativePath、mime、displayName、size。
+- 录音日期子任务接入后，Attachment 可选 `recordedAt`：设备墙钟 UTC 毫秒，缺失/null 表示未知；仅本次应用录音从首次 `recorder.start` 成功的应用观察点固定一次，暂停/继续/完成/重试不重算。旧附件、旧操作及外部导入音频不推断、不回填。详细边界见下述“保存后录音日期与紧凑卡片”。
 - Settings：theme、list/gallery、sort、dateGrouping、sidebarWidth、listWidth、selection、locale。
 
 ID 由 Rust 生成；时间为 UTC 毫秒，UI 按设备本地时区显示。title 从首段提取，空笔记显示“新备忘录”；摘要跳过标题。删除移到最近删除，保存 originalFolderId；恢复回原文件夹，文件夹不存在则回默认。永久删除为明确确认操作。持久文档包含表格/任务/绘画和附件引用，不能仅保存 innerText。
@@ -86,6 +87,20 @@ paperStyle 合法值为 plain、lines-small、lines-medium、lines-large、grid-
 从单标签、所有标签或搜索建议“含标签的备忘录”执行新建成功后，清除此标签内容筛选和已有搜索条件，当前可见可写目标必须是这次实际创建返回的新笔记。新建失败保留原筛选/正文。不得因新笔记尚无标签而继续显示旧匹配笔记，或把新笔记临时伪装成标签匹配；实体所属物理目录仍按既有规则选择。
 
 Rust 错误应结构化：code/message，UI 显示错误并保留未保存内容。自动保存做按笔记串行队列/版本校验，避免切笔记或慢写导致旧内容覆盖新内容。输入法 composition 过程中不改写光标/文档。退出/失焦前清空队列并验证重启内容。附件内容 URL 只从受管路径生成。
+
+### 保存后录音日期与紧凑卡片（APP-002-AUDIO-CARD-01，待实现）
+
+原录屏已证正文紧凑卡包含标题、卡内日期时间、“音频 · 2秒”和右侧播放按钮；保存后展开/回放/菜单手势仍未取证，不能用录制面板的控件补造目标。规格见 `ui/audio-card-mobile.md`。日期行采用下面明确的工程时间含义，不冒充原版尚未证实的取时规则。
+
+`recordedAt` 由本次录音第一次实际 `recorder.start` 成功后的应用观察路径读取 `Date.now()` 并固定到专用录音完成结果/原票据；它表示设备墙钟下应用观察到开始的时刻，不是硬件首采样鉴真。不能取面板打开、文件创建/mtime、笔记日期、完成/落盘/ACK或当前渲染时刻。暂停/继续、文件收尾和保存失败重试沿同一 File/operation/目标及这个值，不新增时刻或改变既有文件身份。客户端与本地归档提供的日期不是恶意renderer防伪承诺；本任务不另造后端开始印记或改变授权协议。
+
+日期只作为受管 Attachment 元数据持久化，UTC整数范围为0..253402300799999，缺失或null为未知；字符串、小数、负数、越界或非audio附件携带非空日期均拒绝，不能静默变成未知。不以导入时now拒绝可表示的未来值，避免设备时钟/归档跨环境误判。它进入原preparing日记和公开附件的同一份快照，重复operation须连同可选日期、名字/MIME/完整字节一致；known变unknown或换值都是冲突，不后补UPDATE或放宽完整Eq。旧无来源store入口保持未知；浏览器预览可从明确录音结果传值，不能按MIME自动读取外部File.lastModified。音频字节与正文attachment attrs/schema不变。
+
+读取仍经原实际note归属/Session权限，从同一次read_attachment返回可选日期给MediaView/AudioPlayer；切ID、晚响应、错误、卸载和访问失效不串用旧日期，不增加无权限日期接口、明文全局索引或日志。当前含附件笔记不能锁定的限制保持。UTC原值只在显示时按设备本地时区生成中文年月日与24小时HH:mm；未知日期省略卡内日期行，不显示伪造值。
+
+旧SQLite JSON缺字段按未知加载，不全库重写、不改变媒体字节、旧revision或文件mtime。新程序读取旧version1归档；若任一附件有recordedAt，则导出version2，旧程序明确拒绝该新归档；无日期仍可导出version1。version1输入出现非空新日期须拒绝，version2完整校验并保全；碰撞导入仅映射原附件/笔记ID和受管路径，不改变日期，两次副本仍保持原值。新程序支持version1/2不代表旧二进制可以安全操作新版活数据库；不承诺旧包重新导出的新元数据保全，也不通过本字段自动迁移数据根或改SQLite结构版本。
+
+手机紧凑卡总时长使用单独显示函数：有限0..59.999秒按向下取整显示“音频 · N秒”，与原片2.60→2秒相容；60秒及以上暂保留既有mm:ss总时长，未知时长只显示“音频”，这些边界是工程选择、长时长原版仍待证。播放器当前进度与±15使用既有formatAudioTime/controller不变。仅校准紧凑卡层级/文案和相对布局，不修改未经原版补证的展开手势、波形或菜单，也不据低清视频授予像素通过。
 
 ### 录音会话与附件提交边界（APP-002源码已接线，安装版待实证）
 
