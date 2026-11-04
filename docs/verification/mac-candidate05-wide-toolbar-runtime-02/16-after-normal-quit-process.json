@@ -1,0 +1,12 @@
+{
+  "observedAt": "2026-11-04T03:16:10.034550+00:00",
+  "command": [
+    "pgrep",
+    "-x",
+    "notes-clone"
+  ],
+  "exitCode": 3,
+  "stdout": "",
+  "stderr": "sysmon request failed with error: sysmond service not found\npgrep: Cannot get process list\n",
+  "limits": "CUA CmdQ issued immediately before this read-only process check; absence does not prove all pending internal ACKs."
+}

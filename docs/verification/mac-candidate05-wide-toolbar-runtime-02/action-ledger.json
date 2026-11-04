@@ -1,0 +1,211 @@
+{
+  "scope": "Documentation seal only; no new GUI or tests by sealing agent.",
+  "steps": [
+    {
+      "step": "01",
+      "action": "Launch exact candidate05 and observe initial synthetic note",
+      "observation": "Root execution recap identifies PID70803/full05 path; snapshot+AX shows tauri://localhost, native toolbar and same three-line QA body. Initial PID/path raw record is not present in this directory.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "01-initial-synthetic.cua-image",
+        "01-initial-synthetic.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "02",
+      "action": "Search exact QA title",
+      "observation": "Search field QA-WIDE-20261104-05; AX search result count1 and full QA body.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "02-search-unique.cua-image",
+        "02-search-unique.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "03",
+      "action": "Search no-match string",
+      "observation": "Search QA-WIDE-NO-MATCH-20261104-05; no-result label; attachment/checklist/format/table/more/share disabled in AX; editor absent.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "03-search-zero.cua-image",
+        "03-search-zero.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "04",
+      "action": "Clear search",
+      "observation": "Search empty; original folder list and full QA body restored; search remains focused.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "04-search-clear-restored.cua-image",
+        "04-search-clear-restored.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "05",
+      "action": "Open format popover",
+      "observation": "Popover exposes bold/italic/underline/strike/highlight/color/headings/body/monospace/lists/blockquote. No style application claimed.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "05-format-menu.cua-image",
+        "05-format-menu.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "06",
+      "action": "Hide sidebar",
+      "observation": "Sidebar rows absent; list/body retained; toolbar exposes Other Tools; not a complete overflow action matrix.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "06-sidebar-hidden.cua-image",
+        "06-sidebar-hidden.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "07",
+      "action": "Restore sidebar",
+      "observation": "Sidebar rows and three-column split return; full QA body retained.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "07-sidebar-restored.cua-image",
+        "07-sidebar-restored.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "08",
+      "action": "Native zoom to wide window",
+      "observation": "Root execution recap supplies native zoom action; screenshot2784x1806 and AX retain three columns/body.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "08-zoom-wide.cua-image",
+        "08-zoom-wide.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "09",
+      "action": "Focus body in wide clone window",
+      "observation": "Focused AX body contains same three lines; screenshot is clone source of frozen local geometry pair.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "09-wide-body-focus.cua-image",
+        "09-wide-body-focus.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "10",
+      "action": "Observe original Notes with same QA text",
+      "observation": "Original Notes same three-line QA body; different folder/list/time; no full-page pair claim.",
+      "status": "REFERENCE_ONLY",
+      "evidence": [
+        "10-original-same-text.cua-image",
+        "10-original-same-text.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "11",
+      "action": "Match original column widths for local comparison",
+      "observation": "Original AX split values228/360 and body focus;2784x1806 JPEG; editor ROI compared with09 in separately frozen geometry evidence. Screen origin/DPR/materials unknown.",
+      "status": "REFERENCE_ONLY",
+      "evidence": [
+        "11-original-wide-columns-matched.cua-image",
+        "11-original-wide-columns-matched.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "12",
+      "action": "Native zoom back to smaller three-column window",
+      "observation": "Root recap supplies native zoom action;2176x1320 screenshot and AX show three columns/full body. No continuous resize/narrow-drag claim.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "12-unzoom-three-columns.cua-image",
+        "12-unzoom-three-columns.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "13",
+      "action": "Choose gallery from Display menu",
+      "observation": "Root recap supplies menu selection; AX gallery cards include unique QA title and two other notes.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "13-gallery-browse.cua-image",
+        "13-gallery-browse.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "14",
+      "action": "Double-click unique QA gallery card",
+      "observation": "Root recap supplies double-click; AX shows full three-line editor and Return to Gallery button.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "14-gallery-expanded.cua-image",
+        "14-gallery-expanded.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "15",
+      "action": "Return to gallery and restore list from menu",
+      "observation": "Root recap supplies return/menu actions; snapshot+AX show list, three columns and full QA body before quit.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "15-list-restored-before-quit.cua-image",
+        "15-list-restored-before-quit.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "16",
+      "action": "Request normal CmdQ quit; initial process check failed",
+      "observation": "Root recap supplies CUA CmdQ. pgrep -x notes-clone exit3 with sysmond unavailable; this result cannot establish process absence.",
+      "status": "ENVIRONMENT_CHECK_FAILED",
+      "evidence": [
+        "16-after-normal-quit-process.json"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "17",
+      "action": "Read exact former PID after quit",
+      "observation": "ps -p70803 -o pid=,lstart=,command= exit1, stdout/stderr empty. Read-only escalated check supports former process absent at this observation, not ACK completion.",
+      "status": "LIMITED_OBSERVED",
+      "evidence": [
+        "17-after-normal-quit-exact-pid.json"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "18",
+      "action": "Cold launch exact full05 path and observe body",
+      "observation": "Root recap supplies exact full-path launch; snapshot+AX retain same three visible lines and list layout. No persisted fullJSON/database/ACK evidence.",
+      "status": "LIMITED_VISUAL_RESTORE",
+      "evidence": [
+        "18-after-normal-quit-cold-restart.cua-image",
+        "18-after-normal-quit-cold-restart.ax.txt"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    },
+    {
+      "step": "19",
+      "action": "Read new process and executable identity",
+      "observation": "pgrep exit0 gives72706; process lstart Wed Nov4 11:16:52 2026 and exact sealed05 path; executable16005376B SHA c4a433e1930bd4bbc07bfb0baa70e0293a28fdba32bd4882a46332176d13c96c.",
+      "status": "IDENTITY_OBSERVED",
+      "evidence": [
+        "19-cold-restart-identity.json"
+      ],
+      "actionProvenance": "Root performed CUA actions; ledger reconstructed from saved AX/image/process artifacts and root execution recap. This is not a raw click/keypress tool log."
+    }
+  ]
+}

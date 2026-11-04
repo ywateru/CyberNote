@@ -21,6 +21,8 @@
 - [宽三栏工具栏独审与生产布局矩阵](plan/reviews/app-001-wide-toolbar-geometry-static-01.md)
 - [Mac候选05构建与真实宽窗复验任务](plan/tasks/app-001-wide-toolbar-runtime-01.md)
 - [Mac候选05已构建、完整签名与保全](verification/mac-candidate05-wide-toolbar-build-01/README.md)
+- [Mac候选05实际搜索、布局切换与视觉冷启有限观察](verification/mac-candidate05-wide-toolbar-runtime-02/README.md)
+- [Mac候选05与原版宽窗局部几何及JPEG派生叠图](research/mac-candidate05-wide-runtime-geometry-01/README.md)
 - [Mac 布局](ui/macos.md)
 - [Android 布局与录屏流程](ui/android.md)
 - [手机录音面板三态布局与坐标](ui/recording-mobile.md)

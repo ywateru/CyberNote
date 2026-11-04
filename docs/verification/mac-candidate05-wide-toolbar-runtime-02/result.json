@@ -1,0 +1,72 @@
+{
+  "status": "PARTIAL_RUNTIME_OBSERVED_FULL_TASK_OPEN",
+  "candidate": "Mac candidate05 wide toolbar; does not include tags or saved recording date",
+  "initialIdentity": {
+    "pid": 70803,
+    "path": "/private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-sealed.app/Contents/MacOS/notes-clone",
+    "sha256": "c4a433e1930bd4bbc07bfb0baa70e0293a28fdba32bd4882a46332176d13c96c",
+    "basis": "Root retrospective execution recap; initial raw identity absent from01–19; do not present as independently captured initial process record."
+  },
+  "coldIdentity": {
+    "observedAt": "2026-11-04T03:17:45.463203+00:00",
+    "pgrep": {
+      "exitCode": 0,
+      "stdout": "72706\n",
+      "stderr": ""
+    },
+    "processes": [
+      {
+        "pid": "72706",
+        "result": "72706 Wed Nov  4 11:16:52 2026     /private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-sealed.app/Contents/MacOS/notes-clone\n"
+      }
+    ],
+    "executable": {
+      "path": "/private/tmp/notes-unified-candidate04-mac-candidate05-wide-toolbar-build-01-mac-sealed.app/Contents/MacOS/notes-clone",
+      "bytes": 16005376,
+      "sha256": "c4a433e1930bd4bbc07bfb0baa70e0293a28fdba32bd4882a46332176d13c96c"
+    },
+    "limits": "Only current process identity and sealed executable hash; no internal ACK or full persisted JSON read."
+  },
+  "imageIntegrityFile": "source-integrity.json",
+  "actionLedger": "action-ledger.json",
+  "observed": [
+    "Exact-title search unique, zero result disabled actions, clear restores visible body",
+    "Format popover visible, sidebar hide/restore",
+    "Native zoom wide and native zoom back small; no continuousresize",
+    "Gallery browse, unique QA card double-click expansion, back/list restore",
+    "Same three-line visible body before CmdQ and after new-process exact05 cold launch"
+  ],
+  "visibleBody": "QA-WIDE-20261104-05\n宽三栏工具栏与搜索对照。\n仅本地合成内容。",
+  "bodyAxTextSame": {
+    "01-initial-synthetic": true,
+    "15-list-restored-before-quit": true,
+    "18-after-normal-quit-cold-restart": true
+  },
+  "normalQuitAndColdRestore": {
+    "status": "LIMITED_VISUAL_TEXT_ACROSS_PROCESSES",
+    "quitActionBasis": "Root CUA CmdQ execution recap",
+    "firstProcessCheck": "16 exit3 sysmond failure; not exit proof",
+    "formerPidCheck": "17 exactPID70803 ps exit1 empty",
+    "newProcess": "19 PID72706 full05path/hash and18 full visible body",
+    "fullPersistedJson": "UNKNOWN",
+    "internalSaveAck": "UNKNOWN",
+    "databaseRead": false
+  },
+  "pixelStatus": "UNKNOWN; JPEG-derived local pair only, geometry report shows body differences; no lossless PNG/fullpixel pass",
+  "localGeometry": "../../research/mac-candidate05-wide-runtime-geometry-01/README.md",
+  "permissionStatus": {
+    "status": "NOT_ESTABLISHED",
+    "reference": "docs/verification/mac-candidate05-wide-toolbar-runtime-01/05-auth-window-cua-limitation.json",
+    "sha256": "c16b4c571814fe59d9526b4910355854e1414d41a8c28551e6b801047fb89bb8",
+    "limit": "Authentication form observation is not granted capture permission. No claim that manual authentication or lossless helper authorization completed."
+  },
+  "unknown": [
+    "Native marked IME",
+    "Continuous resize, drag narrow, full responsive/overflow matrix",
+    "All toolbar actions application and data effects",
+    "Persisted fullJSON/revision/ACK/DB identity",
+    "Original material/color/same screen position/DPR/fullpixel equivalence",
+    "Lossless capture helper actually authorized"
+  ],
+  "recordedAt": "2026-11-04T03:23:20.541570+00:00"
+}

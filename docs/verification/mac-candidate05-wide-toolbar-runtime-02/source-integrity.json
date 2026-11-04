@@ -1,0 +1,347 @@
+{
+  "basis": "Byte identities observed during document sealing; source CUA images and AX/process records kept unchanged.",
+  "originalFiles": [
+    {
+      "path": "01-initial-synthetic.ax.txt",
+      "bytes": 2185,
+      "sha256": "f0ce9ac3f101a68075df656258f7bcbc5fac44d844f5af8f4bc6deba1f579679"
+    },
+    {
+      "path": "01-initial-synthetic.cua-image",
+      "bytes": 188270,
+      "sha256": "fbf219a735a7f94c25e69a9c9edaedc35408e7cf7cbee2ac9cd1b531005da6ec"
+    },
+    {
+      "path": "02-search-unique.ax.txt",
+      "bytes": 1924,
+      "sha256": "89be6404ac5e838be476981fa2b513fdbb3c7e71079de88aacf07467dc776a29"
+    },
+    {
+      "path": "02-search-unique.cua-image",
+      "bytes": 160749,
+      "sha256": "0ade6381b260757e47df2cfd4ee9d8deae0418590740872442678773f578079e"
+    },
+    {
+      "path": "03-search-zero.ax.txt",
+      "bytes": 1524,
+      "sha256": "16ea073516703afcf2b9146c69ccbfb39415956035947f8eb1c10517a585e2bd"
+    },
+    {
+      "path": "03-search-zero.cua-image",
+      "bytes": 122396,
+      "sha256": "4ab2656e6aeda97343762b00a4569edaa6f2fdf1011bd9e19b51955cbc82e068"
+    },
+    {
+      "path": "04-search-clear-restored.ax.txt",
+      "bytes": 2131,
+      "sha256": "0606e57d7185f8fe3ba6aaa7dd7f28f67a7dc829cca17682ca261e024ee0268e"
+    },
+    {
+      "path": "04-search-clear-restored.cua-image",
+      "bytes": 192901,
+      "sha256": "5a6802978294d88f5368a7079c88fdfa41ab1a23d97ab58e020695b332b3d79d"
+    },
+    {
+      "path": "05-format-menu.ax.txt",
+      "bytes": 2531,
+      "sha256": "25cd2673d3cebbc5493547d43be93d9c816f9b98075a635679543e81abf0ae37"
+    },
+    {
+      "path": "05-format-menu.cua-image",
+      "bytes": 199907,
+      "sha256": "2a4fa5886c3fb353eee07f039e095be7f18b4de92092e75dcb9a729d3881468f"
+    },
+    {
+      "path": "06-sidebar-hidden.ax.txt",
+      "bytes": 1704,
+      "sha256": "a2f5d206f14ba4e9780e3add8de4e420cacb05a9312f4510aec4e8d4b4c321c7"
+    },
+    {
+      "path": "06-sidebar-hidden.cua-image",
+      "bytes": 153736,
+      "sha256": "ca621d2a450533b633c756874911d14df86b84d226784da8942e7c9d382012f1"
+    },
+    {
+      "path": "07-sidebar-restored.ax.txt",
+      "bytes": 2131,
+      "sha256": "0606e57d7185f8fe3ba6aaa7dd7f28f67a7dc829cca17682ca261e024ee0268e"
+    },
+    {
+      "path": "07-sidebar-restored.cua-image",
+      "bytes": 192798,
+      "sha256": "fe22705b479a6a742b6d30f4cede750527ba78a32273f208c159c193c9f2f0f8"
+    },
+    {
+      "path": "08-zoom-wide.ax.txt",
+      "bytes": 2131,
+      "sha256": "0606e57d7185f8fe3ba6aaa7dd7f28f67a7dc829cca17682ca261e024ee0268e"
+    },
+    {
+      "path": "08-zoom-wide.cua-image",
+      "bytes": 234318,
+      "sha256": "e67ef53a95250ae9058a8cad763b89cd7b9f59ed225098dda447de0f683df01e"
+    },
+    {
+      "path": "09-wide-body-focus.ax.txt",
+      "bytes": 2185,
+      "sha256": "f0ce9ac3f101a68075df656258f7bcbc5fac44d844f5af8f4bc6deba1f579679"
+    },
+    {
+      "path": "09-wide-body-focus.cua-image",
+      "bytes": 226938,
+      "sha256": "5a8eb558efeb1e6eab583c7c8bb9d8cdd326f11076651ac6d31daa3c951c7a1e"
+    },
+    {
+      "path": "10-original-same-text.ax.txt",
+      "bytes": 5896,
+      "sha256": "42a1684cdc68972da91b28c2b8507161c0f199f77fd979684ccf6f5cbf442f50"
+    },
+    {
+      "path": "10-original-same-text.cua-image",
+      "bytes": 219562,
+      "sha256": "31f2a0f4c7d240c5ff3d7957ba36ed35e5e5707a49210e3baf6d2f9f9169b2f1"
+    },
+    {
+      "path": "11-original-wide-columns-matched.ax.txt",
+      "bytes": 5896,
+      "sha256": "ed971c74f3fbdacd156825279fa91d9446ffd3e5231517d87ba799a251b18f1f"
+    },
+    {
+      "path": "11-original-wide-columns-matched.cua-image",
+      "bytes": 222011,
+      "sha256": "bbf0ea2a743a374eed3372f03142956100af54eb880f45eafc841d00bddfd544"
+    },
+    {
+      "path": "12-unzoom-three-columns.ax.txt",
+      "bytes": 2023,
+      "sha256": "0ff3e182ee948e474df11cd2086275ec1b0c8546a346bcc3f91410085f6bdd3e"
+    },
+    {
+      "path": "12-unzoom-three-columns.cua-image",
+      "bytes": 183426,
+      "sha256": "17ee68f9a7dc6bad342db2d8c1df896122aa42f0367f658164b19bf68d613a7f"
+    },
+    {
+      "path": "13-gallery-browse.ax.txt",
+      "bytes": 1607,
+      "sha256": "9231bc34495f736b23e1f7d9819f13ece1a4d9ddcbde8dd93ac99ea0a7c07270"
+    },
+    {
+      "path": "13-gallery-browse.cua-image",
+      "bytes": 176707,
+      "sha256": "128d856e342b3ce2dfe4b5e2400973b4adce296c41e0a3ad5f54829606ad920a"
+    },
+    {
+      "path": "14-gallery-expanded.ax.txt",
+      "bytes": 1663,
+      "sha256": "a735fb31722ff263958a79fe098a7e81afffa2fb4d6ea3b8b85b1c2c2c375b16"
+    },
+    {
+      "path": "14-gallery-expanded.cua-image",
+      "bytes": 135096,
+      "sha256": "e0aa5a0ab1c57c26664f038ed307a4470f1c086eff0f5172effd3f4ab8ed7ce2"
+    },
+    {
+      "path": "15-list-restored-before-quit.ax.txt",
+      "bytes": 2111,
+      "sha256": "0d993e3e62215f7bc98cbafc6081652cfae917b7b6d41d40ab601302ba9c0d4d"
+    },
+    {
+      "path": "15-list-restored-before-quit.cua-image",
+      "bytes": 188522,
+      "sha256": "c5c30dd8b0cf055cdbb51a8dbec3ea8ccd8699758a9eebb9701ca193c5df3c64"
+    },
+    {
+      "path": "16-after-normal-quit-process.json",
+      "bytes": 388,
+      "sha256": "87f71c6ee6a7de83fdd59d4558b19e28322bc5c36f181ee23abc4a1711ae1992"
+    },
+    {
+      "path": "17-after-normal-quit-exact-pid.json",
+      "bytes": 281,
+      "sha256": "bd69a35afe79417a9b66365ad70fdbf2e4b9a06952af70488c5a85f11b1853ad"
+    },
+    {
+      "path": "18-after-normal-quit-cold-restart.ax.txt",
+      "bytes": 2111,
+      "sha256": "0d993e3e62215f7bc98cbafc6081652cfae917b7b6d41d40ab601302ba9c0d4d"
+    },
+    {
+      "path": "18-after-normal-quit-cold-restart.cua-image",
+      "bytes": 187600,
+      "sha256": "e4e949d9431526e06bca69e6f848e327209939b80f056743b53fd819c3bb4d9b"
+    },
+    {
+      "path": "19-cold-restart-identity.json",
+      "bytes": 743,
+      "sha256": "5628cf0278942fc40f7eb95ab515b7cc0627a8cdb4f3172c9cf65f75defa2e46"
+    }
+  ],
+  "images": [
+    {
+      "path": "01-initial-synthetic.cua-image",
+      "bytes": 188270,
+      "sha256": "fbf219a735a7f94c25e69a9c9edaedc35408e7cf7cbee2ac9cd1b531005da6ec",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "02-search-unique.cua-image",
+      "bytes": 160749,
+      "sha256": "0ade6381b260757e47df2cfd4ee9d8deae0418590740872442678773f578079e",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "03-search-zero.cua-image",
+      "bytes": 122396,
+      "sha256": "4ab2656e6aeda97343762b00a4569edaa6f2fdf1011bd9e19b51955cbc82e068",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "04-search-clear-restored.cua-image",
+      "bytes": 192901,
+      "sha256": "5a6802978294d88f5368a7079c88fdfa41ab1a23d97ab58e020695b332b3d79d",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "05-format-menu.cua-image",
+      "bytes": 199907,
+      "sha256": "2a4fa5886c3fb353eee07f039e095be7f18b4de92092e75dcb9a729d3881468f",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "06-sidebar-hidden.cua-image",
+      "bytes": 153736,
+      "sha256": "ca621d2a450533b633c756874911d14df86b84d226784da8942e7c9d382012f1",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "07-sidebar-restored.cua-image",
+      "bytes": 192798,
+      "sha256": "fe22705b479a6a742b6d30f4cede750527ba78a32273f208c159c193c9f2f0f8",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "08-zoom-wide.cua-image",
+      "bytes": 234318,
+      "sha256": "e67ef53a95250ae9058a8cad763b89cd7b9f59ed225098dda447de0f683df01e",
+      "encoding": "JPEG",
+      "width": 2784,
+      "height": 1806,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "09-wide-body-focus.cua-image",
+      "bytes": 226938,
+      "sha256": "5a8eb558efeb1e6eab583c7c8bb9d8cdd326f11076651ac6d31daa3c951c7a1e",
+      "encoding": "JPEG",
+      "width": 2784,
+      "height": 1806,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "10-original-same-text.cua-image",
+      "bytes": 219562,
+      "sha256": "31f2a0f4c7d240c5ff3d7957ba36ed35e5e5707a49210e3baf6d2f9f9169b2f1",
+      "encoding": "JPEG",
+      "width": 2784,
+      "height": 1806,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "11-original-wide-columns-matched.cua-image",
+      "bytes": 222011,
+      "sha256": "bbf0ea2a743a374eed3372f03142956100af54eb880f45eafc841d00bddfd544",
+      "encoding": "JPEG",
+      "width": 2784,
+      "height": 1806,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "12-unzoom-three-columns.cua-image",
+      "bytes": 183426,
+      "sha256": "17ee68f9a7dc6bad342db2d8c1df896122aa42f0367f658164b19bf68d613a7f",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "13-gallery-browse.cua-image",
+      "bytes": 176707,
+      "sha256": "128d856e342b3ce2dfe4b5e2400973b4adce296c41e0a3ad5f54829606ad920a",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "14-gallery-expanded.cua-image",
+      "bytes": 135096,
+      "sha256": "e0aa5a0ab1c57c26664f038ed307a4470f1c086eff0f5172effd3f4ab8ed7ce2",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "15-list-restored-before-quit.cua-image",
+      "bytes": 188522,
+      "sha256": "c5c30dd8b0cf055cdbb51a8dbec3ea8ccd8699758a9eebb9701ca193c5df3c64",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    },
+    {
+      "path": "18-after-normal-quit-cold-restart.cua-image",
+      "bytes": 187600,
+      "sha256": "e4e949d9431526e06bca69e6f848e327209939b80f056743b53fd819c3bb4d9b",
+      "encoding": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB",
+      "sourceReencoded": false
+    }
+  ],
+  "imageCount": 16,
+  "encodedImageDimensions": {
+    "2176x1320": 12,
+    "2784x1806": 4
+  }
+}

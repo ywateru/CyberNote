@@ -1,0 +1,101 @@
+{
+  "scope": "Bounded original Notes smart-folder observations; batch sealed at22; parent task remains in-progress.",
+  "date": "2026-11-04",
+  "installedAppMetadata": {
+    "bundleIdentifier": "com.apple.Notes",
+    "shortVersion": "4.13",
+    "bundleVersion": "3146.101.28",
+    "source": "00-original-app-file-identity.json",
+    "runtimeProcessIdentityProven": false
+  },
+  "observations": [
+    {
+      "id": "cancel",
+      "sources": [
+        "05",
+        "06"
+      ],
+      "result": "Smart creation canceled; no CANCEL sidebar entry."
+    },
+    {
+      "id": "pinned",
+      "sources": [
+        "08",
+        "09",
+        "10",
+        "11",
+        "12"
+      ],
+      "result": "Saved pinned-inclusion view; count1→0→1 after real unpin/repin; last unpin path navigated to physical A; explicitly selected empty smart view had no visible/settable body."
+    },
+    {
+      "id": "folder",
+      "sources": [
+        "03",
+        "13",
+        "14"
+      ],
+      "result": "Selected A token, saved include A; two direct A notes appeared, known A1 child sample absent; free-text entry was not successful."
+    },
+    {
+      "id": "all-any",
+      "sources": [
+        "15",
+        "16",
+        "17",
+        "18"
+      ],
+      "result": "All A+pin returned A-PIN; Any A+pin returned both A notes. No outside-A pinned witness."
+    },
+    {
+      "id": "top-search",
+      "sources": [
+        "19",
+        "20"
+      ],
+      "result": "Top search from IN-A switched selection to iCloud All and found B; cancel restored IN-A."
+    },
+    {
+      "id": "new-from-smart",
+      "sources": [
+        "20",
+        "21 excerpt",
+        "22"
+      ],
+      "result": "New action navigated to ordinary Notes105→106; new synthetic title/body present, smart counts unchanged; returning to IN-A showed only two A notes."
+    }
+  ],
+  "finalState": {
+    "selectedView": "QA-SMART-20261104-IN-A",
+    "mode": "任意",
+    "rules": [
+      "文件夹 包含 QA-SMART-20261104-A",
+      "置顶备忘录 包含"
+    ],
+    "visibleMembers": [
+      "QA-SMART-20261104-A-PIN",
+      "QA-SMART-20261104-A-PLAIN"
+    ],
+    "pinnedViewCount": 1,
+    "openFormOrMenu": false,
+    "source": "22 + root final action recap"
+  },
+  "unknown": [
+    "exclude folder",
+    "multiple folder selections",
+    "smart views as folder-rule targets",
+    "outside-A pinned OR branch",
+    "move targets",
+    "saved name change",
+    "deletion/reference lifecycle",
+    "cold restart persistence",
+    "capture-helper grant",
+    "lossless PNG/pixel equality"
+  ],
+  "coldRestartPerformed": false,
+  "pixelPass": false,
+  "productImplementationVerified": false,
+  "userExistingContentEditedMovedDeleted": false,
+  "syntheticDeleted": false,
+  "audioRecordedOrExported": false
+}

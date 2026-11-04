@@ -1,0 +1,570 @@
+{
+  "coordinateSystem": "Decoded source image pixels; top-left origin; boxes [x0,y0,x1,y1) exclusive. No DPR/point/frame inference.",
+  "rois": {
+    "toolbar": [
+      1176,
+      0,
+      2784,
+      112
+    ],
+    "body": [
+      1200,
+      155,
+      1600,
+      280
+    ]
+  },
+  "featureSearchRois": {
+    "edit": [
+      1190,
+      20,
+      1280,
+      85
+    ],
+    "format": [
+      1430,
+      20,
+      1768,
+      85
+    ],
+    "share": [
+      1920,
+      20,
+      2092,
+      85
+    ],
+    "search": [
+      2110,
+      20,
+      2780,
+      85
+    ]
+  },
+  "lineSearchRois": [
+    [
+      1200,
+      165,
+      1600,
+      200
+    ],
+    [
+      1200,
+      200,
+      1600,
+      234
+    ],
+    [
+      1200,
+      234,
+      1600,
+      270
+    ]
+  ],
+  "method": "Neutral dark ink iff 299R+587G+114B < threshold*1000 and max(R,G,B)-min(R,G,B)<25. Threshold sensitivity 120/160/200. All qualifying pixels within each explicit ROI, no registration/resampling/ICC conversion.",
+  "sources": {
+    "09-wide-body-focus.cua-image": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-candidate05-wide-toolbar-runtime-02/09-wide-body-focus.cua-image",
+      "bytes": 226938,
+      "sha256": "5a8eb558efeb1e6eab583c7c8bb9d8cdd326f11076651ac6d31daa3c951c7a1e"
+    },
+    "09-wide-body-focus.ax.txt": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-candidate05-wide-toolbar-runtime-02/09-wide-body-focus.ax.txt",
+      "bytes": 2185,
+      "sha256": "f0ce9ac3f101a68075df656258f7bcbc5fac44d844f5af8f4bc6deba1f579679"
+    },
+    "11-original-wide-columns-matched.cua-image": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-candidate05-wide-toolbar-runtime-02/11-original-wide-columns-matched.cua-image",
+      "bytes": 222011,
+      "sha256": "bbf0ea2a743a374eed3372f03142956100af54eb880f45eafc841d00bddfd544"
+    },
+    "11-original-wide-columns-matched.ax.txt": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-candidate05-wide-toolbar-runtime-02/11-original-wide-columns-matched.ax.txt",
+      "bytes": 5896,
+      "sha256": "ed971c74f3fbdacd156825279fa91d9446ffd3e5231517d87ba799a251b18f1f"
+    }
+  },
+  "measurements": {
+    "clone": {
+      "format": "JPEG",
+      "size": [
+        2784,
+        1806
+      ],
+      "imageMode": "RGB",
+      "embeddedIccSha256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf",
+      "thresholds": {
+        "120": {
+          "toolbarInk": {
+            "edit": [
+              1219,
+              35,
+              1250,
+              67
+            ],
+            "format": [
+              1455,
+              34,
+              1738,
+              70
+            ],
+            "share": [
+              1947,
+              33,
+              2064,
+              69
+            ],
+            "search": [
+              2141,
+              40,
+              2166,
+              65
+            ]
+          },
+          "bodyLineInk": [
+            [
+              1227,
+              172,
+              1533,
+              194
+            ],
+            [
+              1227,
+              204,
+              1541,
+              229
+            ],
+            [
+              1227,
+              239,
+              1430,
+              264
+            ]
+          ]
+        },
+        "160": {
+          "toolbarInk": {
+            "edit": [
+              1219,
+              35,
+              1250,
+              67
+            ],
+            "format": [
+              1454,
+              34,
+              1738,
+              70
+            ],
+            "share": [
+              1947,
+              33,
+              2064,
+              69
+            ],
+            "search": [
+              2141,
+              40,
+              2231,
+              65
+            ]
+          },
+          "bodyLineInk": [
+            [
+              1227,
+              172,
+              1533,
+              194
+            ],
+            [
+              1227,
+              203,
+              1541,
+              229
+            ],
+            [
+              1227,
+              238,
+              1430,
+              264
+            ]
+          ]
+        },
+        "200": {
+          "toolbarInk": {
+            "edit": [
+              1219,
+              35,
+              1250,
+              67
+            ],
+            "format": [
+              1454,
+              34,
+              1738,
+              70
+            ],
+            "share": [
+              1947,
+              33,
+              2064,
+              69
+            ],
+            "search": [
+              2141,
+              40,
+              2232,
+              65
+            ]
+          },
+          "bodyLineInk": [
+            [
+              1227,
+              172,
+              1533,
+              194
+            ],
+            [
+              1227,
+              203,
+              1542,
+              229
+            ],
+            [
+              1226,
+              238,
+              1431,
+              264
+            ]
+          ]
+        }
+      },
+      "lineInkTopDifferences": [
+        31,
+        35
+      ],
+      "selectedGlyphInk160": {
+        "Q": [
+          1227,
+          172,
+          1245,
+          194
+        ],
+        "A": [
+          1247,
+          172,
+          1264,
+          192
+        ],
+        "宽": [
+          1227,
+          203,
+          1251,
+          229
+        ],
+        "仅": [
+          1227,
+          239,
+          1251,
+          264
+        ]
+      },
+      "dividerEvidence": {
+        "roi": [
+          1172,
+          400,
+          1184,
+          800
+        ],
+        "columnMeanLuma": {
+          "1172": 254.8325,
+          "1173": 254.8325,
+          "1174": 254.8325,
+          "1175": 254.8325,
+          "1176": 253.8375,
+          "1177": 254.835,
+          "1178": 221.9875,
+          "1179": 222.0075,
+          "1180": 254.9775,
+          "1181": 254.9925,
+          "1182": 254.985,
+          "1183": 254.9925
+        },
+        "darkBandX": [
+          1178,
+          1180
+        ]
+      }
+    },
+    "original": {
+      "format": "JPEG",
+      "size": [
+        2784,
+        1806
+      ],
+      "imageMode": "RGB",
+      "embeddedIccSha256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf",
+      "thresholds": {
+        "120": {
+          "toolbarInk": {
+            "edit": [
+              1217,
+              35,
+              1249,
+              67
+            ],
+            "format": [
+              1457,
+              35,
+              1737,
+              70
+            ],
+            "share": [
+              1947,
+              32,
+              2065,
+              69
+            ],
+            "search": null
+          },
+          "bodyLineInk": [
+            [
+              1226,
+              175,
+              1512,
+              196
+            ],
+            [
+              1226,
+              207,
+              1516,
+              231
+            ],
+            [
+              1225,
+              241,
+              1413,
+              265
+            ]
+          ]
+        },
+        "160": {
+          "toolbarInk": {
+            "edit": [
+              1217,
+              35,
+              1249,
+              67
+            ],
+            "format": [
+              1456,
+              35,
+              1737,
+              70
+            ],
+            "share": [
+              1947,
+              32,
+              2065,
+              69
+            ],
+            "search": [
+              2141,
+              40,
+              2232,
+              65
+            ]
+          },
+          "bodyLineInk": [
+            [
+              1226,
+              175,
+              1512,
+              196
+            ],
+            [
+              1226,
+              207,
+              1516,
+              231
+            ],
+            [
+              1225,
+              241,
+              1413,
+              265
+            ]
+          ]
+        },
+        "200": {
+          "toolbarInk": {
+            "edit": [
+              1217,
+              35,
+              1250,
+              67
+            ],
+            "format": [
+              1456,
+              34,
+              1738,
+              70
+            ],
+            "share": [
+              1947,
+              32,
+              2065,
+              69
+            ],
+            "search": [
+              2141,
+              40,
+              2232,
+              65
+            ]
+          },
+          "bodyLineInk": [
+            [
+              1225,
+              175,
+              1512,
+              196
+            ],
+            [
+              1225,
+              207,
+              1517,
+              231
+            ],
+            [
+              1225,
+              241,
+              1414,
+              265
+            ]
+          ]
+        }
+      },
+      "lineInkTopDifferences": [
+        32,
+        34
+      ],
+      "selectedGlyphInk160": {
+        "Q": [
+          1226,
+          175,
+          1243,
+          196
+        ],
+        "A": [
+          1244,
+          175,
+          1260,
+          194
+        ],
+        "宽": [
+          1226,
+          207,
+          1248,
+          231
+        ],
+        "仅": [
+          1225,
+          241,
+          1248,
+          265
+        ]
+      },
+      "dividerEvidence": {
+        "roi": [
+          1172,
+          400,
+          1184,
+          800
+        ],
+        "columnMeanLuma": {
+          "1172": 255.0,
+          "1173": 255.0,
+          "1174": 255.0,
+          "1175": 255.0,
+          "1176": 230.0,
+          "1177": 229.0,
+          "1178": 255.0,
+          "1179": 254.0,
+          "1180": 255.0,
+          "1181": 255.0,
+          "1182": 255.0,
+          "1183": 255.0
+        },
+        "darkBandX": [
+          1176,
+          1178
+        ]
+      }
+    }
+  },
+  "visibleSurfaceEstimates": {
+    "method": "Visual reading of rounded white face boundaries in native-size crops, approximate +/-2 image px; material/shadow/color/JPEG prevent frame inference.",
+    "clone": {
+      "edit": [
+        1197,
+        16,
+        1270,
+        88
+      ],
+      "format": [
+        1436,
+        16,
+        1760,
+        88
+      ],
+      "share": [
+        1926,
+        16,
+        2086,
+        88
+      ],
+      "search": [
+        2118,
+        16,
+        2768,
+        88
+      ]
+    },
+    "original": {
+      "edit": [
+        1194,
+        16,
+        1268,
+        88
+      ],
+      "format": [
+        1436,
+        16,
+        1758,
+        88
+      ],
+      "share": [
+        1926,
+        16,
+        2086,
+        88
+      ],
+      "search": [
+        2118,
+        16,
+        2768,
+        88
+      ]
+    }
+  },
+  "limits": [
+    "Exactly two source screenshots, same three-line QA body and body focus confirmed by their AX text.",
+    "JPEG-derived PNG crops/overlays/differences are not lossless capture evidence and cannot establish pixel PASS.",
+    "No full-page similarity score; sidebar accounts/counts/list data/times differ.",
+    "Window screen positions, DPR, AppKit frames, font descriptors and true text baselines are not established.",
+    "Visible pointer halos at approximately clone(1980,900), original(1020,956) lie outside both selected ROIs; clone gold caret near (1448,250) is within body ROI but excluded from neutral ink mask.",
+    "Toolbar symbols and text differ in darkness/material/AA and may reflect active/color states; decoded JPEG differences include those effects.",
+    "Static glyph segmentation uses blank columns; selected initial Q/A/宽/仅 are isolated in these images only, not a general OCR/font identity claim."
+  ],
+  "sourcesUnchangedAfter": true
+}
