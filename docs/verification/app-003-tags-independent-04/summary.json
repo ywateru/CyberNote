@@ -1,0 +1,62 @@
+{
+  "scenarios": 12,
+  "actualStoreActionRecords": 159,
+  "errors": [],
+  "results": [
+    {
+      "name": "independent02-last-reference-repro-now-retained",
+      "pass": true
+    },
+    {
+      "name": "engine-composition-multiple-candidates-and-commit",
+      "pass": true
+    },
+    {
+      "name": "engine-composition-selected-range-cancel",
+      "pass": true
+    },
+    {
+      "name": "end-before-final-empty-replacement",
+      "pass": true
+    },
+    {
+      "name": "end-before-final-surrogate-and-combining-replacement",
+      "pass": true
+    },
+    {
+      "name": "multiple-results-real-continuation-does-not-retarget",
+      "pass": true
+    },
+    {
+      "name": "ordinary-edit-and-explicit-other-note-old-end",
+      "pass": true
+    },
+    {
+      "name": "prepare-immediate-freeze-and-abort-does-not-revive",
+      "pass": true
+    },
+    {
+      "name": "ordinary-no-composition-immediate-parking",
+      "pass": true
+    },
+    {
+      "name": "cancel-restores-nonempty-original-selection-then-no-stale-retention",
+      "pass": true
+    },
+    {
+      "name": "explicit-clear-filter-exits-retention-without-focus-revival",
+      "pass": true
+    },
+    {
+      "name": "engine-replaces-previous-character-at-caret",
+      "pass": true
+    }
+  ],
+  "additionalExistingSnapshotAssertions": {
+    "prepareProtectedTagNameAbsentFromBody": true,
+    "abortProtectedTagNameNotRestored": true,
+    "abortNoFocus": true
+  },
+  "meaning": "All12 independent App/Editor/realStore checks passed; browser engine and controlled DOM composition, not OS IME",
+  "scaffold": "Same reviewed author transport/App setup as independent03; independent selected scenarios and readonly observer inspection; no product source transform"
+}
