@@ -125,6 +125,85 @@ fn info(label: String, binding: Binding, native: NativeInfo) -> BindingInfo {
         native,
     }
 }
+// The application menu is shared by all Mac windows. Only the main binding owns this title.
+// A focus event may arrive before bind or after unbind, when there is no title to project yet.
+fn project_sidebar_menu(
+    map: &Bindings,
+    label: &str,
+    apply: impl FnOnce(&str) -> Result<()>,
+) -> Result<()> {
+    if label != "main" {
+        return Ok(());
+    }
+    let title = map
+        .lock()
+        .map_err(|_| Error::new("state", "顶部绑定锁损坏"))?
+        .get(label)
+        .map(|record| {
+            if record.state.columns.sidebar_visible {
+                "隐藏文件夹"
+            } else {
+                "显示文件夹"
+            }
+        });
+    if let Some(title) = title {
+        apply(title)?;
+    }
+    Ok(())
+}
+fn sidebar_menu_item<R: Runtime>(
+    items: Vec<tauri::menu::MenuItemKind<R>>,
+) -> tauri::Result<Option<tauri::menu::MenuItem<R>>> {
+    for item in items {
+        if item.id().as_ref() == "sidebar" {
+            if let Some(item) = item.as_menuitem() {
+                return Ok(Some(item.clone()));
+            }
+        }
+        if let Some(submenu) = item.as_submenu() {
+            if let Some(item) = sidebar_menu_item(submenu.items()?)? {
+                return Ok(Some(item));
+            }
+        }
+    }
+    Ok(None)
+}
+pub(super) fn refresh_sidebar_menu<R: Runtime>(app: &AppHandle<R>, label: &str) {
+    // Called inside bind/update's on_main task or the main event loop's Focused event.
+    // Read the current binding here; never capture a title on a worker and queue it later.
+    // project_sidebar_menu releases the bindings lock before any Tauri menu dispatch.
+    let result = (|| {
+        let state = app
+            .try_state::<NotesUi<R>>()
+            .ok_or_else(|| Error::new("state", "顶部插件尚未初始化"))?;
+        project_sidebar_menu(&state.bindings, label, |title| {
+            let menu = app
+                .menu()
+                .ok_or_else(|| Error::new("menu_missing", "应用没有菜单"))?;
+            let item = sidebar_menu_item(
+                menu.items()
+                    .map_err(|e| Error::new("menu", e.to_string()))?,
+            )
+            .map_err(|e| Error::new("menu", e.to_string()))?
+            .ok_or_else(|| Error::new("menu_missing", "应用没有文件夹菜单项"))?;
+            if item.text().map_err(|e| Error::new("menu", e.to_string()))? != title {
+                item.set_text(title)
+                    .map_err(|e| Error::new("menu", e.to_string()))?;
+            }
+            Ok(())
+        })
+    })();
+    // Menu presentation failure must not undo or fail an already applied toolbar state.
+    if let Err(error) = result {
+        eprintln!("notes-ui: sidebar menu title failed: {error}");
+    }
+}
+fn require_newer_revision(old: &Binding, state: &ToolbarState) -> Result<()> {
+    if state.revision <= old.state.revision {
+        return Err(Error::new("stale_state", "顶部状态版本必须递增"));
+    }
+    Ok(())
+}
 pub(super) async fn bind<R: Runtime>(
     app: &AppHandle<R>,
     map: Bindings,
@@ -179,7 +258,10 @@ pub(super) async fn bind<R: Runtime>(
             ))
         };
         match result {
-            Ok(native) => Ok(info(label, record, native)),
+            Ok(native) => {
+                refresh_sidebar_menu(window.app_handle(), &label);
+                Ok(info(label, record, native))
+            }
             Err(e) => {
                 unsafe {
                     notes_ui_destroy(id_c.as_ptr());
@@ -203,9 +285,7 @@ pub(super) async fn update<R: Runtime>(
     on_main(app, move || {
         let label = window.label().to_owned();
         let old = binding(&map, &label, &id)?;
-        if state.revision <= old.state.revision {
-            return Err(Error::new("stale_state", "顶部状态版本必须递增"));
-        }
+        require_newer_revision(&old, &state)?;
         let id_c = cstr(&id)?;
         let state_c = json(&state)?;
         let native = unsafe { response(notes_ui_update(id_c.as_ptr(), state_c.as_ptr()))? };
@@ -213,6 +293,7 @@ pub(super) async fn update<R: Runtime>(
         map.lock()
             .map_err(|_| Error::new("state", "顶部绑定锁损坏"))?
             .insert(label.clone(), record.clone());
+        refresh_sidebar_menu(window.app_handle(), &label);
         Ok(info(label, record, native))
     })
     .await
@@ -349,6 +430,139 @@ pub(super) fn destroy_all<R: Runtime>(app: &AppHandle<R>) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn sidebar_menu_projects_main_state_in_all_layouts_and_on_focus() {
+        for layout in [
+            Layout::ThreeColumn,
+            Layout::GalleryBrowse,
+            Layout::GalleryExpanded,
+        ] {
+            let mut state: ToolbarState =
+                serde_json::from_str(include_str!("../examples/state.json")).unwrap();
+            state.layout = layout;
+            let map: Bindings = Arc::new(Mutex::new(HashMap::from([(
+                "main".into(),
+                Binding {
+                    id: uuid::Uuid::new_v4().to_string(),
+                    state,
+                },
+            )])));
+            let mut titles = Vec::new();
+            for visible in [true, false, true] {
+                map.lock()
+                    .unwrap()
+                    .get_mut("main")
+                    .unwrap()
+                    .state
+                    .columns
+                    .sidebar_visible = visible;
+                let before =
+                    serde_json::to_value(&map.lock().unwrap().get("main").unwrap().state).unwrap();
+                project_sidebar_menu(&map, "main", |title| {
+                    titles.push(title.to_owned());
+                    Ok(())
+                })
+                .unwrap();
+                // Refocusing main projects the same current binding, without a new state or revision.
+                project_sidebar_menu(&map, "main", |title| {
+                    assert_eq!(title, titles.last().unwrap());
+                    Ok(())
+                })
+                .unwrap();
+                assert_eq!(
+                    serde_json::to_value(&map.lock().unwrap().get("main").unwrap().state).unwrap(),
+                    before
+                );
+            }
+            assert_eq!(titles, ["隐藏文件夹", "显示文件夹", "隐藏文件夹"]);
+        }
+    }
+    #[test]
+    fn sidebar_menu_ignores_independent_and_not_yet_bound_windows() {
+        let mut state: ToolbarState =
+            serde_json::from_str(include_str!("../examples/state.json")).unwrap();
+        state.layout = Layout::IndependentNote;
+        state.columns.sidebar_visible = false;
+        let map: Bindings = Arc::new(Mutex::new(HashMap::from([(
+            "note-independent".into(),
+            Binding {
+                id: uuid::Uuid::new_v4().to_string(),
+                state,
+            },
+        )])));
+        for label in ["main", "note-independent", "other"] {
+            project_sidebar_menu(&map, label, |_| {
+                panic!("window without main state wrote application menu")
+            })
+            .unwrap();
+        }
+        let mut main = map.lock().unwrap().get("note-independent").unwrap().clone();
+        main.state.layout = Layout::ThreeColumn;
+        main.state.columns.sidebar_visible = true;
+        map.lock().unwrap().insert("main".into(), main);
+        project_sidebar_menu(&map, "note-independent", |_| {
+            panic!("independent window overwrote main title")
+        })
+        .unwrap();
+        project_sidebar_menu(&map, "main", |title| {
+            assert_eq!(title, "隐藏文件夹");
+            Ok(())
+        })
+        .unwrap();
+    }
+    #[test]
+    fn sidebar_menu_keeps_current_state_after_stale_update_and_menu_failure() {
+        let mut state: ToolbarState =
+            serde_json::from_str(include_str!("../examples/state.json")).unwrap();
+        state.revision = 5;
+        state.columns.sidebar_visible = false;
+        let id = uuid::Uuid::new_v4().to_string();
+        let map: Bindings = Arc::new(Mutex::new(HashMap::from([(
+            "main".into(),
+            Binding {
+                id: id.clone(),
+                state: state.clone(),
+            },
+        )])));
+        let current = binding(&map, "main", &id).unwrap();
+        for revision in [4, 5] {
+            let mut stale = state.clone();
+            stale.revision = revision;
+            stale.columns.sidebar_visible = true;
+            assert_eq!(
+                require_newer_revision(&current, &stale).unwrap_err().code,
+                "stale_state"
+            );
+        }
+        let mut next = state.clone();
+        next.revision = 6;
+        require_newer_revision(&current, &next).unwrap();
+        assert_eq!(
+            binding(&map, "main", &uuid::Uuid::new_v4().to_string())
+                .err()
+                .unwrap()
+                .code,
+            "stale_binding"
+        );
+        assert_eq!(
+            project_sidebar_menu(&map, "main", |_| Err(Error::new(
+                "menu_missing",
+                "fixture missing item"
+            )))
+            .unwrap_err()
+            .code,
+            "menu_missing"
+        );
+        project_sidebar_menu(&map, "main", |title| {
+            assert_eq!(title, "显示文件夹");
+            Ok(())
+        })
+        .unwrap();
+        assert_eq!(
+            serde_json::to_value(&map.lock().unwrap().get("main").unwrap().state).unwrap(),
+            serde_json::to_value(state).unwrap()
+        );
+    }
     #[test]
     fn menu_search_matches_only_the_exact_menu_event_id() {
         for id in [

@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "at": "2026-11-04T05:08:47.643667+00:00",
+  "baselineHead": "a692fdbaba125e26ba76d78da45479fd9f810bf4",
+  "worktree": "/private/tmp/apple-notes-sidebar-menu-label-01",
+  "branch": "task/sidebar-menu-label-01",
+  "productFiles": [
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "bytes": 7786,
+      "sha256": "a745a6792f9af7dcb39e57cdc6320a5dff2f1805ae7916414a9cace571973659"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "bytes": 25070,
+      "sha256": "2ea616d7d224215e9b90b29c4a965c364bb302c80d050f00e3401b2537b37281"
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "bytes": 16068,
+      "sha256": "716215739e49fad5d770f0d4b6e5f7cf37e949bc3dbd715794afd881823a0f93"
+    }
+  ],
+  "productAggregateAlgorithm": "sha256 of sorted lines path TAB bytes TAB sha256 NEWLINE",
+  "productAggregate": "6e0ff99124800008f84e70a080a570c6b447a38068b0bb4d22e744abbc3c673a",
+  "checks": [
+    {
+      "path": "docs/verification/app-001-sidebar-menu-label-01/cargo-host-check.json",
+      "bytes": 607,
+      "sha256": "e38325ef91686cb7675679cfe41bd422ed22f43e62029c1bec6700047cb5da13"
+    },
+    {
+      "path": "docs/verification/app-001-sidebar-menu-label-01/cargo-host-check.txt",
+      "bytes": 1101,
+      "sha256": "39c9a6a566c2dadf4db8992118053955ee2ce9244f7e906207b511a25ab30cf2"
+    },
+    {
+      "path": "docs/verification/app-001-sidebar-menu-label-01/cargo-plugin-test.json",
+      "bytes": 625,
+      "sha256": "e865d94839f00ad6d119546c793a4d822edbdacb7e861839bd6e8a5eeceaa774"
+    },
+    {
+      "path": "docs/verification/app-001-sidebar-menu-label-01/cargo-plugin-test.txt",
+      "bytes": 1803,
+      "sha256": "427d6f43e30c5a6ca88bc52799197dc19f206f6838b997e1eb0643a10b3118b8"
+    }
+  ],
+  "freeBytesAfter": 3780534272,
+  "limits": "Source candidate and controlled production projection only; native menu API compiled, no AppKit menu/GUI/platform bundle/runtime/pixel validation."
+}

@@ -1,0 +1,24 @@
+   Compiling tauri-plugin-notes-ui v0.1.0 (/private/tmp/apple-notes-sidebar-menu-label-01/plugins/tauri-plugin-notes-ui)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.52s
+     Running unittests src/lib.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/tauri_plugin_notes_ui-555b8726ba210167)
+
+running 16 tests
+test macos::tests::menu_search_matches_only_the_exact_menu_event_id ... ok
+test tests::events_cannot_cross_windows_bindings_revisions_or_disabled_commands ... ok
+test macos::tests::focus_lookup_rejects_other_window_and_old_id_after_rebind ... ok
+test tests::gallery_browse_is_explicit_and_rejects_stale_editor_actions ... ok
+test macos::tests::sidebar_menu_ignores_independent_and_not_yet_bound_windows ... ok
+test macos::tests::sidebar_menu_keeps_current_state_after_stale_update_and_menu_failure ... ok
+test tests::format_surface_accepts_only_format_commands_and_disabled_colors_cannot_dispatch ... ok
+test tests::contract_rejects_unknown_variants_fields_and_unbounded_state ... ok
+test macos::tests::menu_search_rejects_disabled_or_missing_search_without_changing_state ... ok
+test macos::tests::menu_search_uses_only_the_focused_main_current_binding ... ok
+test tests::search_focus_requires_enabled_search_without_mutating_query_or_revision ... ok
+test tests::menus_require_unique_owned_commands_and_bounded_nesting ... ok
+test tests::guest_window_label_must_match_the_invoking_window ... ok
+test tests::tauri_window_target_delivers_only_to_the_bound_window ... ok
+test tests::focus_command_rejects_cross_window_and_invalid_uuid_before_native_dispatch ... ok
+test macos::tests::sidebar_menu_projects_main_state_in_all_layouts_and_on_focus ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

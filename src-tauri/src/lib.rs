@@ -385,7 +385,7 @@ pub fn run() {
                     )
                     .build()?;
                 let view = SubmenuBuilder::new(app, "显示")
-                    .text("sidebar", "显示/隐藏文件夹")
+                    .text("sidebar", "隐藏文件夹")
                     .text("gallery", "切换画廊视图")
                     .item(
                         &MenuItemBuilder::with_id("search", "搜索备忘录")

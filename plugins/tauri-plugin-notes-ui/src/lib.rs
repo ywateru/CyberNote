@@ -235,6 +235,11 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
                 }
                 tauri::RunEvent::WindowEvent {
                     label,
+                    event: tauri::WindowEvent::Focused(true),
+                    ..
+                } => macos::refresh_sidebar_menu(app, label),
+                tauri::RunEvent::WindowEvent {
+                    label,
                     event: tauri::WindowEvent::Destroyed,
                     ..
                 } => macos::destroy_label(app, label),
