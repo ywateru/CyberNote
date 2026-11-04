@@ -33,7 +33,7 @@ RecordingSession/Panel完成结果、App录音票据和提交batch、AttachmentS
 
 开发者必须覆盖真实Panel/Session→App→submission→真实Rust临时Store的开始时间固定和失败重试边界；受控硬件采集不代表原生音轨通过。至少包括打开/权限等待后再开始、暂停继续不变、跨日与长暂停、首store响应丢失、正文ACK失败、refresh失败及旧目标晚响应。每种恢复核对同operation/attachment/日期，错误日期重复请求拒绝，旧正文/字节不变。
 
-真实Store与归档检查覆盖旧None行/旧日记/旧v1、外部File.lastModified不自动赋值、合法v2往返两次及ID重映射、日期类型/范围/kind非法时原子拒绝。核对已有完整Eq未放宽，不复制设备数据库或用户音频作为夹具。
+真实Store与归档检查覆盖旧None行/旧日记/旧v1、外部File.lastModified不自动赋值、合法v2往返两次及ID重映射、日期类型/范围/kind非法时原子拒绝；加载或读取非法已持久值明确报错且旧行/字节不改。核对已有完整Eq未放宽，不复制设备数据库或用户音频作为夹具。
 
 UI仅对新紧凑卡作真实组件检查：三行、未知日期两行、独立短总时长及既有进度表达不变、读失败/换ID/卸载/权限变化不串旧值、长标题/窄屏。执行typecheck、相关生产边界回归与必要Rust定向检查，不为可逆样式变化写镜像测试。共享Rust target需root明确分配；每输出阶段≥2GiB，无下载/升级/平台构建、target复制或泛清缓存。
 
