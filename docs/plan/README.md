@@ -8,7 +8,7 @@
 |---|---|---|
 | APP-SMART-D1 本地库防损 | done（源码范围，独立pass） | de3c07f严格旧格式、识别版本优先、原子初始化；不代表新平台包 |
 | APP-SMART-D2 真实智能规则与归档 | done（内部源码能力），9bdc441独立pass | 标签四模式/置顶、CAS、同快照、DB2/归档3与旧UI门禁；唯一名称P2修复，作者69pass/独立窄2pass；公开UI、新包/像素仍待O/U |
-| APP-SMART-O 元数据顺序与保存所有权 | in-progress，D2已独立通过 | 提交收据、通知顺序、旧ACK与Editor保全；按任务定稿串行开发 |
+| APP-SMART-O 元数据顺序与保存所有权 | in-progress，源码08d2206待独立审查 | 显式提交收据、通知/回包顺序与被动刷新已接通；最终Rust78/0/3ignored、AccessGate16/0、前端/宿主编译通过。旧browser04六路径不代替最终源码运行验证；独审补窄路径，U门禁保持关闭 |
 | APP-SMART-U 两端智能界面 | pending，依赖O | Mac原版表单与手机独立面板；完整离线规则/手机未知状态/像素对照仍open |
 | REF-001 原版取证/需求/UI/调研 | in-progress | 原视频已保全、抽帧、初始规格已写，持续补证 |
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
