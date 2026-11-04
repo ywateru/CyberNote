@@ -1,13 +1,15 @@
 ---
 id: app-smart-u-device09
 scope: Exact smart-folder Mac and Android packages and finite native acceptance
-status: pending
+status: in-progress
 depends-on: [app-smart-u-platform-ui09]
 ---
 
 ## Entry gate
 
 本任务仅准备交付要求，尚未授权正式构建。U作者SOURCE-READY STOP、root固定产品commit、不同作者源码审查pass后，root另行明确40位源SHA、输入/平台冻结及独占输出目录，才可构建。禁止拿活动HEAD、旧安装包或浏览器预览代替该准确源。复用已审查的candidate06离线构建/收集工具及已成功Android环境，不新增下载、升级、缓存复制/清理或proof flags。
+
+2026-11-05进入执行：fix13产品`8e8fe7e320e34a2b9c27bf7c7e794662ad988da4`独审pass、作者和审查者均STOP释放target，root接受源码门槛。先按`verification/unified-candidate06/smart-u-device09-preparation/`生成明确准确提交的Mac/Android独立授权并捕获输入冻结；root核freeze SHA后分阶段START平台构建。平台输出分别使用全新`mac-smart-u-build09`与`android-smart-u-build04`目录。该执行记录不赋予旧包、新源或浏览器预览设备结论，仍不得未核freeze直接构建。
 
 D1/D2/O/U和此前已合入录音、标签、工具栏/侧栏变更都必须在同一准确产品输入中。两平台的完整依赖/生成输入分别冻结，不能因应用源码相同就声称完整构建身份相同。每次新尝试独占新目录，失败不覆盖；至少2GiB空间、jobs2、每次600秒有界，仅停自有进程组；主机target不可与验证/另一构建并用。
 
