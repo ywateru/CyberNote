@@ -28,6 +28,9 @@ pub(crate) use smart::{SmartMembership, SmartQuery};
 #[cfg(test)]
 #[path = "store/recorded_at_tests.rs"]
 mod recorded_at_tests;
+#[cfg(test)]
+#[path = "store/folder_name_tests.rs"]
+mod folder_name_tests;
 
 #[derive(Debug, Serialize)]
 pub struct AppError {
@@ -541,6 +544,9 @@ impl Store {
                 if name.is_empty() {
                     return Err(err("invalid", "请输入文件夹名称"));
                 }
+                if name.len() > 4096 {
+                    return Err(err("invalid", "文件夹名称不能超过 4096 字节"));
+                }
                 let parent = a["parentId"].as_str().map(String::from);
                 if let Some(p) = &parent {
                     smart::require_parent(&self.folder(p)?)?;
@@ -566,6 +572,9 @@ impl Store {
                 let name = str_field(&a, "name")?.trim();
                 if name.is_empty() {
                     return Err(err("invalid", "请输入文件夹名称"));
+                }
+                if name.len() > 4096 {
+                    return Err(err("invalid", "文件夹名称不能超过 4096 字节"));
                 }
                 f.name = name.into();
                 self.put_folder(&f)?;
