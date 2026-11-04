@@ -1,0 +1,68 @@
+{
+  "verdict": "PASS_FINITE_IMPLEMENTED_GEOMETRY_NOT_PIXEL_PARITY",
+  "excludedFromAcceptance": [
+    {
+      "file": "02-original-hidden.cua-image",
+      "rois": [
+        "title",
+        "count"
+      ],
+      "reason": "Visible pointer and blue-gray halo over text; full neutral segmentation contaminated"
+    },
+    {
+      "file": "20-mac07-sidebar228-restored.cua-image",
+      "rois": [
+        "today"
+      ],
+      "reason": "Direct1:1 crop confirms blue text selection highlight, not pointer or font regression"
+    },
+    {
+      "file": "29-mac07-cold-menu-restored.cua-image",
+      "rois": [
+        "toggle"
+      ],
+      "reason": "Visible pointer and halo over sidebar toggle"
+    }
+  ],
+  "rawDiagnosticsRetained": true,
+  "formatReview": {
+    "cuaImages": 21,
+    "actualFormats": {
+      "JPEG RGB": 21
+    },
+    "smallImages": [
+      "07-mac07-visible.cua-image",
+      "23-mac07-cold-visible.cua-image"
+    ],
+    "smallSize": [
+      2176,
+      1320
+    ],
+    "otherSize": [
+      2788,
+      1806
+    ],
+    "rootReadmeFactualFormatErrorFound": false,
+    "additionalReadmeLimitation": "20 has date text selection; do not silently change root README"
+  },
+  "execution": {
+    "argv": [
+      "python3",
+      "docs/verification/mac-list-heading07-runtime-analysis-01/measure.py"
+    ],
+    "exitCode": 0,
+    "stdout": "execution.stdout.json",
+    "stderr": "execution.stderr.txt"
+  },
+  "extraCrop": {
+    "file": "excluded-20-date.png",
+    "source": "20-mac07-sidebar228-restored.cua-image",
+    "roi": [
+      456,
+      104,
+      760,
+      205
+    ],
+    "reason": "Directly inspected blue selected date"
+  }
+}

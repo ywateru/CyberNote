@@ -4532,6 +4532,7 @@ function ResizeHandle({
       aria-valuenow={width}
       aria-orientation="vertical"
       onPointerDown={(e) => {
+        e.preventDefault();
         drag.current = { x: e.clientX, w: width };
         e.currentTarget.setPointerCapture(e.pointerId);
       }}

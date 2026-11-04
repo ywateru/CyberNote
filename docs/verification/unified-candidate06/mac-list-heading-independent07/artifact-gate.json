@@ -1,0 +1,93 @@
+{
+  "at": "2026-11-04T12:41:18.939783+00:00",
+  "conclusion": "PASS: exact sealed app cleared for root GUI launch",
+  "app": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-list-heading-build07/mac-attempt01/mac-sealed.app",
+  "executable": {
+    "path": "artifacts/unified-candidate06/mac-list-heading-build07/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+    "bytes": 16015072,
+    "sha256": "0de1ab851b06f6da59fe3d37a3843af0b0cf46557effe69d2c72bb7bcf63ffd1"
+  },
+  "archive": {
+    "path": "artifacts/unified-candidate06/mac-list-heading-build07/mac-attempt01/mac-sealed.zip",
+    "bytes": 4753267,
+    "sha256": "92c1ffca5e16179660eb538c9b8282b6f148f6443b9c6307b71640cac6e7af20"
+  },
+  "bundle": [
+    {
+      "path": "Contents/Info.plist",
+      "bytes": 1193,
+      "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+      "type": "file",
+      "mode": 420
+    },
+    {
+      "path": "Contents/MacOS/notes-clone",
+      "bytes": 16015072,
+      "sha256": "0de1ab851b06f6da59fe3d37a3843af0b0cf46557effe69d2c72bb7bcf63ffd1",
+      "type": "file",
+      "mode": 493
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b",
+      "type": "file",
+      "mode": 420
+    }
+  ],
+  "checks": [
+    {
+      "name": "exact sealed executable",
+      "pass": true
+    },
+    {
+      "name": "exact sealed ZIP",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry Contents",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry Contents/Info.plist",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry Contents/MacOS",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry Contents/MacOS/notes-clone",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry Contents/_CodeSignature",
+      "pass": true
+    },
+    {
+      "name": "regular bundle entry Contents/_CodeSignature/CodeResources",
+      "pass": true
+    },
+    {
+      "name": "sealed collection exact complete bundle",
+      "pass": true
+    },
+    {
+      "name": "ZIP CRC",
+      "pass": true
+    },
+    {
+      "name": "no duplicate ZIP names",
+      "pass": true
+    },
+    {
+      "name": "ZIP complete byte-for-byte app identity",
+      "pass": true
+    },
+    {
+      "name": "fresh sealed deep strict verification",
+      "pass": true
+    }
+  ],
+  "scope": "Artifact launch gate only. Full input provenance audit continues. No GUI/build/sign/ADB/cache/stage/commit action."
+}

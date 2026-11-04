@@ -1,0 +1,82 @@
+{
+  "mode": "candidate",
+  "sourceHead": "8614d788745a6183542d261d1c6b6fc789084dc7",
+  "sourceSha256": "fc5a7eba1c5a43e4f05b99142c6fc5deb35554b2e71a9b243127ba1020967894",
+  "declarationSha256": "4bb83381a3d2b6d80c4d8beb096fb3c68f85cfc08eb6882458317f3221985983",
+  "actualProductionCallSites": 2,
+  "results": [
+    {
+      "name": "sidebar-resize",
+      "pass": true,
+      "markup": "<div class=\"resize-handle sidebar-resize\" role=\"separator\" aria-label=\"调整分栏宽度\" aria-valuenow=\"228\" aria-orientation=\"vertical\"></div>",
+      "downDefaultPrevented": true,
+      "capture": [
+        19,
+        20,
+        21
+      ],
+      "changedWidths": [
+        248,
+        213,
+        180,
+        360
+      ],
+      "endWidths": [
+        248,
+        180,
+        360
+      ],
+      "checks": [
+        "inactive ignored",
+        "cancelable start",
+        "capture order",
+        "positive delta",
+        "negative delta",
+        "lower clamp",
+        "upper clamp",
+        "existing settings retained",
+        "end callback",
+        "post-end ignored",
+        "next drag lower end",
+        "next drag upper end"
+      ]
+    },
+    {
+      "name": "list-resize",
+      "pass": true,
+      "markup": "<div class=\"resize-handle list-resize\" role=\"separator\" aria-label=\"调整分栏宽度\" aria-valuenow=\"280\" aria-orientation=\"vertical\"></div>",
+      "downDefaultPrevented": true,
+      "capture": [
+        19,
+        20,
+        21
+      ],
+      "changedWidths": [
+        300,
+        265,
+        220,
+        440
+      ],
+      "endWidths": [
+        300,
+        220,
+        440
+      ],
+      "checks": [
+        "inactive ignored",
+        "cancelable start",
+        "capture order",
+        "positive delta",
+        "negative delta",
+        "lower clamp",
+        "upper clamp",
+        "existing settings retained",
+        "end callback",
+        "post-end ignored",
+        "next drag lower end",
+        "next drag upper end"
+      ]
+    }
+  ],
+  "limits": "Real production function and JSX props executed in React server render. Node cancelable Event and host capture/settings boundaries are controlled; no browser DOM, native window, existing editor selection, or default text-selection gesture is exercised. Root exact-package Computer Use remains required."
+}

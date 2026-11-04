@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-04T12:52:55.052410+00:00",
+  "kind": "independent verifier assertion failed; no source operation",
+  "assertion": "20 footer text selection retained",
+  "observed": "First direct review.py invocation raised AssertionError at the shared19/20 footer check.",
+  "cause": "Auditor overgeneralized Selected text in20 as same footer selection as19. Actual20 selected text is list headings and multiple note previews.",
+  "correction": "Keep19 footer and20 list text selection as separate excluded experience states. Raw source unchanged.",
+  "failedSource": "review.py.failed01"
+}

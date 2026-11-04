@@ -1,0 +1,21 @@
+{
+  "unchangedInputs": 16,
+  "changedInputs": [
+    {
+      "path": "docs/plan/tasks/app-001-sidebar-drag-selection08.md",
+      "opening": {
+        "path": "docs/plan/tasks/app-001-sidebar-drag-selection08.md",
+        "bytes": 1747,
+        "sha256": "d16ec804a88340ad02f24b7c908befea12bef1a837b1ec421256f64ad7235017"
+      },
+      "final": {
+        "bytes": 2197,
+        "sha256": "c5fb9f89df27c25cd0c78d96e6c8b9cc16a5207558a5a0bfa8ec7a68917d2d40"
+      },
+      "exactOriginalPrefixRetained": true,
+      "appendText": "\n## 源码交付门槛\n\n作者唯一App.tsx SHA fc5a7eba1c5a43e4f05b99142c6fc5deb35554b2e71a9b243127ba1020967894；不同作者只读重放baseline/candidate完整生产组件与两个真实App JSX入口，输出同作者，SOURCE-READY。CSS/native逐字节同HEAD。作者pnpm build exit0；受控事件未宣称真实浏览器选字或正文既有选区。独审封存后进入准确commit/freeze/Mac-only build，最后root Computer Use验收。\n"
+    }
+  ],
+  "sourceGateUnchanged": true,
+  "reason": "Root appended handoff status after independent source-ready message; no contract or product change"
+}

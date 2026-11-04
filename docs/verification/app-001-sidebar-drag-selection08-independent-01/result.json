@@ -1,0 +1,29 @@
+{
+  "verdict": "SOURCE-READY_NO_BLOCKER",
+  "sourceHead": "8614d788745a6183542d261d1c6b6fc789084dc7",
+  "candidateAppSha256": "fc5a7eba1c5a43e4f05b99142c6fc5deb35554b2e71a9b243127ba1020967894",
+  "authorFilesVerified": 9,
+  "authorManifestSha256": "8cefe58e70801ad2a339aa2b92af322144a00ba1cbcd92031f54c4b3a15e2c15",
+  "authorAggregateDeclared": "b60b8337d7641fc8fc6486ff40f0e3a466be3335cf3404cfa525095d9aa444f0",
+  "authorAggregateFormula": "Not stated in manifest; per-file identities and exact set independently verified. No inferred aggregate recipe claimed.",
+  "inputs": 17,
+  "singleInsertionExact": true,
+  "unchangedControlFiles": [
+    "src/style.css",
+    "plugins/tauri-plugin-notes-ui/macos/toolbar.m"
+  ],
+  "independentActualProductionReplay": [
+    "baseline sidebar",
+    "baseline list",
+    "candidate sidebar",
+    "candidate list"
+  ],
+  "replayExactToAuthor": true,
+  "limits": [
+    "React server render + controlled Node cancelable Event/capture/settings, no browser default text selection gesture.",
+    "Full production ResizeHandle function and both real App JSX sites executed, but no complete live App rerender/editor selection/IME verification.",
+    "Existing cancel/lost-capture/multipointer semantics unchanged and not expanded.",
+    "Root exact-package Computer Use still required for no new selected DOM text and preservation of prior editor selection.",
+    "No GUI/ADB/platform build/shared cache/product edit/stage/commit; author frontend build record inspected, not repeated."
+  ]
+}

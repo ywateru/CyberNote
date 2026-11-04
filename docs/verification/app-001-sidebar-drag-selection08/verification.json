@@ -1,0 +1,31 @@
+{
+  "sourceHead": "8614d788745a6183542d261d1c6b6fc789084dc7",
+  "baselineAppSha256": "6eff8e958057e79fa9968a5e89e936197a78567b1e1e58c101e2e99f74671fd4",
+  "candidateAppSha256": "fc5a7eba1c5a43e4f05b99142c6fc5deb35554b2e71a9b243127ba1020967894",
+  "productDiffOnlySinglePreventDefaultInsertion": true,
+  "unchangedControls": {
+    "src/style.css": {
+      "sha256": "eeff3cc31a139fe48543ed9f7daf013c470fee5d703968acdb61d5c583f7262d",
+      "unchangedFromHead": true
+    },
+    "plugins/tauri-plugin-notes-ui/macos/toolbar.m": {
+      "sha256": "be75271f92f9e3d58476962d1a06d7c4a4285c68d5bafa1c9e2d25151a2825c0",
+      "unchangedFromHead": true
+    }
+  },
+  "commands": [
+    {
+      "command": "node docs/verification/app-001-sidebar-drag-selection08/check-production.mjs --baseline",
+      "exitCode": 0
+    },
+    {
+      "command": "node docs/verification/app-001-sidebar-drag-selection08/check-production.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0
+    }
+  ],
+  "limits": "Controlled production-component event execution; browser default text selection and existing body selection remain for exact-package Computer Use. No GUI/ADB/platform build/cache/stage/commit."
+}
