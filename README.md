@@ -26,7 +26,7 @@ candidate04已完成[Android精确安装保全](docs/verification/unified-candid
 
 原生比例PNG取图工具已通过[独立源码审查](docs/plan/reviews/tools-lossless-window-capture-static-01.md)，并从主路径编译为独立工具。[前置Mac有限观察](docs/verification/candidate04-mac-runtime-01/README.md)已能读取原版窗口，原生取图因缺现有屏幕录制权限明确拒绝，未生成PNG；旧包退出和新包未启动属于当时检查点，后续恢复结果见上段。历史与本轮CUA截图实际编码JPEG，旧字节保持，不用于无损像素验收。原版与本批的同条件整窗像素仍未通过。
 
-尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音与暂停试听的设备验收、绘画及附件完整预览、Android更广OCR矩阵、完整文稿扫描主流程、标签/智能文件夹/数学/笔记链接和标准格式导入导出。标签candidate02关闭首轮非法出站保存及新建目标问题，但[第二轮独审](docs/plan/reviews/app-003-tags-static-02.md)确证标签失配停车会打断活动组字，已补契约并进入candidate03窄修；未合入主产品或candidate04。具体通过子用例和缺口以交付计划与独立报告为准。
+尚未完成的范围包括全页面/菜单/手势与材质像素校准、真实可听录音与暂停试听的设备验收、绘画及附件完整预览、Android更广OCR矩阵、完整文稿扫描主流程、标签设备验收、智能文件夹/数学/笔记链接和标准格式导入导出。标签候选04已通过[独立源码审查](docs/plan/reviews/app-003-tags-static-04.md)，合入主分支b598a74并完成[主线整合回归](docs/verification/app-003-tags-main-integration-01/README.md)：合法保存快照、活动组字保全、结束后停车和归档边界通过。旧候选02/03失败证据保留；当前安装包仍不含标签，原生系统输入法及像素未验。具体通过子用例和缺口以交付计划与独立报告为准。
 
 ## 运行与构建
 

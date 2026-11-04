@@ -1,7 +1,7 @@
 ---
 id: app-002-audio-card-01
 scope: saved-recording-timestamp-and-mobile-compact-card
-status: pending
+status: in-progress
 depends-on: [app-003-tags-01]
 ---
 

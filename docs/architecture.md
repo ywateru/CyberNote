@@ -60,7 +60,7 @@ paperStyle 合法值为 plain、lines-small、lines-medium、lines-large、grid-
 
 当前搜索在前端对 Rust 载入的本地笔记正文与元数据做中文子串过滤，没有独立 FTS/search 命令。附件随永久删除清理，没有单独 remove_attachment 命令。MacShell/MobileShell 是概念边界，首轮均由 `src/App.tsx` 分支渲染，富编辑器在 `src/Editor.tsx`，原生存储在 `src-tauri/src/store.rs`。
 
-### 已提交标签契约（APP-003-TAGS-01，待实现）
+### 已提交标签契约（APP-003-TAGS-01，源码已合入、设备待验）
 
 这是首批本地工程契约。原版只实证了 `#UI对照` 后输入空格及侧栏出现标签；以下语法、比较、修改与筛选细节尚未证明与原版一致，需后续补证校准。
 

@@ -1,0 +1,215 @@
+{
+  "error": "Error: listen EPERM: operation not permitted 127.0.0.1",
+  "stack": "Error: listen EPERM: operation not permitted 127.0.0.1\n    at Server.setupListenHandle [as _listen2] (node:net:1917:21)\n    at listenInCluster (node:net:1996:12)\n    at node:net:2205:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)",
+  "results": [],
+  "records": [
+    {
+      "action": {
+        "type": "createNote"
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793758490035,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "attrs": {
+                  "level": 1
+                },
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "64b10f42-6c49-4344-8081-88b6385140e2",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "",
+          "revision": 0,
+          "sealed": null,
+          "title": "新备忘录",
+          "updatedAt": 1793758490035
+        }
+      }
+    },
+    {
+      "action": {
+        "type": "saveNote",
+        "id": "64b10f42-6c49-4344-8081-88b6385140e2",
+        "revision": 0,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "#UI",
+                  "marks": [
+                    {
+                      "type": "noteTag",
+                      "attrs": {
+                        "name": "UI对照"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": "对照",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    },
+                    {
+                      "type": "noteTag",
+                      "attrs": {
+                        "name": "UI对照"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " "
+                },
+                {
+                  "type": "text",
+                  "text": "#Keep",
+                  "marks": [
+                    {
+                      "type": "noteTag",
+                      "attrs": {
+                        "name": "Keep"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " "
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": {
+                "level": 2
+              },
+              "content": [
+                {
+                  "type": "text",
+                  "text": "after",
+                  "marks": [
+                    {
+                      "type": "italic"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "response": {
+        "ok": true,
+        "value": {
+          "createdAt": 1793758490035,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "attrs": {
+                          "name": "UI对照"
+                        },
+                        "type": "noteTag"
+                      }
+                    ],
+                    "text": "#UI",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "attrs": {
+                          "name": "UI对照"
+                        },
+                        "type": "noteTag"
+                      }
+                    ],
+                    "text": "对照",
+                    "type": "text"
+                  },
+                  {
+                    "text": " ",
+                    "type": "text"
+                  },
+                  {
+                    "marks": [
+                      {
+                        "attrs": {
+                          "name": "Keep"
+                        },
+                        "type": "noteTag"
+                      }
+                    ],
+                    "text": "#Keep",
+                    "type": "text"
+                  },
+                  {
+                    "text": " ",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "level": 2
+                },
+                "content": [
+                  {
+                    "marks": [
+                      {
+                        "type": "italic"
+                      }
+                    ],
+                    "text": "after",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "64b10f42-6c49-4344-8081-88b6385140e2",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "#UI对照 #Keep \nafter",
+          "revision": 1,
+          "sealed": null,
+          "title": "#UI对照 #Keep ",
+          "updatedAt": 1793758490039
+        }
+      }
+    }
+  ],
+  "body": null
+}

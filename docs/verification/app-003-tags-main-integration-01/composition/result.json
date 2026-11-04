@@ -1,0 +1,17 @@
+{
+  "binary": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-qa-fix-store",
+  "binaryHash": "f43d9695ad1d5cb9a0e0e42bb6af415f6a2e3bf78d65979b57e7ac607b0620cf",
+  "method": "production App/Editor; browser-engine CDP IME plus controlled DOM composition with real input; only preview action/access transports adapted",
+  "results": [],
+  "records": [],
+  "errors": [
+    "Error: listen EPERM: operation not permitted 127.0.0.1\n    at Server.setupListenHandle [as _listen2] (node:net:1917:21)\n    at listenInCluster (node:net:1996:12)\n    at node:net:2205:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)"
+  ],
+  "actionInjection": "  if (!native) { const result=await fetch('/__store-action',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(a)}).then(r=>r.json()); ((window as any).__storeResults ||= []).push({action:a,result}); if(!result.ok)throw result.error; const latest=await fetch('/__store-action',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type:'__workspace'})}).then(r=>r.json()); if(!latest.ok)throw latest.error; preview=latest.value; persist(); return result.value as T; }\n",
+  "accessInjection": "  if (!native) { const receive=(event:Event)=>{const payload=(event as CustomEvent<AccessEvent>).detail;accessGate.invalidate(payload.access);handler(payload);};window.addEventListener('__controlled-access',receive);return()=>window.removeEventListener('__controlled-access',receive); }",
+  "limitations": [
+    "Not native IME, Android, native IPC or Session barrier acceptance",
+    "Only synthetic notes in isolated temporary stores",
+    "No forced DOM flush, manual composing mutation, fake final transaction, build or package change"
+  ]
+}

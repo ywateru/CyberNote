@@ -1,0 +1,89 @@
+{
+  "status": "PASS_WITH_PRESERVED_ENVIRONMENT_START_FAILURES",
+  "head": "b598a74eb5713052323f70270d5d03e95fe916ca",
+  "checks": {
+    "access": {
+      "exitCode": 0,
+      "seconds": 0.302186666
+    },
+    "build": {
+      "exitCode": 0,
+      "seconds": 3.5028853750000004
+    },
+    "composition": {
+      "exitCode": 1,
+      "seconds": 0.472951458
+    },
+    "composition-run02": {
+      "exitCode": 0,
+      "seconds": 8.724191042
+    },
+    "native-toolbar": {
+      "exitCode": 0,
+      "seconds": 0.6142871249999999
+    },
+    "ocr": {
+      "exitCode": 0,
+      "seconds": 1.626304125
+    },
+    "save-boundary": {
+      "exitCode": 1,
+      "seconds": 0.6098505839999999
+    },
+    "save-boundary-run02": {
+      "exitCode": 0,
+      "seconds": 5.846512208
+    },
+    "schema": {
+      "exitCode": 0,
+      "seconds": 0.672400167
+    },
+    "store-basic": {
+      "exitCode": 0,
+      "seconds": 1.094097125
+    },
+    "tags-browser": {
+      "exitCode": 1,
+      "seconds": 0.308521875
+    },
+    "tags-browser-run02": {
+      "exitCode": 0,
+      "seconds": 7.020397917
+    }
+  },
+  "counts": {
+    "schema": 96,
+    "access": 16,
+    "nativeToolbar": 13,
+    "ocr": 37,
+    "tagBrowser": 27,
+    "saveBoundary": 11,
+    "saveBoundaryStoreActions": 53,
+    "composition": 12,
+    "compositionStoreActions": 170,
+    "storeBasicExactTest": 1
+  },
+  "compositionActionTypes": {
+    "createNote": 14,
+    "saveNote": 47,
+    "__workspace": 109
+  },
+  "saveBoundaryActionTypes": {
+    "createNote": 4,
+    "saveNote": 10,
+    "__workspace": 36,
+    "settings": 3
+  },
+  "pageErrors": {
+    "tags": [],
+    "saveBoundary": [],
+    "composition": []
+  },
+  "limitations": [
+    "Native GUI, OS IME, native IPC/Session, actual native OCR, device transport, and pixels remain UNKNOWN.",
+    "Preview transport connects production App/Editor/save queue to exact pre-existing Rust Store CLI using synthetic notes.",
+    "Existing Rust test executable provenance is historical path and exact test plus no src-tauri diff; its current SHA is newly observed, not historical attestation.",
+    "Three first browser launches failed before scenarios due to local listen EPERM; original exit1 logs retained and separate allowed-listener run02 outputs passed.",
+    "No Rust compilation, platform build, downloads, dependencies, product edits, GUI or ADB."
+  ]
+}

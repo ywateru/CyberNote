@@ -33,6 +33,8 @@
 - [首个标签候选独审：组合输入保存与筛选新建阻塞](plan/reviews/app-003-tags-static-01.md)
 - [标签候选02独审：合法快照通过、筛选停车打断活动组字](plan/reviews/app-003-tags-static-02.md)
 - [标签候选03独审：最终事务先于结束监听后旧编辑器滞留](plan/reviews/app-003-tags-static-03.md)
+- [标签候选04独审通过与证据边界](plan/reviews/app-003-tags-static-04.md)
+- [主线标签整合回归](verification/app-003-tags-main-integration-01/README.md)
 - [Apple 官方标签与锁定限制补证](research/tag-lock-official-20261104.md)
 - [交互状态矩阵](ui/interaction-matrix.md)
 - [交付计划](plan/README.md)

@@ -1,0 +1,69 @@
+{
+  "source": "src/access-client.ts",
+  "results": [
+    {
+      "name": "delayed workspace from before prepare cannot reenter cache",
+      "status": "pass"
+    },
+    {
+      "name": "allowed pre-prepare save may acknowledge revision without replacing prepare state",
+      "status": "pass"
+    },
+    {
+      "name": "late save response after commit cannot acknowledge a new editor",
+      "status": "pass"
+    },
+    {
+      "name": "delayed live text response is discarded after authorization changes",
+      "status": "pass"
+    },
+    {
+      "name": "lower backend epoch cannot replace a newer snapshot even in the same generation",
+      "status": "pass"
+    },
+    {
+      "name": "response from a previous backend process is rejected",
+      "status": "pass"
+    },
+    {
+      "name": "own completed barrier response remains acceptable after its commit event",
+      "status": "pass"
+    },
+    {
+      "name": "old transition response cannot cross the next prepare",
+      "status": "pass"
+    },
+    {
+      "name": "old transition response cannot cross the next commit",
+      "status": "pass"
+    },
+    {
+      "name": "focus synchronization invalidates a pending read before a new snapshot arrives",
+      "status": "pass"
+    },
+    {
+      "name": "authorization token carries process and targeted note epoch",
+      "status": "pass"
+    },
+    {
+      "name": "no snapshot means no authorized action token",
+      "status": "pass"
+    },
+    {
+      "name": "focus snapshot cannot advance an unsaved document baseline",
+      "status": "pass"
+    },
+    {
+      "name": "a confirmed own save advances the following queued save",
+      "status": "pass"
+    },
+    {
+      "name": "conflict plus another hydrate leaves later queued saves and retry on the old baseline",
+      "status": "pass"
+    },
+    {
+      "name": "a clean editor can adopt a trusted external revision",
+      "status": "pass"
+    }
+  ]
+}

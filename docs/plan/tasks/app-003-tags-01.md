@@ -11,7 +11,7 @@ depends-on: []
 
 本项从 candidate04 后的主线冻结开始；录音/OCR产品源码已冻结，实机验证在主树独立进行，不与其修改 App/Editor。实现只在 root 提供的隔离分支进行。
 
-2026-11-04：标签源码候选04 `37ee2bda6381bf5be76dedf6e4ef4fa89bd7f696` 已获不同作者 [static-04](../reviews/app-003-tags-static-04.md) pass/SOURCE-READY，仅限源码及列明浏览器→真实Store边界。独立12场景/159实际action通过；root核11证据1013050B及12产品aggregate438a0cc3…。本轮整合保留当前主线工具栏与新录音卡片契约，标签产品12文件逐字一致；整合回归与安装版、原生系统输入法、native IPC/Session和像素仍待验，任务保持in-progress。
+2026-11-04：标签源码候选04 `37ee2bda6381bf5be76dedf6e4ef4fa89bd7f696` 已获不同作者 [static-04](../reviews/app-003-tags-static-04.md) pass/SOURCE-READY，仅限源码及列明浏览器→真实Store边界。独立12场景/159实际action通过；root核11证据1013050B及12产品aggregate438a0cc3…。本轮整合保留当前主线工具栏与新录音卡片契约，标签产品12文件逐字一致。主b598a74的[整合回归](../../verification/app-003-tags-main-integration-01/README.md)已通过：build/schema96/access16/toolbar13/OCR37/标签27/save-boundary11（53实际Store action）/composition12（170 action）/Rust指定1例。3次本机监听EPERM原失败保留，独占run02成功；root逐文件核68证据2517706B。安装版、原生系统输入法、native IPC/Session和像素仍待验，任务保持in-progress；录音卡片任务的源码依赖门槛已满足。
 
 ## context
 
