@@ -1,7 +1,7 @@
 ---
 id: app-mac-ordinary-form-surface20
 scope: Mac ordinary creation form surface, corner contour and unchecked checkbox
-status: in-progress
+status: source-ready
 depends-on: [app-mac-folder-form-geometry15]
 ---
 

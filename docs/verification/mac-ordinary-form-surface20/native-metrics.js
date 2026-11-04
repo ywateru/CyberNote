@@ -1,0 +1,3 @@
+await document.fonts.ready;
+const selectors=['.smart-form','h2','.smart-name input','.smart-make input','.smart-make p','footer','footer button:first-child','footer button.smart-primary'];
+return {devicePixelRatio,viewport:[innerWidth,innerHeight],units:selectors.map(selector=>{const e=document.querySelector(selector),r=e.getBoundingClientRect(),s=getComputedStyle(e);return{selector,rect:{x:r.x,y:r.y,width:r.width,height:r.height},styles:{background:s.backgroundColor,borderColor:s.borderColor,borderWidth:s.borderWidth,borderRadius:s.borderRadius,appearance:s.appearance}}}),requests:performance.getEntriesByType('resource').map(r=>r.name)};
