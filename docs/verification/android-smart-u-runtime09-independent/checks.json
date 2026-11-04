@@ -1,0 +1,1382 @@
+{
+  "scope": "fixed Android runtime09 files plus Android05 package review and task16; no GUI/ADB/DB/source/artifact reads",
+  "rootIndexSha256": "041de935002910fb2b5ff97e7cd29aada9542cf1241fc7eba9fb92878f6c272f",
+  "indexedFiles": 53,
+  "rootDirectoryFiles": 54,
+  "unindexed": [
+    "root-evidence-index.json"
+  ],
+  "entryChecks": [
+    {
+      "path": "00-apk-before.sha256.txt",
+      "bytes": 158,
+      "sha256": "6d24da5293b7ed4b8c01a43c0af3241a371f2e09bfeff27abc75f56f33942a9f",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "00-package-before.txt",
+      "bytes": 6529,
+      "sha256": "a489a2f2074ff9883f5a61fb586b02ce9dc6af62967a2016417a9c688ccef18f",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "00-screen-before.png",
+      "bytes": 98952,
+      "sha256": "e853858fa93f45f086d13034e613b75c64524f3145a7273aefa1e061cabb5260",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "01-list-before.png",
+      "bytes": 217257,
+      "sha256": "2e674247d291f75d5d8f86a774f1bf15dfa8a0ee96315a5d50837564e01733d6",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "02-folders-before.png",
+      "bytes": 101035,
+      "sha256": "a8ba6b88febbce10a0a0c1e4e64eea39725bed80f878a10bf33aa45c545c9ae4",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "03-root-package-gate.json",
+      "bytes": 461,
+      "sha256": "1d899979863fbdff7fc6fc7fad5b2ae353ca9c52eb29b33f385ab6030108b902",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "04-apk-after.sha256.txt",
+      "bytes": 158,
+      "sha256": "1ed5ae455d686007cc5dbe9be12c379ba4438c0ea707fd9ab13fd745b0c35069",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "04-launch.txt",
+      "bytes": 60,
+      "sha256": "643e79579eb58e25dd0f31bf5dfc3bde6d3ebffdb290237dcb181e46e263a5a7",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "04-package-after.txt",
+      "bytes": 5938,
+      "sha256": "4a9c48464761a3cac927767121e7111955e64aa0583d797c759744dd34cc059b",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "04-screen-after.png",
+      "bytes": 505049,
+      "sha256": "8a2ec41df929c1629edbabbe7f5dd061a6d9ea835cf23650b4b1f0407c9763ce",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "05-started.png",
+      "bytes": 100569,
+      "sha256": "9e6a522fd4a4a06935788c5fc07c0135101e9c5d38878e350a83a27f2e1b7b15",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "06-old-notes-after-upgrade.png",
+      "bytes": 222142,
+      "sha256": "819002071b274427d361c4148bd898d6392e425031d4f6df4903e1a9b94521ec",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "07-old-audio-after-upgrade.png",
+      "bytes": 96015,
+      "sha256": "26205f205a23b5f1f151c8ed9939730f5078b2e624a78e24926b25f9b95772e2",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "08-back-folders.png",
+      "bytes": 100511,
+      "sha256": "91e4b5fd5ea6bbf2b1593fb88bfbadafde60f9fdc9de40a41f13d541f7dabc74",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "09-new-folder.png",
+      "bytes": 122503,
+      "sha256": "47a5ebdab32cd77d98e04aa72739fb542e7cedfe3208435776c5e9d2669f6de8",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "10-filter-stage.png",
+      "bytes": 176774,
+      "sha256": "5a960b6ce905227e440056e84091c83f6c6968ee4e3bc12baf074c0291341831",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "11-empty-tag-rejection.png",
+      "bytes": 176774,
+      "sha256": "5a960b6ce905227e440056e84091c83f6c6968ee4e3bc12baf074c0291341831",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "12-empty-tag-settled.png",
+      "bytes": 176019,
+      "sha256": "fef463f793a2200bd98e68abdff9b8940112e016b19fa2f3aea47a22e195241d",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "13-filter-cancel-name-retained.png",
+      "bytes": 134883,
+      "sha256": "d145a13a446eb67476b8e7eb9e3b8f9b5e727475001906a057562a7beb0e093d",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "14-new-cancel-no-definition.png",
+      "bytes": 100508,
+      "sha256": "ed84ede066200b91613ab95161dbb2f0ed1e8f0ae64a8aa80792d6a5d6d590b1",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "15-new-test-note.png",
+      "bytes": 122984,
+      "sha256": "f8c6e41325a9ddf5898ce2249b4514fc9ad030e72cc6f3bf41628010125edcf0",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "16-synthetic-tag-note.png",
+      "bytes": 155304,
+      "sha256": "2f0e0d8eccf74766a0c2c021aab10c155ccce159fdf90ae63b16efc6ebfeca8e",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "17-note-more.png",
+      "bytes": 246455,
+      "sha256": "c38e5e7eaf25e303860f05cd8d5c5333df3f56beb44217b61a82a09f32409b98",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "18-actual-note-menu.png",
+      "bytes": 137112,
+      "sha256": "79412908c0b6bad35740998d6b93e76ccbfa3018a76847df9b3afee912e61c49",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "19-new-tag-in-folders.png",
+      "bytes": 108272,
+      "sha256": "8f0cdfce2de4a084d8c103d5b77e3e0aeef5fd06d3320fc574c014a8dbf543ce",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "20-new-filter-real-tag.png",
+      "bytes": 184546,
+      "sha256": "b253f654591098446d36def549d4c3377c179f45220c6b1fb1bb8ad408d6b803",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "21-tag-selected-pinned-menu.png",
+      "bytes": 182245,
+      "sha256": "14600a860ebca14a1ff3c9f34d78ddf0482f73c30e06f4bf734d883055ffa34d",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "22-filter-confirmed-not-saved.png",
+      "bytes": 130479,
+      "sha256": "378d3961c07e52185fdffea9b5a44d930b885de651b8fcabc7d58b74a3e217c2",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "23-smart-saved.png",
+      "bytes": 99659,
+      "sha256": "a8373c99d5f25ac42a07c0828583e7889beb312fc059148b06de9774f0b45519",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "24-smart-list-menu.png",
+      "bytes": 134489,
+      "sha256": "09653baa1fe846c85fadb0a328c91c5f75f024d1fe7aff4a4a72546e83e43222",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "25-saved-folder-row.png",
+      "bytes": 122256,
+      "sha256": "09c1d8f447a9e05c967d77975aa62f1c9ac7569dc88748a45d6171755142f548",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "26-smart-context.png",
+      "bytes": 149006,
+      "sha256": "9bbccff8000258a0b4b0f0c1c8ed0609939e8c7187fec2851f5e34d63eab51b4",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "27-edit-name.png",
+      "bytes": 132911,
+      "sha256": "ed0a07045d61ef7245c3958ba1bbb4d46cb2bfa59986276fd52b2f0ac7e407a8",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "28-persisted-rules-edit.png",
+      "bytes": 181985,
+      "sha256": "49d1f8a7cda0ca291d6e8662b26b3fcc871cf80652bc815e9ab6b77e72019cea",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "29-pinned-mode-options.png",
+      "bytes": 148940,
+      "sha256": "0d8d18bd6f0d1993efacea82c495390c747f37745ab9d0cc888c4ff8efbc6a27",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "30-renamed-rule-draft.png",
+      "bytes": 134587,
+      "sha256": "9abd1602b919f16087133d91a9f83fe05bdb3ddbd68c8e6ccd95594c58c42a4e",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "31-edited-exclude-empty.png",
+      "bytes": 123937,
+      "sha256": "9ccb9bfc72e1c760bd02799f8f8950891c76ce0dc65b02bfd675dd92c875140b",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "32-open-empty-smart.png",
+      "bytes": 74359,
+      "sha256": "2ed779edbedcd8657856ef343ebae7491daf5fe25e108c3caf4b8997c20d71e0",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "33-cold-process.json",
+      "bytes": 197,
+      "sha256": "4523cd2ee22d601ced017c92c1d393b378bca054ec68e36b5b2148f57e3711ab",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "34-cold-folders.png",
+      "bytes": 20969,
+      "sha256": "42cebb7dabe70317b2c0a521eda88088ba6e8216c8a9ca74303e8574e91e39db",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "35-cold-started.png",
+      "bytes": 123797,
+      "sha256": "83e444f9001d8f5f482c26837dd575c98f4c9a8ed17a400850e61be3e43e1c6e",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "36-cold-persisted-exclude.png",
+      "bytes": 181952,
+      "sha256": "8991c2549b7abcfdb13e0006b3a50ad799e751fb1ecc0b30de59da2dd39a06b6",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "37-cancel-wrong-hydration.png",
+      "bytes": 123088,
+      "sha256": "370ecc8708aa225fd2e538156926c280e37de365f794da249258f93ba45b6652",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "38-ordinary-note-after-cold.png",
+      "bytes": 218379,
+      "sha256": "908eac4b2ea37bf1420a1e980f733f434734b889369b3350281f7471c1b92947",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "39-test-note-unpin-menu.png",
+      "bytes": 139949,
+      "sha256": "7d5c47a5d4d8ee4a88886d9354eac2581869f7017482d4b6e7bccb167706db54",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "40-live-exclude-now-member.png",
+      "bytes": 122603,
+      "sha256": "319dffc7540e97d63c830d7091b864139c395308dee196c57a546c8613b0147c",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "41-live-exclude-member-list.png",
+      "bytes": 102741,
+      "sha256": "821cd7b7d55f247ff2fcb763fb84091b9157337dccd2fd875664a8ba42fef56a",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "42-test-body-after-cold.png",
+      "bytes": 94480,
+      "sha256": "4ad48be84386dd9a3e8261dcd147390aab9ee8a8710870e76da5f1526cb991f5",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "43-second-cold-process.json",
+      "bytes": 197,
+      "sha256": "7538a337affb514f3986bcbc88662ad9f956a63bf40268de7bba81fd243d2917",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "44-second-cold-folders.png",
+      "bytes": 122634,
+      "sha256": "538a6dbc76494105f851b005103e2821ff7f6f37ad0338b261def3cecb983c2b",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "README.md",
+      "bytes": 2349,
+      "sha256": "970591ef8e45024c7acb8336186622a1ecba6e1d98db88c29d11b24f7c4bf592",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "RUNTIME.md",
+      "bytes": 4751,
+      "sha256": "141e8611b20ac15f602c6bd22234a8b2084fc60c57b1743d81e7ddaa5c7ea820",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "preflight-connection.txt",
+      "bytes": 254,
+      "sha256": "2f8ac08075ddd02dc9623236e168b3fa859587eac35a9fa94011bb373e112334",
+      "sizeMatch": true,
+      "shaMatch": true
+    }
+  ],
+  "images": [
+    {
+      "path": "00-screen-before.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "01-list-before.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "02-folders-before.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "04-screen-after.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "05-started.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "06-old-notes-after-upgrade.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "07-old-audio-after-upgrade.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "08-back-folders.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "09-new-folder.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "10-filter-stage.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "11-empty-tag-rejection.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "12-empty-tag-settled.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "13-filter-cancel-name-retained.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "14-new-cancel-no-definition.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "15-new-test-note.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "16-synthetic-tag-note.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "17-note-more.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "18-actual-note-menu.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "19-new-tag-in-folders.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "20-new-filter-real-tag.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "21-tag-selected-pinned-menu.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "22-filter-confirmed-not-saved.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "23-smart-saved.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "24-smart-list-menu.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "25-saved-folder-row.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "26-smart-context.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "27-edit-name.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "28-persisted-rules-edit.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "29-pinned-mode-options.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "30-renamed-rule-draft.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "31-edited-exclude-empty.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "32-open-empty-smart.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "34-cold-folders.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "35-cold-started.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "36-cold-persisted-exclude.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "37-cancel-wrong-hydration.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "38-ordinary-note-after-cold.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "39-test-note-unpin-menu.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "40-live-exclude-now-member.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "41-live-exclude-member-list.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "42-test-body-after-cold.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    },
+    {
+      "path": "44-second-cold-folders.png",
+      "format": "PNG",
+      "mode": "RGBA",
+      "size": [
+        1080,
+        2280
+      ]
+    }
+  ],
+  "inputSnapshot": [
+    {
+      "path": "docs/plan/reviews/android-smart-u-independent05.md",
+      "bytes": 7819,
+      "sha256": "40799c4262b2f2fe4066aa36ef932ff7f7b52314ad9d627380f2fd4fbbecab82"
+    },
+    {
+      "path": "docs/plan/tasks/app-smart-draft-hydration16.md",
+      "bytes": 2414,
+      "sha256": "7bc9a501eda8857d3a05ca9557d45567a3446a19bb00d1e885d72e1e5c661f1b"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/00-apk-before.sha256.txt",
+      "bytes": 158,
+      "sha256": "6d24da5293b7ed4b8c01a43c0af3241a371f2e09bfeff27abc75f56f33942a9f"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/00-package-before.txt",
+      "bytes": 6529,
+      "sha256": "a489a2f2074ff9883f5a61fb586b02ce9dc6af62967a2016417a9c688ccef18f"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/00-screen-before.png",
+      "bytes": 98952,
+      "sha256": "e853858fa93f45f086d13034e613b75c64524f3145a7273aefa1e061cabb5260"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/01-list-before.png",
+      "bytes": 217257,
+      "sha256": "2e674247d291f75d5d8f86a774f1bf15dfa8a0ee96315a5d50837564e01733d6"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/02-folders-before.png",
+      "bytes": 101035,
+      "sha256": "a8ba6b88febbce10a0a0c1e4e64eea39725bed80f878a10bf33aa45c545c9ae4"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/03-root-package-gate.json",
+      "bytes": 461,
+      "sha256": "1d899979863fbdff7fc6fc7fad5b2ae353ca9c52eb29b33f385ab6030108b902"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/04-apk-after.sha256.txt",
+      "bytes": 158,
+      "sha256": "1ed5ae455d686007cc5dbe9be12c379ba4438c0ea707fd9ab13fd745b0c35069"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/04-launch.txt",
+      "bytes": 60,
+      "sha256": "643e79579eb58e25dd0f31bf5dfc3bde6d3ebffdb290237dcb181e46e263a5a7"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/04-package-after.txt",
+      "bytes": 5938,
+      "sha256": "4a9c48464761a3cac927767121e7111955e64aa0583d797c759744dd34cc059b"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/04-screen-after.png",
+      "bytes": 505049,
+      "sha256": "8a2ec41df929c1629edbabbe7f5dd061a6d9ea835cf23650b4b1f0407c9763ce"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/05-started.png",
+      "bytes": 100569,
+      "sha256": "9e6a522fd4a4a06935788c5fc07c0135101e9c5d38878e350a83a27f2e1b7b15"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/06-old-notes-after-upgrade.png",
+      "bytes": 222142,
+      "sha256": "819002071b274427d361c4148bd898d6392e425031d4f6df4903e1a9b94521ec"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/07-old-audio-after-upgrade.png",
+      "bytes": 96015,
+      "sha256": "26205f205a23b5f1f151c8ed9939730f5078b2e624a78e24926b25f9b95772e2"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/08-back-folders.png",
+      "bytes": 100511,
+      "sha256": "91e4b5fd5ea6bbf2b1593fb88bfbadafde60f9fdc9de40a41f13d541f7dabc74"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/09-new-folder.png",
+      "bytes": 122503,
+      "sha256": "47a5ebdab32cd77d98e04aa72739fb542e7cedfe3208435776c5e9d2669f6de8"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/10-filter-stage.png",
+      "bytes": 176774,
+      "sha256": "5a960b6ce905227e440056e84091c83f6c6968ee4e3bc12baf074c0291341831"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/11-empty-tag-rejection.png",
+      "bytes": 176774,
+      "sha256": "5a960b6ce905227e440056e84091c83f6c6968ee4e3bc12baf074c0291341831"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/12-empty-tag-settled.png",
+      "bytes": 176019,
+      "sha256": "fef463f793a2200bd98e68abdff9b8940112e016b19fa2f3aea47a22e195241d"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/13-filter-cancel-name-retained.png",
+      "bytes": 134883,
+      "sha256": "d145a13a446eb67476b8e7eb9e3b8f9b5e727475001906a057562a7beb0e093d"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/14-new-cancel-no-definition.png",
+      "bytes": 100508,
+      "sha256": "ed84ede066200b91613ab95161dbb2f0ed1e8f0ae64a8aa80792d6a5d6d590b1"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/15-new-test-note.png",
+      "bytes": 122984,
+      "sha256": "f8c6e41325a9ddf5898ce2249b4514fc9ad030e72cc6f3bf41628010125edcf0"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/16-synthetic-tag-note.png",
+      "bytes": 155304,
+      "sha256": "2f0e0d8eccf74766a0c2c021aab10c155ccce159fdf90ae63b16efc6ebfeca8e"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/17-note-more.png",
+      "bytes": 246455,
+      "sha256": "c38e5e7eaf25e303860f05cd8d5c5333df3f56beb44217b61a82a09f32409b98"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/18-actual-note-menu.png",
+      "bytes": 137112,
+      "sha256": "79412908c0b6bad35740998d6b93e76ccbfa3018a76847df9b3afee912e61c49"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/19-new-tag-in-folders.png",
+      "bytes": 108272,
+      "sha256": "8f0cdfce2de4a084d8c103d5b77e3e0aeef5fd06d3320fc574c014a8dbf543ce"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/20-new-filter-real-tag.png",
+      "bytes": 184546,
+      "sha256": "b253f654591098446d36def549d4c3377c179f45220c6b1fb1bb8ad408d6b803"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/21-tag-selected-pinned-menu.png",
+      "bytes": 182245,
+      "sha256": "14600a860ebca14a1ff3c9f34d78ddf0482f73c30e06f4bf734d883055ffa34d"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/22-filter-confirmed-not-saved.png",
+      "bytes": 130479,
+      "sha256": "378d3961c07e52185fdffea9b5a44d930b885de651b8fcabc7d58b74a3e217c2"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/23-smart-saved.png",
+      "bytes": 99659,
+      "sha256": "a8373c99d5f25ac42a07c0828583e7889beb312fc059148b06de9774f0b45519"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/24-smart-list-menu.png",
+      "bytes": 134489,
+      "sha256": "09653baa1fe846c85fadb0a328c91c5f75f024d1fe7aff4a4a72546e83e43222"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/25-saved-folder-row.png",
+      "bytes": 122256,
+      "sha256": "09c1d8f447a9e05c967d77975aa62f1c9ac7569dc88748a45d6171755142f548"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/26-smart-context.png",
+      "bytes": 149006,
+      "sha256": "9bbccff8000258a0b4b0f0c1c8ed0609939e8c7187fec2851f5e34d63eab51b4"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/27-edit-name.png",
+      "bytes": 132911,
+      "sha256": "ed0a07045d61ef7245c3958ba1bbb4d46cb2bfa59986276fd52b2f0ac7e407a8"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/28-persisted-rules-edit.png",
+      "bytes": 181985,
+      "sha256": "49d1f8a7cda0ca291d6e8662b26b3fcc871cf80652bc815e9ab6b77e72019cea"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/29-pinned-mode-options.png",
+      "bytes": 148940,
+      "sha256": "0d8d18bd6f0d1993efacea82c495390c747f37745ab9d0cc888c4ff8efbc6a27"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/30-renamed-rule-draft.png",
+      "bytes": 134587,
+      "sha256": "9abd1602b919f16087133d91a9f83fe05bdb3ddbd68c8e6ccd95594c58c42a4e"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/31-edited-exclude-empty.png",
+      "bytes": 123937,
+      "sha256": "9ccb9bfc72e1c760bd02799f8f8950891c76ce0dc65b02bfd675dd92c875140b"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/32-open-empty-smart.png",
+      "bytes": 74359,
+      "sha256": "2ed779edbedcd8657856ef343ebae7491daf5fe25e108c3caf4b8997c20d71e0"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/33-cold-process.json",
+      "bytes": 197,
+      "sha256": "4523cd2ee22d601ced017c92c1d393b378bca054ec68e36b5b2148f57e3711ab"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/34-cold-folders.png",
+      "bytes": 20969,
+      "sha256": "42cebb7dabe70317b2c0a521eda88088ba6e8216c8a9ca74303e8574e91e39db"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/35-cold-started.png",
+      "bytes": 123797,
+      "sha256": "83e444f9001d8f5f482c26837dd575c98f4c9a8ed17a400850e61be3e43e1c6e"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/36-cold-persisted-exclude.png",
+      "bytes": 181952,
+      "sha256": "8991c2549b7abcfdb13e0006b3a50ad799e751fb1ecc0b30de59da2dd39a06b6"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/37-cancel-wrong-hydration.png",
+      "bytes": 123088,
+      "sha256": "370ecc8708aa225fd2e538156926c280e37de365f794da249258f93ba45b6652"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/38-ordinary-note-after-cold.png",
+      "bytes": 218379,
+      "sha256": "908eac4b2ea37bf1420a1e980f733f434734b889369b3350281f7471c1b92947"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/39-test-note-unpin-menu.png",
+      "bytes": 139949,
+      "sha256": "7d5c47a5d4d8ee4a88886d9354eac2581869f7017482d4b6e7bccb167706db54"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/40-live-exclude-now-member.png",
+      "bytes": 122603,
+      "sha256": "319dffc7540e97d63c830d7091b864139c395308dee196c57a546c8613b0147c"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/41-live-exclude-member-list.png",
+      "bytes": 102741,
+      "sha256": "821cd7b7d55f247ff2fcb763fb84091b9157337dccd2fd875664a8ba42fef56a"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/42-test-body-after-cold.png",
+      "bytes": 94480,
+      "sha256": "4ad48be84386dd9a3e8261dcd147390aab9ee8a8710870e76da5f1526cb991f5"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/43-second-cold-process.json",
+      "bytes": 197,
+      "sha256": "7538a337affb514f3986bcbc88662ad9f956a63bf40268de7bba81fd243d2917"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/44-second-cold-folders.png",
+      "bytes": 122634,
+      "sha256": "538a6dbc76494105f851b005103e2821ff7f6f37ad0338b261def3cecb983c2b"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/README.md",
+      "bytes": 2349,
+      "sha256": "970591ef8e45024c7acb8336186622a1ecba6e1d98db88c29d11b24f7c4bf592"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/RUNTIME.md",
+      "bytes": 4751,
+      "sha256": "141e8611b20ac15f602c6bd22234a8b2084fc60c57b1743d81e7ddaa5c7ea820"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/preflight-connection.txt",
+      "bytes": 254,
+      "sha256": "2f8ac08075ddd02dc9623236e168b3fa859587eac35a9fa94011bb373e112334"
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/root-evidence-index.json",
+      "bytes": 8577,
+      "sha256": "041de935002910fb2b5ff97e7cd29aada9542cf1241fc7eba9fb92878f6c272f"
+    }
+  ],
+  "contactSheetsAreScaledNavigationOnly": true,
+  "imagesViewed": [
+    "00-screen-before.png",
+    "01-list-before.png",
+    "02-folders-before.png",
+    "04-screen-after.png",
+    "05-started.png",
+    "06-old-notes-after-upgrade.png",
+    "07-old-audio-after-upgrade.png",
+    "08-back-folders.png",
+    "09-new-folder.png",
+    "10-filter-stage.png",
+    "11-empty-tag-rejection.png",
+    "12-empty-tag-settled.png",
+    "13-filter-cancel-name-retained.png",
+    "14-new-cancel-no-definition.png",
+    "15-new-test-note.png",
+    "16-synthetic-tag-note.png",
+    "17-note-more.png",
+    "18-actual-note-menu.png",
+    "19-new-tag-in-folders.png",
+    "20-new-filter-real-tag.png",
+    "21-tag-selected-pinned-menu.png",
+    "22-filter-confirmed-not-saved.png",
+    "23-smart-saved.png",
+    "24-smart-list-menu.png",
+    "25-saved-folder-row.png",
+    "26-smart-context.png",
+    "27-edit-name.png",
+    "28-persisted-rules-edit.png",
+    "29-pinned-mode-options.png",
+    "30-renamed-rule-draft.png",
+    "31-edited-exclude-empty.png",
+    "32-open-empty-smart.png",
+    "34-cold-folders.png",
+    "35-cold-started.png",
+    "36-cold-persisted-exclude.png",
+    "37-cancel-wrong-hydration.png",
+    "38-ordinary-note-after-cold.png",
+    "39-test-note-unpin-menu.png",
+    "40-live-exclude-now-member.png",
+    "41-live-exclude-member-list.png",
+    "42-test-body-after-cold.png",
+    "44-second-cold-folders.png"
+  ],
+  "nativeCropPanels": [
+    "detail-rules-native.png",
+    "detail-context-native.png",
+    "detail-audio-native.png",
+    "detail-empty-native.png",
+    "detail-member-body-native.png"
+  ],
+  "nativeCropMethod": "RGB conversion plus unscaled integer crop; coordinates printed on each panel; source RGBA PNG bytes untouched",
+  "closingInputChecks": [
+    {
+      "path": "docs/plan/reviews/android-smart-u-independent05.md",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/plan/tasks/app-smart-draft-hydration16.md",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/00-apk-before.sha256.txt",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/00-package-before.txt",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/00-screen-before.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/01-list-before.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/02-folders-before.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/03-root-package-gate.json",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/04-apk-after.sha256.txt",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/04-launch.txt",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/04-package-after.txt",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/04-screen-after.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/05-started.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/06-old-notes-after-upgrade.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/07-old-audio-after-upgrade.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/08-back-folders.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/09-new-folder.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/10-filter-stage.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/11-empty-tag-rejection.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/12-empty-tag-settled.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/13-filter-cancel-name-retained.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/14-new-cancel-no-definition.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/15-new-test-note.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/16-synthetic-tag-note.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/17-note-more.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/18-actual-note-menu.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/19-new-tag-in-folders.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/20-new-filter-real-tag.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/21-tag-selected-pinned-menu.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/22-filter-confirmed-not-saved.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/23-smart-saved.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/24-smart-list-menu.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/25-saved-folder-row.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/26-smart-context.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/27-edit-name.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/28-persisted-rules-edit.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/29-pinned-mode-options.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/30-renamed-rule-draft.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/31-edited-exclude-empty.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/32-open-empty-smart.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/33-cold-process.json",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/34-cold-folders.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/35-cold-started.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/36-cold-persisted-exclude.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/37-cancel-wrong-hydration.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/38-ordinary-note-after-cold.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/39-test-note-unpin-menu.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/40-live-exclude-now-member.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/41-live-exclude-member-list.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/42-test-body-after-cold.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/43-second-cold-process.json",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/44-second-cold-folders.png",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/README.md",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/RUNTIME.md",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/preflight-connection.txt",
+      "sizeMatch": true,
+      "shaMatch": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/root-evidence-index.json",
+      "sizeMatch": true,
+      "shaMatch": true
+    }
+  ],
+  "closingInputsUnchanged": true,
+  "closingRootDirectoryListingUnchanged": true,
+  "readmeLocalLinksResolve": true
+}

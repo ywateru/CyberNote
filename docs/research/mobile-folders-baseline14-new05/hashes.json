@@ -1,0 +1,49 @@
+{
+  "algorithm": "SHA-256",
+  "inputs": [
+    {
+      "id": "old02",
+      "path": "docs/verification/android-smart-u-runtime09/02-folders-before.png",
+      "bytes": 101035,
+      "sha256": "a8ba6b88febbce10a0a0c1e4e64eea39725bed80f878a10bf33aa45c545c9ae4"
+    },
+    {
+      "id": "new05",
+      "path": "docs/verification/android-smart-u-runtime09/05-started.png",
+      "bytes": 100569,
+      "sha256": "9e6a522fd4a4a06935788c5fc07c0135101e9c5d38878e350a83a27f2e1b7b15"
+    },
+    {
+      "id": "prior_measurements",
+      "path": "docs/research/mobile-folders-baseline14/measurements.json",
+      "bytes": 59373,
+      "sha256": "fd30dd1a753e2b59ba821b436214a904f68047e04bc18a6f87a714d50f6b3cbb"
+    }
+  ],
+  "input_unchanged_at_close": [
+    {
+      "path": "docs/verification/android-smart-u-runtime09/02-folders-before.png",
+      "unchanged": true
+    },
+    {
+      "path": "docs/verification/android-smart-u-runtime09/05-started.png",
+      "unchanged": true
+    },
+    {
+      "path": "docs/research/mobile-folders-baseline14/measurements.json",
+      "unchanged": true
+    }
+  ],
+  "outputs_excluding_this_manifest": [
+    {
+      "path": "docs/research/mobile-folders-baseline14-new05/README.md",
+      "bytes": 2888,
+      "sha256": "19572daacfe2ea9e8dec6f04aaace3920c7b8a8df21a635c95a9ad2352602e6c"
+    },
+    {
+      "path": "docs/research/mobile-folders-baseline14-new05/comparison.json",
+      "bytes": 10284,
+      "sha256": "ea64f77e19fecc27fb74c900fc122bfadde06c134c7bf5c2682c094e6ee5cee1"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+# 智能文件夹09有限运行与后续修复衔接
+
+2026-11-05，root。原版删除/恢复实验按用户要求暂停，继续其他开发。现有有限记录不等于完整功能或像素一致性通过。
+
+## 已接受的封存记录
+
+- Mac09实际运行原76项及独立报告已核，根接受口径以[ACCEPTANCE](mac-smart-u-runtime09/ACCEPTANCE.md)为准，原README三处过宽描述保留历史并收窄。root重新逐项核独立输出6文件，全部大小/SHA匹配；独立索引SHA eaad7efe23b0409061284e7db656a5153590b4d6ab79fb19fe167e65e1f70946。
+- Android05准确包构建及独核门槛成立，保安装身份升级、两次冷启、旧7篇加合成1篇、标签/置顶查询有限链由runtime09记录支持。root重新逐项核[独立输出](android-smart-u-runtime09-independent/README.md)13文件，全部大小/SHA匹配；独立索引SHA 091c116c78b266c3c8300a2a481cad65d85dd732d4c013d6db4c5622584eb0ad。不得将可见录音卡保留等同音轨字节/播放证明。
+- Android05根53项索引SHA 041de935002910fb2b5ff97e7cd29aada9542cf1241fc7eba9fb92878f6c272f；Mac09原76项索引SHA cd147ffa783f6553eb5ceb0f8b32f3380db1eb2e720a9a17931c7ef46e5202c7，后续78项补充索引SHA 0d146a200af2e745b3d1fc766954bfa40b2644ac2e082411bce02f49cf4d8215。未改原封存输入。
+
+## 仍然阻塞
+
+Android05 false规则重开却显示包含的P1，错误提示不可见和长按目录选字均有实际截图，独审保留。没有重存错误草稿，只有本轮合成笔记被取消置顶。Mac09共享同一旧适配器，也不能授完整编辑通过。geometry15已源独审并提交80b01da，hydration16已作者SOURCE-READY并独审中；后续mobile17修可见反馈与目录文字选择。它们都尚未进入本次旧准确包，不能追认。
+
+下一轮在源码独审完成后固定准确来源，串行双端出包、核产物、保数据升级，再用Computer Use/已授权ADB验证新包。原版删除实验、日期等未支持规则、中文IME、完整跨窗/输入/像素仍open。构建旧APK和dist隔离副本保留本地，不随文档提交重复大二进制。

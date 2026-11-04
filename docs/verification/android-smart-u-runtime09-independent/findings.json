@@ -1,0 +1,56 @@
+{
+  "findings": [
+    {
+      "id": "F1",
+      "priority": "P1 (existing task16)",
+      "status": "blocking; visible inconsistency supported",
+      "evidence": [
+        "28-persisted-rules-edit.png",
+        "29-pinned-mode-options.png",
+        "30-renamed-rule-draft.png",
+        "31-edited-exclude-empty.png",
+        "32-open-empty-smart.png",
+        "33-cold-process.json",
+        "35-cold-started.png",
+        "36-cold-persisted-exclude.png",
+        "37-cancel-wrong-hydration.png",
+        "39-test-note-unpin-menu.png",
+        "40-live-exclude-now-member.png",
+        "41-live-exclude-member-list.png",
+        "43-second-cold-process.json",
+        "44-second-cold-folders.png"
+      ],
+      "finding": "Cold reopen displays include while the saved query behaviour remains consistent with exclude: count0 while the synthetic note is pinned, count1 after unpinning, then count1 after another cold launch. Screenshot36 visibly says 包含 despite its filename.",
+      "limits": "No independently read persisted JSON, UUID, revision, ACK, or source. Exact value:false to pinned:true cause is attributed to RUNTIME line29/task16 line12. Wrong draft was cancelled according to root; no only-rename/resave of wrong draft was tested. Screenshot29 shows the initial include selection, not an already selected exclude state."
+    },
+    {
+      "id": "F2",
+      "priority": "open interaction defect; severity not newly assigned",
+      "status": "visible feedback gap supported; not complete empty-tag acceptance",
+      "evidence": [
+        "10-filter-stage.png",
+        "11-empty-tag-rejection.png",
+        "12-empty-tag-settled.png",
+        "13-filter-cancel-name-retained.png",
+        "14-new-cancel-no-definition.png"
+      ],
+      "finding": "After root-reported confirm of allSelected with zero selected tags, retained viewport stays in draft with no visible warning. Screenshot10 and11 are byte-identical.13 retains name after cancel and14 shows no added smart row.",
+      "limits": "Screenshot alone does not prove tap delivery or backend rejection. No scroll to error, AX tree, or error-body evidence. Error-at-end source explanation is author attribution only. No success/save claim."
+    },
+    {
+      "id": "F3",
+      "priority": "open interaction defect; severity not newly assigned",
+      "status": "simultaneous menu and native selection handles supported",
+      "evidence": [
+        "25-saved-folder-row.png",
+        "26-smart-context.png",
+        "27-edit-name.png"
+      ],
+      "finding": "26 shows the smart-folder context menu and selected U09 text with system handles simultaneously.",
+      "limits": "Long press action is root narration. Screenshot supports visible unintended selection but not event timing, complete menu behaviour, or Apple comparison. Delete was not exercised in this evidence."
+    }
+  ],
+  "newUnreportedProductFinding": false,
+  "overallPass": false,
+  "pixelPass": false
+}

@@ -1,0 +1,64 @@
+Window: "备忘录", App: 备忘录.
+0 standard window 备忘录, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost
+			3 container
+				4 button 快速备忘录 3
+				5 text 在我的 Mac 上
+				6 button 全部备忘录 40
+				7 button 备忘录 0
+				8 button Notes Clone UI 3
+				9 button QA 独立验证 14
+				10 button FIX01 6
+				11 button FIX03 Session Proof 6
+				12 button Notes Clone UI 对照 8
+				13 button 新建文件夹
+				14 button 更多设置
+			15 splitter 调整分栏宽度
+			16 text 无备忘录
+			17 splitter 调整分栏宽度
+			18 text 未选择备忘录
+			19 container 新建智能文件夹
+				20 container
+					21 heading 新建智能文件夹, Value: 2
+						22 text 新建智能文件夹
+					23 text 名称：
+					24 text field (settable) 名称, Value: QA-SMART-U09-Mac
+					25 checkbox 制作智能文件夹, Value: 1
+					26 text 制作智能文件夹 使用标签和其他过滤方式整理。 包含匹配下列
+					27 pop up button 组合过滤条件, Value: 全部
+					28 text 过滤条件的备忘录：
+					29 pop up button 过滤条件类型, Value: 标签
+					30 pop up button 标签模式, Value: 任何标签
+					31 button 移除过滤条件
+					32 button 添加过滤条件
+					33 pop up button 过滤条件类型, Value: 置顶备忘录
+					34 pop up button 置顶模式, Value: 包含
+					35 button 移除过滤条件
+					36 button 添加过滤条件
+					37 button 取消
+					38 button 好
+	39 button 显示或隐藏文件夹
+	40 button 文件夹显示选项
+	41 button 新建备忘录
+	42 button (disabled) 添加附件
+	43 button (disabled) 核对清单
+	44 button (disabled) 格式
+	45 button (disabled) 插入表格
+	46 button (disabled) 更多备忘录操作
+	47 button (disabled) 共享备忘录
+	48 button 其他工具
+	49 search text field (settable) Description: 搜索备忘录, Placeholder: 搜索
+		50 button Search
+	51 text Description: 备忘录, Value: 备忘录 0 个备忘录
+	52 close button
+	53 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	54 minimize button
+55 menu bar
+	56 备忘录
+	57 文件
+	58 编辑
+	59 显示
+	60 窗口
+
+The focused UI element is 2 HTML content Description: 备忘录, URL: tauri://localhost

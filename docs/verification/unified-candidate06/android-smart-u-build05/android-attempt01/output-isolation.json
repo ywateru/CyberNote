@@ -1,0 +1,61 @@
+{
+  "policy": "atomic-rename-final-output-and-dist",
+  "sourcePathsAbsentBeforeCommand": true,
+  "outputs": [
+    {
+      "name": "application",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-smart-u-build05/android-attempt01/prior-outputs/application",
+      "kind": "file",
+      "before": {
+        "kind": "file",
+        "device": 16777233,
+        "inode": 29383214,
+        "mode": 420,
+        "bytes": 179247354,
+        "sha256": "a6f94fe3c397a6078116c5f2d6c3190ae5091afa214b7005307973f57ef96322"
+      }
+    },
+    {
+      "name": "dist",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-smart-u-build05/android-attempt01/prior-outputs/dist",
+      "kind": "directory",
+      "before": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 29382158,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "assets",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "assets/index-C5hYxQ-U.js",
+            "bytes": 965089,
+            "sha256": "3b2492e59c29895eb6b0dd029c2bfd8a16ae65adf268c998a62d72cb85ab4118",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/index-De_oZbG2.css",
+            "bytes": 64908,
+            "sha256": "751892c3a8c846782f354665d2b986b1fb141a3731c76b24a36ebab0c6e990c6",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "index.html",
+            "bytes": 498,
+            "sha256": "75a454779f92d9e625ade99aa7ed394f6fb95097b8229e9cb35e31e1b1a78df8",
+            "type": "file",
+            "mode": 420
+          }
+        ]
+      }
+    }
+  ]
+}

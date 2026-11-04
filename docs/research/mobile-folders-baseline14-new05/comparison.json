@@ -1,0 +1,479 @@
+{
+  "date": "2026-11-05",
+  "scope": "Finite identity and ROI comparison only. New05 source frozen by root. No repeated full original-video measurement and no modification to earlier baseline14.",
+  "package_identity": {
+    "old02_apk_sha256": "d6350a35374a8fa05c836e26f361dfb3d4834882fd4a360ad7a7ebbedf2d123c",
+    "new05_apk_sha256": "a6f94fe3c397a6078116c5f2d6c3190ae5091afa214b7005307973f57ef96322",
+    "identity_source": "Parent/root supplies these identities and independent review path docs/plan/reviews/android-smart-u-independent05.md; no APK/target read or independent install by this study."
+  },
+  "inputs": [
+    {
+      "id": "old02",
+      "path": "docs/verification/android-smart-u-runtime09/02-folders-before.png",
+      "bytes": 101035,
+      "sha256": "a8ba6b88febbce10a0a0c1e4e64eea39725bed80f878a10bf33aa45c545c9ae4"
+    },
+    {
+      "id": "new05",
+      "path": "docs/verification/android-smart-u-runtime09/05-started.png",
+      "bytes": 100569,
+      "sha256": "9e6a522fd4a4a06935788c5fc07c0135101e9c5d38878e350a83a27f2e1b7b15"
+    },
+    {
+      "id": "prior_measurements",
+      "path": "docs/research/mobile-folders-baseline14/measurements.json",
+      "bytes": 59373,
+      "sha256": "fd30dd1a753e2b59ba821b436214a904f68047e04bc18a6f87a714d50f6b3cbb"
+    }
+  ],
+  "decoded_image_sizes": {
+    "old02": [
+      1080,
+      2280
+    ],
+    "new05": [
+      1080,
+      2280
+    ]
+  },
+  "png_file_bytes_equal": false,
+  "whole_image": {
+    "roi": [
+      0,
+      0,
+      1080,
+      2280
+    ],
+    "rgb_equal": false,
+    "changed_pixel_count": 654,
+    "max_absolute_channel_delta": 153,
+    "difference_bbox_local": [
+      54,
+      29,
+      173,
+      2095
+    ],
+    "difference_bbox_global": [
+      54,
+      29,
+      173,
+      2095
+    ]
+  },
+  "status_bar": {
+    "roi": [
+      0,
+      0,
+      1080,
+      83
+    ],
+    "rgb_equal": false,
+    "changed_pixel_count": 637,
+    "max_absolute_channel_delta": 153,
+    "difference_bbox_local": [
+      100,
+      29,
+      173,
+      59
+    ],
+    "difference_bbox_global": [
+      100,
+      29,
+      173,
+      59
+    ]
+  },
+  "application_region": {
+    "roi": [
+      0,
+      83,
+      1080,
+      2148
+    ],
+    "rgb_equal": false,
+    "changed_pixel_count": 17,
+    "max_absolute_channel_delta": 3,
+    "difference_bbox_local": [
+      54,
+      444,
+      138,
+      2012
+    ],
+    "difference_bbox_global": [
+      54,
+      527,
+      138,
+      2095
+    ]
+  },
+  "android_navigation_bar": {
+    "roi": [
+      0,
+      2148,
+      1080,
+      2280
+    ],
+    "rgb_equal": true,
+    "changed_pixel_count": 0,
+    "max_absolute_channel_delta": 0,
+    "difference_bbox_local": null,
+    "difference_bbox_global": null
+  },
+  "application_absolute_rgb_delta_triplets": [
+    {
+      "absolute_rgb_delta": [
+        0,
+        0,
+        1
+      ],
+      "pixel_count": 15
+    },
+    {
+      "absolute_rgb_delta": [
+        0,
+        2,
+        3
+      ],
+      "pixel_count": 1
+    },
+    {
+      "absolute_rgb_delta": [
+        1,
+        1,
+        2
+      ],
+      "pixel_count": 1
+    }
+  ],
+  "old_selected_roi_comparison": {
+    "title_ink": {
+      "roi": [
+        20,
+        190,
+        360,
+        320
+      ],
+      "rgb_equal": true,
+      "changed_pixel_count": 0,
+      "max_absolute_channel_delta": 0,
+      "difference_bbox_local": null,
+      "difference_bbox_global": null,
+      "mask": "dark160",
+      "old02_selected_bbox_from_baseline14": [
+        47,
+        215,
+        327,
+        305
+      ],
+      "new05_selected_bbox": [
+        47,
+        215,
+        327,
+        305
+      ],
+      "selected_bbox_equal": true
+    },
+    "search_fill": {
+      "roi": [
+        0,
+        330,
+        1080,
+        460
+      ],
+      "rgb_equal": true,
+      "changed_pixel_count": 0,
+      "max_absolute_channel_delta": 0,
+      "difference_bbox_local": null,
+      "difference_bbox_global": null,
+      "mask": "search237",
+      "old02_selected_bbox_from_baseline14": [
+        44,
+        346,
+        1037,
+        445
+      ],
+      "new05_selected_bbox": [
+        44,
+        346,
+        1037,
+        445
+      ],
+      "selected_bbox_equal": true
+    },
+    "first_card_white_interior": {
+      "roi": [
+        0,
+        470,
+        1080,
+        630
+      ],
+      "rgb_equal": false,
+      "changed_pixel_count": 14,
+      "max_absolute_channel_delta": 3,
+      "difference_bbox_local": [
+        98,
+        57,
+        138,
+        96
+      ],
+      "difference_bbox_global": [
+        98,
+        527,
+        138,
+        566
+      ],
+      "mask": "white250",
+      "old02_selected_bbox_from_baseline14": [
+        44,
+        489,
+        1037,
+        610
+      ],
+      "new05_selected_bbox": [
+        44,
+        489,
+        1037,
+        610
+      ],
+      "selected_bbox_equal": true
+    },
+    "physical_card_white_visible": {
+      "roi": [
+        0,
+        770,
+        1080,
+        1050
+      ],
+      "rgb_equal": false,
+      "changed_pixel_count": 1,
+      "max_absolute_channel_delta": 1,
+      "difference_bbox_local": [
+        101,
+        177,
+        102,
+        178
+      ],
+      "difference_bbox_global": [
+        101,
+        947,
+        102,
+        948
+      ],
+      "mask": "white250",
+      "old02_selected_bbox_from_baseline14": [
+        44,
+        788,
+        1037,
+        1030
+      ],
+      "new05_selected_bbox": [
+        44,
+        788,
+        1037,
+        1030
+      ],
+      "selected_bbox_equal": true
+    },
+    "quick_label_ink": {
+      "roi": [
+        175,
+        510,
+        450,
+        585
+      ],
+      "rgb_equal": true,
+      "changed_pixel_count": 0,
+      "max_absolute_channel_delta": 0,
+      "difference_bbox_local": null,
+      "difference_bbox_global": null,
+      "mask": "dark160",
+      "old02_selected_bbox_from_baseline14": [
+        183,
+        530,
+        413,
+        573
+      ],
+      "new05_selected_bbox": [
+        183,
+        530,
+        413,
+        573
+      ],
+      "selected_bbox_equal": true
+    },
+    "memo_label_ink": {
+      "roi": [
+        175,
+        930,
+        450,
+        1005
+      ],
+      "rgb_equal": true,
+      "changed_pixel_count": 0,
+      "max_absolute_channel_delta": 0,
+      "difference_bbox_local": null,
+      "difference_bbox_global": null,
+      "mask": "dark160",
+      "old02_selected_bbox_from_baseline14": [
+        184,
+        950,
+        319,
+        993
+      ],
+      "new05_selected_bbox": [
+        184,
+        950,
+        319,
+        993
+      ],
+      "selected_bbox_equal": true
+    },
+    "quick_icon_gold": {
+      "roi": [
+        60,
+        505,
+        165,
+        592
+      ],
+      "rgb_equal": false,
+      "changed_pixel_count": 14,
+      "max_absolute_channel_delta": 3,
+      "difference_bbox_local": [
+        38,
+        22,
+        78,
+        61
+      ],
+      "difference_bbox_global": [
+        98,
+        527,
+        138,
+        566
+      ],
+      "mask": "gold_strict",
+      "old02_selected_bbox_from_baseline14": [
+        94,
+        523,
+        148,
+        577
+      ],
+      "new05_selected_bbox": [
+        94,
+        523,
+        148,
+        577
+      ],
+      "selected_bbox_equal": true
+    },
+    "memo_icon_gold": {
+      "roi": [
+        60,
+        925,
+        165,
+        1005
+      ],
+      "rgb_equal": false,
+      "changed_pixel_count": 1,
+      "max_absolute_channel_delta": 1,
+      "difference_bbox_local": [
+        41,
+        22,
+        42,
+        23
+      ],
+      "difference_bbox_global": [
+        101,
+        947,
+        102,
+        948
+      ],
+      "mask": "gold_strict",
+      "old02_selected_bbox_from_baseline14": [
+        91,
+        943,
+        151,
+        994
+      ],
+      "new05_selected_bbox": [
+        91,
+        943,
+        151,
+        994
+      ],
+      "selected_bbox_equal": true
+    },
+    "footer_folder_gold": {
+      "roi": [
+        20,
+        2020,
+        150,
+        2130
+      ],
+      "rgb_equal": false,
+      "changed_pixel_count": 2,
+      "max_absolute_channel_delta": 1,
+      "difference_bbox_local": [
+        34,
+        74,
+        86,
+        75
+      ],
+      "difference_bbox_global": [
+        54,
+        2094,
+        106,
+        2095
+      ],
+      "mask": "gold_strict",
+      "old02_selected_bbox_from_baseline14": [
+        50,
+        2051,
+        110,
+        2102
+      ],
+      "new05_selected_bbox": [
+        50,
+        2051,
+        110,
+        2102
+      ],
+      "selected_bbox_equal": true
+    },
+    "footer_compose_gold": {
+      "roi": [
+        930,
+        2020,
+        1060,
+        2130
+      ],
+      "rgb_equal": true,
+      "changed_pixel_count": 0,
+      "max_absolute_channel_delta": 0,
+      "difference_bbox_local": null,
+      "difference_bbox_global": null,
+      "mask": "gold_strict",
+      "old02_selected_bbox_from_baseline14": [
+        966,
+        2048,
+        1023,
+        2105
+      ],
+      "new05_selected_bbox": [
+        966,
+        2048,
+        1023,
+        2105
+      ],
+      "selected_bbox_equal": true
+    }
+  },
+  "method": "Pillow RGB decode, no resize or registration. ImageChops.difference; changed pixel iff maximum absolute R/G/B difference>0. Per ROI only the previously selected threshold is reapplied to new05. All bbox [x0,y0,x1,y1), right/bottom excluded. Existing status/nav boundaries reused because same1080x2280 device screenshot surface.",
+  "visual_state": "Expanded top folder page; no search/keyboard/menu/edit mode; quick0/all7/default7/#QA06Tag. State observed in fixed new05 image.",
+  "conclusion": "All ten previously selected geometry bboxes equal old02. Five complete ROIs are RGB identical; five containing gold icons differ in tiny color samples. Application region is not byte/pixel identical:17 changed pixels, max channel delta3. Thus old finite geometry findings carry to these specific new05 bboxes, not a full app/original Notes pixel PASS.",
+  "nonconclusions": [
+    "Do not label entire application RGB identical.",
+    "No new05 versus full original-video zero difference.",
+    "No application or smart-form interaction validation from this single fixed screenshot.",
+    "No changes to old baseline14, product, tools, GUI/ADB, target/cache, build/test/stage/commit."
+  ]
+}
