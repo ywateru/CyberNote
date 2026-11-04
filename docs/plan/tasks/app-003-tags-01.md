@@ -71,3 +71,13 @@ App 仅在原本匹配、正在组字且仍有焦点/可写/授权的同一 Edit
 现有保存边界 11 场景、OCR 37、schema 96、access 16 与最终 typecheck 通过。OCR AST fixture 绑定同一新增 clearTagComposition 闭包和对应空 ref，未替换产品访问处理。前 5 轮检查器/夹具失败及原始日志全部保全，原因和终轮结果见 [candidate03 证据](../../verification/app-003-tags-01/source-candidate03/README.md)。没有编译 Rust、平台构建、依赖改动、外网下载或用户笔记数据。
 
 这些是受控 DOM composition 与实际浏览器输入，Store CLI 为真实持久层但未经过 native IPC/Session。prepare/abort 仅改 transport，实际 App/gate 保护代码执行；它不是多窗口原生 Session 屏障验收。真实 macOS/Android/iOS 中文输入法、平台安装版、冷启和像素对照仍 UNKNOWN，由根任务实机与独审推进。
+
+## candidate04 执行记录（2026-11-04）
+
+candidate03 独审 [static-03](../reviews/app-003-tags-static-03.md) 正式 BLOCKED：浏览器引擎实际最终事务/清理可在观察器单独的 end 监听前到达，当时 postEndTransaction 被 finalText 尚未设置的条件漏掉，导致真实结束、最终合法正文和保存均完成后原失配编辑器继续可写。报告及含 manifest 共17文件独立证据从 root 已保全目录独占复制，逐文件按原 manifest 和报告 SHA 核对一致；不改旧03材料。
+
+candidate04 从精确 `6ce6033d845d15f1b45e074da9171db0c5ffb488` 出发，生产仅窄改 `tag-composition.ts`：每个当前 cycle 的真实 transaction 在 PM 已不 composing 时记录 finishedTransaction，不再要求观察器 end 监听已设置 finalText。最终释放仍同时检查实际 end、当前 composing=false、映射范围真实文字等于 end.data、raw 已合法，并在真实 transaction/onUpdate 后观察；最终输入晚到时仍等待对应实际文字。没有 timer、强制 flush、手改 composing、伪造 end/正文事务，App 和通用保存/搜索/屏障全部保持03字节。
+
+新增真实浏览器引擎 `Input.imeSetComposition("bian")`→`("变化")`→`Input.insertText("最终")` 开发验证，并严格断言真实 !composing transaction 位于末端 end 监听之前。原编辑器在更新中保持活动，实际 Store 保存最终 `#独最终审 A` 后结果仍空且原目标正常停车，后续普通 `ENDED-ORDINARY` 与其他键入不能改旧Store。事件 start/update/beforeinput/input 有 isTrusted=true，本Chrome end 仍isTrusted=false；明确是浏览器引擎序列，不是系统中文输入法验收。
+
+本轮12场景全部通过，保留03原11项的 end/final两种顺序、原02真实续字与ACK选区保全、multistep/empty/cancel、多结果/普通输入、显式导航及prepare/abort优先。最终typecheck通过。未受此一模块变更影响的03 schema96/access16/OCR37/既有保存11不计作本轮重跑，原结果保全。未编译Rust或平台包，src-tauri相对首审仍零diff，既有Store binary开闭hash一致。详见 [candidate04证据](../../verification/app-003-tags-01/source-candidate04/README.md)。当前pending-review，冻结后由不同作者独审；原生系统IME、native IPC/Session、安装版、冷启与像素验收仍UNKNOWN。

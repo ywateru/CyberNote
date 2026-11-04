@@ -1,5 +1,5 @@
-// Real production App/Editor/queue, controlled DOM composition, exact existing
-// Rust Store CLI. Only preview action and access event transports are adapted.
+// Real production App/Editor/queue, browser-engine plus controlled DOM
+// composition, exact existing Rust Store CLI. Only preview transports adapted.
 import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile, statfs } from "node:fs/promises";
 import { resolve } from "node:path";
@@ -259,6 +259,8 @@ async function begin(
       "compositionstart",
       "compositionupdate",
       "compositionend",
+      "beforeinput",
+      "input",
       "blur",
       "focus",
     ])
@@ -366,6 +368,96 @@ try {
     headless: true,
     args: ["--disk-cache-size=1048576", "--media-cache-size=1048576"],
   });
+  await run(
+    "browser-engine-final-transaction-before-end-listener",
+    async (r) => {
+      const { page, n } = await begin(r.name);
+      await page.evaluate(() => {
+        window.engineTrace = [];
+        const e = window.probe;
+        e.on("transaction", ({ transaction, appendedTransactions = [] }) => {
+          window.engineTrace.push({
+            type: "transaction",
+            composing: e.view.composing,
+            steps: transaction.steps.map((step) => step.toJSON()),
+            appendedSteps: appendedTransactions.map((tr) =>
+              tr.steps.map((step) => step.toJSON()),
+            ),
+            raw: e.getJSON(),
+          });
+        });
+        e.view.dom.addEventListener("compositionend", (event) => {
+          window.engineTrace.push({
+            type: "end-listener",
+            data: event.data,
+            trusted: event.isTrusted,
+            composing: e.view.composing,
+          });
+        });
+      });
+      const cdp = await context.newCDPSession(page);
+      await cdp.send("Input.imeSetComposition", {
+        text: "bian",
+        selectionStart: 4,
+        selectionEnd: 4,
+      });
+      await waitText(page, n.id, "bian");
+      const first = await snapshot(page);
+      active(first);
+      assert.equal(first.composing, true);
+      assert.deepEqual(first.rows, []);
+      await cdp.send("Input.imeSetComposition", {
+        text: "变化",
+        selectionStart: 2,
+        selectionEnd: 2,
+      });
+      await waitText(page, n.id, "变化");
+      const updated = await snapshot(page);
+      active(updated);
+      assert.equal(updated.composing, true);
+      assert.deepEqual(updated.rows, []);
+      assert.deepEqual(stored(n.id).document, updated.legal);
+      r.stages.push({ first, updated });
+      await cdp.send("Input.insertText", { text: "最终" });
+      await waitText(page, n.id, "最终");
+      const ended = await parked(page);
+      assert.equal(ended.composing, false);
+      assert.deepEqual(ended.raw, ended.legal);
+      assert.deepEqual(ended.rows, []);
+      assert.equal(stored(n.id).plainText.split("\n")[0], "#独最终审 A");
+      assert.deepEqual(stored(n.id).document, ended.legal);
+      for (const type of [
+        "compositionstart",
+        "compositionupdate",
+        "beforeinput",
+        "input",
+      ])
+        assert.ok(
+          ended.events.some((event) => event.type === type && event.trusted),
+        );
+      assert.ok(
+        ended.events.some(
+          (event) => event.type === "compositionend" && event.data === "最终",
+        ),
+      );
+      const trace = await page.evaluate(() => window.engineTrace);
+      const endIndex = trace.findIndex(
+        (event) => event.type === "end-listener",
+      );
+      assert.ok(endIndex >= 0);
+      assert.ok(
+        trace
+          .slice(0, endIndex)
+          .some((event) => event.type === "transaction" && !event.composing),
+      );
+      r.stages.push({ ended, trace, stored: stored(n.id) });
+      const unchanged = await noWrite(page, n.id);
+      await page.keyboard.insertText("ENDED-ORDINARY");
+      await settle(page);
+      assert.deepEqual(stored(n.id), unchanged);
+      r.stages.push({ afterOrdinaryInput: await snapshot(page), unchanged });
+    },
+  );
   for (const all of [false, true])
     await run(
       all ? "all-tags-final-before-end" : "single-final-before-end",
@@ -616,7 +708,7 @@ try {
         binary,
         binaryHash,
         method:
-          "production App/Editor; controlled browser DOM composition with real browser input; only preview action/access transports adapted",
+          "production App/Editor; browser-engine CDP IME plus controlled DOM composition with real input; only preview action/access transports adapted",
         results,
         records,
         errors,

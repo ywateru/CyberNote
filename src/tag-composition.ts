@@ -5,15 +5,16 @@ import { editorSaveSnapshot } from "./editor-save-snapshot";
 
 // Observe this Editor's real event/transaction boundary. An end event alone is
 // insufficient: some keyboards deliver the final input afterwards. Its data
-// must be present in the mapped composition range and a post-end PM transaction
-// (including tag cleanup) must have reached the live Editor before releasing it.
+// must be present in the mapped composition range, and a real PM transaction
+// after composing finishes (including tag cleanup) must have reached this Editor.
+// Browser event dispatch can run that transaction before our end listener.
 export class TagComposition {
   cycle = 0;
   pending = false;
   private from = 0;
   private to = 0;
   private finalText: string | null = null;
-  private postEndTransaction = false;
+  private finishedTransaction = false;
   private queued = false;
   private dom: HTMLElement;
 
@@ -34,7 +35,7 @@ export class TagComposition {
     this.from = this.editor.state.selection.from;
     this.to = this.editor.state.selection.to;
     this.finalText = null;
-    this.postEndTransaction = false;
+    this.finishedTransaction = false;
     this.restarted();
   };
 
@@ -56,8 +57,7 @@ export class TagComposition {
       this.from = tr.mapping.map(this.from, -1);
       this.to = tr.mapping.map(this.to, 1);
     }
-    if (this.finalText !== null && !this.editor.view.composing)
-      this.postEndTransaction = true;
+    if (!this.editor.view.composing) this.finishedTransaction = true;
     this.checkAfterTransaction();
   };
 
@@ -70,7 +70,7 @@ export class TagComposition {
       if (
         !this.pending ||
         this.finalText === null ||
-        !this.postEndTransaction ||
+        !this.finishedTransaction ||
         editor.isDestroyed ||
         editor.view.composing ||
         editor.state.doc.textBetween(this.from, this.to, "\n", "\n") !==
