@@ -1,0 +1,114 @@
+{
+  "candidateCommit": "8bfeb435d2fba006a66fbb6532729cfb393669a6",
+  "baselineCommit": "a692fdbaba125e26ba76d78da45479fd9f810bf4",
+  "authorIdentity": {
+    "path": "docs/verification/app-001-sidebar-menu-label-01/identity.json",
+    "bytes": 1970,
+    "sha256": "3814d0897a69d8e6ec0b6bd8796384bad03c6474be635d16db187df1b8efce2c"
+  },
+  "productionFiles": [
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "bytes": 7786,
+      "sha256": "a745a6792f9af7dcb39e57cdc6320a5dff2f1805ae7916414a9cace571973659",
+      "matchesCandidateCommit": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "bytes": 25070,
+      "sha256": "2ea616d7d224215e9b90b29c4a965c364bb302c80d050f00e3401b2537b37281",
+      "matchesCandidateCommit": true
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "bytes": 16068,
+      "sha256": "716215739e49fad5d770f0d4b6e5f7cf37e949bc3dbd715794afd881823a0f93",
+      "matchesCandidateCommit": true
+    }
+  ],
+  "productionAggregateAlgorithm": "sha256 of sorted lines path TAB bytes TAB sha256 NEWLINE",
+  "productionAggregate": "6e0ff99124800008f84e70a080a570c6b447a38068b0bb4d22e744abbc3c673a",
+  "lockedDependencyApiExcerpts": [
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/menu/normal.rs",
+      "bytes": 3670,
+      "sha256": "cd8243024d763935c0c3c8d521b6513c0b7a02eae029bdf83b3f0614c68f1485",
+      "startLine": 87,
+      "endLine": 97,
+      "text": "  pub fn text(&self) -> crate::Result<String> {\n    run_item_main_thread!(self, |self_: Self| (*self_.0).as_ref().text())\n  }\n\n  /// Set the text for this menu item. `text` could optionally contain\n  /// an `&` before a character to assign this character as the mnemonic\n  /// for this menu item. To display a `&` without assigning a mnemenonic, use `&&`.\n  pub fn set_text<S: AsRef<str>>(&self, text: S) -> crate::Result<()> {\n    let text = text.as_ref().to_string();\n    run_item_main_thread!(self, |self_: Self| (*self_.0).as_ref().set_text(text))\n  }"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/menu/mod.rs",
+      "bytes": 23421,
+      "sha256": "c534080732897386d0b0bc531d1f702c50f5c0ddc472659bb0da49bf6e5076af",
+      "startLine": 26,
+      "endLine": 39,
+      "text": "macro_rules! run_item_main_thread {\n  ($self:ident, $ex:expr) => {{\n    use std::sync::mpsc::channel;\n    let (tx, rx) = channel();\n    let self_ = $self.clone();\n    let task = move || {\n      let f = $ex;\n      let _ = tx.send(f(self_));\n    };\n    $self\n      .app_handle()\n      .run_on_main_thread(task)\n      .and_then(|_| rx.recv().map_err(|_| crate::Error::FailedToReceiveMessage))\n  }};"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/app.rs",
+      "bytes": 94329,
+      "sha256": "ef71e5c2da6696f9bef817f5f32d34c7710b678ca7ec8a00e539527bca5ad1d4",
+      "startLine": 496,
+      "endLine": 500,
+      "text": "  pub fn run_on_main_thread<F: FnOnce() + Send + 'static>(&self, f: F) -> crate::Result<()> {\n    self\n      .runtime_handle\n      .run_on_main_thread(f)\n      .map_err(Into::into)"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-runtime-wry-2.12.3/src/lib.rs",
+      "bytes": 168926,
+      "sha256": "ec343fc347aff1fb5327100df2541992e47eb6be1ddb55102170e2253b9c6d59",
+      "startLine": 263,
+      "endLine": 281,
+      "text": "  fn send_user_message(&self, message: Message<T>) -> Result<()> {\n    if current_thread().id() == self.main_thread_id {\n      handle_user_message(\n        &self.main_thread.window_target,\n        message,\n        UserMessageContext {\n          window_id_map: &self.window_id_map,\n          windows: &self.main_thread.windows,\n        },\n      );\n      Ok(())\n    } else {\n      self\n        .proxy\n        .send_event(message)\n        .map_err(|_| Error::FailedToSendMessage)\n    }\n  }\n"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-runtime-wry-2.12.3/src/lib.rs",
+      "bytes": 168926,
+      "sha256": "ec343fc347aff1fb5327100df2541992e47eb6be1ddb55102170e2253b9c6d59",
+      "startLine": 2626,
+      "endLine": 2627,
+      "text": "  fn run_on_main_thread<F: FnOnce() + Send + 'static>(&self, f: F) -> Result<()> {\n    self.context.send_user_message(Message::Task(Box::new(f)))"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/app.rs",
+      "bytes": 94329,
+      "sha256": "ef71e5c2da6696f9bef817f5f32d34c7710b678ca7ec8a00e539527bca5ad1d4",
+      "startLine": 1434,
+      "endLine": 1497,
+      "text": "    mut self,\n    mut callback: F,\n  ) -> impl FnMut(RuntimeRunEvent<EventLoopMessage>) {\n    // whether the activity is being finished to fulfill an exit request the app accepted\n    #[cfg(target_os = \"android\")]\n    let mut finishing_activity = false;\n\n    move |event| match event {\n      RuntimeRunEvent::Ready => {\n        if let Err(e) = setup(&mut self) {\n          panic!(\"Failed to setup app: {e}\");\n        }\n        let event = on_event_loop_event(self.handle(), RuntimeRunEvent::Ready, self.manager());\n        callback(self.handle(), event);\n      }\n      RuntimeRunEvent::Exit => {\n        let event = on_event_loop_event(self.handle(), RuntimeRunEvent::Exit, self.manager());\n        callback(self.handle(), event);\n        self.cleanup_before_exit();\n        if self.manager.restart_on_exit.load(atomic::Ordering::Relaxed) {\n          crate::process::restart(&self.env());\n        }\n      }\n      // On Android, exiting the process while the activity is still on screen skips the close transition\n      // and flashes a blank screen, so a programmatic exit finishes the activity instead and the event loop\n      // exits through the regular window destroyed path.\n      #[cfg(target_os = \"android\")]\n      RuntimeRunEvent::ExitRequested {\n        code: Some(code),\n        tx,\n      } if code != RESTART_EXIT_CODE && !self.manager.windows().is_empty() => {\n        let (app_tx, app_rx) = std::sync::mpsc::channel();\n        let event = on_event_loop_event(\n          self.handle(),\n          RuntimeRunEvent::ExitRequested {\n            code: Some(code),\n            tx: app_tx,\n          },\n          self.manager(),\n        );\n        callback(self.handle(), event);\n\n        if matches!(app_rx.try_recv(), Ok(ExitRequestedEventAction::Prevent)) {\n          let _ = tx.send(ExitRequestedEventAction::Prevent);\n        } else {\n          match self.handle().finish_activity() {\n            Ok(()) => {\n              finishing_activity = true;\n              // keep the event loop running until the activity is destroyed\n              let _ = tx.send(ExitRequestedEventAction::Prevent);\n            }\n            // fall back to exiting the process directly\n            Err(e) => log::error!(\"failed to finish the activity: {e}\"),\n          }\n        }\n      }\n      #[cfg(target_os = \"android\")]\n      RuntimeRunEvent::ExitRequested { code: None, .. } if finishing_activity => {\n        // the app already accepted this exit when it was requested\n      }\n      _ => {\n        let event = on_event_loop_event(self.handle(), event, self.manager());\n        callback(self.handle(), event);\n      }"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/app.rs",
+      "bytes": 94329,
+      "sha256": "ef71e5c2da6696f9bef817f5f32d34c7710b678ca7ec8a00e539527bca5ad1d4",
+      "startLine": 2811,
+      "endLine": 2815,
+      "text": "  manager\n    .plugins\n    .lock()\n    .expect(\"poisoned plugin store\")\n    .on_event(app_handle, &event);"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs",
+      "bytes": 34621,
+      "sha256": "8c8a9c3cdb93d1d149f1f1822e5bf8cd5e454f1ce7f3e57a427b97ba59f52a9f",
+      "startLine": 976,
+      "endLine": 980,
+      "text": "  pub(crate) fn on_event(&mut self, app: &AppHandle<R>, event: &RunEvent) {\n    self\n      .store\n      .iter_mut()\n      .for_each(|plugin| plugin.on_event(app, event))"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/menu/submenu.rs",
+      "bytes": 13192,
+      "sha256": "83acf7bd950faa49a501addb0ca3ebc14935db91c54de96d81a03977a2bb8606",
+      "startLine": 357,
+      "endLine": 359,
+      "text": "  pub fn items(&self) -> crate::Result<Vec<MenuItemKind<R>>> {\n    Ok(self.0.items.lock().unwrap().clone())\n  }"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/muda-0.20.0/src/platform_impl/macos/mod.rs",
+      "bytes": 42579,
+      "sha256": "bb44d6542eb040fd8f3ebc122c09edbef8411cfa5f96c2b312b12136454b1e9f",
+      "startLine": 258,
+      "endLine": 279,
+      "text": "/// Shared methods\nimpl PlatformMenuItem {\n    pub fn text(&self) -> Option<String> {\n        self.ns_menu_items\n            .values()\n            .flat_map(|items| items.iter())\n            .next()\n            .map(|item| item.title().to_string())\n    }\n\n    pub fn set_text(&mut self, text: &str, _accelerator: Option<&MenuAccelerator>) {\n        let title = NSString::from_str(&strip_mnemonic(text));\n        for ns_items in self.ns_menu_items.values() {\n            for ns_item in ns_items {\n                ns_item.setAttributedTitle(None);\n                ns_item.setTitle(&title);\n                if let Some(submenu) = ns_item.submenu() {\n                    submenu.setTitle(&title);\n                }\n            }\n        }\n    }"
+    }
+  ],
+  "scope": "Current production source and locked runtime API; no AppKit execution, new bundle, or pixel claim."
+}

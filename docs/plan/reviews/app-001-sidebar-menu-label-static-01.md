@@ -1,0 +1,24 @@
+# APP-001 sidebar menu label — independent source review 01
+
+Decision: **SOURCE-READY** for candidate `8bfeb435d2fba006a66fbb6532729cfb393669a6`, relative to `a692fdbaba125e26ba76d78da45479fd9f810bf4`. No source blocker found in the reviewed change. Runtime menu acceptance and pixel matching remain open; the root agent must integrate and build the new Mac candidate before testing its actual menu.
+
+## Scope and identity
+
+Reviewed all three production changes, actual bind/update/focus wiring, recursive lookup of the installed menu, failure paths, exact-window and revision isolation, and existing search routing. Author identity JSON independently hashes to `3814d0897a69d8e6ec0b6bd8796384bad03c6474be635d16db187df1b8efce2c`. Current production bytes match the candidate commit and the author's aggregate `6e0ff99124800008f84e70a080a570c6b447a38068b0bb4d22e744abbc3c673a`. See the accompanying source identities and locked-dependency excerpts.
+
+## Findings
+
+1. `src-tauri/src/lib.rs` changes the initial nested `sidebar` item to “隐藏文件夹”. Its existing menu action ID and focused-window event routing remain unchanged. `sidebar_menu_item` visits actual `MenuItemKind` values, recurses through `submenu.items()`, accepts the exact `sidebar` ID only as an ordinary item, and returns the existing reference-backed item. This reaches the nested “显示” submenu without rebuilding its actions.
+2. `bind` and `update` already execute inside `on_main`. Bind refreshes only after native creation succeeds. Update validates the exact current binding ID and requires a strictly newer revision before the native update; only a successful native response permits storing the new binding and refreshing. Native creation failure still destroys/removes its binding, while failed updates do not store or project their proposed state.
+3. Refresh reads the current binding inside the main-thread task. `project_sidebar_menu` returns for labels other than `main` before acquiring the lock. It projects `sidebar_visible=true` as “隐藏文件夹”, false as “显示文件夹”; an absent binding is a no-op. Its lock guard ends before menu inspection or mutation. There is no new cached title or worker-captured title that could overwrite newer state later.
+4. The new `Focused(true)` arm invokes refresh in the plugin event-loop path. Locked Tauri 2.12.5 passes plugin events from its event-loop callback. Menu text APIs use `run_item_main_thread!`; locked tauri-runtime-wry 2.12.3 handles a task synchronously when already on its main thread, rather than queueing another title write. Locked muda 0.20.0 mutates the native title synchronously. This dependency chain supports the sequencing claim; it is not an executed NSMenu test.
+5. Independent `note-*` focus or updates cannot project the main menu. Existing invoking-window checks, exact binding UUID lookup, and stale revision rejection remain in place. Main focus before bind or after unbind leaves the menu unchanged. The existing guarded search event arm precedes the new focus arm; `focus_search`, `focus_search_on_main`, `is_search_menu_event`, `menu_search_binding`, and `focus_search_from_menu` were read and are unchanged. No new search routing or focus mutation was introduced.
+6. Missing plugin state, missing menu/item, item-read failure and title-write failure reach the dedicated logged presentation error. Refresh returns unit and cannot turn a successfully applied native toolbar state into a rejected update. A failure could temporarily leave an old visible label; runtime testing must establish successful behavior on the installed application.
+
+## Independent verification
+
+- Offline locked plugin tests: **16 passed**, exit 0. This compiles the real macOS plugin and native menu API; pure helper tests alone are not used as readiness evidence.
+- Offline locked desktop host library check: **passed**, exit 0. Both monitored process groups stopped with no live members. Minimum observed free space across these checks was **3,454,259,200 bytes**, above the 2 GiB guard. The shared host target was released immediately afterward.
+- One narrow independent fixture extracts the exact production `project_sidebar_menu` function text and supplies minimal Rust types and a sink. It proves the sink can acquire the bindings lock, mutate the current binding, and see that mutation on the next projection; a separate window does not invoke the sink. **1 passed**, compile and test exit 0, each bounded to 30 seconds. Its temporary executable was removed. It does not simulate AppKit, menu recursion, or complete bind/update runtime behavior.
+
+No product edits, new bundle, platform download, GUI action, cache cleanup, or broad test matrix were performed by this review. Native menu opening, hide/show restoration, main/independent-window focus changes, cold start, existing search interaction and visual comparison are reserved for the root agent's new candidate. This decision does not establish full Apple Notes parity.

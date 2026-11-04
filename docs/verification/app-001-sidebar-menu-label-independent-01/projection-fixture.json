@@ -1,0 +1,35 @@
+{
+  "source": "plugins/tauri-plugin-notes-ui/src/macos.rs",
+  "extractedFunction": "project_sidebar_menu",
+  "extractedFunctionSha256": "d16505846935288b468c05102dfc3d8f77bc9884a2d7149f95e81580267ca429",
+  "extraction": "exact text from fn project_sidebar_menu( to fn sidebar_menu_item<; minimal independent Rust types and sink only",
+  "startedAt": "2026-11-04T05:23:50.015604+00:00",
+  "commands": [
+    {
+      "argv": [
+        "rustc",
+        "--edition=2021",
+        "--test",
+        "/private/tmp/apple-notes-sidebar-menu-label-review01/docs/verification/app-001-sidebar-menu-label-independent-01/projection-fixture.rs",
+        "-o",
+        "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-sidebar-independent-bp5qjk7k/fixture"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeoutSeconds": 30
+    },
+    {
+      "argv": [
+        "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-sidebar-independent-bp5qjk7k/fixture",
+        "--nocapture"
+      ],
+      "exitCode": 0,
+      "stdout": "\nrunning 1 test\ntest guard_released_before_sink_and_each_projection_reads_current_binding ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "stderr": "",
+      "timeoutSeconds": 30
+    }
+  ],
+  "endedAt": "2026-11-04T05:23:52.312002+00:00",
+  "freeBytesAfter": 3484418048
+}
