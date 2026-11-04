@@ -479,6 +479,13 @@
 .smart-mobile .smart-error {
   margin: 15px 25px;
 }
+.smart-mobile-feedback.has-error {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f2f2f7;
+  display: flow-root;
+}
 @media (max-width: 700px) {
   .smart-mac .smart-form {
     width: calc(100% - 20px);

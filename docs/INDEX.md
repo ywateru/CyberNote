@@ -37,6 +37,7 @@
 - [Mac普通新建表单尺寸与底部结构修正15](plan/tasks/app-mac-folder-form-geometry15.md)
 - [置顶false重开草稿值保全修复16](plan/tasks/app-smart-draft-hydration16.md)
 - [手机智能表单错误可见与文件夹长按选字修复17](plan/tasks/app-mobile-folder-interactions17.md)
+- [文件夹修复下一轮准确双端包与验收准备18](verification/unified-candidate06/folder-fixes18-preparation/README.md)
 - [Android05实际运行独立证据核对](verification/android-smart-u-runtime09-independent/README.md)
 - [Mac09实际运行独立证据核对](verification/mac-smart-u-runtime09-independent/README.md)
 - [Mac智能文件夹表单布局](ui/smart-folders-macos.md)

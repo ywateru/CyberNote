@@ -352,37 +352,42 @@ export function SmartFolderForm({
         <fieldset disabled={busy}>
           {mobile ? (
             <>
-              <header className="smart-mobile-header">
-                <button type="button" aria-label="取消" onClick={cancel}>
-                  <X />
-                </button>
-                <strong>
-                  {panel
-                    ? "过滤条件"
-                    : folder
-                      ? "编辑智能文件夹"
-                      : "新建文件夹"}
-                </strong>
-                <button
-                  type="button"
-                  className="smart-mobile-confirm"
-                  aria-label={panel ? "确认过滤条件" : "保存文件夹"}
-                  onClick={() => {
-                    if (panel) {
-                      try {
-                        validate(panel);
-                        setDraft(panel);
-                        setPanel(null);
-                        setError("");
-                      } catch (e) {
-                        setError((e as Error).message);
-                      }
-                    } else void submit();
-                  }}
-                >
-                  <Check />
-                </button>
-              </header>
+              <div
+                className={`smart-mobile-feedback ${error ? "has-error" : ""}`}
+              >
+                <header className="smart-mobile-header">
+                  <button type="button" aria-label="取消" onClick={cancel}>
+                    <X />
+                  </button>
+                  <strong>
+                    {panel
+                      ? "过滤条件"
+                      : folder
+                        ? "编辑智能文件夹"
+                        : "新建文件夹"}
+                  </strong>
+                  <button
+                    type="button"
+                    className="smart-mobile-confirm"
+                    aria-label={panel ? "确认过滤条件" : "保存文件夹"}
+                    onClick={() => {
+                      if (panel) {
+                        try {
+                          validate(panel);
+                          setDraft(panel);
+                          setPanel(null);
+                          setError("");
+                        } catch (e) {
+                          setError((e as Error).message);
+                        }
+                      } else void submit();
+                    }}
+                  >
+                    <Check />
+                  </button>
+                </header>
+                {errorView}
+              </div>
               {panel ? (
                 <div className="smart-mobile-filter-body">
                   <div className="smart-mobile-combine">
@@ -763,7 +768,6 @@ export function SmartFolderForm({
               </footer>
             </form>
           )}
-          {mobile && errorView}
         </fieldset>
         {warning && (
           <div className="smart-warning-backdrop">

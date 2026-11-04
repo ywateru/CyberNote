@@ -1,0 +1,84 @@
+{
+  "status": "SOURCE-READY STOP; independent review pending",
+  "baselineHead": "9d46dd6a2c2210dc7c31f98db02c7c189efd0a8f",
+  "productChanges": [
+    "src/SmartFolderForm.tsx",
+    "src/smart-folders.css",
+    "src/style.css"
+  ],
+  "sourceSha256": {
+    "src/SmartFolderForm.tsx": "b2e4d60e5cbe0265b1bca7a67cd5c2d7412b3697e34152d870c0d0344770c15c",
+    "src/smart-folders.css": "1f3a46d009431f3068ed76fe2847e25fda1d906ba2de6819b4e1c5d7fa5861d2",
+    "src/style.css": "99628d2bc1cae683f620675d062a7a9542bbbb91db0ab05e45274f093b7729bf",
+    "src/smart-draft.ts": "a97480a10d85fcb50091987af187d0132608528349748f6488715988004abca6",
+    "src/App.tsx": "a4fb62d7e4ccbf16a235a368f2d142886719902f103fbdbf8f0c5d816c623984"
+  },
+  "baselineSha256": {
+    "baseline-SmartFolderForm.tsx": "41fd3e76ed7d8b53890f51160226871126a0295a9df7be1bed2bf1281746f299",
+    "baseline-smart-folders.css": "2174301b19a3d4dbcf709ed52d8a76b766be870ffccd32fad9c5a1adb3419a53",
+    "baseline-style.css": "eeff3cc31a139fe48543ed9f7daf013c470fee5d703968acdb61d5c583f7262d"
+  },
+  "checks": {
+    "fixture": {
+      "baseline": {
+        "assertions": 71,
+        "failed": 15
+      },
+      "candidate": {
+        "assertions": 71,
+        "failed": 0
+      },
+      "sameHarness": true,
+      "normalGeometryUnchanged": true
+    },
+    "typecheck": {
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    "scopedDiffCheck": {
+      "exitCode": 0,
+      "paths": [
+        "src/SmartFolderForm.tsx",
+        "src/smart-folders.css",
+        "src/style.css",
+        "docs/plan/tasks/app-mobile-folder-interactions17.md"
+      ],
+      "wholeTreeLimitation": "Earlier root-owned plan EOF blank line was subsequently fixed by root; author did not edit public plan."
+    }
+  },
+  "evidenceSha256": {
+    "README.md": "51741247aa2d27aee53995b1a66200a8e35096b2c67c4f5141aaac76e7c13045",
+    "after-attempt01/280x240-error.png": "71ffddd98cd6f44dca025c1bd8347e8fd45687b053b0f899487400573b842aeb",
+    "after-attempt01/390x360-error.png": "40d16ce5bc5dfc95eb22ca8e24f32124622e925cee62e24f58d29944212a5531",
+    "after-attempt01/390x844-error.png": "03a336e932142197fd956c68fc4fc9b1f6c6467fe8385d10017fc9cf6622015e",
+    "after-attempt01/production-folder-fragments.json": "96a87d0511f315854e8dec972a113807e14a9686a9c64bd0cdf9027b24dce02f",
+    "after-attempt01/result.json": "e4ac5a0133ae35e5919419aa725844b8619cc62b32950777942acc79c4214715",
+    "after-attempt02/280x240-error.png": "71ffddd98cd6f44dca025c1bd8347e8fd45687b053b0f899487400573b842aeb",
+    "after-attempt02/390x360-error.png": "40d16ce5bc5dfc95eb22ca8e24f32124622e925cee62e24f58d29944212a5531",
+    "after-attempt02/390x844-error.png": "03a336e932142197fd956c68fc4fc9b1f6c6467fe8385d10017fc9cf6622015e",
+    "after-attempt02/production-folder-fragments.json": "96a87d0511f315854e8dec972a113807e14a9686a9c64bd0cdf9027b24dce02f",
+    "after-attempt02/result.json": "c41b27a8fc181907dd6ad44c27aac447f2b107168c7b2339dcb1dcd6b5e65360",
+    "baseline-SmartFolderForm.tsx": "41fd3e76ed7d8b53890f51160226871126a0295a9df7be1bed2bf1281746f299",
+    "baseline-smart-folders.css": "2174301b19a3d4dbcf709ed52d8a76b766be870ffccd32fad9c5a1adb3419a53",
+    "baseline-style.css": "eeff3cc31a139fe48543ed9f7daf013c470fee5d703968acdb61d5c583f7262d",
+    "before-attempt01/production-folder-fragments.json": "96a87d0511f315854e8dec972a113807e14a9686a9c64bd0cdf9027b24dce02f",
+    "before-attempt01/result.json": "65073abd618631c344d07260707b79a37a2ece94843fa973417fa060e6656f12",
+    "before-attempt02/280x240-error.png": "5b82425f0123ad91f8103a0f26c2bf56d795d97ffb7cd425b507fe4ef222f672",
+    "before-attempt02/390x360-error.png": "f5f80e939260b3606f3102615738d59699e5410f26beba7317974d8f9ad17cce",
+    "before-attempt02/390x844-error.png": "808f291ca99bb9f779bf37de49984c2375305c2b52677fadda65fffd9101a639",
+    "before-attempt02/production-folder-fragments.json": "96a87d0511f315854e8dec972a113807e14a9686a9c64bd0cdf9027b24dce02f",
+    "before-attempt02/result.json": "9c88400b90699eae28db92b48a8a34e5435ab1cedaa127aeb3a1f547a621b2e1",
+    "before-attempt03/280x240-error.png": "5b82425f0123ad91f8103a0f26c2bf56d795d97ffb7cd425b507fe4ef222f672",
+    "before-attempt03/390x360-error.png": "f5f80e939260b3606f3102615738d59699e5410f26beba7317974d8f9ad17cce",
+    "before-attempt03/390x844-error.png": "808f291ca99bb9f779bf37de49984c2375305c2b52677fadda65fffd9101a639",
+    "before-attempt03/production-folder-fragments.json": "96a87d0511f315854e8dec972a113807e14a9686a9c64bd0cdf9027b24dce02f",
+    "before-attempt03/result.json": "46c847054bb57de37e04159d571f4ebb9ad4c98f573072f136ac5af64ba619ea",
+    "check-mobile.mjs": "7346192b3ab1e1cc7073e8e764c40abf324781c4aaf79ca75fb04da9b7c949e9",
+    "comparison.json": "2f8fbec0e601c0d4dec04ba06d7c5066913f6150beb7758ebb542a7a612218c4"
+  },
+  "limits": [
+    "No platform build/install/device/native touch-selection acceptance",
+    "Isolated in-memory callbacks; production folder events extracted unchanged; not full App/Editor integration",
+    "No backend/DB/shared target-cache/downloads/Git mutation"
+  ]
+}

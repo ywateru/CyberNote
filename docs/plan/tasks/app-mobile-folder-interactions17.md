@@ -1,7 +1,7 @@
 ---
 id: app-mobile-folder-interactions17
 scope: Visible mobile smart-form rejection and nonselectable folder controls
-status: ready
+status: source-review-pass
 priority: P2
 depends-on: [app-smart-draft-hydration16]
 ---
@@ -42,3 +42,11 @@ depends-on: [app-smart-draft-hydration16]
 ## Verification
 
 使用生产组件和样式，已有本机依赖与自有隔离夹具，不下载/清理共享缓存。保留修复前实际失败证据，覆盖实际高度长列表、滚动后非法确认、短视口、合法重试/取消、名称页错误；检查alert边界在视口内且控件可点。生产folder-row至少验证选择样式继承和正文仍可选，并复核真实事件链；设备长按最终由root ADB完成。typecheck及受影响契约检查。源码准备后STOP，独立作者审查。不得平台构建/共享target/GUI/ADB/数据库/原版删除/Git。本任务新包实际移动验收完成之前仅source-review-pass，不能done。
+
+## Author handoff
+
+2026-11-05 SOURCE-READY STOP。唯一产品路径为SmartFolderForm.tsx、smart-folders.css、style.css；App.tsx与hydration16适配器未改。作者以生产React、全量CSS及App真实folderRow/touch timer/scrim片段检查71项断言全部通过；同一最终夹具加载归档修复前源时15项失败。长列表、滚动、390×844/390×360/280×240、合法重试取消、名字页、选择样式和受控事件链已覆盖，正常几何前后相同，typecheck通过。详见[作者证据](../../verification/app-mobile-folder-interactions17/README.md)。尚未独审或运行准确新包，不是设备/原版像素通过。
+
+## Source acceptance
+
+root接受作者前71项15失败、后71通过及不同作者独立71通过；独审37固定输入保持，原失败留档。root核13项独立索引全部SHA匹配，索引60d21eacb14a0a8da58264ddb2115c23afe493a03955b79db360232d5a8931f9。仅三个UI文件，App/16保持；准确Android系统长按及新包设备反馈仍待18验收，不将受控样本认定为完整Editor或原版像素。

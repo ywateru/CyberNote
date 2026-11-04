@@ -1,0 +1,57 @@
+{
+  "status": "source-review-pass; native accurate-package acceptance pending",
+  "findings": [],
+  "productChangesReviewed": [
+    "src/SmartFolderForm.tsx",
+    "src/smart-folders.css",
+    "src/style.css"
+  ],
+  "independentExecution": {
+    "firstAttempt": true,
+    "assertions": 71,
+    "failed": 0,
+    "exitCode": 0,
+    "errors": [],
+    "externalRequests": [],
+    "sourceResult": "attempt01/result.json",
+    "sourceResultSha256": "c41b27a8fc181907dd6ad44c27aac447f2b107168c7b2339dcb1dcd6b5e65360"
+  },
+  "normalGeometryExactlyEqualsArchivedBeforeAndAfter": true,
+  "productionFolderFragmentsMatchAuthor": true,
+  "protectedInputCount": 37,
+  "allProtectedInputsUnchanged": true,
+  "baselineFinalReplay": {
+    "independentlyReexecuted": false,
+    "assertions": 71,
+    "failed": 15,
+    "verifiedFileSha256": "46c847054bb57de37e04159d571f4ebb9ad4c98f573072f136ac5af64ba619ea",
+    "failedChecks": [
+      "390x844 rejection alert currently visible",
+      "390x844 existing error stays visible during scroll",
+      "390x844 controls stay clickable during scroll",
+      "390x844 scrolled rejection visible",
+      "390x360 rejection alert currently visible",
+      "390x360 existing error stays visible during scroll",
+      "390x360 controls stay clickable during scroll",
+      "390x360 scrolled rejection visible",
+      "280x240 rejection alert currently visible",
+      "280x240 existing error stays visible during scroll",
+      "280x240 controls stay clickable during scroll",
+      "280x240 scrolled rejection visible",
+      "280x240 name rejection visible",
+      "folder row nonselectable",
+      "folder descendants inherit nonselection"
+    ]
+  },
+  "typecheck": {
+    "independentlyRerun": false,
+    "authorExitCode": 0,
+    "reason": "Minimal three-file review and exact protected author manifest; no new type-level logic."
+  },
+  "limits": [
+    "Chromium actual form plus production App folder/touch/scrim fragments in controlled in-memory state; no full App/Editor/backend or persistence.",
+    "Dispatched touchstart/touchmove/touchend events test production timer/cancellation, not Android native selection handles.",
+    "No new native WK, platform build, installation, device, GUI, ADB, user DB, downloads, Git, shared target/cache operations.",
+    "No original iPhone pixel or animation acceptance; root must verify accurate rebuilt packages."
+  ]
+}

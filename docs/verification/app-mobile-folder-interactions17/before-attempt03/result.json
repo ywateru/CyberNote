@@ -1,0 +1,1046 @@
+{
+  "archivedBaseline": true,
+  "scope": "Production SmartFolderForm and complete CSS; exact production App folderRow/touch timer/scrim fragments in isolated state fixture. No backend/DB/device/native selection engine. Editor check uses production .tiptap CSS on contenteditable markup, not full Editor.",
+  "hashes": {
+    "src/SmartFolderForm.tsx": "41fd3e76ed7d8b53890f51160226871126a0295a9df7be1bed2bf1281746f299",
+    "src/smart-folders.css": "2174301b19a3d4dbcf709ed52d8a76b766be870ffccd32fad9c5a1adb3419a53",
+    "src/style.css": "eeff3cc31a139fe48543ed9f7daf013c470fee5d703968acdb61d5c583f7262d",
+    "src/smart-draft.ts": "a97480a10d85fcb50091987af187d0132608528349748f6488715988004abca6",
+    "src/App.tsx": "a4fb62d7e4ccbf16a235a368f2d142886719902f103fbdbf8f0c5d816c623984",
+    "docs/verification/app-mobile-folder-interactions17/check-mobile.mjs": "7346192b3ab1e1cc7073e8e764c40abf324781c4aaf79ca75fb04da9b7c949e9"
+  },
+  "checks": [
+    {
+      "name": "390x844 no empty alert",
+      "passed": true
+    },
+    {
+      "name": "390x844 rejection alert currently visible",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "390x844 one alert",
+      "passed": true
+    },
+    {
+      "name": "390x844 header remains clickable",
+      "passed": true
+    },
+    {
+      "name": "390x844 invalid no save",
+      "passed": true
+    },
+    {
+      "name": "390x844 existing error stays visible during scroll",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "390x844 controls stay clickable during scroll",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "390x844 scrolled rejection visible",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "390x844 scrolled controls clickable",
+      "passed": true
+    },
+    {
+      "name": "390x844 valid retry clears alert",
+      "passed": true
+    },
+    {
+      "name": "390x844 panel confirmation no persistence",
+      "passed": true
+    },
+    {
+      "name": "390x844 retry submits chosen tag",
+      "passed": true
+    },
+    {
+      "name": "390x844 panel cancel keeps name",
+      "passed": true
+    },
+    {
+      "name": "390x844 cancel clears alert",
+      "passed": true
+    },
+    {
+      "name": "390x844 outer cancel no save",
+      "passed": true
+    },
+    {
+      "name": "390x844 name rejection visible",
+      "passed": true
+    },
+    {
+      "name": "390x844 name rejection unique",
+      "passed": true
+    },
+    {
+      "name": "390x844 name rejection controls clickable",
+      "passed": true
+    },
+    {
+      "name": "390x844 name invalid no save",
+      "passed": true
+    },
+    {
+      "name": "390x360 no empty alert",
+      "passed": true
+    },
+    {
+      "name": "390x360 rejection alert currently visible",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "390x360 one alert",
+      "passed": true
+    },
+    {
+      "name": "390x360 header remains clickable",
+      "passed": true
+    },
+    {
+      "name": "390x360 invalid no save",
+      "passed": true
+    },
+    {
+      "name": "390x360 existing error stays visible during scroll",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "390x360 controls stay clickable during scroll",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "390x360 scrolled rejection visible",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "390x360 scrolled controls clickable",
+      "passed": true
+    },
+    {
+      "name": "390x360 valid retry clears alert",
+      "passed": true
+    },
+    {
+      "name": "390x360 panel confirmation no persistence",
+      "passed": true
+    },
+    {
+      "name": "390x360 retry submits chosen tag",
+      "passed": true
+    },
+    {
+      "name": "390x360 panel cancel keeps name",
+      "passed": true
+    },
+    {
+      "name": "390x360 cancel clears alert",
+      "passed": true
+    },
+    {
+      "name": "390x360 outer cancel no save",
+      "passed": true
+    },
+    {
+      "name": "390x360 name rejection visible",
+      "passed": true
+    },
+    {
+      "name": "390x360 name rejection unique",
+      "passed": true
+    },
+    {
+      "name": "390x360 name rejection controls clickable",
+      "passed": true
+    },
+    {
+      "name": "390x360 name invalid no save",
+      "passed": true
+    },
+    {
+      "name": "280x240 no empty alert",
+      "passed": true
+    },
+    {
+      "name": "280x240 rejection alert currently visible",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "280x240 one alert",
+      "passed": true
+    },
+    {
+      "name": "280x240 header remains clickable",
+      "passed": true
+    },
+    {
+      "name": "280x240 invalid no save",
+      "passed": true
+    },
+    {
+      "name": "280x240 existing error stays visible during scroll",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "280x240 controls stay clickable during scroll",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "280x240 scrolled rejection visible",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "280x240 scrolled controls clickable",
+      "passed": true
+    },
+    {
+      "name": "280x240 valid retry clears alert",
+      "passed": true
+    },
+    {
+      "name": "280x240 panel confirmation no persistence",
+      "passed": true
+    },
+    {
+      "name": "280x240 retry submits chosen tag",
+      "passed": true
+    },
+    {
+      "name": "280x240 panel cancel keeps name",
+      "passed": true
+    },
+    {
+      "name": "280x240 cancel clears alert",
+      "passed": true
+    },
+    {
+      "name": "280x240 outer cancel no save",
+      "passed": true
+    },
+    {
+      "name": "280x240 name rejection visible",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "280x240 name rejection unique",
+      "passed": true
+    },
+    {
+      "name": "280x240 name rejection controls clickable",
+      "passed": true
+    },
+    {
+      "name": "280x240 name invalid no save",
+      "passed": true
+    },
+    {
+      "name": "folder row nonselectable",
+      "passed": false,
+      "actual": "auto",
+      "expected": "none",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\n'auto' !== 'none'\n"
+    },
+    {
+      "name": "folder descendants inherit nonselection",
+      "passed": false,
+      "actual": false,
+      "expected": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "body selection not disabled",
+      "passed": true
+    },
+    {
+      "name": "editor and text retain selection",
+      "passed": true
+    },
+    {
+      "name": "user double click cannot select folder text",
+      "passed": true
+    },
+    {
+      "name": "body text user selection survives",
+      "passed": true
+    },
+    {
+      "name": "ordinary click navigation",
+      "passed": true
+    },
+    {
+      "name": "context menu targets correct folder",
+      "passed": true
+    },
+    {
+      "name": "production outside click closes",
+      "passed": true
+    },
+    {
+      "name": "production touch timer targets correct folder",
+      "passed": true
+    },
+    {
+      "name": "scroll movement cancels long press",
+      "passed": true
+    },
+    {
+      "name": "early release cancels long press",
+      "passed": true
+    },
+    {
+      "name": "page errors",
+      "passed": true
+    },
+    {
+      "name": "external requests",
+      "passed": true
+    }
+  ],
+  "feedbackStates": [
+    {
+      "name": "390x844-first-rejection",
+      "count": 1,
+      "alert": {
+        "x": 25,
+        "y": 1140,
+        "width": 340,
+        "height": 18,
+        "bottom": 1158,
+        "right": 365
+      },
+      "header": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 62,
+        "bottom": 82,
+        "right": 390
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 824,
+        "bottom": 844,
+        "right": 390
+      },
+      "scrollTop": 0,
+      "scrollHeight": 1153,
+      "visible": false,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 60
+          },
+          "clickable": true
+        },
+        {
+          "rect": {
+            "x": 330,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 370
+          },
+          "clickable": true
+        }
+      ]
+    },
+    {
+      "name": "390x844-scrolled-existing-error",
+      "count": 1,
+      "alert": {
+        "x": 25,
+        "y": 975,
+        "width": 340,
+        "height": 18,
+        "bottom": 993,
+        "right": 365
+      },
+      "header": {
+        "x": 0,
+        "y": -145,
+        "width": 390,
+        "height": 62,
+        "bottom": -83,
+        "right": 390
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 824,
+        "bottom": 844,
+        "right": 390
+      },
+      "scrollTop": 165,
+      "scrollHeight": 1153,
+      "visible": false,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": -134,
+            "width": 40,
+            "height": 40,
+            "bottom": -94,
+            "right": 60
+          },
+          "clickable": false
+        },
+        {
+          "rect": {
+            "x": 330,
+            "y": -134,
+            "width": 40,
+            "height": 40,
+            "bottom": -94,
+            "right": 370
+          },
+          "clickable": false
+        }
+      ]
+    },
+    {
+      "name": "390x844-name-rejection",
+      "count": 1,
+      "alert": {
+        "x": 25,
+        "y": 256,
+        "width": 340,
+        "height": 18,
+        "bottom": 274,
+        "right": 365
+      },
+      "header": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 62,
+        "bottom": 82,
+        "right": 390
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 824,
+        "bottom": 844,
+        "right": 390
+      },
+      "scrollTop": 0,
+      "scrollHeight": 824,
+      "visible": true,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 60
+          },
+          "clickable": true
+        },
+        {
+          "rect": {
+            "x": 330,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 370
+          },
+          "clickable": true
+        }
+      ]
+    },
+    {
+      "name": "390x360-first-rejection",
+      "count": 1,
+      "alert": {
+        "x": 25,
+        "y": 1140,
+        "width": 340,
+        "height": 18,
+        "bottom": 1158,
+        "right": 365
+      },
+      "header": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 62,
+        "bottom": 82,
+        "right": 390
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 340,
+        "bottom": 360,
+        "right": 390
+      },
+      "scrollTop": 0,
+      "scrollHeight": 1153,
+      "visible": false,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 60
+          },
+          "clickable": true
+        },
+        {
+          "rect": {
+            "x": 330,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 370
+          },
+          "clickable": true
+        }
+      ]
+    },
+    {
+      "name": "390x360-scrolled-existing-error",
+      "count": 1,
+      "alert": {
+        "x": 25,
+        "y": 733,
+        "width": 340,
+        "height": 18,
+        "bottom": 751,
+        "right": 365
+      },
+      "header": {
+        "x": 0,
+        "y": -387,
+        "width": 390,
+        "height": 62,
+        "bottom": -325,
+        "right": 390
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 340,
+        "bottom": 360,
+        "right": 390
+      },
+      "scrollTop": 407,
+      "scrollHeight": 1153,
+      "visible": false,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": -376,
+            "width": 40,
+            "height": 40,
+            "bottom": -336,
+            "right": 60
+          },
+          "clickable": false
+        },
+        {
+          "rect": {
+            "x": 330,
+            "y": -376,
+            "width": 40,
+            "height": 40,
+            "bottom": -336,
+            "right": 370
+          },
+          "clickable": false
+        }
+      ]
+    },
+    {
+      "name": "390x360-name-rejection",
+      "count": 1,
+      "alert": {
+        "x": 25,
+        "y": 256,
+        "width": 340,
+        "height": 18,
+        "bottom": 274,
+        "right": 365
+      },
+      "header": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 62,
+        "bottom": 82,
+        "right": 390
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 340,
+        "bottom": 360,
+        "right": 390
+      },
+      "scrollTop": 0,
+      "scrollHeight": 340,
+      "visible": true,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 60
+          },
+          "clickable": true
+        },
+        {
+          "rect": {
+            "x": 330,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 370
+          },
+          "clickable": true
+        }
+      ]
+    },
+    {
+      "name": "280x240-first-rejection",
+      "count": 1,
+      "alert": {
+        "x": 25,
+        "y": 1420,
+        "width": 230,
+        "height": 18,
+        "bottom": 1438,
+        "right": 255
+      },
+      "header": {
+        "x": 0,
+        "y": 20,
+        "width": 280,
+        "height": 62,
+        "bottom": 82,
+        "right": 280
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 280,
+        "height": 220,
+        "bottom": 240,
+        "right": 280
+      },
+      "scrollTop": 0,
+      "scrollHeight": 1433,
+      "visible": false,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 60
+          },
+          "clickable": true
+        },
+        {
+          "rect": {
+            "x": 220,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 260
+          },
+          "clickable": true
+        }
+      ]
+    },
+    {
+      "name": "280x240-scrolled-existing-error",
+      "count": 1,
+      "alert": {
+        "x": 25,
+        "y": 813,
+        "width": 230,
+        "height": 18,
+        "bottom": 831,
+        "right": 255
+      },
+      "header": {
+        "x": 0,
+        "y": -587,
+        "width": 280,
+        "height": 62,
+        "bottom": -525,
+        "right": 280
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 280,
+        "height": 220,
+        "bottom": 240,
+        "right": 280
+      },
+      "scrollTop": 607,
+      "scrollHeight": 1433,
+      "visible": false,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": -576,
+            "width": 40,
+            "height": 40,
+            "bottom": -536,
+            "right": 60
+          },
+          "clickable": false
+        },
+        {
+          "rect": {
+            "x": 220,
+            "y": -576,
+            "width": 40,
+            "height": 40,
+            "bottom": -536,
+            "right": 260
+          },
+          "clickable": false
+        }
+      ]
+    },
+    {
+      "name": "280x240-name-rejection",
+      "count": 1,
+      "alert": {
+        "x": 25,
+        "y": 256,
+        "width": 230,
+        "height": 18,
+        "bottom": 274,
+        "right": 255
+      },
+      "header": {
+        "x": 0,
+        "y": 20,
+        "width": 280,
+        "height": 62,
+        "bottom": 82,
+        "right": 280
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 280,
+        "height": 220,
+        "bottom": 240,
+        "right": 280
+      },
+      "scrollTop": 0,
+      "scrollHeight": 269,
+      "visible": false,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 60
+          },
+          "clickable": true
+        },
+        {
+          "rect": {
+            "x": 220,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 260
+          },
+          "clickable": true
+        }
+      ]
+    }
+  ],
+  "geometry": [
+    {
+      "name": "390x844-clean",
+      "count": 0,
+      "alert": null,
+      "header": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 62,
+        "bottom": 82,
+        "right": 390
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 824,
+        "bottom": 844,
+        "right": 390
+      },
+      "scrollTop": 0,
+      "scrollHeight": 1105,
+      "visible": false,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 60
+          },
+          "clickable": true
+        },
+        {
+          "rect": {
+            "x": 330,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 370
+          },
+          "clickable": true
+        }
+      ]
+    },
+    {
+      "name": "390x360-clean",
+      "count": 0,
+      "alert": null,
+      "header": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 62,
+        "bottom": 82,
+        "right": 390
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 390,
+        "height": 340,
+        "bottom": 360,
+        "right": 390
+      },
+      "scrollTop": 0,
+      "scrollHeight": 1105,
+      "visible": false,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 60
+          },
+          "clickable": true
+        },
+        {
+          "rect": {
+            "x": 330,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 370
+          },
+          "clickable": true
+        }
+      ]
+    },
+    {
+      "name": "280x240-clean",
+      "count": 0,
+      "alert": null,
+      "header": {
+        "x": 0,
+        "y": 20,
+        "width": 280,
+        "height": 62,
+        "bottom": 82,
+        "right": 280
+      },
+      "form": {
+        "x": 0,
+        "y": 20,
+        "width": 280,
+        "height": 220,
+        "bottom": 240,
+        "right": 280
+      },
+      "scrollTop": 0,
+      "scrollHeight": 1385,
+      "visible": false,
+      "buttons": [
+        {
+          "rect": {
+            "x": 20,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 60
+          },
+          "clickable": true
+        },
+        {
+          "rect": {
+            "x": 220,
+            "y": 31,
+            "width": 40,
+            "height": 40,
+            "bottom": 71,
+            "right": 260
+          },
+          "clickable": true
+        }
+      ]
+    },
+    {
+      "name": "mac-ordinary-clean",
+      "rect": {
+        "x": 344,
+        "y": 226.25,
+        "width": 400,
+        "height": 207.5
+      }
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "selectionStyles": {
+    "row": {
+      "select": "auto",
+      "webkit": "auto",
+      "touchAction": "manipulation"
+    },
+    "children": [
+      {
+        "select": "auto",
+        "webkit": "auto",
+        "touchAction": "auto"
+      },
+      {
+        "select": "auto",
+        "webkit": "auto",
+        "touchAction": "auto"
+      },
+      {
+        "select": "auto",
+        "webkit": "auto",
+        "touchAction": "auto"
+      },
+      {
+        "select": "auto",
+        "webkit": "auto",
+        "touchAction": "auto"
+      }
+    ],
+    "body": {
+      "select": "auto",
+      "webkit": "auto",
+      "touchAction": "auto"
+    },
+    "editor": {
+      "select": "text",
+      "webkit": "text",
+      "touchAction": "auto"
+    },
+    "paragraph": {
+      "select": "text",
+      "webkit": "text",
+      "touchAction": "auto"
+    }
+  },
+  "summary": {
+    "assertions": 71,
+    "failed": 15
+  },
+  "status": "fail"
+}

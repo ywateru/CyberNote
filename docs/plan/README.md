@@ -12,6 +12,7 @@
 | APP-SMART-U 两端智能界面 | in-progress，准确双端包有限运行；false重开回填P1待修 | d576b50旧九组及peer/O通过事实保留；两项P2经fix13解除，原失败探针、第三行真实保存、TS30/all-any8值/Rust共享corpus通过。Mac09/Android05准确包与有限运行已取得，Android false重开回填缺陷进hydration16；普通Mac过宽进geometry15，完整离线规则/手机未知状态/像素仍open |
 | APP-MAC-FOLDER-FORM-GEOMETRY15 普通新建表单 | source-review-pass，80b01da整合 | 仅普通Mac class/CSS，作者12/独审15React场景及离屏WK800×414；正式包/焦点/像素仍待验 |
 | APP-SMART-DRAFT-HYDRATION16 置顶false回填 | source-review-pass | 一行显式value→pinned；作者280断言前70失败/后0失败、独审329断言通过，Android05原P1保留，准确新包仍待验 |
+| APP-MOBILE-17 错误可见与目录选字 | source-review-pass | [任务](tasks/app-mobile-folder-interactions17.md)；Android05实际11/12、26及独核为缺陷依据；限定三个UI文件，源码与设备验收分开 |
 | REF-001 原版取证/需求/UI/调研 | in-progress | 原视频已保全、抽帧、初始规格已写，持续补证 |
 | APP-001 跨端完整实现 | in-progress | Mac .app 与 APK 已构建；基础编辑/重启已独立通过，归档/功能/像素仍阻塞 |
 | QA-001 独立验证 | 首轮blocked，源码0870d04 | 普通Mac/Android保存重启通过；归档损坏、功能与像素阻塞见qa-001-01报告 |
@@ -72,5 +73,3 @@
 docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，docs/ui 是视觉证据。实现阶段遵循 docs-sprint 的 develop/verify 分离。空仓库先建立 Git 基线，串行实施开发/验证；不要求用户批准已授权的常规设计补全。测试必须覆盖真实持久化边界和 UI 用户路径，不能只测试同实现的常量。
 
 具体模块边界与必须实证的调用链见 [交付分解](analysis/delivery-map.md)。后续每项阻塞差异建立最小可验收任务，先修再复核。
-
-| APP-MOBILE-17 错误可见与目录选字 | ready，等hydration16独审释放 | [任务](tasks/app-mobile-folder-interactions17.md)；Android05实际11/12、26及独核为缺陷依据；源码与设备验收分开 |
