@@ -1,0 +1,302 @@
+{
+  "scope": "Python children/temp fixtures only; simulated markers are not Gradle/offline/platform evidence.",
+  "environments": {
+    "macUnchanged": true,
+    "androidChangedKeys": [
+      "GRADLE_OPTS"
+    ],
+    "android": {
+      "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+      "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+      "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+      "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+      "CARGO_NET_OFFLINE": "true",
+      "CARGO_BUILD_JOBS": "2",
+      "GRADLE_RO_DEP_CACHE": "/private/tmp/notes-lifecycle-cache-overlay-01/overlay-ro",
+      "GRADLE_OPTS": "-Dorg.gradle.daemon=false -Dorg.gradle.configuration-cache=false"
+    }
+  },
+  "cases": [
+    {
+      "mode": "good",
+      "runnerExit": 0,
+      "collectorAccepted": true,
+      "actualChildEnvironmentObserved": true,
+      "initSetsAssertsThenReadsProperties": true,
+      "ownedGroupStopped": true,
+      "ownedInitRemoved": true,
+      "oldOutputsPreserved": true,
+      "independentCollectorRejections": [
+        "missing",
+        "nonce",
+        "workers",
+        "offline",
+        "cache-value",
+        "cache-reused",
+        "proof",
+        "environment",
+        "cleanup"
+      ],
+      "proofError": null,
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "<controlled Python fixture>"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "missing",
+      "runnerExit": 1,
+      "collectorAccepted": false,
+      "actualChildEnvironmentObserved": true,
+      "initSetsAssertsThenReadsProperties": true,
+      "ownedGroupStopped": true,
+      "ownedInitRemoved": true,
+      "oldOutputsPreserved": true,
+      "independentCollectorRejections": [],
+      "proofError": "RuntimeError('Android current init proof missing or has wrong offline/workers/cache/nonce value')",
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "<controlled Python fixture>"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "offline",
+      "runnerExit": 1,
+      "collectorAccepted": false,
+      "actualChildEnvironmentObserved": true,
+      "initSetsAssertsThenReadsProperties": true,
+      "ownedGroupStopped": true,
+      "ownedInitRemoved": true,
+      "oldOutputsPreserved": true,
+      "independentCollectorRejections": [],
+      "proofError": "RuntimeError('Android current init proof missing or has wrong offline/workers/cache/nonce value')",
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "<controlled Python fixture>"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "workers",
+      "runnerExit": 1,
+      "collectorAccepted": false,
+      "actualChildEnvironmentObserved": true,
+      "initSetsAssertsThenReadsProperties": true,
+      "ownedGroupStopped": true,
+      "ownedInitRemoved": true,
+      "oldOutputsPreserved": true,
+      "independentCollectorRejections": [],
+      "proofError": "RuntimeError('Android current init proof missing or has wrong offline/workers/cache/nonce value')",
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "<controlled Python fixture>"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "cache-value",
+      "runnerExit": 1,
+      "collectorAccepted": false,
+      "actualChildEnvironmentObserved": true,
+      "initSetsAssertsThenReadsProperties": true,
+      "ownedGroupStopped": true,
+      "ownedInitRemoved": true,
+      "oldOutputsPreserved": true,
+      "independentCollectorRejections": [],
+      "proofError": "RuntimeError('Android current init proof missing or has wrong offline/workers/cache/nonce value')",
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "<controlled Python fixture>"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "nonce",
+      "runnerExit": 1,
+      "collectorAccepted": false,
+      "actualChildEnvironmentObserved": true,
+      "initSetsAssertsThenReadsProperties": true,
+      "ownedGroupStopped": true,
+      "ownedInitRemoved": true,
+      "oldOutputsPreserved": true,
+      "independentCollectorRejections": [],
+      "proofError": "RuntimeError('Android current init proof missing or has wrong offline/workers/cache/nonce value')",
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "<controlled Python fixture>"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "cache-reused",
+      "runnerExit": 1,
+      "collectorAccepted": false,
+      "actualChildEnvironmentObserved": true,
+      "initSetsAssertsThenReadsProperties": true,
+      "ownedGroupStopped": true,
+      "ownedInitRemoved": true,
+      "oldOutputsPreserved": true,
+      "independentCollectorRejections": [],
+      "proofError": "RuntimeError('Android configuration cache reuse is forbidden')",
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "<controlled Python fixture>"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "cache-reusing",
+      "runnerExit": 1,
+      "collectorAccepted": false,
+      "actualChildEnvironmentObserved": true,
+      "initSetsAssertsThenReadsProperties": true,
+      "ownedGroupStopped": true,
+      "ownedInitRemoved": true,
+      "oldOutputsPreserved": true,
+      "independentCollectorRejections": [],
+      "proofError": "RuntimeError('Android configuration cache reuse is forbidden')",
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "<controlled Python fixture>"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "mixed",
+      "runnerExit": 1,
+      "collectorAccepted": false,
+      "actualChildEnvironmentObserved": true,
+      "initSetsAssertsThenReadsProperties": true,
+      "ownedGroupStopped": true,
+      "ownedInitRemoved": true,
+      "oldOutputsPreserved": true,
+      "independentCollectorRejections": [],
+      "proofError": "RuntimeError('Android current init proof missing or has wrong offline/workers/cache/nonce value')",
+      "calls": [
+        {
+          "requestedButNotExecuted": [
+            "pnpm",
+            "android:build",
+            "--debug"
+          ],
+          "actual": [
+            "/Library/Developer/CommandLineTools/usr/bin/python3",
+            "-B",
+            "-c",
+            "<controlled Python fixture>"
+          ]
+        }
+      ]
+    }
+  ],
+  "startupEnvironmentRejected": {
+    "mode": "environment",
+    "runnerExit": 1,
+    "collectorAccepted": false,
+    "actualChildEnvironmentObserved": true,
+    "initSetsAssertsThenReadsProperties": true,
+    "ownedGroupStopped": true,
+    "ownedInitRemoved": true,
+    "oldOutputsPreserved": true,
+    "independentCollectorRejections": [],
+    "proofError": "RuntimeError('Android startup environment lacks the configuration-cache=false JVM option')",
+    "calls": [
+      {
+        "requestedButNotExecuted": [
+          "pnpm",
+          "android:build",
+          "--debug"
+        ],
+        "actual": [
+          "/Library/Developer/CommandLineTools/usr/bin/python3",
+          "-B",
+          "-c",
+          "<controlled Python fixture>"
+        ]
+      }
+    ]
+  },
+  "status": "pass"
+}

@@ -1,7 +1,7 @@
 ---
 id: tools-android-offline-init14
 scope: Guarantee the scoped Gradle offline init is evaluated on each accepted Android build
-status: in-progress
+status: done
 depends-on: [app-smart-u-device09]
 ---
 
@@ -34,3 +34,5 @@ Gradle官方current文档说明cache hit会跳过包括init scripts在内的配�
 本任务不关闭智能规则、设备或像素总目标，只使下一次真实Android构建拥有可验证的离线执行来源。
 
 2026-11-05执行起点：原工具与Mac包已完成不同作者核查并STOP，见[Mac有限报告](../reviews/mac-smart-u-independent09.md)，可以开始上述工具窄修。只读作者已确认有效环境经runner、android.mjs继续传递，gradlew明确将GRADLE_OPTS解析为JVM参数；native CLI中间段及本机9.6.1实际开关仍待真实新attempt验证。作者阶段不运行正式平台构建。
+
+2026-11-05 root接受准确`93e0e13da6e3e0efe2450684f9f909e795aeda6b`的[不同作者独审](../reviews/tools-android-offline-init14.md)有限pass；15项证据逐字节核对无差异。工具源码/参数/拒绝边界完成，真实Gradle与Android包行为仍由device09新build05单列，不追认build04。作者与审查者均STOP，target/cache已释放。

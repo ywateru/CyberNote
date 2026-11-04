@@ -1,0 +1,33 @@
+[
+  {
+    "name": "controlled",
+    "argv": [
+      "/Library/Developer/CommandLineTools/usr/bin/python3",
+      "-B",
+      "docs/verification/unified-candidate06/preparation/check-android-offline-init.py",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/tools-android-offline-init14-independent/controlled.json"
+    ],
+    "exitCode": 0,
+    "seconds": 2.131100584
+  },
+  {
+    "name": "safety",
+    "argv": [
+      "/Library/Developer/CommandLineTools/usr/bin/python3",
+      "-B",
+      "docs/verification/unified-candidate06/preparation/check-boundaries.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.7006366669999999
+  },
+  {
+    "name": "extra",
+    "argv": [
+      "/Library/Developer/CommandLineTools/usr/bin/python3",
+      "-B",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/tools-android-offline-init14-independent/check-extra-collector.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.33747583300000006
+  }
+]

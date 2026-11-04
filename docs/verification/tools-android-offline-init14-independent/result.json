@@ -1,0 +1,60 @@
+{
+  "status": "pass",
+  "scope": "tools14 exact-source/parameter/failure-boundary review only; not real Gradle/native/device/pixel validation",
+  "head": "93e0e13da6e3e0efe2450684f9f909e795aeda6b",
+  "confirmedFindings": [],
+  "runnerCases": 10,
+  "authorCollectorMutationRejections": 9,
+  "safetyTests": 7,
+  "extraCollectorCases": 9,
+  "extraCollectorRejections": 8,
+  "extraCollectorValidRepeatedProofAcceptance": 1,
+  "invalidInitNonceRejections": 4,
+  "inputIdentityUnchanged": true,
+  "full320EqualHistoricalMacFreeze": true,
+  "manifestSha256": "a1634e41759706d2e654e71c9196e5654d5230cb0940084a6e62d6a5c3efe0f3",
+  "toolAggregate": "e4ac8930de9a43a86f53c4a33d6eec088fb4f802db27e2de2c00d40f16e20a3e",
+  "productAggregate": "b02f0a58b0ff5bc31cb9d09437fd73b32645b5f198d781336196fe2060b75897",
+  "inputAggregate": "abf3f38aceb7cc93100e27ca3bca1848d3d12bba5999835d2a501346522efab6",
+  "review": {
+    "path": "docs/plan/reviews/tools-android-offline-init14.md",
+    "sha256": "bafde0fc8926f1531fddd7ac39b431f72b395871cf1a6686ef513ab096d6da0f"
+  },
+  "commands": [
+    {
+      "name": "controlled",
+      "argv": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-B",
+        "docs/verification/unified-candidate06/preparation/check-android-offline-init.py",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/tools-android-offline-init14-independent/controlled.json"
+      ],
+      "exitCode": 0,
+      "seconds": 2.131100584
+    },
+    {
+      "name": "safety",
+      "argv": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-B",
+        "docs/verification/unified-candidate06/preparation/check-boundaries.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.7006366669999999
+    },
+    {
+      "name": "extra",
+      "argv": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-B",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/tools-android-offline-init14-independent/check-extra-collector.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.33747583300000006
+    }
+  ],
+  "scopeRestrictions": "No product/tool edits, platform/version commands, GUI, ADB, original Notes, user DB, cache/target writes, stage or commit.",
+  "remaining": "Root must separately authorize/freeze/START accurate Android05. Prior failed Android04 remains unaccepted; Mac09 historical sealing unchanged.",
+  "stop": true,
+  "sharedTargetAndCache": "not acquired or used; released"
+}

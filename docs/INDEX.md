@@ -27,6 +27,8 @@
 - [智能双端包输入清单与串行安排](verification/unified-candidate06/smart-u-device09-preparation/README.md)
 - [智能界面Mac准确完整包独立核查](plan/reviews/mac-smart-u-independent09.md)
 - [Android构建离线初始化窄修14](plan/tasks/tools-android-offline-init14.md)
+- [离线初始化工具14独立复核](plan/reviews/tools-android-offline-init14.md)
+- [手机文件夹页原录屏与旧包几何基线14](research/mobile-folders-baseline14/README.md)
 - [Mac智能文件夹表单布局](ui/smart-folders-macos.md)
 - [Mac智能表单原图像素测量与捕获范围](research/smart-folder-form-measurements09/README.md)
 - [手机智能文件夹官方文字与原图依据09](research/mobile-smart-folder-official09.md)

@@ -1,0 +1,114 @@
+{
+  "status": "pass",
+  "scope": "Python/temp fixtures only; no Groovy, Gradle or native execution.",
+  "extraCollectorCases": [
+    {
+      "case": "second-cache-reuse-phrase",
+      "expected": "reject",
+      "actual": "reject",
+      "reason": "Android configuration cache reuse is forbidden"
+    },
+    {
+      "case": "case-insensitive-cache-reuse",
+      "expected": "reject",
+      "actual": "reject",
+      "reason": "Android configuration cache reuse is forbidden"
+    },
+    {
+      "case": "mixed-old-and-current-nonce",
+      "expected": "reject",
+      "actual": "reject",
+      "reason": "Android current init proof missing or has wrong offline/workers/cache/nonce value"
+    },
+    {
+      "case": "result-nonce-only",
+      "expected": "reject",
+      "actual": "reject",
+      "reason": "Android current init proof missing or has wrong offline/workers/cache/nonce value"
+    },
+    {
+      "case": "proof-marker-count-only",
+      "expected": "reject",
+      "actual": "reject",
+      "reason": "Android init proof differs from the current raw build log"
+    },
+    {
+      "case": "raw-log-removed-while-success-proof-remains",
+      "expected": "reject",
+      "actual": "reject",
+      "reason": "[Errno 2] No such file or directory: '/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/candidate06-offline14-fmhv6r09/docs/verification/unified-candidate06/controlled/android-good/build.txt'"
+    },
+    {
+      "case": "two-identical-current-proofs",
+      "expected": "accept",
+      "actual": "accept"
+    },
+    {
+      "case": "duplicate-log-stale-proof-count",
+      "expected": "reject",
+      "actual": "reject",
+      "reason": "Android init proof differs from the current raw build log"
+    },
+    {
+      "case": "bad-frozen-environment-and-matching-child-record",
+      "expected": "reject",
+      "actual": "reject",
+      "reason": "Android startup environment lacks the configuration-cache=false JVM option"
+    }
+  ],
+  "invalidInitNonceRejections": 4,
+  "environmentSelection": {
+    "macUnchanged": true,
+    "androidChangedKeys": [
+      "GRADLE_OPTS"
+    ],
+    "android": {
+      "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+      "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+      "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+      "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+      "CARGO_NET_OFFLINE": "true",
+      "CARGO_BUILD_JOBS": "2",
+      "GRADLE_RO_DEP_CACHE": "/private/tmp/notes-lifecycle-cache-overlay-01/overlay-ro",
+      "GRADLE_OPTS": "-Dorg.gradle.daemon=false -Dorg.gradle.configuration-cache=false"
+    }
+  },
+  "baseFixture": {
+    "mode": "good",
+    "runnerExit": 0,
+    "collectorAccepted": true,
+    "actualChildEnvironmentObserved": true,
+    "initSetsAssertsThenReadsProperties": true,
+    "ownedGroupStopped": true,
+    "ownedInitRemoved": true,
+    "oldOutputsPreserved": true,
+    "independentCollectorRejections": [
+      "missing",
+      "nonce",
+      "workers",
+      "offline",
+      "cache-value",
+      "cache-reused",
+      "proof",
+      "environment",
+      "cleanup"
+    ],
+    "proofError": null,
+    "calls": [
+      {
+        "requestedButNotExecuted": [
+          "pnpm",
+          "android:build",
+          "--debug"
+        ],
+        "actual": [
+          "/Library/Developer/CommandLineTools/usr/bin/python3",
+          "-B",
+          "-c",
+          "<controlled Python fixture>"
+        ]
+      }
+    ]
+  },
+  "provenancePreconditions": "Unmodified real temporary runner files/output identity; no collector provenance bypass mocks."
+}
