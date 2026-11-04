@@ -17,6 +17,7 @@
 - [原版空标签草稿验证09](research/smart-folder-empty-tags-runtime09/README.md)
 - [原版标签候选、胶囊与模式往返草稿10](research/smart-folder-tag-picker-runtime10/README.md)
 - [Mac智能文件夹表单布局](ui/smart-folders-macos.md)
+- [Mac智能表单原图像素测量与捕获范围](research/smart-folder-form-measurements09/README.md)
 - [手机智能文件夹官方文字与原图依据09](research/mobile-smart-folder-official09.md)
 - [手机智能筛选面板与长按菜单布局](ui/smart-folders-mobile.md)
 - [本地库版本与实体防损修复任务09](plan/tasks/app-smart-d1-storage-open09.md)

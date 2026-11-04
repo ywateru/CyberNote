@@ -1,0 +1,1387 @@
+{
+  "coordinate_convention": "Source-image origin top-left; [x0,y0,x1,y1) exclusive upper edges; values are decoded image pixels, never pt/dp/CSS px",
+  "masks": {
+    "ink": "max(R,G,B)<threshold, inside bounded text ROI; measures glyph ink, not font box or baseline",
+    "grey": "min(R,G,B)>=210, max<threshold, max-min<=4; connectedness not required; ROI bounds exclude neighbors",
+    "gold": "R>200, R-B>threshold, G-B>threshold/3; useful for gold fill/ring, not absolute color identity",
+    "white": "min(R,G,B)>threshold; bounded modal ROI only"
+  },
+  "records": {
+    "default": {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/docs/research/smart-folder-empty-tags-runtime09/01-default-empty-tags-before-save.cua-image",
+      "paired_ax": "/Users/water/work/2026/Apple-Notes-Clone/docs/research/smart-folder-empty-tags-runtime09/01-default-empty-tags-before-save.ax.txt",
+      "format": "JPEG",
+      "mode": "RGB",
+      "pixels": [
+        1368,
+        586
+      ],
+      "capture": "tight modal close-up; rounded corners meet image edges; unknown display scale",
+      "measurements": {
+        "title": {
+          "roi": [
+            30,
+            30,
+            350,
+            90
+          ],
+          "mask": "ink",
+          "threshold_bboxes": {
+            "80": [
+              41,
+              45,
+              218,
+              68
+            ],
+            "128": [
+              41,
+              45,
+              218,
+              69
+            ],
+            "180": [
+              41,
+              45,
+              219,
+              69
+            ]
+          }
+        },
+        "name_label": {
+          "roi": [
+            30,
+            110,
+            115,
+            165
+          ],
+          "mask": "ink",
+          "threshold_bboxes": {
+            "80": [
+              42,
+              125,
+              99,
+              148
+            ],
+            "128": [
+              41,
+              125,
+              99,
+              148
+            ],
+            "180": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "name_value": {
+          "roi": [
+            135,
+            115,
+            650,
+            160
+          ],
+          "mask": "ink",
+          "threshold_bboxes": {
+            "80": [
+              143,
+              127,
+              493,
+              148
+            ],
+            "128": [
+              143,
+              127,
+              493,
+              148
+            ],
+            "180": [
+              142,
+              127,
+              494,
+              148
+            ]
+          }
+        },
+        "checkbox_label": {
+          "roi": [
+            80,
+            185,
+            350,
+            225
+          ],
+          "mask": "ink",
+          "threshold_bboxes": {
+            "80": [
+              85,
+              197,
+              262,
+              220
+            ],
+            "128": [
+              85,
+              197,
+              262,
+              221
+            ],
+            "180": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        },
+        "description": {
+          "roi": [
+            75,
+            225,
+            650,
+            270
+          ],
+          "mask": "ink",
+          "threshold_bboxes": {
+            "80": null,
+            "128": [
+              81,
+              233,
+              420,
+              256
+            ],
+            "180": [
+              81,
+              233,
+              424,
+              257
+            ]
+          }
+        },
+        "name_focus_ring": {
+          "roi": [
+            110,
+            95,
+            1345,
+            175
+          ],
+          "mask": "gold",
+          "threshold_bboxes": {
+            "30": [
+              123,
+              106,
+              1334,
+              166
+            ],
+            "50": [
+              123,
+              106,
+              1334,
+              166
+            ],
+            "70": [
+              124,
+              107,
+              1333,
+              165
+            ]
+          }
+        },
+        "checkbox": {
+          "roi": [
+            35,
+            185,
+            80,
+            230
+          ],
+          "mask": "gold",
+          "threshold_bboxes": {
+            "30": [
+              39,
+              192,
+              72,
+              224
+            ],
+            "50": [
+              40,
+              192,
+              72,
+              224
+            ],
+            "70": [
+              40,
+              192,
+              72,
+              224
+            ]
+          }
+        },
+        "combination": {
+          "roi": [
+            205,
+            280,
+            365,
+            350
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              211,
+              292,
+              358,
+              340
+            ],
+            "245": [
+              211,
+              292,
+              358,
+              340
+            ],
+            "250": [
+              211,
+              292,
+              358,
+              340
+            ]
+          }
+        },
+        "rule_type": {
+          "roi": [
+            35,
+            385,
+            270,
+            450
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              40,
+              394,
+              264,
+              442
+            ],
+            "245": [
+              40,
+              394,
+              264,
+              442
+            ],
+            "250": [
+              40,
+              394,
+              264,
+              442
+            ]
+          }
+        },
+        "rule_mode": {
+          "roi": [
+            275,
+            385,
+            615,
+            450
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              280,
+              394,
+              608,
+              442
+            ],
+            "245": [
+              280,
+              394,
+              608,
+              442
+            ],
+            "250": [
+              280,
+              394,
+              608,
+              442
+            ]
+          }
+        },
+        "token_field": {
+          "roi": [
+            612,
+            382,
+            1240,
+            450
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": null,
+            "245": [
+              620,
+              390,
+              1232,
+              442
+            ],
+            "250": [
+              620,
+              390,
+              1232,
+              442
+            ]
+          }
+        },
+        "separator_top": {
+          "roi": [
+            40,
+            368,
+            1328,
+            377
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              40,
+              371,
+              1328,
+              373
+            ],
+            "245": [
+              40,
+              371,
+              1328,
+              373
+            ],
+            "250": [
+              40,
+              371,
+              1328,
+              373
+            ]
+          }
+        },
+        "separator_bottom": {
+          "roi": [
+            40,
+            451,
+            1328,
+            461
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              40,
+              455,
+              1328,
+              457
+            ],
+            "245": [
+              40,
+              455,
+              1328,
+              457
+            ],
+            "250": [
+              40,
+              455,
+              1328,
+              457
+            ]
+          }
+        },
+        "cancel": {
+          "roi": [
+            985,
+            490,
+            1158,
+            553
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              992,
+              498,
+              1152,
+              546
+            ],
+            "245": [
+              992,
+              498,
+              1152,
+              546
+            ],
+            "250": [
+              992,
+              498,
+              1152,
+              546
+            ]
+          }
+        },
+        "okay": {
+          "roi": [
+            1160,
+            490,
+            1335,
+            553
+          ],
+          "mask": "gold",
+          "threshold_bboxes": {
+            "30": [
+              1168,
+              497,
+              1328,
+              547
+            ],
+            "50": [
+              1168,
+              498,
+              1328,
+              546
+            ],
+            "70": [
+              1168,
+              498,
+              1328,
+              546
+            ]
+          }
+        },
+        "minus": {
+          "roi": [
+            1235,
+            380,
+            1284,
+            430
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              1249,
+              402,
+              1270,
+              404
+            ],
+            "245": [
+              1243,
+              390,
+              1276,
+              420
+            ],
+            "250": [
+              1243,
+              388,
+              1276,
+              422
+            ]
+          }
+        },
+        "plus": {
+          "roi": [
+            1282,
+            380,
+            1333,
+            430
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              1290,
+              388,
+              1323,
+              422
+            ],
+            "245": [
+              1290,
+              388,
+              1323,
+              422
+            ],
+            "250": [
+              1289,
+              388,
+              1324,
+              422
+            ]
+          }
+        }
+      },
+      "guide": {
+        "file": "default-rule-footer-guide.png",
+        "source_crop": [
+          20,
+          280,
+          1340,
+          556
+        ],
+        "unscaled": true,
+        "annotation_order": [
+          "combination",
+          "rule_type",
+          "rule_mode",
+          "token_field",
+          "separator_top",
+          "separator_bottom",
+          "cancel",
+          "okay"
+        ],
+        "note": "Source pixels decoded from JPEG and copied; blue annotation overlays alter guide pixels. Guide PNG does not make source lossless."
+      }
+    },
+    "any_tag": {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/docs/research/smart-folder-empty-tags-runtime09/04-any-tag-has-no-token-field.cua-image",
+      "paired_ax": "/Users/water/work/2026/Apple-Notes-Clone/docs/research/smart-folder-empty-tags-runtime09/04-any-tag-has-no-token-field.ax.txt",
+      "format": "JPEG",
+      "mode": "RGB",
+      "pixels": [
+        1368,
+        586
+      ],
+      "capture": "tight modal close-up; same image dimensions as default, independent measurement",
+      "measurements": {
+        "rule_type": {
+          "roi": [
+            35,
+            385,
+            270,
+            450
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              40,
+              394,
+              264,
+              442
+            ],
+            "245": [
+              40,
+              394,
+              264,
+              442
+            ],
+            "250": [
+              40,
+              394,
+              264,
+              442
+            ]
+          }
+        },
+        "rule_mode": {
+          "roi": [
+            275,
+            385,
+            615,
+            450
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              280,
+              394,
+              608,
+              450
+            ],
+            "245": [
+              280,
+              394,
+              608,
+              450
+            ],
+            "250": [
+              280,
+              394,
+              608,
+              450
+            ]
+          },
+          "status": "EXCLUDED_FROM_GEOMETRY: pointer halo below the mode selector enters the ROI and hits its lower boundary; raw bbox is not the control height.",
+          "do_not_use_for_dimensions": true
+        },
+        "cancel": {
+          "roi": [
+            985,
+            490,
+            1158,
+            553
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              992,
+              498,
+              1152,
+              546
+            ],
+            "245": [
+              992,
+              498,
+              1152,
+              546
+            ],
+            "250": [
+              992,
+              498,
+              1152,
+              546
+            ]
+          }
+        },
+        "okay": {
+          "roi": [
+            1160,
+            490,
+            1335,
+            553
+          ],
+          "mask": "gold",
+          "threshold_bboxes": {
+            "30": [
+              1168,
+              497,
+              1328,
+              547
+            ],
+            "50": [
+              1168,
+              498,
+              1328,
+              546
+            ],
+            "70": [
+              1168,
+              498,
+              1328,
+              546
+            ]
+          }
+        }
+      }
+    },
+    "edit_two_rules": {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/docs/research/smart-folder-original-runtime-01/15-all-folder-a-and-pinned-definition.cua-image",
+      "paired_ax": "/Users/water/work/2026/Apple-Notes-Clone/docs/research/smart-folder-original-runtime-01/15-all-folder-a-and-pinned-definition.ax.txt",
+      "format": "JPEG",
+      "mode": "RGB",
+      "pixels": [
+        1368,
+        636
+      ],
+      "capture": "tight modal close-up; no checkbox/description; folder and pinned rules",
+      "measurements": {
+        "title": {
+          "roi": [
+            30,
+            30,
+            350,
+            90
+          ],
+          "mask": "ink",
+          "threshold_bboxes": {
+            "80": [
+              41,
+              45,
+              218,
+              68
+            ],
+            "128": [
+              41,
+              45,
+              218,
+              69
+            ],
+            "180": [
+              41,
+              45,
+              219,
+              69
+            ]
+          }
+        },
+        "name_label": {
+          "roi": [
+            30,
+            110,
+            115,
+            165
+          ],
+          "mask": "ink",
+          "threshold_bboxes": {
+            "80": [
+              42,
+              125,
+              99,
+              148
+            ],
+            "128": [
+              41,
+              125,
+              99,
+              148
+            ],
+            "180": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "name_field": {
+          "roi": [
+            115,
+            100,
+            1340,
+            175
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              142,
+              127,
+              476,
+              149
+            ],
+            "245": [
+              127,
+              110,
+              1330,
+              162
+            ],
+            "250": [
+              127,
+              110,
+              1330,
+              162
+            ]
+          }
+        },
+        "combination": {
+          "roi": [
+            205,
+            185,
+            365,
+            245
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              211,
+              192,
+              358,
+              240
+            ],
+            "245": [
+              211,
+              192,
+              358,
+              240
+            ],
+            "250": [
+              211,
+              192,
+              358,
+              240
+            ]
+          }
+        },
+        "rule1_type": {
+          "roi": [
+            35,
+            285,
+            270,
+            350
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              40,
+              294,
+              264,
+              342
+            ],
+            "245": [
+              40,
+              294,
+              264,
+              342
+            ],
+            "250": [
+              40,
+              294,
+              264,
+              342
+            ]
+          }
+        },
+        "rule1_mode": {
+          "roi": [
+            275,
+            285,
+            460,
+            350
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              280,
+              294,
+              453,
+              342
+            ],
+            "245": [
+              280,
+              294,
+              453,
+              342
+            ],
+            "250": [
+              280,
+              294,
+              453,
+              342
+            ]
+          }
+        },
+        "folder_token_field": {
+          "roi": [
+            270,
+            345,
+            1240,
+            417
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": null,
+            "245": [
+              276,
+              356,
+              1232,
+              410
+            ],
+            "250": [
+              276,
+              356,
+              1232,
+              410
+            ]
+          }
+        },
+        "rule2_type": {
+          "roi": [
+            35,
+            435,
+            270,
+            500
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              40,
+              444,
+              264,
+              492
+            ],
+            "245": [
+              40,
+              444,
+              264,
+              492
+            ],
+            "250": [
+              40,
+              444,
+              264,
+              492
+            ]
+          }
+        },
+        "rule2_mode": {
+          "roi": [
+            275,
+            435,
+            460,
+            500
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              280,
+              444,
+              453,
+              492
+            ],
+            "245": [
+              280,
+              444,
+              453,
+              492
+            ],
+            "250": [
+              280,
+              444,
+              453,
+              492
+            ]
+          }
+        },
+        "separator1": {
+          "roi": [
+            40,
+            268,
+            1328,
+            277
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              40,
+              271,
+              1328,
+              273
+            ],
+            "245": [
+              40,
+              271,
+              1328,
+              273
+            ],
+            "250": [
+              40,
+              271,
+              1328,
+              273
+            ]
+          }
+        },
+        "separator2": {
+          "roi": [
+            40,
+            418,
+            1328,
+            427
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              40,
+              421,
+              1328,
+              423
+            ],
+            "245": [
+              40,
+              421,
+              1328,
+              423
+            ],
+            "250": [
+              40,
+              421,
+              1328,
+              423
+            ]
+          }
+        },
+        "separator3": {
+          "roi": [
+            40,
+            502,
+            1328,
+            511
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              40,
+              505,
+              1328,
+              507
+            ],
+            "245": [
+              40,
+              505,
+              1328,
+              507
+            ],
+            "250": [
+              40,
+              505,
+              1328,
+              507
+            ]
+          }
+        },
+        "cancel": {
+          "roi": [
+            985,
+            540,
+            1158,
+            603
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              992,
+              548,
+              1152,
+              596
+            ],
+            "245": [
+              992,
+              548,
+              1152,
+              596
+            ],
+            "250": [
+              992,
+              548,
+              1152,
+              596
+            ]
+          }
+        },
+        "okay": {
+          "roi": [
+            1160,
+            540,
+            1335,
+            603
+          ],
+          "mask": "gold",
+          "threshold_bboxes": {
+            "30": [
+              1168,
+              547,
+              1328,
+              597
+            ],
+            "50": [
+              1168,
+              548,
+              1328,
+              596
+            ],
+            "70": [
+              1168,
+              548,
+              1328,
+              596
+            ]
+          }
+        }
+      },
+      "guide": {
+        "file": "edit-rule-footer-guide.png",
+        "source_crop": [
+          20,
+          180,
+          1340,
+          616
+        ],
+        "unscaled": true,
+        "annotation_order": [
+          "combination",
+          "rule1_type",
+          "rule1_mode",
+          "folder_token_field",
+          "rule2_type",
+          "rule2_mode",
+          "cancel",
+          "okay"
+        ],
+        "note": "Source pixels decoded from JPEG and copied; blue annotation overlays alter guide pixels. Guide PNG does not make source lossless."
+      }
+    },
+    "alert": {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/docs/research/smart-folder-empty-tags-runtime09/02-empty-tags-save-rejected.cua-image",
+      "paired_ax": "/Users/water/work/2026/Apple-Notes-Clone/docs/research/smart-folder-empty-tags-runtime09/02-empty-tags-save-rejected.ax.txt",
+      "format": "JPEG",
+      "mode": "RGB",
+      "pixels": [
+        520,
+        278
+      ],
+      "capture": "separate tight warning capture; not a region in default image",
+      "measurements": {
+        "title": {
+          "roi": [
+            30,
+            35,
+            470,
+            80
+          ],
+          "mask": "ink",
+          "threshold_bboxes": {
+            "80": [
+              45,
+              46,
+              306,
+              69
+            ],
+            "128": [
+              45,
+              46,
+              307,
+              70
+            ],
+            "180": [
+              45,
+              46,
+              307,
+              70
+            ]
+          }
+        },
+        "body": {
+          "roi": [
+            30,
+            90,
+            490,
+            165
+          ],
+          "mask": "ink",
+          "threshold_bboxes": {
+            "80": [
+              45,
+              98,
+              463,
+              154
+            ],
+            "128": [
+              45,
+              98,
+              463,
+              155
+            ],
+            "180": [
+              44,
+              98,
+              464,
+              155
+            ]
+          }
+        },
+        "okay": {
+          "roi": [
+            20,
+            175,
+            500,
+            255
+          ],
+          "mask": "gold",
+          "threshold_bboxes": {
+            "30": [
+              31,
+              189,
+              489,
+              247
+            ],
+            "50": [
+              32,
+              190,
+              488,
+              246
+            ],
+            "70": [
+              32,
+              190,
+              488,
+              246
+            ]
+          }
+        }
+      }
+    },
+    "whole_window": {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/docs/research/smart-folder-original-runtime03/02-edit-existing.cua-image",
+      "paired_ax": "/Users/water/work/2026/Apple-Notes-Clone/docs/research/smart-folder-original-runtime03/02-edit-existing.ax.txt",
+      "format": "JPEG",
+      "mode": "RGB",
+      "pixels": [
+        1368,
+        636
+      ],
+      "capture": "main window plus background/blank region; modal smaller inside image; never normalize to close-up",
+      "measurements": {
+        "visible_modal": {
+          "roi": [
+            220,
+            180,
+            770,
+            460
+          ],
+          "mask": "white",
+          "threshold_bboxes": {
+            "242": [
+              250,
+              206,
+              732,
+              430
+            ],
+            "245": [
+              251,
+              206,
+              731,
+              430
+            ],
+            "248": [
+              251,
+              206,
+              731,
+              430
+            ]
+          }
+        },
+        "title": {
+          "roi": [
+            255,
+            212,
+            400,
+            242
+          ],
+          "mask": "ink",
+          "threshold_bboxes": {
+            "80": [
+              265,
+              222,
+              326,
+              230
+            ],
+            "128": [
+              265,
+              222,
+              327,
+              230
+            ],
+            "180": [
+              264,
+              222,
+              327,
+              230
+            ]
+          }
+        },
+        "rule1_type": {
+          "roi": [
+            259,
+            303,
+            346,
+            330
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              265,
+              310,
+              343,
+              326
+            ],
+            "245": [
+              264,
+              310,
+              343,
+              327
+            ],
+            "250": [
+              264,
+              309,
+              343,
+              327
+            ]
+          }
+        },
+        "rule2_type": {
+          "roi": [
+            259,
+            356,
+            346,
+            383
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              265,
+              363,
+              343,
+              379
+            ],
+            "245": [
+              264,
+              362,
+              343,
+              380
+            ],
+            "250": [
+              264,
+              362,
+              343,
+              380
+            ]
+          }
+        },
+        "cancel": {
+          "roi": [
+            595,
+            394,
+            658,
+            423
+          ],
+          "mask": "grey",
+          "threshold_bboxes": {
+            "240": [
+              600,
+              400,
+              655,
+              416
+            ],
+            "245": [
+              600,
+              399,
+              656,
+              416
+            ],
+            "250": [
+              599,
+              399,
+              656,
+              416
+            ]
+          }
+        },
+        "okay": {
+          "roi": [
+            658,
+            394,
+            723,
+            423
+          ],
+          "mask": "gold",
+          "threshold_bboxes": {
+            "30": [
+              661,
+              398,
+              719,
+              417
+            ],
+            "50": [
+              661,
+              399,
+              718,
+              417
+            ],
+            "70": [
+              661,
+              399,
+              718,
+              416
+            ]
+          }
+        }
+      }
+    }
+  },
+  "excluded": [
+    "Default grey name-border mask is contaminated by pointer halo/caret; report gold focus ring instead.",
+    "Minus button pale outer circle is threshold sensitive; do not derive exact native hit target.",
+    "No image is a lossless native-window acquisition; no display scale or source capture normalization was supplied.",
+    "No pixel-equivalence result or native point conversion."
+  ]
+}

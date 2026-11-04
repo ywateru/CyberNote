@@ -25,6 +25,8 @@ Folder在TS边界为严格物理/智能联合类型；查询闭合schema、Rust/
 
 Mac按已采表单和菜单结构：新建切换制作智能、默认标签行、全部/任意、每行模式及token、单行禁移除、底部取消/好、空标签警告。编辑表单去掉新建checkbox/说明并恢复定义；焦点/菜单/输入法和窗口缩放保全。原版JPEG仅是对照，不标成无损零差，尺寸/颜色须测量后校准。
 
+表单校准补充：`research/smart-folder-form-measurements09/`提供独立近景原图坐标与局部标注，`research/smart-folder-tag-picker-runtime10/`有CUA真实候选、token及allSelected→anyTag→allSelected保留值的草稿往返。原图40px边距、48px控件高等不可原样当CSS px；先在同捕获范围的新包图中校准。候选中的“创建新标签”仅已见入口未点击，不能宣称原版已验证持久化。anyTag/noTags提交不携带names，但可在草稿层缓存selected值，切回恢复；AX disabled隐藏输入不能渲染成可见禁用框。
+
 手机过滤管理使用官方iOS26静态参考中的面板层级、顶部×/黄色勾、启用/其他分组、标签胶囊与类型行，文案保留手机“任何已选标签”等差异；不能复用Mac行增减样式。名称上层、关闭/确认是否保存等未获手机运行证据的部分必须先落工程动作约定，后续实机补证，不能称原版已通过。Back/键盘/安全区接现真实平台路径。用户原录屏覆盖的文件夹页优先沿该录屏，官方新图不作为替换旧已验界面的理由。
 
 ## Verification and delivery
