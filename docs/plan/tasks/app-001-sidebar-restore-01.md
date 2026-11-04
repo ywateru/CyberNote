@@ -35,3 +35,7 @@ depends-on: []
 ## 主线源码状态 / 2026-11-04
 
 候选1c835b35经不同作者d3ce0e77独审SOURCE-READY，已合入主线；主线d87bcb1上的最小整合build、toolbar13及生产110状态/36隐藏恢复链全部通过，证据于7496ec2封存。唯一运行产品变更为toolbar.m，SHA0deb20826e37511f0654c1c355901ffe10877416fcf98fa8dd32c2cc88c90588。候选manifest中的任务文档身份以冻结提交为准，后续状态补记不回写旧证据。任务继续partial，等新Mac包实际点击/菜单/画廊/正常冷启，不能以源码通过关闭用户故障验收。
+
+## candidate06 实际窗口 / 2026-11-04
+
+准确f18源sealed可执行152ad9e5…已实际启动；列表普通与宽窗隐藏→直接按钮恢复、菜单恢复、画廊浏览/展开、正常CmdQ新PID重启后再次恢复均有限通过。原始证据candidate06-mac-sidebar-runtime-01经不同作者candidate06-mac-sidebar-independent-01只读复核支持；20JPEG不是像素认证，连续窄窗/分栏拖动未验。新发现显示菜单仍固定文案，已追加sidebar-menu-label-01并待新Mac包实际验收后再关闭本用户故障子项。

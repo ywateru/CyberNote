@@ -1,0 +1,857 @@
+{
+  "schema": 1,
+  "startedAt": "2026-11-04T05:09:22.668537+00:00",
+  "endedAt": "2026-11-04T05:09:22.812087+00:00",
+  "conclusion": "SUPPORTED LIMITED OBSERVATIONS; overall sidebar/pixel acceptance remains open",
+  "checks": [
+    {
+      "name": "free>=2GiB",
+      "pass": true
+    },
+    {
+      "name": "20 original JPEG images decode",
+      "pass": true
+    },
+    {
+      "name": "22 AX records",
+      "pass": true
+    },
+    {
+      "name": "list visible hidden restored sidebar",
+      "pass": true
+    },
+    {
+      "name": "list direct native toggle throughout",
+      "pass": true
+    },
+    {
+      "name": "list native new folder absent while hidden",
+      "pass": true
+    },
+    {
+      "name": "list same selected folder count",
+      "pass": true
+    },
+    {
+      "name": "list exact same three-line visible editor value",
+      "pass": true
+    },
+    {
+      "name": "wide-list visible hidden restored sidebar",
+      "pass": true
+    },
+    {
+      "name": "wide-list direct native toggle throughout",
+      "pass": true
+    },
+    {
+      "name": "wide-list native new folder absent while hidden",
+      "pass": true
+    },
+    {
+      "name": "wide-list same selected folder count",
+      "pass": true
+    },
+    {
+      "name": "wide-list exact same three-line visible editor value",
+      "pass": true
+    },
+    {
+      "name": "gallery visible hidden restored sidebar",
+      "pass": true
+    },
+    {
+      "name": "gallery direct native toggle throughout",
+      "pass": true
+    },
+    {
+      "name": "gallery native new folder absent while hidden",
+      "pass": true
+    },
+    {
+      "name": "gallery same selected folder count",
+      "pass": true
+    },
+    {
+      "name": "gallery exact QA card label maintained",
+      "pass": true
+    },
+    {
+      "name": "expanded-gallery visible hidden restored sidebar",
+      "pass": true
+    },
+    {
+      "name": "expanded-gallery direct native toggle throughout",
+      "pass": true
+    },
+    {
+      "name": "expanded-gallery native new folder absent while hidden",
+      "pass": true
+    },
+    {
+      "name": "expanded-gallery same selected folder count",
+      "pass": true
+    },
+    {
+      "name": "expanded-gallery exact same three-line visible editor value",
+      "pass": true
+    },
+    {
+      "name": "cold-list visible hidden restored sidebar",
+      "pass": true
+    },
+    {
+      "name": "cold-list direct native toggle throughout",
+      "pass": true
+    },
+    {
+      "name": "cold-list native new folder absent while hidden",
+      "pass": true
+    },
+    {
+      "name": "cold-list same selected folder count",
+      "pass": true
+    },
+    {
+      "name": "cold-list exact same three-line visible editor value",
+      "pass": true
+    },
+    {
+      "name": "expanded gallery back button coexists with toggle",
+      "pass": true
+    },
+    {
+      "name": "clone hidden menu fixed label and menu-restored sidebar",
+      "pass": true
+    },
+    {
+      "name": "list-return snapshot matches list shape and body",
+      "pass": true
+    },
+    {
+      "name": "old05 hidden snapshot lacks direct toggle",
+      "pass": true
+    },
+    {
+      "name": "original hidden/restored body and direct button",
+      "pass": true
+    },
+    {
+      "name": "original restored split values228/360",
+      "pass": true
+    },
+    {
+      "name": "original menu dynamic labels evidence",
+      "pass": true
+    },
+    {
+      "name": "ordinary canvas2176x1320",
+      "pass": true
+    },
+    {
+      "name": "wide canvas2786x1806",
+      "pass": true
+    },
+    {
+      "name": "zoom canvas changed wider",
+      "pass": true
+    },
+    {
+      "name": "exact executable identity recorded before and after",
+      "pass": true
+    },
+    {
+      "name": "different process identity recorded after reopen",
+      "pass": true
+    },
+    {
+      "name": "recorded runtime executable matches independent complete package check",
+      "pass": true
+    },
+    {
+      "name": "all source evidence bytes stable during review",
+      "pass": true
+    }
+  ],
+  "diskFreeBefore": 3779084288,
+  "sourceFiles": [
+    {
+      "path": "00-original-hidden.ax.txt",
+      "bytes": 4795,
+      "sha256": "0a315c8b10efb131378f43a49cb062ee8dbe6f1c260f8af036f713a619a492c6"
+    },
+    {
+      "path": "00-original-hidden.cua-image",
+      "bytes": 189230,
+      "sha256": "ad5ccd1383a48ef5299df9e9ee38a76de8ed8e1b8d1986a317ce150cd14e880d"
+    },
+    {
+      "path": "01-original-restored.ax.txt",
+      "bytes": 7113,
+      "sha256": "2ef3f5e056cbce1a0c844e8691abdbc937a1be0ca44239156284ce3c3ebd7514"
+    },
+    {
+      "path": "01-original-restored.cua-image",
+      "bytes": 249985,
+      "sha256": "a4b43f7b748481813790d68b8d4f6d187a8609fc4b1b6894a13c92463a523189"
+    },
+    {
+      "path": "02-old-before-quit.ax.txt",
+      "bytes": 1684,
+      "sha256": "be4067ada8576b118cb02326be9277ec3d18cc7b6ac6b57a9551980ab619cd82"
+    },
+    {
+      "path": "02-old-before-quit.cua-image",
+      "bytes": 144525,
+      "sha256": "08f1a37501b61a287347a65fa5f1944011851c6494ad8f27cd08c6fcf19314e6"
+    },
+    {
+      "path": "03-new-launched.ax.txt",
+      "bytes": 2023,
+      "sha256": "0ff3e182ee948e474df11cd2086275ec1b0c8546a346bcc3f91410085f6bdd3e"
+    },
+    {
+      "path": "03-new-launched.cua-image",
+      "bytes": 183363,
+      "sha256": "3f145f462b12a1f46c6fe3d027d23b7bd2bf9a32d19f4e6f00badd70c0e8f612"
+    },
+    {
+      "path": "03-process-identity.json",
+      "bytes": 561,
+      "sha256": "746e77b251d4d4d8381b67267c6963b443f56f7b3127d840c8c549d8f6534139"
+    },
+    {
+      "path": "04-new-hidden.ax.txt",
+      "bytes": 1608,
+      "sha256": "be34d8ce566e110b5ccf1a02b211451faacb16b1d22d94d259da4900b0e7aaef"
+    },
+    {
+      "path": "04-new-hidden.cua-image",
+      "bytes": 141296,
+      "sha256": "5b08bcbe5c1783f725e4f0965d7faa79c662bfaa192b6c089f1a3270870bed39"
+    },
+    {
+      "path": "05-new-restored.ax.txt",
+      "bytes": 2023,
+      "sha256": "0ff3e182ee948e474df11cd2086275ec1b0c8546a346bcc3f91410085f6bdd3e"
+    },
+    {
+      "path": "05-new-restored.cua-image",
+      "bytes": 183903,
+      "sha256": "91ce82d79ac7c3bdfb01c54e47f3586f101bd572465eb4693eda36dd4930c949"
+    },
+    {
+      "path": "06-hidden-display-menu.ax.txt",
+      "bytes": 240,
+      "sha256": "0c3e8dfa44ee5ad2b9951dd9b852ba2257aa9952d521dc891dee9d89ffec5bbe"
+    },
+    {
+      "path": "07-menu-restored.ax.txt",
+      "bytes": 2111,
+      "sha256": "0d993e3e62215f7bc98cbafc6081652cfae917b7b6d41d40ab601302ba9c0d4d"
+    },
+    {
+      "path": "07-menu-restored.cua-image",
+      "bytes": 187967,
+      "sha256": "05ce6b7586f11357dfd8b85de0ecc859d2177fdc96a928a567ca1d6e282cbecf"
+    },
+    {
+      "path": "08-zoom-changed-visible.ax.txt",
+      "bytes": 2111,
+      "sha256": "0d993e3e62215f7bc98cbafc6081652cfae917b7b6d41d40ab601302ba9c0d4d"
+    },
+    {
+      "path": "08-zoom-changed-visible.cua-image",
+      "bytes": 226805,
+      "sha256": "cc8902216e8148a563760d92ca0420208e912b4eb5f676ba8a3b79724e1445eb"
+    },
+    {
+      "path": "09-zoom-changed-hidden.ax.txt",
+      "bytes": 1696,
+      "sha256": "cf9291d4ff925ffcad30a723891b4a20e996f3e6c88e029be335102f7598efa4"
+    },
+    {
+      "path": "09-zoom-changed-hidden.cua-image",
+      "bytes": 181482,
+      "sha256": "ec6d68b9e8d96b43c2cdd3cae1a9a6d16e7d0957c13b833c2c8ec18a06e67d5a"
+    },
+    {
+      "path": "10-zoom-changed-restored.ax.txt",
+      "bytes": 2111,
+      "sha256": "0d993e3e62215f7bc98cbafc6081652cfae917b7b6d41d40ab601302ba9c0d4d"
+    },
+    {
+      "path": "10-zoom-changed-restored.cua-image",
+      "bytes": 226309,
+      "sha256": "3f8ace6bbc94368dd7dce02f784e427ac5c82210f5b327bfb8a30f03eef4223e"
+    },
+    {
+      "path": "11-gallery-visible.ax.txt",
+      "bytes": 1695,
+      "sha256": "4091787306ce3604a3b6c60b0589c723b32ff1efdf73de797234c60dc7a8977e"
+    },
+    {
+      "path": "11-gallery-visible.cua-image",
+      "bytes": 214172,
+      "sha256": "feabe3dacb3c3c25bde2be8b7a37f156b6f1ee8f952d08a1bff87ab249b690a9"
+    },
+    {
+      "path": "12-gallery-hidden.ax.txt",
+      "bytes": 1280,
+      "sha256": "0504a9fb6573c1be5f4312e5167d941948030a4528b36393d8587f16c80bc398"
+    },
+    {
+      "path": "12-gallery-hidden.cua-image",
+      "bytes": 169675,
+      "sha256": "553a728e52120f05c82eedef45b2b4a4746c2fbc7bbd33e550e665a05666e996"
+    },
+    {
+      "path": "13-gallery-restored.ax.txt",
+      "bytes": 1695,
+      "sha256": "4091787306ce3604a3b6c60b0589c723b32ff1efdf73de797234c60dc7a8977e"
+    },
+    {
+      "path": "13-gallery-restored.cua-image",
+      "bytes": 214169,
+      "sha256": "3a992dcb7446960105d286a0f54c1532514246cdf1fe2a5b1e36f7dd4514876d"
+    },
+    {
+      "path": "14-gallery-expanded-visible.ax.txt",
+      "bytes": 1663,
+      "sha256": "a735fb31722ff263958a79fe098a7e81afffa2fb4d6ea3b8b85b1c2c2c375b16"
+    },
+    {
+      "path": "14-gallery-expanded-visible.cua-image",
+      "bytes": 171317,
+      "sha256": "3dfa83330d18c5e1e78ff08c8283e97342563ac29f831228f1bef41a7ca64eaa"
+    },
+    {
+      "path": "15-gallery-expanded-hidden.ax.txt",
+      "bytes": 1248,
+      "sha256": "45c3b3042b1d7a21b64429ca55bc8ebcc25666d66289e4b10125c8073428580e"
+    },
+    {
+      "path": "15-gallery-expanded-hidden.cua-image",
+      "bytes": 125082,
+      "sha256": "d0130ffa1168cab1fe5a997a55c915d43c7cef3def05bb5246c6f76cd920df14"
+    },
+    {
+      "path": "16-gallery-expanded-restored.ax.txt",
+      "bytes": 1663,
+      "sha256": "a735fb31722ff263958a79fe098a7e81afffa2fb4d6ea3b8b85b1c2c2c375b16"
+    },
+    {
+      "path": "16-gallery-expanded-restored.cua-image",
+      "bytes": 170471,
+      "sha256": "58a293fe5b5511c2f30e93129fc67c6f1889f34d531c80d494433f51963dc181"
+    },
+    {
+      "path": "17-list-returned.ax.txt",
+      "bytes": 2111,
+      "sha256": "0d993e3e62215f7bc98cbafc6081652cfae917b7b6d41d40ab601302ba9c0d4d"
+    },
+    {
+      "path": "17-list-returned.cua-image",
+      "bytes": 226333,
+      "sha256": "333a01f5dd742da8b951ce8876fb353ceecd432721ee8a76f2286f8608675866"
+    },
+    {
+      "path": "18-normal-quit-process.json",
+      "bytes": 118,
+      "sha256": "92fb27197d2a04264e93712351dab886cae55c08272e6ff5cfd3f574deb40e4c"
+    },
+    {
+      "path": "19-cold-reopened.ax.txt",
+      "bytes": 2111,
+      "sha256": "0d993e3e62215f7bc98cbafc6081652cfae917b7b6d41d40ab601302ba9c0d4d"
+    },
+    {
+      "path": "19-cold-reopened.cua-image",
+      "bytes": 187600,
+      "sha256": "e4e949d9431526e06bca69e6f848e327209939b80f056743b53fd819c3bb4d9b"
+    },
+    {
+      "path": "19-reopen-process-identity.json",
+      "bytes": 543,
+      "sha256": "2af50e8b48fac92cbee888fab43017186458a1a4ee9aa141d5660747899e2531"
+    },
+    {
+      "path": "20-cold-hidden.ax.txt",
+      "bytes": 1696,
+      "sha256": "cf9291d4ff925ffcad30a723891b4a20e996f3e6c88e029be335102f7598efa4"
+    },
+    {
+      "path": "20-cold-hidden.cua-image",
+      "bytes": 146315,
+      "sha256": "c93d9f44a731cbf39e4bae170be29a0ec027a91ec94f03c4a8de01df76adffdf"
+    },
+    {
+      "path": "21-cold-restored.ax.txt",
+      "bytes": 2111,
+      "sha256": "0d993e3e62215f7bc98cbafc6081652cfae917b7b6d41d40ab601302ba9c0d4d"
+    },
+    {
+      "path": "21-cold-restored.cua-image",
+      "bytes": 187917,
+      "sha256": "39c409b68c10d4281aaddda52d1011ea2d4abe17e934575bdf137359aa4e38d0"
+    },
+    {
+      "path": "22-original-visible-menu.ax.txt",
+      "bytes": 1715,
+      "sha256": "8252c229873b07bf1dd1acd8ba2dfd26f42e35504a38d2cae17f6a337fd6f06a"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2401,
+      "sha256": "6067db6594e1fba8ff99ec951e4ea46c5dc14f419f2a8d28eb1930c4be62ed82"
+    }
+  ],
+  "sourceAggregate": "0282a8780120b814954871b4dc1ea99102054b35644660eebc738144839b1089",
+  "sourceFileCount": 46,
+  "sourceBytes": 3778042,
+  "images": [
+    {
+      "path": "00-original-hidden.cua-image",
+      "bytes": 189230,
+      "sha256": "ad5ccd1383a48ef5299df9e9ee38a76de8ed8e1b8d1986a317ce150cd14e880d",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "01-original-restored.cua-image",
+      "bytes": 249985,
+      "sha256": "a4b43f7b748481813790d68b8d4f6d187a8609fc4b1b6894a13c92463a523189",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "02-old-before-quit.cua-image",
+      "bytes": 144525,
+      "sha256": "08f1a37501b61a287347a65fa5f1944011851c6494ad8f27cd08c6fcf19314e6",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB"
+    },
+    {
+      "path": "03-new-launched.cua-image",
+      "bytes": 183363,
+      "sha256": "3f145f462b12a1f46c6fe3d027d23b7bd2bf9a32d19f4e6f00badd70c0e8f612",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB"
+    },
+    {
+      "path": "04-new-hidden.cua-image",
+      "bytes": 141296,
+      "sha256": "5b08bcbe5c1783f725e4f0965d7faa79c662bfaa192b6c089f1a3270870bed39",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB"
+    },
+    {
+      "path": "05-new-restored.cua-image",
+      "bytes": 183903,
+      "sha256": "91ce82d79ac7c3bdfb01c54e47f3586f101bd572465eb4693eda36dd4930c949",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB"
+    },
+    {
+      "path": "07-menu-restored.cua-image",
+      "bytes": 187967,
+      "sha256": "05ce6b7586f11357dfd8b85de0ecc859d2177fdc96a928a567ca1d6e282cbecf",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB"
+    },
+    {
+      "path": "08-zoom-changed-visible.cua-image",
+      "bytes": 226805,
+      "sha256": "cc8902216e8148a563760d92ca0420208e912b4eb5f676ba8a3b79724e1445eb",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "09-zoom-changed-hidden.cua-image",
+      "bytes": 181482,
+      "sha256": "ec6d68b9e8d96b43c2cdd3cae1a9a6d16e7d0957c13b833c2c8ec18a06e67d5a",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "10-zoom-changed-restored.cua-image",
+      "bytes": 226309,
+      "sha256": "3f8ace6bbc94368dd7dce02f784e427ac5c82210f5b327bfb8a30f03eef4223e",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "11-gallery-visible.cua-image",
+      "bytes": 214172,
+      "sha256": "feabe3dacb3c3c25bde2be8b7a37f156b6f1ee8f952d08a1bff87ab249b690a9",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "12-gallery-hidden.cua-image",
+      "bytes": 169675,
+      "sha256": "553a728e52120f05c82eedef45b2b4a4746c2fbc7bbd33e550e665a05666e996",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "13-gallery-restored.cua-image",
+      "bytes": 214169,
+      "sha256": "3a992dcb7446960105d286a0f54c1532514246cdf1fe2a5b1e36f7dd4514876d",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "14-gallery-expanded-visible.cua-image",
+      "bytes": 171317,
+      "sha256": "3dfa83330d18c5e1e78ff08c8283e97342563ac29f831228f1bef41a7ca64eaa",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "15-gallery-expanded-hidden.cua-image",
+      "bytes": 125082,
+      "sha256": "d0130ffa1168cab1fe5a997a55c915d43c7cef3def05bb5246c6f76cd920df14",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "16-gallery-expanded-restored.cua-image",
+      "bytes": 170471,
+      "sha256": "58a293fe5b5511c2f30e93129fc67c6f1889f34d531c80d494433f51963dc181",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "17-list-returned.cua-image",
+      "bytes": 226333,
+      "sha256": "333a01f5dd742da8b951ce8876fb353ceecd432721ee8a76f2286f8608675866",
+      "format": "JPEG",
+      "width": 2786,
+      "height": 1806,
+      "mode": "RGB"
+    },
+    {
+      "path": "19-cold-reopened.cua-image",
+      "bytes": 187600,
+      "sha256": "e4e949d9431526e06bca69e6f848e327209939b80f056743b53fd819c3bb4d9b",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB"
+    },
+    {
+      "path": "20-cold-hidden.cua-image",
+      "bytes": 146315,
+      "sha256": "c93d9f44a731cbf39e4bae170be29a0ec027a91ec94f03c4a8de01df76adffdf",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB"
+    },
+    {
+      "path": "21-cold-restored.cua-image",
+      "bytes": 187917,
+      "sha256": "39c409b68c10d4281aaddda52d1011ea2d4abe17e934575bdf137359aa4e38d0",
+      "format": "JPEG",
+      "width": 2176,
+      "height": 1320,
+      "mode": "RGB"
+    }
+  ],
+  "axStates": [
+    {
+      "path": "00-original-hidden.ax.txt",
+      "directToggle": false,
+      "sidebarVisible": false,
+      "nativeNewFolder": false,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": false
+    },
+    {
+      "path": "01-original-restored.ax.txt",
+      "directToggle": false,
+      "sidebarVisible": false,
+      "nativeNewFolder": false,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": false
+    },
+    {
+      "path": "02-old-before-quit.ax.txt",
+      "directToggle": false,
+      "sidebarVisible": false,
+      "nativeNewFolder": false,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "03-new-launched.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "04-new-hidden.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": false,
+      "nativeNewFolder": false,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "05-new-restored.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "06-hidden-display-menu.ax.txt",
+      "directToggle": false,
+      "sidebarVisible": false,
+      "nativeNewFolder": false,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": false,
+      "qaGalleryCard": false,
+      "selectedFolderCount": false
+    },
+    {
+      "path": "07-menu-restored.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "08-zoom-changed-visible.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "09-zoom-changed-hidden.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": false,
+      "nativeNewFolder": false,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "10-zoom-changed-restored.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "11-gallery-visible.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": false,
+      "qaGalleryCard": true,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "12-gallery-hidden.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": false,
+      "nativeNewFolder": false,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": false,
+      "qaGalleryCard": true,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "13-gallery-restored.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": false,
+      "qaGalleryCard": true,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "14-gallery-expanded-visible.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": true,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "15-gallery-expanded-hidden.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": false,
+      "nativeNewFolder": false,
+      "backToGallery": true,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "16-gallery-expanded-restored.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": true,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "17-list-returned.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "19-cold-reopened.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "20-cold-hidden.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": false,
+      "nativeNewFolder": false,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "21-cold-restored.ax.txt",
+      "directToggle": true,
+      "sidebarVisible": true,
+      "nativeNewFolder": true,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": true,
+      "qaGalleryCard": false,
+      "selectedFolderCount": true
+    },
+    {
+      "path": "22-original-visible-menu.ax.txt",
+      "directToggle": false,
+      "sidebarVisible": false,
+      "nativeNewFolder": false,
+      "backToGallery": false,
+      "exactThreeLineEditorValue": false,
+      "qaGalleryCard": false,
+      "selectedFolderCount": false
+    }
+  ],
+  "processRecords": {
+    "19-reopen-process-identity.json": {
+      "at": "2026-11-04T05:05:01.992280+00:00",
+      "priorPid": 80892,
+      "runningProcess": "82135 Wed Nov  4 13:01:04 2026     /Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-build01/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+      "newPid": 82135,
+      "executable": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-build01/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+      "bytes": 15990560,
+      "sha256": "152ad9e5f9fe0bc6eeab2f08bb6980b2610884ec8b43f9610ad4bc0d883f7f6c"
+    },
+    "18-normal-quit-process.json": {
+      "at": "2026-11-04T05:00:52.481025+00:00",
+      "normalQuitPid": 80892,
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "03-process-identity.json": {
+      "at": "2026-11-04T04:53:00.224010+00:00",
+      "oldPid": 72706,
+      "oldPidAbsentAfterNormalQuit": true,
+      "runningProcess": "80892 Wed Nov  4 12:50:41 2026     /Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-build01/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+      "executable": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-build01/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+      "bytes": 15990560,
+      "sha256": "152ad9e5f9fe0bc6eeab2f08bb6980b2610884ec8b43f9610ad4bc0d883f7f6c"
+    }
+  },
+  "extraEvidence": [
+    {
+      "path": "docs/research/mac-sidebar-original-20261104-01/02-hidden-view-menu.ax.txt",
+      "bytes": 1717,
+      "sha256": "9db62b2838035da969ca05e633fa42275445af4aa2ea00e140fb5c26020ba787"
+    },
+    {
+      "path": "docs/verification/unified-candidate06/mac-independent01/result.json",
+      "bytes": 122345,
+      "sha256": "260e9108f5453fc90fb2b3ebec09b19bf35a3eff2f49a1a6691d9941e46e9f0f"
+    }
+  ],
+  "zoomFinding": "07 JPEG2176x1320 ->08 JPEG2786x1806;09–17 same wider canvas;19–21 back2176x1320. No narrow-window acceptance, native logical frame/DPR not recorded.",
+  "limits": "Snapshot sequence checked against authored action narrative; no independent live action replay. 18-process record lacks argv and alone does not establish command semantics. No complete DB/JSON, persistence/hidden-state retention, lossless pixel, continuous window/split drag or final menu-fix build acceptance."
+}
