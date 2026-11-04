@@ -1,0 +1,209 @@
+{
+  "schema": 1,
+  "startedAt": "2026-11-04T04:51:56.025968+00:00",
+  "stage": "android",
+  "expectedHead": "f18da0ccf8bb6e131e80e22b9752f0df2725245d",
+  "productAggregate": "f409cc270772c6ff8a66e6a92576cae8b375409ff40619ebfbb44566f286526c",
+  "sourceAggregate": "4d52edcb2c2851105ede8fa0399ba2dd10f6e0e2af93bb1bc7d77afc580fa301",
+  "freezeSha256": "ac195fb61c62be15ccc653716ad9691f5d8cdaf6bdacce7dc5f82e3f54bc6d1e",
+  "attempt": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-build01/android-attempt01",
+  "nonce": "314e0c8af0224ca5a5b93537f5ec5b6f",
+  "command": [
+    "pnpm",
+    "android:build",
+    "--debug"
+  ],
+  "exitCode": 0,
+  "explicitEnvironmentOverrides": {
+    "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+    "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+    "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+    "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "2",
+    "GRADLE_RO_DEP_CACHE": "/private/tmp/notes-lifecycle-cache-overlay-01/overlay-ro",
+    "GRADLE_OPTS": "-Dorg.gradle.daemon=false"
+  },
+  "outputIsolation": {
+    "policy": "atomic-rename-final-output-and-dist",
+    "sourcePathsAbsentBeforeCommand": true,
+    "outputs": [
+      {
+        "name": "application",
+        "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+        "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-build01/android-attempt01/prior-outputs/application",
+        "kind": "file",
+        "before": {
+          "kind": "file",
+          "device": 16777233,
+          "inode": 27272927,
+          "mode": 420,
+          "bytes": 304110831,
+          "sha256": "bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2"
+        }
+      },
+      {
+        "name": "dist",
+        "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+        "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-build01/android-attempt01/prior-outputs/dist",
+        "kind": "directory",
+        "before": {
+          "kind": "directory",
+          "device": 16777233,
+          "inode": 28275664,
+          "mode": 493,
+          "directories": [
+            {
+              "path": "assets",
+              "mode": 493
+            }
+          ],
+          "files": [
+            {
+              "path": "assets/index-BnD9Awr9.css",
+              "bytes": 56919,
+              "sha256": "e3eda993c164505b76f53c5dea2cf81afb4d23966dac1464ba61a9a3cbd28bc0",
+              "type": "file",
+              "mode": 420
+            },
+            {
+              "path": "assets/index-DzIGqeFB.js",
+              "bytes": 936785,
+              "sha256": "dc6479660a72b32acf1b2a7f21c9f571d63fcaffe438f8208b3d99f6a550f9cf",
+              "type": "file",
+              "mode": 420
+            },
+            {
+              "path": "index.html",
+              "bytes": 498,
+              "sha256": "c818a6f903f3a3ea4469c6b726bb8fa57d4f5f8f0b230a6df3d0ac825a4cf9db",
+              "type": "file",
+              "mode": 420
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "temporaryGradleInit": {
+    "path": "/private/tmp/notes-scan-gradle-home/init.d/candidate06-offline-314e0c8af0224ca5a5b93537f5ec5b6f.gradle",
+    "device": 16777233,
+    "inode": 28279042,
+    "bytes": 142,
+    "sha256": "6edb2488955a85fa35423768d7fa97efc216f61e966656ae047e51f1c327fb0a"
+  },
+  "diskFreeBefore": 4536111104,
+  "minimumFreeBytes": 3860373504,
+  "deadlineSeconds": 600,
+  "ownedProcessGroup": 81023,
+  "ownedGroupStopped": true,
+  "remainingOwnedGroupMembers": [],
+  "elapsedSeconds": 26.316,
+  "temporaryGradleInitRemoved": true,
+  "temporaryGradleInitBeforeCleanup": {
+    "path": "/private/tmp/notes-scan-gradle-home/init.d/candidate06-offline-314e0c8af0224ca5a5b93537f5ec5b6f.gradle",
+    "device": 16777233,
+    "inode": 28279042,
+    "bytes": 142,
+    "regularFile": true,
+    "sha256": "6edb2488955a85fa35423768d7fa97efc216f61e966656ae047e51f1c327fb0a"
+  },
+  "inputComparisons": {
+    "schema": true,
+    "authorization": true,
+    "head": true,
+    "stage": true,
+    "productFiles": true,
+    "productAggregate": true,
+    "files": true,
+    "aggregate": true,
+    "toolVersions": true,
+    "tools": true,
+    "selectedParentEnvironment": true,
+    "effectiveBuildEnvironment": true,
+    "ocrCache": true,
+    "supplementalInputs": true,
+    "scope": true
+  },
+  "supplementalInputsUnchanged": true,
+  "generatedOutputs": [
+    {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+      "snapshot": {
+        "kind": "file",
+        "device": 16777233,
+        "inode": 28280143,
+        "mode": 420,
+        "bytes": 177445114,
+        "sha256": "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4"
+      }
+    },
+    {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+      "snapshot": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 28279131,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "assets",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "assets/index-BnD9Awr9.css",
+            "bytes": 56919,
+            "sha256": "e3eda993c164505b76f53c5dea2cf81afb4d23966dac1464ba61a9a3cbd28bc0",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/index-DzIGqeFB.js",
+            "bytes": 936785,
+            "sha256": "dc6479660a72b32acf1b2a7f21c9f571d63fcaffe438f8208b3d99f6a550f9cf",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "index.html",
+            "bytes": 498,
+            "sha256": "c818a6f903f3a3ea4469c6b726bb8fa57d4f5f8f0b230a6df3d0ac825a4cf9db",
+            "type": "file",
+            "mode": 420
+          }
+        ]
+      }
+    }
+  ],
+  "buildOutputIdentity": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+    "bytes": 177445114,
+    "sha256": "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4"
+  },
+  "dist": [
+    {
+      "path": "assets/index-BnD9Awr9.css",
+      "bytes": 56919,
+      "sha256": "e3eda993c164505b76f53c5dea2cf81afb4d23966dac1464ba61a9a3cbd28bc0",
+      "type": "file",
+      "mode": 420
+    },
+    {
+      "path": "assets/index-DzIGqeFB.js",
+      "bytes": 936785,
+      "sha256": "dc6479660a72b32acf1b2a7f21c9f571d63fcaffe438f8208b3d99f6a550f9cf",
+      "type": "file",
+      "mode": 420
+    },
+    {
+      "path": "index.html",
+      "bytes": 498,
+      "sha256": "c818a6f903f3a3ea4469c6b726bb8fa57d4f5f8f0b230a6df3d0ac825a4cf9db",
+      "type": "file",
+      "mode": 420
+    }
+  ],
+  "endedAt": "2026-11-04T04:52:24.520694+00:00"
+}
