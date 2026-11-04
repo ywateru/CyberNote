@@ -1,0 +1,67 @@
+{
+  "status": "UNRESOLVED_NATIVE_LIFECYCLE_PROVIDER_UNAVAILABLE",
+  "scope": "Static read-only Apple Notes.app; no target execution, GUI, DB, instrumentation, provider/config installation or product edits",
+  "target": {
+    "path": "/System/Applications/Notes.app/Contents/MacOS/Notes",
+    "sha256": "9e20c23a979367362c50edf8fb28bb1988be7e7384254cc3dce38a4a8373df02"
+  },
+  "evidence_ids": [],
+  "evidence_id_note": "binary_session and empty bundle summaries expose no supporting lifecycle Evidence ID; no Evidence ID was invented.",
+  "observed_static": [
+    {
+      "fact": "Exact installed executable identity agrees with saved runtime07 identities",
+      "source": "identity.json"
+    },
+    {
+      "fact": "Current REA session closed with no analysis provider binding",
+      "source": "01-session.raw.json"
+    },
+    {
+      "fact": "All configured native analysis candidates unavailable; target SHA and dispatch filters both return total_retained_records 0",
+      "sources": [
+        "01-session.raw.json",
+        "02-existing-dispatch-summary.raw.json",
+        "03-existing-target-summary.raw.json"
+      ]
+    },
+    {
+      "fact": "Prior repository REA bundle has 0 records and 0 artifacts",
+      "source": "references/desktop/rea-evidence-initial.json",
+      "source_sha256": "000bef2a45fbd4b17adc4e2ab0acd65b076ef5c25f0d8479244c8088730de9cd"
+    }
+  ],
+  "historical_ui_only": [
+    {
+      "fact": "Default sheet uses one 标签 / 所有已选 rule, disabled remove, enabled add; tag modes include 所有已选/任何已选/任何标签/仅不含标签的备忘录",
+      "source": "references/desktop/macos26-smart-folder-tags.ax.txt",
+      "source_sha256": "30ee43ddbbfc7572515ae913fdcd0d2b754b1f4b2f0f13b79c5cbd008a22b9de"
+    },
+    {
+      "fact": "Filter menu lists 标签、创建日期、编辑日期、共享、@提及、核对清单、附件、文件夹、快速备忘录、置顶备忘录、锁定备忘录",
+      "source": "references/desktop/macos26-smart-folder-filter-menu.ax.txt",
+      "source_sha256": "37651a3ac8eccaee3536c3e95deb1dae0e7456c35e5516ab10490e04dc03a859"
+    },
+    {
+      "fact": "Saved runtime07 report supports only QA-prefix physical candidates, cancellation and same-definition normal reopen; no deletion submitted",
+      "source": "docs/research/smart-folder-original-runtime07/README.md",
+      "source_sha256": "622d0fb8ca2e0008255422cdab9f3e6baaa3cd1cb6d62319eeb871a860076ee7"
+    }
+  ],
+  "inference": [
+    "A default pinned rule would differ from the observed default tag rule.",
+    "Rule-token identity does not determine how deletion repairs references.",
+    "Disabled removal of the only initial rule does not establish post-deletion last-rule behavior."
+  ],
+  "unknown": [
+    "Delete physical folder: include token dropped/retained/invalidated or deletion rejected",
+    "Delete physical folder: exclude token dropped/retained/invalidated or deletion rejected",
+    "Delete physical subtree: direct and descendant references handled consistently and atomically",
+    "Delete final folder token: empty rule removed, replaced, retained or save blocked",
+    "Delete final rule through referenced-folder removal: smart definition preserved, fallback or deleted",
+    "Delete smart definition: only definition removed versus any member-note mutation",
+    "Default all-selected empty-tag evaluation and save enablement",
+    "Tag token candidates, identity, eligibility and matching evaluation beyond saved AX options",
+    "Mobile equivalent smart-folder sheet and deletion lifecycle"
+  ]
+}
+

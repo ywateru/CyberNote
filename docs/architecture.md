@@ -168,6 +168,12 @@ ID 冲突采用导入副本：既有普通文件夹、笔记、附件保留原 I
 
 ## 接入与验证
 
+### 本地库打开与旧实体保护（APP-SMART-D1，2026-11-04）
+
+当前生产库仍为 user_version=1；新智能格式另批迁移。Store.open 先识别版本和既有必需结构，再进行任何 schema 写入或 import/attachment 日记恢复。0 仅允许新空库或完整可识别的旧结构显式兼容；未知/未来版本以 schema_version 拒绝，部分/未知结构明确拒绝，不能运行 CREATE IF NOT EXISTS 把未知库补成当前库。初始化事务同时创建 schema、补真正缺失的系统文件夹/设置并提交版本；现行1不反复重设版本。恢复日记仅在受支持库、已有文件夹检查及初始化事务成功后按原协议执行。
+
+Folder 旧物理六字段严格解码，未知字段和类型不能忽略，缺省 parentId 仍为 None。default/quick/trash 必须分别使用固定同名 ID、对应 kind 和根层级；自定义仅 normal，all 只作导航。行主键必须等于 JSON id。已有坏 JSON、错 ID/kind、系统非法 parent 或读取错误都报错保全；只有 SQL 真正无行才允许补建。此批不新增旧 normal parent/笔记 owner 能力限制，不重写合法实体、正文、版本、录音日期或设置，不提前开放 smart UI。事务中途失败全部 rollback；原 archive1/2 兼容及恢复语义保持，Folder 的未知字段也不能在归档解码时被丢弃。具体实现及实际测试结果见 plan/tasks/app-smart-d1-storage-open09.md；本节是契约，不能当成已通过证据。
+
 必须逐项验证真实链路：Shell 选择→Editor 初始化；Editor transaction→保存队列→Rust→SQLite→重启；文件选择→Rust 附件复制→编辑器节点→重启预览；搜索→本地数据→列表选择；删除→最近删除→恢复；移动→计数/列表；录音→实际媒体→附件保存→播放；绘画→JSON/图片→重启编辑。先做核心闭环，然后以同一契约补齐功能，不隐藏未实现入口。
 
 

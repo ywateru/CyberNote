@@ -1,0 +1,12 @@
+{
+  "failures": [
+    {"type": "shell-glob", "observed_error": "zsh:1: no matches found: docs/verification/smart-folder-original-runtime07*/README.md", "effect": "That read command did not reach its rg source reads; subsequent independent rg-files inventory completed.", "correction": "Read exact docs/research/smart-folder-original-runtime07/README.md path; no source changed."},
+    {"type": "path-typo", "observed_error": "rg: ui/local-features.md: IO error for operation on ui/local-features.md: No such file or directory (os error 2)", "correction": "Discovered and read docs/ui/local-features.md."},
+    {"type": "target-path-correction", "observed_error": "ls: /Sys/Applications/Notes.app: No such file or directory", "correction": "Confirmed actual /System/Applications/Notes.app and hashed exact main executable."}
+  ],
+  "notes": [
+    "Some displayed combined tool output was truncated by the client; original REA tool objects were retained in functions store and written whole into raw JSON without copying truncated previews.",
+    "No lifecycle analysis was repeated or synthesized from lack of a provider.",
+    "These are author workflow notes copied from visible tool errors, not fabricated original stderr files."
+  ]
+}
