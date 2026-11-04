@@ -60,6 +60,8 @@
 - [Mac11实际表单量图25与原旧新对照](research/mac-ordinary-surface25-runtime-analysis/analysis.md)
 - [Mac11侧栏偏好与普通表面根接收23](verification/mac-ordinary-sidebar23-root-acceptance.md)
 - [Mac普通新建名称焦点、选区与文字对齐26](plan/tasks/app-mac-ordinary-name-focus26.md)
+- [Android文件夹首页准确06差异准备27](research/android-folders-readiness27/analysis.md)
+- [手机文件夹首页局部图标、文字与标题校准28](plan/tasks/app-mobile-folder-visual28.md)
 - [Android05实际运行独立证据核对](verification/android-smart-u-runtime09-independent/README.md)
 - [Mac09实际运行独立证据核对](verification/mac-smart-u-runtime09-independent/README.md)
 - [Mac智能文件夹表单布局](ui/smart-folders-macos.md)
