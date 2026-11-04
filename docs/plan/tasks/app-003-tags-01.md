@@ -42,6 +42,8 @@ depends-on: []
 
 独审 [static-01](../reviews/app-003-tags-static-01.md) 另有 P2：搜索建议 `filter=tags` 下新建没有清除此筛选，新空白笔记被排除而旧结果仍可能成为当前目标，属于源码状态推导，首轮未界面复现。同批局部修复并以真实 App 验证新建后目标和首次文字归属；新建失败保全原状态。
 
+candidate02 `a0989b354b539fc06d794f167cd97af615693d44` 独审另确证：同一真实 App/Editor 在单标签筛选内发生受控 DOM composition，出站投影成功保存，但失配后停车触发真实 blur，Editor 仍 composing 且后续实际键盘文字未进入正文。先按架构新增的局部活动组字保留边界窄修，保持结果投影真实、原目标/历史不变；真实结束后执行停车。必须覆盖单标签及所有标签、多个结果时不跳笔记、真实后续文字、结束后不可写、显式导航、普通无 composition 立即停车，以及 access prepare/abort 优先。受控 DOM composition 不能冒充原生中文输入法验收。不得为此放宽通用搜索停车、授权、保存/ACK 相等，或延迟保护屏障。冻结 candidate02 独审失败后再实施、冻结下一候选，交不同作者复验。
+
 ## verification
 
 执行现有依赖下 typecheck、真实 Editor schema crosscheck，以及有意义的生产边界检查。至少覆盖：
