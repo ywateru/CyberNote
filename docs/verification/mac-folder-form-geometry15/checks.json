@@ -1,0 +1,58 @@
+{
+  "baselineHead": "e482dac285a1e2b66f88bac035824b7c98e832a7",
+  "commands": [
+    {
+      "command": "xcrun clang -fobjc-arc -fblocks -mmacosx-version-min=12.0 -Wall -Wextra -Werror -framework AppKit -framework WebKit <local webkit-render.m> -o <local helper>",
+      "exitCode": 0,
+      "scope": "Local offscreen measurement helper only; no application package or shared target/cache"
+    },
+    {
+      "command": "webkit-render baseline-native.html baseline-native baseline-metrics.js",
+      "exitCode": 0,
+      "result": "baseline 680x191 CSS, DPR2, snapshot2176x1320, 0 windows, inactive"
+    },
+    {
+      "command": "check-form.mjs browser-attempt01",
+      "exitCode": 1,
+      "result": "Preserved failure: Chromium default label line-height yielded209.5 instead207; subsequent ordinary label line-height16 added."
+    },
+    {
+      "command": "check-form.mjs browser-attempt02",
+      "exitCode": 1,
+      "result": "Preserved failure: Chromium computes0.5px CSS border as1px; native WK confirms0.5px. Chromium geometry check records rounding, exact WK checks remain separate."
+    },
+    {
+      "command": "check-form.mjs browser-attempt03",
+      "exitCode": 0,
+      "result": "12 production React/complete CSS scenarios passed; only isolated callbacks, no backend."
+    },
+    {
+      "command": "webkit-render browser-attempt03/candidate-native.html final-native candidate-metrics.js",
+      "exitCode": 0,
+      "result": "Final actual React DOM plus complete CSS; panel400x207 CSS. Framework-created invisible TUINSWindow, no visible/key/main window, inactive app, WK not attached to window."
+    },
+    {
+      "command": "first inline native assertion",
+      "exitCode": 1,
+      "result": "Overly strict windows==0 assertion rejected invisible internal TUINSWindow; raw final-native.json retained. Rechecked visibility/key/main/inactive/unattached constraints without rerender or source changes."
+    },
+    {
+      "command": "python3 -B docs/verification/mac-folder-form-geometry15/check-native.py",
+      "exitCode": 0,
+      "result": "Exact saved native geometry passes, crop800x414."
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "stdout": "tsc --noEmit"
+    },
+    {
+      "command": "node scripts/check-smart-contract.mjs",
+      "exitCode": 0,
+      "stdout": "30 production smart query/entity/draft/projection contract cases passed."
+    }
+  ],
+  "noPlatformBuild": true,
+  "noSharedTargetCacheUse": true,
+  "noDeviceGuiDbOperation": true
+}

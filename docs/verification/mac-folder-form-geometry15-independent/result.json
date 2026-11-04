@@ -1,0 +1,76 @@
+{
+  "status": "pass",
+  "scope": "Geometry15 two-source ordinary Mac creation state/CSS and controlled React/WK checks only.",
+  "confirmedFindings": [],
+  "sourceFiles": [
+    {
+      "path": "src/SmartFolderForm.tsx",
+      "bytes": 27704,
+      "sha256": "41fd3e76ed7d8b53890f51160226871126a0295a9df7be1bed2bf1281746f299"
+    },
+    {
+      "path": "src/smart-folders.css",
+      "bytes": 9975,
+      "sha256": "2174301b19a3d4dbcf709ed52d8a76b766be870ffccd32fad9c5a1adb3419a53"
+    }
+  ],
+  "sourceManifest": {
+    "path": "docs/verification/mac-folder-form-geometry15/source-manifest.json",
+    "bytes": 8976,
+    "sha256": "bd5d385d0e7a749e7e17505f62d277c681a0574108c04e007a45d4a56656de83"
+  },
+  "browserCaseCount": 15,
+  "browserCommand": {
+    "argv": [
+      "node",
+      "docs/verification/mac-folder-form-geometry15-independent/check-independent02.mjs",
+      "docs/verification/mac-folder-form-geometry15-independent/browser-attempt02"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 4.0689861249999995,
+    "deadlineSeconds": 90
+  },
+  "freshNativeCommand": {
+    "argv": [
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-folder-form-geometry15/webkit-render",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-folder-form-geometry15-independent/browser-attempt02/candidate-native.html",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-folder-form-geometry15-independent/fresh-native",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-folder-form-geometry15/candidate-metrics.js"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.850846333,
+    "deadlineSeconds": 25
+  },
+  "nativeCheckCommand": {
+    "argv": [
+      "python3",
+      "-B",
+      "docs/verification/mac-folder-form-geometry15-independent/check-native-records.py"
+    ],
+    "exitCode": 0
+  },
+  "nativeCssSize": [
+    400,
+    207
+  ],
+  "nativePixelCrop": [
+    800,
+    414
+  ],
+  "protectedCount": 50,
+  "inputCount": 320,
+  "onlyChangedFrozenPaths": [
+    "src/SmartFolderForm.tsx",
+    "src/smart-folders.css"
+  ],
+  "reviewerFixtureFailurePreserved": true,
+  "authorFailuresPreserved": true,
+  "report": {
+    "path": "docs/plan/reviews/app-mac-folder-form-geometry15.md",
+    "bytes": 7451,
+    "sha256": "864ea36b32695daf465f1cb1f88179f4ea8ac2f509ffd5ad180a32d905af4868"
+  },
+  "limits": "No formal package, native focus/input, backend persistence or full pixel acceptance. Full intelligent-rule semantics and root reported preexisting issue are outside this geometry change. No Git/device/GUI/user DB/download/cleanup/shared target-cache operation or product/tool edits.",
+  "stop": true,
+  "sharedTargetAndCache": "not acquired or used; released"
+}

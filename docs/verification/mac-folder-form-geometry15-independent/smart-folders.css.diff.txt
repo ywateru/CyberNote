@@ -1,0 +1,49 @@
+--- baseline-smart-folders.css
++++ src/smart-folders.css
+@@ -491,3 +491,46 @@
+     margin-left: auto;
+   }
+ }
++
++/* Ordinary Mac creation uses the compact sheet; smart/edit/mobile retain their layout. */
++.smart-mac .smart-form.smart-ordinary {
++  width: min(400px, calc(100% - 40px));
++  padding: 19px;
++}
++.smart-mac .smart-ordinary h2 {
++  font-size: 13px;
++  line-height: 16px;
++  margin-bottom: 20px;
++}
++.smart-mac .smart-ordinary .smart-name {
++  gap: 6px;
++}
++.smart-mac .smart-ordinary .smart-name input {
++  height: 24px;
++}
++.smart-mac .smart-ordinary .smart-name input:focus {
++  outline-width: 2px;
++}
++.smart-mac .smart-ordinary .smart-make {
++  margin: 16px 0 0;
++}
++.smart-mac .smart-ordinary .smart-make label {
++  line-height: 16px;
++}
++.smart-mac .smart-ordinary .smart-make input {
++  width: 16px;
++  height: 16px;
++}
++.smart-mac .smart-ordinary .smart-make p {
++  margin: 2px 0 0 20px;
++  font-size: 13px;
++  line-height: 16px;
++}
++.smart-mac .smart-ordinary footer {
++  margin-top: 16px;
++  border-top: 0.5px solid #bcbcbc;
++  padding-top: 16.5px;
++}
++.smart-mac .smart-ordinary footer button {
++  height: 24px;
++}

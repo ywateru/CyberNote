@@ -1,0 +1,16 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('dialog', { name: '同步文件夹' }) to be visible[22m
+
+    at /Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-folder-form-geometry15-independent/check-independent.mjs:63:109 {
+  log: [
+    "  - waiting for getByRole('dialog', { name: '同步文件夹' }) to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.16.0

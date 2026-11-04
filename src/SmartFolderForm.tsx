@@ -347,7 +347,7 @@ export function SmartFolderForm({
                 ? "新建智能文件夹"
                 : "新建文件夹"
         }
-        className={`smart-form ${panel ? "smart-filter-panel" : ""}`}
+        className={`smart-form ${panel ? "smart-filter-panel" : ""} ${!mobile && !folder && !draft.smart ? "smart-ordinary" : ""}`}
       >
         <fieldset disabled={busy}>
           {mobile ? (

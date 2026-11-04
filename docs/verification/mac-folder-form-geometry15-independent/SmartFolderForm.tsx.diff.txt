@@ -1,0 +1,11 @@
+--- baseline-SmartFolderForm.tsx
++++ src/SmartFolderForm.tsx
+@@ -347,7 +347,7 @@
+                 ? "新建智能文件夹"
+                 : "新建文件夹"
+         }
+-        className={`smart-form ${panel ? "smart-filter-panel" : ""}`}
++        className={`smart-form ${panel ? "smart-filter-panel" : ""} ${!mobile && !folder && !draft.smart ? "smart-ordinary" : ""}`}
+       >
+         <fieldset disabled={busy}>
+           {mobile ? (
