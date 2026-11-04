@@ -1,0 +1,81 @@
+{
+  "readOnly": true,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-original.app"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-original.app: code has no resources but signature indicates they must be present\n",
+      "seconds": 0.024
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app: valid on disk\n/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app: satisfies its Designated Requirement\n",
+      "seconds": 0.012
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone\nIdentifier=com.local.notesclone\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=31949 flags=0x2(adhoc) hashes=992+3 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=1e0654b12eb137c1cdbe2b527a619be92a18ae9c\nCandidateCDHashFull sha256=1e0654b12eb137c1cdbe2b527a619be92a18ae9c1551d8589f568f49a115d35e\nHash choices=sha256\nCMSDigest=1e0654b12eb137c1cdbe2b527a619be92a18ae9c1551d8589f568f49a115d35e\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=11337728\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=1e0654b12eb137c1cdbe2b527a619be92a18ae9c\nSignature=adhoc\nInfo.plist entries=16\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=0\nInternal requirements count=0 size=12\n",
+      "seconds": 0.004
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone\n",
+      "seconds": 0.004
+    },
+    {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app"
+      ],
+      "exitCode": 0,
+      "stdout": "# designated => cdhash H\"1e0654b12eb137c1cdbe2b527a619be92a18ae9c\"\n",
+      "stderr": "Executable=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone\n",
+      "seconds": 0.004
+    },
+    {
+      "argv": [
+        "/usr/bin/file",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone"
+      ],
+      "exitCode": 0,
+      "stdout": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone: Mach-O 64-bit executable arm64\n/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-smart-u-build09/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone:   Mach-O 64-bit executable arm64\n",
+      "stderr": "",
+      "seconds": 0.005
+    }
+  ]
+}

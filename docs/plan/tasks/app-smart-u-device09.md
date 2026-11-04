@@ -11,6 +11,8 @@ depends-on: [app-smart-u-platform-ui09]
 
 2026-11-05进入执行：fix13产品`8e8fe7e320e34a2b9c27bf7c7e794662ad988da4`独审pass、作者和审查者均STOP释放target，root接受源码门槛。先按`verification/unified-candidate06/smart-u-device09-preparation/`生成明确准确提交的Mac/Android独立授权并捕获输入冻结；root核freeze SHA后分阶段START平台构建。平台输出分别使用全新`mac-smart-u-build09`与`android-smart-u-build04`目录。该执行记录不赋予旧包、新源或浏览器预览设备结论，仍不得未核freeze直接构建。
 
+准确构建源为`7ab867d416f48ea23913907c87fd6d058833e1cb`：Mac构建/收集及[独立完整包核查](../reviews/mac-smart-u-independent09.md)有限pass，sealed app可进入root的Computer Use设备验收；本机仍锁定，尚未启动新包。Android attempt01子命令虽exit0，runner因offlineMarkerMissing失败，没有collect/install；按[工具窄修14](tools-android-offline-init14.md)修构建流程后重新准确冻结，不能追认旧失败APK。Android升级前已保全界面/包身份基线，现有7篇与标签/录音卡可见；不代表新包数据迁移已验。
+
 D1/D2/O/U和此前已合入录音、标签、工具栏/侧栏变更都必须在同一准确产品输入中。两平台的完整依赖/生成输入分别冻结，不能因应用源码相同就声称完整构建身份相同。每次新尝试独占新目录，失败不覆盖；至少2GiB空间、jobs2、每次600秒有界，仅停自有进程组；主机target不可与验证/另一构建并用。
 
 ## Package checks

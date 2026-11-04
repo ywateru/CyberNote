@@ -1,0 +1,252 @@
+{
+  "schema": 1,
+  "startedAt": "2026-11-04T16:37:06.390401+00:00",
+  "stage": "mac",
+  "expectedHead": "7ab867d416f48ea23913907c87fd6d058833e1cb",
+  "productAggregate": "b02f0a58b0ff5bc31cb9d09437fd73b32645b5f198d781336196fe2060b75897",
+  "sourceAggregate": "abf3f38aceb7cc93100e27ca3bca1848d3d12bba5999835d2a501346522efab6",
+  "freezeSha256": "33d823170db2ed0685ccdbd26af6a0cd459dcc124d73f409aa28fec08c658561",
+  "attempt": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-smart-u-build09/mac-attempt01",
+  "nonce": "1117f7e48e7945589cf785cab6428ee0",
+  "command": [
+    "pnpm",
+    "mac:build"
+  ],
+  "exitCode": 0,
+  "explicitEnvironmentOverrides": {
+    "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+    "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+    "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+    "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "outputIsolation": {
+    "policy": "atomic-rename-final-output-and-dist",
+    "sourcePathsAbsentBeforeCommand": true,
+    "outputs": [
+      {
+        "name": "application",
+        "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+        "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-smart-u-build09/mac-attempt01/prior-outputs/application",
+        "kind": "directory",
+        "before": {
+          "kind": "directory",
+          "device": 16777233,
+          "inode": 29068717,
+          "mode": 493,
+          "directories": [
+            {
+              "path": "Contents",
+              "mode": 493
+            },
+            {
+              "path": "Contents/MacOS",
+              "mode": 493
+            }
+          ],
+          "files": [
+            {
+              "path": "Contents/Info.plist",
+              "bytes": 1193,
+              "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+              "type": "file",
+              "mode": 420
+            },
+            {
+              "path": "Contents/MacOS/notes-clone",
+              "bytes": 16090480,
+              "sha256": "dd120de30bbba231faa1635265c8924b453d8055482745e2c447ad1909dc893f",
+              "type": "file",
+              "mode": 493
+            }
+          ]
+        }
+      },
+      {
+        "name": "dist",
+        "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+        "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-smart-u-build09/mac-attempt01/prior-outputs/dist",
+        "kind": "directory",
+        "before": {
+          "kind": "directory",
+          "device": 16777233,
+          "inode": 29068277,
+          "mode": 493,
+          "directories": [
+            {
+              "path": "assets",
+              "mode": 493
+            }
+          ],
+          "files": [
+            {
+              "path": "assets/index-C5hYxQ-U.js",
+              "bytes": 965089,
+              "sha256": "3b2492e59c29895eb6b0dd029c2bfd8a16ae65adf268c998a62d72cb85ab4118",
+              "type": "file",
+              "mode": 420
+            },
+            {
+              "path": "assets/index-De_oZbG2.css",
+              "bytes": 64908,
+              "sha256": "751892c3a8c846782f354665d2b986b1fb141a3731c76b24a36ebab0c6e990c6",
+              "type": "file",
+              "mode": 420
+            },
+            {
+              "path": "index.html",
+              "bytes": 498,
+              "sha256": "75a454779f92d9e625ade99aa7ed394f6fb95097b8229e9cb35e31e1b1a78df8",
+              "type": "file",
+              "mode": 420
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "diskFreeBefore": 70012432384,
+  "minimumFreeBytes": 69981495296,
+  "deadlineSeconds": 600,
+  "ownedProcessGroup": 27708,
+  "ownedGroupStopped": true,
+  "remainingOwnedGroupMembers": [],
+  "elapsedSeconds": 39.091,
+  "inputComparisons": {
+    "schema": true,
+    "authorization": true,
+    "head": true,
+    "stage": true,
+    "productFiles": true,
+    "productAggregate": true,
+    "files": true,
+    "aggregate": true,
+    "toolVersions": true,
+    "tools": true,
+    "selectedParentEnvironment": true,
+    "effectiveBuildEnvironment": true,
+    "ocrCache": true,
+    "supplementalInputs": true,
+    "scope": true
+  },
+  "supplementalInputsUnchanged": true,
+  "generatedOutputs": [
+    {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+      "snapshot": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 29381671,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "Contents",
+            "mode": 493
+          },
+          {
+            "path": "Contents/MacOS",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "Contents/Info.plist",
+            "bytes": 1193,
+            "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "Contents/MacOS/notes-clone",
+            "bytes": 16375584,
+            "sha256": "33c5635855372ec7f8fe6c6110d813366b645335b259bff549d5b6e55e1262a5",
+            "type": "file",
+            "mode": 493
+          }
+        ]
+      }
+    },
+    {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+      "snapshot": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 29381509,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "assets",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "assets/index-C5hYxQ-U.js",
+            "bytes": 965089,
+            "sha256": "3b2492e59c29895eb6b0dd029c2bfd8a16ae65adf268c998a62d72cb85ab4118",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/index-De_oZbG2.css",
+            "bytes": 64908,
+            "sha256": "751892c3a8c846782f354665d2b986b1fb141a3731c76b24a36ebab0c6e990c6",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "index.html",
+            "bytes": 498,
+            "sha256": "75a454779f92d9e625ade99aa7ed394f6fb95097b8229e9cb35e31e1b1a78df8",
+            "type": "file",
+            "mode": 420
+          }
+        ]
+      }
+    }
+  ],
+  "buildOutputIdentity": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+    "bundleFiles": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+        "type": "file",
+        "mode": 420
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16375584,
+        "sha256": "33c5635855372ec7f8fe6c6110d813366b645335b259bff549d5b6e55e1262a5",
+        "type": "file",
+        "mode": 493
+      }
+    ]
+  },
+  "dist": [
+    {
+      "path": "assets/index-C5hYxQ-U.js",
+      "bytes": 965089,
+      "sha256": "3b2492e59c29895eb6b0dd029c2bfd8a16ae65adf268c998a62d72cb85ab4118",
+      "type": "file",
+      "mode": 420
+    },
+    {
+      "path": "assets/index-De_oZbG2.css",
+      "bytes": 64908,
+      "sha256": "751892c3a8c846782f354665d2b986b1fb141a3731c76b24a36ebab0c6e990c6",
+      "type": "file",
+      "mode": 420
+    },
+    {
+      "path": "index.html",
+      "bytes": 498,
+      "sha256": "75a454779f92d9e625ade99aa7ed394f6fb95097b8229e9cb35e31e1b1a78df8",
+      "type": "file",
+      "mode": 420
+    }
+  ],
+  "endedAt": "2026-11-04T16:37:47.057036+00:00"
+}

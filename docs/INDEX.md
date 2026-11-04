@@ -25,6 +25,8 @@
 - [后续纯本地智能规则的数据准备13](research/smart-local-rules-readiness13.md)
 - [智能界面准确双端包与有限设备验收准备](plan/tasks/app-smart-u-device09.md)
 - [智能双端包输入清单与串行安排](verification/unified-candidate06/smart-u-device09-preparation/README.md)
+- [智能界面Mac准确完整包独立核查](plan/reviews/mac-smart-u-independent09.md)
+- [Android构建离线初始化窄修14](plan/tasks/tools-android-offline-init14.md)
 - [Mac智能文件夹表单布局](ui/smart-folders-macos.md)
 - [Mac智能表单原图像素测量与捕获范围](research/smart-folder-form-measurements09/README.md)
 - [手机智能文件夹官方文字与原图依据09](research/mobile-smart-folder-official09.md)
