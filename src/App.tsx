@@ -29,6 +29,7 @@ import {
   tagSelectionAfterAccess,
 } from "./note-tags";
 import { SaveRevisions } from "./save-revisions";
+import { SidebarPreference } from "./sidebar-preference";
 import { secureId } from "./secure-id";
 import { enqueueSave, type SaveOutcome } from "./save-queue";
 import {
@@ -458,6 +459,17 @@ function App() {
   const viewportHeight = useRef(window.innerHeight);
   const keyboardHeight = useRef(0);
   const [sidebar, setSidebar] = useState(true);
+  const sidebarRequested = useRef(true);
+  const initializedSidebar = useRef(false);
+  const ownsSidebarPreference = native && macNative && !separate;
+  const [sidebarPreference] = useState(
+    () =>
+      new SidebarPreference(
+        (visible) =>
+          action({ type: "settings", settings: { macSidebarVisible: visible } }),
+        () => loadWorkspace(),
+      ),
+  );
   const nativeToolbar = useRef<NativeToolbar<NativeContext> | null>(null);
   const [nativeInfo, setNativeInfo] = useState<BindingInfo | null>(null);
   const [nativeSearchAck, setNativeSearchAck] = useState(0);
@@ -785,6 +797,18 @@ function App() {
     }
   }, [desktopSearch, query, filter, tagFilter]);
   const fail = useCallback((e: unknown) => setError(errText(e)), []);
+  const changeSidebar = useCallback(
+    (value: boolean | ((current: boolean) => boolean)) => {
+      if (ownsSidebarPreference && !initializedSidebar.current) return;
+      const visible =
+        typeof value === "function" ? value(sidebarRequested.current) : value;
+      sidebarRequested.current = visible;
+      setSidebar(visible);
+      if (ownsSidebarPreference)
+        void sidebarPreference.request(visible).catch(fail);
+    },
+    [ownsSidebarPreference, sidebarPreference, fail],
+  );
   const hydrate = useCallback((data: Workspace, passive = false) => {
     if (!metadataGate.canPublish(data.metadata)) return false;
     const previous = wsRef.current;
@@ -1265,6 +1289,7 @@ function App() {
         .onCloseRequested(async (event) => {
           if (
             pendingDocs.current.size ||
+            (ownsSidebarPreference && sidebarPreference.needsConfirmation) ||
             recordingLifecycle.current.active() ||
             ocrLifecycle.current.active()
           ) {
@@ -1274,7 +1299,12 @@ function App() {
               const ocrClosing = ocrLifecycle.current.close();
               const recordingClosing = recordingLifecycle.current.close();
               await Promise.all([ocrClosing, recordingClosing]);
-              await flush();
+              do {
+                if (ownsSidebarPreference) await sidebarPreference.flush();
+                await flush();
+              } while (
+                ownsSidebarPreference && sidebarPreference.needsConfirmation
+              );
               if (
                 !pendingDocs.current.size &&
                 !recordingLifecycle.current.active() &&
@@ -1293,7 +1323,7 @@ function App() {
       recordingLifecycle.current.detach();
       unlisten?.();
     };
-  }, [flush, fail]);
+  }, [flush, fail, ownsSidebarPreference, sidebarPreference]);
   clearSensitive.current = (ids) => {
     if (!ids.length) return;
     if (
@@ -1366,6 +1396,14 @@ function App() {
       },
       (data) => {
         if (!hydrate(data)) throw new MetadataStale();
+        if (ownsSidebarPreference && !initializedSidebar.current) {
+          initializedSidebar.current = true;
+          sidebarRequested.current =
+            typeof data.settings.macSidebarVisible === "boolean"
+              ? data.settings.macSidebarVisible
+              : true;
+          setSidebar(sidebarRequested.current);
+        }
         if (!initializedSelection.current) {
           initializedSelection.current = true;
           restoreSelection(data);
@@ -2009,7 +2047,7 @@ function App() {
             openModal("newFolder");
             break;
           case "sidebar":
-            setSidebar((v) => !v);
+            changeSidebar((v) => !v);
             break;
           case "gallery":
             updateSettings({ view: view === "list" ? "gallery" : "list" });
@@ -2037,7 +2075,15 @@ function App() {
       disposed = true;
       unlisten?.();
     };
-  }, [newNote, view, updateSettings, archive, focusGlobalSearch, fail]);
+  }, [
+    newNote,
+    view,
+    updateSettings,
+    archive,
+    focusGlobalSearch,
+    fail,
+    changeSidebar,
+  ]);
   useEffect(() => {
     const handler = (e: Event) => {
       const d = (e as CustomEvent).detail;
@@ -3520,7 +3566,7 @@ function App() {
             openModal("newFolder");
             return;
           case "toggleSidebar":
-            setSidebar((value) => !value);
+            changeSidebar((value) => !value);
             return;
           case "backToGallery":
             back();
@@ -3943,7 +3989,7 @@ function App() {
               >
                 <FolderPlus />
               </IconButton>
-              <IconButton label="隐藏文件夹" onClick={() => setSidebar(false)}>
+              <IconButton label="隐藏文件夹" onClick={() => changeSidebar(false)}>
                 <PanelLeft />
               </IconButton>
             </div>
@@ -4099,7 +4145,7 @@ function App() {
                 {!sidebar && (
                   <IconButton
                     label="显示文件夹"
-                    onClick={() => setSidebar(true)}
+                    onClick={() => changeSidebar(true)}
                   >
                     <PanelLeft />
                   </IconButton>

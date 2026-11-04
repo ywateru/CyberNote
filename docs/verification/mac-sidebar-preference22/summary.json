@@ -1,0 +1,193 @@
+{
+  "status": "source-ready",
+  "productionAppCases": 27,
+  "deliveryPortCases": 4,
+  "pageErrors": 0,
+  "externalRequests": 0,
+  "typecheckExit": 0,
+  "rustBuildExit": 0,
+  "observedAppPreferencePatchesAllSingleBooleanKey": true,
+  "appPatchObservations": [
+    {
+      "case": "four-entries",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "four-entries",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "case": "dom-entries",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dom-entries",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "case": "ordered-old-new",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "ordered-old-new",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "case": "superseded-reject",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "superseded-reject",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "case": "uncertain-no-value",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "uncertain-unaccepted",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "uncertain-maintenance",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-unaccepted",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-unaccepted",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-unaccepted",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-maintenance",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-maintenance",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-maintenance",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-close-retry",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-close-retry",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-close-retry",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-close-retry",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "dirty-close-retry",
+      "stage": "failed",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "close-old-new",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    },
+    {
+      "case": "close-old-new",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": true
+      }
+    },
+    {
+      "case": "body-close-protection",
+      "stage": "snapshot",
+      "patch": {
+        "macSidebarVisible": false
+      }
+    }
+  ],
+  "limits": [
+    "No exact Mac package acceptance or native GUI/toolbar/menu rendering proof.",
+    "Window-close pending/dirty guarded; predefined immediate CmdQ remains separate unchanged host path.",
+    "Archive import itself not reexecuted: later trusted hydration/backing-settings replacement exercised, and only first trustworthy initialization restores sidebar.",
+    "Real OCR/recording lifecycle not rerun; existing synchronous close admission and final activity checks retained, actual production body rejection case covered."
+  ]
+}

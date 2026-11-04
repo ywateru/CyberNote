@@ -1,0 +1,259 @@
+{
+  "status": "source-ready",
+  "task": "app-mac-sidebar-preference22",
+  "baselineHead": "31cef507ac981b09ab02ef8a17c6d288da83cde4",
+  "handoffReadOnlyHead": "5887071c20612cc6739254858fb879f0dc418c18",
+  "allowedProductPaths": [
+    "src/App.tsx",
+    "src/types.ts",
+    "src/sidebar-preference.ts"
+  ],
+  "products": [
+    {
+      "path": "src/App.tsx",
+      "bytes": 179569,
+      "sha256": "1f33d51d58f52bb01d283d80ceb856d6e6ba6a8c1b99214d1938c922f751fd37"
+    },
+    {
+      "path": "src/types.ts",
+      "bytes": 3294,
+      "sha256": "0bba2d1b9c0f46388d4a8a7b643e826517faf0e1b4018d947526b737c427a159"
+    },
+    {
+      "path": "src/sidebar-preference.ts",
+      "bytes": 2416,
+      "sha256": "02efda1c3dd671475fd4c0c229b6aa242c0ec1485253ad2a0371721cb2c4a13d"
+    }
+  ],
+  "preservedBoundaries": [
+    {
+      "path": "src/smart-folders.css",
+      "bytes": 10837,
+      "sha256": "f18dfeb0b6c9d52d66b4d4ad78016bd234c2763b38ae9ba0f09a4b7410881186"
+    },
+    {
+      "path": "src/smart-draft.ts",
+      "bytes": 3204,
+      "sha256": "a97480a10d85fcb50091987af187d0132608528349748f6488715988004abca6"
+    },
+    {
+      "path": "src/SmartFolderForm.tsx",
+      "bytes": 27898,
+      "sha256": "b2e4d60e5cbe0265b1bca7a67cd5c2d7412b3697e34152d870c0d0344770c15c"
+    },
+    {
+      "path": "src/bridge.ts",
+      "bytes": 18044,
+      "sha256": "729f7dc797abb762a9382f106b1fad103335e27346e598d9b18c37a2785672fd"
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "bytes": 16585,
+      "sha256": "89e8438d82eb5735908e388eb7231af8deb01b754ff0bb628fb7900233ce5790"
+    },
+    {
+      "path": "src-tauri/src/store.rs",
+      "bytes": 51651,
+      "sha256": "0417df9969f30577c0e835fcae915e0296f402b5db89dcaa34544ca07246daba"
+    },
+    {
+      "path": "src-tauri/src/session.rs",
+      "bytes": 19613,
+      "sha256": "b0751c3f0cf52f9cccea343812b96dc4c107fe250d99f7e3b34f64ca381980b6"
+    },
+    {
+      "path": "src/native-toolbar.ts",
+      "bytes": 1090,
+      "sha256": "c70c97cdd7d84cad8a7bb3587687afb43a87d3cf371740830d4bd63f2dcf423e"
+    },
+    {
+      "path": "src/native-toolbar-state.ts",
+      "bytes": 7488,
+      "sha256": "bb03630f2e9bb7a3e4a5c0200cf55667f36c26e55e682e6c5b87c6c1d8683200"
+    }
+  ],
+  "productionRustInputs": [
+    {
+      "path": "src-tauri/src/store.rs",
+      "bytes": 51651,
+      "sha256": "0417df9969f30577c0e835fcae915e0296f402b5db89dcaa34544ca07246daba"
+    },
+    {
+      "path": "src-tauri/src/session.rs",
+      "bytes": 19613,
+      "sha256": "b0751c3f0cf52f9cccea343812b96dc4c107fe250d99f7e3b34f64ca381980b6"
+    },
+    {
+      "path": "src-tauri/src/store/archive/document.rs",
+      "bytes": 12875,
+      "sha256": "6dd018af7abb782fced57a7f46594fe8a39701777f976af34d5b6162e2daa611"
+    },
+    {
+      "path": "src-tauri/src/store/archive/tests.rs",
+      "bytes": 28149,
+      "sha256": "4dfa432e123f4b9c71e2af3ab9a10796d21f2edf7adf101ee8dbacde4bc42f43"
+    },
+    {
+      "path": "src-tauri/src/store/archive.rs",
+      "bytes": 30979,
+      "sha256": "68fae366760d2db4e45ff570c0999b653e69c527bae5cadd0da4cdf76838104a"
+    },
+    {
+      "path": "src-tauri/src/store/attachment_operations/tests.rs",
+      "bytes": 21397,
+      "sha256": "f68c4e41dc35d5ee61b2db9e1a20937cef5efdadd2c521c791d81216814452b4"
+    },
+    {
+      "path": "src-tauri/src/store/attachment_operations.rs",
+      "bytes": 17819,
+      "sha256": "92943f23aa259d78343f47d6d216c7e2c7486d2938fea343cdfbe3df02aa30a4"
+    },
+    {
+      "path": "src-tauri/src/store/commits.rs",
+      "bytes": 1544,
+      "sha256": "9fcd33383d4e3bce0a78774863323a04b1bc9b9b5fe5faf074f1a6d3963bb4e3"
+    },
+    {
+      "path": "src-tauri/src/store/folder_name_tests.rs",
+      "bytes": 3627,
+      "sha256": "de0598fed3287661d7cf347b981e4c3ea3cc955300eb7a1d2905d3fcfc924da4"
+    },
+    {
+      "path": "src-tauri/src/store/metadata_tests.rs",
+      "bytes": 7954,
+      "sha256": "c9806fc8a1877842c14c11021348d7676f35725a6e17a20439c49a051e8e4ee0"
+    },
+    {
+      "path": "src-tauri/src/store/open.rs",
+      "bytes": 9794,
+      "sha256": "dffa8804c67b1786ac4134e1aef56a5bfa9502b323fe6676117075ea68ce4442"
+    },
+    {
+      "path": "src-tauri/src/store/open_tests.rs",
+      "bytes": 16738,
+      "sha256": "13b2a33a6d4c9329fb9821412b4810f364cf1481a5a3fa378b0bf2ac1d936a07"
+    },
+    {
+      "path": "src-tauri/src/store/recorded_at_tests.rs",
+      "bytes": 15322,
+      "sha256": "d774fa8d7d4bff638797dd42cf6e98b0830f8ccc7e14a9685eac9c2b8c8eda2a"
+    },
+    {
+      "path": "src-tauri/src/store/smart.rs",
+      "bytes": 12817,
+      "sha256": "3e952b05c19256f7144287760c287d615e41b7c55a559e80d7fa8cfba12d124e"
+    },
+    {
+      "path": "src-tauri/src/store/smart_tests.rs",
+      "bytes": 30690,
+      "sha256": "a9c8b2a4a11ce143c9f9a42bf6f9c30e2b3845148596e6d58e031469603121dd"
+    },
+    {
+      "path": "src-tauri/src/session/metadata.rs",
+      "bytes": 13781,
+      "sha256": "76b571060e87bbf4a12961430793d6897128852930de22b258111c19b07b0cdc"
+    },
+    {
+      "path": "src-tauri/src/session/smart_tests.rs",
+      "bytes": 5644,
+      "sha256": "3d0b99daa1842fd45a6f1ec8fe38ab935d7cb8f7590e43eeb7f9fe13dfb4a509"
+    },
+    {
+      "path": "src-tauri/src/session/tests.rs",
+      "bytes": 20638,
+      "sha256": "e47c13dc71db3d173e90a8140863411d974db4717f1a25372f8f909689b21b83"
+    }
+  ],
+  "dependencyLocks": [
+    {
+      "path": "src-tauri/Cargo.lock",
+      "bytes": 114667,
+      "sha256": "889b7f449ff4b34263139279cacf57f105fd9c3c6a7099bb56c958f3780ed1b0"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 69103,
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2"
+    },
+    {
+      "path": "docs/verification/mac-sidebar-preference22/harness/Cargo.toml",
+      "bytes": 339,
+      "sha256": "e118efa9ece16e5b7adbf1c8939d1b47db77c0cea02b0517e2947b427468f4f4"
+    },
+    {
+      "path": "docs/verification/mac-sidebar-preference22/harness/Cargo.lock",
+      "bytes": 19008,
+      "sha256": "0771da58f41e5f88df0ecba5cb3ea85c74286a2c6541e715f42b7551ba035bc1"
+    }
+  ],
+  "rustTool": {
+    "path": "/private/tmp/notes-sidebar22-target-upq2n6rn/debug/notes-sidebar-preference22",
+    "bytes": 7594520,
+    "sha256": "19624791900fc9ae10bb5d174749949809856e9fec45d27399d655e3b62a21d0"
+  },
+  "rustToolKind": "Offline task-local synthetic Session/Store transport, no Tauri platform build; source paths point to exact production modules.",
+  "evidenceScripts": [
+    {
+      "path": "docs/verification/mac-sidebar-preference22/check-app.mjs",
+      "bytes": 23231,
+      "sha256": "13aa454a0b3d13258b8fadeeacbea1bbc0cf9809a9c506d8c094246443bb1876"
+    },
+    {
+      "path": "docs/verification/mac-sidebar-preference22/check-app-attempt01.mjs",
+      "bytes": 20225,
+      "sha256": "02150d70e92def98016d2348c53188fdd3dd83e1544e932f2e0a3834d0e1328c"
+    },
+    {
+      "path": "docs/verification/mac-sidebar-preference22/check-app-attempt02.mjs",
+      "bytes": 23231,
+      "sha256": "13aa454a0b3d13258b8fadeeacbea1bbc0cf9809a9c506d8c094246443bb1876"
+    },
+    {
+      "path": "docs/verification/mac-sidebar-preference22/check-delivery.mjs",
+      "bytes": 2313,
+      "sha256": "c6295a916fafb104af4dcec82be77003a01dbc034331b0685b0625a95aa17830"
+    },
+    {
+      "path": "docs/verification/mac-sidebar-preference22/harness/src/main.rs",
+      "bytes": 2767,
+      "sha256": "f175e28ee3234b0a9937c52bdb82ef21a8afd04ed68406bd5e35ebac2ebf12a8"
+    }
+  ],
+  "referenceInputs": [
+    {
+      "path": "docs/plan/tasks/app-mac-sidebar-preference22.md",
+      "bytes": 6353,
+      "sha256": "b5e543a7c10d2a77bcdd774bbfbf975af3d0a40f1fc6ea5df48626fd27b12648"
+    },
+    {
+      "path": "docs/ui/macos.md",
+      "bytes": 22675,
+      "sha256": "58b0936b8c59366617c7190b1f18f679357411b772e833cad102706f9d49556e"
+    },
+    {
+      "path": "docs/architecture.md",
+      "bytes": 49013,
+      "sha256": "90ce8a565732cf9f00d22cc5952445e60da7dd389fbfc53e9517bc28deb63ea7"
+    },
+    {
+      "path": "docs/research/mac-sidebar-restart21/evidence-index.json",
+      "bytes": 2275,
+      "sha256": "c53a2fd353b04f7c0f4b32d11b954069748ef0f85cbad5f9f2990f0ddfc27716"
+    },
+    {
+      "path": "docs/research/mac-sidebar-preference22-readiness/input-manifest.json",
+      "bytes": 20448,
+      "sha256": "c19f3b272c52acebaf52c4ae7d0ac06b286e155d36e252cfaa2182530953be14"
+    }
+  ],
+  "verification": {
+    "productionAppCases": 27,
+    "deliveryPortCases": 4,
+    "typecheck": "pass once",
+    "rustOfflineBuild": "pass",
+    "sourceDiffWhitespace": "pass",
+    "exactMacPackage": "pending root independent review and build",
+    "fastCmdQ": "unchanged host boundary; actual package observation required"
+  },
+  "authority": "root START after20 independent PASS; author code only App/types/helper plus task status/new evidence; no Git mutation/formal package/GUI/ADB/user data/audio/downloads."
+}

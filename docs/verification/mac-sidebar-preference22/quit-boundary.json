@@ -1,0 +1,31 @@
+{
+  "scope": "Read-only locked-source route assessment; no native execution/quit guarantee",
+  "sources": [
+    {
+      "path": "src-tauri/src/lib.rs",
+      "bytes": 16585,
+      "sha256": "89e8438d82eb5735908e388eb7231af8deb01b754ff0bb628fb7900233ce5790"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/muda-0.20.0/src/platform_impl/macos/mod.rs",
+      "bytes": 42579,
+      "sha256": "bb44d6542eb040fd8f3ebc122c09edbef8411cfa5f96c2b312b12136454b1e9f"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tao-0.37.2/src/platform_impl/macos/app_delegate.rs",
+      "bytes": 7281,
+      "sha256": "6db1d4abf763a65c89338d1250e720a59c5f189a456f6923727fb356fa7f43f1"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-runtime-wry-2.12.3/src/lib.rs",
+      "bytes": 168926,
+      "sha256": "ec343fc347aff1fb5327100df2541992e47eb6be1ddb55102170e2253b9c6d59"
+    }
+  ],
+  "facts": [
+    "Current app menu uses predefined .quit(), no custom host quit handshake.",
+    "muda0.20.0 maps CloseWindow to performClose: and Quit to terminate:.",
+    "Tao0.37.2 applicationWillTerminate calls AppState::exit; renderer close guard only receives window close requests."
+  ],
+  "decision": "No host protocol expansion in22. Confirmed preference persistence is separate from immediate CmdQ with pending intents; exact Mac11 must observe both cases, and fast-loss remains partial if reproduced."
+}

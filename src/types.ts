@@ -57,6 +57,7 @@ export interface Settings {
   view?: "list" | "gallery";
   sort?: "updated" | "created" | "title";
   sidebarWidth?: number;
+  macSidebarVisible?: boolean;
   listWidth?: number;
   selectedFolder?: string;
   selectedNote?: string;

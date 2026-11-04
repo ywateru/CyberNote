@@ -1,7 +1,7 @@
 ---
 id: app-mac-sidebar-preference22
 scope: Persist and restore the Mac main-window folder-sidebar visibility
-status: ready
+status: source-ready
 depends-on: [app-mac-ordinary-form-surface20]
 ---
 

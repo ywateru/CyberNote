@@ -1,0 +1,53 @@
+{
+  "productSourcesUnchangedBetweenAuthorRuns": [
+    {
+      "path": "src/App.tsx",
+      "bytes": 179569,
+      "sha256": "1f33d51d58f52bb01d283d80ceb856d6e6ba6a8c1b99214d1938c922f751fd37"
+    },
+    {
+      "path": "src/types.ts",
+      "bytes": 3294,
+      "sha256": "0bba2d1b9c0f46388d4a8a7b643e826517faf0e1b4018d947526b737c427a159"
+    },
+    {
+      "path": "src/sidebar-preference.ts",
+      "bytes": 2416,
+      "sha256": "02efda1c3dd671475fd4c0c229b6aa242c0ec1485253ad2a0371721cb2c4a13d"
+    }
+  ],
+  "attempt01": {
+    "status": "fixture-failure-after-19-cases",
+    "script": {
+      "path": "docs/verification/mac-sidebar-preference22/check-app-attempt01.mjs",
+      "bytes": 20225,
+      "sha256": "02150d70e92def98016d2348c53188fdd3dd83e1544e932f2e0a3834d0e1328c"
+    },
+    "rawResult": "browser-attempt01/result.json",
+    "cause": "Fixture treated createNote response as Workspace.notes[0], but production Rust returns a Note with id. First attempt also reused ambiguous case directory names; retained, not relied on for final isolation.",
+    "productChangeAfterFailure": false
+  },
+  "attempt02": {
+    "status": "pass",
+    "cases": 27,
+    "script": {
+      "path": "docs/verification/mac-sidebar-preference22/check-app-attempt02.mjs",
+      "bytes": 23231,
+      "sha256": "13aa454a0b3d13258b8fadeeacbea1bbc0cf9809a9c506d8c094246443bb1876"
+    },
+    "rawResult": "browser-attempt02/result.json",
+    "changes": "Fixture reads created Note.id, uses unique case names, adds first-read retry/iOS/body-close/new App+new process cases."
+  },
+  "supplement": {
+    "status": "pass",
+    "cases": 4,
+    "script": {
+      "path": "docs/verification/mac-sidebar-preference22/check-delivery.mjs",
+      "bytes": 2313,
+      "sha256": "c6295a916fafb104af4dcec82be77003a01dbc034331b0685b0625a95aa17830"
+    },
+    "rawResult": "delivery-result.json",
+    "reason": "Directly exercise accepted value + maintenanceError contract shape that unchanged bridge normally suppresses; exact-value alone must not confirm."
+  },
+  "typecheck": "typecheck.json one run pass; no product source change followed it."
+}
