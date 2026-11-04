@@ -1,0 +1,30 @@
+[
+  {
+    "name": "build",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 3.778193709
+  },
+  {
+    "name": "native-toolbar",
+    "command": [
+      "node",
+      "scripts/check-native-toolbar.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.21700608400000032
+  },
+  {
+    "name": "production-geometry",
+    "command": [
+      "python3",
+      "scripts/check-sidebar-restore-geometry.py",
+      "docs/verification/app-001-sidebar-restore-main-integration-01/production-run01"
+    ],
+    "exitCode": 0,
+    "seconds": 2.3247374579999995
+  }
+]

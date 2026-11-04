@@ -1,0 +1,45 @@
+{
+  "mainCommit": "d87bcb1be996f363eb8833f8b706772f45841ffb",
+  "allFourInputsUnchangedAndMatchMainAndCandidate": true,
+  "files": [
+    {
+      "path": "plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "bytes": 42044,
+      "sha256": "0deb20826e37511f0654c1c355901ffe10877416fcf98fa8dd32c2cc88c90588",
+      "matchesFrozenCandidate": true
+    },
+    {
+      "path": "scripts/check-sidebar-restore-geometry.py",
+      "bytes": 8733,
+      "sha256": "69b9d2307b5e88bb12c5a8db30e8adc27c5502c9eee22c6d595779161d69dccf",
+      "matchesFrozenCandidate": true
+    },
+    {
+      "path": "scripts/check-native-toolbar.mjs",
+      "bytes": 12274,
+      "sha256": "16465470090cabf19908b46a2e4872ca4e2de7d0d7f7c996b211945750b645b0",
+      "matchesFrozenCandidate": true
+    },
+    {
+      "path": "scripts/check-wide-toolbar-geometry.py",
+      "bytes": 12561,
+      "sha256": "4e304916df896b927631292f68e8e429cc9965cb01f4d47789575ba4813fe6ab",
+      "matchesFrozenCandidate": true
+    }
+  ],
+  "freeBytes": 4923584512,
+  "processesComplete": true,
+  "localGeometryExecutables": [
+    {
+      "path": "production-run01/baseline",
+      "bytes": 77144,
+      "sha256": "66e20e08da05ed99e63b9b9a44c9340040fad2d5251552d52e577cd6ec80d106"
+    },
+    {
+      "path": "production-run01/candidate",
+      "bytes": 77096,
+      "sha256": "524d924579cf222b74a99e3c047e5d5f0d1a0e0171ac3f29d24132a76b80698b"
+    }
+  ],
+  "noGUIADBPlatformRust": true
+}
