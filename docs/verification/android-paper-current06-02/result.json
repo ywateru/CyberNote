@@ -1,0 +1,108 @@
+{
+  "schema": "notesclone.android.paper-current06.capture.v1",
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "installedApk": {
+    "path": "/data/app/~~eb5P2bS7ZSfexzMHy-g4uA==/com.local.notesclone-zgT9fwv3c8LKq4bjcHFRQg==/base.apk",
+    "bytes": 177445114,
+    "sha256": "d773e08fd76ba5bbb8e77be9acbfe6e42159bd4efea6674c1af03aae66fecfc4"
+  },
+  "sourceHeadViaExistingProvenance": "f18da0ccf8bb6e131e80e22b9752f0df2725245d",
+  "identityEvidence": {
+    "path": "docs/verification/android-paper-current06-02/00-identity-attempt02.json",
+    "bytes": 10797,
+    "sha256": "b1779006410722fb170c7a71d40d308c0b1702fcad61b72ba4919376cd8ce0bc"
+  },
+  "primary": {
+    "path": "docs/verification/android-paper-current06-02/06-paper-picker-native.png",
+    "bytes": 71737,
+    "sha256": "3bc54dcb81ee867ca799a964d1c9f8b415cf45627706bc4dda312cb3065fb087"
+  },
+  "before": {
+    "path": "docs/verification/android-paper-current06-02/04-paper-note-before.png",
+    "bytes": 77754,
+    "sha256": "2be66fbec35ee5513e450fe5b3fe24d76b74f7d04aa6a95c3c216d83558bddc6"
+  },
+  "returned": {
+    "path": "docs/verification/android-paper-current06-02/07-cancel-return.png",
+    "bytes": 78375,
+    "sha256": "72f9b58c48d3fb048fafbc26f5fe4e6410d28bf93deeb51411c50a7333b3084d"
+  },
+  "referenceFrame": {
+    "path": "references/mobile/frames-2s/frame-044.png",
+    "bytes": 17032,
+    "sha256": "d4d51679c9be81ca39c18a326ba497028398b213e1e0e13ecbed316859af06f0"
+  },
+  "savedOriginalVideo": {
+    "path": "references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4",
+    "bytes": 8452211,
+    "sha256": "2bed50027479becf059cc32b68c361107a0c3f840f027f79933a4b99bc4e394d"
+  },
+  "nativePngDimensions": [
+    1080,
+    2280
+  ],
+  "referenceFrameDimensions": [
+    224,
+    480
+  ],
+  "actionsAllPassed": true,
+  "pidsRecorded": [
+    "16712",
+    "16712",
+    "16712",
+    "16712",
+    "16712",
+    "16712",
+    "16712"
+  ],
+  "fixedSearch": "QA-PAPER-INDEPENDENT-20261103C",
+  "observedResultCount": 1,
+  "visibleTitle": "QA-PAPER-INDEPENDENT-20261103C",
+  "visibleBody": "Alpha Beta Gamma",
+  "visibleDateBeforeAndAfter": "2026年11月3日23:45",
+  "observedState": {
+    "keyboardBeforePickerAndAfterHidden": true,
+    "sevenItemsVisible": true,
+    "selectedPriorToAnyCardTap": "grid-large",
+    "cardTapped": false,
+    "cancelTapped": true,
+    "currentRowsAfterBlank": [
+      [
+        "lines-small",
+        "grid-small"
+      ],
+      [
+        "lines-medium",
+        "grid-medium"
+      ],
+      [
+        "lines-large",
+        "grid-large"
+      ]
+    ],
+    "referenceRowsAfterBlank": [
+      [
+        "lines-small",
+        "lines-medium"
+      ],
+      [
+        "lines-large",
+        "grid-small"
+      ],
+      [
+        "grid-medium",
+        "grid-large"
+      ]
+    ]
+  },
+  "conclusion": "Finite actual current06 paper page/cancel observations supported; card order differs from reference; no pixel acceptance.",
+  "limits": [
+    "No DB or rich-text JSON query",
+    "No card selection or save",
+    "Different preexisting selected state from reference",
+    "No body-editing keyboard-entry test",
+    "No screenshot geometry recomputation",
+    "No APK/DB/audio payload export"
+  ]
+}

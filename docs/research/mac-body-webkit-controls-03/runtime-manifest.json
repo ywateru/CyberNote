@@ -1,0 +1,565 @@
+{
+  "schema": "notesclone.webkit.controls.runtime-manifest.v1",
+  "scope": "New runtime analysis document only; runtime01-04 and original static files/manifests preserved. No new GUI, runtime, product changes or build.",
+  "sourcesBefore": [
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/README-multiline.md",
+      "bytes": 981,
+      "sha256": "9aa3a24d6b043730bb00a89da80d863af3c044340ed4bb8a2d27d20e82107402"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/README.md",
+      "bytes": 2044,
+      "sha256": "3c0950ca576ca83e7047fda939d0132abbc0a5c467a32c8c3e7da18ec44daf66"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/controls-multiline.html",
+      "bytes": 11728,
+      "sha256": "37adb6483d20414ba38af0fe5bdbe55787416e45d2a1767f0f59194dd77cec9a"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/controls.html",
+      "bytes": 11609,
+      "sha256": "7f41bcef7b9a391ec15090dc7bafc459cf05a1e1dba8e1ce6bb47bc2ad9081ef"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/manifest.json",
+      "bytes": 1449,
+      "sha256": "c6e7ec28b0f087ea0da0c4f32f27fde00b1d6e0b636b81fbc0fe0aefaf0e3406"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/multiline-manifest.json",
+      "bytes": 995,
+      "sha256": "c65232b8d8098f6db3689a8d29e8ddf7452985e2c9ff59383a8b8fe1c062db63"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/multiline-static-validation.json",
+      "bytes": 1681,
+      "sha256": "65a3079cf429ed4ec8a6873be6fff3ae89a38991b9226e5747913f43741cea59"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime01.ax.txt",
+      "bytes": 3912,
+      "sha256": "a98af3de3f39561a5fed69a777043b02cc16793b1503cfb3884fa2bca85a0ac7"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime02.ax.txt",
+      "bytes": 14478,
+      "sha256": "21743ae7c89f982f385f1ebd398ee736fb05ae97831c38b16698efa6eebcaf36"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime02.cua-image",
+      "bytes": 409895,
+      "sha256": "3ebd4ed3ead6e01f19da388aa0d6e83460941e508b024fcbf79961efe3db7c79"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime03-focused-baseline.ax.txt",
+      "bytes": 14422,
+      "sha256": "7448a30fefef619b1c4ebbaa35e692743fe5c5a29c962baa9c36255dd9ed3d45"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime04-multiline.ax.txt",
+      "bytes": 14497,
+      "sha256": "d464eda1018d39ee736836b3b934c2f0b9ca6bc86bd5c921de3949d30f2b9cc0"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime04-multiline.cua-image",
+      "bytes": 409635,
+      "sha256": "9e98fd30725ba27fb47464cd07f6a3ca27acb7867a64d3fa15a2190a830e05b0"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/static-validation.json",
+      "bytes": 1253,
+      "sha256": "064622f6e30eceaf87e632a89e14e444c57da662356f93f543afbe0ff09ae58c"
+    }
+  ],
+  "sourcesAfter": [
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/README-multiline.md",
+      "bytes": 981,
+      "sha256": "9aa3a24d6b043730bb00a89da80d863af3c044340ed4bb8a2d27d20e82107402"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/README.md",
+      "bytes": 2044,
+      "sha256": "3c0950ca576ca83e7047fda939d0132abbc0a5c467a32c8c3e7da18ec44daf66"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/controls-multiline.html",
+      "bytes": 11728,
+      "sha256": "37adb6483d20414ba38af0fe5bdbe55787416e45d2a1767f0f59194dd77cec9a"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/controls.html",
+      "bytes": 11609,
+      "sha256": "7f41bcef7b9a391ec15090dc7bafc459cf05a1e1dba8e1ce6bb47bc2ad9081ef"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/manifest.json",
+      "bytes": 1449,
+      "sha256": "c6e7ec28b0f087ea0da0c4f32f27fde00b1d6e0b636b81fbc0fe0aefaf0e3406"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/multiline-manifest.json",
+      "bytes": 995,
+      "sha256": "c65232b8d8098f6db3689a8d29e8ddf7452985e2c9ff59383a8b8fe1c062db63"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/multiline-static-validation.json",
+      "bytes": 1681,
+      "sha256": "65a3079cf429ed4ec8a6873be6fff3ae89a38991b9226e5747913f43741cea59"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime01.ax.txt",
+      "bytes": 3912,
+      "sha256": "a98af3de3f39561a5fed69a777043b02cc16793b1503cfb3884fa2bca85a0ac7"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime02.ax.txt",
+      "bytes": 14478,
+      "sha256": "21743ae7c89f982f385f1ebd398ee736fb05ae97831c38b16698efa6eebcaf36"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime02.cua-image",
+      "bytes": 409895,
+      "sha256": "3ebd4ed3ead6e01f19da388aa0d6e83460941e508b024fcbf79961efe3db7c79"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime03-focused-baseline.ax.txt",
+      "bytes": 14422,
+      "sha256": "7448a30fefef619b1c4ebbaa35e692743fe5c5a29c962baa9c36255dd9ed3d45"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime04-multiline.ax.txt",
+      "bytes": 14497,
+      "sha256": "d464eda1018d39ee736836b3b934c2f0b9ca6bc86bd5c921de3949d30f2b9cc0"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime04-multiline.cua-image",
+      "bytes": 409635,
+      "sha256": "9e98fd30725ba27fb47464cd07f6a3ca27acb7867a64d3fa15a2190a830e05b0"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/static-validation.json",
+      "bytes": 1253,
+      "sha256": "064622f6e30eceaf87e632a89e14e444c57da662356f93f543afbe0ff09ae58c"
+    }
+  ],
+  "sourcesUnchanged": true,
+  "newOutputFiles": [
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime-analysis.md",
+      "bytes": 5726,
+      "sha256": "0aa95947f56874a1358cd52afb4e0254ed5ab76d3e288d98f552f5ca4d9a5524"
+    }
+  ],
+  "aggregateEntries": [
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/README-multiline.md",
+      "bytes": 981,
+      "sha256": "9aa3a24d6b043730bb00a89da80d863af3c044340ed4bb8a2d27d20e82107402"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/README.md",
+      "bytes": 2044,
+      "sha256": "3c0950ca576ca83e7047fda939d0132abbc0a5c467a32c8c3e7da18ec44daf66"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/controls-multiline.html",
+      "bytes": 11728,
+      "sha256": "37adb6483d20414ba38af0fe5bdbe55787416e45d2a1767f0f59194dd77cec9a"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/controls.html",
+      "bytes": 11609,
+      "sha256": "7f41bcef7b9a391ec15090dc7bafc459cf05a1e1dba8e1ce6bb47bc2ad9081ef"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/manifest.json",
+      "bytes": 1449,
+      "sha256": "c6e7ec28b0f087ea0da0c4f32f27fde00b1d6e0b636b81fbc0fe0aefaf0e3406"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/multiline-manifest.json",
+      "bytes": 995,
+      "sha256": "c65232b8d8098f6db3689a8d29e8ddf7452985e2c9ff59383a8b8fe1c062db63"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/multiline-static-validation.json",
+      "bytes": 1681,
+      "sha256": "65a3079cf429ed4ec8a6873be6fff3ae89a38991b9226e5747913f43741cea59"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime-analysis.md",
+      "bytes": 5726,
+      "sha256": "0aa95947f56874a1358cd52afb4e0254ed5ab76d3e288d98f552f5ca4d9a5524"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime01.ax.txt",
+      "bytes": 3912,
+      "sha256": "a98af3de3f39561a5fed69a777043b02cc16793b1503cfb3884fa2bca85a0ac7"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime02.ax.txt",
+      "bytes": 14478,
+      "sha256": "21743ae7c89f982f385f1ebd398ee736fb05ae97831c38b16698efa6eebcaf36"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime02.cua-image",
+      "bytes": 409895,
+      "sha256": "3ebd4ed3ead6e01f19da388aa0d6e83460941e508b024fcbf79961efe3db7c79"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime03-focused-baseline.ax.txt",
+      "bytes": 14422,
+      "sha256": "7448a30fefef619b1c4ebbaa35e692743fe5c5a29c962baa9c36255dd9ed3d45"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime04-multiline.ax.txt",
+      "bytes": 14497,
+      "sha256": "d464eda1018d39ee736836b3b934c2f0b9ca6bc86bd5c921de3949d30f2b9cc0"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/runtime04-multiline.cua-image",
+      "bytes": 409635,
+      "sha256": "9e98fd30725ba27fb47464cd07f6a3ca27acb7867a64d3fa15a2190a830e05b0"
+    },
+    {
+      "path": "docs/research/mac-body-webkit-controls-03/static-validation.json",
+      "bytes": 1253,
+      "sha256": "064622f6e30eceaf87e632a89e14e444c57da662356f93f543afbe0ff09ae58c"
+    }
+  ],
+  "aggregateFormat": "UTF8 <sha256>  <full-relative-path>\\n sorted by full path; includes14 inputs+new report, excludes runtime-manifest itself",
+  "aggregateSha256": "16d99700e3e79138922f39d62c5effaeeca4232281279d44cde9d4ce0a5b26f1",
+  "runtime01Role": "Safari open-panel, not control-page measurement",
+  "summaryDisplay": {
+    "runtime02.ax.txt": [
+      {
+        "control": "baseline",
+        "supportDisplay": "基线",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "spacing-space-all",
+        "supportDisplay": "false",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "spacing-trim-all",
+        "supportDisplay": "false",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "chws-off",
+        "supportDisplay": "true",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "chws-on",
+        "supportDisplay": "true",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "palt-on",
+        "supportDisplay": "true",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      }
+    ],
+    "runtime03-focused-baseline.ax.txt": [
+      {
+        "control": "baseline",
+        "supportDisplay": "基线",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "spacing-space-all",
+        "supportDisplay": "false",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "spacing-trim-all",
+        "supportDisplay": "false",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "chws-off",
+        "supportDisplay": "true",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "chws-on",
+        "supportDisplay": "true",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "palt-on",
+        "supportDisplay": "true",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      }
+    ],
+    "runtime04-multiline.ax.txt": [
+      {
+        "control": "baseline",
+        "supportDisplay": "基线",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "spacing-space-all",
+        "supportDisplay": "false",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "spacing-trim-all",
+        "supportDisplay": "false",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "chws-off",
+        "supportDisplay": "true",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "chws-on",
+        "supportDisplay": "true",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      },
+      {
+        "control": "palt-on",
+        "supportDisplay": "true",
+        "mixedWidthCssPx": "276.742432",
+        "adjacentWidthCssPx": "103.190659",
+        "hanSeparatedWidthCssPx": "219.280151",
+        "repeatedParagraphTopAdvancesCssPx": "17.218750/17.218750/17.218750"
+      }
+    ]
+  },
+  "jsonExportReview": {
+    "runtime02.ax.txt": [
+      {
+        "control": "baseline",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 482,
+        "endsWith": "rces\":[{\"path\":\"docs/verification/mac-body-ty"
+      },
+      {
+        "control": "spacing-space-all",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 491,
+        "endsWith": ",1]},\"sources\":[{\"path\":\"docs/verification/ma"
+      },
+      {
+        "control": "spacing-trim-all",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 490,
+        "endsWith": "1]},\"sources\":[{\"path\":\"docs/verification/mac"
+      },
+      {
+        "control": "chws-off",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 482,
+        "endsWith": "rces\":[{\"path\":\"docs/verification/mac-body-ty"
+      },
+      {
+        "control": "chws-on",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 481,
+        "endsWith": "ces\":[{\"path\":\"docs/verification/mac-body-typ"
+      },
+      {
+        "control": "palt-on",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 481,
+        "endsWith": "ces\":[{\"path\":\"docs/verification/mac-body-typ"
+      }
+    ],
+    "runtime03-focused-baseline.ax.txt": [
+      {
+        "control": "baseline",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 482,
+        "endsWith": "rces\":[{\"path\":\"docs/verification/mac-body-ty"
+      },
+      {
+        "control": "spacing-space-all",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 491,
+        "endsWith": ",1]},\"sources\":[{\"path\":\"docs/verification/ma"
+      },
+      {
+        "control": "spacing-trim-all",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 490,
+        "endsWith": "1]},\"sources\":[{\"path\":\"docs/verification/mac"
+      },
+      {
+        "control": "chws-off",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 482,
+        "endsWith": "rces\":[{\"path\":\"docs/verification/mac-body-ty"
+      },
+      {
+        "control": "chws-on",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 481,
+        "endsWith": "ces\":[{\"path\":\"docs/verification/mac-body-typ"
+      },
+      {
+        "control": "palt-on",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 481,
+        "endsWith": "ces\":[{\"path\":\"docs/verification/mac-body-typ"
+      }
+    ],
+    "runtime04-multiline.ax.txt": [
+      {
+        "control": "baseline",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 488,
+        "endsWith": ",\n\"sources\":[{\"path\":\"docs/verification/mac-b"
+      },
+      {
+        "control": "spacing-space-all",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 497,
+        "endsWith": "4,851,1]},\n\"sources\":[{\"path\":\"docs/verificat"
+      },
+      {
+        "control": "spacing-trim-all",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 496,
+        "endsWith": ",851,1]},\n\"sources\":[{\"path\":\"docs/verificati"
+      },
+      {
+        "control": "chws-off",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 488,
+        "endsWith": ",\n\"sources\":[{\"path\":\"docs/verification/mac-b"
+      },
+      {
+        "control": "chws-on",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 487,
+        "endsWith": "\n\"sources\":[{\"path\":\"docs/verification/mac-bo"
+      },
+      {
+        "control": "palt-on",
+        "characters": 512,
+        "parseable": false,
+        "error": "Unterminated string starting at",
+        "position": 487,
+        "endsWith": "\n\"sources\":[{\"path\":\"docs/verification/mac-bo"
+      }
+    ]
+  },
+  "exportStatus": "No complete independently parseable per-control runtime JSON in saved AX; neither computed values nor font feature application established.",
+  "pageSelfReportedJsonCharacters": {
+    "runtime02And03": [
+      6157,
+      6234,
+      6234,
+      6253,
+      6246,
+      6246
+    ],
+    "runtime04": [
+      6174,
+      6251,
+      6251,
+      6270,
+      6263,
+      6263
+    ]
+  },
+  "staticManifestsPreserved": [
+    "manifest.json",
+    "multiline-manifest.json"
+  ],
+  "minimumFreeBytes": 2147483648,
+  "freeBytesBeforeWrite": 78098272256
+}

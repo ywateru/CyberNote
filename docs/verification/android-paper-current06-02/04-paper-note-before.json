@@ -1,0 +1,95 @@
+{
+  "serial": "emulator-5580",
+  "package": "com.local.notesclone",
+  "at": "2026-11-04T07:47:27.203768+00:00",
+  "hostFreeBefore": 80557756416,
+  "spaceBefore": {
+    "hostFreeBytes": 80557756416,
+    "deviceDataDf": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 627708   5312224  11% /storage/emulated/0/Android/obb\n"
+  },
+  "spaceBeforePng": {
+    "hostFreeBytes": 80557731840,
+    "deviceDataDf": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 627712   5312220  11% /storage/emulated/0/Android/obb\n"
+  },
+  "png": {
+    "path": "04-paper-note-before.png",
+    "bytes": 77754,
+    "sha256": "2be66fbec35ee5513e450fe5b3fe24d76b74f7d04aa6a95c3c216d83558bddc6"
+  },
+  "pidof": "16712",
+  "status": "PASS",
+  "events": [
+    {
+      "at": "2026-11-04T07:47:27.229264+00:00",
+      "args": [
+        "get-state"
+      ],
+      "exitCode": 0,
+      "stdout": "device\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T07:47:27.250251+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 627708   5312224  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T07:47:27.813925+00:00",
+      "args": [
+        "shell",
+        "input",
+        "tap",
+        "475",
+        "679"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T07:47:27.828314+00:00",
+      "args": [
+        "shell",
+        "df",
+        "-k",
+        "/data"
+      ],
+      "exitCode": 0,
+      "stdout": "Filesystem      1K-blocks   Used Available Use% Mounted on\n/dev/block/dm-4   6082144 627712   5312220  11% /storage/emulated/0/Android/obb\n",
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T07:47:27.921439+00:00",
+      "args": [
+        "exec-out",
+        "screencap",
+        "-p"
+      ],
+      "exitCode": 0,
+      "stdout": {
+        "bytes": 77754,
+        "sha256": "2be66fbec35ee5513e450fe5b3fe24d76b74f7d04aa6a95c3c216d83558bddc6"
+      },
+      "stderr": ""
+    },
+    {
+      "at": "2026-11-04T07:47:27.941317+00:00",
+      "args": [
+        "shell",
+        "pidof",
+        "com.local.notesclone"
+      ],
+      "exitCode": 0,
+      "stdout": "16712\n",
+      "stderr": ""
+    }
+  ],
+  "hostFreeAfter": 80557641728
+}

@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "scope": "Static only; new serialization variant; no GUI/runtime claim",
+  "source": {
+    "path": "controls.html",
+    "bytes": 11609,
+    "sha256": "7f41bcef7b9a391ec15090dc7bafc459cf05a1e1dba8e1ce6bb47bc2ad9081ef"
+  },
+  "variant": {
+    "path": "controls-multiline.html",
+    "bytes": 11728,
+    "sha256": "37adb6483d20414ba38af0fe5bdbe55787416e45d2a1767f0f59194dd77cec9a"
+  },
+  "change": "Only serializeBounded function replaced; every other HTML byte identical. Top-level field per line, nested values compact. Success and length-error JSON use multiline format.",
+  "allExistingFileSHAsUnchanged": true,
+  "preservedExistingFiles": {
+    "runtime02.cua-image": "3ebd4ed3ead6e01f19da388aa0d6e83460941e508b024fcbf79961efe3db7c79",
+    "static-validation.json": "064622f6e30eceaf87e632a89e14e444c57da662356f93f543afbe0ff09ae58c",
+    "runtime03-focused-baseline.ax.txt": "7448a30fefef619b1c4ebbaa35e692743fe5c5a29c962baa9c36255dd9ed3d45",
+    "runtime01.ax.txt": "a98af3de3f39561a5fed69a777043b02cc16793b1503cfb3884fa2bca85a0ac7",
+    "README.md": "3c0950ca576ca83e7047fda939d0132abbc0a5c467a32c8c3e7da18ec44daf66",
+    "manifest.json": "c6e7ec28b0f087ea0da0c4f32f27fde00b1d6e0b636b81fbc0fe0aefaf0e3406",
+    "runtime02.ax.txt": "21743ae7c89f982f385f1ebd398ee736fb05ae97831c38b16698efa6eebcaf36",
+    "controls.html": "7f41bcef7b9a391ec15090dc7bafc459cf05a1e1dba8e1ce6bb47bc2ad9081ef"
+  },
+  "javascriptSyntax": "pass",
+  "roundtripAndBoundaryTest": "Roundtrip, top-level multiline/compact nested arrays and strict 15999/16000/16001 boundaries pass.",
+  "maxLengthExclusive": 16000,
+  "geometryAndCSSAndFixtureUnchanged": true,
+  "freeBytes": 80550584320
+}

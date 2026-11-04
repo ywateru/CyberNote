@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "scope": "New local research directory only; no GUI, platform build, product or old evidence edits",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2044,
+      "sha256": "3c0950ca576ca83e7047fda939d0132abbc0a5c467a32c8c3e7da18ec44daf66"
+    },
+    {
+      "path": "controls.html",
+      "bytes": 11609,
+      "sha256": "7f41bcef7b9a391ec15090dc7bafc459cf05a1e1dba8e1ce6bb47bc2ad9081ef"
+    },
+    {
+      "path": "static-validation.json",
+      "bytes": 1253,
+      "sha256": "064622f6e30eceaf87e632a89e14e444c57da662356f93f543afbe0ff09ae58c"
+    }
+  ],
+  "sources": [
+    {
+      "path": "docs/plan/tasks/ref-mac-punctuation-controls-03.md",
+      "bytes": 2733,
+      "sha256": "ccc3f1b7894e3917087b00ab8d429d7fe84a47836fe1145ff9b5da26af66252e"
+    },
+    {
+      "path": "docs/verification/mac-body-typography-runtime-01/corpus.json",
+      "bytes": 1446,
+      "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"
+    },
+    {
+      "path": "docs/verification/mac-punctuation-context-runtime-02/corpus.json",
+      "bytes": 393,
+      "sha256": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"
+    }
+  ],
+  "excluded": [
+    "manifest.json (self-reference)",
+    "runtime* (root-owned outputs may be written after page delivery; not sealed by developer)"
+  ],
+  "freeBytesBeforeSeal": 80562114560,
+  "runtimeStatus": "Not executed by developer; root owns CUA runtime"
+}

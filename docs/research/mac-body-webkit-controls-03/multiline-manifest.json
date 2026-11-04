@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "scope": "New multiline serialization variant only; original controls/manifests/runtime are preserved",
+  "files": [
+    {
+      "path": "controls-multiline.html",
+      "bytes": 11728,
+      "sha256": "37adb6483d20414ba38af0fe5bdbe55787416e45d2a1767f0f59194dd77cec9a"
+    },
+    {
+      "path": "README-multiline.md",
+      "bytes": 981,
+      "sha256": "9aa3a24d6b043730bb00a89da80d863af3c044340ed4bb8a2d27d20e82107402"
+    },
+    {
+      "path": "multiline-static-validation.json",
+      "bytes": 1681,
+      "sha256": "65a3079cf429ed4ec8a6873be6fff3ae89a38991b9226e5747913f43741cea59"
+    }
+  ],
+  "sourceHTML": {
+    "path": "controls.html",
+    "bytes": 11609,
+    "sha256": "7f41bcef7b9a391ec15090dc7bafc459cf05a1e1dba8e1ce6bb47bc2ad9081ef"
+  },
+  "excluded": [
+    "multiline-manifest.json (self-reference)",
+    "runtime* (root-owned evidence; untouched by developer)"
+  ],
+  "runtimeStatus": "No developer GUI; await root-owned runtime and independent JSON parse"
+}

@@ -1,0 +1,42 @@
+{
+  "scope": "Static checks only; no browser/GUI/runtime claim",
+  "htmlBytes": 11609,
+  "htmlSHA256": "7f41bcef7b9a391ec15090dc7bafc459cf05a1e1dba8e1ce6bb47bc2ad9081ef",
+  "sourceSHAMatch": true,
+  "exactSixSingleVariableControls": true,
+  "frozenAndDerivedTextsMatch": true,
+  "sampleCount": 18,
+  "utf16CharactersPerControl": 154,
+  "javascriptSyntax": "pass",
+  "externalURLAttributes": [],
+  "networkStorageAPIScan": "pass",
+  "boundedSerializerBoundaryTest": "Boundary 15999/16000/16001 pass; all outputs independently parseable.",
+  "syntheticConservativeCharacterCounts": [
+    [
+      "baseline",
+      13416
+    ],
+    [
+      "spacing-space-all",
+      13456
+    ],
+    [
+      "spacing-trim-all",
+      13453
+    ],
+    [
+      "chws-off",
+      13443
+    ],
+    [
+      "chws-on",
+      13441
+    ],
+    [
+      "palt-on",
+      13441
+    ]
+  ],
+  "syntheticLimitation": "Length exercise uses 512-character UA, 14x150-character computed fields and oversized 8-digit coordinates. Actual DOM layout remains unmeasured; runtime strict length guard emits complete visible failure JSON at >=16000.",
+  "layoutInspection": "All status/summary/textarea regions have fixed heights; all 6 controls are measured before any summary/result updates."
+}

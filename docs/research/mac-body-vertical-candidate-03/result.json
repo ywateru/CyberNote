@@ -1,0 +1,768 @@
+{
+  "schema": "notesclone.mac.body.vertical.candidate.v1",
+  "status": "Analytical candidate only; no product mutation, runtime capture, GUI, test or new build.",
+  "sourcesBefore": {
+    "docs/research/mac-punctuation-context-geometry-02/result.json": {
+      "path": "docs/research/mac-punctuation-context-geometry-02/result.json",
+      "bytes": 139393,
+      "sha256": "fd9a35d1ffcec305e2fc998d24e7101b6fb2b015ab378db6ad34a4de8dfa4962"
+    },
+    "docs/research/mac-body-candidate06-geometry-01/result.json": {
+      "path": "docs/research/mac-body-candidate06-geometry-01/result.json",
+      "bytes": 37638,
+      "sha256": "0b04fa14d6714b27705a54be91a4b5f4c9321a7ecb55a9c34c084bc3ab451660"
+    },
+    "src/style.css": {
+      "path": "src/style.css",
+      "bytes": 65886,
+      "sha256": "75227796447c2f1404d5bb6e11f5c4663d53035d6cd343c288d92f6302f18bf7"
+    },
+    "src/Editor.tsx": {
+      "path": "src/Editor.tsx",
+      "bytes": 11962,
+      "sha256": "43c332456c159b5951345b3d2244996154a54065e25dfee355f27e8d3586fc32"
+    }
+  },
+  "sourcesAfter": {
+    "docs/research/mac-punctuation-context-geometry-02/result.json": {
+      "path": "docs/research/mac-punctuation-context-geometry-02/result.json",
+      "bytes": 139393,
+      "sha256": "fd9a35d1ffcec305e2fc998d24e7101b6fb2b015ab378db6ad34a4de8dfa4962"
+    },
+    "docs/research/mac-body-candidate06-geometry-01/result.json": {
+      "path": "docs/research/mac-body-candidate06-geometry-01/result.json",
+      "bytes": 37638,
+      "sha256": "0b04fa14d6714b27705a54be91a4b5f4c9321a7ecb55a9c34c084bc3ab451660"
+    },
+    "src/style.css": {
+      "path": "src/style.css",
+      "bytes": 65886,
+      "sha256": "75227796447c2f1404d5bb6e11f5c4663d53035d6cd343c288d92f6302f18bf7"
+    },
+    "src/Editor.tsx": {
+      "path": "src/Editor.tsx",
+      "bytes": 11962,
+      "sha256": "43c332456c159b5951345b3d2244996154a54065e25dfee355f27e8d3586fc32"
+    }
+  },
+  "sourcesUnchanged": true,
+  "coordinateSystem": "Existing decoded JPEG image pixels; no image changed or regenerated. No DPR/CSS-to-image scale established.",
+  "knownConfiguredValuesFromSource": {
+    "ordinaryTopLevelParagraphFontCssPx": 13,
+    "lineHeightCssPx": 17.22,
+    "minHeightCssPx": 17.22,
+    "selector": ".desktop.native-toolbar:not(.separate) .note-document .tiptap > p"
+  },
+  "candidate": {
+    "fontCssPx": 13,
+    "lineHeightCssPx": 17,
+    "minHeightCssPx": 17,
+    "startPaddingCssPx": 2,
+    "scope": "Mac native-toolbar not separate; CSS all-p guard on actual root element children, without new Editor class or JS.",
+    "correctionFormula": "DeltaY(n)=R*(2-0.22*n)+unknownIntrinsicFirstLineMetricChange; n counts visual advances incl empty and wrapped lines.",
+    "scenarioR": 2,
+    "scenarioRMeaning": "Illustrative effective image-coordinate response parameter, neither measured browser response nor established DPR.",
+    "intrinsicFirstLineTermInNumericTable": 0,
+    "numericTableWarning": "Predicted algebraic values only, not rendered candidate positions. CSS line-box changes, wrapping, quantization, transforms, and font metrics may invalidate values.",
+    "allParagraphGuard": ".tiptap:has(> p):not(:has(> :not(p)))"
+  },
+  "samples": {
+    "context02": {
+      "source": "docs/research/mac-punctuation-context-geometry-02/result.json",
+      "advanceIndexDefinition": "Zero-based visual line advance from first row, including blank line; body01 final wrapped second visual line increments index. Not a DOM measurement.",
+      "thresholds": {
+        "120": {
+          "rows": [
+            {
+              "advanceIndex": 0,
+              "originalInkTop": 175,
+              "cloneInkTop": 171,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 4.0,
+              "scenarioResidualR2": 0.0
+            },
+            {
+              "advanceIndex": 1,
+              "originalInkTop": 207,
+              "cloneInkTop": 203,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 3.56,
+              "scenarioResidualR2": -0.44
+            },
+            {
+              "advanceIndex": 2,
+              "originalInkTop": 241,
+              "cloneInkTop": 238,
+              "observedDelta": -3,
+              "scenarioCorrectionR2": 3.12,
+              "scenarioResidualR2": 0.12
+            },
+            {
+              "advanceIndex": 3,
+              "originalInkTop": 275,
+              "cloneInkTop": 272,
+              "observedDelta": -3,
+              "scenarioCorrectionR2": 2.68,
+              "scenarioResidualR2": -0.32
+            },
+            {
+              "advanceIndex": 4,
+              "originalInkTop": 309,
+              "cloneInkTop": 307,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 2.24,
+              "scenarioResidualR2": 0.24
+            },
+            {
+              "advanceIndex": 5,
+              "originalInkTop": 343,
+              "cloneInkTop": 341,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 1.8,
+              "scenarioResidualR2": -0.2
+            },
+            {
+              "advanceIndex": 6,
+              "originalInkTop": 377,
+              "cloneInkTop": 376,
+              "observedDelta": -1,
+              "scenarioCorrectionR2": 1.36,
+              "scenarioResidualR2": 0.36
+            },
+            {
+              "advanceIndex": 8,
+              "originalInkTop": 445,
+              "cloneInkTop": 445,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": 0.48,
+              "scenarioResidualR2": 0.48
+            },
+            {
+              "advanceIndex": 9,
+              "originalInkTop": 479,
+              "cloneInkTop": 479,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": 0.04,
+              "scenarioResidualR2": 0.04
+            },
+            {
+              "advanceIndex": 10,
+              "originalInkTop": 513,
+              "cloneInkTop": 513,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": -0.4,
+              "scenarioResidualR2": -0.4
+            }
+          ],
+          "linearObservedErrorFit": {
+            "interceptImagePixels": -4.09090909090909,
+            "slopeImagePixelsPerAdvance": 0.4564393939393938
+          },
+          "scenarioResidualMinMax": [
+            -0.44,
+            0.48
+          ]
+        },
+        "160": {
+          "rows": [
+            {
+              "advanceIndex": 0,
+              "originalInkTop": 175,
+              "cloneInkTop": 171,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 4.0,
+              "scenarioResidualR2": 0.0
+            },
+            {
+              "advanceIndex": 1,
+              "originalInkTop": 207,
+              "cloneInkTop": 203,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 3.56,
+              "scenarioResidualR2": -0.44
+            },
+            {
+              "advanceIndex": 2,
+              "originalInkTop": 241,
+              "cloneInkTop": 238,
+              "observedDelta": -3,
+              "scenarioCorrectionR2": 3.12,
+              "scenarioResidualR2": 0.12
+            },
+            {
+              "advanceIndex": 3,
+              "originalInkTop": 275,
+              "cloneInkTop": 272,
+              "observedDelta": -3,
+              "scenarioCorrectionR2": 2.68,
+              "scenarioResidualR2": -0.32
+            },
+            {
+              "advanceIndex": 4,
+              "originalInkTop": 309,
+              "cloneInkTop": 307,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 2.24,
+              "scenarioResidualR2": 0.24
+            },
+            {
+              "advanceIndex": 5,
+              "originalInkTop": 343,
+              "cloneInkTop": 341,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 1.8,
+              "scenarioResidualR2": -0.2
+            },
+            {
+              "advanceIndex": 6,
+              "originalInkTop": 377,
+              "cloneInkTop": 376,
+              "observedDelta": -1,
+              "scenarioCorrectionR2": 1.36,
+              "scenarioResidualR2": 0.36
+            },
+            {
+              "advanceIndex": 8,
+              "originalInkTop": 445,
+              "cloneInkTop": 445,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": 0.48,
+              "scenarioResidualR2": 0.48
+            },
+            {
+              "advanceIndex": 9,
+              "originalInkTop": 479,
+              "cloneInkTop": 479,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": 0.04,
+              "scenarioResidualR2": 0.04
+            },
+            {
+              "advanceIndex": 10,
+              "originalInkTop": 513,
+              "cloneInkTop": 513,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": -0.4,
+              "scenarioResidualR2": -0.4
+            }
+          ],
+          "linearObservedErrorFit": {
+            "interceptImagePixels": -4.09090909090909,
+            "slopeImagePixelsPerAdvance": 0.4564393939393938
+          },
+          "scenarioResidualMinMax": [
+            -0.44,
+            0.48
+          ]
+        },
+        "200": {
+          "rows": [
+            {
+              "advanceIndex": 0,
+              "originalInkTop": 175,
+              "cloneInkTop": 171,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 4.0,
+              "scenarioResidualR2": 0.0
+            },
+            {
+              "advanceIndex": 1,
+              "originalInkTop": 207,
+              "cloneInkTop": 203,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 3.56,
+              "scenarioResidualR2": -0.44
+            },
+            {
+              "advanceIndex": 2,
+              "originalInkTop": 241,
+              "cloneInkTop": 238,
+              "observedDelta": -3,
+              "scenarioCorrectionR2": 3.12,
+              "scenarioResidualR2": 0.12
+            },
+            {
+              "advanceIndex": 3,
+              "originalInkTop": 275,
+              "cloneInkTop": 272,
+              "observedDelta": -3,
+              "scenarioCorrectionR2": 2.68,
+              "scenarioResidualR2": -0.32
+            },
+            {
+              "advanceIndex": 4,
+              "originalInkTop": 309,
+              "cloneInkTop": 307,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 2.24,
+              "scenarioResidualR2": 0.24
+            },
+            {
+              "advanceIndex": 5,
+              "originalInkTop": 343,
+              "cloneInkTop": 341,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 1.8,
+              "scenarioResidualR2": -0.2
+            },
+            {
+              "advanceIndex": 6,
+              "originalInkTop": 377,
+              "cloneInkTop": 376,
+              "observedDelta": -1,
+              "scenarioCorrectionR2": 1.36,
+              "scenarioResidualR2": 0.36
+            },
+            {
+              "advanceIndex": 8,
+              "originalInkTop": 445,
+              "cloneInkTop": 445,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": 0.48,
+              "scenarioResidualR2": 0.48
+            },
+            {
+              "advanceIndex": 9,
+              "originalInkTop": 479,
+              "cloneInkTop": 479,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": 0.04,
+              "scenarioResidualR2": 0.04
+            },
+            {
+              "advanceIndex": 10,
+              "originalInkTop": 513,
+              "cloneInkTop": 513,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": -0.4,
+              "scenarioResidualR2": -0.4
+            }
+          ],
+          "linearObservedErrorFit": {
+            "interceptImagePixels": -4.09090909090909,
+            "slopeImagePixelsPerAdvance": 0.4564393939393938
+          },
+          "scenarioResidualMinMax": [
+            -0.44,
+            0.48
+          ]
+        }
+      }
+    },
+    "body01": {
+      "source": "docs/research/mac-body-candidate06-geometry-01/result.json",
+      "advanceIndexDefinition": "Zero-based visual line advance from first row, including blank line; body01 final wrapped second visual line increments index. Not a DOM measurement.",
+      "thresholds": {
+        "120": {
+          "rows": [
+            {
+              "advanceIndex": 0,
+              "originalInkTop": 175,
+              "cloneInkTop": 171,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 4.0,
+              "scenarioResidualR2": 0.0
+            },
+            {
+              "advanceIndex": 1,
+              "originalInkTop": 207,
+              "cloneInkTop": 203,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 3.56,
+              "scenarioResidualR2": -0.44
+            },
+            {
+              "advanceIndex": 2,
+              "originalInkTop": 241,
+              "cloneInkTop": 238,
+              "observedDelta": -3,
+              "scenarioCorrectionR2": 3.12,
+              "scenarioResidualR2": 0.12
+            },
+            {
+              "advanceIndex": 3,
+              "originalInkTop": 277,
+              "cloneInkTop": 274,
+              "observedDelta": -3,
+              "scenarioCorrectionR2": 2.68,
+              "scenarioResidualR2": -0.32
+            },
+            {
+              "advanceIndex": 4,
+              "originalInkTop": 309,
+              "cloneInkTop": 307,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 2.24,
+              "scenarioResidualR2": 0.24
+            },
+            {
+              "advanceIndex": 5,
+              "originalInkTop": 343,
+              "cloneInkTop": 341,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 1.8,
+              "scenarioResidualR2": -0.2
+            },
+            {
+              "advanceIndex": 6,
+              "originalInkTop": 377,
+              "cloneInkTop": 376,
+              "observedDelta": -1,
+              "scenarioCorrectionR2": 1.36,
+              "scenarioResidualR2": 0.36
+            },
+            {
+              "advanceIndex": 7,
+              "originalInkTop": 411,
+              "cloneInkTop": 410,
+              "observedDelta": -1,
+              "scenarioCorrectionR2": 0.92,
+              "scenarioResidualR2": -0.08
+            },
+            {
+              "advanceIndex": 9,
+              "originalInkTop": 479,
+              "cloneInkTop": 479,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": 0.04,
+              "scenarioResidualR2": 0.04
+            },
+            {
+              "advanceIndex": 10,
+              "originalInkTop": 513,
+              "cloneInkTop": 513,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": -0.4,
+              "scenarioResidualR2": -0.4
+            },
+            {
+              "advanceIndex": 11,
+              "originalInkTop": 547,
+              "cloneInkTop": 547,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": -0.84,
+              "scenarioResidualR2": -0.84
+            }
+          ],
+          "linearObservedErrorFit": {
+            "interceptImagePixels": -3.9652870493991985,
+            "slopeImagePixelsPerAdvance": 0.4072096128170894
+          },
+          "scenarioResidualMinMax": [
+            -0.84,
+            0.36
+          ]
+        },
+        "160": {
+          "rows": [
+            {
+              "advanceIndex": 0,
+              "originalInkTop": 175,
+              "cloneInkTop": 171,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 4.0,
+              "scenarioResidualR2": 0.0
+            },
+            {
+              "advanceIndex": 1,
+              "originalInkTop": 207,
+              "cloneInkTop": 203,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 3.56,
+              "scenarioResidualR2": -0.44
+            },
+            {
+              "advanceIndex": 2,
+              "originalInkTop": 241,
+              "cloneInkTop": 238,
+              "observedDelta": -3,
+              "scenarioCorrectionR2": 3.12,
+              "scenarioResidualR2": 0.12
+            },
+            {
+              "advanceIndex": 3,
+              "originalInkTop": 276,
+              "cloneInkTop": 274,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 2.68,
+              "scenarioResidualR2": 0.68
+            },
+            {
+              "advanceIndex": 4,
+              "originalInkTop": 309,
+              "cloneInkTop": 307,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 2.24,
+              "scenarioResidualR2": 0.24
+            },
+            {
+              "advanceIndex": 5,
+              "originalInkTop": 343,
+              "cloneInkTop": 341,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 1.8,
+              "scenarioResidualR2": -0.2
+            },
+            {
+              "advanceIndex": 6,
+              "originalInkTop": 377,
+              "cloneInkTop": 376,
+              "observedDelta": -1,
+              "scenarioCorrectionR2": 1.36,
+              "scenarioResidualR2": 0.36
+            },
+            {
+              "advanceIndex": 7,
+              "originalInkTop": 411,
+              "cloneInkTop": 410,
+              "observedDelta": -1,
+              "scenarioCorrectionR2": 0.92,
+              "scenarioResidualR2": -0.08
+            },
+            {
+              "advanceIndex": 9,
+              "originalInkTop": 479,
+              "cloneInkTop": 479,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": 0.04,
+              "scenarioResidualR2": 0.04
+            },
+            {
+              "advanceIndex": 10,
+              "originalInkTop": 513,
+              "cloneInkTop": 513,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": -0.4,
+              "scenarioResidualR2": -0.4
+            },
+            {
+              "advanceIndex": 11,
+              "originalInkTop": 547,
+              "cloneInkTop": 547,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": -0.84,
+              "scenarioResidualR2": -0.84
+            }
+          ],
+          "linearObservedErrorFit": {
+            "interceptImagePixels": -3.786381842456609,
+            "slopeImagePixelsPerAdvance": 0.39052069425901204
+          },
+          "scenarioResidualMinMax": [
+            -0.84,
+            0.68
+          ]
+        },
+        "200": {
+          "rows": [
+            {
+              "advanceIndex": 0,
+              "originalInkTop": 175,
+              "cloneInkTop": 171,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 4.0,
+              "scenarioResidualR2": 0.0
+            },
+            {
+              "advanceIndex": 1,
+              "originalInkTop": 207,
+              "cloneInkTop": 203,
+              "observedDelta": -4,
+              "scenarioCorrectionR2": 3.56,
+              "scenarioResidualR2": -0.44
+            },
+            {
+              "advanceIndex": 2,
+              "originalInkTop": 241,
+              "cloneInkTop": 238,
+              "observedDelta": -3,
+              "scenarioCorrectionR2": 3.12,
+              "scenarioResidualR2": 0.12
+            },
+            {
+              "advanceIndex": 3,
+              "originalInkTop": 276,
+              "cloneInkTop": 274,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 2.68,
+              "scenarioResidualR2": 0.68
+            },
+            {
+              "advanceIndex": 4,
+              "originalInkTop": 309,
+              "cloneInkTop": 307,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 2.24,
+              "scenarioResidualR2": 0.24
+            },
+            {
+              "advanceIndex": 5,
+              "originalInkTop": 343,
+              "cloneInkTop": 341,
+              "observedDelta": -2,
+              "scenarioCorrectionR2": 1.8,
+              "scenarioResidualR2": -0.2
+            },
+            {
+              "advanceIndex": 6,
+              "originalInkTop": 377,
+              "cloneInkTop": 376,
+              "observedDelta": -1,
+              "scenarioCorrectionR2": 1.36,
+              "scenarioResidualR2": 0.36
+            },
+            {
+              "advanceIndex": 7,
+              "originalInkTop": 411,
+              "cloneInkTop": 410,
+              "observedDelta": -1,
+              "scenarioCorrectionR2": 0.92,
+              "scenarioResidualR2": -0.08
+            },
+            {
+              "advanceIndex": 9,
+              "originalInkTop": 479,
+              "cloneInkTop": 479,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": 0.04,
+              "scenarioResidualR2": 0.04
+            },
+            {
+              "advanceIndex": 10,
+              "originalInkTop": 513,
+              "cloneInkTop": 513,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": -0.4,
+              "scenarioResidualR2": -0.4
+            },
+            {
+              "advanceIndex": 11,
+              "originalInkTop": 547,
+              "cloneInkTop": 547,
+              "observedDelta": 0,
+              "scenarioCorrectionR2": -0.84,
+              "scenarioResidualR2": -0.84
+            }
+          ],
+          "linearObservedErrorFit": {
+            "interceptImagePixels": -3.786381842456609,
+            "slopeImagePixelsPerAdvance": 0.39052069425901204
+          },
+          "scenarioResidualMinMax": [
+            -0.84,
+            0.68
+          ]
+        }
+      }
+    }
+  },
+  "recommendedBoundaries": {
+    "existingParagraphRule": "src/style.css:620",
+    "defaultRootAndParagraph": "src/style.css:602 and615",
+    "rootWrapper": "src/Editor.tsx:385",
+    "plainTextParagraphConstruction": "src/Editor.tsx:340-350",
+    "preferredScope": "Use existing root all-p CSS guard for17/17 and2px padding; preserve existing general13px rule."
+  },
+  "freeBytesBeforeOutput": 80557572096,
+  "minimumFreeBytes": 2147483648,
+  "limits": [
+    "Mixed glyph ink top is not baseline; body01 alphabet row varies1image pixel with threshold.",
+    "All-p document structure inferred for controlled corpus from explicit plain-text paste code; AX alone does not prove DOM tree.",
+    "No font family/feature, native-top, date, toolbar, mobile, list/task/table/header, editor schema, native controls or persistence changes proposed.",
+    "The same fitted trend can have other causes; analytical compatibility does not prove17CSSpx or2CSSpx correctness."
+  ],
+  "allPGuardStaticReview": {
+    "additionalSourcesBefore": {
+      "src/editor-schema.ts": {
+        "path": "src/editor-schema.ts",
+        "bytes": 2859,
+        "sha256": "daca1ff535d1516a708096d7e600f44ba1dd9510474dc7a65bf3595aea97ce0f"
+      },
+      "src/note-tag-extension.ts": {
+        "path": "src/note-tag-extension.ts",
+        "bytes": 5106,
+        "sha256": "db582a04ce347f9d136186caf2bd7147d0b3fbb7bc12e4174a666be44fc37d8a"
+      },
+      "node_modules/.pnpm/@tiptap+starter-kit@3.32.2/node_modules/@tiptap/starter-kit/src/starter-kit.ts": {
+        "path": "node_modules/.pnpm/@tiptap+starter-kit@3.32.2/node_modules/@tiptap/starter-kit/src/starter-kit.ts",
+        "bytes": 8236,
+        "sha256": "4d9992cf4ec5c6e573b6eea615095fc23fbe7a84772b36f4babd3cef1ed06f2c"
+      },
+      "node_modules/.pnpm/@tiptap+extensions@3.32.2_@tiptap+core@3.32.2_@tiptap+pm@3.32.2__@tiptap+pm@3.32.2/node_modules/@tiptap/extensions/src/placeholder/utils/createPlaceholderDecoration.ts": {
+        "path": "node_modules/.pnpm/@tiptap+extensions@3.32.2_@tiptap+core@3.32.2_@tiptap+pm@3.32.2__@tiptap+pm@3.32.2/node_modules/@tiptap/extensions/src/placeholder/utils/createPlaceholderDecoration.ts",
+        "bytes": 1802,
+        "sha256": "7ff5e6a6681e64758e5e9a396be478939b3be7c42fb0804a6ff641e22b8e0242"
+      },
+      "node_modules/.pnpm/prosemirror-gapcursor@1.4.1/node_modules/prosemirror-gapcursor/src/index.ts": {
+        "path": "node_modules/.pnpm/prosemirror-gapcursor@1.4.1/node_modules/prosemirror-gapcursor/src/index.ts",
+        "bytes": 3692,
+        "sha256": "f070a4bab923e9cd72d1e56f0fa915581ab96458c9af42595eaf6982ae865d2d"
+      },
+      "node_modules/.pnpm/prosemirror-gapcursor@1.4.1/node_modules/prosemirror-gapcursor/src/gapcursor.ts": {
+        "path": "node_modules/.pnpm/prosemirror-gapcursor@1.4.1/node_modules/prosemirror-gapcursor/src/gapcursor.ts",
+        "bytes": 4395,
+        "sha256": "23af2d78aaba33165700cd10a7b566cd331676531c7a96a7477bd2b4d8136bd3"
+      },
+      "node_modules/.pnpm/prosemirror-dropcursor@1.8.4/node_modules/prosemirror-dropcursor/src/dropcursor.ts": {
+        "path": "node_modules/.pnpm/prosemirror-dropcursor@1.8.4/node_modules/prosemirror-dropcursor/src/dropcursor.ts",
+        "bytes": 6893,
+        "sha256": "0bf1a77d3e675328930dd73ca6e12660a8d3c6f42a2d72b6125103c6af20d7ba"
+      },
+      "node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/viewdesc.ts": {
+        "path": "node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/viewdesc.ts",
+        "bytes": 65316,
+        "sha256": "55b6cb4ff0f62fa9e0ce6bb57dff892c28dec4ee84a5b7b3235c1f3f15d02aeb"
+      }
+    },
+    "additionalSourcesAfter": {
+      "src/editor-schema.ts": {
+        "path": "src/editor-schema.ts",
+        "bytes": 2859,
+        "sha256": "daca1ff535d1516a708096d7e600f44ba1dd9510474dc7a65bf3595aea97ce0f"
+      },
+      "src/note-tag-extension.ts": {
+        "path": "src/note-tag-extension.ts",
+        "bytes": 5106,
+        "sha256": "db582a04ce347f9d136186caf2bd7147d0b3fbb7bc12e4174a666be44fc37d8a"
+      },
+      "node_modules/.pnpm/@tiptap+starter-kit@3.32.2/node_modules/@tiptap/starter-kit/src/starter-kit.ts": {
+        "path": "node_modules/.pnpm/@tiptap+starter-kit@3.32.2/node_modules/@tiptap/starter-kit/src/starter-kit.ts",
+        "bytes": 8236,
+        "sha256": "4d9992cf4ec5c6e573b6eea615095fc23fbe7a84772b36f4babd3cef1ed06f2c"
+      },
+      "node_modules/.pnpm/@tiptap+extensions@3.32.2_@tiptap+core@3.32.2_@tiptap+pm@3.32.2__@tiptap+pm@3.32.2/node_modules/@tiptap/extensions/src/placeholder/utils/createPlaceholderDecoration.ts": {
+        "path": "node_modules/.pnpm/@tiptap+extensions@3.32.2_@tiptap+core@3.32.2_@tiptap+pm@3.32.2__@tiptap+pm@3.32.2/node_modules/@tiptap/extensions/src/placeholder/utils/createPlaceholderDecoration.ts",
+        "bytes": 1802,
+        "sha256": "7ff5e6a6681e64758e5e9a396be478939b3be7c42fb0804a6ff641e22b8e0242"
+      },
+      "node_modules/.pnpm/prosemirror-gapcursor@1.4.1/node_modules/prosemirror-gapcursor/src/index.ts": {
+        "path": "node_modules/.pnpm/prosemirror-gapcursor@1.4.1/node_modules/prosemirror-gapcursor/src/index.ts",
+        "bytes": 3692,
+        "sha256": "f070a4bab923e9cd72d1e56f0fa915581ab96458c9af42595eaf6982ae865d2d"
+      },
+      "node_modules/.pnpm/prosemirror-gapcursor@1.4.1/node_modules/prosemirror-gapcursor/src/gapcursor.ts": {
+        "path": "node_modules/.pnpm/prosemirror-gapcursor@1.4.1/node_modules/prosemirror-gapcursor/src/gapcursor.ts",
+        "bytes": 4395,
+        "sha256": "23af2d78aaba33165700cd10a7b566cd331676531c7a96a7477bd2b4d8136bd3"
+      },
+      "node_modules/.pnpm/prosemirror-dropcursor@1.8.4/node_modules/prosemirror-dropcursor/src/dropcursor.ts": {
+        "path": "node_modules/.pnpm/prosemirror-dropcursor@1.8.4/node_modules/prosemirror-dropcursor/src/dropcursor.ts",
+        "bytes": 6893,
+        "sha256": "0bf1a77d3e675328930dd73ca6e12660a8d3c6f42a2d72b6125103c6af20d7ba"
+      },
+      "node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/viewdesc.ts": {
+        "path": "node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/viewdesc.ts",
+        "bytes": 65316,
+        "sha256": "55b6cb4ff0f62fa9e0ce6bb57dff892c28dec4ee84a5b7b3235c1f3f15d02aeb"
+      }
+    },
+    "sourcesUnchanged": true,
+    "placeholder": "Node decoration attributes only.",
+    "trailingBreakAndSeparator": "Textblock-local children, not root-direct in ordinary p.",
+    "dropcursor": "Appends into editorView.dom.offsetParent; actual DOM parent not measured.",
+    "gapcursor": "DIV widget possible for special GapCursor, but pure open paragraphs make valid false at ordinary boundaries; runtime not asserted.",
+    "unknownWidgets": "Fail closed and may cause style toggling; do not broadly ignore noneditable elements.",
+    "runtimeSelectorSupportOrDomMatchMeasured": false,
+    "punctuationFeatureChanges": "Excluded; vertical-only candidate."
+  }
+}

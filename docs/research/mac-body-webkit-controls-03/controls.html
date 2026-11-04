@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Mac正文 WebKit 六控制03</title>
+<style>
+:root{font:14px system-ui;color:#262626;background:white}*{box-sizing:border-box}body{margin:24px;max-width:1100px}h1{font-size:20px}h2{font:600 15px/20px system-ui;margin:0 0 10px}button{font:inherit;padding:5px 12px}#summary-box{height:286px;overflow:auto;border:1px solid #bbb;padding:10px;margin:16px 0}#status{height:40px;overflow:auto;margin:0 0 8px;font-weight:600}table{table-layout:fixed;border-collapse:collapse;width:100%;font:12px/18px ui-monospace,monospace}th,td{border:1px solid #ccc;padding:4px;white-space:nowrap;overflow:hidden;text-overflow:clip}th:first-child,td:first-child{width:24%}.control{border:1px solid #bbb;padding:12px;margin:20px 0}.specimen{font-size:13px;line-height:17.22px;font-weight:400;font-kerning:auto;font-feature-settings:normal;font-variant:normal;font-synthesis:none;letter-spacing:normal;word-spacing:normal;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}.specimen>p{font-size:13px;line-height:17.22px;min-height:17.22px;margin:0;white-space:pre;width:max-content;max-width:none}.sample-scroll{overflow:auto}.result-status{height:36px;margin-top:10px;overflow:auto;font:12px/18px system-ui}.result-label{display:block;font:12px/18px system-ui}textarea{display:block;width:100%;height:180px;resize:none;font:11px/15px ui-monospace,monospace;white-space:pre;overflow:auto;margin:0}.scope{line-height:1.5}
+</style>
+<h1>Mac正文 WebKit 六控制03</h1>
+<p class="scope">仅本页 CSS 支持、计算样式与 DOM Range 测量。统一生产字体栈、13px / 17.22px、zh-CN、kerning auto。语法接受不代表字体实施 feature；CSS px 不等于原版截图像素。无网络、外部依赖或浏览器存储写入。</p>
+<button type="button" id="remeasure">重新测量六组</button>
+<div id="summary-box"><p id="status" role="status">等待测量</p><table><thead><tr><th>控制</th><th>CSS支持</th><th>混排宽</th><th>紧连宽</th><th>中隔宽</th><th>重复推进</th></tr></thead><tbody id="summary-body"></tbody></table></div>
+<div id="all-controls"></div>
+<script id="fixture" type="application/json">{"sources": [{"path": "docs/verification/mac-body-typography-runtime-01/corpus.json", "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"}, {"path": "docs/verification/mac-punctuation-context-runtime-02/corpus.json", "sha256": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"}], "fontStack": "-apple-system, BlinkMacSystemFont, \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif", "controls": [["baseline", null, null], ["spacing-space-all", "text-spacing-trim", "space-all"], ["spacing-trim-all", "text-spacing-trim", "trim-all"], ["chws-off", "font-feature-settings", "\"chws\" 0"], ["chws-on", "font-feature-settings", "\"chws\" 1"], ["palt-on", "font-feature-settings", "\"palt\" 1"]], "samples": [["old-mixed", "0123456789 中文标点，。！？；：《》 — () []"], ["adjacent", "，。！？；：《》"], ["han-separated", "中，中。中！中？中；中：中《中》中"], ["isolated-0", "，"], ["isolated-1", "。"], ["isolated-2", "！"], ["isolated-3", "？"], ["isolated-4", "；"], ["isolated-5", "："], ["isolated-6", "《"], ["isolated-7", "》"], ["repeat-1", "Ag中文"], ["repeat-2", "Ag中文"], ["repeat-3", "Ag中文"], ["repeat-4", "Ag中文"], ["plain-han", "宽三栏工具栏与搜索对照"], ["plain-latin", "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz"], ["plain-digits", "0123456789"]], "sampleDerivation": {"old-mixed": "body line 4 (zero-based)", "adjacent": "context line 1", "han-separated": "context line 2", "isolated": "each character of context line 1", "repeats": "context lines 3..6", "plain-han": "body line 1 with final full stop removed", "plain-latin": "body line 3", "plain-digits": "first ten characters of body line 4"}}</script>
+<script>
+'use strict';
+const fixture=JSON.parse(document.getElementById('fixture').textContent);
+const MAX_JSON_CHARACTERS=16000;
+const styleProperties=['font-family','font-size','font-weight','line-height','font-kerning','font-feature-settings','text-spacing-trim','font-variant-east-asian','font-synthesis','letter-spacing','word-spacing','text-rendering','-webkit-font-smoothing','white-space'];
+const fixedSettings={fontFamily:fixture.fontStack,fontSize:'13px',lineHeight:'17.22px',fontKerning:'auto',textRendering:'optimizeLegibility',lang:'zh-CN'};
+for(const [index,control] of fixture.controls.entries()){
+ const [id,property,value]=control;
+ const row=document.createElement('tr');row.id='row-'+id;for(const label of [id,'待测','—','—','—','—']){const cell=document.createElement('td');cell.textContent=label;row.append(cell);}document.getElementById('summary-body').append(row);
+ const article=document.createElement('article');article.className='control';article.id='control-'+id;
+ const heading=document.createElement('h2');heading.textContent='控制'+(index+1)+' '+id+(property?' · '+property+': '+value:' · 生产基线');article.append(heading);
+ const scroller=document.createElement('div');scroller.className='sample-scroll';
+ const specimen=document.createElement('div');specimen.className='specimen';specimen.id='specimen-'+id;specimen.lang='zh-CN';specimen.style.fontFamily=fixture.fontStack;if(property)specimen.style.setProperty(property,value);
+ for(const [label,text] of fixture.samples){const p=document.createElement('p');p.dataset.sample=label;p.textContent=text;specimen.append(p);}scroller.append(specimen);article.append(scroller);
+ const status=document.createElement('div');status.id='status-'+id;status.className='result-status';status.textContent='等待完整JSON';article.append(status);
+ const label=document.createElement('label');label.className='result-label';label.htmlFor='json-'+id;label.textContent='控制'+(index+1)+' '+id+' 完整JSON（独立块，小于16000字符）';article.append(label);
+ const textarea=document.createElement('textarea');textarea.id='json-'+id;textarea.readOnly=true;textarea.spellcheck=false;textarea.setAttribute('aria-label','控制'+(index+1)+' '+id+' 完整JSON');article.append(textarea);document.getElementById('all-controls').append(article);
+}
+function number(n){return Math.round(n*1e6)/1e6;}
+function computed(element){const style=getComputedStyle(element);return Object.fromEntries(styleProperties.map(key=>[key,style.getPropertyValue(key)]));}
+function serializeBounded(result){
+ const text=JSON.stringify(result);
+ if(text.length>=MAX_JSON_CHARACTERS)return {ok:false,text:JSON.stringify({schema:1,id:result.id,error:'JSON_LENGTH_LIMIT',actualCharacters:text.length,limitExclusive:MAX_JSON_CHARACTERS}),originalCharacters:text.length};
+ return {ok:true,text,originalCharacters:text.length};
+}
+function environment(){return {ua:navigator.userAgent,platform:navigator.platform,documentLang:document.documentElement.lang,language:navigator.language,languages:[...navigator.languages],dpr:devicePixelRatio,viewport:[innerWidth,innerHeight],visualViewport:window.visualViewport?[visualViewport.width,visualViewport.height,visualViewport.scale]:null};}
+function readControl([id,property,value],env){
+ const element=document.getElementById('specimen-'+id),base=computed(element.querySelector('p')); 
+ const result={schema:1,id,unit:'CSS px; rounded numeric rect values to 6 decimals',scope:'DOM Range and requested/computed CSS only; no actual glyph font identity claim',environment:env,sources:fixture.sources,requested:{fixed:fixedSettings,delta:property?[property,value]:null},support:{propertyValue:property?CSS.supports(property,value):null,baselineFontFamily:CSS.supports('font-family',fixture.fontStack)},applied:{inlineValue:property?element.style.getPropertyValue(property):null,computedValue:property?getComputedStyle(element.querySelector('p')).getPropertyValue(property):null},computed:base,sampleColumns:['id','text','rangeWidth','rangeHeight','paragraphTop','rangeTop','characters'],characterColumns:['utf16Index','text','rangeXRelativeToParagraph','rangeWidth','prefixWidth'],samples:[]};
+ for(const p of element.querySelectorAll(':scope > p')){
+  const range=document.createRange();range.selectNodeContents(p);const box=range.getBoundingClientRect(),pbox=p.getBoundingClientRect(),node=p.firstChild;const characters=[];
+  for(let i=0;i<node.length;i++){
+   const c=document.createRange();c.setStart(node,i);c.setEnd(node,i+1);const cb=c.getBoundingClientRect();const prefix=document.createRange();prefix.setStart(node,0);prefix.setEnd(node,i+1);
+   characters.push([i,node.textContent.slice(i,i+1),number(cb.x-pbox.x),number(cb.width),number(prefix.getBoundingClientRect().width)]);
+  }
+  result.samples.push([p.dataset.sample,p.textContent,number(box.width),number(box.height),number(pbox.top),number(box.top),characters]);
+ }
+ const repeated=result.samples.filter(s=>s[0].startsWith('repeat-'));
+ result.repeatedParagraphTopAdvances=repeated.slice(1).map((p,i)=>number(p[4]-repeated[i][4]));
+ result.repeatedRangeTopAdvances=repeated.slice(1).map((p,i)=>number(p[5]-repeated[i][5]));
+ result.interpretation='Support checks parsing; inline/computed report actual acceptance; only measured context differences establish a shaping effect.';
+ return result;
+}
+async function measure(){
+ const status=document.getElementById('status');status.textContent='正在测量；所有摘要和结果区域保持固定高度';
+ await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+ const env=environment();const results=fixture.controls.map(c=>readControl(c,env));
+ // All geometry is captured before writing any summary or result text.
+ for(const result of results){
+  const sealed=serializeBounded(result);const textarea=document.getElementById('json-'+result.id);textarea.value=sealed.text;
+  document.getElementById('status-'+result.id).textContent=sealed.ok?'PASS：独立JSON '+sealed.text.length+' 字符；首末括号完整。':'FAIL：结果 '+sealed.originalCharacters+' 字符，超过严格上限；仅显示完整错误JSON，不截断。';
+  const row=document.getElementById('row-'+result.id);const values=[result.id,result.support.propertyValue===null?'基线':String(result.support.propertyValue),...result.samples.slice(0,3).map(s=>s[2].toFixed(6)),result.repeatedParagraphTopAdvances.map(n=>n.toFixed(6)).join('/')];
+  values.forEach((value,i)=>row.cells[i].textContent=value);
+ }
+ status.textContent=results.every(r=>serializeBounded(r).ok)?'测量完成：6组；每组JSON均严格小于16000字符。CSS支持不代表feature已应用。':'测量完成但有长度失败；请查看对应完整错误JSON。';
+ window.controlResults=results;
+}
+function fail(error){document.getElementById('status').textContent='FAIL：'+String(error);for(const [id] of fixture.controls){const value=JSON.stringify({schema:1,id,error:String(error)});document.getElementById('json-'+id).value=value.length<MAX_JSON_CHARACTERS?value:'{"error":"UNBOUNDED_ERROR_MESSAGE"}';document.getElementById('status-'+id).textContent='FAIL：测量未完成';}}
+document.getElementById('remeasure').addEventListener('click',()=>measure().catch(fail));measure().catch(fail);
+</script></html>
