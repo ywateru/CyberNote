@@ -1,0 +1,38 @@
+{
+  "file": "controls.html",
+  "bytes": 8777,
+  "sha256": "230c19d816bb716c25fd44bfc7c6f31482f1e8aa9637df763ae17d181b50d5af",
+  "sources": [
+    {
+      "path": "docs/verification/mac-body-typography-runtime-01/corpus.json",
+      "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"
+    },
+    {
+      "path": "docs/verification/mac-punctuation-context-runtime-02/corpus.json",
+      "sha256": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"
+    }
+  ],
+  "controls": [
+    {
+      "id": "current-full-stack",
+      "fontFamily": "-apple-system, BlinkMacSystemFont, \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+      "fontKerning": "auto"
+    },
+    {
+      "id": "apple-system-only",
+      "fontFamily": "-apple-system",
+      "fontKerning": "auto"
+    },
+    {
+      "id": "system-ui-only",
+      "fontFamily": "system-ui",
+      "fontKerning": "auto"
+    },
+    {
+      "id": "apple-system-kerning-normal",
+      "fontFamily": "-apple-system",
+      "fontKerning": "normal"
+    }
+  ],
+  "validation": "Static inspection only; root owns Safari runtime; no browser launched here."
+}

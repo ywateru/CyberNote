@@ -1,0 +1,37 @@
+{
+  "source_sha256": "586f35a1e6d770bf9aa75f6ecf261ad0f2f7cc37979d4809c2bed49444ec9dc9",
+  "input_sha256": {
+    "docs/verification/mac-body-typography-runtime-01/corpus.json": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19",
+    "docs/verification/mac-punctuation-context-runtime-02/corpus.json": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"
+  },
+  "temp_dir": "/private/tmp/notes-native-metrics-02-xlb_ha3a",
+  "compile_command": [
+    "/usr/bin/clang",
+    "-fobjc-arc",
+    "-fno-modules",
+    "-Os",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/research/mac-body-native-metrics-02/measure.m",
+    "-framework",
+    "Foundation",
+    "-framework",
+    "AppKit",
+    "-framework",
+    "CoreText",
+    "-o",
+    "/private/tmp/notes-native-metrics-02-xlb_ha3a/measure"
+  ],
+  "start_free_bytes": 36709437440,
+  "attempt": "03",
+  "compile_exit": 0,
+  "binary_bytes": 75944,
+  "binary_sha256": "e87b9320ddb2db3302e8435f2da5bf4c795f4d51a80580ca5dcce2cc4a56eb11",
+  "run_command": [
+    "/private/tmp/notes-native-metrics-02-xlb_ha3a/measure",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-body-typography-runtime-01/corpus.json",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mac-punctuation-context-runtime-02/corpus.json",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/research/mac-body-native-metrics-02/result-attempt03.json"
+  ],
+  "run_exit": 0,
+  "elapsed_seconds": 1.6078531249999999,
+  "end_free_bytes": 36709179392
+}

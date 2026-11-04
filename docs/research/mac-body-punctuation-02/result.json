@@ -1,0 +1,4715 @@
+{
+  "schema": "notesclone.mac.body.punctuation-position-analysis.v1",
+  "sourceHeadAtResearch": "58378ed644df3bec1e421108169f2ca6c33ceb66",
+  "sources": {
+    "07-original-blank-area-click.cua-image": {
+      "path": "docs/verification/mac-body-typography-runtime-01/07-original-blank-area-click.cua-image",
+      "bytes": 336118,
+      "sha256": "d05c5a049e7237799efabd283a25c334d4541a6205147291352d4ecdfe367d42"
+    },
+    "03-candidate-corpus-wide.cua-image": {
+      "path": "docs/verification/mac-body-typography-runtime-01/03-candidate-corpus-wide.cua-image",
+      "bytes": 318490,
+      "sha256": "07065a1e1a33d253d37d7bfa640a6a9fb5294892994a4b10e79ee95f85924d64"
+    },
+    "07-original-blank-area-click.ax.txt": {
+      "path": "docs/verification/mac-body-typography-runtime-01/07-original-blank-area-click.ax.txt",
+      "bytes": 8247,
+      "sha256": "ff3d144ed5fce0fe647f0894de2d31792cbbc15b48efd1516792171932693945"
+    },
+    "03-candidate-corpus-wide.ax.txt": {
+      "path": "docs/verification/mac-body-typography-runtime-01/03-candidate-corpus-wide.ax.txt",
+      "bytes": 4316,
+      "sha256": "215af39e6ef51f7fb273e59c33a085e33634b7f886509fad02b148d5d2a087d9"
+    },
+    "corpus.json": {
+      "path": "docs/verification/mac-body-typography-runtime-01/corpus.json",
+      "bytes": 1446,
+      "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"
+    }
+  },
+  "priorGeometryResult": {
+    "path": "docs/research/mac-body-candidate06-geometry-01/result.json",
+    "bytes": 37638,
+    "sha256": "0b04fa14d6714b27705a54be91a4b5f4c9321a7ecb55a9c34c084bc3ab451660"
+  },
+  "primaryPair": {
+    "original": "07-original-blank-area-click",
+    "clone": "03-candidate-corpus-wide"
+  },
+  "coordinateSystem": "Decoded source image pixels, top-left origin, bbox[x0,y0,x1,y1) exclusive; no point/DPR/baseline inference.",
+  "roi": [
+    1210,
+    302,
+    1800,
+    338
+  ],
+  "method": "Neutral ink uses299R+587G+114B<threshold*1000 and max-min<25; thresholds120/160/200. Segment full row by entirely blank x columns, with no joining, registration, scaling, masking or OCR.",
+  "corpusRow": "0123456789 中文标点，。！？；：《》 — () []",
+  "codepoints": [
+    {
+      "index": 0,
+      "character": "0",
+      "codepoint": "U+0030",
+      "isSpace": false
+    },
+    {
+      "index": 1,
+      "character": "1",
+      "codepoint": "U+0031",
+      "isSpace": false
+    },
+    {
+      "index": 2,
+      "character": "2",
+      "codepoint": "U+0032",
+      "isSpace": false
+    },
+    {
+      "index": 3,
+      "character": "3",
+      "codepoint": "U+0033",
+      "isSpace": false
+    },
+    {
+      "index": 4,
+      "character": "4",
+      "codepoint": "U+0034",
+      "isSpace": false
+    },
+    {
+      "index": 5,
+      "character": "5",
+      "codepoint": "U+0035",
+      "isSpace": false
+    },
+    {
+      "index": 6,
+      "character": "6",
+      "codepoint": "U+0036",
+      "isSpace": false
+    },
+    {
+      "index": 7,
+      "character": "7",
+      "codepoint": "U+0037",
+      "isSpace": false
+    },
+    {
+      "index": 8,
+      "character": "8",
+      "codepoint": "U+0038",
+      "isSpace": false
+    },
+    {
+      "index": 9,
+      "character": "9",
+      "codepoint": "U+0039",
+      "isSpace": false
+    },
+    {
+      "index": 10,
+      "character": " ",
+      "codepoint": "U+0020",
+      "isSpace": true
+    },
+    {
+      "index": 11,
+      "character": "中",
+      "codepoint": "U+4E2D",
+      "isSpace": false
+    },
+    {
+      "index": 12,
+      "character": "文",
+      "codepoint": "U+6587",
+      "isSpace": false
+    },
+    {
+      "index": 13,
+      "character": "标",
+      "codepoint": "U+6807",
+      "isSpace": false
+    },
+    {
+      "index": 14,
+      "character": "点",
+      "codepoint": "U+70B9",
+      "isSpace": false
+    },
+    {
+      "index": 15,
+      "character": "，",
+      "codepoint": "U+FF0C",
+      "isSpace": false
+    },
+    {
+      "index": 16,
+      "character": "。",
+      "codepoint": "U+3002",
+      "isSpace": false
+    },
+    {
+      "index": 17,
+      "character": "！",
+      "codepoint": "U+FF01",
+      "isSpace": false
+    },
+    {
+      "index": 18,
+      "character": "？",
+      "codepoint": "U+FF1F",
+      "isSpace": false
+    },
+    {
+      "index": 19,
+      "character": "；",
+      "codepoint": "U+FF1B",
+      "isSpace": false
+    },
+    {
+      "index": 20,
+      "character": "：",
+      "codepoint": "U+FF1A",
+      "isSpace": false
+    },
+    {
+      "index": 21,
+      "character": "《",
+      "codepoint": "U+300A",
+      "isSpace": false
+    },
+    {
+      "index": 22,
+      "character": "》",
+      "codepoint": "U+300B",
+      "isSpace": false
+    },
+    {
+      "index": 23,
+      "character": " ",
+      "codepoint": "U+0020",
+      "isSpace": true
+    },
+    {
+      "index": 24,
+      "character": "—",
+      "codepoint": "U+2014",
+      "isSpace": false
+    },
+    {
+      "index": 25,
+      "character": " ",
+      "codepoint": "U+0020",
+      "isSpace": true
+    },
+    {
+      "index": 26,
+      "character": "(",
+      "codepoint": "U+0028",
+      "isSpace": false
+    },
+    {
+      "index": 27,
+      "character": ")",
+      "codepoint": "U+0029",
+      "isSpace": false
+    },
+    {
+      "index": 28,
+      "character": " ",
+      "codepoint": "U+0020",
+      "isSpace": true
+    },
+    {
+      "index": 29,
+      "character": "[",
+      "codepoint": "U+005B",
+      "isSpace": false
+    },
+    {
+      "index": 30,
+      "character": "]",
+      "codepoint": "U+005D",
+      "isSpace": false
+    }
+  ],
+  "association": "Each threshold in both images yields exactly27 x-runs. Known text has27 nonspace codepoints; ordered association was manually checked visually against the known corpus. This is not OCR or general glyph recognition. If another image splits/merges runs this mapping must not be reused automatically.",
+  "measurements": {
+    "original": {
+      "120": [
+        {
+          "index": 0,
+          "character": "0",
+          "codepoint": "U+0030",
+          "isSpace": false,
+          "segmentOrdinal": 0,
+          "bbox": [
+            1226,
+            311,
+            1239,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 0,
+          "inkEndRelativeToFirstGlyph": 13,
+          "blankColumnsBefore": null,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 1,
+          "character": "1",
+          "codepoint": "U+0031",
+          "isSpace": false,
+          "segmentOrdinal": 1,
+          "bbox": [
+            1242,
+            312,
+            1249,
+            330
+          ],
+          "width": 7,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 16,
+          "inkEndRelativeToFirstGlyph": 23,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 2,
+          "character": "2",
+          "codepoint": "U+0032",
+          "isSpace": false,
+          "segmentOrdinal": 2,
+          "bbox": [
+            1254,
+            311,
+            1266,
+            330
+          ],
+          "width": 12,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 28,
+          "inkEndRelativeToFirstGlyph": 40,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 3,
+          "character": "3",
+          "codepoint": "U+0033",
+          "isSpace": false,
+          "segmentOrdinal": 3,
+          "bbox": [
+            1269,
+            311,
+            1282,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 43,
+          "inkEndRelativeToFirstGlyph": 56,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 4,
+          "character": "4",
+          "codepoint": "U+0034",
+          "isSpace": false,
+          "segmentOrdinal": 4,
+          "bbox": [
+            1285,
+            312,
+            1299,
+            330
+          ],
+          "width": 14,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 59,
+          "inkEndRelativeToFirstGlyph": 73,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 5,
+          "character": "5",
+          "codepoint": "U+0035",
+          "isSpace": false,
+          "segmentOrdinal": 5,
+          "bbox": [
+            1302,
+            312,
+            1314,
+            330
+          ],
+          "width": 12,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 76,
+          "inkEndRelativeToFirstGlyph": 88,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 6,
+          "character": "6",
+          "codepoint": "U+0036",
+          "isSpace": false,
+          "segmentOrdinal": 6,
+          "bbox": [
+            1318,
+            311,
+            1331,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 92,
+          "inkEndRelativeToFirstGlyph": 105,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 7,
+          "character": "7",
+          "codepoint": "U+0037",
+          "isSpace": false,
+          "segmentOrdinal": 7,
+          "bbox": [
+            1334,
+            312,
+            1346,
+            330
+          ],
+          "width": 12,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 108,
+          "inkEndRelativeToFirstGlyph": 120,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 8,
+          "character": "8",
+          "codepoint": "U+0038",
+          "isSpace": false,
+          "segmentOrdinal": 8,
+          "bbox": [
+            1348,
+            311,
+            1361,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 122,
+          "inkEndRelativeToFirstGlyph": 135,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 9,
+          "character": "9",
+          "codepoint": "U+0039",
+          "isSpace": false,
+          "segmentOrdinal": 9,
+          "bbox": [
+            1365,
+            311,
+            1378,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 139,
+          "inkEndRelativeToFirstGlyph": 152,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 11,
+          "character": "中",
+          "codepoint": "U+4E2D",
+          "isSpace": false,
+          "segmentOrdinal": 10,
+          "bbox": [
+            1390,
+            309,
+            1410,
+            332
+          ],
+          "width": 20,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 164,
+          "inkEndRelativeToFirstGlyph": 184,
+          "blankColumnsBefore": 12,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 12,
+          "character": "文",
+          "codepoint": "U+6587",
+          "isSpace": false,
+          "segmentOrdinal": 11,
+          "bbox": [
+            1414,
+            309,
+            1436,
+            332
+          ],
+          "width": 22,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 188,
+          "inkEndRelativeToFirstGlyph": 210,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 13,
+          "character": "标",
+          "codepoint": "U+6807",
+          "isSpace": false,
+          "segmentOrdinal": 12,
+          "bbox": [
+            1439,
+            309,
+            1463,
+            332
+          ],
+          "width": 24,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 213,
+          "inkEndRelativeToFirstGlyph": 237,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 14,
+          "character": "点",
+          "codepoint": "U+70B9",
+          "isSpace": false,
+          "segmentOrdinal": 13,
+          "bbox": [
+            1465,
+            309,
+            1488,
+            332
+          ],
+          "width": 23,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 239,
+          "inkEndRelativeToFirstGlyph": 262,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 15,
+          "character": "，",
+          "codepoint": "U+FF0C",
+          "isSpace": false,
+          "segmentOrdinal": 14,
+          "bbox": [
+            1493,
+            327,
+            1497,
+            334
+          ],
+          "width": 4,
+          "height": 7,
+          "inkStartRelativeToFirstGlyph": 267,
+          "inkEndRelativeToFirstGlyph": 271,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 16,
+          "character": "。",
+          "codepoint": "U+3002",
+          "isSpace": false,
+          "segmentOrdinal": 15,
+          "bbox": [
+            1510,
+            326,
+            1516,
+            332
+          ],
+          "width": 6,
+          "height": 6,
+          "inkStartRelativeToFirstGlyph": 284,
+          "inkEndRelativeToFirstGlyph": 290,
+          "blankColumnsBefore": 13,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 17,
+          "character": "！",
+          "codepoint": "U+FF01",
+          "isSpace": false,
+          "segmentOrdinal": 16,
+          "bbox": [
+            1527,
+            312,
+            1530,
+            330
+          ],
+          "width": 3,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 301,
+          "inkEndRelativeToFirstGlyph": 304,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 18,
+          "character": "？",
+          "codepoint": "U+FF1F",
+          "isSpace": false,
+          "segmentOrdinal": 17,
+          "bbox": [
+            1542,
+            312,
+            1553,
+            330
+          ],
+          "width": 11,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 316,
+          "inkEndRelativeToFirstGlyph": 327,
+          "blankColumnsBefore": 12,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 19,
+          "character": "；",
+          "codepoint": "U+FF1B",
+          "isSpace": false,
+          "segmentOrdinal": 18,
+          "bbox": [
+            1561,
+            315,
+            1565,
+            331
+          ],
+          "width": 4,
+          "height": 16,
+          "inkStartRelativeToFirstGlyph": 335,
+          "inkEndRelativeToFirstGlyph": 339,
+          "blankColumnsBefore": 8,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 20,
+          "character": "：",
+          "codepoint": "U+FF1A",
+          "isSpace": false,
+          "segmentOrdinal": 19,
+          "bbox": [
+            1576,
+            315,
+            1579,
+            327
+          ],
+          "width": 3,
+          "height": 12,
+          "inkStartRelativeToFirstGlyph": 350,
+          "inkEndRelativeToFirstGlyph": 353,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 21,
+          "character": "《",
+          "codepoint": "U+300A",
+          "isSpace": false,
+          "segmentOrdinal": 20,
+          "bbox": [
+            1598,
+            309,
+            1608,
+            332
+          ],
+          "width": 10,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 372,
+          "inkEndRelativeToFirstGlyph": 382,
+          "blankColumnsBefore": 19,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 22,
+          "character": "》",
+          "codepoint": "U+300B",
+          "isSpace": false,
+          "segmentOrdinal": 21,
+          "bbox": [
+            1611,
+            309,
+            1621,
+            332
+          ],
+          "width": 10,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 385,
+          "inkEndRelativeToFirstGlyph": 395,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 24,
+          "character": "—",
+          "codepoint": "U+2014",
+          "isSpace": false,
+          "segmentOrdinal": 22,
+          "bbox": [
+            1631,
+            322,
+            1652,
+            323
+          ],
+          "width": 21,
+          "height": 1,
+          "inkStartRelativeToFirstGlyph": 405,
+          "inkEndRelativeToFirstGlyph": 426,
+          "blankColumnsBefore": 10,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 26,
+          "character": "(",
+          "codepoint": "U+0028",
+          "isSpace": false,
+          "segmentOrdinal": 23,
+          "bbox": [
+            1663,
+            311,
+            1668,
+            334
+          ],
+          "width": 5,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 437,
+          "inkEndRelativeToFirstGlyph": 442,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 27,
+          "character": ")",
+          "codepoint": "U+0029",
+          "isSpace": false,
+          "segmentOrdinal": 24,
+          "bbox": [
+            1671,
+            311,
+            1676,
+            334
+          ],
+          "width": 5,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 445,
+          "inkEndRelativeToFirstGlyph": 450,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 29,
+          "character": "[",
+          "codepoint": "U+005B",
+          "isSpace": false,
+          "segmentOrdinal": 25,
+          "bbox": [
+            1689,
+            310,
+            1694,
+            334
+          ],
+          "width": 5,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 463,
+          "inkEndRelativeToFirstGlyph": 468,
+          "blankColumnsBefore": 13,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 30,
+          "character": "]",
+          "codepoint": "U+005D",
+          "isSpace": false,
+          "segmentOrdinal": 26,
+          "bbox": [
+            1696,
+            310,
+            1701,
+            334
+          ],
+          "width": 5,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 470,
+          "inkEndRelativeToFirstGlyph": 475,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        }
+      ],
+      "160": [
+        {
+          "index": 0,
+          "character": "0",
+          "codepoint": "U+0030",
+          "isSpace": false,
+          "segmentOrdinal": 0,
+          "bbox": [
+            1226,
+            311,
+            1239,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 0,
+          "inkEndRelativeToFirstGlyph": 13,
+          "blankColumnsBefore": null,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 1,
+          "character": "1",
+          "codepoint": "U+0031",
+          "isSpace": false,
+          "segmentOrdinal": 1,
+          "bbox": [
+            1242,
+            311,
+            1249,
+            330
+          ],
+          "width": 7,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 16,
+          "inkEndRelativeToFirstGlyph": 23,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 2,
+          "character": "2",
+          "codepoint": "U+0032",
+          "isSpace": false,
+          "segmentOrdinal": 2,
+          "bbox": [
+            1254,
+            311,
+            1266,
+            330
+          ],
+          "width": 12,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 28,
+          "inkEndRelativeToFirstGlyph": 40,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 3,
+          "character": "3",
+          "codepoint": "U+0033",
+          "isSpace": false,
+          "segmentOrdinal": 3,
+          "bbox": [
+            1269,
+            311,
+            1282,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 43,
+          "inkEndRelativeToFirstGlyph": 56,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 4,
+          "character": "4",
+          "codepoint": "U+0034",
+          "isSpace": false,
+          "segmentOrdinal": 4,
+          "bbox": [
+            1285,
+            311,
+            1299,
+            330
+          ],
+          "width": 14,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 59,
+          "inkEndRelativeToFirstGlyph": 73,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 5,
+          "character": "5",
+          "codepoint": "U+0035",
+          "isSpace": false,
+          "segmentOrdinal": 5,
+          "bbox": [
+            1302,
+            311,
+            1315,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 76,
+          "inkEndRelativeToFirstGlyph": 89,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 6,
+          "character": "6",
+          "codepoint": "U+0036",
+          "isSpace": false,
+          "segmentOrdinal": 6,
+          "bbox": [
+            1318,
+            311,
+            1331,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 92,
+          "inkEndRelativeToFirstGlyph": 105,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 7,
+          "character": "7",
+          "codepoint": "U+0037",
+          "isSpace": false,
+          "segmentOrdinal": 7,
+          "bbox": [
+            1334,
+            311,
+            1346,
+            330
+          ],
+          "width": 12,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 108,
+          "inkEndRelativeToFirstGlyph": 120,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 8,
+          "character": "8",
+          "codepoint": "U+0038",
+          "isSpace": false,
+          "segmentOrdinal": 8,
+          "bbox": [
+            1348,
+            311,
+            1362,
+            330
+          ],
+          "width": 14,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 122,
+          "inkEndRelativeToFirstGlyph": 136,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 9,
+          "character": "9",
+          "codepoint": "U+0039",
+          "isSpace": false,
+          "segmentOrdinal": 9,
+          "bbox": [
+            1364,
+            311,
+            1378,
+            330
+          ],
+          "width": 14,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 138,
+          "inkEndRelativeToFirstGlyph": 152,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 11,
+          "character": "中",
+          "codepoint": "U+4E2D",
+          "isSpace": false,
+          "segmentOrdinal": 10,
+          "bbox": [
+            1389,
+            309,
+            1410,
+            333
+          ],
+          "width": 21,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 163,
+          "inkEndRelativeToFirstGlyph": 184,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 12,
+          "character": "文",
+          "codepoint": "U+6587",
+          "isSpace": false,
+          "segmentOrdinal": 11,
+          "bbox": [
+            1414,
+            309,
+            1437,
+            333
+          ],
+          "width": 23,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 188,
+          "inkEndRelativeToFirstGlyph": 211,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 13,
+          "character": "标",
+          "codepoint": "U+6807",
+          "isSpace": false,
+          "segmentOrdinal": 12,
+          "bbox": [
+            1439,
+            309,
+            1463,
+            333
+          ],
+          "width": 24,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 213,
+          "inkEndRelativeToFirstGlyph": 237,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 14,
+          "character": "点",
+          "codepoint": "U+70B9",
+          "isSpace": false,
+          "segmentOrdinal": 13,
+          "bbox": [
+            1465,
+            309,
+            1488,
+            333
+          ],
+          "width": 23,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 239,
+          "inkEndRelativeToFirstGlyph": 262,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 15,
+          "character": "，",
+          "codepoint": "U+FF0C",
+          "isSpace": false,
+          "segmentOrdinal": 14,
+          "bbox": [
+            1493,
+            327,
+            1497,
+            334
+          ],
+          "width": 4,
+          "height": 7,
+          "inkStartRelativeToFirstGlyph": 267,
+          "inkEndRelativeToFirstGlyph": 271,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 16,
+          "character": "。",
+          "codepoint": "U+3002",
+          "isSpace": false,
+          "segmentOrdinal": 15,
+          "bbox": [
+            1510,
+            326,
+            1516,
+            333
+          ],
+          "width": 6,
+          "height": 7,
+          "inkStartRelativeToFirstGlyph": 284,
+          "inkEndRelativeToFirstGlyph": 290,
+          "blankColumnsBefore": 13,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 17,
+          "character": "！",
+          "codepoint": "U+FF01",
+          "isSpace": false,
+          "segmentOrdinal": 16,
+          "bbox": [
+            1527,
+            312,
+            1530,
+            330
+          ],
+          "width": 3,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 301,
+          "inkEndRelativeToFirstGlyph": 304,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 18,
+          "character": "？",
+          "codepoint": "U+FF1F",
+          "isSpace": false,
+          "segmentOrdinal": 17,
+          "bbox": [
+            1542,
+            311,
+            1553,
+            330
+          ],
+          "width": 11,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 316,
+          "inkEndRelativeToFirstGlyph": 327,
+          "blankColumnsBefore": 12,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 19,
+          "character": "；",
+          "codepoint": "U+FF1B",
+          "isSpace": false,
+          "segmentOrdinal": 18,
+          "bbox": [
+            1561,
+            314,
+            1565,
+            331
+          ],
+          "width": 4,
+          "height": 17,
+          "inkStartRelativeToFirstGlyph": 335,
+          "inkEndRelativeToFirstGlyph": 339,
+          "blankColumnsBefore": 8,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 20,
+          "character": "：",
+          "codepoint": "U+FF1A",
+          "isSpace": false,
+          "segmentOrdinal": 19,
+          "bbox": [
+            1576,
+            314,
+            1579,
+            327
+          ],
+          "width": 3,
+          "height": 13,
+          "inkStartRelativeToFirstGlyph": 350,
+          "inkEndRelativeToFirstGlyph": 353,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 21,
+          "character": "《",
+          "codepoint": "U+300A",
+          "isSpace": false,
+          "segmentOrdinal": 20,
+          "bbox": [
+            1597,
+            309,
+            1608,
+            333
+          ],
+          "width": 11,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 371,
+          "inkEndRelativeToFirstGlyph": 382,
+          "blankColumnsBefore": 18,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 22,
+          "character": "》",
+          "codepoint": "U+300B",
+          "isSpace": false,
+          "segmentOrdinal": 21,
+          "bbox": [
+            1611,
+            309,
+            1622,
+            332
+          ],
+          "width": 11,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 385,
+          "inkEndRelativeToFirstGlyph": 396,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 24,
+          "character": "—",
+          "codepoint": "U+2014",
+          "isSpace": false,
+          "segmentOrdinal": 22,
+          "bbox": [
+            1631,
+            321,
+            1652,
+            324
+          ],
+          "width": 21,
+          "height": 3,
+          "inkStartRelativeToFirstGlyph": 405,
+          "inkEndRelativeToFirstGlyph": 426,
+          "blankColumnsBefore": 9,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 26,
+          "character": "(",
+          "codepoint": "U+0028",
+          "isSpace": false,
+          "segmentOrdinal": 23,
+          "bbox": [
+            1662,
+            311,
+            1668,
+            335
+          ],
+          "width": 6,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 436,
+          "inkEndRelativeToFirstGlyph": 442,
+          "blankColumnsBefore": 10,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 27,
+          "character": ")",
+          "codepoint": "U+0029",
+          "isSpace": false,
+          "segmentOrdinal": 24,
+          "bbox": [
+            1671,
+            311,
+            1676,
+            335
+          ],
+          "width": 5,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 445,
+          "inkEndRelativeToFirstGlyph": 450,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 29,
+          "character": "[",
+          "codepoint": "U+005B",
+          "isSpace": false,
+          "segmentOrdinal": 25,
+          "bbox": [
+            1689,
+            310,
+            1694,
+            334
+          ],
+          "width": 5,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 463,
+          "inkEndRelativeToFirstGlyph": 468,
+          "blankColumnsBefore": 13,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 30,
+          "character": "]",
+          "codepoint": "U+005D",
+          "isSpace": false,
+          "segmentOrdinal": 26,
+          "bbox": [
+            1696,
+            310,
+            1701,
+            334
+          ],
+          "width": 5,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 470,
+          "inkEndRelativeToFirstGlyph": 475,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        }
+      ],
+      "200": [
+        {
+          "index": 0,
+          "character": "0",
+          "codepoint": "U+0030",
+          "isSpace": false,
+          "segmentOrdinal": 0,
+          "bbox": [
+            1225,
+            311,
+            1239,
+            331
+          ],
+          "width": 14,
+          "height": 20,
+          "inkStartRelativeToFirstGlyph": 0,
+          "inkEndRelativeToFirstGlyph": 14,
+          "blankColumnsBefore": null,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 1,
+          "character": "1",
+          "codepoint": "U+0031",
+          "isSpace": false,
+          "segmentOrdinal": 1,
+          "bbox": [
+            1241,
+            311,
+            1249,
+            330
+          ],
+          "width": 8,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 16,
+          "inkEndRelativeToFirstGlyph": 24,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 2,
+          "character": "2",
+          "codepoint": "U+0032",
+          "isSpace": false,
+          "segmentOrdinal": 2,
+          "bbox": [
+            1254,
+            311,
+            1266,
+            330
+          ],
+          "width": 12,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 29,
+          "inkEndRelativeToFirstGlyph": 41,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 3,
+          "character": "3",
+          "codepoint": "U+0033",
+          "isSpace": false,
+          "segmentOrdinal": 3,
+          "bbox": [
+            1269,
+            311,
+            1282,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 44,
+          "inkEndRelativeToFirstGlyph": 57,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 4,
+          "character": "4",
+          "codepoint": "U+0034",
+          "isSpace": false,
+          "segmentOrdinal": 4,
+          "bbox": [
+            1285,
+            311,
+            1299,
+            330
+          ],
+          "width": 14,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 60,
+          "inkEndRelativeToFirstGlyph": 74,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 5,
+          "character": "5",
+          "codepoint": "U+0035",
+          "isSpace": false,
+          "segmentOrdinal": 5,
+          "bbox": [
+            1302,
+            311,
+            1315,
+            331
+          ],
+          "width": 13,
+          "height": 20,
+          "inkStartRelativeToFirstGlyph": 77,
+          "inkEndRelativeToFirstGlyph": 90,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 6,
+          "character": "6",
+          "codepoint": "U+0036",
+          "isSpace": false,
+          "segmentOrdinal": 6,
+          "bbox": [
+            1317,
+            311,
+            1331,
+            331
+          ],
+          "width": 14,
+          "height": 20,
+          "inkStartRelativeToFirstGlyph": 92,
+          "inkEndRelativeToFirstGlyph": 106,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 7,
+          "character": "7",
+          "codepoint": "U+0037",
+          "isSpace": false,
+          "segmentOrdinal": 7,
+          "bbox": [
+            1333,
+            311,
+            1346,
+            330
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 108,
+          "inkEndRelativeToFirstGlyph": 121,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 8,
+          "character": "8",
+          "codepoint": "U+0038",
+          "isSpace": false,
+          "segmentOrdinal": 8,
+          "bbox": [
+            1348,
+            311,
+            1362,
+            330
+          ],
+          "width": 14,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 123,
+          "inkEndRelativeToFirstGlyph": 137,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 9,
+          "character": "9",
+          "codepoint": "U+0039",
+          "isSpace": false,
+          "segmentOrdinal": 9,
+          "bbox": [
+            1364,
+            311,
+            1378,
+            331
+          ],
+          "width": 14,
+          "height": 20,
+          "inkStartRelativeToFirstGlyph": 139,
+          "inkEndRelativeToFirstGlyph": 153,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 11,
+          "character": "中",
+          "codepoint": "U+4E2D",
+          "isSpace": false,
+          "segmentOrdinal": 10,
+          "bbox": [
+            1389,
+            309,
+            1410,
+            333
+          ],
+          "width": 21,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 164,
+          "inkEndRelativeToFirstGlyph": 185,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 12,
+          "character": "文",
+          "codepoint": "U+6587",
+          "isSpace": false,
+          "segmentOrdinal": 11,
+          "bbox": [
+            1414,
+            309,
+            1437,
+            333
+          ],
+          "width": 23,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 189,
+          "inkEndRelativeToFirstGlyph": 212,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 13,
+          "character": "标",
+          "codepoint": "U+6807",
+          "isSpace": false,
+          "segmentOrdinal": 12,
+          "bbox": [
+            1439,
+            309,
+            1463,
+            333
+          ],
+          "width": 24,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 214,
+          "inkEndRelativeToFirstGlyph": 238,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 14,
+          "character": "点",
+          "codepoint": "U+70B9",
+          "isSpace": false,
+          "segmentOrdinal": 13,
+          "bbox": [
+            1465,
+            309,
+            1488,
+            333
+          ],
+          "width": 23,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 240,
+          "inkEndRelativeToFirstGlyph": 263,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 15,
+          "character": "，",
+          "codepoint": "U+FF0C",
+          "isSpace": false,
+          "segmentOrdinal": 14,
+          "bbox": [
+            1493,
+            326,
+            1497,
+            334
+          ],
+          "width": 4,
+          "height": 8,
+          "inkStartRelativeToFirstGlyph": 268,
+          "inkEndRelativeToFirstGlyph": 272,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 16,
+          "character": "。",
+          "codepoint": "U+3002",
+          "isSpace": false,
+          "segmentOrdinal": 15,
+          "bbox": [
+            1509,
+            326,
+            1517,
+            333
+          ],
+          "width": 8,
+          "height": 7,
+          "inkStartRelativeToFirstGlyph": 284,
+          "inkEndRelativeToFirstGlyph": 292,
+          "blankColumnsBefore": 12,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 17,
+          "character": "！",
+          "codepoint": "U+FF01",
+          "isSpace": false,
+          "segmentOrdinal": 16,
+          "bbox": [
+            1527,
+            311,
+            1531,
+            330
+          ],
+          "width": 4,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 302,
+          "inkEndRelativeToFirstGlyph": 306,
+          "blankColumnsBefore": 10,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 18,
+          "character": "？",
+          "codepoint": "U+FF1F",
+          "isSpace": false,
+          "segmentOrdinal": 17,
+          "bbox": [
+            1542,
+            311,
+            1553,
+            330
+          ],
+          "width": 11,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 317,
+          "inkEndRelativeToFirstGlyph": 328,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 19,
+          "character": "；",
+          "codepoint": "U+FF1B",
+          "isSpace": false,
+          "segmentOrdinal": 18,
+          "bbox": [
+            1561,
+            314,
+            1565,
+            331
+          ],
+          "width": 4,
+          "height": 17,
+          "inkStartRelativeToFirstGlyph": 336,
+          "inkEndRelativeToFirstGlyph": 340,
+          "blankColumnsBefore": 8,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 20,
+          "character": "：",
+          "codepoint": "U+FF1A",
+          "isSpace": false,
+          "segmentOrdinal": 19,
+          "bbox": [
+            1576,
+            314,
+            1580,
+            327
+          ],
+          "width": 4,
+          "height": 13,
+          "inkStartRelativeToFirstGlyph": 351,
+          "inkEndRelativeToFirstGlyph": 355,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 21,
+          "character": "《",
+          "codepoint": "U+300A",
+          "isSpace": false,
+          "segmentOrdinal": 20,
+          "bbox": [
+            1597,
+            309,
+            1608,
+            333
+          ],
+          "width": 11,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 372,
+          "inkEndRelativeToFirstGlyph": 383,
+          "blankColumnsBefore": 17,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 22,
+          "character": "》",
+          "codepoint": "U+300B",
+          "isSpace": false,
+          "segmentOrdinal": 21,
+          "bbox": [
+            1610,
+            309,
+            1622,
+            333
+          ],
+          "width": 12,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 385,
+          "inkEndRelativeToFirstGlyph": 397,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 24,
+          "character": "—",
+          "codepoint": "U+2014",
+          "isSpace": false,
+          "segmentOrdinal": 22,
+          "bbox": [
+            1631,
+            321,
+            1652,
+            324
+          ],
+          "width": 21,
+          "height": 3,
+          "inkStartRelativeToFirstGlyph": 406,
+          "inkEndRelativeToFirstGlyph": 427,
+          "blankColumnsBefore": 9,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 26,
+          "character": "(",
+          "codepoint": "U+0028",
+          "isSpace": false,
+          "segmentOrdinal": 23,
+          "bbox": [
+            1662,
+            310,
+            1668,
+            335
+          ],
+          "width": 6,
+          "height": 25,
+          "inkStartRelativeToFirstGlyph": 437,
+          "inkEndRelativeToFirstGlyph": 443,
+          "blankColumnsBefore": 10,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 27,
+          "character": ")",
+          "codepoint": "U+0029",
+          "isSpace": false,
+          "segmentOrdinal": 24,
+          "bbox": [
+            1671,
+            310,
+            1677,
+            335
+          ],
+          "width": 6,
+          "height": 25,
+          "inkStartRelativeToFirstGlyph": 446,
+          "inkEndRelativeToFirstGlyph": 452,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 29,
+          "character": "[",
+          "codepoint": "U+005B",
+          "isSpace": false,
+          "segmentOrdinal": 25,
+          "bbox": [
+            1689,
+            309,
+            1695,
+            335
+          ],
+          "width": 6,
+          "height": 26,
+          "inkStartRelativeToFirstGlyph": 464,
+          "inkEndRelativeToFirstGlyph": 470,
+          "blankColumnsBefore": 12,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 30,
+          "character": "]",
+          "codepoint": "U+005D",
+          "isSpace": false,
+          "segmentOrdinal": 26,
+          "bbox": [
+            1696,
+            309,
+            1701,
+            335
+          ],
+          "width": 5,
+          "height": 26,
+          "inkStartRelativeToFirstGlyph": 471,
+          "inkEndRelativeToFirstGlyph": 476,
+          "blankColumnsBefore": 1,
+          "interveningTextSincePriorInk": ""
+        }
+      ]
+    },
+    "clone": {
+      "120": [
+        {
+          "index": 0,
+          "character": "0",
+          "codepoint": "U+0030",
+          "isSpace": false,
+          "segmentOrdinal": 0,
+          "bbox": [
+            1227,
+            309,
+            1240,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 0,
+          "inkEndRelativeToFirstGlyph": 13,
+          "blankColumnsBefore": null,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 1,
+          "character": "1",
+          "codepoint": "U+0031",
+          "isSpace": false,
+          "segmentOrdinal": 1,
+          "bbox": [
+            1243,
+            310,
+            1250,
+            328
+          ],
+          "width": 7,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 16,
+          "inkEndRelativeToFirstGlyph": 23,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 2,
+          "character": "2",
+          "codepoint": "U+0032",
+          "isSpace": false,
+          "segmentOrdinal": 2,
+          "bbox": [
+            1256,
+            309,
+            1267,
+            328
+          ],
+          "width": 11,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 29,
+          "inkEndRelativeToFirstGlyph": 40,
+          "blankColumnsBefore": 6,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 3,
+          "character": "3",
+          "codepoint": "U+0033",
+          "isSpace": false,
+          "segmentOrdinal": 3,
+          "bbox": [
+            1271,
+            310,
+            1283,
+            328
+          ],
+          "width": 12,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 44,
+          "inkEndRelativeToFirstGlyph": 56,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 4,
+          "character": "4",
+          "codepoint": "U+0034",
+          "isSpace": false,
+          "segmentOrdinal": 4,
+          "bbox": [
+            1287,
+            310,
+            1301,
+            328
+          ],
+          "width": 14,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 60,
+          "inkEndRelativeToFirstGlyph": 74,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 5,
+          "character": "5",
+          "codepoint": "U+0035",
+          "isSpace": false,
+          "segmentOrdinal": 5,
+          "bbox": [
+            1304,
+            310,
+            1316,
+            328
+          ],
+          "width": 12,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 77,
+          "inkEndRelativeToFirstGlyph": 89,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 6,
+          "character": "6",
+          "codepoint": "U+0036",
+          "isSpace": false,
+          "segmentOrdinal": 6,
+          "bbox": [
+            1320,
+            309,
+            1333,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 93,
+          "inkEndRelativeToFirstGlyph": 106,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 7,
+          "character": "7",
+          "codepoint": "U+0037",
+          "isSpace": false,
+          "segmentOrdinal": 7,
+          "bbox": [
+            1335,
+            310,
+            1347,
+            328
+          ],
+          "width": 12,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 108,
+          "inkEndRelativeToFirstGlyph": 120,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 8,
+          "character": "8",
+          "codepoint": "U+0038",
+          "isSpace": false,
+          "segmentOrdinal": 8,
+          "bbox": [
+            1350,
+            310,
+            1363,
+            328
+          ],
+          "width": 13,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 123,
+          "inkEndRelativeToFirstGlyph": 136,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 9,
+          "character": "9",
+          "codepoint": "U+0039",
+          "isSpace": false,
+          "segmentOrdinal": 9,
+          "bbox": [
+            1367,
+            309,
+            1380,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 140,
+          "inkEndRelativeToFirstGlyph": 153,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 11,
+          "character": "中",
+          "codepoint": "U+4E2D",
+          "isSpace": false,
+          "segmentOrdinal": 10,
+          "bbox": [
+            1391,
+            307,
+            1411,
+            331
+          ],
+          "width": 20,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 164,
+          "inkEndRelativeToFirstGlyph": 184,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 12,
+          "character": "文",
+          "codepoint": "U+6587",
+          "isSpace": false,
+          "segmentOrdinal": 11,
+          "bbox": [
+            1416,
+            307,
+            1438,
+            330
+          ],
+          "width": 22,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 189,
+          "inkEndRelativeToFirstGlyph": 211,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 13,
+          "character": "标",
+          "codepoint": "U+6807",
+          "isSpace": false,
+          "segmentOrdinal": 12,
+          "bbox": [
+            1441,
+            308,
+            1464,
+            330
+          ],
+          "width": 23,
+          "height": 22,
+          "inkStartRelativeToFirstGlyph": 214,
+          "inkEndRelativeToFirstGlyph": 237,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 14,
+          "character": "点",
+          "codepoint": "U+70B9",
+          "isSpace": false,
+          "segmentOrdinal": 13,
+          "bbox": [
+            1468,
+            307,
+            1490,
+            330
+          ],
+          "width": 22,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 241,
+          "inkEndRelativeToFirstGlyph": 263,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 15,
+          "character": "，",
+          "codepoint": "U+FF0C",
+          "isSpace": false,
+          "segmentOrdinal": 14,
+          "bbox": [
+            1495,
+            325,
+            1498,
+            332
+          ],
+          "width": 3,
+          "height": 7,
+          "inkStartRelativeToFirstGlyph": 268,
+          "inkEndRelativeToFirstGlyph": 271,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 16,
+          "character": "。",
+          "codepoint": "U+3002",
+          "isSpace": false,
+          "segmentOrdinal": 15,
+          "bbox": [
+            1521,
+            325,
+            1527,
+            331
+          ],
+          "width": 6,
+          "height": 6,
+          "inkStartRelativeToFirstGlyph": 294,
+          "inkEndRelativeToFirstGlyph": 300,
+          "blankColumnsBefore": 23,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 17,
+          "character": "！",
+          "codepoint": "U+FF01",
+          "isSpace": false,
+          "segmentOrdinal": 16,
+          "bbox": [
+            1548,
+            310,
+            1551,
+            328
+          ],
+          "width": 3,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 321,
+          "inkEndRelativeToFirstGlyph": 324,
+          "blankColumnsBefore": 21,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 18,
+          "character": "？",
+          "codepoint": "U+FF1F",
+          "isSpace": false,
+          "segmentOrdinal": 17,
+          "bbox": [
+            1570,
+            310,
+            1581,
+            328
+          ],
+          "width": 11,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 343,
+          "inkEndRelativeToFirstGlyph": 354,
+          "blankColumnsBefore": 19,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 19,
+          "character": "；",
+          "codepoint": "U+FF1B",
+          "isSpace": false,
+          "segmentOrdinal": 18,
+          "bbox": [
+            1600,
+            313,
+            1603,
+            329
+          ],
+          "width": 3,
+          "height": 16,
+          "inkStartRelativeToFirstGlyph": 373,
+          "inkEndRelativeToFirstGlyph": 376,
+          "blankColumnsBefore": 19,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 20,
+          "character": "：",
+          "codepoint": "U+FF1A",
+          "isSpace": false,
+          "segmentOrdinal": 19,
+          "bbox": [
+            1625,
+            313,
+            1628,
+            325
+          ],
+          "width": 3,
+          "height": 12,
+          "inkStartRelativeToFirstGlyph": 398,
+          "inkEndRelativeToFirstGlyph": 401,
+          "blankColumnsBefore": 22,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 21,
+          "character": "《",
+          "codepoint": "U+300A",
+          "isSpace": false,
+          "segmentOrdinal": 20,
+          "bbox": [
+            1660,
+            307,
+            1670,
+            330
+          ],
+          "width": 10,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 433,
+          "inkEndRelativeToFirstGlyph": 443,
+          "blankColumnsBefore": 32,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 22,
+          "character": "》",
+          "codepoint": "U+300B",
+          "isSpace": false,
+          "segmentOrdinal": 21,
+          "bbox": [
+            1674,
+            308,
+            1684,
+            330
+          ],
+          "width": 10,
+          "height": 22,
+          "inkStartRelativeToFirstGlyph": 447,
+          "inkEndRelativeToFirstGlyph": 457,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 24,
+          "character": "—",
+          "codepoint": "U+2014",
+          "isSpace": false,
+          "segmentOrdinal": 22,
+          "bbox": [
+            1706,
+            320,
+            1727,
+            322
+          ],
+          "width": 21,
+          "height": 2,
+          "inkStartRelativeToFirstGlyph": 479,
+          "inkEndRelativeToFirstGlyph": 500,
+          "blankColumnsBefore": 22,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 26,
+          "character": "(",
+          "codepoint": "U+0028",
+          "isSpace": false,
+          "segmentOrdinal": 23,
+          "bbox": [
+            1738,
+            309,
+            1743,
+            332
+          ],
+          "width": 5,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 511,
+          "inkEndRelativeToFirstGlyph": 516,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 27,
+          "character": ")",
+          "codepoint": "U+0029",
+          "isSpace": false,
+          "segmentOrdinal": 24,
+          "bbox": [
+            1746,
+            309,
+            1751,
+            332
+          ],
+          "width": 5,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 519,
+          "inkEndRelativeToFirstGlyph": 524,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 29,
+          "character": "[",
+          "codepoint": "U+005B",
+          "isSpace": false,
+          "segmentOrdinal": 25,
+          "bbox": [
+            1764,
+            309,
+            1769,
+            332
+          ],
+          "width": 5,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 537,
+          "inkEndRelativeToFirstGlyph": 542,
+          "blankColumnsBefore": 13,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 30,
+          "character": "]",
+          "codepoint": "U+005D",
+          "isSpace": false,
+          "segmentOrdinal": 26,
+          "bbox": [
+            1771,
+            309,
+            1776,
+            332
+          ],
+          "width": 5,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 544,
+          "inkEndRelativeToFirstGlyph": 549,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        }
+      ],
+      "160": [
+        {
+          "index": 0,
+          "character": "0",
+          "codepoint": "U+0030",
+          "isSpace": false,
+          "segmentOrdinal": 0,
+          "bbox": [
+            1227,
+            309,
+            1240,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 0,
+          "inkEndRelativeToFirstGlyph": 13,
+          "blankColumnsBefore": null,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 1,
+          "character": "1",
+          "codepoint": "U+0031",
+          "isSpace": false,
+          "segmentOrdinal": 1,
+          "bbox": [
+            1243,
+            310,
+            1250,
+            328
+          ],
+          "width": 7,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 16,
+          "inkEndRelativeToFirstGlyph": 23,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 2,
+          "character": "2",
+          "codepoint": "U+0032",
+          "isSpace": false,
+          "segmentOrdinal": 2,
+          "bbox": [
+            1255,
+            309,
+            1267,
+            328
+          ],
+          "width": 12,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 28,
+          "inkEndRelativeToFirstGlyph": 40,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 3,
+          "character": "3",
+          "codepoint": "U+0033",
+          "isSpace": false,
+          "segmentOrdinal": 3,
+          "bbox": [
+            1271,
+            309,
+            1284,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 44,
+          "inkEndRelativeToFirstGlyph": 57,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 4,
+          "character": "4",
+          "codepoint": "U+0034",
+          "isSpace": false,
+          "segmentOrdinal": 4,
+          "bbox": [
+            1287,
+            310,
+            1301,
+            328
+          ],
+          "width": 14,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 60,
+          "inkEndRelativeToFirstGlyph": 74,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 5,
+          "character": "5",
+          "codepoint": "U+0035",
+          "isSpace": false,
+          "segmentOrdinal": 5,
+          "bbox": [
+            1304,
+            310,
+            1316,
+            328
+          ],
+          "width": 12,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 77,
+          "inkEndRelativeToFirstGlyph": 89,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 6,
+          "character": "6",
+          "codepoint": "U+0036",
+          "isSpace": false,
+          "segmentOrdinal": 6,
+          "bbox": [
+            1320,
+            309,
+            1333,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 93,
+          "inkEndRelativeToFirstGlyph": 106,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 7,
+          "character": "7",
+          "codepoint": "U+0037",
+          "isSpace": false,
+          "segmentOrdinal": 7,
+          "bbox": [
+            1335,
+            310,
+            1347,
+            328
+          ],
+          "width": 12,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 108,
+          "inkEndRelativeToFirstGlyph": 120,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 8,
+          "character": "8",
+          "codepoint": "U+0038",
+          "isSpace": false,
+          "segmentOrdinal": 8,
+          "bbox": [
+            1350,
+            309,
+            1363,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 123,
+          "inkEndRelativeToFirstGlyph": 136,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 9,
+          "character": "9",
+          "codepoint": "U+0039",
+          "isSpace": false,
+          "segmentOrdinal": 9,
+          "bbox": [
+            1367,
+            309,
+            1380,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 140,
+          "inkEndRelativeToFirstGlyph": 153,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 11,
+          "character": "中",
+          "codepoint": "U+4E2D",
+          "isSpace": false,
+          "segmentOrdinal": 10,
+          "bbox": [
+            1391,
+            307,
+            1411,
+            331
+          ],
+          "width": 20,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 164,
+          "inkEndRelativeToFirstGlyph": 184,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 12,
+          "character": "文",
+          "codepoint": "U+6587",
+          "isSpace": false,
+          "segmentOrdinal": 11,
+          "bbox": [
+            1416,
+            307,
+            1439,
+            331
+          ],
+          "width": 23,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 189,
+          "inkEndRelativeToFirstGlyph": 212,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 13,
+          "character": "标",
+          "codepoint": "U+6807",
+          "isSpace": false,
+          "segmentOrdinal": 12,
+          "bbox": [
+            1441,
+            307,
+            1464,
+            331
+          ],
+          "width": 23,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 214,
+          "inkEndRelativeToFirstGlyph": 237,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 14,
+          "character": "点",
+          "codepoint": "U+70B9",
+          "isSpace": false,
+          "segmentOrdinal": 13,
+          "bbox": [
+            1467,
+            307,
+            1490,
+            330
+          ],
+          "width": 23,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 240,
+          "inkEndRelativeToFirstGlyph": 263,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 15,
+          "character": "，",
+          "codepoint": "U+FF0C",
+          "isSpace": false,
+          "segmentOrdinal": 14,
+          "bbox": [
+            1494,
+            325,
+            1498,
+            332
+          ],
+          "width": 4,
+          "height": 7,
+          "inkStartRelativeToFirstGlyph": 267,
+          "inkEndRelativeToFirstGlyph": 271,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 16,
+          "character": "。",
+          "codepoint": "U+3002",
+          "isSpace": false,
+          "segmentOrdinal": 15,
+          "bbox": [
+            1520,
+            324,
+            1527,
+            331
+          ],
+          "width": 7,
+          "height": 7,
+          "inkStartRelativeToFirstGlyph": 293,
+          "inkEndRelativeToFirstGlyph": 300,
+          "blankColumnsBefore": 22,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 17,
+          "character": "！",
+          "codepoint": "U+FF01",
+          "isSpace": false,
+          "segmentOrdinal": 16,
+          "bbox": [
+            1548,
+            310,
+            1551,
+            328
+          ],
+          "width": 3,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 321,
+          "inkEndRelativeToFirstGlyph": 324,
+          "blankColumnsBefore": 21,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 18,
+          "character": "？",
+          "codepoint": "U+FF1F",
+          "isSpace": false,
+          "segmentOrdinal": 17,
+          "bbox": [
+            1570,
+            310,
+            1581,
+            328
+          ],
+          "width": 11,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 343,
+          "inkEndRelativeToFirstGlyph": 354,
+          "blankColumnsBefore": 19,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 19,
+          "character": "；",
+          "codepoint": "U+FF1B",
+          "isSpace": false,
+          "segmentOrdinal": 18,
+          "bbox": [
+            1600,
+            313,
+            1603,
+            329
+          ],
+          "width": 3,
+          "height": 16,
+          "inkStartRelativeToFirstGlyph": 373,
+          "inkEndRelativeToFirstGlyph": 376,
+          "blankColumnsBefore": 19,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 20,
+          "character": "：",
+          "codepoint": "U+FF1A",
+          "isSpace": false,
+          "segmentOrdinal": 19,
+          "bbox": [
+            1625,
+            313,
+            1628,
+            325
+          ],
+          "width": 3,
+          "height": 12,
+          "inkStartRelativeToFirstGlyph": 398,
+          "inkEndRelativeToFirstGlyph": 401,
+          "blankColumnsBefore": 22,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 21,
+          "character": "《",
+          "codepoint": "U+300A",
+          "isSpace": false,
+          "segmentOrdinal": 20,
+          "bbox": [
+            1660,
+            307,
+            1671,
+            331
+          ],
+          "width": 11,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 433,
+          "inkEndRelativeToFirstGlyph": 444,
+          "blankColumnsBefore": 32,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 22,
+          "character": "》",
+          "codepoint": "U+300B",
+          "isSpace": false,
+          "segmentOrdinal": 21,
+          "bbox": [
+            1674,
+            307,
+            1684,
+            330
+          ],
+          "width": 10,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 447,
+          "inkEndRelativeToFirstGlyph": 457,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 24,
+          "character": "—",
+          "codepoint": "U+2014",
+          "isSpace": false,
+          "segmentOrdinal": 22,
+          "bbox": [
+            1706,
+            320,
+            1727,
+            322
+          ],
+          "width": 21,
+          "height": 2,
+          "inkStartRelativeToFirstGlyph": 479,
+          "inkEndRelativeToFirstGlyph": 500,
+          "blankColumnsBefore": 22,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 26,
+          "character": "(",
+          "codepoint": "U+0028",
+          "isSpace": false,
+          "segmentOrdinal": 23,
+          "bbox": [
+            1738,
+            309,
+            1743,
+            333
+          ],
+          "width": 5,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 511,
+          "inkEndRelativeToFirstGlyph": 516,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 27,
+          "character": ")",
+          "codepoint": "U+0029",
+          "isSpace": false,
+          "segmentOrdinal": 24,
+          "bbox": [
+            1746,
+            309,
+            1751,
+            333
+          ],
+          "width": 5,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 519,
+          "inkEndRelativeToFirstGlyph": 524,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 29,
+          "character": "[",
+          "codepoint": "U+005B",
+          "isSpace": false,
+          "segmentOrdinal": 25,
+          "bbox": [
+            1764,
+            309,
+            1769,
+            332
+          ],
+          "width": 5,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 537,
+          "inkEndRelativeToFirstGlyph": 542,
+          "blankColumnsBefore": 13,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 30,
+          "character": "]",
+          "codepoint": "U+005D",
+          "isSpace": false,
+          "segmentOrdinal": 26,
+          "bbox": [
+            1771,
+            309,
+            1776,
+            332
+          ],
+          "width": 5,
+          "height": 23,
+          "inkStartRelativeToFirstGlyph": 544,
+          "inkEndRelativeToFirstGlyph": 549,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        }
+      ],
+      "200": [
+        {
+          "index": 0,
+          "character": "0",
+          "codepoint": "U+0030",
+          "isSpace": false,
+          "segmentOrdinal": 0,
+          "bbox": [
+            1227,
+            309,
+            1240,
+            329
+          ],
+          "width": 13,
+          "height": 20,
+          "inkStartRelativeToFirstGlyph": 0,
+          "inkEndRelativeToFirstGlyph": 13,
+          "blankColumnsBefore": null,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 1,
+          "character": "1",
+          "codepoint": "U+0031",
+          "isSpace": false,
+          "segmentOrdinal": 1,
+          "bbox": [
+            1243,
+            309,
+            1251,
+            328
+          ],
+          "width": 8,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 16,
+          "inkEndRelativeToFirstGlyph": 24,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 2,
+          "character": "2",
+          "codepoint": "U+0032",
+          "isSpace": false,
+          "segmentOrdinal": 2,
+          "bbox": [
+            1255,
+            309,
+            1268,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 28,
+          "inkEndRelativeToFirstGlyph": 41,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 3,
+          "character": "3",
+          "codepoint": "U+0033",
+          "isSpace": false,
+          "segmentOrdinal": 3,
+          "bbox": [
+            1271,
+            309,
+            1284,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 44,
+          "inkEndRelativeToFirstGlyph": 57,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 4,
+          "character": "4",
+          "codepoint": "U+0034",
+          "isSpace": false,
+          "segmentOrdinal": 4,
+          "bbox": [
+            1287,
+            309,
+            1301,
+            328
+          ],
+          "width": 14,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 60,
+          "inkEndRelativeToFirstGlyph": 74,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 5,
+          "character": "5",
+          "codepoint": "U+0035",
+          "isSpace": false,
+          "segmentOrdinal": 5,
+          "bbox": [
+            1304,
+            309,
+            1317,
+            329
+          ],
+          "width": 13,
+          "height": 20,
+          "inkStartRelativeToFirstGlyph": 77,
+          "inkEndRelativeToFirstGlyph": 90,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 6,
+          "character": "6",
+          "codepoint": "U+0036",
+          "isSpace": false,
+          "segmentOrdinal": 6,
+          "bbox": [
+            1319,
+            309,
+            1333,
+            329
+          ],
+          "width": 14,
+          "height": 20,
+          "inkStartRelativeToFirstGlyph": 92,
+          "inkEndRelativeToFirstGlyph": 106,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 7,
+          "character": "7",
+          "codepoint": "U+0037",
+          "isSpace": false,
+          "segmentOrdinal": 7,
+          "bbox": [
+            1335,
+            309,
+            1348,
+            328
+          ],
+          "width": 13,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 108,
+          "inkEndRelativeToFirstGlyph": 121,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 8,
+          "character": "8",
+          "codepoint": "U+0038",
+          "isSpace": false,
+          "segmentOrdinal": 8,
+          "bbox": [
+            1350,
+            309,
+            1364,
+            328
+          ],
+          "width": 14,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 123,
+          "inkEndRelativeToFirstGlyph": 137,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 9,
+          "character": "9",
+          "codepoint": "U+0039",
+          "isSpace": false,
+          "segmentOrdinal": 9,
+          "bbox": [
+            1366,
+            309,
+            1380,
+            329
+          ],
+          "width": 14,
+          "height": 20,
+          "inkStartRelativeToFirstGlyph": 139,
+          "inkEndRelativeToFirstGlyph": 153,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 11,
+          "character": "中",
+          "codepoint": "U+4E2D",
+          "isSpace": false,
+          "segmentOrdinal": 10,
+          "bbox": [
+            1391,
+            307,
+            1411,
+            331
+          ],
+          "width": 20,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 164,
+          "inkEndRelativeToFirstGlyph": 184,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 12,
+          "character": "文",
+          "codepoint": "U+6587",
+          "isSpace": false,
+          "segmentOrdinal": 11,
+          "bbox": [
+            1416,
+            307,
+            1439,
+            331
+          ],
+          "width": 23,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 189,
+          "inkEndRelativeToFirstGlyph": 212,
+          "blankColumnsBefore": 5,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 13,
+          "character": "标",
+          "codepoint": "U+6807",
+          "isSpace": false,
+          "segmentOrdinal": 12,
+          "bbox": [
+            1441,
+            307,
+            1464,
+            331
+          ],
+          "width": 23,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 214,
+          "inkEndRelativeToFirstGlyph": 237,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 14,
+          "character": "点",
+          "codepoint": "U+70B9",
+          "isSpace": false,
+          "segmentOrdinal": 13,
+          "bbox": [
+            1467,
+            307,
+            1490,
+            331
+          ],
+          "width": 23,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 240,
+          "inkEndRelativeToFirstGlyph": 263,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 15,
+          "character": "，",
+          "codepoint": "U+FF0C",
+          "isSpace": false,
+          "segmentOrdinal": 14,
+          "bbox": [
+            1494,
+            325,
+            1498,
+            332
+          ],
+          "width": 4,
+          "height": 7,
+          "inkStartRelativeToFirstGlyph": 267,
+          "inkEndRelativeToFirstGlyph": 271,
+          "blankColumnsBefore": 4,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 16,
+          "character": "。",
+          "codepoint": "U+3002",
+          "isSpace": false,
+          "segmentOrdinal": 15,
+          "bbox": [
+            1520,
+            324,
+            1527,
+            331
+          ],
+          "width": 7,
+          "height": 7,
+          "inkStartRelativeToFirstGlyph": 293,
+          "inkEndRelativeToFirstGlyph": 300,
+          "blankColumnsBefore": 22,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 17,
+          "character": "！",
+          "codepoint": "U+FF01",
+          "isSpace": false,
+          "segmentOrdinal": 16,
+          "bbox": [
+            1548,
+            310,
+            1552,
+            328
+          ],
+          "width": 4,
+          "height": 18,
+          "inkStartRelativeToFirstGlyph": 321,
+          "inkEndRelativeToFirstGlyph": 325,
+          "blankColumnsBefore": 21,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 18,
+          "character": "？",
+          "codepoint": "U+FF1F",
+          "isSpace": false,
+          "segmentOrdinal": 17,
+          "bbox": [
+            1570,
+            309,
+            1581,
+            328
+          ],
+          "width": 11,
+          "height": 19,
+          "inkStartRelativeToFirstGlyph": 343,
+          "inkEndRelativeToFirstGlyph": 354,
+          "blankColumnsBefore": 18,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 19,
+          "character": "；",
+          "codepoint": "U+FF1B",
+          "isSpace": false,
+          "segmentOrdinal": 18,
+          "bbox": [
+            1599,
+            312,
+            1603,
+            329
+          ],
+          "width": 4,
+          "height": 17,
+          "inkStartRelativeToFirstGlyph": 372,
+          "inkEndRelativeToFirstGlyph": 376,
+          "blankColumnsBefore": 18,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 20,
+          "character": "：",
+          "codepoint": "U+FF1A",
+          "isSpace": false,
+          "segmentOrdinal": 19,
+          "bbox": [
+            1625,
+            312,
+            1629,
+            325
+          ],
+          "width": 4,
+          "height": 13,
+          "inkStartRelativeToFirstGlyph": 398,
+          "inkEndRelativeToFirstGlyph": 402,
+          "blankColumnsBefore": 22,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 21,
+          "character": "《",
+          "codepoint": "U+300A",
+          "isSpace": false,
+          "segmentOrdinal": 20,
+          "bbox": [
+            1660,
+            307,
+            1671,
+            331
+          ],
+          "width": 11,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 433,
+          "inkEndRelativeToFirstGlyph": 444,
+          "blankColumnsBefore": 31,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 22,
+          "character": "》",
+          "codepoint": "U+300B",
+          "isSpace": false,
+          "segmentOrdinal": 21,
+          "bbox": [
+            1673,
+            307,
+            1685,
+            331
+          ],
+          "width": 12,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 446,
+          "inkEndRelativeToFirstGlyph": 458,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 24,
+          "character": "—",
+          "codepoint": "U+2014",
+          "isSpace": false,
+          "segmentOrdinal": 22,
+          "bbox": [
+            1706,
+            319,
+            1727,
+            322
+          ],
+          "width": 21,
+          "height": 3,
+          "inkStartRelativeToFirstGlyph": 479,
+          "inkEndRelativeToFirstGlyph": 500,
+          "blankColumnsBefore": 21,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 26,
+          "character": "(",
+          "codepoint": "U+0028",
+          "isSpace": false,
+          "segmentOrdinal": 23,
+          "bbox": [
+            1738,
+            309,
+            1743,
+            333
+          ],
+          "width": 5,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 511,
+          "inkEndRelativeToFirstGlyph": 516,
+          "blankColumnsBefore": 11,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 27,
+          "character": ")",
+          "codepoint": "U+0029",
+          "isSpace": false,
+          "segmentOrdinal": 24,
+          "bbox": [
+            1746,
+            309,
+            1752,
+            333
+          ],
+          "width": 6,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 519,
+          "inkEndRelativeToFirstGlyph": 525,
+          "blankColumnsBefore": 3,
+          "interveningTextSincePriorInk": ""
+        },
+        {
+          "index": 29,
+          "character": "[",
+          "codepoint": "U+005B",
+          "isSpace": false,
+          "segmentOrdinal": 25,
+          "bbox": [
+            1764,
+            308,
+            1769,
+            332
+          ],
+          "width": 5,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 537,
+          "inkEndRelativeToFirstGlyph": 542,
+          "blankColumnsBefore": 12,
+          "interveningTextSincePriorInk": " "
+        },
+        {
+          "index": 30,
+          "character": "]",
+          "codepoint": "U+005D",
+          "isSpace": false,
+          "segmentOrdinal": 26,
+          "bbox": [
+            1771,
+            308,
+            1777,
+            332
+          ],
+          "width": 6,
+          "height": 24,
+          "inkStartRelativeToFirstGlyph": 544,
+          "inkEndRelativeToFirstGlyph": 550,
+          "blankColumnsBefore": 2,
+          "interveningTextSincePriorInk": ""
+        }
+      ]
+    }
+  },
+  "cloneMinusOriginal": {
+    "120": [
+      {
+        "index": 0,
+        "character": "0",
+        "codepoint": "U+0030",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": null
+      },
+      {
+        "index": 1,
+        "character": "1",
+        "codepoint": "U+0031",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 2,
+        "character": "2",
+        "codepoint": "U+0032",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 3,
+        "character": "3",
+        "codepoint": "U+0033",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 4,
+        "character": "4",
+        "codepoint": "U+0034",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 5,
+        "character": "5",
+        "codepoint": "U+0035",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 6,
+        "character": "6",
+        "codepoint": "U+0036",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 7,
+        "character": "7",
+        "codepoint": "U+0037",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": -1
+      },
+      {
+        "index": 8,
+        "character": "8",
+        "codepoint": "U+0038",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 9,
+        "character": "9",
+        "codepoint": "U+0039",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 11,
+        "character": "中",
+        "codepoint": "U+4E2D",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": -1
+      },
+      {
+        "index": 12,
+        "character": "文",
+        "codepoint": "U+6587",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 13,
+        "character": "标",
+        "codepoint": "U+6807",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 14,
+        "character": "点",
+        "codepoint": "U+70B9",
+        "absoluteInkStartDelta": 3,
+        "normalizedInkStartDelta": 2,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 2
+      },
+      {
+        "index": 15,
+        "character": "，",
+        "codepoint": "U+FF0C",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 16,
+        "character": "。",
+        "codepoint": "U+3002",
+        "absoluteInkStartDelta": 11,
+        "normalizedInkStartDelta": 10,
+        "normalizedInkEndDelta": 10,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 10
+      },
+      {
+        "index": 17,
+        "character": "！",
+        "codepoint": "U+FF01",
+        "absoluteInkStartDelta": 21,
+        "normalizedInkStartDelta": 20,
+        "normalizedInkEndDelta": 20,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 10
+      },
+      {
+        "index": 18,
+        "character": "？",
+        "codepoint": "U+FF1F",
+        "absoluteInkStartDelta": 28,
+        "normalizedInkStartDelta": 27,
+        "normalizedInkEndDelta": 27,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 7
+      },
+      {
+        "index": 19,
+        "character": "；",
+        "codepoint": "U+FF1B",
+        "absoluteInkStartDelta": 39,
+        "normalizedInkStartDelta": 38,
+        "normalizedInkEndDelta": 37,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 11
+      },
+      {
+        "index": 20,
+        "character": "：",
+        "codepoint": "U+FF1A",
+        "absoluteInkStartDelta": 49,
+        "normalizedInkStartDelta": 48,
+        "normalizedInkEndDelta": 48,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 11
+      },
+      {
+        "index": 21,
+        "character": "《",
+        "codepoint": "U+300A",
+        "absoluteInkStartDelta": 62,
+        "normalizedInkStartDelta": 61,
+        "normalizedInkEndDelta": 61,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 13
+      },
+      {
+        "index": 22,
+        "character": "》",
+        "codepoint": "U+300B",
+        "absoluteInkStartDelta": 63,
+        "normalizedInkStartDelta": 62,
+        "normalizedInkEndDelta": 62,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 24,
+        "character": "—",
+        "codepoint": "U+2014",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 74,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 12
+      },
+      {
+        "index": 26,
+        "character": "(",
+        "codepoint": "U+0028",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 74,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 27,
+        "character": ")",
+        "codepoint": "U+0029",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 74,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 29,
+        "character": "[",
+        "codepoint": "U+005B",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 74,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 30,
+        "character": "]",
+        "codepoint": "U+005D",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 74,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      }
+    ],
+    "160": [
+      {
+        "index": 0,
+        "character": "0",
+        "codepoint": "U+0030",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": null
+      },
+      {
+        "index": 1,
+        "character": "1",
+        "codepoint": "U+0031",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 2,
+        "character": "2",
+        "codepoint": "U+0032",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 3,
+        "character": "3",
+        "codepoint": "U+0033",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 4,
+        "character": "4",
+        "codepoint": "U+0034",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 5,
+        "character": "5",
+        "codepoint": "U+0035",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 6,
+        "character": "6",
+        "codepoint": "U+0036",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 7,
+        "character": "7",
+        "codepoint": "U+0037",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": -1
+      },
+      {
+        "index": 8,
+        "character": "8",
+        "codepoint": "U+0038",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 9,
+        "character": "9",
+        "codepoint": "U+0039",
+        "absoluteInkStartDelta": 3,
+        "normalizedInkStartDelta": 2,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 2
+      },
+      {
+        "index": 11,
+        "character": "中",
+        "codepoint": "U+4E2D",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 12,
+        "character": "文",
+        "codepoint": "U+6587",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 13,
+        "character": "标",
+        "codepoint": "U+6807",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 14,
+        "character": "点",
+        "codepoint": "U+70B9",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 1,
+        "normalizedInkEndDelta": 1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 15,
+        "character": "，",
+        "codepoint": "U+FF0C",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": -1
+      },
+      {
+        "index": 16,
+        "character": "。",
+        "codepoint": "U+3002",
+        "absoluteInkStartDelta": 10,
+        "normalizedInkStartDelta": 9,
+        "normalizedInkEndDelta": 10,
+        "glyphInkWidthDelta": 1,
+        "blankColumnsBeforeDelta": 9
+      },
+      {
+        "index": 17,
+        "character": "！",
+        "codepoint": "U+FF01",
+        "absoluteInkStartDelta": 21,
+        "normalizedInkStartDelta": 20,
+        "normalizedInkEndDelta": 20,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 10
+      },
+      {
+        "index": 18,
+        "character": "？",
+        "codepoint": "U+FF1F",
+        "absoluteInkStartDelta": 28,
+        "normalizedInkStartDelta": 27,
+        "normalizedInkEndDelta": 27,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 7
+      },
+      {
+        "index": 19,
+        "character": "；",
+        "codepoint": "U+FF1B",
+        "absoluteInkStartDelta": 39,
+        "normalizedInkStartDelta": 38,
+        "normalizedInkEndDelta": 37,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 11
+      },
+      {
+        "index": 20,
+        "character": "：",
+        "codepoint": "U+FF1A",
+        "absoluteInkStartDelta": 49,
+        "normalizedInkStartDelta": 48,
+        "normalizedInkEndDelta": 48,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 11
+      },
+      {
+        "index": 21,
+        "character": "《",
+        "codepoint": "U+300A",
+        "absoluteInkStartDelta": 63,
+        "normalizedInkStartDelta": 62,
+        "normalizedInkEndDelta": 62,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 14
+      },
+      {
+        "index": 22,
+        "character": "》",
+        "codepoint": "U+300B",
+        "absoluteInkStartDelta": 63,
+        "normalizedInkStartDelta": 62,
+        "normalizedInkEndDelta": 61,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 24,
+        "character": "—",
+        "codepoint": "U+2014",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 74,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 13
+      },
+      {
+        "index": 26,
+        "character": "(",
+        "codepoint": "U+0028",
+        "absoluteInkStartDelta": 76,
+        "normalizedInkStartDelta": 75,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 27,
+        "character": ")",
+        "codepoint": "U+0029",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 74,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 29,
+        "character": "[",
+        "codepoint": "U+005B",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 74,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 30,
+        "character": "]",
+        "codepoint": "U+005D",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 74,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      }
+    ],
+    "200": [
+      {
+        "index": 0,
+        "character": "0",
+        "codepoint": "U+0030",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": -1,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": null
+      },
+      {
+        "index": 1,
+        "character": "1",
+        "codepoint": "U+0031",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 2,
+        "character": "2",
+        "codepoint": "U+0032",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": -1,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 1,
+        "blankColumnsBeforeDelta": -1
+      },
+      {
+        "index": 3,
+        "character": "3",
+        "codepoint": "U+0033",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 4,
+        "character": "4",
+        "codepoint": "U+0034",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 5,
+        "character": "5",
+        "codepoint": "U+0035",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 6,
+        "character": "6",
+        "codepoint": "U+0036",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 7,
+        "character": "7",
+        "codepoint": "U+0037",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 8,
+        "character": "8",
+        "codepoint": "U+0038",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 9,
+        "character": "9",
+        "codepoint": "U+0039",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 11,
+        "character": "中",
+        "codepoint": "U+4E2D",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": -1,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 12,
+        "character": "文",
+        "codepoint": "U+6587",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 13,
+        "character": "标",
+        "codepoint": "U+6807",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": -1,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 14,
+        "character": "点",
+        "codepoint": "U+70B9",
+        "absoluteInkStartDelta": 2,
+        "normalizedInkStartDelta": 0,
+        "normalizedInkEndDelta": 0,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 15,
+        "character": "，",
+        "codepoint": "U+FF0C",
+        "absoluteInkStartDelta": 1,
+        "normalizedInkStartDelta": -1,
+        "normalizedInkEndDelta": -1,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": -1
+      },
+      {
+        "index": 16,
+        "character": "。",
+        "codepoint": "U+3002",
+        "absoluteInkStartDelta": 11,
+        "normalizedInkStartDelta": 9,
+        "normalizedInkEndDelta": 8,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 10
+      },
+      {
+        "index": 17,
+        "character": "！",
+        "codepoint": "U+FF01",
+        "absoluteInkStartDelta": 21,
+        "normalizedInkStartDelta": 19,
+        "normalizedInkEndDelta": 19,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 11
+      },
+      {
+        "index": 18,
+        "character": "？",
+        "codepoint": "U+FF1F",
+        "absoluteInkStartDelta": 28,
+        "normalizedInkStartDelta": 26,
+        "normalizedInkEndDelta": 26,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 7
+      },
+      {
+        "index": 19,
+        "character": "；",
+        "codepoint": "U+FF1B",
+        "absoluteInkStartDelta": 38,
+        "normalizedInkStartDelta": 36,
+        "normalizedInkEndDelta": 36,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 10
+      },
+      {
+        "index": 20,
+        "character": "：",
+        "codepoint": "U+FF1A",
+        "absoluteInkStartDelta": 49,
+        "normalizedInkStartDelta": 47,
+        "normalizedInkEndDelta": 47,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 11
+      },
+      {
+        "index": 21,
+        "character": "《",
+        "codepoint": "U+300A",
+        "absoluteInkStartDelta": 63,
+        "normalizedInkStartDelta": 61,
+        "normalizedInkEndDelta": 61,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 14
+      },
+      {
+        "index": 22,
+        "character": "》",
+        "codepoint": "U+300B",
+        "absoluteInkStartDelta": 63,
+        "normalizedInkStartDelta": 61,
+        "normalizedInkEndDelta": 61,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 24,
+        "character": "—",
+        "codepoint": "U+2014",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 73,
+        "normalizedInkEndDelta": 73,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 12
+      },
+      {
+        "index": 26,
+        "character": "(",
+        "codepoint": "U+0028",
+        "absoluteInkStartDelta": 76,
+        "normalizedInkStartDelta": 74,
+        "normalizedInkEndDelta": 73,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 1
+      },
+      {
+        "index": 27,
+        "character": ")",
+        "codepoint": "U+0029",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 73,
+        "normalizedInkEndDelta": 73,
+        "glyphInkWidthDelta": 0,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 29,
+        "character": "[",
+        "codepoint": "U+005B",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 73,
+        "normalizedInkEndDelta": 72,
+        "glyphInkWidthDelta": -1,
+        "blankColumnsBeforeDelta": 0
+      },
+      {
+        "index": 30,
+        "character": "]",
+        "codepoint": "U+005D",
+        "absoluteInkStartDelta": 75,
+        "normalizedInkStartDelta": 73,
+        "normalizedInkEndDelta": 74,
+        "glyphInkWidthDelta": 1,
+        "blankColumnsBeforeDelta": 1
+      }
+    ]
+  },
+  "groups160": {
+    "original": {
+      "digits": {
+        "codepointIndexInclusive": [
+          0,
+          9
+        ],
+        "text": "0123456789",
+        "bbox": [
+          1226,
+          311,
+          1378,
+          330
+        ],
+        "width": 152
+      },
+      "ChineseWord": {
+        "codepointIndexInclusive": [
+          11,
+          14
+        ],
+        "text": "中文标点",
+        "bbox": [
+          1389,
+          309,
+          1488,
+          333
+        ],
+        "width": 99
+      },
+      "ChinesePunctuation": {
+        "codepointIndexInclusive": [
+          15,
+          22
+        ],
+        "text": "，。！？；：《》",
+        "bbox": [
+          1493,
+          309,
+          1622,
+          334
+        ],
+        "width": 129
+      },
+      "emDash": {
+        "codepointIndexInclusive": [
+          24,
+          24
+        ],
+        "text": "—",
+        "bbox": [
+          1631,
+          321,
+          1652,
+          324
+        ],
+        "width": 21
+      },
+      "asciiParentheses": {
+        "codepointIndexInclusive": [
+          26,
+          27
+        ],
+        "text": "()",
+        "bbox": [
+          1662,
+          311,
+          1676,
+          335
+        ],
+        "width": 14
+      },
+      "asciiBrackets": {
+        "codepointIndexInclusive": [
+          29,
+          30
+        ],
+        "text": "[]",
+        "bbox": [
+          1689,
+          310,
+          1701,
+          334
+        ],
+        "width": 12
+      }
+    },
+    "clone": {
+      "digits": {
+        "codepointIndexInclusive": [
+          0,
+          9
+        ],
+        "text": "0123456789",
+        "bbox": [
+          1227,
+          309,
+          1380,
+          328
+        ],
+        "width": 153
+      },
+      "ChineseWord": {
+        "codepointIndexInclusive": [
+          11,
+          14
+        ],
+        "text": "中文标点",
+        "bbox": [
+          1391,
+          307,
+          1490,
+          331
+        ],
+        "width": 99
+      },
+      "ChinesePunctuation": {
+        "codepointIndexInclusive": [
+          15,
+          22
+        ],
+        "text": "，。！？；：《》",
+        "bbox": [
+          1494,
+          307,
+          1684,
+          332
+        ],
+        "width": 190
+      },
+      "emDash": {
+        "codepointIndexInclusive": [
+          24,
+          24
+        ],
+        "text": "—",
+        "bbox": [
+          1706,
+          320,
+          1727,
+          322
+        ],
+        "width": 21
+      },
+      "asciiParentheses": {
+        "codepointIndexInclusive": [
+          26,
+          27
+        ],
+        "text": "()",
+        "bbox": [
+          1738,
+          309,
+          1751,
+          333
+        ],
+        "width": 13
+      },
+      "asciiBrackets": {
+        "codepointIndexInclusive": [
+          29,
+          30
+        ],
+        "text": "[]",
+        "bbox": [
+          1764,
+          309,
+          1776,
+          332
+        ],
+        "width": 12
+      }
+    }
+  },
+  "widthDecomposition": {
+    "120": {
+      "original": {
+        "glyphInkWidthSum": 303,
+        "blankColumnSum": 172,
+        "wholeRowInkWidth": 475
+      },
+      "clone": {
+        "glyphInkWidthSum": 297,
+        "blankColumnSum": 252,
+        "wholeRowInkWidth": 549
+      },
+      "cloneMinusOriginal": {
+        "glyphInkWidthSum": -6,
+        "blankColumnSum": 80,
+        "wholeRowInkWidth": 74
+      }
+    },
+    "160": {
+      "original": {
+        "glyphInkWidthSum": 311,
+        "blankColumnSum": 164,
+        "wholeRowInkWidth": 475
+      },
+      "clone": {
+        "glyphInkWidthSum": 304,
+        "blankColumnSum": 245,
+        "wholeRowInkWidth": 549
+      },
+      "cloneMinusOriginal": {
+        "glyphInkWidthSum": -7,
+        "blankColumnSum": 81,
+        "wholeRowInkWidth": 74
+      }
+    },
+    "200": {
+      "original": {
+        "glyphInkWidthSum": 322,
+        "blankColumnSum": 154,
+        "wholeRowInkWidth": 476
+      },
+      "clone": {
+        "glyphInkWidthSum": 318,
+        "blankColumnSum": 232,
+        "wholeRowInkWidth": 550
+      },
+      "cloneMinusOriginal": {
+        "glyphInkWidthSum": -4,
+        "blankColumnSum": 78,
+        "wholeRowInkWidth": 74
+      }
+    }
+  },
+  "normalization": "Reported relative position differences subtract each row first glyph ink x from numeric coordinates only. No image pixels are shifted. This removes the1px first-glyph absolute offset from cumulative ink-start differences, not font sidebearings or true advance.",
+  "spaces": "Indices10,23,25,28 are U+0020, no ink. Blank-column gaps include preceding/trailing sidebearings, punctuation layout and spaces where present; image-only evidence cannot assign their separate advances.",
+  "verticalFromFrozenGeometry": {
+    "120": [
+      {
+        "logicalVisualRowIndex": 0,
+        "originalTop": 175,
+        "cloneTop": 171,
+        "topDelta": -4,
+        "bottomDelta": -4,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 1,
+        "originalTop": 207,
+        "cloneTop": 203,
+        "topDelta": -4,
+        "bottomDelta": -4,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 2,
+        "originalTop": 241,
+        "cloneTop": 238,
+        "topDelta": -3,
+        "bottomDelta": -3,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 3,
+        "originalTop": 277,
+        "cloneTop": 274,
+        "topDelta": -3,
+        "bottomDelta": 0,
+        "heightDelta": 3
+      },
+      {
+        "logicalVisualRowIndex": 4,
+        "originalTop": 309,
+        "cloneTop": 307,
+        "topDelta": -2,
+        "bottomDelta": -2,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 5,
+        "originalTop": 343,
+        "cloneTop": 341,
+        "topDelta": -2,
+        "bottomDelta": -2,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 6,
+        "originalTop": 377,
+        "cloneTop": 376,
+        "topDelta": -1,
+        "bottomDelta": -1,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 7,
+        "originalTop": 411,
+        "cloneTop": 410,
+        "topDelta": -1,
+        "bottomDelta": -1,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 9,
+        "originalTop": 479,
+        "cloneTop": 479,
+        "topDelta": 0,
+        "bottomDelta": 0,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 10,
+        "originalTop": 513,
+        "cloneTop": 513,
+        "topDelta": 0,
+        "bottomDelta": 0,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 11,
+        "originalTop": 547,
+        "cloneTop": 547,
+        "topDelta": 0,
+        "bottomDelta": 0,
+        "heightDelta": 0
+      }
+    ],
+    "160": [
+      {
+        "logicalVisualRowIndex": 0,
+        "originalTop": 175,
+        "cloneTop": 171,
+        "topDelta": -4,
+        "bottomDelta": -4,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 1,
+        "originalTop": 207,
+        "cloneTop": 203,
+        "topDelta": -4,
+        "bottomDelta": -4,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 2,
+        "originalTop": 241,
+        "cloneTop": 238,
+        "topDelta": -3,
+        "bottomDelta": -3,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 3,
+        "originalTop": 276,
+        "cloneTop": 274,
+        "topDelta": -2,
+        "bottomDelta": -3,
+        "heightDelta": -1
+      },
+      {
+        "logicalVisualRowIndex": 4,
+        "originalTop": 309,
+        "cloneTop": 307,
+        "topDelta": -2,
+        "bottomDelta": -2,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 5,
+        "originalTop": 343,
+        "cloneTop": 341,
+        "topDelta": -2,
+        "bottomDelta": -2,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 6,
+        "originalTop": 377,
+        "cloneTop": 376,
+        "topDelta": -1,
+        "bottomDelta": -1,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 7,
+        "originalTop": 411,
+        "cloneTop": 410,
+        "topDelta": -1,
+        "bottomDelta": -1,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 9,
+        "originalTop": 479,
+        "cloneTop": 479,
+        "topDelta": 0,
+        "bottomDelta": 0,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 10,
+        "originalTop": 513,
+        "cloneTop": 513,
+        "topDelta": 0,
+        "bottomDelta": 0,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 11,
+        "originalTop": 547,
+        "cloneTop": 547,
+        "topDelta": 0,
+        "bottomDelta": 0,
+        "heightDelta": 0
+      }
+    ],
+    "200": [
+      {
+        "logicalVisualRowIndex": 0,
+        "originalTop": 175,
+        "cloneTop": 171,
+        "topDelta": -4,
+        "bottomDelta": -4,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 1,
+        "originalTop": 207,
+        "cloneTop": 203,
+        "topDelta": -4,
+        "bottomDelta": -4,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 2,
+        "originalTop": 241,
+        "cloneTop": 238,
+        "topDelta": -3,
+        "bottomDelta": -3,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 3,
+        "originalTop": 276,
+        "cloneTop": 274,
+        "topDelta": -2,
+        "bottomDelta": -3,
+        "heightDelta": -1
+      },
+      {
+        "logicalVisualRowIndex": 4,
+        "originalTop": 309,
+        "cloneTop": 307,
+        "topDelta": -2,
+        "bottomDelta": -2,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 5,
+        "originalTop": 343,
+        "cloneTop": 341,
+        "topDelta": -2,
+        "bottomDelta": -2,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 6,
+        "originalTop": 377,
+        "cloneTop": 376,
+        "topDelta": -1,
+        "bottomDelta": -1,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 7,
+        "originalTop": 411,
+        "cloneTop": 410,
+        "topDelta": -1,
+        "bottomDelta": -1,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 9,
+        "originalTop": 479,
+        "cloneTop": 479,
+        "topDelta": 0,
+        "bottomDelta": 0,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 10,
+        "originalTop": 513,
+        "cloneTop": 513,
+        "topDelta": 0,
+        "bottomDelta": 0,
+        "heightDelta": 0
+      },
+      {
+        "logicalVisualRowIndex": 11,
+        "originalTop": 547,
+        "cloneTop": 547,
+        "topDelta": 0,
+        "bottomDelta": 0,
+        "heightDelta": 0
+      }
+    ]
+  },
+  "sameGlyphEvidence160": {
+    "Q": [
+      1226,
+      175,
+      1243,
+      196
+    ],
+    "A": [
+      1244,
+      175,
+      1260,
+      194
+    ],
+    "宽": [
+      1226,
+      207,
+      1248,
+      231
+    ],
+    "仅": [
+      1225,
+      241,
+      1248,
+      265
+    ]
+  },
+  "sameGlyphCandidate160": {
+    "Q": [
+      1227,
+      171,
+      1244,
+      192
+    ],
+    "A": [
+      1245,
+      171,
+      1261,
+      190
+    ],
+    "宽": [
+      1227,
+      203,
+      1249,
+      227
+    ],
+    "仅": [
+      1226,
+      238,
+      1249,
+      262
+    ]
+  },
+  "limits": [
+    "Ink widths/gaps are not glyph advances, text layout boxes or font feature identity.",
+    "All sources are JPEG; threshold sensitivity and AA remain; no pixel PASS.",
+    "Original/clone ink-left differs1px at t160 and divider2px; images remain in original coordinates.",
+    "Vertical row tops mix glyph metrics and row placement; identical repeated AgChinese provides bounded advances but no true baseline measurement.",
+    "No GUI, REA, target/cache/worktree/dependency operations, product modification or main commit."
+  ],
+  "minimumFreeBytes": 2147483648,
+  "maximumNewBytes": 5242880,
+  "sourceIdentitiesUnchangedAfter": true
+}

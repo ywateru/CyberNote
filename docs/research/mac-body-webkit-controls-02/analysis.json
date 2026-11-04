@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "scope": "Finite static analysis of root-owned actual Safari runtime01 AX and unchanged controls.html; no new GUI or browser execution",
+  "sources": {
+    "controls.html": {
+      "bytes": 8777,
+      "sha256": "230c19d816bb716c25fd44bfc7c6f31482f1e8aa9637df763ae17d181b50d5af"
+    },
+    "runtime01.ax.txt": {
+      "bytes": 108904,
+      "sha256": "9f86323016f378f92aa144889510725084022c53e846353d58f3bd08a9706ec2"
+    },
+    "runtime01.cua-image": {
+      "bytes": 499520,
+      "sha256": "da30e5b4042fbe0995212c3b40fcb505c2de6110ced1335098a99a8f8257dddb"
+    },
+    "manifest.json": {
+      "bytes": 1161,
+      "sha256": "dd5f20d42091c13c50e5098efe92773627ba7cf642c77dd253faa1b275241e93"
+    },
+    "static-validation.json": {
+      "bytes": 344,
+      "sha256": "820f533ff8ab2685c04310cd2910c53542d728554175bf021b8bdb2e9c47b746"
+    }
+  },
+  "integrity": {
+    "htmlMatchesOriginalManifest": true,
+    "bothFrozenCorpusSHAMatchOriginalManifest": true
+  },
+  "summaryPrecisionDecimalPlaces": 6,
+  "observedRows": [
+    {
+      "id": "current-full-stack",
+      "originalMixedRangeWidthCSSPx": 276.742432,
+      "adjacentPunctuationRangeWidthCSSPx": 103.190659,
+      "hanSeparatedPunctuationRangeWidthCSSPx": 219.280151,
+      "repeatedParagraphTopAdvancesCSSPx": [
+        17.21875,
+        17.21875,
+        17.21875
+      ],
+      "evidence": "AX summary table cells; number strings produced by toFixed(6)",
+      "computedVisible": {
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "lineHeight": "17.219999px",
+        "fontKerning": "auto",
+        "fontFeatureSettings": "normal",
+        "fontVariantEastAsian": "normal",
+        "fontFamily": "-apple-system, BlinkMacSystemFont, \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif"
+      }
+    },
+    {
+      "id": "apple-system-only",
+      "originalMixedRangeWidthCSSPx": 276.742432,
+      "adjacentPunctuationRangeWidthCSSPx": 103.190674,
+      "hanSeparatedPunctuationRangeWidthCSSPx": 219.280151,
+      "repeatedParagraphTopAdvancesCSSPx": [
+        17.21875,
+        17.21875,
+        17.21875
+      ],
+      "evidence": "AX summary table cells; number strings produced by toFixed(6)",
+      "computedVisible": {
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "lineHeight": "17.219999px",
+        "fontKerning": "auto",
+        "fontFeatureSettings": "normal",
+        "fontVariantEastAsian": "normal",
+        "fontFamily": "-apple-system"
+      }
+    },
+    {
+      "id": "system-ui-only",
+      "originalMixedRangeWidthCSSPx": 276.742432,
+      "adjacentPunctuationRangeWidthCSSPx": 103.190659,
+      "hanSeparatedPunctuationRangeWidthCSSPx": 219.280151,
+      "repeatedParagraphTopAdvancesCSSPx": [
+        17.21875,
+        17.21875,
+        17.21875
+      ],
+      "evidence": "AX summary table cells; number strings produced by toFixed(6)",
+      "computedVisible": {
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "lineHeight": "17.219999px",
+        "fontKerning": "auto",
+        "fontFeatureSettings": "normal",
+        "fontVariantEastAsian": "normal",
+        "fontFamily": "system-ui"
+      }
+    },
+    {
+      "id": "apple-system-kerning-normal",
+      "originalMixedRangeWidthCSSPx": 276.742432,
+      "adjacentPunctuationRangeWidthCSSPx": 103.190674,
+      "hanSeparatedPunctuationRangeWidthCSSPx": 219.280151,
+      "repeatedParagraphTopAdvancesCSSPx": [
+        17.21875,
+        17.21875,
+        17.21875
+      ],
+      "evidence": "AX summary table cells; number strings produced by toFixed(6)",
+      "computedVisible": {
+        "fontSize": "13px",
+        "fontWeight": "400",
+        "lineHeight": "17.219999px",
+        "fontKerning": "normal",
+        "fontFeatureSettings": "normal",
+        "fontVariantEastAsian": "normal",
+        "fontFamily": "-apple-system"
+      }
+    }
+  ],
+  "observedEnvironment": {
+    "source": "visible prefix of truncated textarea JSON",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4 Safari/605.1.15",
+    "platform": "MacIntel",
+    "devicePixelRatio": 2,
+    "innerWidth": 1324,
+    "innerHeight": 851,
+    "visualViewport": {
+      "scale": 1,
+      "width": 1324,
+      "height": 851
+    }
+  },
+  "visibleGlobalSupport": {
+    "appleSystem": true,
+    "systemUI": true,
+    "fontKerningNormal": true,
+    "fontSynthesisNone": true,
+    "fontFeatureSettingsNormal": true,
+    "fontVariantEastAsianNormal": true,
+    "documentFontsStatus": "loaded"
+  },
+  "textareaCapture": {
+    "jsonParseSucceeded": false,
+    "capturedCharacters": 100000,
+    "error": "Expecting property name enclosed in double quotes: line 3593 column 6 (char 100000)",
+    "capturedTail": ": {\n                \"x\": 142,\n                \"y\": 863.96875,\n                \"width\": 14,\n                \"height\": 16,\n                \"top\": 863.96875,\n     "
+  },
+  "crossControlSpreadsCSSPx": {
+    "originalMixedRangeWidthCSSPx": 0.0,
+    "adjacentPunctuationRangeWidthCSSPx": 1.5000000004761205e-05,
+    "hanSeparatedPunctuationRangeWidthCSSPx": 0.0
+  },
+  "repeatedAdvanceVsRequested17_22CSSPx": -0.0012499999999988631,
+  "findings": [
+    "All four requested font declarations yield the same mixed and Han-separated widths at six displayed decimals. Adjacent punctuation differs by only 0.000015 CSS px between groups.",
+    "This sample does not support fixing punctuation width merely by removing explicit fallback families, switching the system generic, or setting font-kerning:normal.",
+    "Computed font-family identifies the requested CSS declaration, not the actual font for each shaped glyph. Equal widths do not prove font identity.",
+    "All groups repeat at 17.218750 CSS px under requested 17.22px; this is local Range/element geometry, not Apple Notes baseline evidence.",
+    "The AX capture has complete summary table values but only a truncated textarea JSON prefix. No complete per-character JSON export exists in this evidence."
+  ],
+  "limitations": [
+    "Safari result does not prove the bundled app WKWebView uses identical engine configuration or font fallback.",
+    "DOM Range advance/rects, CoreText native points, PDF export coordinates and screenshot ink bounds are distinct measurements.",
+    "The visible devicePixelRatio=2 belongs to this Safari page only; it does not establish the DPR of previously captured app images.",
+    "text-spacing-trim and chws/palt values were not probed by this page. Their current local CSS parsing, computed values and actual shaping effects remain unmeasured.",
+    "CSS.supports for a generic font-feature-settings declaration cannot establish that a specific font implements a tag or that shaping applied it."
+  ],
+  "nextProposal": {
+    "status": "proposal only; no HTML/product implementation",
+    "supportGate": [
+      "In the same Safari/WebKit runtime record CSS.supports and computed round-trip for text-spacing-trim:space-all and text-spacing-trim:trim-all. Unsupported values remain explicit failures.",
+      "Record CSS.supports and computed round-trip for font-feature-settings:\"chws\" 0/1 and \"palt\" 1; treat this as parser acceptance only, not font-feature support."
+    ],
+    "boundedControls": [
+      {
+        "id": "baseline",
+        "change": "current full stack, all current settings retained"
+      },
+      {
+        "id": "spacing-space-all",
+        "change": "only text-spacing-trim:space-all; run only when accepted by local parser/computed round-trip"
+      },
+      {
+        "id": "spacing-trim-all",
+        "change": "only text-spacing-trim:trim-all; run only when accepted by local parser/computed round-trip"
+      },
+      {
+        "id": "chws-off",
+        "change": "only font-feature-settings:\"chws\" 0"
+      },
+      {
+        "id": "chws-on",
+        "change": "only font-feature-settings:\"chws\" 1"
+      },
+      {
+        "id": "palt-on",
+        "change": "only font-feature-settings:\"palt\" 1; broad proportional-width comparison, not an assumed fix"
+      }
+    ],
+    "measurements": [
+      "Keep the three frozen strings, isolated punctuation and ordinary Han/Latin controls; record compact complete JSON of whole-line widths and prefix differences.",
+      "Keep font size, line height, kerning, text-rendering, language and available width fixed. Do not combine trimming and manual font-feature controls in the first pass.",
+      "If a control changes only adjacent punctuation while leaving Han-separated and plain text stable, it distinguishes a contextual adjustment candidate; if isolated/nonadjacent widths also change, retain those regressions explicitly.",
+      "Only after one discriminating control is found, capture the winning single candidate and baseline in the actual app; do not modify production CSS based on Safari alone."
+    ],
+    "exportRequirement": "Emit bounded per-control JSON chunks or compact textarea values so each captured block is independently parseable. Never call an AX-truncated prefix a complete export."
+  }
+}

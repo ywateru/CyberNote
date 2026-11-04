@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-Hans"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; font-src 'none'">
+<title>Mac正文 WebKit 字体声明四控制02</title>
+<style>
+:root{font-family:system-ui;font-size:14px;color:#262626;background:white}*{box-sizing:border-box}body{margin:24px;max-width:1200px}h1{font-size:20px}h2{font-size:15px;margin:0 0 12px;font-family:system-ui}.controls{display:grid;grid-template-columns:repeat(2,minmax(370px,1fr));gap:20px}.specimen{border:1px solid #bbb;padding:14px;overflow:auto;font-synthesis:none;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-weight:400;font-feature-settings:normal}.specimen>p{font-size:13px;line-height:17.22px;min-height:17.22px;margin:0;white-space:pre;width:max-content;max-width:none;letter-spacing:normal;word-spacing:normal}.caption{font-family:system-ui;font-size:12px;line-height:1.5;white-space:pre-wrap;margin-top:14px;color:#555}textarea{display:block;width:100%;height:440px;font:11px/1.4 ui-monospace,monospace;white-space:pre;margin-top:8px}table{border-collapse:collapse;font-variant-numeric:tabular-nums;margin:18px 0}th,td{padding:5px 9px;border:1px solid #ccc;text-align:left}#status{font-weight:600}button{font:inherit;padding:6px 12px}
+</style>
+<h1>Mac正文 WebKit 字体声明四控制02</h1>
+<p>同一冻结文本，13px / 17.22px。只测本页 DOM Range 与计算样式；计算字体族不是实际字形字体鉴定。单位为本页 CSS px。页面无外部依赖、网络或浏览器存储写入。</p>
+<p id="status" role="status">等待测量</p>
+<button type="button" id="measure-again">重新测量本页</button>
+<div id="summary"></div><div class="controls" id="controls"></div>
+<label for="results">测量结果</label><textarea id="results" aria-label="测量结果" readonly spellcheck="false"></textarea>
+<script id="fixture" type="application/json">{"sources": [{"path": "docs/verification/mac-body-typography-runtime-01/corpus.json", "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"}, {"path": "docs/verification/mac-punctuation-context-runtime-02/corpus.json", "sha256": "572d1d4ef54bf19089c9c9515cc6d222137d0c973303765231ce7f5e51b33e17"}], "samples": [{"label": "original-mixed-punctuation", "text": "0123456789 中文标点，。！？；：《》 — () []"}, {"label": "adjacent-punctuation", "text": "，。！？；：《》"}, {"label": "han-separated-punctuation", "text": "中，中。中！中？中；中：中《中》中"}, {"label": "repeat-1", "text": "Ag中文"}, {"label": "repeat-2", "text": "Ag中文"}, {"label": "repeat-3", "text": "Ag中文"}, {"label": "repeat-4", "text": "Ag中文"}], "controls": [{"id": "current-full-stack", "fontFamily": "-apple-system, BlinkMacSystemFont, \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif", "fontKerning": "auto"}, {"id": "apple-system-only", "fontFamily": "-apple-system", "fontKerning": "auto"}, {"id": "system-ui-only", "fontFamily": "system-ui", "fontKerning": "auto"}, {"id": "apple-system-kerning-normal", "fontFamily": "-apple-system", "fontKerning": "normal"}]}</script>
+<script>
+'use strict';
+const fixture=JSON.parse(document.getElementById('fixture').textContent);
+const controlsElement=document.getElementById('controls');
+for(const control of fixture.controls){
+ const article=document.createElement('article');article.className='specimen';article.id=control.id;article.style.fontFamily=control.fontFamily;article.style.fontKerning=control.fontKerning;
+ const heading=document.createElement('h2');heading.textContent=control.id;article.append(heading);
+ for(const sample of fixture.samples){const p=document.createElement('p');p.dataset.sample=sample.label;p.textContent=sample.text;article.append(p);}
+ const caption=document.createElement('div');caption.className='caption';article.append(caption);controlsElement.append(article);
+}
+const rect=r=>({x:r.x,y:r.y,width:r.width,height:r.height,top:r.top,right:r.right,bottom:r.bottom,left:r.left});
+const styles=element=>{const s=getComputedStyle(element);return Object.fromEntries(['fontFamily','fontSize','fontWeight','lineHeight','fontKerning','fontFeatureSettings','fontVariant','fontVariantEastAsian','fontSynthesis','letterSpacing','wordSpacing','textRendering','webkitFontSmoothing','whiteSpace'].map(key=>[key,s[key]??null]));};
+async function measure(){
+ const status=document.getElementById('status');status.textContent='正在测量';
+ await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+ const result={schema:1,scope:'Local Safari/WebKit controlled DOM Range measurement; no screen-font identity or Notes implementation claim',unit:'CSS px from DOM Range; not screenshot pixels',sources:fixture.sources,userAgent:navigator.userAgent,platform:navigator.platform,devicePixelRatio:window.devicePixelRatio,innerWidth:innerWidth,innerHeight:innerHeight,visualViewport:window.visualViewport?{scale:visualViewport.scale,width:visualViewport.width,height:visualViewport.height}:null,support:{appleSystem:CSS.supports('font-family','-apple-system'),systemUI:CSS.supports('font-family','system-ui'),fontKerningNormal:CSS.supports('font-kerning','normal'),fontSynthesisNone:CSS.supports('font-synthesis','none'),fontFeatureSettingsNormal:CSS.supports('font-feature-settings','normal'),fontVariantEastAsianNormal:CSS.supports('font-variant-east-asian','normal'),documentFontsStatus:document.fonts.status},controls:[]};
+ for(const control of fixture.controls){
+  const article=document.getElementById(control.id);const record={requested:control,computed:styles(article.querySelector('p')),support:{family:CSS.supports('font-family',control.fontFamily),kerning:CSS.supports('font-kerning',control.fontKerning)},samples:[]};
+  for(const p of article.querySelectorAll(':scope > p')){
+   const range=document.createRange();range.selectNodeContents(p);const bounds=range.getBoundingClientRect();
+   const sample={label:p.dataset.sample,text:p.textContent,computed:styles(p),paragraphRect:rect(p.getBoundingClientRect()),rangeRect:rect(bounds),rangeRects:[...range.getClientRects()].map(rect)};
+   if(record.samples.length<3){
+    const node=p.firstChild;sample.utf16Characters=[];
+    for(let i=0;i<node.length;i++){
+     const charRange=document.createRange();charRange.setStart(node,i);charRange.setEnd(node,i+1);
+     const prefix=document.createRange();prefix.setStart(node,0);prefix.setEnd(node,i+1);
+     const previous=document.createRange();previous.setStart(node,0);previous.setEnd(node,i);
+     sample.utf16Characters.push({index:i,text:node.textContent.slice(i,i+1),rect:rect(charRange.getBoundingClientRect()),prefixWidth:prefix.getBoundingClientRect().width,prefixAdvance:prefix.getBoundingClientRect().width-previous.getBoundingClientRect().width});
+    }
+   }
+   record.samples.push(sample);
+  }
+  const repeated=record.samples.slice(3);record.repeatedParagraphTopAdvances=repeated.slice(1).map((p,i)=>p.paragraphRect.top-repeated[i].paragraphRect.top);record.repeatedRangeTopAdvances=repeated.slice(1).map((p,i)=>p.rangeRect.top-repeated[i].rangeRect.top);
+  article.querySelector('.caption').textContent=JSON.stringify({computed:record.computed,support:record.support},null,2);
+  result.controls.push(record);
+ }
+ const table=document.createElement('table');const head=document.createElement('tr');for(const title of ['控制','原混排宽','紧连标点宽','中隔标点宽','重复段落top推进']){const th=document.createElement('th');th.textContent=title;head.append(th);}table.append(head);
+ for(const c of result.controls){const tr=document.createElement('tr');const values=[c.requested.id,...c.samples.slice(0,3).map(s=>s.rangeRect.width.toFixed(6)),c.repeatedParagraphTopAdvances.map(x=>x.toFixed(6)).join(', ')];for(const value of values){const td=document.createElement('td');td.textContent=value;tr.append(td);}table.append(tr);}
+ document.getElementById('summary').replaceChildren(table);document.getElementById('results').value=JSON.stringify(result,null,2);window.measurementResult=result;status.textContent='测量完成：4 个控制，28 个顶层段落。下方“测量结果”包含完整 JSON。';
+}
+function showError(error){document.getElementById('status').textContent='测量失败：'+String(error);document.getElementById('results').value=JSON.stringify({error:String(error),stack:error&&error.stack||null},null,2);}
+document.getElementById('measure-again').addEventListener('click',()=>measure().catch(showError));measure().catch(showError);
+</script></html>
