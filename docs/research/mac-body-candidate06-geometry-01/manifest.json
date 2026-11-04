@@ -1,0 +1,82 @@
+{
+  "schema": "notesclone.evidence-manifest.v1",
+  "algorithm": "sha256",
+  "sort": "complete relative path string",
+  "exclude": [
+    "manifest.json"
+  ],
+  "aggregateEncoding": "UTF-8 <sha256>  <relativePath>\\n",
+  "fileCount": 13,
+  "totalBytes": 1716396,
+  "aggregateSha256": "e38bdbae5b6cd1c5e7277ee2a4e8fb02ba90c9ef5af3ed06be2a739454daac39",
+  "diskFreeBeforeSeal": 2294657024,
+  "sourceIdentityRecheck": "All 10 recorded source identities and previous geometry result matched size/SHA256 before sealing.",
+  "priorSealGate": "Initial manifest attempt stopped before writing when free space was below2GiB; resumed only after root confirmed cleanup and current free rechecked >=2GiB. No image recalculation during final seal.",
+  "files": [
+    {
+      "path": "01-pointer-overlap-first-five.png",
+      "bytes": 95177,
+      "sha256": "3741df5f18c614809ee6c72bd206c82dd1c1ae57d522e283b220a1a3b5013584"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8337,
+      "sha256": "67496b6a634dc75025e19d1bb8d66950b9a9d3968a51a051a44989b417a95e20"
+    },
+    {
+      "path": "analyze.py",
+      "bytes": 12146,
+      "sha256": "31fde3c089a23d8d9459f6df03e6b0f5f9f702568a059cc834bf9b335eb84f4c"
+    },
+    {
+      "path": "body-jpeg-decoded-absdiff-x4.png",
+      "bytes": 157757,
+      "sha256": "c438c06d4ad46fc545e66671ab5b0e1ad6a82323ca1185ee1df9fc50d2c78a4f"
+    },
+    {
+      "path": "body-jpeg-decoded-absdiff.png",
+      "bytes": 252288,
+      "sha256": "4fc406fb3fbd40965fa20c7288626fb428ace48b5bda4b9376cfb41852aba30e"
+    },
+    {
+      "path": "body-overlay-50.png",
+      "bytes": 223301,
+      "sha256": "32ac1a3ba5afb1920a09539fd5f46faf23469442b324b8f3c424f15edbac2586"
+    },
+    {
+      "path": "clone-body-crop.png",
+      "bytes": 188568,
+      "sha256": "61d16c13d3793acf6716f2c9d19dbb8202b75d9a2c0694b6a9ae824acfae1397"
+    },
+    {
+      "path": "clone-body-ink-annotated.png",
+      "bytes": 181300,
+      "sha256": "4ea8d6e48889ee03db4d29dd51c3dbf5970345484ed2faaa1aa440ec5eed1050"
+    },
+    {
+      "path": "clone-first-five-crop.png",
+      "bytes": 73279,
+      "sha256": "af467b322f7e72e7edd219f0b9c1ad08a6cf2847ea528fa6968418d28fe6a147"
+    },
+    {
+      "path": "original-body-crop.png",
+      "bytes": 203772,
+      "sha256": "a4eb2952aa906eada35563bd4d4a655cb64bc4c0f345d7df5024ccab34662553"
+    },
+    {
+      "path": "original-body-ink-annotated.png",
+      "bytes": 195395,
+      "sha256": "04496955cb85fff5ad7a2ffc82221027e8f2a12899c5155162ea9843fca3592f"
+    },
+    {
+      "path": "original-first-five-crop.png",
+      "bytes": 87438,
+      "sha256": "18c944c78b2b69cf96c8ac7961c712f760776b55ca81c2e2407b5dff5ac8a557"
+    },
+    {
+      "path": "result.json",
+      "bytes": 37638,
+      "sha256": "0b04fa14d6714b27705a54be91a4b5f4c9321a7ecb55a9c34c084bc3ab451660"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 ---
 id: app-001-body-typography-01
 scope: mac-main-ordinary-paragraph-size-calibration
-status: awaiting-review
+status: in-progress
 depends-on: []
 ---
 
@@ -29,3 +29,9 @@ depends-on: []
 ## delivery
 
 产品仅style.css新增6行：精确选择器限定Mac native-toolbar非独立窗note-document内顶层p，13px/17.22px/17.22px。没有改祖先、字体栈、内距、transform、schema或数据。复用已安装Playwright/Chrome离线headless设施，真实createEditorExtensions/Editor生成JSON格式样本，加载完整生产基线/候选CSS，4上下文实际computed对照通过：Mac普通/空段与9种mark继承，手机/宽Android/独立窗不命中，标题/列表/清单/表格/引用/pre/附件等12排除样本及祖先/日期不变，文档JSON不变。pnpm build exit0，既有大chunk提示保留。证据与限制见 `docs/verification/app-001-body-typography-01/README.md`；没有Mac WebKit/AppKit/原版字体或像素结论，等待不同作者审查与root新包真实截图。
+
+## 实际候选与剩余差异
+
+源码独审通过后合入7cdf1cb/a90e55f，mac-body-build03已构建、保全并由不同作者929项产物记录核查。root实际PID88780/重启89698准确sealed exe b3c9013f…，合成corpus纯文本输入、正常退出后手动重选完整正文、侧栏直接恢复和动态菜单均有限通过。新包输入成功不证明CSS修复了旧包点击无效。
+
+clean07原版↔03候选同画布JPEG分析支持保留13px实验：前三行宽差+1/+2/+2、高度相同，旧共享中文宽差+24/+15明显降低；但首行提前4像素、标点混排宽差74像素仍明确存在。重复行节奏与空行后起点不支持统一下移。任务继续in-progress，下一步分别定位标点排版和连续行垂直节奏；无字体身份、无全窗/双端pixel PASS。完整运行与几何证据分别见verification/mac-body-typography-runtime-01、research/mac-body-candidate06-geometry-01。

@@ -16,4 +16,6 @@ Mac原始包strict签名exit1（原始错误保留），sealed派生包既有str
 
 ## Mac菜单补包
 
-侧栏动态菜单补丁已独审并合入准确b5063fd，独立构建于[mac-menu-build02](mac-menu-build02/README.md)，是当前Mac实际运行版；上表原Mac06产物继续保留自身准确来源。新Mac exe731695ca…，菜单和直接恢复实际有限验收见../candidate06-mac-sidebar-menu-runtime-02/。Android06已完成保数据升级、ASCII标签输入保存/选择/强停冷启与旧未知日期录音卡有限验收，见../candidate06-android-runtime-01/及其独立复核；仍不扩张为全部标签/新音频有效收音/像素通过。
+侧栏动态菜单补丁已独审并合入准确b5063fd，独立构建于[mac-menu-build02](mac-menu-build02/README.md)，为上一轮侧栏验收包；上表原Mac06产物继续保留自身准确来源。其Mac exe731695ca…，菜单和直接恢复实际有限验收见../candidate06-mac-sidebar-menu-runtime-02/。Android06已完成保数据升级、ASCII标签输入保存/选择/强停冷启与旧未知日期录音卡有限验收，见../candidate06-android-runtime-01/及其独立复核；仍不扩张为全部标签/新音频有效收音/像素通过。
+
+当前Mac实际运行包更新为准确a90e55f的[正文候选build03](mac-body-build03/README.md)，exe b3c9013f…，保留侧栏修复，新增普通段落尺寸实验。实际输入、正常退出后手动重选完整正文、左上直接恢复与动态菜单再次有限通过，见../mac-body-typography-runtime-01/。同文局部分析支持字号改善，标点与前几行垂直起点仍不同；该包不是pixel PASS。Android未因本次Mac实验重建，仍以表内f18来源为准。

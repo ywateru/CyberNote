@@ -1,0 +1,33 @@
+{
+  "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+  "argv": [
+    "python3",
+    "docs/verification/unified-candidate06/mac-body-independent03/verify.py"
+  ],
+  "reusedVerifier": {
+    "path": "docs/verification/unified-candidate06/mac-menu-independent02/verify.py",
+    "bytes": 11570,
+    "sha256": "c18611d5d2ece256dd195208fe331e50e949593c3b3365325192b43da5e6de92"
+  },
+  "authorization": {
+    "path": "docs/verification/unified-candidate06/root-authorization-mac-body-build03.json",
+    "bytes": 30290,
+    "sha256": "cd51848bfd7f19747673744abab2d1c3f04a0a7cb2c3c1df5fcb4bd045947e1b"
+  },
+  "initialRun": {
+    "exitCode": 1,
+    "reason": "All artifact assertions reached completion, then final evidence identity collection expected inherited root-freeze-review.json which does not exist this round. Adapted record path to actual freeze-summary.json and added summary linkage assertion; no source evidence or product changed."
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "assertionsPassed": 929,
+    "result": {
+      "path": "docs/verification/unified-candidate06/mac-body-independent03/result.json",
+      "bytes": 123091,
+      "sha256": "bb86c116ed967b9ad75abeb2a2facd2acd6987b75f7418e8f06362d69780d945"
+    }
+  },
+  "platformCommandsExecuted": false,
+  "mainCommit": false,
+  "freeBytesAfter": 2904645632
+}

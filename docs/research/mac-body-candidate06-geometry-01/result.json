@@ -1,0 +1,1776 @@
+{
+  "coordinateSystem": "Decoded source image pixels, top-left origin; bbox [x0,y0,x1,y1) exclusive. No CSS/AppKit point or DPR inference.",
+  "method": "Neutral ink: 299R+587G+114B < threshold*1000 and max(R,G,B)-min(R,G,B)<25. Thresholds120/160/200. Explicit fixed ROIs. No registration, geometry normalization, resampling or color conversion beyond RGB JPEG decoding.",
+  "sources": {
+    "01-original-corpus.cua-image": {
+      "path": "docs/verification/mac-body-typography-runtime-01/01-original-corpus.cua-image",
+      "bytes": 335616,
+      "sha256": "4241ccf4b60821246b5b48aea0694ded0cd7d4216a21b5a7f7610b7fb2f75a2d"
+    },
+    "01-original-corpus.ax.txt": {
+      "path": "docs/verification/mac-body-typography-runtime-01/01-original-corpus.ax.txt",
+      "bytes": 8247,
+      "sha256": "ff3d144ed5fce0fe647f0894de2d31792cbbc15b48efd1516792171932693945"
+    },
+    "03-candidate-corpus-wide.cua-image": {
+      "path": "docs/verification/mac-body-typography-runtime-01/03-candidate-corpus-wide.cua-image",
+      "bytes": 318490,
+      "sha256": "07065a1e1a33d253d37d7bfa640a6a9fb5294892994a4b10e79ee95f85924d64"
+    },
+    "03-candidate-corpus-wide.ax.txt": {
+      "path": "docs/verification/mac-body-typography-runtime-01/03-candidate-corpus-wide.ax.txt",
+      "bytes": 4316,
+      "sha256": "215af39e6ef51f7fb273e59c33a085e33634b7f886509fad02b148d5d2a087d9"
+    },
+    "05-original-corpus-pointer-away.cua-image": {
+      "path": "docs/verification/mac-body-typography-runtime-01/05-original-corpus-pointer-away.cua-image",
+      "bytes": 335591,
+      "sha256": "428198e55f5ccd4ad820cacc86ca51579358701b66ca38e25b6426edc74cc58a"
+    },
+    "05-original-corpus-pointer-away.ax.txt": {
+      "path": "docs/verification/mac-body-typography-runtime-01/05-original-corpus-pointer-away.ax.txt",
+      "bytes": 8247,
+      "sha256": "ff3d144ed5fce0fe647f0894de2d31792cbbc15b48efd1516792171932693945"
+    },
+    "07-original-blank-area-click.cua-image": {
+      "path": "docs/verification/mac-body-typography-runtime-01/07-original-blank-area-click.cua-image",
+      "bytes": 336118,
+      "sha256": "d05c5a049e7237799efabd283a25c334d4541a6205147291352d4ecdfe367d42"
+    },
+    "07-original-blank-area-click.ax.txt": {
+      "path": "docs/verification/mac-body-typography-runtime-01/07-original-blank-area-click.ax.txt",
+      "bytes": 8247,
+      "sha256": "ff3d144ed5fce0fe647f0894de2d31792cbbc15b48efd1516792171932693945"
+    },
+    "corpus.json": {
+      "path": "docs/verification/mac-body-typography-runtime-01/corpus.json",
+      "bytes": 1446,
+      "sha256": "bb1ea53fc968f97ce5b17ac7566bf6afc7633927427ad9074864a9f83bd56e19"
+    },
+    "04-candidate-process.json": {
+      "path": "docs/verification/mac-body-typography-runtime-01/04-candidate-process.json",
+      "bytes": 555,
+      "sha256": "55b694dc366e359927c5b6399a69ed53a2e060205601bf4947a84ba63b8b0d39"
+    }
+  },
+  "primaryPair": {
+    "original": "07-original-blank-area-click",
+    "clone": "03-candidate-corpus-wide"
+  },
+  "focus": {
+    "original": {
+      "exactCorpusPresentInFocusedValue": true,
+      "focusedElementDeclaration": "101 文本输入区 (settable) ID: Note Body Text View, Secondary Actions: 制作核对清单项, Value: QA-TYPE-20261104-01"
+    },
+    "clone": {
+      "exactCorpusPresentInFocusedValue": true,
+      "focusedElementDeclaration": "25 text entry area (settable) 备忘录正文, Value: QA-TYPE-20261104-01"
+    }
+  },
+  "sameCanvas": true,
+  "recordedCandidateIdentity": {
+    "sourceHead": "a90e55f484149be562b2aa8a6f6f298bd953c203",
+    "processes": [
+      {
+        "pid": 88780,
+        "executable": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-body-build03/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone"
+      }
+    ],
+    "bytes": 16013344,
+    "sha256": "b3c9013f48e6bbfbe466a9f0089e80b9fce9448a02074441bf3e97839c782587",
+    "creation": {
+      "reusePriorEmptyQaNote": true,
+      "pasteFormat": "text"
+    },
+    "limits": "Process identity plus preserved AX; no claim of full DB or font identity."
+  },
+  "identityScope": "04 recorded process/package identity reused, no live process or artifact inspection in this image analysis.",
+  "corpusText": "QA-TYPE-20261104-01\n宽三栏工具栏与搜索对照。\n仅本地合成内容。\nABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz\n0123456789 中文标点，。！？；：《》 — () []\n行距对照一 Ag中文\n行距对照二 Ag中文\n行距对照三 Ag中文\n\n空行之后 Ag中文\n长段换行：这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。",
+  "rowMapping": [
+    "QA-TYPE-20261104-01",
+    "宽三栏工具栏与搜索对照。",
+    "仅本地合成内容。",
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz",
+    "0123456789 中文标点，。！？；：《》 — () []",
+    "行距对照一 Ag中文",
+    "行距对照二 Ag中文",
+    "行距对照三 Ag中文",
+    "空行之后 Ag中文",
+    "long paragraph visual row1",
+    "long paragraph visual row2"
+  ],
+  "rois": {
+    "body": [
+      1200,
+      160,
+      2740,
+      585
+    ],
+    "firstFive": [
+      1200,
+      155,
+      2100,
+      340
+    ],
+    "rows": [
+      [
+        1210,
+        165,
+        2100,
+        202
+      ],
+      [
+        1210,
+        202,
+        2100,
+        234
+      ],
+      [
+        1210,
+        234,
+        2100,
+        270
+      ],
+      [
+        1210,
+        270,
+        2100,
+        304
+      ],
+      [
+        1210,
+        304,
+        2100,
+        338
+      ],
+      [
+        1210,
+        338,
+        1750,
+        373
+      ],
+      [
+        1210,
+        373,
+        1750,
+        407
+      ],
+      [
+        1210,
+        407,
+        1750,
+        442
+      ],
+      [
+        1210,
+        473,
+        1750,
+        509
+      ],
+      [
+        1210,
+        509,
+        2740,
+        543
+      ],
+      [
+        1210,
+        543,
+        2740,
+        580
+      ]
+    ],
+    "repeatAgChinese": [
+      [
+        1356,
+        338,
+        1455,
+        373
+      ],
+      [
+        1356,
+        373,
+        1455,
+        407
+      ],
+      [
+        1356,
+        407,
+        1455,
+        442
+      ]
+    ],
+    "emptyLine": [
+      1210,
+      442,
+      1750,
+      473
+    ],
+    "safePrefixes": [
+      [
+        1210,
+        165,
+        1485,
+        202
+      ],
+      [
+        1210,
+        202,
+        1485,
+        234
+      ]
+    ]
+  },
+  "measurements": {
+    "original": {
+      "encoding": "JPEG",
+      "size": [
+        2786,
+        1806
+      ],
+      "sourceMode": "RGB",
+      "embeddedIccSha256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf",
+      "thresholds": {
+        "120": {
+          "rowInk": [
+            [
+              1226,
+              175,
+              1504,
+              196
+            ],
+            [
+              1226,
+              207,
+              1516,
+              231
+            ],
+            [
+              1225,
+              241,
+              1413,
+              265
+            ],
+            [
+              1225,
+              277,
+              2037,
+              298
+            ],
+            [
+              1226,
+              309,
+              1701,
+              334
+            ],
+            [
+              1225,
+              343,
+              1445,
+              369
+            ],
+            [
+              1225,
+              377,
+              1445,
+              403
+            ],
+            [
+              1225,
+              411,
+              1445,
+              437
+            ],
+            [
+              1226,
+              479,
+              1419,
+              505
+            ],
+            [
+              1226,
+              513,
+              2720,
+              537
+            ],
+            [
+              1225,
+              547,
+              1904,
+              571
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 278,
+              "height": 21
+            },
+            {
+              "width": 290,
+              "height": 24
+            },
+            {
+              "width": 188,
+              "height": 24
+            },
+            {
+              "width": 812,
+              "height": 21
+            },
+            {
+              "width": 475,
+              "height": 25
+            },
+            {
+              "width": 220,
+              "height": 26
+            },
+            {
+              "width": 220,
+              "height": 26
+            },
+            {
+              "width": 220,
+              "height": 26
+            },
+            {
+              "width": 193,
+              "height": 26
+            },
+            {
+              "width": 1494,
+              "height": 24
+            },
+            {
+              "width": 679,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1361,
+              343,
+              1445,
+              369
+            ],
+            [
+              1361,
+              377,
+              1445,
+              403
+            ],
+            [
+              1361,
+              411,
+              1445,
+              437
+            ]
+          ],
+          "repeatAgChineseTopAdvances": [
+            34,
+            34
+          ],
+          "afterEmptyLineTopMinusThirdRepeatTop": 68,
+          "emptyLineInk": null,
+          "safePrefixInk": [
+            [
+              1226,
+              175,
+              1485,
+              196
+            ],
+            [
+              1226,
+              207,
+              1485,
+              230
+            ]
+          ]
+        },
+        "160": {
+          "rowInk": [
+            [
+              1226,
+              175,
+              1504,
+              196
+            ],
+            [
+              1226,
+              207,
+              1516,
+              231
+            ],
+            [
+              1225,
+              241,
+              1413,
+              265
+            ],
+            [
+              1225,
+              276,
+              2037,
+              301
+            ],
+            [
+              1226,
+              309,
+              1701,
+              335
+            ],
+            [
+              1225,
+              343,
+              1445,
+              369
+            ],
+            [
+              1225,
+              377,
+              1445,
+              403
+            ],
+            [
+              1225,
+              411,
+              1445,
+              437
+            ],
+            [
+              1226,
+              479,
+              1420,
+              505
+            ],
+            [
+              1225,
+              513,
+              2720,
+              537
+            ],
+            [
+              1225,
+              547,
+              1904,
+              571
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 278,
+              "height": 21
+            },
+            {
+              "width": 290,
+              "height": 24
+            },
+            {
+              "width": 188,
+              "height": 24
+            },
+            {
+              "width": 812,
+              "height": 25
+            },
+            {
+              "width": 475,
+              "height": 26
+            },
+            {
+              "width": 220,
+              "height": 26
+            },
+            {
+              "width": 220,
+              "height": 26
+            },
+            {
+              "width": 220,
+              "height": 26
+            },
+            {
+              "width": 194,
+              "height": 26
+            },
+            {
+              "width": 1495,
+              "height": 24
+            },
+            {
+              "width": 679,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1361,
+              343,
+              1445,
+              369
+            ],
+            [
+              1361,
+              377,
+              1445,
+              403
+            ],
+            [
+              1361,
+              411,
+              1445,
+              437
+            ]
+          ],
+          "repeatAgChineseTopAdvances": [
+            34,
+            34
+          ],
+          "afterEmptyLineTopMinusThirdRepeatTop": 68,
+          "emptyLineInk": null,
+          "safePrefixInk": [
+            [
+              1226,
+              175,
+              1485,
+              196
+            ],
+            [
+              1226,
+              207,
+              1485,
+              231
+            ]
+          ]
+        },
+        "200": {
+          "rowInk": [
+            [
+              1225,
+              175,
+              1505,
+              196
+            ],
+            [
+              1225,
+              207,
+              1517,
+              231
+            ],
+            [
+              1225,
+              241,
+              1414,
+              265
+            ],
+            [
+              1225,
+              276,
+              2038,
+              301
+            ],
+            [
+              1225,
+              309,
+              1701,
+              335
+            ],
+            [
+              1225,
+              343,
+              1445,
+              369
+            ],
+            [
+              1225,
+              377,
+              1445,
+              403
+            ],
+            [
+              1225,
+              411,
+              1445,
+              437
+            ],
+            [
+              1226,
+              479,
+              1420,
+              505
+            ],
+            [
+              1225,
+              513,
+              2720,
+              537
+            ],
+            [
+              1224,
+              547,
+              1904,
+              571
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 280,
+              "height": 21
+            },
+            {
+              "width": 292,
+              "height": 24
+            },
+            {
+              "width": 189,
+              "height": 24
+            },
+            {
+              "width": 813,
+              "height": 25
+            },
+            {
+              "width": 476,
+              "height": 26
+            },
+            {
+              "width": 220,
+              "height": 26
+            },
+            {
+              "width": 220,
+              "height": 26
+            },
+            {
+              "width": 220,
+              "height": 26
+            },
+            {
+              "width": 194,
+              "height": 26
+            },
+            {
+              "width": 1495,
+              "height": 24
+            },
+            {
+              "width": 680,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1361,
+              343,
+              1445,
+              369
+            ],
+            [
+              1361,
+              377,
+              1445,
+              403
+            ],
+            [
+              1361,
+              411,
+              1445,
+              437
+            ]
+          ],
+          "repeatAgChineseTopAdvances": [
+            34,
+            34
+          ],
+          "afterEmptyLineTopMinusThirdRepeatTop": 68,
+          "emptyLineInk": null,
+          "safePrefixInk": [
+            [
+              1225,
+              175,
+              1485,
+              196
+            ],
+            [
+              1225,
+              207,
+              1485,
+              231
+            ]
+          ]
+        }
+      },
+      "selectedInitialGlyphs160": {
+        "Q": [
+          1226,
+          175,
+          1243,
+          196
+        ],
+        "A": [
+          1244,
+          175,
+          1260,
+          194
+        ],
+        "宽": [
+          1226,
+          207,
+          1248,
+          231
+        ],
+        "仅": [
+          1225,
+          241,
+          1248,
+          265
+        ]
+      },
+      "divider": {
+        "roi": [
+          1170,
+          650,
+          1187,
+          1050
+        ],
+        "columnMeanGray": {
+          "1170": 255.0,
+          "1171": 255.0,
+          "1172": 255.0,
+          "1173": 255.0,
+          "1174": 255.0,
+          "1175": 255.0,
+          "1176": 230.0,
+          "1177": 229.0,
+          "1178": 255.0,
+          "1179": 254.0,
+          "1180": 255.0,
+          "1181": 255.0,
+          "1182": 255.0,
+          "1183": 255.0,
+          "1184": 255.0,
+          "1185": 255.0,
+          "1186": 255.0
+        },
+        "darkBandX": [
+          1176,
+          1178
+        ]
+      },
+      "firstRowLeftMinusDividerStart160": 50
+    },
+    "clone": {
+      "encoding": "JPEG",
+      "size": [
+        2786,
+        1806
+      ],
+      "sourceMode": "RGB",
+      "embeddedIccSha256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf",
+      "thresholds": {
+        "120": {
+          "rowInk": [
+            [
+              1227,
+              171,
+              1506,
+              192
+            ],
+            [
+              1227,
+              203,
+              1518,
+              227
+            ],
+            [
+              1227,
+              238,
+              1415,
+              262
+            ],
+            [
+              1227,
+              274,
+              2037,
+              298
+            ],
+            [
+              1227,
+              307,
+              1776,
+              332
+            ],
+            [
+              1227,
+              341,
+              1443,
+              367
+            ],
+            [
+              1227,
+              376,
+              1443,
+              402
+            ],
+            [
+              1227,
+              410,
+              1443,
+              436
+            ],
+            [
+              1228,
+              479,
+              1418,
+              505
+            ],
+            [
+              1227,
+              513,
+              2720,
+              537
+            ],
+            [
+              1227,
+              547,
+              1905,
+              571
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 279,
+              "height": 21
+            },
+            {
+              "width": 291,
+              "height": 24
+            },
+            {
+              "width": 188,
+              "height": 24
+            },
+            {
+              "width": 810,
+              "height": 24
+            },
+            {
+              "width": 549,
+              "height": 25
+            },
+            {
+              "width": 216,
+              "height": 26
+            },
+            {
+              "width": 216,
+              "height": 26
+            },
+            {
+              "width": 216,
+              "height": 26
+            },
+            {
+              "width": 190,
+              "height": 26
+            },
+            {
+              "width": 1493,
+              "height": 24
+            },
+            {
+              "width": 678,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1363,
+              341,
+              1443,
+              367
+            ],
+            [
+              1363,
+              376,
+              1443,
+              402
+            ],
+            [
+              1363,
+              410,
+              1443,
+              436
+            ]
+          ],
+          "repeatAgChineseTopAdvances": [
+            35,
+            34
+          ],
+          "afterEmptyLineTopMinusThirdRepeatTop": 69,
+          "emptyLineInk": null,
+          "safePrefixInk": [
+            [
+              1227,
+              171,
+              1485,
+              192
+            ],
+            [
+              1227,
+              203,
+              1481,
+              226
+            ]
+          ]
+        },
+        "160": {
+          "rowInk": [
+            [
+              1227,
+              171,
+              1506,
+              192
+            ],
+            [
+              1227,
+              203,
+              1519,
+              227
+            ],
+            [
+              1226,
+              238,
+              1416,
+              262
+            ],
+            [
+              1227,
+              274,
+              2037,
+              298
+            ],
+            [
+              1227,
+              307,
+              1776,
+              333
+            ],
+            [
+              1227,
+              341,
+              1444,
+              367
+            ],
+            [
+              1227,
+              376,
+              1444,
+              402
+            ],
+            [
+              1227,
+              410,
+              1444,
+              436
+            ],
+            [
+              1227,
+              479,
+              1418,
+              505
+            ],
+            [
+              1227,
+              513,
+              2720,
+              537
+            ],
+            [
+              1226,
+              547,
+              1906,
+              571
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 279,
+              "height": 21
+            },
+            {
+              "width": 292,
+              "height": 24
+            },
+            {
+              "width": 190,
+              "height": 24
+            },
+            {
+              "width": 810,
+              "height": 24
+            },
+            {
+              "width": 549,
+              "height": 26
+            },
+            {
+              "width": 217,
+              "height": 26
+            },
+            {
+              "width": 217,
+              "height": 26
+            },
+            {
+              "width": 217,
+              "height": 26
+            },
+            {
+              "width": 191,
+              "height": 26
+            },
+            {
+              "width": 1493,
+              "height": 24
+            },
+            {
+              "width": 680,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1362,
+              341,
+              1444,
+              367
+            ],
+            [
+              1363,
+              376,
+              1444,
+              402
+            ],
+            [
+              1363,
+              410,
+              1444,
+              436
+            ]
+          ],
+          "repeatAgChineseTopAdvances": [
+            35,
+            34
+          ],
+          "afterEmptyLineTopMinusThirdRepeatTop": 69,
+          "emptyLineInk": null,
+          "safePrefixInk": [
+            [
+              1227,
+              171,
+              1485,
+              192
+            ],
+            [
+              1227,
+              203,
+              1482,
+              227
+            ]
+          ]
+        },
+        "200": {
+          "rowInk": [
+            [
+              1227,
+              171,
+              1507,
+              192
+            ],
+            [
+              1227,
+              203,
+              1519,
+              227
+            ],
+            [
+              1226,
+              238,
+              1416,
+              262
+            ],
+            [
+              1226,
+              274,
+              2038,
+              298
+            ],
+            [
+              1227,
+              307,
+              1777,
+              333
+            ],
+            [
+              1226,
+              341,
+              1444,
+              367
+            ],
+            [
+              1226,
+              376,
+              1444,
+              402
+            ],
+            [
+              1226,
+              410,
+              1444,
+              436
+            ],
+            [
+              1227,
+              479,
+              1418,
+              505
+            ],
+            [
+              1227,
+              513,
+              2720,
+              537
+            ],
+            [
+              1226,
+              547,
+              1906,
+              571
+            ]
+          ],
+          "rowDimensions": [
+            {
+              "width": 280,
+              "height": 21
+            },
+            {
+              "width": 292,
+              "height": 24
+            },
+            {
+              "width": 190,
+              "height": 24
+            },
+            {
+              "width": 812,
+              "height": 24
+            },
+            {
+              "width": 550,
+              "height": 26
+            },
+            {
+              "width": 218,
+              "height": 26
+            },
+            {
+              "width": 218,
+              "height": 26
+            },
+            {
+              "width": 218,
+              "height": 26
+            },
+            {
+              "width": 191,
+              "height": 26
+            },
+            {
+              "width": 1493,
+              "height": 24
+            },
+            {
+              "width": 680,
+              "height": 24
+            }
+          ],
+          "repeatAgChineseInk": [
+            [
+              1362,
+              341,
+              1444,
+              367
+            ],
+            [
+              1362,
+              376,
+              1444,
+              402
+            ],
+            [
+              1362,
+              410,
+              1444,
+              436
+            ]
+          ],
+          "repeatAgChineseTopAdvances": [
+            35,
+            34
+          ],
+          "afterEmptyLineTopMinusThirdRepeatTop": 69,
+          "emptyLineInk": null,
+          "safePrefixInk": [
+            [
+              1227,
+              171,
+              1485,
+              192
+            ],
+            [
+              1227,
+              203,
+              1482,
+              227
+            ]
+          ]
+        }
+      },
+      "selectedInitialGlyphs160": {
+        "Q": [
+          1227,
+          171,
+          1244,
+          192
+        ],
+        "A": [
+          1245,
+          171,
+          1261,
+          190
+        ],
+        "宽": [
+          1227,
+          203,
+          1249,
+          227
+        ],
+        "仅": [
+          1226,
+          238,
+          1249,
+          262
+        ]
+      },
+      "divider": {
+        "roi": [
+          1170,
+          650,
+          1187,
+          1050
+        ],
+        "columnMeanGray": {
+          "1170": 255.0,
+          "1171": 255.0,
+          "1172": 255.0,
+          "1173": 255.0,
+          "1174": 255.0,
+          "1175": 255.0,
+          "1176": 254.0,
+          "1177": 255.0,
+          "1178": 222.0,
+          "1179": 222.0,
+          "1180": 255.0,
+          "1181": 255.0,
+          "1182": 255.0,
+          "1183": 255.0,
+          "1184": 255.0,
+          "1185": 255.0,
+          "1186": 255.0
+        },
+        "darkBandX": [
+          1178,
+          1180
+        ]
+      },
+      "firstRowLeftMinusDividerStart160": 49
+    }
+  },
+  "cloneMinusOriginal": {
+    "120": [
+      {
+        "row": 1,
+        "bboxDelta": [
+          1,
+          -4,
+          2,
+          -4
+        ],
+        "widthDelta": 1,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 2,
+        "bboxDelta": [
+          1,
+          -4,
+          2,
+          -4
+        ],
+        "widthDelta": 1,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 3,
+        "bboxDelta": [
+          2,
+          -3,
+          2,
+          -3
+        ],
+        "widthDelta": 0,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 4,
+        "bboxDelta": [
+          2,
+          -3,
+          0,
+          0
+        ],
+        "widthDelta": -2,
+        "heightDelta": 3,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 5,
+        "bboxDelta": [
+          1,
+          -2,
+          75,
+          -2
+        ],
+        "widthDelta": 74,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 6,
+        "bboxDelta": [
+          2,
+          -2,
+          -2,
+          -2
+        ],
+        "widthDelta": -4,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 7,
+        "bboxDelta": [
+          2,
+          -1,
+          -2,
+          -1
+        ],
+        "widthDelta": -4,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 8,
+        "bboxDelta": [
+          2,
+          -1,
+          -2,
+          -1
+        ],
+        "widthDelta": -4,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 9,
+        "bboxDelta": [
+          2,
+          0,
+          -1,
+          0
+        ],
+        "widthDelta": -3,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 10,
+        "bboxDelta": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "widthDelta": -1,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 11,
+        "bboxDelta": [
+          2,
+          0,
+          1,
+          0
+        ],
+        "widthDelta": -1,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      }
+    ],
+    "160": [
+      {
+        "row": 1,
+        "bboxDelta": [
+          1,
+          -4,
+          2,
+          -4
+        ],
+        "widthDelta": 1,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 2,
+        "bboxDelta": [
+          1,
+          -4,
+          3,
+          -4
+        ],
+        "widthDelta": 2,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 3,
+        "bboxDelta": [
+          1,
+          -3,
+          3,
+          -3
+        ],
+        "widthDelta": 2,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 4,
+        "bboxDelta": [
+          2,
+          -2,
+          0,
+          -3
+        ],
+        "widthDelta": -2,
+        "heightDelta": -1,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 5,
+        "bboxDelta": [
+          1,
+          -2,
+          75,
+          -2
+        ],
+        "widthDelta": 74,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 6,
+        "bboxDelta": [
+          2,
+          -2,
+          -1,
+          -2
+        ],
+        "widthDelta": -3,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 7,
+        "bboxDelta": [
+          2,
+          -1,
+          -1,
+          -1
+        ],
+        "widthDelta": -3,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 8,
+        "bboxDelta": [
+          2,
+          -1,
+          -1,
+          -1
+        ],
+        "widthDelta": -3,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 9,
+        "bboxDelta": [
+          1,
+          0,
+          -2,
+          0
+        ],
+        "widthDelta": -3,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 10,
+        "bboxDelta": [
+          2,
+          0,
+          0,
+          0
+        ],
+        "widthDelta": -2,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 11,
+        "bboxDelta": [
+          1,
+          0,
+          2,
+          0
+        ],
+        "widthDelta": 1,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      }
+    ],
+    "200": [
+      {
+        "row": 1,
+        "bboxDelta": [
+          2,
+          -4,
+          2,
+          -4
+        ],
+        "widthDelta": 0,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 2,
+        "bboxDelta": [
+          2,
+          -4,
+          2,
+          -4
+        ],
+        "widthDelta": 0,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 3,
+        "bboxDelta": [
+          1,
+          -3,
+          2,
+          -3
+        ],
+        "widthDelta": 1,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 4,
+        "bboxDelta": [
+          1,
+          -2,
+          0,
+          -3
+        ],
+        "widthDelta": -1,
+        "heightDelta": -1,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 5,
+        "bboxDelta": [
+          2,
+          -2,
+          76,
+          -2
+        ],
+        "widthDelta": 74,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 6,
+        "bboxDelta": [
+          1,
+          -2,
+          -1,
+          -2
+        ],
+        "widthDelta": -2,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 7,
+        "bboxDelta": [
+          1,
+          -1,
+          -1,
+          -1
+        ],
+        "widthDelta": -2,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 8,
+        "bboxDelta": [
+          1,
+          -1,
+          -1,
+          -1
+        ],
+        "widthDelta": -2,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 9,
+        "bboxDelta": [
+          1,
+          0,
+          -2,
+          0
+        ],
+        "widthDelta": -3,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 10,
+        "bboxDelta": [
+          2,
+          0,
+          0,
+          0
+        ],
+        "widthDelta": -2,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      },
+      {
+        "row": 11,
+        "bboxDelta": [
+          2,
+          0,
+          2,
+          0
+        ],
+        "widthDelta": 0,
+        "heightDelta": 0,
+        "originalPointerContamination": false
+      }
+    ]
+  },
+  "pointerContamination": {
+    "original01": "Arrow/halo around x1515,y202 overlaps first two row endings.",
+    "original05": "Despite pointer-away name, actual saved image still has arrow/halo at first two row endings. Not used for final geometry.",
+    "original07": "Actual full image inspected: arrow/halo around x1300,y700, outside body ROI. Primary original for final geometry.",
+    "clone03": "Visible pointer/halo around x1980,y778, outside body ROI.",
+    "noMaskingOrInpainting": true
+  },
+  "lineBreakObservation": {
+    "method": "Manual visual reading of known corpus; not OCR or DOM layout inspection.",
+    "bothVisualRows": 2,
+    "sameVisibleBreak": true,
+    "row1EndsWith": "这是用于本",
+    "row2StartsWith": "地界面对照的合成内容。",
+    "rightEdgeContentBoxNotEstablished": true
+  },
+  "limits": [
+    "JPEG-derived images do not establish lossless pixel PASS or font identity.",
+    "Same canvas does not establish same screen origin, DPR, actual content frames or font descriptors.",
+    "Divider differs2 image pixels, retained without alignment.",
+    "Initial01 and attempted05 first two original rows are pointer-contaminated at160/200; final07 removes this overlap without image masking.",
+    "Original spellcheck underline is colored; neutral mask filters most color but JPEG/AA affect ink thresholds.",
+    "Original/clone dates, account, note count and list content differ; whole-window similarity excluded.",
+    "Visible ink top advances are not true baseline or CSS/native line-height measurements.",
+    "Candidate05 comparison uses previous corpus partly different; only shared Chinese lines/isolated initial glyph dimensions are a bounded cross-round comparison, not normalized A/B."
+  ],
+  "boundedPreviousComparison": {
+    "source": {
+      "path": "docs/research/mac-candidate05-wide-runtime-geometry-01/result.json",
+      "bytes": 11773,
+      "sha256": "184ed8cec791ea2d409c738b7ccaaff09dc8769370b5f908462cd31e637f0fd4"
+    },
+    "commonChineseLines": {
+      "宽三栏工具栏与搜索对照。": {
+        "previousCloneDimensions": {
+          "width": 314,
+          "height": 26
+        },
+        "previousOriginalDimensions": {
+          "width": 290,
+          "height": 24
+        },
+        "newCloneDimensions": {
+          "width": 292,
+          "height": 24
+        },
+        "newOriginalDimensions": {
+          "width": 290,
+          "height": 24
+        }
+      },
+      "仅本地合成内容。": {
+        "previousCloneDimensions": {
+          "width": 203,
+          "height": 26
+        },
+        "previousOriginalDimensions": {
+          "width": 188,
+          "height": 24
+        },
+        "newCloneDimensions": {
+          "width": 190,
+          "height": 24
+        },
+        "newOriginalDimensions": {
+          "width": 188,
+          "height": 24
+        }
+      }
+    },
+    "caution": "Different round and corpus; only shared strings and same threshold method compared. No normalized controlled A/B claim."
+  },
+  "sourcesUnchangedAfter": true
+}
