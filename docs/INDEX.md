@@ -40,6 +40,7 @@
 - [正文几何与有限运行记录独立审阅](plan/reviews/app-001-body-typography-runtime-01.md)
 - [当前Mac侧栏两条恢复路径最终复验](verification/mac-sidebar-final-04/README.md)
 - [当前Mac侧栏最终记录独立核查](plan/reviews/app-001-sidebar-final-04.md)
+- [用户再次反馈后的当前桌面包侧栏双入口复验](verification/mac-sidebar-user-regression05/README.md)
 - [连续与汉字隔开标点的真实窗口控制](verification/mac-punctuation-context-runtime-02/README.md)
 - [标点上下文与重复行几何](research/mac-punctuation-context-geometry-02/README.md)
 - [原生系统字体与苹方上下文诊断](research/mac-body-native-metrics-02/README.md)
