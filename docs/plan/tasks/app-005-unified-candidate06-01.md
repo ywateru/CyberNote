@@ -1,7 +1,7 @@
 ---
 id: app-005-unified-candidate06-01
 scope: accepted-tags-and-recording-date-cross-platform-package-and-runtime
-status: pending
+status: in-progress
 depends-on: [app-002-audio-card-01]
 ---
 
@@ -45,3 +45,7 @@ root独占Mac GUI，Android按用户明确允许的ADB验收执行。先核目�
 ## verification
 
 构建和设备验收由不同作者承担；root核每项产物与证据manifest。报告按源码、构建、安装、功能、持久化、原生输入法及像素分别给结论。全部历史失败和candidate04/05身份继续保留。完整应用目标、智能文件夹/绘画/扫描/数学/链接/标准格式与未覆盖交互仍继续执行，本批通过不关闭总任务。
+
+## 2026-11-04 源码准备状态
+
+录音卡片独审及主线整合门槛均已通过，见main-integration-01；candidate06工具b5c0aef正由不同作者独审。用户新报桌面隐藏文件夹后恢复入口丢失，已建立app-001-sidebar-restore-01，并将在Mac最终冻结前接入修复；目前未派发真实平台编译，准确源SHA待修复/工具合入后由root指定。
