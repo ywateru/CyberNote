@@ -1,0 +1,20 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: axis hidden clips visible actual ink
++ actual - expected
+
++ 'f5b7f47f7d1a06dab9ff9cfacbd146c976e61db5286daac38df729994867154b'
+- '583d8830b9ff07bc7700f986458ee7d601645d131e51ea0687d69650a70e9de4'
+
+    at noClipScreenshot (file:///private/tmp/apple-notes-mobile-recording-wave60-independent-01/docs/verification/mobile-recording-wave60-independent/check-independent.mjs:224:12)
+    at async file:///private/tmp/apple-notes-mobile-recording-wave60-independent-01/docs/verification/mobile-recording-wave60-independent/check-independent.mjs:235:50 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'f5b7f47f7d1a06dab9ff9cfacbd146c976e61db5286daac38df729994867154b',
+  expected: '583d8830b9ff07bc7700f986458ee7d601645d131e51ea0687d69650a70e9de4',
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

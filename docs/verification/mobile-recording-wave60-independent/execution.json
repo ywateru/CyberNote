@@ -1,0 +1,38 @@
+[
+  {
+    "directory": "baseline-01",
+    "flags": "",
+    "exitCode": 1,
+    "resultStatus": "FAIL",
+    "meaning": "First command omitted --baseline: this directory actually contains candidate source; full-screen unclip equality assertion too broad, first failure retained.",
+    "runnerSha256": "21b84704bd17f6659941d082db458760f2fd486dbbe2507ab87adb137a2625e3",
+    "noNativeMediaDeviceActions": true
+  },
+  {
+    "directory": "baseline-02",
+    "flags": "--baseline",
+    "exitCode": 0,
+    "resultStatus": "PASS",
+    "meaning": "Correct exact59 baseline",
+    "runnerSha256": "d633a44ed929f55c843eacce9b69670a77ec3f4df7c2885a433c7ae40752ba6f",
+    "noNativeMediaDeviceActions": true
+  },
+  {
+    "directory": "candidate-01",
+    "flags": "--compare baseline-02",
+    "exitCode": 1,
+    "resultStatus": "FAIL",
+    "meaning": "Checker API error after successful first pointer capture: removeExposedFunction not present in Playwright; no product change.",
+    "runnerSha256": "d633a44ed929f55c843eacce9b69670a77ec3f4df7c2885a433c7ae40752ba6f",
+    "noNativeMediaDeviceActions": true
+  },
+  {
+    "directory": "candidate-02",
+    "flags": "--compare baseline-02",
+    "exitCode": 0,
+    "resultStatus": "PASS",
+    "meaning": "Finite task60 shared-view checks pass",
+    "runnerSha256": "a072297adc24fb0ef974f663ce72a9884b580af1532ea6708cb0c5ab89fca7f7",
+    "noNativeMediaDeviceActions": true
+  }
+]
