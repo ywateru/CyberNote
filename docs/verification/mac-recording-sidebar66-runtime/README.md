@@ -1,6 +1,6 @@
 # 录音右栏66实际Mac验收准备
 
-2026-11-05，状态：WAITING-SOURCE-REVIEW-AND-PACKAGE。此文件仅为验收计划，不表示新包已构建或运行。
+2026-11-05，状态：SOURCE-INTEGRATED-WAITING-PACKAGE。源码最终修复已独审并合入root9199370a，根typecheck/build通过。此文件仍为实际验收计划，不表示新包已构建或运行。
 
 ## 现场保全
 

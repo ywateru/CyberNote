@@ -2,7 +2,7 @@
 
 更新：2026-11-05。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
-最新优先项：用户要求彻底重构录音，取消浮窗、统一主窗口右侧非模态栏，见[任务66](plan/tasks/app-mac-recording-sidebar66.md)。暂停自动保存、关闭保存收起、录音中编辑/切笔记与原A归属继续保持；本地owner与native退出守卫一起重构。当前保留Mac18未存3秒现场与手机13秒现场，不退出/重载/复制。65实际Host等待及投影修复已通过focused独审并整合（root typecheck/build通过）；66尚未源码/新包验收。
+最新优先项：用户要求彻底重构录音，取消浮窗、统一主窗口右侧非模态栏，见[任务66](plan/tasks/app-mac-recording-sidebar66.md)。暂停自动保存、关闭保存收起、录音中编辑/切笔记与原A归属继续保持；本地owner与native退出守卫一起重构。当前保留Mac18未存3秒现场与手机13秒现场，不退出/重载/复制。65实际Host等待及投影修复已通过focused独审并整合（root typecheck/build通过）；66最终修复f4a2fba7已通过独审（实际App链17组、native核心5组）并合入root9199370a，根typecheck/build通过；[整合记录](verification/mac-recording-sidebar66-root-integration/README.md)。准确Mac19出包与真实运行待验。
 
 历史64状态：最新优先项：[Mac暂停/关闭自动保存64](plan/tasks/app-mac-recording-autosave64.md)首版已独审/整合并生成[Mac18](verification/unified-candidate06/mac-recording-autosave-build18/README.md)，但[真实暂停保存被目标校验拦截](verification/mac-recording-autosave64-runtime/README.md)，**MAC18-RUNTIME-BLOCKED**，不作为修复交付。新3秒录音现场保留，继续修复实际App/Host恢复等待与投影边界。手机原现场继续保持。[最新交互契约](ui/recording-desktop.md)不变。
 
