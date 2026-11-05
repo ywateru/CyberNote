@@ -4,6 +4,26 @@
 #undef main
 #include <pthread.h>
 #include <string.h>
+#ifdef DIAGNOSTICS63_REAL_SINK
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <time.h>
+extern void diagnostics63_initialize(void);
+extern void diagnostics63_event(uint64_t, uint32_t, int, long);
+static long fillSyntheticStderr(void) {
+    int flags=fcntl(STDERR_FILENO,F_GETFL); assert(flags>=0);
+    assert(fcntl(STDERR_FILENO,F_SETFL,flags|O_NONBLOCK)==0);
+    char bytes[4096]; memset(bytes,'X',sizeof(bytes)); long total=0;
+    while(total<8*1024*1024) {
+        ssize_t n=write(STDERR_FILENO,bytes,sizeof(bytes));
+        if(n>0) {total+=n;continue;}
+        assert(n==-1 && (errno==EAGAIN || errno==EWOULDBLOCK)); break;
+    }
+    assert(total>0 && total<8*1024*1024);
+    assert(fcntl(STDERR_FILENO,F_SETFL,flags)==0); return total;
+}
+#endif
 
 typedef struct { uint64_t request; uint32_t stage; int code; long status; int mainThread; } Event63;
 static Event63 events63[4096];
@@ -17,6 +37,9 @@ static void diagnostic63(uint64_t request, uint32_t stage, int code, long status
     assert(eventCount63 < 4096);
     events63[eventCount63++] = (Event63){request, stage, code, status, pthread_main_np()};
     pthread_mutex_unlock(&eventLock63);
+#ifdef DIAGNOSTICS63_REAL_SINK
+    diagnostics63_event(request, stage, code, status);
+#endif
 }
 static void reply63(void *raw, int code, long status) { behavior('P'); reply(raw, code, status); }
 static void release63(void *raw) { behavior('F'); releaseContext(raw); }
@@ -133,6 +156,15 @@ static int suite63(BOOL enabled) {
     return cases;
 }
 int main(void) {
+#ifdef DIAGNOSTICS63_REAL_SINK
+    diagnostics63_initialize();
+    long filled=fillSyntheticStderr();
+    struct timespec start,end; clock_gettime(CLOCK_MONOTONIC,&start);
+    for(int i=0;i<10000;i++) diagnostics63_event(2000,RecordingNativeEntry,0,-1);
+    clock_gettime(CLOCK_MONOTONIC,&end);
+    double producerMS=(end.tv_sec-start.tv_sec)*1000.0+(end.tv_nsec-start.tv_nsec)/1000000.0;
+    assert(producerMS<1000);
+#endif
     int off=suite63(NO); assert(eventCount63==0);
     char offBehavior[4096]; int offCount=behaviorCount63; memcpy(offBehavior,behavior63,offCount);
     behaviorCount63=0;
@@ -142,5 +174,8 @@ int main(void) {
     assert(countStage(1000,RecordingNativeEntry)==1 && countStage(1000,RecordingNativeWindow)==1);
     // Each native event has the exact synthetic request ID, never an address.
     for(int i=0;i<eventCount63;i++) assert(events63[i].request>=101 && events63[i].request<=1000);
+#ifdef DIAGNOSTICS63_REAL_SINK
+    printf("PASS blocked-output production Rust producer_ms=%.3f synthetic_prefill_bytes=%ld no reader; 10000 producer calls return without waiting\n",producerMS,filled);
+#endif
     printf("PASS %d cases per mode; %d unchanged query/request/reply/release operations; %d diagnostic events; callback-entry precedes main processing from worker thread; fake OS only\n",on,offCount,eventCount63);
 }

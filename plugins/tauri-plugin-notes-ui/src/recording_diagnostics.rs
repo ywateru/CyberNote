@@ -3,7 +3,8 @@ use std::{
     io::Write,
     sync::{
         atomic::{AtomicU64, Ordering},
-        Mutex, OnceLock,
+        mpsc::{self, SyncSender},
+        OnceLock,
     },
     time::Instant,
 };
@@ -11,7 +12,73 @@ use std::{
 pub(super) const EVENT_LIMIT: usize = 256;
 static ENABLED: OnceLock<bool> = OnceLock::new();
 static NEXT_REQUEST: AtomicU64 = AtomicU64::new(1);
-static OUTPUT: Mutex<usize> = Mutex::new(0);
+const QUEUE_CAPACITY: usize = 64;
+static SENDER: OnceLock<Option<SyncSender<Event>>> = OnceLock::new();
+static ATTEMPTS: AtomicU64 = AtomicU64::new(0);
+static QUEUE_DROPPED: AtomicU64 = AtomicU64::new(0);
+static BUDGET_DROPPED: AtomicU64 = AtomicU64::new(0);
+#[cfg(test)]
+static TEST_WRITTEN: AtomicU64 = AtomicU64::new(0);
+#[cfg(test)]
+static TEST_TRUNCATED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+struct Event {
+    request: u64,
+    stage: Stage,
+    code: i32,
+    status: i64,
+    micros: u128,
+}
+
+// This is the only I/O owner. It may block forever on a pipe without retaining
+// any authorization context; producers never wait for it, including at exit.
+fn writer(rx: mpsc::Receiver<Event>) {
+    let mut written = 0;
+    let mut truncated = false;
+    loop {
+        match rx.recv_timeout(std::time::Duration::from_millis(25)) {
+            Ok(event) => {
+                if truncated {
+                    continue;
+                }
+                let _ = writeln!(
+                    std::io::stderr().lock(),
+                    "notes-recording-diag request={} stage={} code={} status={} t_us={}",
+                    event.request,
+                    event.stage.name(),
+                    event.code,
+                    event.status,
+                    event.micros
+                );
+                written += 1;
+                #[cfg(test)]
+                TEST_WRITTEN.fetch_add(1, Ordering::Release);
+            }
+            Err(mpsc::RecvTimeoutError::Timeout) => {
+                let queue_dropped = QUEUE_DROPPED.load(Ordering::Relaxed);
+                let budget_dropped = BUDGET_DROPPED.load(Ordering::Relaxed);
+                if !truncated && (queue_dropped != 0 || budget_dropped != 0) {
+                    let micros = EPOCH.get().map_or(0, |epoch| epoch.elapsed().as_micros());
+                    let _ = writeln!(std::io::stderr().lock(),
+                        "notes-recording-diag stage=truncated event_limit={EVENT_LIMIT} emitted={written} queue_dropped={queue_dropped} budget_dropped={budget_dropped} t_us={micros}");
+                    truncated = true;
+                    #[cfg(test)]
+                    TEST_TRUNCATED.store(true, Ordering::Release);
+                }
+            }
+            Err(mpsc::RecvTimeoutError::Disconnected) => return,
+        }
+    }
+}
+
+// Test-only completion observation. No product endpoint or flush/join exists.
+#[cfg(test)]
+#[allow(dead_code)]
+pub(super) fn test_output() -> (u64, bool) {
+    (
+        TEST_WRITTEN.load(Ordering::Acquire),
+        TEST_TRUNCATED.load(Ordering::Acquire),
+    )
+}
 static EPOCH: OnceLock<Instant> = OnceLock::new();
 
 // Values are shared with recording_access.m. The sink accepts only this closed
@@ -89,6 +156,17 @@ impl Request {
             std::env::var_os("NOTES_RECORDING_DIAGNOSTICS").as_deref()
                 == Some(std::ffi::OsStr::new("1"))
         }) {
+            // Initialize before dispatch to AppKit. The main/OS/FFI producer
+            // path below only reads this cell and never starts or joins threads.
+            EPOCH.get_or_init(Instant::now);
+            SENDER.get_or_init(|| {
+                let (tx, rx) = mpsc::sync_channel(QUEUE_CAPACITY);
+                std::thread::Builder::new()
+                    .name("notes-recording-diag".into())
+                    .spawn(move || writer(rx))
+                    .ok()
+                    .map(|_| tx)
+            });
             Self(NEXT_REQUEST.fetch_add(1, Ordering::Relaxed))
         } else {
             Self(0)
@@ -98,24 +176,24 @@ impl Request {
         if self.0 == 0 {
             return;
         }
-        // Diagnostics cannot unwind across FFI or alter authorization results.
-        let _ = std::panic::catch_unwind(|| {
-            let mut count = OUTPUT.lock().unwrap_or_else(|error| error.into_inner());
-            if *count > EVENT_LIMIT {
-                return;
-            }
-            let micros = EPOCH.get_or_init(Instant::now).elapsed().as_micros();
-            let mut output = std::io::stderr().lock();
-            if *count == EVENT_LIMIT {
-                let _ = writeln!(
-                    output,
-                    "notes-recording-diag stage=truncated events={EVENT_LIMIT} t_us={micros}"
-                );
-            } else {
-                let _ = writeln!(output, "notes-recording-diag request={} stage={} code={code} status={status} t_us={micros}", self.0, stage.name());
-            }
-            *count += 1;
-        });
+        // Fixed-size scalars only. No lock, allocation, I/O, worker wait or
+        // blocking send occurs on main, OS callback or FFI producers.
+        let slot = ATTEMPTS.fetch_add(1, Ordering::Relaxed);
+        if slot >= EVENT_LIMIT as u64 {
+            BUDGET_DROPPED.fetch_add(1, Ordering::Relaxed);
+            return;
+        }
+        let micros = EPOCH.get().map_or(0, |epoch| epoch.elapsed().as_micros());
+        let event = Event {
+            request: self.0,
+            stage,
+            code,
+            status,
+            micros,
+        };
+        if !matches!(SENDER.get(), Some(Some(sender)) if sender.try_send(event).is_ok()) {
+            QUEUE_DROPPED.fetch_add(1, Ordering::Relaxed);
+        }
     }
     pub fn error(self, mut error: crate::Error, stage: Stage) -> crate::Error {
         if self.0 != 0 && error.stage.is_none() {
@@ -152,7 +230,7 @@ extern "C" fn native_event(request: u64, stage: u32, code: i32, status: std::ffi
         27 => Stage::DuplicateFinish,
         _ => return,
     };
-    Request(request).emit(stage, code, status);
+    let _ = std::panic::catch_unwind(|| Request(request).emit(stage, code, status));
 }
 
 // A dropped preflight future identifies a cancelled/expired Rust waiter. It

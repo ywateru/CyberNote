@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, spawn } from 'node:child_process';
 import ts from 'typescript';
 const compiled=ts.transpileModule(await readFile('src/native-recording-access.ts','utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText
   .replace(/import \{ isTauri \} from "@tauri-apps\/api\/core";/,'const isTauri=()=>true;')
@@ -42,17 +42,35 @@ if(binary) {
   const base={...process.env}; delete base.NOTES_RECORDING_DIAGNOSTICS;
   for(const value of [undefined,'0','true','1']) {
     const env={...base,...(value===undefined?{}:{NOTES_RECORDING_DIAGNOSTICS:value})};
-    const result=spawnSync(binary,[],{env,encoding:'utf8'}); assert.equal(result.status,0,result.stderr);
+    const result=spawnSync(binary,['--exact','sink_contract63','--nocapture'],{env,encoding:'utf8'}); assert.equal(result.status,0,result.stderr);
     if(value==='1') {
       const lines=result.stderr.trim().split('\n'); assert.equal(lines.length,3);
       for(const stage of ['rust_dispatch','os_completion_entry','rust_wait_cancelled'])assert(lines.some(line=>line.includes(`stage=${stage} `)));
     } else assert.equal(result.stderr,'','default/off/invalid flag must be silent');
     console.log(result.stdout.trim());
   }
-  const result=spawnSync(binary,['flood'],{env:{...base,NOTES_RECORDING_DIAGNOSTICS:'1'},encoding:'utf8'});
+  const result=spawnSync(binary,['--exact','sink_contract63','--nocapture'],{env:{...base,NOTES_RECORDING_DIAGNOSTICS:'1',DIAGNOSTICS63_SYNTHETIC_FLOOD:'1'},encoding:'utf8'});
   assert.equal(result.status,0,result.stderr);
-  const lines=result.stderr.trim().split('\n'); assert.equal(lines.length,257);
-  assert.equal(lines.filter(line=>line.includes('stage=truncated')).length,1); assert(lines.at(-1).includes('stage=truncated events=256'));
-  let last=0n; for(const line of lines) { assert.match(line,/^notes-recording-diag (request=1 stage=rust_dispatch code=0 status=-1|stage=truncated events=256) t_us=\d+$/); const t=BigInt(line.match(/t_us=(\d+)/)[1]); assert(t>=last); last=t; }
-  console.log('PASS production Rust sink: strict opt-in, zero output by default, 256 events + one truncation across 4 concurrent threads, monotonic serialized output');
+  const lines=result.stderr.trim().split('\n'); assert(lines.length>=2 && lines.length<=257);
+  assert.equal(lines.filter(line=>line.includes('stage=truncated')).length,1);
+  const summary=lines.at(-1).match(/^notes-recording-diag stage=truncated event_limit=256 emitted=(\d+) queue_dropped=(\d+) budget_dropped=(\d+) t_us=\d+$/);
+  assert(summary); assert.equal(Number(summary[1]),lines.length-1);
+  assert.equal(Number(summary[1])+Number(summary[2]),256); assert.equal(Number(summary[3]),144);
+  for(const line of lines.slice(0,-1))assert.match(line,/^notes-recording-diag request=1 stage=rust_dispatch code=0 status=-1 t_us=\d+$/);
+  console.log('PASS production Rust sink: strict opt-in, zero output by default, nonblocking bounded queue, <=256 events + one drop/truncation snapshot across 4 concurrent threads');
+}
+const blockedBinary=process.argv[3];
+if(blockedBinary) {
+  await new Promise((resolve,reject)=>{
+    const child=spawn(blockedBinary,[],{env:{...process.env,NOTES_RECORDING_DIAGNOSTICS:'1'},stdio:['ignore','pipe','pipe']});
+    let output=''; const deadline=setTimeout(()=>{child.kill('SIGKILL');reject(new Error('blocked stderr stalled authorization/producer beyond 5 seconds'));},5000);
+    // Deliberately never attach a stderr reader until the child has exited.
+    child.stdout.setEncoding('utf8'); child.stdout.on('data',text=>{output+=text;});
+    child.on('error',error=>{clearTimeout(deadline);reject(error);});
+    child.on('exit',()=>{child.stderr.resume();});
+    child.on('close',(code,signal)=>{
+      clearTimeout(deadline);
+      try {assert.equal(code,0,`code=${code} signal=${signal} ${output}`);assert.match(output,/blocked-output production Rust producer_ms=/);assert.match(output,/69 unchanged query\/request\/reply\/release operations/);console.log(output.trim());resolve();}catch(error){reject(error);}
+    });
+  });
 }
