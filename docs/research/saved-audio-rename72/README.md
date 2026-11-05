@@ -22,7 +22,7 @@
 - [本机时间、HEAD、二进制、进程、窗口、AX拒绝](evidence/00-local-identity.json)。
 - [REA起始session](evidence/00-session-before.json)：实际closed；故本轮正常open，没有假定父任务的会话仍可用。
 - [open原始响应](evidence/01-open.json)和[observe拒绝原始响应](evidence/02-original-observe-denied.json)。
-- [导出响应](evidence/03-export.json)、[bundle](evidence/rea-evidence.json)、[close响应](evidence/04-close.json)。bundle准确为0个Evidence record：拒绝发生在生成观察证据之前；原始失败另行完整保存，不能把空bundle当运行证据。
+- [导出响应](evidence/03-export.json)、[bundle](evidence/rea-evidence.json)、[close响应](evidence/04-close.json)。bundle准确为0个Evidence record：拒绝发生在生成观察证据之前；原始失败另行完整保存，不能把空bundle当运行证据。上述observe参数是本轮调用记录，保存的原始响应只含拒绝结果、没有回显pid/window_id/请求参数；因此仅凭该响应不能再次独立证明具体参数或目标笔记，二进制和窗口身份分别由open响应及local-identity证明。
 
 任务62的[既有菜单观察](../saved-audio-menu62/README.md)仍只证明菜单存在“重新命名…”和selector `renameAttachment:`。本轮没有扩展其行为覆盖。未启动/停止原版，未播放、读取、复制或导出音频，未调用麦克风，未读取Notes数据库，未操作Android，未修改权限或认证设置。REA已close。
 
@@ -35,7 +35,7 @@
 3. `src/bridge.ts:574` 从已应用workspace的attachmentOwners取noteId，生成AccessGate stamp和expected，调用 `read_attachment`，由accept同时校验授权与metadata后才能发布。不得为了改名绕过此读取门。
 4. `src-tauri/src/lib.rs:291` 从真实attachment_note确定归属，调用Session.sensitive，再tagged Store.read_attachment结果。Session.sensitive（`session.rs:146`）检查token、转换屏障、锁定/删除授权。`store.rs:818` 读取真实Attachment记录与本地字节，返回 `name=a.display_name`、mime、recordedAt及data。
 5. `store.rs:117` Attachment以完整 `PartialEq, Eq` 比较，display_name与id/note_id/kind/relative_path/mime/size/recorded_at同属一个记录。`recording-metadata.ts`只是日期校验/格式，不保存标题。
-6. `Editor.tsx:173` 的标题渲染对name使用 `replace(/\.[^.]+$/, "")` 去最后一个点之后的部分。这只适合作文件名fallback；若新标题是“会议.纪要”，照用该逻辑会误显示为“会议”。命名文本与物理文件名必须分别定义，不能凭现有regex假设原版扩展名规则。
+6. `Editor.tsx:158` 的标题渲染对name使用 `replace(/\.[^.]+$/, "")` 去最后一个点之后的部分。这只适合作文件名fallback；若新标题是“会议.纪要”，照用该逻辑会误显示为“会议”。命名文本与物理文件名必须分别定义，不能凭现有regex假设原版扩展名规则。
 7. 保存卡目前只有播放/暂停、展开、定位等入口；`src/debug/catalog.ts`、`protocol.ts`无已保存录音重命名语义命令。新增按钮还必须接同一真实动作，不能调试入口另造假状态。
 
 ## 不可直接修改Attachment.display_name的原因
@@ -75,7 +75,7 @@ bridge.action(mode save) → Rust saveNote → strict document validator
 - `App.tsx:889` hydrate先检查metadataGate.canPublish，授权变化清敏感状态；pending覆盖与externalVersions不允许因标题动作重建Editor、损坏IME/Undo/其他正文。跨窗口旧保存仍须CAS拒绝，不能自动覆盖新正文。
 - `session/metadata.rs` apply_store从真实Store capture_commit推进metadata sequence和changes；observed/applied各有含义（`metadata-client.ts`），不能收到事件就假装workspace已应用。
 - `store.rs:415` saveNote检查deleted、revision和validate_document，锁定时使用已授权key加密正文，更新revision并put_note。标题若放正文，可沿用正文加密、归档及访问边界。
-- `src/editor-schema.ts:48` 的attachment attrs当前只有id/name/kind；Rust `archive/document.rs:114` 对新attrs默认只接受schema default，并非任意字符串。因此新增字段必须同步TipTap schema、Rust显式类型/长度/仅audio规则、`document-schema.json`与corpus；仅改前端会被真实Rust拒绝。
+- `src/editor-schema.ts:48` 的attachment attrs当前只有id/name/kind；Rust `src-tauri/src/store/archive/document.rs:114` 对当前manifest未登记的attrs直接拒绝；已登记但尚无显式类型策略的字段仅接受schema default，并非任意字符串。因此新增字段必须同步TipTap schema、Rust显式类型/长度/仅audio规则、`document-schema.json`与corpus；仅改前端会被真实Rust拒绝。
 - `scripts/check-editor-schema.mjs:97` 对共享schema manifest做精确crosscheck，必须先审查属性政策再显式生成；不能为过测试放宽unknown attrs。
 - `archive.rs`导入/导出经完整graph/document验证，附件display_name非空且≤4096 bytes；正文新字段要定义最大值、空/空白、换行、null与缺省政策及归档版本兼容。这里的工程边界不能冒称原版输入限制。
 - 正文attrs新增会让旧应用拒绝新归档；不得宣称旧版完全兼容。应明确是否升级归档version、支持旧文档默认值和新version拒绝策略，并用真实export/import roundtrip验证。
