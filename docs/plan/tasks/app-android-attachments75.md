@@ -1,7 +1,7 @@
 ---
 id: app-android-attachments75
 scope: android-attachment-save-and-command-regression
-status: in-progress
+status: done
 depends-on: [app-mobile-recording-primary73]
 ---
 
@@ -35,3 +35,9 @@ depends-on: [app-mobile-recording-primary73]
 开发须冻结提交并由不同agent独审，保存失败原始证据和修复前后结果，记录精确源码身份、命令自然退出码、完整wall、Rust源/二进制身份、pageErrors、HTML/rect及截图。最低回归：桌面100项、手机recording43及notes9、pnpm build、production排除；新增手机附件测试单独计数。独立复跑真实Rust新进程恢复和关键错误重试，不以浏览器代替Android chooser/IME/设备验收。不构建APK来掩盖未复现；本任务按实际结果标source-ready或in-progress，用户原生故障未证实前不关闭父附件任务。
 
 根独占分配本轮开发可复用Cargo缓存：`/private/tmp/apple-notes-recording-window50-independent-target`，只有开发agent可写，复核时串行交接；禁止删除共享target。2026-11-06开始时37GiB可用、无匹配cargo/rustc进程，完整离线闭包待实际构建。原task74桌面录音场景暂不执行；共用设施以本任务输出为准，后续更新task74依赖。
+
+# completion / 2026-11-06
+
+限定源码修复与受控链完成，不关闭父附件/原生/像素目标。产品4052e8aa、builder-only11fa62c8，开发证据bb70756a；[独审](../reviews/app-android-attachments75.md)7e8ee7fd为PASS/SOURCE-READY，无blocking；主线eccba2dd合入后[串行整合](../../verification/android-attachments75/integration/README.md)9条命令均自然exit0：桌面100、手机录音43/笔记9/附件43、协议18、真实Rust21、构建与生产排除。87输入指纹7988ded2…37ff8e前后相同、clean/pageErrors空。独审另29浏览器/14真实Rust故障恢复通过；首次旧100ms断言失败和probe工具失败按原样保留。
+
+已修：自动NodeSelection覆盖前附件引用、多图同步后永久预览错误、空MIME已知签名识别、FileReader abort/error永悬、重试成功残留错误及取消晚observer覆盖成功；原权限/owner/正文校验不变。当前Rust锁定离线构建和同目录新PID恢复实际通过，记录24源/83包依赖图与actual registry hash，缺失checksum sidecar明示missing，不伪报校验。无生产Rust/依赖变动、无APK构建安装、原Android录音现场未动。下一优先[原生76](app-android-attachments-native76.md)。

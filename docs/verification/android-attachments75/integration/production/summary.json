@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "mode": "check-production",
+  "sourceHead": "eccba2dd2a929ff4890604cdd734d61619b1ae0f",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsChanged": false,
+  "platform": "desktop-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "elapsedMs": 794,
+  "result": {
+    "productionAPIAbsent": true,
+    "urlCannotEnable": true,
+    "bundle": {
+      "files": 3,
+      "markers": [
+        "__NOTES_DEBUG__",
+        "SyntheticMediaRecorder",
+        "__DEBUG_PLATFORM__",
+        "synthetic-device-and-ipc-boundaries"
+      ],
+      "matches": []
+    },
+    "platformMockInjectedByRunnerOnly": true
+  },
+  "pageErrors": []
+}

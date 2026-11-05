@@ -2,6 +2,8 @@
 
 更新：2026-11-06。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
+2026-11-06：[安卓版附件75](plan/tasks/app-android-attachments75.md)已[独审PASS](plan/reviews/app-android-attachments75.md)并完成[主线串行整合](verification/android-attachments75/integration/README.md)，9命令自然exit0：desktop100/mobile附件43/录音43/笔记9、protocol18、真实Rust21、build/production。修复空笔记多附件覆盖、预览读取永久错误、空MIME/读取中止及重试/取消错误残留；独审另29浏览器/14真实Rust故障恢复通过。原Android/系统chooser/整体像素仍开放，未生成APK、原13秒录音现场未动。下一优先[全新独立Android原生76](plan/tasks/app-android-attachments-native76.md)ready；真实Rust桌面录音74也ready但尚未执行。
+
 2026-11-06最新优先项：[安卓版附件75](plan/tasks/app-android-attachments75.md)。用户报告附件无法保存及显示问题；先复现手机附件读取/受管存储/正文ACK/新进程恢复，必要时修复，独立复核后整合。真实Rust设施先用于附件，[桌面录音74](plan/tasks/app-debug-recording-rust74.md)暂后续执行。原Android未保存录音现场继续完全保留，不操作原设备；浏览器/Session通过不代表原生chooser或整体像素已通过。
 
 2026-11-06：[录音中央控件73](plan/tasks/app-mobile-recording-primary73.md)已完成[独立复审](plan/reviews/app-mobile-recording-primary73-recheck.md)、[视觉效率复核](plan/reviews/app-mobile-recording-primary73-efficiency-recheck.md)及[主线整合](verification/mobile-recording-primary73/integration/README.md)。根桌面100/手机录音43/笔记9、build/production、24态视觉均自然exit0。修正手机外圈/间隔/暂停填色；修复延迟媒体重挂载的测试竞态；同24态视觉限定依赖扫描后独审约260→50秒，六桌面严格无差。完整原生/像素与CLI清理性能仍开放；下一项[真实Rust持久化74](plan/tasks/app-debug-recording-rust74.md)ready，尚未构建执行。

@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-06附件75现已限定完成：[独审PASS](reviews/app-android-attachments75.md)及[主线9命令串行整合](../verification/android-attachments75/integration/README.md)均已归档。desktop100/mobile附件43/录音43/笔记9、protocol18、真实Rust21、build/production全部自然exit0；原设备/原生chooser/整页像素仍开放。[原生76](tasks/app-android-attachments-native76.md)ready为下一优先，使用全新AVD与准确新APK，保留原13秒录音现场。[录音Rust74](tasks/app-debug-recording-rust74.md)复用设施，尚未执行。
+
 2026-11-06最新优先为[安卓版附件75](tasks/app-android-attachments75.md)：用户报告添加附件无法保存及显示问题，正在复现实际手机输入框往返、附件落盘、正文ACK与新进程恢复；原设备约13秒未保存录音现场保持，不进行安装或重启。显示与保存分别验收，见[处理分析](analysis/android-quality75.md)。[真实Rust录音落盘74](tasks/app-debug-recording-rust74.md)等待75的共用设施，未执行。
 
 2026-11-06任务73已限定完成：[主线整合](../verification/mobile-recording-primary73/integration/README.md)全部自然exit0，desktop100/mobile43/notes9、构建/生产排除与24态视觉通过。独审发现的saved-card重挂载竞态已修runner真实metadata等待，旧失败保留；视觉依赖扫描提速复验通过，非CLI全局性能保证。完整产品目标继续进行。

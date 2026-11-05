@@ -1,7 +1,7 @@
 ---
 id: app-android-attachments-native76
 scope: isolated-android-attachment-chooser-and-display
-status: pending
+status: ready
 depends-on: [app-android-attachments75]
 ---
 
@@ -30,4 +30,4 @@ depends-on: [app-android-attachments75]
 
 # verification
 
-75正式独审/主线整合后才能启动。由不同agent验证新APK来源、独立AVD/serial/CDP身份、原生chooser与新设备重启恢复结果。保存源/包hash、原始命令、自然退出/wall、HTML/截图及失败记录；原设备不访问作为约束持续核对。完成后清理本轮新模拟器进程、转发和无用中间文件，保留准确APK与紧凑证据、共享SDK/Cargo缓存不清。当前仅只读准备，尚未创建AVD/构建/安装/运行。
+75正式独审/主线整合后才能启动。由不同agent验证新APK来源、独立AVD/serial/CDP身份、原生chooser与新设备重启恢复结果。保存源/包hash、原始命令、自然退出/wall、HTML/截图及失败记录；原设备不访问作为约束持续核对。完成后清理本轮新模拟器进程、转发和无用中间文件，保留准确APK与紧凑证据、共享SDK/Cargo缓存不清。2026-11-06依赖75已完成独审/主线9命令串行整合，本文ready；仍仅只读准备，尚未创建AVD/构建/安装/运行。

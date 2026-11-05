@@ -1,0 +1,153 @@
+{
+  "head": "eccba2dd2a929ff4890604cdd734d61619b1ae0f",
+  "output": "/private/tmp/notes-attachments75-root-p9nikfpv",
+  "start": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "runs": [
+    {
+      "name": "frontend-build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 3.662,
+      "log": "/private/tmp/notes-attachments75-root-p9nikfpv/frontend-build.log"
+    },
+    {
+      "name": "production",
+      "command": [
+        "pnpm",
+        "debug",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/notes-attachments75-root-p9nikfpv/production"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 1.099,
+      "log": "/private/tmp/notes-attachments75-root-p9nikfpv/production.log"
+    },
+    {
+      "name": "desktop",
+      "command": [
+        "pnpm",
+        "test:debug",
+        "--out",
+        "/private/tmp/notes-attachments75-root-p9nikfpv/desktop"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 47.115,
+      "log": "/private/tmp/notes-attachments75-root-p9nikfpv/desktop.log"
+    },
+    {
+      "name": "mobile-recording",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "recording",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-attachments75-root-p9nikfpv/mobile-recording"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 10.375,
+      "log": "/private/tmp/notes-attachments75-root-p9nikfpv/mobile-recording.log"
+    },
+    {
+      "name": "mobile-notes",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "notes",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-attachments75-root-p9nikfpv/mobile-notes"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 5.141,
+      "log": "/private/tmp/notes-attachments75-root-p9nikfpv/mobile-notes.log"
+    },
+    {
+      "name": "mobile-attachments",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "attachments",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-attachments75-root-p9nikfpv/mobile-attachments"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 18.885,
+      "log": "/private/tmp/notes-attachments75-root-p9nikfpv/mobile-attachments.log"
+    },
+    {
+      "name": "protocol",
+      "command": [
+        "node",
+        "scripts/debug/check-rust-backend.mjs"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 6.101,
+      "log": "/private/tmp/notes-attachments75-root-p9nikfpv/protocol.log"
+    },
+    {
+      "name": "rust-build",
+      "command": [
+        "node",
+        "scripts/debug/build-rust-attachments.mjs",
+        "/private/tmp/notes-attachments75-root-p9nikfpv/rust-build"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 3.055,
+      "log": "/private/tmp/notes-attachments75-root-p9nikfpv/rust-build.log"
+    },
+    {
+      "name": "real-rust",
+      "command": [
+        "node",
+        "scripts/debug/check-mobile-attachments-rust.mjs",
+        "/private/tmp/notes-attachments75-root-p9nikfpv/rust-build",
+        "/private/tmp/notes-attachments75-root-p9nikfpv/real-rust"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 4.68,
+      "log": "/private/tmp/notes-attachments75-root-p9nikfpv/real-rust.log"
+    }
+  ],
+  "end": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "unchanged": true,
+  "pass": true
+}

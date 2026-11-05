@@ -1,5 +1,7 @@
 # 差异与待证事项
 
+- 75独审首次桌面测试停在既有contract的100ms false async predicate timeout+lastState断言，未进入产品组；原因未确定，保留原失败。未改产品后独审完整100项与根串行100项均通过；作为P3测试时限稳定性问题后续诊断，不猜测并发根因。旧attachment submission/cancellation两个loader在import阶段失败、0用例执行，当前75手机/FileReader/真实Rust链已另验，但旧工具兼容性仍待独立维护。见[75独审](reviews/app-android-attachments75.md)。
+
 - 73限定完成后的P3残差：手机初始红色、录制暂停glyph及字体抗锯齿仍与压缩原帧不同；中央轮廓/暂停内芯改善不授予整页像素通过。视觉fixture限定扫描后根完整wall50.17s，但默认CLI仍有清理开销（根desktop检查24.425s、完整49.87s；开发曾195.48s），根因未完整定位，不能把视觉入口配置提速泛化到所有runner。见[73整合](../verification/mobile-recording-primary73/integration/README.md)及[独审](reviews/app-mobile-recording-primary73-efficiency-recheck.md)。
 
 - 原视频 224×480，iOS 版本与原始逻辑尺寸未知，高清字形无法从压缩视频恢复。

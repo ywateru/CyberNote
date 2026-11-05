@@ -1,7 +1,7 @@
 ---
 id: app-debug-recording-rust74
 scope: command-driven-recording-real-rust-persistence
-status: pending
+status: ready
 depends-on: [app-mobile-recording-primary73, app-android-attachments75]
 ---
 
@@ -9,7 +9,7 @@ depends-on: [app-mobile-recording-primary73, app-android-attachments75]
 
 让用户要求的高效命令验收覆盖真实Rust落盘：复用现有调试API、实际App/Editor/RecordingSession和合成音源，验证桌面暂停自动checkpoint、继续累计、跨笔记侧栏关闭，以及退出受测Rust子进程后同一隔离目录的新进程恢复。默认Fake九组保持其既有边界；新模式必须明确opt-in，不能宣称现有100/43项自动变成Rust通过。
 
-2026-11-06用户新报告安卓版附件无法保存：优先执行[附件75](app-android-attachments75.md)，真实Rust设施先服务手机附件。本文桌面录音场景尚未执行，待75冻结合入后复用设施，不能将75附件通过写成本文录音通过。
+2026-11-06用户新报告安卓版附件无法保存：[附件75](app-android-attachments75.md)现已完成独审与主线整合，真实Rust设施已用于手机附件。本文依赖满足ready，但按用户Android优先级排在[原生76](app-android-attachments-native76.md)之后；桌面录音场景尚未执行，复用设施不能将75附件通过写成本文录音通过。
 
 # context
 
