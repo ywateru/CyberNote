@@ -1,0 +1,2 @@
+PASS blocked-output production Rust producer_ms=0.260 synthetic_prefill_bytes=65536 no reader; 10000 producer calls return without waiting
+PASS 17 cases per mode; 69 unchanged query/request/reply/release operations; 134 diagnostic events; callback-entry precedes main processing from worker thread; fake OS only

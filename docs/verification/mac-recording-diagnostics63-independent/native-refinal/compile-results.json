@@ -1,0 +1,36 @@
+[
+  {
+    "command": [
+      "rustc",
+      "--edition=2021",
+      "--cfg",
+      "test",
+      "-Awarnings",
+      "docs/verification/mac-recording-diagnostics63-independent/check-sink-independent.rs",
+      "-o",
+      "/private/tmp/notes-diagnostics63-independent-bin/sink"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.5850036144256592
+  },
+  {
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fblocks",
+      "-framework",
+      "AppKit",
+      "-framework",
+      "AVFoundation",
+      "-framework",
+      "WebKit",
+      "-framework",
+      "CoreFoundation",
+      "docs/verification/mac-recording-diagnostics63-independent/check-native63-copy.m",
+      "-o",
+      "/private/tmp/notes-diagnostics63-independent-bin/native63"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.7002530097961426
+  }
+]

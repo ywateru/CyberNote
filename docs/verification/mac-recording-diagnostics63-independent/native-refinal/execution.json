@@ -1,0 +1,98 @@
+{
+  "source": "78f9f9d896e8c5d75311f3202484ff119f57369c",
+  "realDeviceOrAudioOperation": false,
+  "results": [
+    {
+      "name": "quiet-None",
+      "command": [
+        "/private/tmp/notes-diagnostics63-independent-bin/sink",
+        "quiet"
+      ],
+      "flag": null,
+      "exitCode": 0,
+      "elapsedSeconds": 0.476553167
+    },
+    {
+      "name": "quiet-0",
+      "command": [
+        "/private/tmp/notes-diagnostics63-independent-bin/sink",
+        "quiet"
+      ],
+      "flag": "0",
+      "exitCode": 0,
+      "elapsedSeconds": 0.004384832999999977
+    },
+    {
+      "name": "quiet-true",
+      "command": [
+        "/private/tmp/notes-diagnostics63-independent-bin/sink",
+        "quiet"
+      ],
+      "flag": "true",
+      "exitCode": 0,
+      "elapsedSeconds": 0.0034129999999999994
+    },
+    {
+      "name": "quiet-1",
+      "command": [
+        "/private/tmp/notes-diagnostics63-independent-bin/sink",
+        "quiet"
+      ],
+      "flag": "1",
+      "exitCode": 0,
+      "elapsedSeconds": 0.005223458999999986
+    },
+    {
+      "name": "locked",
+      "command": [
+        "/private/tmp/notes-diagnostics63-independent-bin/sink",
+        "locked"
+      ],
+      "flag": "1",
+      "exitCode": 0,
+      "elapsedSeconds": 0.036635374999999915
+    },
+    {
+      "name": "late-budget",
+      "command": [
+        "/private/tmp/notes-diagnostics63-independent-bin/sink",
+        "late-budget"
+      ],
+      "flag": "1",
+      "exitCode": 0,
+      "elapsedSeconds": 0.4131072499999999
+    },
+    {
+      "name": "full-unread-pipe",
+      "command": [
+        "/private/tmp/notes-diagnostics63-independent-bin/sink",
+        "blocked"
+      ],
+      "flag": "1",
+      "exitCode": 0,
+      "elapsedSeconds": 0.0065029999999999255,
+      "pipePrefilledBytes": 65536,
+      "readDuringChild": false
+    },
+    {
+      "name": "failed-writer-epipe",
+      "command": [
+        "/private/tmp/notes-diagnostics63-independent-bin/sink",
+        "failed"
+      ],
+      "flag": "1",
+      "exitCode": 0,
+      "elapsedSeconds": 0.004436667000000005,
+      "readEndClosedBeforeChild": true
+    },
+    {
+      "name": "native63-lifecycle",
+      "command": [
+        "/private/tmp/notes-diagnostics63-independent-bin/native63"
+      ],
+      "flag": null,
+      "exitCode": -6,
+      "elapsedSeconds": 0.526650083
+    }
+  ]
+}

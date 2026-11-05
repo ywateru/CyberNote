@@ -1,0 +1,209 @@
+{
+  "source": "8d47e7791e549aed26f091676075de9930461b17",
+  "boundary": "Real production JS helper transpiled; only isTauri/invoke/platform are synthetic. No native, media, permissions or app runtime.",
+  "status": "PASS",
+  "cases": 50,
+  "invokeCalls": 45,
+  "results": [
+    {
+      "name": "structured-code-microphone_timeout",
+      "status": "PASS"
+    },
+    {
+      "name": "structured-code-microphone_busy",
+      "status": "PASS"
+    },
+    {
+      "name": "structured-code-microphone_denied",
+      "status": "PASS"
+    },
+    {
+      "name": "structured-code-microphone_restricted",
+      "status": "PASS"
+    },
+    {
+      "name": "structured-code-microphone_unsettled",
+      "status": "PASS"
+    },
+    {
+      "name": "structured-code-microphone_native",
+      "status": "PASS"
+    },
+    {
+      "name": "structured-code-window_closed",
+      "status": "PASS"
+    },
+    {
+      "name": "structured-code-window_mismatch",
+      "status": "PASS"
+    },
+    {
+      "name": "structured-code-thread",
+      "status": "PASS"
+    },
+    {
+      "name": "structured-code-dispatch",
+      "status": "PASS"
+    },
+    {
+      "name": "structured-code-microphone_bridge",
+      "status": "PASS"
+    },
+    {
+      "name": "stage-native_result",
+      "status": "PASS"
+    },
+    {
+      "name": "stage-rust_dispatch",
+      "status": "PASS"
+    },
+    {
+      "name": "stage-rust_wait_deadline",
+      "status": "PASS"
+    },
+    {
+      "name": "stage-rust_wait_receive",
+      "status": "PASS"
+    },
+    {
+      "name": "stage-rust_revalidate",
+      "status": "PASS"
+    },
+    {
+      "name": "stage-rust_delivery",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe-or-invalid-id-\"0\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe-or-invalid-id-\"01\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe-or-invalid-id-\"-1\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe-or-invalid-id-\"18446744073709551616\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe-or-invalid-id-\"123456789012345678901\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe-or-invalid-id-\"title/path\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe-or-invalid-id-\"1\\n\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe-or-invalid-id-\"\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe-or-invalid-id-42",
+      "status": "PASS"
+    },
+    {
+      "name": "unsafe-or-invalid-id-null",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-stage-and-private-fields-not-read",
+      "status": "PASS"
+    },
+    {
+      "name": "off-wire-optional-fields-absent",
+      "status": "PASS"
+    },
+    {
+      "name": "ordinary-error-identity-preserved",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-error-undefined",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-error-null",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-error-0",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-error-false",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-error-\"unknown\"",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-error-{}",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-error-{\"message\":12}",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-error-{\"message\":null}",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid-code-type-not-copied",
+      "status": "PASS"
+    },
+    {
+      "name": "authorized-success",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-success-is-failure-null",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-success-is-failure-undefined",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-success-is-failure-{}",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-success-is-failure-{\"status\":\"denied\"}",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown-success-is-failure-{\"status\":\"unknown\"}",
+      "status": "PASS"
+    },
+    {
+      "name": "environment-gate-false-MacIntel-Mac",
+      "status": "PASS"
+    },
+    {
+      "name": "environment-gate-true-Linux x86-Linux",
+      "status": "PASS"
+    },
+    {
+      "name": "environment-gate-true-MacIntel-Android",
+      "status": "PASS"
+    },
+    {
+      "name": "environment-gate-true-MacIntel-iPhone",
+      "status": "PASS"
+    },
+    {
+      "name": "environment-gate-true-MacIntel-iPad",
+      "status": "PASS"
+    }
+  ]
+}

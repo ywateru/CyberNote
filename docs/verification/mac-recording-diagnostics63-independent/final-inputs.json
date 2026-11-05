@@ -1,0 +1,474 @@
+{
+  "schema": 1,
+  "source": "78f9f9d896e8c5d75311f3202484ff119f57369c",
+  "independentProductHead": "2a83aa3c",
+  "authorEvidenceCommits": [
+    "acdaa3957b50ba4ada1060d184608f62191ca8bf",
+    "068f341c2e20bde6c5d6c1fef19be6377239426a"
+  ],
+  "files": [
+    {
+      "path": "plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "bytes": 5112,
+      "sha256": "eb8b42c3711ae95ee4eca6770b1165aad93f4b5e7b63496737ccdd36aa18f9df",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/macos/recording_access.m",
+      "bytes": 11523,
+      "sha256": "72b4e251016db26af02b50178b2d5f0188cd1dbbed97b23688f7590c23e3950d",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "bytes": 14391,
+      "sha256": "9d6e5d52d7b6a5026479de77d78ecd8bbbfda32196355494fc5ac57c1551e42d",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "bytes": 41112,
+      "sha256": "65844415624b99505505cd070a5408f92d718b1ba801bb97fc637e5bb0dab131",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/recording_diagnostics.rs",
+      "bytes": 8812,
+      "sha256": "eb291de2b364c3990d2fe260e5604bc2a87228b31fd4a854187ce3a05a6be4fd",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "scripts/check-mac-recording-diagnostics63-native.m",
+      "bytes": 10017,
+      "sha256": "605c47ee48ec40847401eaaf493e34cf5c6b46f221f8dae3618e218fce4dcc6c",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "scripts/check-mac-recording-diagnostics63-sink.rs",
+      "bytes": 3455,
+      "sha256": "7ab224a9dfc632b1a6e794c923ef39f3014d38476b9b04d59ed3f877f7e0a966",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "scripts/check-mac-recording-diagnostics63.mjs",
+      "bytes": 6110,
+      "sha256": "dac3b202eb510db1bc71f6a63c8df8824489fc688059af1469cf5cec5ff8656d",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "src/native-recording-access.ts",
+      "bytes": 1978,
+      "sha256": "3cd44eec8fec1e9cff7535a8c3df1289090ee3025a952cab786b0db3712261d7",
+      "matchesFrozenSource": true
+    }
+  ],
+  "protected": [
+    {
+      "path": "src/recording-session.ts",
+      "unchangedFromPreparationBase": true,
+      "sha256": "f3dfdb38bc61fe906bcb2cc9c793a22a39388c97aede2c26f35451cbd8b31fa2"
+    },
+    {
+      "path": "src/RecordingPanel.tsx",
+      "unchangedFromPreparationBase": true,
+      "sha256": "62feeb38b451d7138693d124b6b30bbac297a59c6e347d26e2b17ced870d3a93"
+    },
+    {
+      "path": "src/RecordingDock.tsx",
+      "unchangedFromPreparationBase": true,
+      "sha256": "47330efe587a9e7a2f76f8e37e81d812fa330b9b21809afada02e5349f426a15"
+    },
+    {
+      "path": "src/RecordingView.tsx",
+      "unchangedFromPreparationBase": true,
+      "sha256": "d9f798d7995c345b550d7b20120e1a88e7bbb3a5ec2209e5bf98b5dc680b25c9"
+    },
+    {
+      "path": "src/recording-coordinator.ts",
+      "unchangedFromPreparationBase": true,
+      "sha256": "ff64667f26326f1fb8e55de81bff6c11044ac713d599581cce066418e77cc599"
+    },
+    {
+      "path": "src/recording-window-transport.ts",
+      "unchangedFromPreparationBase": true,
+      "sha256": "dd8214d08170431aa07f375551bad8b15cd6430a5e2986c8151807a9d865572c"
+    },
+    {
+      "path": "src/App.tsx",
+      "unchangedFromPreparationBase": true,
+      "sha256": "cf3d8ca5b09b88b8b5b2df8bf4abf3b7decff92301847a307654bf11094fda11"
+    },
+    {
+      "path": "src/RecordingPanel.css",
+      "unchangedFromPreparationBase": true,
+      "sha256": "e24b26d73098deede96cf29c53da671994d12de9f15634efe9d28ac0b83348a0"
+    },
+    {
+      "path": "src/style.css",
+      "unchangedFromPreparationBase": true,
+      "sha256": "5ceac05bf79ca9fa83e0237b909c76281c2b03993ab654dbc6bed37191060929"
+    },
+    {
+      "path": "src-tauri/src/media_permission.rs",
+      "unchangedFromPreparationBase": true,
+      "sha256": "0008e0f343c15e0019bdb86c44b6423d07b477ca1206bd38ed40be1487bb7ad6"
+    },
+    {
+      "path": "src-tauri/capabilities/macos-recording-access.json",
+      "unchangedFromPreparationBase": true,
+      "sha256": "4387271bd891609b3afa7b4298d26f4db88b657b8d182474061defd47a667587"
+    },
+    {
+      "path": "src-tauri/Info.plist",
+      "unchangedFromPreparationBase": true,
+      "sha256": "e18a1bbdded73783f5dc7a7c4cc46d96c39240575132c226e50f09fffd63617d"
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/build.rs",
+      "unchangedFromPreparationBase": true,
+      "sha256": "fa2e9b5f1b697a70e9198b1d626baf5942782be664da49dc0c4de44bc624110b"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "unchangedFromPreparationBase": true,
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2"
+    },
+    {
+      "path": "src-tauri/Cargo.lock",
+      "unchangedFromPreparationBase": true,
+      "sha256": "889b7f449ff4b34263139279cacf57f105fd9c3c6a7099bb56c958f3780ed1b0"
+    }
+  ],
+  "archived52Diffs": {
+    "docs/verification/mac-recording-access52": [],
+    "docs/verification/mac-recording-access52-independent": []
+  },
+  "authorEvidence": [
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/README.md",
+      "bytes": 9937,
+      "sha256": "3b21645caaf06d78a9527319eeb3db9be66bcef7bfc9feb661f84d46fd086173",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/build.log",
+      "bytes": 930,
+      "sha256": "35598274d0a138cddadc90d782c67c69fc113dec12000be60726fd61f21f4a84",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/frontend-results.json",
+      "bytes": 1013,
+      "sha256": "d8dfdfd0c5917d592d73f75d718b7d7b9d5e81fe9bcae28a15f24cc41adf004f",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/js-and-rust-sink-test.log",
+      "bytes": 618,
+      "sha256": "001d0521941617813215bf5661f9cb45adc7ef779add5135a747c34f7940eebd",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/native-results.json",
+      "bytes": 2768,
+      "sha256": "c8ed27d7c6c314ba492993bbe9205f5b7839db21675519edb86aee4631c81244",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/objc-diagnostics-compile.log",
+      "bytes": 269,
+      "sha256": "54c7a1aacdfd36c0ab0433b53e15e373bd619947659477dcdc9d8937c7ffbf81",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/objc-diagnostics-test.log",
+      "bytes": 193,
+      "sha256": "e521d5ebda50734c2f5d7471a5358482ad8cb3bf92314a37baff6cd337546f0e",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/objc-production-compile.log",
+      "bytes": 199,
+      "sha256": "4b5660e0d274aaea251633a04b9c593c416b4c53d0e26bbf450dd2bf60779ead",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/objc52-compile.log",
+      "bytes": 276,
+      "sha256": "dba80663222cdef0ff5c193e985c7344e97a9d07f982814c90d80edef4fbe0f5",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/objc52-supplement-compile.log",
+      "bytes": 291,
+      "sha256": "e78591d590d32c938ac4e5a67ede9b49d4ab05ea8577c153018f57949926606a",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/objc52-supplement-test.log",
+      "bytes": 158,
+      "sha256": "b67db9ce0b42dfc83050169005886232b026d9e28234bb237e665df0d9ab263b",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/objc52-test.log",
+      "bytes": 139,
+      "sha256": "5e06d39c5675034f436cede7aabeed93a96f972a4743832ef95a3866141f20be",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/production-preflight52.log",
+      "bytes": 506,
+      "sha256": "ae7ea3fb1fa812a2737622e23ac938066355d859247c6513f4b1b67049445658",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/review-handoff52.log",
+      "bytes": 137,
+      "sha256": "1c25f4dde623d379a51e0b71dae2befbf56205fe6e6f4d1c803176605a34fdf5",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/review-microtask52.log",
+      "bytes": 2928,
+      "sha256": "bcb0417ea5701445e52bf240f1e85864b78ba0f2ada56c31133e2967f6e677fe",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/rust-sink-compile.log",
+      "bytes": 140,
+      "sha256": "7dc84b42224fe0aa4c506cfccec95e07a14bec3921728edce7bfffe96d618e7d",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/session-script.log",
+      "bytes": 2424,
+      "sha256": "4266b47e25fa828aca50a3b8f35f1deb6a92f8fb560d0648c5c1e1c8b44c1e58",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/session52.log",
+      "bytes": 1244,
+      "sha256": "86fe2b55119a6b57290dcb315d497863a4c0d0ae802d4f00d0e954c1d5cd52ac",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-600efea/typecheck.log",
+      "bytes": 127,
+      "sha256": "86c53933b09011128527e32bdf9b3f458ea1b2a3d607f6ebb3dadb8248cc2d68",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/cargo-plugin-test.log",
+      "bytes": 9409,
+      "sha256": "2d6c699e3adfbc0ba509ae4d5114a102a7cba2a7e3681355e73b04a992da6a5d",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/cargo-result.json",
+      "bytes": 260,
+      "sha256": "ebdca5844d798e3ee8432fa46f839726b5dbbc73f179e9898e14956a80460135",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/js-and-rust-sink-test.log",
+      "bytes": 618,
+      "sha256": "001d0521941617813215bf5661f9cb45adc7ef779add5135a747c34f7940eebd",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/native-results.json",
+      "bytes": 2767,
+      "sha256": "14101a4a124b21d8aea3a091ed1687d3709df6f43461ba1c4d7809e0cecd6ceb",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/objc-diagnostics-compile.log",
+      "bytes": 269,
+      "sha256": "54c7a1aacdfd36c0ab0433b53e15e373bd619947659477dcdc9d8937c7ffbf81",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/objc-diagnostics-test.log",
+      "bytes": 228,
+      "sha256": "f73798eba394bfdde3b9e5c8fee9c4a5742372e9c7a31e158e848af5f84d9b39",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/objc-production-compile.log",
+      "bytes": 199,
+      "sha256": "4b5660e0d274aaea251633a04b9c593c416b4c53d0e26bbf450dd2bf60779ead",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/objc52-compile.log",
+      "bytes": 276,
+      "sha256": "dba80663222cdef0ff5c193e985c7344e97a9d07f982814c90d80edef4fbe0f5",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/objc52-supplement-compile.log",
+      "bytes": 291,
+      "sha256": "e78591d590d32c938ac4e5a67ede9b49d4ab05ea8577c153018f57949926606a",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/objc52-supplement-test.log",
+      "bytes": 158,
+      "sha256": "b67db9ce0b42dfc83050169005886232b026d9e28234bb237e665df0d9ab263b",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/objc52-test.log",
+      "bytes": 139,
+      "sha256": "5e06d39c5675034f436cede7aabeed93a96f972a4743832ef95a3866141f20be",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/attempt-8d47e77/rust-sink-compile.log",
+      "bytes": 140,
+      "sha256": "7dc84b42224fe0aa4c506cfccec95e07a14bec3921728edce7bfffe96d618e7d",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/cargo-app-check.log",
+      "bytes": 8018,
+      "sha256": "deea0ebedb4ef2c2c72d615735698f659e7f0d8b45c5a24b9bfd43e56062601c",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/cargo-plugin-test.log",
+      "bytes": 2605,
+      "sha256": "45cfb2d503eaa987d920c44b2d21da89dcca17ce8e0d9af7d7439f5fec3cb8a8",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/cargo-results.json",
+      "bytes": 626,
+      "sha256": "2d3d5eb03b23225077193adc67935cca920825d0e32b8272fe13682fa0f9db07",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/js-and-rust-sink-test.log",
+      "bytes": 1542,
+      "sha256": "6154eb35c7458c928356aeb541fd92cfb00517b462d70fd477208940a7078712",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/js-error-final.log",
+      "bytes": 168,
+      "sha256": "7ef0dae2667a53ac2c561816bdb50c395a8409571b68b4f57754eb25b18b6fd5",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/native-results.json",
+      "bytes": 3830,
+      "sha256": "f221a49a2f40879618148edffb9670457dbb76604e5a5a960f7f8168fa876032",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/objc-blocked-compile.log",
+      "bytes": 368,
+      "sha256": "fe5afcdc63977d906266be0807b9ee9f42b17e3dee4c2bd178c1fdf9441c5a36",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/objc-diagnostics-compile.log",
+      "bytes": 269,
+      "sha256": "54c7a1aacdfd36c0ab0433b53e15e373bd619947659477dcdc9d8937c7ffbf81",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/objc-diagnostics-test.log",
+      "bytes": 228,
+      "sha256": "f73798eba394bfdde3b9e5c8fee9c4a5742372e9c7a31e158e848af5f84d9b39",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/objc-production-compile.log",
+      "bytes": 199,
+      "sha256": "4b5660e0d274aaea251633a04b9c593c416b4c53d0e26bbf450dd2bf60779ead",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/objc52-compile.log",
+      "bytes": 276,
+      "sha256": "dba80663222cdef0ff5c193e985c7344e97a9d07f982814c90d80edef4fbe0f5",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/objc52-supplement-compile.log",
+      "bytes": 291,
+      "sha256": "e78591d590d32c938ac4e5a67ede9b49d4ab05ea8577c153018f57949926606a",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/objc52-supplement-test.log",
+      "bytes": 158,
+      "sha256": "b67db9ce0b42dfc83050169005886232b026d9e28234bb237e665df0d9ab263b",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/objc52-test.log",
+      "bytes": 139,
+      "sha256": "5e06d39c5675034f436cede7aabeed93a96f972a4743832ef95a3866141f20be",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/result.json",
+      "bytes": 772,
+      "sha256": "1dfa0bee30f3f391b025c81ba58606d1efe4e0e3941c42b845c046693e97ea21",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/rust-sink-compile.log",
+      "bytes": 147,
+      "sha256": "eca057ebd194f890b8bfa518aa5bb394b4012d0d3595d059c7570cab650aa4a2",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/rust-sink-staticlib.log",
+      "bytes": 181,
+      "sha256": "e0e76eb2385138a40dc978c3fa681ac82206eb8cae682380ca713e0ac2ab344b",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/sealed52-hashes.json",
+      "bytes": 1422,
+      "sha256": "20e05463dd36f69c2285f571e4aa90403d6ebdbb82be84d506d62b55937e4fbd",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/source-files.json",
+      "bytes": 1517,
+      "sha256": "0089572f06d9195af5122202bbc38c48890dc955e885c55668c080db379542d0",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/synthetic-sink-on.log",
+      "bytes": 667,
+      "sha256": "aaa85d8d4d1344285bb419c1488d3c0cdd5f4e230804f13bbff2b08a52405980",
+      "matchesFrozenEvidence": true
+    },
+    {
+      "path": "docs/verification/mac-recording-diagnostics63/synthetic-sink-saturated.log",
+      "bytes": 5511,
+      "sha256": "cbcf3ff641151125fb6db284a4ecfba0cf40bc36eb801e91dd0699e9d2e338cb",
+      "matchesFrozenEvidence": true
+    }
+  ],
+  "tauriPrimaryLocalSources": [
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-macros-2.7.4/src/command/wrapper.rs",
+      "sha256": "62e125dda30b5b1d664b141a44ca8fd0057e14e3d4c98e35c36c443b4f8daa6e"
+    },
+    {
+      "path": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/ipc/mod.rs",
+      "sha256": "6aa3624871ec604883e799e728346e6f474808589ab5b67c1db7bc600ef0068b"
+    }
+  ],
+  "allFrozenSourceMatch": true,
+  "allProtectedUnchanged": true,
+  "allAuthorEvidenceMatch": true,
+  "realDeviceOrAudioOperation": false
+}

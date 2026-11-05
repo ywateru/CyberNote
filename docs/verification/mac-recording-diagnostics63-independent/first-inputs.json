@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "source": "8d47e7791e549aed26f091676075de9930461b17",
+  "independentHead": "a20d5de1df682c7ee8dbee1361d3381b881725b2",
+  "files": [
+    {
+      "path": "plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "bytes": 5112,
+      "sha256": "eb8b42c3711ae95ee4eca6770b1165aad93f4b5e7b63496737ccdd36aa18f9df",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/macos/recording_access.m",
+      "bytes": 11523,
+      "sha256": "72b4e251016db26af02b50178b2d5f0188cd1dbbed97b23688f7590c23e3950d",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "bytes": 14391,
+      "sha256": "9d6e5d52d7b6a5026479de77d78ecd8bbbfda32196355494fc5ac57c1551e42d",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "bytes": 41112,
+      "sha256": "65844415624b99505505cd070a5408f92d718b1ba801bb97fc637e5bb0dab131",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/recording_diagnostics.rs",
+      "bytes": 5774,
+      "sha256": "095ad3d4ffd87bcd5f26205bd4a61203ee2245d9f59b8c49e60e4076bbd476ad",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "scripts/check-mac-recording-diagnostics63-native.m",
+      "bytes": 8521,
+      "sha256": "37b7f2393a2f6bfb7d2a7c45d51adbbcdfde1b1859a5ca908b09c7b9a8e6a4f9",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "scripts/check-mac-recording-diagnostics63-sink.rs",
+      "bytes": 2113,
+      "sha256": "ce5189ba79cca36b2620d5c1965f409eb14b64d9e71ec3946a4bf0d371da23c1",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "scripts/check-mac-recording-diagnostics63.mjs",
+      "bytes": 4767,
+      "sha256": "cc268d93c8335e6db2525dcde9f89ed345625d48494bdb6cc364f399485450cf",
+      "matchesFrozenSource": true
+    },
+    {
+      "path": "src/native-recording-access.ts",
+      "bytes": 1978,
+      "sha256": "3cd44eec8fec1e9cff7535a8c3df1289090ee3025a952cab786b0db3712261d7",
+      "matchesFrozenSource": true
+    }
+  ],
+  "finding": "P2 blocking synchronous diagnostic stderr I/O on authorization producer threads",
+  "nativeTestsRun": false,
+  "realDeviceOrAudioOperation": false
+}

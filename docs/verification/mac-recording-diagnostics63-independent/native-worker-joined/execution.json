@@ -1,0 +1,33 @@
+[
+  {
+    "name": "compile",
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fobjc-arc-exceptions",
+      "-fblocks",
+      "-mmacosx-version-min=12.0",
+      "-framework",
+      "AppKit",
+      "-framework",
+      "AVFoundation",
+      "-framework",
+      "WebKit",
+      "-framework",
+      "CoreFoundation",
+      "docs/verification/mac-recording-diagnostics63-independent/check-native63-joined.m",
+      "-o",
+      "/private/tmp/notes-diagnostics63-independent-bin/native63-joined"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.6777929159999999
+  },
+  {
+    "name": "run",
+    "command": [
+      "/private/tmp/notes-diagnostics63-independent-bin/native63-joined"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.6722382080000001
+  }
+]
