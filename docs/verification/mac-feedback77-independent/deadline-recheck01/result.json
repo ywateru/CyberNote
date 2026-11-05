@@ -1,0 +1,80 @@
+{
+  "input": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "b4d046b7945f3d1422ffe095fd04cc67671f7e5989ebb194293fb90dc521182a",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "b4d046b7945f3d1422ffe095fd04cc67671f7e5989ebb194293fb90dc521182a",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "cases": [
+    {
+      "label": "real App async false",
+      "code": "TIMEOUT",
+      "lastState": true,
+      "elapsedMs": 749.9158339999999,
+      "timeoutMs": 750,
+      "predicateCalls": 22
+    },
+    {
+      "label": "real App delayed true",
+      "elapsedMs": 140.25958300000002,
+      "predicateCalls": 4,
+      "noteId": "note-a"
+    },
+    {
+      "label": "real App late true predicate",
+      "code": "TIMEOUT",
+      "lastState": true,
+      "elapsedMs": 101.43712500000038,
+      "timeoutMs": 100
+    },
+    {
+      "label": "real App never settling predicate",
+      "code": "TIMEOUT",
+      "lastState": true,
+      "elapsedMs": 100.60450000000037,
+      "timeoutMs": 100
+    },
+    {
+      "label": "slow initial real App transport",
+      "code": "TIMEOUT",
+      "lastState": false,
+      "elapsedMs": 59.43441699999994,
+      "timeoutMs": 60,
+      "predicateCalls": 0
+    },
+    {
+      "label": "never settling transport",
+      "code": "TIMEOUT",
+      "lastState": false,
+      "elapsedMs": 59.94720899999993,
+      "timeoutMs": 60,
+      "predicateCalls": 0
+    }
+  ],
+  "pageErrors": [],
+  "completeWallMs": 2782.7942080000003
+}

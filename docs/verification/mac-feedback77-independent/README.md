@@ -9,3 +9,6 @@
 布局探针自然exit0仅表示探针完成；其`completeWallMs`计时是在openRuntime之后开始，**不能当完整进程wall**；这里只使用其布局与时序事实，不将探针exit0当产品验收通过。旧contract真实热态8次deadline有lastState；独立受控首transport140ms、deadline100ms在100.23ms抛TIMEOUT且predicate0调用/无lastState，表明“100ms超时必带lastState”断言不成立。运行时无伪造state。根已安排作者修正不成立的断言并保留截止覆盖。
 
 根已授权开发解除旧freeze；本agent停止旧源码测试，等待新freeze。当前runner是独立证据工具；初审测试假设/定位器修正必须在复核版本记录。生产build/full desktop/mobile由开发与根按串行安排另跑，初审没有执行或重复这些写dist操作。
+
+
+2026-11-06后续：新freeze独立[复审PASS / SOURCE-READY](recheck.md)，51检查+6截止场景；以上初审BLOCKED为历史事实继续保留。

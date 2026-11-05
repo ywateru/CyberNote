@@ -1,0 +1,1097 @@
+{
+  "head": "f7b3c94486bcc870620f1ac46a100be8abe3b607",
+  "input": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "b4d046b7945f3d1422ffe095fd04cc67671f7e5989ebb194293fb90dc521182a",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "b4d046b7945f3d1422ffe095fd04cc67671f7e5989ebb194293fb90dc521182a",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "checks": [
+    {
+      "name": "desktop footer new-folder removed",
+      "pass": true
+    },
+    {
+      "name": "bottom more remains right aligned",
+      "pass": true
+    },
+    {
+      "name": "top new folder opens actual form",
+      "pass": true
+    },
+    {
+      "name": "highlight preserves original continuous glyph positions",
+      "pass": true,
+      "detail": {
+        "beforeSpacing": {
+          "text": "甲乙搜索丙丁",
+          "rect": {
+            "x": 304.921875,
+            "y": 132,
+            "width": 167.078125,
+            "height": 17,
+            "top": 132,
+            "right": 472,
+            "bottom": 149,
+            "left": 304.921875
+          },
+          "characters": [
+            {
+              "char": "甲",
+              "x": 304.921875,
+              "width": 13,
+              "right": 317.921875
+            },
+            {
+              "char": "乙",
+              "x": 317.921875,
+              "width": 13,
+              "right": 330.921875
+            },
+            {
+              "char": "搜",
+              "x": 330.921875,
+              "width": 13,
+              "right": 343.921875
+            },
+            {
+              "char": "索",
+              "x": 343.921875,
+              "width": 13,
+              "right": 356.921875
+            },
+            {
+              "char": "丙",
+              "x": 356.921875,
+              "width": 13,
+              "right": 369.921875
+            },
+            {
+              "char": "丁",
+              "x": 369.921875,
+              "width": 13,
+              "right": 382.921875
+            }
+          ]
+        },
+        "afterSpacing": {
+          "text": "甲乙搜索丙丁",
+          "rect": {
+            "x": 304.921875,
+            "y": 132,
+            "width": 167.078125,
+            "height": 17,
+            "top": 132,
+            "right": 472,
+            "bottom": 149,
+            "left": 304.921875
+          },
+          "characters": [
+            {
+              "char": "甲",
+              "x": 304.921875,
+              "width": 13,
+              "right": 317.921875
+            },
+            {
+              "char": "乙",
+              "x": 317.921875,
+              "width": 13,
+              "right": 330.921875
+            },
+            {
+              "char": "搜",
+              "x": 330.921875,
+              "width": 13,
+              "right": 343.921875
+            },
+            {
+              "char": "索",
+              "x": 343.921875,
+              "width": 13,
+              "right": 356.921875
+            },
+            {
+              "char": "丙",
+              "x": 356.921875,
+              "width": 13,
+              "right": 369.921875
+            },
+            {
+              "char": "丁",
+              "x": 369.921875,
+              "width": 13,
+              "right": 382.921875
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "far Chinese whole match visible at list width 220",
+      "pass": true,
+      "detail": {
+        "g": {
+          "text": "…搜索结尾",
+          "rect": {
+            "x": 304.921875,
+            "y": 132,
+            "width": 107.078125,
+            "height": 17,
+            "top": 132,
+            "right": 412,
+            "bottom": 149,
+            "left": 304.921875
+          },
+          "characters": [
+            {
+              "char": "…",
+              "x": 304.921875,
+              "width": 10.390625,
+              "right": 315.3125
+            },
+            {
+              "char": "搜",
+              "x": 315.3125,
+              "width": 13,
+              "right": 328.3125
+            },
+            {
+              "char": "索",
+              "x": 328.3125,
+              "width": 13,
+              "right": 341.3125
+            },
+            {
+              "char": "结",
+              "x": 341.3125,
+              "width": 13,
+              "right": 354.3125
+            },
+            {
+              "char": "尾",
+              "x": 354.3125,
+              "width": 13,
+              "right": 367.3125
+            }
+          ]
+        },
+        "m": {
+          "x": 315.3125,
+          "y": 132,
+          "width": 26,
+          "height": 16
+        }
+      }
+    },
+    {
+      "name": "far snippet ellipsis and resize context at width 220",
+      "pass": true,
+      "detail": "…搜索结尾"
+    },
+    {
+      "name": "far Chinese whole match visible at list width 280",
+      "pass": true,
+      "detail": {
+        "g": {
+          "text": "…上下文上下文搜索结尾",
+          "rect": {
+            "x": 304.921875,
+            "y": 132,
+            "width": 167.078125,
+            "height": 17,
+            "top": 132,
+            "right": 472,
+            "bottom": 149,
+            "left": 304.921875
+          },
+          "characters": [
+            {
+              "char": "…",
+              "x": 304.921875,
+              "width": 10.390625,
+              "right": 315.3125
+            },
+            {
+              "char": "上",
+              "x": 315.296875,
+              "width": 13.015625,
+              "right": 328.3125
+            },
+            {
+              "char": "下",
+              "x": 328.296875,
+              "width": 13.015625,
+              "right": 341.3125
+            },
+            {
+              "char": "文",
+              "x": 341.296875,
+              "width": 13.015625,
+              "right": 354.3125
+            },
+            {
+              "char": "上",
+              "x": 354.296875,
+              "width": 13.015625,
+              "right": 367.3125
+            },
+            {
+              "char": "下",
+              "x": 367.296875,
+              "width": 13.015625,
+              "right": 380.3125
+            },
+            {
+              "char": "文",
+              "x": 380.296875,
+              "width": 13.015625,
+              "right": 393.3125
+            },
+            {
+              "char": "搜",
+              "x": 393.3125,
+              "width": 13,
+              "right": 406.3125
+            },
+            {
+              "char": "索",
+              "x": 406.3125,
+              "width": 13,
+              "right": 419.3125
+            },
+            {
+              "char": "结",
+              "x": 419.3125,
+              "width": 13,
+              "right": 432.3125
+            },
+            {
+              "char": "尾",
+              "x": 432.3125,
+              "width": 13,
+              "right": 445.3125
+            }
+          ]
+        },
+        "m": {
+          "x": 393.3125,
+          "y": 132,
+          "width": 26,
+          "height": 16
+        }
+      }
+    },
+    {
+      "name": "far snippet ellipsis and resize context at width 280",
+      "pass": true,
+      "detail": "…上下文上下文搜索结尾"
+    },
+    {
+      "name": "far Chinese whole match visible at list width 220",
+      "pass": true,
+      "detail": {
+        "g": {
+          "text": "…搜索结尾",
+          "rect": {
+            "x": 304.921875,
+            "y": 132,
+            "width": 107.078125,
+            "height": 17,
+            "top": 132,
+            "right": 412,
+            "bottom": 149,
+            "left": 304.921875
+          },
+          "characters": [
+            {
+              "char": "…",
+              "x": 304.921875,
+              "width": 10.390625,
+              "right": 315.3125
+            },
+            {
+              "char": "搜",
+              "x": 315.3125,
+              "width": 13,
+              "right": 328.3125
+            },
+            {
+              "char": "索",
+              "x": 328.3125,
+              "width": 13,
+              "right": 341.3125
+            },
+            {
+              "char": "结",
+              "x": 341.3125,
+              "width": 13,
+              "right": 354.3125
+            },
+            {
+              "char": "尾",
+              "x": 354.3125,
+              "width": 13,
+              "right": 367.3125
+            }
+          ]
+        },
+        "m": {
+          "x": 315.3125,
+          "y": 132,
+          "width": 26,
+          "height": 16
+        }
+      }
+    },
+    {
+      "name": "far snippet ellipsis and resize context at width 220",
+      "pass": true,
+      "detail": "…搜索结尾"
+    },
+    {
+      "name": "literal global highlight aLpHa",
+      "pass": true,
+      "detail": [
+        "Alpha",
+        "alpha",
+        "ALPHA",
+        "alpha"
+      ]
+    },
+    {
+      "name": "orange text transparent background aLpHa",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML aLpHa",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight 搜索",
+      "pass": true,
+      "detail": [
+        "搜索",
+        "搜索",
+        "搜索"
+      ]
+    },
+    {
+      "name": "orange text transparent background 搜索",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML 搜索",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight [x]",
+      "pass": true,
+      "detail": [
+        "[x]",
+        "[x]"
+      ]
+    },
+    {
+      "name": "orange text transparent background [x]",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML [x]",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight a+b",
+      "pass": true,
+      "detail": [
+        "a+b"
+      ]
+    },
+    {
+      "name": "orange text transparent background a+b",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML a+b",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight .*",
+      "pass": true,
+      "detail": [
+        ".*"
+      ]
+    },
+    {
+      "name": "orange text transparent background .*",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML .*",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight <img src=x onerror=alert(1)>",
+      "pass": true,
+      "detail": [
+        "<img src=x onerror=alert(1)>",
+        "<img src=x onerror=alert(1)>"
+      ]
+    },
+    {
+      "name": "orange text transparent background <img src=x onerror=alert(1)>",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML <img src=x onerror=alert(1)>",
+      "pass": true
+    },
+    {
+      "name": "body find stays separate from global highlight",
+      "pass": true
+    },
+    {
+      "name": "clear query removes list highlights",
+      "pass": true
+    },
+    {
+      "name": "search rendering never mutates saved document",
+      "pass": true
+    },
+    {
+      "name": "far body match appears in visible snippet with ellipsis",
+      "pass": true,
+      "detail": {
+        "far": "…ntext needle after match",
+        "match": {
+          "x": 349.4375,
+          "y": 132,
+          "width": 40.6875,
+          "height": 16
+        },
+        "preview": {
+          "x": 304.921875,
+          "y": 132,
+          "width": 167.078125,
+          "height": 17
+        }
+      }
+    },
+    {
+      "name": "locked body is not exposed by matching result",
+      "pass": true
+    },
+    {
+      "name": "locked result renders title without secret body",
+      "pass": true
+    },
+    {
+      "name": "right-click unselected locked A inside viewport",
+      "pass": true,
+      "detail": {
+        "label": "right-click unselected locked A",
+        "point": {
+          "x": 259,
+          "y": 186
+        },
+        "rect": {
+          "x": 259,
+          "y": 186,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "right-click unselected locked A opens at event location or needed edge shift",
+      "pass": true,
+      "detail": {
+        "label": "right-click unselected locked A",
+        "point": {
+          "x": 259,
+          "y": 186
+        },
+        "rect": {
+          "x": 259,
+          "y": 186,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "right-click does not change editor selection",
+      "pass": true
+    },
+    {
+      "name": "context action targets A not selected B",
+      "pass": true
+    },
+    {
+      "name": "scroll to B lower row inside viewport",
+      "pass": true,
+      "detail": {
+        "label": "scroll to B lower row",
+        "point": {
+          "x": 494,
+          "y": 271
+        },
+        "rect": {
+          "x": 494,
+          "y": 271,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "scroll to B lower row opens at event location or needed edge shift",
+      "pass": true,
+      "detail": {
+        "label": "scroll to B lower row",
+        "point": {
+          "x": 494,
+          "y": 271
+        },
+        "rect": {
+          "x": 494,
+          "y": 271,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "resize keeps existing menu in bounds inside viewport",
+      "pass": true,
+      "detail": {
+        "label": "resize keeps existing menu in bounds",
+        "rect": {
+          "x": 464,
+          "y": 61,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 720,
+          "height": 360
+        }
+      }
+    },
+    {
+      "name": "hidden sidebar resized list inside viewport",
+      "pass": true,
+      "detail": {
+        "label": "hidden sidebar resized list",
+        "point": {
+          "x": 31,
+          "y": 235
+        },
+        "rect": {
+          "x": 31,
+          "y": 235,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "hidden sidebar resized list opens at event location or needed edge shift",
+      "pass": true,
+      "detail": {
+        "label": "hidden sidebar resized list",
+        "point": {
+          "x": 31,
+          "y": 235
+        },
+        "rect": {
+          "x": 31,
+          "y": 235,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "gallery lower edge inside viewport",
+      "pass": true,
+      "detail": {
+        "label": "gallery lower edge",
+        "point": {
+          "x": 197,
+          "y": 526
+        },
+        "rect": {
+          "x": 197,
+          "y": 501,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "gallery lower edge opens at event location or needed edge shift",
+      "pass": true,
+      "detail": {
+        "label": "gallery lower edge",
+        "point": {
+          "x": 197,
+          "y": 526
+        },
+        "rect": {
+          "x": 197,
+          "y": 501,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "coordinate-less keyboard fallback inside viewport",
+      "pass": true,
+      "detail": {
+        "label": "coordinate-less keyboard fallback",
+        "rect": {
+          "x": 26,
+          "y": 250,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "keyboard fallback anchors visible target card",
+      "pass": true
+    },
+    {
+      "name": "reopened menu uses fresh row point inside viewport",
+      "pass": true,
+      "detail": {
+        "label": "reopened menu uses fresh row point",
+        "point": {
+          "x": 31,
+          "y": 235
+        },
+        "rect": {
+          "x": 31,
+          "y": 235,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "reopened menu uses fresh row point opens at event location or needed edge shift",
+      "pass": true,
+      "detail": {
+        "label": "reopened menu uses fresh row point",
+        "point": {
+          "x": 31,
+          "y": 235
+        },
+        "rect": {
+          "x": 31,
+          "y": 235,
+          "width": 248,
+          "height": 291
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      }
+    },
+    {
+      "name": "toolbar more uses own top right anchor",
+      "pass": true,
+      "detail": {
+        "x": 1012,
+        "y": 52,
+        "width": 248,
+        "height": 291
+      }
+    },
+    {
+      "name": "no uncaught page errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "observations": [
+    {
+      "label": "far Chinese width 220",
+      "g": {
+        "text": "…搜索结尾",
+        "rect": {
+          "x": 304.921875,
+          "y": 132,
+          "width": 107.078125,
+          "height": 17,
+          "top": 132,
+          "right": 412,
+          "bottom": 149,
+          "left": 304.921875
+        },
+        "characters": [
+          {
+            "char": "…",
+            "x": 304.921875,
+            "width": 10.390625,
+            "right": 315.3125
+          },
+          {
+            "char": "搜",
+            "x": 315.3125,
+            "width": 13,
+            "right": 328.3125
+          },
+          {
+            "char": "索",
+            "x": 328.3125,
+            "width": 13,
+            "right": 341.3125
+          },
+          {
+            "char": "结",
+            "x": 341.3125,
+            "width": 13,
+            "right": 354.3125
+          },
+          {
+            "char": "尾",
+            "x": 354.3125,
+            "width": 13,
+            "right": 367.3125
+          }
+        ]
+      },
+      "match": {
+        "x": 315.3125,
+        "y": 132,
+        "width": 26,
+        "height": 16
+      }
+    },
+    {
+      "label": "far Chinese width 280",
+      "g": {
+        "text": "…上下文上下文搜索结尾",
+        "rect": {
+          "x": 304.921875,
+          "y": 132,
+          "width": 167.078125,
+          "height": 17,
+          "top": 132,
+          "right": 472,
+          "bottom": 149,
+          "left": 304.921875
+        },
+        "characters": [
+          {
+            "char": "…",
+            "x": 304.921875,
+            "width": 10.390625,
+            "right": 315.3125
+          },
+          {
+            "char": "上",
+            "x": 315.296875,
+            "width": 13.015625,
+            "right": 328.3125
+          },
+          {
+            "char": "下",
+            "x": 328.296875,
+            "width": 13.015625,
+            "right": 341.3125
+          },
+          {
+            "char": "文",
+            "x": 341.296875,
+            "width": 13.015625,
+            "right": 354.3125
+          },
+          {
+            "char": "上",
+            "x": 354.296875,
+            "width": 13.015625,
+            "right": 367.3125
+          },
+          {
+            "char": "下",
+            "x": 367.296875,
+            "width": 13.015625,
+            "right": 380.3125
+          },
+          {
+            "char": "文",
+            "x": 380.296875,
+            "width": 13.015625,
+            "right": 393.3125
+          },
+          {
+            "char": "搜",
+            "x": 393.3125,
+            "width": 13,
+            "right": 406.3125
+          },
+          {
+            "char": "索",
+            "x": 406.3125,
+            "width": 13,
+            "right": 419.3125
+          },
+          {
+            "char": "结",
+            "x": 419.3125,
+            "width": 13,
+            "right": 432.3125
+          },
+          {
+            "char": "尾",
+            "x": 432.3125,
+            "width": 13,
+            "right": 445.3125
+          }
+        ]
+      },
+      "match": {
+        "x": 393.3125,
+        "y": 132,
+        "width": 26,
+        "height": 16
+      }
+    },
+    {
+      "label": "far Chinese width 220",
+      "g": {
+        "text": "…搜索结尾",
+        "rect": {
+          "x": 304.921875,
+          "y": 132,
+          "width": 107.078125,
+          "height": 17,
+          "top": 132,
+          "right": 412,
+          "bottom": 149,
+          "left": 304.921875
+        },
+        "characters": [
+          {
+            "char": "…",
+            "x": 304.921875,
+            "width": 10.390625,
+            "right": 315.3125
+          },
+          {
+            "char": "搜",
+            "x": 315.3125,
+            "width": 13,
+            "right": 328.3125
+          },
+          {
+            "char": "索",
+            "x": 328.3125,
+            "width": 13,
+            "right": 341.3125
+          },
+          {
+            "char": "结",
+            "x": 341.3125,
+            "width": 13,
+            "right": 354.3125
+          },
+          {
+            "char": "尾",
+            "x": 354.3125,
+            "width": 13,
+            "right": 367.3125
+          }
+        ]
+      },
+      "match": {
+        "x": 315.3125,
+        "y": 132,
+        "width": 26,
+        "height": 16
+      }
+    },
+    {
+      "label": "right-click unselected locked A",
+      "point": {
+        "x": 259,
+        "y": 186
+      },
+      "rect": {
+        "x": 259,
+        "y": 186,
+        "width": 248,
+        "height": 291
+      },
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      }
+    },
+    {
+      "label": "scroll to B lower row",
+      "point": {
+        "x": 494,
+        "y": 271
+      },
+      "rect": {
+        "x": 494,
+        "y": 271,
+        "width": 248,
+        "height": 291
+      },
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      }
+    },
+    {
+      "label": "resize keeps existing menu in bounds",
+      "rect": {
+        "x": 464,
+        "y": 61,
+        "width": 248,
+        "height": 291
+      },
+      "viewport": {
+        "width": 720,
+        "height": 360
+      }
+    },
+    {
+      "label": "hidden sidebar resized list",
+      "point": {
+        "x": 31,
+        "y": 235
+      },
+      "rect": {
+        "x": 31,
+        "y": 235,
+        "width": 248,
+        "height": 291
+      },
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      }
+    },
+    {
+      "label": "gallery lower edge",
+      "point": {
+        "x": 197,
+        "y": 526
+      },
+      "rect": {
+        "x": 197,
+        "y": 501,
+        "width": 248,
+        "height": 291
+      },
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      }
+    },
+    {
+      "label": "coordinate-less keyboard fallback",
+      "rect": {
+        "x": 26,
+        "y": 250,
+        "width": 248,
+        "height": 291
+      },
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      }
+    },
+    {
+      "label": "reopened menu uses fresh row point",
+      "point": {
+        "x": 31,
+        "y": 235
+      },
+      "rect": {
+        "x": 31,
+        "y": 235,
+        "width": 248,
+        "height": 291
+      },
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  ],
+  "pageErrors": [],
+  "completeWallMs": 14332
+}

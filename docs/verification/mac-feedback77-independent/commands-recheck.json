@@ -1,0 +1,25 @@
+{
+  "sourceFreeze": "f7b3c944",
+  "productFix": "e760ece7",
+  "fingerprint": "b4d046b7945f3d1422ffe095fd04cc67671f7e5989ebb194293fb90dc521182a",
+  "fileCount": 89,
+  "records": [
+    {
+      "command": "/usr/bin/time -p node docs/verification/mac-feedback77-independent/independent-runner.mjs /private/tmp/notes-mac77-independent-recheck01",
+      "naturalExitCode": 0,
+      "processRealSeconds": 14.42,
+      "internalWithCleanupMs": 14332,
+      "checks": 51,
+      "pageErrors": []
+    },
+    {
+      "command": "/usr/bin/time -p node docs/verification/mac-feedback77-independent/deadline-recheck.mjs /private/tmp/notes-mac77-deadline-recheck01",
+      "naturalExitCode": 0,
+      "processRealSeconds": 2.88,
+      "internalWithCleanupMs": 2783.229208,
+      "scenarios": 6,
+      "pageErrors": []
+    }
+  ],
+  "observedBy": "independent agent PTY output; original result JSON is preserved in each directory"
+}
