@@ -19,7 +19,7 @@ src/recording-session.ts或新的桌面分段/PCM helper、RecordingPanel.tsx、
 
 ## contract
 
-1. Mac暂停先终结当前MediaRecorder分段，等真实最后dataavailable/onstop；完整分段解码后累计合法WAV。继续复用原stream和session开新分段，不重新授权、不计暂停/保存间隔。不得拼接独立MP4/WebM、以非终结prefix冒充可靠媒体或丢片段。固定声道/采样率、明确内存/100MB文件上限；越界/解码/收尾失败保留已ACK版本和可重试原音频，错误可见。手机保留现链，不改既有行为。
+1. Mac暂停先终结当前MediaRecorder分段，等真实最后dataavailable/onstop；完整分段解码后累计合法WAV。继续复用原stream和session开新分段，不重新授权、不计暂停/保存间隔。不得拼接独立MP4/WebM、以非终结prefix冒充可靠媒体或丢片段。格式为24kHz、单声道、16bit little-endian PCM WAV，100MiB上限含44字节头（约36分24秒）；明确解码内存边界。越界/解码/收尾失败保留已ACK版本和可重试原音频，错误可见。手机保留现链，不改既有行为。此为本轮可靠本地编码方案的容量限制，不冒充原版压缩格式与录音时长上限。
 2. 暂停→累计File→checkpoint revision N自动提交。成功须音频落盘及A正文真实ACK，窗口保留。checkpoint/final确认分开，带准确revision；旧ACK/hello不回退、不销毁、不混淆File。关闭同步封住新录音操作，排在在途checkpoint后，准确final ACK后唯一destroy；失败保留视图与音频重试。
 3. 固定session/开始日期，revision单调，每版固定File和独立operation UUID；同版重试不换字节/ID。首次映射bookmark插入，后续在A最新正文中精确定位上一ACK音频节点原位替换。缺失/重复/Undo删除或真实权限、归属、editor、外部版本失效须失败保留，不回退插入、不改B、不抢焦点、不回写旧快照。保留原SaveQueue/AccessGate真实ACK。该版替换已派发但ACK失败时识别本版已在正文，重试只等自己的ACK。
 4. 旧版在被替换前须query确认committed（JS ACK不会更新journal），保留旧文件供Undo/历史。候选无正文ACK不宣称已保存；checkpoint不finishRecording或seal ticket。live decoration与持久卡不重复显示，final后撤投影显示最新正常音频卡。内部保留多版本的磁盘/归档空间代价必须如实记录。

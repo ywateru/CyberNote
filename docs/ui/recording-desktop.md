@@ -14,7 +14,7 @@
                                     └失败→保留窗口和音频，可重试
 ```
 
-桌面采用完整分段生成有界累计WAV，不把非终结requestData前缀当可靠媒体。每次是不可变版本，复用附件journal；首次A映射书签插入，后续原位替换前一确认卡，保留最新A正文、选区和B操作。旧版在被替换前query确认committed，保留供Undo/历史引用；内部物理ID随版本变化，逻辑录音与开始日期不变。多版本增加本地及归档空间，错误明确不截断。checkpoint ACK保留会话，final ACK才允许关闭；原节点消失或真实权限/归属失效须失败保留，不能写当前B或重插。见[任务64](../plan/tasks/app-mac-recording-autosave64.md)与[逻辑分析](../plan/analysis/mac-recording-autosave64.md)。源码/受控验证不能替代真实麦克风与完整像素验收。
+桌面采用完整分段生成有界累计WAV，不把非终结requestData前缀当可靠媒体。当前工程格式为24kHz单声道16bit PCM、100MiB含头（约36分24秒），并非原版压缩编码或无限时长；保存中可短暂禁用录音继续/试听，Notes其他操作仍可用，Close必须记录并随后执行。每次是不可变版本，复用附件journal；首次A映射书签插入，后续原位替换前一确认卡，保留最新A正文、选区和B操作。旧版在被替换前query确认committed，保留供Undo/历史引用；内部物理ID随版本变化，逻辑录音与开始日期不变。多版本增加本地及归档空间，错误明确不截断。checkpoint ACK保留会话，final ACK才允许关闭；原节点消失或真实权限/归属失效须失败保留，不能写当前B或重插。见[任务64](../plan/tasks/app-mac-recording-autosave64.md)与[逻辑分析](../plan/analysis/mac-recording-autosave64.md)。源码/受控验证不能替代真实麦克风与完整像素验收。
 
 ## 授权诊断63（内部验证，不增加产品界面）
 
