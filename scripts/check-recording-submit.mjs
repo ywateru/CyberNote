@@ -76,6 +76,7 @@ const { editorSaveSnapshot } = await production("editor-save-snapshot");
 const { documentText } = await production("types");
 const { attachmentRecordedAt } = await production("recording-metadata");
 const { RecordingOwner } = await production("recording-coordinator");
+const { SearchEditorGate } = await production("search-editor-gate");
 const source = await readFile("src/App.tsx", "utf8");
 hashes.App = createHash("sha256").update(source).digest("hex");
 const ast = ts.createSourceFile(
@@ -173,6 +174,11 @@ const actualNames = [
   "submitRecording",
   "openRecording",
   "nativeSelection",
+  "restoreEditor",
+  "createNote",
+  "formatCommand",
+  "openSeparate",
+  "onReady",
 ];
 const effect = unique(
   nodes.filter(
@@ -293,9 +299,10 @@ export function fixture(options = {}) {
     hidden = 0,
     focused = 0,
     api;
+  let openedWindows = 0;
   const recordingMessages = [];
   const quitAcks = [];
-  let quitHandler;
+  let quitHandler, quitCancelled;
   let mappedTransaction;
   const env = {
     AttachmentSubmission,
@@ -346,6 +353,7 @@ export function fixture(options = {}) {
       throw Error(`unexpected recording host command ${command}`);
     },
     WebviewWindow: class {
+      constructor() { openedWindows++; }
       async once(event, callback) {
         if (event === "tauri://created") queueMicrotask(callback);
         return () => {};
@@ -356,6 +364,16 @@ export function fixture(options = {}) {
     ids: 0,
     errText: (error) => error.message,
     useCallback: (fn) => fn,
+    quitState: { current: null },
+    quitPending: false,
+    setQuitPending: (value) => { env.quitPending = value; render(); },
+    appSurface: { current: { inert: false, setAttribute() { this.inert = true; }, removeAttribute() { this.inert = false; } } },
+    editorGate: new SearchEditorGate(),
+    tagCompositions: { current: new Map() },
+    folderId: "default",
+    updateSettings: () => {},
+    clearTagComposition: () => {},
+    formatTarget: { current: null },
     queues: { current: new Map() },
     pendingDocs: { current: new Map() },
     saveFailures: { current: new Map() },
@@ -373,6 +391,7 @@ export function fixture(options = {}) {
     editorsRef: { current: new Map() },
     updateRecordingOwner: () => {},
     recordingLifecycle: { current: null },
+    pickerTargets: { current: new Map() },
     pickerRuntime: { current: null },
     nativeEditorOwners: { current: new WeakMap() },
     nativeDocumentVersions: { current: new WeakMap() },
@@ -449,6 +468,7 @@ export function fixture(options = {}) {
     setAccessSuspended: (value) => {
       env.accessSuspended = value;
     },
+    setEditors: (update) => { env.editorsRef.current = update(env.editorsRef.current); },
     setEditing: () => {},
     setShowFind: () => {},
     document: {
@@ -459,6 +479,7 @@ export function fixture(options = {}) {
     getCurrentWindow: () => ({
       listen: async (name, handler) => {
         if (name === "notes-recording-quit") quitHandler = handler;
+        if (name === "notes-recording-quit-cancelled") quitCancelled = handler;
         return () => {};
       },
       onCloseRequested: async (fn) => {
@@ -481,6 +502,7 @@ export function fixture(options = {}) {
   const editor = {
     isDestroyed: false,
     isEditable: true,
+    setEditable(value) { this.isEditable = value; },
     state: EditorState.create({
       schema,
       doc: schema.nodeFromJSON(initial),
@@ -488,6 +510,7 @@ export function fixture(options = {}) {
     }),
     getJSON: () => editor.state.doc.toJSON(),
     view: {
+      composing: false,
       dispatch: (tr) => {
         editor.state = editor.state.apply(tr);
         mappedTransaction?.({ transaction: tr });
@@ -782,6 +805,7 @@ export function fixture(options = {}) {
     get hidden() {
       return hidden;
     },
+    get openedWindows() { return openedWindows; },
     get focused() {
       return focused;
     },
@@ -808,6 +832,7 @@ export function fixture(options = {}) {
     get quitHandler() {
       return quitHandler;
     },
+    cancelQuit: (id) => quitCancelled({payload:{id}}),
     get closeHandler() {
       return closeHandler;
     },
@@ -943,6 +968,80 @@ if (
       assert.equal(ticket.accepting, true);
       assert.equal(f.recordingMessages.length, 0);
       assert.equal(f.env.recordingTicket.current, ticket);
+    });
+    await test("explicit Quit freezes every existing editor and new/native/format entry before its first wait and after success ACK; matching cancel restores only current legal editor", async () => {
+      const f = fixture({ desktop:true });
+      const waiting = deferred();
+      f.env.ocrLifecycle.current.close = () => waiting.promise;
+      const parked = { isEditable:true, isDestroyed:false, setEditable(value){this.isEditable=value;}, view:{composing:false} };
+      f.env.editorGate.park(parked);
+      f.env.editorsRef.current.set("note-b",parked);
+      f.env.nativeEditorOwners.current.set(parked,"note-b");
+      f.mountQuit();
+      const closing = f.quitHandler({payload:{id:"quit-gate"}});
+      assert.equal(f.editor.isEditable,false,"the first wait cannot leave input admitted");
+      assert.equal(f.env.appSurface.current.inert,true);
+      const late={isEditable:true,isDestroyed:false,setEditable(value){this.isEditable=value;},view:{composing:false}};
+      f.env.tagCompositions.current.set("note-late",{editor:late});
+      f.api.onReady("note-late",late);
+      f.env.editorGate.activate(late,false);
+      assert.equal(late.isEditable,false,"late editor/host activation remains suspended");
+      assert.throws(()=>f.api.capturePickerTarget(),/不可添加附件/);
+      const before=f.calls.length;
+      await f.api.createNote();
+      let formatted=false;
+      f.env.formatTarget.current={noteId:"note-a",editor:f.editor};
+      f.api.formatCommand(()=>{formatted=true;});
+      assert.equal(formatted,false);
+      assert.equal(f.calls.length,before);
+      f.api.restoreEditor(f.editor,true);
+      f.env.editorGate.activate(f.editor,false);
+      assert.equal(f.editor.isEditable,false,"late restore/host activate cannot lift an active Quit");
+      waiting.resolve(); await closing;
+      assert.deepEqual(f.quitAcks,[{id:"quit-gate",success:true}]);
+      assert.equal(f.editor.isEditable,false,"a success ACK stays frozen while other owners finish");
+      f.cancelQuit("stale-quit");
+      assert.equal(f.editor.isEditable,false);
+      f.cancelQuit("quit-gate");
+      assert.equal(f.env.appSurface.current.inert,false);
+      assert.equal(f.editor.isEditable,true);
+      assert.equal(parked.isEditable,false,"a parked editor stays parked");
+    });
+    for (const reason of ["synchronizing","access","blocked"])
+      await test(`Quit cancellation and late restoration preserve current ${reason} restrictions`, async()=>{
+        const f=fixture({desktop:true});f.mountQuit();
+        await f.quitHandler({payload:{id:"quit-restriction"}});
+        if(reason==="synchronizing")f.env.synchronizingRef.current=true;
+        if(reason==="access")bridge.accessGate.state.notes["note-a"].authorized=false;
+        if(reason==="blocked")f.env.blockedNotes.current.add("note-a");
+        f.cancelQuit("quit-restriction");
+        assert.equal(f.editor.isEditable,false);
+        f.api.restoreEditor(f.editor,true);
+        assert.equal(f.editor.isEditable,false);
+      });
+    await test("active or not-yet-settled composition cancels Quit without changing editor body or input editability", async()=>{
+      for(const pending of ["view","tracked"]){
+        const f=fixture({desktop:true}),before=f.editor.getJSON();f.mountQuit();
+        if(pending==="view")f.editor.view.composing=true;
+        else f.env.tagCompositions.current.set("note-a",{pending:true});
+        await f.quitHandler({payload:{id:"quit-composing"}});
+        assert.deepEqual(f.quitAcks,[{id:"quit-composing",success:false}]);
+        assert.deepEqual(f.editor.getJSON(),before);
+        assert.equal(f.editor.isEditable,true);
+        assert.equal(f.env.quitState.current,null);
+      }
+    });
+    await test("create-note and independent-window continuations started before Quit cannot create after their flush wait",async()=>{
+      const f=fixture({desktop:true}),wait=deferred();
+      f.env.queues.current.set("note-a",wait.promise);
+      const creating=f.api.createNote(),opening=f.api.openSeparate(f.backend.notes[0]);
+      f.mountQuit();const closing=f.quitHandler({payload:{id:"quit-inflight-entry"}});
+      assert.equal(f.editor.isEditable,false);
+      const before=f.calls.length;wait.resolve({saved:true});
+      await Promise.all([creating,opening,closing]);
+      assert.equal(f.calls.length,before);
+      assert.equal(f.openedWindows,0,"in-flight openSeparate cannot construct a new window after Quit");
+      assert.deepEqual(f.quitAcks,[{id:"quit-inflight-entry",success:true}]);
     });
     await test("actual App Quit participant waits original A document ACK and child close before acknowledging safe exit", async () => {
       const { f, receive, transfer } = await remote();

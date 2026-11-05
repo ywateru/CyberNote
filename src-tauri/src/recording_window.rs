@@ -26,6 +26,7 @@ struct Entry {
 }
 struct Quit {
     id: String,
+    participants: HashSet<String>,
     waiting: HashSet<String>,
 }
 #[derive(Default)]
@@ -280,6 +281,32 @@ fn may_exit(registry: &mut Registry) -> bool {
         false
     }
 }
+fn cancel_changed_participants(
+    registry: &mut Registry,
+    current: &HashSet<String>,
+) -> Option<String> {
+    if registry
+        .quit
+        .as_ref()
+        .is_some_and(|quit| &quit.participants != current)
+    {
+        registry.quit.take().map(|quit| quit.id)
+    } else {
+        None
+    }
+}
+fn document_windows(app: &tauri::AppHandle) -> HashSet<String> {
+    app.webview_windows()
+        .into_keys()
+        .filter(|label| document_window(label))
+        .collect()
+}
+fn notify_quit_cancelled(app: &tauri::AppHandle, id: &str) {
+    let _ = app.emit("notes-recording-quit-cancelled", json!({"id":id}));
+    for window in app.webview_windows().into_values() {
+        let _ = window.show();
+    }
+}
 #[tauri::command]
 pub fn recording_quit_ack(
     id: String,
@@ -296,11 +323,20 @@ pub fn recording_quit_ack(
     if !success {
         registry.quit = None;
         drop(registry);
-        let _ = app.emit("notes-recording-quit-cancelled", ());
-        let _ = window.show();
+        notify_quit_cancelled(&app, &id);
         return Ok(());
     }
-    quit.waiting.remove(window.label());
+    if let Some(cancelled) = cancel_changed_participants(&mut registry, &document_windows(&app)) {
+        drop(registry);
+        notify_quit_cancelled(&app, &cancelled);
+        return Err("文档窗口已改变，本次退出已取消".into());
+    }
+    registry
+        .quit
+        .as_mut()
+        .unwrap()
+        .waiting
+        .remove(window.label());
     let exit = may_exit(&mut registry);
     drop(registry);
     if exit {
@@ -341,6 +377,7 @@ pub fn destroyed(app: &tauri::AppHandle, label: &str) {
     let Ok(mut registry) = state.0.lock() else {
         return;
     };
+    let quit_before = registry.quit.as_ref().map(|quit| quit.id.clone());
     let mut notifications = Vec::new();
     if let Some(notification) = mark_child_destroyed(&mut registry, label) {
         notifications.push(notification);
@@ -363,8 +400,13 @@ pub fn destroyed(app: &tauri::AppHandle, label: &str) {
     {
         registry.quit = None;
     }
+    cancel_changed_participants(&mut registry, &document_windows(app));
+    let cancelled = quit_before.filter(|_| registry.quit.is_none());
     let exit = may_exit(&mut registry);
     drop(registry);
+    if let Some(id) = cancelled {
+        notify_quit_cancelled(app, &id);
+    }
     for (label, event) in notifications {
         let _ = app.emit_to(
             tauri::EventTarget::Window { label },
@@ -391,13 +433,10 @@ pub fn exit_requested(app: &tauri::AppHandle, api: &tauri::ExitRequestApi) {
         return;
     }
     let id = uuid::Uuid::new_v4().to_string();
-    let waiting: HashSet<_> = app
-        .webview_windows()
-        .into_keys()
-        .filter(|label| document_window(label))
-        .collect();
+    let waiting = document_windows(app);
     registry.quit = Some(Quit {
         id: id.clone(),
+        participants: waiting.clone(),
         waiting: waiting.clone(),
     });
     drop(registry);
@@ -418,10 +457,7 @@ pub fn exit_requested(app: &tauri::AppHandle, api: &tauri::ExitRequestApi) {
         if registry.quit.as_ref().is_some_and(|quit| quit.id == id) {
             registry.quit = None;
             drop(registry);
-            let _ = app.emit("notes-recording-quit-cancelled", ());
-            for window in app.webview_windows().into_values() {
-                let _ = window.show();
-            }
+            notify_quit_cancelled(&app, &id);
         }
     });
 }
@@ -446,6 +482,7 @@ mod tests {
         assert!(!may_exit(&mut registry));
         registry.quit = Some(Quit {
             id: "quit".into(),
+            participants: HashSet::from(["main".into()]),
             waiting: HashSet::from(["main".into()]),
         });
         assert!(!may_exit(&mut registry));
@@ -547,6 +584,7 @@ mod tests {
             registry.entries.get_mut("session").unwrap().owner_alive = true;
             registry.quit = Some(Quit {
                 id: "quit".into(),
+                participants: HashSet::from(["main".into()]),
                 waiting: HashSet::from(["main".into()]),
             });
             assert!(!may_exit(&mut registry));
@@ -569,6 +607,39 @@ mod tests {
             registry.quit.as_mut().unwrap().waiting.clear();
             assert!(may_exit(&mut registry));
         }
+    }
+    #[test]
+    fn quit_participant_changes_cancel_instead_of_reusing_old_acks() {
+        for current in [
+            HashSet::from(["main".into(), "note-late".into()]),
+            HashSet::new(),
+        ] {
+            let mut registry = Registry::default();
+            registry.quit = Some(Quit {
+                id: "quit-original".into(),
+                participants: HashSet::from(["main".into()]),
+                waiting: HashSet::new(),
+            });
+            assert_eq!(
+                cancel_changed_participants(&mut registry, &current).as_deref(),
+                Some("quit-original")
+            );
+            assert!(registry.quit.is_none());
+            assert!(
+                !may_exit(&mut registry),
+                "earlier successful ACKs cannot authorize changed participants"
+            );
+        }
+        let mut registry = Registry::default();
+        registry.quit = Some(Quit {
+            id: "quit-stable".into(),
+            participants: HashSet::from(["main".into()]),
+            waiting: HashSet::new(),
+        });
+        assert!(
+            cancel_changed_participants(&mut registry, &HashSet::from(["main".into()])).is_none()
+        );
+        assert!(may_exit(&mut registry));
     }
     #[test]
     fn capture_child_is_not_a_document_barrier_but_original_owner_still_must_ack() {

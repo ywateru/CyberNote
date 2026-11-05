@@ -464,6 +464,12 @@ function App() {
     updateTagComposition((value) => value + 1);
   }, []);
   const editorGate = useRef(new SearchEditorGate()).current;
+  const quitState = useRef<{
+    id: string;
+    editors: Map<Editor, boolean>;
+  } | null>(null);
+  const [quitPending, setQuitPending] = useState(false);
+  const appSurface = useRef<HTMLDivElement | null>(null);
   const editorsRef = useRef(editors);
   editorsRef.current = editors;
   const [editing, setEditing] = useState(false);
@@ -780,6 +786,10 @@ function App() {
       }
       if (instance) {
         nativeEditorOwners.current.set(instance, id);
+        if (quitState.current) {
+          quitState.current.editors.set(instance, instance.isEditable);
+          editorGate.park(instance);
+        }
         if (!tagCompositions.current.has(id)) {
           const composition = new TagComposition(
             instance,
@@ -813,7 +823,13 @@ function App() {
       editorGate.restore(
         instance,
         editable,
-        !owner || blockedNotes.current.has(owner),
+        !!quitState.current ||
+          synchronizingRef.current ||
+          !!accessGate.state?.operationId ||
+          !owner ||
+          blockedNotes.current.has(owner) ||
+          !!accessGate.state?.suspended.includes(owner) ||
+          accessGate.state?.notes[owner]?.authorized === false,
       );
     },
     [editorGate],
@@ -1029,7 +1045,9 @@ function App() {
   }, [flush, hydrate]);
   const doAction = useCallback(
     async (a: Record<string, unknown>, validate?: () => void) => {
+      if (quitState.current) throw Error("正在完成保存并退出，请稍候。");
       await flush();
+      if (quitState.current) throw Error("正在完成保存并退出，请稍候。");
       validate?.();
       const result = await action(a);
       if (
@@ -1367,20 +1385,71 @@ function App() {
     if (!native) return;
     const releases: (() => void)[] = [];
     let live = true;
+    const resume = (id: string) => {
+      const held = quitState.current;
+      if (!held || held.id !== id) return;
+      quitState.current = null;
+      editorGate.resume();
+      appSurface.current?.removeAttribute("inert");
+      setQuitPending(false);
+      for (const instance of held.editors.keys()) {
+        if (instance.isDestroyed) continue;
+        const owner = nativeEditorOwners.current.get(instance);
+        const note = wsRef.current.notes.find((item) => item.id === owner);
+        if (!owner || editorsRef.current.get(owner) !== instance) continue;
+        if (pickerRuntime.current.editor !== instance) {
+          editorGate.park(instance);
+          continue;
+        }
+        editorGate.activate(
+          instance,
+          synchronizingRef.current ||
+            !!accessGate.state?.operationId ||
+            blockedNotes.current.has(owner) ||
+            !!accessGate.state?.suspended.includes(owner) ||
+            !note ||
+            !!note.deletedAt ||
+            accessGate.state?.notes[owner]?.authorized === false,
+        );
+      }
+    };
     void getCurrentWindow()
       .listen<{ id: string }>("notes-recording-quit", async ({ payload }) => {
+        if (quitState.current) return;
+        // Seal user/native entry synchronously, before close/flush can yield.
+        const held = { id: payload.id, editors: new Map<Editor, boolean>() };
+        quitState.current = held;
         try {
+          if (
+            [...editorsRef.current.values()].some(
+              (instance) => !instance.isDestroyed && instance.view.composing,
+            ) ||
+            [...tagCompositions.current.values()].some((item) => item.pending)
+          )
+            throw Error("输入法仍在组字，退出已取消；请完成当前输入后重试。");
+          if (pickerTargets.current.size || attachmentBatches.current.size)
+            throw Error("附件操作尚未完成，退出已取消；原操作和内容仍保留。");
+          editorGate.suspend();
+          appSurface.current?.setAttribute("inert", "");
+          setQuitPending(true);
+          for (const instance of editorsRef.current.values()) {
+            if (instance.isDestroyed) continue;
+            held.editors.set(instance, instance.isEditable);
+            editorGate.park(instance);
+          }
           await recordingLifecycle.current.close();
           await ocrLifecycle.current.close();
           if (ownsSidebarPreference) await sidebarPreference.flush();
           await flush();
+          if (quitState.current !== held)
+            throw Error("本次退出已取消，请重新执行。");
           await invoke("recording_quit_ack", { id: payload.id, success: true });
         } catch (e) {
           fail(e);
           await invoke("recording_quit_ack", {
             id: payload.id,
             success: false,
-          }).catch(() => {});
+          }).then(() => resume(payload.id)).catch(() => {});
           await getCurrentWindow()
             .show()
             .catch(() => {});
@@ -1391,7 +1460,8 @@ function App() {
         else release();
       });
     void getCurrentWindow()
-      .listen("notes-recording-quit-cancelled", () => {
+      .listen<{ id: string }>("notes-recording-quit-cancelled", ({ payload }) => {
+        resume(payload.id);
         fail(
           Error("退出已取消。录音或正文尚未确认保存，请保持窗口打开并重试。"),
         );
@@ -1668,6 +1738,7 @@ function App() {
     }
   };
   const formatCommand = (command: (e: Editor) => unknown) => {
+    if (quitState.current) return;
     const target = formatTarget.current;
     if (!target || target.noteId !== noteId || target.editor !== editor) return;
     editor.view.dispatch(
@@ -1781,7 +1852,9 @@ function App() {
   const createNote = useCallback(
     async (validate?: () => void) => {
       try {
+        if (quitState.current) throw Error("正在完成保存并退出，请稍候。");
         await flush();
+        if (quitState.current) throw Error("正在完成保存并退出，请稍候。");
         validate?.();
         const fid = isPhysicalOwner(
           wsRef.current.folders.find((f) => f.id === folderId),
@@ -2035,12 +2108,14 @@ function App() {
     [flush, hydrate, restoreSelection, synchronization, fail],
   );
   const openSeparate = async (n: Note) => {
+    if (quitState.current) return;
     if (!native) {
       chooseNote(n);
       return;
     }
     try {
       await flush();
+      if (quitState.current) return;
       new WebviewWindow(`note-${Date.now()}`, {
         url: `index.html?note=${n.id}`,
         title: n.title,
@@ -2063,6 +2138,10 @@ function App() {
   }, [fail]);
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (quitState.current) {
+        e.preventDefault();
+        return;
+      }
       if (folderForm) return;
       if (ocrOperation.current && e.key !== "Escape") return;
       // AppKit menu accelerators also work while NSSearchField owns first responder.
@@ -2317,7 +2396,9 @@ function App() {
         editorsRef.current.get(target.noteId) !== instance ||
         nativeEditorOwners.current.get(instance) !== target.owner ||
         target.owner !== target.noteId ||
-        (pickerRuntime.current.editor === instance && !instance.isEditable) ||
+        (pickerRuntime.current.editor === instance &&
+          !instance.isEditable &&
+          !quitState.current?.editors.get(instance)) ||
         (externalVersions.current.get(target.noteId) || 0) !==
           target.externalVersion ||
         (nativeDocumentVersions.current.get(instance) || 0) !==
@@ -2711,6 +2792,7 @@ function App() {
     const live = pickerRuntime.current;
     const instance = context ? context.editor : live.editor;
     if (
+      quitState.current ||
       synchronizingRef.current ||
       !live.noteId ||
       !instance ||
@@ -3789,6 +3871,7 @@ function App() {
     query,
   ]);
   const attachmentBaseAvailable =
+    !quitPending &&
     !loading &&
     !draw &&
     !accessSuspended.length &&
@@ -3838,6 +3921,7 @@ function App() {
   nativeAssert.current = (context, editing = false, overlay = false) => {
     const live = accessGate.stamp(context.noteId || undefined);
     if (
+      quitState.current ||
       context.scope !== nativeScope ||
       context.noteId !== noteId ||
       JSON.stringify(live) !== JSON.stringify(context.stamp) ||
@@ -3877,6 +3961,7 @@ function App() {
     return target;
   };
   nativeHandler.current = (intent, context, sequence) => {
+    if (quitState.current) return;
     if (intent.kind === "search") {
       setNativeSearchAck(sequence);
       setQuery(intent.phase === "cancel" ? "" : intent.value);
@@ -4067,6 +4152,7 @@ function App() {
     }
   };
   nativeMenuHandler.current = (command) => {
+    if (quitState.current) return;
     const context: NativeContext = {
       noteId,
       scope: nativeScope,
@@ -4151,6 +4237,7 @@ function App() {
     if (liveEditor && !nativeEditorIds.current.has(liveEditor))
       nativeEditorIds.current.set(liveEditor, ++nativeEditorCounter.current);
     const available =
+      !quitPending &&
       !loading &&
       !synchronizing &&
       !accessSuspended.length &&
@@ -4208,6 +4295,8 @@ function App() {
   const nativeTop = !mobile && !!nativeInfo;
   return (
     <div
+      ref={appSurface}
+      inert={quitPending}
       className={`app ${nativeTop ? "native-toolbar" : ""} ${synchronizing || accessSuspended.length ? "access-sync" : ""} ${mobile ? "mobile" : "desktop"} ${view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${menu === "format" && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
       style={
         {
@@ -4893,7 +4982,14 @@ function App() {
               key={`${note.id}-${ws.access?.sessionId || "preview"}-${ws.access?.notes[note.id]?.epoch || 0}-${externalVersions.current.get(note.id) || 0}`}
               note={note}
               active={note.id === noteId}
-              blocked={blockedNotes.current.has(note.id)}
+              blocked={
+                quitPending ||
+                synchronizingRef.current ||
+                !!accessGate.state?.operationId ||
+                blockedNotes.current.has(note.id) ||
+                !!accessGate.state?.suspended.includes(note.id) ||
+                accessGate.state?.notes[note.id]?.authorized === false
+              }
               gate={editorGate}
               onChange={saveEditorDoc}
               onReady={onReady}

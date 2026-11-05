@@ -6,6 +6,11 @@ import type { Editor } from "@tiptap/core";
 // Callers keep their existing destroyed-instance checks; the gate only owns
 // editability and never changes editor lifetime or authorization.
 export class SearchEditorGate {
+  private suspended = false;
+
+  suspend(): void { this.suspended = true; }
+  resume(): void { this.suspended = false; }
+
   private parked = new WeakMap<Editor, { editable: boolean }>();
 
   park(editor: Editor): void {
@@ -15,7 +20,7 @@ export class SearchEditorGate {
   }
 
   activate(editor: Editor, blocked: boolean): void {
-    if (blocked) {
+    if (blocked || this.suspended) {
       this.park(editor);
       return;
     }
@@ -29,7 +34,7 @@ export class SearchEditorGate {
   restore(editor: Editor, editable: boolean, blocked: boolean): void {
     const desired = this.parked.get(editor);
     if (desired) desired.editable = editable;
-    const allowed = editable && !desired && !blocked;
+    const allowed = editable && !desired && !blocked && !this.suspended;
     if (editor.isEditable !== allowed) editor.setEditable(allowed, false);
   }
 }
