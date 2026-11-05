@@ -1,0 +1,19 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at file:///private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-submit.mjs:969:14
+    at async test (file:///private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-submit.mjs:872:21)
+    at async file:///private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-submit.mjs:960:5 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

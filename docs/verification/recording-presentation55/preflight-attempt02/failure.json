@@ -1,0 +1,11 @@
+{
+  "error": "Error: page.evaluate: Error: 录音状态无效，保留原录音窗口\n    at RecordingOwner.receive (http://127.0.0.1:62204/src/recording-coordinator.ts:184:15)\n    at h.query (http://127.0.0.1:62204/__presentation55.tsx:88:32)\n    at eval (eval at evaluate (:290:30), <anonymous>:31:15)\n    at async <anonymous>:316:30",
+  "stack": "page.evaluate: Error: 录音状态无效，保留原录音窗口\n    at RecordingOwner.receive (http://127.0.0.1:62204/src/recording-coordinator.ts:184:15)\n    at h.query (http://127.0.0.1:62204/__presentation55.tsx:88:32)\n    at eval (eval at evaluate (:290:30), <anonymous>:31:15)\n    at async <anonymous>:316:30\n    at /private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-presentation55.mjs:308:31\n    at test (/private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-presentation55.mjs:113:11)\n    at /private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-presentation55.mjs:307:9",
+  "checks": [
+    "default float and permission preparation switch retain one requesting Session and no capture reset",
+    "recording float/dock cycles preserve stream, recorder, genuine activity clock and bounded real waveform",
+    "remote pause, actual preview, play/seek and repeated presentation changes retain the same media element"
+  ],
+  "errors": [],
+  "external": []
+}

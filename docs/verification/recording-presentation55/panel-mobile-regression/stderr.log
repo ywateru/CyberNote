@@ -1,0 +1,19 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /00:01/. Input:
+
+'新录音2026年11月4日 05:5900:00'
+
+    at file:///private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-interactions50.mjs:166:12
+    at async test (file:///private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-interactions50.mjs:130:5)
+    at async file:///private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-interactions50.mjs:162:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '新录音2026年11月4日 05:5900:00',
+  expected: /00:01/,
+  operator: 'match'
+}
+
+Node.js v22.16.0

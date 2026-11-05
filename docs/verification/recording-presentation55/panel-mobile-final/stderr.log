@@ -1,0 +1,15 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.isDisabled: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('.live-recording-toggle')[22m
+
+    at /private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-interactions50.mjs:328:60
+    at async test (/private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-interactions50.mjs:130:5)
+    at async file:///private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-interactions50.mjs:322:3 {
+  name: 'TimeoutError'
+}
+
+Node.js v22.16.0

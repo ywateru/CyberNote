@@ -1,0 +1,15 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "recording_window::tests",
+    "--",
+    "--nocapture"
+  ],
+  "exit": 0,
+  "seconds": 30.658928041
+}

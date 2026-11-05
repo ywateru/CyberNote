@@ -1,0 +1,14 @@
+{
+  "status": "fail",
+  "results": [
+    "desktop standalone panel fills a 320px host, has no dim backdrop, and creates no live card before actual capture",
+    "live card shares capture time/actions; register/update/remove leaves JSON, history, selection and document version unchanged",
+    "source remains editable during capture; actual typing and Undo/Redo remain available",
+    "desktop transport retains paused preview position, keyboard/pointer absolute seeks and ±15 boundaries use confirmed media",
+    "mobile transport retains paused preview position, keyboard/pointer absolute seeks and ±15 boundaries use confirmed media"
+  ],
+  "errors": [],
+  "external": [],
+  "error": "TimeoutError: locator.isDisabled: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.live-recording-toggle')\u001b[22m\n",
+  "stack": "locator.isDisabled: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.live-recording-toggle')\u001b[22m\n\n    at /private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-interactions50.mjs:328:60\n    at async test (/private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-interactions50.mjs:130:5)\n    at async file:///private/tmp/apple-notes-recording-presentation55-01/scripts/check-recording-interactions50.mjs:322:3"
+}
