@@ -1,0 +1,17 @@
+{
+  "command": [
+    "cargo",
+    "check",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--locked",
+    "--offline",
+    "--target-dir",
+    "/private/tmp/apple-notes-recording-window50-independent-target"
+  ],
+  "exit": 0,
+  "sourceCommit": "106204bd5e7b1d986d8c3c658e18282aa23ed701",
+  "limitations": [
+    "host-only compilation; actual Android build remains root acceptance"
+  ]
+}

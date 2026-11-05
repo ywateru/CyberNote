@@ -1,0 +1,30 @@
+2029: 
+2030: /// Desktop window setters and actions.
+2031: #[cfg(desktop)]
+2032: impl<R: Runtime> WebviewWindow<R> {
+2033:   /// Centers the window.
+2034:   pub fn center(&self) -> crate::Result<()> {
+2101: 
+2102:   /// Un-minimizes this window.
+2103:   pub fn unminimize(&self) -> crate::Result<()> {
+2104:     self.window.unminimize()
+2105:   }
+2106: 
+2314: 
+2315: /// Desktop window setters and actions.
+2316: impl<R: Runtime> WebviewWindow<R> {
+2317:   /// Determines if this window should be resizable.
+2318:   /// When resizable is set to false, native window's maximize button is automatically disabled.
+2319:   pub fn set_resizable(&self, resizable: bool) -> crate::Result<()> {
+2332: 
+2333:   /// Show this window.
+2334:   pub fn show(&self) -> crate::Result<()> {
+2335:     self.window.show()
+2336:   }
+2337: 
+2385: 
+2386:   /// Bring the window to front and focus.
+2387:   pub fn set_focus(&self) -> crate::Result<()> {
+2388:     self.window.set_focus()
+2389:   }
+2390: 
