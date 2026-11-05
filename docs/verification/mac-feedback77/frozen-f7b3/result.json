@@ -1,0 +1,111 @@
+{
+  "productCommit": "e760ece7",
+  "freezeCommit": "f7b3c94486bcc870620f1ac46a100be8abe3b607",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "b4d046b7945f3d1422ffe095fd04cc67671f7e5989ebb194293fb90dc521182a",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "rawOutput": "/private/tmp/mac-feedback77-frozen-367",
+  "commands": [
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "wallMs": 3026
+    },
+    {
+      "name": "production",
+      "command": [
+        "pnpm",
+        "debug",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/mac-feedback77-frozen-367/production"
+      ],
+      "exitCode": 0,
+      "wallMs": 918
+    },
+    {
+      "name": "desktop",
+      "command": [
+        "pnpm",
+        "test:debug",
+        "--out",
+        "/private/tmp/mac-feedback77-frozen-367/desktop"
+      ],
+      "exitCode": 0,
+      "wallMs": 47382
+    },
+    {
+      "name": "mobile-notes",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "notes",
+        "--mobile",
+        "--out",
+        "/private/tmp/mac-feedback77-frozen-367/mobile-notes"
+      ],
+      "exitCode": 0,
+      "wallMs": 4339
+    },
+    {
+      "name": "mobile-recording",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "recording",
+        "--mobile",
+        "--out",
+        "/private/tmp/mac-feedback77-frozen-367/mobile-recording"
+      ],
+      "exitCode": 0,
+      "wallMs": 10234
+    },
+    {
+      "name": "mobile-attachments",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "attachments",
+        "--mobile",
+        "--out",
+        "/private/tmp/mac-feedback77-frozen-367/mobile-attachments"
+      ],
+      "exitCode": 0,
+      "wallMs": 19261
+    }
+  ],
+  "desktopChecks": 148,
+  "mobileChecks": {
+    "mobile-notes": 9,
+    "mobile-recording": 43,
+    "mobile-attachments": 43
+  },
+  "allPageErrors": {
+    "production": [],
+    "desktop": [],
+    "mobile-notes": [],
+    "mobile-recording": [],
+    "mobile-attachments": []
+  }
+}

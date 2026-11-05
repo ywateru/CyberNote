@@ -1,6 +1,6 @@
 # Mac截图修正77开发证据
 
-基线 `ad12447963ce648f9fbaff5e411bce91a6b930bb`；第一轮冻结产品/runner `806d34322abfb4cc3f55e25cef4c760748d7c842`。本页记录首轮开发与回归，独审尚在进行，不代表任务最终通过。
+当前冻结为 `f7b3c94486bcc870620f1ac46a100be8abe3b607`（产品修复 `e760ece7`）。开发完整桌面148项及手机95项已通过，独审正独立复核；不代表整窗原生像素通过。基线 `ad12447963ce648f9fbaff5e411bce91a6b930bb`，首轮 `806d3432` 的失败与修复过程完整保留如下，最新回归见末节。
 
 ## Before
 
@@ -39,3 +39,23 @@
 根与开发静态检查指出 `.snippet-text` 既有flex/gap4会将新增命中span拆成独立flex项，可能改变字距；当前42项尚未包含连续字距与ellipsis断言。产品保持冻结等独审实测，若阻塞须解除冻结后修复并重新回归。不能把本轮通过的文字/色值/范围断言扩张为字距像素一致。
 
 所有场景只操作隔离合成数据，IPC/原生窗口/设备为明示fixture；不证明Rust、Tauri原生窗口/系统右键或实际手机。不启动原Android现场、不读取用户录音、不做原版删除实验。本次没有Rust/依赖/锁文件修改或新安装包。
+
+
+## 独审阻塞修复与当前冻结
+
+独审首轮阻塞证据提交 `2ded802b`：flex/gap确实使「甲乙搜索丙丁」从78px变为86px；220px列表中首命中后半字被裁。产品 `e760ece7` 将非锁摘要包入一个正常inline排版容器，锁图标外层保留；测量该容器与首匹配的实际rect，前缀占位造成首命中不完整时去掉前缀、保留省略号和后文。宽度改变由ResizeObserver重新计算，280px恢复六字前文、220px再裁短，无数据改写。`mac-feedback-search-geometry.json` 记录逐字Range坐标、窄/宽/再窄文本与边界；前后文字总宽都是78px，字符相邻无新增空隙，所有47项以及pageErrors检查通过。
+
+测试 `f7b3c944` 修复既有contract不成立的100ms假设，运行时算法完全不改。真实App异步false改为合理750ms预算并仍要求实际回调和已观察lastState；单独受控200ms首次transport/50ms截止检查正确TIMEOUT且无lastState、无谓词调用、transport尚未结束。late true/never采用立即可达的受控state确保真实进入谓词后验证deadline；保留真实App延迟true、stalled transport、错误封装等旧检查。最终 `contract-deadlines.json` 有实际测量，不能将这种受控transport混称原生持久化。
+
+`revision01` 是新增字符测量测试baseline未限定noteA，遇2个snippet-copy触发strict locator错误；已限定目标行，失败原始快照保留。`revision02` 定向47项、`contract-revision01` 定向45项通过，随后提交产品和runner再跑以下全套。
+
+| 当前冻结f7b3验证 | 结果 | 完整wall |
+| --- | --- | --- |
+| pnpm build | 自然exit0 | 3.026s |
+| production排除 | 自然exit0 | 0.918s |
+| 完整桌面十组 | 148项，自然exit0 | 47.382s |
+| mobile notes | 9项，自然exit0 | 4.339s |
+| mobile recording | 43项，自然exit0 | 10.234s |
+| mobile attachments | 43项，自然exit0 | 19.261s |
+
+精确命令、源码、检查及快照见 `frozen-f7b3/result.json`、各组summary/suite。冻结输入89文件指纹 `b4d046b7945f3d1422ffe095fd04cc67671f7e5989ebb194293fb90dc521182a`，所有CLI summary输入前后相同、生产排除/桌面及手机三组pageErrors均为空；原始所有日志/截图/快照保留 `/private/tmp/mac-feedback77-frozen-367`。这里只复制紧凑结果及本次Mac截图，未清理旧失败记录。构建保留既有Vite大chunk提示，无新增Rust或依赖变化。
