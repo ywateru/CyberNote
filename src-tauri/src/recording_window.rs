@@ -425,7 +425,7 @@ pub fn exit_requested(app: &tauri::AppHandle, api: &tauri::ExitRequestApi) {
         api.prevent_exit();
         return;
     };
-    if registry.exit_allowed || registry.entries.is_empty() {
+    if registry.exit_allowed || (registry.entries.is_empty() && registry.quit.is_none()) {
         return;
     }
     api.prevent_exit();
