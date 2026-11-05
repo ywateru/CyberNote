@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { performance } from 'node:perf_hooks';
-import { openRuntime, api, idle, snapshot, state, saveJSON } from './runtime.mjs';
+import { openRuntime, api, idle, snapshot, state, saveJSON, waitForIdle } from './runtime.mjs';
 import { compareSnapshots, compareScreenshots } from './compare.mjs';
 import { runGroups, groupNames } from './scenarios.mjs';
 
@@ -62,7 +62,7 @@ try {
   else if (mode === 'compare') { if (args.length !== 2) throw Error('compare needs two snapshot paths'); console.log(bounded(compareSnapshots(JSON.parse(await readFile(args[0], 'utf8')), JSON.parse(await readFile(args[1], 'utf8'))))); }
   else {
     const allowed = ['list', 'execute', 'script', 'snapshot', 'group', 'all', 'check-production', 'compare-shot']; if (!allowed.includes(mode)) throw Error('Unknown CLI mode ' + mode);
-    if (options.mobile && (mode === 'all' || mode === 'group' && args[0] !== 'notes')) throw Object.assign(Error('Automated mobile browser coverage is group notes only. The complete nine-group suite is desktop-scoped; execute/script/snapshot remain available with --mobile.'), { code: 'UNSUPPORTED' });
+    if (options.mobile && (mode === 'all' || mode === 'group' && !['notes', 'recording'].includes(args[0]))) throw Object.assign(Error('Automated mobile browser coverage is groups notes and recording only. The complete nine-group suite is desktop-scoped; execute/script/snapshot remain available with --mobile.'), { code: 'UNSUPPORTED' });
     if (mode === 'check-production' && !options.production) throw Error('check-production requires --production pointing to a normal frontend build');
     sourceInputsAtStart = await sourceFingerprint(process.cwd()); runtime = await openRuntime(options); const page = runtime.page; const output = options.out ? resolve(options.out) : runtime.directory; await mkdir(output, { recursive: true });
     let result;
@@ -79,7 +79,7 @@ try {
         else if (step.platform) { const { advanceMs, ...config } = step.platform; value = await page.evaluate(async ({ advanceMs, config }) => { await window.__DEBUG_PLATFORM__.configure(config); if (advanceMs !== undefined) window.__DEBUG_PLATFORM__.advance(advanceMs); return { simulated: true }; }, { advanceMs, config }); }
         else if (step.snapshot) { const target = resolve(output, 'step-' + index + '.snapshot.json'); await saveJSON(target, await snapshot(page, step.snapshot)); value = { snapshot: target }; }
         else if (step.screenshot) { const target = resolve(output, step.screenshot); if (!target.startsWith(output + '/')) throw Error('Screenshot must stay inside output directory'); await page.screenshot({ path: target }); value = { screenshot: target }; }
-        else if (step.waitForIdle) value = await page.evaluate((args) => window.__NOTES_DEBUG__.waitForIdle(args), step.waitForIdle);
+        else if (Object.prototype.hasOwnProperty.call(step, 'waitForIdle')) value = await waitForIdle(page, step.waitForIdle);
         else throw Error('Step must specify one operation');
         results.push({ index, ...(step.command ? { command: step.command } : {}), result: value });
       }

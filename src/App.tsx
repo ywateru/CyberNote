@@ -4909,7 +4909,11 @@ function App() {
             });
           if (!validRecordingAction(args)) throw Error("录音动作参数无效");
           const allowed =
-            args.action === "toggle"
+            args.action === "close"
+              ? !mobile || !["saving", "finalizing", "submitted"].includes(state.phase)
+              : mobile && args.action === "finish"
+                ? ["paused", "retry"].includes(state.phase)
+              : args.action === "toggle"
               ? state.canToggle
               : args.action === "playback"
                 ? state.canPlay
