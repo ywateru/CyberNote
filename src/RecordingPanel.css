@@ -112,10 +112,12 @@
   }
   .mobile .recording-backdrop .recording-sheet .recording-time {
     position: absolute;
-    top: 65.4%;
+    top: 65.2%;
     margin: 0;
     font-size: clamp(28px, 9.6vw, 42px);
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: -1.25px;
+    color: #000;
   }
   .mobile .recording-backdrop .recording-sheet .recording-notice {
     position: absolute;
@@ -207,17 +209,39 @@
 @media (max-width: 760px) {
   .mobile .recording-backdrop .recording-sheet .recording-playback {
     position: absolute;
-    top: 75.4%;
+    top: 73.8%;
     height: 8%;
     margin: 0;
   }
+  .mobile
+    .recording-backdrop
+    .recording-sheet
+    .recording-playback
+    .recording-mobile-play-icon {
+    width: 39px;
+    height: 40px;
+    transform: translateX(1px);
+  }
+  .mobile.dark .recording-backdrop .recording-sheet .recording-time,
+  .dark .mobile .recording-backdrop .recording-sheet .recording-time {
+    color: var(--ink);
+  }
   .mobile .recording-backdrop .recording-sheet .recording-notice {
+    top: 56%;
     min-height: 0;
     max-height: 4%;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-notice-with-retry {
+    left: 12px;
+    max-width: calc(100% - 100px);
+    max-height: 44px;
+    text-align: left;
   }
   .mobile .recording-backdrop .recording-sheet .recording-playback-retry {
     position: absolute;
     top: 56%;
+    right: 12px;
+    min-width: 64px;
     font-size: 12px;
     min-height: 44px;
   }

@@ -38,6 +38,27 @@ function SkipSeconds({ forward = false }: { forward?: boolean }) {
   );
 }
 
+function MobilePlaybackIcon({ playing }: { playing: boolean }) {
+  return (
+    <svg
+      className="recording-mobile-play-icon"
+      viewBox="0 0 36 40"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      fill="currentColor"
+    >
+      {playing ? (
+        <>
+          <rect x="5" y="2" width="9" height="36" rx="2" />
+          <rect x="22" y="2" width="9" height="36" rx="2" />
+        </>
+      ) : (
+        <path d="M7 2.2C5.2 1.1 3 2.4 3 4.5v31c0 2.1 2.2 3.4 4 2.3l26-15.5c1.7-1 1.7-3.6 0-4.6Z" />
+      )}
+    </svg>
+  );
+}
+
 /** A projection only: no microphone, media element, URLs or attachment bytes. */
 export default function RecordingView({
   state,
@@ -146,7 +167,7 @@ export default function RecordingView({
           {recordingTime(position)}
         </div>
         <div
-          className="recording-notice"
+          className={`recording-notice${mobile && state.canRetryPreview ? " recording-notice-with-retry" : ""}`}
           role={state.hasError ? "alert" : "status"}
         >
           {notice}
@@ -169,7 +190,9 @@ export default function RecordingView({
             }
             onClick={() => act({ action: "playback" })}
           >
-            {state.playing ? (
+            {mobile ? (
+              <MobilePlaybackIcon playing={state.playing} />
+            ) : state.playing ? (
               <Pause fill="currentColor" />
             ) : (
               <Play fill="currentColor" />
