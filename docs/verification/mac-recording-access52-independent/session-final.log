@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "checks": 11,
+  "results": [
+    "optional preflight omitted keeps existing capture behavior",
+    "denied preflight never creates stream or recorder",
+    "undefined rejection is an explicit error, never success",
+    "cancelling unresolved preflight settles Start and ignores late allow",
+    "preflight timeout closes attempt; late allow cannot capture",
+    "one Start cannot request preflight or stream twice",
+    "getUserMedia deadline reports failure and releases all late tracks",
+    "cancel during media wait releases late tracks with no callback",
+    "late rejection after media timeout cannot emit another error",
+    "cleanup attempts every late track even when first stop throws",
+    "stage two has its own deadline after successful preflight"
+  ],
+  "limits": "Controlled promises/tracks/timers only, no OS permission or real audio"
+}

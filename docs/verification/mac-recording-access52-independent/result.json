@@ -1,0 +1,34 @@
+{
+  "status": "SOURCE-READY",
+  "sourceCommit": "f5bc101614dcc2c144f962b41620e70d4f8657b1",
+  "blockingFindingsOpen": 0,
+  "findingsClosed": [
+    {
+      "id": "media-promise-handoff-leak",
+      "fix": "e2903cc590fab18742ec26b1da586ba37c4a07f2",
+      "verification": "original minimal repro + 14-cut sweep PASS"
+    },
+    {
+      "id": "objc-exception-owner-release",
+      "fix": "f5bc101614dcc2c144f962b41620e70d4f8657b1",
+      "verification": "original independent native supplement 4 PASS with production flags; Rust plugin20 and host check PASS"
+    }
+  ],
+  "checks": {
+    "handoff": 1,
+    "microtaskCuts": 14,
+    "nativeSupplement": 4,
+    "fixedAuthorSession": 11,
+    "fixedAuthorPreflight": 8,
+    "baselineSession": 26,
+    "rustPlugin": 20,
+    "typecheck": "PASS",
+    "hostCheck": "PASS; 4 existing dead-code warnings",
+    "nativePublicCompile": "PASS"
+  },
+  "limits": [
+    "source readiness only",
+    "no GUI/TCC/user data operations",
+    "no actual microphone authorization, sound capture, background recording, pixel or task50 acceptance"
+  ]
+}
