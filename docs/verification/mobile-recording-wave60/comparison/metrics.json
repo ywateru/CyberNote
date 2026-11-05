@@ -1,0 +1,860 @@
+{
+  "source": "b5d008a25a9424f14f2e995cfd2557400cdb4614",
+  "base": "46e45e4f85c4c0d95720ea1e3e40ca5440aded03",
+  "baselineProduct": "99dbb95ed0d4f796a71fcb40d5179ed6d90eeaa6",
+  "boundary": {
+    "reference": [
+      224,
+      480
+    ],
+    "logical": [
+      392,
+      840
+    ],
+    "render": [
+      784,
+      1680
+    ],
+    "scale": "Entire image exact aspect LANCZOS; no fit, masks, shifts or waveform fabrication",
+    "precision": "Lossy video edges approximately +/-1-2 pixels; source DPR and native fonts unknown",
+    "differencesRetained": "System bars, date, excluded transcription, native material, and true waveform differences remain in full images and metrics",
+    "labelExtraction": "Full fixed ROI metrics retain ticks. Label ink is measured separately within text-row bands: old/new derived from actual DOM Range; reference explicit [15,271,40,280]. These bands do not alter any image/diff/full metric.",
+    "yellowPredicate": "Outer: R>150,G>100,B<160,R-B>45,G-B>20; core: R>170,G>110,B<90,R-B>100 within fixed playhead ROI. Lossy neutral fringes can extend the outer bound by one row."
+  },
+  "rois": {
+    "full-no-mask": [
+      0,
+      0,
+      224,
+      480
+    ],
+    "timeline-full": [
+      0,
+      100,
+      224,
+      283
+    ],
+    "playhead": [
+      108,
+      100,
+      117,
+      273
+    ],
+    "first-label-all-positions": [
+      15,
+      255,
+      40,
+      282
+    ],
+    "axis-label-band": [
+      0,
+      255,
+      224,
+      283
+    ],
+    "timer-protected": [
+      60,
+      324,
+      165,
+      350
+    ],
+    "playback-protected": [
+      53,
+      365,
+      173,
+      401
+    ]
+  },
+  "geometry": {
+    "reference": {
+      "yellow": {
+        "pixels": 332,
+        "bounds_half_open": [
+          111,
+          104,
+          114,
+          269
+        ]
+      },
+      "yellowCore": {
+        "pixels": 15,
+        "bounds_half_open": [
+          112,
+          104,
+          114,
+          268
+        ]
+      },
+      "labelTextRowBand": [
+        15,
+        271,
+        40,
+        280
+      ],
+      "labelInk": {
+        "200": {
+          "pixels": 15,
+          "bounds_half_open": [
+            21,
+            273,
+            36,
+            277
+          ]
+        },
+        "220": {
+          "pixels": 36,
+          "bounds_half_open": [
+            20,
+            273,
+            36,
+            278
+          ]
+        },
+        "235": {
+          "pixels": 52,
+          "bounds_half_open": [
+            19,
+            273,
+            36,
+            278
+          ]
+        }
+      },
+      "rawFirstLabelRoiInkIncludingTicks": {
+        "220": {
+          "pixels": 36,
+          "bounds_half_open": [
+            20,
+            273,
+            36,
+            278
+          ]
+        },
+        "235": {
+          "pixels": 52,
+          "bounds_half_open": [
+            19,
+            273,
+            36,
+            278
+          ]
+        }
+      }
+    },
+    "old59": {
+      "yellow": {
+        "pixels": 156,
+        "bounds_half_open": [
+          111,
+          104,
+          114,
+          252
+        ]
+      },
+      "yellowCore": {
+        "pixels": 12,
+        "bounds_half_open": [
+          111,
+          104,
+          114,
+          252
+        ]
+      },
+      "labelTextRowBand": [
+        15,
+        258,
+        40,
+        266
+      ],
+      "labelInk": {
+        "200": {
+          "pixels": 0,
+          "bounds_half_open": null
+        },
+        "220": {
+          "pixels": 20,
+          "bounds_half_open": [
+            20,
+            260,
+            33,
+            264
+          ]
+        },
+        "235": {
+          "pixels": 37,
+          "bounds_half_open": [
+            19,
+            260,
+            34,
+            264
+          ]
+        }
+      },
+      "rawFirstLabelRoiInkIncludingTicks": {
+        "220": {
+          "pixels": 20,
+          "bounds_half_open": [
+            20,
+            260,
+            33,
+            264
+          ]
+        },
+        "235": {
+          "pixels": 37,
+          "bounds_half_open": [
+            19,
+            260,
+            34,
+            264
+          ]
+        }
+      }
+    },
+    "new60": {
+      "yellow": {
+        "pixels": 172,
+        "bounds_half_open": [
+          111,
+          104,
+          114,
+          268
+        ]
+      },
+      "yellowCore": {
+        "pixels": 12,
+        "bounds_half_open": [
+          111,
+          104,
+          114,
+          268
+        ]
+      },
+      "labelTextRowBand": [
+        15,
+        271,
+        40,
+        279
+      ],
+      "labelInk": {
+        "200": {
+          "pixels": 20,
+          "bounds_half_open": [
+            20,
+            273,
+            36,
+            278
+          ]
+        },
+        "220": {
+          "pixels": 37,
+          "bounds_half_open": [
+            20,
+            273,
+            36,
+            278
+          ]
+        },
+        "235": {
+          "pixels": 48,
+          "bounds_half_open": [
+            19,
+            273,
+            36,
+            278
+          ]
+        }
+      },
+      "rawFirstLabelRoiInkIncludingTicks": {
+        "220": {
+          "pixels": 37,
+          "bounds_half_open": [
+            20,
+            273,
+            36,
+            278
+          ]
+        },
+        "235": {
+          "pixels": 51,
+          "bounds_half_open": [
+            19,
+            268,
+            36,
+            278
+          ]
+        }
+      }
+    }
+  },
+  "metricsAgainstReference": {
+    "old59": {
+      "full-no-mask": {
+        "mae_0_255": 14.334753,
+        "changed_pixels": 107212,
+        "changed_ratio_any": 0.9971354,
+        "changed_ratio_over16": 0.12766,
+        "maximum_channel_difference": 255
+      },
+      "timeline-full": {
+        "mae_0_255": 3.852207,
+        "changed_pixels": 40964,
+        "changed_ratio_any": 0.9993169,
+        "changed_ratio_over16": 0.0259075,
+        "maximum_channel_difference": 248
+      },
+      "playhead": {
+        "mae_0_255": 10.459859,
+        "changed_pixels": 1546,
+        "changed_ratio_any": 0.9929351,
+        "changed_ratio_over16": 0.3314066,
+        "maximum_channel_difference": 248
+      },
+      "first-label-all-positions": {
+        "mae_0_255": 7.902222,
+        "changed_pixels": 675,
+        "changed_ratio_any": 1.0,
+        "changed_ratio_over16": 0.1422222,
+        "maximum_channel_difference": 68
+      },
+      "axis-label-band": {
+        "mae_0_255": 4.626276,
+        "changed_pixels": 6245,
+        "changed_ratio_any": 0.9956952,
+        "changed_ratio_over16": 0.0723852,
+        "maximum_channel_difference": 226
+      },
+      "timer-protected": {
+        "mae_0_255": 25.442613,
+        "changed_pixels": 2730,
+        "changed_ratio_any": 1.0,
+        "changed_ratio_over16": 0.2791209,
+        "maximum_channel_difference": 255
+      },
+      "playback-protected": {
+        "mae_0_255": 12.942207,
+        "changed_pixels": 4320,
+        "changed_ratio_any": 1.0,
+        "changed_ratio_over16": 0.1645833,
+        "maximum_channel_difference": 240
+      }
+    },
+    "new60": {
+      "full-no-mask": {
+        "mae_0_255": 14.220303,
+        "changed_pixels": 107212,
+        "changed_ratio_any": 0.9971354,
+        "changed_ratio_over16": 0.1253906,
+        "maximum_channel_difference": 255
+      },
+      "timeline-full": {
+        "mae_0_255": 3.55201,
+        "changed_pixels": 40964,
+        "changed_ratio_any": 0.9993169,
+        "changed_ratio_over16": 0.0199551,
+        "maximum_channel_difference": 200
+      },
+      "playhead": {
+        "mae_0_255": 9.436951,
+        "changed_pixels": 1546,
+        "changed_ratio_any": 0.9929351,
+        "changed_ratio_over16": 0.3391137,
+        "maximum_channel_difference": 200
+      },
+      "first-label-all-positions": {
+        "mae_0_255": 3.551111,
+        "changed_pixels": 675,
+        "changed_ratio_any": 1.0,
+        "changed_ratio_over16": 0.0133333,
+        "maximum_channel_difference": 30
+      },
+      "axis-label-band": {
+        "mae_0_255": 2.83817,
+        "changed_pixels": 6245,
+        "changed_ratio_any": 0.9956952,
+        "changed_ratio_over16": 0.0365115,
+        "maximum_channel_difference": 154
+      },
+      "timer-protected": {
+        "mae_0_255": 25.442613,
+        "changed_pixels": 2730,
+        "changed_ratio_any": 1.0,
+        "changed_ratio_over16": 0.2791209,
+        "maximum_channel_difference": 255
+      },
+      "playback-protected": {
+        "mae_0_255": 12.942207,
+        "changed_pixels": 4320,
+        "changed_ratio_any": 1.0,
+        "changed_ratio_over16": 0.1645833,
+        "maximum_channel_difference": 240
+      }
+    }
+  },
+  "oldNewMetrics": {
+    "full-no-mask": {
+      "mae_0_255": 0.217668,
+      "changed_pixels": 1143,
+      "changed_ratio_any": 0.0106306,
+      "changed_ratio_over16": 0.004641,
+      "maximum_channel_difference": 255
+    },
+    "timeline-full": {
+      "mae_0_255": 0.570933,
+      "changed_pixels": 1143,
+      "changed_ratio_any": 0.0278835,
+      "changed_ratio_over16": 0.0121731,
+      "maximum_channel_difference": 255
+    },
+    "playhead": {
+      "mae_0_255": 1.490901,
+      "changed_pixels": 104,
+      "changed_ratio_any": 0.0667951,
+      "changed_ratio_over16": 0.029544,
+      "maximum_channel_difference": 255
+    },
+    "first-label-all-positions": {
+      "mae_0_255": 6.838025,
+      "changed_pixels": 205,
+      "changed_ratio_any": 0.3037037,
+      "changed_ratio_over16": 0.1451852,
+      "maximum_channel_difference": 68
+    },
+    "axis-label-band": {
+      "mae_0_255": 3.399926,
+      "changed_pixels": 961,
+      "changed_ratio_any": 0.1532207,
+      "changed_ratio_over16": 0.0719069,
+      "maximum_channel_difference": 255
+    },
+    "timer-protected": {
+      "mae_0_255": 0.0,
+      "changed_pixels": 0,
+      "changed_ratio_any": 0.0,
+      "changed_ratio_over16": 0.0,
+      "maximum_channel_difference": 0
+    },
+    "playback-protected": {
+      "mae_0_255": 0.0,
+      "changed_pixels": 0,
+      "changed_ratio_any": 0.0,
+      "changed_ratio_over16": 0.0,
+      "maximum_channel_difference": 0
+    }
+  },
+  "candidates": {
+    "axis-pad5": {
+      "firstLabelAt220": {
+        "pixels": 38,
+        "bounds_half_open": [
+          20,
+          272,
+          36,
+          277
+        ]
+      },
+      "yellow": {
+        "pixels": 172,
+        "bounds_half_open": [
+          111,
+          104,
+          114,
+          268
+        ]
+      }
+    },
+    "axis-pad7": {
+      "firstLabelAt220": {
+        "pixels": 38,
+        "bounds_half_open": [
+          20,
+          274,
+          36,
+          279
+        ]
+      },
+      "yellow": {
+        "pixels": 172,
+        "bounds_half_open": [
+          111,
+          104,
+          114,
+          268
+        ]
+      }
+    },
+    "axis-pad8": {
+      "firstLabelAt220": {
+        "pixels": 37,
+        "bounds_half_open": [
+          20,
+          274,
+          36,
+          279
+        ]
+      },
+      "yellow": {
+        "pixels": 172,
+        "bounds_half_open": [
+          111,
+          104,
+          114,
+          268
+        ]
+      }
+    }
+  },
+  "desktop": {
+    "desktop-280x467": {
+      "pngBytesEqual": true,
+      "oldPngSha256": "bc7e5dd899b3a2d9fac4cc11edb3c68695572ec19f6e9f7bd5b38bfd5cd924f9",
+      "newPngSha256": "bc7e5dd899b3a2d9fac4cc11edb3c68695572ec19f6e9f7bd5b38bfd5cd924f9",
+      "domBytesEqual": true,
+      "allComputedEqual": true,
+      "geometryEqual": true,
+      "timelineCommonFieldsEqual": true,
+      "timelineFieldsNotArchivedInFirstBaseline": [
+        "minorTicks"
+      ],
+      "buttonsEqual": true,
+      "raster": {
+        "mae_0_255": 0.0,
+        "changed_pixels": 0,
+        "changed_ratio_any": 0.0,
+        "changed_ratio_over16": 0.0,
+        "maximum_channel_difference": 0
+      },
+      "rasterBoundsHalfOpen": null
+    },
+    "desktop-320x600-dark": {
+      "pngBytesEqual": false,
+      "oldPngSha256": "f6e2d8b4b231ac066e006051e9506f8024abf00b86e8a3a90188a2d2d1749995",
+      "newPngSha256": "43549434be6c0fa0278a31872a84f2b3f233f54e7cfb9d8db689c87ac935b093",
+      "domBytesEqual": true,
+      "allComputedEqual": true,
+      "geometryEqual": true,
+      "timelineCommonFieldsEqual": true,
+      "timelineFieldsNotArchivedInFirstBaseline": [
+        "minorTicks"
+      ],
+      "buttonsEqual": true,
+      "raster": {
+        "mae_0_255": 7e-06,
+        "changed_pixels": 9,
+        "changed_ratio_any": 1.17e-05,
+        "changed_ratio_over16": 0.0,
+        "maximum_channel_difference": 1
+      },
+      "rasterBoundsHalfOpen": [
+        314,
+        794,
+        604,
+        1147
+      ]
+    }
+  },
+  "mobileProtected": {
+    "mobile-idle-392x840": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-recording-392x840": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-paused-392x840": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-playing-392x840": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-pending-392x840": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-error-392x840": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-saving-392x840": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-paused-320x568": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-paused-280x600": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-paused-392x840-dark": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-error-320x568": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-saving-320x568": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-error-280x600": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "mobile-saving-280x600": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "axis-error-392x840": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "axis-error-392x840-dark": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "samples-392x840": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "axis-error-320x568": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "axis-error-320x568-dark": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "samples-320x568": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "axis-error-280x600": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "axis-error-280x600-dark": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    },
+    "samples-280x600": {
+      ".recording-sheet": true,
+      ".waveform": true,
+      ".wave-samples": true,
+      ".recording-time": true,
+      ".recording-playback": true,
+      ".recording-primary": true,
+      ".recording-done": true,
+      ".recording-notice": true,
+      ".recording-playback-retry": true
+    }
+  },
+  "sampleRegression": {
+    "samples-392x840": {
+      "regionEqual": true,
+      "sampleBoxesEqual": true,
+      "redSamplePixelPositionsEqual": true,
+      "redSamplePixels": 4148,
+      "boundary": "Test input geometry/clipping regression only; no source waveform or amplitude equivalence"
+    },
+    "samples-320x568": {
+      "regionEqual": true,
+      "sampleBoxesEqual": true,
+      "redSamplePixelPositionsEqual": true,
+      "redSamplePixels": 2640,
+      "boundary": "Test input geometry/clipping regression only; no source waveform or amplitude equivalence"
+    },
+    "samples-280x600": {
+      "regionEqual": true,
+      "sampleBoxesEqual": true,
+      "redSamplePixelPositionsEqual": true,
+      "redSamplePixels": 2828,
+      "boundary": "Test input geometry/clipping regression only; no source waveform or amplitude equivalence"
+    }
+  },
+  "axisClearance": {
+    "392x840": {
+      "axisTop": 468.765625,
+      "axisHeight": 20,
+      "axisBottom": 488.765625,
+      "noticeTop": 495.796875,
+      "gap": 7.03125,
+      "rangeAndTicksChecked": true
+    },
+    "320x568": {
+      "axisTop": 316.3125,
+      "axisHeight": 17,
+      "axisBottom": 333.3125,
+      "noticeTop": 335.25,
+      "gap": 1.9375,
+      "rangeAndTicksChecked": true
+    },
+    "280x600": {
+      "axisTop": 334.25,
+      "axisHeight": 17,
+      "axisBottom": 351.25,
+      "noticeTop": 354.140625,
+      "gap": 2.890625,
+      "rangeAndTicksChecked": true
+    }
+  }
+}
