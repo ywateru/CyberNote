@@ -17,6 +17,10 @@ notice/retry top约283（保持，窄高余量更小）
 
 axis框、刻度、label行框及墨迹含溢出均不得侵入notice/retry；必须同时测392×840、320×568、280×600，而非只在参考比例调一张图。axis视觉装饰区域不应抢占下方提示滚动/重试触达；不得缩小44px重试区或移动59已校准控制行。若需让axis脱离wave框显示标签，应显式限制完整有效边界并检验溢出，不靠overflow:hidden裁掉文字获得不重叠结论。保持真实waveform slider原框、100px/s、pointer capture/触摸seek及媒体确认规则。原图样本不能推断振幅缩放，60默认不改sample区/实际样本映射；如需变动须先指出证据依赖。
 
+60最终手机局部参数：playhead bottom2px；axis height20px/bottom−18px，标签font11px/line-height13px/padding-top6px。axis顶部与游标底部同为完整wave底缘上方2px，标签实际19px行框完整容纳于20px轴框，轴框仅裁掉超出视口的横向时间带，不裁文字上下缘；wave overflow允许该明确的下方装饰，axis pointer-events:none，不把溢出区变成额外seek区域。samples原底部30px预留和样本映射保持。
+
+视口高≤650px时，只将axis改为height17px/bottom−15px、标签padding-top3px，字号与line-height保持11px/13px，完整16px标签行框容纳于17px轴框。实测392×840轴底488.77/提示顶495.80、320×568轴底333.31/提示顶335.25、280×600轴底351.25/提示顶354.14逻辑px，分别留7.03/1.94/2.89px；包括全部刻度和文字Range的有效边界。此短屏留白是无原版同尺寸参考的工程约束，不称原生token或错误态像素一致；计时、播放、提示/重试和真实slider框不移动。
+
 仅录音手机局部CSS，不改桌面同props图像、DOM和computed style；不改会话/owner、权限、保存ACK、RecordingView动作或原生。受控实际共享View可用于样式和动作验证，不能宣称已验手机收音或整个产品像素一致。仍保留无听写和真实错误内容。
 
 ## 59 播放行校准依据（2026-11-05）
