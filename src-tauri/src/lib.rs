@@ -360,7 +360,11 @@ pub fn run() {
                     .hide_others()
                     .show_all()
                     .separator()
-                    .quit()
+                    .item(
+                        &MenuItemBuilder::with_id("quit", "退出备忘录")
+                            .accelerator("CmdOrCtrl+Q")
+                            .build(app)?,
+                    )
                     .build()?;
                 let file = SubmenuBuilder::new(app, "文件")
                     .item(
@@ -412,6 +416,14 @@ pub fn run() {
                 )?;
                 app.on_menu_event(|app, event| {
                     use tauri::Emitter;
+                    // The predefined macOS Quit calls terminate: directly and
+                    // bypasses ExitRequested. Route menu/CmdQ through the same
+                    // cancellable recording/document save barrier, even when
+                    // none of our windows currently has focus.
+                    if event.id().as_ref() == "quit" {
+                        app.exit(0);
+                        return;
+                    }
                     if let Some(window) = app
                         .webview_windows()
                         .into_values()

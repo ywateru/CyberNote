@@ -137,3 +137,6 @@
 ## 普通Mac退出入口补齐68/69
 
 主应用右侧录音栏保持66。正常菜单/⌘Q使用自定义菜单项请求AppHandle.exit进入已有ExitRequested；Dock等原生terminate须先在applicationShouldTerminate取消，再请求同一守卫。不得等WillTerminate才发起异步保存。所有已登记活动录音仍需原A最终保存、参与文档flush与准确ACK后才放行；失败保留侧栏/会话供重试。此为既有退出保存合同的入口修复，实际新包未验前不记通过。强杀/断电不承诺，registry全空纯正文行为不由本次扩大保证。
+## 菜单退出入口68
+
+Mac菜单“退出备忘录”及CmdQ使用自有菜单项，经AppHandle.exit进入现有ExitRequested关卡；无焦点窗口也先处理退出意图。已有本地录音登记时，仍须全部正文窗口seal、原A录音final、各正文flush及准确quit ACK后才允许退出，失败恢复编辑并保留重试会话。此连接不增加权限或改变时限、录音归属及存储门禁。Dock退出、AppleEvent直接终止、强杀或注销不由此项接入或宣称保证；准确新包的菜单/CmdQ运行结果另行验收，Mac20已记录的缺卡事实保留。
