@@ -4,6 +4,8 @@
 
 **当前是可运行开发版，尚未达到原版全部UI、交互及逐像素一致，完整目标仍在进行。** 需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，细分状态见[交付计划](docs/plan/README.md)。
 
+日常开发现在使用[统一调试入口](docs/debugging.md)：`pnpm test:debug --out /private/tmp/notes-debug-result`运行隔离合成工作区的命令、DOM/布局与录音场景，`pnpm debug all --mobile`检查手机浏览器布局。默认不启动安装包或接触现有手机/真实麦克风；其fake后端不等同于Rust Store、原生硬件或原版像素验收。Mac21的有限实际验收状态以[文档索引](docs/INDEX.md)为准，下文Mac17及Android13为历史交付记录。
+
 最新源码已合入[手机录音游标/时间轴60](docs/verification/mobile-recording-wave60-root-integration/README.md)：游标下缘及标签位置/字号贴近原暂停帧，三种小屏下完整标签、提示滚动、重试和触摸定位经独立复核；已进入下方第13次Android构建，**未安装到设备**。手机当前未保存录音现场继续保留，不备份/安装/停止/重启。[桌面授权诊断63](docs/verification/mac-recording-diagnostics63-root-integration/README.md)也已独审合入源码，默认关闭，尚未进入安装包；真实新采集与整体像素目标继续开放。
 
 ## 当前交付（2026-11-05）

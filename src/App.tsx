@@ -1,3 +1,4 @@
+import type { DebugAdapter } from "./debug/protocol";
 import { RecordingRevisions } from "./recording-revisions";
 import {
   replaceRecordingAttachment,
@@ -44,7 +45,7 @@ import { SaveRevisions } from "./save-revisions";
 import { SidebarPreference } from "./sidebar-preference";
 import { secureId } from "./secure-id";
 import { invoke } from "@tauri-apps/api/core";
-import type { RecordingViewState } from "./recording-coordinator";
+import { validRecordingAction, type RecordingViewState } from "./recording-coordinator";
 import DesktopRecordingPanel, {
   type DesktopRecordingPanelHandle,
 } from "./DesktopRecordingPanel";
@@ -424,6 +425,10 @@ function SearchEditorHost({
   );
 }
 function App() {
+  const debugAdapter = useRef<DebugAdapter | null>(null);
+  const debugFailure = useRef({ serial: 0, message: "" });
+  const debugPending = useRef(new Set<Promise<unknown>>());
+  const debugRecordingState = useRef<RecordingViewState | null>(null);
   const separate = new URLSearchParams(location.search).get("note");
   const [ws, setWs] = useState<Workspace>(empty);
   const wsRef = useRef(ws);
@@ -861,7 +866,14 @@ function App() {
       setEditing(false);
     }
   }, [desktopSearch, query, filter, tagFilter]);
-  const fail = useCallback((e: unknown) => setError(errText(e)), []);
+  const fail = useCallback((e: unknown) => {
+    if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1")
+      debugFailure.current = {
+        serial: debugFailure.current.serial + 1,
+        message: errText(e),
+      };
+    setError(errText(e));
+  }, []);
   const changeSidebar = useCallback(
     (value: boolean | ((current: boolean) => boolean)) => {
       if (ownsSidebarPreference && !initializedSidebar.current) return;
@@ -1089,7 +1101,11 @@ function App() {
       };
       setSettings((prev) => ({ ...prev, ...patch }));
       setWs((prev) => ({ ...prev, settings: { ...prev.settings, ...patch } }));
-      action({ type: "settings", settings: patch }).catch(fail);
+      const work = action({ type: "settings", settings: patch }).catch(fail);
+      if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1") {
+        debugPending.current.add(work);
+        void work.finally(() => debugPending.current.delete(work));
+      }
     },
     [fail],
   );
@@ -2371,22 +2387,18 @@ function App() {
     if (!owned()) throw Error("原录音或文字识别会话已关闭");
     const synced = await synchronizeRef.current();
     if (!owned()) throw Error("原录音会话已关闭");
-    if (
-      mobile &&
-      recording &&
-      !recording.desktop &&
-      synced.success &&
-      synchronization.current(synced)
-    ) {
+    if (synced.success && synchronization.current(synced)) {
       // The trusted response may resolve before React restores the original
       // Host's gate. Wait for that actual commit, then retain every target check.
       const controller = new AbortController();
-      recording.editorCommits ??= new Set();
-      recording.editorCommits.add(controller);
+      if (recording) {
+        recording.editorCommits ??= new Set();
+        recording.editorCommits.add(controller);
+      }
       try {
         await waitRecordingEditorCommit(controller.signal);
       } finally {
-        recording.editorCommits.delete(controller);
+        recording?.editorCommits?.delete(controller);
       }
       if (!owned()) throw Error("原录音会话已关闭");
     }
@@ -2708,8 +2720,11 @@ function App() {
     }
     setError("");
   };
-  const fileSelected = async (input: HTMLInputElement) => {
-    const files = input.files;
+  const fileSelected = async (
+    input: HTMLInputElement,
+    suppliedFiles?: readonly File[],
+  ) => {
+    const files = suppliedFiles || input.files;
     const batch = pickerTargets.current.get(input);
     pickerTargets.current.delete(input);
     try {
@@ -3340,6 +3355,8 @@ function App() {
     ticket: RecordingTicket,
     state: RecordingViewState,
   ) => {
+    if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1")
+      debugRecordingState.current = state;
     if (
       !ticket.local ||
       !ticket.accepting ||
@@ -4467,6 +4484,467 @@ function App() {
       }),
     });
   });
+  // The whole adapter is eliminated by Vite in a normal production build.
+  // It captures existing handlers, not a second implementation of the actions.
+  if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1") {
+    const context = (): NativeContext => ({
+      noteId,
+      scope: nativeScope,
+      stamp: accessGate.stamp(noteId || undefined),
+      editor,
+      bookmark:
+        editor && !editor.isDestroyed
+          ? editor.state.selection.getBookmark()
+          : null,
+      documentVersion: editor
+        ? nativeDocumentVersions.current.get(editor) || 0
+        : 0,
+    });
+    const assert = (editing = false, overlay = false) =>
+      nativeAssert.current(context(), editing, overlay);
+    const selectedNote = () => {
+      const n = wsRef.current.notes.find((n) => n.id === noteId);
+      if (!n) throw Error("没有已选择的备忘录");
+      return n;
+    };
+    const editable = () => {
+      assert(true);
+      return nativeSelection(context());
+    };
+    const folderHandle = () => {
+      if (!folderFormHandle.current) throw Error("文件夹表单尚未打开");
+      return folderFormHandle.current;
+    };
+    debugAdapter.current = {
+      state: () => ({
+        workspace: structuredClone(wsRef.current),
+        editorJSON: editor && !editor.isDestroyed ? editor.getJSON() : null,
+        error,
+        notice,
+        selection: {
+          folderId,
+          noteId,
+          page,
+          query,
+          searching,
+          tagFilter,
+          menu,
+          modal,
+          listed: listed.map((n) => n.id),
+        },
+        save: {
+          pending: pendingDocs.current.size,
+          queued: queues.current.size,
+          failed: saveFailures.current.size,
+          saving,
+        },
+        busy:
+          loading ||
+          synchronizingRef.current ||
+          !!metadataRefreshRunning.current ||
+          debugPending.current.size > 0 ||
+          sidebarPreference.needsConfirmation ||
+          !!quitState.current ||
+          ["requesting", "saving", "finalizing"].includes(
+            debugRecordingState.current?.phase || "",
+          ),
+        failure: debugFailure.current,
+        recording: {
+          active: !!recordingTicket.current,
+          state: debugRecordingState.current,
+        },
+        ocr: ocrState,
+        settings,
+        folderForm: !!folderForm,
+      }),
+      handlers: {
+        "app.state": () => debugAdapter.current!.state(),
+        "app.flush": () => flush(),
+        "app.refresh": () => refresh(),
+        "app.back": () => androidBack.current(),
+        "app.dismissError": () => setError(""),
+        "folder.select": ({ id }) => {
+          assert();
+          if (id !== "all" && !wsRef.current.folders.some((f) => f.id === id))
+            throw Error("文件夹不存在");
+          chooseFolder(id as string);
+        },
+        "note.select": ({ id }) => {
+          assert();
+          const n = wsRef.current.notes.find((n) => n.id === id);
+          if (!n) throw Error("备忘录不存在");
+          chooseNote(n);
+        },
+        "tag.select": ({ name }) => {
+          assert();
+          chooseTag(name as string | null);
+        },
+        "note.create": () => {
+          assert();
+          return createNote();
+        },
+        "note.patch": (args) => {
+          assert(true);
+          if (!Object.keys(args).length) throw Error("必须提供修改字段");
+          if (
+            args.folderId &&
+            !isPhysicalOwner(
+              wsRef.current.folders.find((f) => f.id === args.folderId),
+            )
+          )
+            throw Error("必须移到实体文件夹");
+          return patch({ type: "patchNote", id: selectedNote().id, ...args });
+        },
+        "note.delete": () => {
+          assert();
+          return patch({ type: "deleteNote", id: selectedNote().id });
+        },
+        "note.restore": () => {
+          assert();
+          if (!selectedNote().deletedAt) throw Error("备忘录不在最近删除");
+          return patch({ type: "restoreNote", id: selectedNote().id });
+        },
+        "note.purge": () => {
+          assert();
+          if (!selectedNote().deletedAt) throw Error("备忘录不在最近删除");
+          openModal("purge");
+        },
+        "note.separate": () => {
+          assert();
+          return openSeparate(selectedNote());
+        },
+        "note.share": () => {
+          assert(true);
+          return shareTarget(context());
+        },
+        "folder.open": ({ id }) => {
+          assert();
+          const f = id
+            ? wsRef.current.folders.find((f) => f.id === id)
+            : undefined;
+          if (id && f?.kind !== "smart")
+            throw Error(
+              "编辑表单只适用于智能文件夹，普通文件夹请使用folder.rename",
+            );
+          setFolderForm(f ? { folder: f } : {});
+        },
+        "folder.draft": () => folderHandle().getDraft(),
+        "folder.updateDraft": ({ draft }) =>
+          folderHandle().updateDraft(draft as Partial<FolderDraft>),
+        "folder.submit": () => folderHandle().submit(),
+        "folder.refresh": () => folderHandle().refresh(),
+        "folder.cancel": () => folderHandle().cancel(),
+        "folder.rename": ({ id }) => {
+          assert();
+          const folder = wsRef.current.folders.find((f) => f.id === id);
+          if (!folder || !["normal", "smart"].includes(folder.kind))
+            throw Error("该文件夹不能改名");
+          setContextFolder(folder.id);
+          if (folder.kind === "smart") setFolderForm({ folder });
+          else {
+            setModal("renameFolder");
+            setModalValue(folder.name);
+            setMenu(null);
+          }
+        },
+        "folder.delete": ({ id }) => {
+          assert();
+          const f = wsRef.current.folders.find((f) => f.id === id);
+          if (!f || (f.kind !== "normal" && f.kind !== "smart"))
+            throw Error("该文件夹不能删除");
+          setContextFolder(f.id);
+          if (f.kind === "smart")
+            smartDeleteTarget.current = {
+              id: f.id,
+              revision: f.definitionRevision,
+            };
+          setModal(f.kind === "smart" ? "deleteSmartFolder" : "deleteFolder");
+        },
+        "editor.insertText": ({ text }) => {
+          const e = editable();
+          return e
+            .chain()
+            .focus()
+            .insertContent({ type: "text", text: text as string })
+            .run();
+        },
+        "editor.setContent": ({ document }) => {
+          const e = editable();
+          const node = e.schema.nodeFromJSON(document);
+          node.check();
+          if (node.type.name !== "doc") throw Error("文档必须为doc");
+          return e.commands.setContent(node.toJSON(), { emitUpdate: true });
+        },
+        "editor.select": ({ from, to }) => {
+          const e = editable();
+          if (
+            !Number.isSafeInteger(from) ||
+            !Number.isSafeInteger(to) ||
+            Number(from) > Number(to) ||
+            Number(to) > e.state.doc.content.size
+          )
+            throw Error("选区越界");
+          return e.commands.setTextSelection({
+            from: Number(from),
+            to: Number(to),
+          });
+        },
+        "editor.undo": () => {
+          const e = editable();
+          if (!e.can().undo()) throw Error("没有可撤销的编辑");
+          return e.chain().focus().undo().run();
+        },
+        "editor.redo": () => {
+          const e = editable();
+          if (!e.can().redo()) throw Error("没有可重做的编辑");
+          return e.chain().focus().redo().run();
+        },
+        "editor.format": ({ command }) => {
+          assert(true);
+          nativeHandler.current(
+            command === "checklist" || command === "table"
+              ? { kind: "action", action: command }
+              : {
+                  kind: "menu",
+                  owner: "format",
+                  command: command as MenuCommand,
+                },
+            context(),
+            0,
+          );
+        },
+        "editor.table": ({ action: tableAction }) => {
+          const e = editable();
+          if (tableAction === "convertToText") return convertTableToText(e);
+          if (tableAction === "insert")
+            return e
+              .chain()
+              .focus()
+              .insertTable({ rows: 2, cols: 2, withHeaderRow: false })
+              .run();
+          const chain = e.chain().focus();
+          const method = chain[tableAction as "addRowBefore"];
+          if (typeof method !== "function" || !method.call(chain).run())
+            throw Error("当前表格操作不可用");
+        },
+        "search.set": ({ query: value }) => {
+          assert();
+          setQuery(value as string);
+          setSearching(true);
+          setFilter((f) => (f === "tags" ? f : ""));
+        },
+        "search.find": ({ query: value }) => {
+          assert(true);
+          setFind(value as string);
+          setShowFind(true);
+        },
+        "settings.update": ({ settings: change }) => {
+          assert();
+          const patch = change as Settings;
+          const keys = [
+            "theme",
+            "view",
+            "sort",
+            "groupDates",
+            "sidebarWidth",
+            "listWidth",
+            "macSidebarVisible",
+          ];
+          if (Object.keys(patch).some((k) => !keys.includes(k)))
+            throw Error("未知设置字段");
+          updateSettings(patch);
+        },
+        "sidebar.toggle": () => {
+          assert();
+          changeSidebar((v) => !v);
+        },
+        "menu.open": ({ menu: value }) => {
+          assert();
+          if (value === "format") {
+            assert(true);
+            openFormat();
+          } else setMenu(value as string);
+        },
+        "modal.open": ({ type, value }) => {
+          assert();
+          openModal(type as string, value as string | undefined);
+        },
+        "modal.submit": async () => {
+          if (
+            !modal ||
+            ![
+              "renameFolder",
+              "lock",
+              "unlock",
+              "deleteFolder",
+              "deleteSmartFolder",
+              "purge",
+            ].includes(modal)
+          )
+            throw Object.assign(Error("当前对话框没有提交动作"), {
+              code: "UNAVAILABLE",
+            });
+          await confirmModal();
+        },
+        "modal.cancel": () => {
+          if (!modal) throw Error("对话框未打开");
+          androidBack.current();
+        },
+        "attachment.choose": ({ kind }) => {
+          assert(true);
+          openAttachmentPicker(
+            kind === "camera" ? cameraInput.current : fileInput.current,
+            kind === "media" ? "image/*,video/*" : "",
+            context(),
+          );
+        },
+        "attachment.submit": async ({ files }) => {
+          assert(true);
+          const input = fileInput.current;
+          if (!input) throw Error("附件输入尚未就绪");
+          const batch = capturePickerTarget(context());
+          const previous = pickerTargets.current.get(input);
+          if (previous) previous.target.invalidated = true;
+          pickerTargets.current.set(input, batch);
+          const synthetic = (
+            files as {
+              name: string;
+              mime: string;
+              text?: string;
+              base64?: string;
+            }[]
+          ).map(
+            (f) =>
+              new File(
+                [
+                  f.base64 === undefined
+                    ? f.text || ""
+                    : Uint8Array.from(atob(f.base64), (c) => c.charCodeAt(0)),
+                ],
+                f.name,
+                { type: f.mime, lastModified: 1700000000000 },
+              ),
+          );
+          await fileSelected(input, synthetic);
+        },
+        "attachment.retry": () => {
+          if (!attachmentBatches.current.size)
+            throw Object.assign(Error("没有可重试的附件"), {
+              code: "UNAVAILABLE",
+            });
+          return retryAttachments();
+        },
+        "attachment.discard": () => {
+          if (!attachmentBatches.current.size) throw Object.assign(Error("没有可取消的附件"), {code: "UNAVAILABLE"});
+          return discardUninsertedAttachments();
+        },
+        "recording.open": () => {
+          assert(true);
+          if (recordingTicket.current) throw Object.assign(Error("录音会话已打开"), {code: "UNAVAILABLE"});
+          debugRecordingState.current = null;
+          openRecording(context());
+        },
+        "recording.action": async (args) => {
+          const ticket = recordingTicket.current;
+          const local = ticket?.local?.handle;
+          const handle = local || recordingPanel.current;
+          const state = debugRecordingState.current;
+          if (!handle || !state)
+            throw Object.assign(Error("录音面板未就绪"), {
+              code: "UNAVAILABLE",
+            });
+          if (!validRecordingAction(args)) throw Error("录音动作参数无效");
+          const allowed =
+            args.action === "toggle"
+              ? state.canToggle
+              : args.action === "playback"
+                ? state.canPlay
+                : args.action === "preview-retry"
+                  ? state.canRetryPreview
+                  : args.action === "skip" || args.action === "seek"
+                    ? state.canSeek
+                    : state.canFinish;
+          if (
+            !allowed ||
+            (args.action === "seek" &&
+              !state.seekable.some(
+                ([start, end]) =>
+                  Number(args.milliseconds) >= start &&
+                  Number(args.milliseconds) <= end,
+              ))
+          )
+            throw Object.assign(Error("当前录音动作不可用"), {
+              code: "UNAVAILABLE",
+            });
+          if (local && (args.action === "close" || args.action === "finish"))
+            await local.close();
+          else handle.dispatch(args);
+        },
+        "ocr.open": () => {
+          assert(true);
+          openOcr(context());
+        },
+        "ocr.select": async ({ source }) => {
+          const op = ocrOperation.current;
+          if (!op) throw Error("识别会话不存在");
+          await op.process({ kind: (source || "image") as "image" | "camera" });
+        },
+        "ocr.insert": () => {
+          const op = ocrOperation.current;
+          if (!op) throw Error("识别会话不存在");
+          return confirmOcr(op);
+        },
+        "ocr.retry": () => {
+          if (!ocrOperation.current || ocrState.phase !== "failed")
+            throw Object.assign(Error("当前识别不能重试"), {
+              code: "UNAVAILABLE",
+            });
+          return retryOcr();
+        },
+        "ocr.cancel": () => {
+          if (!ocrOperation.current) throw Object.assign(Error("识别会话不存在"), {code: "UNAVAILABLE"});
+          return cancelOcr();
+        },
+        "archive.export": () => {
+          assert();
+          return archive("export");
+        },
+        "archive.import": () => {
+          assert();
+          return archive("import");
+        },
+        "app.close": () => {
+          if (!native) throw Error("浏览器预览没有原生窗口关闭事件");
+          return getCurrentWindow().close();
+        },
+        "app.quit": () => {
+          if (!native) throw Error("浏览器预览没有原生退出事件");
+          return exit(0);
+        },
+        "drawing.open": () => {
+          assert(true);
+          setDraw({ strokes: [] });
+        },
+      },
+    };
+  }
+  useEffect(() => {
+    if (!import.meta.env.DEV || import.meta.env.VITE_NOTES_DEBUG !== "1")
+      return;
+    let live = true,
+      release: (() => void) | undefined;
+    void import("./debug/runtime").then(({ registerDebug }) => {
+      if (live)
+        release = registerDebug(() => {
+          if (!debugAdapter.current) throw Error("调试应用尚未就绪");
+          return debugAdapter.current;
+        });
+    });
+    return () => {
+      live = false;
+      release?.();
+    };
+  }, []);
   const nativeTop = !mobile && !!nativeInfo;
   return (
     <div className="recording-layout">
@@ -5534,6 +6012,7 @@ function App() {
           onHandle={(handle) => {
             recordingPanel.current = handle;
           }}
+          onState={import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1" ? (state) => { debugRecordingState.current = state; } : undefined}
           onCancel={() => void cancelRecording(recording).catch(fail)}
           onDone={(result) => submitRecording(recording, result)}
         />

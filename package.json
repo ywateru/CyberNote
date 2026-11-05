@@ -20,7 +20,9 @@
     "test:editor": "node scripts/check-editor-actions.mjs",
     "test:access": "node scripts/check-access-boundary.mjs",
     "test:secure-id": "node scripts/check-secure-id.mjs",
-    "test:native-toolbar": "node scripts/check-native-toolbar.mjs"
+    "test:native-toolbar": "node scripts/check-native-toolbar.mjs",
+    "debug": "node scripts/debug/cli.mjs",
+    "test:debug": "node scripts/debug/cli.mjs all"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.9.0",

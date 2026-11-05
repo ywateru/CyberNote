@@ -154,6 +154,10 @@ function TagTokens({
 }
 export interface FolderFormHandle {
   cancel(): void;
+  getDraft(): FolderDraft;
+  updateDraft(change: Partial<FolderDraft>): void;
+  submit(): Promise<void>;
+  refresh(): Promise<void>;
 }
 export function SmartFolderForm({
   mobile,
@@ -188,6 +192,8 @@ export function SmartFolderForm({
     panelRef = useRef(panel);
   draftRef.current = draft;
   panelRef.current = panel;
+  const submitError = useRef<string | null>(null);
+  const refreshError = useRef<string | null>(null);
   const ordinaryForm = useRef<HTMLFormElement>(null);
   const ordinaryKeyboard = useRef<OrdinaryFolderKeyboard | null>(null);
   const keyboardActive = nativeMainKeyboardAvailable() && !mobile && !folder && !draft.smart && !busy;
@@ -215,7 +221,64 @@ export function SmartFolderForm({
     } else onCancel();
   };
   useEffect(() => {
-    onHandle({ cancel });
+    onHandle({
+      cancel,
+      getDraft: () => structuredClone(draftRef.current),
+      updateDraft: (change) => {
+        if (busyRef.current) throw Error("文件夹正在保存");
+        if (
+          !change ||
+          typeof change !== "object" ||
+          Array.isArray(change) ||
+          Object.keys(change).some(
+            (key) => !["name", "smart", "combine", "rules"].includes(key),
+          )
+        )
+          throw Error("无效草稿字段");
+        if (
+          change.name !== undefined &&
+          (typeof change.name !== "string" || change.name.length > 200)
+        )
+          throw Error("无效文件夹名称");
+        if (change.smart !== undefined && typeof change.smart !== "boolean")
+          throw Error("无效文件夹类型");
+        if (
+          change.combine !== undefined &&
+          !["all", "any"].includes(change.combine)
+        )
+          throw Error("无效组合规则");
+        if (
+          change.rules !== undefined &&
+          (!Array.isArray(change.rules) ||
+            change.rules.length > 16 ||
+            change.rules.some(
+              (r) =>
+                !r ||
+                !Number.isSafeInteger(r.key) ||
+                !["tags", "pinned", "creationDate"].includes(r.type) ||
+                !Array.isArray(r.names) ||
+                r.names.some((n) => typeof n !== "string") ||
+                typeof r.pinned !== "boolean" ||
+                !["allSelected", "anySelected", "anyTag", "noTags"].includes(
+                  r.mode,
+                ),
+            ))
+        )
+          throw Error("无效过滤规则");
+        update(change);
+      },
+      submit: async () => {
+        if (busyRef.current) throw Error("文件夹正在保存");
+        await submit();
+        if (submitError.current) throw Error(submitError.current);
+      },
+      refresh: async () => {
+        if (!draftRef.current.id || busyRef.current)
+          throw Error("文件夹无法刷新");
+        await refresh();
+        if (refreshError.current) throw Error(refreshError.current);
+      },
+    });
     return () => onHandle(null);
   });
   useEffect(() => {
@@ -252,9 +315,11 @@ export function SmartFolderForm({
   };
   const submit = async () => {
     if (busyRef.current) return;
+    submitError.current = null;
     try {
       validate(draft);
     } catch (e) {
+      submitError.current = (e as Error).message;
       setError((e as Error).message);
       if (
         draft.smart &&
@@ -274,9 +339,13 @@ export function SmartFolderForm({
     try {
       const result = await onSave(draft, committedId.current);
       if (result.id) committedId.current = result.id;
-      if (!result.complete)
-        setError("文件夹已经保存，正在等待列表同步。请重试同步。");
+      if (!result.complete) {
+        submitError.current = "文件夹已经保存，正在等待列表同步。请重试同步。";
+        setError(submitError.current);
+      }
     } catch (e) {
+      submitError.current =
+        (e as { message?: string }).message || "保存失败，草稿仍保留。请重试。";
       setError(
         (e as { message?: string }).message || "保存失败，草稿仍保留。请重试。",
       );
@@ -287,6 +356,7 @@ export function SmartFolderForm({
     }
   };
   const refresh = async () => {
+    refreshError.current = null;
     if (!draft.id || busyRef.current) return;
     busyRef.current = true;
     setBusy(true);
@@ -295,7 +365,8 @@ export function SmartFolderForm({
       setConflict(false);
       setError("");
     } catch (e) {
-      setError((e as Error).message);
+      refreshError.current = (e as Error).message;
+      setError(refreshError.current);
     } finally {
       busyRef.current = false;
       setBusy(false);
