@@ -1,0 +1,230 @@
+{
+  "schema": 1,
+  "startedAt": "2026-11-05T04:08:37.713417+00:00",
+  "stage": "android",
+  "expectedHead": "9167db94908ac635b026220e782878447c9e16a7",
+  "productAggregate": "289ef9f8d4d9ab0c9cf9b91ea17e79299e3970c5b2b51d683c058d0e9a54cf90",
+  "sourceAggregate": "c6087562c39525b8ee7b227c5e1fd93ec8793ba16766e7edcdefb3ea645dfda5",
+  "freezeSha256": "ad9993add0666abd769d170fee4bc83eb255569b90d58803227c45a06068884b",
+  "attempt": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-recording-presentation-build10/android-attempt01",
+  "nonce": "4289ce984f3941a79abdeda2348f62eb",
+  "command": [
+    "pnpm",
+    "android:build",
+    "--debug"
+  ],
+  "exitCode": 0,
+  "explicitEnvironmentOverrides": {
+    "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+    "NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+    "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+    "GRADLE_USER_HOME": "/private/tmp/notes-scan-gradle-home",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "2",
+    "GRADLE_RO_DEP_CACHE": "/private/tmp/notes-lifecycle-cache-overlay-01/overlay-ro",
+    "GRADLE_OPTS": "-Dorg.gradle.daemon=false -Dorg.gradle.configuration-cache=false"
+  },
+  "outputIsolation": {
+    "policy": "atomic-rename-final-output-and-dist",
+    "sourcePathsAbsentBeforeCommand": true,
+    "outputs": [
+      {
+        "name": "application",
+        "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+        "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-recording-presentation-build10/android-attempt01/prior-outputs/application",
+        "kind": "file",
+        "before": null
+      },
+      {
+        "name": "dist",
+        "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+        "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-recording-presentation-build10/android-attempt01/prior-outputs/dist",
+        "kind": "directory",
+        "before": {
+          "kind": "directory",
+          "device": 16777233,
+          "inode": 30352027,
+          "mode": 493,
+          "directories": [
+            {
+              "path": "assets",
+              "mode": 493
+            }
+          ],
+          "files": [
+            {
+              "path": "assets/index-6V6yqY4Y.css",
+              "bytes": 73691,
+              "sha256": "643894012323768cf9f41ab5ecfcd31216dc17a9f66fe61b120e674377ada8de",
+              "type": "file",
+              "mode": 420
+            },
+            {
+              "path": "assets/index-kOwwwCY6.js",
+              "bytes": 1006549,
+              "sha256": "26058559d5d9892febae5aaac00a0a66db450781f0d7ff6c47080982ba9c0aa0",
+              "type": "file",
+              "mode": 420
+            },
+            {
+              "path": "assets/native-recording-access-BuXUlhx7.js",
+              "bytes": 581,
+              "sha256": "21d37d625eed7fc1e68a663fe58bcdec77af6d4c9c2ff66b5172b953a77174bf",
+              "type": "file",
+              "mode": 420
+            },
+            {
+              "path": "index.html",
+              "bytes": 498,
+              "sha256": "a25f5443662a0d541fab1ba1a7dc3a00d518a6eafd74c454c7c302914ac87862",
+              "type": "file",
+              "mode": 420
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "temporaryGradleInit": {
+    "path": "/private/tmp/notes-scan-gradle-home/init.d/candidate06-offline-4289ce984f3941a79abdeda2348f62eb.gradle",
+    "device": 16777233,
+    "inode": 30354293,
+    "bytes": 576,
+    "sha256": "dd8cabf5544b7a61646da4482d69ed8fcfe508a7766b75bd1c759d003a656977"
+  },
+  "diskFreeBefore": 34979205120,
+  "minimumFreeBytes": 34123177984,
+  "deadlineSeconds": 600,
+  "ownedProcessGroup": 71465,
+  "ownedGroupStopped": true,
+  "remainingOwnedGroupMembers": [],
+  "elapsedSeconds": 40.374,
+  "temporaryGradleInitRemoved": true,
+  "temporaryGradleInitBeforeCleanup": {
+    "path": "/private/tmp/notes-scan-gradle-home/init.d/candidate06-offline-4289ce984f3941a79abdeda2348f62eb.gradle",
+    "device": 16777233,
+    "inode": 30354293,
+    "bytes": 576,
+    "regularFile": true,
+    "sha256": "dd8cabf5544b7a61646da4482d69ed8fcfe508a7766b75bd1c759d003a656977"
+  },
+  "androidOfflineProof": {
+    "nonce": "4289ce984f3941a79abdeda2348f62eb",
+    "offline": true,
+    "workers": 2,
+    "configurationCacheJvmProperty": "false",
+    "markerCount": 2
+  },
+  "inputComparisons": {
+    "schema": true,
+    "authorization": true,
+    "head": true,
+    "stage": true,
+    "productFiles": true,
+    "productAggregate": true,
+    "files": true,
+    "aggregate": true,
+    "toolVersions": true,
+    "tools": true,
+    "selectedParentEnvironment": true,
+    "effectiveBuildEnvironment": true,
+    "ocrCache": true,
+    "supplementalInputs": true,
+    "scope": true
+  },
+  "supplementalInputsUnchanged": true,
+  "generatedOutputs": [
+    {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+      "snapshot": {
+        "kind": "file",
+        "device": 16777233,
+        "inode": 30355335,
+        "mode": 420,
+        "bytes": 180721914,
+        "sha256": "975f8e95c568f9c1010eb89e1f1a66e867b3b598ca7987c666143149c731da1f"
+      }
+    },
+    {
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+      "snapshot": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 30354307,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "assets",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "assets/index-6V6yqY4Y.css",
+            "bytes": 73691,
+            "sha256": "643894012323768cf9f41ab5ecfcd31216dc17a9f66fe61b120e674377ada8de",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/index-kOwwwCY6.js",
+            "bytes": 1006549,
+            "sha256": "26058559d5d9892febae5aaac00a0a66db450781f0d7ff6c47080982ba9c0aa0",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/native-recording-access-BuXUlhx7.js",
+            "bytes": 581,
+            "sha256": "21d37d625eed7fc1e68a663fe58bcdec77af6d4c9c2ff66b5172b953a77174bf",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "index.html",
+            "bytes": 498,
+            "sha256": "a25f5443662a0d541fab1ba1a7dc3a00d518a6eafd74c454c7c302914ac87862",
+            "type": "file",
+            "mode": 420
+          }
+        ]
+      }
+    }
+  ],
+  "buildOutputIdentity": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+    "bytes": 180721914,
+    "sha256": "975f8e95c568f9c1010eb89e1f1a66e867b3b598ca7987c666143149c731da1f"
+  },
+  "dist": [
+    {
+      "path": "assets/index-6V6yqY4Y.css",
+      "bytes": 73691,
+      "sha256": "643894012323768cf9f41ab5ecfcd31216dc17a9f66fe61b120e674377ada8de",
+      "type": "file",
+      "mode": 420
+    },
+    {
+      "path": "assets/index-kOwwwCY6.js",
+      "bytes": 1006549,
+      "sha256": "26058559d5d9892febae5aaac00a0a66db450781f0d7ff6c47080982ba9c0aa0",
+      "type": "file",
+      "mode": 420
+    },
+    {
+      "path": "assets/native-recording-access-BuXUlhx7.js",
+      "bytes": 581,
+      "sha256": "21d37d625eed7fc1e68a663fe58bcdec77af6d4c9c2ff66b5172b953a77174bf",
+      "type": "file",
+      "mode": 420
+    },
+    {
+      "path": "index.html",
+      "bytes": 498,
+      "sha256": "a25f5443662a0d541fab1ba1a7dc3a00d518a6eafd74c454c7c302914ac87862",
+      "type": "file",
+      "mode": 420
+    }
+  ],
+  "endedAt": "2026-11-05T04:09:20.817953+00:00"
+}

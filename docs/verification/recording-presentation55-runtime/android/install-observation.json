@@ -1,0 +1,30 @@
+{
+  "source": "9167db94908ac635b026220e782878447c9e16a7",
+  "apkSha256": "975f8e95c568f9c1010eb89e1f1a66e867b3b598ca7987c666143149c731da1f",
+  "installCommand": "adb install -r",
+  "installResult": "Success",
+  "observations": [
+    {
+      "command": [
+        "shell",
+        "pm",
+        "path",
+        "com.local.notesclone"
+      ],
+      "exit": 0,
+      "stdout": "package:/data/app/~~TUBm3hEQncZ7beG-Ki04KA==/com.local.notesclone-6Xgs42tThtW-U5lr0uRxgA==/base.apk\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/notes55-01.xml"
+      ],
+      "exit": 0,
+      "stdout": "UI hierchary dumped to: /sdcard/notes55-01.xml\n",
+      "stderr": ""
+    }
+  ]
+}

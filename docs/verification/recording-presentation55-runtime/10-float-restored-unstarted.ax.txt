@@ -1,0 +1,24 @@
+The following is a diff from the previous accessibility tree for Window: "新录音" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 33-35, 38, 41-49, 65-66, 72-108, 110-126
+~28 standard window 新录音, Secondary Actions: Raise
+~		30 HTML content Description: 备忘录, URL: tauri://localhost/index.html?recording=aeb48084-d26c-4af0-84c1-505cf1b90c26&operation=8deddd24-2681-4512-baae-c055a9d7b2dc
+~			31 container 新录音
+~				32 container
++					33 button 关闭录音
++					34 text 新录音 今天 12:22 00:00
++					35 button (collapsed) 录音显示选项, Secondary Actions: Expand
+~				36 slider (disabled, settable, float) 录音回放位置, Value: 0, Details: 00:00.00
+~				37 container 活动录音时间
++					38 text 00:00.00
+~				39 text 系统麦克风授权等待超时；可取消后检查是否仍有系统提示。
+~				40 container 录音回放
++					41 button (disabled) 后退15秒
++					42 button (disabled) 播放录音
++					43 button (disabled) 前进15秒
++				44 button (disabled) 暂停录音
++				45 button (disabled) 完成录音
++	46 close button
++	47 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
++	48 minimize button
++	49 text 新录音
+The focused UI element is 30 HTML content Description: 备忘录, URL: tauri://localhost/index.html?recording=aeb48084-d26c-4af0-84c1-505cf1b90c26&operation=8deddd24-2681-4512-baae-c055a9d7b2dc

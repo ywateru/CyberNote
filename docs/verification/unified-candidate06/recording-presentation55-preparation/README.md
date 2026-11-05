@@ -1,0 +1,3 @@
+# 55/56同源双端构建
+
+固定主线源9167db94908ac635b026220e782878447c9e16a7，产品328项，完整输入347项，产品聚合289ef9f8d4d9ab0c9cf9b91ea17e79299e3970c5b2b51d683c058d0e9a54cf90。保留54全部输入并加入55/56新增产品及插件实际资源；按Mac16→Android10串行freeze/build/collect，共享target/Gradle cache独占。此前Mac15与Android09失败证据保留，构建通过不代替设备或像素验收。
