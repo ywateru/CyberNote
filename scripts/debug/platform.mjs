@@ -107,10 +107,11 @@ export function installBrowserPlatform({ mobile = false } = {}) {
     emit(name, payload) { return Promise.all((listeners.get(name) || []).map((id) => Promise.resolve(callbacks.get(id)?.({ event: name, id, payload })))); },
     async closeIntent() { let prevented = false; await Promise.all((listeners.get('tauri://close-requested') || []).map((id) => Promise.resolve(callbacks.get(id)?.({ event: 'tauri://close-requested', id, payload: { preventDefault() { prevented = true; } } })))); return { simulated: true, prevented }; },
     async quitIntent() { const id = crypto.randomUUID(); await control.emit('notes-recording-quit', { id }); return { id, simulated: true, osTerminationTested: false }; },
-    dispose() { for (const id of intervals.keys()) timers.clear(id); intervals.clear(); for (const context of contexts) void context.close(); delete window.__DEBUG_PLATFORM__; },
+    async backIntent(canGoBack = false) { if (typeof canGoBack !== 'boolean') throw Error('canGoBack must be boolean'); const rows = [...appListeners.values()]; for (const row of rows) callbacks.get(row.id)?.({ index: row.index++, message: { canGoBack } }); return { simulated: true, dispatched: rows.length, nativeBackTested: false }; },
+    dispose() { for (const id of intervals.keys()) timers.clear(id); intervals.clear(); for (const row of appListeners.values()) callbacks.delete(row.id); appListeners.clear(); for (const context of contexts) void context.close(); delete window.__DEBUG_PLATFORM__; },
   };
   const fail = (name) => { if (control.fail[name] > 0) { control.fail[name]--; throw Error('Controlled ' + name + ' device failure'); } };
-  const callbacks = new Map(), listeners = new Map(); let callbackId = 0;
+  const callbacks = new Map(), listeners = new Map(), appListeners = new Map(); let callbackId = 0;
   window.isTauri = true; window.__TAURI_EVENT_PLUGIN_INTERNALS__ = { unregisterListener() {} };
   window.__TAURI_INTERNALS__ = {
     metadata: { currentWindow: { label: 'main' }, currentWebview: { label: 'main' } }, transformCallback(fn) { const id = ++callbackId; callbacks.set(id, fn); return id; }, unregisterCallback(id) { callbacks.delete(id); }, convertFileSrc: (path) => path,
@@ -124,7 +125,8 @@ export function installBrowserPlatform({ mobile = false } = {}) {
       if (command === 'plugin:notes-ui|recording_access') { fail('authorization'); return { status: 'authorized' }; }
       if (command.startsWith('plugin:window|') || command.startsWith('plugin:webview|') || command.startsWith('plugin:webview-window|')) { if (command.endsWith('|close')) { await control.emit('tauri://close-requested', null); return; } if (command.endsWith('|destroy')) control.destroyed = true; if (command.endsWith('|is_focused')) return true; return null; }
       if (command === 'plugin:app|exit') { control.exited = true; return control.quitIntent(); }
-      if (command === 'plugin:app|on_back_button_press') return null;
+      if ((command === 'plugin:app|register_listener' || command === 'plugin:app|registerListener') && args.event === 'back-button') { if (!Number.isInteger(args.handler?.id) || !callbacks.has(args.handler.id)) throw Error('Invalid synthetic back-button channel'); appListeners.set(args.handler.id, { id: args.handler.id, index: 0 }); return null; }
+      if ((command === 'plugin:app|remove_listener' || command === 'plugin:app|removeListener') && args.event === 'back-button') { if (!Number.isInteger(args.channelId)) throw Error('Invalid synthetic back-button channel id'); appListeners.delete(args.channelId); callbacks.delete(args.channelId); return null; }
       const response = await fetch('/__debug_ipc', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ command, args }) }).then((r) => r.json());
       for (const event of response.events || []) { control.events.push(event.name); control.emit(event.name, event.payload); }
       if (command === 'recording_quit_ack') control.quitAcknowledgements.push(args);
