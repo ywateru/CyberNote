@@ -24,7 +24,7 @@ function validate(command: Command, value: unknown): DebugArgs {
   if (!plain(value) || !serialized || serialized.length > 2_000_000)
     fail("INVALID_ARGUMENT", "Arguments must be a bounded plain object");
   for (const key of Object.keys(value))
-    if (!(key in command.args))
+    if (!Object.prototype.hasOwnProperty.call(command.args, key))
       fail("INVALID_ARGUMENT", `Unknown argument: ${key}`);
   for (const [key, field] of Object.entries(command.args)) {
     const v = value[key];
@@ -75,7 +75,7 @@ function validate(command: Command, value: unknown): DebugArgs {
         sort: ["updated", "created", "title"],
       };
       if (
-        key in values
+        Object.prototype.hasOwnProperty.call(values, key)
           ? !values[key].includes(v)
           : ["groupDates", "macSidebarVisible"].includes(key)
             ? typeof v !== "boolean"
@@ -216,7 +216,8 @@ export function registerDebug(getAdapter: () => DebugAdapter): () => void {
         ...row,
         available:
           row.mode !== "unsupported" &&
-          (row.mode === "dom" || row.id in live().handlers),
+          (row.mode === "dom" ||
+            Object.prototype.hasOwnProperty.call(live().handlers, row.id)),
         arguments: row.args,
       })),
     async execute(command: string, args: DebugArgs = {}) {
@@ -282,7 +283,20 @@ export function registerDebug(getAdapter: () => DebugAdapter): () => void {
           result: result === undefined ? null : structuredClone(result),
         };
       } catch (error) {
-        if (error && typeof error === "object" && "code" in error) throw error;
+        if (
+          error &&
+          typeof error === "object" &&
+          "code" in error &&
+          [
+            "INVALID_ARGUMENT",
+            "UNKNOWN_COMMAND",
+            "UNAVAILABLE",
+            "UNSUPPORTED",
+            "TIMEOUT",
+            "APP_ERROR",
+          ].includes(String(error.code))
+        )
+          throw error;
         fail(
           "APP_ERROR",
           error instanceof Error ? error.message : String(error),

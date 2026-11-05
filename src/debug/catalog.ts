@@ -175,7 +175,16 @@ add("settings", "settings.update", "Persist application settings", {
 });
 add("settings", "sidebar.toggle", "Use sidebar preference handler");
 add("menus", "menu.open", "Open existing menu", {
-  menu: e(["format", "view", "media", "more", "folder", "sort", "table"]),
+  menu: e([
+    "format",
+    "view",
+    "media",
+    "more",
+    "folder",
+    "table",
+    "note",
+    "app",
+  ]),
 });
 add("menus", "modal.open", "Open real modal", {
   type: e(["lock", "unlock", "paper", "settings", "move", "purge"]),

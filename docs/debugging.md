@@ -77,7 +77,7 @@ window.__NOTES_DEBUG__.snapshot({selector:".app",maxChars:16000,maxNodes:160});
 | 搜索/笔记内查找/标签提交 | `search.set/find`、标签mark文档及DOM输入 | 搜索建议及实际IME提交用DOM/原生另验 |
 | 锁定/解锁/移除锁 | `modal.open`→`dom.fill`→`modal.submit`；更多菜单DOM移除锁 | 仍受原授权/含标签/附件限制；fake不证明Rust加密 |
 | 设置/主题/列表与画廊/排序/分组/侧栏 | `settings.update`、`sidebar.toggle`、设置与view菜单DOM | 设置请求在idle内追踪；拖拽宽度仍需实际pointer动作 |
-| 菜单/对话框 | `menu.open`、`modal.open/submit/cancel`、`dom.click/fill/key` | 控件真实接线；paper/settings/move为即时控件，不提供假submit |
+| 菜单/对话框 | `menu.open`、`modal.open/submit/cancel`、`dom.click/fill/key` | 控件真实接线；排序在view菜单，folder须普通/智能文件夹，table须实际表格选区；paper/settings/move为即时控件，不提供假submit |
 | 文件/图片/视频/相机 | `attachment.choose/submit/retry/discard`、正文附件DOM | 只模拟File/系统边界，目标/权限/ACK不绕过；实际相机另验 |
 | OCR | `ocr.open/select/insert/retry/cancel` | 实际OcrHost，识别器/系统取图显式fake |
 | 录音/暂停继续/累计checkpoint/保存/重试/播放/定位 | `recording.open`、`recording.action` | 真实Session/PCM/attachment/body ACK，设备边界合成；动作检查canX和seekable |

@@ -4783,10 +4783,16 @@ function App() {
         },
         "menu.open": ({ menu: value }) => {
           assert();
-          if (value === "format") {
-            assert(true);
-            openFormat();
-          } else setMenu(value as string);
+          if (["format", "media", "table"].includes(String(value))) assert(true);
+          if (value === "table" && !editor?.isActive("table")) throw Object.assign(Error("当前选区不在表格中"), {code: "UNAVAILABLE"});
+          if (["more", "note"].includes(String(value))) selectedNote();
+          if (value === "folder") {
+            const folder = wsRef.current.folders.find((f) => f.id === folderId);
+            if (!folder || !["normal", "smart"].includes(folder.kind)) throw Object.assign(Error("当前文件夹没有此菜单"), {code: "UNAVAILABLE"});
+            setContextFolder(folder.id);
+          }
+          if (value === "format") openFormat();
+          else setMenu(value as string);
         },
         "modal.open": ({ type, value }) => {
           assert();
