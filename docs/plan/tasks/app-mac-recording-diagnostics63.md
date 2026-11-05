@@ -24,6 +24,7 @@ depends-on: [app-mac-recording-access52]
 3. 不增加status查询次数。pending仅在真实completion或既有异常路径清除，timeout/close不释放仍可能被系统block引用的context；系统completion迟到仍不二次交付。保留30/35/35/45秒层次，不延长、不缩短、不绕过AV预检/WK策略，不为诊断触发requestAccess/getUserMedia。
 4. JS authorizeNativeRecording必须保留原生结构化错误code及可选诊断stage/request ID，保持Error.message供原UI展示；不得把timeout/busy转为denied。普通Error原样向上传递；未知错误仍给既有明确失败文案，不能伪装授权。默认关闭时是否返回安全stage须明确记录，不得暴露用户内容。
 5. 本项不宣称已定位真实根因、有效收音、设备录音或像素通过。Session层和跨窗诊断后续按真实缺口再拆，不因本任务扩张整个录音链。
+6. 所有main/OS callback/FFI producer的诊断路径不得等待输出I/O、writer或锁。允许一个诊断专用writer线程和固定有界非阻塞队列；producer使用非阻塞入队/预算，饱和有明确固定丢弃或截断记录，不可回退同步输出。writer失败或stderr无人读取不影响授权回调派发、30秒finish或context释放；不join等待writer，不改变授权操作原有线程约束。测试必须覆盖无读取输出、writer卡住与队列饱和，不能只在正常stderr下比较结果。
 
 ## verification
 

@@ -18,6 +18,8 @@
 
 30秒native截止、两段35秒Rust等候及Session45秒截止保持。timeout/close只交付旧结果，不清仍在系统等待的pending或释放callback context；迟到completion只清原pending、不复活Session。JS错误保留code及可选stage/request ID，UI沿用既有message；busy/timeout仍各自独立，不推断为denied。诊断源码/伪OS检查不代表真实麦克风请求成功，当前包和手机现场保持。具体范围见[任务63](../plan/tasks/app-mac-recording-diagnostics63.md)。
 
+诊断不能反向阻塞授权：main、OS completion及FFI仅非阻塞地尝试放入固定有界队列，由独立诊断writer处理输出；饱和有明确丢弃/截断标记。不得在producer同步写stderr、等待输出锁或join writer。writer卡住、stderr不读取也不能阻止completion进入主队列、超时交付或context释放。此诊断线程不改变原授权操作的main线程约束。
+
 ## 用户最新明确要求（2026-11-05，优先于下方早期右栏方案）
 
 用户补充：“录音的样式参考原版。不能是弹出框的方式，而是单独窗口，可以在后台录音，一边录音可以一边做别的工作，并不耽误。”因此桌面最终使用真实独立、非模态的Tauri录音窗口；下方早期图只保留原图内部样式依据，不再要求把录音栏嵌入主窗。不得使用遮暗弹框或阻断主界面来保护旧捕获目标。原版截图中的标题/波形/游标/计时/播放与动作视觉移入独立窗口；不自行增加品牌或转写功能。
