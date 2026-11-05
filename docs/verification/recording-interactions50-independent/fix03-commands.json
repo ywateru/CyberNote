@@ -1,0 +1,61 @@
+{
+  "sourceCommit": "12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0",
+  "results": [
+    {
+      "source": "1b47c8025f3df5b43d85561566fd7ab381096820",
+      "command": [
+        "node",
+        "scripts/check-recording-submit.mjs"
+      ],
+      "exit": 0,
+      "tests": 38
+    },
+    {
+      "source": "1b47c8025f3df5b43d85561566fd7ab381096820",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exit": 0
+    },
+    {
+      "source": "1b47c8025f3df5b43d85561566fd7ab381096820",
+      "command": [
+        "node",
+        "docs/verification/recording-interactions50-independent/check-quit-new-edit-host-adapted.mjs"
+      ],
+      "exit": 0,
+      "tests": 33
+    },
+    {
+      "source": "12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0",
+      "command": [
+        "node",
+        "docs/verification/recording-interactions50-independent/check-quit-restoration-independent.mjs"
+      ],
+      "exit": 0,
+      "tests": 8
+    },
+    {
+      "source": "12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0",
+      "command": [
+        "python3",
+        "docs/verification/recording-interactions50-independent/run-registry-repeat-quit.py",
+        "12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0",
+        "docs/verification/recording-interactions50-independent/native-repeat-quit-final"
+      ],
+      "exit": 0
+    },
+    {
+      "source": "12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0",
+      "command": [
+        "python3",
+        "docs/verification/recording-interactions50-independent/run-registry-participants-independent.py",
+        "12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0",
+        "docs/verification/recording-interactions50-independent/native-participants-final"
+      ],
+      "exit": 0,
+      "tests": 3
+    }
+  ]
+}

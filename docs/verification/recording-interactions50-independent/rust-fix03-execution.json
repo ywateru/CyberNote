@@ -1,0 +1,16 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "recording_window::tests",
+    "--locked",
+    "--offline",
+    "--target-dir",
+    "/private/tmp/apple-notes-recording-window50-independent-target"
+  ],
+  "exit": 0,
+  "sourceCommit": "12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0"
+}
