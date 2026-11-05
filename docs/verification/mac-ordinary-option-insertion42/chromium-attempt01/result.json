@@ -1,0 +1,86 @@
+{
+  "scope": "Production React form; headless Chromium with controlled main/native/false-policy transport; only 37 plain Tab, existing ordinary input/save/cancel regression.",
+  "checks": [
+    {
+      "name": "initial name fully selected",
+      "pass": true,
+      "detail": {
+        "value": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "focused": true,
+        "calls": [],
+        "saves": [],
+        "cancels": 0
+      }
+    },
+    {
+      "name": "37 Right then plain Tab reselects name",
+      "pass": true,
+      "detail": {
+        "value": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "focused": true,
+        "calls": [
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          }
+        ],
+        "saves": [],
+        "cancels": 0
+      }
+    },
+    {
+      "name": "37 ShiftTab reselects name",
+      "pass": true,
+      "detail": {
+        "value": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "focused": true,
+        "calls": [
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          },
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          }
+        ],
+        "saves": [],
+        "cancels": 0
+      }
+    },
+    {
+      "name": "37 uses exact current main query",
+      "pass": true,
+      "detail": [
+        {
+          "cmd": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        },
+        {
+          "cmd": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "status": "FAIL",
+  "error": "Error: page.evaluate: TypeError: Cannot read properties of null (reading 'value')\n    at eval (eval at evaluate (:311:30), <anonymous>:1:75)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+}

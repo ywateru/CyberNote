@@ -1,0 +1,546 @@
+{
+  "status": "PASS",
+  "scope": "Actual production SmartFolderForm keydown -> real WebKit beforeinput/input -> existing onChange controlled draft; synthetic DOM key routing and native editing commands, no OS keyboard or visible window.",
+  "rows": [
+    {
+      "scenario": "sequence43",
+      "before": {
+        "start": 13,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "undo": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": true,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "redoReturn": true,
+      "second": {
+        "start": 15,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD\t\t",
+        "undo": true,
+        "end": 15,
+        "direction": "none",
+        "cancels": 0
+      },
+      "redo": {
+        "start": 15,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD\t\t",
+        "undo": true,
+        "end": 15,
+        "direction": "none",
+        "cancels": 0
+      },
+      "events": [
+        {
+          "end": 5,
+          "start": 0,
+          "data": "QA-OPT43-ABCD",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "新建文件夹",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 13,
+          "start": 13,
+          "data": "QA-OPT43-ABCD",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT43-ABCD",
+          "kind": "input"
+        },
+        {
+          "end": 13,
+          "start": 13,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT43-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 14,
+          "start": 14,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT43-ABCD\t",
+          "kind": "input"
+        },
+        {
+          "end": 14,
+          "start": 14,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT43-ABCD\t",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 15,
+          "start": 15,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT43-ABCD\t\t",
+          "kind": "input"
+        },
+        {
+          "end": 15,
+          "start": 15,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT43-ABCD\t\t",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 5,
+          "start": 0,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "新建文件夹",
+          "kind": "input"
+        },
+        {
+          "end": 5,
+          "start": 0,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "新建文件夹",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 15,
+          "start": 15,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "QA-OPT43-ABCD\t\t",
+          "kind": "input"
+        }
+      ],
+      "after": {
+        "start": 14,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD\t",
+        "undo": true,
+        "end": 14,
+        "direction": "none",
+        "cancels": 0
+      },
+      "undoReturn": true
+    }
+  ],
+  "scenario": "sequence43",
+  "checks": [
+    {
+      "name": "fresh native history process starts without undo",
+      "pass": true,
+      "detail": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      }
+    },
+    {
+      "pass": true,
+      "name": "setup real browser typing"
+    },
+    {
+      "pass": true,
+      "detail": {
+        "start": 13,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "name": "sequence typing ends at right caret"
+    },
+    {
+      "name": "production keydown handled exactly once",
+      "detail": {
+        "start": 14,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD\t",
+        "undo": true,
+        "end": 14,
+        "direction": "none",
+        "cancels": 0
+      },
+      "pass": true
+    },
+    {
+      "detail": {
+        "start": 14,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD\t",
+        "undo": true,
+        "end": 14,
+        "direction": "none",
+        "cancels": 0
+      },
+      "pass": true,
+      "name": "single U+0009 replaces current selection"
+    },
+    {
+      "pass": true,
+      "name": "real insertText beforeinput/input",
+      "detail": [
+        {
+          "end": 13,
+          "start": 13,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT43-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 14,
+          "start": 14,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT43-ABCD\t",
+          "kind": "input"
+        }
+      ]
+    },
+    {
+      "detail": {
+        "start": 14,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD\t",
+        "undo": true,
+        "end": 14,
+        "direction": "none",
+        "cancels": 0
+      },
+      "pass": true,
+      "name": "production controlled draft survives unrelated React render"
+    },
+    {
+      "detail": {
+        "start": 15,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD\t\t",
+        "undo": true,
+        "end": 15,
+        "direction": "none",
+        "cancels": 0
+      },
+      "name": "second production OptionTab appends one U+0009",
+      "pass": true
+    },
+    {
+      "pass": true,
+      "name": "real insertText beforeinput/input",
+      "detail": [
+        {
+          "end": 14,
+          "start": 14,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT43-ABCD\t",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 15,
+          "start": 15,
+          "data": "\t",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT43-ABCD\t\t",
+          "kind": "input"
+        }
+      ]
+    },
+    {
+      "name": "production controlled draft survives unrelated React render",
+      "detail": {
+        "start": 15,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD\t\t",
+        "undo": true,
+        "end": 15,
+        "direction": "none",
+        "cancels": 0
+      },
+      "pass": true
+    },
+    {
+      "pass": true,
+      "detail": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": true,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "name": "real native undo succeeds"
+    },
+    {
+      "detail": [
+        {
+          "end": 15,
+          "start": 15,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT43-ABCD\t\t",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 5,
+          "start": 0,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "新建文件夹",
+          "kind": "input"
+        }
+      ],
+      "pass": true,
+      "name": "real historyUndo beforeinput/input"
+    },
+    {
+      "pass": true,
+      "name": "production controlled draft survives unrelated React render",
+      "detail": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": true,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      }
+    },
+    {
+      "name": "43/full replacement undo restores default name selected",
+      "pass": true,
+      "detail": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": true,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      }
+    },
+    {
+      "name": "real native redo restores edited text/focus",
+      "pass": true,
+      "detail": {
+        "start": 15,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD\t\t",
+        "undo": true,
+        "end": 15,
+        "direction": "none",
+        "cancels": 0
+      }
+    },
+    {
+      "detail": [
+        {
+          "end": 5,
+          "start": 0,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "新建文件夹",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 15,
+          "start": 15,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "QA-OPT43-ABCD\t\t",
+          "kind": "input"
+        }
+      ],
+      "name": "real historyRedo beforeinput/input",
+      "pass": true
+    },
+    {
+      "name": "production controlled draft survives unrelated React render",
+      "pass": true,
+      "detail": {
+        "start": 15,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "QA-OPT43-ABCD\t\t",
+        "attempts": 0,
+        "undo": true,
+        "end": 15,
+        "direction": "none",
+        "cancels": 0
+      }
+    },
+    {
+      "pass": true,
+      "name": "existing onChange/update/draft reaches production onSave",
+      "detail": {
+        "saves": [
+          {
+            "rules": [
+              {
+                "key": 0,
+                "names": [],
+                "type": "tags",
+                "mode": "allSelected",
+                "pinned": true
+              }
+            ],
+            "name": "QA-OPT43-ABCD\t\t",
+            "combine": "all",
+            "smart": false
+          }
+        ],
+        "redo": {
+          "start": 15,
+          "calls": [],
+          "focused": true,
+          "redo": false,
+          "documentFocus": false,
+          "error": null,
+          "saves": [],
+          "attempts": 0,
+          "value": "QA-OPT43-ABCD\t\t",
+          "undo": true,
+          "end": 15,
+          "direction": "none",
+          "cancels": 0
+        }
+      }
+    }
+  ]
+}

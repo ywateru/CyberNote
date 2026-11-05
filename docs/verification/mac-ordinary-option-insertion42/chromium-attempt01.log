@@ -1,0 +1,14 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.evaluate: TypeError: Cannot read properties of null (reading 'value')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:75)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at snapshot (/private/tmp/apple-notes-ordinary-option-insertion42-01/docs/verification/mac-ordinary-option-insertion42/regression.mjs:11:25)
+    at /private/tmp/apple-notes-ordinary-option-insertion42-01/docs/verification/mac-ordinary-option-insertion42/regression.mjs:13:128 {
+  log: []
+}
+
+Node.js v22.16.0

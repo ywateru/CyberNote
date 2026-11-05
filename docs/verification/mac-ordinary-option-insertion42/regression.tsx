@@ -1,0 +1,11 @@
+import React from 'react';
+import {createRoot} from 'react-dom/client';
+import {flushSync} from 'react-dom';
+import {SmartFolderForm} from '../../../src/SmartFolderForm';
+import '../../../src/style.css';
+const w=window as any;w.isTauri=true;w.calls=[];w.saves=[];w.cancels=0;
+Object.defineProperty(navigator,'platform',{value:'MacIntel',configurable:true});
+w.__TAURI_INTERNALS__={metadata:{currentWindow:{label:'main'}},invoke:(cmd:string,args:any)=>{w.calls.push({cmd,args});if(cmd==='plugin:notes-ui|keyboard_navigation')return Promise.resolve({enabled:false});throw Error('unexpected command')}};
+const root=createRoot(document.getElementById('root')!);let key=0;
+w.mount=()=>flushSync(()=>root.render(<SmartFolderForm key={++key} mobile={false} catalog={[]} onHandle={()=>{}} onCancel={()=>w.cancels++} onSave={async draft=>{w.saves.push(structuredClone(draft));return {id:'synthetic',complete:true}}} onRefresh={async()=>{throw Error('No backend')}}/>));
+w.mount();w.ready=true;

@@ -1,0 +1,28 @@
+✘ [ERROR] Expected "}" but found "onRefresh"
+
+    docs/verification/mac-ordinary-option-insertion42/fixture.tsx:14:336:
+      14 │ ...ontrolled',complete:true}} onRefresh={async()=>{throw Error('No...
+         │                               ~~~~~~~~~
+         ╵                               }
+
+/Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:1467
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+docs/verification/mac-ordinary-option-insertion42/fixture.tsx:14:336: ERROR: Expected "}" but found "onRefresh"
+    at failureErrorWithLog (/Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:1467:15)
+    at /Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:926:25
+    at /Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:878:52
+    at buildResponseToResult (/Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:924:7)
+    at /Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:951:16
+    at responseCallbacks.<computed> (/Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:603:9)
+    at handleIncomingPacket (/Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:658:12)
+    at Socket.readFromStdout (/Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:581:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v22.16.0

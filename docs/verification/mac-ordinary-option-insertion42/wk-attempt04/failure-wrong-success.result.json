@@ -1,0 +1,403 @@
+{
+  "scenario": "failure-wrong-success",
+  "status": "PASS",
+  "scope": "Actual production SmartFolderForm keydown -> real WebKit beforeinput/input -> existing onChange controlled draft; synthetic DOM key routing and native editing commands, no OS keyboard or visible window.",
+  "rows": [
+    {
+      "scenario": "failure-wrong-success",
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "value": "QA-OPT41-ABP",
+        "attempts": 1,
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "events": [
+        {
+          "end": 5,
+          "start": 0,
+          "data": "QA-OPT41-ABCD",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "新建文件夹",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 13,
+          "start": 13,
+          "data": "QA-OPT41-ABCD",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT41-ABCD",
+          "kind": "input"
+        },
+        {
+          "end": 13,
+          "start": 11,
+          "data": "P",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT41-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 12,
+          "start": 12,
+          "data": "P",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT41-ABP",
+          "kind": "input"
+        },
+        {
+          "end": 12,
+          "start": 12,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT41-ABP",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 13,
+          "start": 11,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT41-ABCD",
+          "kind": "input"
+        },
+        {
+          "end": 13,
+          "start": 11,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "QA-OPT41-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 12,
+          "start": 12,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyRedo",
+          "value": "QA-OPT41-ABP",
+          "kind": "input"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "fresh native history process starts without undo",
+      "pass": true,
+      "detail": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      }
+    },
+    {
+      "pass": true,
+      "name": "setup real browser typing"
+    },
+    {
+      "detail": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "value": "QA-OPT41-ABP",
+        "attempts": 1,
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "pass": true,
+      "name": "failure consumes only scoped gesture"
+    },
+    {
+      "detail": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "value": "QA-OPT41-ABP",
+        "attempts": 1,
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "name": "failure displays existing accessible generic error",
+      "pass": true
+    },
+    {
+      "detail": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "value": "QA-OPT41-ABP",
+        "attempts": 1,
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "name": "never retries browser edit command",
+      "pass": true
+    },
+    {
+      "name": "partial failure preserves actual visible edit and caret",
+      "pass": true,
+      "detail": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "value": "QA-OPT41-ABP",
+        "attempts": 1,
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      }
+    },
+    {
+      "name": "real insertText beforeinput/input",
+      "pass": true,
+      "detail": [
+        {
+          "end": 13,
+          "start": 11,
+          "data": "P",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT41-ABCD",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 12,
+          "start": 12,
+          "data": "P",
+          "isTrusted": true,
+          "inputType": "insertText",
+          "value": "QA-OPT41-ABP",
+          "kind": "input"
+        }
+      ]
+    },
+    {
+      "name": "production controlled draft survives unrelated React render",
+      "pass": true,
+      "detail": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "attempts": 1,
+        "value": "QA-OPT41-ABP",
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      }
+    },
+    {
+      "pass": true,
+      "detail": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "attempts": 1,
+        "value": "QA-OPT41-ABP",
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "name": "failure stays visible after React render"
+    },
+    {
+      "name": "manual user undo remains available after partial failure",
+      "pass": true
+    },
+    {
+      "name": "partial edit history restores original CD selection",
+      "pass": true,
+      "detail": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": true,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 1,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      }
+    },
+    {
+      "name": "real historyUndo beforeinput/input",
+      "detail": [
+        {
+          "end": 12,
+          "start": 12,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT41-ABP",
+          "kind": "beforeinput"
+        },
+        {
+          "end": 13,
+          "start": 11,
+          "data": null,
+          "isTrusted": true,
+          "inputType": "historyUndo",
+          "value": "QA-OPT41-ABCD",
+          "kind": "input"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "manual user redo remains available after partial failure",
+      "pass": true
+    },
+    {
+      "detail": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 1,
+        "value": "QA-OPT41-ABP",
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "name": "partial redo restores visible failed edit",
+      "pass": true
+    },
+    {
+      "pass": true,
+      "detail": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 1,
+        "value": "QA-OPT41-ABP",
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "name": "production controlled draft survives unrelated React render"
+    },
+    {
+      "name": "failure retains true production draft onSave",
+      "pass": true,
+      "detail": {
+        "saves": [
+          {
+            "rules": [
+              {
+                "key": 0,
+                "pinned": true,
+                "type": "tags",
+                "mode": "allSelected",
+                "names": []
+              }
+            ],
+            "name": "QA-OPT41-ABP",
+            "combine": "all",
+            "smart": false
+          }
+        ],
+        "after": {
+          "start": 12,
+          "calls": [],
+          "focused": true,
+          "redo": false,
+          "documentFocus": false,
+          "error": "无法完成输入，请检查名称后重试。",
+          "saves": [],
+          "value": "QA-OPT41-ABP",
+          "attempts": 1,
+          "undo": true,
+          "end": 12,
+          "direction": "none",
+          "cancels": 0
+        }
+      }
+    }
+  ]
+}

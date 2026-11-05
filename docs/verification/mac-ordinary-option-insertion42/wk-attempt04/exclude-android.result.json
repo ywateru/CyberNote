@@ -1,0 +1,145 @@
+{
+  "scenario": "exclude-android",
+  "scope": "Actual production SmartFolderForm keydown -> real WebKit beforeinput/input -> existing onChange controlled draft; synthetic DOM key routing and native editing commands, no OS keyboard or visible window.",
+  "rows": [
+    {
+      "scenario": "exclude-android",
+      "before": {
+        "start": 5,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 5,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "prevented": false
+    }
+  ],
+  "status": "PASS",
+  "checks": [
+    {
+      "pass": true,
+      "name": "fresh native history process starts without undo",
+      "detail": {
+        "start": 5,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      }
+    },
+    {
+      "pass": true,
+      "detail": {
+        "scenario": "exclude-android",
+        "before": {
+          "start": 5,
+          "calls": [],
+          "focused": true,
+          "redo": false,
+          "documentFocus": false,
+          "error": null,
+          "saves": [],
+          "value": "新建文件夹",
+          "attempts": 0,
+          "undo": false,
+          "end": 5,
+          "direction": "none",
+          "cancels": 0
+        },
+        "after": {
+          "start": 5,
+          "calls": [],
+          "focused": true,
+          "redo": false,
+          "documentFocus": false,
+          "error": null,
+          "saves": [],
+          "attempts": 0,
+          "value": "新建文件夹",
+          "undo": false,
+          "end": 5,
+          "direction": "none",
+          "cancels": 0
+        },
+        "prevented": false
+      },
+      "name": "excluded gesture does not run edit command"
+    },
+    {
+      "detail": {
+        "after": {
+          "start": 5,
+          "calls": [],
+          "focused": true,
+          "redo": false,
+          "documentFocus": false,
+          "error": null,
+          "saves": [],
+          "attempts": 0,
+          "value": "新建文件夹",
+          "undo": false,
+          "end": 5,
+          "direction": "none",
+          "cancels": 0
+        },
+        "before": {
+          "start": 5,
+          "calls": [],
+          "focused": true,
+          "redo": false,
+          "documentFocus": false,
+          "error": null,
+          "saves": [],
+          "value": "新建文件夹",
+          "attempts": 0,
+          "undo": false,
+          "end": 5,
+          "direction": "none",
+          "cancels": 0
+        },
+        "scenario": "exclude-android"
+      },
+      "name": "excluded gesture preserves value and no error",
+      "pass": true
+    },
+    {
+      "pass": true,
+      "detail": {
+        "scenario": "exclude-android",
+        "prevented": false
+      },
+      "name": "excluded gesture keeps default prevention"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "failures": [
+    {
+      "attempt": "bundle-attempt01.log",
+      "classification": "fixture syntax",
+      "detail": "Missing JSX closing brace in onSave prop; no product execution; corrected fixture-attempt02.tsx."
+    },
+    {
+      "attempt": "wk-attempt01/replace-CD41.json",
+      "classification": "missing fixture from failed build",
+      "detail": "No generated page; bounded own WK deadline25s exit3; raw stdout/stderr retained."
+    },
+    {
+      "attempt": "wk-attempt02/excluded.json",
+      "classification": "multi-mount fixture deadline",
+      "detail": "Own hidden WK deadline25s; no result; not counted as passing. Cause not established."
+    },
+    {
+      "attempt": "wk-attempt03/excluded.json",
+      "classification": "multi-mount fixture deadline with traces",
+      "detail": "Own hidden WK deadline25s after mount edit trace, before mounted edit; no cause claimed. Resolved test architecture to one exclusion per fresh process; production unchanged."
+    },
+    {
+      "attempt": "chromium-attempt01.log",
+      "classification": "fixture snapshot expectation",
+      "detail": "First four regression checks passed; snapshot incorrectly assumed name input still exists after real onSave commits and production renders saved-folder screen; optional input snapshot corrected in regression.mjs; attempt02 seven checks pass."
+    },
+    {
+      "attempt": "wk-attempt04/anomaly-dom-only.result.json",
+      "classification": "overclaimed anomaly history test expectation",
+      "detail": "Expected default-name undo after raw native value setter without input. Actual setError restores last real draft/caret13; undo/redo trusted history events retain that name. Retained FAIL; root clarified contract a87cb8b; attempt05 explicitly observes product failure/limitation, no product workaround."
+    },
+    {
+      "attempt": "wk-attempt04/exclude-busy.result.json",
+      "classification": "fixture disabled selector",
+      "detail": "Expected explicit button disabled attribute, but production uses disabled fieldset. Real savePending and nonfocused input reached; corrected precondition to :disabled; attempt05 passes."
+    }
+  ],
+  "noFailedAttemptOverwritten": true,
+  "noProductChangeAfterInitialImplementation": true
+}

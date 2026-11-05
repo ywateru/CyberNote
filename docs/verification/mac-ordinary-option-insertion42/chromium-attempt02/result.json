@@ -1,0 +1,172 @@
+{
+  "scope": "Production React form; headless Chromium with controlled main/native/false-policy transport; only 37 plain Tab, existing ordinary input/save/cancel regression.",
+  "checks": [
+    {
+      "name": "initial name fully selected",
+      "pass": true,
+      "detail": {
+        "value": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "focused": true,
+        "calls": [],
+        "saves": [],
+        "cancels": 0
+      }
+    },
+    {
+      "name": "37 Right then plain Tab reselects name",
+      "pass": true,
+      "detail": {
+        "value": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "focused": true,
+        "calls": [
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          }
+        ],
+        "saves": [],
+        "cancels": 0
+      }
+    },
+    {
+      "name": "37 ShiftTab reselects name",
+      "pass": true,
+      "detail": {
+        "value": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "focused": true,
+        "calls": [
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          },
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          }
+        ],
+        "saves": [],
+        "cancels": 0
+      }
+    },
+    {
+      "name": "37 uses exact current main query",
+      "pass": true,
+      "detail": [
+        {
+          "cmd": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        },
+        {
+          "cmd": "plugin:notes-ui|keyboard_navigation",
+          "args": {
+            "windowLabel": "main"
+          }
+        }
+      ]
+    },
+    {
+      "name": "normal input and Enter save existing draft",
+      "pass": true,
+      "detail": {
+        "focused": false,
+        "calls": [
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          },
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          }
+        ],
+        "saves": [
+          {
+            "name": "正常输入",
+            "smart": false,
+            "combine": "all",
+            "rules": [
+              {
+                "key": 0,
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [],
+                "pinned": true
+              }
+            ]
+          }
+        ],
+        "cancels": 0
+      }
+    },
+    {
+      "name": "Escape cancels exactly once",
+      "pass": true,
+      "detail": {
+        "value": "新建文件夹",
+        "start": 0,
+        "end": 5,
+        "focused": true,
+        "calls": [
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          },
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          }
+        ],
+        "saves": [
+          {
+            "name": "正常输入",
+            "smart": false,
+            "combine": "all",
+            "rules": [
+              {
+                "key": 0,
+                "type": "tags",
+                "mode": "allSelected",
+                "names": [],
+                "pinned": true
+              }
+            ]
+          }
+        ],
+        "cancels": 1
+      }
+    },
+    {
+      "name": "no browser errors/external requests",
+      "pass": true,
+      "detail": {
+        "errors": [],
+        "externalRequests": []
+      }
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "status": "PASS"
+}
