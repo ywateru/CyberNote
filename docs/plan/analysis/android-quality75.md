@@ -39,3 +39,11 @@
 可靠性先解决附件与正文保存、重试及重新打开；随后按原视频已有状态逐页复核文件夹、列表/画廊、编辑器、附件菜单/卡片、格式/纸张和录音。每页须有准确源码、同主题/宽度/状态的HTML/rect/截图及残差，不重新将已经完成的局部修复称作整页完成。
 
 已有纸张/文件夹/新建锚点及录音控件的研究与修复记录继续作为基线；旧research建议可能已接入，不按旧待办盲目重做。附件75冻结后根据实际失败与当前原帧差异拆下一项，原生chooser、IME、系统Back和真实硬件在独立安全环境可用时验收。未开始/未验证项目保持开放，不能用更多Mock断言代替。
+
+## 独立Android原生环境准备（只读）
+
+研究agent已只读核查SDK目录、AVD配置及既有脚本，未执行ADB、启动或停止模拟器、构建、安装、修改配置或读取设备数据。SDK为`/Users/water/Library/Android/sdk`，缓存镜像仅`system-images/android-30/google_apis/arm64-v8a` revision16，system/vendor/kernel/初始userdata文件存在。Emulator37.1.11、cmdline-tools20.0、NDK27.2.12479018、Java17和构建平台路径存在；离线完整构建尚未验证，不能据此宣称新包可用。
+
+后续可使用全新AVD名称、独立`ANDROID_AVD_HOME`与显式新data目录，不复制现有AVD、userdata或snapshot；系统镜像可只读复用。为新数据预留6–8GiB并另留构建余量，实际启动前核剩余空间及独立端口。只验证API30/Android11，不外推API36。原设备的保留决定继续有效。
+
+旧脚本`android-ime-regression.mjs`硬编码emulator-5580，`android-smoke.mjs`/`android-fix01.mjs`默认5580，CDP还可能选首个Tauri target。不得直接执行：新验收必须强制明确新serial，核新AVD/app身份，并绑定对应CDP target；全部ADB命令显式`-s`，不得kill-server或操作原serial。现有APK仅路径存在，未核身份，不当当前修复产物使用。75受控回归和独审完成后再冻结准确新包、创建新环境并执行真实chooser和显示验收。
