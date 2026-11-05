@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/recording-media67-independent20/audit-freeze.py", line 78, in <module>
+    line=(root/row['path']).read_text().splitlines()[row['line']-1];assert row['command'] in line,(row,line)
+AssertionError: ({'path': 'src/RecordingWindow.tsx', 'line': 61, 'command': 'recording_window_context', 'legacyInactiveModule': True}, '      const context = await invoke<RecordingIdentity>(')
