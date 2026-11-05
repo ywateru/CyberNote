@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-05任务70已完成：[整合报告](../verification/app-debug-automation70/integration/README.md)记录单命令九组91项全部通过、27.369秒CLI计时，以及构建/生产排除结果；[独立复核](reviews/app-debug-automation70.md)八门槛PASS。后续常态回归按[调试使用说明](../debugging.md)运行，catalog可达性与实际执行覆盖分别记录。
+
 2026-11-05最新工作：[统一调试命令与HTML程序化验收70](tasks/app-debug-automation70.md)，按[测试策略](../testing.md)使用真实App和模拟设备/音源，默认隔离合成数据，生产不提供调试入口。Mac21实际有限结果见[记录](../verification/mac-recording-quit68-runtime/README.md)；主窗关闭/Dock和整体像素仍未授予通过。旧时点“21准备中”已被本次构建与有限运行记录替代。
 
 2026-11-05：最新要求为主窗口右侧唯一非模态录音栏。66侧栏、67首次媒体读取已合入；68菜单/CmdQ与69普通原生退出桥现已独立复核并整合，见[组合审查](reviews/app-mac-recording-quit6869.md)，结论 SOURCE-READY / RUNTIME-OPEN。准确新Mac21准备中；真实退出后原笔记完整录音及另一笔记最新正文仍须实包验收。[Mac20真实记录](../verification/mac-recording-media67-runtime/README.md)的首次授权超时及CmdQ后K缺卡保持历史失败，不能由受控测试追认为通过。Android约13秒原现场完全不操作；旧Mac18约3秒内存现场进程已不在，原因/时点未知，不能称保全或恢复。整体像素与音质仍开放。

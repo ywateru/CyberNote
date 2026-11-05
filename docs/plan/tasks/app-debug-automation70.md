@@ -1,7 +1,7 @@
 ---
 id: app-debug-automation70
 scope: unified-dev-command-dom-mock-platform
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -32,5 +32,7 @@ depends-on: []
 7. 不操作 Mac21/手机现场、GUI、真实 mic 或用户音频，不重建双端包，不重复全量原生编译。缓存集中临时目录并支持正常清理，避免再次扩散缓存和全量复制历史证据。
 
 # verification
+
+2026-11-05完成：独立审查PASS并合入；主工作区一条`pnpm test:debug`全九组91checks通过，CLI计时27.369秒，前端构建及生产排除通过。准确源码身份、分组结果与范围见[整合报告](../../verification/app-debug-automation70/integration/README.md)。本任务关闭程序化测试工具交付，不关闭真实平台、音质及原版像素目标。
 
 类型与前端构建；开发开关和生产不可用；非法参数、未知命令及清理；命令与真实 DOM 交叉验证；隔离数据和授权；真实 idle/超时；HTML/rect 比较正反例；模拟录音实际编码、累计与失败重试。提供一条 pnpm 快速命令、实测时间、覆盖清单和独立作者复核。不能只测 API 存在或用返回值自证保存，需检查最终 DOM 和工作区。

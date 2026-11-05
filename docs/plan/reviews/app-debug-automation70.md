@@ -16,7 +16,7 @@
 | P1 blocking，已关闭 | task70 contract4/5；App.tsx:4528/4569/4901、DesktopRecordingPanel.tsx:350 | 旧迟到checkpoint store失败，Panel retry但命令与idle成功。8885读取实际Panel busy/close promise及当前render错误，等待真实任务；最终定向及录音14checks证明execute/idle均APP_ERROR、保留owner/File、恢复保存与释放 |
 | P2 blocking，已关闭 | task70 contract1/3；scripts/debug/runtime.mjs API、cli.mjs:78 | Playwright对象传输可能抹`__proto__`，`step.args || {}`吞显式null/false/0/空串。9c72字符串传输与hasOwn缺省判断；CLI6实际进程负例通过 |
 | 测试断言错误，已纠正 | architecture.md、ui/recording-desktop.md不可变音频/Undo合同；scenarios.mjs | 最后全九组错误要求物理媒体数1。9310只改断言：保留两个committed历史revision、正文/DOM单卡引用最新、ACK并释放。受影响录音组14checks全PASS；未删除历史媒体或放宽产品门禁 |
-| 测试平台缺口，已补齐 | task70 contract4/7；scripts/debug/platform.mjs:110/129 | 手机UA需安装Tauri2.9实际register_listener/Channel/remove_listener；59ec仅补明确模拟边界。独立实际官方模块probe验证有序派发与移除、未知channel拒绝，标记nativeBackTested=false |
+| 测试平台缺口，已补齐 | task70 contract4/7；scripts/debug/platform.mjs:110/129 | 手机UA需已安装Tauri API 2.12.4的实际register_listener/Channel/remove_listener；59ec仅补明确模拟边界。独立实际官方模块probe验证有序派发与移除、未知channel拒绝，标记nativeBackTested=false |
 
 ## 八项交付门槛
 

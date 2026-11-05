@@ -1,0 +1,121 @@
+{
+  "date": "2026-11-05",
+  "sourceHead": "c2b45b42041fedf7a0d4347100417557bd70d417",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0e632a7ccb9c92a49d9f13bb989a9b3cd5bf400de481769f2e0f0de49b6bcfe0",
+    "fileCount": 77,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "verdict": "PASS_WITH_DECLARED_SIMULATION_BOUNDARIES",
+  "build": {
+    "command": "pnpm build",
+    "exitCode": 0,
+    "viteElapsedSeconds": 1.85,
+    "distSHA256": {
+      "dist/assets/index-CDiyPKbo.js": "81c6905343854751f05f7c3f96642ebd54a59d6dc6ed18bbbfa41ad86e1d8c8c",
+      "dist/assets/index-Cew6zlwb.css": "1f46e1aa2e8abc4a55c4199f20c3aba8a79b8e21faafc7e53a798dc8c008a5a9",
+      "dist/assets/native-recording-access-D1tmKCcN.js": "33e3198429f7b9c35f940e3462a65859964f5c4e3b8096ed9391a0e7f347f226",
+      "dist/index.html": "14f7f5b739d0431617e7d3513b0b7906aa13f4b87b8bd50d236064c61e446d51"
+    }
+  },
+  "suite": {
+    "command": "pnpm test:debug --out /private/tmp/notes-debug70-root-integration-01",
+    "exitCode": 0,
+    "checks": 91,
+    "groups": [
+      {
+        "group": "contract",
+        "checks": 38,
+        "elapsedMs": 6645,
+        "pass": true
+      },
+      {
+        "group": "notes",
+        "checks": 9,
+        "elapsedMs": 1850,
+        "pass": true
+      },
+      {
+        "group": "folders",
+        "checks": 8,
+        "elapsedMs": 1335,
+        "pass": true
+      },
+      {
+        "group": "editor",
+        "checks": 6,
+        "elapsedMs": 718,
+        "pass": true
+      },
+      {
+        "group": "search-tags",
+        "checks": 4,
+        "elapsedMs": 599,
+        "pass": true
+      },
+      {
+        "group": "settings",
+        "checks": 5,
+        "elapsedMs": 467,
+        "pass": true
+      },
+      {
+        "group": "attachments-ocr",
+        "checks": 5,
+        "elapsedMs": 952,
+        "pass": true
+      },
+      {
+        "group": "archive",
+        "checks": 2,
+        "elapsedMs": 334,
+        "pass": true
+      },
+      {
+        "group": "recording",
+        "checks": 14,
+        "elapsedMs": 4334,
+        "pass": true
+      }
+    ],
+    "cliElapsedMs": 27369,
+    "sampling": "CLI includes setup and scenarios; sampled before final resource cleanup",
+    "sourceInputsChanged": false,
+    "pageErrors": []
+  },
+  "production": {
+    "command": "pnpm debug check-production --production dist",
+    "exitCode": 0,
+    "cliElapsedMs": 5554,
+    "result": {
+      "productionAPIAbsent": true,
+      "urlCannotEnable": true,
+      "bundle": {
+        "files": 3,
+        "markers": [
+          "__NOTES_DEBUG__",
+          "SyntheticMediaRecorder",
+          "__DEBUG_PLATFORM__",
+          "synthetic-device-and-ipc-boundaries"
+        ],
+        "matches": []
+      },
+      "platformMockInjectedByRunnerOnly": true
+    }
+  },
+  "limits": [
+    "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+    "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+    "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+  ]
+}
