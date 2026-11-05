@@ -24,6 +24,8 @@
 
 窗口间仅定向、带不可猜测session与operation的控制/状态/提交协议；捕获和File由录音窗持有，后端附件operation始终归原owner窗，原owner确认实际A正文ACK后才向子窗回成功。重试必须复用原owner缓存的同一File/operation，不重复解码为新File或重复插入；回执丢失/重复请求可查询同提交结果。事件到达、stop或store完成不等于正文ACK。若owner非正常失去存活，录音窗明确错误并保留File，不暗中冒认新窗口身份。
 
+文件接收与正文ACK分开：子窗只有收到真实owner的文件已缓存确认后才能停止携带文件内容；首次relay失败或接收不确定时可重送相同缓存字节，owner按同session/operation幂等接收且只构造一次File。不能在发送之前自设“已传输”而让重试永远缺少文件。非正常子窗Destroyed后若原owner随后给出真实正文ACK或明确安全无音频终态，registry可清除已不存在的child记录；失败、未知或冒认owner不能借此解除退出保护。
+
 新窗口label精确为`recording-<标准小写UUID>`，URL为应用本地recording专用入口；新窄capability只授必要窗口/事件和麦克风预检，不能泛用note-*伪装。初始建议宽320、最低280 CSS px，高600、可调整大小；这是工程起点，内部视觉继续以原图比例校准。
 
 ## 早期原图右栏内部结构
