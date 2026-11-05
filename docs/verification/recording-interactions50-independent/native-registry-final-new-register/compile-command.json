@@ -1,0 +1,15 @@
+[
+  "rustc",
+  "--edition=2021",
+  "/private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/native-registry-final-new-register/check-registry.rs",
+  "-L",
+  "dependency=/private/tmp/apple-notes-recording-window50-independent-target/debug/deps",
+  "-o",
+  "/private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/native-registry-final-new-register/registry-probe.bin",
+  "--extern",
+  "serde=/private/tmp/apple-notes-recording-window50-independent-target/debug/deps/libserde-1f67adda99486fb2.rlib",
+  "--extern",
+  "serde_json=/private/tmp/apple-notes-recording-window50-independent-target/debug/deps/libserde_json-fc93d205ae353a14.rlib",
+  "--extern",
+  "uuid=/private/tmp/apple-notes-recording-window50-independent-target/debug/deps/libuuid-65cf0893fdb687dc.rlib"
+]

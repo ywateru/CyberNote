@@ -1,0 +1,48 @@
+warning: unused imports: `Emitter` and `Manager`
+  --> /private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/native-registry-final/production-recording-window.rs:10:13
+   |
+10 | use tauri::{Emitter, Manager, State};
+   |             ^^^^^^^  ^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `recording_label` is never used
+  --> /private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/native-registry-final/production-recording-window.rs:43:8
+   |
+43 | pub fn recording_label(label: &str) -> bool {
+   |        ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `document_participants` is never used
+  --> /private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/native-registry-final/production-recording-window.rs:46:8
+   |
+46 | pub fn document_participants(windows: impl IntoIterator<Item = String>) -> HashSet<String> {
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `reveal_owner` is never used
+  --> /private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/native-registry-final/production-recording-window.rs:52:8
+   |
+52 | pub fn reveal_owner(app: &tauri::AppHandle, child: &str) {
+   |        ^^^^^^^^^^^^
+
+warning: function `recording_window_context` is never used
+   --> /private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/native-registry-final/production-recording-window.rs:136:8
+    |
+136 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> /private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/native-registry-final/production-recording-window.rs:230:8
+    |
+230 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> /private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/native-registry-final/production-recording-window.rs:245:8
+    |
+245 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: 7 warnings emitted
+

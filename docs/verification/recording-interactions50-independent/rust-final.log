@@ -1,0 +1,13 @@
+   Compiling tauri-plugin-notes-scan v0.1.0 (/private/tmp/apple-notes-recording-window50-independent-02/plugins/tauri-plugin-notes-scan)
+   Compiling tauri-plugin-notes-ui v0.1.0 (/private/tmp/apple-notes-recording-window50-independent-02/plugins/tauri-plugin-notes-ui)
+   Compiling notes-clone v0.1.0 (/private/tmp/apple-notes-recording-window50-independent-02/src-tauri)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 18.30s
+     Running unittests src/lib.rs (/private/tmp/apple-notes-recording-window50-independent-target/debug/deps/notes_clone_lib-eb7283a61f217fab)
+
+running 3 tests
+test recording_window::tests::exact_child_labels_and_ack_gate ... ok
+test recording_window::tests::destroyed_child_requires_authentic_late_terminal_ack_to_release_guard ... ok
+test recording_window::tests::capture_child_is_not_a_document_barrier_but_original_owner_still_must_ack ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 95 filtered out; finished in 0.01s
+

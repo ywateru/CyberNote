@@ -1,0 +1,25 @@
+{
+  "status": "pass",
+  "checks": 12,
+  "results": [
+    "desktop standalone panel fills a 320px host, has no dim backdrop, and creates no live card before actual capture",
+    "live card shares capture time/actions; register/update/remove leaves JSON, history, selection and document version unchanged",
+    "source remains editable during capture; actual typing and Undo/Redo remain available",
+    "desktop transport retains paused preview position, keyboard/pointer absolute seeks and ±15 boundaries use confirmed media",
+    "mobile transport retains paused preview position, keyboard/pointer absolute seeks and ±15 boundaries use confirmed media",
+    "pending play and actual playing disable both Continue surfaces; ended replay waits actual start seek",
+    "idle and permission-wait close release only their own resources; late permission cannot capture",
+    "active-close finalizes once, waits same-file parent ACK, keeps failure retry and never cancels captured audio",
+    "paused-escape finalizes once, waits same-file parent ACK, keeps failure retry and never cancels captured audio",
+    "mobile-back-handle finalizes once, waits same-file parent ACK, keeps failure retry and never cancels captured audio",
+    "live-card-stop finalizes once, waits same-file parent ACK, keeps failure retry and never cancels captured audio",
+    "long capture waveform retains real full-timeline peaks with bounded buckets"
+  ],
+  "errors": [],
+  "external": [],
+  "limits": [
+    "Actual production Panel+Session+playback+PM widget; controlled hardware/clock/save Promise. Parent App closure save regression is separate.",
+    "No native/Android/iOS microphone, encoded audibility, real-device UI or Apple pixel parity claim.",
+    "Desktop host in this component fixture is a controlled element; it does not establish two real native windows. Actual original-A owner/coordinator and App save closures are checked separately."
+  ]
+}
