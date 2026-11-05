@@ -2,6 +2,8 @@
 
 用户已授权完整 Mac 与 Android 开发。此计划持续执行，不以文档完成替代应用完成。
 
+2026-11-05继续[手机录音波形60](tasks/app-mobile-recording-wave60.md)：只校准游标和时间轴内部几何，不触原Android现场；精度、完整axis边界及窄高触达依recording-mobile.md的60节。58/59准确包身份保持，60完成前不追认入包。
+
 2026-11-05最新录音开发包：Mac17/Android构建12均固定源fa21657，333产品/352完整输入一致，[准确构建与准备](../verification/unified-candidate06/recording-visual5859-preparation/README.md)已完成。58/59源独审通过后已入包；[Mac17有限实际复验](../verification/recording-visual5859-mac17-runtime/README.md)覆盖未采集同会话双模式、正文编辑/撤销重做/B搜索/侧栏恢复与保存音频播放/暂停/±15秒。没有新Start，持续收音/采集中双模式/原版全像素仍open。Android12未安装，用户明确保留旧13秒File现场并暂缓设备验收，继续禁止原设备/音频操作。以下时点记录与旧任务结论按各自固定包读取，不能追认为最新包的全部通过。
 
 2026-11-05当前交付为同一d742307产品源的Mac12与Android07：[有限根接收29](../verification/name-mobile29-root-acceptance.md)。准确核包分别494/391项、实际证据独审496/711项通过；侧栏两入口恢复与正常重启偏好、Mac名称操作、手机可见加号及局部几何实际验证通过。Mac文字/选区/环角、手机右下图标及整体像素仍开放；原版删除实验暂停。安装文件见根README当前交付。

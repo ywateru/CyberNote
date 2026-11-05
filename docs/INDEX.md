@@ -11,7 +11,7 @@
 已整合[录音可见几何校准58](plan/tasks/app-recording-visual58.md)及[手机播放行校准59](plan/tasks/app-mobile-recording-visual59.md)：桌面时间轴/标题/计时与手机播放图形/字重、窄屏错误提示已改，[58独审](verification/recording-visual58-independent/review-final.md)与[59独审](verification/mobile-recording-visual59-independent/review-final.md)均SOURCE-READY / PIXEL-OPEN。准确Mac17/Android12已构建收集；手机设备验收继续暂缓，不触原Android失败File。源码、受控视觉与实际包像素结论分开，历史Mac16/Android11不追认包含58/59。
 
 - [Mac17/Android12准确包独立身份核对](verification/unified-candidate06/recording-visual5859-independent/README.md)
-- [手机波形游标与轴标签剩余差异准备60](research/mobile-recording-wave60-readiness/README.md)：只读准备，尚未实施，不改变保留手机现场的决定
+- [手机波形游标与轴标签剩余差异准备60](research/mobile-recording-wave60-readiness/README.md)：已拆分[内部几何任务60](plan/tasks/app-mobile-recording-wave60.md)，源码开发进行中，不改变保留手机现场的决定
 
 - [Mac13实际独审36](plan/reviews/mac-typography-keyboard-runtime36.md)与[Android08实际独审36](plan/reviews/android-compose-anchor-runtime36.md)
 - [Mac12准确构建](verification/unified-candidate06/mac-name-focus-build12/README.md)与[独立核包](plan/reviews/mac-name-focus-independent12.md)
