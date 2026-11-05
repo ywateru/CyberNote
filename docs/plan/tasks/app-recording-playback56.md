@@ -1,7 +1,7 @@
 ---
 id: app-recording-playback56
 scope: saved local audio media URL lifecycle
-status: in-progress
+status: source-ready-runtime-pending
 depends-on: [app-recording-presentation55]
 ---
 
@@ -16,3 +16,5 @@ Mac15真实录音暂停前缀Blob可实际播放，但最终保存卡MediaError4
 ## evidence and limits
 
 证据为docs/verification/recording-window54-mac-runtime/14—20，准确源5a147d2、Mac15；Editor现有readAttachment转data URL，child用Blob URL，二者最终/暂停字节不同，因此仍有终止容器等其他可能。有限受控检查要求字节/MIME一致、代次失效与URL释放、真实Audio原错误/重试路径；保留首次失败。独立审查后root精确同源双端构建，CUA实际录制/保存/重开/播放确认；未通过前不称已修复。证据限制在docs/verification/recording-playback56及-independent。
+
+独审4ca29a8 SOURCE-READY，八组实际组件与额外两组独立资源边界、构建通过，证据e24540f。主线源身份/独审重核/整合Notes并行与音频资源检查见docs/verification/recording-playback56-main-integration。真实包验收仍待完成。

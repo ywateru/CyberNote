@@ -1,0 +1,73 @@
+{
+  "head": "c1e133613540673422b6dabf3105c0ca52dfe1f4",
+  "checks": [
+    {
+      "name": "notes-dock",
+      "command": [
+        "node",
+        "docs/verification/recording-presentation55-independent/check-actual-app-final.mjs",
+        "docs/verification/recording-playback56-main-integration/notes-dock"
+      ],
+      "exitCode": 0,
+      "seconds": 5.917165541
+    },
+    {
+      "name": "audio-resource",
+      "command": [
+        "node",
+        "scripts/check-recording-playback56.mjs",
+        "docs/verification/recording-playback56-main-integration/audio-resource"
+      ],
+      "exitCode": 0,
+      "seconds": 4.220970166999999
+    }
+  ],
+  "source56": "4ca29a8112da76c9e4892bec09b525dc1b487b20",
+  "identity": [
+    {
+      "path": "src/Editor.tsx",
+      "sha256": "036b97b231d3dce02f9a9be6c60c1bb067063477974f26a01efabc308df6d6f2",
+      "expected": "036b97b231d3dce02f9a9be6c60c1bb067063477974f26a01efabc308df6d6f2"
+    },
+    {
+      "path": "src/attachment-media.ts",
+      "sha256": "2ff17ef91d36ea1a26054004ec243dd2ee1d62e5320fd38b5054d669cffae945",
+      "expected": "2ff17ef91d36ea1a26054004ec243dd2ee1d62e5320fd38b5054d669cffae945"
+    },
+    {
+      "path": "src/use-attachment-media.ts",
+      "sha256": "9f99e0178845f5f531f40c31fe00f7a05d6db00b8b9c7b65b42ce45da62f140a",
+      "expected": "9f99e0178845f5f531f40c31fe00f7a05d6db00b8b9c7b65b42ce45da62f140a"
+    },
+    {
+      "path": "src/audio-playback.ts",
+      "sha256": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+      "expected": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942"
+    },
+    {
+      "path": "src/bridge.ts",
+      "sha256": "729f7dc797abb762a9382f106b1fad103335e27346e598d9b18c37a2785672fd",
+      "expected": "729f7dc797abb762a9382f106b1fad103335e27346e598d9b18c37a2785672fd"
+    },
+    {
+      "path": "src/recording-metadata.ts",
+      "sha256": "4630348ffaab79e799e5417b1b256e4957df5460fda8c3966482d0ad766d3131",
+      "expected": "4630348ffaab79e799e5417b1b256e4957df5460fda8c3966482d0ad766d3131"
+    },
+    {
+      "path": "scripts/check-recording-playback56.mjs",
+      "sha256": "2d6de7b96e2d0baa406da222517f6a41438fbd004faa13bed18953a966e770d9",
+      "expected": "2d6de7b96e2d0baa406da222517f6a41438fbd004faa13bed18953a966e770d9"
+    },
+    {
+      "path": "package.json",
+      "sha256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007",
+      "expected": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+      "expected": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2"
+    }
+  ]
+}
