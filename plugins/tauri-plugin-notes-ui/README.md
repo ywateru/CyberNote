@@ -61,6 +61,14 @@ FIX02 正式 Mac 宿主须将所属窗口的全局搜索菜单及 Option+Cmd+F �
 
 ## 权限
 
+### Mac录音权限预检（52）
+
+`recordingAccess()` / `plugin:notes-ui|recording_access`只供用户点击录音Start时调用，不依赖工具栏绑定。当前调用Window必须与windowLabel相同，且为main、既有note-*或精确`recording-<小写canonical UUID>`；后者suffix须36字符、标准连字符且等于Uuid.hyphenated输出。主窗/笔记窗的Mac capability单独增加allow-recording-access；独立录音窗只获得macos-recording-access的这一项许可，不获得notes-ui:default工具栏权限。命令不接受任意媒体类型、目标窗口或系统设置参数。
+
+原生实现仅公开AVCaptureDevice音频授权API：Authorized返回`{status:"authorized"}`，Denied/Restricted返回明确错误，NotDetermined才调用异步requestAccess并在回调后重读真实状态；未知值或结果不一致报错。既有可信WebKit permission handler保持原样，系统允许不等于WebKit音轨/录音成功。非Mac返回unsupported，生产Android/浏览器不调用预检。
+
+主线程在发起前核当前Tauri窗口的真实NSWindow与WKWebView，WebView ready只安装应用内关闭观察、不读/请求权限。异步过程中弱引用真实窗口/视图、拒绝关闭或更换对象，原生返回后Rust再次核当前窗口身份；不因失焦、隐藏或后台工作暂停。原生30秒等待，Rust初始回包和回包后身份复核各自最多等待35秒，Session各准备阶段45秒。Session截止后即不再进入采集；原生或桥接迟到结果不能恢复已取消的会话。超时/关闭只交付一次错误，不撤回OS提示。系统请求未真实结算时保持单一pending并返回busy；OS block持有ObjC owner及Rust sender context直到真实回调释放，超时不释放仍可能被回调使用的context。插件drop移除全局窗口观察。公开API编译和受控生命周期检查不等于实机授权/有声。
+
 宿主 capability 仅授予自己创建的窗口，例如 windows: ["main", "note-*"]，permissions: ["notes-ui:default", "core:event:allow-listen", "core:event:allow-unlisten"]。notes-ui:default 允许 bind/update/unbind/inspect/focus_search（含 allow-focus-search）；命令从 Tauri 注入当前 Window 再核对 windowLabel，不能凭参数绑定其他窗口。不要把权限开放给远程页面。状态仅含标题、计数、动作、菜单和搜索，不传正文、密码或密钥。
 
 常见错误：invalid_state（未知字段、非法数字/长度/菜单）、invalid_binding、window_mismatch、already_bound、stale_binding、stale_state、stale_search、search_composition、symbol_unavailable、unsupported；其他主线程/原生失败返回 thread/window/native/dispatch/state。错误值均为 {code,message}。native 返回 material、reservedTop、真实 contentWidth、active、overflowActions、searchSequence、fullSizeContent、symbolFallbacks、windowNumber、scaleFactor。

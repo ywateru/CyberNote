@@ -127,6 +127,32 @@ Denies the keyboard_navigation command without any pre-configured scope.
 <tr>
 <td>
 
+`notes-ui:allow-recording-access`
+
+</td>
+<td>
+
+Enables the recording_access command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`notes-ui:deny-recording-access`
+
+</td>
+<td>
+
+Denies the recording_access command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `notes-ui:allow-unbind`
 
 </td>

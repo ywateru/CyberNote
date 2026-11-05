@@ -47,6 +47,11 @@ export interface NativeInfo {
 export interface BindingInfo { windowLabel: string; bindingId: string; stateRevision: number; native: NativeInfo }
 export interface NativeUiError { code: string; message: string }
 
+/** Explicit recording Start only. This may show the normal system microphone prompt. */
+export async function recordingAccess(): Promise<{ status: 'authorized' }> {
+  return invoke('plugin:notes-ui|recording_access', { windowLabel: getCurrentWindow().label });
+}
+
 /** Read the current system policy for this main window; independent of toolbar bindings. */
 export async function keyboardNavigation(): Promise<{ enabled: boolean }> {
   return invoke('plugin:notes-ui|keyboard_navigation', { windowLabel: getCurrentWindow().label });

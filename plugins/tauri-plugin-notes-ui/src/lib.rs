@@ -19,6 +19,10 @@ pub struct KeyboardNavigation {
     pub enabled: bool,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RecordingAccess {
+    pub status: String,
+}
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Error {
     pub code: String,
     pub message: String,
@@ -69,6 +73,19 @@ pub struct NotesUi<R: Runtime> {
     bindings: Bindings,
 }
 impl<R: Runtime> NotesUi<R> {
+    /// Called only by an explicit recording start; independent of toolbar bindings.
+    pub async fn recording_access(&self, window: Window<R>) -> Result<RecordingAccess> {
+        recording_window_label(window.label())?;
+        #[cfg(target_os = "macos")]
+        {
+            macos::recording_access(&self.app, window).await
+        }
+        #[cfg(not(target_os = "macos"))]
+        {
+            let _ = window;
+            Err(unsupported())
+        }
+    }
     /// Current main-window system policy. This never requires a toolbar binding.
     pub async fn keyboard_navigation(&self, window: Window<R>) -> Result<KeyboardNavigation> {
         if window.label() != "main" {
@@ -177,6 +194,26 @@ fn own_window<R: Runtime>(window: &Window<R>, window_label: &str) -> Result<()> 
     }
     Ok(())
 }
+fn recording_window_label(label: &str) -> Result<()> {
+    let recording = label.strip_prefix("recording-").is_some_and(|suffix| {
+        suffix.len() == 36
+            && uuid::Uuid::parse_str(suffix).is_ok_and(|id| id.hyphenated().to_string() == suffix)
+    });
+    if label == "main" || (label.starts_with("note-") && label.len() > 5) || recording {
+        Ok(())
+    } else {
+        Err(Error::new("window_mismatch", "录音仅支持所属笔记窗口"))
+    }
+}
+#[tauri::command]
+async fn recording_access<R: Runtime>(
+    window: Window<R>,
+    state: State<'_, NotesUi<R>>,
+    window_label: String,
+) -> Result<RecordingAccess> {
+    own_window(&window, &window_label)?;
+    state.recording_access(window).await
+}
 #[tauri::command]
 async fn bind<R: Runtime>(
     window: Window<R>,
@@ -245,7 +282,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             unbind,
             inspect,
             focus_search,
-            keyboard_navigation
+            keyboard_navigation,
+            recording_access
         ])
         .setup(|app, _| {
             app.manage(NotesUi {
@@ -303,6 +341,45 @@ mod tests;
 #[cfg(test)]
 mod keyboard_query_tests {
     use super::*;
+
+    #[test]
+    fn recording_command_rejects_cross_window_and_untrusted_labels() {
+        let app = tauri::test::mock_app();
+        app.manage(NotesUi {
+            app: app.handle().clone(),
+            bindings: Arc::new(Mutex::new(HashMap::new())),
+        });
+        let view = tauri::WebviewWindowBuilder::new(
+            &app,
+            "untrusted",
+            tauri::WebviewUrl::App("index.html".into()),
+        )
+        .build()
+        .unwrap();
+        let window = view.as_ref().window();
+        for label in ["main", "untrusted"] {
+            let error = tauri::async_runtime::block_on(recording_access(
+                window.clone(),
+                app.state(),
+                label.into(),
+            ))
+            .unwrap_err();
+            assert_eq!(error.code, "window_mismatch");
+        }
+        assert!(recording_window_label("main").is_ok());
+        assert!(recording_window_label("note-test").is_ok());
+        assert!(recording_window_label("note-").is_err());
+        assert!(recording_window_label("recording-729dcb97-61e1-44ed-bb4a-476cfd078587").is_ok());
+        for label in [
+            "recording-",
+            "recording-test",
+            "recording-729DCB97-61E1-44ED-BB4A-476CFD078587",
+            "recording-729dcb9761e144edbb4a476cfd078587",
+            "recording-729dcb97-61e1-44ed-bb4a-476cfd078587-other",
+        ] {
+            assert!(recording_window_label(label).is_err(), "{label}");
+        }
+    }
 
     #[test]
     fn keyboard_query_rejects_foreign_label_and_independent_window_before_dispatch() {

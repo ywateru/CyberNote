@@ -28,6 +28,229 @@ extern "C" {
     ) -> i32;
     fn notes_ui_keyboard_destroy(window_label: *const c_char) -> i32;
     fn notes_ui_keyboard_navigation(window: *mut c_void, enabled: *mut i32) -> i32;
+    fn notes_ui_recording_watch_windows() -> i32;
+    fn notes_ui_recording_drop();
+    fn notes_ui_recording_access(
+        webview: *mut c_void,
+        window: *mut c_void,
+        context: *mut c_void,
+        reply: extern "C" fn(*mut c_void, i32, std::ffi::c_long),
+        release: extern "C" fn(*mut c_void),
+    );
+}
+
+type RecordingSender = mpsc::SyncSender<Result<RecordingAccess>>;
+fn recording_reply_value(code: i32, status: std::ffi::c_long) -> Result<RecordingAccess> {
+    match (code, status) {
+        (0, 3) => Ok(RecordingAccess {
+            status: "authorized".into(),
+        }),
+        (1, _) => Err(Error::new("thread", "麦克风授权必须在主线程发起")),
+        (2, _) => Err(Error::new("window_closed", "录音所属窗口已关闭或改变")),
+        (3, 2) => Err(Error::new(
+            "microphone_denied",
+            "麦克风访问已被拒绝，请检查当前应用的系统麦克风权限。",
+        )),
+        (4, 1) => Err(Error::new(
+            "microphone_restricted",
+            "系统限制了当前应用的麦克风访问。",
+        )),
+        (7, _) => Err(Error::new(
+            "microphone_timeout",
+            "系统麦克风授权等待超时；可取消后检查是否仍有系统提示。",
+        )),
+        (8, _) => Err(Error::new(
+            "microphone_busy",
+            "上一次系统麦克风授权尚未结束，请先处理系统提示。",
+        )),
+        (9, _) => Err(Error::new(
+            "microphone_unsettled",
+            "系统麦克风授权未明确允许，录音未开始。",
+        )),
+        _ => Err(Error::new(
+            "microphone_native",
+            format!("无法确认系统麦克风权限（状态{status}，结果{code}）。"),
+        )),
+    }
+}
+extern "C" fn recording_reply(context: *mut c_void, code: i32, status: std::ffi::c_long) {
+    let _ = std::panic::catch_unwind(|| unsafe {
+        if let Some(sender) = (context as *const RecordingSender).as_ref() {
+            let _ = sender.try_send(recording_reply_value(code, status));
+        }
+    });
+}
+extern "C" fn recording_release(context: *mut c_void) {
+    let _ = std::panic::catch_unwind(|| unsafe {
+        if !context.is_null() {
+            drop(Box::from_raw(context as *mut RecordingSender));
+        }
+    });
+}
+async fn recording_wait<T: Send + 'static>(rx: mpsc::Receiver<Result<T>>) -> Result<T> {
+    tauri::async_runtime::spawn_blocking(move || {
+        rx.recv_timeout(std::time::Duration::from_secs(35))
+            .map_err(|error| match error {
+                mpsc::RecvTimeoutError::Timeout => {
+                    Error::new("microphone_timeout", "麦克风授权桥接等待超时，录音未开始。")
+                }
+                mpsc::RecvTimeoutError::Disconnected => {
+                    Error::new("microphone_bridge", "麦克风授权桥接已终止，录音未开始。")
+                }
+            })?
+    })
+    .await
+    .map_err(|e| Error::new("dispatch", e.to_string()))?
+}
+pub(super) async fn recording_access<R: Runtime>(
+    app: &AppHandle<R>,
+    window: Window<R>,
+) -> Result<RecordingAccess> {
+    let (tx, rx) = mpsc::sync_channel(1);
+    let current_app = app.clone();
+    let caller = window.clone();
+    // This queue wait is bounded too. If it expires before main dispatch, do not
+    // begin a fresh OS request from the late closure.
+    let live = Arc::new(std::sync::atomic::AtomicBool::new(true));
+    let dispatch_live = live.clone();
+    app.run_on_main_thread(move || {
+        use std::sync::atomic::Ordering;
+        if !dispatch_live.load(Ordering::Acquire) {
+            return;
+        }
+        let start = || -> Result<usize> {
+            let current = current_app
+                .get_webview_window(caller.label())
+                .ok_or_else(|| Error::new("window_closed", "录音所属窗口已关闭"))?;
+            let native = caller
+                .ns_window()
+                .map_err(|e| Error::new("window_closed", e.to_string()))?;
+            if current
+                .ns_window()
+                .map_err(|e| Error::new("window_closed", e.to_string()))?
+                != native
+            {
+                return Err(Error::new("window_mismatch", "录音所属窗口已改变"));
+            }
+            Ok(native as usize)
+        };
+        match start() {
+            Err(error) => {
+                let _ = tx.try_send(Err(error));
+            }
+            Ok(native) => {
+                let response_tx = tx.clone();
+                if let Err(error) = current_app
+                    .get_webview_window(caller.label())
+                    .ok_or_else(|| Error::new("window_closed", "录音所属视图已关闭"))
+                    .and_then(|view| {
+                        view.with_webview(move |view| {
+                            if !dispatch_live.load(Ordering::Acquire) {
+                                return;
+                            }
+                            if view.ns_window() as usize != native {
+                                let _ = response_tx.try_send(Err(Error::new(
+                                    "window_mismatch",
+                                    "录音视图所属窗口已改变",
+                                )));
+                                return;
+                            }
+                            let context = Box::into_raw(Box::new(response_tx));
+                            unsafe {
+                                notes_ui_recording_access(
+                                    view.inner(),
+                                    view.ns_window(),
+                                    context.cast(),
+                                    recording_reply,
+                                    recording_release,
+                                );
+                            }
+                        })
+                        .map_err(|e| Error::new("dispatch", e.to_string()))
+                    })
+                {
+                    let _ = tx.try_send(Err(error));
+                }
+            }
+        }
+    })
+    .map_err(|e| Error::new("dispatch", e.to_string()))?;
+    let result = recording_wait(rx).await;
+    live.store(false, std::sync::atomic::Ordering::Release);
+    let result = result?;
+    // Revalidate the actual injected Window, not merely a label reused by a
+    // replacement. No original native pointer is held past its main callback.
+    let (tx, rx) = mpsc::sync_channel(1);
+    let current_app = app.clone();
+    app.run_on_main_thread(move || {
+        let verify = || -> Result<RecordingAccess> {
+            let current = current_app
+                .get_webview_window(window.label())
+                .ok_or_else(|| Error::new("window_closed", "录音所属窗口已关闭"))?;
+            if current
+                .ns_window()
+                .map_err(|e| Error::new("window_closed", e.to_string()))?
+                != window
+                    .ns_window()
+                    .map_err(|e| Error::new("window_closed", e.to_string()))?
+            {
+                return Err(Error::new("window_mismatch", "录音所属窗口已改变"));
+            }
+            Ok(result)
+        };
+        let _ = tx.try_send(verify());
+    })
+    .map_err(|e| Error::new("dispatch", e.to_string()))?;
+    recording_wait(rx).await
+}
+
+#[cfg(test)]
+mod recording_access_tests {
+    use super::*;
+    #[test]
+    fn only_explicit_authorized_status_can_succeed() {
+        assert_eq!(recording_reply_value(0, 3).unwrap().status, "authorized");
+        for (code, status) in [
+            (0, 0),
+            (0, 1),
+            (0, 2),
+            (0, 4),
+            (0, -1),
+            (5, 888),
+            (6, -1),
+            (9, 3),
+        ] {
+            assert!(
+                recording_reply_value(code, status).is_err(),
+                "{code}/{status}"
+            );
+        }
+        assert_eq!(
+            recording_reply_value(3, 2).unwrap_err().code,
+            "microphone_denied"
+        );
+        assert_eq!(
+            recording_reply_value(4, 1).unwrap_err().code,
+            "microphone_restricted"
+        );
+        assert_eq!(
+            recording_reply_value(7, -1).unwrap_err().code,
+            "microphone_timeout"
+        );
+        assert_eq!(
+            recording_reply_value(8, -1).unwrap_err().code,
+            "microphone_busy"
+        );
+    }
+    #[test]
+    fn late_callback_retains_its_context_after_receiver_expires() {
+        let (tx, rx) = mpsc::sync_channel(1);
+        let context = Box::into_raw(Box::new(tx as RecordingSender)).cast();
+        drop(rx);
+        recording_reply(context, 0, 3);
+        recording_reply(context, 7, -1);
+        recording_release(context);
+    }
 }
 
 pub(super) async fn keyboard_navigation<R: Runtime>(
@@ -93,6 +316,9 @@ pub(super) fn install_keyboard_policy<R: Runtime>(webview: tauri::Webview<R>) {
     };
     // Completion is the native result inside this callback, not successful enqueueing.
     if let Err(error) = webview.with_webview(move |native| {
+        if unsafe { notes_ui_recording_watch_windows() } != 0 {
+            eprintln!("notes-ui: recording window lifecycle observation failed");
+        }
         let result = keyboard_status(unsafe {
             notes_ui_keyboard_attach(
                 native.inner(),
@@ -122,6 +348,11 @@ pub(super) fn destroy_keyboard_policy<R: Runtime>(app: &AppHandle<R>, label: Opt
         }
     };
     if let Err(error) = app.run_on_main_thread(move || {
+        if label.is_none() {
+            unsafe {
+                notes_ui_recording_drop();
+            }
+        }
         let result = keyboard_status(unsafe {
             notes_ui_keyboard_destroy(label.as_ref().map_or(std::ptr::null(), |s| s.as_ptr()))
         });

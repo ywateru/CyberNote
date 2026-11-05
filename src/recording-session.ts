@@ -6,6 +6,7 @@ type RecordingCallbacks = {
 };
 
 export type RecordingEnvironment = {
+  authorize?: () => Promise<void>;
   getStream: () => Promise<MediaStream>;
   createRecorder: (stream: MediaStream) => MediaRecorder;
   createContext: () => AudioContext;
@@ -14,6 +15,20 @@ export type RecordingEnvironment = {
 };
 
 const browserEnvironment: RecordingEnvironment = {
+  authorize: async () => {
+    if (
+      typeof window !== "undefined" &&
+      "__TAURI_INTERNALS__" in window &&
+      /Mac/.test(navigator.platform) &&
+      !/Android|iPhone|iPad/.test(navigator.userAgent)
+    ) {
+      if (!navigator.mediaDevices?.getUserMedia)
+        throw Error("设备未提供录音访问，请检查麦克风权限。");
+      const { authorizeNativeRecording } =
+        await import("./native-recording-access");
+      await authorizeNativeRecording();
+    }
+  },
   getStream: () => {
     if (!navigator.mediaDevices?.getUserMedia)
       throw Error("设备未提供录音访问，请检查麦克风权限。");
@@ -63,6 +78,8 @@ export class RecordingSession {
   // An issued request cannot be unsent. Keep its slot through resume/cancel so
   // its late data event cannot be assigned directly to a newer pause request.
   private issuedSnapshot?: SnapshotRequest;
+  private preparationTimer?: ReturnType<typeof setTimeout>;
+  private cancelPreparation?: () => void;
 
   constructor(
     private callbacks: RecordingCallbacks,
@@ -120,6 +137,7 @@ export class RecordingSession {
   }
 
   private discard(): unknown[] {
+    this.cancelPreparation?.();
     this.invalidateSnapshot();
     this.detachRecorder();
     this.chunks = [];
@@ -152,7 +170,33 @@ export class RecordingSession {
     if (!this.accepting || this.started) return;
     this.started = true;
     try {
-      const stream = await this.environment.getStream();
+      if (this.environment.authorize) {
+        await this.prepare(
+          this.environment.authorize(),
+          "系统麦克风授权等待超时，录音未开始。",
+        );
+        if (!this.accepting) return;
+      }
+      // Attach cleanup to the original promise before racing its deadline. A
+      // timed-out browser permission request can still resolve with live tracks.
+      const capture = this.environment.getStream().then((stream) => {
+        if (!this.accepting) {
+          const errors: unknown[] = [];
+          for (const track of stream.getTracks()) {
+            try {
+              track.stop();
+            } catch (error) {
+              errors.push(error);
+            }
+          }
+          if (errors.length) console.error("迟到录音资源释放失败。", errors);
+        }
+        return stream;
+      });
+      const stream = await this.prepare(
+        capture,
+        "麦克风准备超时，录音未开始；请检查系统提示后重试。",
+      );
       if (!this.accepting) {
         // Permission can resolve after dispose; never attach it to a new session.
         this.tracks = stream.getTracks();
@@ -248,6 +292,35 @@ export class RecordingSession {
     } catch (error) {
       this.fail(error);
     }
+  }
+
+  private prepare<T>(pending: Promise<T>, message: string): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      let settled = false;
+      const finish = (
+        result: { ok: true; value: T } | { ok: false; error: unknown },
+      ) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(this.preparationTimer);
+        this.preparationTimer = undefined;
+        this.cancelPreparation = undefined;
+        if (result.ok) resolve(result.value);
+        else reject(result.error ?? Error("麦克风准备失败，未返回具体原因。"));
+      };
+      this.cancelPreparation = () =>
+        finish({ ok: false, error: Error("录音准备已取消。") });
+      // Each native bridge wait is bounded separately; allow 45s per Session
+      // stage. OS/browser prompts are not cancelled by this UI deadline.
+      this.preparationTimer = setTimeout(
+        () => finish({ ok: false, error: Error(message) }),
+        45000,
+      );
+      pending.then(
+        (value) => finish({ ok: true, value }),
+        (error) => finish({ ok: false, error }),
+      );
+    });
   }
 
   pause() {
