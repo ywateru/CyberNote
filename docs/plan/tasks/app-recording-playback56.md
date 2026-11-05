@@ -18,3 +18,7 @@ Mac15真实录音暂停前缀Blob可实际播放，但最终保存卡MediaError4
 证据为docs/verification/recording-window54-mac-runtime/14—20，准确源5a147d2、Mac15；Editor现有readAttachment转data URL，child用Blob URL，二者最终/暂停字节不同，因此仍有终止容器等其他可能。有限受控检查要求字节/MIME一致、代次失效与URL释放、真实Audio原错误/重试路径；保留首次失败。独立审查后root精确同源双端构建，CUA实际录制/保存/重开/播放确认；未通过前不称已修复。证据限制在docs/verification/recording-playback56及-independent。
 
 独审4ca29a8 SOURCE-READY，八组实际组件与额外两组独立资源边界、构建通过，证据e24540f。主线源身份/独审重核/整合Notes并行与音频资源检查见docs/verification/recording-playback56-main-integration。真实包验收仍待完成。
+
+准确Mac16/9167db9上，保留的A54长录音44:58卡片实际播放位置0.55→15.05秒且正常暂停，原主窗SecurityOrigin失败路径有限通过，见verification/recording-presentation55-runtime/01—02。没有导出或认定可听性。新Mac录音仍遇原生权限等待；Android构建10预览实际推进通过，保存被目标校验拦截，57修复前无法验保存后/冷启播放。本任务保持部分设备通过，不以源码或旧包全盘追认。
+
+同准确Mac16正常退出（只读pgrep确认旧进程无匹配）→按封存路径重开PID80059，A54文字与单卡保持，真实播放0.25→29.60并暂停29.95，±15至14.95再回29.95，见runtime/11—13。这条冷启播放范围通过；未据此扩大为新录音保存链或所有编码/可听性通过。

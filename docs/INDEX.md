@@ -2,7 +2,9 @@
 
 更新：2026-11-05。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
-当前包：Mac14（构建源d9ce9c4）/Android08（源182464b），不同来源分别记账。[Mac14普通名称/侧栏/局部选中文字有限接收](verification/mac-ordinary-keyboard47-root-acceptance.md)；上一批双端见[接收36](verification/typography-compose-keyboard36-root-acceptance.md)。整体像素与完整交互目标继续进行。
+当前已发布接收包：Mac14（构建源d9ce9c4）/Android08（源182464b），不同来源分别记账。[Mac14普通名称/侧栏/局部选中文字有限接收](verification/mac-ordinary-keyboard47-root-acceptance.md)；上一批双端见[接收36](verification/typography-compose-keyboard36-root-acceptance.md)。整体像素与完整交互目标继续进行。
+
+本轮录音测试包Mac16/Android构建10准确同源9167db9已出包并实际启动；[真实验收](verification/recording-presentation55-runtime/README.md)记录Mac保存长录音播放、未采集下双模式/Notes内操作和Android暂停/试听/继续。Mac新Start授权无返回、AndroidDone保存拒绝仍阻塞完整验收。[57手机保存修复](plan/tasks/app-mobile-recording-save57.md)正在隔离实施，原失败File保留；不将测试包记为录音完成交付。
 
 用户新优先项：[录音交互任务50](plan/tasks/app-recording-interactions50.md)、[桌面录音规格](ui/recording-desktop.md)、[截图/手机参考49](research/audio-interaction-readiness49/reference-layout.md)。基本录音交互源码与主线整合通过，准确新包及真实后台采集待验；不做听写/转写，未进入Mac14/Android08。 [实际Mac准备阻塞50](verification/recording-interactions50-baseline/README.md)、[只读权限定位51](research/mac-recording-request-readiness51.md)、[明确授权预检任务52](plan/tasks/app-mac-recording-access52.md)。
 

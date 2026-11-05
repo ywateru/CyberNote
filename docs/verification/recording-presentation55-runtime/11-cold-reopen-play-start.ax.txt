@@ -1,0 +1,26 @@
+The following is a diff from the previous accessibility tree for Window: "备忘录" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~				54 text entry area (settable) 备忘录正文, Value: QA-RECORDING-WINDOW-54-A
+原笔记 A。录音期间可继续编辑；保留此测试笔记。
+插入录音位置。
+A-窗口打开期间追加-54
+A-实际录音期间追加-54
+[button: 收起录音进度：新录音.webm]
+**新录音**
+录音 · 44:58
+[button]**暂停**
+[button: 收起录音进度]**⌄**
+[button: 后退15秒]15
+[slider: 播放进度]
+0:00
+[button: 前进15秒]15
+
+
+~						86 button (expanded) 收起录音进度：新录音.webm, Secondary Actions: Collapse
+~						87 button 暂停
+~						88 button (expanded) 收起录音进度, Secondary Actions: Collapse
++						89 button 后退15秒
++						90 slider (settable, float) 播放进度, Value: 0.25, Details: 0:00
++							91 value indicator 0.25
++						92 text 0:00
++						93 button 前进15秒
+The focused UI element is 2 HTML content Description: 备忘录, URL: tauri://localhost

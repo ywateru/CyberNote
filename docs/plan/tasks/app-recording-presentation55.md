@@ -1,7 +1,7 @@
 ---
 id: app-recording-presentation55
 scope: desktop floating/docked recording view with one persistent capture session
-status: source-ready-runtime-pending
+status: source-ready-native-blocked
 depends-on: [app-recording-interactions50, app-mac-recording-access52]
 ---
 
@@ -26,3 +26,5 @@ root整合后串行准确双端构建，Computer Use核Mac真正双模式/背景
 用户再次明确本需求重点为“录音的同时可以操作备忘录其他功能”。验收包含采集中当前A编辑/Undo/Redo、切换/新建B、搜索及格式工具；两种呈现均不得以背景遮罩、inert或覆盖层锁正文/原生工具栏。仅显式Quit等待允许沿50冻结；不能把使用其他应用的后台测试替代备忘录内并行操作。
 
 独审c518aa7 SOURCE-READY，原始证据db89215已整合；主线12文件与作者固定源一致，独审60成员复核通过。下一步按docs/verification/recording-presentation55-runtime-plan.md准确双端包实际验收。Mac15保存卡播放SecurityOrigin阻塞单列任务56，不用55受控通过掩盖。
+
+9167db9已准确生成Mac16/Android构建10。Mac16真实默认浮窗→主窗右栏→浮窗通过，右栏下A编辑/UndoRedo、新B、加粗、搜索通过，但两次新Start均被本机原生麦克风授权未返回阻塞，始终未采集，不能称录音中的双模式/并行操作验收完成。Android构建10实际暂停/试听推进/继续至13秒通过，Done与一次重试被目标校验拒绝；现场File保留，另列57修复。设备证据见verification/recording-presentation55-runtime/；构建编号10不表示Android OS版本，实际OS为Android11/API30。
