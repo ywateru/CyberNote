@@ -1,5 +1,8 @@
 # 交付计划
 
+2026-11-06用户新截图优先：[Mac三处界面修正77](tasks/app-mac-feedback77.md)进行中；两张参考图已保全。限定Mac底部新建入口、列表右键位置、全局搜索文字高亮，走命令/DOM独审。Android原生76继续ready，原录音现场不动。
+
+
 2026-11-06附件75现已限定完成：[独审PASS](reviews/app-android-attachments75.md)及[主线9命令串行整合](../verification/android-attachments75/integration/README.md)均已归档。desktop100/mobile附件43/录音43/笔记9、protocol18、真实Rust21、build/production全部自然exit0；原设备/原生chooser/整页像素仍开放。[原生76](tasks/app-android-attachments-native76.md)ready为下一优先，使用全新AVD与准确新APK，保留原13秒录音现场。[录音Rust74](tasks/app-debug-recording-rust74.md)复用设施，尚未执行。
 
 2026-11-06最新优先为[安卓版附件75](tasks/app-android-attachments75.md)：用户报告添加附件无法保存及显示问题，正在复现实际手机输入框往返、附件落盘、正文ACK与新进程恢复；原设备约13秒未保存录音现场保持，不进行安装或重启。显示与保存分别验收，见[处理分析](analysis/android-quality75.md)。[真实Rust录音落盘74](tasks/app-debug-recording-rust74.md)等待75的共用设施，未执行。

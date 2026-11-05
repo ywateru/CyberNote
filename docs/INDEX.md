@@ -1,5 +1,8 @@
 # Apple Notes Clone
 
+2026-11-06用户新截图优先：[Mac三处界面修正77](plan/tasks/app-mac-feedback77.md)进行中；两张参考图已保全。限定Mac底部新建入口、列表右键位置、全局搜索文字高亮，走命令/DOM独审。Android原生76继续ready，原录音现场不动。
+
+
 更新：2026-11-06。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
 2026-11-06：[安卓版附件75](plan/tasks/app-android-attachments75.md)已[独审PASS](plan/reviews/app-android-attachments75.md)并完成[主线串行整合](verification/android-attachments75/integration/README.md)，9命令自然exit0：desktop100/mobile附件43/录音43/笔记9、protocol18、真实Rust21、build/production。修复空笔记多附件覆盖、预览读取永久错误、空MIME/读取中止及重试/取消错误残留；独审另29浏览器/14真实Rust故障恢复通过。原Android/系统chooser/整体像素仍开放，未生成APK、原13秒录音现场未动。下一优先[全新独立Android原生76](plan/tasks/app-android-attachments-native76.md)ready；真实Rust桌面录音74也ready但尚未执行。
