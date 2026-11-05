@@ -28,3 +28,9 @@ src/App.tsx、src/style.css、必要最小展示/位置组件；scripts/debug必
 开发在隔离分支完成并冻结提交，由另一agent独立审查。真实App命令/DOM事件/HTML/rect/PNG：中部与边缘右键、滚动、分栏与侧栏切换、画廊、目标笔记菜单操作及重开；标题/摘要重复匹配、大小写、中文、regex和HTML特殊字符、空query、正文find不同词、锁态及远处摘要。截图与原版参考只能做有限局部对照，不称整窗像素通过。
 
 最低回归：pnpm build、production排除、桌面完整调试组100及新增项、手机notes9/recording43/attachments43。本次不触Rust边界，不需重编Rust/实机包。记录命令自然exit、完整wall、源码身份、pageErrors、失败原始证据。只操作合成隔离数据，不启动/操作原Android13秒现场，不做原版删除实验。不再询问常规运行许可。
+
+# 独审首轮门槛 / 2026-11-06
+
+冻结806d3432的首轮独审确认两项blocking：snippet-text的flex/gap在拆分高亮span后人为增加两处4px空隙（「甲乙搜索丙丁」78→86px）；220px列表远中文摘要首命中「索」落在clip外。要求保持连续文字排版并在最窄合法列表宽度展示首命中，不能只检textContent或节点存在。
+
+完整all另连续两次止于旧contract100ms超时断言，尚未执行产品组。真实state读取在截止前未返回时，TIMEOUT可以不含lastState；不允许制造状态或移除deadline以刷绿。准许在本任务一并修正测试假设：分别验证真实App异步false及已取得状态的保留、慢首次transport的无状态超时，并保留late true/never/stalled transport截止验证。旧失败按身份保留，重新冻结后独审与主线完整回归。
