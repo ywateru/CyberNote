@@ -1,0 +1,2 @@
+$ clang -DDIAGNOSTICS63_REAL_SINK -fobjc-arc -fobjc-arc-exceptions -fblocks -mmacosx-version-min=12.0 scripts/check-mac-recording-diagnostics63-native.m /private/tmp/libapple_notes_diagnostics63.a -framework AppKit -framework WebKit -framework AVFoundation -framework CoreFoundation -framework Security -liconv -o /private/tmp/apple-notes-diagnostics63-blocked
+exit=0

@@ -1,0 +1,15 @@
+source=78f9f9d896e8c5d75311f3202484ff119f57369c
+$ NOTES_RECORDING_DIAGNOSTICS=1 /private/tmp/apple-notes-diagnostics63-sink --exact sink_contract63 --nocapture
+exit=0
+stdout:
+
+running 1 test
+PASS enabled=true; event_limit=256; metadata policy and unique request IDs
+test sink_contract63 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+stderr (synthetic diagnostics only):
+notes-recording-diag request=1 stage=rust_dispatch code=0 status=-1 t_us=13
+notes-recording-diag request=1 stage=os_completion_entry code=0 status=1 t_us=36
+notes-recording-diag request=1 stage=rust_wait_cancelled code=0 status=-1 t_us=237

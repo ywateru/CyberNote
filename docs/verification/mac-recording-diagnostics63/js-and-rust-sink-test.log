@@ -1,0 +1,26 @@
+$ node scripts/check-mac-recording-diagnostics63.mjs /private/tmp/apple-notes-diagnostics63-sink /private/tmp/apple-notes-diagnostics63-blocked
+exit=0
+PASS 17 production JS structured-error cases; IPC stub only
+running 1 test
+PASS enabled=false; event_limit=256; metadata policy and unique request IDs
+test sink_contract63 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+running 1 test
+PASS enabled=false; event_limit=256; metadata policy and unique request IDs
+test sink_contract63 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+running 1 test
+PASS enabled=false; event_limit=256; metadata policy and unique request IDs
+test sink_contract63 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+running 1 test
+PASS enabled=true; event_limit=256; metadata policy and unique request IDs
+test sink_contract63 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+PASS production Rust sink: strict opt-in, zero output by default, nonblocking bounded queue, <=256 events + one drop/truncation snapshot across 4 concurrent threads
+PASS blocked-output production Rust producer_ms=0.291 synthetic_prefill_bytes=8192 no reader; 10000 producer calls return without waiting
+PASS 17 cases per mode; 69 unchanged query/request/reply/release operations; 134 diagnostic events; callback-entry precedes main processing from worker thread; fake OS only

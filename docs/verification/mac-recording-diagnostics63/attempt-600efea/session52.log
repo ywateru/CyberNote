@@ -1,0 +1,24 @@
+$ node docs/verification/mac-recording-access52/check-session.mjs
+exit=0
+{
+  "status": "PASS",
+  "checks": 15,
+  "results": [
+    "optional preflight omitted keeps existing capture behavior",
+    "denied preflight never creates stream or recorder",
+    "undefined rejection is an explicit error, never success",
+    "cancelling unresolved preflight settles Start and ignores late allow",
+    "preflight timeout closes attempt; late allow cannot capture",
+    "one Start cannot request preflight or stream twice",
+    "getUserMedia deadline reports failure and releases all late tracks",
+    "cancel during media wait releases late tracks with no callback",
+    "late rejection after media timeout cannot emit another error",
+    "cleanup attempts every late track even when first stop throws",
+    "stage two has its own deadline after successful preflight",
+    "resolved media handoff cut 0 releases every track once",
+    "resolved media handoff cut 0 releases every track once when first stop throws",
+    "resolved media handoff cut 1 releases every track once",
+    "resolved media handoff cut 1 releases every track once when first stop throws"
+  ],
+  "limits": "Controlled promises/tracks/timers only, no OS permission or real audio"
+}

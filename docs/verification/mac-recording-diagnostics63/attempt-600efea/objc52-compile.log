@@ -1,0 +1,2 @@
+$ clang -fobjc-arc -fobjc-arc-exceptions -fblocks -mmacosx-version-min=12.0 docs/verification/mac-recording-access52/check-native.m -framework AppKit -framework WebKit -framework AVFoundation -framework CoreFoundation -o /private/tmp/apple-notes-diagnostics63-native52
+exit=0

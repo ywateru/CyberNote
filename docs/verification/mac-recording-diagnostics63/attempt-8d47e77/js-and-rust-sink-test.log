@@ -1,0 +1,8 @@
+$ node scripts/check-mac-recording-diagnostics63.mjs /private/tmp/apple-notes-diagnostics63-sink
+exit=0
+PASS 17 production JS structured-error cases; IPC stub only
+PASS enabled=false; event_limit=256; metadata policy and unique request IDs
+PASS enabled=false; event_limit=256; metadata policy and unique request IDs
+PASS enabled=false; event_limit=256; metadata policy and unique request IDs
+PASS enabled=true; event_limit=256; metadata policy and unique request IDs
+PASS production Rust sink: strict opt-in, zero output by default, 256 events + one truncation across 4 concurrent threads, monotonic serialized output
