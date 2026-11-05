@@ -6,6 +6,7 @@ import { fileBase64 } from "./bridge";
 import {
   sameRecording,
   type RecordingIdentity,
+  type RecordingTransfer,
   type RecordingViewState,
 } from "./recording-coordinator";
 import {
@@ -27,6 +28,7 @@ export default function RecordingWindow() {
   const pendingAction = useRef<"close" | "toggle" | null>(null);
   const file = useRef<RecordingResult | null>(null);
   const transferred = useRef(false);
+  const encoded = useRef<RecordingTransfer | null>(null);
   const pending = useRef<{
     resolve: () => void;
     reject: (error: Error) => void;
@@ -65,6 +67,8 @@ export default function RecordingWindow() {
           else handle.current.toggle();
         } else if (message.kind === "owner-status") {
           ready.current = true;
+          // Only the original owner can confirm it reconstructed this File.
+          transferred.current ||= message.fileAccepted;
           if (message.status === "saved") {
             if (pending.current) pending.current.resolve();
             else if (file.current)
@@ -152,16 +156,16 @@ export default function RecordingWindow() {
     )
       throw Error("录音文件身份已改变，请保留原音频");
     file.current = result;
-    const transfer = transferred.current
-      ? undefined
-      : {
-          name: result.file.name,
-          mime: result.file.type,
-          size: result.file.size,
-          lastModified: result.file.lastModified,
-          recordedAt: result.recordedAt,
-          data: await fileBase64(result.file),
-        };
+    if (!transferred.current && !encoded.current)
+      encoded.current = {
+        name: result.file.name,
+        mime: result.file.type,
+        size: result.file.size,
+        lastModified: result.file.lastModified,
+        recordedAt: result.recordedAt,
+        data: await fileBase64(result.file),
+      };
+    const transfer = transferred.current ? undefined : encoded.current!;
     const response = new Promise<void>((resolve, reject) => {
       pending.current = {
         resolve,
@@ -173,9 +177,8 @@ export default function RecordingWindow() {
       };
     });
     void response.catch(() => {});
-    // File bytes are sent once. Subsequent attempts query/run the original
-    // owner's cached File and original operation, including after a lost ACK.
-    transferred.current = true;
+    // Cache the encoding once; a failed/uncertain relay may resend those same
+    // bytes until the owner confirms receipt. Accepted Files are never resent.
     try {
       await recordingSend(identity, { kind: "submit", transfer });
       await response;

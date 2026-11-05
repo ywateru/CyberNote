@@ -130,6 +130,7 @@ export class RecordingOwner {
           fileAccepted: false,
         };
         await this.ports.send(this.status);
+        this.settleDestroyed();
       } catch (error) {
         await this.fail(error);
       }
@@ -204,6 +205,15 @@ export class RecordingOwner {
     }
     this.status = { kind: "owner-status", status: "saved", fileAccepted: true };
     await this.ports.send(this.status).catch(() => {});
+    // The native child may have disappeared while the original save was
+    // awaiting its real document ACK. That ACK still settles this owner.
+    this.settleDestroyed();
+  }
+  private settleDestroyed() {
+    if (this.closed && !this.closedSafely) {
+      this.closedSafely = true;
+      this.ports.closed(true);
+    }
   }
   toggle() {
     return this.ports.send({ kind: "action", action: "toggle" });

@@ -1,7 +1,7 @@
 // Mount the actual dedicated child entry, Panel/Session and production owner.
 // Native window/IPC and media events are controlled; this is not dual-window QA.
 import assert from "node:assert/strict";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { createServer } from "node:http";
@@ -17,6 +17,7 @@ const output = resolve(
   process.argv[2] || "docs/verification/recording-interactions50/child-window",
 );
 await mkdir(output, { recursive: true });
+const expectsPreflight = /import\(\s*["']\.\/native-recording-access["']\s*\)/.test(await readFile(resolve("src/recording-session.ts"), "utf8"));
 const identity = {
   sessionId: "123e4567-e89b-42d3-a456-426614174000",
   operationId: "123e4567-e89b-42d3-a456-426614174001",
@@ -25,10 +26,11 @@ const identity = {
 };
 const entry = `import React from 'react';import{createRoot}from'react-dom/client';import RecordingWindow from'/src/RecordingWindow.tsx';import{RecordingOwner}from'/src/recording-coordinator.ts';import{decodeRecordingFile}from'/src/recording-window-transport.ts';import'/src/style.css';
 const identity=${JSON.stringify(identity)};const root=createRoot(document.querySelector('#root'));const h=window.host={destroyed:0,finished:0,transfers:0,decoded:0,ownerAlive:true,terminal:false,messages:[],dropSaved:false};
+window.__TAURI_INTERNALS__={};Object.defineProperty(navigator,'platform',{value:'MacIntel',configurable:true});h.microphoneAccess=[];
 const emit=message=>h.listener?.({payload:{...identity,from:'owner',message}});
 h.owner=new RecordingOwner(identity,{send:async message=>{h.messages.push(message);if(['saved','discarded'].includes(message.status))h.terminal=true;if(message.status==='saved'&&h.dropSaved){h.dropSaved=false;return}emit(message)},decode:transfer=>{h.decoded++;return decodeRecordingFile(transfer)},submit:result=>{window.platform.results.push(result);window.platform.files.push(result.file);return new Promise((resolve,reject)=>window.platform.saves.push({resolve,reject}))},discard:async()=>{window.platform.cancels++},view:state=>h.state=state,reveal:async()=>{},closed:()=>{}});
-h.window={listen:async(name,handler)=>{if(name==='notes-recording')h.listener=handler;return()=>{if(h.listener===handler)h.listener=null}},onCloseRequested:async handler=>{h.close=()=>handler({preventDefault:()=>h.prevented=(h.prevented||0)+1});return()=>{}},destroy:async()=>{h.destroyed++;await h.owner.receive({...identity,from:'host',message:{kind:'child-closed'}});root.render(null)}};
-h.invoke=async(command,args)=>{if(command==='recording_window_context')return identity;if(command==='recording_window_finish'){if(!h.terminal)throw Error('missing original document ACK');h.finished++;return}if(command==='recording_window_message'){if(!h.ownerAlive)throw Error('original owner lost; File retained');if(args.message.transfer)h.transfers++;void h.owner.receive({...identity,from:'child',message:args.message});return}throw Error('unexpected '+command)};
+h.window={label:identity.child,listen:async(name,handler)=>{if(name==='notes-recording')h.listener=handler;return()=>{if(h.listener===handler)h.listener=null}},onCloseRequested:async handler=>{h.close=()=>handler({preventDefault:()=>h.prevented=(h.prevented||0)+1});return()=>{}},destroy:async()=>{h.destroyed++;await h.owner.receive({...identity,from:'host',message:{kind:'child-closed'}});root.render(null)}};
+h.invoke=async(command,args)=>{if(command==='plugin:notes-ui|recording_access'){if(args?.windowLabel!==h.window.label||Object.keys(args).join(',')!=='windowLabel')throw Error('invalid microphone preflight identity');h.microphoneAccess.push({command,...args});return{status:'authorized'}}if(command==='recording_window_context')return identity;if(command==='recording_window_finish'){if(!h.terminal)throw Error('missing original document ACK');h.finished++;return}if(command==='recording_window_message'){if(!h.ownerAlive)throw Error('original owner lost; File retained');if(args.message.kind==='submit'){h.submitAttempts=(h.submitAttempts||0)+1;if(h.failFirstSubmit){h.failFirstSubmit=false;throw Error('injected first relay rejection before owner delivery')}}if(args.message.transfer)h.transfers++;void h.owner.receive({...identity,from:'child',message:args.message});return}throw Error('unexpected '+command)};
 h.query=()=>h.owner.receive({...identity,from:'child',message:{kind:'hello'}});h.loseOwner=()=>{h.ownerAlive=false;h.listener?.({payload:{...identity,from:'host',message:{kind:'owner-lost'}}})};if(new URLSearchParams(location.search).get('early')==='1')h.earlyClose=h.owner.close();root.render(React.createElement(React.StrictMode,null,React.createElement(RecordingWindow)));`;
 const modules = {
   "@tauri-apps/api/core":
@@ -122,11 +124,25 @@ try {
   const begin = async () => {
     await page.locator(".recording-primary").click();
     await state("recording");
+    assert.deepEqual(await page.evaluate(() => window.host.microphoneAccess), expectsPreflight ? [{command:"plugin:notes-ui|recording_access",windowLabel:identity.child}] : []);
   };
   const test = async (name, run) => {
     await run();
     checks.push(name);
   };
+  await test("rejected first relay retries the retained encoding until actual owner receipt, then saves once", async () => {
+    await open(); await begin();
+    await page.evaluate(() => { window.host.failFirstSubmit = true; window.host.close(); });
+    await state("finalizing");
+    await page.evaluate(() => window.platform.emit("retained after rejected first relay"));
+    await state("retry");
+    assert.equal(await page.evaluate(() => window.host.decoded), 0);
+    await page.evaluate(() => window.host.close());
+    await page.waitForFunction(() => window.platform.saves.length === 1);
+    assert.deepEqual(await page.evaluate(() => [window.host.submitAttempts,window.host.transfers,window.host.decoded,window.host.destroyed]), [2,1,1,0]);
+    await page.evaluate(() => window.platform.saves[0].resolve());
+    await page.waitForFunction(() => window.host.destroyed === 1);
+  });
   await test("dedicated child entry mounts only recording view and its native idle close waits original discard", async () => {
     await open();
     assert.equal(await page.locator(".app").count(), 0);

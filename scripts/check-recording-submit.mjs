@@ -1044,6 +1044,22 @@ if (
       assert.equal(f.recordingMessages.at(-1).status, "saved");
       assert.equal(f.env.recordingTicket.current, ticket);
     });
+    await test("child destruction before actual A save ACK retains the owner, then real ACK releases the ticket and allows subsequent close", async () => {
+      const saveWait = deferred();
+      const { f, ticket, receive, transfer } = await remote({ saveWait });
+      const work = receive({ kind: "submit", transfer });
+      await until(() => f.counts().saves === 1, "actual A save dispatched");
+      await receive({ kind: "child-closed" }, { from: "host" });
+      assert.equal(f.env.recordingTicket.current, ticket);
+      await assert.rejects(ticket.remote.owner.close(), /意外关闭/);
+      saveWait.resolve();
+      await work;
+      assert.equal(f.recordingMessages.at(-1).status, "saved");
+      assert.equal(f.env.recordingTicket.current, null);
+      await ticket.remote.owner.close();
+      assert.equal(f.counts().stores, 1);
+      assert.equal(f.counts().inserts, 1);
+    });
     await test("recording result rejects invalid/changed dates before persistence; exact File/date retry survives", async () => {
       const f = fixture({ saveFailures: 2 }),
         ticket = f.open(),

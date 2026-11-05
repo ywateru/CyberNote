@@ -22,6 +22,7 @@ struct Entry {
     owner_alive: bool,
     started: bool,
     terminal: bool,
+    child_destroyed: bool,
 }
 struct Quit {
     id: String,
@@ -127,6 +128,7 @@ pub fn register_recording_window(
             owner_alive: true,
             started: false,
             terminal: false,
+            child_destroyed: false,
         },
     );
     Ok(identity)
@@ -147,22 +149,21 @@ pub fn recording_window_context(
     Ok(entry.identity.clone())
 }
 
-#[tauri::command]
-pub fn recording_window_message(
-    session_id: String,
-    operation_id: String,
+// Keep routing and lifecycle transitions together so the actual invoking owner
+// is still authenticated before a late terminal ACK can release a tombstone.
+fn route_message(
+    registry: &mut Registry,
+    session_id: &str,
+    operation_id: &str,
     message: Value,
-    window: tauri::WebviewWindow,
-    app: tauri::AppHandle,
-    state: State<Recordings>,
-) -> Result<(), String> {
-    let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
-    let entry = entry(&mut registry, &session_id, &operation_id)?;
+    caller: &str,
+) -> Result<(String, Value, bool), String> {
+    let entry = entry(registry, session_id, operation_id)?;
     if !entry.owner_alive {
         return Err("原笔记窗口已失去连接，音频仍保留，请勿退出应用".into());
     }
     let kind = message["kind"].as_str().ok_or("录音消息无效")?;
-    let (from, destination) = if window.label() == entry.identity.owner {
+    let (from, destination) = if caller == entry.identity.owner {
         if !["owner-status", "action"].contains(&kind) {
             return Err("录音消息方向无效".into());
         }
@@ -172,7 +173,7 @@ pub fn recording_window_message(
             entry.terminal = true;
         }
         ("owner", entry.identity.child.clone())
-    } else if window.label() == entry.identity.child {
+    } else if caller == entry.identity.child {
         if !["hello", "state", "submit", "cancel", "reveal"].contains(&kind) {
             return Err("录音消息方向无效".into());
         }
@@ -191,7 +192,36 @@ pub fn recording_window_message(
         return Err("不是本次录音的原窗口".into());
     };
     let value = envelope(entry, from, message);
+    let settled = entry.terminal && entry.child_destroyed;
+    if settled {
+        registry.entries.remove(session_id);
+    }
+    Ok((destination, value, settled))
+}
+
+#[tauri::command]
+pub fn recording_window_message(
+    session_id: String,
+    operation_id: String,
+    message: Value,
+    window: tauri::WebviewWindow,
+    app: tauri::AppHandle,
+    state: State<Recordings>,
+) -> Result<(), String> {
+    let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
+    let (destination, value, settled_destroyed) = route_message(
+        &mut registry,
+        &session_id,
+        &operation_id,
+        message,
+        window.label(),
+    )?;
     drop(registry);
+    if settled_destroyed {
+        // The authenticated owner ACK has settled a child that no longer has
+        // a renderer. There is no recipient to notify or second Destroyed.
+        return Ok(());
+    }
     app.emit_to(
         tauri::EventTarget::Window { label: destination },
         "notes-recording",
@@ -279,6 +309,31 @@ pub fn recording_quit_ack(
     Ok(())
 }
 
+fn mark_child_destroyed(registry: &mut Registry, label: &str) -> Option<(String, Value)> {
+    let child = registry
+        .entries
+        .iter()
+        .find(|(_, entry)| entry.identity.child == label)
+        .map(|(id, _)| id.clone());
+    if let Some(id) = child {
+        if let Some(mut entry) = registry.entries.remove(&id) {
+            entry.child_destroyed = true;
+            let notification = (
+                entry.identity.owner.clone(),
+                envelope(&entry, "host", json!({"kind":"child-closed"})),
+            );
+            if !entry.terminal {
+                registry.quit = None;
+                // A lost child is not evidence of an audio/document ACK. Keep
+                // the process guard and original owner until explicitly safe.
+                registry.entries.insert(id, entry);
+            }
+            return Some(notification);
+        }
+    }
+    None
+}
+
 pub fn destroyed(app: &tauri::AppHandle, label: &str) {
     let Some(state) = app.try_state::<Recordings>() else {
         return;
@@ -287,24 +342,8 @@ pub fn destroyed(app: &tauri::AppHandle, label: &str) {
         return;
     };
     let mut notifications = Vec::new();
-    let child = registry
-        .entries
-        .iter()
-        .find(|(_, entry)| entry.identity.child == label)
-        .map(|(id, _)| id.clone());
-    if let Some(id) = child {
-        if let Some(entry) = registry.entries.remove(&id) {
-            notifications.push((
-                entry.identity.owner.clone(),
-                envelope(&entry, "host", json!({"kind":"child-closed"})),
-            ));
-            if !entry.terminal {
-                registry.quit = None;
-                // A lost child is not evidence of an audio/document ACK. Keep
-                // the process guard and original owner until explicitly safe.
-                registry.entries.insert(id, entry);
-            }
-        }
+    if let Some(notification) = mark_child_destroyed(&mut registry, label) {
+        notifications.push(notification);
     }
     for entry in registry
         .entries
@@ -423,6 +462,7 @@ mod tests {
                 owner_alive: true,
                 started: true,
                 terminal: true,
+                child_destroyed: false,
             },
         );
         assert!(
@@ -432,6 +472,103 @@ mod tests {
         registry.entries.clear();
         assert!(may_exit(&mut registry));
         assert!(registry.exit_allowed);
+    }
+    #[test]
+    fn destroyed_child_requires_authentic_late_terminal_ack_to_release_guard() {
+        for terminal in ["saved", "discarded"] {
+            let mut registry = Registry::default();
+            registry.entries.insert(
+                "session".into(),
+                Entry {
+                    identity: Identity {
+                        session_id: "session".into(),
+                        operation_id: "operation".into(),
+                        owner: "main".into(),
+                        child: "recording-child".into(),
+                    },
+                    owner_alive: true,
+                    started: false,
+                    terminal: false,
+                    child_destroyed: false,
+                },
+            );
+            route_message(
+                &mut registry,
+                "session",
+                "operation",
+                json!({"kind":"state","state":{"recordedAt":123}}),
+                "recording-child",
+            )
+            .unwrap();
+            assert!(registry.entries["session"].started);
+            assert!(mark_child_destroyed(&mut registry, "recording-child").is_some());
+            assert!(registry.entries["session"].child_destroyed);
+            assert!(!registry.entries["session"].terminal);
+            for status in ["failed", "saving", "unknown"] {
+                route_message(
+                    &mut registry,
+                    "session",
+                    "operation",
+                    json!({"kind":"owner-status","status":status}),
+                    "main",
+                )
+                .unwrap();
+                assert!(registry.entries.contains_key("session"));
+            }
+            for caller in ["recording-child", "note-other"] {
+                assert!(route_message(
+                    &mut registry,
+                    "session",
+                    "operation",
+                    json!({"kind":"owner-status","status":terminal}),
+                    caller
+                )
+                .is_err());
+                assert!(registry.entries.contains_key("session"));
+            }
+            assert!(route_message(
+                &mut registry,
+                "session",
+                "wrong-operation",
+                json!({"kind":"owner-status","status":terminal}),
+                "main"
+            )
+            .is_err());
+            registry.entries.get_mut("session").unwrap().owner_alive = false;
+            assert!(route_message(
+                &mut registry,
+                "session",
+                "operation",
+                json!({"kind":"owner-status","status":terminal}),
+                "main"
+            )
+            .is_err());
+            assert!(registry.entries.contains_key("session"));
+            registry.entries.get_mut("session").unwrap().owner_alive = true;
+            registry.quit = Some(Quit {
+                id: "quit".into(),
+                waiting: HashSet::from(["main".into()]),
+            });
+            assert!(!may_exit(&mut registry));
+            route_message(
+                &mut registry,
+                "session",
+                "operation",
+                json!({"kind":"owner-status","status":terminal}),
+                "main",
+            )
+            .unwrap();
+            assert!(
+                registry.entries.is_empty(),
+                "only original-owner terminal ACK clears destroyed child guard"
+            );
+            assert!(
+                !may_exit(&mut registry),
+                "document Quit ACK is still mandatory"
+            );
+            registry.quit.as_mut().unwrap().waiting.clear();
+            assert!(may_exit(&mut registry));
+        }
     }
     #[test]
     fn capture_child_is_not_a_document_barrier_but_original_owner_still_must_ack() {
