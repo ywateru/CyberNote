@@ -1,7 +1,7 @@
 ---
 id: app-recording-presentation55
 scope: desktop floating/docked recording view with one persistent capture session
-status: ready
+status: in-review
 depends-on: [app-recording-interactions50, app-mac-recording-access52]
 ---
 
