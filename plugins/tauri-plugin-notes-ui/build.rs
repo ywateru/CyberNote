@@ -14,12 +14,21 @@ fn main() {
             .file("macos/toolbar.m")
             .file("macos/format.m")
             .file("macos/keyboard.m")
-            .file("macos/recording_access.m")
             .flag("-fobjc-arc")
             .flag("-fblocks")
             .flag("-mmacosx-version-min=12.0")
             .warnings(true)
             .compile("notes_ui_toolbar");
+        // Permission callbacks may escape before an Objective-C exception.
+        // Unwind this unit's strong owner/block references on the caught path.
+        cc::Build::new()
+            .file("macos/recording_access.m")
+            .flag("-fobjc-arc")
+            .flag("-fobjc-arc-exceptions")
+            .flag("-fblocks")
+            .flag("-mmacosx-version-min=12.0")
+            .warnings(true)
+            .compile("notes_ui_recording_access");
         for framework in [
             "AppKit",
             "Foundation",
