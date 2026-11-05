@@ -1,11 +1,13 @@
 ---
 id: app-mac-recording-diagnostics63
 scope: bounded opt-in Mac recording authorization diagnostics and structured errors
-status: in-progress
+status: done
 depends-on: [app-mac-recording-access52]
 ---
 
 ## objective
+
+2026-11-05局部源码已独审接收：准确78f9f9d，作者证据acdaa395+068f341，独审813bf706；root合入至7d9adf8b并typecheck/build通过，[主线接收](../../verification/mac-recording-diagnostics63-root-integration/README.md)。首同步stderr阻断修复为非阻塞producer/独立writer，首失败原件保留。done只指SOURCE-READY-DIAGNOSTICS-ONLY；真实授权/采集/像素仍open，未入Mac17或Android构建13。
 
 为既有Start授权超时增加可因果区分的源码诊断，保留原有UI文案、授权顺序、单pending和所有资源生命周期。依据研究61，当前证据停在AV预检，不能假定WK/getUserMedia已执行，也不能将签名mismatch判作唯一根因。任务只源码与受控验证，不启动/替换当前Mac17，不触原Android现场。
 

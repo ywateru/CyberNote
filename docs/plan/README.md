@@ -2,7 +2,7 @@
 
 用户已授权完整 Mac 与 Android 开发。此计划持续执行，不以文档完成替代应用完成。
 
-2026-11-05继续[Mac授权诊断63](tasks/app-mac-recording-diagnostics63.md)：依[研究61](../research/mac-recording-access-next61/README.md)增加默认关闭的有界阶段事件及结构化错误保全，保持原单pending/截止/资源语义；只源码和伪OS验证，不触当前包或手机。[原版已保存音频菜单62](../research/saved-audio-menu62/README.md)已留证，追加/改名等功能尚未实现验收，不混入63。
+2026-11-05[Mac授权诊断63](tasks/app-mac-recording-diagnostics63.md)已独审并[主线接收](../verification/mac-recording-diagnostics63-root-integration/README.md)：默认关闭的有界阶段事件及结构化错误保全，首同步输出阻断已修为64槽非阻塞producer与独立writer，保持原单pending/截止/资源语义。源码/假OS/堵塞sink通过，真实采集仍open；未入当前包，不触手机。[原版已保存音频菜单62](../research/saved-audio-menu62/README.md)已留证，追加/改名等功能尚未实现验收，不混入63。
 
 2026-11-05[手机录音波形60](tasks/app-mobile-recording-wave60.md)已完成局部源码独审并[合入主线](../verification/mobile-recording-wave60-root-integration/README.md)：游标/标签可见改善、完整axis边界及窄高真实触达通过，root typecheck/build通过。保留PIXEL-OPEN及作者9像素微小桌面残差；未生成包含60的新APK，不触原Android现场。58/59准确包身份保持，不追认60入包。
 
