@@ -188,19 +188,24 @@ export default function DesktopRecordingPanel(props: Props) {
         !playback.playing &&
         !playback.playPending &&
         !!session.current?.canResume));
+  const activityElapsed = Math.max(elapsed, samples.at(-1)?.at ?? 0);
+  const duration = (playback.duration ?? activityElapsed / 1000) * 1000;
   const seekable: [number, number][] = [];
-  if (previewAllowed && audio.current)
-    for (let i = 0; i < audio.current.seekable.length; i++)
-      seekable.push([
-        audio.current.seekable.start(i) * 1000,
-        audio.current.seekable.end(i) * 1000,
-      ]);
+  if (previewAllowed && audio.current && Number.isFinite(duration)) {
+    const ranges = audio.current.seekable;
+    for (let i = 0; i < Math.min(ranges.length, 64); i++) {
+      const start = Math.max(0, ranges.start(i) * 1000);
+      const end = Math.min(duration, ranges.end(i) * 1000);
+      if (Number.isFinite(start) && Number.isFinite(end) && end > start)
+        seekable.push([start, end]);
+    }
+  }
   const state: RecordingViewState = {
     sequence: 1,
     phase: status,
     openedAt,
     recordedAt: recordedAt.current,
-    elapsed,
+    elapsed: activityElapsed,
     paused: status === "paused",
     canToggle,
     canFinish:
@@ -220,8 +225,9 @@ export default function DesktopRecordingPanel(props: Props) {
               playback.seekError ||
               playback.durationError),
     hasError: !!error,
-    position: previewAllowed && playback.ready ? playback.time * 1000 : elapsed,
-    duration: (playback.duration ?? elapsed / 1000) * 1000,
+    position:
+      previewAllowed && playback.ready ? playback.time * 1000 : activityElapsed,
+    duration,
     previewPosition: previewAllowed && playback.ready,
     playing: playback.playing,
     playPending: playback.playPending,

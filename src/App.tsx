@@ -2397,6 +2397,19 @@ function App() {
         throw Error("原笔记更改尚未保存，录音仍保留；请先重试保存正文");
       const synced = await synchronizeRef.current();
       if (!owned()) throw Error("原录音归属已失效，音频仍保留");
+      if (synced.success && synchronization.current(synced)) {
+        // A trusted read resolves before React restores the active Host gate.
+        // Wait for that commit, then recheck the entire original-A target below.
+        const controller = new AbortController();
+        ticket.editorCommits ??= new Set();
+        ticket.editorCommits.add(controller);
+        try {
+          await waitRecordingEditorCommit(controller.signal);
+        } finally {
+          ticket.editorCommits.delete(controller);
+        }
+        if (!owned()) throw Error("原录音归属已失效，音频仍保留");
+      }
       if (
         queues.current.get(target.noteId) !== queue ||
         pendingDocs.current.has(target.noteId)
