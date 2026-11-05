@@ -1,0 +1,92 @@
+{
+  "policy": "atomic-rename-final-output-and-dist",
+  "sourcePathsAbsentBeforeCommand": true,
+  "outputs": [
+    {
+      "name": "application",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-recording-autosave-build18/mac-attempt01/prior-outputs/application",
+      "kind": "directory",
+      "before": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 30716829,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "Contents",
+            "mode": 493
+          },
+          {
+            "path": "Contents/MacOS",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "Contents/Info.plist",
+            "bytes": 1193,
+            "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "Contents/MacOS/notes-clone",
+            "bytes": 16743520,
+            "sha256": "a2465b73611e99660e45330bdc9c490078ba885b96dade4c8944ce0051728c83",
+            "type": "file",
+            "mode": 493
+          }
+        ]
+      }
+    },
+    {
+      "name": "dist",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-recording-autosave-build18/mac-attempt01/prior-outputs/dist",
+      "kind": "directory",
+      "before": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 30895451,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "assets",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "assets/index-CJjTgEwl.js",
+            "bytes": 1030214,
+            "sha256": "659aac882c95bea3e97c368c84c38af1084302290bd5876c4dada1fe38d6ecae",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/index-DFDa1aFU.css",
+            "bytes": 79034,
+            "sha256": "888c58cfa31ce06e91b34082b8340a6515e75227dda1cb7ae95e0e0a36c59522",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/native-recording-access-BYtUVf8S.js",
+            "bytes": 1018,
+            "sha256": "0939e85969ea2ed46324a4d1de6aa165af254561421815ff6dbd1b2a2ee37d6e",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "index.html",
+            "bytes": 498,
+            "sha256": "b065f8c0880ac9265de1384b883360408474bbb28ded65f6f93c557fd60bf666",
+            "type": "file",
+            "mode": 420
+          }
+        ]
+      }
+    }
+  ]
+}

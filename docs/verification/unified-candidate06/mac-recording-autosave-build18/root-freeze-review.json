@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "reviewer": "root",
+  "reviewTiming": "Live root read and byte verification completed before START authorization; this record was serialized after build and collection finished.",
+  "sourceHead": "8022407f0b827a564fa64f693b5c7e7f6220b42e",
+  "authorizationSha256": "12248785aab2d75d197f87f83a63f2b360c7102564c6803d85e71e01fea93114",
+  "freeze": {
+    "path": "docs/verification/unified-candidate06/mac-recording-autosave-build18/input-freeze.json",
+    "bytes": 347088,
+    "sha256": "469c75c5817f1f8e7197e5074257dc8b38ae209ae1eef9339614ca353285efa5"
+  },
+  "productCount": 353,
+  "productAggregate": "8b4557edcc8d18a3144cea44f4437cfcb70d9956c95670ed39603ebf0bc48d95",
+  "inputCount": 374,
+  "inputAggregate": "8de71e6d7ff91118bdd1c69b7b54bce42000cbde9a56632210fa1463d31ecb15",
+  "checks": {
+    "exactFreezeShaAndSize": true,
+    "exactSourceHead": true,
+    "nineAuthorizationFields": true,
+    "all353ProductBytesAndHashes": true,
+    "all374InputBytesAndHashes": true,
+    "all333OldProductPathsRetained": true,
+    "all352OldInputPathsRetained": true,
+    "added20ProductAnd22InputPaths": true,
+    "effectiveSixEnvironmentFieldsRead": true,
+    "storeHarnessTemplatesInputOnly": true
+  },
+  "authorizedAction": "One attempt01 run-build with identical authorization and freeze, exclusive target/cache, followed by standard collect with one local adhoc derivative and unchanged signing requirements.",
+  "scope": "Source/build authorization only. No GUI launch, TCC, microphone, persistence or pixel acceptance. Mobile remains untouched."
+}
