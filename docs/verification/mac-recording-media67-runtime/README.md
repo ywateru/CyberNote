@@ -29,3 +29,7 @@ J合成笔记`QA-RECORDING-MEDIA67-J`活动采集中点击主窗原生红close�
 新G/H/I/J/K和旧C/D/E/F本地笔记均保留，不做删除。Android原13秒未存现场完全未操作、未安装/停止/重启/复制。旧Mac18约3秒内存现场已在19运行阶段发现进程不在，停止原因/时点未知，不能称保全或恢复，详见19原报告；本次没有重开旧18。实际新音频没有导出、复制、转写或上传。原版Notes未做删除实验。
 
 最终包已有统一右栏、真实录音中编辑/切笔记/搜索/前后台、暂停累计、×首显、main close恢复的有限成功，但首进程授权超时和CmdQ缺卡事实保留，任务66/67及完整用户目标继续in-progress。
+
+## 后续源码定位（不代写真实内部事件）
+
+40cd170d精确产品与b455c140相同。不同作者对锁定Tauri2.12.5/muda0.20.0/tao0.37.2/runtime-wry2.12.3只读确认：lib.rs的SubmenuBuilder.quit()构造预定义Quit，macOS muda将该菜单项绑定terminate:；tao delegate仅applicationWillTerminate→LoopDestroyed→runtime Exit，而现有录音守卫只挂ExitRequested。后者可由AppHandle.exit的Message::RequestExit进入。此前66受控手动发送notes-recording-quit没有覆盖这个实际菜单入口。此为可确定的源码连接缺口，符合K观测；尚无当次运行内部trace，不宣称已证明K全部内部事件或恢复音频。68拟将菜单CmdQ接入已有可取消退出路径，不修改保存门禁。普通Dock/AppleEvent等其它原生terminate入口另评估，不将菜单修复外推为所有系统终止保证。
