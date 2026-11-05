@@ -1,0 +1,81 @@
+
+> notes-clone@0.1.0 debug /private/tmp/apple-notes-android-attachments75-01
+> node scripts/debug/cli.mjs group notes --mobile --out /private/tmp/attachments75-final-notes
+
+{
+  "version": 1,
+  "mode": "group",
+  "sourceHead": "4052e8aafea7fa51eda6dd5be8420901155dad7d",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "5b81e114c06b86cdd89ddcc67aa37598b080aac98e3799c88e10e56200c27d52",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "5b81e114c06b86cdd89ddcc67aa37598b080aac98e3799c88e10e56200c27d52",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsChanged": false,
+  "platform": "mobile-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "elapsedMs": 14833,
+  "result": {
+    "groups": [
+      {
+        "group": "notes",
+        "pass": true,
+        "checks": [
+          "Semantic create persists a new workspace note and rendered editor",
+          "Editor transaction saved body and DOM agrees",
+          "Pin and paper semantic patch reaches persistent workspace",
+          "Delete moves actual note into trash",
+          "Restore leaves trash",
+          "Real lock modal makes note unauthorized and hides editable content",
+          "Real unlock modal restores authorized editable note",
+          "Purge requires real confirmation and removes workspace note and DOM",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 2475
+      }
+    ],
+    "passedChecks": 9,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": [],
+  "output": "/private/tmp/attachments75-final-notes"
+}
+real 15.34
+user 16.54
+sys 9.97

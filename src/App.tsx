@@ -217,7 +217,7 @@ import gridSmallPreview from "../assets/mobile-paper-previews/grid-small.svg";
 import gridMediumPreview from "../assets/mobile-paper-previews/grid-medium.svg";
 import gridLargePreview from "../assets/mobile-paper-previews/grid-large.svg";
 import { convertTableToText, toggleListStyle } from "./editor-actions";
-import type { SelectionBookmark } from "@tiptap/pm/state";
+import { NodeSelection, Selection, type SelectionBookmark } from "@tiptap/pm/state";
 import {
   documentText,
   type DrawingStroke,
@@ -2635,6 +2635,22 @@ function App() {
                   kind: attachment.kind,
                 },
               })
+              .command(({ tr }) => {
+                // Tiptap may select a just-inserted atomic block. Leaving that
+                // automatic NodeSelection would replace it with the next file
+                // in this batch (or the next chooser), despite no user selection.
+                if (
+                  tr.selection instanceof NodeSelection &&
+                  tr.selection.node.type.name === "attachment" &&
+                  tr.selection.node.attrs.id === attachment.id
+                ) {
+                  const after = tr.selection.to;
+                  if (!tr.doc.resolve(after).nodeAfter?.isTextblock)
+                    tr.insert(after, instance.schema.nodes.paragraph.create());
+                  tr.setSelection(Selection.near(tr.doc.resolve(after), 1));
+                }
+                return true;
+              })
               .run();
             if (!inserted)
               throw Error("编辑器未接受附件插入，已保留原附件；请重试");
@@ -2678,6 +2694,12 @@ function App() {
         else await submitAttachmentBatch(batch);
       }
       if (ocrOperation.current) await retryOcr();
+      if (
+        !pendingDocs.current.size &&
+        !saveFailures.current.size &&
+        !attachmentBatches.current.size &&
+        !ocrOperation.current
+      ) setError("");
     } finally {
       debugComplete?.();
     }
@@ -2755,7 +2777,7 @@ function App() {
       attachmentBatches.current.add(batch);
       await submitAttachmentBatch(batch);
     } catch (e) {
-      fail(e);
+      if (!batch?.cancelRequested) fail(e);
     } finally {
       debugComplete?.();
       if (fileInput.current) fileInput.current.value = "";
@@ -2949,6 +2971,7 @@ function App() {
     if (owner !== live.noteId) throw Error("附件编辑器归属已改变");
     const original = wsRef.current.notes.find((n) => n.id === live.noteId);
     if (!original) throw Error("原附件备忘录不存在");
+    if (original.locked) throw Error("已锁定备忘录不支持附件，请先移除锁定");
     const target: PickerTarget = {
       noteId: live.noteId,
       scope: live.scope,
@@ -3694,6 +3717,7 @@ function App() {
           {menu === "media" && (
             <>
               <MenuRow
+                disabled={!!current?.locked}
                 icon={<FileText size={19} />}
                 onClick={() => {
                   openAttachmentPicker(fileInput.current, "");
@@ -3703,6 +3727,7 @@ function App() {
                 附加文件
               </MenuRow>
               <MenuRow
+                disabled={!!current?.locked}
                 icon={<Volume2 size={19} />}
                 onClick={() => {
                   try {
@@ -3716,6 +3741,7 @@ function App() {
               </MenuRow>
               <div className="menu-divider" />
               <MenuRow
+                disabled={!!current?.locked}
                 icon={<Image size={19} />}
                 onClick={() => {
                   openAttachmentPicker(fileInput.current, "image/*,video/*");
@@ -3725,6 +3751,7 @@ function App() {
                 选取照片或视频
               </MenuRow>
               <MenuRow
+                disabled={!!current?.locked}
                 icon={<Camera size={19} />}
                 onClick={() => {
                   openAttachmentPicker(cameraInput.current);
@@ -3734,6 +3761,7 @@ function App() {
                 拍照或录像
               </MenuRow>
               <MenuRow
+                disabled={!!current?.locked}
                 icon={<ScanLine size={19} />}
                 onClick={() => {
                   setMenu(null);
@@ -3746,6 +3774,7 @@ function App() {
                 扫描文稿
               </MenuRow>
               <MenuRow
+                disabled={!!current?.locked}
                 icon={<ScanText size={19} />}
                 onClick={() => {
                   setMenu(null);
@@ -3760,6 +3789,7 @@ function App() {
               </MenuRow>
               <div className="menu-divider" />
               <MenuRow
+                disabled={!!current?.locked}
                 icon={<PenTool size={19} />}
                 onClick={() => {
                   setMenu(null);
@@ -4090,7 +4120,7 @@ function App() {
     !!current &&
     !current.deletedAt &&
     (!mobile || page === "editor") &&
-    (!current.locked || !!accessGate.state?.notes[current.id]?.authorized);
+    !current.locked;
   const pickerBaseAvailable = attachmentBaseAvailable && !record && !ocr;
   pickerRuntime.current = {
     scope: JSON.stringify([nativeScope, page]),

@@ -240,7 +240,7 @@ Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许�
 最新用户要求移除浮窗，统一App内右栏。55的child拥有采集、远程视图与呈现切换仅作历史。66直接owner会话、精确原A保存、可等待关闭及native本地登记退出屏障详见ui/recording-desktop.md与任务66。
 ## 持久媒体陈旧读取恢复67
 
-共享媒体加载器仅对typed MetadataStale执行最多三次总readAttachment，每次重新捕获access stamp并通过现有gate；旧结果不创建URL、不发布。layout lifetime及手动version令旧读取/重试失效；其它错误不自动重试，达到上限保留显式重试。录音写入、正文ACK、版本、journal及退出守卫不改。准确范围见[67合同](plan/tasks/app-mac-recording-media67.md)。
+75手机真实多图选择+650ms读延迟复现了下一项synchronize令上一图AccessChanged后永久错误。共享媒体加载器现对typed MetadataStale或AccessChanged执行最多三次总readAttachment，每次重新捕获access stamp并通过完整现有gate；被拒旧结果不创建URL、不发布。layout lifetime及手动version令旧读取/重试失效；其他错误不自动重试，达到上限对所有媒体保留显式重试。真实撤权仍必须由原bridge/Session拒绝，不把AccessChanged当作授权成功。录音写入、正文ACK、版本、journal及退出守卫不改。准确范围见[67合同](plan/tasks/app-mac-recording-media67.md)。
 
 
 ### 显式开发调试接口（任务70）
@@ -250,3 +250,8 @@ Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许�
 通用附件/OCR的可信同步也须等待现有`useEditorCommit`确认React Host恢复可编辑状态，随后执行完整`rebindAttachmentTarget`。task70 CDP定位曾发现唯一失败条件为同一目标`live.available=false`，其身份/正文/版本/可信同步均相同；同步返回不能作为Host恢复的证据。此等待不放宽原目标检查，操作被取消或编辑器销毁后仍拒绝。
 
 桌面Panel的100ms展示投影不能充当异步完成证据。仅DEV+显式开关下的handle inspection读取现有`busy/closePromise`与当前render状态；录音命令等待实际pending，idle同时拒绝hasError/注册错误并等待opening/handle挂载。正常产品不含该inspection；错误提示读取结构化message，保留重试会话。
+
+75附件输入补充：手机文档provider可能不给File.type。仅当type为空时，从已经FileReader读取的字节识别PNG/JPEG/GIF/WebP/PDF签名，其他保留application/octet-stream；不按扩展名猜类型，也不补推视频/音频。签名分类不等于内容有效或可解码。FileReader error/abort必须以明确Error结束原提交，保留原目标和operation供重试，不留下永久pending；不放宽epoch、owner、原正文或Editor身份。
+
+75实证：新空笔记一次选择两附件时，Tiptap插入atom后自动留下NodeSelection，下一份替换第一份。现仅在本次刚插入附件被自动选中时，在同一原插入事务中将光标置于紧邻后续文本块；没有此文本块时添加可输入paragraph。原始用户书签仍先决定插入/替换位置，显式选择旧卡的替换语义保留；多选、下一次选择与Undo沿同一原编辑器事务/ACK，不删除被替换的旧媒体。
+附件retry仅完整流程成功且pending正文、保存失败、附件batch、OCR均清空才清旧错误；取消已封住准入后，迟到的原读取/提交observer不覆盖取消handler的权威结果，取消handler失败仍明确上报。

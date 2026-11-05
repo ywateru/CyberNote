@@ -1,0 +1,173 @@
+{
+  "error": "Mobile actual FileList stores image and generic file through Session and body save ACK",
+  "stack": "AssertionError [ERR_ASSERTION]: Mobile actual FileList stores image and generic file through Session and body save ACK\n    at check (file:///private/tmp/apple-notes-android-attachments75-01/scripts/debug/check-mobile-attachments-rust.mjs:14:261)\n    at file:///private/tmp/apple-notes-android-attachments75-01/scripts/debug/check-mobile-attachments-rust.mjs:20:271",
+  "checks": [
+    "Fresh real Rust workspace creates actual note through Session ordinary action"
+  ],
+  "stages": [],
+  "lifecycle": {
+    "pid": 73975,
+    "closing": false,
+    "exit": null,
+    "pending": 0
+  },
+  "state": {
+    "workspace": {
+      "access": {
+        "epoch": 1,
+        "notes": {
+          "ae492217-6b32-4767-89fe-bf46d24a55cf": {
+            "authorized": true,
+            "epoch": 0
+          }
+        },
+        "operationId": null,
+        "sessionId": "9e768ed0-f495-4a9b-905e-2c3bb6befef1",
+        "suspended": []
+      },
+      "attachments": [
+        {
+          "displayName": "actual-session.png",
+          "id": "16f97dec-5296-4739-ae5c-2d4fe5563e40",
+          "kind": "image",
+          "mime": "image/png",
+          "noteId": "ae492217-6b32-4767-89fe-bf46d24a55cf",
+          "relativePath": "op-cc339ab8-6217-4c69-8675-8821571da7f8-16f97dec-5296-4739-ae5c-2d4fe5563e40.blob",
+          "size": 68
+        },
+        {
+          "displayName": "actual-session.txt",
+          "id": "fa442a8a-69f3-4da8-8c61-08e84a6b1f9d",
+          "kind": "file",
+          "mime": "text/plain",
+          "noteId": "ae492217-6b32-4767-89fe-bf46d24a55cf",
+          "relativePath": "op-718796a5-5690-4f1b-9d5a-ef69bf254f6b-fa442a8a-69f3-4da8-8c61-08e84a6b1f9d.blob",
+          "size": 49
+        }
+      ],
+      "folders": [
+        {
+          "id": "default",
+          "name": "备忘录",
+          "sortOrder": 0,
+          "createdAt": 1793916794976,
+          "kind": "default",
+          "parentId": null
+        },
+        {
+          "id": "quick",
+          "name": "快速备忘录",
+          "sortOrder": -1,
+          "createdAt": 1793916794976,
+          "kind": "quick",
+          "parentId": null
+        },
+        {
+          "id": "trash",
+          "name": "最近删除",
+          "sortOrder": 9999,
+          "createdAt": 1793916794976,
+          "kind": "trash",
+          "parentId": null
+        }
+      ],
+      "metadata": {
+        "sequence": 5,
+        "sessionId": "9e768ed0-f495-4a9b-905e-2c3bb6befef1"
+      },
+      "notes": [
+        {
+          "createdAt": 1793916802832,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "attrs": {
+                  "id": "fa442a8a-69f3-4da8-8c61-08e84a6b1f9d",
+                  "kind": "file",
+                  "name": "actual-session.txt"
+                },
+                "type": "attachment"
+              },
+              {
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "ae492217-6b32-4767-89fe-bf46d24a55cf",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "",
+          "revision": 2,
+          "sealed": null,
+          "title": "新备忘录",
+          "updatedAt": 1793916803894
+        }
+      ],
+      "settings": {
+        "selectedFolder": "default",
+        "selectedNote": "ae492217-6b32-4767-89fe-bf46d24a55cf"
+      }
+    },
+    "editorJSON": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "attachment",
+          "attrs": {
+            "id": "fa442a8a-69f3-4da8-8c61-08e84a6b1f9d",
+            "name": "actual-session.txt",
+            "kind": "file"
+          }
+        },
+        {
+          "type": "paragraph"
+        }
+      ]
+    },
+    "error": "",
+    "notice": "",
+    "selection": {
+      "folderId": "default",
+      "noteId": "ae492217-6b32-4767-89fe-bf46d24a55cf",
+      "page": "editor",
+      "query": "",
+      "searching": false,
+      "menu": null,
+      "modal": null,
+      "listed": [
+        "ae492217-6b32-4767-89fe-bf46d24a55cf"
+      ]
+    },
+    "save": {
+      "pending": 0,
+      "queued": 1,
+      "failed": 0,
+      "saving": 0
+    },
+    "busy": false,
+    "failure": {
+      "serial": 0,
+      "message": ""
+    },
+    "recording": {
+      "active": false,
+      "state": null
+    },
+    "ocr": {
+      "phase": "choose",
+      "text": "",
+      "error": ""
+    },
+    "settings": {
+      "selectedFolder": "default",
+      "selectedNote": "ae492217-6b32-4767-89fe-bf46d24a55cf"
+    },
+    "folderForm": false
+  },
+  "pageErrors": []
+}

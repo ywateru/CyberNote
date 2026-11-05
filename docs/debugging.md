@@ -1,6 +1,6 @@
 # 开发命令与布局检查
 
-2026-11-06，任务70/71/73。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
+2026-11-06，任务70/71/73/75。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
 
 [73主线验收](verification/mobile-recording-primary73/integration/README.md)当前为桌面100/手机录音43/手机笔记9项。手机新增600ms延迟读取后，等待同一卡片真实blob音源/metadata就绪再单次展开和后段回放，避免源更新重挂载丢失控件。程序化视觉对照可运行`node scripts/check-mobile-recording-primary73.mjs /private/tmp/notes-primary73`，它固定baseline3534acaf、真实共享View和同尺寸投影，仅适合该控件校准；输入变化必须显式审查基线。脚本限定真实依赖扫描，生产API规则不变。报告耗时须包括最终清理至进程退出，不能只引用CLI summary计时。
 
@@ -14,7 +14,7 @@ pnpm debug group recording --out /private/tmp/notes-debug-recording
 pnpm debug group recording --mobile --out /private/tmp/notes-debug-mobile-recording
 ```
 
-默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。全九组主回归以桌面为基准；手机执行`notes`与独立`recording`小组及自定义script/snapshot，桌面专用录音栏和原生退出场景不扩张为手机通过。
+默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。全九组主回归以桌面为基准；手机执行`notes`、独立`recording`与`attachments`小组及自定义script/snapshot，桌面专用录音栏和原生退出场景不扩张为手机通过。
 
 需要本机已安装 Chrome 和 playwright-core。默认寻找 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` 和 `/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/playwright-core/index.mjs`；其他机器用 `CHROME_PATH`、`PLAYWRIGHT_CORE_PATH` 或 `--chrome`、`--playwright` 指定。runner不自动安装依赖。
 
@@ -107,3 +107,21 @@ Apple Notes没有HTML。原版只能通过已保全录屏、原生截图和标�
 [开发证据](verification/mobile-debug-recording71/development/README.md)保留失败历史与准确源码指纹。浏览器390×844只证明合成设备/JS协议fixture上的真实前端路径，不证明Android WebView、系统权限、硬件音质或原版像素一致。
 
 2026-11-06任务71已通过[独立最终复审](plan/reviews/app-mobile-debug-recording71-recheck.md)及[主工作区整合](verification/mobile-debug-recording71/integration/README.md)：桌面100项、手机录音42项、手机笔记9项，构建和生产入口排除通过。初审失败保留于历史证据。日常使用以上命令；catalog可用性与各次实际覆盖分别读取，不能据此授予原生设备或原版像素通过。
+
+
+## 手机附件与真实 Rust（75）
+
+```sh
+pnpm debug group attachments --mobile --out /private/tmp/notes-attachments-result
+node scripts/debug/check-rust-backend.mjs
+CARGO_TARGET_DIR=/absolute/exclusively-assigned-cache node scripts/debug/build-rust-attachments.mjs /private/tmp/notes-current-rust-build
+node scripts/debug/check-mobile-attachments-rust.mjs /private/tmp/notes-current-rust-build /private/tmp/notes-current-rust-result
+```
+
+以上输出目录必须不存在。Rust构建是单独显式opt-in：复制当前完整`store.rs/store/**/session.rs/session/**`到fresh harness，复用已存在的小Cargo.lock，`cargo build --locked --offline`，不安装依赖或构建Mac/APK。build.json记录全部递归源码、wrapper、manifest/lock、registry实际文件汇总hash、依赖图与二进制SHA；runner检查这些身份，不接受已改变的wrapper/源码或旧binary，不fallback Fake。Cargo缓存由任务执行者独占分配且不删除。
+
+手机附件组通过真实菜单或`attachment.choose`保留原picker目标，再以Playwright FileChooser或FileList边界输入合成File；实际hidden input change、FileReader、AttachmentSubmission、保存队列和正文ACK全部保留。`attachment.submit`在调用时重建target，适合直接边界注入，但不能证明系统选择器往返。新增组包括空笔记多选、连续选择、显式旧卡替换和Undo/Redo，单图/PDF/普通文件、同名重选、取消后重选、blur/visible/focus、延迟/abort/error、正文失败重试、丢响应query、ACK后refresh-only、多文件第二项失败、晚到取消、原目标改变、媒体stale有界重读与撤权、390/320浅深色长文件卡HTML/几何/PNG。默认桌面九组100项保持原范围，新增手机附件计数单列。
+
+真实Rust runner使用fresh合成目录，手机PNG和普通文件走`Session.register_save/Session.save`与Session附件方法；read先由Store查owner再`sensitive/tagged`。核实际文件字节/正文引用及同目录新PID/新Session恢复，旧op不能被新Session接管、旧token不能读。lock/delete/import屏障返回明确unsupported，不空ACK。外部transport严格拒绝启动/JSON/未知或重复ID/超长/EOF/超时异常，close等待owned child真实退出才允许删除或重开目录；故障不切换后端。
+
+此边界仍不是Android系统chooser/URI/WebView/IME或原用户设备故障验收，也不证明Apple Notes PDF预览像素一致。原Android及其未保存录音保持现场。准确失败历史与源码/运行身份见[75证据](verification/android-attachments75/README.md)。

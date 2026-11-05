@@ -466,6 +466,7 @@ export async function storeAttachment(
   if (native && date !== undefined)
     throw Error("录音日期必须通过原附件持久操作提交");
   const data = await fileBase64(file);
+  const mime = attachmentMime(file.type, data);
   if (native) {
     const stamp = accessGate.stamp(noteId);
     const attachment: Attachment = accept(
@@ -473,7 +474,7 @@ export async function storeAttachment(
         noteId,
         expected: accessGate.expected(noteId),
         name: file.name,
-        mime: file.type || "application/octet-stream",
+        mime,
         data,
       }),
       stamp,
@@ -484,15 +485,15 @@ export async function storeAttachment(
   const a: Attachment = {
     id: secureId(),
     noteId,
-    kind: file.type.startsWith("image/")
+    kind: mime.startsWith("image/")
       ? "image"
-      : file.type.startsWith("audio/")
+      : mime.startsWith("audio/")
         ? "audio"
-        : file.type.startsWith("video/")
+        : mime.startsWith("video/")
           ? "video"
           : "file",
     relativePath: "",
-    mime: file.type,
+    mime,
     displayName: file.name,
     size: file.size,
     ...(date === undefined ? {} : { recordedAt: date }),
@@ -518,12 +519,13 @@ export async function storeAttachmentOperation(
     file.type.startsWith("audio/") ? "audio" : "file",
   );
   const data = await fileBase64(file);
+  const mime = attachmentMime(file.type, data);
   const result = accept<AttachmentOperationResult>(
     await invoke("store_attachment_operation", {
       operationId,
       noteId,
       name: file.name,
-      mime: file.type || "application/octet-stream",
+      mime,
       data,
       expected,
       ...(date === undefined ? {} : { recordedAt: date }),
@@ -590,11 +592,26 @@ export async function readAttachment(id: string): Promise<{
     recordedAt: attachmentRecordedAt(a?.recordedAt, a?.kind || "file"),
   };
 }
+// Some Android document providers omit File.type. Only known byte signatures
+// supply a missing MIME; filenames never determine an executable/media type.
+function attachmentMime(declared: string, base64: string): string {
+  if (declared) return declared;
+  const head = atob(base64.slice(0, 24));
+  if (head.startsWith("\x89PNG\r\n\x1a\n")) return "image/png";
+  if (head.startsWith("\xff\xd8\xff")) return "image/jpeg";
+  if (head.startsWith("GIF87a") || head.startsWith("GIF89a"))
+    return "image/gif";
+  if (head.startsWith("RIFF") && head.slice(8, 12) === "WEBP")
+    return "image/webp";
+  if (head.startsWith("%PDF-")) return "application/pdf";
+  return "application/octet-stream";
+}
 export function fileBase64(file: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const r = new FileReader();
     r.onload = () => resolve(String(r.result).split(",")[1]);
-    r.onerror = reject;
+    r.onerror = () => reject(r.error || Error("无法读取附件文件，请重试"));
+    r.onabort = () => reject(Error("附件读取已中断，文件已保留，请重试"));
     r.readAsDataURL(file);
   });
 }

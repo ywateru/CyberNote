@@ -1,0 +1,197 @@
+{
+  "error": "Mobile actual FileList stores image and generic file through Session and body save ACK",
+  "stack": "AssertionError [ERR_ASSERTION]: Mobile actual FileList stores image and generic file through Session and body save ACK\n    at check (file:///private/tmp/apple-notes-android-attachments75-01/scripts/debug/check-mobile-attachments-rust.mjs:14:261)\n    at file:///private/tmp/apple-notes-android-attachments75-01/scripts/debug/check-mobile-attachments-rust.mjs:20:271",
+  "checks": [
+    "Fresh real Rust workspace creates actual note through Session ordinary action"
+  ],
+  "stages": [],
+  "lifecycle": {
+    "pid": 77788,
+    "closing": false,
+    "exit": null,
+    "pending": 0
+  },
+  "state": {
+    "workspace": {
+      "access": {
+        "epoch": 1,
+        "notes": {
+          "db657a18-e439-4bf8-ac03-4549e0e56278": {
+            "authorized": true,
+            "epoch": 0
+          }
+        },
+        "operationId": null,
+        "sessionId": "80db3c23-2bba-43d3-8023-7b485e84de76",
+        "suspended": []
+      },
+      "attachments": [
+        {
+          "displayName": "actual-session.png",
+          "id": "c0a580f2-8408-4caa-9fc7-1d662490c0cf",
+          "kind": "image",
+          "mime": "image/png",
+          "noteId": "db657a18-e439-4bf8-ac03-4549e0e56278",
+          "relativePath": "op-038375a3-cc97-4f2b-a3b5-7324c23f7849-c0a580f2-8408-4caa-9fc7-1d662490c0cf.blob",
+          "size": 68
+        },
+        {
+          "displayName": "actual-session.txt",
+          "id": "622630cf-7198-4c6c-adae-5a80234d5992",
+          "kind": "file",
+          "mime": "text/plain",
+          "noteId": "db657a18-e439-4bf8-ac03-4549e0e56278",
+          "relativePath": "op-9db95fb7-c085-47e6-9970-b2f84c5b7e17-622630cf-7198-4c6c-adae-5a80234d5992.blob",
+          "size": 49
+        }
+      ],
+      "folders": [
+        {
+          "id": "default",
+          "name": "备忘录",
+          "sortOrder": 0,
+          "createdAt": 1793916875362,
+          "kind": "default",
+          "parentId": null
+        },
+        {
+          "id": "quick",
+          "name": "快速备忘录",
+          "sortOrder": -1,
+          "createdAt": 1793916875362,
+          "kind": "quick",
+          "parentId": null
+        },
+        {
+          "id": "trash",
+          "name": "最近删除",
+          "sortOrder": 9999,
+          "createdAt": 1793916875362,
+          "kind": "trash",
+          "parentId": null
+        }
+      ],
+      "metadata": {
+        "sequence": 6,
+        "sessionId": "80db3c23-2bba-43d3-8023-7b485e84de76"
+      },
+      "notes": [
+        {
+          "createdAt": 1793916888756,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "attrs": {
+                  "level": 1
+                },
+                "content": [
+                  {
+                    "text": "Synthetic attachment target 75",
+                    "type": "text"
+                  }
+                ],
+                "type": "heading"
+              },
+              {
+                "attrs": {
+                  "id": "622630cf-7198-4c6c-adae-5a80234d5992",
+                  "kind": "file",
+                  "name": "actual-session.txt"
+                },
+                "type": "attachment"
+              },
+              {
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "db657a18-e439-4bf8-ac03-4549e0e56278",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "Synthetic attachment target 75",
+          "revision": 3,
+          "sealed": null,
+          "title": "Synthetic attachment target 75",
+          "updatedAt": 1793916890145
+        }
+      ],
+      "settings": {
+        "selectedFolder": "default",
+        "selectedNote": "db657a18-e439-4bf8-ac03-4549e0e56278"
+      }
+    },
+    "editorJSON": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "level": 1
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "Synthetic attachment target 75"
+            }
+          ]
+        },
+        {
+          "type": "attachment",
+          "attrs": {
+            "id": "622630cf-7198-4c6c-adae-5a80234d5992",
+            "name": "actual-session.txt",
+            "kind": "file"
+          }
+        },
+        {
+          "type": "paragraph"
+        }
+      ]
+    },
+    "error": "",
+    "notice": "",
+    "selection": {
+      "folderId": "default",
+      "noteId": "db657a18-e439-4bf8-ac03-4549e0e56278",
+      "page": "editor",
+      "query": "",
+      "searching": false,
+      "menu": null,
+      "modal": null,
+      "listed": [
+        "db657a18-e439-4bf8-ac03-4549e0e56278"
+      ]
+    },
+    "save": {
+      "pending": 0,
+      "queued": 1,
+      "failed": 0,
+      "saving": 0
+    },
+    "busy": false,
+    "failure": {
+      "serial": 0,
+      "message": ""
+    },
+    "recording": {
+      "active": false,
+      "state": null
+    },
+    "ocr": {
+      "phase": "choose",
+      "text": "",
+      "error": ""
+    },
+    "settings": {
+      "selectedFolder": "default",
+      "selectedNote": "db657a18-e439-4bf8-ac03-4549e0e56278"
+    },
+    "folderForm": false
+  },
+  "pageErrors": []
+}

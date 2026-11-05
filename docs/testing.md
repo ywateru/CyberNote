@@ -4,7 +4,7 @@
 
 运行命令、参数、完整入口矩阵与模拟边界见[开发命令与布局检查](debugging.md)。
 
-73新增验收约束：保存卡重挂载时不能用全局idle或标题存在冒充媒体就绪；需有界等待实际HTMLAudioElement的音源/metadata，再操作会因源变化重建的展开控件。固定600ms读延迟复现与正例纳入手机43项。每份正式结果记录自然进程退出码与含清理wall，视觉/CLI内部计时各有边界。[主线证据](verification/mobile-recording-primary73/integration/README.md)保留旧失败与后续通过，下一项74才补真实Rust落盘。
+73新增验收约束：保存卡重挂载时不能用全局idle或标题存在冒充媒体就绪；需有界等待实际HTMLAudioElement的音源/metadata，再操作会因源变化重建的展开控件。固定600ms读延迟复现与正例纳入手机43项。每份正式结果记录自然进程退出码与含清理wall，视觉/CLI内部计时各有边界。[主线证据](verification/mobile-recording-primary73/integration/README.md)保留旧失败与后续通过，75优先补手机附件的当前Rust Session/Store真实落盘与新进程恢复；74桌面录音真实Rust链后续单独验收。
 
 ## 统一入口
 
@@ -36,3 +36,8 @@
 任务71将手机录音作为独立命令组：`pnpm debug group recording --mobile --out DIR`。手机MediaRecorder合成边界必须输出连续单容器的增量块；多次暂停最终存储字节需实际解码完整活动时长、验证后段非零样本并真实播放，不能只检查计时器。手机暂停不套桌面checkpoint规则。异步状态用真正await的有界轮询验证；同步truthiness轮询不得接收async predicate。CLI显式waitForIdle的无效raw参数、超时与异步APP_ERROR应保留原错误code。
 
 任务71初审发现三项阻塞，修复记录见[独审后修复证据](verification/mobile-debug-recording71/fixes/README.md)。保留初审两次手机重试失败，不用历史37项通过替代可靠性结论。idle须等实际在途retry整体Promise结算后判断残留失败；deadline须覆盖state/predicate等待；rawidle JSON传输须保留own __proto__并严格拒绝。
+
+
+任务75补充手机`attachments`组，真实choose→hidden FileList change→FileReader→原operation→正文ACK。发现与修复按证据分开：空笔记多选自动NodeSelection替换上一卡；多图读回跨下一项同步后永久AccessChanged；File.type缺失的已知签名分类；FileReader.abort永悬；重试成功后的残留错误。不得把未复现的Android设备故障直接归因到其中任何一个。保留原失败JSON/HTML/PNG和runner失败记录。默认Fake、受控真实Rust、原生设备unknown分别报告。
+
+75真实Rust附件验证必须先显式从当前递归Session/Store及全部实际依赖输入构建小transport，locked/offline，绑定source/binary哈希；手机PNG+普通文件必须检查真实文件字节和正文唯一引用，关闭owned进程等实际exit后，新PID同fresh目录恢复。register_save_intent→Session.register_save、saveNote→Session.save，附件走Session，read先Store owner再Session.sensitive/tagged；不伪造权限屏障ACK或新Session收养老operation。协议故障测试处理spawn/非法JSON/未知重复ID/超长/EOF/timeout/待处理拒绝及关闭实际退出，失败不fallback。完整默认桌面100、手机录音43、手机笔记9、构建、生产排除仍须在同一冻结源码复跑，新手机附件与真实Rust项单独计数。自然进程退出码及含最终清理wall为正式耗时。
