@@ -19,13 +19,11 @@ import {
   RotateCcw,
   RotateCw,
 } from "lucide-react";
-import { native, readAttachment } from "./bridge";
+import { native } from "./bridge";
+import { useAttachmentMedia } from "./use-attachment-media";
+import type { AttachmentMediaSource } from "./attachment-media";
 import type { Note, DrawingStroke } from "./types";
-import {
-  attachmentRecordedAt,
-  compactAudioDuration,
-  recordingDate,
-} from "./recording-metadata";
+import { compactAudioDuration, recordingDate } from "./recording-metadata";
 import {
   createAudioPlayback,
   formatAudioTime,
@@ -34,57 +32,31 @@ import {
 
 function MediaView({ node }: NodeViewProps) {
   const { id, name, kind } = node.attrs;
-  const [media, setMedia] = useState<{
-    id: string;
-    src: string;
-    name: string;
-    recordedAt?: number;
-  } | null>(null);
-  const [failure, setFailure] = useState<{
-    id: string;
-    message: string;
-  } | null>(null);
-  const src = media && media.id === id ? media.src : "";
-  const error = failure && failure.id === id ? failure.message : "";
-  useEffect(() => {
-    let live = true;
-    setMedia(null);
-    setFailure(null);
-    readAttachment(id)
-      .then((x) => {
-        if (live)
-          setMedia({
-            id,
-            src: `data:${x.mime};base64,${x.data}`,
-            name: x.name,
-            recordedAt: attachmentRecordedAt(x.recordedAt, kind),
-          });
-      })
-      .catch((e) => {
-        if (live) {
-          setMedia(null);
-          setFailure({ id, message: e.message || String(e) });
-        }
-      });
-    return () => {
-      live = false;
-    };
-  }, [id, kind]);
+  const { media, error, retry } = useAttachmentMedia(id, kind);
+  const src = media?.source.src ?? "";
   return (
     <NodeViewWrapper
       className={`attachment-node ${kind}`}
       contentEditable={false}
     >
       {error ? (
-        <span className="inline-error">{error}</span>
+        <span className="inline-error" role="alert">
+          {error}
+          {kind === "audio" && (
+            <button type="button" aria-label="重试录音" onClick={retry}>
+              重试
+            </button>
+          )}
+        </span>
       ) : kind === "image" ? (
         <img src={src} alt={name} draggable={false} />
       ) : kind === "audio" ? (
         <AudioPlayer
           key={id}
           src={src}
-          name={media && media.id === id ? media.name : name}
-          recordedAt={media && media.id === id ? media.recordedAt : undefined}
+          name={media?.name ?? name}
+          recordedAt={media?.recordedAt}
+          source={media?.source}
         />
       ) : kind === "video" ? (
         <video src={src} controls />
@@ -101,8 +73,18 @@ function MediaView({ node }: NodeViewProps) {
     </NodeViewWrapper>
   );
 }
-type AudioPlayerProps = { src: string; name: string; recordedAt?: number };
-export function AudioPlayer({ src, name, recordedAt }: AudioPlayerProps) {
+type AudioPlayerProps = {
+  src: string;
+  name: string;
+  recordedAt?: number;
+  source?: AttachmentMediaSource;
+};
+export function AudioPlayer({
+  src,
+  name,
+  recordedAt,
+  source,
+}: AudioPlayerProps) {
   // Different attachments get different media elements and controller lifetimes.
   // In-flight events or play promises from the previous source cannot affect it.
   return (
@@ -111,10 +93,16 @@ export function AudioPlayer({ src, name, recordedAt }: AudioPlayerProps) {
       src={src}
       name={name}
       recordedAt={recordedAt}
+      source={source}
     />
   );
 }
-function AudioPlayerSession({ src, name, recordedAt }: AudioPlayerProps) {
+function AudioPlayerSession({
+  src,
+  name,
+  recordedAt,
+  source,
+}: AudioPlayerProps) {
   const audio = useRef<HTMLAudioElement>(null);
   const controller = useRef<ReturnType<typeof createAudioPlayback> | null>(
     null,
@@ -127,11 +115,12 @@ function AudioPlayerSession({ src, name, recordedAt }: AudioPlayerProps) {
     if (!audio.current) return;
     const player = createAudioPlayback(audio.current, src, setPlayback);
     controller.current = player;
-    return () => {
-      controller.current = null;
+    const stop = () => {
+      if (controller.current === player) controller.current = null;
       player.dispose();
     };
-  }, [src]);
+    return source ? source.bindController(stop) : stop;
+  }, [src, source]);
   const { playing, duration, time } = playback;
   const error =
     playback.mediaError || playback.playError || playback.durationError;
