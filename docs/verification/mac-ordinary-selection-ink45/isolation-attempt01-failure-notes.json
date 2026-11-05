@@ -1,0 +1,7 @@
+{
+  "status": "Fixture expectation FAIL, not hidden",
+  "failedCheck": "smart toggle keeps original name",
+  "actualContract": "Production SmartFolderForm line638 onward intentionally renames default 新建文件夹 to 新建智能文件夹 when switching to smart",
+  "cause": "Fixture used untouched default name but asserted customized-name preservation",
+  "resolution": "Correct this single expectation; rerun only finite isolation checks, preserve all original outputs and source; no CSS or other product change"
+}

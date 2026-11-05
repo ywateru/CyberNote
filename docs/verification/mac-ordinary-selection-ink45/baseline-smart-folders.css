@@ -1,0 +1,582 @@
+.smart-form-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0005;
+}
+.smart-form {
+  position: relative;
+  color: var(--text, #202020);
+  background: var(--panel, #f7f7f7);
+  border: 1px solid #aaa7;
+  border-radius: 12px;
+  box-shadow: 0 24px 70px #0005;
+  max-height: calc(100% - 48px);
+  overflow: auto;
+}
+.smart-form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.smart-mac .smart-form {
+  width: min(680px, calc(100% - 48px));
+  padding: 20px;
+}
+.smart-mac h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+.smart-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.smart-name input {
+  flex: 1;
+  min-width: 0;
+  height: 26px;
+  border: 1px solid #bcbcbc;
+  border-radius: 5px;
+  background: var(--surface, #fff);
+  padding: 2px 7px;
+  color: inherit;
+}
+.smart-form input:focus {
+  outline: 3px solid #e5b80077;
+  outline-offset: 1px;
+}
+.smart-make {
+  margin: 13px 0;
+  font-size: 13px;
+}
+.smart-make label {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.smart-make input {
+  accent-color: #e5ad00;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+.smart-make p {
+  margin: 4px 0 0 22px;
+  color: #777;
+  font-size: 12px;
+}
+.smart-combine {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  margin: 13px 0 15px;
+}
+.smart-form select {
+  font: inherit;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 2px 22px 2px 7px;
+  height: 25px;
+  background: var(--surface, #f0f0f0);
+  color: inherit;
+  max-width: 100%;
+}
+.smart-rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 0 6px;
+  border-bottom: 1px solid #bcbcbc;
+}
+.smart-rules {
+  border-top: 1px solid #bcbcbc;
+}
+.smart-rule > select:first-child {
+  width: 112px;
+  flex-shrink: 0;
+}
+.smart-rule > select:nth-child(2) {
+  max-width: 190px;
+  flex-shrink: 1;
+}
+.smart-rule-buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.smart-rule-buttons button {
+  border: 1px solid #777;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  margin-top: -2px;
+  color: #666;
+  background: transparent;
+}
+.smart-rule-buttons svg {
+  width: 12px;
+  height: 12px;
+}
+.smart-rule-buttons button:disabled {
+  opacity: 0.28;
+}
+.smart-token-anchor {
+  position: relative;
+  flex: 1;
+  min-width: 75px;
+}
+.smart-token-input {
+  min-height: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  background: var(--surface, #fff);
+  padding: 2px 4px;
+}
+.smart-token-input:focus-within {
+  outline: 3px solid #e5b80077;
+}
+.smart-token-input input {
+  font: inherit;
+  width: 32px;
+  flex: 1;
+  min-width: 25px;
+  border: 0;
+  outline: 0 !important;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+.smart-token {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  background: #e5c869;
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 12px;
+}
+.smart-token button {
+  border: 0;
+  background: transparent;
+  color: #615015;
+  padding: 0 0 0 3px;
+  font-size: 13px;
+}
+.smart-tag-options {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  top: 100%;
+  min-width: 180px;
+  max-height: 180px;
+  overflow: auto;
+  background: var(--surface, #fff);
+  padding: 4px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  box-shadow: 0 3px 10px #0003;
+}
+.smart-tag-options button {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  width: 100%;
+  padding: 5px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  white-space: nowrap;
+  border-radius: 4px;
+}
+.smart-tag-options button.active,
+.smart-tag-options button:hover {
+  background: #e8b82f;
+  color: #242424;
+}
+.smart-form footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+.smart-form footer button {
+  width: 80px;
+  height: 25px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  background: #e7e7e7;
+  color: #222;
+}
+.smart-form button.smart-primary {
+  background: #f2bd00;
+  border: 1px solid #dbad00;
+  color: #201b05;
+}
+.smart-error {
+  color: #a73323;
+  font-size: 12px;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+.smart-error button {
+  margin-left: 8px;
+  color: #8b6500;
+  text-decoration: underline;
+  background: transparent;
+  border: 0;
+}
+.smart-warning-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0002;
+}
+.smart-warning {
+  width: 280px;
+  padding: 22px 20px 16px;
+  background: var(--panel, #f6f6f6);
+  border-radius: 12px;
+  box-shadow: 0 8px 35px #0005;
+  text-align: center;
+  font-size: 13px;
+}
+.smart-warning strong {
+  font-size: 14px;
+}
+.smart-warning p {
+  line-height: 1.5;
+  margin: 14px 0 20px;
+}
+.smart-warning button {
+  width: 100%;
+  height: 28px;
+  border-radius: 7px;
+}
+.smart-mobile {
+  align-items: flex-end;
+  background: #0005;
+  padding-top: 20px;
+}
+.smart-mobile .smart-form {
+  width: 100%;
+  max-height: 100%;
+  height: calc(100% - env(safe-area-inset-top, 0px));
+  border-radius: 26px 26px 0 0;
+  border: 0;
+  background: #f2f2f7;
+  color: #111;
+  overflow: auto;
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+  box-shadow: 0 -6px 0 #ddd;
+}
+.smart-mobile-header {
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+.smart-mobile-header strong {
+  font-size: 17px;
+  font-weight: 650;
+}
+.smart-mobile-header button {
+  border: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #e5e5ea;
+  color: #555;
+}
+.smart-mobile-header button svg {
+  width: 21px;
+  height: 21px;
+  stroke-width: 2.7;
+}
+.smart-mobile-header button.smart-mobile-confirm {
+  background: #ffcb00;
+  color: #312900;
+}
+.smart-mobile-name {
+  margin: 22px 20px;
+}
+.smart-mobile-name > input {
+  display: block;
+  width: 100%;
+  font-size: 17px;
+  border: 0;
+  border-radius: 13px;
+  background: white;
+  padding: 16px;
+  color: #111;
+}
+.smart-mobile-name > button {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 15px 16px;
+  border: 0;
+  border-radius: 13px;
+  background: #fff;
+  font-size: 17px;
+}
+.smart-mobile-name > button span {
+  margin-left: auto;
+  color: #777;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 15px;
+}
+.smart-mobile-name > button svg {
+  width: 15px;
+}
+.smart-mobile-filter-body {
+  padding: 4px 20px 30px;
+}
+.smart-mobile-combine {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: white;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.smart-mobile select {
+  border: 0;
+  background: transparent;
+  height: auto;
+  padding: 0 1px;
+  font-size: 14px;
+  color: #666;
+  max-width: 180px;
+}
+.smart-mobile h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 26px 15px 10px;
+}
+.smart-mobile-card {
+  background: #fff;
+  border-radius: 15px;
+  margin-top: 16px;
+}
+.smart-mobile-rule-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 10px 14px;
+  font-size: 16px;
+}
+.smart-mobile-rule-heading > svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.smart-mobile-rule-heading > select {
+  margin-left: auto;
+  min-width: 0;
+  max-width: 52%;
+}
+.smart-tag-icon {
+  color: #bf8b00;
+}
+.smart-pin-icon {
+  color: #ff9400;
+}
+.smart-mobile-tags {
+  border-top: 1px solid #ddd;
+  margin: 0 14px;
+  padding: 15px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 7px;
+}
+.smart-mobile-tags > button {
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: #e8e8ed;
+  color: #68686c;
+  font-size: 15px;
+  height: 32px;
+}
+.smart-mobile-tags > button.selected {
+  background: #ffca00;
+  color: #705500;
+}
+.smart-mobile-tags > .smart-token-anchor {
+  flex-basis: 100%;
+}
+.smart-mobile .smart-token-input {
+  border: 0;
+  min-height: 30px;
+}
+.smart-mobile .smart-token {
+  display: none;
+}
+.smart-mobile .smart-token-input input {
+  font-size: 15px;
+  width: 100%;
+  min-height: 26px;
+}
+.smart-mobile .smart-token-input input::placeholder {
+  color: #999;
+}
+.smart-mobile-other {
+  overflow: hidden;
+}
+.smart-mobile-other > button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+  padding: 13px 14px;
+  font-size: 16px;
+  min-height: 48px;
+}
+.smart-mobile-other > button svg {
+  width: 23px;
+  height: 23px;
+  color: #8c8c91;
+}
+.smart-mobile-other > button span {
+  margin-left: auto;
+  color: #777;
+  font-size: 14px;
+}
+.smart-mobile-other > button:disabled {
+  color: #8c8c91;
+  opacity: 1;
+}
+.smart-mobile .smart-error {
+  margin: 15px 25px;
+}
+.smart-mobile-feedback.has-error {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f2f2f7;
+  display: flow-root;
+}
+@media (max-width: 700px) {
+  .smart-mac .smart-form {
+    width: calc(100% - 20px);
+    padding: 14px;
+  }
+  .smart-rule {
+    flex-wrap: wrap;
+  }
+  .smart-rule-buttons {
+    margin-left: auto;
+  }
+}
+
+/* Ordinary Mac creation uses the compact sheet; smart/edit/mobile retain their layout. */
+.smart-mac .smart-form.smart-ordinary {
+  width: min(400px, calc(100% - 40px));
+  padding: 19px;
+  background: var(--paper, #fff);
+  border-color: transparent;
+  border-radius: 26px;
+}
+.smart-mac .smart-ordinary h2 {
+  font-size: 13px;
+  line-height: 16px;
+  margin-bottom: 20px;
+}
+.smart-mac .smart-ordinary .smart-name {
+  gap: 6px;
+}
+:root:not(.dark) .smart-mac .smart-ordinary .smart-name,
+:root:not(.dark) .smart-mac .smart-ordinary .smart-make label {
+  -webkit-font-smoothing: auto;
+}
+.smart-mac .smart-ordinary .smart-name input {
+  height: 24px;
+  padding-inline: 5px;
+}
+.smart-mac .smart-ordinary .smart-name input:focus {
+  border-color: transparent;
+  outline: 3.5px solid #f6d499;
+  outline-offset: -0.5px;
+}
+.smart-mac .smart-ordinary .smart-name input:focus::selection {
+  background: #fceac1;
+  color: #202020;
+}
+.smart-mac .smart-ordinary .smart-make {
+  margin: 16px 0 0;
+}
+.smart-mac .smart-ordinary .smart-make label {
+  gap: 6px;
+  line-height: 16px;
+}
+.smart-mac .smart-ordinary .smart-make input {
+  width: 16px;
+  height: 16px;
+}
+.smart-mac .smart-ordinary .smart-make input:not(:checked) {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--ordinary-checkbox, #e6e6e6);
+  border: 0;
+  border-radius: 5px;
+}
+.smart-mac .smart-ordinary .smart-make p {
+  margin: 2px 0 0 20px;
+  font-size: 13px;
+  line-height: 16px;
+}
+.smart-mac .smart-ordinary footer {
+  margin-top: 16px;
+  border-top: 0.5px solid #bcbcbc;
+  padding-top: 16.5px;
+}
+.smart-mac .smart-ordinary footer button {
+  height: 24px;
+  background: var(--ordinary-button, #ececec);
+  border-color: transparent;
+}
+.smart-mac .smart-ordinary footer button.smart-primary {
+  background: #fdb82a;
+}
+.dark .smart-mac .smart-ordinary {
+  --ordinary-button: #3a3a3c;
+  --ordinary-checkbox: #48484a;
+  --surface: #2c2c2e;
+  color: var(--ink);
+}
+.dark .smart-mac .smart-ordinary footer button:not(.smart-primary) {
+  color: inherit;
+}
+.dark .smart-mac .smart-ordinary .smart-make p {
+  color: #aaa;
+}

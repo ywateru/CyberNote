@@ -1,0 +1,14 @@
+diff --git a/src/smart-folders.css b/src/smart-folders.css
+index 3b079a6..6ef48ac 100644
+--- a/src/smart-folders.css
++++ b/src/smart-folders.css
+@@ -532,6 +532,9 @@
+   background: #fceac1;
+   color: #202020;
+ }
++:root:not(.dark) .smart-mac .smart-ordinary .smart-name input:focus::selection {
++  color: #000;
++}
+ .smart-mac .smart-ordinary .smart-make {
+   margin: 16px 0 0;
+ }

@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "stage": "Initial manifest before symlink exists",
+  "error": "FileNotFoundError: node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.cjs",
+  "sourceMutationAfterFailure": "Three-line color override was applied before noticing manifest failure; restoring exact HEAD CSS before successful input freeze",
+  "resolution": "Create authorized read-only node_modules symlink first, restore CSS bytes from this worktree HEAD, then freeze and reapply"
+}

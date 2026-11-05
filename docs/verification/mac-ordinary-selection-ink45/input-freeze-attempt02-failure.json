@@ -1,0 +1,8 @@
+{
+  "status": "FAIL",
+  "stage": "Initial manifest based on prior package freeze",
+  "error": "Missing src-tauri/gen/android/app/proguard-tauri.pro in fresh worktree",
+  "cause": "Historical package freeze contains ignored generated files absent from source checkout",
+  "sourceMutationAfterFailure": "Color override had been applied again before examining result; restore exact HEAD bytes, then use existing finite inputs with explicit absent list",
+  "resolution": "Protect all present historical input paths and exact tracked product source paths; absence recorded, no generated copies/download"
+}
