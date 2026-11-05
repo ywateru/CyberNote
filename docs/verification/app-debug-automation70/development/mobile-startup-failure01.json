@@ -1,0 +1,10 @@
+{
+  "sourceHead": "9310d1a929209782746b750d359a1ddfbf5ca445",
+  "command": "pnpm debug group notes --mobile --out /private/tmp/notes-debug70-finish-mobile-notes-01",
+  "exitCode": 1,
+  "evidenceOrigin": "Execution tool returned JSON error; openRuntime failed before CLI could retain a runtime output directory.",
+  "message": "page.evaluate: Error: Unsupported fixture IPC plugin:app|registerListener",
+  "classification": "Test-platform boundary omitted current Tauri mobile back-button listener; product source unchanged.",
+  "fixedBy": "59ecfb6cef0c749b6d338fa43794a9491c36b645",
+  "rerun": "mobile-notes-summary.json"
+}
