@@ -1,0 +1,1847 @@
+{
+  "boundary": "controlled actual shared View; Chromium, no native material/audio/OS QA",
+  "baseline": true,
+  "checks": [
+    "desktop click/drag/keyboard request same drawing scale; no optimistic position",
+    "mobile actual touch requests seek at same scale"
+  ],
+  "layouts": {
+    "desktop-paused-280x467": {
+      ".recording-sheet": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 467,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:0500:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:1400:02.701515继续"
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 76,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:05"
+      },
+      "header strong": {
+        "x": 16,
+        "y": 15,
+        "width": 98.328125,
+        "height": 22,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音"
+      },
+      "header small": {
+        "x": 16,
+        "y": 44,
+        "width": 98.328125,
+        "height": 17,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "今天 08:53 00:05"
+      },
+      ".recording-cancel": {
+        "x": 240,
+        "y": 19,
+        "width": 24,
+        "height": 24,
+        "color": "rgb(142, 142, 147)",
+        "background": "rgb(237, 237, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".recording-presentation-menu > button": {
+        "x": 197,
+        "y": 19,
+        "width": 35,
+        "height": 24,
+        "color": "rgb(198, 158, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".waveform": {
+        "x": 0,
+        "y": 76,
+        "width": 280,
+        "height": 199,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(250, 250, 250) linear-gradient(rgba(0, 0, 0, 0) 49.7%, rgb(226, 226, 231) 49.7%, rgb(226, 226, 231) 50.3%, rgba(0, 0, 0, 0) 50.3%) repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".wave-samples": {
+        "x": 0,
+        "y": 76,
+        "width": 280,
+        "height": 169,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".wave-axis": {
+        "x": 0,
+        "y": 245,
+        "width": 280,
+        "height": 30,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".recording-playhead": {
+        "x": 140,
+        "y": 76,
+        "width": 1,
+        "height": 169,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(232, 186, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-time": {
+        "x": 89.1875,
+        "y": 303,
+        "width": 101.609375,
+        "height": 28,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:02.70"
+      },
+      ".recording-notice": {
+        "x": 140,
+        "y": 333,
+        "width": 0,
+        "height": 18,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-playback": {
+        "x": 54,
+        "y": 355,
+        "width": 172,
+        "height": 44,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "1515"
+      },
+      ".recording-primary": {
+        "x": 64,
+        "y": 411,
+        "width": 152,
+        "height": 40,
+        "color": "rgb(255, 59, 48)",
+        "background": "rgb(242, 233, 232) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": "继续"
+      },
+      ".recording-done": {
+        "x": 224,
+        "y": 411,
+        "width": 40,
+        "height": 40,
+        "color": "rgb(255, 255, 255)",
+        "background": "rgb(198, 158, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      "ticks": [
+        {
+          "x": 18.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:00"
+        },
+        {
+          "x": 58.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:01"
+        },
+        {
+          "x": 98.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:02"
+        },
+        {
+          "x": 138.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:03"
+        },
+        {
+          "x": 178.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:04"
+        },
+        {
+          "x": 218.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:05"
+        },
+        {
+          "x": 258.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:06"
+        },
+        {
+          "x": 298.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:07"
+        },
+        {
+          "x": 338.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:08"
+        },
+        {
+          "x": 378.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:09"
+        },
+        {
+          "x": 418.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:10"
+        },
+        {
+          "x": 458.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:11"
+        },
+        {
+          "x": 498.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:12"
+        },
+        {
+          "x": 538.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:13"
+        },
+        {
+          "x": 578.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:14"
+        }
+      ],
+      "samples": [
+        {
+          "x": 111,
+          "y": 143.6015625,
+          "width": 2,
+          "height": 33.796875
+        },
+        {
+          "x": 131,
+          "y": 153.7421875,
+          "width": 2,
+          "height": 13.515625
+        },
+        {
+          "x": 151,
+          "y": 150.3671875,
+          "width": 2,
+          "height": 20.265625
+        }
+      ]
+    },
+    "desktop-pending-280x467": {
+      ".recording-sheet": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 467,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:0500:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:1400:02.701515继续"
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 76,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:05"
+      },
+      "header strong": {
+        "x": 16,
+        "y": 15,
+        "width": 98.328125,
+        "height": 22,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音"
+      },
+      "header small": {
+        "x": 16,
+        "y": 44,
+        "width": 98.328125,
+        "height": 17,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "今天 08:53 00:05"
+      },
+      ".recording-cancel": {
+        "x": 240,
+        "y": 19,
+        "width": 24,
+        "height": 24,
+        "color": "rgb(142, 142, 147)",
+        "background": "rgb(237, 237, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".recording-presentation-menu > button": {
+        "x": 197,
+        "y": 19,
+        "width": 35,
+        "height": 24,
+        "color": "rgb(198, 158, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".waveform": {
+        "x": 0,
+        "y": 76,
+        "width": 280,
+        "height": 199,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(250, 250, 250) linear-gradient(rgba(0, 0, 0, 0) 49.7%, rgb(226, 226, 231) 49.7%, rgb(226, 226, 231) 50.3%, rgba(0, 0, 0, 0) 50.3%) repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".wave-samples": {
+        "x": 0,
+        "y": 76,
+        "width": 280,
+        "height": 169,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".wave-axis": {
+        "x": 0,
+        "y": 245,
+        "width": 280,
+        "height": 30,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".recording-playhead": {
+        "x": 140,
+        "y": 76,
+        "width": 1,
+        "height": 169,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(232, 186, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-time": {
+        "x": 89.1875,
+        "y": 303,
+        "width": 101.609375,
+        "height": 28,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:02.70"
+      },
+      ".recording-notice": {
+        "x": 140,
+        "y": 333,
+        "width": 0,
+        "height": 18,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-playback": {
+        "x": 54,
+        "y": 355,
+        "width": 172,
+        "height": 44,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "1515"
+      },
+      ".recording-primary": {
+        "x": 64,
+        "y": 411,
+        "width": 152,
+        "height": 40,
+        "color": "rgb(183, 183, 188)",
+        "background": "rgb(238, 238, 239) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": true,
+        "text": "继续"
+      },
+      ".recording-done": {
+        "x": 224,
+        "y": 411,
+        "width": 40,
+        "height": 40,
+        "color": "rgb(255, 255, 255)",
+        "background": "rgb(198, 158, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      "ticks": [
+        {
+          "x": 18.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:00"
+        },
+        {
+          "x": 58.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:01"
+        },
+        {
+          "x": 98.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:02"
+        },
+        {
+          "x": 138.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:03"
+        },
+        {
+          "x": 178.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:04"
+        },
+        {
+          "x": 218.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:05"
+        },
+        {
+          "x": 258.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:06"
+        },
+        {
+          "x": 298.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:07"
+        },
+        {
+          "x": 338.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:08"
+        },
+        {
+          "x": 378.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:09"
+        },
+        {
+          "x": 418.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:10"
+        },
+        {
+          "x": 458.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:11"
+        },
+        {
+          "x": 498.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:12"
+        },
+        {
+          "x": 538.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:13"
+        },
+        {
+          "x": 578.90625,
+          "y": 246,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:14"
+        }
+      ],
+      "samples": [
+        {
+          "x": 111,
+          "y": 143.6015625,
+          "width": 2,
+          "height": 33.796875
+        },
+        {
+          "x": 131,
+          "y": 153.7421875,
+          "width": 2,
+          "height": 13.515625
+        },
+        {
+          "x": 151,
+          "y": 150.3671875,
+          "width": 2,
+          "height": 20.265625
+        }
+      ]
+    },
+    "desktop-idle-280x360": {
+      ".recording-sheet": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 360,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:0000:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:00.001515"
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 76,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:00"
+      },
+      "header strong": {
+        "x": 16,
+        "y": 15,
+        "width": 98.46875,
+        "height": 22,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音"
+      },
+      "header small": {
+        "x": 16,
+        "y": 44,
+        "width": 98.46875,
+        "height": 17,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "今天 08:53 00:00"
+      },
+      ".recording-cancel": {
+        "x": 240,
+        "y": 19,
+        "width": 24,
+        "height": 24,
+        "color": "rgb(142, 142, 147)",
+        "background": "rgb(237, 237, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".recording-presentation-menu > button": {
+        "x": 197,
+        "y": 19,
+        "width": 35,
+        "height": 24,
+        "color": "rgb(198, 158, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".waveform": {
+        "x": 0,
+        "y": 76,
+        "width": 280,
+        "height": 92,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(250, 250, 250) linear-gradient(rgba(0, 0, 0, 0) 49.7%, rgb(226, 226, 231) 49.7%, rgb(226, 226, 231) 50.3%, rgba(0, 0, 0, 0) 50.3%) repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:12"
+      },
+      ".wave-samples": {
+        "x": 0,
+        "y": 76,
+        "width": 280,
+        "height": 62,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".wave-axis": {
+        "x": 0,
+        "y": 138,
+        "width": 280,
+        "height": 30,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:12"
+      },
+      ".recording-playhead": {
+        "x": 140,
+        "y": 76,
+        "width": 1,
+        "height": 62,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(232, 186, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-time": {
+        "x": 89.1875,
+        "y": 196,
+        "width": 101.609375,
+        "height": 28,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:00.00"
+      },
+      ".recording-notice": {
+        "x": 140,
+        "y": 226,
+        "width": 0,
+        "height": 18,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-playback": {
+        "x": 54,
+        "y": 248,
+        "width": 172,
+        "height": 44,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "1515"
+      },
+      ".recording-primary": {
+        "x": 120,
+        "y": 304,
+        "width": 40,
+        "height": 40,
+        "color": "rgb(255, 59, 48)",
+        "background": "rgb(242, 233, 232) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".recording-done": {
+        "x": 168,
+        "y": 304,
+        "width": 40,
+        "height": 40,
+        "color": "rgb(177, 177, 181)",
+        "background": "rgb(228, 228, 231) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": true,
+        "text": ""
+      },
+      "ticks": [
+        {
+          "x": 126.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:00"
+        },
+        {
+          "x": 166.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:01"
+        },
+        {
+          "x": 206.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:02"
+        },
+        {
+          "x": 246.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:03"
+        },
+        {
+          "x": 286.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:04"
+        },
+        {
+          "x": 326.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:05"
+        },
+        {
+          "x": 366.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:06"
+        },
+        {
+          "x": 406.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:07"
+        },
+        {
+          "x": 446.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:08"
+        },
+        {
+          "x": 486.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:09"
+        },
+        {
+          "x": 526.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:10"
+        },
+        {
+          "x": 566.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:11"
+        },
+        {
+          "x": 606.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:12"
+        }
+      ],
+      "samples": []
+    },
+    "desktop-error-320x467": {
+      ".recording-sheet": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 467,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:0500:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:1400:02.70回放失败，请重试1515重试回放继续"
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 76,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:05"
+      },
+      "header strong": {
+        "x": 16,
+        "y": 15,
+        "width": 98.328125,
+        "height": 22,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音"
+      },
+      "header small": {
+        "x": 16,
+        "y": 44,
+        "width": 98.328125,
+        "height": 17,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "今天 08:53 00:05"
+      },
+      ".recording-cancel": {
+        "x": 280,
+        "y": 19,
+        "width": 24,
+        "height": 24,
+        "color": "rgb(142, 142, 147)",
+        "background": "rgb(237, 237, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".recording-presentation-menu > button": {
+        "x": 237,
+        "y": 19,
+        "width": 35,
+        "height": 24,
+        "color": "rgb(198, 158, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".waveform": {
+        "x": 0,
+        "y": 76,
+        "width": 320,
+        "height": 155,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(250, 250, 250) linear-gradient(rgba(0, 0, 0, 0) 49.7%, rgb(226, 226, 231) 49.7%, rgb(226, 226, 231) 50.3%, rgba(0, 0, 0, 0) 50.3%) repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".wave-samples": {
+        "x": 0,
+        "y": 76,
+        "width": 320,
+        "height": 125,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".wave-axis": {
+        "x": 0,
+        "y": 201,
+        "width": 320,
+        "height": 30,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".recording-playhead": {
+        "x": 160,
+        "y": 76,
+        "width": 1,
+        "height": 125,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(232, 186, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-time": {
+        "x": 109.1875,
+        "y": 259,
+        "width": 101.609375,
+        "height": 28,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:02.70"
+      },
+      ".recording-notice": {
+        "x": 116,
+        "y": 289,
+        "width": 88,
+        "height": 18,
+        "color": "rgb(255, 59, 48)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "回放失败，请重试"
+      },
+      ".recording-playback": {
+        "x": 74,
+        "y": 311,
+        "width": 172,
+        "height": 44,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "1515"
+      },
+      ".recording-primary": {
+        "x": 64,
+        "y": 411,
+        "width": 192,
+        "height": 40,
+        "color": "rgb(255, 59, 48)",
+        "background": "rgb(242, 233, 232) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": "继续"
+      },
+      ".recording-done": {
+        "x": 264,
+        "y": 411,
+        "width": 40,
+        "height": 40,
+        "color": "rgb(255, 255, 255)",
+        "background": "rgb(198, 158, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      "ticks": [
+        {
+          "x": 38.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:00"
+        },
+        {
+          "x": 78.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:01"
+        },
+        {
+          "x": 118.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:02"
+        },
+        {
+          "x": 158.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:03"
+        },
+        {
+          "x": 198.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:04"
+        },
+        {
+          "x": 238.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:05"
+        },
+        {
+          "x": 278.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:06"
+        },
+        {
+          "x": 318.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:07"
+        },
+        {
+          "x": 358.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:08"
+        },
+        {
+          "x": 398.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:09"
+        },
+        {
+          "x": 438.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:10"
+        },
+        {
+          "x": 478.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:11"
+        },
+        {
+          "x": 518.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:12"
+        },
+        {
+          "x": 558.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:13"
+        },
+        {
+          "x": 598.90625,
+          "y": 202,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:14"
+        }
+      ],
+      "samples": [
+        {
+          "x": 131,
+          "y": 126,
+          "width": 2,
+          "height": 25
+        },
+        {
+          "x": 151,
+          "y": 133.5,
+          "width": 2,
+          "height": 10
+        },
+        {
+          "x": 171,
+          "y": 131,
+          "width": 2,
+          "height": 15
+        }
+      ]
+    },
+    "desktop-busy-280x360": {
+      ".recording-sheet": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 360,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:0500:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:1400:02.70正在保存录音1515"
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 280,
+        "height": 76,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:05"
+      },
+      "header strong": {
+        "x": 16,
+        "y": 15,
+        "width": 98.328125,
+        "height": 22,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音"
+      },
+      "header small": {
+        "x": 16,
+        "y": 44,
+        "width": 98.328125,
+        "height": 17,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "今天 08:53 00:05"
+      },
+      ".recording-cancel": {
+        "x": 240,
+        "y": 19,
+        "width": 24,
+        "height": 24,
+        "color": "rgb(142, 142, 147)",
+        "background": "rgb(237, 237, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": true,
+        "text": ""
+      },
+      ".recording-presentation-menu > button": {
+        "x": 197,
+        "y": 19,
+        "width": 35,
+        "height": 24,
+        "color": "rgb(198, 158, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".waveform": {
+        "x": 0,
+        "y": 76,
+        "width": 280,
+        "height": 92,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(250, 250, 250) linear-gradient(rgba(0, 0, 0, 0) 49.7%, rgb(226, 226, 231) 49.7%, rgb(226, 226, 231) 50.3%, rgba(0, 0, 0, 0) 50.3%) repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".wave-samples": {
+        "x": 0,
+        "y": 76,
+        "width": 280,
+        "height": 62,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".wave-axis": {
+        "x": 0,
+        "y": 138,
+        "width": 280,
+        "height": 30,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".recording-playhead": {
+        "x": 140,
+        "y": 76,
+        "width": 1,
+        "height": 62,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(232, 186, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-time": {
+        "x": 89.1875,
+        "y": 196,
+        "width": 101.609375,
+        "height": 28,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:02.70"
+      },
+      ".recording-notice": {
+        "x": 107,
+        "y": 226,
+        "width": 66,
+        "height": 18,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "正在保存录音"
+      },
+      ".recording-playback": {
+        "x": 54,
+        "y": 248,
+        "width": 172,
+        "height": 44,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "1515"
+      },
+      ".recording-primary": {
+        "x": 64,
+        "y": 304,
+        "width": 152,
+        "height": 40,
+        "color": "rgb(183, 183, 188)",
+        "background": "rgb(238, 238, 239) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": true,
+        "text": ""
+      },
+      ".recording-done": {
+        "x": 224,
+        "y": 304,
+        "width": 40,
+        "height": 40,
+        "color": "rgb(177, 177, 181)",
+        "background": "rgb(228, 228, 231) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": true,
+        "text": ""
+      },
+      "ticks": [
+        {
+          "x": 18.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:00"
+        },
+        {
+          "x": 58.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:01"
+        },
+        {
+          "x": 98.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:02"
+        },
+        {
+          "x": 138.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:03"
+        },
+        {
+          "x": 178.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:04"
+        },
+        {
+          "x": 218.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:05"
+        },
+        {
+          "x": 258.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:06"
+        },
+        {
+          "x": 298.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:07"
+        },
+        {
+          "x": 338.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:08"
+        },
+        {
+          "x": 378.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:09"
+        },
+        {
+          "x": 418.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:10"
+        },
+        {
+          "x": 458.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:11"
+        },
+        {
+          "x": 498.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:12"
+        },
+        {
+          "x": 538.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:13"
+        },
+        {
+          "x": 578.90625,
+          "y": 139,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:14"
+        }
+      ],
+      "samples": [
+        {
+          "x": 111,
+          "y": 100.8046875,
+          "width": 2,
+          "height": 12.390625
+        },
+        {
+          "x": 131,
+          "y": 104.5234375,
+          "width": 2,
+          "height": 4.953125
+        },
+        {
+          "x": 151,
+          "y": 103.28125,
+          "width": 2,
+          "height": 7.4375
+        }
+      ]
+    },
+    "desktop-dark-320x600": {
+      ".recording-sheet": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 600,
+        "color": "rgb(238, 238, 238)",
+        "background": "rgb(28, 28, 30) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:0500:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:1400:02.701515继续"
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 76,
+        "color": "rgb(238, 238, 238)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音今天 08:53 00:05"
+      },
+      "header strong": {
+        "x": 16,
+        "y": 15,
+        "width": 98.328125,
+        "height": 22,
+        "color": "rgb(238, 238, 238)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音"
+      },
+      "header small": {
+        "x": 16,
+        "y": 44,
+        "width": 98.328125,
+        "height": 17,
+        "color": "rgb(153, 153, 153)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "今天 08:53 00:05"
+      },
+      ".recording-cancel": {
+        "x": 280,
+        "y": 19,
+        "width": 24,
+        "height": 24,
+        "color": "rgb(142, 142, 147)",
+        "background": "rgb(237, 237, 238) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".recording-presentation-menu > button": {
+        "x": 237,
+        "y": 19,
+        "width": 35,
+        "height": 24,
+        "color": "rgb(228, 175, 10)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      ".waveform": {
+        "x": 0,
+        "y": 76,
+        "width": 320,
+        "height": 332,
+        "color": "rgb(238, 238, 238)",
+        "background": "rgb(250, 250, 250) linear-gradient(rgba(0, 0, 0, 0) 49.7%, rgb(68, 68, 68) 49.7%, rgb(68, 68, 68) 50.3%, rgba(0, 0, 0, 0) 50.3%) repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".wave-samples": {
+        "x": 0,
+        "y": 76,
+        "width": 320,
+        "height": 302,
+        "color": "rgb(238, 238, 238)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".wave-axis": {
+        "x": 0,
+        "y": 378,
+        "width": 320,
+        "height": 30,
+        "color": "rgb(238, 238, 238)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".recording-playhead": {
+        "x": 160,
+        "y": 76,
+        "width": 1,
+        "height": 302,
+        "color": "rgb(238, 238, 238)",
+        "background": "rgb(232, 186, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-time": {
+        "x": 109.1875,
+        "y": 436,
+        "width": 101.609375,
+        "height": 28,
+        "color": "rgb(238, 238, 238)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:02.70"
+      },
+      ".recording-notice": {
+        "x": 160,
+        "y": 466,
+        "width": 0,
+        "height": 18,
+        "color": "rgb(153, 153, 153)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-playback": {
+        "x": 74,
+        "y": 488,
+        "width": 172,
+        "height": 44,
+        "color": "rgb(238, 238, 238)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "1515"
+      },
+      ".recording-primary": {
+        "x": 64,
+        "y": 544,
+        "width": 192,
+        "height": 40,
+        "color": "rgb(255, 59, 48)",
+        "background": "rgb(242, 233, 232) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": "继续"
+      },
+      ".recording-done": {
+        "x": 264,
+        "y": 544,
+        "width": 40,
+        "height": 40,
+        "color": "rgb(255, 255, 255)",
+        "background": "rgb(228, 175, 10) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": ""
+      },
+      "ticks": [
+        {
+          "x": 38.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:00"
+        },
+        {
+          "x": 78.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:01"
+        },
+        {
+          "x": 118.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:02"
+        },
+        {
+          "x": 158.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:03"
+        },
+        {
+          "x": 198.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:04"
+        },
+        {
+          "x": 238.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:05"
+        },
+        {
+          "x": 278.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:06"
+        },
+        {
+          "x": 318.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:07"
+        },
+        {
+          "x": 358.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:08"
+        },
+        {
+          "x": 398.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:09"
+        },
+        {
+          "x": 438.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:10"
+        },
+        {
+          "x": 478.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:11"
+        },
+        {
+          "x": 518.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:12"
+        },
+        {
+          "x": 558.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:13"
+        },
+        {
+          "x": 598.90625,
+          "y": 379,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:14"
+        }
+      ],
+      "samples": [
+        {
+          "x": 131,
+          "y": 196.8046875,
+          "width": 2,
+          "height": 60.390625
+        },
+        {
+          "x": 151,
+          "y": 214.921875,
+          "width": 2,
+          "height": 24.15625
+        },
+        {
+          "x": 171,
+          "y": 208.8828125,
+          "width": 2,
+          "height": 36.234375
+        }
+      ]
+    },
+    "mobile-paused-392x840": {
+      ".recording-sheet": {
+        "x": 0,
+        "y": 57.75,
+        "width": 392,
+        "height": 782.25,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "关闭新录音今天 08:53 00:0200:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:1400:02.601515继续完成"
+      },
+      "header": {
+        "x": 0,
+        "y": 103.109375,
+        "width": 392,
+        "height": 62.578125,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "关闭新录音今天 08:53 00:02"
+      },
+      "header strong": {
+        "x": 146.359375,
+        "y": 108.390625,
+        "width": 99.28125,
+        "height": 29,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "新录音"
+      },
+      "header small": {
+        "x": 146.359375,
+        "y": 143.390625,
+        "width": 99.28125,
+        "height": 17,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "今天 08:53 00:02"
+      },
+      ".recording-cancel": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "color": "rgb(198, 158, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": "关闭"
+      },
+      ".recording-presentation-menu > button": null,
+      ".waveform": {
+        "x": 0,
+        "y": 182.125,
+        "width": 392,
+        "height": 288.640625,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) linear-gradient(rgba(0, 0, 0, 0) 49.7%, rgb(226, 226, 231) 49.7%, rgb(226, 226, 231) 50.3%, rgba(0, 0, 0, 0) 50.3%) repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".wave-samples": {
+        "x": 0,
+        "y": 182.125,
+        "width": 392,
+        "height": 258.640625,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".wave-axis": {
+        "x": 0,
+        "y": 440.765625,
+        "width": 392,
+        "height": 30,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:0000:0100:0200:0300:0400:0500:0600:0700:0800:0900:1000:1100:1200:1300:14"
+      },
+      ".recording-playhead": {
+        "x": 196,
+        "y": 182.125,
+        "width": 1,
+        "height": 258.640625,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgb(232, 186, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-time": {
+        "x": 120.25,
+        "y": 569.328125,
+        "width": 151.484375,
+        "height": 44,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "00:02.60"
+      },
+      ".recording-notice": {
+        "x": 196,
+        "y": 613.140625,
+        "width": 0,
+        "height": 0,
+        "color": "rgb(138, 138, 138)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": ""
+      },
+      ".recording-playback": {
+        "x": 98,
+        "y": 647.5625,
+        "width": 196,
+        "height": 62.578125,
+        "color": "rgb(38, 38, 38)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "text": "1515"
+      },
+      ".recording-primary": {
+        "x": 123.375,
+        "y": 726.171875,
+        "width": 145.234375,
+        "height": 57.875,
+        "color": "rgb(255, 59, 48)",
+        "background": "rgba(255, 59, 48, 0.08) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": "继续"
+      },
+      ".recording-done": {
+        "x": 330.375,
+        "y": 726.171875,
+        "width": 44,
+        "height": 57.875,
+        "color": "rgb(198, 158, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "disabled": false,
+        "text": "完成"
+      },
+      "ticks": [
+        {
+          "x": 78.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:00"
+        },
+        {
+          "x": 118.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:01"
+        },
+        {
+          "x": 158.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:02"
+        },
+        {
+          "x": 198.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:03"
+        },
+        {
+          "x": 238.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:04"
+        },
+        {
+          "x": 278.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:05"
+        },
+        {
+          "x": 318.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:06"
+        },
+        {
+          "x": 358.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:07"
+        },
+        {
+          "x": 398.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:08"
+        },
+        {
+          "x": 438.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:09"
+        },
+        {
+          "x": 478.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:10"
+        },
+        {
+          "x": 518.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:11"
+        },
+        {
+          "x": 558.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:12"
+        },
+        {
+          "x": 598.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:13"
+        },
+        {
+          "x": 638.90625,
+          "y": 441.765625,
+          "width": 26.1875,
+          "height": 23,
+          "text": "00:14"
+        }
+      ],
+      "samples": [
+        {
+          "x": 171,
+          "y": 285.578125,
+          "width": 2,
+          "height": 51.71875
+        },
+        {
+          "x": 191,
+          "y": 301.09375,
+          "width": 2,
+          "height": 20.6875
+        },
+        {
+          "x": 211,
+          "y": 295.921875,
+          "width": 2,
+          "height": 31.03125
+        }
+      ]
+    }
+  },
+  "errors": [],
+  "external": [],
+  "status": "PASS"
+}

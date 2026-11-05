@@ -1,0 +1,511 @@
+{
+  "boundary": {
+    "desktop_source_crop": [
+      1999,
+      164,
+      560,
+      934
+    ],
+    "desktop_logical": [
+      280,
+      467
+    ],
+    "render_dpr": 2,
+    "desktop_source_dpr": "not independently proven; explicit 2x engineering comparison only",
+    "mobile_source": [
+      224,
+      480
+    ],
+    "mobile_logical": [
+      392,
+      840
+    ],
+    "mobile_render": [
+      784,
+      1680
+    ],
+    "mobile_downsample": "exact aspect LANCZOS to224x480; lossy reference supports coarse geometry only",
+    "no_masks": true,
+    "dynamic_differences": "3 controlled sample props, real date formatted from current day08:53; source amplitudes/date differ. Original desktop Continue gray state unknown; ordinary paused remains enabled red. Source mobile has native status/Home/ellipsis/transcription absent in controlled projection."
+  },
+  "desktop_metrics": {
+    "old": {
+      "full": {
+        "bounds": [
+          0,
+          0,
+          560,
+          934
+        ],
+        "mean_absolute_channel_error_0_255": 12.659,
+        "changed_pixel_ratio_any_channel": 0.99646,
+        "changed_pixel_ratio_channel_error_over_16": 0.06724
+      },
+      "title-date": {
+        "bounds": [
+          24,
+          38,
+          260,
+          120
+        ],
+        "mean_absolute_channel_error_0_255": 34.372,
+        "changed_pixel_ratio_any_channel": 0.99928,
+        "changed_pixel_ratio_channel_error_over_16": 0.24401
+      },
+      "top-controls": {
+        "bounds": [
+          414,
+          40,
+          536,
+          94
+        ],
+        "mean_absolute_channel_error_0_255": 16.747,
+        "changed_pixel_ratio_any_channel": 1.0,
+        "changed_pixel_ratio_channel_error_over_16": 0.1864
+      },
+      "waveform-dynamic": {
+        "bounds": [
+          0,
+          128,
+          560,
+          542
+        ],
+        "mean_absolute_channel_error_0_255": 6.9,
+        "changed_pixel_ratio_any_channel": 0.99664,
+        "changed_pixel_ratio_channel_error_over_16": 0.03656
+      },
+      "time-axis": {
+        "bounds": [
+          0,
+          528,
+          560,
+          590
+        ],
+        "mean_absolute_channel_error_0_255": 9.26,
+        "changed_pixel_ratio_any_channel": 0.99865,
+        "changed_pixel_ratio_channel_error_over_16": 0.07042
+      },
+      "timer": {
+        "bounds": [
+          160,
+          650,
+          400,
+          716
+        ],
+        "mean_absolute_channel_error_0_255": 52.714,
+        "changed_pixel_ratio_any_channel": 1.0,
+        "changed_pixel_ratio_channel_error_over_16": 0.22045
+      },
+      "playback": {
+        "bounds": [
+          150,
+          735,
+          410,
+          795
+        ],
+        "mean_absolute_channel_error_0_255": 39.72,
+        "changed_pixel_ratio_any_channel": 0.99994,
+        "changed_pixel_ratio_channel_error_over_16": 0.20327
+      },
+      "continue-state-difference": {
+        "bounds": [
+          126,
+          816,
+          434,
+          912
+        ],
+        "mean_absolute_channel_error_0_255": 8.194,
+        "changed_pixel_ratio_any_channel": 1.0,
+        "changed_pixel_ratio_channel_error_over_16": 0.02993
+      },
+      "done": {
+        "bounds": [
+          442,
+          815,
+          536,
+          912
+        ],
+        "mean_absolute_channel_error_0_255": 24.759,
+        "changed_pixel_ratio_any_channel": 0.99145,
+        "changed_pixel_ratio_channel_error_over_16": 0.56306
+      }
+    },
+    "new": {
+      "full": {
+        "bounds": [
+          0,
+          0,
+          560,
+          934
+        ],
+        "mean_absolute_channel_error_0_255": 4.647,
+        "changed_pixel_ratio_any_channel": 0.60731,
+        "changed_pixel_ratio_channel_error_over_16": 0.03976
+      },
+      "title-date": {
+        "bounds": [
+          24,
+          38,
+          260,
+          120
+        ],
+        "mean_absolute_channel_error_0_255": 24.967,
+        "changed_pixel_ratio_any_channel": 0.92838,
+        "changed_pixel_ratio_channel_error_over_16": 0.19636
+      },
+      "top-controls": {
+        "bounds": [
+          414,
+          40,
+          536,
+          94
+        ],
+        "mean_absolute_channel_error_0_255": 8.095,
+        "changed_pixel_ratio_any_channel": 0.98953,
+        "changed_pixel_ratio_channel_error_over_16": 0.05965
+      },
+      "waveform-dynamic": {
+        "bounds": [
+          0,
+          128,
+          560,
+          542
+        ],
+        "mean_absolute_channel_error_0_255": 1.665,
+        "changed_pixel_ratio_any_channel": 0.71059,
+        "changed_pixel_ratio_channel_error_over_16": 0.01453
+      },
+      "time-axis": {
+        "bounds": [
+          0,
+          528,
+          560,
+          590
+        ],
+        "mean_absolute_channel_error_0_255": 1.033,
+        "changed_pixel_ratio_any_channel": 0.38969,
+        "changed_pixel_ratio_channel_error_over_16": 0.02252
+      },
+      "timer": {
+        "bounds": [
+          160,
+          650,
+          400,
+          716
+        ],
+        "mean_absolute_channel_error_0_255": 20.203,
+        "changed_pixel_ratio_any_channel": 0.18845,
+        "changed_pixel_ratio_channel_error_over_16": 0.12942
+      },
+      "playback": {
+        "bounds": [
+          150,
+          735,
+          410,
+          795
+        ],
+        "mean_absolute_channel_error_0_255": 23.238,
+        "changed_pixel_ratio_any_channel": 0.24391,
+        "changed_pixel_ratio_channel_error_over_16": 0.19071
+      },
+      "continue-state-difference": {
+        "bounds": [
+          126,
+          816,
+          434,
+          912
+        ],
+        "mean_absolute_channel_error_0_255": 6.771,
+        "changed_pixel_ratio_any_channel": 0.80892,
+        "changed_pixel_ratio_channel_error_over_16": 0.02712
+      },
+      "done": {
+        "bounds": [
+          442,
+          815,
+          536,
+          912
+        ],
+        "mean_absolute_channel_error_0_255": 11.496,
+        "changed_pixel_ratio_any_channel": 0.56855,
+        "changed_pixel_ratio_channel_error_over_16": 0.56142
+      }
+    }
+  },
+  "desktop_ink_geometry_image_pixels": {
+    "reference": {
+      "title_ink": [
+        34,
+        47,
+        120,
+        75
+      ],
+      "timer_ink": [
+        185,
+        670,
+        376,
+        703
+      ],
+      "play_triangle_ink": [
+        267,
+        745,
+        299,
+        781
+      ],
+      "done_gold": [
+        449,
+        822,
+        529,
+        902
+      ],
+      "playhead_gold": [
+        274,
+        131,
+        288,
+        541
+      ],
+      "second2_label_ink": [
+        137,
+        558,
+        197,
+        574
+      ]
+    },
+    "old": {
+      "title_ink": [
+        33,
+        38,
+        126,
+        67
+      ],
+      "timer_ink": [
+        181,
+        618,
+        380,
+        652
+      ],
+      "play_triangle_ink": [
+        266,
+        735,
+        297,
+        773
+      ],
+      "done_gold": [
+        448,
+        822,
+        528,
+        902
+      ],
+      "playhead_gold": [
+        276,
+        152,
+        286,
+        490
+      ],
+      "second2_label_ink": [
+        199,
+        521,
+        248,
+        534
+      ]
+    },
+    "new": {
+      "title_ink": [
+        33,
+        46,
+        117,
+        73
+      ],
+      "timer_ink": [
+        186,
+        672,
+        375,
+        705
+      ],
+      "play_triangle_ink": [
+        266,
+        743,
+        297,
+        781
+      ],
+      "done_gold": [
+        448,
+        822,
+        528,
+        902
+      ],
+      "playhead_gold": [
+        274,
+        132,
+        288,
+        542
+      ],
+      "second2_label_ink": [
+        138,
+        558,
+        196,
+        574
+      ]
+    }
+  },
+  "mobile_metrics": {
+    "old": {
+      "full-source-system-differences": {
+        "bounds": [
+          0,
+          0,
+          224,
+          480
+        ],
+        "mean_absolute_channel_error_0_255": 15.265,
+        "changed_pixel_ratio_any_channel": 0.99714,
+        "changed_pixel_ratio_channel_error_over_16": 0.13426
+      },
+      "title-date": {
+        "bounds": [
+          65,
+          59,
+          158,
+          93
+        ],
+        "mean_absolute_channel_error_0_255": 10.863,
+        "changed_pixel_ratio_any_channel": 1.0,
+        "changed_pixel_ratio_channel_error_over_16": 0.19671
+      },
+      "waveform-dynamic": {
+        "bounds": [
+          0,
+          104,
+          224,
+          270
+        ],
+        "mean_absolute_channel_error_0_255": 4.397,
+        "changed_pixel_ratio_any_channel": 0.99965,
+        "changed_pixel_ratio_channel_error_over_16": 0.03614
+      },
+      "axis-coarse": {
+        "bounds": [
+          0,
+          270,
+          224,
+          283
+        ],
+        "mean_absolute_channel_error_0_255": 4.223,
+        "changed_pixel_ratio_any_channel": 0.99519,
+        "changed_pixel_ratio_channel_error_over_16": 0.08791
+      },
+      "timer": {
+        "bounds": [
+          60,
+          326,
+          164,
+          349
+        ],
+        "mean_absolute_channel_error_0_255": 35.839,
+        "changed_pixel_ratio_any_channel": 1.0,
+        "changed_pixel_ratio_channel_error_over_16": 0.34197
+      },
+      "playback": {
+        "bounds": [
+          50,
+          365,
+          175,
+          400
+        ],
+        "mean_absolute_channel_error_0_255": 27.713,
+        "changed_pixel_ratio_any_channel": 1.0,
+        "changed_pixel_ratio_channel_error_over_16": 0.18857
+      },
+      "continue": {
+        "bounds": [
+          68,
+          413,
+          157,
+          450
+        ],
+        "mean_absolute_channel_error_0_255": 30.376,
+        "changed_pixel_ratio_any_channel": 0.98512,
+        "changed_pixel_ratio_channel_error_over_16": 0.75311
+      }
+    },
+    "new": {
+      "full-source-system-differences": {
+        "bounds": [
+          0,
+          0,
+          224,
+          480
+        ],
+        "mean_absolute_channel_error_0_255": 15.293,
+        "changed_pixel_ratio_any_channel": 0.99714,
+        "changed_pixel_ratio_channel_error_over_16": 0.1311
+      },
+      "title-date": {
+        "bounds": [
+          65,
+          59,
+          158,
+          93
+        ],
+        "mean_absolute_channel_error_0_255": 10.684,
+        "changed_pixel_ratio_any_channel": 1.0,
+        "changed_pixel_ratio_channel_error_over_16": 0.19355
+      },
+      "waveform-dynamic": {
+        "bounds": [
+          0,
+          104,
+          224,
+          270
+        ],
+        "mean_absolute_channel_error_0_255": 4.143,
+        "changed_pixel_ratio_any_channel": 0.99962,
+        "changed_pixel_ratio_channel_error_over_16": 0.02477
+      },
+      "axis-coarse": {
+        "bounds": [
+          0,
+          270,
+          224,
+          283
+        ],
+        "mean_absolute_channel_error_0_255": 4.223,
+        "changed_pixel_ratio_any_channel": 0.99519,
+        "changed_pixel_ratio_channel_error_over_16": 0.08791
+      },
+      "timer": {
+        "bounds": [
+          60,
+          326,
+          164,
+          349
+        ],
+        "mean_absolute_channel_error_0_255": 35.839,
+        "changed_pixel_ratio_any_channel": 1.0,
+        "changed_pixel_ratio_channel_error_over_16": 0.34197
+      },
+      "playback": {
+        "bounds": [
+          50,
+          365,
+          175,
+          400
+        ],
+        "mean_absolute_channel_error_0_255": 30.683,
+        "changed_pixel_ratio_any_channel": 1.0,
+        "changed_pixel_ratio_channel_error_over_16": 0.20983
+      },
+      "continue": {
+        "bounds": [
+          68,
+          413,
+          157,
+          450
+        ],
+        "mean_absolute_channel_error_0_255": 30.376,
+        "changed_pixel_ratio_any_channel": 0.98512,
+        "changed_pixel_ratio_channel_error_over_16": 0.75311
+      }
+    }
+  }
+}
