@@ -1,6 +1,8 @@
 # 交付计划
 
-2026-11-06任务73已限定完成：[主线整合](../verification/mobile-recording-primary73/integration/README.md)全部自然exit0，desktop100/mobile43/notes9、构建/生产排除与24态视觉通过。独审发现的saved-card重挂载竞态已修runner真实metadata等待，旧失败保留；视觉依赖扫描提速复验通过，非CLI全局性能保证。下一项[真实Rust录音落盘74](tasks/app-debug-recording-rust74.md)ready；完整产品目标继续进行。
+2026-11-06最新优先为[安卓版附件75](tasks/app-android-attachments75.md)：用户报告添加附件无法保存及显示问题，正在复现实际手机输入框往返、附件落盘、正文ACK与新进程恢复；原设备约13秒未保存录音现场保持，不进行安装或重启。显示与保存分别验收，见[处理分析](analysis/android-quality75.md)。[真实Rust录音落盘74](tasks/app-debug-recording-rust74.md)等待75的共用设施，未执行。
+
+2026-11-06任务73已限定完成：[主线整合](../verification/mobile-recording-primary73/integration/README.md)全部自然exit0，desktop100/mobile43/notes9、构建/生产排除与24态视觉通过。独审发现的saved-card重挂载竞态已修runner真实metadata等待，旧失败保留；视觉依赖扫描提速复验通过，非CLI全局性能保证。完整产品目标继续进行。
 
 2026-11-06准备阶段（已由上方整合结果更新）：[手机中央录音控件73](tasks/app-mobile-recording-primary73.md)当时在独立工作树开发，保持既有录音逻辑，按原视频稳定三态校准并量化同尺寸视觉差异。[重命名研究72](../research/saved-audio-rename72/README.md)已合入，[独审](reviews/ref-saved-audio-rename72.md)确认报告准确；原版AX拒绝导致名称交互未取得证据，任务保持in-progress / ORIGINAL-OPEN，不将源码方案当成功能交付。
 
