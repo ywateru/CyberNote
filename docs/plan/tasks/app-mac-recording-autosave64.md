@@ -28,7 +28,7 @@ src/recording-session.ts或新的桌面分段/PCM helper、RecordingPanel.tsx、
 
 ## verification
 
-2026-11-05进展：作者de6产品/fe602证据、独审367产品/5d9d证据已准确合入主线，见[根整合](../../verification/mac-recording-autosave64-root-integration/README.md)。root typecheck/build与字节核对通过；SOURCE-READY / MAC-RUNTIME-PENDING。新Mac18冻结/构建及真实暂停/关闭保存仍待，任务保持in-progress，不追认旧Mac17运行结果。
+2026-11-05进展：首版de6/367独审合入、root typecheck/build与字节核对通过，并准确构建Mac18。后续[真实3秒暂停保存被校验拒绝](../../verification/mac-recording-autosave64-runtime/README.md)，状态MAC18-RUNTIME-BLOCKED。继续同任务修复validateRecordingTarget同步停车后等待真实Editor commit，以及DesktopPanel elapsed/sample和seekable投影边界；不得放宽target/state安全校验。Mac18录音现场保留，后续准确源码须独审、新包复验。任务保持in-progress，不能以首版受控通过覆盖实际失败。
 
 冻结准确source。覆盖真实分段终结和PCM/WAV字节/顺序/时长/声道采样率，无暂停间隙；暂停A正文ACK不关窗；多次续录最终一张最新卡；编码/传输/stored/等ACK中Close、重复Close、旧ACK、丢回执；A编辑停放切B与后续替换不改B/焦点；节点删除/Undo不重插；文件/正文/解码/零数据/100MB/收尾超时失败不丢原音频；权限等待取消、迟到清理、float↔dock不重录。挂载生产Window/Panel/Owner及实际App闭包/PM/SaveQueue，注明受控边界。
 

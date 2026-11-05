@@ -1,6 +1,6 @@
 # 交付计划
 
-2026-11-05用户最新反馈：[Mac录音暂停/关闭自动保存64](tasks/app-mac-recording-autosave64.md)已[独审通过已测边界](reviews/app-mac-recording-autosave64.md)并[主线整合](../verification/mac-recording-autosave64-root-integration/README.md)，SOURCE-READY / MAC-RUNTIME-PENDING，整体任务仍进行中。按明确用户请求修订暂停持久化、分段累计及准确final确认再关闭；新Mac18包与实际验收继续，手机原现场保持。见[分析](analysis/mac-recording-autosave64.md)。
+2026-11-05用户最新反馈：[Mac录音暂停/关闭自动保存64](tasks/app-mac-recording-autosave64.md)首版通过已测受控边界并合入、生成Mac18，但[实际暂停保存失败](../verification/mac-recording-autosave64-runtime/README.md)，**MAC18-RUNTIME-BLOCKED**。保持in-progress，继续实际App/Host恢复等待与投影边界修复，新3秒录音保留，首版独审不覆盖这个真实失败。手机原现场保持，见[分析](analysis/mac-recording-autosave64.md)。
 
 用户已授权完整 Mac 与 Android 开发。此计划持续执行，不以文档完成替代应用完成。
 

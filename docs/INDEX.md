@@ -2,7 +2,7 @@
 
 更新：2026-11-05。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
-最新优先项：[Mac暂停/关闭自动保存64](plan/tasks/app-mac-recording-autosave64.md)已[独审](plan/reviews/app-mac-recording-autosave64.md)并[主线整合](verification/mac-recording-autosave64-root-integration/README.md)，SOURCE-READY / MAC-RUNTIME-PENDING，新包构建与实机验收继续。[分析](plan/analysis/mac-recording-autosave64.md)与[最新交互契约](ui/recording-desktop.md)规定暂停持久化、继续累计单卡及final ACK后关闭。手机原现场继续保持。
+最新优先项：[Mac暂停/关闭自动保存64](plan/tasks/app-mac-recording-autosave64.md)首版已独审/整合并生成[Mac18](verification/unified-candidate06/mac-recording-autosave-build18/README.md)，但[真实暂停保存被目标校验拦截](verification/mac-recording-autosave64-runtime/README.md)，**MAC18-RUNTIME-BLOCKED**，不作为修复交付。新3秒录音现场保留，继续修复实际App/Host恢复等待与投影边界。手机原现场继续保持。[最新交互契约](ui/recording-desktop.md)不变。
 
 [手机游标/时间轴60](plan/tasks/app-mobile-recording-wave60.md)已独审并[合入主线](verification/mobile-recording-wave60-root-integration/README.md)，新[Android构建13](verification/unified-candidate06/android-recording-wave-build13/README.md)已本地生成、未安装；[Mac授权有界诊断63](plan/tasks/app-mac-recording-diagnostics63.md)已[独审合入](verification/mac-recording-diagnostics63-root-integration/README.md)，首版同步输出阻塞已修，默认关闭，尚未进入安装包。[授权链研究61](research/mac-recording-access-next61/README.md)保留真实采集未通过；[原版已存音频菜单62](research/saved-audio-menu62/README.md)仅观察菜单，未执行追加/导出/删除，菜单功能差异继续开放。不操作原Android现场，不追认旧包包含新改动。
 
