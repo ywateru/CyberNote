@@ -5,6 +5,9 @@ import RecordingPanel, { type RecordingPanelHandle } from "./RecordingPanel";
 import { fileBase64 } from "./bridge";
 import {
   sameRecording,
+  validRecordingAction,
+  type RecordingAction,
+  type RecordingPresentation,
   type RecordingIdentity,
   type RecordingTransfer,
   type RecordingViewState,
@@ -25,7 +28,10 @@ export default function RecordingWindow() {
   const [identity, setIdentity] = useState<RecordingIdentity | null>(null);
   const [error, setError] = useState("");
   const handle = useRef<RecordingPanelHandle | null>(null);
-  const pendingAction = useRef<"close" | "toggle" | null>(null);
+  const pendingAction = useRef<RecordingAction[]>([]);
+  const [switching, setSwitching] = useState(false);
+  const presentationRequest = useRef(0);
+  const presentationSequence = useRef(0);
   const file = useRef<RecordingResult | null>(null);
   const transferred = useRef(false);
   const encoded = useRef<RecordingTransfer | null>(null);
@@ -62,9 +68,31 @@ export default function RecordingWindow() {
         if (event.from !== "owner") return;
         const message = event.message;
         if (message.kind === "action") {
-          if (!handle.current) pendingAction.current = message.action;
-          else if (message.action === "close") handle.current.close();
-          else handle.current.toggle();
+          if (!validRecordingAction(message)) {
+            setError("录音操作无效，原音频仍保留");
+            return;
+          }
+          if (!handle.current) {
+            if (pendingAction.current.length < 32)
+              pendingAction.current.push(message);
+            else setError("录音操作过多，请等待界面连接");
+          } else {
+            try {
+              handle.current.dispatch(message);
+            } catch (error) {
+              setError(text(error));
+            }
+          }
+        } else if (message.kind === "presentation-result") {
+          if (
+            message.request !== presentationRequest.current ||
+            !Number.isSafeInteger(message.sequence) ||
+            message.sequence <= presentationSequence.current
+          )
+            return;
+          presentationSequence.current = message.sequence;
+          setSwitching(false);
+          setError(message.error ?? "");
         } else if (message.kind === "owner-status") {
           ready.current = true;
           // Only the original owner can confirm it reconstructed this File.
@@ -79,8 +107,13 @@ export default function RecordingWindow() {
             else setError(messageText);
           } else if (message.status === "discarded") {
             void destroy(context).catch((e) => setError(text(e)));
+          } else if (
+            message.status !== "ready" &&
+            message.status !== "saving"
+          ) {
+            setError("录音保存状态无效，原音频仍保留");
           }
-        }
+        } else setError("未知录音消息，原音频仍保留");
       });
       if (!live) {
         unlisten();
@@ -130,12 +163,14 @@ export default function RecordingWindow() {
   };
   const onHandle = useCallback((value: RecordingPanelHandle | null) => {
     handle.current = value;
-    if (value && pendingAction.current) {
-      const action = pendingAction.current;
-      pendingAction.current = null;
-      if (action === "close") value.close();
-      else value.toggle();
-    }
+    if (value)
+      for (const action of pendingAction.current.splice(0)) {
+        try {
+          value.dispatch(action);
+        } catch (error) {
+          setError(text(error));
+        }
+      }
   }, []);
   const onState = useCallback(
     (state: RecordingViewState) => {
@@ -146,6 +181,20 @@ export default function RecordingWindow() {
     },
     [identity],
   );
+  const onPresentation = (mode: RecordingPresentation) => {
+    if (!identity) return;
+    const request = ++presentationRequest.current;
+    setSwitching(true);
+    setError("");
+    void recordingSend(identity, { kind: "presentation", mode, request }).catch(
+      (error) => {
+        if (request === presentationRequest.current) {
+          setSwitching(false);
+          setError(text(error));
+        }
+      },
+    );
+  };
   const onDone = async (result: RecordingResult) => {
     if (!identity || !ready.current)
       throw Error("原笔记窗口尚未确认连接，音频仍保留");
@@ -203,6 +252,8 @@ export default function RecordingWindow() {
             mobile={false}
             onHandle={onHandle}
             onState={onState}
+            onPresentation={onPresentation}
+            switching={switching}
             onCancel={() => {
               void recordingSend(identity, { kind: "cancel" }).catch((e) =>
                 setError(text(e)),

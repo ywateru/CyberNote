@@ -182,6 +182,7 @@ import {
   shouldClearSearchAfterAccessChange,
 } from "./search-selection";
 import { SearchEditorGate } from "./search-editor-gate";
+import RecordingDock from "./RecordingDock";
 import RecordingPanel, { type RecordingPanelHandle } from "./RecordingPanel";
 import { Fragment, Slice } from "@tiptap/pm/model";
 import {
@@ -534,6 +535,7 @@ function App() {
   const recordingLifecycle = useRef({
     active: (): boolean => false,
     independent: (): boolean => false,
+    ensureFloating: async () => {},
     close: async () => {},
     suspend: (_ids: string[]) => {},
     detach: () => {},
@@ -1340,7 +1342,10 @@ function App() {
           // child continues capture independently of this window's visibility.
           if (recordingLifecycle.current.independent()) {
             event.preventDefault();
-            await getCurrentWindow().hide().catch(fail);
+            try {
+              await recordingLifecycle.current.ensureFloating();
+              await getCurrentWindow().hide();
+            } catch (error) { fail(error); }
             return;
           }
           if (
@@ -3044,6 +3049,7 @@ function App() {
         const id = identity;
         const owner = new RecordingOwner(id, {
           send: (message) => recordingSend(id, message),
+          visibility: (target, visible) => recordingSend(id, { kind: "visibility", target, visible }),
           decode: decodeRecordingFile,
           submit: (result) => submitRecording(ticket, result),
           discard: async () => {
@@ -3150,6 +3156,14 @@ function App() {
   recordingLifecycle.current = {
     active: () => !!recordingTicket.current,
     independent: () => !!recordingTicket.current?.desktop,
+    ensureFloating: async () => {
+      const ticket = recordingTicket.current;
+      if (!ticket?.desktop) return;
+      await ticket.opening;
+      if (recordingTicket.current !== ticket) return;
+      if (!ticket.remote) throw Error("录音窗口尚未就绪，请保持原窗口打开");
+      await ticket.remote.owner.ensureFloating();
+    },
     close: async () => {
       const ticket = recordingTicket.current;
       if (!ticket) return;
@@ -4294,6 +4308,7 @@ function App() {
   });
   const nativeTop = !mobile && !!nativeInfo;
   return (
+    <div className="recording-layout">
     <div
       ref={appSurface}
       inert={quitPending}
@@ -5344,6 +5359,8 @@ function App() {
           onDone={(result) => submitRecording(recording, result)}
         />
       )}
+    </div>
+    {!mobile && recordingTicket.current?.remote && <RecordingDock owner={recordingTicket.current.remote.owner} fail={fail} />}
     </div>
   );
 }

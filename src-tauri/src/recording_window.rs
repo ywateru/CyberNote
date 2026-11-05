@@ -23,6 +23,7 @@ struct Entry {
     started: bool,
     terminal: bool,
     child_destroyed: bool,
+    docked: bool,
 }
 struct Quit {
     id: String,
@@ -131,6 +132,7 @@ pub fn register_recording_window(
             started: false,
             terminal: false,
             child_destroyed: false,
+            docked: false,
         },
     );
     Ok(identity)
@@ -166,7 +168,7 @@ fn route_message(
     }
     let kind = message["kind"].as_str().ok_or("录音消息无效")?;
     let (from, destination) = if caller == entry.identity.owner {
-        if !["owner-status", "action"].contains(&kind) {
+        if !["owner-status", "action", "presentation-result"].contains(&kind) {
             return Err("录音消息方向无效".into());
         }
         if kind == "owner-status"
@@ -176,7 +178,16 @@ fn route_message(
         }
         ("owner", entry.identity.child.clone())
     } else if caller == entry.identity.child {
-        if !["hello", "state", "submit", "cancel", "reveal"].contains(&kind) {
+        if ![
+            "hello",
+            "state",
+            "submit",
+            "cancel",
+            "reveal",
+            "presentation",
+        ]
+        .contains(&kind)
+        {
             return Err("录音消息方向无效".into());
         }
         if kind == "state" && message["state"]["recordedAt"].is_number() {
@@ -201,6 +212,26 @@ fn route_message(
     Ok((destination, value, settled))
 }
 
+fn visibility_target(
+    registry: &mut Registry,
+    session_id: &str,
+    operation_id: &str,
+    message: &Value,
+    caller: &str,
+) -> Result<(String, bool, bool), String> {
+    let recording = entry(registry, session_id, operation_id)?;
+    if caller != recording.identity.owner || !recording.owner_alive || recording.child_destroyed {
+        return Err("不是本次录音的原窗口，不能切换显示".into());
+    }
+    let visible = message["visible"].as_bool().ok_or("录音可见性无效")?;
+    let (target, child) = match message["target"].as_str() {
+        Some("owner") if visible => (recording.identity.owner.clone(), false),
+        Some("child") => (recording.identity.child.clone(), true),
+        _ => return Err("录音显示目标无效".into()),
+    };
+    Ok((target, visible, child))
+}
+
 #[tauri::command]
 pub fn recording_window_message(
     session_id: String,
@@ -211,6 +242,35 @@ pub fn recording_window_message(
     state: State<Recordings>,
 ) -> Result<(), String> {
     let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
+    // Visibility is a dedicated, authenticated operation on the fixed pair.
+    // It never broadcasts, adopts another label or changes capture ownership.
+    if message["kind"] == "visibility" {
+        let (target, visible, child) = visibility_target(
+            &mut registry,
+            &session_id,
+            &operation_id,
+            &message,
+            window.label(),
+        )?;
+        drop(registry);
+        let target = app.get_webview_window(&target).ok_or("原录音窗口不可用")?;
+        if visible {
+            target.show().map_err(|_| "无法显示原录音窗口")?;
+            #[cfg(desktop)]
+            target.unminimize().map_err(|_| "无法恢复原录音窗口")?;
+            target.set_focus().map_err(|_| "无法激活原录音窗口")?;
+        } else {
+            target.hide().map_err(|_| "无法隐藏浮动录音窗口")?;
+        }
+        if child {
+            if let Ok(mut registry) = state.0.lock() {
+                if let Ok(recording) = entry(&mut registry, &session_id, &operation_id) {
+                    recording.docked = !visible;
+                }
+            }
+        }
+        return Ok(());
+    }
     let (destination, value, settled_destroyed) = route_message(
         &mut registry,
         &session_id,
@@ -304,8 +364,23 @@ fn document_windows(app: &tauri::AppHandle) -> HashSet<String> {
 }
 fn notify_quit_cancelled(app: &tauri::AppHandle, id: &str) {
     let _ = app.emit("notes-recording-quit-cancelled", json!({"id":id}));
+    let state = app.state::<Recordings>();
+    let hidden_children: HashSet<String> = state
+        .0
+        .lock()
+        .map(|registry| {
+            registry
+                .entries
+                .values()
+                .filter(|entry| entry.docked && entry.owner_alive)
+                .map(|entry| entry.identity.child.clone())
+                .collect()
+        })
+        .unwrap_or_default();
     for window in app.webview_windows().into_values() {
-        let _ = window.show();
+        if !hidden_children.contains(window.label()) {
+            let _ = window.show();
+        }
     }
 }
 #[tauri::command]
@@ -409,6 +484,13 @@ pub fn destroyed(app: &tauri::AppHandle, label: &str) {
         notify_quit_cancelled(app, &id);
     }
     for (label, event) in notifications {
+        if event["message"]["kind"] == "owner-lost" {
+            if let Some(child) = app.get_webview_window(&label) {
+                let _ = child.show();
+                #[cfg(desktop)]
+                let _ = child.unminimize();
+            }
+        }
         let _ = app.emit_to(
             tauri::EventTarget::Window { label },
             "notes-recording",
@@ -501,6 +583,7 @@ mod tests {
                 started: true,
                 terminal: true,
                 child_destroyed: false,
+                docked: false,
             },
         );
         assert!(
@@ -528,6 +611,7 @@ mod tests {
                     started: false,
                     terminal: false,
                     child_destroyed: false,
+                    docked: false,
                 },
             );
             route_message(
@@ -641,6 +725,94 @@ mod tests {
             cancel_changed_participants(&mut registry, &HashSet::from(["main".into()])).is_none()
         );
         assert!(may_exit(&mut registry));
+    }
+    #[test]
+    fn presentation_visibility_only_original_owner_can_address_fixed_pair() {
+        let mut registry = Registry::default();
+        registry.entries.insert(
+            "session".into(),
+            Entry {
+                identity: Identity {
+                    session_id: "session".into(),
+                    operation_id: "operation".into(),
+                    owner: "main".into(),
+                    child: "recording-child".into(),
+                },
+                owner_alive: true,
+                started: true,
+                terminal: false,
+                child_destroyed: false,
+                docked: false,
+            },
+        );
+        for caller in ["recording-child", "note-other"] {
+            assert!(visibility_target(
+                &mut registry,
+                "session",
+                "operation",
+                &json!({"target":"child","visible":false}),
+                caller
+            )
+            .is_err());
+        }
+        assert!(visibility_target(
+            &mut registry,
+            "session",
+            "wrong",
+            &json!({"target":"child","visible":false}),
+            "main"
+        )
+        .is_err());
+        for message in [
+            json!({"target":"owner","visible":false}),
+            json!({"target":"note-other","visible":true}),
+            json!({"target":"child","visible":"yes"}),
+        ] {
+            assert!(
+                visibility_target(&mut registry, "session", "operation", &message, "main").is_err()
+            );
+        }
+        assert_eq!(
+            visibility_target(
+                &mut registry,
+                "session",
+                "operation",
+                &json!({"target":"child","visible":false}),
+                "main"
+            )
+            .unwrap(),
+            ("recording-child".into(), false, true)
+        );
+        assert_eq!(
+            visibility_target(
+                &mut registry,
+                "session",
+                "operation",
+                &json!({"target":"owner","visible":true}),
+                "main"
+            )
+            .unwrap(),
+            ("main".into(), true, false)
+        );
+        registry.entries.get_mut("session").unwrap().owner_alive = false;
+        assert!(visibility_target(
+            &mut registry,
+            "session",
+            "operation",
+            &json!({"target":"child","visible":true}),
+            "main"
+        )
+        .is_err());
+        registry.entries.get_mut("session").unwrap().owner_alive = true;
+        registry.entries.get_mut("session").unwrap().child_destroyed = true;
+        assert!(visibility_target(
+            &mut registry,
+            "session",
+            "operation",
+            &json!({"target":"child","visible":true}),
+            "main"
+        )
+        .is_err());
     }
     #[test]
     fn capture_child_is_not_a_document_barrier_but_original_owner_still_must_ack() {

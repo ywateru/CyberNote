@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Check, Pause, Play, RotateCcw, RotateCw, X } from "lucide-react";
-import type { RecordingViewState } from "./recording-coordinator";
+import RecordingView from "./RecordingView";
 import {
-  RecordingWaveform,
+  validRecordingAction,
+  type RecordingAction,
+  type RecordingPresentation,
+  type RecordingViewState,
+} from "./recording-coordinator";
+import {
   RecordingWaveformHistory,
   type RecordingSample,
 } from "./recording-waveform";
@@ -11,23 +15,14 @@ import {
   createRecordingPlayback,
   initialRecordingPlaybackState,
 } from "./recording-playback";
-import { RecordingClock, recordingTime } from "./recording-clock";
+import { RecordingClock } from "./recording-clock";
 import {
   attachmentRecordedAt,
   type RecordingResult,
 } from "./recording-metadata";
 import "./RecordingPanel.css";
 
-type Phase =
-  | "idle"
-  | "requesting"
-  | "recording"
-  | "paused"
-  | "finalizing"
-  | "saving"
-  | "retry"
-  | "submitted"
-  | "error";
+type Phase = RecordingViewState["phase"];
 const errText = (e: unknown): string => {
   if (e instanceof AggregateError)
     return `${e.message} ${e.errors.map(errText).join("；")}`;
@@ -58,7 +53,11 @@ function recordingFile(blob: Blob): File {
   });
 }
 
-export type RecordingPanelHandle = { close: () => void; toggle: () => void };
+export type RecordingPanelHandle = {
+  close: () => void;
+  toggle: () => void;
+  dispatch: (action: RecordingAction) => void;
+};
 
 export default function RecordingPanel({
   onCancel,
@@ -66,8 +65,12 @@ export default function RecordingPanel({
   mobile = true,
   onHandle,
   onState,
+  onPresentation,
+  switching,
 }: {
   mobile?: boolean;
+  onPresentation?: (mode: RecordingPresentation) => void;
+  switching?: boolean;
   onHandle?: (handle: RecordingPanelHandle | null) => void;
   onState?: (state: RecordingViewState) => void;
   onCancel: () => void;
@@ -82,11 +85,16 @@ export default function RecordingPanel({
   const [error, setError] = useState("");
   const [samples, setSamples] = useState<RecordingSample[]>([]);
   const history = useRef(new RecordingWaveformHistory());
-  const actions = useRef({ close: () => {}, toggle: () => {} });
+  const actions = useRef({
+    close: () => {},
+    toggle: () => {},
+    dispatch: (_action: RecordingAction) => {},
+  });
   const previewStatus = useRef(initialRecordingPlaybackState);
   const recordedAt = useRef<number | undefined>(undefined);
   const finalResult = useRef<RecordingResult | null>(null);
   const previewGeneration = useRef(0);
+  const previewAudio = useRef<HTMLAudioElement | null>(null);
   const previewPlayer = useRef<ReturnType<
     typeof createRecordingPlayback
   > | null>(null);
@@ -182,8 +190,9 @@ export default function RecordingPanel({
     const generation = previewSource.generation;
     let player: ReturnType<typeof createRecordingPlayback>;
     try {
+      previewAudio.current = new Audio();
       player = createRecordingPlayback(
-        new Audio(),
+        previewAudio.current,
         previewSource.blob,
         (state) => {
           if (
@@ -345,6 +354,7 @@ export default function RecordingPanel({
     onHandle?.({
       close: () => actions.current.close(),
       toggle: () => actions.current.toggle(),
+      dispatch: (action) => actions.current.dispatch(action),
     });
     return () => onHandle?.(null);
   }, [onHandle]);
@@ -363,12 +373,6 @@ export default function RecordingPanel({
     status === "idle" ||
     status === "recording" ||
     (status === "paused" && !previewState.playing && !previewState.playPending);
-  const primaryLabel =
-    status === "idle"
-      ? "开始录音"
-      : status === "paused"
-        ? "继续录音"
-        : "暂停录音";
   const playbackError =
     previewError ||
     previewState.mediaError ||
@@ -390,143 +394,110 @@ export default function RecordingPanel({
           : status === "submitted"
             ? "录音已提交"
             : "");
-  useEffect(() => {
-    onState?.({
-      phase: status,
-      recordedAt: recordedAt.current,
-      elapsed,
-      paused: status === "paused",
-      canToggle: canToggle && status !== "idle",
-      canFinish: status === "recording" || canFinish,
-      notice,
-    });
-  }, [onState, status, elapsed, canToggle, canFinish, notice]);
-  const date = new Date(recordedAt.current ?? openedAt);
-  const today = date.toDateString() === new Date(Date.now()).toDateString();
-  const createdAt = `${today ? "今天" : date.toLocaleDateString("zh-CN")} ${date.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}`;
   const previewPosition = previewAllowed && previewState.ready;
-  const position = previewPosition ? previewState.time * 1000 : elapsed;
-  const seekEnabled =
-    previewAllowed && (previewState.canSeek || previewState.seeking);
-  const closing =
-    status === "saving" || status === "finalizing" || status === "submitted";
+  const activityElapsed = Math.max(elapsed, samples.at(-1)?.at ?? 0);
+  const position = previewPosition ? previewState.time * 1000 : activityElapsed;
+  const duration = (previewState.duration ?? activityElapsed / 1000) * 1000;
+  const seekable: [number, number][] = [];
+  if (previewAllowed && previewAudio.current && Number.isFinite(duration)) {
+    const ranges = previewAudio.current.seekable;
+    for (let i = 0; i < Math.min(ranges.length, 64); i++) {
+      const start = Math.max(0, ranges.start(i) * 1000);
+      const end = Math.min(duration, ranges.end(i) * 1000);
+      if (Number.isFinite(start) && Number.isFinite(end) && end > start)
+        seekable.push([start, end]);
+    }
+  }
+  const viewState: RecordingViewState = {
+    sequence: 1,
+    phase: status,
+    openedAt,
+    recordedAt: recordedAt.current,
+    elapsed: activityElapsed,
+    paused: status === "paused",
+    canToggle,
+    canFinish: status === "recording" || canFinish,
+    notice,
+    hasError: !!(error || playbackError),
+    position,
+    duration,
+    previewPosition,
+    playing: previewState.playing,
+    playPending: previewState.playPending,
+    previewPending,
+    seeking: previewState.seeking,
+    canPlay:
+      previewAllowed &&
+      previewState.ready &&
+      !previewState.playPending &&
+      !previewState.seeking,
+    canSeek: previewAllowed && previewState.canSeek,
+    canRetryPreview: !!(previewAllowed && previewSource && playbackError),
+    seekable,
+    samples,
+  };
+  const dispatch = (action: RecordingAction) => {
+    if (!validRecordingAction(action)) {
+      setPreviewError("录音操作无效");
+      return;
+    }
+    switch (action.action) {
+      case "close":
+        close();
+        break;
+      case "toggle":
+        if (canToggle) primary();
+        break;
+      case "finish":
+        if (canFinish) finish();
+        break;
+      case "playback":
+        if (viewState.canPlay) previewPlayer.current?.toggle();
+        break;
+      case "preview-retry":
+        if (viewState.canRetryPreview) previewPlayer.current?.retry();
+        break;
+      case "skip":
+        if (viewState.canSeek) previewPlayer.current?.skip(action.seconds);
+        break;
+      case "seek":
+        if (
+          !(viewState.canSeek || viewState.seeking) ||
+          !seekable.some(
+            ([start, end]) =>
+              action.milliseconds >= start && action.milliseconds <= end,
+          )
+        ) {
+          setPreviewError("录音回放位置超出实际可播放范围");
+          return;
+        }
+        previewPlayer.current?.seek(action.milliseconds / 1000);
+        break;
+    }
+  };
+  actions.current.dispatch = dispatch;
+  const projection = useRef(viewState);
+  projection.current = viewState;
+  const projectionSequence = useRef(0);
+  // At most ten bounded projections per second, with a trailing real snapshot.
+  useEffect(() => {
+    if (!onState) return;
+    const publish = () =>
+      onState({
+        ...projection.current,
+        sequence: ++projectionSequence.current,
+      });
+    publish();
+    const timer = window.setInterval(publish, 100);
+    return () => window.clearInterval(timer);
+  }, [onState]);
   return (
-    <div
-      className={`recording-backdrop ${mobile ? "recording-mobile" : "recording-desktop"}`}
-    >
-      <section
-        className="recording-sheet"
-        role="dialog"
-        aria-modal={mobile || undefined}
-        aria-label="新录音"
-        data-recording-state={status}
-      >
-        {mobile && <div className="sheet-handle" />}
-        <header>
-          <button
-            className="recording-cancel"
-            aria-label="关闭录音"
-            disabled={closing}
-            onClick={close}
-          >
-            {mobile ? "关闭" : <X />}
-          </button>
-          <div>
-            <strong>新录音</strong>
-            <small>
-              {createdAt} {recordingTime(elapsed, false)}
-            </small>
-          </div>
-        </header>
-        <RecordingWaveform
-          samples={samples}
-          position={position}
-          duration={(previewState.duration ?? elapsed / 1000) * 1000}
-          enabled={seekEnabled}
-          seek={(milliseconds) =>
-            previewPlayer.current?.seek(milliseconds / 1000)
-          }
-        />
-        <div
-          className="recording-time"
-          aria-label={previewPosition ? "实际回放位置" : "活动录音时间"}
-        >
-          {recordingTime(position)}
-        </div>
-        <div
-          className="recording-notice"
-          role={error || playbackError ? "alert" : "status"}
-        >
-          {notice}
-        </div>
-        <div className="recording-playback" aria-label="录音回放">
-          <button
-            aria-label="后退15秒"
-            disabled={!previewAllowed || !previewState.canSeek}
-            onClick={() => previewPlayer.current?.skip(-15)}
-          >
-            <RotateCcw />
-            <span>15</span>
-          </button>
-          <button
-            aria-label={previewState.playing ? "暂停回放" : "播放录音"}
-            disabled={
-              !previewAllowed ||
-              !previewState.ready ||
-              previewState.playPending ||
-              previewState.seeking
-            }
-            onClick={() => previewPlayer.current?.toggle()}
-          >
-            {previewState.playing ? (
-              <Pause fill="currentColor" />
-            ) : (
-              <Play fill="currentColor" />
-            )}
-          </button>
-          <button
-            aria-label="前进15秒"
-            disabled={!previewAllowed || !previewState.canSeek}
-            onClick={() => previewPlayer.current?.skip(15)}
-          >
-            <RotateCw />
-            <span>15</span>
-          </button>
-        </div>
-        {previewAllowed && previewSource && playbackError && (
-          <button
-            className="recording-playback-retry"
-            onClick={() => previewPlayer.current?.retry()}
-          >
-            重试回放
-          </button>
-        )}
-        <div className="recording-controls">
-          <span className="recording-action-spacer" aria-hidden="true" />
-          <button
-            className={`recording-primary recording-primary-${status}`}
-            aria-label={primaryLabel}
-            disabled={!canToggle}
-            onClick={primary}
-          >
-            {status === "idle" || status === "requesting" ? (
-              <span className="recording-red-core" />
-            ) : status === "paused" ? (
-              "继续"
-            ) : (
-              <Pause fill="currentColor" />
-            )}
-          </button>
-          <button
-            className="recording-done"
-            aria-label={status === "retry" ? "重试保存录音" : "完成录音"}
-            disabled={!canFinish}
-            onClick={() => finish()}
-          >
-            {mobile ? status === "retry" ? "重试" : "完成" : <Check />}
-          </button>
-        </div>
-      </section>
-    </div>
+    <RecordingView
+      state={viewState}
+      mobile={mobile}
+      act={dispatch}
+      onPresentation={onPresentation}
+      switching={switching}
+    />
   );
 }
