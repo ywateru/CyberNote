@@ -63,6 +63,7 @@ pub fn reveal_owner(app: &tauri::AppHandle, child: &str) {
     drop(registry);
     if let Some(window) = owner.and_then(|label| app.get_webview_window(&label)) {
         let _ = window.show();
+        #[cfg(desktop)]
         let _ = window.unminimize();
         let _ = window.set_focus();
     }
