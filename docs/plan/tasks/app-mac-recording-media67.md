@@ -31,3 +31,5 @@ status: in-progress
 # progress
 
 - 2026-11-05：66源码独审/准确Mac19核包通过，实际首显MediaView MetadataStale阻断；有界安全新读合同先落文档，待作者实施与不同作者独审。
+
+- 2026-11-05：作者新隔离树`/private/tmp/apple-notes-mac-recording-media67-01`由root43e16f97建立，正在实施真实读取竞态runner及窄修。Mac19额外E活动×保存0:21首显正常；F活动主窗close后新进程重开0:10/C1:31/D文字保持。旧18准确PID随后已不在，内存现场无法继续保证保留，原因/时点未确定，已向用户披露；不重启旧18、不声称恢复。手机仍完全未操作。
