@@ -22,6 +22,8 @@ struct Entry {
     owner_alive: bool,
     started: bool,
     terminal: bool,
+    revision: Option<(u64, bool)>,
+    checkpoint_revision: u64,
     child_destroyed: bool,
     docked: bool,
 }
@@ -131,6 +133,8 @@ pub fn register_recording_window(
             owner_alive: true,
             started: false,
             terminal: false,
+            revision: None,
+            checkpoint_revision: 0,
             child_destroyed: false,
             docked: false,
         },
@@ -171,10 +175,25 @@ fn route_message(
         if !["owner-status", "action", "presentation-result"].contains(&kind) {
             return Err("录音消息方向无效".into());
         }
-        if kind == "owner-status"
-            && ["saved", "discarded"].contains(&message["status"].as_str().unwrap_or(""))
-        {
-            entry.terminal = true;
+        if kind == "owner-status" {
+            let status = message["status"].as_str().unwrap_or("");
+            if let Some((revision, final_intent)) = entry.revision {
+                if ["checkpoint-saved", "saved", "discarded"].contains(&status) {
+                    if message["revision"].as_u64() != Some(revision)
+                        || (status == "saved") != final_intent
+                        || status == "discarded"
+                    {
+                        return Err("录音版本最终确认不匹配，请保持窗口打开".into());
+                    }
+                    if final_intent {
+                        entry.terminal = true;
+                    } else {
+                        entry.checkpoint_revision = revision;
+                    }
+                }
+            } else if ["saved", "discarded"].contains(&status) {
+                entry.terminal = true;
+            }
         }
         ("owner", entry.identity.child.clone())
     } else if caller == entry.identity.child {
@@ -182,6 +201,7 @@ fn route_message(
             "hello",
             "state",
             "submit",
+            "revision-submit",
             "cancel",
             "reveal",
             "presentation",
@@ -193,7 +213,32 @@ fn route_message(
         if kind == "state" && message["state"]["recordedAt"].is_number() {
             entry.started = true;
         }
-        if kind == "submit" {
+        if kind == "revision-submit" {
+            let revision = message["revision"]
+                .as_u64()
+                .filter(|revision| *revision > 0 && *revision <= 9_007_199_254_740_991)
+                .ok_or("录音版本无效")?;
+            let final_intent = match message["intent"].as_str() {
+                Some("final") => true,
+                Some("checkpoint") => false,
+                _ => return Err("录音保存意图无效".into()),
+            };
+            let valid = match entry.revision {
+                None => revision == 1,
+                Some((current, intent)) => {
+                    (revision == current && intent == final_intent)
+                        || (!intent
+                            && entry.checkpoint_revision == current
+                            && revision == current + 1)
+                }
+            };
+            if !valid || entry.terminal {
+                return Err("录音版本保存顺序无效".into());
+            }
+            entry.revision = Some((revision, final_intent));
+            entry.started = true;
+        }
+        if kind == "submit" || kind == "revision-submit" {
             if let Some(data) = message["transfer"]["data"].as_str() {
                 if data.len() > ((100 * 1024 * 1024 + 2) / 3) * 4 {
                     return Err("录音附件不能超过100 MB".into());
@@ -295,13 +340,19 @@ pub fn recording_window_message(
 #[tauri::command]
 pub fn recording_window_finish(
     session_id: String,
+    revision: Option<u64>,
     operation_id: String,
     window: tauri::WebviewWindow,
     state: State<Recordings>,
 ) -> Result<(), String> {
     let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
     let entry = entry(&mut registry, &session_id, &operation_id)?;
-    if window.label() != entry.identity.child || !entry.terminal {
+    if window.label() != entry.identity.child
+        || !entry.terminal
+        || entry
+            .revision
+            .is_some_and(|(current, final_intent)| !final_intent || revision != Some(current))
+    {
         return Err("原笔记尚未确认录音保存，请保持录音窗口打开".into());
     }
     Ok(())
@@ -549,6 +600,97 @@ pub fn exit_requested(app: &tauri::AppHandle, api: &tauri::ExitRequestApi) {
 mod tests {
     use super::*;
     #[test]
+    fn finalized_revisions_require_exact_checkpoint_and_final_ack() {
+        let mut registry = Registry::default();
+        registry.entries.insert(
+            "session".into(),
+            Entry {
+                identity: Identity {
+                    session_id: "session".into(),
+                    operation_id: "op".into(),
+                    owner: "main".into(),
+                    child: "child".into(),
+                },
+                owner_alive: true,
+                started: false,
+                terminal: false,
+                revision: None,
+                checkpoint_revision: 0,
+                child_destroyed: false,
+                docked: false,
+            },
+        );
+        let send = |registry: &mut Registry, caller: &str, message: Value| {
+            route_message(registry, "session", "op", message, caller)
+        };
+        assert!(send(
+            &mut registry,
+            "child",
+            json!({"kind":"revision-submit","revision":2,"intent":"checkpoint"})
+        )
+        .is_err());
+        assert!(send(
+            &mut registry,
+            "child",
+            json!({"kind":"revision-submit","revision":1,"intent":"checkpoint"})
+        )
+        .is_ok());
+        assert!(!registry.entries["session"].terminal);
+        for ack in [
+            json!({"kind":"owner-status","revision":1,"status":"saved"}),
+            json!({"kind":"owner-status","revision":2,"status":"checkpoint-saved"}),
+            json!({"kind":"owner-status","status":"discarded"}),
+        ] {
+            assert!(send(&mut registry, "main", ack).is_err());
+        }
+        assert!(send(
+            &mut registry,
+            "child",
+            json!({"kind":"revision-submit","revision":2,"intent":"final"})
+        )
+        .is_err());
+        assert!(send(
+            &mut registry,
+            "main",
+            json!({"kind":"owner-status","revision":1,"status":"checkpoint-saved"})
+        )
+        .is_ok());
+        assert_eq!(registry.entries["session"].checkpoint_revision, 1);
+        assert!(!registry.entries["session"].terminal);
+        assert!(send(
+            &mut registry,
+            "child",
+            json!({"kind":"revision-submit","revision":2,"intent":"final"})
+        )
+        .is_ok());
+        for ack in [
+            json!({"kind":"owner-status","revision":1,"status":"checkpoint-saved"}),
+            json!({"kind":"owner-status","revision":1,"status":"saved"}),
+            json!({"kind":"owner-status","revision":2,"status":"checkpoint-saved"}),
+        ] {
+            assert!(send(&mut registry, "main", ack).is_err());
+        }
+        assert!(send(
+            &mut registry,
+            "main",
+            json!({"kind":"owner-status","revision":2,"status":"saved"})
+        )
+        .is_ok());
+        assert!(registry.entries["session"].terminal);
+        assert!(send(
+            &mut registry,
+            "child",
+            json!({"kind":"revision-submit","revision":3,"intent":"final"})
+        )
+        .is_err());
+        assert!(send(
+            &mut registry,
+            "other",
+            json!({"kind":"owner-status","revision":2,"status":"saved"})
+        )
+        .is_err());
+    }
+    #[test]
     fn exact_child_labels_and_ack_gate() {
         assert!(recording_label(
             "recording-123e4567-e89b-12d3-a456-426614174000"
@@ -582,6 +724,8 @@ mod tests {
                 owner_alive: true,
                 started: true,
                 terminal: true,
+                revision: None,
+                checkpoint_revision: 0,
                 child_destroyed: false,
                 docked: false,
             },
@@ -610,6 +754,8 @@ mod tests {
                     owner_alive: true,
                     started: false,
                     terminal: false,
+                    revision: None,
+                    checkpoint_revision: 0,
                     child_destroyed: false,
                     docked: false,
                 },
@@ -741,6 +887,8 @@ mod tests {
                 owner_alive: true,
                 started: true,
                 terminal: false,
+                revision: None,
+                checkpoint_revision: 0,
                 child_destroyed: false,
                 docked: false,
             },

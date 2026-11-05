@@ -1,3 +1,4 @@
+import DesktopRecordingPanel from "./DesktopRecordingPanel";
 import { useEffect, useRef, useState } from "react";
 import RecordingView from "./RecordingView";
 import {
@@ -19,6 +20,7 @@ import { RecordingClock } from "./recording-clock";
 import {
   attachmentRecordedAt,
   type RecordingResult,
+  type RecordingRevision,
 } from "./recording-metadata";
 import "./RecordingPanel.css";
 
@@ -59,7 +61,7 @@ export type RecordingPanelHandle = {
   dispatch: (action: RecordingAction) => void;
 };
 
-export default function RecordingPanel({
+function MobileRecordingPanel({
   onCancel,
   onDone,
   mobile = true,
@@ -500,4 +502,14 @@ export default function RecordingPanel({
       switching={switching}
     />
   );
+}
+
+export default function RecordingPanel(
+  props: Parameters<typeof MobileRecordingPanel>[0] & {
+    onRevision?: (result: RecordingRevision) => Promise<void>;
+  },
+) {
+  if (props.mobile === false && props.onRevision)
+    return <DesktopRecordingPanel {...props} onRevision={props.onRevision} />;
+  return <MobileRecordingPanel {...props} />;
 }

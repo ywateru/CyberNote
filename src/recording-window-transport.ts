@@ -33,8 +33,12 @@ export function decodeRecordingFile(transfer: RecordingTransfer): File {
     lastModified: transfer.lastModified,
   });
 }
-export function recordingFinish(identity: RecordingIdentity) {
+export function recordingFinish(
+  identity: RecordingIdentity,
+  revision?: number,
+) {
   return invoke<void>("recording_window_finish", {
+    revision,
     sessionId: identity.sessionId,
     operationId: identity.operationId,
   });

@@ -53,6 +53,7 @@ export function mountRecordingCard({ editor, bookmark }: RecordingCardTarget) {
   card.append(metadata, stop, toggle);
   anchor.append(card);
   anchor.addEventListener("mousedown", (event) => event.preventDefault());
+  let persistedId: string | undefined;
   const plugin = new Plugin<number>({
     key,
     state: {
@@ -60,20 +61,40 @@ export function mountRecordingCard({ editor, bookmark }: RecordingCardTarget) {
       apply: (transaction, value) => transaction.mapping.map(value, 1),
     },
     props: {
-      decorations: (state) =>
-        DecorationSet.create(state.doc, [
+      decorations: (state) => {
+        const hidden: Decoration[] = [];
+        if (persistedId)
+          state.doc.descendants((node, position) => {
+            if (
+              node.type.name === "attachment" &&
+              node.attrs.id === persistedId
+            )
+              hidden.push(
+                Decoration.node(position, position + node.nodeSize, {
+                  style: "display:none",
+                }),
+              );
+          });
+        return DecorationSet.create(state.doc, [
+          ...hidden,
           Decoration.widget(key.getState(state) ?? position, anchor, {
             key: "liveRecordingCard",
             side: 1,
             ignoreSelection: true,
             stopEvent: () => true,
           }),
-        ]),
+        ]);
+      },
     },
   });
   editor.registerPlugin(plugin);
   let live = true;
   return {
+    persisted(id: string) {
+      persistedId = id;
+      // View-only refresh; no doc transaction/history or persisted attributes.
+      if (!editor.isDestroyed) editor.view.updateState(editor.state);
+    },
     update(state: RecordingCardState) {
       if (!live || editor.isDestroyed) return;
       date.textContent = recordingDate(state.recordedAt);
@@ -96,4 +117,3 @@ export function mountRecordingCard({ editor, bookmark }: RecordingCardTarget) {
     },
   };
 }
-

@@ -1,4 +1,4 @@
-import type { RecordingResult } from "./recording-metadata";
+import type { RecordingRevision, RecordingResult } from "./recording-metadata";
 
 export type RecordingIdentity = {
   sessionId: string;
@@ -133,14 +133,22 @@ export type RecordingTransfer = {
 };
 export type OwnerStatus = {
   kind: "owner-status";
-  status: "ready" | "saving" | "saved" | "failed" | "discarded";
+  status:
+    "ready" | "saving" | "checkpoint-saved" | "saved" | "failed" | "discarded";
   fileAccepted: boolean;
+  revision?: number;
   error?: string;
 };
 export type RecordingMessage =
   | { kind: "hello" }
   | { kind: "state"; state: RecordingViewState }
   | { kind: "submit"; transfer?: RecordingTransfer }
+  | {
+      kind: "revision-submit";
+      revision: number;
+      intent: "checkpoint" | "final";
+      transfer?: RecordingTransfer;
+    }
   | { kind: "cancel" }
   | { kind: "reveal" }
   | ({ kind: "action" } & RecordingAction)
@@ -335,6 +343,7 @@ export class RecordingOwner {
       send: (message: RecordingMessage) => Promise<void>;
       decode: (transfer: RecordingTransfer) => File;
       submit: (result: RecordingResult) => Promise<void>;
+      saveRevision?: (result: RecordingRevision) => Promise<void>;
       discard: () => Promise<void>;
       view: (state: RecordingViewState) => void;
       reveal: () => Promise<void>;
@@ -395,7 +404,11 @@ export class RecordingOwner {
     } else if (message.kind === "reveal") {
       await this.ports.reveal();
     } else if (message.kind === "cancel") {
-      if ((this.started && !this.captureError) || this.result) {
+      if (
+        (this.started && !this.captureError) ||
+        this.result ||
+        this.revisionResult
+      ) {
         await this.fail(
           Error("已开始的录音须先完成保存，音频仍保留在录音窗口"),
         );
@@ -413,6 +426,8 @@ export class RecordingOwner {
       } catch (error) {
         await this.fail(error);
       }
+    } else if (message.kind === "revision-submit") {
+      await this.receiveRevision(message);
     } else if (message.kind === "submit") {
       if (!this.result && message.transfer) {
         const transfer = message.transfer;
@@ -454,6 +469,109 @@ export class RecordingOwner {
       await this.running;
       this.running = undefined;
     } else throw Error("未知录音消息，保留原录音窗口");
+  }
+  private revision = 0;
+  private revisionResult?: RecordingRevision;
+  private revisionTransfer?: RecordingTransfer;
+  private revisionRunning?: Promise<void>;
+  private async receiveRevision(
+    message: Extract<RecordingMessage, { kind: "revision-submit" }>,
+  ) {
+    if (
+      !this.ports.saveRevision ||
+      !Number.isSafeInteger(message.revision) ||
+      message.revision <= 0 ||
+      !["checkpoint", "final"].includes(message.intent)
+    )
+      throw Error("录音版本消息无效，原音频仍保留。");
+    if (
+      message.revision < this.revision ||
+      message.revision > this.revision + 1
+    ) {
+      await this.ports.send(this.status);
+      return;
+    }
+    if (
+      this.revisionResult &&
+      message.revision === this.revisionResult.revision
+    ) {
+      if (
+        message.intent !== this.revisionResult.intent ||
+        (message.transfer &&
+          JSON.stringify(message.transfer) !==
+            JSON.stringify(this.revisionTransfer))
+      )
+        throw Error("同版录音文件身份已改变，原音频仍保留。");
+    } else {
+      if (
+        this.revisionRunning ||
+        message.revision !== this.revision + 1 ||
+        !message.transfer
+      )
+        throw Error("录音版本尚未接收或保存顺序无效。");
+      const transfer = message.transfer;
+      if (
+        !Number.isSafeInteger(transfer.recordedAt) ||
+        transfer.recordedAt <= 0 ||
+        !Number.isSafeInteger(transfer.size) ||
+        transfer.size <= 44 ||
+        transfer.size > 100 * 1024 * 1024 ||
+        transfer.mime !== "audio/wav"
+      )
+        throw Error("录音WAV版本信息无效，原音频仍保留。");
+      const file = this.ports.decode(transfer);
+      if (file.size !== transfer.size || file.type !== transfer.mime)
+        throw Error("录音版本传输不完整，原音频仍保留。");
+      this.revisionTransfer = { ...transfer };
+      this.revisionResult = Object.freeze({
+        file,
+        recordedAt: transfer.recordedAt,
+        revision: message.revision,
+        intent: message.intent,
+      });
+    }
+    if (message.revision === this.revision || this.revisionRunning) {
+      await this.ports.send(this.status);
+      return;
+    }
+    const result = this.revisionResult!;
+    this.status = {
+      kind: "owner-status",
+      status: "saving",
+      fileAccepted: true,
+      revision: result.revision,
+    };
+    await this.ports.send(this.status).catch(() => {});
+    const work = (async () => {
+      try {
+        await this.ports.saveRevision!(result);
+        this.revision = result.revision;
+        this.status = {
+          kind: "owner-status",
+          status: result.intent === "final" ? "saved" : "checkpoint-saved",
+          fileAccepted: true,
+          revision: result.revision,
+        };
+        await this.ports.send(this.status).catch(() => {});
+        if (result.intent === "final") this.settleDestroyed();
+      } catch (error) {
+        this.closing = false;
+        this.status = {
+          kind: "owner-status",
+          status: "failed",
+          fileAccepted: true,
+          revision: result.revision,
+          error: errorText(error),
+        };
+        for (const waiter of this.waiters)
+          waiter.reject(Error(errorText(error)));
+        this.waiters.clear();
+        await this.ports.send(this.status).catch(() => {});
+      }
+    })();
+    this.revisionRunning = work;
+    await work;
+    if (this.revisionRunning === work) this.revisionRunning = undefined;
   }
   private async fail(error: unknown) {
     this.closing = false;

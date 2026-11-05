@@ -1,3 +1,5 @@
+import { RecordingRevisionRelay } from "./recording-revision-relay";
+import type { RecordingRevision } from "./recording-metadata";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
@@ -42,6 +44,8 @@ export default function RecordingWindow() {
   } | null>(null);
   const exiting = useRef(false);
   const ready = useRef(false);
+  const revisionRelay = useRef<RecordingRevisionRelay | null>(null);
+  const destroyWork = useRef<Promise<void> | null>(null);
 
   useEffect(() => {
     let live = true;
@@ -59,11 +63,16 @@ export default function RecordingWindow() {
         ids,
       );
       if (!live) return;
+      revisionRelay.current = new RecordingRevisionRelay(
+        (message) => recordingSend(context, message),
+        fileBase64,
+      );
       unlisten = await recordingListen((event) => {
         if (!live || !sameRecording(context, event)) return;
         if (event.from === "host" && event.message.kind === "owner-lost") {
           setError("原笔记窗口意外关闭。录音仍保留在此窗口，请勿退出应用。");
           pending.current?.reject(Error("原笔记窗口已失去连接，音频仍保留"));
+          revisionRelay.current?.lost("原笔记窗口已失去连接，原音频仍保留。");
         }
         if (event.from !== "owner") return;
         const message = event.message;
@@ -95,6 +104,14 @@ export default function RecordingWindow() {
           setError(message.error ?? "");
         } else if (message.kind === "owner-status") {
           ready.current = true;
+          if (message.revision !== undefined) {
+            const final = revisionRelay.current?.receive(message);
+            if (final)
+              void destroy(context, message.revision).catch((e) =>
+                setError(text(e)),
+              );
+            return;
+          }
           // Only the original owner can confirm it reconstructed this File.
           transferred.current ||= message.fileAccepted;
           if (message.status === "saved") {
@@ -140,6 +157,7 @@ export default function RecordingWindow() {
     });
     return () => {
       live = false;
+      revisionRelay.current?.dispose();
       unlisten?.();
       unclose?.();
       if (timer) clearInterval(timer);
@@ -150,16 +168,24 @@ export default function RecordingWindow() {
       }
     };
   }, []);
-  const destroy = async (context: RecordingIdentity) => {
-    if (exiting.current) return;
-    await recordingFinish(context);
+  const destroy = (
+    context: RecordingIdentity,
+    revision?: number,
+  ): Promise<void> => {
+    if (destroyWork.current) return destroyWork.current;
     exiting.current = true;
-    try {
+    const work = (async () => {
+      await recordingFinish(context, revision);
       await getCurrentWindow().destroy();
-    } catch (e) {
-      exiting.current = false;
-      throw e;
-    }
+    })();
+    destroyWork.current = work;
+    void work.catch(() => {
+      if (destroyWork.current === work) {
+        destroyWork.current = null;
+        exiting.current = false;
+      }
+    });
+    return work;
   };
   const onHandle = useCallback((value: RecordingPanelHandle | null) => {
     handle.current = value;
@@ -239,6 +265,12 @@ export default function RecordingWindow() {
       void response.catch(() => {});
     }
   };
+  const onRevision = async (result: RecordingRevision) => {
+    if (!identity || !ready.current || !revisionRelay.current)
+      throw Error("原笔记窗口尚未确认连接，原音频仍保留。");
+    await revisionRelay.current.submit(result);
+    if (result.intent === "final") await destroy(identity, result.revision);
+  };
   return (
     <div className="recording-window-host desktop">
       {error && (
@@ -260,6 +292,7 @@ export default function RecordingWindow() {
               );
             }}
             onDone={onDone}
+            onRevision={onRevision}
           />
         </>
       ) : (

@@ -33,3 +33,9 @@ export function compactAudioDuration(duration: number | null): string {
     return "音频";
   return `音频 · ${duration < 60 ? `${Math.floor(duration)}秒` : formatAudioTime(duration)}`;
 }
+
+export type RecordingRevision = RecordingResult &
+  Readonly<{
+    revision: number;
+    intent: "checkpoint" | "final";
+  }>;

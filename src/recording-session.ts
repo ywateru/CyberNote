@@ -1,4 +1,4 @@
-type RecordingCallbacks = {
+export type RecordingCallbacks = {
   onRecording: () => void;
   onStopped: (blob: Blob) => void;
   onLevel: (level: number) => void;
@@ -14,7 +14,7 @@ export type RecordingEnvironment = {
   clearInterval: (timer: number) => void;
 };
 
-const browserEnvironment: RecordingEnvironment = {
+export const browserEnvironment: RecordingEnvironment = {
   authorize: async () => {
     if (
       typeof window !== "undefined" &&

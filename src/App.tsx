@@ -1,3 +1,6 @@
+import { RecordingRevisions } from "./recording-revisions";
+import { replaceRecordingAttachment, recordingAttachmentReferencedOnce } from "./recording-replacement";
+import type { RecordingRevision } from "./recording-metadata";
 import {
   useCallback,
   useEffect,
@@ -71,6 +74,7 @@ type PickerBatch = {
   recording?: RecordingTicket;
 };
 type RecordingTicket = {
+  revisions?: RecordingRevisions<PickerTarget>;
   batch: PickerBatch;
   accepting: boolean;
   detached: boolean;
@@ -3042,6 +3046,60 @@ function App() {
       .catch(() => {});
     return work;
   };
+  const submitRecordingRevision = async (
+    ticket: RecordingTicket,
+    result: RecordingRevision,
+  ) => {
+    if (
+      !ticket.accepting ||
+      ticket.detached ||
+      recordingTicket.current !== ticket ||
+      !ticket.remote
+    )
+      throw Error("原录音会话已失效，音频仍保留。");
+    if (
+      ticket.recordedAt !== undefined &&
+      ticket.recordedAt !== result.recordedAt
+    )
+      throw Error("录音开始时间已改变，原音频仍保留。");
+    ticket.recordedAt = attachmentRecordedAt(result.recordedAt, "audio");
+    if (ticket.recordedAt === undefined)
+      throw Error("录音开始时间缺失，原音频仍保留。");
+    const target = ticket.batch.target;
+    ticket.revisions ??= new RecordingRevisions(target.noteId, target);
+    await ticket.revisions.run(result, {
+      validate: (inserted) => validateRecordingTarget(ticket, inserted),
+      register: (operation) =>
+        attachmentSubmissions.current.set(operation.operationId, operation),
+      committed: operation => attachmentSubmissions.current.delete(operation.operationId),
+      store: (operation) =>
+        storeAttachmentOperation(
+          operation.operationId,
+          target.noteId,
+          operation.file,
+          operation.recordedAt,
+        ),
+      query: (operation) =>
+        queryAttachmentOperation(operation.operationId, target.noteId),
+      insert: (attachment, previous) =>
+        replaceRecordingAttachment(
+          target.editor,
+          target.bookmark,
+          attachment,
+          previous,
+        ),
+      inserted: (attachment) => ticket.remote?.card?.persisted(attachment.id),
+      references: (attachment) =>
+        !target.editor.isDestroyed &&
+        recordingAttachmentReferencedOnce(target.editor, attachment),
+      awaitDocumentAck: (operation) =>
+        awaitAttachmentDocumentAck(operation, target),
+    });
+    // The next checkpoint can replace this committed version. Do not terminate
+    // the original ticket or discard its editor/bookmark on checkpoint ACK.
+    if (result.intent === "final") finishRecording(ticket);
+    void metadataRefreshRef.current();
+  };
   const openRecording = (context?: NativeContext) => {
     if (recordingTicket.current)
       throw Error("上次录音操作尚未核定，请先重试保存或取消");
@@ -3076,6 +3134,7 @@ function App() {
           visibility: (target, visible) => recordingSend(id, { kind: "visibility", target, visible }),
           decode: decodeRecordingFile,
           submit: (result) => submitRecording(ticket, result),
+          saveRevision: (result) => submitRecordingRevision(ticket, result),
           discard: async () => {
             await cancelRecording(ticket);
           },
