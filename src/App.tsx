@@ -5360,7 +5360,7 @@ function App() {
         />
       )}
     </div>
-    {!mobile && recordingTicket.current?.remote && <RecordingDock owner={recordingTicket.current.remote.owner} fail={fail} />}
+    {!mobile && recordingTicket.current?.remote && <RecordingDock owner={recordingTicket.current.remote.owner} fail={fail} top={nativeInfo?.native.reservedTop || 0} />}
     </div>
   );
 }

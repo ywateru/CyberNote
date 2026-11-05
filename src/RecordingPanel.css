@@ -585,3 +585,10 @@
   color: var(--ink);
   font-size: 13px;
 }
+
+.recording-dock .recording-backdrop {
+  top: var(--recording-native-top, 0px);
+}
+.recording-dock .recording-window-error {
+  top: calc(var(--recording-native-top, 0px) + 78px);
+}

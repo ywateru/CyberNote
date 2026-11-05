@@ -36,7 +36,7 @@ const originalAck=h.owner.confirmDock.bind(h.owner);h.owner.confirmDock=(sequenc
 h.window={label:identity.child,listen:async(name,handler)=>{if(name==='notes-recording')h.listener=handler;return()=>{if(h.listener===handler)h.listener=null}},onCloseRequested:async handler=>{h.close=()=>handler({preventDefault:()=>{}});return()=>{}},destroy:async()=>{h.destroyed++;await h.owner.receive({...identity,from:'host',message:{kind:'child-closed'}});root.render(null)}};
 h.invoke=async(command,args)=>{if(command==='plugin:notes-ui|recording_access'){if(args?.windowLabel!==h.window.label||Object.keys(args).join(',')!=='windowLabel')throw Error('invalid microphone preflight identity');h.microphoneAccess.push({command,...args});return{status:'authorized'}}if(command==='recording_window_context')return identity;if(command==='recording_window_finish'){if(!h.terminal)throw Error('missing original document ACK');h.finished++;return}if(command==='recording_window_message'){if(!h.ownerAlive)throw Error('original owner lost; File retained');if(args.message.transfer)h.transfers++;void h.owner.receive({...identity,from:'child',message:args.message}).catch(e=>h.errors.push(String(e)));return}throw Error('unexpected '+command)};
 h.query=message=>h.owner.receive({...identity,from:'child',message});h.validState=validRecordingState;h.validAction=validRecordingAction;h.bounded=()=>{const history=new RecordingWaveformHistory();for(let i=0;i<10000;i++)history.append(i*100,i%256);return history.samples()};
-root.render(<><div className="recording-layout"><div className="app desktop separate"><textarea id="other-note" defaultValue="笔记B"/></div><RecordingDock owner={h.owner} fail={e=>h.errors.push(String(e))}/></div><div id="child"><RecordingWindow/></div></>);`;
+root.render(<><div className="recording-layout"><div className="app desktop separate"><textarea id="other-note" defaultValue="笔记B"/></div><RecordingDock owner={h.owner} top={44} fail={e=>h.errors.push(String(e))}/></div><div id="child"><RecordingWindow/></div></>);`;
 const modules = {
   "@tauri-apps/api/core":
     "export const isTauri=()=>true;export const invoke=(command,args)=>window.host.invoke(command,args)",
@@ -247,6 +247,12 @@ try {
     }));
     assert.equal(bounds.dock.width, 280);
     assert.ok(bounds.app.right <= bounds.dock.left);
+    assert.equal(
+      await page
+        .locator(".recording-dock .recording-backdrop")
+        .evaluate((node) => node.getBoundingClientRect().top),
+      44,
+    );
     await page.screenshot({ path: resolve(output, "docked-recording.png") });
   });
   await test("remote pause, actual preview, play/seek and repeated presentation changes retain the same media element", async () => {

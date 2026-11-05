@@ -105,6 +105,7 @@ try {
   const begin = async () => {
     await primary().click();
     await state("recording");
+    await page.evaluate(() => window.platform.advance(0));
   };
   const pauseReady = async () => {
     await primary().click();
@@ -120,6 +121,7 @@ try {
     await page.waitForFunction(
       () => !document.querySelector('[aria-label="播放录音"]').disabled,
     );
+    await page.evaluate(() => window.platform.advance(0));
   };
   const sameDocument = async () =>
     assert.deepEqual(
@@ -325,6 +327,7 @@ try {
     await pauseReady();
     await page.getByRole("button", { name: "播放录音", exact: true }).click();
     assert.ok(await primary().isDisabled());
+    await page.evaluate(() => window.platform.advance(0));
     assert.ok(await page.locator(".live-recording-toggle").isDisabled());
     await page.evaluate(() => {
       document.querySelector(".recording-primary").click();
