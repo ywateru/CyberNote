@@ -2,7 +2,7 @@
 
 状态：首版实现契约，允许依据真实对比继续完善。
 
-2026-11-05录音自动保存契约以[Mac任务64](plan/tasks/app-mac-recording-autosave64.md)和[桌面录音最新规格](ui/recording-desktop.md)为准：暂停生成完整可播放累计版本，并在原A正文ACK及journal query committed后确认；后续版本原位替换上一卡片，通用不可变附件operation语义保持。checkpoint不终结会话，关闭等准确final ACK才销毁。旧已committed媒体保留以保护Undo/历史，因此内部版本增加磁盘和归档空间；不把单可见卡等同于单物理附件。此为待实现契约，不代表源/设备已通过。
+2026-11-05录音呈现以[统一右栏66](plan/tasks/app-mac-recording-sidebar66.md)为准：App稳定持有本地录音会话、直接提交不可变版本，无child/relay；native登记本地owner会话以保留主窗关闭/整应用退出保存屏障。录音自动保存契约以[Mac任务64](plan/tasks/app-mac-recording-autosave64.md)和[桌面录音最新规格](ui/recording-desktop.md)为准：暂停生成完整可播放累计版本，并在原A正文ACK及journal query committed后确认；后续版本原位替换上一卡片，通用不可变附件operation语义保持。checkpoint不终结会话，关闭等准确final ACK才销毁。旧已committed媒体保留以保护Undo/历史，因此内部版本增加磁盘和归档空间；不把单可见卡等同于单物理附件。此为待实现契约，不代表源/设备已通过。
 
 ## 模块与所有权
 
@@ -106,7 +106,7 @@ Rust 错误应结构化：code/message，UI 显示错误并保留未保存内容
 
 ### 录音会话与附件提交边界（APP-002源码已接线，安装版待实证）
 
-2026-11-05用户进一步明确独立窗口与后台录音：桌面非模态录音窗持有采集和File，原owner窗可隐藏保活稳定源Editor/保存队列，主界面允许继续输入/切笔记。源note最新可信正文与映射bookmark的录音专用提交必须保持owner/授权/operation和正文ACK；普通附件旧严校验继续。主窗普通关闭隐藏保活，独立录音窗关闭和应用退出均先真实收尾保存，失败保持同File/窗口。最新契约见[独立录音窗口](ui/recording-desktop.md)与任务50纠正节，覆盖早期右侧嵌入/锁主界面/退出沿旧行为的范围。
+2026-11-05最新66要求统一主窗口右侧非模态栏，替代旧独立窗口和55双模式：App稳定owner持有Session/File/累计PCM，当前选中B不改变原A归属。直接调用保存链，原A实时书签/正文/权限/版本与正文ACK、journal committed保持。红色关闭保存后销毁，CmdQ依赖native本地会话登记与所有正文参与者准确ACK；失败保留右栏和音频。具体合同以[桌面录音规格](ui/recording-desktop.md)为准。
 
 2026-11-05任务50补充：面板正常关闭（×、Escape及与其相同的手机返回）在已经实际采集后先真实收尾并调用原`onDone`，沿同一File/operation/原note等待正文ACK后才离开；不能先seal ticket或卸载Panel。idle/requesting退出仍释放请求与迟到资源；采集失败和保存retry分别处理，保存失败必须保留最终File。显式生命周期失效/权限撤回/销毁等仍沿原封锁和清理，未新增崩溃恢复草稿；桌面整体退出遵循上方最新独立窗安全收尾规则。具体状态以[录音交互规格](ui/recording-desktop.md)为准；以下旧“取消/Back”清理约束对真正取消/失效适用，不再代表正常有音频关闭的用户操作。
 
@@ -235,6 +235,6 @@ Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许�
 
 失败不写默认值、不覆盖其他设置；保留未确认意图和既有错误反馈。窗口关闭时待写/失败必须纳入现有正文/媒体关闭保护；CmdQ实际路由和快速退出另行实证。响应式mobile不是平台，独立窗投影false不是显隐意图；二者不得写主窗偏好。归档既有全settings往返保持，导入当下不自动重置或写回；下次启动读取导入值。详见[准备22](research/mac-sidebar-preference22-readiness/analysis.md)与[任务22](plan/tasks/app-mac-sidebar-preference22.md)。
 
-### 录音呈现55
+### 录音呈现66
 
-用户新要求允许浮窗与主窗右侧展开切换。唯一child仍全程拥有Session/File/Audio，owner展开仅共享纯视图+同session远程控制/实际状态投影，不搬迁采集或音频；目标视图确认后才隐藏原视图，主窗关闭先显示浮窗。原A附件operation/正文ACK与Quit屏障保持。详见ui/recording-desktop.md双模式合同与任务55。
+最新用户要求移除浮窗，统一App内右栏。55的child拥有采集、远程视图与呈现切换仅作历史。66直接owner会话、精确原A保存、可等待关闭及native本地登记退出屏障详见ui/recording-desktop.md与任务66。
