@@ -1,5 +1,7 @@
 # 移动录音面板：已证三态的局部布局
 
+任务57保存边界：手机录音完成后，可信同步返回仍须等待原 SearchEditorHost 的门控恢复布局实际提交，再重取原目标快照并执行全部 note/owner/editor/scope、正文、版本与授权检查。同步临时冻结不作为目标已改变的证据；不删除 isEditable/available 检查。首次存储前及存储后第二次校验一致，取消/封会话/卸载结束等待；真实目标或正文/权限变化仍失败并保留同 File/operation，真实正文 ACK 前不关闭。此为修复既有保存流程的工程边界，不改变录屏布局及桌面会话规则。
+
 状态：参考规格，2026-11-04。仅使用已经保全的 224×480 代表原帧，不新增取帧或扩大时段。目标是为局部状态任务提供布局依据；不是高清像素验收，也不表示当前克隆已具有下列行为。
 
 来源：[26–38 秒逐帧时序](../research/mobile-recording-sequence-01/README.md)、[初始 n833](../research/mobile-recording-sequence-01/representative/frame-n0833.png)、[录制 n870](../research/mobile-recording-sequence-01/representative/frame-n0870.png)、[暂停 n960](../research/mobile-recording-sequence-01/representative/frame-n0960.png)。实际 PTS 分别 27.766667、29.000000、32.000000 秒。原录屏/原图保持原字节，本次未操作 GUI、设备、target、产品或主 Git。

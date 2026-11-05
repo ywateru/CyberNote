@@ -10,6 +10,7 @@ import {
 } from "react";
 import { type Editor, type JSONContent } from "@tiptap/react";
 import { editorSaveSnapshot } from "./editor-save-snapshot";
+import { useEditorCommit } from "./use-editor-commit";
 import {
   attachmentRecordedAt,
   type RecordingResult,
@@ -79,6 +80,7 @@ type RecordingTicket = {
   cancelling?: Promise<void>;
   desktop?: boolean;
   opening?: Promise<void>;
+  editorCommits?: Set<AbortController>;
   remote?: {
     identity: RecordingIdentity;
     owner: RecordingOwner;
@@ -530,6 +532,7 @@ function App() {
     detach: () => {},
   });
   const recordingTicket = useRef<RecordingTicket | null>(null);
+  const waitRecordingEditorCommit = useEditorCommit();
   const recordingPanel = useRef<RecordingPanelHandle | null>(null);
   const [, updateRecordingOwner] = useState(0);
   const recordingLifecycle = useRef({
@@ -2307,6 +2310,25 @@ function App() {
     if (!owned()) throw Error("原录音或文字识别会话已关闭");
     const synced = await synchronizeRef.current();
     if (!owned()) throw Error("原录音会话已关闭");
+    if (
+      mobile &&
+      recording &&
+      !recording.desktop &&
+      synced.success &&
+      synchronization.current(synced)
+    ) {
+      // The trusted response may resolve before React restores the original
+      // Host's gate. Wait for that actual commit, then retain every target check.
+      const controller = new AbortController();
+      recording.editorCommits ??= new Set();
+      recording.editorCommits.add(controller);
+      try {
+        await waitRecordingEditorCommit(controller.signal);
+      } finally {
+        recording.editorCommits.delete(controller);
+      }
+      if (!owned()) throw Error("原录音会话已关闭");
+    }
     const live = pickerRuntime.current;
     const instance = live.editor;
     const note = wsRef.current.notes.find((n) => n.id === target.noteId);
@@ -2870,6 +2892,7 @@ function App() {
   }, []);
   const finishRecording = (ticket: RecordingTicket) => {
     ticket.accepting = false;
+    for (const controller of ticket.editorCommits || []) controller.abort();
     ticket.remote?.card?.dispose();
     if (ticket.remote) return; // Child closes only after receiving the real ACK.
     if (recordingTicket.current === ticket) {
@@ -2898,6 +2921,7 @@ function App() {
   };
   const sealRecording = (ticket: RecordingTicket) => {
     ticket.accepting = false;
+    for (const controller of ticket.editorCommits || []) controller.abort();
     const operation = attachmentSubmissions.current.get(
       ticket.batch.operationIds[0],
     );

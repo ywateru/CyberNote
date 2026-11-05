@@ -129,6 +129,8 @@ APP-002-ATTACHMENT-SUBMIT-01已在主源码将同一契约接入系统文件选�
 
 录音票据在打开前固定目标和operation；仅当前同一ticket可窄豁免自己的record遮挡，普通picker/global nativeAssert保持原门禁。Panel onDone的resolve约定为真实saveDoc返回正文已acknowledge，失败reject保留同File；已ACK刷新失败仅重刷。取消先封submit，但保留同ticket窄cancel归属，Panel立即卸载以释放采集，operation等待真实run/FileReader/IPC结束后才核安全取消。Editor/pending引用与已ACK附件保留；deferred/身份失效保留可恢复身份和可见错误。唯一close监听通过同一lifecycle ref等安全取消或真实pending正文确认，不新增竞争监听。源码证据见`plan/reviews/app-002-recording-submit-static-01.md`；暂停快照与±15另由app-002-recording-preview-01负责，不改变最终File/父ACK协议。
 
+手机录音保存的可信读取与实际编辑器提交分开：同步期间 SearchEditorHost 经门控暂时不可编辑，可信读取 Promise 完成不等于恢复布局已提交。仅手机录音在成功同步后请求并等待父布局提交（子 Host 门控布局先运行），之后重新取实时快照执行原完整 rebindAttachmentTarget 校验，首次 store 前与 store 后均适用。等待不更新原目标、书签、正文、版本或授权；取消、封会话及组件卸载结束等待，编辑器销毁或目标/正文/权限变化仍拒绝。原 File/operation 与真实正文 ACK 关闭约定不变，不放宽普通 picker/OCR 或桌面独立 Session 的 A/B 规则。此边界由任务57实际 React App/Host/Gate 延迟读取检查覆盖，设备成功须另验。
+
 ### OCR宿主接入（APP-004-OCR-HOST-01源码候选，待独审和安装版实测）
 
 notes-scan现已通过主Cargo path依赖、Builder及notes-scan:default capability接入候选源码。OcrHost归属单次原目标、原生会话、正文事务及真实saveDoc ACK；ocr-native直接使用已有typed guest。首批只把实际文字接到既有普通段落与保存队列，不新增扫描节点、永久图片或文档schema。Mac typed命令recognizeImageText标为“从图片识别文本…”，notes-ui Rust/guest union与native-toolbar-state使用同一命令；takePhoto/scanDocument/addSketch仍禁用。Android使用插件本地选图/文字相机，camera返回ready，不重复finish。Mac仅对用户已选非空图片作受限20MiB读取/ingest，不接受路径输入。
