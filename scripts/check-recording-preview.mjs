@@ -456,6 +456,68 @@ try {
     );
     assert.equal(revoked, 1);
   });
+  await test("absolute seek coalesces a drag to the final requested position and publishes only observed time", async () => {
+    const f = playback();
+    f.audio.ready(45, [[0, 45]]);
+    f.player.seek(9);
+    f.player.seek(17);
+    f.player.seek(24);
+    assert.equal(f.state.time, 0);
+    assert.deepEqual(f.audio.requested, [9]);
+    f.audio.confirm(9);
+    assert.deepEqual(f.audio.requested, [9, 24]);
+    assert.equal(f.state.time, 9);
+    f.audio.confirm(24);
+    assert.equal(f.state.time, 24);
+    assert.equal(f.state.seeking, false);
+    f.player.seek(99);
+    f.audio.confirm(45);
+    assert.equal(f.state.time, 45);
+    f.player.seek(-99);
+    f.audio.confirm(0);
+    assert.equal(f.state.time, 0);
+    f.player.dispose();
+  });
+  await test("actual ended retains end time; replay waits confirmed start before issuing play", async () => {
+    const f = playback();
+    f.audio.ready();
+    f.player.toggle();
+    f.audio.position = 45;
+    f.audio.paused = true;
+    f.audio.emit("ended");
+    assert.equal(f.state.ended, true);
+    assert.equal(f.state.time, 45);
+    const plays = f.audio.plays;
+    f.player.toggle();
+    assert.equal(f.state.playPending, true);
+    assert.equal(f.audio.plays, plays);
+    assert.equal(f.audio.requested.at(-1), 0);
+    assert.equal(f.state.time, 45);
+    f.audio.confirm(0);
+    assert.equal(f.audio.plays, plays + 1);
+    assert.equal(f.state.time, 0);
+    assert.equal(f.state.ended, false);
+    assert.equal(f.state.playPending, false);
+    f.player.dispose();
+  });
+  await test("pending play admission stays busy until actual play or failure", async () => {
+    const f = playback();
+    f.audio.ready();
+    let reject;
+    f.audio.playResult = () =>
+      new Promise((_, no) => {
+        reject = no;
+      });
+    f.player.toggle();
+    f.player.toggle();
+    assert.equal(f.audio.plays, 1);
+    assert.equal(f.state.playPending, true);
+    reject(Error("blocked"));
+    await flush();
+    assert.equal(f.state.playPending, false);
+    assert.match(f.state.playError, /无法播放/);
+    f.player.dispose();
+  });
   console.log(
     JSON.stringify(
       {

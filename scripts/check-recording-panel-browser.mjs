@@ -21,7 +21,7 @@ const entry = `import React from 'react';import {createRoot} from 'react-dom/cli
 const root=createRoot(document.querySelector('#root'));window.mountPanel=()=>root.render(React.createElement(React.StrictMode,null,React.createElement('div',{className:'app mobile',style:{position:'relative',height:'100vh',width:'100vw',padding:0}},React.createElement(RecordingPanel,{onCancel:()=>{window.platform.cancels++;root.render(null)},onDone:result=>{const p=window.platform;p.results.push(result);p.files.push(result.file);return new Promise((resolve,reject)=>p.saves.push({resolve,reject}));}}))));window.unmountPanel=()=>root.render(null);`;
 const vite = await createViteServer({
   configFile: false,
-  cacheDir: resolve("artifacts/recording-panel-vite-cache"),
+  cacheDir: resolve(output, "vite-cache"),
   plugins: [
     react(),
     {
@@ -30,7 +30,7 @@ const vite = await createViteServer({
       load: (id) => (id === "/__recording.tsx" ? entry : undefined),
     },
   ],
-  server: { middlewareMode: true, hmr: false },
+  server: { middlewareMode: true, host: "127.0.0.1", hmr: false },
   appType: "custom",
 });
 const server = createServer((req, res) => {
@@ -319,20 +319,21 @@ try {
     assert.equal((await counts()).starts, 0);
     assert.equal((await counts()).files, 0);
   });
-  await test("Escape cancel releases live recording once and captured late events cannot submit", async () => {
+  await test("Escape finishes active recording once and retains the Panel until parent ACK", async () => {
     await open();
     await begin();
     await page.keyboard.press("Escape");
-    await page.waitForFunction(
-      () => !document.querySelector("[data-recording-state]"),
-    );
-    await page.evaluate(() => {
-      window.platform.lateData({ data: new Blob(["late"]) });
-      window.platform.lateStop();
-    });
-    assert.equal(await page.evaluate(() => window.platform.cancels), 1);
+    await state("finalizing");
     assert.equal((await counts()).trackStops, 1);
     assert.equal((await counts()).files, 0);
+    await page.evaluate(() => window.platform.emit("close-tail"));
+    await state("saving");
+    assert.equal(await page.evaluate(() => window.platform.cancels), 0);
+    assert.equal((await counts()).files, 1);
+    await page.keyboard.press("Escape");
+    assert.equal((await counts()).files, 1);
+    await page.evaluate(() => window.platform.saves[0].resolve());
+    await state("submitted");
   });
   await test("Unmount while waiting onstop gates captured late data/stop", async () => {
     await open();
@@ -464,7 +465,7 @@ try {
     await page.getByRole("button", { name: "暂停回放", exact: true }).click();
     assert.equal(
       await page.locator(".recording-time").textContent(),
-      "00:04.25",
+      "00:23.20",
     );
     const controls = await page
       .locator(".recording-playback button")
@@ -482,7 +483,7 @@ try {
     await page.evaluate(() => window.unmountPanel());
     assert.equal((await counts()).revoked, 1);
   });
-  await test("Continue seals late play before revoke and a new pause uses cumulative chunks and a new player", async () => {
+  await test("Pending/playing preview blocks Continue; paused preview resumes capture and seals old events", async () => {
     await open({ preview: true, holdPlay: true });
     await paused();
     await page.evaluate(() => {
@@ -492,6 +493,16 @@ try {
     await page.waitForFunction(() => window.platform.audios.length === 1);
     await page.evaluate(() => window.platform.audios[0].ready());
     await page.getByRole("button", { name: "播放录音", exact: true }).click();
+    assert.ok(await primary().isDisabled());
+    await page.evaluate(() => {
+      document.querySelector(".recording-primary").click();
+      const a = window.platform.audios[0];
+      a.resolvePlay();
+      a.paused = false;
+      a.emit("play");
+    });
+    assert.ok(await primary().isDisabled());
+    await page.getByRole("button", { name: "暂停回放", exact: true }).click();
     await primary().click();
     await state("recording");
     assert.equal(await page.evaluate(() => window.platform.audios[0].src), "");
@@ -590,7 +601,7 @@ try {
     await page.evaluate(() => window.platform.saves[0].resolve());
     await state("submitted");
   });
-  await test("Cancel active preview and unmount pending snapshot reject late callbacks with no URL revival", async () => {
+  await test("Close pending playback saves complete audio; explicit unmount still rejects late snapshot", async () => {
     await open({ preview: true, holdPlay: true });
     await paused();
     await page.evaluate(() => {
@@ -601,9 +612,7 @@ try {
     await page.evaluate(() => window.platform.audios[0].ready());
     await page.getByRole("button", { name: "播放录音", exact: true }).click();
     await page.keyboard.press("Escape");
-    await page.waitForFunction(
-      () => !document.querySelector("[data-recording-state]"),
-    );
+    await state("finalizing");
     await page.evaluate(() => {
       const a = window.platform.audios[0];
       a.resolvePlay();
@@ -611,7 +620,15 @@ try {
     });
     assert.equal(await page.evaluate(() => window.platform.audios[0].src), "");
     assert.equal((await counts()).revoked, 1);
-    assert.equal((await counts()).files, 0);
+    await page.evaluate(() => window.platform.emit("tail"));
+    await state("saving");
+    assert.equal((await counts()).files, 1);
+    assert.equal(
+      await page.evaluate(() => window.platform.files[0].text()),
+      "prefixtail",
+    );
+    await page.evaluate(() => window.platform.saves[0].resolve());
+    await state("submitted");
     await open({ preview: true });
     await paused();
     await page.evaluate(() => window.platform.pauseEvent());
@@ -636,7 +653,9 @@ try {
     });
     await page.waitForFunction(() => window.platform.audios.length === 1);
     await page.evaluate(() => window.platform.audios[0].ready());
-    await page.waitForFunction(()=>!document.querySelector('[aria-label="播放录音"]').disabled);
+    await page.waitForFunction(
+      () => !document.querySelector('[aria-label="播放录音"]').disabled,
+    );
     assert.ok(
       await page
         .getByRole("button", { name: "播放录音", exact: true })
@@ -671,7 +690,9 @@ try {
         .isDisabled(),
     );
     await page.evaluate(() => window.platform.audios[0].ready());
-    await page.waitForFunction(()=>!document.querySelector('[aria-label="播放录音"]').disabled);
+    await page.waitForFunction(
+      () => !document.querySelector('[aria-label="播放录音"]').disabled,
+    );
     assert.ok(
       await page
         .getByRole("button", { name: "播放录音", exact: true })

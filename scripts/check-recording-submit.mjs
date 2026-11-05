@@ -5,6 +5,7 @@ import ts from "typescript";
 import { pathToFileURL } from "node:url";
 import { Schema } from "@tiptap/pm/model";
 import { EditorState } from "@tiptap/pm/state";
+import { history, undo, redo, closeHistory } from "@tiptap/pm/history";
 
 // Execute the actual App recording-parent closures and production submission,
 // bridge, authority and SaveQueue implementations. Only platform/host I/O is
@@ -22,6 +23,8 @@ async function production(name) {
     },
   }).outputText;
   for (const dependency of [
+    "metadata-client",
+    "smart-folders",
     "access-client",
     "secure-id",
     "proof-access",
@@ -72,6 +75,7 @@ const { documentsEqual } = await production("document-equality");
 const { editorSaveSnapshot } = await production("editor-save-snapshot");
 const { documentText } = await production("types");
 const { attachmentRecordedAt } = await production("recording-metadata");
+const { RecordingOwner } = await production("recording-coordinator");
 const source = await readFile("src/App.tsx", "utf8");
 hashes.App = createHash("sha256").update(source).digest("hex");
 const ast = ts.createSourceFile(
@@ -100,6 +104,15 @@ function declaration(name) {
     name,
   );
 }
+const transactionChanged = unique(
+  nodes.filter(
+    (node) =>
+      ts.isVariableDeclaration(node) &&
+      node.name.getText(ast) === "changed" &&
+      node.initializer?.getText(ast).includes("ticket?.desktop"),
+  ),
+  "original recording transaction mapping",
+);
 function assignment(name) {
   return (
     unique(
@@ -147,6 +160,7 @@ const actualNames = [
   "refresh",
   "saveDoc",
   "validatePickerTarget",
+  "validateRecordingTarget",
   "awaitAttachmentDocumentAck",
   "submitAttachmentBatch",
   "retryAttachments",
@@ -168,6 +182,15 @@ const effect = unique(
       node.arguments[0]?.getText(ast).includes(".onCloseRequested"),
   ),
   "unique close effect",
+);
+const quitEffect = unique(
+  nodes.filter(
+    (node) =>
+      ts.isCallExpression(node) &&
+      node.expression.getText(ast) === "useEffect" &&
+      node.arguments[0]?.getText(ast).includes('"recording_quit_ack"'),
+  ),
+  "recording Quit effect",
 );
 const targetEffect = unique(
   nodes.filter(
@@ -208,10 +231,11 @@ assert.equal(
   panelAttribute("key").getText(ast),
   "recording.batch.operationIds[0]",
 );
+let fixtureSerial = 0;
 export function fixture(options = {}) {
   const [NOTE_A, NOTE_B] = options.noteIds || ["note-a", "note-b"];
   const access = options.backend?.access || {
-    sessionId: "recording-session",
+    sessionId: `recording-session-${++fixtureSerial}`,
     epoch: 4,
     notes: {
       [NOTE_A]: { epoch: 7, authorized: true },
@@ -256,23 +280,78 @@ export function fixture(options = {}) {
     settings: {},
     access,
   };
+  backend.metadata ??= { sessionId: access.sessionId, sequence: 0 };
+  const tagged = (value) => ({
+    ...value,
+    metadata: structuredClone(backend.metadata),
+  });
   const journal = new Map(),
     calls = [],
     readers = [];
   let closeHandler,
     destroyed = 0,
+    hidden = 0,
+    focused = 0,
     api;
+  const recordingMessages = [];
+  const quitAcks = [];
+  let quitHandler;
+  let mappedTransaction;
   const env = {
     AttachmentSubmission,
     attachmentRecordedAt,
     documentReferencesAttachment,
     TrustedSynchronization,
-    rebindAttachmentTarget,
+    rebindAttachmentTarget: (target, live) => {
+      try {
+        return rebindAttachmentTarget(target, live);
+      } catch (error) {
+        if (options.debug)
+          console.error(
+            JSON.stringify(
+              { stage: "target-check", target, live },
+              (_key, value) => (value === editor ? "EDITOR" : value),
+            ),
+          );
+        throw error;
+      }
+    },
     enqueueSave,
     documentsEqual,
     editorSaveSnapshot,
     documentText,
     ...bridge,
+    RecordingOwner,
+    decodeRecordingFile: (transfer) =>
+      new File([Buffer.from(transfer.data, "base64")], transfer.name, {
+        type: transfer.mime,
+        lastModified: transfer.lastModified,
+      }),
+    recordingSend: async (_identity, message) => {
+      recordingMessages.push(message);
+    },
+    recordingListen: async () => () => {},
+    invoke: async (command, params) => {
+      if (command === "recording_quit_ack") {
+        quitAcks.push(params);
+        return;
+      }
+      if (command === "register_recording_window")
+        return {
+          ...params,
+          owner: "main",
+          child: `recording-${params.sessionId}`,
+        };
+      if (command === "recording_window_abandon") return;
+      throw Error(`unexpected recording host command ${command}`);
+    },
+    WebviewWindow: class {
+      async once(event, callback) {
+        if (event === "tauri://created") queueMicrotask(callback);
+        return () => {};
+      }
+    },
+    mountRecordingCard: () => ({ update() {}, dispose() {} }),
     secureId: options.secureId || (() => `operation-${++env.ids}`),
     ids: 0,
     errText: (error) => error.message,
@@ -290,6 +369,9 @@ export function fixture(options = {}) {
       current: { active: () => false, close: async () => {}, detach() {} },
     },
     recordingTicket: { current: null },
+    recordingPanel: { current: null },
+    editorsRef: { current: new Map() },
+    updateRecordingOwner: () => {},
     recordingLifecycle: { current: null },
     pickerRuntime: { current: null },
     nativeEditorOwners: { current: new WeakMap() },
@@ -301,7 +383,9 @@ export function fixture(options = {}) {
           "controlled fixture did not request access hydration destruction",
         ),
     },
-    initializedSelection: { current: false },
+    initializedSelection: { current: true },
+    metadataRefreshRef: { current: async () => {} },
+    ownsSidebarPreference: false,
     synchronizingRef: { current: false },
     synchronizeRef: { current: null },
     synchronization: new TrustedSynchronization(),
@@ -313,7 +397,7 @@ export function fixture(options = {}) {
     nativeScope: "scope-a",
     noteId: NOTE_A,
     page: "editor",
-    mobile: true,
+    mobile: !options.desktop,
     loading: false,
     synchronizing: false,
     syncError: "",
@@ -322,6 +406,7 @@ export function fixture(options = {}) {
     record: false,
     ocr: null,
     modal: null,
+    folderForm: null,
     menu: "media",
     showFind: false,
     searching: false,
@@ -372,6 +457,10 @@ export function fixture(options = {}) {
       removeEventListener: () => {},
     },
     getCurrentWindow: () => ({
+      listen: async (name, handler) => {
+        if (name === "notes-recording-quit") quitHandler = handler;
+        return () => {};
+      },
       onCloseRequested: async (fn) => {
         closeHandler = fn;
         return () => {};
@@ -379,23 +468,38 @@ export function fixture(options = {}) {
       destroy: async () => {
         destroyed++;
       },
+      hide: async () => {
+        hidden++;
+      },
+      show: async () => {},
+      setFocus: async () => {
+        focused++;
+      },
     }),
     flushFail: false,
   };
   const editor = {
     isDestroyed: false,
     isEditable: true,
-    state: EditorState.create({ schema, doc: schema.nodeFromJSON(initial) }),
+    state: EditorState.create({
+      schema,
+      doc: schema.nodeFromJSON(initial),
+      plugins: [history()],
+    }),
     getJSON: () => editor.state.doc.toJSON(),
     view: {
       dispatch: (tr) => {
         editor.state = editor.state.apply(tr);
+        mappedTransaction?.({ transaction: tr });
       },
     },
     chain: () => {
       let content;
       const chain = {
-        focus: () => chain,
+        focus: () => {
+          focused++;
+          return chain;
+        },
         insertContent: (value) => {
           content = value;
           return chain;
@@ -427,6 +531,21 @@ export function fixture(options = {}) {
     },
   };
   env.editor = editor;
+  editor.commands = {
+    insertContentAt(range, node, config) {
+      assert.equal(config.updateSelection, false);
+      env.insertCalls++;
+      const tr = editor.state.tr.replaceRangeWith(
+        range.from,
+        range.to,
+        schema.nodeFromJSON(node),
+      );
+      editor.view.dispatch(tr);
+      void api.saveDoc(NOTE_A, editor.getJSON());
+      return true;
+    },
+  };
+  env.editorsRef.current.set(NOTE_A, editor);
   env.nativeEditorOwners.current.set(editor, NOTE_A);
   env.nativeDocumentVersions.current.set(editor, 0);
   function render() {
@@ -520,7 +639,8 @@ export function fixture(options = {}) {
             documentReferencesAttachment(row.document, item.attachment)
           )
             item.status = "committed";
-        return { ...structuredClone(row), access };
+        backend.metadata.sequence++;
+        return tagged({ ...structuredClone(row), access });
       }
       if (command === "store_attachment_operation") {
         if (options.storeWait) await options.storeWait.promise;
@@ -536,7 +656,9 @@ export function fixture(options = {}) {
             ? {}
             : { recordedAt: params.recordedAt }),
         };
+        backend.metadata.sequence++;
         const result = {
+          metadata: structuredClone(backend.metadata),
           operationId: params.operationId,
           noteId: params.noteId,
           status: "stored",
@@ -554,33 +676,36 @@ export function fixture(options = {}) {
       }
       if (command === "query_attachment_operation")
         return structuredClone(
-          journal.get(params.operationId) || {
-            operationId: params.operationId,
-            noteId: params.noteId,
-            status: "notPersisted",
-            access,
-          },
+          tagged(
+            journal.get(params.operationId) || {
+              operationId: params.operationId,
+              noteId: params.noteId,
+              status: "notPersisted",
+              access,
+            },
+          ),
         );
       if (command === "cancel_attachment_operation") {
         if (options.cancelDeferred)
-          return {
+          return tagged({
             operationId: params.operationId,
             noteId: params.noteId,
             status: "deferred",
             reason: "save_pending",
             access,
-          };
+          });
         const stored = journal.get(params.operationId);
-        if (stored?.status === "committed") return structuredClone(stored);
+        if (stored?.status === "committed")
+          return tagged(structuredClone(stored));
         const status = journal.delete(params.operationId)
           ? "aborted"
           : "notPersisted";
-        return {
+        return tagged({
           operationId: params.operationId,
           noteId: params.noteId,
           status,
           access,
-        };
+        });
       }
       throw Error(`unexpected actual bridge command ${command}`);
     },
@@ -599,6 +724,10 @@ export function fixture(options = {}) {
     `return {${actualNames.join(",")}};`,
   ].join("\n");
   api = execute(code, env);
+  mappedTransaction = execute(
+    `return (${transactionChanged.initializer.getText(ast)});`,
+    { ...env, instance: editor },
+  );
   const file = { name: "新录音.webm", type: "audio/webm", size: 24 };
   const open = (nativeEntry = false) => {
     if (nativeEntry) {
@@ -627,7 +756,7 @@ export function fixture(options = {}) {
   };
   const props = (ticket) =>
     execute(
-      `return {onDone: ${panelAttribute("onDone").getText(ast)}, onCancel: ${panelAttribute("onCancel").getText(ast)}};`,
+      `return {onDone: ${panelAttribute("onDone").getText(ast)}, onCancel: ${panelAttribute("onCancel").getText(ast)}, onHandle: ${panelAttribute("onHandle").getText(ast)}};`,
       { ...env, ...api, recording: ticket },
     );
   const mountClose = () =>
@@ -649,7 +778,36 @@ export function fixture(options = {}) {
     backend,
     readers,
     render,
+    recordingMessages,
+    get hidden() {
+      return hidden;
+    },
+    get focused() {
+      return focused;
+    },
+    editSource(text) {
+      const tr = closeHistory(editor.state.tr).insertText(text, 1);
+      editor.view.dispatch(tr);
+      return api.saveDoc(NOTE_A, editor.getJSON());
+    },
+    undoSource() {
+      assert(undo(editor.state, editor.view.dispatch));
+      return api.saveDoc(NOTE_A, editor.getJSON());
+    },
+    redoSource() {
+      assert(redo(editor.state, editor.view.dispatch));
+      return api.saveDoc(NOTE_A, editor.getJSON());
+    },
     mountClose,
+    mountQuit: () =>
+      execute(`return (${quitEffect.arguments[0].getText(ast)})();`, {
+        ...env,
+        ...api,
+      }),
+    quitAcks,
+    get quitHandler() {
+      return quitHandler;
+    },
     get closeHandler() {
       return closeHandler;
     },
@@ -685,11 +843,207 @@ if (
 ) {
   const results = [];
   async function test(name, run) {
+    console.log(`RUN ${name}`);
     const details = await run();
     results.push({ name, pass: true, ...details });
   }
   const previousReader = globalThis.FileReader;
   try {
+    const remote = async (options = {}) => {
+      const f = fixture({ ...options, desktop: true });
+      const ticket = f.open();
+      await ticket.opening;
+      assert(ticket.remote);
+      assert.equal(
+        f.env.record,
+        false,
+        "desktop does not open the mobile overlay",
+      );
+      const identity = ticket.remote.identity;
+      const receive = (message, extra = {}) =>
+        ticket.remote.owner.receive({
+          ...identity,
+          from: "child",
+          message,
+          ...extra,
+        });
+      const transfer = {
+        name: "新录音.webm",
+        mime: "audio/webm",
+        size: 6,
+        lastModified: 1793743200000,
+        recordedAt: 1793743199123,
+        data: Buffer.from("audio1").toString("base64"),
+      };
+      return { f, ticket, identity, receive, transfer };
+    };
+    await test("independent owner uses current A after typing/Undo/Redo and B navigation; one mapped insertion preserves B and never focuses A", async () => {
+      const { f, ticket, receive, transfer } = await remote();
+      await f.editSource("A latest");
+      await f.undoSource();
+      await f.redoSource();
+      assert.equal(
+        ticket.batch.target.bookmark.resolve(f.editor.state.doc).from,
+        9,
+      );
+      f.env.noteId = "note-b";
+      f.env.current = f.backend.notes[1];
+      f.env.nativeScope = "scope-b";
+      f.editor.isEditable = false; // production gate parks A while B is active
+      f.env.editor = { isDestroyed: false, isEditable: true };
+      f.render();
+      f.targetChanged();
+      const bodyB = {
+        type: "doc",
+        content: [
+          { type: "paragraph", content: [{ type: "text", text: "B working" }] },
+        ],
+      };
+      await f.api.saveDoc("note-b", bodyB);
+      const finalizing = ticket.remote.owner.close();
+      assert.equal(f.recordingMessages.at(-1).action, "close");
+      await receive({ kind: "submit", transfer });
+      assert.equal(f.counts().stores, 1);
+      assert.equal(f.counts().inserts, 1);
+      assert.equal(f.focused, 0);
+      assert.equal(f.env.noteId, "note-b");
+      assert.deepEqual(f.backend.notes[1].document, bodyB);
+      assert.match(documentText(f.backend.notes[0].document), /A latest/);
+      assert.equal(
+        f.backend.notes[0].document.content.filter(
+          (n) => n.type === "attachment",
+        ).length,
+        1,
+      );
+      assert.equal(f.recordingMessages.at(-1).status, "saved");
+      const savedFile = ticket.file;
+      await receive({ kind: "hello" }); // lost success delivery recovers by query
+      await receive({ kind: "submit" }); // retransmit has no File bytes
+      assert.equal(ticket.file, savedFile);
+      assert.equal(f.counts().stores, 1);
+      assert.equal(f.counts().inserts, 1);
+      assert.equal(
+        f.env.recordingTicket.current,
+        ticket,
+        "owner remains alive until child closure",
+      );
+      await receive({ kind: "child-closed" }, { from: "host" });
+      await finalizing;
+      assert.equal(f.env.recordingTicket.current, null);
+      return { counts: f.counts(), focused: f.focused };
+    });
+    await test("independent ordinary main close only hides, preserves A and does not finalize or cancel capture", async () => {
+      const { f, ticket } = await remote();
+      f.mountClose();
+      let prevented = 0;
+      await f.closeHandler({ preventDefault: () => prevented++ });
+      assert.equal(prevented, 1);
+      assert.equal(f.hidden, 1);
+      assert.equal(f.destroyed, 0);
+      assert.equal(ticket.accepting, true);
+      assert.equal(f.recordingMessages.length, 0);
+      assert.equal(f.env.recordingTicket.current, ticket);
+    });
+    await test("actual App Quit participant waits original A document ACK and child close before acknowledging safe exit", async () => {
+      const { f, receive, transfer } = await remote();
+      f.mountQuit();
+      const quit = f.quitHandler({ payload: { id: "quit-actual-app" } });
+      await Promise.resolve();
+      assert.equal(f.quitAcks.length, 0);
+      await receive({ kind: "submit", transfer });
+      assert.equal(f.recordingMessages.at(-1).status, "saved");
+      assert.equal(
+        f.quitAcks.length,
+        0,
+        "document ACK alone cannot destroy the capture window",
+      );
+      await receive({ kind: "child-closed" }, { from: "host" });
+      await quit;
+      assert.deepEqual(f.quitAcks, [{ id: "quit-actual-app", success: true }]);
+    });
+    await test("actual App Quit participant reports failure and keeps original ticket/File when A cannot save", async () => {
+      const { f, ticket, receive, transfer } = await remote({
+        saveFailures: 2,
+      });
+      f.mountQuit();
+      const quit = f.quitHandler({ payload: { id: "quit-actual-failed" } });
+      await Promise.resolve();
+      await receive({ kind: "submit", transfer });
+      await quit;
+      assert.deepEqual(f.quitAcks, [
+        { id: "quit-actual-failed", success: false },
+      ]);
+      assert.equal(f.env.recordingTicket.current, ticket);
+      assert(ticket.file);
+      assert.equal(f.destroyed, 0);
+    });
+    await test("independent save failure retains original decoded File and operation; repeated finish retries actual A ACK without another transfer/insertion", async () => {
+      const { f, ticket, receive, transfer } = await remote({
+        saveFailures: 2,
+      });
+      const closing = ticket.remote.owner.close();
+      const rejectedClose = assert.rejects(closing, /durable save rejected/);
+      await receive({ kind: "submit", transfer });
+      await rejectedClose;
+      assert.equal(f.recordingMessages.at(-1).status, "failed");
+      assert.equal(f.recordingMessages.at(-1).fileAccepted, true);
+      const originalFile = ticket.file;
+      assert(originalFile instanceof File);
+      assert.equal(f.env.recordingTicket.current, ticket);
+      await receive({ kind: "submit" });
+      assert.equal(ticket.file, originalFile);
+      assert.equal(f.recordingMessages.at(-1).status, "saved");
+      assert.equal(f.counts().stores, 1);
+      assert.equal(f.counts().inserts, 1);
+      assert.equal(
+        f.backend.notes[0].document.content.filter(
+          (n) => n.type === "attachment",
+        ).length,
+        1,
+      );
+    });
+    for (const change of ["external", "epoch", "editor"])
+      await test(`independent ${change} invalidation retains child File and cannot loosen original-target checks`, async () => {
+        const { f, ticket, receive, transfer } = await remote();
+        if (change === "external")
+          f.env.externalVersions.current.set("note-a", 1);
+        if (change === "epoch") bridge.accessGate.state.notes["note-a"].epoch++;
+        if (change === "editor") f.editor.isDestroyed = true;
+        await receive({ kind: "submit", transfer });
+        assert.equal(f.recordingMessages.at(-1).status, "failed");
+        assert.equal(f.recordingMessages.at(-1).fileAccepted, true);
+        assert.equal(f.counts().stores, 0);
+        assert.equal(f.counts().inserts, 0);
+        assert(ticket.file);
+        assert.equal(f.env.recordingTicket.current, ticket);
+      });
+    await test("wrong session/operation/direction messages cannot obtain the retained owner or insert an attachment", async () => {
+      const { f, receive, transfer } = await remote();
+      for (const extra of [
+        { sessionId: "other" },
+        { operationId: "other" },
+        { from: "owner" },
+      ])
+        await receive({ kind: "submit", transfer }, extra);
+      assert.equal(f.counts().stores, 0);
+      assert.equal(f.recordingMessages.length, 0);
+    });
+    await test("independent duplicate submit during real SaveQueue wait stays saving until backend ACK and closes only after child destruction", async () => {
+      const saveWait = deferred();
+      const { f, ticket, receive, transfer } = await remote({ saveWait });
+      const work = receive({ kind: "submit", transfer });
+      await until(() => f.counts().saves === 1, "actual A save dispatched");
+      await receive({ kind: "submit" });
+      await receive({ kind: "hello" });
+      assert.equal(f.recordingMessages.at(-1).status, "saving");
+      assert.equal(f.counts().stores, 1);
+      assert.equal(f.counts().inserts, 1);
+      assert.equal(ticket.accepting, true);
+      saveWait.resolve();
+      await work;
+      assert.equal(f.recordingMessages.at(-1).status, "saved");
+      assert.equal(f.env.recordingTicket.current, ticket);
+    });
     await test("recording result rejects invalid/changed dates before persistence; exact File/date retry survives", async () => {
       const f = fixture({ saveFailures: 2 }),
         ticket = f.open(),
@@ -960,24 +1314,27 @@ if (
       assert.equal(f.counts().active, false);
       return { counts: f.counts() };
     });
-    await test("actual Android Back prevents late store insertion and preserves cancellation identity", async () => {
+    await test("actual Android Back delegates to the mounted Panel close handle without sealing an in-flight save", async () => {
       const storeWait = deferred(),
         f = fixture({ storeWait }),
-        ticket = f.open(),
-        pending = outcome(f.props(ticket).onDone(f.result));
+        ticket = f.open();
+      let requested = 0;
+      f.props(ticket).onHandle({
+        close: () => {
+          requested++;
+        },
+      });
+      const pending = outcome(f.props(ticket).onDone(f.result));
       await until(() => f.counts().stores === 1, "store pending");
       f.env.androidBack.current();
-      assert.equal(f.env.record, false);
-      assert.equal(ticket.accepting, false);
+      assert.equal(requested, 1);
+      assert.equal(f.env.record, true);
+      assert.equal(ticket.accepting, true);
       storeWait.resolve();
-      await pending;
-      await until(
-        () => !f.env.recordingTicket.current,
-        "Back cancellation settled",
-      );
-      assert.equal(f.counts().inserts, 0);
-      assert.equal(f.counts().journal, 0);
-      return { counts: f.counts() };
+      assert.equal((await pending).success, true);
+      assert.equal(f.counts().inserts, 1);
+      assert.equal(f.counts().cancels, 0);
+      return { requested, counts: f.counts() };
     });
     await test("cancel with pending local reference preserves attachment then global retry obtains body ACK", async () => {
       const f = fixture({ saveFailures: 2 }),

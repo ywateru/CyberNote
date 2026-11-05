@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Pause, Play, RotateCcw, RotateCw } from "lucide-react";
+import { Check, Pause, Play, RotateCcw, RotateCw, X } from "lucide-react";
+import type { RecordingViewState } from "./recording-coordinator";
+import {
+  RecordingWaveform,
+  RecordingWaveformHistory,
+  type RecordingSample,
+} from "./recording-waveform";
 import { RecordingSession } from "./recording-session";
 import {
   createRecordingPlayback,
@@ -52,10 +58,18 @@ function recordingFile(blob: Blob): File {
   });
 }
 
+export type RecordingPanelHandle = { close: () => void; toggle: () => void };
+
 export default function RecordingPanel({
   onCancel,
   onDone,
+  mobile = true,
+  onHandle,
+  onState,
 }: {
+  mobile?: boolean;
+  onHandle?: (handle: RecordingPanelHandle | null) => void;
+  onState?: (state: RecordingViewState) => void;
   onCancel: () => void;
   onDone: (result: RecordingResult) => Promise<void>;
 }) {
@@ -66,7 +80,10 @@ export default function RecordingPanel({
   const clock = useRef(new RecordingClock());
   const [elapsed, setElapsed] = useState(0);
   const [error, setError] = useState("");
-  const [levels, setLevels] = useState<number[]>([]);
+  const [samples, setSamples] = useState<RecordingSample[]>([]);
+  const history = useRef(new RecordingWaveformHistory());
+  const actions = useRef({ close: () => {}, toggle: () => {} });
+  const previewStatus = useRef(initialRecordingPlaybackState);
   const recordedAt = useRef<number | undefined>(undefined);
   const finalResult = useRef<RecordingResult | null>(null);
   const previewGeneration = useRef(0);
@@ -85,12 +102,7 @@ export default function RecordingPanel({
   const deadline = useRef<number | null>(null);
   const done = useRef(onDone);
   done.current = onDone;
-  const [createdAt] = useState(() =>
-    new Date().toLocaleTimeString("zh-CN", {
-      hour: "2-digit",
-      minute: "2-digit",
-    }),
-  );
+  const [openedAt] = useState(() => Date.now());
 
   const transition = (next: Phase) => {
     phase.current = next;
@@ -105,6 +117,7 @@ export default function RecordingPanel({
     previewPlayer.current?.dispose();
     previewPlayer.current = null;
     setPreviewSource(null);
+    previewStatus.current = initialRecordingPlaybackState;
     setPreviewState(initialRecordingPlaybackState);
     setPreviewError("");
     setPreviewPending(false);
@@ -177,8 +190,10 @@ export default function RecordingPanel({
             live.current &&
             generation === previewGeneration.current &&
             (phase.current === "paused" || phase.current === "retry")
-          )
+          ) {
+            previewStatus.current = state;
             setPreviewState(state);
+          }
         },
       );
       previewPlayer.current = player;
@@ -257,8 +272,10 @@ export default function RecordingPanel({
         }
       },
       onLevel: (level) => {
-        if (live.current && phase.current === "recording")
-          setLevels((values) => [...values.slice(-89), level]);
+        if (live.current && phase.current === "recording") {
+          history.current.append(clock.current.milliseconds(), level);
+          setSamples(history.current.samples());
+        }
       },
       onError: fail,
     });
@@ -275,7 +292,11 @@ export default function RecordingPanel({
       setElapsed(clock.current.milliseconds());
       transition("paused");
       preparePausedPreview();
-    } else if (phase.current === "paused") {
+    } else if (
+      phase.current === "paused" &&
+      !previewStatus.current.playing &&
+      !previewStatus.current.playPending
+    ) {
       clearPlayback();
       if (session.current?.resume()) {
         clock.current.resume();
@@ -283,13 +304,19 @@ export default function RecordingPanel({
       }
     }
   };
-  const finish = () => {
+  const finish = (allowRecording = false) => {
     if (!live.current) return;
     if (phase.current === "retry" && finalResult.current) {
       void submit(finalResult.current);
       return;
     }
-    if (phase.current !== "paused") return;
+    if (
+      phase.current !== "paused" &&
+      !(allowRecording && phase.current === "recording")
+    )
+      return;
+    clock.current.pause();
+    setElapsed(clock.current.milliseconds());
     clearPlayback();
     transition("finalizing");
     // An absent terminal event is a visible failure, never an empty attachment.
@@ -308,7 +335,34 @@ export default function RecordingPanel({
     session.current?.dispose();
     onCancel();
   };
+  const close = () => {
+    if (["idle", "requesting", "error"].includes(phase.current)) cancel();
+    else finish(true);
+  };
+  actions.current.close = close;
+  actions.current.toggle = primary;
+  useEffect(() => {
+    onHandle?.({
+      close: () => actions.current.close(),
+      toggle: () => actions.current.toggle(),
+    });
+    return () => onHandle?.(null);
+  }, [onHandle]);
+  useEffect(() => {
+    const escape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.isComposing) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      actions.current.close();
+    };
+    window.addEventListener("keydown", escape, true);
+    return () => window.removeEventListener("keydown", escape, true);
+  }, []);
   const canFinish = status === "paused" || status === "retry";
+  const canToggle =
+    status === "idle" ||
+    status === "recording" ||
+    (status === "paused" && !previewState.playing && !previewState.playPending);
   const primaryLabel =
     status === "idle"
       ? "开始录音"
@@ -336,53 +390,68 @@ export default function RecordingPanel({
           : status === "submitted"
             ? "录音已提交"
             : "");
+  useEffect(() => {
+    onState?.({
+      phase: status,
+      recordedAt: recordedAt.current,
+      elapsed,
+      paused: status === "paused",
+      canToggle: canToggle && status !== "idle",
+      canFinish: status === "recording" || canFinish,
+      notice,
+    });
+  }, [onState, status, elapsed, canToggle, canFinish, notice]);
+  const date = new Date(recordedAt.current ?? openedAt);
+  const today = date.toDateString() === new Date(Date.now()).toDateString();
+  const createdAt = `${today ? "今天" : date.toLocaleDateString("zh-CN")} ${date.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}`;
+  const previewPosition = previewAllowed && previewState.ready;
+  const position = previewPosition ? previewState.time * 1000 : elapsed;
+  const seekEnabled =
+    previewAllowed && (previewState.canSeek || previewState.seeking);
+  const closing =
+    status === "saving" || status === "finalizing" || status === "submitted";
   return (
     <div
-      className="recording-backdrop"
-      onKeyDown={(event) => {
-        if (event.key === "Escape") cancel();
-      }}
+      className={`recording-backdrop ${mobile ? "recording-mobile" : "recording-desktop"}`}
     >
       <section
         className="recording-sheet"
         role="dialog"
-        aria-modal="true"
+        aria-modal={mobile || undefined}
         aria-label="新录音"
         data-recording-state={status}
       >
-        <div className="sheet-handle" />
+        {mobile && <div className="sheet-handle" />}
         <header>
-          <button className="recording-cancel" onClick={cancel}>
-            取消
+          <button
+            className="recording-cancel"
+            aria-label="关闭录音"
+            disabled={closing}
+            onClick={close}
+          >
+            {mobile ? "关闭" : <X />}
           </button>
           <div>
             <strong>新录音</strong>
             <small>
-              今天 {createdAt} {recordingTime(elapsed, false)}
+              {createdAt} {recordingTime(elapsed, false)}
             </small>
           </div>
         </header>
-        <div className="waveform" aria-hidden="true">
-          <div className="wave-bars">
-            {levels.map((height, index) => (
-              <i key={index} style={{ height: `${height}px` }} />
-            ))}
-          </div>
-          <div className="recording-playhead" />
-        </div>
+        <RecordingWaveform
+          samples={samples}
+          position={position}
+          duration={(previewState.duration ?? elapsed / 1000) * 1000}
+          enabled={seekEnabled}
+          seek={(milliseconds) =>
+            previewPlayer.current?.seek(milliseconds / 1000)
+          }
+        />
         <div
           className="recording-time"
-          aria-label={
-            previewAllowed && previewState.playing
-              ? "实际回放位置"
-              : "活动录音时间"
-          }
+          aria-label={previewPosition ? "实际回放位置" : "活动录音时间"}
         >
-          {recordingTime(
-            previewAllowed && previewState.playing
-              ? previewState.time * 1000
-              : elapsed,
-          )}
+          {recordingTime(position)}
         </div>
         <div
           className="recording-notice"
@@ -401,7 +470,12 @@ export default function RecordingPanel({
           </button>
           <button
             aria-label={previewState.playing ? "暂停回放" : "播放录音"}
-            disabled={!previewAllowed || !previewState.ready}
+            disabled={
+              !previewAllowed ||
+              !previewState.ready ||
+              previewState.playPending ||
+              previewState.seeking
+            }
             onClick={() => previewPlayer.current?.toggle()}
           >
             {previewState.playing ? (
@@ -428,12 +502,11 @@ export default function RecordingPanel({
           </button>
         )}
         <div className="recording-controls">
+          <span className="recording-action-spacer" aria-hidden="true" />
           <button
             className={`recording-primary recording-primary-${status}`}
             aria-label={primaryLabel}
-            disabled={
-              status !== "idle" && status !== "recording" && status !== "paused"
-            }
+            disabled={!canToggle}
             onClick={primary}
           >
             {status === "idle" || status === "requesting" ? (
@@ -446,10 +519,11 @@ export default function RecordingPanel({
           </button>
           <button
             className="recording-done"
+            aria-label={status === "retry" ? "重试保存录音" : "完成录音"}
             disabled={!canFinish}
-            onClick={finish}
+            onClick={() => finish()}
           >
-            {status === "retry" ? "重试" : "完成"}
+            {mobile ? status === "retry" ? "重试" : "完成" : <Check />}
           </button>
         </div>
       </section>

@@ -1,11 +1,11 @@
 mod media_permission;
+mod recording_window;
 mod session;
 mod store;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use serde_json::{json, Value};
 use session::{Session, Token};
 use std::{
-    collections::HashSet,
     path::PathBuf,
     sync::{Arc, Condvar, Mutex},
     time::Duration,
@@ -123,7 +123,7 @@ async fn mutate(
         }
         return result.map(|(value, _)| value);
     }
-    let participants: HashSet<_> = app.webview_windows().into_keys().collect();
+    let participants = recording_window::document_participants(app.webview_windows().into_keys());
     let event = state
         .0
          .0
@@ -151,7 +151,7 @@ async fn mutate(
             .1
             .wait_timeout_while(guard, Duration::from_secs(10), |s| !s.ready())
             .map_err(|_| failure("数据锁错误"))?;
-        let live = app.webview_windows().into_keys().collect();
+        let live = recording_window::document_participants(app.webview_windows().into_keys());
         let (result, event) = guard.finish(&operation, &live, wait.timed_out())?;
         let metadata = guard.take_metadata_event();
         drop(guard);
@@ -325,8 +325,10 @@ async fn import_archive(
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = tauri::Builder::default()
+        .manage(recording_window::Recordings::default())
         .on_window_event(|window, event| {
             if matches!(event, tauri::WindowEvent::Destroyed) {
+                recording_window::destroyed(window.app_handle(), window.label());
                 if let Some(state) = window.try_state::<AppState>() {
                     if let Ok(mut session) = state.0 .0.lock() {
                         session.forget_attachment_window(window.label());
@@ -400,6 +402,8 @@ pub fn run() {
                 let window = SubmenuBuilder::with_id(app, tauri::menu::WINDOW_SUBMENU_ID, "窗口")
                     .item(&PredefinedMenuItem::minimize(app, None)?)
                     .item(&PredefinedMenuItem::maximize(app, None)?)
+                    .separator()
+                    .text("show_recording_owner", "显示备忘录窗口")
                     .build()?;
                 app.set_menu(
                     MenuBuilder::new(app)
@@ -413,6 +417,15 @@ pub fn run() {
                         .into_values()
                         .find(|window| window.is_focused().unwrap_or(false))
                     {
+                        if event.id().as_ref() == "show_recording_owner" {
+                            if recording_window::recording_label(window.label()) {
+                                recording_window::reveal_owner(app, window.label());
+                            } else if let Some(main) = app.get_webview_window("main") {
+                                let _ = main.show();
+                                let _ = main.set_focus();
+                            }
+                            return;
+                        }
                         if window.label() == "main" || window.label().starts_with("note-") {
                             let _ = window.emit_to(
                                 tauri::EventTarget::Window {
@@ -442,7 +455,13 @@ pub fn run() {
         cancel_attachment_operation,
         read_attachment,
         export_archive,
-        import_archive
+        import_archive,
+        recording_window::register_recording_window,
+        recording_window::recording_window_context,
+        recording_window::recording_window_message,
+        recording_window::recording_window_finish,
+        recording_window::recording_window_abandon,
+        recording_window::recording_quit_ack
     ]);
     #[cfg(feature = "access-boundary-proof")]
     let builder = builder.invoke_handler(tauri::generate_handler![
@@ -458,11 +477,31 @@ pub fn run() {
         read_attachment,
         export_archive,
         import_archive,
-        proof_access_record
+        proof_access_record,
+        recording_window::register_recording_window,
+        recording_window::recording_window_context,
+        recording_window::recording_window_message,
+        recording_window::recording_window_finish,
+        recording_window::recording_window_abandon,
+        recording_window::recording_quit_ack
     ]);
     builder
-        .run(tauri::generate_context!())
-        .expect("Notes failed to start");
+        .build(tauri::generate_context!())
+        .expect("Notes failed to start")
+        .run(|app, event| match event {
+            tauri::RunEvent::ExitRequested { api, .. } => {
+                recording_window::exit_requested(app, &api)
+            }
+            #[cfg(target_os = "macos")]
+            tauri::RunEvent::Reopen { .. } => {
+                if let Some(main) = app.get_webview_window("main") {
+                    let _ = main.show();
+                    let _ = main.unminimize();
+                    let _ = main.set_focus();
+                }
+            }
+            _ => {}
+        });
 }
 
 #[cfg(test)]
