@@ -58,3 +58,5 @@ depends-on: []
 - 2026-11-05：最终产品f4a2fba7修复两项P1，独审73505a55在实际App17组及native核心5组通过；产品/作者/复验全部整合至root9199370a。根产品与作者最终源逐字一致，typecheck/build通过，见[根整合](../../verification/mac-recording-sidebar66-root-integration/README.md)。源码阶段接收，任务仍in-progress，准确Mac19冻结/构建/独立核包及Computer Use实际运行待完成。
 
 - 2026-11-05：Mac19准确构建与独立核包通过；root真实Computer Use观测统一右栏、录音中C/D编辑/搜索、01:12→继续→01:32暂停累计及×收起。但×后首次持久卡MetadataStale，重试才恢复1:31/播放/定位，进入67窄修；不标完整runtime通过。
+
+- 2026-11-05：准确Mac20构建及独立核包84a46a74通过；真实录音/两次暂停累计、×首显播放、主窗close重开有限成功，但CmdQ切B后重开K无卡，进入68。首次进程授权code7、重开后采集成功均保留，见[20实际记录](../../verification/mac-recording-media67-runtime/README.md)。不标完整runtime或像素通过，Android不操作。

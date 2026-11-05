@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "at": "2026-11-05T10:16:20.030342+00:00",
+  "sourceHead": "b455c14093b7a717a0a6e810b30d19301296e448",
+  "status": "PASS — FROZEN ONLY, build START pending",
+  "checks": {
+    "nineFieldSchema": true,
+    "sourceHeadExact": true,
+    "authorizationExact": true,
+    "productRowsEqualPlan": true,
+    "inputRowsEqualPlan": true,
+    "productRowsEqualCurrent": true,
+    "inputRowsEqualCurrent": true,
+    "productAggregateExact": true,
+    "inputAggregateExact": true,
+    "completeMac19ProductUnionRetained": true,
+    "completeMac19InputUnionRetained": true,
+    "historicalInputOnly21Retained": true,
+    "historicalInputOnlyBytesUnchanged": true,
+    "historicalDeletedCapabilitiesStillAbsent": true,
+    "plugins77": true,
+    "completeCapabilitySetByteIdentical": true,
+    "handlerSourceByteIdentical": true,
+    "nativeGuardSourceByteIdentical": true,
+    "noChangedPermissionGrants": true,
+    "existingMainMicrophoneGrant": true,
+    "noBuildAttempt": true,
+    "noArtifactDirectory": true
+  },
+  "productCount": 361,
+  "inputCount": 382,
+  "productAggregate": "c12780c3f0049592fa035e6c64f39a3d9df40b054249ee7194abc49a205f4c3d",
+  "inputAggregate": "7ba3010f9b9fdc0f2f72aebc391d0a4bcdbf9f45575b6396e70a04cfe63ddf00",
+  "authorization": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/recording-media67-preparation/mac-authorization.json",
+    "bytes": 39568,
+    "sha256": "2d5f283789f9975230e34d54538ae17b5218e3ab31c523c41718b002ad77bd6c"
+  },
+  "freeze": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-recording-media-build20/input-freeze.json",
+    "bytes": 350994,
+    "sha256": "051ad9000605d9883596090dec6618d1121d99f24379b138c145771e3df97da2"
+  },
+  "limits": "Row/hash/source audit only; no build, signing, GUI, audio/device/old-app operation. Old Mac18 process previously absent with cause/time unknown; no audio preservation/recovery claim."
+}
