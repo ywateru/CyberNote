@@ -24,3 +24,5 @@ RecordingSession在当前生产getStream之前增加可选的authorize/preflight
 root创建独立worktree后由native_ui_research实施：src/recording-session.ts、必要src/native-recording-access.ts；plugins/tauri-plugin-notes-ui/{src/lib.rs,src/macos.rs,build.rs,guest-js/index.ts,macos/recording_access.m,permissions及自动生成schema/README}，仅必要宿主capability新增窄许可。不修改50的Panel/App/CSS/playback路径。确有额外路径先说明。
 
 作者完成typecheck/必要Rust编译与Session有意义回归，新增拒绝/权限等待取消/迟到成功不getStream/超时晚stream释放/一次回调/异常状态；native公开API编译、窗口身份和回调生命周期须有实际可检查接线。受控音轨不能证明系统真实授权或有声。独审由verify_app完成，根串行整合50+52后构建准确包实际核验。证据仅docs/verification/mac-recording-access52/与独审相邻目录，必要日志和结果即可，禁止重复全部历史矩阵。
+
+2026-11-05用户独立窗口纠正：52额外支持精确 `recording-<标准小写UUID>` 本地录音窗；仍校实际调用window/WK及异步同一native身份，不接受任意字符串。52只负责其麦克风预检窄权限，50负责录音窗事件/显示/关闭权限，两者capability分别命名避免写同一文件；不要将录音窗加入宽泛notes-ui默认toolbar权限。

@@ -27,3 +27,14 @@
 `check-recording-preview.mjs`覆盖实际Session快照及播放controller，补绝对seek/结束重播/位置保持；`check-recording-session.mjs`保留采集释放和迟到事件回归；`check-recording-submit.mjs`执行AST提取的真实App父闭包、AttachmentSubmission、桥与SaveQueue，保留同File、存储失败、正文ACK、权限/目标变化、Back/整体关闭/卸载边界。提取器需适配接缝时核对仍执行真实闭包，不能退为复制算法。根据固定差异选择这些相关检查及作者新增真实组件回归，不重跑无关矩阵。
 
 实际浏览器测试依赖已有Playwright/Chrome，不下载。正式执行记录每条命令和真实失败；headless受控媒体不证明麦克风编码、设备有声或像素一致。作者冻结后再确定精确命令及输出目录；本文件仅为准备记录。
+
+## 52原生授权预检独审补充（等待固定提交）
+
+依据root固定`a6282ae`合同`docs/plan/tasks/app-mac-recording-access52.md`及51报告。51只证明准确Mac14本轮进入WebKit/TCC路径、有code requirement不匹配和prompting，未证明当前原生授权状态或挂起完整根因。52验收为正确接线、资源有界和失败可达；不能要求preflight自证已修复TCC，也不能将Authorized/开关on/Prompt计为真正采音。
+
+- 核新增窄helper确实从生产`RecordingSession.start()`在真实用户Start后、getStream前调用；可选环境接缝不影响既有受控环境。仅Mac Tauri调用，Android/普通浏览器/mount不预检。authorized放行、denied/restricted可见失败，只有notDetermined调用公开AVCaptureDevice requestAccess；回调后复查真实状态，未知值/FFI异常必须失败，不默认authorized。一次Start不重复请求。
+- 新command沿现有`own_window`校验实际调用窗口及guest label，同时支持main/既有note-*。现有键盘查询仅main，不能直接继承其限制；异步授权回调结束后必须重验窗口存活和同一原生身份，只有同名label不足以排除关闭后替代窗口。新许可仅Mac本地实际窗口，不扩大受信origin或替换现有WebKit媒体handler。
+- 检查原生主线程调度、任意queue completion、FFI上下文所有权/释放与一次结算。等待、通道和并发请求有界，主线程不阻塞等权限；超时后OS回调仍可能到达，不能提前释放其裸上下文或累积无界request。现有`on_main`同步通道等待不是异步系统权限回调的完整生命周期方案，需看真实新增接线。
+- Session在preflight后重验accepting；取消/卸载/preflight超时/拒绝后的晚成功不能再getStream或构造recorder。getUserMedia等待也有界，错误一次进入onError与幂等清理；timeout不等于撤回系统prompt。晚stream所有轨道逐个stop，即使一轨stop异常也继续释放其它轨；Promise.race不能丢失晚stream。与新会话隔离、结束后定时器清理均需实际Session回归。
+- 正式执行仅固定源的typecheck、必要native编译与相关Session/桥/窗口身份回归：拒绝、等待取消、迟到授权、晚stream、一次回调、未知状态、关窗/同label替代和dispatch失败。测试需调用生产接缝，受控stream/回调不代表系统真实授权；不重跑50界面或全历史矩阵。
+- 只核允许的Session/helper/plugin/窄capability路径，无TCC读写、签名/设置变更、权限放宽、依赖/锁/schema协议或50Panel/App/CSS/playback变化。实际新包的提示、开始/暂停/完成及有声留给root合并后的准确包验证；本准备未读变化中52工作树、未运行任何52实现。
