@@ -1,6 +1,6 @@
 # 52：Mac 显式录音授权预检，源码候选
 
-源码固定在 `ef2fe7c3a3de7f8b7644d3ed50e0232a445b5af8`，基线 `a6282ae3a93b1fccfe1bda63b02d752595d1fad7`。分支 `task/mac-recording-access52`，隔离工作树 `/private/tmp/apple-notes-mac-recording-access52-01`。本记录只覆盖52；独立录音窗界面、定向保存、退出保护属于50，未修改其路径，也未整合50产品代码。
+首版源码固定在 `ef2fe7c3a3de7f8b7644d3ed50e0232a445b5af8`，基线 `a6282ae3a93b1fccfe1bda63b02d752595d1fad7`。独审发现两项资源释放问题后的最新源码是 `f5bc101614dcc2c144f962b41620e70d4f8657b1`，修复与最新结果见本文末尾和 `result-review-fixed.json`；首版 `result.json` 及原日志保持历史身份。分支 `task/mac-recording-access52`，隔离工作树 `/private/tmp/apple-notes-mac-recording-access52-01`。本记录只覆盖52；独立录音窗界面、定向保存、退出保护属于50，未修改其路径，也未整合50产品代码。
 
 ## 变更与边界
 
@@ -42,9 +42,37 @@ node docs/verification/mac-recording-access52/check-session.mjs
 node docs/verification/mac-recording-access52/check-production-preflight.mjs
 cargo test --manifest-path plugins/tauri-plugin-notes-ui/Cargo.toml --lib --locked --offline --target-dir /private/tmp/apple-notes-recording-access52-target
 cargo check --manifest-path src-tauri/Cargo.toml --lib --locked --offline --target-dir /private/tmp/apple-notes-recording-access52-target
-clang -fobjc-arc -fblocks -mmacosx-version-min=12.0 -Wall -Wextra -c plugins/tauri-plugin-notes-ui/macos/recording_access.m -o /private/tmp/apple-notes-recording-access52-native.o
-clang -fobjc-arc -fblocks -mmacosx-version-min=12.0 docs/verification/mac-recording-access52/check-native.m -framework AppKit -framework WebKit -framework AVFoundation -framework CoreFoundation -o /private/tmp/apple-notes-recording-access52-native-check
+clang -fobjc-arc -fobjc-arc-exceptions -fblocks -mmacosx-version-min=12.0 -Wall -Wextra -c plugins/tauri-plugin-notes-ui/macos/recording_access.m -o /private/tmp/apple-notes-recording-access52-native.o
+clang -fobjc-arc -fobjc-arc-exceptions -fblocks -mmacosx-version-min=12.0 docs/verification/mac-recording-access52/check-native.m -framework AppKit -framework WebKit -framework AVFoundation -framework CoreFoundation -o /private/tmp/apple-notes-recording-access52-native-check
 /private/tmp/apple-notes-recording-access52-native-check
 ```
 
 `result.json`固定源码身份及各产品输入SHA256；日志和harness属于随后的证据提交。独立审查和整合50+52的准确新包实机核验由root继续。
+
+## 独审阻塞修复
+
+独审针对首版复现了两个问题，不能用首版的通过检查覆盖这些失败：
+
+1. getStream已成功、prepare尚未把stream交给start的微任务间隙，dispose先取消prepare，导致轨道既未登记、也未经过迟到清理。原始失败见`handoff-original-failure.log`（stopped=0）。提交 `e2903cc590fab18742ec26b1da586ba37c4a07f2` 在原始流成功回调立即登记Session轨道所有权，dispose随时可以清理，await后不再重新登记。新增4例覆盖两个交接位置、三轨清理及首轨stop抛错，确认每轨恰好stop一次，且不会新建录音器或发成功/错误回调。
+2. 系统请求保存completion后抛Objective-C异常，局部强owner/block在原编译模式的异常展开中未释放，晚回调结束后context仍存活。原始断言失败见`native-exception-original-failure.log`。提交 `f5bc101614dcc2c144f962b41620e70d4f8657b1` 把`recording_access.m`独立编译并只为它启用`-fobjc-arc-exceptions`；其他原生文件flags保持原样。异常返回和晚回调仍各自遵守一次交付/延迟释放边界。
+
+`check-review-handoff.mjs`、`check-review-microtask-cuts.mjs`、`check-native-supplement.m`从独审工作树原样复制，方便此目录独立复查。补充native harness仍只替换OS边界，既不发权限也不操作GUI。
+
+| 最新检查 | 结果 | 日志 |
+|---|---|---|
+| Session授权/生命周期及交接清理 | 15 PASS | `session-access-handoff-fixed.log` |
+| 独审最小交接复现 | PASS，stopped=1、recorder=0 | `review-handoff-fixed.log` |
+| 独审7种取消切点 × 有/无预检 | 14 PASS | `review-microtask-cuts-fixed.log` |
+| 生产门控与原Session回归 | 8、26 PASS | `production-preflight-handoff-fixed.log`、`session-regression-handoff-fixed.log` |
+| 原native生命周期与独审FFI/异常补充 | 14、4 PASS | `native-owner-review-fixed.log`、`native-supplement-review-fixed.log` |
+| 插件Rust | 20 PASS | `rust-plugin-test-review-fixed.log` |
+| 最新公开API编译 / 前端构建 / 宿主离线检查 | PASS | `native-compile-review-fixed.log`、`frontend-build-handoff-fixed.log`、`host-check-review-fixed.log` |
+
+最新源码的产品输入SHA256及不变锁文件检查见`result-review-fixed.json`。补充检查命令如下，native补充必须使用生产同样的ARC异常清理flag：
+
+```sh
+node docs/verification/mac-recording-access52/check-review-handoff.mjs
+node docs/verification/mac-recording-access52/check-review-microtask-cuts.mjs
+clang -fobjc-arc -fobjc-arc-exceptions -fblocks -mmacosx-version-min=12.0 docs/verification/mac-recording-access52/check-native-supplement.m -framework AppKit -framework WebKit -framework AVFoundation -framework CoreFoundation -o /private/tmp/apple-notes-recording-access52-native-supplement
+/private/tmp/apple-notes-recording-access52-native-supplement
+```

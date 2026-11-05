@@ -84,5 +84,26 @@ try {
     assert.equal(timers.size, 1); assert.notEqual([...timers.keys()][0], firstTimer); [...timers.values()][0](); await start;
     media.resolve(f.stream); await tick(); assert.equal(f.counts.stopped, 2); assert.equal(f.counts.error, 1);
   });
+  for (const cut of [0, 1]) for (const throwing of [false, true]) {
+    await test(`resolved media handoff cut ${cut} releases every track once${throwing ? ' when first stop throws' : ''}`, async () => {
+      const f = fixture(), media = deferred(), stopped = [0, 0, 0], removed = [0, 0, 0];
+      f.environment.getStream = () => media.promise;
+      const tracks = stopped.map((_, index) => ({
+        addEventListener() {},
+        removeEventListener() { removed[index]++; },
+        stop() { stopped[index]++; if (throwing && index === 0) throw Error('first stop failed'); },
+      }));
+      const realError = console.error; let failures = 0; console.error = () => failures++;
+      try {
+        const start = f.session.start();
+        media.resolve({ getTracks: () => tracks });
+        queueMicrotask(() => cut ? queueMicrotask(() => f.session.dispose()) : f.session.dispose());
+        await start; await tick(); f.session.dispose();
+        assert.deepEqual(stopped, [1, 1, 1]); assert.deepEqual(removed, [1, 1, 1]);
+        assert.deepEqual([f.counts.started, f.counts.recorder, f.counts.error], [0, 0, 0]);
+        assert.equal(failures, throwing ? 1 : 0);
+      } finally { console.error = realError; }
+    });
+  }
   console.log(JSON.stringify({ status: 'PASS', checks: results.length, results, limits: 'Controlled promises/tracks/timers only, no OS permission or real audio' }, null, 2));
 } finally { globalThis.setTimeout = realSet; globalThis.clearTimeout = realClear; }
