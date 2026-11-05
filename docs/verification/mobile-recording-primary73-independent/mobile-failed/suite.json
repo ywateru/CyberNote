@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "group": "recording",
+      "pass": false,
+      "checks": [
+        "Mobile initial real HTML has modal sheet, enabled close/start and disabled Done/playback",
+        "Mobile finish reports UNAVAILABLE",
+        "Mobile playback reports UNAVAILABLE",
+        "Mobile seek reports UNAVAILABLE",
+        "Mobile empty close cancels without requesting device or storing attachment",
+        "Mobile active Done and playback remain disabled and semantic state agrees",
+        "Mobile finish reports UNAVAILABLE",
+        "Mobile pause prepares actual decodable preview without desktop checkpoint writes",
+        "Mobile preview plays in actual browser media element and disables resume",
+        "Mobile toggle reports UNAVAILABLE",
+        "Mobile preview pause is observed and seek capability follows actual media ranges",
+        "Mobile seek reports actual media time",
+        "Mobile backward skip clamps to actual start",
+        "Mobile forward skip clamps to actual prefix end",
+        "Mobile seek reports UNAVAILABLE",
+        "Mobile resume accumulates active time and excludes five-second paused gap",
+        "Mobile second preview really plays after first pause boundary",
+        "Mobile playback reports APP_ERROR",
+        "Mobile real play rejection retains paused capture and exposes retry",
+        "Mobile preview retry clears actual error and plays same retained prefix",
+        "Mobile finish waits for original A body ACK and yields exactly one card without touching B",
+        "Mobile stored bytes really decode cumulative active audio including nonzero later samples"
+      ],
+      "error": "Selector must identify exactly one HTML element",
+      "elapsedMs": 5491
+    }
+  ]
+}

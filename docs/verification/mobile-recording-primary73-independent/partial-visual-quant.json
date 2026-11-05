@@ -1,0 +1,257 @@
+{
+  "pipeline": "independent Python/Pillow raw reading of original vs separately Chrome sRGB canvas-decoded original/full screenshots, full 784x1680->224x480 high-quality drawImage; no crop scaling",
+  "results": {
+    "idle": {
+      "rawMode": [
+        [
+          255,
+          51,
+          45
+        ],
+        253
+      ],
+      "browserMode": [
+        [
+          255,
+          40,
+          33
+        ],
+        253
+      ],
+      "roi": [
+        104,
+        423,
+        120,
+        439
+      ],
+      "variants": {
+        "before": {
+          "mode": [
+            [
+              255,
+              59,
+              48
+            ],
+            256
+          ],
+          "coreMAE": 11.328125,
+          "buttonMAE": 31.538027332144978,
+          "glyphMAE": 11.29689608636977,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 157,
+              "clonePixels": 26,
+              "xor": 135,
+              "iou": 0.1509433962264151
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 213,
+              "clonePixels": 106,
+              "xor": 123,
+              "iou": 0.4434389140271493
+            }
+          ]
+        },
+        "after": {
+          "mode": [
+            [
+              255,
+              59,
+              48
+            ],
+            256
+          ],
+          "coreMAE": 11.328125,
+          "buttonMAE": 26.035650623885918,
+          "glyphMAE": 11.29689608636977,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 157,
+              "clonePixels": 156,
+              "xor": 95,
+              "iou": 0.5343137254901961
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 213,
+              "clonePixels": 220,
+              "xor": 109,
+              "iou": 0.5977859778597786
+            }
+          ]
+        }
+      }
+    },
+    "recording": {
+      "rawMode": [
+        [
+          255,
+          254,
+          255
+        ],
+        252
+      ],
+      "browserMode": [
+        [
+          255,
+          254,
+          255
+        ],
+        252
+      ],
+      "roi": [
+        87,
+        422,
+        101,
+        440
+      ],
+      "variants": {
+        "before": {
+          "mode": [
+            [
+              255,
+              255,
+              255
+            ],
+            252
+          ],
+          "coreMAE": 0.3333333333333333,
+          "buttonMAE": 15.923816478033345,
+          "glyphMAE": 55.32793522267207,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 394,
+              "clonePixels": 86,
+              "xor": 326,
+              "iou": 0.19106699751861042
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 536,
+              "clonePixels": 212,
+              "xor": 338,
+              "iou": 0.3775322283609576
+            }
+          ]
+        },
+        "after": {
+          "mode": [
+            [
+              255,
+              255,
+              255
+            ],
+            252
+          ],
+          "coreMAE": 0.3333333333333333,
+          "buttonMAE": 10.185225751490812,
+          "glyphMAE": 55.32793522267207,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 394,
+              "clonePixels": 372,
+              "xor": 50,
+              "iou": 0.8774509803921569
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 536,
+              "clonePixels": 418,
+              "xor": 150,
+              "iou": 0.7282608695652174
+            }
+          ]
+        }
+      }
+    },
+    "paused": {
+      "rawMode": [
+        [
+          255,
+          190,
+          187
+        ],
+        250
+      ],
+      "browserMode": [
+        [
+          255,
+          186,
+          183
+        ],
+        250
+      ],
+      "roi": [
+        87,
+        422,
+        101,
+        440
+      ],
+      "variants": {
+        "before": {
+          "mode": [
+            [
+              255,
+              240,
+              239
+            ],
+            252
+          ],
+          "coreMAE": 36.664021164021165,
+          "buttonMAE": 37.33089935499574,
+          "glyphMAE": 45.40485829959514,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 331,
+              "clonePixels": 167,
+              "xor": 198,
+              "iou": 0.43103448275862066
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 398,
+              "clonePixels": 203,
+              "xor": 241,
+              "iou": 0.42755344418052255
+            }
+          ]
+        },
+        "after": {
+          "mode": [
+            [
+              255,
+              190,
+              187
+            ],
+            252
+          ],
+          "coreMAE": 2.664021164021164,
+          "buttonMAE": 10.999026408664962,
+          "glyphMAE": 19.870445344129553,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 331,
+              "clonePixels": 381,
+              "xor": 124,
+              "iou": 0.7033492822966507
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 398,
+              "clonePixels": 400,
+              "xor": 176,
+              "iou": 0.6386036960985626
+            }
+          ]
+        }
+      }
+    }
+  }
+}

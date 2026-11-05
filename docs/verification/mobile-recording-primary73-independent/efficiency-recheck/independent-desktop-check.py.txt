@@ -1,0 +1,9 @@
+from PIL import Image
+from pathlib import Path
+import json,hashlib
+p=Path('/private/tmp/primary73-recheck-visual-efficient');out=[]
+for before in sorted((p/'before').glob('desktop-*.png')):
+ name=before.stem;after=p/'after'/before.name;a=Image.open(before).convert('RGBA');b=Image.open(after).convert('RGBA');diffs=[(i,x,y) for i,(x,y) in enumerate(zip(a.getdata(),b.getdata())) if x!=y]
+ row={'name':name,'rgbaDifferencePixels':len(diffs),'maxChannelDelta':max((max(abs(c-d) for c,d in zip(x,y)) for _,x,y in diffs),default=0),'pngBytesEqual':before.read_bytes()==after.read_bytes(),'htmlEqual':(p/'before'/f'{name}.dom.txt').read_bytes()==(p/'after'/f'{name}.dom.txt').read_bytes(),'allComputedEqual':json.loads((p/'before'/f'{name}.computed.json').read_text())==json.loads((p/'after'/f'{name}.computed.json').read_text())};out.append(row)
+assert len(out)==6 and all(x['rgbaDifferencePixels']==0 and x['htmlEqual'] and x['allComputedEqual'] for x in out)
+Path('/private/tmp/primary73-efficient-desktop-pixels.json').write_text(json.dumps({'pass':True,'states':out},indent=2));print(json.dumps(out,indent=2))

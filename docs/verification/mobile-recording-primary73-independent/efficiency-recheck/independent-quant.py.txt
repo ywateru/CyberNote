@@ -1,0 +1,42 @@
+from PIL import Image
+from pathlib import Path
+from collections import Counter
+import json,math,hashlib,struct
+base=Path('/private/tmp/primary73-efficient-independent-pixels')
+root=Path('/private/tmp/apple-notes-mobile-recording-primary73-review01')
+def image(p): return Image.open(p).convert('RGB')
+def mode(im,box): return Counter(im.crop(box).getdata()).most_common(1)[0]
+def mae(a,b,box):
+ aa=list(a.crop(box).getdata());bb=list(b.crop(box).getdata())
+ return sum(abs(x-y) for p,q in zip(aa,bb) for x,y in zip(p,q))/(len(aa)*3)
+def mask(im,box,phase,t):
+ l,top,r,b=box;cx=(l+r)/2;cy=(top+b)/2;w=r-l;h=b-top;s=set()
+ for y in range(top-2,b+2):
+  for x in range(l-2,r+2):
+   dx=max(abs(x+.5-cx)-(w-h)/2,0);dy=y+.5-cy
+   if abs(math.hypot(dx,dy)-h/2)>2.5:continue
+   red,g,blue=im.getpixel((x,y))
+   yes=(red-g>45 and red-blue>45 and g<t-40) if phase=='paused' else (max(red,g,blue)-min(red,g,blue)<15 and max(red,g,blue)<t)
+   if yes:s.add((x,y))
+ return s
+result={'pipeline':'Independent Chrome sRGB canvas decode of original and full formal 784x1680 screenshots -> 224x480 high quality full frame; Python/Pillow raw reads of these uniformly decoded PNGs. No crop scaling.','contourBandPixels':2.5,'thresholds':[210,235],'glyphROI':[103,425,122,438],'results':{}}
+for phase,n in [('idle','0833'),('recording','0870'),('paused','0960')]:
+ source=root/f'docs/research/mobile-recording-sequence-01/representative/frame-n{n}.png';raw=source.read_bytes();chunks=[];p=8
+ while p<len(raw):
+  count=struct.unpack('>I',raw[p:p+4])[0];kind=raw[p+4:p+8].decode();data=raw[p+8:p+8+count]
+  if kind in ['cICP','cHRM','gAMA','iCCP']:chunks.append({'type':kind,'hex':data.hex()})
+  p+=count+12
+ box=[95,415,129,448] if phase=='idle' else [71,415,154,448]
+ core=[104,423,120,439] if phase=='idle' else [87,422,101,440]
+ ref=image(base/f'original-{phase}-browser.png')
+ row={'originalSHA256':hashlib.sha256(raw).hexdigest(),'originalMetadataChunks':chunks,'rawMode':mode(image(source),core),'browserMode':mode(ref,core),'bounds':box,'coreROI':core,'variants':{}}
+ for variant in ['before','after']:
+  candidate=image(base/f'{variant}-{phase}-browser.png');masks=[]
+  for threshold in [210,235]:
+   a=mask(ref,box,phase,threshold);b=mask(candidate,box,phase,threshold)
+   masks.append({'threshold':threshold,'referencePixels':len(a),'clonePixels':len(b),'xor':len(a^b),'iou':len(a&b)/len(a|b)})
+  row['variants'][variant]={'mode':mode(candidate,core),'buttonMAE':mae(ref,candidate,box),'coreMAE':mae(ref,candidate,core),'glyphMAE':mae(ref,candidate,[103,425,122,438]),'masks':masks}
+ result['results'][phase]=row
+Path('/private/tmp/primary73-efficient-independent-quant.json').write_text(json.dumps(result,indent=2))
+for phase,row in result['results'].items():
+ print(phase,[(v,x['buttonMAE'],x['coreMAE'],x['glyphMAE']) for v,x in row['variants'].items()])
