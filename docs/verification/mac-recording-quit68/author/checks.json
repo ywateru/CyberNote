@@ -1,0 +1,47 @@
+{
+  "product": "a24082099a8208bc8da7ffeb9640dd20663fce46",
+  "typecheck": {
+    "exit": 0,
+    "log": "typecheck.stdout"
+  },
+  "build": {
+    "exit": 0,
+    "log": "build.stdout"
+  },
+  "cargoCheck": {
+    "exit": 0,
+    "log": "cargo-check.stdout",
+    "command": "cargo check --manifest-path src-tauri/Cargo.toml --locked --offline --target-dir /Users/water/work/2026/Apple-Notes-Clone/src-tauri/target",
+    "warnings": 13
+  },
+  "nativeRegression": {
+    "exit": 0,
+    "cases": 5,
+    "result": "native-regression/result.json"
+  },
+  "media67": {
+    "exit": 0,
+    "assertions": 25,
+    "result": "media67-regression02/result.json"
+  },
+  "limits": "Exit codes transcribed from completed tool sessions; scripts final executions have separate execution records. Full build/check started before product commit, source bytes are identical to committed product.",
+  "quitMatrix": {
+    "exit": 0,
+    "assertions": 28,
+    "pageErrors": [],
+    "result": "candidate-final/result.json",
+    "execution": "candidate-final-execution.json"
+  },
+  "baseline": {
+    "exit": 0,
+    "assertions": 3,
+    "result": "baseline-final02/result.json",
+    "nativeSource": "40cd170d"
+  },
+  "sidebar66": {
+    "exit": 0,
+    "assertions": 42,
+    "result": "sidebar66-regression02/result.json",
+    "execution": "sidebar66-regression02-execution.json"
+  }
+}

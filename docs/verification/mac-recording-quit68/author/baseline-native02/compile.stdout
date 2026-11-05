@@ -1,0 +1,45 @@
+warning: type `Registry` is more private than the item `Recordings::0`
+  --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native02/production-boundary.rs:90:42
+   |
+90 | #[derive(Default)] pub struct Recordings(pub Mutex<Registry>);
+   |                                          ^^^^^^^^^^^^^^^^^^^ field `Recordings::0` is reachable at visibility `pub(crate)`
+   |
+note: but type `Registry` is only usable at visibility `pub(self)`
+  --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native02/production-boundary.rs:62:1
+   |
+62 | struct Registry {
+   | ^^^^^^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `Registry` is more private than the item `test_expire`
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native02/production-boundary.rs:571:1
+    |
+571 | pub fn test_expire(r:&mut Registry,id:&str)->bool{expire_quit(r,id)}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `test_expire` is reachable at visibility `pub(crate)`
+    |
+note: but type `Registry` is only usable at visibility `pub(self)`
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native02/production-boundary.rs:62:1
+    |
+ 62 | struct Registry {
+    | ^^^^^^^^^^^^^^^
+
+error: type `Registry` is private
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native02/production-boundary.rs:640:56
+    |
+640 |  "expire"=>{let id=text(a,"id");let changed={let mut r=app.inner.recordings.0.lock().unwrap();recording_window::test_expire(&mut r,...
+    |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ private type
+
+error: type `Registry` is private
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native02/production-boundary.rs:640:95
+    |
+640 | ...t r=app.inner.recordings.0.lock().unwrap();recording_window::test_expire(&mut r,&id)};if changed{app.emit("notes-recording-quit-...
+    |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ private type
+
+error: type `Registry` is private
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native02/production-boundary.rs:640:125
+    |
+640 | ...dings.0.lock().unwrap();recording_window::test_expire(&mut r,&id)};if changed{app.emit("notes-recording-quit-cancelled",json!({"...
+    |                                                          ^^^^^^ private type
+
+error: aborting due to 3 previous errors; 2 warnings emitted
+

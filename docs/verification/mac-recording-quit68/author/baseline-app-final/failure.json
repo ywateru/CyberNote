@@ -1,0 +1,1487 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Error: WebSocket closed without opened.'\n+ ]\n- []\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Error: WebSocket closed without opened.'\n+ ]\n- []\n\n    at file:///private/tmp/apple-notes-mac-recording-quit68-01/scripts/check-recording-quit68-app.mjs:188:9",
+  "checks": [
+    {
+      "name": "baseline actual App registers native local identity before capture",
+      "pass": true
+    },
+    {
+      "name": "baseline production menu declaration chooses locked predefined terminate selector",
+      "pass": true
+    },
+    {
+      "name": "baseline native menu path never reaches production ExitRequested or App final listener",
+      "pass": true
+    }
+  ],
+  "observations": [
+    {
+      "baselineMissingConnection": {
+        "active": true,
+        "streams": 1,
+        "starts": 1,
+        "local": true,
+        "native": {
+          "error": null,
+          "events": [],
+          "registry": {
+            "childCount": 0,
+            "exitAllowed": false,
+            "localCount": 1,
+            "quit": null
+          },
+          "requests": 0,
+          "result": {
+            "accelerator": "Cmd+Q",
+            "id": "predefined-quit",
+            "kind": "predefined-terminate",
+            "text": "Quit"
+          },
+          "terminated": false,
+          "trace": [
+            {
+              "note": "source-bound bypass; not executed against NSApplication",
+              "selector": "terminate:",
+              "stage": "locked-muda-quit-selector"
+            }
+          ]
+        },
+        "log": [
+          {
+            "command": "register_recording_local",
+            "args": {
+              "sessionId": "e7776ee2-bd79-40fe-ab0c-0fa01e474ff2",
+              "operationId": "69563d44-b159-46c0-b917-fd4c3b27503d"
+            },
+            "response": {
+              "error": null,
+              "events": [],
+              "registry": {
+                "childCount": 0,
+                "exitAllowed": false,
+                "localCount": 1,
+                "quit": null
+              },
+              "requests": 0,
+              "result": {
+                "incarnation": "864632b7-1b04-4124-99a4-39795f88cf34",
+                "operationId": "69563d44-b159-46c0-b917-fd4c3b27503d",
+                "owner": "main",
+                "sessionId": "e7776ee2-bd79-40fe-ab0c-0fa01e474ff2"
+              },
+              "terminated": false,
+              "trace": []
+            }
+          },
+          {
+            "command": "recording_local_started",
+            "args": {
+              "incarnation": "864632b7-1b04-4124-99a4-39795f88cf34",
+              "operationId": "69563d44-b159-46c0-b917-fd4c3b27503d",
+              "owner": "main",
+              "sessionId": "e7776ee2-bd79-40fe-ab0c-0fa01e474ff2"
+            },
+            "response": {
+              "error": null,
+              "events": [],
+              "registry": {
+                "childCount": 0,
+                "exitAllowed": false,
+                "localCount": 1,
+                "quit": null
+              },
+              "requests": 0,
+              "result": null,
+              "terminated": false,
+              "trace": []
+            }
+          },
+          {
+            "command": "menu",
+            "args": {},
+            "response": {
+              "error": null,
+              "events": [],
+              "registry": {
+                "childCount": 0,
+                "exitAllowed": false,
+                "localCount": 1,
+                "quit": null
+              },
+              "requests": 0,
+              "result": {
+                "accelerator": "Cmd+Q",
+                "id": "predefined-quit",
+                "kind": "predefined-terminate",
+                "text": "Quit"
+              },
+              "terminated": false,
+              "trace": [
+                {
+                  "note": "source-bound bypass; not executed against NSApplication",
+                  "selector": "terminate:",
+                  "stage": "locked-muda-quit-selector"
+                }
+              ]
+            }
+          }
+        ],
+        "notes": [
+          {
+            "id": "note-a",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": " A edited while recordingOriginal A。"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "note-b",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": " B latest bodyOriginal B。"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "submissions": [],
+        "calls": [
+          {
+            "command": "plugin:notes-ui|bind",
+            "args": {
+              "windowLabel": "main",
+              "toolbar": {
+                "layout": "threeColumn",
+                "columns": {
+                  "sidebarVisible": true,
+                  "sidebarWidth": 228,
+                  "listWidth": 280
+                },
+                "folderTitle": "备忘录",
+                "folderCount": 0,
+                "tableFocused": false,
+                "actions": [
+                  {
+                    "action": "newFolder",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "action": "toggleSidebar",
+                    "enabled": false,
+                    "selected": true
+                  },
+                  {
+                    "action": "viewOptions",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "action": "newNote",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "action": "format",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "action": "checklist",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "action": "table",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "action": "attachment",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "action": "share",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "action": "more",
+                    "enabled": false,
+                    "selected": false
+                  }
+                ],
+                "menus": [
+                  {
+                    "owner": "viewOptions",
+                    "items": [
+                      {
+                        "kind": "item",
+                        "command": "viewGallery",
+                        "label": "画廊视图",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "separator"
+                      },
+                      {
+                        "kind": "submenu",
+                        "label": "排序方式",
+                        "items": [
+                          {
+                            "kind": "item",
+                            "command": "sortDefault",
+                            "label": "默认（编辑日期）",
+                            "enabled": false,
+                            "selected": true
+                          },
+                          {
+                            "kind": "separator"
+                          },
+                          {
+                            "kind": "item",
+                            "command": "sortModified",
+                            "label": "编辑日期",
+                            "enabled": false,
+                            "selected": false
+                          },
+                          {
+                            "kind": "item",
+                            "command": "sortCreated",
+                            "label": "创建日期",
+                            "enabled": false,
+                            "selected": false
+                          },
+                          {
+                            "kind": "item",
+                            "command": "sortTitle",
+                            "label": "标题",
+                            "enabled": false,
+                            "selected": false
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "item",
+                        "command": "groupByDate",
+                        "label": "按日期分组",
+                        "enabled": false,
+                        "selected": true
+                      },
+                      {
+                        "kind": "separator"
+                      },
+                      {
+                        "kind": "item",
+                        "command": "viewAttachments",
+                        "label": "查看附件",
+                        "enabled": false,
+                        "selected": false
+                      }
+                    ]
+                  },
+                  {
+                    "owner": "format",
+                    "items": [
+                      {
+                        "kind": "item",
+                        "command": "bold",
+                        "label": "粗体",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "italic",
+                        "label": "斜体",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "underline",
+                        "label": "下划线",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "strikethrough",
+                        "label": "删除线",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "highlight",
+                        "label": "高亮",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "submenu",
+                        "label": "颜色",
+                        "items": [
+                          {
+                            "kind": "item",
+                            "command": "colorDefault",
+                            "label": "无高亮",
+                            "enabled": false,
+                            "selected": true
+                          },
+                          {
+                            "kind": "item",
+                            "command": "colorPurple",
+                            "label": "紫色",
+                            "enabled": false,
+                            "selected": false
+                          },
+                          {
+                            "kind": "item",
+                            "command": "colorPink",
+                            "label": "粉色",
+                            "enabled": false,
+                            "selected": false
+                          },
+                          {
+                            "kind": "item",
+                            "command": "colorOrange",
+                            "label": "橙色",
+                            "enabled": false,
+                            "selected": false
+                          },
+                          {
+                            "kind": "item",
+                            "command": "colorMint",
+                            "label": "薄荷色",
+                            "enabled": false,
+                            "selected": false
+                          },
+                          {
+                            "kind": "item",
+                            "command": "colorBlue",
+                            "label": "蓝色",
+                            "enabled": false,
+                            "selected": false
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "separator"
+                      },
+                      {
+                        "kind": "item",
+                        "command": "styleTitle",
+                        "label": "标题",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "styleHeading",
+                        "label": "小标题",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "styleSubheading",
+                        "label": "副标题",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "styleBody",
+                        "label": "正文",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "styleMonospaced",
+                        "label": "等宽样式",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "listBullet",
+                        "label": "项目符号列表",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "listDash",
+                        "label": "短划线列表",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "listNumber",
+                        "label": "编号列表",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "separator"
+                      },
+                      {
+                        "kind": "item",
+                        "command": "blockquote",
+                        "label": "块引用",
+                        "enabled": false,
+                        "selected": false
+                      }
+                    ]
+                  },
+                  {
+                    "owner": "attachment",
+                    "items": [
+                      {
+                        "kind": "item",
+                        "command": "choosePhotoVideo",
+                        "label": "选取照片或视频…",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "recordAudio",
+                        "label": "录音",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "attachFile",
+                        "label": "附加文件…",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "recognizeImageText",
+                        "label": "从图片识别文本…",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "separator"
+                      },
+                      {
+                        "kind": "item",
+                        "command": "takePhoto",
+                        "label": "拍照",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "scanDocument",
+                        "label": "扫描文稿",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "addSketch",
+                        "label": "添加速绘",
+                        "enabled": false,
+                        "selected": false
+                      }
+                    ]
+                  },
+                  {
+                    "owner": "more",
+                    "items": [
+                      {
+                        "kind": "item",
+                        "command": "pinNote",
+                        "label": "置顶备忘录",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "lockNote",
+                        "label": "锁定备忘录",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "separator"
+                      },
+                      {
+                        "kind": "item",
+                        "command": "findInNote",
+                        "label": "在备忘录中查找",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "moveNote",
+                        "label": "移到…",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "recentNotes",
+                        "label": "最近备忘录",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "submenu",
+                        "label": "数学结果",
+                        "items": [
+                          {
+                            "kind": "item",
+                            "command": "mathInsert",
+                            "label": "插入结果",
+                            "enabled": false,
+                            "selected": false
+                          },
+                          {
+                            "kind": "item",
+                            "command": "mathSuggest",
+                            "label": "建议结果",
+                            "enabled": false,
+                            "selected": false
+                          },
+                          {
+                            "kind": "item",
+                            "command": "mathOff",
+                            "label": "关",
+                            "enabled": false,
+                            "selected": false
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "submenu",
+                        "label": "附件视图",
+                        "items": [
+                          {
+                            "kind": "item",
+                            "command": "attachmentsSmall",
+                            "label": "全部设为小尺寸",
+                            "enabled": false,
+                            "selected": false
+                          },
+                          {
+                            "kind": "item",
+                            "command": "attachmentsLarge",
+                            "label": "全部设为大尺寸",
+                            "enabled": false,
+                            "selected": false
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "separator"
+                      },
+                      {
+                        "kind": "item",
+                        "command": "deleteNote",
+                        "label": "删除备忘录",
+                        "enabled": false,
+                        "selected": false
+                      }
+                    ]
+                  }
+                ],
+                "search": {
+                  "enabled": false,
+                  "value": "",
+                  "acknowledgedEvent": 0
+                },
+                "glassStyle": "regular",
+                "revision": 1
+              }
+            }
+          },
+          {
+            "command": "load_workspace"
+          },
+          {
+            "command": "workspace_action",
+            "args": {
+              "action": {
+                "type": "settings",
+                "settings": {
+                  "selectedFolder": "all",
+                  "selectedNote": "note-a"
+                }
+              },
+              "expected": {
+                "sessionId": "controlled-native-session",
+                "epoch": 1
+              }
+            }
+          },
+          {
+            "command": "workspace_action",
+            "args": {
+              "action": {
+                "type": "settings",
+                "settings": {
+                  "selectedNote": "note-a"
+                }
+              },
+              "expected": {
+                "sessionId": "controlled-native-session",
+                "epoch": 1
+              }
+            }
+          },
+          {
+            "command": "register_recording_local",
+            "args": {
+              "sessionId": "e7776ee2-bd79-40fe-ab0c-0fa01e474ff2",
+              "operationId": "69563d44-b159-46c0-b917-fd4c3b27503d"
+            }
+          },
+          {
+            "command": "recording_local_started",
+            "args": {
+              "incarnation": "864632b7-1b04-4124-99a4-39795f88cf34",
+              "operationId": "69563d44-b159-46c0-b917-fd4c3b27503d",
+              "owner": "main",
+              "sessionId": "e7776ee2-bd79-40fe-ab0c-0fa01e474ff2"
+            }
+          },
+          {
+            "command": "register_save_intent",
+            "args": {
+              "noteId": "note-a",
+              "intent": "003dd29a-22bc-4238-832a-0f2d5947594b",
+              "expected": {
+                "sessionId": "controlled-native-session",
+                "epoch": 1,
+                "noteEpoch": 0
+              }
+            }
+          },
+          {
+            "command": "workspace_action",
+            "args": {
+              "action": {
+                "type": "saveNote",
+                "id": "note-a",
+                "saveIntent": "003dd29a-22bc-4238-832a-0f2d5947594b",
+                "document": {
+                  "type": "doc",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": " A edited while recordingOriginal A。"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "revision": 1
+              },
+              "expected": {
+                "sessionId": "controlled-native-session",
+                "epoch": 1
+              }
+            }
+          },
+          {
+            "command": "load_workspace"
+          },
+          {
+            "command": "register_save_intent",
+            "args": {
+              "noteId": "note-b",
+              "intent": "938da3f2-a1b8-407f-a53a-a30299ca0d81",
+              "expected": {
+                "sessionId": "controlled-native-session",
+                "epoch": 1,
+                "noteEpoch": 0
+              }
+            }
+          },
+          {
+            "command": "workspace_action",
+            "args": {
+              "action": {
+                "type": "saveNote",
+                "id": "note-b",
+                "saveIntent": "938da3f2-a1b8-407f-a53a-a30299ca0d81",
+                "document": {
+                  "type": "doc",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": " B latest bodyOriginal B。"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "revision": 1
+              },
+              "expected": {
+                "sessionId": "controlled-native-session",
+                "epoch": 1
+              }
+            }
+          },
+          {
+            "command": "load_workspace"
+          }
+        ],
+        "inert": false,
+        "editable": true,
+        "phase": "recording",
+        "errors": []
+      }
+    }
+  ],
+  "errors": [
+    "Error: WebSocket closed without opened."
+  ],
+  "snapshot": {
+    "text": "unexpected IPC plugin:notes-ui|bind\n重试\n在我的 Mac 上\n全部备忘录\n2\n备忘录\n2\n新建文件夹\n全部备忘录\n2个备忘录\n1970年1月\nOriginal A\n1970/1/1\n无更多文本\n备忘录\nOriginal B\n1970/1/1\n无更多文本\n备忘录\n格式\n1970年1月1日 08:00\n\n B latest bodyOriginal B。\n\n新录音\n今天 18:5000:00\n00:00\n00:01\n00:02\n00:03\n00:04\n00:05\n00:06\n00:07\n00:08\n00:09\n00:10\n00:11\n00:12\n00:00.49\n15\n15",
+    "native": {
+      "error": null,
+      "events": [],
+      "registry": {
+        "childCount": 0,
+        "exitAllowed": false,
+        "localCount": 1,
+        "quit": null
+      },
+      "requests": 0,
+      "result": {
+        "accelerator": "Cmd+Q",
+        "id": "predefined-quit",
+        "kind": "predefined-terminate",
+        "text": "Quit"
+      },
+      "terminated": false,
+      "trace": [
+        {
+          "note": "source-bound bypass; not executed against NSApplication",
+          "selector": "terminate:",
+          "stage": "locked-muda-quit-selector"
+        }
+      ]
+    },
+    "log": [
+      {
+        "command": "register_recording_local",
+        "args": {
+          "sessionId": "e7776ee2-bd79-40fe-ab0c-0fa01e474ff2",
+          "operationId": "69563d44-b159-46c0-b917-fd4c3b27503d"
+        },
+        "response": {
+          "error": null,
+          "events": [],
+          "registry": {
+            "childCount": 0,
+            "exitAllowed": false,
+            "localCount": 1,
+            "quit": null
+          },
+          "requests": 0,
+          "result": {
+            "incarnation": "864632b7-1b04-4124-99a4-39795f88cf34",
+            "operationId": "69563d44-b159-46c0-b917-fd4c3b27503d",
+            "owner": "main",
+            "sessionId": "e7776ee2-bd79-40fe-ab0c-0fa01e474ff2"
+          },
+          "terminated": false,
+          "trace": []
+        }
+      },
+      {
+        "command": "recording_local_started",
+        "args": {
+          "incarnation": "864632b7-1b04-4124-99a4-39795f88cf34",
+          "operationId": "69563d44-b159-46c0-b917-fd4c3b27503d",
+          "owner": "main",
+          "sessionId": "e7776ee2-bd79-40fe-ab0c-0fa01e474ff2"
+        },
+        "response": {
+          "error": null,
+          "events": [],
+          "registry": {
+            "childCount": 0,
+            "exitAllowed": false,
+            "localCount": 1,
+            "quit": null
+          },
+          "requests": 0,
+          "result": null,
+          "terminated": false,
+          "trace": []
+        }
+      },
+      {
+        "command": "menu",
+        "args": {},
+        "response": {
+          "error": null,
+          "events": [],
+          "registry": {
+            "childCount": 0,
+            "exitAllowed": false,
+            "localCount": 1,
+            "quit": null
+          },
+          "requests": 0,
+          "result": {
+            "accelerator": "Cmd+Q",
+            "id": "predefined-quit",
+            "kind": "predefined-terminate",
+            "text": "Quit"
+          },
+          "terminated": false,
+          "trace": [
+            {
+              "note": "source-bound bypass; not executed against NSApplication",
+              "selector": "terminate:",
+              "stage": "locked-muda-quit-selector"
+            }
+          ]
+        }
+      }
+    ],
+    "calls": [
+      {
+        "command": "plugin:notes-ui|bind",
+        "args": {
+          "windowLabel": "main",
+          "toolbar": {
+            "layout": "threeColumn",
+            "columns": {
+              "sidebarVisible": true,
+              "sidebarWidth": 228,
+              "listWidth": 280
+            },
+            "folderTitle": "备忘录",
+            "folderCount": 0,
+            "tableFocused": false,
+            "actions": [
+              {
+                "action": "newFolder",
+                "enabled": false,
+                "selected": false
+              },
+              {
+                "action": "toggleSidebar",
+                "enabled": false,
+                "selected": true
+              },
+              {
+                "action": "viewOptions",
+                "enabled": false,
+                "selected": false
+              },
+              {
+                "action": "newNote",
+                "enabled": false,
+                "selected": false
+              },
+              {
+                "action": "format",
+                "enabled": false,
+                "selected": false
+              },
+              {
+                "action": "checklist",
+                "enabled": false,
+                "selected": false
+              },
+              {
+                "action": "table",
+                "enabled": false,
+                "selected": false
+              },
+              {
+                "action": "attachment",
+                "enabled": false,
+                "selected": false
+              },
+              {
+                "action": "share",
+                "enabled": false,
+                "selected": false
+              },
+              {
+                "action": "more",
+                "enabled": false,
+                "selected": false
+              }
+            ],
+            "menus": [
+              {
+                "owner": "viewOptions",
+                "items": [
+                  {
+                    "kind": "item",
+                    "command": "viewGallery",
+                    "label": "画廊视图",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "separator"
+                  },
+                  {
+                    "kind": "submenu",
+                    "label": "排序方式",
+                    "items": [
+                      {
+                        "kind": "item",
+                        "command": "sortDefault",
+                        "label": "默认（编辑日期）",
+                        "enabled": false,
+                        "selected": true
+                      },
+                      {
+                        "kind": "separator"
+                      },
+                      {
+                        "kind": "item",
+                        "command": "sortModified",
+                        "label": "编辑日期",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "sortCreated",
+                        "label": "创建日期",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "sortTitle",
+                        "label": "标题",
+                        "enabled": false,
+                        "selected": false
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "item",
+                    "command": "groupByDate",
+                    "label": "按日期分组",
+                    "enabled": false,
+                    "selected": true
+                  },
+                  {
+                    "kind": "separator"
+                  },
+                  {
+                    "kind": "item",
+                    "command": "viewAttachments",
+                    "label": "查看附件",
+                    "enabled": false,
+                    "selected": false
+                  }
+                ]
+              },
+              {
+                "owner": "format",
+                "items": [
+                  {
+                    "kind": "item",
+                    "command": "bold",
+                    "label": "粗体",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "italic",
+                    "label": "斜体",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "underline",
+                    "label": "下划线",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "strikethrough",
+                    "label": "删除线",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "highlight",
+                    "label": "高亮",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "submenu",
+                    "label": "颜色",
+                    "items": [
+                      {
+                        "kind": "item",
+                        "command": "colorDefault",
+                        "label": "无高亮",
+                        "enabled": false,
+                        "selected": true
+                      },
+                      {
+                        "kind": "item",
+                        "command": "colorPurple",
+                        "label": "紫色",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "colorPink",
+                        "label": "粉色",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "colorOrange",
+                        "label": "橙色",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "colorMint",
+                        "label": "薄荷色",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "colorBlue",
+                        "label": "蓝色",
+                        "enabled": false,
+                        "selected": false
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "separator"
+                  },
+                  {
+                    "kind": "item",
+                    "command": "styleTitle",
+                    "label": "标题",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "styleHeading",
+                    "label": "小标题",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "styleSubheading",
+                    "label": "副标题",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "styleBody",
+                    "label": "正文",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "styleMonospaced",
+                    "label": "等宽样式",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "listBullet",
+                    "label": "项目符号列表",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "listDash",
+                    "label": "短划线列表",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "listNumber",
+                    "label": "编号列表",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "separator"
+                  },
+                  {
+                    "kind": "item",
+                    "command": "blockquote",
+                    "label": "块引用",
+                    "enabled": false,
+                    "selected": false
+                  }
+                ]
+              },
+              {
+                "owner": "attachment",
+                "items": [
+                  {
+                    "kind": "item",
+                    "command": "choosePhotoVideo",
+                    "label": "选取照片或视频…",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "recordAudio",
+                    "label": "录音",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "attachFile",
+                    "label": "附加文件…",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "recognizeImageText",
+                    "label": "从图片识别文本…",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "separator"
+                  },
+                  {
+                    "kind": "item",
+                    "command": "takePhoto",
+                    "label": "拍照",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "scanDocument",
+                    "label": "扫描文稿",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "addSketch",
+                    "label": "添加速绘",
+                    "enabled": false,
+                    "selected": false
+                  }
+                ]
+              },
+              {
+                "owner": "more",
+                "items": [
+                  {
+                    "kind": "item",
+                    "command": "pinNote",
+                    "label": "置顶备忘录",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "lockNote",
+                    "label": "锁定备忘录",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "separator"
+                  },
+                  {
+                    "kind": "item",
+                    "command": "findInNote",
+                    "label": "在备忘录中查找",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "moveNote",
+                    "label": "移到…",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "item",
+                    "command": "recentNotes",
+                    "label": "最近备忘录",
+                    "enabled": false,
+                    "selected": false
+                  },
+                  {
+                    "kind": "submenu",
+                    "label": "数学结果",
+                    "items": [
+                      {
+                        "kind": "item",
+                        "command": "mathInsert",
+                        "label": "插入结果",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "mathSuggest",
+                        "label": "建议结果",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "mathOff",
+                        "label": "关",
+                        "enabled": false,
+                        "selected": false
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "submenu",
+                    "label": "附件视图",
+                    "items": [
+                      {
+                        "kind": "item",
+                        "command": "attachmentsSmall",
+                        "label": "全部设为小尺寸",
+                        "enabled": false,
+                        "selected": false
+                      },
+                      {
+                        "kind": "item",
+                        "command": "attachmentsLarge",
+                        "label": "全部设为大尺寸",
+                        "enabled": false,
+                        "selected": false
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "separator"
+                  },
+                  {
+                    "kind": "item",
+                    "command": "deleteNote",
+                    "label": "删除备忘录",
+                    "enabled": false,
+                    "selected": false
+                  }
+                ]
+              }
+            ],
+            "search": {
+              "enabled": false,
+              "value": "",
+              "acknowledgedEvent": 0
+            },
+            "glassStyle": "regular",
+            "revision": 1
+          }
+        }
+      },
+      {
+        "command": "load_workspace"
+      },
+      {
+        "command": "workspace_action",
+        "args": {
+          "action": {
+            "type": "settings",
+            "settings": {
+              "selectedFolder": "all",
+              "selectedNote": "note-a"
+            }
+          },
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1
+          }
+        }
+      },
+      {
+        "command": "workspace_action",
+        "args": {
+          "action": {
+            "type": "settings",
+            "settings": {
+              "selectedNote": "note-a"
+            }
+          },
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1
+          }
+        }
+      },
+      {
+        "command": "register_recording_local",
+        "args": {
+          "sessionId": "e7776ee2-bd79-40fe-ab0c-0fa01e474ff2",
+          "operationId": "69563d44-b159-46c0-b917-fd4c3b27503d"
+        }
+      },
+      {
+        "command": "recording_local_started",
+        "args": {
+          "incarnation": "864632b7-1b04-4124-99a4-39795f88cf34",
+          "operationId": "69563d44-b159-46c0-b917-fd4c3b27503d",
+          "owner": "main",
+          "sessionId": "e7776ee2-bd79-40fe-ab0c-0fa01e474ff2"
+        }
+      },
+      {
+        "command": "register_save_intent",
+        "args": {
+          "noteId": "note-a",
+          "intent": "003dd29a-22bc-4238-832a-0f2d5947594b",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          }
+        }
+      },
+      {
+        "command": "workspace_action",
+        "args": {
+          "action": {
+            "type": "saveNote",
+            "id": "note-a",
+            "saveIntent": "003dd29a-22bc-4238-832a-0f2d5947594b",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": " A edited while recordingOriginal A。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 1
+          },
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1
+          }
+        }
+      },
+      {
+        "command": "load_workspace"
+      },
+      {
+        "command": "register_save_intent",
+        "args": {
+          "noteId": "note-b",
+          "intent": "938da3f2-a1b8-407f-a53a-a30299ca0d81",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          }
+        }
+      },
+      {
+        "command": "workspace_action",
+        "args": {
+          "action": {
+            "type": "saveNote",
+            "id": "note-b",
+            "saveIntent": "938da3f2-a1b8-407f-a53a-a30299ca0d81",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": " B latest bodyOriginal B。"
+                    }
+                  ]
+                }
+              ]
+            },
+            "revision": 1
+          },
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1
+          }
+        }
+      },
+      {
+        "command": "load_workspace"
+      }
+    ]
+  }
+}

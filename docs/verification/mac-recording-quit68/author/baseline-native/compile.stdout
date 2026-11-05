@@ -1,0 +1,332 @@
+error[E0277]: the trait bound `T: serde::Serialize` is not satisfied
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:21:175
+    |
+ 21 | ...push(json!({"label":label,"name":name,"payload":payload}));Ok(())}
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         |
+    |         the trait `serde_core::ser::Serialize` is not implemented for `T`
+    |         required by a bound introduced by this call
+    |
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `T` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+note: there are multiple different versions of crate `serde_core` in the dependency graph
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ------------------- this is the trait that was imported
+    |
+   ::: /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ^^^^^^^^^^^^^^^^^^^ this is the expected trait
+    = help: you can use `cargo tree` to explore your dependency tree
+    = note: required for `&T` to implement `serde_core::ser::Serialize`
+note: required by a bound in `to_value`
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_json-1.0.154/src/value/mod.rs:997:8
+    |
+995 | pub fn to_value<T>(value: T) -> Result<Value, Error>
+    |        -------- required by a bound in this function
+996 | where
+997 |     T: Serialize,
+    |        ^^^^^^^^^ required by this bound in `to_value`
+    = note: this error originates in the macro `$crate::json_internal` which comes from the expansion of the macro `json` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider further restricting type parameter `T` with trait `Serialize`
+    |
+ 21 |  fn emit_to<T:serde::Serialize + serde_core::ser::Serialize>(&self,target:EventTarget,name:&str,payload:T)->Result<(),String>{let EventTarget::Window{label}=target;self.inner.events.lock().unwrap().push(json!({"label":label,"name":name,"payload":payload}));Ok(())}
+    |                                ++++++++++++++++++++++++++++
+
+error[E0277]: the trait bound `T: serde::Serialize` is not satisfied
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:22:115
+    |
+ 22 | ...wrap().push(json!({"name":name,"payload":payload}));Ok(())}
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |                |
+    |                the trait `serde_core::ser::Serialize` is not implemented for `T`
+    |                required by a bound introduced by this call
+    |
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `T` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+note: there are multiple different versions of crate `serde_core` in the dependency graph
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ------------------- this is the trait that was imported
+    |
+   ::: /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ^^^^^^^^^^^^^^^^^^^ this is the expected trait
+    = help: you can use `cargo tree` to explore your dependency tree
+    = note: required for `&T` to implement `serde_core::ser::Serialize`
+note: required by a bound in `to_value`
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_json-1.0.154/src/value/mod.rs:997:8
+    |
+995 | pub fn to_value<T>(value: T) -> Result<Value, Error>
+    |        -------- required by a bound in this function
+996 | where
+997 |     T: Serialize,
+    |        ^^^^^^^^^ required by this bound in `to_value`
+    = note: this error originates in the macro `$crate::json_internal` which comes from the expansion of the macro `json` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider further restricting type parameter `T` with trait `Serialize`
+    |
+ 22 |  fn emit<T:serde::Serialize + serde_core::ser::Serialize>(&self,name:&str,payload:T)->Result<(),String>{self.inner.events.lock().unwrap().push(json!({"name":name,"payload":payload}));Ok(())}
+    |                             ++++++++++++++++++++++++++++
+
+error[E0277]: the trait bound `Value: serde::Serialize` is not satisfied
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:376:17
+    |
+373 |             app.emit_to(
+    |                 ------- required by a bound introduced by this call
+...
+376 |                 json!({"id":id}),
+    |                 ^^^^^^^^^^^^^^^^ the trait `Serialize` is not implemented for `Value`
+    |
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `Value` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+note: there are multiple different versions of crate `serde_core` in the dependency graph
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ------------------- this is the found trait
+    |
+   ::: /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ^^^^^^^^^^^^^^^^^^^ this is the expected trait
+    = help: you can use `cargo tree` to explore your dependency tree
+    = help: the following other types implement trait `Serialize`:
+              &'a T
+              &'a mut T
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+              (T0, T1, T2, T3)
+              (T0, T1, T2, T3, T4)
+            and 129 others
+note: required by a bound in `AppHandle::emit_to`
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:21:15
+    |
+ 21 |  fn emit_to<T:serde::Serialize>(&self,target:EventTarget,name:&str,payload:T)->Result<(),String>{let EventTarget::Window{label}=tar...
+    |               ^^^^^^^^^^^^^^^^ required by this bound in `AppHandle::emit_to`
+
+error[E0277]: the trait bound `Value: serde::Serialize` is not satisfied
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:466:56
+    |
+466 |     let _ = app.emit("notes-recording-quit-cancelled", json!({"id":id}));
+    |                 ----                                   ^^^^^^^^^^^^^^^^ the trait `Serialize` is not implemented for `Value`
+    |                 |
+    |                 required by a bound introduced by this call
+    |
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `Value` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+note: there are multiple different versions of crate `serde_core` in the dependency graph
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ------------------- this is the found trait
+    |
+   ::: /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ^^^^^^^^^^^^^^^^^^^ this is the expected trait
+    = help: you can use `cargo tree` to explore your dependency tree
+    = help: the following other types implement trait `Serialize`:
+              &'a T
+              &'a mut T
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+              (T0, T1, T2, T3)
+              (T0, T1, T2, T3, T4)
+            and 129 others
+note: required by a bound in `AppHandle::emit`
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:22:12
+    |
+ 22 |  fn emit<T:serde::Serialize>(&self,name:&str,payload:T)->Result<(),String>{self.inner.events.lock().unwrap().push(json!({"name":nam...
+    |            ^^^^^^^^^^^^^^^^ required by this bound in `AppHandle::emit`
+
+error[E0277]: the trait bound `Value: serde::Serialize` is not satisfied
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:550:13
+    |
+547 |         let _ = app.emit_to(
+    |                     ------- required by a bound introduced by this call
+...
+550 |             json!({"id":id}),
+    |             ^^^^^^^^^^^^^^^^ the trait `Serialize` is not implemented for `Value`
+    |
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `Value` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+note: there are multiple different versions of crate `serde_core` in the dependency graph
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ------------------- this is the found trait
+    |
+   ::: /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ^^^^^^^^^^^^^^^^^^^ this is the expected trait
+    = help: you can use `cargo tree` to explore your dependency tree
+    = help: the following other types implement trait `Serialize`:
+              &'a T
+              &'a mut T
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+              (T0, T1, T2, T3)
+              (T0, T1, T2, T3, T4)
+            and 129 others
+note: required by a bound in `AppHandle::emit_to`
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:21:15
+    |
+ 21 |  fn emit_to<T:serde::Serialize>(&self,target:EventTarget,name:&str,payload:T)->Result<(),String>{let EventTarget::Window{label}=tar...
+    |               ^^^^^^^^^^^^^^^^ required by this bound in `AppHandle::emit_to`
+
+error[E0282]: type annotations needed
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:583:52
+    |
+583 | fn menu_callback(app:&AppHandle,event:MenuEvent){(|app, event| {
+    |                                                    ^^^
+584 |                     use tauri::Emitter;
+585 |                     if let Some(window) = app
+    |                                           --- type must be known at this point
+    |
+help: consider giving this closure parameter an explicit type
+    |
+583 | fn menu_callback(app:&AppHandle,event:MenuEvent){(|app: /* Type */, event| {
+    |                                                       ++++++++++++
+
+error[E0277]: the trait bound `LocalIdentity: serde::Serialize` is not satisfied
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:630:148
+    |
+630 | ...xt(a,"operationId"),w,s).map(|x|serde_json::to_value(x).unwrap()),
+    |                                    -------------------- ^ unsatisfied trait bound
+    |                                    |
+    |                                    required by a bound introduced by this call
+    |
+help: the trait `serde_core::ser::Serialize` is not implemented for `LocalIdentity`
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:75:1
+    |
+ 75 | pub struct LocalIdentity {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `LocalIdentity` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+note: there are multiple different versions of crate `serde_core` in the dependency graph
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ------------------- this is the found trait
+    |
+   ::: /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ^^^^^^^^^^^^^^^^^^^ this is the expected trait
+    = help: you can use `cargo tree` to explore your dependency tree
+    = help: the following other types implement trait `serde_core::ser::Serialize`:
+              &'a T
+              &'a mut T
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+              (T0, T1, T2, T3)
+              (T0, T1, T2, T3, T4)
+            and 134 others
+note: required by a bound in `to_value`
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_json-1.0.154/src/value/mod.rs:997:8
+    |
+995 | pub fn to_value<T>(value: T) -> Result<Value, Error>
+    |        -------- required by a bound in this function
+996 | where
+997 |     T: Serialize,
+    |        ^^^^^^^^^ required by this bound in `to_value`
+
+error[E0277]: the trait bound `MenuPlan: serde::Serialize` is not satisfied
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:636:321
+    |
+636 | ...d against NSApplication"}));}Ok(serde_json::to_value(plan).unwrap())},
+    |                                    -------------------- ^^^^ unsatisfied trait bound
+    |                                    |
+    |                                    required by a bound introduced by this call
+    |
+help: the trait `serde_core::ser::Serialize` is not implemented for `MenuPlan`
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:27:43
+    |
+ 27 | #[derive(Default,Clone,serde::Serialize)] struct MenuPlan{kind:String,id:String,text:String,accelerator:String}
+    |                                           ^^^^^^^^^^^^^^^
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `MenuPlan` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+note: there are multiple different versions of crate `serde_core` in the dependency graph
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ------------------- this is the found trait
+    |
+   ::: /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ^^^^^^^^^^^^^^^^^^^ this is the expected trait
+    = help: you can use `cargo tree` to explore your dependency tree
+    = help: the following other types implement trait `serde_core::ser::Serialize`:
+              &'a T
+              &'a mut T
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+              (T0, T1, T2, T3)
+              (T0, T1, T2, T3, T4)
+            and 134 others
+note: required by a bound in `to_value`
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_json-1.0.154/src/value/mod.rs:997:8
+    |
+995 | pub fn to_value<T>(value: T) -> Result<Value, Error>
+    |        -------- required by a bound in this function
+996 | where
+997 |     T: Serialize,
+    |        ^^^^^^^^^ required by this bound in `to_value`
+
+error[E0277]: the trait bound `Value: serde::Serialize` is not satisfied
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:640:191
+    |
+640 | ...anged{app.emit("notes-recording-quit-cancelled",json!({"id":id}))?;}Ok(Value::Null)},
+    |              ----                                  ^^^^^^^^^^^^^^^^ the trait `Serialize` is not implemented for `Value`
+    |              |
+    |              required by a bound introduced by this call
+    |
+    = note: for local types consider adding `#[derive(serde::Serialize)]` to your `Value` type
+    = note: for types from other crates check whether the crate offers a `serde` feature flag
+note: there are multiple different versions of crate `serde_core` in the dependency graph
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ------------------- this is the found trait
+    |
+   ::: /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/serde_core-1.0.229/src/ser/mod.rs:234:1
+    |
+234 | pub trait Serialize {
+    | ^^^^^^^^^^^^^^^^^^^ this is the expected trait
+    = help: you can use `cargo tree` to explore your dependency tree
+    = help: the following other types implement trait `Serialize`:
+              &'a T
+              &'a mut T
+              ()
+              (T,)
+              (T0, T1)
+              (T0, T1, T2)
+              (T0, T1, T2, T3)
+              (T0, T1, T2, T3, T4)
+            and 129 others
+note: required by a bound in `AppHandle::emit`
+   --> /private/tmp/apple-notes-mac-recording-quit68-01/docs/verification/mac-recording-quit68/author/baseline-native/production-boundary.rs:22:12
+    |
+ 22 |  fn emit<T:serde::Serialize>(&self,name:&str,payload:T)->Result<(),String>{self.inner.events.lock().unwrap().push(json!({"name":nam...
+    |            ^^^^^^^^^^^^^^^^ required by this bound in `AppHandle::emit`
+
+error: aborting due to 9 previous errors
+
+Some errors have detailed explanations: E0277, E0282.
+For more information about an error, try `rustc --explain E0277`.

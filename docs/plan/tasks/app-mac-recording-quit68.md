@@ -35,3 +35,7 @@ src/App.tsx、src/DesktopRecordingPanel.tsx及必要录音lifecycle；src-tauri/
 - 采集中A→B编辑→Quit等待final/所有正文；requesting无音频取消、busy save、decode/store/save ACK/flush/cleanup失败取消退出且可重试；late/duplicate/stale ACK与取消恢复。
 - 回归暂停两次累计、同挂载×、main close及67media加载；typecheck/build、native必要测试。不同作者独立review committed精确源后整合，再准确新包root实际复验。
 - 没有实际新包GUI前，不把源码结论记为运行成功；保留20 CmdQ失败和授权首次超时历史。
+
+# progress
+
+2026-11-05：产品a24082099a8208bc8da7ffeb9640dd20663fce46从准确40cd170d冻结，仅lib.rs生产菜单/CmdQ改为自定义退出项、焦点查找前AppHandle.exit进入既有ExitRequested守卫。源码提取的真实menu/run回调及全部本地登记/quit命令wrapper与实际App/Panel/Session受控连接，基线入口反例3项、候选28项、66回归42项、67媒体25项、native5组均通过；typecheck/build/full cargo check通过。准确清单与首失败原件见docs/verification/mac-recording-quit68/author/。本阶段SOURCE-READY、独立review和新包实际验收待完成；Dock/AppleEvent入口另由69处理，不追认Mac20运行成功。
