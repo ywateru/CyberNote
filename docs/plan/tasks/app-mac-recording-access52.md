@@ -1,7 +1,7 @@
 ---
 id: app-mac-recording-access52
 scope: explicit macOS microphone preflight before WebView capture
-status: ready
+status: source-ready-runtime-pending
 depends-on: [ref-mac-recording-request-readiness51]
 ---
 
@@ -26,3 +26,9 @@ root创建独立worktree后由native_ui_research实施：src/recording-session.t
 作者完成typecheck/必要Rust编译与Session有意义回归，新增拒绝/权限等待取消/迟到成功不getStream/超时晚stream释放/一次回调/异常状态；native公开API编译、窗口身份和回调生命周期须有实际可检查接线。受控音轨不能证明系统真实授权或有声。独审由verify_app完成，根串行整合50+52后构建准确包实际核验。证据仅docs/verification/mac-recording-access52/与独审相邻目录，必要日志和结果即可，禁止重复全部历史矩阵。
 
 2026-11-05用户独立窗口纠正：52额外支持精确 `recording-<标准小写UUID>` 本地录音窗；仍校实际调用window/WK及异步同一native身份，不接受任意字符串。52只负责其麦克风预检窄权限，50负责录音窗事件/显示/关闭权限，两者capability分别命名避免写同一文件；不要将录音窗加入宽泛notes-ui默认toolbar权限。
+
+## 固定源码接收（2026-11-05）
+
+最终作者源码`f5bc101614dcc2c144f962b41620e70d4f8657b1`已获不同作者独审SOURCE-READY，主线顺序合入初版及两项修复，当前对应主`d88b67c`产品，证据主`7688b13`。首轮媒体流交接取消漏停和ObjC异常owner释放两项阻塞均保留原失败并关闭；独审微任务14、原生异常4、原Session26、Rust20、typecheck/host等必要复验通过。主线13产品逐字节等于最终独审源，记录`verification/mac-recording-access52/main-integration-identity.json`。
+
+此接收仅为源码/受控边界就绪，尚未进入准确新包；不证明真实系统授权、有效音轨、后台录音或像素一致。待50独立窗源码审查/整合后统一构建并按实包计划54核验，不追认旧Mac14的准备阻塞已经修复。
