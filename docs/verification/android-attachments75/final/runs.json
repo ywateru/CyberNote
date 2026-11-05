@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "boundaries": [
+    "All browser suites use fresh synthetic data and JS IPC fixture unless explicitly real-rust-mobile.",
+    "No original Android device, ADB, user recording, microphone, original Notes, Mac/APK build or desktop real-Rust recording task74 used.",
+    "Outer wall includes runner cleanup and process exit.",
+    "No claim of Android native failure resolution or original pixel parity."
+  ],
+  "runs": [
+    {
+      "name": "desktop",
+      "sourceHead": "4052e8aa",
+      "command": "pnpm test:debug --out /private/tmp/attachments75-final-desktop",
+      "checks": 100,
+      "outerWallSeconds": 54.83,
+      "exitCode": 0,
+      "toolSession": 88816
+    },
+    {
+      "name": "mobile-recording",
+      "sourceHead": "4052e8aa",
+      "command": "pnpm debug group recording --mobile --out /private/tmp/attachments75-final-recording",
+      "checks": 43,
+      "outerWallSeconds": 23.97,
+      "exitCode": 0,
+      "toolSession": 37602
+    },
+    {
+      "name": "mobile-notes",
+      "sourceHead": "4052e8aa",
+      "command": "pnpm debug group notes --mobile --out /private/tmp/attachments75-final-notes",
+      "checks": 9,
+      "outerWallSeconds": 15.34,
+      "exitCode": 0,
+      "toolSession": 24690
+    },
+    {
+      "name": "frontend-build",
+      "sourceHead": "4052e8aa",
+      "command": "pnpm build",
+      "checks": null,
+      "outerWallSeconds": 9.3,
+      "exitCode": 0,
+      "toolSession": 9449
+    },
+    {
+      "name": "first-rust-builder",
+      "sourceHead": "4052e8aa",
+      "command": "CARGO_TARGET_DIR=/private/tmp/apple-notes-recording-window50-independent-target node scripts/debug/build-rust-attachments.mjs /private/tmp/attachments75-final-rust-build",
+      "checks": null,
+      "outerWallSeconds": 6.27,
+      "exitCode": 1,
+      "toolSession": null
+    },
+    {
+      "name": "rust-builder",
+      "sourceHead": "11fa62c8",
+      "command": "CARGO_TARGET_DIR=/private/tmp/apple-notes-recording-window50-independent-target node scripts/debug/build-rust-attachments.mjs /private/tmp/attachments75-final-rust-build02",
+      "checks": null,
+      "outerWallSeconds": 2.86,
+      "exitCode": 0,
+      "toolSession": null
+    },
+    {
+      "name": "real-rust-mobile",
+      "sourceHead": "11fa62c8",
+      "command": "node scripts/debug/check-mobile-attachments-rust.mjs /private/tmp/attachments75-final-rust-build02 /private/tmp/attachments75-final-real",
+      "checks": 21,
+      "outerWallSeconds": 12.24,
+      "exitCode": 0,
+      "toolSession": 66210
+    },
+    {
+      "name": "strict-rust-protocol",
+      "sourceHead": "11fa62c8",
+      "command": "node scripts/debug/check-rust-backend.mjs",
+      "checks": 18,
+      "outerWallSeconds": 4.44,
+      "exitCode": 0,
+      "toolSession": 35044
+    },
+    {
+      "name": "mobile-attachments",
+      "sourceHead": "11fa62c8",
+      "command": "pnpm debug group attachments --mobile --out /private/tmp/attachments75-final-mobile",
+      "checks": 43,
+      "outerWallSeconds": 46.66,
+      "exitCode": 0,
+      "toolSession": 48521
+    },
+    {
+      "name": "production-exclusion",
+      "sourceHead": "11fa62c8",
+      "command": "pnpm debug check-production --production dist --out /private/tmp/attachments75-final-production",
+      "checks": null,
+      "outerWallSeconds": 1.9,
+      "exitCode": 0,
+      "toolSession": 97769
+    }
+  ]
+}

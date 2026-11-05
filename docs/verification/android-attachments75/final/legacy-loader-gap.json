@@ -1,0 +1,26 @@
+[
+  {
+    "command": "node scripts/check-attachment-submission.mjs",
+    "path": "/private/tmp/attachments75-final-submission.log",
+    "bytes": 78515,
+    "sha256": "2d7a6a2c2e795931b2b96db5c046f63f64ebf5ad2fd895ccf80e4ba6837cfa81",
+    "exitCode": 1,
+    "outerWallSeconds": 0.59,
+    "executedCases": 0,
+    "errorCode": "ERR_UNSUPPORTED_RESOLVE_REQUEST",
+    "missingCurrentDependency": "./metadata-client",
+    "explanation": "Old data-URL loader does not load current bridge dependency closure. No product cases executed. No adaptation or fallback performed."
+  },
+  {
+    "command": "node scripts/check-attachment-cancellation.mjs",
+    "path": "/private/tmp/attachments75-final-cancellation.log",
+    "bytes": 78515,
+    "sha256": "835f18fb80fe63d16f9cc9b9290eb16db7b8abc75ba73d300921ea336a2bb9a5",
+    "exitCode": 1,
+    "outerWallSeconds": 0.61,
+    "executedCases": 0,
+    "errorCode": "ERR_UNSUPPORTED_RESOLVE_REQUEST",
+    "missingCurrentDependency": "./metadata-client",
+    "explanation": "Old data-URL loader does not load current bridge dependency closure. No product cases executed. No adaptation or fallback performed."
+  }
+]

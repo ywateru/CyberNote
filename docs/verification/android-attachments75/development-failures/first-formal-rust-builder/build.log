@@ -1,0 +1,193 @@
+   Compiling notes-qa-fix-store v0.1.0 (/private/tmp/attachments75-final-rust-build/harness)
+warning: field `action` is never read
+  --> current/session.rs:43:5
+   |
+36 | pub struct Pending {
+   |            ------- field in this struct
+...
+43 |     action: Value,
+   |     ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: methods `export_archive`, `forget_attachment_window`, `begin`, `acknowledge`, `ready`, and `finish` are never used
+   --> current/session.rs:135:12
+    |
+ 57 | impl Session {
+    | ------------ methods in this implementation
+...
+135 |     pub fn export_archive(&self, path: &std::path::Path, token: &Token) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+...
+175 |     pub fn forget_attachment_window(&mut self, window: &str) {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+388 |     pub fn begin(
+    |            ^^^^^
+...
+446 |     pub fn acknowledge(&mut self, operation: &str, window: &str, success: bool) -> Result<()> {
+    |            ^^^^^^^^^^^
+...
+465 |     pub fn ready(&self) -> bool {
+    |            ^^^^^
+...
+470 |     pub fn finish(
+    |            ^^^^^^
+
+warning: methods `store_attachment` and `smart_projection` are never used
+  --> current/session/metadata.rs:54:19
+   |
+ 4 | impl Session {
+   | ------------ methods in this implementation
+...
+54 |     pub(crate) fn store_attachment(
+   |                   ^^^^^^^^^^^^^^^^
+...
+98 |     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: methods `revoke_keys`, `folder_note_ids`, and `store_attachment` are never used
+   --> current/store.rs:274:19
+    |
+174 | impl Store {
+    | ---------- methods in this implementation
+...
+274 |     pub(crate) fn revoke_keys(&mut self, ids: &[String]) {
+    |                   ^^^^^^^^^^^
+...
+279 |     pub(crate) fn folder_note_ids(&self, fid: &str) -> Result<Vec<String>> {
+    |                   ^^^^^^^^^^^^^^^
+...
+763 |     pub fn store_attachment(
+    |            ^^^^^^^^^^^^^^^^
+
+warning: function `validated_tags` is never used
+  --> current/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+
+warning: constant `MAX_ARCHIVE` is never used
+  --> current/store/archive.rs:56:7
+   |
+56 | const MAX_ARCHIVE: u64 = 256 * 1024 * 1024;
+   |       ^^^^^^^^^^^
+
+warning: constant `MAX_ATTACHMENT` is never used
+  --> current/store/archive.rs:57:7
+   |
+57 | const MAX_ATTACHMENT: u64 = 100 * 1024 * 1024;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `MAX_DECODED` is never used
+  --> current/store/archive.rs:58:7
+   |
+58 | const MAX_DECODED: u64 = 128 * 1024 * 1024;
+   |       ^^^^^^^^^^^
+
+warning: constant `MAX_JSON_VALUES` is never used
+  --> current/store/archive.rs:61:7
+   |
+61 | const MAX_JSON_VALUES: usize = 500_000;
+   |       ^^^^^^^^^^^^^^^
+
+warning: struct `JsonBudget` is never constructed
+  --> current/store/archive.rs:66:8
+   |
+66 | struct JsonBudget<'a> {
+   |        ^^^^^^^^^^
+
+warning: function `validate_json_budget` is never used
+   --> current/store/archive.rs:128:4
+    |
+128 | fn validate_json_budget(bytes: &[u8]) -> Result<()> {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `Archive` is never constructed
+   --> current/store/archive.rs:148:8
+    |
+148 | struct Archive {
+    |        ^^^^^^^
+
+warning: struct `ImportPlan` is never constructed
+   --> current/store/archive.rs:162:8
+    |
+162 | struct ImportPlan {
+    |        ^^^^^^^^^^
+
+warning: function `write_new` is never used
+   --> current/store/archive.rs:192:4
+    |
+192 | fn write_new(path: &Path, bytes: &[u8]) -> Result<()> {
+    |    ^^^^^^^^^
+
+warning: function `validate_settings` is never used
+   --> current/store/archive.rs:251:4
+    |
+251 | fn validate_settings(settings: &Value) -> Result<()> {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `remap_document` is never used
+   --> current/store/archive.rs:387:4
+    |
+387 | fn remap_document(doc: &mut Value, ids: &HashMap<String, String>) {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `copy_ids` is never used
+   --> current/store/archive.rs:399:4
+    |
+399 | fn copy_ids<'a>(
+    |    ^^^^^^^^
+
+warning: function `validate_archive_version` is never used
+   --> current/store/archive.rs:415:4
+    |
+415 | fn validate_archive_version(archive: &Archive) -> Result<()> {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `read_archive` is never used
+   --> current/store/archive.rs:427:4
+    |
+427 | fn read_archive(path: &Path) -> Result<Archive> {
+    |    ^^^^^^^^^^^^
+
+warning: methods `prepare_archive`, `export_archive`, `preflight_archive`, and `import_archive` are never used
+   --> current/store/archive.rs:436:8
+    |
+435 | impl Store {
+    | ---------- methods in this implementation
+436 |     fn prepare_archive(&self, mut archive: Archive, transaction_id: &str) -> Result<ImportPlan> {
+    |        ^^^^^^^^^^^^^^^
+...
+564 |     pub fn export_archive(&self, path: &Path) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+...
+641 |     pub(crate) fn preflight_archive(&self, path: &Path) -> Result<()> {
+    |                   ^^^^^^^^^^^^^^^^^
+...
+644 |     pub fn import_archive(&mut self, path: &Path) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+
+warning: function `import_checkpoint` is never used
+   --> current/store/archive.rs:802:4
+    |
+802 | fn import_checkpoint(_: &str) {}
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> current/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `evaluate_smart_folder` is never used
+   --> current/store/smart.rs:314:19
+    |
+250 | impl Store {
+    | ---------- method in this implementation
+...
+314 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: `notes-qa-fix-store` (bin "notes-current-attachment-transport") generated 23 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.99s

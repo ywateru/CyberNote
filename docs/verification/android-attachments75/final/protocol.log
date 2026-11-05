@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "checks": 18,
+  "labels": [
+    "malformed rejects every pending request with explicit protocol/process failure",
+    "malformed close waits until actual owned child exit",
+    "unknown rejects every pending request with explicit protocol/process failure",
+    "unknown close waits until actual owned child exit",
+    "shape rejects every pending request with explicit protocol/process failure",
+    "shape close waits until actual owned child exit",
+    "oversized rejects every pending request with explicit protocol/process failure",
+    "oversized close waits until actual owned child exit",
+    "timeout rejects every pending request with explicit protocol/process failure",
+    "timeout close waits until actual owned child exit",
+    "eof rejects every pending request with explicit protocol/process failure",
+    "eof close waits until actual owned child exit",
+    "exit rejects every pending request with explicit protocol/process failure",
+    "exit close waits until actual owned child exit",
+    "Spawn error rejects without hanging or Fake fallback",
+    "Graceful close waits for EOF-triggered delayed natural exit",
+    "Hung close terminates owned child and reports forced shutdown after actual exit",
+    "Duplicate response poisons transport and cannot settle later request"
+  ]
+}
+real 4.44
+user 0.25
+sys 0.09
