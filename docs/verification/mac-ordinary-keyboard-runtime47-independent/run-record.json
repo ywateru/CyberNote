@@ -1,0 +1,23 @@
+{
+  "atUTC": "2026-11-05T00:47:34.394556+00:00",
+  "initialRun": {
+    "exitCode": 1,
+    "passed": 268,
+    "assertions": 269,
+    "cause": "Independent checker compared OPT40 fixture ID literally with OPT41; preserved first-run/ in full"
+  },
+  "correction": "Assert each complete endpoint separately with explicit fixture ID difference; product and prior evidence untouched",
+  "finalRun": {
+    "exitCode": 0,
+    "passed": 269,
+    "assertions": 269
+  },
+  "manualViews": [
+    "keyboard-endpoints-srgb.png",
+    "sidebar-context-srgb.png"
+  ],
+  "protectedInputs": 131,
+  "newGUIOrRuntimeOperations": 0,
+  "scope": "Finite saved endpoints only; no source/build/GUI/ADB/DB or changing visual analysis47",
+  "status": "READY STOP"
+}

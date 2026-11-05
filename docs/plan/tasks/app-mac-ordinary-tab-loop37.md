@@ -34,3 +34,5 @@ Enter/Escape、普通输入/选择/组字、正常保存/取消、原生搜索�
 2026-11-05 root START37：隔离/private/tmp/apple-notes-ordinary-tab-loop37-01，分支task/mac-ordinary-tab-loop37，基线26648d88021adf3abdcfdfe879453a3b36866613。实际桥接拆分src/native-keyboard.ts与src/ordinary-folder-keyboard.ts，插件build.rs/自动生成权限加入新只读command，宿主capability不改。node_modules只读复用，独占Rust target；作者待固定提交/不同作者独审，尚未准确包验收。
 
 2026-11-05源阶段root接收：最终产品1a5422f、作者证据6e247ca经不同作者PASS；主线依次04e3312、b7a093c、d7d7db5逐字整合。root fresh重核作者69与独立20成员index全部匹配，完整307产品身份一致。独审448项身份/接线、12组件/11原生有限通过，review见docs/plan/reviews/app-mac-ordinary-tab-loop37.md。源码依赖已满足，允许42从此集成主线隔离开始；37状态仍in-progress，实际Tab差异须准确Mac14 Computer Use关闭，不授系统开启态、全IPC或像素通过。
+
+2026-11-05 root实际有限接收：准确Mac14 source d9ce9c4及实际47经不同作者复核；参见 `docs/verification/mac-ordinary-keyboard47-root-acceptance.md`。37/42当前系统导航关闭的指定故障路径有限通过，开启导航/多窗/IME不扩大通过；45干净48局部选中改善成立，自然态与Mac13完整raw/sRGB零变化，但字形/底色/不利阈值与整体像素继续开放。

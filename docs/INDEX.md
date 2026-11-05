@@ -2,7 +2,9 @@
 
 更新：2026-11-05。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
-当前包与有限验收：[文字、手机锚点与侧栏36根接收](verification/typography-compose-keyboard36-root-acceptance.md)。同源Mac13/Android08已实际运行并经独立证据复核，整体像素与完整交互目标继续进行。下方12/07记录保留为上一批基线。
+当前包：Mac14（构建源d9ce9c4）/Android08（源182464b），不同来源分别记账。[Mac14普通名称/侧栏/局部选中文字有限接收](verification/mac-ordinary-keyboard47-root-acceptance.md)；上一批双端见[接收36](verification/typography-compose-keyboard36-root-acceptance.md)。整体像素与完整交互目标继续进行。
+
+用户新优先项：[录音交互任务50](plan/tasks/app-recording-interactions50.md)、[桌面录音规格](ui/recording-desktop.md)、[截图/手机参考49](research/audio-interaction-readiness49/reference-layout.md)。基本录音交互实施中，不做听写/转写，未进入Mac14/Android08。
 
 - [Mac13实际独审36](plan/reviews/mac-typography-keyboard-runtime36.md)与[Android08实际独审36](plan/reviews/android-compose-anchor-runtime36.md)
 - [Mac12准确构建](verification/unified-candidate06/mac-name-focus-build12/README.md)与[独立核包](plan/reviews/mac-name-focus-independent12.md)

@@ -1,0 +1,8 @@
+{
+  "classification": "Verifier comparison overreach",
+  "failure": "Saved prior application is exact Mac13 snapshot. Prior shared dist bytes/modes/directories match Mac13, but directory inode differs; later Android frontend rebuild can replace shared dist. No unrelated source or build failure.",
+  "correctedCheck": "Preserved prior dist exact full snapshot still checked against Mac14 before-isolation record. Historical Mac13 correspondence checked by complete bytes/modes/directories, without assuming shared dist inode survived.",
+  "productChange": false,
+  "signatureCommandsRun": 0,
+  "originalFailureRetained": "attempt01-failure.json; verify-attempt01.py"
+}

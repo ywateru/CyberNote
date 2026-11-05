@@ -1,0 +1,9 @@
+# Mac14 独立准确核包
+
+PASS / PACKAGE IDENTITY READY STOP。1174项断言通过，375项保护文件内容/SHA/mtime不变。完整结论见 `docs/plan/reviews/mac-ordinary-loop-independent14.md`。
+
+固定source d9ce9c4b864c2d05bf3d2057ec48ae65fb868a46、freeze3adea7a3607d2247c7d34de529aab2fd38c48f160d91a6d336a0ae2e92974e94；sealed exe c9f7f35adc675c8058fabeb98f03fa7d1904a2c023e123cc396121264a8e211f，ZIP146fdbc67111cd1ae0779337a22af1550d1d9a446c27021bc243415f5dff0605。新鲜只读strict签名通过，original预期strict失败保留。
+
+复用Mac13方法核327完整输入、308产品、canonical结束及隔离、原件/ZIP完整字节和模式、Mach-O签名差异；没有重建、源行为测试、签名写入、启动/安装、GUI/ADB/DB或共享缓存遍历。当前公共target/dist不作为静态输入，来源GitID以root授权和冻结记录连接，未独立Git对象证明。真实交互、系统权限、跨端及全像素继续开放。
+
+attempt01保留历史共享dist inode过强断言失败和原脚本；实际保全dist与14记录完整一致、与13内容模式目录一致。修正只限核包脚本；attempt02通过。结果、fresh signatures、Mach-O证明、输入初末清单及原失败均在索引中。停止后由root启动准确sealed应用实测。

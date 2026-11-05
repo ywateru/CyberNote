@@ -6,15 +6,16 @@
 
 ## 当前交付（2026-11-05）
 
-当前本机可用包为 **Mac13 / Android08**，共用固定产品源 `182464bcc3055caadcd78fe4c7ce1a0ec31eea6a`。两端已实际运行，准确构建、有限设备记录及局部量图均有不同作者复核，见[本批有限接收](docs/verification/typography-compose-keyboard36-root-acceptance.md)。本地标签与智能文件夹已接入；完整规则、全部交互及像素目标继续按[交付计划](docs/plan/README.md)推进。
+当前本机可用包为 **Mac14 / Android08**。Mac14固定构建源 `d9ce9c4b864c2d05bf3d2057ec48ae65fb868a46`，Android08保持 `182464bcc3055caadcd78fe4c7ce1a0ec31eea6a`。两端来源分别记录；[Mac14有限接收](docs/verification/mac-ordinary-keyboard47-root-acceptance.md)承接[上一批双端接收](docs/verification/typography-compose-keyboard36-root-acceptance.md)。
 
 | 平台 | 当前本机交付（未纳入Git） | 本批已验证 |
 | --- | --- | --- |
-| Mac13 | [ZIP](artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.zip) / [应用](artifacts/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/mac-sealed.app) | arm64，本地完整adhoc签名、未公证；两条侧栏恢复、动态菜单、显隐偏好正常重启保持、普通文字绘制改善 |
-| Android08 | [APK](artifacts/unified-candidate06/android-compose-anchor-build08/android-attempt01/android-original.apk) | arm64-v8a debug；保数据覆盖升级、右下新建真实触摸、左侧plus取消、旧QA正文/标签冷启保持，图标实际右移8px |
+| Mac14 | [ZIP](artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-sealed.zip) / [应用](artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-sealed.app) | arm64、本地完整adhoc签名、未公证；普通Tab全选循环、OptionTab实际插入与撤销重做、侧栏两入口及显隐正常重启、浅色选中字改善 |
+| Android08 | [APK](artifacts/unified-candidate06/android-compose-anchor-build08/android-attempt01/android-original.apk) | arm64-v8a debug；保数据覆盖升级、右下新建真实触摸、左侧plus取消、旧QA正文/标签冷启保持 |
 
-Mac普通表单名称和标签局部更接近原版，字形、选区色与焦点环仍有残差。普通Tab/OptionTab仍不一致，正按[局部循环任务37](docs/plan/tasks/app-mac-ordinary-tab-loop37.md)修复。Android右下图标宽归一中心已从206.2667改善至207.9259，录屏为208；原视频224×480，不能据此授精确path或全页像素PASS。空白新建无输入返回后8→9的条目保留，原版相同路径语义待证，不授取消不新增。详见[Mac实际复核](docs/plan/reviews/mac-typography-keyboard-runtime36.md)及[Android实际复核](docs/plan/reviews/android-compose-anchor-runtime36.md)。
+Mac14当前系统导航关闭条件下的Tab/OptionTab故障路径已实际有限通过；系统导航开启、多窗和完整输入仍待验。干净补拍48支持全选及部分选中文字颜色误差下降，自然态相对Mac13完整图像零变化，字形、选区背景与全界面像素仍有残差。Android空白新建返回后计数9的条目继续保留，原版相同路径语义待证。
 
+用户新增的录音基本交互要求正按[任务50](docs/plan/tasks/app-recording-interactions50.md)实施，包含桌面右侧录音栏、正文进行中卡、试听定位与安全完成，不做听写或转写。该项尚未包含在上述已交付包中；[用户桌面截图](references/desktop/recording-20261105/user-recording-sidebar.png)已原字节保存。
 原始移动端录屏已保存在 `references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4`。原版删除/恢复实验按用户要求暂停；Mac对比使用Computer Use，本批未增加系统截图工具权限要求。旧包、缓存及失败证据均保留。
 
 ## 早期交付记录

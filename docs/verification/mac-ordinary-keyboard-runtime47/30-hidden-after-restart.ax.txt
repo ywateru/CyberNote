@@ -1,0 +1,58 @@
+Window: "备忘录", App: 备忘录.
+0 standard window 备忘录, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost
+			3 text 昨天
+			4 button test 2026/11/4 helloss sfs sss sss sss
+			5 button QA-VERTICAL-LONG-20261104-03 2026/11/4 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 长段自动换行：这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。
+			6 button 新备忘录 2026/11/4 QA-VERTICAL-INPUT-20261104-04 Ag中文 尾段 before abc 123END-VERTICAL04 输入回归：中文 abc 123 END-VERTICAL04-COMMITTED
+			7 button QA-PUNCT-20261104-02 2026/11/4 ，。！？；：《》 中，中。中！中？中；中：中《中》中 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文
+			8 button QA-TYPE-20261104-01 2026/11/4 宽三栏工具栏与搜索对照。 仅本地合成内容。 ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 中文标点，。！？；：《》 — () [] 行距对照一 Ag中文 行距对照二 Ag中文 行距对照三 Ag中文 空行之后 Ag中文 长段换行：这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。
+			9 button QA-WIDE-20261104-05 2026/11/4 宽三栏工具栏与搜索对照。 仅本地合成内容。
+			10 text 过去7天
+			11 button QA FIX02 34223AF MacABC Beta Gamma local owner 2026/11/3 QA FIX05 EC1 CLOSE 20261103 保存核对：Alpha 123 — 完整正文 END-EC1-99538
+			12 button 每日 TODO 2026/11/3 记录每一个想法 今天的计划 整理需求与交互 完成本地保存
+			13 splitter 调整分栏宽度
+			14 container
+				15 button 2026年11月4日 14:19
+				16 text entry area (settable) 备忘录正文, Value: QA-TYPE-20261104-01
+宽三栏工具栏与搜索对照。
+仅本地合成内容。
+ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz
+0123456789 中文标点，。！？；：《》 — () []
+行距对照一 Ag中文
+行距对照二 Ag中文
+行距对照三 Ag中文
+
+空行之后 Ag中文
+长段换行：这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。
+					17 text (settable) QA-TYPE-20261104-01
+					18 text (settable) 宽三栏工具栏与搜索对照。
+					19 text (settable) 仅本地合成内容。
+					20 text (settable) ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz
+					21 text (settable) 0123456789 中文标点，。！？；：《》 — () []
+					22 text (settable) 行距对照一 Ag中文
+					23 text (settable) 行距对照二 Ag中文
+					24 text (settable) 行距对照三 Ag中文
+					25 text (settable) 空行之后 Ag中文
+					26 text (settable) 长段换行：这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。
+	27 button 显示或隐藏文件夹
+	28 button 新建备忘录
+	29 button 添加附件
+	30 button 核对清单
+	31 button 格式
+	32 button 插入表格
+	33 button 更多备忘录操作
+	34 button 共享备忘录
+	35 button 其他工具
+	36 search text field (settable) Description: 搜索备忘录, Placeholder: 搜索
+		37 button Search
+	38 close button
+	39 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	40 minimize button
+41 menu bar
+	42 备忘录
+	43 文件
+	44 编辑
+	45 显示
+	46 窗口

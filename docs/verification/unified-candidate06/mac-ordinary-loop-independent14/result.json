@@ -1,0 +1,4798 @@
+{
+  "status": "PASS exact-package identity only",
+  "stop": true,
+  "sourceHeadSuppliedByRoot": "d9ce9c4b864c2d05bf3d2057ec48ae65fb868a46",
+  "gitObjectRead": false,
+  "freezeSHA256": "3adea7a3607d2247c7d34de529aab2fd38c48f160d91a6d336a0ae2e92974e94",
+  "productFiles": 308,
+  "inputFiles": 327,
+  "productAggregate": "51ef44771aff4afd0117af09f6b5de6ae928306277ef1534eb35b951b8e87b3e",
+  "inputAggregate": "00ec0f65421419ef9d4dfc7fdfad80f755abb599469d69382d585470c0d39a8b",
+  "protectedFiles": 375,
+  "checks": [
+    {
+      "name": "exact authorization SHA",
+      "passed": true
+    },
+    {
+      "name": "exact freeze SHA",
+      "passed": true
+    },
+    {
+      "name": "exact build result SHA",
+      "passed": true
+    },
+    {
+      "name": "exact collection result SHA",
+      "passed": true
+    },
+    {
+      "name": "exact nine-field authorization",
+      "passed": true
+    },
+    {
+      "name": "source identity chain",
+      "passed": true
+    },
+    {
+      "name": "root freeze review",
+      "passed": true
+    },
+    {
+      "name": "freeze summary",
+      "passed": true
+    },
+    {
+      "name": "freeze review precedes START",
+      "passed": true
+    },
+    {
+      "name": "build collect exact linkage",
+      "passed": true
+    },
+    {
+      "name": "successful bounded build",
+      "passed": true
+    },
+    {
+      "name": "collector ready all comparisons",
+      "passed": true
+    },
+    {
+      "name": "full frozen snapshot inputs-before.json",
+      "passed": true
+    },
+    {
+      "name": "full frozen snapshot inputs-after.json",
+      "passed": true
+    },
+    {
+      "name": "full frozen snapshot collection/inputs-before-collection.json",
+      "passed": true
+    },
+    {
+      "name": "full frozen snapshot collection/inputs-after-collection.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input assets/mobile-paper-previews/README.md",
+      "passed": true
+    },
+    {
+      "name": "current frozen input assets/mobile-paper-previews/grid-large.svg",
+      "passed": true
+    },
+    {
+      "name": "current frozen input assets/mobile-paper-previews/grid-medium.svg",
+      "passed": true
+    },
+    {
+      "name": "current frozen input assets/mobile-paper-previews/grid-small.svg",
+      "passed": true
+    },
+    {
+      "name": "current frozen input assets/mobile-paper-previews/lines-large.svg",
+      "passed": true
+    },
+    {
+      "name": "current frozen input assets/mobile-paper-previews/lines-medium.svg",
+      "passed": true
+    },
+    {
+      "name": "current frozen input assets/mobile-paper-previews/lines-small.svg",
+      "passed": true
+    },
+    {
+      "name": "current frozen input docs/fixtures/smart-projection09.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input index.html",
+      "passed": true
+    },
+    {
+      "name": "current frozen input node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.cjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.d.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.js",
+      "passed": true
+    },
+    {
+      "name": "current frozen input node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/index.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/input.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input package.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input patches/prosemirror-view@1.42.9.patch",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/README.md",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/consumer-rules.pro",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/gradle.lockfile",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/gradle.properties",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/harness/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/harness/src/main/AndroidManifest.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/blank-fixture.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/chinese-fixture.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/settings.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/deviceFixture/java/com/local/notesscan/DeviceFixtureActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/main/AndroidManifest.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ChineseOcr.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/CropView.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/Images.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ProbeActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ScanActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/main/res/values/styles.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/android/src/test/java/com/local/notesscan/GeometryTest.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/build.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/examples/host_copy_probe.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/examples/macos_probe.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/guest-js/index.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/macos/vision.m",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/package.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/permissions/autogenerated/commands/execute.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/permissions/autogenerated/reference.md",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/permissions/default.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/permissions/schemas/schema.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/scripts/artifact-inventory.py",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/scripts/check-android.sh",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/scripts/generate-fixture.swift",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/src/lib.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-scan/src/session.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/README.md",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/build.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/examples/demo.html",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/examples/state.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/macos/format.h",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/macos/format.m",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/macos/keyboard.m",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/package.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/bind.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/focus_search.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/inspect.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/unbind.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/update.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/permissions/default.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/src/model.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/src/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/verification/format-gallery/README.md",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/verification/format-gallery/android-check.txt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/verification/format-gallery/checks.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/verification/format-gallery/guest-typecheck.txt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/verification/format-gallery/inputs.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/verification/format-gallery/objc-syntax.txt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/verification/format-gallery/rust-test.txt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input plugins/tauri-plugin-notes-ui/verification/format-gallery/source-isolation.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input pnpm-lock.yaml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input pnpm-workspace.yaml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/android-fix01.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/android-ime-regression.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/android-smoke.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/android.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/audio-card-rust-fixture.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/build-window-capture.py",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-access-boundary.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-android-composition.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-attachment-cancellation.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-attachment-submission.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-audio-card-integration.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-audio-card-store.py",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-audio-card-ui.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-audio-controls-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-audio-playback-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-audio-playback.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-body-typography-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-document-identity.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-editor-actions.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-editor-schema.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-metadata-session.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-native-toolbar.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-ocr-host.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-ocr-panel-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-recording-panel-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-recording-preview.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-recording-session.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-recording-submit.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-search-selection.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-search-zero-startup.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-search-zero-ui.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-secure-id.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-sidebar-restore-geometry.py",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-smart-contract.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-smart-ui.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-tags-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-tags-composition-retention.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-tags-save-boundary.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-tags-store.py",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-wide-toolbar-geometry.py",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/check-window-capture.swift",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/compare-fix02-toolbar.py",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/recording-platform-fixture.mjs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/run-window-capture.py",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/window-capture.md",
+      "passed": true
+    },
+    {
+      "name": "current frozen input scripts/window-capture.swift",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/Cargo.lock",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/Cargo.toml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/Info.plist",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/app-icon.svg",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/build.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/capabilities/default.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/capabilities/macos-notes-ui.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/.editorconfig",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/proguard-rules.pro",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/proguard-tauri.pro",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Ipc.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Logger.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/PermissionHelper.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Rust.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebChromeClient.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebView.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebViewClient.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/TauriActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/WryActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/proguard-wry.pro",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/layout/activity_main.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/values-night/themes.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/values/colors.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/values/ic_launcher_background.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/values/strings.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/values/themes.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/src/main/res/xml/file_paths.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/tauri.build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/app/tauri.properties",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/BuildTask.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/RustPlugin.kt",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/gradle.properties",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/gradle/wrapper/gradle-wrapper.properties",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/gradlew",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/gradlew.bat",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/settings.gradle",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/gen/android/tauri.settings.gradle",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/128x128.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/128x128@2x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/32x32.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/64x64.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/Square107x107Logo.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/Square142x142Logo.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/Square150x150Logo.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/Square284x284Logo.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/Square30x30Logo.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/Square310x310Logo.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/Square44x44Logo.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/Square71x71Logo.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/Square89x89Logo.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/StoreLogo.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-anydpi-v26/ic_launcher.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-hdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-mdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-xhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/android/values/ic_launcher_background.xml",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/icon.icns",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/icon.ico",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/icon.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-20x20@1x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-20x20@2x-1.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-20x20@2x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-20x20@3x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-29x29@1x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-29x29@2x-1.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-29x29@2x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-29x29@3x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-40x40@1x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-40x40@2x-1.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-40x40@2x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-40x40@3x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-512@2x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-60x60@2x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-60x60@3x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-76x76@1x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-76x76@2x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/icons/ios/AppIcon-83.5x83.5@2x.png",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/lib.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/main.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/media_permission.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/session.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/session/metadata.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/session/smart_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/session/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/archive.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/archive/document-cases.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/archive/document-schema.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/archive/document.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/archive/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/attachment_operations.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/attachment_operations/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/commits.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/folder_name_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/metadata_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/open.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/open_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/recorded_at_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/smart.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/src/store/smart_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src-tauri/tauri.conf.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/App.tsx",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/Editor.tsx",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/MobileFolderIcons.tsx",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/OcrPanel.css",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/OcrPanel.tsx",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/RecordingPanel.css",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/RecordingPanel.tsx",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/SmartFolderForm.tsx",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/access-client.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/attachment-submission.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/attachment-target.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/audio-playback.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/bridge.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/document-equality.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/editor-actions.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/editor-save-snapshot.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/editor-schema.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/main.tsx",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/metadata-client.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/native-keyboard.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/native-toolbar-controller.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/native-toolbar-state.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/native-toolbar.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/note-tag-extension.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/note-tags.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/ocr-host.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/ocr-native.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/ordinary-folder-keyboard.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/ordinary-folder-option.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/proof-access.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/recording-clock.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/recording-metadata.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/recording-playback.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/recording-session.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/save-queue.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/save-revisions.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/search-editor-gate.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/search-selection.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/secure-id.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/sidebar-preference.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/smart-draft.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/smart-folders.css",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/smart-folders.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/style.css",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/tag-composition.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/trusted-synchronization.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/types.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input src/vite-env.d.ts",
+      "passed": true
+    },
+    {
+      "name": "current frozen input tsconfig.json",
+      "passed": true
+    },
+    {
+      "name": "current frozen input vite.config.ts",
+      "passed": true
+    },
+    {
+      "name": "all327 current files aggregate",
+      "passed": true
+    },
+    {
+      "name": "all308 product files aggregate",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 aggregate identity",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained assets/mobile-paper-previews/README.md",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained assets/mobile-paper-previews/grid-large.svg",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained assets/mobile-paper-previews/grid-medium.svg",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained assets/mobile-paper-previews/grid-small.svg",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained assets/mobile-paper-previews/lines-large.svg",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained assets/mobile-paper-previews/lines-medium.svg",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained assets/mobile-paper-previews/lines-small.svg",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained docs/fixtures/smart-projection09.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained index.html",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained package.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained patches/prosemirror-view@1.42.9.patch",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/README.md",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/consumer-rules.pro",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/gradle.lockfile",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/gradle.properties",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/harness/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/harness/src/main/AndroidManifest.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/blank-fixture.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/chinese-fixture.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/settings.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/deviceFixture/java/com/local/notesscan/DeviceFixtureActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/main/AndroidManifest.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ChineseOcr.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/CropView.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/Images.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ProbeActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ScanActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/main/res/values/styles.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/android/src/test/java/com/local/notesscan/GeometryTest.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/build.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/examples/host_copy_probe.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/examples/macos_probe.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/guest-js/index.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/macos/vision.m",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/package.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/permissions/autogenerated/commands/execute.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/permissions/autogenerated/reference.md",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/permissions/default.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/permissions/schemas/schema.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/scripts/artifact-inventory.py",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/scripts/check-android.sh",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/scripts/generate-fixture.swift",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/src/lib.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-scan/src/session.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/README.md",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/build.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/examples/demo.html",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/examples/state.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/macos/format.h",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/macos/format.m",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/macos/keyboard.m",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/package.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/bind.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/focus_search.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/inspect.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/unbind.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/update.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/permissions/default.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/src/model.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/src/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/verification/format-gallery/README.md",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/verification/format-gallery/android-check.txt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/verification/format-gallery/checks.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/verification/format-gallery/guest-typecheck.txt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/verification/format-gallery/inputs.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/verification/format-gallery/objc-syntax.txt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/verification/format-gallery/rust-test.txt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained plugins/tauri-plugin-notes-ui/verification/format-gallery/source-isolation.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained pnpm-lock.yaml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained pnpm-workspace.yaml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/android-fix01.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/android-ime-regression.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/android-smoke.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/android.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/audio-card-rust-fixture.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/build-window-capture.py",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-access-boundary.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-android-composition.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-attachment-cancellation.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-attachment-submission.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-audio-card-integration.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-audio-card-store.py",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-audio-card-ui.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-audio-controls-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-audio-playback-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-audio-playback.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-body-typography-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-document-identity.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-editor-actions.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-editor-schema.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-metadata-session.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-native-toolbar.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-ocr-host.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-ocr-panel-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-recording-panel-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-recording-preview.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-recording-session.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-recording-submit.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-search-selection.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-search-zero-startup.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-search-zero-ui.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-secure-id.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-sidebar-restore-geometry.py",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-smart-contract.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-smart-ui.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-tags-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-tags-composition-retention.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-tags-save-boundary.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-tags-store.py",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-wide-toolbar-geometry.py",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/check-window-capture.swift",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/compare-fix02-toolbar.py",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/recording-platform-fixture.mjs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/run-window-capture.py",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/window-capture.md",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained scripts/window-capture.swift",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/Cargo.lock",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/Cargo.toml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/Info.plist",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/app-icon.svg",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/build.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/capabilities/default.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/capabilities/macos-notes-ui.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/.editorconfig",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/proguard-rules.pro",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/layout/activity_main.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/values-night/themes.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/values/colors.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/values/ic_launcher_background.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/values/strings.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/values/themes.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/app/src/main/res/xml/file_paths.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/BuildTask.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/RustPlugin.kt",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/gradle.properties",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/gradle/wrapper/gradle-wrapper.properties",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/gradlew",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/gradlew.bat",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/gen/android/settings.gradle",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/128x128.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/128x128@2x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/32x32.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/64x64.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/Square107x107Logo.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/Square142x142Logo.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/Square150x150Logo.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/Square284x284Logo.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/Square30x30Logo.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/Square310x310Logo.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/Square44x44Logo.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/Square71x71Logo.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/Square89x89Logo.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/StoreLogo.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-anydpi-v26/ic_launcher.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-hdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-mdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-xhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/android/values/ic_launcher_background.xml",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/icon.icns",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/icon.ico",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/icon.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-20x20@1x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-20x20@2x-1.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-20x20@2x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-20x20@3x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-29x29@1x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-29x29@2x-1.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-29x29@2x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-29x29@3x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-40x40@1x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-40x40@2x-1.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-40x40@2x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-40x40@3x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-512@2x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-60x60@2x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-60x60@3x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-76x76@1x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-76x76@2x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/icons/ios/AppIcon-83.5x83.5@2x.png",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/lib.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/main.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/media_permission.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/session.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/session/metadata.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/session/smart_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/session/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/archive.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/archive/document-cases.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/archive/document-schema.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/archive/document.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/archive/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/attachment_operations.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/attachment_operations/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/commits.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/folder_name_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/metadata_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/open.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/open_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/recorded_at_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/smart.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/src/store/smart_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src-tauri/tauri.conf.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/App.tsx",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/Editor.tsx",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/MobileFolderIcons.tsx",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/OcrPanel.css",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/OcrPanel.tsx",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/RecordingPanel.css",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/RecordingPanel.tsx",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/access-client.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/attachment-submission.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/attachment-target.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/audio-playback.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/bridge.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/document-equality.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/editor-actions.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/editor-save-snapshot.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/editor-schema.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/main.tsx",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/metadata-client.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/native-keyboard.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/native-toolbar-controller.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/native-toolbar-state.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/native-toolbar.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/note-tag-extension.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/note-tags.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/ocr-host.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/ocr-native.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/ordinary-folder-keyboard.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/proof-access.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/recording-clock.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/recording-metadata.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/recording-playback.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/recording-session.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/save-queue.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/save-revisions.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/search-editor-gate.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/search-selection.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/secure-id.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/sidebar-preference.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/smart-draft.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/smart-folders.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/style.css",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/tag-composition.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/trusted-synchronization.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/types.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained src/vite-env.d.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained tsconfig.json",
+      "passed": true
+    },
+    {
+      "name": "reviewed37 product retained vite.config.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed42 aggregate",
+      "passed": true
+    },
+    {
+      "name": "reviewed42 exact product src/SmartFolderForm.tsx",
+      "passed": true
+    },
+    {
+      "name": "reviewed42 exact product src/ordinary-folder-option.ts",
+      "passed": true
+    },
+    {
+      "name": "reviewed45 exact three-line CSS",
+      "passed": true
+    },
+    {
+      "name": "exact canonical tool check-android-offline-init.py",
+      "passed": true
+    },
+    {
+      "name": "exact canonical tool check-boundaries.py",
+      "passed": true
+    },
+    {
+      "name": "exact canonical tool check-review-fixes.py",
+      "passed": true
+    },
+    {
+      "name": "exact canonical tool collect-outputs.py",
+      "passed": true
+    },
+    {
+      "name": "exact canonical tool common.py",
+      "passed": true
+    },
+    {
+      "name": "exact canonical tool freeze-inputs.py",
+      "passed": true
+    },
+    {
+      "name": "exact canonical tool run-build.py",
+      "passed": true
+    },
+    {
+      "name": "seven canonical tools",
+      "passed": true
+    },
+    {
+      "name": "offline jobs2 actual environment",
+      "passed": true
+    },
+    {
+      "name": "25 unique frozen model member records",
+      "passed": true
+    },
+    {
+      "name": "supplemental overlay aggregate",
+      "passed": true
+    },
+    {
+      "name": "raw build no download or reused configuration cache",
+      "passed": true
+    },
+    {
+      "name": "actual production frontend native plugin and mac log",
+      "passed": true
+    },
+    {
+      "name": "canonical isolated output evidence",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/Info.plist",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/MacOS",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/MacOS/notes-clone",
+      "passed": true
+    },
+    {
+      "name": "prior full inode mode file identity application",
+      "passed": true
+    },
+    {
+      "name": "regular entry assets",
+      "passed": true
+    },
+    {
+      "name": "regular entry assets/index-B5XVqrGq.js",
+      "passed": true
+    },
+    {
+      "name": "regular entry assets/index-CcN0EZLg.css",
+      "passed": true
+    },
+    {
+      "name": "regular entry index.html",
+      "passed": true
+    },
+    {
+      "name": "prior full inode mode file identity dist",
+      "passed": true
+    },
+    {
+      "name": "saved exact Mac13 original app",
+      "passed": true
+    },
+    {
+      "name": "prior dist contents match Mac13 without asserting shared directory inode",
+      "passed": true
+    },
+    {
+      "name": "new bundle and dist distinct inodes",
+      "passed": true
+    },
+    {
+      "name": "generated dist exactly matches captured build manifest",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/Info.plist",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/MacOS",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/MacOS/notes-clone",
+      "passed": true
+    },
+    {
+      "name": "complete original bundle inventory",
+      "passed": true
+    },
+    {
+      "name": "exact original executable",
+      "passed": true
+    },
+    {
+      "name": "exact original ZIP",
+      "passed": true
+    },
+    {
+      "name": "original ZIP unique names",
+      "passed": true
+    },
+    {
+      "name": "original ZIP bundle root",
+      "passed": true
+    },
+    {
+      "name": "original ZIP bundle root",
+      "passed": true
+    },
+    {
+      "name": "original exact ZIP content CRC hashes and modes",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/Info.plist",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/MacOS",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/MacOS/notes-clone",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/_CodeSignature",
+      "passed": true
+    },
+    {
+      "name": "regular entry Contents/_CodeSignature/CodeResources",
+      "passed": true
+    },
+    {
+      "name": "complete sealed bundle inventory",
+      "passed": true
+    },
+    {
+      "name": "exact sealed executable",
+      "passed": true
+    },
+    {
+      "name": "exact sealed ZIP",
+      "passed": true
+    },
+    {
+      "name": "sealed ZIP unique names",
+      "passed": true
+    },
+    {
+      "name": "sealed ZIP bundle root",
+      "passed": true
+    },
+    {
+      "name": "sealed ZIP bundle root",
+      "passed": true
+    },
+    {
+      "name": "sealed ZIP bundle root",
+      "passed": true
+    },
+    {
+      "name": "sealed exact ZIP content CRC hashes and modes",
+      "passed": true
+    },
+    {
+      "name": "original expected executable and ZIP",
+      "passed": true
+    },
+    {
+      "name": "sealed expected executable",
+      "passed": true
+    },
+    {
+      "name": "sealed expected ZIP",
+      "passed": true
+    },
+    {
+      "name": "sealed expected bundle aggregate",
+      "passed": true
+    },
+    {
+      "name": "original equals newly generated full bundle snapshot",
+      "passed": true
+    },
+    {
+      "name": "only signature executable and CodeResources differences",
+      "passed": true
+    },
+    {
+      "name": "thin arm64 MachO",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 0",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 1",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 2",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 3",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 4",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 5",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 6",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 7",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 8",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 9",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 10",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 11",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 12",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 13",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 14",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 15",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 16",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 17",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 18",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 19",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 20",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 21",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 22",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 23",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 24",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 25",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 26",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 27",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 28",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 29",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 30",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 31",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 32",
+      "passed": true
+    },
+    {
+      "name": "same load command structure 33",
+      "passed": true
+    },
+    {
+      "name": "one signature and LINKEDIT",
+      "passed": true
+    },
+    {
+      "name": "same signature tail start",
+      "passed": true
+    },
+    {
+      "name": "LINKEDIT tail ends at signature",
+      "passed": true
+    },
+    {
+      "name": "entire nonsignature payload equal with only size fields normalized",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker NotesUIKeyboardPolicy",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker isFullKeyboardAccessEnabled",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker setTabFocusesLinks:",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker notes_ui_keyboard_attach",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker notes_ui_keyboard_destroy",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker notes_ui_keyboard_navigation",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker notes-ui: keyboard policy installation completed for ",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker notes-ui: keyboard policy refresh failed",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker NSWindowDidBecomeKeyNotification",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker NSApplicationDidBecomeActiveNotification",
+      "passed": true
+    },
+    {
+      "name": "compiled native keyboard marker NSWindowWillCloseNotification",
+      "passed": true
+    },
+    {
+      "name": "original failure and sealed success retained",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-01.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-01.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-02.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-02.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-03.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-03.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-04.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-04.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-05.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-05.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-06.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-06.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-07.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-07.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-08.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-08.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-09.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-09.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-10.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-10.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-11.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-11.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-12.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-12.txt",
+      "passed": true
+    },
+    {
+      "name": "raw command log command-13.txt",
+      "passed": true
+    },
+    {
+      "name": "bounded completed command command-13.txt",
+      "passed": true
+    },
+    {
+      "name": "fresh signature expected exit ['/usr/bin/codesign', '--verify', '--deep', '--strict', '--verbose=4', '/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-original.app']",
+      "passed": true
+    },
+    {
+      "name": "fresh exact original resource failure",
+      "passed": true
+    },
+    {
+      "name": "fresh signature expected exit ['/usr/bin/codesign', '--verify', '--deep', '--strict', '--verbose=4', '/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-sealed.app']",
+      "passed": true
+    },
+    {
+      "name": "fresh sealed valid",
+      "passed": true
+    },
+    {
+      "name": "fresh signature expected exit ['/usr/bin/codesign', '-d', '--verbose=4', '/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-sealed.app']",
+      "passed": true
+    },
+    {
+      "name": "fresh adhoc arm64 identity",
+      "passed": true
+    },
+    {
+      "name": "same bundle plist metadata",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-01.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-02.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-03.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-04.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-05.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-06.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-07.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-08.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-09.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-10.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-11.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-12.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/command-13.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-original.app/Contents/Info.plist",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-original.zip",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-sealed.app/Contents/Info.plist",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-sealed.app/Contents/_CodeSignature/CodeResources",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-sealed.zip",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged assets/mobile-paper-previews/README.md",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged assets/mobile-paper-previews/grid-large.svg",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged assets/mobile-paper-previews/grid-medium.svg",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged assets/mobile-paper-previews/grid-small.svg",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged assets/mobile-paper-previews/lines-large.svg",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged assets/mobile-paper-previews/lines-medium.svg",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged assets/mobile-paper-previews/lines-small.svg",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/fixtures/smart-projection09.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/mac-ordinary-option-insertion42/product-source.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/mac-ordinary-tab-loop37/all-product-inputs.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/freeze-summary.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/input-freeze.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/build.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/collection/inputs-after-collection.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/collection/inputs-before-collection.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/collection/result.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/generated-outputs.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/inputs-after.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/inputs-before.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/output-isolation.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/prior-outputs/application/Contents/Info.plist",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/prior-outputs/application/Contents/MacOS/notes-clone",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/prior-outputs/dist/assets/index-B5XVqrGq.js",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/prior-outputs/dist/assets/index-CcN0EZLg.css",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/prior-outputs/dist/index.html",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/result.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop-build14/root-freeze-review.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-ordinary-loop39-preparation/mac-authorization.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/mac-typography-keyboard-build13/mac-attempt02/generated-outputs.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/preparation/check-android-offline-init.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/preparation/check-boundaries.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/preparation/check-review-fixes.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/preparation/collect-outputs.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/preparation/common.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/preparation/freeze-inputs.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged docs/verification/unified-candidate06/preparation/run-build.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged index.html",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.cjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.d.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.js",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/index.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/input.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged package.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged patches/prosemirror-view@1.42.9.patch",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/README.md",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/consumer-rules.pro",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/gradle.lockfile",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/gradle.properties",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/harness/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/harness/src/main/AndroidManifest.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/blank-fixture.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/chinese-fixture.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/settings.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/deviceFixture/java/com/local/notesscan/DeviceFixtureActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/main/AndroidManifest.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ChineseOcr.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/CropView.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/Images.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ProbeActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ScanActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/main/res/values/styles.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/android/src/test/java/com/local/notesscan/GeometryTest.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/build.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/examples/host_copy_probe.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/examples/macos_probe.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/guest-js/index.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/macos/vision.m",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/package.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/permissions/autogenerated/commands/execute.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/permissions/autogenerated/reference.md",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/permissions/default.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/permissions/schemas/schema.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/scripts/artifact-inventory.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/scripts/check-android.sh",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/scripts/generate-fixture.swift",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/src/lib.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-scan/src/session.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/README.md",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/build.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/examples/demo.html",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/examples/state.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/macos/format.h",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/macos/format.m",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/macos/keyboard.m",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/package.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/bind.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/focus_search.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/inspect.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/unbind.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/update.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/permissions/default.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/src/model.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/src/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/verification/format-gallery/README.md",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/verification/format-gallery/android-check.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/verification/format-gallery/checks.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/verification/format-gallery/guest-typecheck.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/verification/format-gallery/inputs.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/verification/format-gallery/objc-syntax.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/verification/format-gallery/rust-test.txt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged plugins/tauri-plugin-notes-ui/verification/format-gallery/source-isolation.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged pnpm-lock.yaml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged pnpm-workspace.yaml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/android-fix01.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/android-ime-regression.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/android-smoke.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/android.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/audio-card-rust-fixture.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/build-window-capture.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-access-boundary.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-android-composition.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-attachment-cancellation.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-attachment-submission.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-audio-card-integration.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-audio-card-store.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-audio-card-ui.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-audio-controls-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-audio-playback-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-audio-playback.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-body-typography-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-document-identity.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-editor-actions.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-editor-schema.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-metadata-session.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-native-toolbar.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-ocr-host.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-ocr-panel-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-recording-panel-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-recording-preview.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-recording-session.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-recording-submit.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-search-selection.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-search-zero-startup.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-search-zero-ui.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-secure-id.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-sidebar-restore-geometry.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-smart-contract.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-smart-ui.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-tags-browser.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-tags-composition-retention.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-tags-save-boundary.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-tags-store.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-wide-toolbar-geometry.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/check-window-capture.swift",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/compare-fix02-toolbar.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/recording-platform-fixture.mjs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/run-window-capture.py",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/window-capture.md",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged scripts/window-capture.swift",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/App.tsx",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/Editor.tsx",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/MobileFolderIcons.tsx",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/OcrPanel.css",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/OcrPanel.tsx",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/RecordingPanel.css",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/RecordingPanel.tsx",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/SmartFolderForm.tsx",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/access-client.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/attachment-submission.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/attachment-target.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/audio-playback.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/bridge.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/document-equality.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/editor-actions.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/editor-save-snapshot.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/editor-schema.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/main.tsx",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/metadata-client.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/native-keyboard.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/native-toolbar-controller.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/native-toolbar-state.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/native-toolbar.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/note-tag-extension.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/note-tags.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/ocr-host.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/ocr-native.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/ordinary-folder-keyboard.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/ordinary-folder-option.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/proof-access.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/recording-clock.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/recording-metadata.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/recording-playback.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/recording-session.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/save-queue.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/save-revisions.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/search-editor-gate.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/search-selection.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/secure-id.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/sidebar-preference.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/smart-draft.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/smart-folders.css",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/smart-folders.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/style.css",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/tag-composition.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/trusted-synchronization.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/types.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src/vite-env.d.ts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/Cargo.lock",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/Cargo.toml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/Info.plist",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/app-icon.svg",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/build.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/capabilities/default.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/capabilities/macos-notes-ui.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/.editorconfig",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/proguard-rules.pro",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/proguard-tauri.pro",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Ipc.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Logger.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/PermissionHelper.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Rust.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebChromeClient.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebView.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebViewClient.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/TauriActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/WryActivity.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/proguard-wry.pro",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/layout/activity_main.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/values/colors.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/values/ic_launcher_background.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/values/strings.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/values/themes.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/values-night/themes.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/src/main/res/xml/file_paths.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/tauri.build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/app/tauri.properties",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/BuildTask.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/RustPlugin.kt",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/gradle/wrapper/gradle-wrapper.properties",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/gradle.properties",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/gradlew",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/gradlew.bat",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/settings.gradle",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/gen/android/tauri.settings.gradle",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/128x128.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/128x128@2x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/32x32.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/64x64.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/Square107x107Logo.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/Square142x142Logo.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/Square150x150Logo.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/Square284x284Logo.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/Square30x30Logo.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/Square310x310Logo.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/Square44x44Logo.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/Square71x71Logo.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/Square89x89Logo.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/StoreLogo.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-anydpi-v26/ic_launcher.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-hdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-mdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-xhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/android/values/ic_launcher_background.xml",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/icon.icns",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/icon.ico",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/icon.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-20x20@1x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-20x20@2x-1.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-20x20@2x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-20x20@3x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-29x29@1x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-29x29@2x-1.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-29x29@2x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-29x29@3x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-40x40@1x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-40x40@2x-1.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-40x40@2x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-40x40@3x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-512@2x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-60x60@2x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-60x60@3x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-76x76@1x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-76x76@2x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/icons/ios/AppIcon-83.5x83.5@2x.png",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/lib.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/main.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/media_permission.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/session/metadata.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/session/smart_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/session/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/session.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/archive/document-cases.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/archive/document-schema.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/archive/document.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/archive/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/archive.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/attachment_operations/tests.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/attachment_operations.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/commits.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/folder_name_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/metadata_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/open.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/open_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/recorded_at_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/smart.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store/smart_tests.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/src/store.rs",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged src-tauri/tauri.conf.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged tsconfig.json",
+      "passed": true
+    },
+    {
+      "name": "protected unchanged vite.config.ts",
+      "passed": true
+    },
+    {
+      "name": "327 frozen inputs unchanged at close",
+      "passed": true
+    }
+  ],
+  "assertions": 1174,
+  "failed": 0,
+  "bundleInventories": {
+    "original": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+        "type": "file",
+        "mode": 420
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16457360,
+        "sha256": "eac006e3e922c49bc5971a935821f469649b141009fc1f323808e255a083946c",
+        "type": "file",
+        "mode": 493
+      }
+    ],
+    "sealed": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+        "type": "file",
+        "mode": 420
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16379808,
+        "sha256": "c9f7f35adc675c8058fabeb98f03fa7d1904a2c023e123cc396121264a8e211f",
+        "type": "file",
+        "mode": 493
+      },
+      {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b",
+        "type": "file",
+        "mode": 420
+      }
+    ]
+  },
+  "archives": {
+    "original": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-original.zip",
+      "bytes": 4966428,
+      "sha256": "ff445742b2e878855628de30b0a4ead18dc710a8fd4af923cca1ae73c4bf3549"
+    },
+    "sealed": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-ordinary-loop-build14/mac-attempt01/mac-sealed.zip",
+      "bytes": 4893746,
+      "sha256": "146fdbc67111cd1ae0779337a22af1550d1d9a446c27021bc243415f5dff0605"
+    }
+  },
+  "machoSignatureOnlyProof": {
+    "signatureOffset": 16329632,
+    "originalSignatureBytes": 127728,
+    "sealedSignatureBytes": 50176,
+    "normalizedPayloadSHA256": "d71ae60e5b829d81b9974c2dc458c58088d91e317f416b7abaa9b73fbda62d91",
+    "allowedSizeFields": [
+      [
+        3312,
+        8
+      ],
+      [
+        3328,
+        8
+      ],
+      [
+        5172,
+        4
+      ]
+    ]
+  },
+  "frozenModelFacts": {
+    "members": 25,
+    "bytes": 2490310,
+    "scope": "Frozen records only; no cache traversal or Mac model inclusion claim."
+  },
+  "limits": [
+    "No Git object proof; source ID linked via authorization/root freeze and327 actual file hashes, with reviewed37/42/45 product identity.",
+    "No rebuild or independent compressed frontend asset decoding; source/log/dist snapshot correspondence only.",
+    "Current shared target/dist deliberately not inspected; immutable bundles and recorded generation chain checked.",
+    "Native keyboard strings/selectors present; no runtime installation, event delivery, settings switch or Option insertion acceptance.",
+    "Original strict failure retained, derived adhoc strict pass only; no DeveloperID/notarization/TCC acceptance.",
+    "No build/sign write/launch/GUI/ADB/userDB/install/download/cache traversal; no Android parity or whole UI pixel acceptance."
+  ]
+}

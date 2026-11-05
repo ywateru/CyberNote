@@ -29,3 +29,5 @@ root创建隔离树及START后，产品仅src/smart-folders.css。在现有普�
 2026-11-05 root START45：在已整合37源的主线创建/private/tmp/apple-notes-ordinary-selection-ink45-01，native_ui_research唯一作者，仅CSS产品路径。与42代码路径不重叠，可隔离并行；verify_app不同作者独审后root串行合入。拟纳入Mac14，freeze前须两项均明确源通过，不以本条授权完整构建。
 
 2026-11-05 root源接收：source93d33f6与作者证据7675323经不同作者SOURCE-READY PASS，主线f7ef86f/f212bd4逐字合入。root fresh重核作者69/index bddc4ad9…与独立11/index63e06d62…全部匹配。独立复算支持明暗误差下降，sRGB160 mask192→196与右缘+1不利值保留；声明映射不作真实活动选择通过。本项仍in-progress，纳入Mac14后用Computer Use和原版46/旧包13基线46作实际全选/建文部分/末尾状态核对。
+
+2026-11-05 root实际有限接收：准确Mac14 source d9ce9c4及实际47经不同作者复核；参见 `docs/verification/mac-ordinary-keyboard47-root-acceptance.md`。37/42当前系统导航关闭的指定故障路径有限通过，开启导航/多窗/IME不扩大通过；45干净48局部选中改善成立，自然态与Mac13完整raw/sRGB零变化，但字形/底色/不利阈值与整体像素继续开放。

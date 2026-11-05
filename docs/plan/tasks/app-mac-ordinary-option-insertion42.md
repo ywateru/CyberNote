@@ -38,3 +38,5 @@ root创建独立worktree后，产品仅src/SmartFolderForm.tsx、必要窄src/or
 2026-11-05 root START42：37源阶段已独审合入，创建/private/tmp/apple-notes-ordinary-option-insertion42-01，develop_app唯一作者。仅本项两产品路径；以root最新已提交主线为创建基线，禁止修改主树及37隔离树。完整行为/像素仍待准确包验收。
 
 2026-11-05 root源接收：独审1185项有限核查PASS、20成员index7d3370ca…，root重新核184作者与20独审成员全部匹配，准确两产品逐字合入a840308，作者证据6a46358。37/42/45已串行独审接收，下一Mac14先冻结后构建并实际CUA。此任务仍in-progress，不授真实OS键或完整交互PASS。
+
+2026-11-05 root实际有限接收：准确Mac14 source d9ce9c4及实际47经不同作者复核；参见 `docs/verification/mac-ordinary-keyboard47-root-acceptance.md`。37/42当前系统导航关闭的指定故障路径有限通过，开启导航/多窗/IME不扩大通过；45干净48局部选中改善成立，自然态与Mac13完整raw/sRGB零变化，但字形/底色/不利阈值与整体像素继续开放。
