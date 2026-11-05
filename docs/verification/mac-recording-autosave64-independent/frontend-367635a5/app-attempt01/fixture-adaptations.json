@@ -1,0 +1,24 @@
+{
+  "head": "367635a54d781752e8b03051b52ee767c40d7822",
+  "originalSha256": "8a8b83812d6470787b24238f5f4114d1f9343bda709b58434bb7bbba5a379312",
+  "adaptedSha256": "6d9e0f998f1b91d6122d9c7041822022c0c7398113a23724292dacac7b60d5e2",
+  "changes": [
+    "runtime dependency traversal",
+    "new production modules",
+    "extract actual new App closure",
+    "new closures module environment",
+    "view-only card host method",
+    "observe actual PM dispatch with real Editor onChange save boundary",
+    "avoid double host onChange after insert command",
+    "read actual File bytes",
+    "remove false automatic journal commit on saveNote",
+    "CAS validates old revision before advancing",
+    "unique physical attachment identity",
+    "real transferred byte size",
+    "unique physical attachment path",
+    "retain previous immutable versions in metadata",
+    "query-only commit with injected awaited boundary",
+    "close query host branch"
+  ],
+  "limits": "Changes adapt platform/Editor onChange host and AST extraction only. Actual App saving closures and production algorithms are not rewritten."
+}

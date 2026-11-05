@@ -1,0 +1,34 @@
+{
+  "startingHead": "367635a54d781752e8b03051b52ee767c40d7822",
+  "endingHead": "367635a54d781752e8b03051b52ee767c40d7822",
+  "commands": [
+    {
+      "name": "mobile-session",
+      "command": [
+        "node",
+        "scripts/check-recording-session.mjs"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.470462
+    },
+    {
+      "name": "mobile-preview",
+      "command": [
+        "node",
+        "scripts/check-recording-preview.mjs"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.537466584
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 4.875992625
+    }
+  ],
+  "note": "Fresh recorded replay of prior successful checks to preserve complete raw stdout/stderr; no product edits."
+}

@@ -1,0 +1,26 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(relay.receive({kind:'owner-status',status:'saved',fileAccepted:true,revision:2}))\n",
+  "stack": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(relay.receive({kind:'owner-status',status:'saved',fileAccepted:true,revision:2}))\n\n    at file:///private/tmp/apple-notes-mac-recording-autosave64-independent-01/scripts/check-mac-recording-autosave64-boundaries-independent.mjs:54:1118\n    at async test (file:///private/tmp/apple-notes-mac-recording-autosave64-independent-01/scripts/check-mac-recording-autosave64-boundaries-independent.mjs:27:31)\n    at async file:///private/tmp/apple-notes-mac-recording-autosave64-independent-01/scripts/check-mac-recording-autosave64-boundaries-independent.mjs:54:2",
+  "checks": [
+    "late native authorization after dispose never requests stream",
+    "late stream after acquisition timeout releases track without starting recorder",
+    "checkpoint waits real terminal data/onstop and same stream resumes new recorder",
+    "decode failure preserves exact sealed blob for retry without duplicate PCM append",
+    "recorder error preserves received chunks and final tail through subsequent checkpoint",
+    "analyser read failure seals recorder before reporting error and preserves last tail for checkpoint",
+    "segment timeout preserves chunks; late terminal event permits explicit retry",
+    "PCM little-endian mono mixing exact bytes and failed append retains prior complete frames"
+  ],
+  "hashes": {
+    "desktop-recording-session": "348e0298d2a7d825977c4efc881768e2a7042d969ac4a4551f6178a75874f23c",
+    "recording-session": "fe002d7bc3670821d25884fb776fb961def3960af9e257681a57fe613581f6bc",
+    "recording-pcm": "733870292dc2e3f6fd87fa4bac9cf504c5da2bfe136d79556c289803bf1800c2",
+    "recording-revision-relay": "df1fe9769029a0c122d8c7827d2809d3da70a876dca385fb84fb97b627120f29",
+    "recording-revisions": "621343405cae9d62bff3be6891656043fee2bc5894022068d2646b1ecad1b3ef",
+    "attachment-submission": "4c44ecd682e8f2fa04d40a87445d6dfe47e1cc7f40dac6691367e75a74225833",
+    "recording-metadata": "7f09b9b0908016cfebe924cc63c87256ed51be1a6bf122d544a1233cbb93d5b0",
+    "audio-playback": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+    "secure-id": "04eb982510ffd3b6a6931f3f61ddbf1cc53d981d2e8aac281a5110c7c112c3ab",
+    "recording-coordinator": "a56eaae1a42f1ba7141055b52eb40f54b0729c5f2fae9b6077a895bd127fa904"
+  }
+}

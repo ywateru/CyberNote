@@ -1,0 +1,31 @@
+{
+  "status": "pass",
+  "checks": [
+    "late native authorization after dispose never requests stream",
+    "late stream after acquisition timeout releases track without starting recorder",
+    "checkpoint waits real terminal data/onstop and same stream resumes new recorder",
+    "decode failure preserves exact sealed blob for retry without duplicate PCM append",
+    "recorder error preserves received chunks and final tail through subsequent checkpoint",
+    "segment timeout preserves chunks; late terminal event permits explicit retry",
+    "PCM little-endian mono mixing exact bytes and failed append retains prior complete frames",
+    "relay old ACK cannot settle current checkpoint/final and retries cache identical transfer",
+    "revisions asynchronous committed query rechecks deleted node and never permits next version",
+    "owner checkpoint confirmation is nonterminal; Close waits final child destruction and duplicate revision is not resaved"
+  ],
+  "hashes": {
+    "desktop-recording-session": "c730929012fa0b0ddc1571a7600f91db427d256eafe80ef7419cdb602f60829e",
+    "recording-session": "fe002d7bc3670821d25884fb776fb961def3960af9e257681a57fe613581f6bc",
+    "recording-pcm": "733870292dc2e3f6fd87fa4bac9cf504c5da2bfe136d79556c289803bf1800c2",
+    "recording-revision-relay": "290222443ae545418d66c1ea5d7003ba9cff1c00542cecd1acf5c352c08857a7",
+    "recording-revisions": "621343405cae9d62bff3be6891656043fee2bc5894022068d2646b1ecad1b3ef",
+    "attachment-submission": "4c44ecd682e8f2fa04d40a87445d6dfe47e1cc7f40dac6691367e75a74225833",
+    "recording-metadata": "7f09b9b0908016cfebe924cc63c87256ed51be1a6bf122d544a1233cbb93d5b0",
+    "audio-playback": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+    "secure-id": "04eb982510ffd3b6a6931f3f61ddbf1cc53d981d2e8aac281a5110c7c112c3ab",
+    "recording-coordinator": "a56eaae1a42f1ba7141055b52eb40f54b0729c5f2fae9b6077a895bd127fa904"
+  },
+  "limits": [
+    "Production modules with controlled event/resource/IPC boundaries; no actual recording/decoder, mounted UI or Rust claim.",
+    "PCM byte validation uses known synthetic decoded samples. Actual synthesized MediaRecorder/AudioContext test is separate."
+  ]
+}

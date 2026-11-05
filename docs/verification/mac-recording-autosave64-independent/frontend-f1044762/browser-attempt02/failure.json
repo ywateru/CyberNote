@@ -1,0 +1,11 @@
+{
+  "error": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.",
+  "stack": "page.waitForFunction: Timeout 10000ms exceeded.\n    at state (/private/tmp/apple-notes-mac-recording-autosave64-independent-01/scripts/check-mac-recording-autosave64-browser-independent.mjs:35:26)\n    at /private/tmp/apple-notes-mac-recording-autosave64-independent-01/scripts/check-mac-recording-autosave64-browser-independent.mjs:45:276",
+  "checks": [
+    "production Window/Panel/Session seals actual synthesized MediaRecorder segment, resamples/decodes and saves a complete playable non-silent PCM WAV without closing",
+    "two real recorder segments share one authorized stream; cumulative WAV excludes 1.3s pause, and busy Close queues an exact final revision after checkpoint ACK while old ACK cannot destroy",
+    "final revision ACK alone releases unique destroy, with native finish carrying exact revision"
+  ],
+  "errors": [],
+  "external": []
+}
