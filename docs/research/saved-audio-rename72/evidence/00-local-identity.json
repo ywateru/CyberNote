@@ -1,0 +1,56 @@
+{
+  "observedAt": "2026-11-05T16:38:41.505424+00:00",
+  "sourceHead": {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit": 0,
+    "stdout": "0f43a9c6185a193c6a6408c732aa1ae50871490d\n",
+    "stderr": ""
+  },
+  "process": {
+    "argv": [
+      "pgrep",
+      "-x",
+      "Notes"
+    ],
+    "exit": 0,
+    "stdout": "40579\n",
+    "stderr": ""
+  },
+  "pidIdentity": {
+    "argv": [
+      "ps",
+      "-p",
+      "40579",
+      "-o",
+      "pid=,lstart=,comm="
+    ],
+    "exit": 0,
+    "stdout": "40579 Thu Nov  5 03:09:22 2026     /System/Applications/Notes.app/Contents/MacOS/Notes\n",
+    "stderr": ""
+  },
+  "binarySha256": "9e20c23a979367362c50edf8fb28bb1988be7e7384254cc3dce38a4a8373df02",
+  "windows": {
+    "argv": [
+      "swift",
+      "-e",
+      "import CoreGraphics; for w in (CGWindowListCopyWindowInfo(.optionAll, kCGNullWindowID) as? [[String:Any]] ?? []) where w[kCGWindowOwnerPID as String] as? Int == 40579 { print(w) }"
+    ],
+    "exit": 0,
+    "stdout": "[\"kCGWindowAlpha\": 1, \"kCGWindowLayer\": 103, \"kCGWindowMemoryUsage\": 2368, \"kCGWindowBounds\": {\n    Height = 18;\n    Width = 122;\n    X = 1170;\n    Y = 62;\n}, \"kCGWindowStoreType\": 1, \"kCGWindowOwnerName\": 备忘录, \"kCGWindowNumber\": 86197, \"kCGWindowOwnerPID\": 40579, \"kCGWindowName\": , \"kCGWindowSharingState\": 1]\n[\"kCGWindowStoreType\": 1, \"kCGWindowOwnerName\": 备忘录, \"kCGWindowName\": , \"kCGWindowOwnerPID\": 40579, \"kCGWindowNumber\": 86182, \"kCGWindowSharingState\": 1, \"kCGWindowBounds\": {\n    Height = 352;\n    Width = 204;\n    X = 686;\n    Y = 73;\n}, \"kCGWindowMemoryUsage\": 2368, \"kCGWindowLayer\": 0, \"kCGWindowAlpha\": 1]\n[\"kCGWindowMemoryUsage\": 2368, \"kCGWindowLayer\": 0, \"kCGWindowSharingState\": 1, \"kCGWindowBounds\": {\n    Height = 29;\n    Width = 1440;\n    X = 0;\n    Y = 0;\n}, \"kCGWindowNumber\": 83206, \"kCGWindowName\": , \"kCGWindowAlpha\": 1, \"kCGWindowOwnerPID\": 40579, \"kCGWindowOwnerName\": 备忘录, \"kCGWindowStoreType\": 1]\n[\"kCGWindowOwnerPID\": 40579, \"kCGWindowBounds\": {\n    Height = 29;\n    Width = 1440;\n    X = 0;\n    Y = 0;\n}, \"kCGWindowStoreType\": 1, \"kCGWindowMemoryUsage\": 2368, \"kCGWindowName\": , \"kCGWindowSharingState\": 1, \"kCGWindowOwnerName\": 备忘录, \"kCGWindowLayer\": 0, \"kCGWindowNumber\": 83205, \"kCGWindowAlpha\": 1]\n[\"kCGWindowOwnerName\": 备忘录, \"kCGWindowStoreType\": 1, \"kCGWindowSharingState\": 1, \"kCGWindowMemoryUsage\": 2368, \"kCGWindowOwnerPID\": 40579, \"kCGWindowName\": , \"kCGWindowNumber\": 83204, \"kCGWindowAlpha\": 1, \"kCGWindowLayer\": 0, \"kCGWindowBounds\": {\n    Height = 29;\n    Width = 1440;\n    X = 0;\n    Y = 0;\n}]\n[\"kCGWindowBounds\": {\n    Height = 29;\n    Width = 1440;\n    X = 0;\n    Y = 0;\n}, \"kCGWindowOwnerName\": 备忘录, \"kCGWindowName\": , \"kCGWindowOwnerPID\": 40579, \"kCGWindowSharingState\": 1, \"kCGWindowStoreType\": 1, \"kCGWindowAlpha\": 1, \"kCGWindowNumber\": 83203, \"kCGWindowLayer\": 0, \"kCGWindowMemoryUsage\": 2368]\n[\"kCGWindowMemoryUsage\": 2368, \"kCGWindowSharingState\": 1, \"kCGWindowStoreType\": 1, \"kCGWindowNumber\": 83174, \"kCGWindowAlpha\": 1, \"kCGWindowOwnerPID\": 40579, \"kCGWindowBounds\": {\n    Height = 64;\n    Width = 64;\n    X = 0;\n    Y = 432;\n}, \"kCGWindowOwnerName\": 备忘录, \"kCGWindowName\": , \"kCGWindowLayer\": 0]\n[\"kCGWindowAlpha\": 1, \"kCGWindowLayer\": 0, \"kCGWindowSharingState\": 1, \"kCGWindowOwnerPID\": 40579, \"kCGWindowIsOnscreen\": 1, \"kCGWindowMemoryUsage\": 2368, \"kCGWindowBounds\": {\n    Height = 903;\n    Width = 1387;\n    X = 53;\n    Y = 29;\n}, \"kCGWindowNumber\": 83173, \"kCGWindowStoreType\": 1, \"kCGWindowOwnerName\": 备忘录, \"kCGWindowName\": Notes Clone UI 对照]\n[\"kCGWindowAlpha\": 0.9343880414962769, \"kCGWindowOwnerPID\": 40579, \"kCGWindowSharingState\": 1, \"kCGWindowLayer\": 103, \"kCGWindowStoreType\": 1, \"kCGWindowName\": , \"kCGWindowOwnerName\": 备忘录, \"kCGWindowBounds\": {\n    Height = 22;\n    Width = 101;\n    X = 655;\n    Y = 178;\n}, \"kCGWindowNumber\": 86185, \"kCGWindowMemoryUsage\": 2368]\n",
+    "stderr": ""
+  },
+  "accessibilityCheck": {
+    "argv": [
+      "osascript",
+      "-e",
+      "tell application \"System Events\" to tell process \"Notes\" to get {name, id} of every window"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "64:74: execution error: “System Events”遇到一个错误：“osascript”不允许辅助访问。 (-1728)\n"
+  }
+}
