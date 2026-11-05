@@ -1,0 +1,502 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "name": "Mac18 desktop projection independently reproduces samples ahead of stale elapsed and retry preview range beyond duration, with accepted retry phase",
+      "pass": true
+    },
+    {
+      "name": "production desktop retry projections remain valid after clock/media events and real Dock commits current retry state",
+      "pass": true
+    }
+  ],
+  "observations": [
+    {
+      "baseline": {
+        "recording": {
+          "states": [
+            {
+              "sequence": 1,
+              "phase": "idle",
+              "openedAt": 1793743199123,
+              "elapsed": 0,
+              "paused": false,
+              "canToggle": true,
+              "canFinish": false,
+              "notice": "",
+              "hasError": false,
+              "position": 0,
+              "duration": 0,
+              "previewPosition": false,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": false,
+              "canSeek": false,
+              "canRetryPreview": false,
+              "seekable": [],
+              "samples": []
+            },
+            {
+              "sequence": 2,
+              "phase": "recording",
+              "openedAt": 1793743199123,
+              "recordedAt": 1793743199123,
+              "elapsed": 0,
+              "paused": false,
+              "canToggle": true,
+              "canFinish": true,
+              "notice": "",
+              "hasError": false,
+              "position": 0,
+              "duration": 0,
+              "previewPosition": false,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": false,
+              "canSeek": false,
+              "canRetryPreview": false,
+              "seekable": [],
+              "samples": [
+                {
+                  "at": 300,
+                  "peak": 12
+                }
+              ]
+            }
+          ],
+          "invalid": [
+            {
+              "state": {
+                "sequence": 2,
+                "phase": "recording",
+                "openedAt": 1793743199123,
+                "recordedAt": 1793743199123,
+                "elapsed": 0,
+                "paused": false,
+                "canToggle": true,
+                "canFinish": true,
+                "notice": "",
+                "hasError": false,
+                "position": 0,
+                "duration": 0,
+                "previewPosition": false,
+                "playing": false,
+                "playPending": false,
+                "previewPending": false,
+                "seeking": false,
+                "canPlay": false,
+                "canSeek": false,
+                "canRetryPreview": false,
+                "seekable": [],
+                "samples": [
+                  {
+                    "at": 300,
+                    "peak": 12
+                  }
+                ]
+              },
+              "samplesAhead": true,
+              "rangeOverflow": false
+            }
+          ]
+        },
+        "result": {
+          "invalid": [
+            {
+              "state": {
+                "sequence": 2,
+                "phase": "recording",
+                "openedAt": 1793743199123,
+                "recordedAt": 1793743199123,
+                "elapsed": 0,
+                "paused": false,
+                "canToggle": true,
+                "canFinish": true,
+                "notice": "",
+                "hasError": false,
+                "position": 0,
+                "duration": 0,
+                "previewPosition": false,
+                "playing": false,
+                "playPending": false,
+                "previewPending": false,
+                "seeking": false,
+                "canPlay": false,
+                "canSeek": false,
+                "canRetryPreview": false,
+                "seekable": [],
+                "samples": [
+                  {
+                    "at": 300,
+                    "peak": 12
+                  }
+                ]
+              },
+              "samplesAhead": true,
+              "rangeOverflow": false
+            },
+            {
+              "state": {
+                "sequence": 3,
+                "phase": "retry",
+                "openedAt": 1793743199123,
+                "recordedAt": 1793743199123,
+                "elapsed": 350,
+                "paused": false,
+                "canToggle": false,
+                "canFinish": true,
+                "notice": "controlled save rejection",
+                "hasError": true,
+                "position": 0,
+                "duration": 3000,
+                "previewPosition": true,
+                "playing": false,
+                "playPending": false,
+                "previewPending": false,
+                "seeking": false,
+                "canPlay": true,
+                "canSeek": true,
+                "canRetryPreview": false,
+                "seekable": [
+                  [
+                    0,
+                    3001
+                  ]
+                ],
+                "samples": [
+                  {
+                    "at": 300,
+                    "peak": 12
+                  }
+                ]
+              },
+              "samplesAhead": false,
+              "rangeOverflow": true
+            }
+          ],
+          "ownerErrors": [
+            "录音状态无效，保留原录音窗口",
+            "录音状态无效，保留原录音窗口"
+          ],
+          "latest": {
+            "mode": "dock",
+            "dock": true,
+            "switching": false,
+            "serial": 1,
+            "error": "",
+            "state": {
+              "sequence": 1,
+              "phase": "idle",
+              "openedAt": 1793743199123,
+              "elapsed": 0,
+              "paused": false,
+              "canToggle": true,
+              "canFinish": false,
+              "notice": "",
+              "hasError": false,
+              "position": 0,
+              "duration": 0,
+              "previewPosition": false,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": false,
+              "canSeek": false,
+              "canRetryPreview": false,
+              "seekable": [],
+              "samples": []
+            }
+          },
+          "allStates": [
+            {
+              "sequence": 1,
+              "phase": "idle",
+              "openedAt": 1793743199123,
+              "elapsed": 0,
+              "paused": false,
+              "canToggle": true,
+              "canFinish": false,
+              "notice": "",
+              "hasError": false,
+              "position": 0,
+              "duration": 0,
+              "previewPosition": false,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": false,
+              "canSeek": false,
+              "canRetryPreview": false,
+              "seekable": [],
+              "samples": []
+            },
+            {
+              "sequence": 2,
+              "phase": "recording",
+              "openedAt": 1793743199123,
+              "recordedAt": 1793743199123,
+              "elapsed": 0,
+              "paused": false,
+              "canToggle": true,
+              "canFinish": true,
+              "notice": "",
+              "hasError": false,
+              "position": 0,
+              "duration": 0,
+              "previewPosition": false,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": false,
+              "canSeek": false,
+              "canRetryPreview": false,
+              "seekable": [],
+              "samples": [
+                {
+                  "at": 300,
+                  "peak": 12
+                }
+              ]
+            },
+            {
+              "sequence": 3,
+              "phase": "retry",
+              "openedAt": 1793743199123,
+              "recordedAt": 1793743199123,
+              "elapsed": 350,
+              "paused": false,
+              "canToggle": false,
+              "canFinish": true,
+              "notice": "controlled save rejection",
+              "hasError": true,
+              "position": 0,
+              "duration": 3000,
+              "previewPosition": true,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": true,
+              "canSeek": true,
+              "canRetryPreview": false,
+              "seekable": [
+                [
+                  0,
+                  3001
+                ]
+              ],
+              "samples": [
+                {
+                  "at": 300,
+                  "peak": 12
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "candidate": {
+        "recording": {
+          "states": [
+            {
+              "sequence": 1,
+              "phase": "idle",
+              "openedAt": 1793743199123,
+              "elapsed": 0,
+              "paused": false,
+              "canToggle": true,
+              "canFinish": false,
+              "notice": "",
+              "hasError": false,
+              "position": 0,
+              "duration": 0,
+              "previewPosition": false,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": false,
+              "canSeek": false,
+              "canRetryPreview": false,
+              "seekable": [],
+              "samples": []
+            },
+            {
+              "sequence": 2,
+              "phase": "recording",
+              "openedAt": 1793743199123,
+              "recordedAt": 1793743199123,
+              "elapsed": 300,
+              "paused": false,
+              "canToggle": true,
+              "canFinish": true,
+              "notice": "",
+              "hasError": false,
+              "position": 300,
+              "duration": 300,
+              "previewPosition": false,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": false,
+              "canSeek": false,
+              "canRetryPreview": false,
+              "seekable": [],
+              "samples": [
+                {
+                  "at": 300,
+                  "peak": 12
+                }
+              ]
+            }
+          ],
+          "invalid": []
+        },
+        "result": {
+          "invalid": [],
+          "ownerErrors": [],
+          "latest": {
+            "mode": "dock",
+            "dock": true,
+            "switching": false,
+            "serial": 1,
+            "error": "",
+            "state": {
+              "sequence": 3,
+              "phase": "retry",
+              "openedAt": 1793743199123,
+              "recordedAt": 1793743199123,
+              "elapsed": 350,
+              "paused": false,
+              "canToggle": false,
+              "canFinish": true,
+              "notice": "controlled save rejection",
+              "hasError": true,
+              "position": 0,
+              "duration": 3000,
+              "previewPosition": true,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": true,
+              "canSeek": true,
+              "canRetryPreview": false,
+              "seekable": [
+                [
+                  0,
+                  3000
+                ]
+              ],
+              "samples": [
+                {
+                  "at": 300,
+                  "peak": 12
+                }
+              ]
+            }
+          },
+          "allStates": [
+            {
+              "sequence": 1,
+              "phase": "idle",
+              "openedAt": 1793743199123,
+              "elapsed": 0,
+              "paused": false,
+              "canToggle": true,
+              "canFinish": false,
+              "notice": "",
+              "hasError": false,
+              "position": 0,
+              "duration": 0,
+              "previewPosition": false,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": false,
+              "canSeek": false,
+              "canRetryPreview": false,
+              "seekable": [],
+              "samples": []
+            },
+            {
+              "sequence": 2,
+              "phase": "recording",
+              "openedAt": 1793743199123,
+              "recordedAt": 1793743199123,
+              "elapsed": 300,
+              "paused": false,
+              "canToggle": true,
+              "canFinish": true,
+              "notice": "",
+              "hasError": false,
+              "position": 300,
+              "duration": 300,
+              "previewPosition": false,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": false,
+              "canSeek": false,
+              "canRetryPreview": false,
+              "seekable": [],
+              "samples": [
+                {
+                  "at": 300,
+                  "peak": 12
+                }
+              ]
+            },
+            {
+              "sequence": 3,
+              "phase": "retry",
+              "openedAt": 1793743199123,
+              "recordedAt": 1793743199123,
+              "elapsed": 350,
+              "paused": false,
+              "canToggle": false,
+              "canFinish": true,
+              "notice": "controlled save rejection",
+              "hasError": true,
+              "position": 0,
+              "duration": 3000,
+              "previewPosition": true,
+              "playing": false,
+              "playPending": false,
+              "previewPending": false,
+              "seeking": false,
+              "canPlay": true,
+              "canSeek": true,
+              "canRetryPreview": false,
+              "seekable": [
+                [
+                  0,
+                  3000
+                ]
+              ],
+              "samples": [
+                {
+                  "at": 300,
+                  "peak": 12
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "errors": []
+}

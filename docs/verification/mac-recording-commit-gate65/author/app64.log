@@ -1,0 +1,79 @@
+RUN two pause checkpoints and final replace exactly one A card while B is active; query alone commits each old journal
+RUN checkpoint waits for durable document ACK, then journal query barrier before admitting the next revision
+RUN failed document ACK retains exact operation/File and retries the inserted version without another store or insert
+RUN prior card delete fails replacement without fallback insertion
+RUN prior card duplicate fails replacement without fallback insertion
+RUN current new card delete during query await cannot publish checkpoint ACK
+RUN current new card duplicate during query await cannot publish checkpoint ACK
+RUN Undo-deleted previous card never reinserts; latest A text survives successful exact replacement
+{
+  "pass": true,
+  "checks": [
+    {
+      "name": "two pause checkpoints and final replace exactly one A card while B is active; query alone commits each old journal",
+      "pass": true,
+      "storedVersions": 3,
+      "visibleCard": 1,
+      "originalFilesRetained": true
+    },
+    {
+      "name": "checkpoint waits for durable document ACK, then journal query barrier before admitting the next revision",
+      "pass": true,
+      "documentAckIsNotJournalCommit": true
+    },
+    {
+      "name": "failed document ACK retains exact operation/File and retries the inserted version without another store or insert",
+      "pass": true,
+      "stores": 1,
+      "inserts": 1
+    },
+    {
+      "name": "prior card delete fails replacement without fallback insertion",
+      "pass": true,
+      "cards": 0
+    },
+    {
+      "name": "prior card duplicate fails replacement without fallback insertion",
+      "pass": true,
+      "cards": 2
+    },
+    {
+      "name": "current new card delete during query await cannot publish checkpoint ACK",
+      "pass": true,
+      "acknowledged": false
+    },
+    {
+      "name": "current new card duplicate during query await cannot publish checkpoint ACK",
+      "pass": true,
+      "acknowledged": false
+    },
+    {
+      "name": "Undo-deleted previous card never reinserts; latest A text survives successful exact replacement",
+      "pass": true
+    }
+  ],
+  "hashes": {
+    "attachment-submission": "4c44ecd682e8f2fa04d40a87445d6dfe47e1cc7f40dac6691367e75a74225833",
+    "recording-metadata": "7f09b9b0908016cfebe924cc63c87256ed51be1a6bf122d544a1233cbb93d5b0",
+    "audio-playback": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+    "recording-revisions": "621343405cae9d62bff3be6891656043fee2bc5894022068d2646b1ecad1b3ef",
+    "secure-id": "04eb982510ffd3b6a6931f3f61ddbf1cc53d981d2e8aac281a5110c7c112c3ab",
+    "recording-replacement": "b8b97b03d6f30e0ca398532d55d2e0c110c903c859b234312254900e2d8e71e3",
+    "trusted-synchronization": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128",
+    "attachment-target": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+    "document-equality": "629d2729ac47626f6618f13d6858c98dc5a0f654a4b53ba70f6ec0731204db7d",
+    "bridge": "729f7dc797abb762a9382f106b1fad103335e27346e598d9b18c37a2785672fd",
+    "metadata-client": "ca3efa81802ffdf9e5d5478dd429d2aa742d19e1e5beb04946ac4642843e9c1f",
+    "smart-folders": "22a5e1b8b4767cb1a74df5ab9cc680c8aef3f4b62b0ddac72746006fa8d85d53",
+    "note-tags": "2d5460e5a70bcb7b6a5a91631e25ca6ff05c1b3aeeb79b45a4a145415c174a2f",
+    "access-client": "2ac79fec3a00ae972f22bac2c6534aa1468b719a8be4b18c7e803549c9d99f98",
+    "proof-access": "64b235d209e03649d340354b1aa187efd2fe872cfbc9e007951306359c3ca3ca",
+    "types": "0bba2d1b9c0f46388d4a8a7b643e826517faf0e1b4018d947526b737c427a159",
+    "save-queue": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+    "save-revisions": "3fbf025c8c57cbcc78cdc13d8b62962b0235feb89ea3cd23b5af8547bc940d6a",
+    "editor-save-snapshot": "4ca9f9b64f52c3558b1a843c61f0ef8d810af45743c26f2cf57974c03564d5dd",
+    "recording-coordinator": "a56eaae1a42f1ba7141055b52eb40f54b0729c5f2fae9b6077a895bd127fa904",
+    "search-editor-gate": "9dbe5495db5d9538d8b0fd7acfc8a63acaedb1c7f41c5325a58b79101407016d",
+    "App": "186bf602cba399eb409dd700405aa648821f32d2f0ecc01bb00faebe1154421d"
+  }
+}

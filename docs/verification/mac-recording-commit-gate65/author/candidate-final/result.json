@@ -1,0 +1,928 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "name": "exact Mac18 source reproduces first checkpoint gate rejection solely during unchanged active Host temporary editability",
+      "pass": true
+    },
+    {
+      "name": "actual App/Host/Gate waits committed active editor then saves original punctuation selection without weakening target checks",
+      "pass": true
+    },
+    {
+      "name": "real Host commit wait retains rejection/cancellation for owner",
+      "pass": true
+    },
+    {
+      "name": "real Host commit wait retains rejection/cancellation for epoch",
+      "pass": true
+    },
+    {
+      "name": "real Host commit wait retains rejection/cancellation for external",
+      "pass": true
+    },
+    {
+      "name": "real Host commit wait retains rejection/cancellation for operation",
+      "pass": true
+    },
+    {
+      "name": "real Host commit wait retains rejection/cancellation for suspend",
+      "pass": true
+    },
+    {
+      "name": "real Host commit wait retains rejection/cancellation for seal",
+      "pass": true
+    },
+    {
+      "name": "real Host commit wait retains rejection/cancellation for unmount",
+      "pass": true
+    }
+  ],
+  "observations": [
+    {
+      "baseline": {
+        "outcome": {
+          "saved": false,
+          "error": "原录音笔记、编辑器或授权已改变，音频仍保留；不会写入其他笔记"
+        },
+        "validations": [
+          {
+            "editable": false,
+            "active": true,
+            "sameEditor": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": true,
+            "operation": false,
+            "suspended": false,
+            "locked": false
+          }
+        ],
+        "waits": 0,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": false
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "sameEditor": true,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A。"
+                }
+              ]
+            }
+          ]
+        },
+        "active": true
+      }
+    },
+    {
+      "candidate": {
+        "outcome": {
+          "saved": true
+        },
+        "validations": [
+          {
+            "editable": true,
+            "active": true,
+            "sameEditor": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": true,
+            "operation": false,
+            "suspended": false,
+            "locked": false
+          },
+          {
+            "editable": true,
+            "active": true,
+            "sameEditor": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": true,
+            "operation": false,
+            "suspended": false,
+            "locked": false
+          },
+          {
+            "editable": true,
+            "active": true,
+            "sameEditor": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": true,
+            "operation": false,
+            "suspended": false,
+            "locked": false
+          },
+          {
+            "editable": true,
+            "active": true,
+            "sameEditor": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": true,
+            "operation": false,
+            "suspended": false,
+            "locked": false
+          }
+        ],
+        "waits": 4,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": false
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          }
+        ],
+        "stores": 1,
+        "saves": 1,
+        "queries": 1,
+        "sameEditor": true,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A"
+                }
+              ]
+            },
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "saved-c27f3947-3f38-443a-aade-d0b56e77485d",
+                "name": "合成.wav",
+                "kind": "audio"
+              }
+            },
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "active": true
+      }
+    },
+    {
+      "change": "owner",
+      "state": {
+        "outcome": {
+          "saved": false,
+          "error": "原录音笔记、编辑器或授权已改变，音频仍保留；不会写入其他笔记"
+        },
+        "validations": [
+          {
+            "editable": true,
+            "active": true,
+            "sameEditor": true,
+            "sameOwner": false,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": true,
+            "operation": false,
+            "suspended": false,
+            "locked": false
+          }
+        ],
+        "waits": 1,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": false
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "sameEditor": true,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A。"
+                }
+              ]
+            }
+          ]
+        },
+        "active": true
+      }
+    },
+    {
+      "change": "epoch",
+      "state": {
+        "outcome": {
+          "saved": false,
+          "error": "原录音笔记、编辑器或授权已改变，音频仍保留；不会写入其他笔记"
+        },
+        "validations": [
+          {
+            "editable": false,
+            "active": false,
+            "sameEditor": false,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": false,
+            "operation": false,
+            "suspended": false,
+            "locked": false
+          }
+        ],
+        "waits": 1,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": false
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "sameEditor": false,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A。"
+                }
+              ]
+            }
+          ]
+        },
+        "active": true
+      }
+    },
+    {
+      "change": "external",
+      "state": {
+        "outcome": {
+          "saved": false,
+          "error": "原录音笔记、编辑器或授权已改变，音频仍保留；不会写入其他笔记"
+        },
+        "validations": [
+          {
+            "editable": false,
+            "active": false,
+            "sameEditor": false,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": false,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": true,
+            "operation": false,
+            "suspended": false,
+            "locked": false
+          }
+        ],
+        "waits": 1,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": false
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "sameEditor": false,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A。"
+                }
+              ]
+            }
+          ]
+        },
+        "active": true
+      }
+    },
+    {
+      "change": "operation",
+      "state": {
+        "outcome": {
+          "saved": false,
+          "error": "原录音笔记、编辑器或授权已改变，音频仍保留；不会写入其他笔记"
+        },
+        "validations": [
+          {
+            "editable": false,
+            "active": true,
+            "sameEditor": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": true,
+            "operation": true,
+            "suspended": false,
+            "locked": false
+          }
+        ],
+        "waits": 1,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": false
+          },
+          {
+            "action": "park",
+            "editable": false
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "sameEditor": true,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A。"
+                }
+              ]
+            }
+          ]
+        },
+        "active": true
+      }
+    },
+    {
+      "change": "suspend",
+      "state": {
+        "outcome": {
+          "saved": false,
+          "error": "原录音笔记、编辑器或授权已改变，音频仍保留；不会写入其他笔记"
+        },
+        "validations": [
+          {
+            "editable": false,
+            "active": true,
+            "sameEditor": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": true,
+            "operation": false,
+            "suspended": true,
+            "locked": false
+          }
+        ],
+        "waits": 1,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": false
+          },
+          {
+            "action": "park",
+            "editable": false
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "sameEditor": true,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A。"
+                }
+              ]
+            }
+          ]
+        },
+        "active": true
+      }
+    },
+    {
+      "change": "seal",
+      "state": {
+        "outcome": {
+          "saved": false,
+          "error": "原录音或编辑器已关闭，音频仍保留"
+        },
+        "validations": [],
+        "waits": 1,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": false
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "sameEditor": true,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A。"
+                }
+              ]
+            }
+          ]
+        },
+        "active": true
+      }
+    },
+    {
+      "change": "unmount",
+      "state": {
+        "outcome": {
+          "saved": false,
+          "error": "原录音或编辑器已关闭，音频仍保留"
+        },
+        "validations": [],
+        "waits": 1,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": false
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "sameEditor": true,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A。"
+                }
+              ]
+            }
+          ]
+        },
+        "active": true
+      }
+    }
+  ],
+  "errors": []
+}

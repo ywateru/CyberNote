@@ -1,0 +1,101 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "name": "exact Mac18 source reproduces first checkpoint gate rejection solely during unchanged active Host temporary editability",
+      "pass": true
+    }
+  ],
+  "observations": [
+    {
+      "baseline": {
+        "outcome": {
+          "saved": false,
+          "error": "原录音笔记、编辑器或授权已改变，音频仍保留；不会写入其他笔记"
+        },
+        "validations": [
+          {
+            "editable": false,
+            "active": true,
+            "sameEditor": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "trusted": true,
+            "destroyed": false,
+            "session": true,
+            "epoch": true,
+            "noteEpoch": true,
+            "operation": false,
+            "suspended": false,
+            "locked": false
+          }
+        ],
+        "waits": 0,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": false
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "sameEditor": true,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A。"
+                }
+              ]
+            }
+          ]
+        },
+        "active": true
+      }
+    }
+  ],
+  "errors": []
+}

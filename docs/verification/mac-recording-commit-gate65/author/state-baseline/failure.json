@@ -1,0 +1,267 @@
+{
+  "error": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.recording-dock') to be visible\u001b[22m\n\u001b[2m    63 × locator resolved to hidden <aside aria-label=\"录音面板\" class=\"recording-dock\">…</aside>\u001b[22m\n",
+  "stack": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.recording-dock') to be visible\u001b[22m\n\u001b[2m    63 × locator resolved to hidden <aside aria-label=\"录音面板\" class=\"recording-dock\">…</aside>\u001b[22m\n\n    at run (/private/tmp/apple-notes-mac-recording-commit-gate65-01/scripts/check-recording-state65-browser.mjs:111:43)\n    at async file:///private/tmp/apple-notes-mac-recording-commit-gate65-01/scripts/check-recording-state65-browser.mjs:120:25",
+  "checks": [],
+  "observations": [],
+  "snapshot": {
+    "states": [
+      {
+        "sequence": 1,
+        "phase": "idle",
+        "openedAt": 1793743199123,
+        "elapsed": 0,
+        "paused": false,
+        "canToggle": true,
+        "canFinish": false,
+        "notice": "",
+        "hasError": false,
+        "position": 0,
+        "duration": 0,
+        "previewPosition": false,
+        "playing": false,
+        "playPending": false,
+        "previewPending": false,
+        "seeking": false,
+        "canPlay": false,
+        "canSeek": false,
+        "canRetryPreview": false,
+        "seekable": [],
+        "samples": []
+      },
+      {
+        "sequence": 2,
+        "phase": "recording",
+        "openedAt": 1793743199123,
+        "recordedAt": 1793743199123,
+        "elapsed": 0,
+        "paused": false,
+        "canToggle": true,
+        "canFinish": true,
+        "notice": "",
+        "hasError": false,
+        "position": 0,
+        "duration": 0,
+        "previewPosition": false,
+        "playing": false,
+        "playPending": false,
+        "previewPending": false,
+        "seeking": false,
+        "canPlay": false,
+        "canSeek": false,
+        "canRetryPreview": false,
+        "seekable": [],
+        "samples": [
+          {
+            "at": 300,
+            "peak": 12
+          }
+        ]
+      },
+      {
+        "sequence": 3,
+        "phase": "retry",
+        "openedAt": 1793743199123,
+        "recordedAt": 1793743199123,
+        "elapsed": 350,
+        "paused": false,
+        "canToggle": false,
+        "canFinish": true,
+        "notice": "controlled save rejection",
+        "hasError": true,
+        "position": 0,
+        "duration": 3000,
+        "previewPosition": true,
+        "playing": false,
+        "playPending": false,
+        "previewPending": false,
+        "seeking": false,
+        "canPlay": true,
+        "canSeek": true,
+        "canRetryPreview": false,
+        "seekable": [
+          [
+            0,
+            3001
+          ]
+        ],
+        "samples": [
+          {
+            "at": 300,
+            "peak": 12
+          }
+        ]
+      }
+    ],
+    "invalid": [
+      {
+        "state": {
+          "sequence": 2,
+          "phase": "recording",
+          "openedAt": 1793743199123,
+          "recordedAt": 1793743199123,
+          "elapsed": 0,
+          "paused": false,
+          "canToggle": true,
+          "canFinish": true,
+          "notice": "",
+          "hasError": false,
+          "position": 0,
+          "duration": 0,
+          "previewPosition": false,
+          "playing": false,
+          "playPending": false,
+          "previewPending": false,
+          "seeking": false,
+          "canPlay": false,
+          "canSeek": false,
+          "canRetryPreview": false,
+          "seekable": [],
+          "samples": [
+            {
+              "at": 300,
+              "peak": 12
+            }
+          ]
+        },
+        "samplesAhead": true,
+        "rangeOverflow": false
+      },
+      {
+        "state": {
+          "sequence": 3,
+          "phase": "retry",
+          "openedAt": 1793743199123,
+          "recordedAt": 1793743199123,
+          "elapsed": 350,
+          "paused": false,
+          "canToggle": false,
+          "canFinish": true,
+          "notice": "controlled save rejection",
+          "hasError": true,
+          "position": 0,
+          "duration": 3000,
+          "previewPosition": true,
+          "playing": false,
+          "playPending": false,
+          "previewPending": false,
+          "seeking": false,
+          "canPlay": true,
+          "canSeek": true,
+          "canRetryPreview": false,
+          "seekable": [
+            [
+              0,
+              3001
+            ]
+          ],
+          "samples": [
+            {
+              "at": 300,
+              "peak": 12
+            }
+          ]
+        },
+        "samplesAhead": false,
+        "rangeOverflow": true
+      }
+    ],
+    "results": [
+      {
+        "file": {},
+        "recordedAt": 1793743199123,
+        "revision": 1,
+        "intent": "checkpoint"
+      }
+    ],
+    "ownerErrors": [
+      "录音状态无效，保留原录音窗口",
+      "录音状态无效，保留原录音窗口"
+    ],
+    "identity": {
+      "sessionId": "s",
+      "operationId": "o",
+      "owner": "main",
+      "child": "child"
+    },
+    "owner": {
+      "latest": {
+        "sequence": 1,
+        "phase": "idle",
+        "openedAt": 1793743199123,
+        "elapsed": 0,
+        "paused": false,
+        "canToggle": true,
+        "canFinish": false,
+        "notice": "",
+        "hasError": false,
+        "position": 0,
+        "duration": 0,
+        "previewPosition": false,
+        "playing": false,
+        "playPending": false,
+        "previewPending": false,
+        "seeking": false,
+        "canPlay": false,
+        "canSeek": false,
+        "canRetryPreview": false,
+        "seekable": [],
+        "samples": []
+      },
+      "presentationSerial": 1,
+      "childRequest": 0,
+      "presentationWork": {},
+      "subscribers": {},
+      "snapshot": {
+        "mode": "dock",
+        "dock": true,
+        "switching": false,
+        "serial": 1,
+        "error": "",
+        "state": {
+          "sequence": 1,
+          "phase": "idle",
+          "openedAt": 1793743199123,
+          "elapsed": 0,
+          "paused": false,
+          "canToggle": true,
+          "canFinish": false,
+          "notice": "",
+          "hasError": false,
+          "position": 0,
+          "duration": 0,
+          "previewPosition": false,
+          "playing": false,
+          "playPending": false,
+          "previewPending": false,
+          "seeking": false,
+          "canPlay": false,
+          "canSeek": false,
+          "canRetryPreview": false,
+          "seekable": [],
+          "samples": []
+        }
+      },
+      "status": {
+        "kind": "owner-status",
+        "status": "ready",
+        "fileAccepted": false
+      },
+      "started": false,
+      "captureError": false,
+      "closed": false,
+      "closedSafely": false,
+      "closing": false,
+      "waiters": {},
+      "revision": 0,
+      "identity": {
+        "sessionId": "s",
+        "operationId": "o",
+        "owner": "main",
+        "child": "child"
+      },
+      "ports": {}
+    },
+    "handle": {}
+  },
+  "errors": []
+}

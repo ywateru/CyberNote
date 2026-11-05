@@ -333,6 +333,14 @@ export function fixture(options = {}) {
         throw error;
       }
     },
+    // This fixture has a controlled, already committed host and no React tree.
+    // The real useEditorCommit/Host timing is covered by check-recording-commit-gate65-app.
+    // Keep cancellation and an optional delayed host boundary observable here.
+    waitRecordingEditorCommit: async (signal) => {
+      if (signal.aborted) throw Error("controlled editor host cancelled");
+      await options.editorCommit?.(signal);
+      if (signal.aborted) throw Error("controlled editor host cancelled");
+    },
     enqueueSave,
     documentsEqual,
     editorSaveSnapshot,
