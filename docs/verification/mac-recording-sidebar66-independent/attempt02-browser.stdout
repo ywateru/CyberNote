@@ -1,0 +1,46 @@
+4:55:54 PM [vite] Internal server error: Failed to resolve import "../assets/mobile-paper-previews/lines-small.svg" from "../../../__app66.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /__app66.tsx:205:30
+  153|  import { ocrNative } from "/src/ocr-native";
+  154|  import OcrPanel from "/src/OcrPanel";
+  155|  import linesSmallPreview from "../assets/mobile-paper-previews/lines-small.svg";
+     |                                 ^
+  156|  import linesMediumPreview from "../assets/mobile-paper-previews/lines-medium.svg";
+  157|  import linesLargePreview from "../assets/mobile-paper-previews/lines-large.svg";
+      at TransformPluginContext._formatLog (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:42846:41)
+      at TransformPluginContext.error (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:42843:16)
+      at normalizeUrl (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:40820:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:40939:37
+      at async Promise.all (index 42)
+      at async TransformPluginContext.transform (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:40866:7)
+      at async EnvironmentPluginContainer.transform (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:42641:18)
+      at async loadAndTransform (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:36053:27)
+4:55:54 PM [vite] (client) Pre-transform error: Failed to resolve import "../assets/mobile-paper-previews/lines-small.svg" from "../../../__app66.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /__app66.tsx:205:30
+  153|  import { ocrNative } from "/src/ocr-native";
+  154|  import OcrPanel from "/src/OcrPanel";
+  155|  import linesSmallPreview from "../assets/mobile-paper-previews/lines-small.svg";
+     |                                 ^
+  156|  import linesMediumPreview from "../assets/mobile-paper-previews/lines-medium.svg";
+  157|  import linesLargePreview from "../assets/mobile-paper-previews/lines-large.svg";
+4:56:25 PM [vite] Internal server error: Failed to resolve import "../assets/mobile-paper-previews/lines-small.svg" from "../../../__app66.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /__app66.tsx:205:30
+  153|  import { ocrNative } from "/src/ocr-native";
+  154|  import OcrPanel from "/src/OcrPanel";
+  155|  import linesSmallPreview from "../assets/mobile-paper-previews/lines-small.svg";
+     |                                 ^
+  156|  import linesMediumPreview from "../assets/mobile-paper-previews/lines-medium.svg";
+  157|  import linesLargePreview from "../assets/mobile-paper-previews/lines-large.svg";
+      at TransformPluginContext._formatLog (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:42846:41)
+      at TransformPluginContext.error (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:42843:16)
+      at normalizeUrl (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:40820:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:40939:37
+      at async Promise.all (index 42)
+      at async TransformPluginContext.transform (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:40866:7)
+      at async EnvironmentPluginContainer.transform (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:42641:18)
+      at async loadAndTransform (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:36053:27)
+      at async viteTransformMiddleware (file:///Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/vite@6.4.5/node_modules/vite/dist/node/chunks/dep-CkSfqg8D.js:37550:24)

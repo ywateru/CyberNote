@@ -1,0 +1,13 @@
+mounted App lost registration response retains recoverable ownership FAIL AssertionError [ERR_ASSERTION]: registration committed but actual App discarded ticket and session id
+requesting close cancels pending authorization without waiting for media FAIL AssertionError [ERR_ASSERTION]: close stayed pending on authorization; late permission can start new capture
+
+true !== false
+
+actual App first and cumulative checkpoint with A parked behind editable B PASS
+final body acknowledged then cleanup failed retries only native cleanup PASS
+busy checkpoint reentrant close waits final plus cleanup PASS
+main close prevents destroy on failure and retry waits confirmed final PASS
+expired quit cannot replay success after delayed final completes PASS
+Escape in ordinary editor preserves sidebar, local Escape final closes PASS
+real revocation invalidates original A and retains recording PASS
+{"head":"11c73a914deb6bb955fe88ec54ab70f8a5566a60","checks":[{"name":"mounted App lost registration response retains recoverable ownership","status":"fail","error":"AssertionError [ERR_ASSERTION]: registration committed but actual App discarded ticket and session id"},{"name":"requesting close cancels pending authorization without waiting for media","status":"fail","error":"AssertionError [ERR_ASSERTION]: close stayed pending on authorization; late permission can start new capture\n\ntrue !== false\n"},{"name":"actual App first and cumulative checkpoint with A parked behind editable B","status":"pass"},{"name":"final body acknowledged then cleanup failed retries only native cleanup","status":"pass"},{"name":"busy checkpoint reentrant close waits final plus cleanup","status":"pass"},{"name":"main close prevents destroy on failure and retry waits confirmed final","status":"pass"},{"name":"expired quit cannot replay success after delayed final completes","status":"pass"},{"name":"Escape in ordinary editor preserves sidebar, local Escape final closes","status":"pass"},{"name":"real revocation invalidates original A and retains recording","status":"pass"}],"errors":[]}

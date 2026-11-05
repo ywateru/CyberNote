@@ -1,0 +1,17 @@
+{
+  "error": "Error: page.evaluate: Target page, context or browser has been closed",
+  "stack": "page.evaluate: Target page, context or browser has been closed\n    at test (/private/tmp/apple-notes-mac-recording-sidebar66-independent-01/scripts/check-mac-recording-sidebar66-independent.mjs:33:1055)\n    at async file:///private/tmp/apple-notes-mac-recording-sidebar66-independent-01/scripts/check-mac-recording-sidebar66-independent.mjs:35:1",
+  "checks": [
+    {
+      "name": "mounted App lost registration response retains recoverable ownership",
+      "status": "fail",
+      "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+      "state": {
+        "text": "",
+        "calls": [],
+        "ticket": false
+      }
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,328 @@
+{
+  "head": "11c73a914deb6bb955fe88ec54ab70f8a5566a60",
+  "checks": [
+    {
+      "name": "mounted App lost registration response retains recoverable ownership",
+      "status": "fail",
+      "error": "AssertionError [ERR_ASSERTION]: registration committed but actual App discarded ticket and session id",
+      "state": {
+        "text": "registration response lost重试\n编辑\n文件夹\n在我的 Mac 上\n全部备忘录2\n备忘录2\n新建文件夹\n全部备忘录2个备忘录\n今天\nA\n14:00无更多文本\n备忘录\nB\n14:00无更多文本\n备忘录\n2个备忘录\n格式\n2026年11月5日 14:00\n\nA text",
+        "calls": [
+          {
+            "command": "load_workspace",
+            "params": {}
+          },
+          {
+            "command": "workspace_action",
+            "params": {
+              "action": {
+                "type": "settings",
+                "settings": {
+                  "selectedFolder": "all",
+                  "selectedNote": "A"
+                }
+              },
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            }
+          },
+          {
+            "command": "workspace_action",
+            "params": {
+              "action": {
+                "type": "settings",
+                "settings": {
+                  "selectedNote": "A"
+                }
+              },
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            }
+          },
+          {
+            "command": "register_recording_local",
+            "params": {
+              "sessionId": "7ba3b1bd-0b9c-4591-bf17-9c1d13e4f37d",
+              "operationId": "46cd0d62-be07-452f-9baa-087a572605aa"
+            }
+          }
+        ],
+        "ticket": false,
+        "observed": {
+          "ticket": false,
+          "locals": 1,
+          "sheet": false
+        }
+      }
+    },
+    {
+      "name": "requesting close cancels pending authorization without waiting for media",
+      "status": "fail",
+      "error": "AssertionError [ERR_ASSERTION]: close stayed pending on authorization; late permission can start new capture\n\ntrue !== false\n",
+      "state": {
+        "text": "编辑\n文件夹\n在我的 Mac 上\n全部备忘录2\n备忘录2\n新建文件夹\n全部备忘录2个备忘录\n今天\nA\n14:00附件\n备忘录\nB\n14:00无更多文本\n备忘录\n2个备忘录\n格式\n2026年11月5日 14:00\n新录音录音 · 时长未知音频播放⌄\n当前设备无法播放此录音格式。 重试\n\nA text",
+        "calls": [
+          {
+            "command": "register_save_intent",
+            "params": {
+              "noteId": "A",
+              "intent": "f84e3711-69e6-4a8a-9f42-bafb7a2e3ea0",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              }
+            }
+          },
+          {
+            "command": "read_attachment",
+            "params": {
+              "id": "audio-780f7086-ccbf-47a2-b98c-f1cc0e1d163a",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              }
+            }
+          },
+          {
+            "command": "workspace_action",
+            "params": {
+              "action": {
+                "type": "saveNote",
+                "id": "A",
+                "saveIntent": "f84e3711-69e6-4a8a-9f42-bafb7a2e3ea0",
+                "document": {
+                  "type": "doc",
+                  "content": [
+                    {
+                      "type": "attachment",
+                      "attrs": {
+                        "id": "audio-780f7086-ccbf-47a2-b98c-f1cc0e1d163a",
+                        "name": "新录音.wav",
+                        "kind": "audio"
+                      }
+                    },
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "A text"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "revision": 0
+              },
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            }
+          },
+          {
+            "command": "load_workspace",
+            "params": {}
+          },
+          {
+            "command": "recording_local_validate",
+            "params": {
+              "sessionId": "85b72a0b-175c-4f7e-8433-0cc234cbd0c0",
+              "operationId": "9e0356d5-dd31-4c5c-9fb9-79d2a8bdc3ca",
+              "incarnation": "native-incarnation",
+              "owner": "main"
+            }
+          },
+          {
+            "command": "load_workspace",
+            "params": {}
+          },
+          {
+            "command": "query_attachment_operation",
+            "params": {
+              "operationId": "780f7086-ccbf-47a2-b98c-f1cc0e1d163a",
+              "noteId": "A",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              }
+            }
+          },
+          {
+            "command": "recording_local_validate",
+            "params": {
+              "sessionId": "85b72a0b-175c-4f7e-8433-0cc234cbd0c0",
+              "operationId": "9e0356d5-dd31-4c5c-9fb9-79d2a8bdc3ca",
+              "incarnation": "native-incarnation",
+              "owner": "main"
+            }
+          },
+          {
+            "command": "load_workspace",
+            "params": {}
+          },
+          {
+            "command": "recording_local_revision",
+            "params": {
+              "sessionId": "85b72a0b-175c-4f7e-8433-0cc234cbd0c0",
+              "operationId": "9e0356d5-dd31-4c5c-9fb9-79d2a8bdc3ca",
+              "incarnation": "native-incarnation",
+              "owner": "main",
+              "revision": 1,
+              "finalIntent": true
+            }
+          },
+          {
+            "command": "load_workspace",
+            "params": {}
+          },
+          {
+            "command": "recording_local_release",
+            "params": {
+              "sessionId": "85b72a0b-175c-4f7e-8433-0cc234cbd0c0",
+              "operationId": "9e0356d5-dd31-4c5c-9fb9-79d2a8bdc3ca",
+              "incarnation": "native-incarnation",
+              "owner": "main",
+              "saved": true,
+              "revision": 1
+            }
+          }
+        ],
+        "ticket": false,
+        "observed": {
+          "beforeAuthorization": {
+            "ticket": true,
+            "release": 0,
+            "streams": 0,
+            "state": "requesting"
+          },
+          "afterAuthorization": {
+            "streams": 1,
+            "starts": 1,
+            "stops": 1,
+            "ticket": false,
+            "saves": [
+              {
+                "sessionId": "85b72a0b-175c-4f7e-8433-0cc234cbd0c0",
+                "operationId": "9e0356d5-dd31-4c5c-9fb9-79d2a8bdc3ca",
+                "incarnation": "native-incarnation",
+                "owner": "main",
+                "saved": true,
+                "revision": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "actual App first and cumulative checkpoint with A parked behind editable B",
+      "status": "pass",
+      "observation": {
+        "sameEditor": true,
+        "sameTicket": true,
+        "streams": 1,
+        "starts": 2,
+        "a": "{\"type\":\"doc\",\"content\":[{\"type\":\"attachment\",\"attrs\":{\"id\":\"audio-a6969160-b850-4bed-aad2-51b8cb0aefc4\",\"name\":\"新录音.wav\",\"kind\":\"audio\"}},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\" A typedA text\"}]}]}",
+        "b": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\" B typedB text\"}]}]}",
+        "aEditable": false,
+        "stores": 2,
+        "committed": true
+      }
+    },
+    {
+      "name": "final body acknowledged then cleanup failed retries only native cleanup",
+      "status": "pass",
+      "observation": {
+        "before": {
+          "stores": 1,
+          "acks": 1,
+          "body": 3,
+          "ticket": true
+        },
+        "after": {
+          "stores": 1,
+          "acks": 1,
+          "body": 3
+        }
+      }
+    },
+    {
+      "name": "busy checkpoint reentrant close waits final plus cleanup",
+      "status": "pass",
+      "observation": {
+        "saves": [
+          {
+            "sessionId": "bad737df-04c7-4b7e-9e1a-5b8b546e0d32",
+            "operationId": "e8ccddbe-00de-40c7-80fe-730178e2214c",
+            "incarnation": "native-incarnation",
+            "owner": "main",
+            "revision": 1,
+            "finalIntent": false
+          },
+          {
+            "sessionId": "bad737df-04c7-4b7e-9e1a-5b8b546e0d32",
+            "operationId": "e8ccddbe-00de-40c7-80fe-730178e2214c",
+            "incarnation": "native-incarnation",
+            "owner": "main",
+            "revision": 2,
+            "finalIntent": true
+          }
+        ],
+        "releases": 1
+      }
+    },
+    {
+      "name": "main close prevents destroy on failure and retry waits confirmed final",
+      "status": "pass",
+      "observation": {
+        "destroyed": 1,
+        "prevented": true,
+        "locals": 0,
+        "hide": false
+      }
+    },
+    {
+      "name": "expired quit cannot replay success after delayed final completes",
+      "status": "pass",
+      "observation": {
+        "acks": [
+          {
+            "id": "quit-current",
+            "success": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "Escape in ordinary editor preserves sidebar, local Escape final closes",
+      "status": "pass",
+      "observation": {
+        "closed": true
+      }
+    },
+    {
+      "name": "real revocation invalidates original A and retains recording",
+      "status": "pass",
+      "observation": {
+        "sameOwner": "A",
+        "streams": 1,
+        "stores": 0,
+        "invalidated": true
+      }
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Actual mounted App, SearchEditorHost, NoteEditor/TipTap, SearchEditorGate, useEditorCommit, SaveQueue, DesktopPanel, DesktopSession, RecordingRevisions and bridge; only debug getters inserted before App return.",
+    "Native IPC, authorization, stream, recorder, decoding, playback and persisted host are controlled. Tests do not use hardware mic, device, GUI or native permission.",
+    "Native mac toolbar deliberately not mounted via platform boundary. No pixel/package/runtime claim."
+  ]
+}

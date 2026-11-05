@@ -1,0 +1,19 @@
+mounted App lost registration response retains recoverable ownership FAIL AssertionError [ERR_ASSERTION]: registration committed but actual App discarded ticket and session id
+requesting close cancels pending authorization without waiting for media FAIL AssertionError [ERR_ASSERTION]: close stayed pending on authorization; late permission can start new capture
+
+true !== false
+
+actual App first and cumulative checkpoint with A parked behind editable B PASS
+final body acknowledged then cleanup failed retries only native cleanup PASS
+busy checkpoint reentrant close waits final plus cleanup FAIL Error: locator.click: Error: strict mode violation: getByRole('button', { name: '暂停录音', exact: true }) resolved to 2 elements:
+    1) <button disabled type="button" aria-label="暂停录音" class="live-recording-toggle">暂停</button> aka getByText('暂停')
+    2) <button aria-label="暂停录音" class="recording-primary recording-primary-recording">…</button> aka getByRole('dialog', { name: '新录音' }).getByLabel('暂停录音')
+
+Call log:
+[2m  - waiting for getByRole('button', { name: '暂停录音', exact: true })[22m
+
+main close prevents destroy on failure and retry waits confirmed final PASS
+expired quit cannot replay success after delayed final completes PASS
+Escape in ordinary editor preserves sidebar, local Escape final closes PASS
+real revocation invalidates original A and retains recording PASS
+{"head":"11c73a914deb6bb955fe88ec54ab70f8a5566a60","checks":[{"name":"mounted App lost registration response retains recoverable ownership","status":"fail","error":"AssertionError [ERR_ASSERTION]: registration committed but actual App discarded ticket and session id"},{"name":"requesting close cancels pending authorization without waiting for media","status":"fail","error":"AssertionError [ERR_ASSERTION]: close stayed pending on authorization; late permission can start new capture\n\ntrue !== false\n"},{"name":"actual App first and cumulative checkpoint with A parked behind editable B","status":"pass"},{"name":"final body acknowledged then cleanup failed retries only native cleanup","status":"pass"},{"name":"busy checkpoint reentrant close waits final plus cleanup","status":"fail","error":"Error: locator.click: Error: strict mode violation: getByRole('button', { name: '暂停录音', exact: true }) resolved to 2 elements:\n    1) <button disabled type=\"button\" aria-label=\"暂停录音\" class=\"live-recording-toggle\">暂停</button> aka getByText('暂停')\n    2) <button aria-label=\"暂停录音\" class=\"recording-primary recording-primary-recording\">…</button> aka getByRole('dialog', { name: '新录音' }).getByLabel('暂停录音')\n\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '暂停录音', exact: true })\u001b[22m\n"},{"name":"main close prevents destroy on failure and retry waits confirmed final","status":"pass"},{"name":"expired quit cannot replay success after delayed final completes","status":"pass"},{"name":"Escape in ordinary editor preserves sidebar, local Escape final closes","status":"pass"},{"name":"real revocation invalidates original A and retains recording","status":"pass"}],"errors":[]}

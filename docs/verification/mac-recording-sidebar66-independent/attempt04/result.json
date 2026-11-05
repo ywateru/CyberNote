@@ -1,0 +1,23 @@
+{
+  "head": "11c73a914deb6bb955fe88ec54ab70f8a5566a60",
+  "checks": [
+    {
+      "name": "mounted App lost registration response retains recoverable ownership",
+      "status": "fail",
+      "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.folder-row').filter({ hasText: '全部备忘录' })\u001b[22m\n",
+      "state": {
+        "text": "",
+        "calls": [],
+        "ticket": false
+      }
+    }
+  ],
+  "errors": [
+    "TypeError: getCurrentWindow(...).onFocusChanged is not a function"
+  ],
+  "limits": [
+    "Actual mounted App, SearchEditorHost, NoteEditor/TipTap, SearchEditorGate, useEditorCommit, SaveQueue, DesktopPanel, DesktopSession, RecordingRevisions and bridge; only debug getters inserted before App return.",
+    "Native IPC, authorization, stream, recorder, decoding, playback and persisted host are controlled. Tests do not use hardware mic, device, GUI or native permission.",
+    "Native mac toolbar deliberately not mounted via platform boundary. No pixel/package/runtime claim."
+  ]
+}
