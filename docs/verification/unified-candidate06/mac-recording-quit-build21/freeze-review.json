@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "at": "2026-11-05T12:19:49.425479+00:00",
+  "sourceHead": "bd51ae6aae37cf2f9576bf50e44e568c67a17427",
+  "status": "PASS — FROZEN ONLY; await root direct exact freeze review and explicit START.",
+  "checks": {
+    "nineFieldSchema": true,
+    "sourceHeadExact": true,
+    "trackedTreeIndexClean": true,
+    "authorizationExact": true,
+    "product366Input387": true,
+    "productRowsEqualPlan": true,
+    "inputRowsEqualPlan": true,
+    "productRowsEqualCurrent": true,
+    "inputRowsEqualCurrent": true,
+    "productAggregateExact": true,
+    "inputAggregateExact": true,
+    "completeMac20ProductUnionRetained": true,
+    "completeMac20InputUnionRetained": true,
+    "historicalInputOnly21Retained": true,
+    "historicalInputOnlyBytesUnchanged": true,
+    "historicalDeletedCapabilitiesStillAbsent": true,
+    "plugins78": true,
+    "trackedProductGitBytesExact": true,
+    "completeCapabilitySetByteIdentical": true,
+    "applicationHandlerSourceByteIdentical": true,
+    "pluginHandlerSourceByteIdentical": true,
+    "pluginCommandDeclarationByteIdentical": true,
+    "nativeGuardSourceByteIdentical": true,
+    "noChangedPermissionGrants": true,
+    "existingMainMicrophoneGrant": true,
+    "toolsEqualMac20": true,
+    "toolVersionsEqualMac20": true,
+    "effectiveEnvironmentEqualMac20": true,
+    "ocrCacheEqualMac20": true,
+    "supplementalInputsEqualMac20": true,
+    "noBuildAttempt": true,
+    "noArtifactDirectory": true,
+    "spaceGuardPassed": true
+  },
+  "productCount": 366,
+  "inputCount": 387,
+  "productAggregate": "cd01c9943be7fe95dacb108716f723f0dcdf8963d375788e91e529aca63a273c",
+  "inputAggregate": "22cbefc567271d7b74fd5e1dc905c21fb53733b2c64e1e460c9cd4396df434e1",
+  "transitionCounts": {
+    "unchanged": 378,
+    "modified": 4,
+    "added": 5,
+    "removed": 0
+  },
+  "authorization": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/recording-quit68-native69-preparation/mac-authorization.json",
+    "bytes": 40074,
+    "sha256": "f7c697d0c152a0b1eba877dd733612e918deeea64fb18aa6355a52cfb7e508b1"
+  },
+  "freeze": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-recording-quit-build21/input-freeze.json",
+    "bytes": 353304,
+    "sha256": "5a01650d4a621540eb03f3f99b2a37bae366cfaa7cdcc23fef0d1f575f98c1f4"
+  },
+  "selectedParentEnvironmentChangesFromMac20": {},
+  "scratchCleanup": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/build-cache-cleanup-20261105/scratch-cleanup.json",
+    "bytes": 511376,
+    "sha256": "29797acc464108149e26d4051b9c79bd76f62d023393d89dc189820074c0c6ce"
+  },
+  "limits": "Rows/source/schema/permissions/tool/environment identity only. No build, sign, GUI, app/media/device/Android action. Cleanup removed only explicit untracked generated cache/dist/test binaries; original evidence and input bytes retained."
+}

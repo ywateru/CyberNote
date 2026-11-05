@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "at": "2026-11-05T12:25:31.258016+00:00",
+  "sourceHead": "bd51ae6aae37cf2f9576bf50e44e568c67a17427",
+  "headObservedAfterCollection": "bd51ae6aae37cf2f9576bf50e44e568c67a17427",
+  "status": "PASS — exact collection completed; independent package review and runtime acceptance remain separate.",
+  "checks": {
+    "buildExitZero": true,
+    "onlyAttempt01": true,
+    "fixedNormalCommand": true,
+    "buildAll15InputsEqual": true,
+    "buildSupplementalUnchanged": true,
+    "ownedGroupStopped": true,
+    "collectionReady": true,
+    "collectionAll15InputsEqual": true,
+    "collectionSupplementalUnchanged": true,
+    "exactSourceThroughout": true,
+    "exactFreezeThroughout": true,
+    "buildNonceMatches": true,
+    "buildResultIdentityMatches": true,
+    "originalAppTreeMatches": true,
+    "sealedAppTreeMatches": true,
+    "originalZipMatches": true,
+    "sealedZipMatches": true,
+    "originalExecutableMatches": true,
+    "sealedExecutableMatches": true,
+    "originalPreservedUnchanged": true,
+    "originalStrictFailureRetained": true,
+    "singleDerivedSign": true,
+    "derivedStrictVerify": true,
+    "onlyAllowedSealingChanges": true,
+    "infoPlistUnchanged": true,
+    "generatedAndPriorOutputsMatch": true,
+    "builtSourceOutputMatches": true,
+    "builtDistMatches": true,
+    "frozenProductBytesStillMatch": true,
+    "frozenInputBytesStillMatch": true,
+    "trackedTreeClean": true
+  },
+  "buildResult": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-recording-quit-build21/mac-attempt01/result.json",
+    "bytes": 8513,
+    "sha256": "d9c7cd027d30c802f64ba444f2d12ab55a92897a20cc4ba33f85b6a2bfccb3ba"
+  },
+  "collectionResult": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-recording-quit-build21/mac-attempt01/collection/result.json",
+    "bytes": 28016,
+    "sha256": "060fb079f2cbfc37de8fc778060eb02ff81ec4990650694f573fd4682deb54af"
+  },
+  "freeze": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-recording-quit-build21/input-freeze.json",
+    "bytes": 353304,
+    "sha256": "5a01650d4a621540eb03f3f99b2a37bae366cfaa7cdcc23fef0d1f575f98c1f4"
+  },
+  "sealed": {
+    "derivedApp": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-quit-build21/mac-attempt01/mac-sealed.app",
+    "bundleFiles": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+        "type": "file",
+        "mode": 420
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16746416,
+        "sha256": "b8228d203acebb4750b6b43e5f1360b2a7f62f54aeaca01721187fb3443eba73",
+        "type": "file",
+        "mode": 493
+      },
+      {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b",
+        "type": "file",
+        "mode": 420
+      }
+    ],
+    "bundleAggregate": "16df48fa523bb25285495d49d9eb39edbefed77a0220566da69fefeafdabd34e",
+    "archive": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-quit-build21/mac-attempt01/mac-sealed.zip",
+      "bytes": 5014264,
+      "sha256": "b7a544f1c3e5f2f29d078c58f8cd02d6d559c5c15a99e646417c771f2fb14685"
+    },
+    "executable": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-quit-build21/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone",
+      "bytes": 16746416,
+      "sha256": "b8228d203acebb4750b6b43e5f1360b2a7f62f54aeaca01721187fb3443eba73"
+    }
+  },
+  "original": {
+    "sourceApp": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+    "preservedApp": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-quit-build21/mac-attempt01/mac-original.app",
+    "bundleFiles": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3",
+        "type": "file",
+        "mode": 420
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16826112,
+        "sha256": "73fa5b74e71899eb49452e0998005769686b917a8a031e1e773b37f81a264f16",
+        "type": "file",
+        "mode": 493
+      }
+    ],
+    "bundleAggregate": "45860e4ae4dea706bd0d7abb96cf44dd09c13f23e4ef21a67c0d6e945aff88b9",
+    "archive": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-quit-build21/mac-attempt01/mac-original.zip",
+      "bytes": 5089198,
+      "sha256": "acbe7a943e384526c6327d2f0cfb0d7e82e9f2c5defd452f6cdb188379533aaf"
+    },
+    "executable": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-quit-build21/mac-attempt01/mac-original.app/Contents/MacOS/notes-clone",
+      "bytes": 16826112,
+      "sha256": "73fa5b74e71899eb49452e0998005769686b917a8a031e1e773b37f81a264f16"
+    }
+  },
+  "limits": "Post-collection byte and guard evidence only. No rerun build/sign, launch, GUI, TCC, actual audio, device, Android, DeveloperID, notarization or pixel acceptance."
+}

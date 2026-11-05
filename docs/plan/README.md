@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-05最新工作：[统一调试命令与HTML程序化验收70](tasks/app-debug-automation70.md)，按[测试策略](../testing.md)使用真实App和模拟设备/音源，默认隔离合成数据，生产不提供调试入口。Mac21实际有限结果见[记录](../verification/mac-recording-quit68-runtime/README.md)；主窗关闭/Dock和整体像素仍未授予通过。旧时点“21准备中”已被本次构建与有限运行记录替代。
+
 2026-11-05：最新要求为主窗口右侧唯一非模态录音栏。66侧栏、67首次媒体读取已合入；68菜单/CmdQ与69普通原生退出桥现已独立复核并整合，见[组合审查](reviews/app-mac-recording-quit6869.md)，结论 SOURCE-READY / RUNTIME-OPEN。准确新Mac21准备中；真实退出后原笔记完整录音及另一笔记最新正文仍须实包验收。[Mac20真实记录](../verification/mac-recording-media67-runtime/README.md)的首次授权超时及CmdQ后K缺卡保持历史失败，不能由受控测试追认为通过。Android约13秒原现场完全不操作；旧Mac18约3秒内存现场进程已不在，原因/时点未知，不能称保全或恢复。整体像素与音质仍开放。
 
 历史64状态：2026-11-05用户最新反馈：[Mac录音暂停/关闭自动保存64](tasks/app-mac-recording-autosave64.md)首版通过已测受控边界并合入、生成Mac18，但[实际暂停保存失败](../verification/mac-recording-autosave64-runtime/README.md)，**MAC18-RUNTIME-BLOCKED**。保持in-progress，继续实际App/Host恢复等待与投影边界修复，新3秒录音保留，首版独审不覆盖这个真实失败。手机原现场保持，见[分析](analysis/mac-recording-autosave64.md)。
