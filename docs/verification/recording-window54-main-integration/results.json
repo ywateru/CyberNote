@@ -1,0 +1,65 @@
+[
+  {
+    "name": "build",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 6.33
+  },
+  {
+    "name": "app-save",
+    "command": [
+      "node",
+      "scripts/check-recording-submit.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 3.97
+  },
+  {
+    "name": "preview",
+    "command": [
+      "node",
+      "scripts/check-recording-preview.mjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.41
+  },
+  {
+    "name": "components",
+    "command": [
+      "node",
+      "scripts/check-recording-interactions50.mjs",
+      "docs/verification/recording-window54-main-integration/components"
+    ],
+    "exitCode": 0,
+    "seconds": 9.48
+  },
+  {
+    "name": "child",
+    "command": [
+      "node",
+      "scripts/check-recording-window-browser50.mjs",
+      "docs/verification/recording-window54-main-integration/child"
+    ],
+    "exitCode": 0,
+    "seconds": 4.47
+  },
+  {
+    "name": "native",
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--locked",
+      "--offline",
+      "recording_window",
+      "--",
+      "--nocapture"
+    ],
+    "exitCode": 0,
+    "seconds": 28.38
+  }
+]

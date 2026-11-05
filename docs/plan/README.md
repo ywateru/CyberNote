@@ -90,3 +90,5 @@ docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，do
 2026-11-05后续40–42：原版未保存草稿已观察OptionTab中间插入、选区替换及一次真实撤销/重做；隐藏WK候选保留真实React输入和编辑历史，但未验证产品按键路由。[任务42](tasks/app-mac-ordinary-option-insertion42.md)依赖37合入，当前pending，不与37重叠实施。用户再次明确“先不删除，继续其他开发”，原版删除/恢复实验和Android新空笔记清理继续暂停。Android08实际36有限运行及独立证据复核已经完成，当前包不改，计数9保留。
 
 2026-11-05当前状态：Mac14准确d9ce9c4已核包/实际47/独立48有限接收，Android保持08原来源；见[根接收47](../verification/mac-ordinary-keyboard47-root-acceptance.md)。上文37/42“待新包”“Tab仍差异”是当时历史记录，当前指定关闭导航故障路径已通过，其余边界开放。新优先项[录音交互50](tasks/app-recording-interactions50.md)实施中，排除听写/转写。
+
+2026-11-05录音50最终12e5源独审SOURCE-READY，主线50+52六项整合检查通过；准确Mac15/Android09与实际后台录音待验，见[主线整合54](../verification/recording-window54-main-integration/README.md)。不追认旧Mac14/Android08或原版像素通过。

@@ -1,7 +1,7 @@
 ---
 id: app-recording-interactions50
 scope: independent desktop recording window, background capture, live card and shared transport
-status: in-progress
+status: source-ready-runtime-pending
 depends-on: [app-002-recording-preview-01, app-002-recording-submit-01]
 ---
 
@@ -32,3 +32,9 @@ depends-on: [app-002-recording-preview-01, app-002-recording-submit-01]
 原生集成补充：访问屏障当前枚举所有WebviewWindow为正文参与者，新录音入口不运行App且无正文/保存队列。允许在lib的begin与finish两处同一参与者快照过滤中仅排除精确合法`recording-<标准小写UUID>`窗口；main/note-*及其他未知窗原有严格行为保持，不扩大Session权限或将录音窗冒充正文ACK。registry可独立于lib为src-tauri/src/recording_window.rs。源owner必须仍参与真实访问屏障，屏障导致源授权失效时录音提交失败保留File，不绕过屏障。
 
 新增验收：真实两个窗口、子窗录音时主窗编辑A并切B（A/B输入与Undo保留）、切其他应用/失焦/最小化不主动停、完成只落A映射位置且B不抢焦点；主窗普通关闭后录音持续/恢复主窗、独立窗关闭保存、整体Quit等待所有录音ACK或失败保留；错误及迟到/错session/重发/回执丢失不重复附件或错note。headless可验证实际生产controller+coordinator/PM/App保存接线，不把假的窗口适配器当真实双窗证据；实包CUA为最终验收。保留已写transport/波形代码，撤下旧背景阻断/正文锁定方案，不再验证该旧方案。
+
+## 最终源码接收（2026-11-05）
+
+最终准确12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0获不同作者SOURCE-READY；主线已合入完整产品链。首次relay重试、child失去后迟到真实ACK释放、Quit等待新输入与重复Quit绕过四项均保留首次失败并修复。退出首次await前的窄编辑屏障需要src/search-editor-gate.ts新增suspend/resume；仅整应用退出启用，普通后台录音继续可编辑。
+
+主线20个50文件完全等于最终manifest，50+52 build/真实App38/preview19/实际组件12/子窗Owner6/Rust4顺序通过。见verification/recording-window54-main-integration/README.md及独审review-final.md。此为源码与受控边界接收；准确Mac15/Android09、真实后台采集和原版像素仍待按54运行，不标完整功能交付。

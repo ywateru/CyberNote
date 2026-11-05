@@ -15,7 +15,7 @@
 
 Mac14当前系统导航关闭条件下的Tab/OptionTab故障路径已实际有限通过；系统导航开启、多窗和完整输入仍待验。干净补拍48支持全选及部分选中文字颜色误差下降，自然态相对Mac13完整图像零变化，字形、选区背景与全界面像素仍有残差。Android空白新建返回后计数9的条目继续保留，原版相同路径语义待证。
 
-用户新增的录音基本交互要求正按[任务50](docs/plan/tasks/app-recording-interactions50.md)实施：桌面改为真实独立非模态录音窗口，支持后台录音、同时编辑/切换笔记和操作其他应用，完成保存回原笔记；同时完善正文进行中卡、试听定位与安全关闭，不做听写或转写。该项尚未包含在上述已交付包中；[用户桌面截图](references/desktop/recording-20261105/user-recording-sidebar.png)已原字节保存，内部样式继续以它对照。准确旧Mac14本轮仍停在麦克风准备阶段，新[授权预检52](docs/plan/tasks/app-mac-recording-access52.md)与[实包验收计划54](docs/verification/recording-window54-runtime-plan.md)分别推进，不能把代码或计时器当作实际收音通过。
+用户新增的录音基本交互要求已完成源码独审及主线整合回归，按[任务50](docs/plan/tasks/app-recording-interactions50.md)实施：桌面改为真实独立非模态录音窗口，支持后台录音、同时编辑/切换笔记和操作其他应用，完成保存回原笔记；同时完善正文进行中卡、试听定位与安全关闭，不做听写或转写。该项尚未包含在上述已交付包中；[用户桌面截图](references/desktop/recording-20261105/user-recording-sidebar.png)已原字节保存，内部样式继续以它对照。准确旧Mac14本轮仍停在麦克风准备阶段，新[授权预检52](docs/plan/tasks/app-mac-recording-access52.md)与[实包验收计划54](docs/verification/recording-window54-runtime-plan.md)分别推进，不能把代码或计时器当作实际收音通过。
 原始移动端录屏已保存在 `references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4`。原版删除/恢复实验按用户要求暂停；Mac对比使用Computer Use，本批未增加系统截图工具权限要求。旧包、缓存及失败证据均保留。
 
 ## 早期交付记录
