@@ -2,6 +2,8 @@
 
 更新：2026-11-06。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
+2026-11-06最新优先项：[安卓版附件75](plan/tasks/app-android-attachments75.md)。用户报告附件无法保存及显示问题；先复现手机附件读取/受管存储/正文ACK/新进程恢复，必要时修复，独立复核后整合。真实Rust设施先用于附件，[桌面录音74](plan/tasks/app-debug-recording-rust74.md)暂后续执行。原Android未保存录音现场继续完全保留，不操作原设备；浏览器/Session通过不代表原生chooser或整体像素已通过。
+
 2026-11-06：[录音中央控件73](plan/tasks/app-mobile-recording-primary73.md)已完成[独立复审](plan/reviews/app-mobile-recording-primary73-recheck.md)、[视觉效率复核](plan/reviews/app-mobile-recording-primary73-efficiency-recheck.md)及[主线整合](verification/mobile-recording-primary73/integration/README.md)。根桌面100/手机录音43/笔记9、build/production、24态视觉均自然exit0。修正手机外圈/间隔/暂停填色；修复延迟媒体重挂载的测试竞态；同24态视觉限定依赖扫描后独审约260→50秒，六桌面严格无差。完整原生/像素与CLI清理性能仍开放；下一项[真实Rust持久化74](plan/tasks/app-debug-recording-rust74.md)ready，尚未构建执行。
 
 2026-11-06准备阶段（73现已完成，见上方整合）：按[手机录音中央控件73](plan/tasks/app-mobile-recording-primary73.md)，依据已保全的稳定录屏帧校准外圈、内侧间隔与暂停填色，以命令/HTML和同尺寸图像量化回归。[已存录音重命名研究72](research/saved-audio-rename72/README.md)及[独审](plan/reviews/ref-saved-audio-rename72.md)已合入：源码读写链和不可变附件边界已核对，原版AX访问拒绝，名称编辑/Undo/恢复未观察，任务继续开放，未实现猜测交互。原Android未保存录音现场保持不动。
