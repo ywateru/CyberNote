@@ -46,12 +46,18 @@ export function RecordingWaveform({
   seek: (milliseconds: number) => void;
 }) {
   const drag = useRef<{ id: number; x: number; time: number } | null>(null);
-  const pixelsPerSecond = 40;
+  // Both preserved references resolve to about 100 logical px per second
+  // (desktop 200 image px at the explicit 2x comparison boundary; mobile
+  // 57.5/224 of a 390px viewport). Drawing and pointer requests share this unit.
+  const pixelsPerSecond = 100;
   const requested = (time: number) =>
     seek(Math.max(0, Math.min(duration, time)));
   const ticks = Array.from(
     { length: 25 },
     (_, index) => Math.floor(position / 1000) + index - 12,
+  );
+  const minorTicks = ticks.flatMap((tick) =>
+    [0.25, 0.5, 0.75].map((fraction) => tick + fraction),
   );
   return (
     <div
@@ -128,6 +134,16 @@ export function RecordingWaveform({
           ))}
       </div>
       <div className="wave-axis" aria-hidden="true">
+        {minorTicks
+          .filter((tick) => tick >= 0)
+          .map((tick) => (
+            <i
+              key={tick}
+              style={{
+                left: `calc(50% + ${(tick - position / 1000) * pixelsPerSecond}px)`,
+              }}
+            />
+          ))}
         {ticks
           .filter((tick) => tick >= 0)
           .map((tick) => (

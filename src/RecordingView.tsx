@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Check,
-  MoreHorizontal,
-  Pause,
-  Play,
-  RotateCcw,
-  RotateCw,
-  X,
-} from "lucide-react";
+import { Check, MoreHorizontal, Pause, Play, X } from "lucide-react";
 import { RecordingWaveform } from "./recording-waveform";
 import { recordingTime } from "./recording-clock";
 import type {
@@ -16,6 +8,35 @@ import type {
   RecordingViewState,
 } from "./recording-coordinator";
 import "./RecordingPanel.css";
+
+/** Local recording transport glyph: the arrowhead sits above the numeral. */
+function SkipSeconds({ forward = false }: { forward?: boolean }) {
+  return (
+    <svg viewBox="0 0 24 28" aria-hidden="true" className="recording-skip-icon">
+      <g transform={forward ? "translate(24 0) scale(-1 1)" : undefined}>
+        <path
+          d="M6.5 6.5a10 10 0 1 0 5.5-1.7"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+        <path d="M13 1 8 4.8 13 8.6Z" fill="currentColor" stroke="none" />
+      </g>
+      <text
+        x="12"
+        y="19"
+        textAnchor="middle"
+        fill="currentColor"
+        stroke="none"
+        fontSize="10"
+        fontWeight="600"
+      >
+        15
+      </text>
+    </svg>
+  );
+}
 
 /** A projection only: no microphone, media element, URLs or attachment bytes. */
 export default function RecordingView({
@@ -79,7 +100,10 @@ export default function RecordingView({
           <div>
             <strong>新录音</strong>
             <small>
-              {createdAt} {recordingTime(elapsed, false)}
+              {createdAt}
+              <span className="recording-total-duration">
+                {recordingTime(elapsed, false)}
+              </span>
             </small>
           </div>
           {!mobile && onPresentation && (
@@ -133,8 +157,7 @@ export default function RecordingView({
             disabled={!previewAllowed || !state.canSeek}
             onClick={() => act({ action: "skip", seconds: -15 })}
           >
-            <RotateCcw />
-            <span>15</span>
+            <SkipSeconds />
           </button>
           <button
             aria-label={state.playing ? "暂停回放" : "播放录音"}
@@ -157,8 +180,7 @@ export default function RecordingView({
             disabled={!previewAllowed || !state.canSeek}
             onClick={() => act({ action: "skip", seconds: 15 })}
           >
-            <RotateCw />
-            <span>15</span>
+            <SkipSeconds forward />
           </button>
         </div>
         {state.canRetryPreview && (

@@ -287,10 +287,13 @@ try {
       const bounds = await slider.boundingBox();
       const x = bounds.x + bounds.width / 2,
         y = bounds.y + bounds.height / 2;
-      await page.mouse.move(x + 40, y);
+      await page.mouse.move(x + 100, y);
       await page.mouse.down();
-      await page.mouse.move(x + 80, y);
+      await page.mouse.move(x + 200, y);
       await page.mouse.up();
+      // Reference58 is 100px/s: preserve the original 1s -> 2s semantic
+      // targets and media-confirmation barrier. Drag leaves the pane; actual
+      // pointer capture must keep receiving it without predicting success.
       assert.equal(
         await page.evaluate(() =>
           window.platform.audios.at(-1).requests.at(-1),

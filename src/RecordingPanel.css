@@ -592,3 +592,220 @@
 .recording-dock .recording-window-error {
   top: calc(var(--recording-native-top, 0px) + 78px);
 }
+
+/* Reference58: 560x934 source crop compared to a 280x467 logical view at 2x.
+   These are recording-local geometry/material approximations, not source DPR. */
+.recording-sheet .waveform,
+.dark .recording-sheet .waveform {
+  background-image: none;
+}
+.recording-sheet .wave-axis {
+  border-top: 0;
+}
+.recording-sheet .wave-axis span {
+  transform: none;
+  margin-left: -2px;
+}
+.recording-sheet .wave-axis span::before {
+  left: 2px;
+}
+.recording-sheet .wave-axis > i {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 5px;
+  background: #dedee1;
+}
+.recording-total-duration {
+  margin-left: 6px;
+}
+.recording-sheet .recording-playback .recording-skip-icon {
+  height: 28px;
+}
+.recording-desktop.recording-backdrop .recording-sheet {
+  background: #f9f9f9;
+  color: #000;
+}
+.recording-desktop.recording-backdrop .recording-sheet header {
+  height: 72px;
+  align-items: flex-start;
+  padding-top: 19px;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  header
+  > div:first-of-type {
+  gap: 3px;
+}
+.recording-desktop.recording-backdrop .recording-sheet header strong {
+  font-size: 14.5px;
+  line-height: 21px;
+}
+.recording-desktop.recording-backdrop .recording-sheet header small {
+  white-space: nowrap;
+  line-height: 17px;
+  color: #777;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-cancel,
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-presentation-menu
+  > button {
+  min-width: 18px;
+  width: 18px;
+  height: 18px;
+  padding: 1px;
+  background: #e9e9e9;
+  color: #000;
+  border-radius: 50%;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-cancel {
+  top: 23.5px;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+}
+.recording-desktop .recording-cancel svg {
+  stroke-width: 2;
+}
+.recording-desktop .recording-sheet .recording-presentation-menu {
+  top: 24.5px;
+  right: 48px;
+}
+.recording-desktop .recording-presentation-menu > button svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 3;
+}
+.recording-desktop.recording-backdrop .recording-sheet .waveform {
+  position: absolute;
+  top: 65.5px;
+  bottom: 171px;
+  min-height: 0;
+  height: auto;
+  flex: none;
+  background-color: transparent;
+}
+.recording-desktop .recording-sheet .wave-samples {
+  inset: 6.5px 0 32px;
+  background: #f5f5f5;
+}
+.recording-desktop .recording-sheet .wave-samples i {
+  width: 1px;
+}
+.recording-desktop .recording-sheet .wave-axis {
+  height: 32px;
+}
+.recording-desktop .recording-sheet .wave-axis span {
+  font-size: 11px;
+  padding-top: 12px;
+  color: #808080;
+}
+.recording-desktop .recording-sheet .wave-axis span::before {
+  height: 10px;
+  background: #dedee1;
+}
+.recording-desktop .recording-sheet .recording-playhead {
+  bottom: 25.5px;
+  background: #ffb51c;
+}
+.recording-desktop .recording-sheet .recording-playhead::before,
+.recording-desktop .recording-sheet .recording-playhead::after {
+  width: 7px;
+  height: 7px;
+  left: -3px;
+  background: #ffb51c;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-time {
+  position: absolute;
+  bottom: 110px;
+  margin: 0;
+  font-size: 22.5px;
+  line-height: 27px;
+  letter-spacing: -0.5px;
+  font-weight: 700;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-playback {
+  position: absolute;
+  bottom: 64px;
+  width: 138px;
+  height: 44px;
+  margin: 0;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-playback
+  button
+  .recording-skip-icon {
+  width: 25.2px;
+  height: 29.4px;
+}
+@media (max-width: 760px) {
+  .recording-mobile .recording-sheet .recording-playback .recording-skip-icon {
+    width: 34px;
+    height: 39.66px;
+  }
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-notice {
+  position: absolute;
+  top: 79px;
+  left: 10px;
+  right: 10px;
+  margin: 0;
+  min-height: 0;
+  max-height: 36px;
+  z-index: 1;
+}
+.recording-desktop .recording-notice:not(:empty) {
+  background: var(--paper);
+}
+.recording-desktop .recording-playback-retry {
+  position: absolute;
+  bottom: 147px;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet:has(.recording-playback-retry)
+  .waveform {
+  bottom: 215px;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-controls {
+  position: absolute;
+  bottom: 15.5px;
+  height: 41px;
+  margin: 0;
+  gap: 9px;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-primary {
+  height: 41px;
+  background: #f2e9e8;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-primary:disabled {
+  opacity: 1;
+  color: #f8f8f8;
+  background: #f0f0f0;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-done {
+  background: #ffb000;
+}
+.recording-desktop .recording-done svg {
+  stroke-width: 2.2;
+}
+.dark .recording-desktop.recording-backdrop .recording-sheet {
+  background: var(--paper);
+  color: var(--ink);
+}
+.dark .recording-desktop .recording-sheet .wave-samples {
+  background: #202020;
+}
+.dark .recording-desktop.recording-backdrop .recording-sheet .recording-cancel,
+.dark
+  .recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-presentation-menu
+  > button {
+  background: #3a3a3c;
+  color: var(--ink);
+}
