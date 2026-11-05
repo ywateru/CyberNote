@@ -1,0 +1,46 @@
+Timestamp               Ty Process[PID:TID]
+2026-11-05 12:11:05.280 Df tccd[67582:2582448] [com.apple.TCC:access] REQUEST: tccd_uid=501, sender_pid=71272, sender_uid=501, sender_auid=501, function=TCCAccessRequest, msgID=71272.6
+2026-11-05 12:11:05.280 Df tccd[67582:2582448] [com.apple.TCC:access] AUTHREQ_CTX: msgID=71272.6, function=<private>, service=kTCCServiceMicrophone, preflight=no, query=1, client_dict=(null), daemon_dict=<private>
+2026-11-05 12:11:05.280 Df tccd[67582:2582448] [com.apple.TCC:access] AUTHREQ_ATTRIBUTION: msgID=71272.6, attribution={requesting={TCCDProcess: identifier=com.local.notesclone, pid=71272, auid=501, euid=501, binary_path=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone}, },
+2026-11-05 12:11:05.283 Df tccd[67582:2582448] [com.apple.TCC:access] AUTHREQ_SUBJECT: msgID=71272.6, subject=com.local.notesclone,
+2026-11-05 12:11:05.286 Df tccd[67582:2582448] [com.apple.TCC:access] Failed to match existing code requirement for subject com.local.notesclone and service kTCCServiceMicrophone
+	cdhash H"0a258674ff1844f9fe57fc9d3619c5cd22fa7cad"
+	cdhash H"469ea16128121596a2875236e9c69ef6ffa5d06b"
+2026-11-05 12:11:05.287 Df tccd[67582:2582448] [com.apple.TCC:access] AUTHREQ_PROMPTING: msgID=71272.6, service=kTCCServiceMicrophone, subject=Sub:{com.local.notesclone}Resp:{TCCDProcess: identifier=com.local.notesclone, pid=71272, auid=501, euid=501, binary_path=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone},
+2026-11-05 12:21:27.908 Df tccd[67582:258799c] [com.apple.TCC:access] REQUEST: tccd_uid=501, sender_pid=74528, sender_uid=501, sender_auid=501, function=TCCAccessRequest, msgID=74528.2
+2026-11-05 12:21:27.908 I  tccd[67582:258799c] [com.apple.TCC:access] REQUEST_MSG: msgID=74528.2, msg={
+	require_purpose=<xpc_null>
+	service="kTCCServiceMicrophone"
+	function="TCCAccessRequest"
+	preflight=true
+	target_token={NULL}
+	TCCD_MSG_ID="74528.2"
+	background_session=false
+}
+2026-11-05 12:21:27.908 Df tccd[67582:258799c] [com.apple.TCC:access] AUTHREQ_CTX: msgID=74528.2, function=<private>, service=kTCCServiceMicrophone, preflight=yes, query=1, client_dict=(null), daemon_dict=<private>
+2026-11-05 12:21:27.908 Df tccd[67582:258799c] [com.apple.TCC:access] AUTHREQ_ATTRIBUTION: msgID=74528.2, attribution={requesting={TCCDProcess: identifier=com.local.notesclone, pid=74528, auid=501, euid=501, binary_path=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone}, },
+2026-11-05 12:21:27.914 Df tccd[67582:258799c] [com.apple.TCC:access] AUTHREQ_SUBJECT: msgID=74528.2, subject=com.local.notesclone,
+2026-11-05 12:21:27.915 Df tccd[67582:258799c] [com.apple.TCC:access] Failed to match existing code requirement for subject com.local.notesclone and service kTCCServiceMicrophone
+	cdhash H"0a258674ff1844f9fe57fc9d3619c5cd22fa7cad"
+	cdhash H"469ea16128121596a2875236e9c69ef6ffa5d06b"
+2026-11-05 12:21:27.915 I  tccd[67582:258799c] [com.apple.TCC:access] Handling access request to kTCCServiceMicrophone, from Sub:{com.local.notesclone}Resp:{TCCDProcess: identifier=com.local.notesclone, pid=74528, auid=501, euid=501, binary_path=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone}, ReqResult(Auth Right: Unknown (None), promptType: 1,DB Action:None, UpdateVerifierData)
+2026-11-05 12:21:27.915 Df tccd[67582:258799c] [com.apple.TCC:access] AUTHREQ_RESULT: msgID=74528.2, authValue=1, authReason=0, authVersion=1, desired_auth=0, error=(null),
+2026-11-05 12:21:27.915 Df tccd[67582:258799c] [com.apple.TCC:access] REPLY: (501) function=TCCAccessRequest, msgID=74528.2
+2026-11-05 12:22:10.241 Df tccd[67582:2589587] [com.apple.TCC:access] REQUEST: tccd_uid=501, sender_pid=74528, sender_uid=501, sender_auid=501, function=TCCAccessRequest, msgID=74528.6
+2026-11-05 12:22:10.241 I  tccd[67582:2589587] [com.apple.TCC:access] REQUEST_MSG: msgID=74528.6, msg={
+	require_purpose=<xpc_null>
+	service="kTCCServiceMicrophone"
+	function="TCCAccessRequest"
+	preflight=false
+	target_token={NULL}
+	TCCD_MSG_ID="74528.6"
+	background_session=false
+}
+2026-11-05 12:22:10.241 Df tccd[67582:2589587] [com.apple.TCC:access] AUTHREQ_CTX: msgID=74528.6, function=<private>, service=kTCCServiceMicrophone, preflight=no, query=1, client_dict=(null), daemon_dict=<private>
+2026-11-05 12:22:10.241 Df tccd[67582:2589587] [com.apple.TCC:access] AUTHREQ_ATTRIBUTION: msgID=74528.6, attribution={requesting={TCCDProcess: identifier=com.local.notesclone, pid=74528, auid=501, euid=501, binary_path=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone}, },
+2026-11-05 12:22:10.244 Df tccd[67582:2589587] [com.apple.TCC:access] AUTHREQ_SUBJECT: msgID=74528.6, subject=com.local.notesclone,
+2026-11-05 12:22:10.245 Df tccd[67582:2589587] [com.apple.TCC:access] Failed to match existing code requirement for subject com.local.notesclone and service kTCCServiceMicrophone
+	cdhash H"0a258674ff1844f9fe57fc9d3619c5cd22fa7cad"
+	cdhash H"469ea16128121596a2875236e9c69ef6ffa5d06b"
+2026-11-05 12:22:10.245 I  tccd[67582:2589587] [com.apple.TCC:access] Handling access request to kTCCServiceMicrophone, from Sub:{com.local.notesclone}Resp:{TCCDProcess: identifier=com.local.notesclone, pid=74528, auid=501, euid=501, binary_path=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone}, ReqResult(Auth Right: Unknown (None), promptType: 1,DB Action:None, UpdateVerifierData)
+2026-11-05 12:22:10.246 Df tccd[67582:2589587] [com.apple.TCC:access] AUTHREQ_PROMPTING: msgID=74528.6, service=kTCCServiceMicrophone, subject=Sub:{com.local.notesclone}Resp:{TCCDProcess: identifier=com.local.notesclone, pid=74528, auid=501, euid=501, binary_path=/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.app/Contents/MacOS/notes-clone},

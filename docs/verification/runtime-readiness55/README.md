@@ -36,3 +36,7 @@ Keep this exact sealed package and identity unchanged. When root returns to Mac 
 ## Scope
 
 No GUI actions, TCC database reads, permission changes/resets, audio/recording file access or export, user database reads, product changes, signing changes, builds, tests or target/shared cache access occurred. Only existing unified logs, the exact process/package identity and immutable native source were read, and evidence files in this directory were written. No claim of live capture, audible sound, a measured public AVAuthorizationStatus, or completed overall acceptance is made.
+
+## Independent relaunch supplement
+
+`reopened-state.md` and `reopened-*` files preserve one later bounded check through 12:23:05 after root normally relaunched the same Mac16 package as PID74528. They distinguish old `71272.6`, new startup preflight `74528.2`, and new explicit Start `74528.6`; they do not overwrite the original snapshot or claim that a prompt was visibly displayed.
