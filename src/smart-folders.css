@@ -532,6 +532,9 @@
   background: #fceac1;
   color: #202020;
 }
+:root:not(.dark) .smart-mac .smart-ordinary .smart-name input:focus::selection {
+  color: #000;
+}
 .smart-mac .smart-ordinary .smart-make {
   margin: 16px 0 0;
 }
