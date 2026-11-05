@@ -1,0 +1,23 @@
+import json,hashlib,copy
+from pathlib import Path
+root=Path('/private/tmp/apple-notes-mobile-recording-primary73-review01');p=Path('/private/tmp/primary73-recheck-visual-efficient');old=Path('/private/tmp/primary73-recheck-visual');s=json.loads((p/'summary.json').read_text());prior=json.loads((old/'summary.json').read_text());h=hashlib.sha256()
+for f in s['sourceInputs']:h.update(f.encode()+b'\0'+(root/f).read_bytes()+b'\0')
+assert s['status']=='PASS' and s['errors']==[] and h.hexdigest()==s['sourceFingerprintAtStart']==s['sourceFingerprintAtEnd']
+assert s['rendering']['optimizeDeps']['entries']==['src/RecordingView.tsx'] and s['rendering']['optimizeDeps']['include']==['react-dom/client']
+a=copy.deepcopy(s['variants']);b=copy.deepcopy(prior['variants'])
+for collection in [a,b]:
+ for v in ['before','after']:
+  for row in collection[v]['layouts'].values():row.pop('allComputedSHA256',None)
+assert a==b and s['checks']==prior['checks']
+files=[];computed=[]
+for path in sorted(old.rglob('*')):
+ if not path.is_file():continue
+ rel=path.relative_to(old);candidate=p/rel
+ if path.suffix in ['.png','.txt']:
+  assert path.read_bytes()==candidate.read_bytes(),str(rel);files.append(str(rel))
+ elif path.name.endswith('.computed.json'):
+  assert json.loads(path.read_text())==json.loads(candidate.read_text()),str(rel)
+  computed.append({'path':str(rel),'structurallyEqual':True,'bytesEqual':path.read_bytes()==candidate.read_bytes()})
+q=json.loads(Path('/private/tmp/primary73-efficient-independent-quant.json').read_text());previous=json.loads(Path('/private/tmp/primary73-recheck-independent-quant.json').read_text());assert q==previous
+proof={'status':'PASS','sourceHead':s['sourceHead'],'visualSevenInputSHA256':h.hexdigest(),'sameVariantLayoutMetricsAsDf3RecheckExceptComputedSerializationHashes':True,'sameChecksAsDf3Recheck':True,'imageAndDOMFilesByteEqual':files,'crossRunComputedFiles':computed,'independentQuantExactlyEqualToDf3Recheck':True,'oldWallSeconds':259.887,'newWallSeconds':49.602,'ratio':259.887/49.602,'reductionPercent':100*(1-49.602/259.887)}
+Path('/private/tmp/primary73-efficient-cross-run-proof.json').write_text(json.dumps(proof,indent=2));print({k:v for k,v in proof.items() if k not in ['imageAndDOMFilesByteEqual','crossRunComputedFiles']});print('byteEqualImageDOM',len(files),'computedStructuralEqual',len(computed))
