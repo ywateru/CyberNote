@@ -1,0 +1,54 @@
+{
+  "head": "806d34322abfb4cc3f55e25cef4c760748d7c842",
+  "input": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0099747b5e39c46e22c77526c866b5cd866647cc4387d317d6752241918495ac",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0099747b5e39c46e22c77526c866b5cd866647cc4387d317d6752241918495ac",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "checks": [
+    {
+      "name": "desktop footer new-folder removed",
+      "pass": true
+    },
+    {
+      "name": "bottom more remains right aligned",
+      "pass": true
+    },
+    {
+      "name": "top new folder opens actual form",
+      "pass": false
+    }
+  ],
+  "observations": [],
+  "pageErrors": [],
+  "failure": {
+    "message": "top new folder opens actual form",
+    "stack": "AssertionError [ERR_ASSERTION]: top new folder opens actual form\n    at check (file:///private/tmp/apple-notes-mac-feedback77/docs/verification/mac-feedback77-independent/independent-runner.mjs:11:90)\n    at file:///private/tmp/apple-notes-mac-feedback77/docs/verification/mac-feedback77-independent/independent-runner.mjs:23:81"
+  },
+  "completeWallMs": 2179
+}
