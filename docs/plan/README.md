@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-06当前工作：[手机中央录音控件73](tasks/app-mobile-recording-primary73.md)正在独立工作树开发，保持既有录音逻辑，按原视频稳定三态校准并量化同尺寸视觉差异。[重命名研究72](../research/saved-audio-rename72/README.md)已合入，[独审](reviews/ref-saved-audio-rename72.md)确认报告准确；原版AX拒绝导致名称交互未取得证据，任务保持in-progress / ORIGINAL-OPEN，不将源码方案当成功能交付。
+
 2026-11-06任务71完成：[独立最终复审](reviews/app-mobile-debug-recording71-recheck.md)与[主工作区整合](../verification/mobile-debug-recording71/integration/README.md)均通过，desktop100/mobile recording42/mobile notes9，构建和生产排除通过。三项独审阻塞已用真实故障/超时/参数负例关闭，旧blocked与两次失败不改写。默认JS fixture与合成媒体边界保持；完整Mac/Android原生及原版像素仍进行。
 
 2026-11-05任务70已完成：[整合报告](../verification/app-debug-automation70/integration/README.md)记录单命令九组91项全部通过、27.369秒CLI计时，以及构建/生产排除结果；[独立复核](reviews/app-debug-automation70.md)八门槛PASS。后续常态回归按[调试使用说明](../debugging.md)运行，catalog可达性与实际执行覆盖分别记录。
