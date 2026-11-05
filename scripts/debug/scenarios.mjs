@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
+import { runMacFeedback } from './mac-feedback.mjs';
 import { resolve } from 'node:path';
 import { openRuntime, api, idle, state, snapshot, saveJSON, waitForState, waitForIdle } from './runtime.mjs';
 import { compareSnapshots, compareScreenshots } from './compare.mjs';
 import { runMobileRecording } from './mobile-recording.mjs';
 import { runMobileAttachments } from './mobile-attachments.mjs';
 
-export const groupNames = ['contract', 'notes', 'folders', 'editor', 'search-tags', 'settings', 'attachments-ocr', 'archive', 'recording'];
+export const groupNames = ['contract', 'notes', 'folders', 'editor', 'search-tags', 'settings', 'attachments-ocr', 'archive', 'recording', 'mac-feedback'];
 export async function runGroups(runtime, names, output) {
   const results = [], page = runtime.page, exercised = new Map();
   const descriptors = await page.evaluate(() => window.__NOTES_DEBUG__.list());
@@ -16,7 +17,9 @@ export async function runGroups(runtime, names, output) {
     const command = async (id, args = {}) => { exercised.set(id, (exercised.get(id) || 0) + 1); const result = await api(page, id, args); await idle(page); return result.result; };
     const selected = async () => { const s = await state(page); return s.workspace.notes.find((note) => note.id === s.selection.noteId); };
     try {
-      if (name === 'attachments' && runtime.mobile) {
+      if (name === 'mac-feedback') {
+        await runMacFeedback(runtime, { command, check, output });
+      } else if (name === 'attachments' && runtime.mobile) {
         await runMobileAttachments(runtime,{command,check,output});
       } else if (name === 'contract') {
         const falseStarted = performance.now(); let waitError;

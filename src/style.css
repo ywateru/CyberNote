@@ -260,6 +260,9 @@ a {
   padding: 0 8px;
   flex-shrink: 0;
 }
+.desktop .folder-footer {
+  justify-content: flex-end;
+}
 .folder-footer > button {
   display: flex;
   align-items: center;
@@ -1154,6 +1157,15 @@ a {
 .menu-note {
   right: 20px;
   top: 52px;
+}
+.desktop .menu-note {
+  position: fixed;
+  right: auto;
+  bottom: auto;
+}
+.desktop .search-match {
+  color: rgb(252, 184, 40);
+  background: transparent;
 }
 .menu-view {
   top: 52px;
