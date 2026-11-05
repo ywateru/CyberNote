@@ -1,0 +1,7 @@
+import sys,subprocess,time,json,datetime,pathlib
+label=sys.argv[1];cmd=sys.argv[2:];out=pathlib.Path('/private/tmp/primary73-recheck-'+label);out.mkdir(exist_ok=True)
+start=time.monotonic();utc=datetime.datetime.now(datetime.timezone.utc).isoformat()
+with (out/'process.log').open('w') as f:
+ result=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT)
+proof={'command':cmd,'startedUTC':utc,'finishedUTC':datetime.datetime.now(datetime.timezone.utc).isoformat(),'wallSeconds':round(time.monotonic()-start,3),'exitCode':result.returncode}
+(out/'process.json').write_text(json.dumps(proof,indent=2));print(json.dumps(proof));sys.exit(result.returncode)

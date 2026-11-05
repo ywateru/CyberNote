@@ -1,0 +1,331 @@
+{
+  "pipeline": "Independent Chrome sRGB canvas decode of original and full formal 784x1680 screenshots -> 224x480 high quality full frame; Python/Pillow raw reads of these uniformly decoded PNGs. No crop scaling.",
+  "contourBandPixels": 2.5,
+  "thresholds": [
+    210,
+    235
+  ],
+  "glyphROI": [
+    103,
+    425,
+    122,
+    438
+  ],
+  "results": {
+    "idle": {
+      "originalSHA256": "2bef5009608d2ad4fbc920592385f854ae75a5efd84085d4350f53b66f910b5d",
+      "originalMetadataChunks": [
+        {
+          "type": "cICP",
+          "hex": "01010001"
+        },
+        {
+          "type": "cHRM",
+          "hex": "00007a26000080840000fa00000080e8000075300000ea6000003a9800001770"
+        },
+        {
+          "type": "gAMA",
+          "hex": "0000b18f"
+        }
+      ],
+      "rawMode": [
+        [
+          255,
+          51,
+          45
+        ],
+        253
+      ],
+      "browserMode": [
+        [
+          255,
+          40,
+          33
+        ],
+        253
+      ],
+      "bounds": [
+        95,
+        415,
+        129,
+        448
+      ],
+      "coreROI": [
+        104,
+        423,
+        120,
+        439
+      ],
+      "variants": {
+        "before": {
+          "mode": [
+            [
+              255,
+              59,
+              48
+            ],
+            256
+          ],
+          "buttonMAE": 31.538027332144978,
+          "coreMAE": 11.328125,
+          "glyphMAE": 11.29689608636977,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 157,
+              "clonePixels": 26,
+              "xor": 135,
+              "iou": 0.1509433962264151
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 213,
+              "clonePixels": 106,
+              "xor": 123,
+              "iou": 0.4434389140271493
+            }
+          ]
+        },
+        "after": {
+          "mode": [
+            [
+              255,
+              59,
+              48
+            ],
+            256
+          ],
+          "buttonMAE": 26.035650623885918,
+          "coreMAE": 11.328125,
+          "glyphMAE": 11.29689608636977,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 157,
+              "clonePixels": 156,
+              "xor": 95,
+              "iou": 0.5343137254901961
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 213,
+              "clonePixels": 220,
+              "xor": 109,
+              "iou": 0.5977859778597786
+            }
+          ]
+        }
+      }
+    },
+    "recording": {
+      "originalSHA256": "4b19b7a3ca1bcf7807df1190e4ac90b7e581acc1d8f8a02000d95dc51ff82d39",
+      "originalMetadataChunks": [
+        {
+          "type": "cICP",
+          "hex": "01010001"
+        },
+        {
+          "type": "cHRM",
+          "hex": "00007a26000080840000fa00000080e8000075300000ea6000003a9800001770"
+        },
+        {
+          "type": "gAMA",
+          "hex": "0000b18f"
+        }
+      ],
+      "rawMode": [
+        [
+          255,
+          254,
+          255
+        ],
+        252
+      ],
+      "browserMode": [
+        [
+          255,
+          254,
+          255
+        ],
+        252
+      ],
+      "bounds": [
+        71,
+        415,
+        154,
+        448
+      ],
+      "coreROI": [
+        87,
+        422,
+        101,
+        440
+      ],
+      "variants": {
+        "before": {
+          "mode": [
+            [
+              255,
+              255,
+              255
+            ],
+            252
+          ],
+          "buttonMAE": 15.923816478033345,
+          "coreMAE": 0.3333333333333333,
+          "glyphMAE": 55.32793522267207,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 394,
+              "clonePixels": 86,
+              "xor": 326,
+              "iou": 0.19106699751861042
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 536,
+              "clonePixels": 212,
+              "xor": 338,
+              "iou": 0.3775322283609576
+            }
+          ]
+        },
+        "after": {
+          "mode": [
+            [
+              255,
+              255,
+              255
+            ],
+            252
+          ],
+          "buttonMAE": 10.185225751490812,
+          "coreMAE": 0.3333333333333333,
+          "glyphMAE": 55.32793522267207,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 394,
+              "clonePixels": 372,
+              "xor": 50,
+              "iou": 0.8774509803921569
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 536,
+              "clonePixels": 418,
+              "xor": 150,
+              "iou": 0.7282608695652174
+            }
+          ]
+        }
+      }
+    },
+    "paused": {
+      "originalSHA256": "ed3bb1ace0f95af2721de9d600ca077223f2a5684299fe9b48d5f9b8a606d496",
+      "originalMetadataChunks": [
+        {
+          "type": "cICP",
+          "hex": "01010001"
+        },
+        {
+          "type": "cHRM",
+          "hex": "00007a26000080840000fa00000080e8000075300000ea6000003a9800001770"
+        },
+        {
+          "type": "gAMA",
+          "hex": "0000b18f"
+        }
+      ],
+      "rawMode": [
+        [
+          255,
+          190,
+          187
+        ],
+        250
+      ],
+      "browserMode": [
+        [
+          255,
+          186,
+          183
+        ],
+        250
+      ],
+      "bounds": [
+        71,
+        415,
+        154,
+        448
+      ],
+      "coreROI": [
+        87,
+        422,
+        101,
+        440
+      ],
+      "variants": {
+        "before": {
+          "mode": [
+            [
+              255,
+              240,
+              239
+            ],
+            252
+          ],
+          "buttonMAE": 37.33089935499574,
+          "coreMAE": 36.664021164021165,
+          "glyphMAE": 45.40485829959514,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 331,
+              "clonePixels": 167,
+              "xor": 198,
+              "iou": 0.43103448275862066
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 398,
+              "clonePixels": 203,
+              "xor": 241,
+              "iou": 0.42755344418052255
+            }
+          ]
+        },
+        "after": {
+          "mode": [
+            [
+              255,
+              190,
+              187
+            ],
+            252
+          ],
+          "buttonMAE": 10.999026408664962,
+          "coreMAE": 2.664021164021164,
+          "glyphMAE": 19.870445344129553,
+          "masks": [
+            {
+              "threshold": 210,
+              "referencePixels": 331,
+              "clonePixels": 381,
+              "xor": 124,
+              "iou": 0.7033492822966507
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 398,
+              "clonePixels": 400,
+              "xor": 176,
+              "iou": 0.6386036960985626
+            }
+          ]
+        }
+      }
+    }
+  }
+}
