@@ -4,18 +4,20 @@
 
 **当前是可运行开发版，尚未达到原版全部UI、交互及逐像素一致，完整目标仍在进行。** 需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，细分状态见[交付计划](docs/plan/README.md)。
 
-最新源码已合入[手机录音游标/时间轴60](docs/verification/mobile-recording-wave60-root-integration/README.md)：游标下缘及标签位置/字号贴近原暂停帧，三种小屏下完整标签、提示滚动、重试和触摸定位经独立复核；主线检查与前端构建通过。**此修复尚未进入下方Mac17/Android12安装包。** 手机当前未保存录音现场继续保留，不备份/安装/停止/重启。桌面授权诊断63仍隔离开发，真实新采集与整体像素目标继续开放。
+最新源码已合入[手机录音游标/时间轴60](docs/verification/mobile-recording-wave60-root-integration/README.md)：游标下缘及标签位置/字号贴近原暂停帧，三种小屏下完整标签、提示滚动、重试和触摸定位经独立复核；已进入下方第13次Android构建，**未安装到设备**。手机当前未保存录音现场继续保留，不备份/安装/停止/重启。[桌面授权诊断63](docs/verification/mac-recording-diagnostics63-root-integration/README.md)也已独审合入源码，默认关闭，尚未进入安装包；真实新采集与整体像素目标继续开放。
 
 ## 当前交付（2026-11-05）
 
-本轮录音开发包为 **Mac17 / Android构建12**，两端均固定于 `fa21657bc116431324d85b18fcbe9e1d328471fb`，333项产品输入及352项完整输入逐项相同。包含独立浮窗↔主窗右栏、保存卡播放、手机保存时序修复，以及58桌面/共享时间轴与59手机播放图形/计时校准。它们仍属有限验收中的开发包。
+本轮录音开发包为 **Mac17 / Android构建13**，分别固定于 `fa21657bc116431324d85b18fcbe9e1d328471fb`（333产品/352完整输入）和 `a236b311d7d6dcb33b0ee4f16977ebe2d2adf8ac`（334产品/353完整输入）。包含独立浮窗↔主窗右栏、保存卡播放、手机保存时序修复，以及58桌面/共享时间轴与59手机播放图形/计时校准；Android构建13另含手机游标/标签60。二者均不含63诊断，仍属有限验收中的开发包。
 
 | 平台 | 最新本机录音开发包（未纳入Git） | 已验证与限制 |
 | --- | --- | --- |
 | Mac17 | [ZIP](artifacts/unified-candidate06/mac-recording-visual-build17/mac-attempt01/mac-sealed.zip) / [应用](artifacts/unified-candidate06/mac-recording-visual-build17/mac-attempt01/mac-sealed.app) | 完整本地adhoc严格验签；实际未采集状态的浮窗↔右栏保持同一会话，正文编辑/撤销重做/切换B/搜索及文件夹隐藏恢复通过。已有44:58录音播放、暂停与±15秒通过。新包持续收音及采集中双模式仍待验 |
-| Android构建12 | [APK](artifacts/unified-candidate06/android-recording-visual-build12/android-attempt01/android-original.apk) | arm64-v8a debug；准确离线构建、收集与v2签名通过，尚未安装。用户选择保留原构建10的13秒未保存录音现场、暂不继续手机设备验收；不备份、不覆盖升级或停止原应用。12是构建编号，现有设备OS为Android11/API30 |
+| Android构建13 | [APK](artifacts/unified-candidate06/android-recording-wave-build13/android-attempt01/android-original.apk) | arm64-v8a debug；准确离线构建、收集与v2签名通过，独立核包通过，尚未安装。包含60局部修复。用户选择保留原构建10的13秒未保存录音现场、暂不继续手机设备验收；不备份、不覆盖升级或停止原应用。13是构建编号，现有设备OS为Android11/API30 |
 
-[本轮根交接](docs/verification/recording-visual5859-root-handoff.md)记录准确包、独审与剩余边界。实包过程见[Mac17实际窗口记录](docs/verification/recording-visual5859-mac17-runtime/README.md)、[Mac17构建](docs/verification/unified-candidate06/mac-recording-visual-build17/README.md)及[Android12构建](docs/verification/unified-candidate06/android-recording-visual-build12/README.md)。Mac此前新采集的系统授权请求无返回阻塞仍保留于[55运行记录](docs/verification/recording-presentation55-runtime/README.md)，本轮未反复请求Start或修改系统权限。当前录音完整设备验收与原版像素一致性均未通过。
+[58/59批次根交接](docs/verification/recording-visual5859-root-handoff.md)记录当时准确包、独审与剩余边界。实包过程见[Mac17实际窗口记录](docs/verification/recording-visual5859-mac17-runtime/README.md)、[Mac17构建](docs/verification/unified-candidate06/mac-recording-visual-build17/README.md)及[Android12构建](docs/verification/unified-candidate06/android-recording-visual-build12/README.md)。Mac此前新采集的系统授权请求无返回阻塞仍保留于[55运行记录](docs/verification/recording-presentation55-runtime/README.md)，本轮未反复请求Start或修改系统权限。当前录音完整设备验收与原版像素一致性均未通过。
+
+后续手机60的[Android构建13](docs/verification/unified-candidate06/android-recording-wave-build13/README.md)已本地生成并通过[51项独立核包](docs/verification/unified-candidate06/android-recording-wave-independent13/README.md)，APK SHA256为`60aa7ff23ccc91e18fd027b1bb0a9d1ce21b01410275b86f05cccee40f15358b`，180721914字节。前述Android12保留历史身份，不再作为最新手机开发包；Mac17保持原包。63只在源码中，默认关闭的诊断及受控测试通过不能追认真实授权问题已修复。
 
 [桌面/共享时间轴58](docs/plan/tasks/app-recording-visual58.md)及[手机播放图形/计时59](docs/plan/tasks/app-mobile-recording-visual59.md)已独立审查并纳入本批双端包。59仅手机样式与图形，桌面普通/深色同状态PNG、DOM、计算样式和几何保持58基线；手机新播放三角宽度9→19视频像素、原帧19，顶缘偏差12→0。仍保留字体、材料、两侧图标与波形高度等残差，不宣称完整像素一致。Mac16/Android11历史包及其来源记录保持。
 

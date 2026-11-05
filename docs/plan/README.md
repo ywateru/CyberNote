@@ -4,9 +4,9 @@
 
 2026-11-05[Mac授权诊断63](tasks/app-mac-recording-diagnostics63.md)已独审并[主线接收](../verification/mac-recording-diagnostics63-root-integration/README.md)：默认关闭的有界阶段事件及结构化错误保全，首同步输出阻断已修为64槽非阻塞producer与独立writer，保持原单pending/截止/资源语义。源码/假OS/堵塞sink通过，真实采集仍open；未入当前包，不触手机。[原版已保存音频菜单62](../research/saved-audio-menu62/README.md)已留证，追加/改名等功能尚未实现验收，不混入63。
 
-2026-11-05[手机录音波形60](tasks/app-mobile-recording-wave60.md)已完成局部源码独审并[合入主线](../verification/mobile-recording-wave60-root-integration/README.md)：游标/标签可见改善、完整axis边界及窄高真实触达通过，root typecheck/build通过。保留PIXEL-OPEN及作者9像素微小桌面残差；未生成包含60的新APK，不触原Android现场。58/59准确包身份保持，不追认60入包。
+2026-11-05[手机录音波形60](tasks/app-mobile-recording-wave60.md)已完成局部源码独审并[合入主线](../verification/mobile-recording-wave60-root-integration/README.md)：游标/标签可见改善、完整axis边界及窄高真实触达通过，root typecheck/build通过。后续[Android构建13](../verification/unified-candidate06/android-recording-wave-build13/README.md)准确a236b311已生成并独立核包通过、未安装。保留PIXEL-OPEN及作者9像素微小桌面残差，不触原Android现场。58/59旧包身份保持，不追认60进入旧包。
 
-2026-11-05最新录音开发包：Mac17/Android构建12均固定源fa21657，333产品/352完整输入一致，[准确构建与准备](../verification/unified-candidate06/recording-visual5859-preparation/README.md)已完成。58/59源独审通过后已入包；[Mac17有限实际复验](../verification/recording-visual5859-mac17-runtime/README.md)覆盖未采集同会话双模式、正文编辑/撤销重做/B搜索/侧栏恢复与保存音频播放/暂停/±15秒。没有新Start，持续收音/采集中双模式/原版全像素仍open。Android12未安装，用户明确保留旧13秒File现场并暂缓设备验收，继续禁止原设备/音频操作。以下时点记录与旧任务结论按各自固定包读取，不能追认为最新包的全部通过。
+2026-11-05最新录音开发包：Mac17保持fa21657的333产品/352输入，手机更新为Android构建13/a236b311的334产品/353输入（含60、不含63）。此前[58/59双端准确构建](../verification/unified-candidate06/recording-visual5859-preparation/README.md)保持历史身份。[Mac17有限实际复验](../verification/recording-visual5859-mac17-runtime/README.md)覆盖未采集同会话双模式、正文编辑/撤销重做/B搜索/侧栏恢复与保存音频播放/暂停/±15秒。没有新Start，持续收音/采集中双模式/原版全像素仍open。Android13未安装，用户明确保留旧13秒File现场并暂缓设备验收，继续禁止原设备/音频操作。以下时点记录与旧任务结论按各自固定包读取，不能追认为最新包的全部通过。
 
 2026-11-05当前交付为同一d742307产品源的Mac12与Android07：[有限根接收29](../verification/name-mobile29-root-acceptance.md)。准确核包分别494/391项、实际证据独审496/711项通过；侧栏两入口恢复与正常重启偏好、Mac名称操作、手机可见加号及局部几何实际验证通过。Mac文字/选区/环角、手机右下图标及整体像素仍开放；原版删除实验暂停。安装文件见根README当前交付。
 
