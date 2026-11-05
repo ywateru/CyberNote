@@ -1,0 +1,58 @@
+[
+  {
+    "name": "typecheck",
+    "exit": 0,
+    "command": [
+      "pnpm",
+      "typecheck"
+    ]
+  },
+  {
+    "name": "build",
+    "exit": 0,
+    "command": [
+      "pnpm",
+      "build"
+    ]
+  },
+  {
+    "name": "production-preflight52",
+    "exit": 0,
+    "command": [
+      "node",
+      "docs/verification/mac-recording-access52/check-production-preflight.mjs"
+    ]
+  },
+  {
+    "name": "session52",
+    "exit": 0,
+    "command": [
+      "node",
+      "docs/verification/mac-recording-access52/check-session.mjs"
+    ]
+  },
+  {
+    "name": "review-handoff52",
+    "exit": 0,
+    "command": [
+      "node",
+      "docs/verification/mac-recording-access52/check-review-handoff.mjs"
+    ]
+  },
+  {
+    "name": "review-microtask52",
+    "exit": 0,
+    "command": [
+      "node",
+      "docs/verification/mac-recording-access52/check-review-microtask-cuts.mjs"
+    ]
+  },
+  {
+    "name": "session-script",
+    "exit": 0,
+    "command": [
+      "node",
+      "scripts/check-recording-session.mjs"
+    ]
+  }
+]

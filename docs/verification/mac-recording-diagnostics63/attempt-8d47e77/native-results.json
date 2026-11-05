@@ -1,0 +1,129 @@
+[
+  {
+    "name": "objc-production-compile",
+    "exit": 0,
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fobjc-arc-exceptions",
+      "-fblocks",
+      "-mmacosx-version-min=12.0",
+      "-Wall",
+      "-Wextra",
+      "-c",
+      "plugins/tauri-plugin-notes-ui/macos/recording_access.m",
+      "-o",
+      "/private/tmp/apple-notes-diagnostics63.o"
+    ]
+  },
+  {
+    "name": "objc-diagnostics-compile",
+    "exit": 0,
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fobjc-arc-exceptions",
+      "-fblocks",
+      "-mmacosx-version-min=12.0",
+      "scripts/check-mac-recording-diagnostics63-native.m",
+      "-framework",
+      "AppKit",
+      "-framework",
+      "WebKit",
+      "-framework",
+      "AVFoundation",
+      "-framework",
+      "CoreFoundation",
+      "-o",
+      "/private/tmp/apple-notes-diagnostics63-native"
+    ]
+  },
+  {
+    "name": "objc-diagnostics-test",
+    "exit": 0,
+    "command": [
+      "/private/tmp/apple-notes-diagnostics63-native"
+    ]
+  },
+  {
+    "name": "objc52-compile",
+    "exit": 0,
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fobjc-arc-exceptions",
+      "-fblocks",
+      "-mmacosx-version-min=12.0",
+      "docs/verification/mac-recording-access52/check-native.m",
+      "-framework",
+      "AppKit",
+      "-framework",
+      "WebKit",
+      "-framework",
+      "AVFoundation",
+      "-framework",
+      "CoreFoundation",
+      "-o",
+      "/private/tmp/apple-notes-diagnostics63-native52"
+    ]
+  },
+  {
+    "name": "objc52-test",
+    "exit": 0,
+    "command": [
+      "/private/tmp/apple-notes-diagnostics63-native52"
+    ]
+  },
+  {
+    "name": "objc52-supplement-compile",
+    "exit": 0,
+    "command": [
+      "clang",
+      "-fobjc-arc",
+      "-fobjc-arc-exceptions",
+      "-fblocks",
+      "-mmacosx-version-min=12.0",
+      "docs/verification/mac-recording-access52/check-native-supplement.m",
+      "-framework",
+      "AppKit",
+      "-framework",
+      "WebKit",
+      "-framework",
+      "AVFoundation",
+      "-framework",
+      "CoreFoundation",
+      "-o",
+      "/private/tmp/apple-notes-diagnostics63-supplement52"
+    ]
+  },
+  {
+    "name": "objc52-supplement-test",
+    "exit": 0,
+    "command": [
+      "/private/tmp/apple-notes-diagnostics63-supplement52"
+    ]
+  },
+  {
+    "name": "rust-sink-compile",
+    "exit": 0,
+    "command": [
+      "rustc",
+      "--edition",
+      "2021",
+      "-A",
+      "dead_code",
+      "scripts/check-mac-recording-diagnostics63-sink.rs",
+      "-o",
+      "/private/tmp/apple-notes-diagnostics63-sink"
+    ]
+  },
+  {
+    "name": "js-and-rust-sink-test",
+    "exit": 0,
+    "command": [
+      "node",
+      "scripts/check-mac-recording-diagnostics63.mjs",
+      "/private/tmp/apple-notes-diagnostics63-sink"
+    ]
+  }
+]
