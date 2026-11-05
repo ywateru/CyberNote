@@ -50,3 +50,5 @@ depends-on: []
 # progress
 
 - 2026-11-05：用户明确改变呈现，取消65-only Mac19方向。66合同和调用链先落文档，准确65独审收尾后作为实现基线。尚未66源码/新包/实际验收。
+
+- 2026-11-05：准确65产品/作者/独审映射b42d51f5/ec3886c3/989f23e5合入；root typecheck/build通过。66隔离树 `/private/tmp/apple-notes-mac-recording-sidebar66-01` 由989f23e5建立并开始实现，源码未交审。
