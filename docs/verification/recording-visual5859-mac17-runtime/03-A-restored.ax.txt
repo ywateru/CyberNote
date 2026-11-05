@@ -1,0 +1,92 @@
+Window: "备忘录", App: 备忘录.
+0 standard window 备忘录, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: 备忘录, URL: tauri://localhost
+			3 container
+				4 button 快速备忘录 3
+				5 text 在我的 Mac 上
+				6 button 全部备忘录 46
+				7 button 备忘录 1
+				8 button Notes Clone UI 3
+				9 button QA 独立验证 14
+				10 button FIX01 6
+				11 button FIX03 Session Proof 6
+				12 button Notes Clone UI 对照 13
+				13 button QA-SMART-U09-Mac-R18 0
+				14 button QA-SMART-U09-Mac-Selected 1
+				15 container 标签
+					16 text ⌄ 标签
+					17 button 所有标签
+					18 button #QASmartU09, Help: 1个备忘录
+				19 button 新建文件夹
+				20 button 更多设置
+			21 splitter 调整分栏宽度
+			22 text 今天
+			23 button QA-RECORDING-55-A 13:55 双模式录音验收 A，保留此笔记。 录音插入位置。 A-展开录音栏期间编辑-55
+			24 button QA-RECORDING-55-B 12:24 B-展开录音栏期间独立编辑-55 保留此测试笔记。
+			25 button QA-RECORDING-WINDOW-54-A 11:44 原笔记 A。录音期间可继续编辑；保留此测试笔记。 插入录音位置。 A-窗口打开期间追加-54 A-实际录音期间追加-54
+			26 button QA-RECORDING-WINDOW-54-B 10:57 B-录音期间独立工作-54 保留此测试笔记。
+			27 button QA-AUDIO-20261105-50 09:07 本地录音交互验收；保留此测试笔记。
+			28 text 昨天
+			29 button test 2026/11/4 helloss sfs sss sss sss
+			30 button QA-VERTICAL-LONG-20261104-03 2026/11/4 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 长段自动换行：这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。这是用于校准普通正文行距的本地合成内容。
+			31 button 新备忘录 2026/11/4 QA-VERTICAL-INPUT-20261104-04 Ag中文 尾段 before abc 123END-VERTICAL04 输入回归：中文 abc 123 END-VERTICAL04-COMMITTED
+			32 button QA-PUNCT-20261104-02 2026/11/4 ，。！？；：《》 中，中。中！中？中；中：中《中》中 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文 Ag中文
+			33 button QA-TYPE-20261104-01 2026/11/4 宽三栏工具栏与搜索对照。 仅本地合成内容。 ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 中文标点，。！？；：《》 — () [] 行距对照一 Ag中文 行距对照二 Ag中文 行距对照三 Ag中文 空行之后 Ag中文 长段换行：这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。这是用于本地界面对照的合成内容。
+			34 button QA-WIDE-20261104-05 2026/11/4 宽三栏工具栏与搜索对照。 仅本地合成内容。
+			35 text 过去7天
+			36 button QA FIX02 34223AF MacABC Beta Gamma local owner 2026/11/3 QA FIX05 EC1 CLOSE 20261103 保存核对：Alpha 123 — 完整正文 END-EC1-99538
+			37 button 每日 TODO 2026/11/3 记录每一个想法 今天的计划 整理需求与交互 完成本地保存
+			38 splitter 调整分栏宽度
+			39 container
+				40 button 2026年11月5日 13:55
+				41 text entry area (settable) 备忘录正文, Value: QA-RECORDING-55-A
+双模式录音验收 A，保留此笔记。
+录音插入位置。
+A-展开录音栏期间编辑-55
+					42 text (settable) QA-RECORDING-55-A
+					43 text (settable) 双模式录音验收 A，保留此笔记。
+					44 text (settable) 录音插入位置。
+					45 text (settable) A-展开录音栏期间编辑-55
+			46 container 录音面板
+				47 container 新录音
+					48 container
+						49 button 关闭录音
+						50 text 新录音 今天 13:53 00:00
+						51 button (collapsed) 录音显示选项, Secondary Actions: Expand
+					52 slider (disabled, settable, float) 录音回放位置, Value: 0, Details: 00:00.00
+					53 container 活动录音时间
+						54 text 00:00.00
+					55 container 录音回放
+						56 button (disabled) 后退15秒
+						57 button (disabled) 播放录音
+						58 button (disabled) 前进15秒
+					59 button 开始录音
+					60 button (disabled) 完成录音
+	61 button 新建文件夹
+	62 button 显示或隐藏文件夹
+	63 button 文件夹显示选项
+	64 button 新建备忘录
+	65 button 添加附件
+	66 button 核对清单
+	67 button 格式
+	68 button 插入表格
+	69 button 更多备忘录操作
+	70 button 共享备忘录
+	71 search text field (settable) Description: 搜索备忘录, Placeholder: 搜索
+		72 button Search
+	73 text Description: Notes Clone UI 对照, Value: Notes Clone UI 对照 13 个备忘录
+	74 close button
+	75 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	76 minimize button
+77 menu bar
+	78 备忘录
+	79 文件
+	80 编辑
+	81 显示
+	82 窗口
+
+The focused UI element is 41 text entry area (settable) 备忘录正文, Value: QA-RECORDING-55-A
+双模式录音验收 A，保留此笔记。
+录音插入位置。
+A-展开录音栏期间编辑-55

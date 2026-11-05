@@ -2,6 +2,8 @@
 
 用户已授权完整 Mac 与 Android 开发。此计划持续执行，不以文档完成替代应用完成。
 
+2026-11-05最新录音开发包：Mac17/Android构建12均固定源fa21657，333产品/352完整输入一致，[准确构建与准备](../verification/unified-candidate06/recording-visual5859-preparation/README.md)已完成。58/59源独审通过后已入包；[Mac17有限实际复验](../verification/recording-visual5859-mac17-runtime/README.md)覆盖未采集同会话双模式、正文编辑/撤销重做/B搜索/侧栏恢复与保存音频播放/暂停/±15秒。没有新Start，持续收音/采集中双模式/原版全像素仍open。Android12未安装，用户明确保留旧13秒File现场并暂缓设备验收，继续禁止原设备/音频操作。以下时点记录与旧任务结论按各自固定包读取，不能追认为最新包的全部通过。
+
 2026-11-05当前交付为同一d742307产品源的Mac12与Android07：[有限根接收29](../verification/name-mobile29-root-acceptance.md)。准确核包分别494/391项、实际证据独审496/711项通过；侧栏两入口恢复与正常重启偏好、Mac名称操作、手机可见加号及局部几何实际验证通过。Mac文字/选区/环角、手机右下图标及整体像素仍开放；原版删除实验暂停。安装文件见根README当前交付。
 
 2026-11-04 智能文件夹下一批：先执行 [D1本地库防损](tasks/app-smart-d1-storage-open09.md)，再以 [D2真实标签/置顶规则与归档](tasks/app-smart-d2-durable-rules09.md) 接入真实存储，之后完成通知/保存所有权及两端UI。用户选择暂不开展原版删除实验；引用目录删除语义保留待验，继续独立开发，不以静态表单替代功能。既有Mac08侧栏恢复与拖动修复保持交付。

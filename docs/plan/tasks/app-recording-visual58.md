@@ -7,7 +7,7 @@ depends-on: [app-recording-presentation55, app-recording-playback56, app-mobile-
 
 ## objective
 
-根整合：源8a305475合入为c42fa85，作者证据569de683合入为c27f1c7，不同作者独审5c0147a8合入为2c3193a。五个变更输入、六个受保护文件和45条独立证据在根树重新核哈希一致。独审结论SOURCE-READY / PIXEL-OPEN；详见docs/verification/recording-visual58-independent/review-final.md。58现已允许作为59依赖；原生包、真实采集中双模式及整体像素仍待验，不追认现有Mac16/Android11包包含58。
+根整合：源8a305475合入为c42fa85，作者证据569de683合入为c27f1c7，不同作者独审5c0147a8合入为2c3193a。五个变更输入、六个受保护文件和45条独立证据在根树重新核哈希一致。独审结论SOURCE-READY / PIXEL-OPEN；详见docs/verification/recording-visual58-independent/review-final.md。58现已允许作为59依赖；准确fa21657的Mac17/Android12已构建收集。Mac17未采集双模式/Notes操作及保存音频播放有限复验通过，真实采集中双模式及整体像素仍待验；Android12未装且设备由用户暂停。见docs/verification/recording-visual5859-mac17-runtime/README.md，不追认历史Mac16/Android11包含58。
 
 推进完整原版UI目标：修正当前录音栏与已保存原图直接可证的时间轴、标题/播放/底部行几何和图形差异。优先完成原图同尺寸的Mac右栏，手机共享时间轴按原视频帧核比例，不把已有功能/构建通过当像素通过。保持录音时Notes其他功能可用、浮窗/右栏切换连续、原A保存归属和无听写。
 

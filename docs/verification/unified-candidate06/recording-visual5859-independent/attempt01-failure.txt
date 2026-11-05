@@ -1,0 +1,7 @@
+First independent identity checker execution reached its final tracked-tree assertion after all package/input/signature checks passed, then exited1:
+Traceback (most recent call last):
+  File "verify-build-identities.py", line 84, in <module>
+    assert subprocess.check_output(['git','diff','HEAD','--name-only'],cwd=ROOT,text=True).strip()==''
+AssertionError
+
+Root concurrently reported authorized README/INDEX/plan/task pointer updates while HEAD remained fa21657. No product identity mismatch occurred. The corrected checker permits and records documentation-only tracked differences, rejects any intersecting the352 frozen input paths, and continues to hash every frozen input/current/Git product byte. No tracked file is modified by this reviewer.

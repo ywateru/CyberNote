@@ -6,16 +6,16 @@
 
 ## 当前交付（2026-11-05）
 
-本轮录音开发包为 **Mac16 / Android构建11**；两端来源不同，不能视为同一完整构建。Mac16源 `9167db94908ac635b026220e782878447c9e16a7`，包含浮窗/主窗右栏双模式与已保存录音播放修复；Android11源 `747a509bce96f72a23c2709493d7d50fe46aa53c`，另含手机录音完成保存的提交时序修复。它们仍属有限验收中的开发包。
+本轮录音开发包为 **Mac17 / Android构建12**，两端均固定于 `fa21657bc116431324d85b18fcbe9e1d328471fb`，333项产品输入及352项完整输入逐项相同。包含独立浮窗↔主窗右栏、保存卡播放、手机保存时序修复，以及58桌面/共享时间轴与59手机播放图形/计时校准。它们仍属有限验收中的开发包。
 
 | 平台 | 最新本机录音开发包（未纳入Git） | 已验证与限制 |
 | --- | --- | --- |
-| Mac16 | [ZIP](artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.zip) / [应用](artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.app) | 实际浮窗↔右栏及Notes内编辑/撤销重做/新建/搜索/加粗通过，但新采集被系统授权请求无返回阻塞；已有长录音正常重开后播放与±15秒通过。未完成新包采集中双模式验收 |
-| Android构建11 | [APK](artifacts/unified-candidate06/android-recording-save-build11/android-attempt01/android-original.apk) | arm64-v8a debug；源码独审、准确离线构建/收集通过，尚未安装。用户选择保留原构建10的13秒未保存录音现场、暂不继续手机设备验收；不备份、不覆盖升级或停止原应用。11是构建编号，现有设备OS为Android11/API30 |
+| Mac17 | [ZIP](artifacts/unified-candidate06/mac-recording-visual-build17/mac-attempt01/mac-sealed.zip) / [应用](artifacts/unified-candidate06/mac-recording-visual-build17/mac-attempt01/mac-sealed.app) | 完整本地adhoc严格验签；实际未采集状态的浮窗↔右栏保持同一会话，正文编辑/撤销重做/切换B/搜索及文件夹隐藏恢复通过。已有44:58录音播放、暂停与±15秒通过。新包持续收音及采集中双模式仍待验 |
+| Android构建12 | [APK](artifacts/unified-candidate06/android-recording-visual-build12/android-attempt01/android-original.apk) | arm64-v8a debug；准确离线构建、收集与v2签名通过，尚未安装。用户选择保留原构建10的13秒未保存录音现场、暂不继续手机设备验收；不备份、不覆盖升级或停止原应用。12是构建编号，现有设备OS为Android11/API30 |
 
-实包过程见[录音运行记录](docs/verification/recording-presentation55-runtime/README.md)和[Android11构建记录](docs/verification/unified-candidate06/android-recording-save-build11/README.md)。当前录音完整设备验收与原版像素一致性均未通过。
+[本轮根交接](docs/verification/recording-visual5859-root-handoff.md)记录准确包、独审与剩余边界。实包过程见[Mac17实际窗口记录](docs/verification/recording-visual5859-mac17-runtime/README.md)、[Mac17构建](docs/verification/unified-candidate06/mac-recording-visual-build17/README.md)及[Android12构建](docs/verification/unified-candidate06/android-recording-visual-build12/README.md)。Mac此前新采集的系统授权请求无返回阻塞仍保留于[55运行记录](docs/verification/recording-presentation55-runtime/README.md)，本轮未反复请求Start或修改系统权限。当前录音完整设备验收与原版像素一致性均未通过。
 
-后续[桌面/共享时间轴58](docs/plan/tasks/app-recording-visual58.md)及[手机播放图形/计时59](docs/plan/tasks/app-mobile-recording-visual59.md)已独立审查并合入源码，准确新包准备中。59仅手机样式与图形，桌面普通/深色同状态PNG、DOM、计算样式和几何保持58基线；手机新播放三角宽度9→19视频像素、原帧19，顶缘偏差12→0。仍保留字体、材料、两侧图标与波形高度等残差，不宣称完整像素一致。上述Mac16/Android11尚不含58/59。
+[桌面/共享时间轴58](docs/plan/tasks/app-recording-visual58.md)及[手机播放图形/计时59](docs/plan/tasks/app-mobile-recording-visual59.md)已独立审查并纳入本批双端包。59仅手机样式与图形，桌面普通/深色同状态PNG、DOM、计算样式和几何保持58基线；手机新播放三角宽度9→19视频像素、原帧19，顶缘偏差12→0。仍保留字体、材料、两侧图标与波形高度等残差，不宣称完整像素一致。Mac16/Android11历史包及其来源记录保持。
 
 此前已有限接收的包为 **Mac14 / Android08**。Mac14固定构建源 `d9ce9c4b864c2d05bf3d2057ec48ae65fb868a46`，Android08保持 `182464bcc3055caadcd78fe4c7ce1a0ec31eea6a`。两端来源分别记录；[Mac14有限接收](docs/verification/mac-ordinary-keyboard47-root-acceptance.md)承接[上一批双端接收](docs/verification/typography-compose-keyboard36-root-acceptance.md)。
 
@@ -26,7 +26,7 @@
 
 Mac14当前系统导航关闭条件下的Tab/OptionTab故障路径已实际有限通过；系统导航开启、多窗和完整输入仍待验。干净补拍48支持全选及部分选中文字颜色误差下降，自然态相对Mac13完整图像零变化，字形、选区背景与全界面像素仍有残差。Android空白新建返回后计数9的条目继续保留，原版相同路径语义待证。
 
-用户新增录音需求的重点是：录音时继续使用备忘录内的其他功能，包括当前A编辑/撤销重做、切换或新建B、搜索与格式工具，并始终保存回开始录音的A。[任务50](docs/plan/tasks/app-recording-interactions50.md)及[双模式55](docs/plan/tasks/app-recording-presentation55.md)已完成源码独审与整合：真实独立非模态浮窗、主窗右侧展开、同一会话连续切换；正文无阻塞遮罩，同时完善进行中卡、试听定位与安全关闭。不做听写或转写。这些变化已包含Mac16开发包，尚未进入此前有限接收的Mac14/Android08。用户[桌面截图](references/desktop/recording-20261105/user-recording-sidebar.png)已原字节保存；实际双模式采集与像素结论以运行记录为准，不能把代码或计时器当作实际收音通过。
+用户新增录音需求的重点是：录音时继续使用备忘录内的其他功能，包括当前A编辑/撤销重做、切换或新建B、搜索与格式工具，并始终保存回开始录音的A。[任务50](docs/plan/tasks/app-recording-interactions50.md)及[双模式55](docs/plan/tasks/app-recording-presentation55.md)已完成源码独审与整合：真实独立非模态浮窗、主窗右侧展开、同一会话连续切换；正文无阻塞遮罩，同时完善进行中卡、试听定位与安全关闭。不做听写或转写。这些变化已包含Mac17/Android12开发包，尚未进入此前有限接收的Mac14/Android08。用户[桌面截图](references/desktop/recording-20261105/user-recording-sidebar.png)已原字节保存；实际双模式采集与像素结论以运行记录为准，不能把代码或计时器当作实际收音通过。
 原始移动端录屏已保存在 `references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4`。原版删除/恢复实验按用户要求暂停；Mac对比使用Computer Use，本批未增加系统截图工具权限要求。旧包、缓存及失败证据均保留。
 
 ## 早期交付记录

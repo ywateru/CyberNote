@@ -2,7 +2,7 @@
 
 ## 当前可用包（2026-11-05）
 
-最新录音开发包为Mac16（源9167db9）及[Android构建11](android-recording-save-build11/README.md)（源747a509），不同来源分别记账，直接产物链接见[根README](../../../README.md)。[实际录音记录](../recording-presentation55-runtime/README.md)区分Mac非采集双模式/Notes操作、已有长录音正常重开后播放，以及旧Android构建10的真实采集/暂停/试听/继续。Mac新采集授权请求无返回，Android11尚未安装；用户已选择保留原13秒失败录音现场、暂不继续手机设备验收，因此不备份或操作原应用。完整录音与像素验收未完成。此前有限接收为Mac14/Android08，见根README。
+最新录音开发包为[Mac17](mac-recording-visual-build17/README.md)及[Android构建12](android-recording-visual-build12/README.md)，两端同源 `fa21657bc116431324d85b18fcbe9e1d328471fb`，333项产品/352项完整输入一致，准确产物链接见[根README](../../../README.md)。[准备与身份](recording-visual5859-preparation/README.md)保留冻结和构建/收集链。[Mac17实际记录](../recording-visual5859-mac17-runtime/README.md)通过未采集同会话双模式、A编辑撤销重做、B搜索、文件夹恢复与已有长录音播放/暂停/±15秒；新Start未重试，持续收音及采集中双模式未通过。Android12尚未安装；用户选择保留原13秒失败录音现场、暂不继续手机设备验收，不备份或操作原应用。完整录音与像素验收未完成。此前Mac16/Android11、Mac14/Android08记录均保留。
 
 以下是按时点保留的历史交付；其中“当前”只指对应记录时点。
 

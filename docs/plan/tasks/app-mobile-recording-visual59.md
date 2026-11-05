@@ -7,7 +7,7 @@ depends-on: [app-recording-visual58]
 
 ## objective
 
-根整合：源码99dbb95合入为cc5b6aa，作者证据9a823fd合入cd3d37c，独立证据07de0cc合入b152c63；根树核3个源码、8个保护文件及100条独立证据哈希一致。独审SOURCE-READY / PIXEL-OPEN，报告docs/verification/mobile-recording-visual59-independent/review-final.md。桌面普通与深色同props的PNG/DOM/computed/geometry均与58基线相同。当前仍需准确双端新包；手机设备按用户要求暂缓，不能把受控View结论追认为设备收音/保存或完整像素验收。
+根整合：源码99dbb95合入为cc5b6aa，作者证据9a823fd合入cd3d37c，独立证据07de0cc合入b152c63；根树核3个源码、8个保护文件及100条独立证据哈希一致。独审SOURCE-READY / PIXEL-OPEN，报告docs/verification/mobile-recording-visual59-independent/review-final.md。桌面普通与深色同props的PNG/DOM/computed/geometry均与58基线相同。准确fa21657的Mac17/Android12已构建收集，手机包未装；手机设备按用户要求暂缓，不能把受控View结论追认为设备收音/保存或完整像素验收。
 
 继续原视频像素/交互目标，修正58同原比例手机对照中仍明显偏小/偏低的播放图形、播放行和大计时字重。手机设备验收由用户明确暂缓，只允许源码与受控共享View验证；不得操作、备份、安装、停止或重启原Android现场。
 

@@ -4,11 +4,14 @@
 
 当前已发布接收包：Mac14（构建源d9ce9c4）/Android08（源182464b），不同来源分别记账。[Mac14普通名称/侧栏/局部选中文字有限接收](verification/mac-ordinary-keyboard47-root-acceptance.md)；上一批双端见[接收36](verification/typography-compose-keyboard36-root-acceptance.md)。整体像素与完整交互目标继续进行。
 
-本轮最新录音开发包为Mac16（源9167db9）/Android构建11（源747a509），两端来源分别记录。[真实验收](verification/recording-presentation55-runtime/README.md)记录Mac保存长录音正常重开后播放、未采集下双模式/Notes内操作和旧Android构建10暂停/试听/继续。Mac新Start授权无返回、旧AndroidDone保存拒绝仍阻塞完整验收。[57手机保存修复](plan/tasks/app-mobile-recording-save57.md)已源码独审/主线整合通过，[Android11准确构建](verification/unified-candidate06/android-recording-save-build11/README.md)已收集，尚未安装。用户现已选择保留原13秒失败File现场、暂不继续手机设备验收；不备份/安装/停止/重启原应用，源码与受控UI开发继续。不将开发包记为录音完成交付。
+本轮最新录音开发包为[Mac17](verification/unified-candidate06/mac-recording-visual-build17/README.md)/[Android构建12](verification/unified-candidate06/android-recording-visual-build12/README.md)，均固定源fa21657，333产品/352完整输入相同，含55/56/57/58/59。[Mac17真实有限复验](verification/recording-visual5859-mac17-runtime/README.md)通过未采集双模式同会话、编辑/撤销重做、B搜索、侧栏恢复和已有44:58播放/暂停/±15秒；新采集中双模式、有效收音与整体像素仍开放。Mac此前Start授权无返回及旧AndroidDone拒绝保留在[55记录](verification/recording-presentation55-runtime/README.md)。Android12未安装；用户选择保留原13秒失败File现场、暂不继续手机设备验收，不备份/安装/停止/重启原应用，源码与受控UI开发继续。不将开发包记为录音完成交付。
 
 用户新优先项：[录音交互任务50](plan/tasks/app-recording-interactions50.md)、[浮窗/主窗右栏双模式55](plan/tasks/app-recording-presentation55.md)、[桌面录音规格](ui/recording-desktop.md)、[截图/手机参考49](research/audio-interaction-readiness49/reference-layout.md)。重点为采集中仍可操作Notes其他功能，切换呈现不重启会话、保存归属原A。源码与主线整合通过，准确新包已出，真实采集中双模式仍待验；不做听写/转写，未进入Mac14/Android08。 [实际Mac准备阻塞50](verification/recording-interactions50-baseline/README.md)、[只读权限定位51](research/mac-recording-request-readiness51.md)、[明确授权预检任务52](plan/tasks/app-mac-recording-access52.md)。
 
-已整合[录音可见几何校准58](plan/tasks/app-recording-visual58.md)及[手机播放行校准59](plan/tasks/app-mobile-recording-visual59.md)：桌面时间轴/标题/计时与手机播放图形/字重、窄屏错误提示已改，[58独审](verification/recording-visual58-independent/review-final.md)与[59独审](verification/mobile-recording-visual59-independent/review-final.md)均SOURCE-READY / PIXEL-OPEN。准备准确Mac17/Android12新包；手机设备验收继续暂缓，不触原Android失败File。源码、受控视觉与实际包像素结论分开，现有Mac16/Android11尚不含58/59。
+已整合[录音可见几何校准58](plan/tasks/app-recording-visual58.md)及[手机播放行校准59](plan/tasks/app-mobile-recording-visual59.md)：桌面时间轴/标题/计时与手机播放图形/字重、窄屏错误提示已改，[58独审](verification/recording-visual58-independent/review-final.md)与[59独审](verification/mobile-recording-visual59-independent/review-final.md)均SOURCE-READY / PIXEL-OPEN。准确Mac17/Android12已构建收集；手机设备验收继续暂缓，不触原Android失败File。源码、受控视觉与实际包像素结论分开，历史Mac16/Android11不追认包含58/59。
+
+- [Mac17/Android12准确包独立身份核对](verification/unified-candidate06/recording-visual5859-independent/README.md)
+- [手机波形游标与轴标签剩余差异准备60](research/mobile-recording-wave60-readiness/README.md)：只读准备，尚未实施，不改变保留手机现场的决定
 
 - [Mac13实际独审36](plan/reviews/mac-typography-keyboard-runtime36.md)与[Android08实际独审36](plan/reviews/android-compose-anchor-runtime36.md)
 - [Mac12准确构建](verification/unified-candidate06/mac-name-focus-build12/README.md)与[独立核包](plan/reviews/mac-name-focus-independent12.md)
