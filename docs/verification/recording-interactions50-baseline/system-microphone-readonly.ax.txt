@@ -1,0 +1,85 @@
+Window: "麦克风", App: 系统设置.
+0 标准窗口 麦克风, ID: main, Secondary Actions: Raise
+	1 分离组 main, SidebarNavigationSplitView
+		2 滚动区 Secondary Actions: Scroll Up, Scroll Down
+			3 列表 边栏
+				4 row (selectable)
+				5 row (selectable) water yy, Apple账户
+				6 row (selectable)
+				7 row (selectable) Description: Apple账户建议，2个新项目, Value: 2
+				8 row (selectable) Description: 有软件更新可用，1个新项目, Value: 1
+				9 row (selectable)
+				10 row (selectable) Wi‑Fi
+				11 row (selectable) 蓝牙
+				12 row (selectable) 网络
+				13 row (selectable) 电池
+				14 row (selectable)
+				15 row (selectable) 通用
+				16 row (selectable) 菜单栏
+				17 row (selectable) 辅助功能
+				18 row (selectable) 聚焦
+				19 row (selectable) 墙纸
+				20 row (selectable) 外观
+				21 row (selectable) 显示器
+				22 row (selectable) 桌面与程序坞
+				23 row (selectable) Siri
+				24 row (selectable)
+				25 row (selectable) 通知
+				26 row (selectable) 声音
+				27 row (selectable) 专注模式
+				28 row (selectable) 屏幕时间
+				29 row (selectable)
+				30 row (selectable) 锁定屏幕
+				31 row (selected) 隐私与安全性
+				32 row (selectable) 触控ID与密码
+				33 row (selectable) 用户与群组
+				34 row (selectable)
+				35 row (selectable) 互联网账户
+				36 row (selectable) Game Center
+				37 row (selectable) iCloud
+				38 row (selectable) 钱包与Apple Pay
+				39 row (selectable)
+				40 row (selectable) 键盘
+				41 row (selectable) 触控板
+				42 row (selectable) 打印机与扫描仪
+			43 滚动条 (settable, float) 0.01436781609195402
+				44 值指示器 (settable, float) 0.01436781609195402
+				45 增箭头按钮
+				46 减箭头按钮
+				47 增页面按钮
+				48 减页面按钮
+		49 搜索文本栏 (settable) 搜索
+			50 按钮 搜索
+		51 分离器 (disabled, settable, float) 223
+		52 滚动区 Secondary Actions: Cancel
+			53 container
+				54 文本 允许下面的应用程序访问你的麦克风。
+				55 转换 飞书, Value: on, ID: 飞书_Toggle
+				56 转换 腾讯会议, Value: on, ID: 腾讯会议_Toggle
+				57 转换 微信, Value: on, ID: 微信_Toggle
+				58 转换 Antigravity IDE, Value: on, ID: Antigravity IDE_Toggle
+				59 转换 ChatGPT, Value: on, ID: ChatGPT_Toggle
+				60 转换 Cursor, Value: on, ID: Cursor_Toggle
+				61 转换 DeepSeek Harness, Value: on, ID: DeepSeek Harness_Toggle
+				62 转换 DoubaoIme, Value: on, ID: DoubaoIme_Toggle
+				63 转换 Google Chrome, Value: on, ID: Google Chrome_Toggle
+				64 转换 mac-sealed, Value: on, ID: mac-sealed_Toggle
+	65 工具栏
+		66 container
+			67 按钮 Description: 返回, ID: go back
+			68 菜单按钮 (disabled) Description: 前进, ID: go forward
+	69 关闭按钮
+	70 缩放按钮
+	71 最小化按钮
+	72 文本 麦克风
+73 menu bar
+	74 系统设置
+	75 编辑
+	76 显示
+	77 窗口
+	78 帮助
+
+Selected:
+	31 row (selected)
+
+Note: Pay special attention to the content selected by the user. If the user asks a question or refers to the content they are looking at on-screen, they might be referring to the selected content (but they might be referring to something else that's visible, too).
