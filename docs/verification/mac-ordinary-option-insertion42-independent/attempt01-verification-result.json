@@ -1,0 +1,5945 @@
+{
+  "status": "FAIL",
+  "stop": "SOURCE-READY READY STOP",
+  "scope": "Fixed source, source/evidence identity, independent semantic review of sealed real WK/native-history logs; no fresh runtime or actual package acceptance",
+  "base": "f2bc755f854938c3d6bdcf8e1f6f40fa200de0f5",
+  "sourceCommit": "5fe06e13a681a80bf9fc7b0dc89aeaf853346696",
+  "evidenceHead": "6b85c75fb745731c27304d613ee0e6c7b53c16f2",
+  "rootContractCommit": "a87cb8b2fbc2d818ff305925d5c2d40aec18488d",
+  "assertions": 1185,
+  "passed": 1183,
+  "productSeedFiles": 308,
+  "authorIndexFiles": 184,
+  "retainedLocalArtifacts": 23,
+  "reviewedWKScenarios": 30,
+  "authorWKAssertions": 237,
+  "authorChromiumAssertions": 7,
+  "protectedInputs": 13,
+  "checks": [
+    {
+      "name": "current explicit main task equals fixed root contract",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author tree old task is kept unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "DOM-only exception explicit in contract",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "fixed HEAD",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "product parent",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "evidence parent",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "only two product files",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exact source patch",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "aggregate product-source.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "catalog count product-source.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash product-source.json src/SmartFolderForm.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob product-source.json src/SmartFolderForm.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash product-source.json src/ordinary-folder-option.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob product-source.json src/ordinary-folder-option.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "aggregate all-product-inputs.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "catalog count all-product-inputs.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json assets/mobile-paper-previews/README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json assets/mobile-paper-previews/README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json assets/mobile-paper-previews/grid-large.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json assets/mobile-paper-previews/grid-large.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json assets/mobile-paper-previews/grid-medium.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json assets/mobile-paper-previews/grid-medium.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json assets/mobile-paper-previews/grid-small.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json assets/mobile-paper-previews/grid-small.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json assets/mobile-paper-previews/lines-large.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json assets/mobile-paper-previews/lines-large.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json assets/mobile-paper-previews/lines-medium.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json assets/mobile-paper-previews/lines-medium.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json assets/mobile-paper-previews/lines-small.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json assets/mobile-paper-previews/lines-small.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json docs/fixtures/smart-projection09.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json docs/fixtures/smart-projection09.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json index.html",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json index.html",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json package.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json package.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json patches/prosemirror-view@1.42.9.patch",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json patches/prosemirror-view@1.42.9.patch",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/.gitignore",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/.gitignore",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/Cargo.lock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/Cargo.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/build.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/build.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/consumer-rules.pro",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/consumer-rules.pro",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/gradle.lockfile",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/gradle.lockfile",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/gradle.properties",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/gradle.properties",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/harness/build.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/harness/build.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/harness/src/main/AndroidManifest.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/harness/src/main/AndroidManifest.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/blank-fixture.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/blank-fixture.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/chinese-fixture.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/harness/src/main/assets/chinese-fixture.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/settings.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/settings.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/deviceFixture/java/com/local/notesscan/DeviceFixtureActivity.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/deviceFixture/java/com/local/notesscan/DeviceFixtureActivity.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/AndroidManifest.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/AndroidManifest.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ChineseOcr.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ChineseOcr.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/CropView.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/CropView.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/Images.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/Images.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ProbeActivity.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ProbeActivity.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ScanActivity.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/ScanActivity.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/SessionStore.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/res/values/styles.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/main/res/values/styles.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/test/java/com/local/notesscan/GeometryTest.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/android/src/test/java/com/local/notesscan/GeometryTest.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/build.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/build.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/examples/host_copy_probe.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/examples/host_copy_probe.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/examples/macos_probe.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/examples/macos_probe.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/guest-js/index.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/guest-js/index.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/macos/vision.m",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/macos/vision.m",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/package.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/package.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/permissions/autogenerated/commands/execute.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/permissions/autogenerated/commands/execute.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/permissions/autogenerated/reference.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/permissions/autogenerated/reference.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/permissions/default.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/permissions/default.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/permissions/schemas/schema.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/permissions/schemas/schema.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/scripts/artifact-inventory.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/scripts/artifact-inventory.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/scripts/check-android.sh",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/scripts/check-android.sh",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/scripts/generate-fixture.swift",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/scripts/generate-fixture.swift",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/src/lib.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/src/lib.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-scan/src/session.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-scan/src/session.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/.gitignore",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/.gitignore",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/Cargo.lock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/build.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/build.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/examples/demo.html",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/examples/demo.html",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/examples/state.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/examples/state.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/examples/toolbar_demo.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/macos/format.h",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/macos/format.h",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/macos/format.m",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/macos/format.m",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/macos/keyboard.m",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/macos/keyboard.m",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/package.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/package.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/bind.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/bind.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/focus_search.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/focus_search.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/inspect.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/inspect.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/unbind.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/unbind.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/update.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/update.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/default.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/default.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/src/macos.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/src/model.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/src/model.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/src/tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/src/tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/android-check.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/android-check.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/checks.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/checks.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/guest-typecheck.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/guest-typecheck.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/inputs.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/inputs.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/objc-syntax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/objc-syntax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/rust-test.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/rust-test.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/source-isolation.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json plugins/tauri-plugin-notes-ui/verification/format-gallery/source-isolation.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json pnpm-lock.yaml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json pnpm-lock.yaml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json pnpm-workspace.yaml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json pnpm-workspace.yaml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/android-fix01.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/android-fix01.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/android-ime-regression.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/android-ime-regression.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/android-smoke.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/android-smoke.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/android.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/android.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/audio-card-rust-fixture.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/audio-card-rust-fixture.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/build-window-capture.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/build-window-capture.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-access-boundary.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-access-boundary.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-android-composition.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-android-composition.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-attachment-cancellation.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-attachment-cancellation.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-attachment-submission.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-attachment-submission.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-audio-card-integration.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-audio-card-integration.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-audio-card-store.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-audio-card-store.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-audio-card-ui.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-audio-card-ui.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-audio-controls-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-audio-controls-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-audio-playback-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-audio-playback-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-audio-playback.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-audio-playback.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-body-typography-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-body-typography-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-document-identity.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-document-identity.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-editor-actions.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-editor-actions.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-editor-schema.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-editor-schema.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-metadata-session.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-metadata-session.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-native-toolbar.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-native-toolbar.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-ocr-host.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-ocr-host.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-ocr-panel-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-ocr-panel-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-recording-panel-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-recording-panel-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-recording-preview.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-recording-preview.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-recording-session.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-recording-session.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-recording-submit.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-recording-submit.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-search-selection.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-search-selection.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-search-zero-startup.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-search-zero-startup.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-search-zero-ui.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-search-zero-ui.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-secure-id.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-secure-id.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-sidebar-restore-geometry.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-sidebar-restore-geometry.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-smart-contract.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-smart-contract.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-smart-ui.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-smart-ui.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-tags-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-tags-browser.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-tags-composition-retention.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-tags-composition-retention.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-tags-save-boundary.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-tags-save-boundary.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-tags-store.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-tags-store.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-wide-toolbar-geometry.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-wide-toolbar-geometry.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/check-window-capture.swift",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/check-window-capture.swift",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/compare-fix02-toolbar.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/compare-fix02-toolbar.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/recording-platform-fixture.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/recording-platform-fixture.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/run-window-capture.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/run-window-capture.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/window-capture.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/window-capture.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json scripts/window-capture.swift",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json scripts/window-capture.swift",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/Cargo.lock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/Cargo.lock",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/Cargo.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/Cargo.toml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/Info.plist",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/Info.plist",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/app-icon.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/app-icon.svg",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/build.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/build.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/capabilities/default.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/capabilities/default.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/capabilities/macos-notes-ui.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/capabilities/macos-notes-ui.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/.editorconfig",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/.editorconfig",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/.gitignore",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/.gitignore",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/.gitignore",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/.gitignore",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/build.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/build.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/proguard-rules.pro",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/proguard-rules.pro",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/layout/activity_main.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/layout/activity_main.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/values-night/themes.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/values-night/themes.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/values/colors.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/values/colors.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/values/ic_launcher_background.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/values/ic_launcher_background.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/values/strings.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/values/strings.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/values/themes.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/values/themes.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/app/src/main/res/xml/file_paths.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/app/src/main/res/xml/file_paths.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/build.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/build.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/buildSrc/build.gradle.kts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/BuildTask.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/BuildTask.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/RustPlugin.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/buildSrc/src/main/java/com/local/notesclone/kotlin/RustPlugin.kt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/gradle.properties",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/gradle.properties",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/gradle/wrapper/gradle-wrapper.properties",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/gradle/wrapper/gradle-wrapper.properties",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/gradlew",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/gradlew",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/gradlew.bat",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/gradlew.bat",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/gen/android/settings.gradle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/gen/android/settings.gradle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/128x128.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/128x128.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/128x128@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/128x128@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/32x32.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/32x32.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/64x64.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/64x64.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/Square107x107Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/Square107x107Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/Square142x142Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/Square142x142Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/Square150x150Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/Square150x150Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/Square284x284Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/Square284x284Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/Square30x30Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/Square30x30Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/Square310x310Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/Square310x310Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/Square44x44Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/Square44x44Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/Square71x71Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/Square71x71Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/Square89x89Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/Square89x89Logo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/StoreLogo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/StoreLogo.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-anydpi-v26/ic_launcher.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-hdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-mdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-xhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/android/values/ic_launcher_background.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/android/values/ic_launcher_background.xml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/icon.icns",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/icon.icns",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/icon.ico",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/icon.ico",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/icon.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/icon.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-20x20@1x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-20x20@1x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-20x20@2x-1.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-20x20@2x-1.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-20x20@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-20x20@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-20x20@3x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-20x20@3x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-29x29@1x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-29x29@1x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-29x29@2x-1.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-29x29@2x-1.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-29x29@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-29x29@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-29x29@3x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-29x29@3x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-40x40@1x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-40x40@1x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-40x40@2x-1.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-40x40@2x-1.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-40x40@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-40x40@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-40x40@3x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-40x40@3x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-512@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-512@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-60x60@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-60x60@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-60x60@3x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-60x60@3x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-76x76@1x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-76x76@1x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-76x76@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-76x76@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/icons/ios/AppIcon-83.5x83.5@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/icons/ios/AppIcon-83.5x83.5@2x.png",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/lib.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/lib.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/main.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/main.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/media_permission.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/media_permission.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/session.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/session.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/session/metadata.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/session/metadata.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/session/smart_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/session/smart_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/session/tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/session/tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/archive.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/archive.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/archive/document-cases.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/archive/document-cases.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/archive/document-schema.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/archive/document-schema.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/archive/document.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/archive/document.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/archive/tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/archive/tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/attachment_operations.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/attachment_operations.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/attachment_operations/tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/attachment_operations/tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/commits.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/commits.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/folder_name_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/folder_name_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/metadata_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/metadata_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/open.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/open.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/open_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/open_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/recorded_at_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/recorded_at_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/smart.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/smart.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/src/store/smart_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/src/store/smart_tests.rs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src-tauri/tauri.conf.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src-tauri/tauri.conf.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/App.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/App.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/Editor.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/Editor.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/MobileFolderIcons.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/MobileFolderIcons.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/OcrPanel.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/OcrPanel.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/OcrPanel.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/OcrPanel.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/RecordingPanel.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/RecordingPanel.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/RecordingPanel.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/RecordingPanel.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/SmartFolderForm.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/SmartFolderForm.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/access-client.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/access-client.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/attachment-submission.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/attachment-submission.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/attachment-target.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/attachment-target.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/audio-playback.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/audio-playback.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/bridge.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/bridge.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/document-equality.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/document-equality.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/editor-actions.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/editor-actions.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/editor-save-snapshot.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/editor-save-snapshot.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/editor-schema.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/editor-schema.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/main.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/main.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/metadata-client.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/metadata-client.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/native-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/native-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/native-toolbar-controller.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/native-toolbar-controller.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/native-toolbar-state.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/native-toolbar-state.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/native-toolbar.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/native-toolbar.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/note-tag-extension.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/note-tag-extension.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/note-tags.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/note-tags.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/ocr-host.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/ocr-host.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/ocr-native.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/ocr-native.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/ordinary-folder-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/ordinary-folder-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/ordinary-folder-option.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/ordinary-folder-option.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/proof-access.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/proof-access.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/recording-clock.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/recording-clock.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/recording-metadata.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/recording-metadata.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/recording-playback.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/recording-playback.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/recording-session.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/recording-session.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/save-queue.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/save-queue.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/save-revisions.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/save-revisions.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/search-editor-gate.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/search-editor-gate.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/search-selection.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/search-selection.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/secure-id.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/secure-id.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/sidebar-preference.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/sidebar-preference.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/smart-draft.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/smart-draft.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/smart-folders.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/smart-folders.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/smart-folders.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/smart-folders.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/style.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/style.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/tag-composition.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/tag-composition.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/trusted-synchronization.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/trusted-synchronization.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/types.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/types.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json src/vite-env.d.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json src/vite-env.d.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json tsconfig.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json tsconfig.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "source size/hash all-product-inputs.json vite.config.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Git blob all-product-inputs.json vite.config.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "catalog covers entire product except root docs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author index exact hash",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author index184",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed .gitignore",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed all-product-inputs.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed bundle-attempt01.log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed bundle-attempt02.log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed bundle-attempt03.log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed bundle-attempt04.log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed bundle-attempt05.log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed bundle.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed chromium-attempt01/result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed chromium-attempt01.log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed chromium-attempt02/result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed chromium-attempt02.log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed compile-attempt01.log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed compile-attempt02.log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed failure-ledger.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed fixture-attempt01.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed fixture-attempt02.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed fixture-attempt03.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed fixture-attempt04.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed fixture.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed inputs-before.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed local-artifacts.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed product-source.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed protected-inputs-result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed regression-attempt01.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed regression.mjs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed regression.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed run-wk.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed source.patch",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed typecheck-attempt01.log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed verification-result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed verify-seal.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt01/replace-CD41.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt01/replace-CD41.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt01/replace-CD41.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/caret-middle.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/caret-middle.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/caret-middle.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/caret-middle.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/excluded.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/excluded.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/excluded.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-false.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-false.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-false.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-false.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-missing.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-missing.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-missing.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-missing.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-noevent-success.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-noevent-success.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-noevent-success.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-noevent-success.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-partial-false.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-partial-false.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-partial-false.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-partial-false.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-partial-throw.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-partial-throw.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-partial-throw.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-partial-throw.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-readonly.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-readonly.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-readonly.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-readonly.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-throw.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-throw.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-throw.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-throw.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-wrong-success.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-wrong-success.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-wrong-success.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/failure-wrong-success.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/replace-CD41.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/replace-CD41.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/replace-CD41.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/replace-CD41.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/select-all.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/select-all.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/select-all.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/select-all.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/sequence43.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/sequence43.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/sequence43.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/sequence43.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/shift-end.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/shift-end.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/shift-end.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt02/shift-end.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt03/excluded.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt03/excluded.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt03/excluded.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/anomaly-dom-only.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/anomaly-dom-only.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/anomaly-dom-only.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/anomaly-dom-only.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-229.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-229.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-229.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-229.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-android.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-android.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-android.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-android.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-busy.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-busy.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-busy.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-busy.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-composing.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-composing.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-composing.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-composing.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-ctrl.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-ctrl.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-ctrl.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-ctrl.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-edit.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-edit.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-edit.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-edit.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-iphone.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-iphone.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-iphone.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-iphone.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-meta.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-meta.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-meta.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-meta.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-mobile.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-mobile.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-mobile.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-mobile.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-nontab.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-nontab.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-nontab.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-nontab.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-prevented.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-prevented.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-prevented.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-prevented.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-preview.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-preview.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-preview.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-preview.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-smart.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-smart.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-smart.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-smart.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-window.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-window.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-window.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/exclude-window.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-partial-false.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-partial-false.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-partial-false.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-partial-false.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-partial-throw.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-partial-throw.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-partial-throw.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-partial-throw.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-wrong-success.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-wrong-success.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-wrong-success.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt04/failure-wrong-success.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/anomaly-dom-only.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/anomaly-dom-only.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/anomaly-dom-only.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/anomaly-dom-only.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-busy.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-busy.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-busy.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-busy.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-outside.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-outside.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-outside.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-outside.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-warning.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-warning.result.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-warning.stderr",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-attempt05/exclude-warning.stdout",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-probe-attempt01.m",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "author indexed wk-probe.m",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact chromium-attempt01/fixture.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact chromium-attempt01/fixture.html",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact chromium-attempt01/fixture.js",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact chromium-attempt02/fixture.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact chromium-attempt02/fixture.html",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact chromium-attempt02/fixture.js",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt02/fixture.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt02/fixture.html",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt02/fixture.js",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt02/metafile.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt03/fixture.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt03/fixture.html",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt03/fixture.js",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt03/metafile.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt04/fixture.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt04/fixture.html",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt04/fixture.js",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt04/metafile.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt05/fixture.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt05/fixture.html",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt05/fixture.js",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-attempt05/metafile.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "retained local artifact wk-probe",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original index count mac-folder-option-history-original41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-history-original41/01-before-suffix-selection.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-history-original41/01-before-suffix-selection.cua-image",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-history-original41/02-after-option-tab.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-history-original41/02-after-option-tab.cua-image",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-history-original41/03-after-undo.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-history-original41/03-after-undo.cua-image",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-history-original41/04-after-redo.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-history-original41/04-after-redo.cua-image",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-history-original41/05-escape-cancelled.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-history-original41/README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original index count mac-folder-option-sequence-original43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/01-name-end.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/01-name-end.cua-image",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/02-first-option-tab.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/02-first-option-tab.cua-image",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/03-second-option-tab.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/03-second-option-tab.cua-image",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/04-undo.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/04-undo.cua-image",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/05-redo.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/05-redo.cua-image",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/06-cancelled.ax.txt",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original indexed docs/research/mac-folder-option-sequence-original43/README.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "same onChange to update draft",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "trusted native main caller gate",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "busy/warning guard",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "real native event and current input",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "existing37 form handler retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "helper one literal TAB editing command",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "helper no forbidden fallback",
+      "pass": false,
+      "detail": null
+    },
+    {
+      "name": "strict true and real event validation",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "observer lifetime always cleaned",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "composition/modifier exclusions",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "target/editability/selection preflight",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unchanged37/style/lock src/ordinary-folder-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unchanged37/style/lock src/native-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unchanged37/style/lock src/style.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unchanged37/style/lock src/smart-folders.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "unchanged37/style/lock pnpm-lock.yaml",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "production helper present bundle02",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "real onSave fixture bundle02",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length02 src/SmartFolderForm.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length02 src/ordinary-folder-option.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length02 src/ordinary-folder-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length02 src/native-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length02 src/style.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length02 src/smart-folders.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "production helper present bundle03",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "real onSave fixture bundle03",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length03 src/SmartFolderForm.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length03 src/ordinary-folder-option.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length03 src/ordinary-folder-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length03 src/native-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length03 src/style.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length03 src/smart-folders.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "production helper present bundle04",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "real onSave fixture bundle04",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length04 src/SmartFolderForm.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length04 src/ordinary-folder-option.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length04 src/ordinary-folder-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length04 src/native-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length04 src/style.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length04 src/smart-folders.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "production helper present bundle05",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "real onSave fixture bundle05",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length05 src/SmartFolderForm.tsx",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length05 src/ordinary-folder-option.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length05 src/ordinary-folder-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length05 src/native-keyboard.ts",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length05 src/style.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bundle exact source length05 src/smart-folders.css",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected scenario count30",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected assertion total237",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "reconstructed single TAB/current selection select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exact TAB input event count select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one real history pair select-all historyUndo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one real history pair select-all historyRedo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "redo visible endpoint select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "default full-selection grouped undo select-all",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "reconstructed single TAB/current selection caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exact TAB input event count caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one real history pair caret-middle historyUndo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one real history pair caret-middle historyRedo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "redo visible endpoint caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "actual production save captures edited draft caret-middle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "reconstructed single TAB/current selection replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exact TAB input event count replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one real history pair replace-CD41 historyUndo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one real history pair replace-CD41 historyRedo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "redo visible endpoint replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "41 exact undo value and CD selection",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "actual production save captures edited draft replace-CD41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "reconstructed single TAB/current selection shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exact TAB input event count shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one real history pair shift-end historyUndo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one real history pair shift-end historyRedo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "redo visible endpoint shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "actual production save captures edited draft shift-end",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "reconstructed single TAB/current selection sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exact TAB input event count sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one real history pair sequence43 historyUndo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "one real history pair sequence43 historyRedo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "redo visible endpoint sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "default full-selection grouped undo sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "43 two literal tabs and one grouped undo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "actual production save captures edited draft sequence43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result failure-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion failure-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained failure-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history failure-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained failure-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted failure-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input failure-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure single command or zero preflight failure-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no-edit failure original selection/value failure-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure true draft reaches save failure-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result failure-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion failure-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained failure-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history failure-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained failure-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted failure-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input failure-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure single command or zero preflight failure-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no-edit failure original selection/value failure-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure true draft reaches save failure-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result failure-missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion failure-missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained failure-missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history failure-missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained failure-missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted failure-missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input failure-missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure single command or zero preflight failure-missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no-edit failure original selection/value failure-missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure true draft reaches save failure-missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result failure-readonly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion failure-readonly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained failure-readonly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history failure-readonly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained failure-readonly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted failure-readonly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input failure-readonly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure single command or zero preflight failure-readonly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no-edit failure original selection/value failure-readonly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure true draft reaches save failure-readonly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result failure-noevent-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion failure-noevent-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained failure-noevent-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history failure-noevent-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained failure-noevent-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted failure-noevent-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input failure-noevent-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure single command or zero preflight failure-noevent-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no-edit failure original selection/value failure-noevent-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure true draft reaches save failure-noevent-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure single command or zero preflight failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "partial preserves real edited state failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "partial history restores CD then redoes P failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure true draft reaches save failure-partial-false",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure single command or zero preflight failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "partial preserves real edited state failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "partial history restores CD then redoes P failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure true draft reaches save failure-partial-throw",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure single command or zero preflight failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "partial preserves real edited state failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "partial history restores CD then redoes P failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "failure true draft reaches save failure-wrong-success",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-edit",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-edit",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-edit",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-edit",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-edit",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-edit",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-preview",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-preview",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-preview",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-preview",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-preview",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-preview",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-window",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-window",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-window",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-window",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-window",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-window",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-mobile",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-mobile",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-mobile",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-mobile",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-mobile",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-mobile",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-android",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-android",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-android",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-android",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-android",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-android",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-iphone",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-iphone",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-iphone",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-iphone",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-iphone",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-iphone",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-ctrl",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-ctrl",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-ctrl",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-ctrl",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-ctrl",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-ctrl",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-meta",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-meta",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-meta",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-meta",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-meta",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-meta",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-composing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-composing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-composing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-composing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-composing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-composing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-229",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-229",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-229",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-229",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-229",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-229",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-prevented",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-prevented",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-prevented",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-prevented",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-prevented",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-prevented",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-nontab",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-nontab",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-nontab",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-nontab",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-nontab",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-nontab",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-smart",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-smart",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-smart",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-smart",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-smart",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-smart",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result anomaly-dom-only",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion anomaly-dom-only",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained anomaly-dom-only",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history anomaly-dom-only",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained anomaly-dom-only",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all recorded editing events trusted anomaly-dom-only",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "events paired beforeinput/input anomaly-dom-only",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "DOM-only explicitly failure observation",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "DOM-only inside differs but last real draft restored",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "DOM-only no insertion event pair",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "DOM-only history effect retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-busy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-busy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-busy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-busy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-busy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-busy",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-warning",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-warning",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-warning",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-warning",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-warning",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-warning",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "raw stdout equals parsed result exclude-outside",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded real hidden WK completion exclude-outside",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "selected checks retained exclude-outside",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "isolated empty initial history exclude-outside",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "hidden focus limit retained exclude-outside",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "excluded path command0/unchanged/default exclude-outside",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "37 regression7 retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "37 query counts exact main command",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "37 normal input/save/Escape",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "seven failure records retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "DOM-only early FAIL retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "busy early FAIL retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original AX literal TAB endpoint mac-folder-option-history-original41",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original AX literal TAB endpoint mac-folder-option-sequence-original43",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original41 CD undo selection",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "original43 default selected undo",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "protected bytes/SHA/mtime unchanged",
+      "pass": false,
+      "detail": null
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "python3",
+    "docs/verification/mac-ordinary-option-insertion42-independent/verify-independent.py"
+  ],
+  "exitCode": 1,
+  "assertions": 1185,
+  "passed": 1183,
+  "failureClassification": "Independent checker fixture only",
+  "failures": [
+    "Substring .value = also matched legitimate === comparisons; replace with assignment regex excluding equals",
+    "Local before snapshot variable shadowed by per-scenario row; actual before/after protected JSON each contain545 identical records, but integrity calculation compared row dictionary"
+  ],
+  "productChange": false,
+  "newRuntimeExecution": false
+}

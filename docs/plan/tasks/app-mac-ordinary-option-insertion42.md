@@ -36,3 +36,5 @@ root创建独立worktree后，产品仅src/SmartFolderForm.tsx、必要窄src/or
 固定产品提交后由不同作者独审，再合入准确Mac包。实际Computer Use在同一原版合成草稿序列核OptionTab、CmdZ/CmdShiftZ和名称值/选区/焦点，并复验37普通导航、普通智能往返/取消及侧栏不退化。开启系统导航、多窗和全原版交互仍无自动通过结论。
 
 2026-11-05 root START42：37源阶段已独审合入，创建/private/tmp/apple-notes-ordinary-option-insertion42-01，develop_app唯一作者。仅本项两产品路径；以root最新已提交主线为创建基线，禁止修改主树及37隔离树。完整行为/像素仍待准确包验收。
+
+2026-11-05 root源接收：独审1185项有限核查PASS、20成员index7d3370ca…，root重新核184作者与20独审成员全部匹配，准确两产品逐字合入a840308，作者证据6a46358。37/42/45已串行独审接收，下一Mac14先冻结后构建并实际CUA。此任务仍in-progress，不授真实OS键或完整交互PASS。

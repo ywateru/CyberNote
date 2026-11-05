@@ -1,0 +1,2008 @@
+{
+  "method": "Parse raw stdout, compare parsed records/metadata, independently reconstruct selection replacement, event pairs, draft save and undo endpoints. No new WK/browser/native execution.",
+  "scenarios": [
+    {
+      "scenario": "select-all",
+      "path": "wk-attempt02/select-all.result.json",
+      "checks": 12,
+      "elapsedSeconds": 0.5323920249938965,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 1,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "\t",
+        "attempts": 0,
+        "undo": true,
+        "end": 1,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "\t",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "\t",
+          "\t",
+          1,
+          1
+        ],
+        [
+          "beforeinput",
+          "historyUndo",
+          null,
+          "\t",
+          1,
+          1
+        ],
+        [
+          "input",
+          "historyUndo",
+          null,
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "beforeinput",
+          "historyRedo",
+          null,
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "historyRedo",
+          null,
+          "\t",
+          1,
+          1
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "caret-middle",
+      "path": "wk-attempt02/caret-middle.result.json",
+      "checks": 13,
+      "elapsedSeconds": 0.6027798652648926,
+      "before": {
+        "start": 3,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT40-ABCD",
+        "undo": true,
+        "end": 3,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 4,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "QA-\tOPT40-ABCD",
+        "attempts": 0,
+        "undo": true,
+        "end": 4,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT40-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT40-ABCD",
+          "QA-OPT40-ABCD",
+          13,
+          13
+        ],
+        [
+          "beforeinput",
+          "insertText",
+          "\t",
+          "QA-OPT40-ABCD",
+          3,
+          3
+        ],
+        [
+          "input",
+          "insertText",
+          "\t",
+          "QA-\tOPT40-ABCD",
+          4,
+          4
+        ],
+        [
+          "beforeinput",
+          "historyUndo",
+          null,
+          "QA-\tOPT40-ABCD",
+          4,
+          4
+        ],
+        [
+          "input",
+          "historyUndo",
+          null,
+          "QA-OPT40-ABCD",
+          3,
+          3
+        ],
+        [
+          "beforeinput",
+          "historyRedo",
+          null,
+          "QA-OPT40-ABCD",
+          3,
+          3
+        ],
+        [
+          "input",
+          "historyRedo",
+          null,
+          "QA-\tOPT40-ABCD",
+          4,
+          4
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "replace-CD41",
+      "path": "wk-attempt02/replace-CD41.result.json",
+      "checks": 14,
+      "elapsedSeconds": 0.5922670364379883,
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "QA-OPT41-AB\t",
+        "attempts": 0,
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ],
+        [
+          "beforeinput",
+          "insertText",
+          "\t",
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "input",
+          "insertText",
+          "\t",
+          "QA-OPT41-AB\t",
+          12,
+          12
+        ],
+        [
+          "beforeinput",
+          "historyUndo",
+          null,
+          "QA-OPT41-AB\t",
+          12,
+          12
+        ],
+        [
+          "input",
+          "historyUndo",
+          null,
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "beforeinput",
+          "historyRedo",
+          null,
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "input",
+          "historyRedo",
+          null,
+          "QA-OPT41-AB\t",
+          12,
+          12
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "shift-end",
+      "path": "wk-attempt02/shift-end.result.json",
+      "checks": 13,
+      "elapsedSeconds": 0.5689470767974854,
+      "before": {
+        "start": 13,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "QA-OPT40-ABCD",
+        "attempts": 0,
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 14,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "QA-OPT40-ABCD\t",
+        "attempts": 0,
+        "undo": true,
+        "end": 14,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT40-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT40-ABCD",
+          "QA-OPT40-ABCD",
+          13,
+          13
+        ],
+        [
+          "beforeinput",
+          "insertText",
+          "\t",
+          "QA-OPT40-ABCD",
+          13,
+          13
+        ],
+        [
+          "input",
+          "insertText",
+          "\t",
+          "QA-OPT40-ABCD\t",
+          14,
+          14
+        ],
+        [
+          "beforeinput",
+          "historyUndo",
+          null,
+          "QA-OPT40-ABCD\t",
+          14,
+          14
+        ],
+        [
+          "input",
+          "historyUndo",
+          null,
+          "QA-OPT40-ABCD",
+          13,
+          13
+        ],
+        [
+          "beforeinput",
+          "historyRedo",
+          null,
+          "QA-OPT40-ABCD",
+          13,
+          13
+        ],
+        [
+          "input",
+          "historyRedo",
+          null,
+          "QA-OPT40-ABCD\t",
+          14,
+          14
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "sequence43",
+      "path": "wk-attempt02/sequence43.result.json",
+      "checks": 18,
+      "elapsedSeconds": 0.558190107345581,
+      "before": {
+        "start": 13,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 14,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT43-ABCD\t",
+        "undo": true,
+        "end": 14,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT43-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT43-ABCD",
+          "QA-OPT43-ABCD",
+          13,
+          13
+        ],
+        [
+          "beforeinput",
+          "insertText",
+          "\t",
+          "QA-OPT43-ABCD",
+          13,
+          13
+        ],
+        [
+          "input",
+          "insertText",
+          "\t",
+          "QA-OPT43-ABCD\t",
+          14,
+          14
+        ],
+        [
+          "beforeinput",
+          "insertText",
+          "\t",
+          "QA-OPT43-ABCD\t",
+          14,
+          14
+        ],
+        [
+          "input",
+          "insertText",
+          "\t",
+          "QA-OPT43-ABCD\t\t",
+          15,
+          15
+        ],
+        [
+          "beforeinput",
+          "historyUndo",
+          null,
+          "QA-OPT43-ABCD\t\t",
+          15,
+          15
+        ],
+        [
+          "input",
+          "historyUndo",
+          null,
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "beforeinput",
+          "historyRedo",
+          null,
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "historyRedo",
+          null,
+          "QA-OPT43-ABCD\t\t",
+          15,
+          15
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "failure-false",
+      "path": "wk-attempt02/failure-false.result.json",
+      "checks": 9,
+      "elapsedSeconds": 0.8661870956420898,
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "attempts": 1,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "failure-throw",
+      "path": "wk-attempt02/failure-throw.result.json",
+      "checks": 9,
+      "elapsedSeconds": 0.7232100963592529,
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "QA-OPT41-ABCD",
+        "attempts": 0,
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "value": "QA-OPT41-ABCD",
+        "attempts": 1,
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "failure-missing",
+      "path": "wk-attempt02/failure-missing.result.json",
+      "checks": 9,
+      "elapsedSeconds": 0.6277520656585693,
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "QA-OPT41-ABCD",
+        "attempts": 0,
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "failure-readonly",
+      "path": "wk-attempt02/failure-readonly.result.json",
+      "checks": 9,
+      "elapsedSeconds": 0.6821298599243164,
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "QA-OPT41-ABCD",
+        "attempts": 0,
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "failure-noevent-success",
+      "path": "wk-attempt02/failure-noevent-success.result.json",
+      "checks": 9,
+      "elapsedSeconds": 0.49721789360046387,
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "QA-OPT41-ABCD",
+        "attempts": 0,
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "value": "QA-OPT41-ABCD",
+        "attempts": 1,
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "failure-partial-false",
+      "path": "wk-attempt04/failure-partial-false.result.json",
+      "checks": 16,
+      "elapsedSeconds": 0.7502458095550537,
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "QA-OPT41-ABCD",
+        "attempts": 0,
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "value": "QA-OPT41-ABP",
+        "attempts": 1,
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ],
+        [
+          "beforeinput",
+          "insertText",
+          "P",
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "input",
+          "insertText",
+          "P",
+          "QA-OPT41-ABP",
+          12,
+          12
+        ],
+        [
+          "beforeinput",
+          "historyUndo",
+          null,
+          "QA-OPT41-ABP",
+          12,
+          12
+        ],
+        [
+          "input",
+          "historyUndo",
+          null,
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "beforeinput",
+          "historyRedo",
+          null,
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "input",
+          "historyRedo",
+          null,
+          "QA-OPT41-ABP",
+          12,
+          12
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "failure-partial-throw",
+      "path": "wk-attempt04/failure-partial-throw.result.json",
+      "checks": 16,
+      "elapsedSeconds": 0.6212670803070068,
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "value": "QA-OPT41-ABP",
+        "attempts": 1,
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ],
+        [
+          "beforeinput",
+          "insertText",
+          "P",
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "input",
+          "insertText",
+          "P",
+          "QA-OPT41-ABP",
+          12,
+          12
+        ],
+        [
+          "beforeinput",
+          "historyUndo",
+          null,
+          "QA-OPT41-ABP",
+          12,
+          12
+        ],
+        [
+          "input",
+          "historyUndo",
+          null,
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "beforeinput",
+          "historyRedo",
+          null,
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "input",
+          "historyRedo",
+          null,
+          "QA-OPT41-ABP",
+          12,
+          12
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "failure-wrong-success",
+      "path": "wk-attempt04/failure-wrong-success.result.json",
+      "checks": 16,
+      "elapsedSeconds": 0.5725369453430176,
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 12,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "value": "QA-OPT41-ABP",
+        "attempts": 1,
+        "undo": true,
+        "end": 12,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ],
+        [
+          "beforeinput",
+          "insertText",
+          "P",
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "input",
+          "insertText",
+          "P",
+          "QA-OPT41-ABP",
+          12,
+          12
+        ],
+        [
+          "beforeinput",
+          "historyUndo",
+          null,
+          "QA-OPT41-ABP",
+          12,
+          12
+        ],
+        [
+          "input",
+          "historyUndo",
+          null,
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "beforeinput",
+          "historyRedo",
+          null,
+          "QA-OPT41-ABCD",
+          11,
+          13
+        ],
+        [
+          "input",
+          "historyRedo",
+          null,
+          "QA-OPT41-ABP",
+          12,
+          12
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-edit",
+      "path": "wk-attempt04/exclude-edit.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.9406728744506836,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "编辑名称",
+        "attempts": 0,
+        "undo": false,
+        "end": 4,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "编辑名称",
+        "undo": false,
+        "end": 4,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-preview",
+      "path": "wk-attempt04/exclude-preview.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.7172942161560059,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-window",
+      "path": "wk-attempt04/exclude-window.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.715184211730957,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-mobile",
+      "path": "wk-attempt04/exclude-mobile.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.8307669162750244,
+      "before": {
+        "start": 5,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 5,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-android",
+      "path": "wk-attempt04/exclude-android.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.6530089378356934,
+      "before": {
+        "start": 5,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 5,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-iphone",
+      "path": "wk-attempt04/exclude-iphone.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.6461818218231201,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-ctrl",
+      "path": "wk-attempt04/exclude-ctrl.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.6321070194244385,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-meta",
+      "path": "wk-attempt04/exclude-meta.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.737145185470581,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-composing",
+      "path": "wk-attempt04/exclude-composing.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.8045480251312256,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-229",
+      "path": "wk-attempt04/exclude-229.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.5821940898895264,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-prevented",
+      "path": "wk-attempt04/exclude-prevented.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.5294098854064941,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-nontab",
+      "path": "wk-attempt04/exclude-nontab.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.6039540767669678,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-smart",
+      "path": "wk-attempt04/exclude-smart.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.8135149478912354,
+      "before": {
+        "start": 7,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建智能文件夹",
+        "undo": false,
+        "end": 7,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 7,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建智能文件夹",
+        "undo": false,
+        "end": 7,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "anomaly-dom-only",
+      "path": "wk-attempt05/anomaly-dom-only.result.json",
+      "checks": 8,
+      "elapsedSeconds": 1.179638147354126,
+      "before": {
+        "start": 11,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 13,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": "无法完成输入，请检查名称后重试。",
+        "saves": [],
+        "attempts": 1,
+        "value": "QA-OPT41-ABCD",
+        "undo": true,
+        "end": 13,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [
+        [
+          "beforeinput",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "新建文件夹",
+          0,
+          5
+        ],
+        [
+          "input",
+          "insertText",
+          "QA-OPT41-ABCD",
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ],
+        [
+          "beforeinput",
+          "historyUndo",
+          null,
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ],
+        [
+          "input",
+          "historyUndo",
+          null,
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ],
+        [
+          "beforeinput",
+          "historyRedo",
+          null,
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ],
+        [
+          "input",
+          "historyRedo",
+          null,
+          "QA-OPT41-ABCD",
+          13,
+          13
+        ]
+      ],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-busy",
+      "path": "wk-attempt05/exclude-busy.result.json",
+      "checks": 5,
+      "elapsedSeconds": 0.9029371738433838,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": false,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [
+          {
+            "rules": [
+              {
+                "key": 0,
+                "names": [],
+                "pinned": true,
+                "mode": "allSelected",
+                "type": "tags"
+              }
+            ],
+            "name": "新建文件夹",
+            "combine": "all",
+            "smart": false
+          }
+        ],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": false,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [
+          {
+            "rules": [
+              {
+                "key": 0,
+                "pinned": true,
+                "type": "tags",
+                "mode": "allSelected",
+                "names": []
+              }
+            ],
+            "name": "新建文件夹",
+            "combine": "all",
+            "smart": false
+          }
+        ],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-warning",
+      "path": "wk-attempt05/exclude-warning.result.json",
+      "checks": 5,
+      "elapsedSeconds": 0.7143518924713135,
+      "before": {
+        "start": 5,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 5,
+        "calls": [],
+        "focused": true,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    },
+    {
+      "scenario": "exclude-outside",
+      "path": "wk-attempt05/exclude-outside.result.json",
+      "checks": 4,
+      "elapsedSeconds": 0.539870023727417,
+      "before": {
+        "start": 0,
+        "calls": [],
+        "focused": false,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "value": "新建文件夹",
+        "attempts": 0,
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "after": {
+        "start": 0,
+        "calls": [],
+        "focused": false,
+        "redo": false,
+        "documentFocus": false,
+        "error": null,
+        "saves": [],
+        "attempts": 0,
+        "value": "新建文件夹",
+        "undo": false,
+        "end": 5,
+        "direction": "none",
+        "cancels": 0
+      },
+      "eventSequence": [],
+      "scope": "Independent interpretation of sealed raw logs, not a fresh native run"
+    }
+  ],
+  "scenarioCount": 30,
+  "authorSelectedAssertions": 237,
+  "chromiumRegression": {
+    "scope": "Production React form; headless Chromium with controlled main/native/false-policy transport; only 37 plain Tab, existing ordinary input/save/cancel regression.",
+    "checks": [
+      {
+        "name": "initial name fully selected",
+        "pass": true,
+        "detail": {
+          "value": "新建文件夹",
+          "start": 0,
+          "end": 5,
+          "focused": true,
+          "calls": [],
+          "saves": [],
+          "cancels": 0
+        }
+      },
+      {
+        "name": "37 Right then plain Tab reselects name",
+        "pass": true,
+        "detail": {
+          "value": "新建文件夹",
+          "start": 0,
+          "end": 5,
+          "focused": true,
+          "calls": [
+            {
+              "cmd": "plugin:notes-ui|keyboard_navigation",
+              "args": {
+                "windowLabel": "main"
+              }
+            }
+          ],
+          "saves": [],
+          "cancels": 0
+        }
+      },
+      {
+        "name": "37 ShiftTab reselects name",
+        "pass": true,
+        "detail": {
+          "value": "新建文件夹",
+          "start": 0,
+          "end": 5,
+          "focused": true,
+          "calls": [
+            {
+              "cmd": "plugin:notes-ui|keyboard_navigation",
+              "args": {
+                "windowLabel": "main"
+              }
+            },
+            {
+              "cmd": "plugin:notes-ui|keyboard_navigation",
+              "args": {
+                "windowLabel": "main"
+              }
+            }
+          ],
+          "saves": [],
+          "cancels": 0
+        }
+      },
+      {
+        "name": "37 uses exact current main query",
+        "pass": true,
+        "detail": [
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          },
+          {
+            "cmd": "plugin:notes-ui|keyboard_navigation",
+            "args": {
+              "windowLabel": "main"
+            }
+          }
+        ]
+      },
+      {
+        "name": "normal input and Enter save existing draft",
+        "pass": true,
+        "detail": {
+          "focused": false,
+          "calls": [
+            {
+              "cmd": "plugin:notes-ui|keyboard_navigation",
+              "args": {
+                "windowLabel": "main"
+              }
+            },
+            {
+              "cmd": "plugin:notes-ui|keyboard_navigation",
+              "args": {
+                "windowLabel": "main"
+              }
+            }
+          ],
+          "saves": [
+            {
+              "name": "正常输入",
+              "smart": false,
+              "combine": "all",
+              "rules": [
+                {
+                  "key": 0,
+                  "type": "tags",
+                  "mode": "allSelected",
+                  "names": [],
+                  "pinned": true
+                }
+              ]
+            }
+          ],
+          "cancels": 0
+        }
+      },
+      {
+        "name": "Escape cancels exactly once",
+        "pass": true,
+        "detail": {
+          "value": "新建文件夹",
+          "start": 0,
+          "end": 5,
+          "focused": true,
+          "calls": [
+            {
+              "cmd": "plugin:notes-ui|keyboard_navigation",
+              "args": {
+                "windowLabel": "main"
+              }
+            },
+            {
+              "cmd": "plugin:notes-ui|keyboard_navigation",
+              "args": {
+                "windowLabel": "main"
+              }
+            }
+          ],
+          "saves": [
+            {
+              "name": "正常输入",
+              "smart": false,
+              "combine": "all",
+              "rules": [
+                {
+                  "key": 0,
+                  "type": "tags",
+                  "mode": "allSelected",
+                  "names": [],
+                  "pinned": true
+                }
+              ]
+            }
+          ],
+          "cancels": 1
+        }
+      },
+      {
+        "name": "no browser errors/external requests",
+        "pass": true,
+        "detail": {
+          "errors": [],
+          "externalRequests": []
+        }
+      }
+    ],
+    "errors": [],
+    "externalRequests": [],
+    "status": "PASS"
+  },
+  "limits": [
+    "Synthetic DOM key routing, controlled Tauri metadata/transport",
+    "Hidden WK document.hasFocus false; OS Option/Cmd key path untested",
+    "DOM-only anomaly explicit product failure; natural React render changes selection/history"
+  ]
+}
