@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "mode": "group",
+  "sourceHead": "77ade45ef51b87c90fa4022c3ada74425b64728e",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "2684e6020edb8245b4d5a468274962d3e695bcaefc4f3f377e4b5659da19b934",
+    "fileCount": 79,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/cli.mjs",
+      " M scripts/debug/platform.mjs",
+      " M scripts/debug/runtime.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M src/App.tsx",
+      " M src/RecordingPanel.tsx",
+      "?? scripts/debug/mobile-recording.mjs",
+      "?? scripts/debug/probe-mobile71.mjs"
+    ]
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "2684e6020edb8245b4d5a468274962d3e695bcaefc4f3f377e4b5659da19b934",
+    "fileCount": 79,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/cli.mjs",
+      " M scripts/debug/platform.mjs",
+      " M scripts/debug/runtime.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M src/App.tsx",
+      " M src/RecordingPanel.tsx",
+      "?? scripts/debug/mobile-recording.mjs",
+      "?? scripts/debug/probe-mobile71.mjs"
+    ]
+  },
+  "sourceInputsChanged": false,
+  "platform": "mobile-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "elapsedMs": 9674,
+  "result": {
+    "groups": [
+      {
+        "group": "notes",
+        "pass": true,
+        "checks": [
+          "Semantic create persists a new workspace note and rendered editor",
+          "Editor transaction saved body and DOM agrees",
+          "Pin and paper semantic patch reaches persistent workspace",
+          "Delete moves actual note into trash",
+          "Restore leaves trash",
+          "Real lock modal makes note unauthorized and hides editable content",
+          "Real unlock modal restores authorized editable note",
+          "Purge requires real confirmation and removes workspace note and DOM",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 2497
+      }
+    ],
+    "passedChecks": 9,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": []
+}

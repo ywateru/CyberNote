@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "mode": "check-production",
+  "sourceHead": "77ade45ef51b87c90fa4022c3ada74425b64728e",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "2684e6020edb8245b4d5a468274962d3e695bcaefc4f3f377e4b5659da19b934",
+    "fileCount": 79,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/cli.mjs",
+      " M scripts/debug/platform.mjs",
+      " M scripts/debug/runtime.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M src/App.tsx",
+      " M src/RecordingPanel.tsx",
+      "?? scripts/debug/mobile-recording.mjs",
+      "?? scripts/debug/probe-mobile71.mjs"
+    ]
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "2684e6020edb8245b4d5a468274962d3e695bcaefc4f3f377e4b5659da19b934",
+    "fileCount": 79,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/cli.mjs",
+      " M scripts/debug/platform.mjs",
+      " M scripts/debug/runtime.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M src/App.tsx",
+      " M src/RecordingPanel.tsx",
+      "?? scripts/debug/mobile-recording.mjs",
+      "?? scripts/debug/probe-mobile71.mjs"
+    ]
+  },
+  "sourceInputsChanged": false,
+  "platform": "desktop-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "elapsedMs": 2404,
+  "result": {
+    "productionAPIAbsent": true,
+    "urlCannotEnable": true,
+    "bundle": {
+      "files": 3,
+      "markers": [
+        "__NOTES_DEBUG__",
+        "SyntheticMediaRecorder",
+        "__DEBUG_PLATFORM__",
+        "synthetic-device-and-ipc-boundaries"
+      ],
+      "matches": []
+    },
+    "platformMockInjectedByRunnerOnly": true
+  },
+  "pageErrors": []
+}

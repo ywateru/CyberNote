@@ -418,7 +418,7 @@ function MobileRecordingPanel({
     elapsed: activityElapsed,
     paused: status === "paused",
     canToggle,
-    canFinish: status === "recording" || canFinish,
+    canFinish,
     notice,
     hasError: !!(error || playbackError),
     position,
@@ -493,6 +493,12 @@ function MobileRecordingPanel({
     const timer = window.setInterval(publish, 100);
     return () => window.clearInterval(timer);
   }, [onState]);
+  // Debug readers need the current committed mobile projection, including a
+  // fast device/preview failure; the normal bounded presentation feed remains.
+  useEffect(() => {
+    if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1")
+      onState?.({ ...projection.current, sequence: ++projectionSequence.current });
+  });
   return (
     <RecordingView
       state={viewState}

@@ -1,0 +1,31 @@
+import {openRuntime, api, idle, state, waitForState, waitForIdle} from '/private/tmp/apple-notes-mobile-debug71-01/scripts/debug/runtime.mjs';
+import {writeFile} from 'node:fs/promises';
+const output={checks:[],findings:[]};
+const runtime=await openRuntime({root:'/private/tmp/apple-notes-mobile-debug71-01',mobile:true});
+const {page}=runtime;
+const record=(label,result)=>output.checks.push({label,...result});
+try {
+ for(const options of [null,false,0,'',{timeoutMs:100,unexpected:1},JSON.parse('{"__proto__":1}')]) {
+   try {await waitForIdle(page,options);record('raw idle invalid input',{options,unexpectedSuccess:true});}
+   catch(e){record('raw idle invalid input',{options,code:e.code,message:e.message});}
+ }
+ let start=performance.now(); let error;
+ try{await waitForState(page,async()=>false,{timeoutMs:80});}catch(e){error=e;}
+ record('false asynchronous predicate',{elapsedMs:performance.now()-start,code:error?.code,lastState:!!error?.lastState});
+ start=performance.now();
+ const late=await waitForState(page,async()=>{await new Promise(r=>setTimeout(r,220));return true;},{timeoutMs:50});
+ output.findings.push({label:'true result after deadline accepted',elapsedMs:performance.now()-start,timeoutMs:50,returnedState:!!late});
+ start=performance.now();
+ const never=await Promise.race([waitForState(page,()=>new Promise(()=>{}),{timeoutMs:50}).then(()=>({status:'resolved'}),e=>({status:'rejected',code:e.code})),new Promise(r=>setTimeout(()=>r({status:'still-pending'}),250))]);
+ output.findings.push({label:'never-settling async predicate exceeds deadline',elapsedMs:performance.now()-start,timeoutMs:50,...never});
+ await api(page,'note.select',{id:'note-a'});await api(page,'recording.open');await idle(page);
+ await page.evaluate(()=>window.__DEBUG_PLATFORM__.configure({mediaFail:{permission:1}}));
+ const result=await page.evaluate(async()=>{try{await window.__NOTES_DEBUG__.execute('recording.action',{action:'toggle'});return {ok:true};}catch(e){return {code:e.code,message:e.message}}});
+ let idleError;try{await idle(page);}catch(e){idleError={code:e.code,message:e.message};}
+ record('real device failure execute and idle',{result,idleError,state:(await state(page)).recording});
+ await api(page,'recording.action',{action:'close'});await idle(page);
+ record('failed empty session close releases owner',{active:(await state(page)).recording.active,attachmentCount:runtime.backend.workspace.attachments.length});
+ output.pageErrors=runtime.errors;
+} finally {await runtime.cleanup();}
+await writeFile('/private/tmp/mobile71-independent-probe.json',JSON.stringify(output,null,2));
+console.log(JSON.stringify(output,null,2));

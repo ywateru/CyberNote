@@ -1,0 +1,6 @@
+import assert from 'node:assert/strict';
+import {writeFile} from 'node:fs/promises';
+import {openRuntime,waitForState} from '/private/tmp/apple-notes-mobile-debug71-01/scripts/debug/runtime.mjs';
+const runtime=await openRuntime({root:'/private/tmp/apple-notes-mobile-debug71-01'});const results=[];
+try{for(const type of ['late','never']){let entered=0;const started=performance.now();let error;try{await waitForState(runtime.page,async()=>{entered++;if(type==='never')return new Promise(()=>{});await new Promise(r=>setTimeout(r,350));return true;},{timeoutMs:150});}catch(e){error=e;}assert(entered>0&&error?.code==='TIMEOUT');results.push({type,entered,elapsedMs:performance.now()-started,code:error.code});}}finally{await runtime.cleanup();}
+await writeFile('/private/tmp/mobile71-recheck-entered.json',JSON.stringify({pass:true,results},null,2));console.log(JSON.stringify({pass:true,results}));

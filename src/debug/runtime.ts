@@ -413,6 +413,13 @@ export function registerDebug(getAdapter: () => DebugAdapter): () => void {
       let stable = 0;
       while (performance.now() - start < timeout) {
         const state = live().state();
+        // A retained failure is terminal only after actual retry work settles.
+        // pendingDocs alone is not work: a failed, un-retried save still fails.
+        if (active || state.busy || state.save.saving) {
+          stable = 0;
+          await frame();
+          continue;
+        }
         if (state.save.failed)
           fail(
             "APP_ERROR",

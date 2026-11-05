@@ -2664,13 +2664,23 @@ function App() {
     setMenu(null);
   };
   const retryAttachments = async () => {
-    for (const [id, doc] of [...pendingDocs.current]) await saveDoc(id, doc);
-    for (const batch of [...attachmentBatches.current]) {
-      if (batch.recording && batch.cancelRequested)
-        await cancelRecording(batch.recording);
-      else await submitAttachmentBatch(batch);
+    let debugComplete: (() => void) | undefined;
+    if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1") {
+      const work = new Promise<void>((resolve) => { debugComplete = resolve; });
+      debugPending.current.add(work);
+      void work.finally(() => debugPending.current.delete(work));
     }
-    if (ocrOperation.current) await retryOcr();
+    try {
+      for (const [id, doc] of [...pendingDocs.current]) await saveDoc(id, doc);
+      for (const batch of [...attachmentBatches.current]) {
+        if (batch.recording && batch.cancelRequested)
+          await cancelRecording(batch.recording);
+        else await submitAttachmentBatch(batch);
+      }
+      if (ocrOperation.current) await retryOcr();
+    } finally {
+      debugComplete?.();
+    }
   };
   const discardUninsertedAttachments = async () => {
     for (const batch of attachmentBatches.current) {
@@ -4909,7 +4919,11 @@ function App() {
             });
           if (!validRecordingAction(args)) throw Error("录音动作参数无效");
           const allowed =
-            args.action === "toggle"
+            args.action === "close"
+              ? !mobile || !["saving", "finalizing", "submitted"].includes(state.phase)
+              : mobile && args.action === "finish"
+                ? ["paused", "retry"].includes(state.phase)
+              : args.action === "toggle"
               ? state.canToggle
               : args.action === "playback"
                 ? state.canPlay

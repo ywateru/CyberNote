@@ -1,0 +1,29 @@
+import {openRuntime,api,idle,state,saveJSON} from './runtime.mjs';
+const runtime=await openRuntime({mobile:true}); const {page}=runtime; const result={sourceHead:'77ade45e'};
+try {
+ if(process.argv[2]==='wav') {
+  result.decode=await page.evaluate(async()=>{
+   const bytes=new ArrayBuffer(44+24000*5*2), v=new DataView(bytes),text=(at,s)=>{for(let i=0;i<s.length;i++)v.setUint8(at+i,s.charCodeAt(i));};
+   text(0,'RIFF');v.setUint32(4,0xffffffff,true);text(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,24000,true);v.setUint32(28,48000,true);v.setUint16(32,2,true);v.setUint16(34,16,true);text(36,'data');v.setUint32(40,0xffffffff,true);
+   for(let i=0;i<120000;i++)v.setInt16(44+i*2,Math.round(Math.sin(i/24000*Math.PI*880)*4096),true);
+   const ctx=new AudioContext({sampleRate:24000});try {const decode=async(n)=>{const b=await ctx.decodeAudioData(bytes.slice(0,n));return {sampleRate:b.sampleRate,length:b.length,duration:b.duration,rms:Math.sqrt(b.getChannelData(0).reduce((a,x)=>a+x*x,0)/b.length)};};return {prefix:await decode(44+48000*2),final:await decode(bytes.byteLength)};} finally{await ctx.close();}
+  });
+  await saveJSON('/private/tmp/mobile-debug71-wav-proof.json',result);console.log(JSON.stringify(result));
+ } else if(process.argv[2]==='cumulative') {
+  await api(page,'note.select',{id:'note-a'}); await idle(page); await api(page,'recording.open'); await idle(page); await api(page,'recording.action',{action:'toggle'});await idle(page);
+  await page.evaluate(()=>window.__DEBUG_PLATFORM__.advance(2000));await api(page,'recording.action',{action:'toggle'});await idle(page);result.first=(await state(page)).recording.state;
+  await page.evaluate(()=>window.__DEBUG_PLATFORM__.advance(5000));await api(page,'recording.action',{action:'toggle'});await idle(page);await page.evaluate(()=>window.__DEBUG_PLATFORM__.advance(3000));await api(page,'recording.action',{action:'toggle'});await idle(page);result.second=(await state(page)).recording.state;
+  await api(page,'recording.action',{action:'finish'});await idle(page);
+  const attachment=runtime.backend.workspace.attachments.at(-1);result.attachment=attachment;
+  result.decoded=await page.evaluate(async(base64)=>{const bytes=Uint8Array.from(atob(base64),x=>x.charCodeAt(0));const ctx=new AudioContext({sampleRate:24000});try{const b=await ctx.decodeAudioData(bytes.buffer);return{sampleRate:b.sampleRate,length:b.length,duration:b.duration,rms:Math.sqrt(b.getChannelData(0).reduce((a,x)=>a+x*x,0)/b.length)};}finally{await ctx.close();}},runtime.backend.files.get(attachment.id));
+  await saveJSON('/private/tmp/mobile-debug71-cumulative.json',result); console.log(JSON.stringify({firstElapsed:result.first.elapsed,secondElapsed:result.second.elapsed,decoded:result.decoded}));
+ } else {
+ await api(page,'note.select',{id:'note-a'}); await idle(page); await api(page,'recording.open'); await idle(page);
+ result.idle=(await state(page)).recording;
+ try {result.idleClose=await api(page,'recording.action',{action:'close'});} catch(e){result.idleClose={code:e.code,message:e.message};}
+ await api(page,'recording.open'); await idle(page); await api(page,'recording.action',{action:'toggle'}); await idle(page); await page.evaluate(()=>window.__DEBUG_PLATFORM__.advance(1200));
+ result.recording=(await state(page)).recording;
+ try {result.finish=await api(page,'recording.action',{action:'finish'});} catch(e){result.finish={code:e.code,message:e.message};} await idle(page); result.afterFinish=(await state(page)).recording;
+ await saveJSON('/private/tmp/mobile-debug71-baseline.json',result); console.log(JSON.stringify(result));
+ }
+}finally{await runtime.cleanup();}

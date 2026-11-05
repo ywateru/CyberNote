@@ -1,0 +1,97 @@
+{
+  "results": [
+    {
+      "name": "null",
+      "raw": null,
+      "expected": "INVALID_ARGUMENT",
+      "exitCode": 1,
+      "stderr": "{\n  \"error\": \"INVALID_ARGUMENT\",\n  \"message\": \"Invalid idle options\",\n  \"retainedOutput\": \"/private/tmp/mobile-debug71-fix-negative01/null\"\n}"
+    },
+    {
+      "name": "false",
+      "raw": false,
+      "expected": "INVALID_ARGUMENT",
+      "exitCode": 1,
+      "stderr": "{\n  \"error\": \"INVALID_ARGUMENT\",\n  \"message\": \"Invalid idle options\",\n  \"retainedOutput\": \"/private/tmp/mobile-debug71-fix-negative01/false\"\n}"
+    },
+    {
+      "name": "zero",
+      "raw": 0,
+      "expected": "INVALID_ARGUMENT",
+      "exitCode": 1,
+      "stderr": "{\n  \"error\": \"INVALID_ARGUMENT\",\n  \"message\": \"Invalid idle options\",\n  \"retainedOutput\": \"/private/tmp/mobile-debug71-fix-negative01/zero\"\n}"
+    },
+    {
+      "name": "empty",
+      "raw": "",
+      "expected": "INVALID_ARGUMENT",
+      "exitCode": 1,
+      "stderr": "{\n  \"error\": \"INVALID_ARGUMENT\",\n  \"message\": \"Invalid idle options\",\n  \"retainedOutput\": \"/private/tmp/mobile-debug71-fix-negative01/empty\"\n}"
+    },
+    {
+      "name": "unknown",
+      "raw": {
+        "timeoutMs": 1000,
+        "extra": 1
+      },
+      "expected": "INVALID_ARGUMENT",
+      "exitCode": 1,
+      "stderr": "{\n  \"error\": \"INVALID_ARGUMENT\",\n  \"message\": \"Invalid idle options\",\n  \"retainedOutput\": \"/private/tmp/mobile-debug71-fix-negative01/unknown\"\n}"
+    },
+    {
+      "name": "ownproto",
+      "raw": {
+        "__proto__": 1
+      },
+      "expected": "INVALID_ARGUMENT",
+      "exitCode": 1,
+      "stderr": "{\n  \"error\": \"INVALID_ARGUMENT\",\n  \"message\": \"Invalid idle options\",\n  \"retainedOutput\": \"/private/tmp/mobile-debug71-fix-negative01/ownproto\"\n}"
+    },
+    {
+      "name": "timeout",
+      "raw": {
+        "timeoutMs": 1
+      },
+      "expected": "TIMEOUT",
+      "exitCode": 1,
+      "stderr": "{\n  \"error\": \"TIMEOUT\",\n  \"message\": \"Application did not become idle in 1ms\",\n  \"retainedOutput\": \"/private/tmp/mobile-debug71-fix-negative01/timeout\"\n}"
+    },
+    {
+      "name": "CLI mobile device rejection",
+      "expected": "APP_ERROR",
+      "exitCode": 1,
+      "stderr": "{\n  \"error\": \"APP_ERROR\",\n  \"message\": \"Controlled permission device failure\",\n  \"retainedOutput\": \"/private/tmp/mobile-debug71-fix-negative01/app-error\"\n}"
+    },
+    {
+      "name": "raw explicit waitForIdle actual async error envelope",
+      "error": {
+        "code": "APP_ERROR",
+        "message": "Controlled permission device failure"
+      },
+      "state": {
+        "sequence": 5,
+        "phase": "error",
+        "openedAt": 1793895714312,
+        "elapsed": 0,
+        "paused": false,
+        "canToggle": false,
+        "canFinish": false,
+        "notice": "Controlled permission device failure",
+        "hasError": true,
+        "position": 0,
+        "duration": 0,
+        "previewPosition": false,
+        "playing": false,
+        "playPending": false,
+        "previewPending": false,
+        "seeking": false,
+        "canPlay": false,
+        "canSeek": false,
+        "canRetryPreview": false,
+        "seekable": [],
+        "samples": []
+      }
+    }
+  ],
+  "passed": 9
+}

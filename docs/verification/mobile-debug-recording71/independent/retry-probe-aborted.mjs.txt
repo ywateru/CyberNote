@@ -1,0 +1,29 @@
+import {openRuntime,api,idle,state,waitForState} from '/private/tmp/apple-notes-mobile-debug71-01/scripts/debug/runtime.mjs';
+import {writeFile} from 'node:fs/promises';
+const output={};
+for(const mobile of [true,false]){
+ const runtime=await openRuntime({root:'/private/tmp/apple-notes-mobile-debug71-01',mobile});const {page}=runtime;
+ try{
+ await api(page,'note.select',{id:'note-a'});await api(page,'recording.open');await idle(page);await api(page,'recording.action',{action:'toggle'});await idle(page);await page.evaluate(()=>window.__DEBUG_PLATFORM__.advance(1400));
+ if(mobile){
+ await api(page,'recording.action',{action:'toggle'});await idle(page);await page.evaluate(()=>window.__DEBUG_PLATFORM__.configure({delay:{save:180},fail:{save:2}}));
+ let finishError;try{await api(page,'recording.action',{action:'finish'});await idle(page);}catch(e){finishError={code:e.code,message:e.message};}
+ await waitForState(page,s=>s.recording.state?.phase==='retry');
+ await page.evaluate(()=>window.__DEBUG_PLATFORM__.configure({delay:{save:450},fail:{save:0}}));
+ const before=performance.now();const click=await api(page,'dom.click',{selector:'.error-banner button:first-of-type'});const elapsedClick=performance.now()-before;
+ const during=await state(page);let immediateError;try{await idle(page);}catch(e){immediateError={code:e.code,message:e.message};}
+ const after=await waitForState(page,s=>!s.recording.active&&s.save.pending===0&&s.save.failed===0&&s.save.saving===0);
+ await idle(page);
+ output.mobile={finishError,elapsedClick,during:{save:during.save,busy:during.busy,recording:during.recording},immediateError,recoveryElapsedMs:performance.now()-before,after:{save:after.save,recording:after.recording},attachments:runtime.backend.workspace.attachments.length,pageErrors:runtime.errors};
+ }else{
+ await page.evaluate(()=>window.__DEBUG_PLATFORM__.configure({delay:{store:500}}));
+ await page.evaluate(()=>{window.__pendingPause=window.__NOTES_DEBUG__.execute('recording.action',{action:'toggle'}).then(()=>({ok:true}),e=>({code:e.code,message:e.message}));});
+ const during=await waitForState(page,s=>s.recording.state?.phase==='saving');
+ const before=performance.now();let closed=false;const pendingClose=api(page,'recording.action',{action:'close'}).then(r=>{closed=true;return r});
+ await new Promise(r=>setTimeout(r,90));const early=closed;await pendingClose;await idle(page);
+ const pauseResult=await page.evaluate(()=>window.__pendingPause);const after=await state(page);
+ output.desktop={earlyClosed:early,elapsedMs:performance.now()-before,during:{recording:during.recording,save:during.save},pauseResult,after:{recording:after.recording,save:after.save},attachments:runtime.backend.workspace.attachments.length,pageErrors:runtime.errors};
+ }
+ }finally{await runtime.cleanup();}
+}
+await writeFile('/private/tmp/mobile71-independent-retry-probe.json',JSON.stringify(output,null,2));console.log(JSON.stringify(output,null,2));

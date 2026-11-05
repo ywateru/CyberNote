@@ -1,6 +1,6 @@
 # 开发命令与布局检查
 
-2026-11-05，任务70。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
+2026-11-06，任务70/71。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
 
 ## 一条命令运行
 
@@ -9,9 +9,10 @@ pnpm test:debug --out /private/tmp/notes-debug-result
 pnpm debug group notes --mobile --out /private/tmp/notes-debug-mobile
 pnpm debug list
 pnpm debug group recording --out /private/tmp/notes-debug-recording
+pnpm debug group recording --mobile --out /private/tmp/notes-debug-mobile-recording
 ```
 
-默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。全九组主回归以桌面为基准；手机执行`notes`小组及自定义script/snapshot，桌面专用录音栏和原生退出场景不扩张为手机通过。
+默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。全九组主回归以桌面为基准；手机执行`notes`与独立`recording`小组及自定义script/snapshot，桌面专用录音栏和原生退出场景不扩张为手机通过。
 
 需要本机已安装 Chrome 和 playwright-core。默认寻找 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` 和 `/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/playwright-core/index.mjs`；其他机器用 `CHROME_PATH`、`PLAYWRIGHT_CORE_PATH` 或 `--chrome`、`--playwright` 指定。runner不自动安装依赖。
 
@@ -44,7 +45,7 @@ pnpm debug check-production --production dist --out /private/tmp/notes-debug-pro
 
 文件注入只替换系统文件选择边界，示例 `attachment.submit {"files":[{"name":"synthetic.txt","mime":"text/plain","text":"fixture"}]}`。也支持`base64`，两种内容只选一种。最多8文件，单文件1MB、总1.5MB；不会读取路径。提交复用原`capturePickerTarget → fileSelected → AttachmentSubmission → 保存正文ACK`，保留原目标、授权、版本和书签校验。
 
-脚本平台步骤示例 `{"platform":{"advanceMs":2000,"mediaFail":{"decode":1},"fail":{"store":1},"delay":{"settings":200}}}`。时间推进只改变录音使用的performance时钟并触发已有interval，浏览器渲染、Promise和IPC仍真实调度；不能把时间推进当保存完成。媒体是固定440Hz、24kHz PCM/WAV，真实AudioContext解码、累计编码和产品保存路径不替换。原生IPC、文件对话框、OCR识别、剪贴板和退出事件是显式模拟。
+脚本平台步骤示例 `{"platform":{"advanceMs":2000,"mediaFail":{"decode":1},"fail":{"store":1},"delay":{"settings":200}}}`。时间推进只改变录音使用的performance时钟并触发已有interval，浏览器渲染、Promise和IPC仍真实调度；不能把时间推进当保存完成。媒体是固定440Hz、24kHz PCM/WAV。合成MediaRecorder仅首块带未知长度RIFF/data头，之后每个requestData/stop只提供增量PCM，避免拼接多份完整WAV导致最终回放只解首段。真实AudioContext解码、桌面累计编码及手机Session最终File/产品保存路径不替换；手机多次暂停不写桌面checkpoint。可用`mediaFail.play`让真实HTMLMediaElement.play边界拒绝。原生IPC、文件对话框、OCR识别、剪贴板和退出事件是显式模拟。
 
 ## 浏览器接口与错误
 
@@ -57,7 +58,7 @@ await window.__NOTES_DEBUG__.waitForIdle({timeoutMs:8000});
 window.__NOTES_DEBUG__.snapshot({selector:".app",maxChars:16000,maxNodes:160});
 ```
 
-版本为1。未知命令`UNKNOWN_COMMAND`、无效或未知字段`INVALID_ARGUMENT`、未注册/当前不可用`UNAVAILABLE`、产品原有禁用项`UNSUPPORTED`、保存或应用handler错误`APP_ERROR`、等待超时`TIMEOUT`。命令复用真实handler内部捕获的错误也会被报告；`waitForIdle`检查正在执行的命令、加载/同步/设置请求、实际pending正文、保存失败与录音finalizing/saving/requesting，要求连续三帧稳定，最长30秒。失败不会清掉未保存内容；应按实际错误恢复/重试，再`app.dismissError`清除提示。录音处于recording/paused可idle，表示没有在途保存，不表示会话已经结束。
+版本为1。未知命令`UNKNOWN_COMMAND`、无效或未知字段`INVALID_ARGUMENT`、未注册/当前不可用`UNAVAILABLE`、产品原有禁用项`UNSUPPORTED`、保存或应用handler错误`APP_ERROR`、等待超时`TIMEOUT`。命令复用真实handler内部捕获的错误也会被报告；`waitForIdle`检查正在执行的命令、加载/同步/设置请求、实际pending正文、保存失败与录音finalizing/saving/requesting，要求连续三帧稳定，最长30秒。失败不会清掉未保存内容；应使用真实重试操作恢复并核对保存ACK，不能用`app.dismissError`冒充恢复。CLI的execute和显式waitForIdle均以JSON字符串传输并保留原API错误code/未知own字段；own __proto__也交原API严格拒绝。idle先等待真实在途retry/保存工作，再判断残留failed/error，未重试的失败仍立即APP_ERROR。录音state轮询使用runner的`waitForState`真正await条件，全局真实deadline覆盖state读取和predicate等待，迟到true或永不settle均TIMEOUT；不把async函数传给本机Playwright的同步truthiness轮询。录音处于recording/paused可idle，表示没有在途保存，不表示会话已经结束。
 
 `list()`的`available`表示当前运行时已注册的入口，动态可操作条件由真实handler校验，不代表当前UI允许任何动作。`mode`区分semantic、DOM和unsupported。DOM原语要求恰好一个可见、可用、非inert控件；fill只支持input/textarea，编辑器文字应走真实事务。`dom.key`只派发键盘事件，不伪造浏览器默认文字输入或可信系统事件。
 
@@ -93,3 +94,12 @@ window.__NOTES_DEBUG__.snapshot({selector:".app",maxChars:16000,maxNodes:160});
 快照含原始HTML、UUID按出现顺序一对一替换的normalizedHTML、文本、每个节点的角色/标签/可见性/rect/必要computed style、editorJSON及viewport。rect四舍五入到0.01px；不删除文字、顺序、样式或布局差异。默认16K字符、160节点，最大100K/1000，超限显式truncated。截图使用PNG；比较同时提供文本/HTML/几何差异或实际RGBA像素差异，正反例场景必须证明差异会被发现。
 
 Apple Notes没有HTML。原版只能通过已保全录屏、原生截图和标注作为参考；此套件不自动宣称原版像素一致。原始移动录屏继续保存在`references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4`。
+
+
+## 手机录音专用组（71）
+
+`pnpm debug group recording --mobile --out DIR`运行真实手机面板，覆盖初始禁用态、空会话关闭、录制/暂停继续、暂停期间不计时且不存checkpoint、实际预览播放暂停/seek/skip、预览失败与重试、存储累计音频字节解码和后段播放、正文ACK、重开已保存卡、采集中关闭、设备拒绝、延迟附件与正文失败及真实重试去重。每次保留初始、录制、暂停、失败和保存后HTML/rect/computed style及PNG。桌面九组保持独立，空会话关闭也按真实关闭按钮可用性测试。
+
+手机`finish`仅在paused/retry可用，采集中完成返回UNAVAILABLE；`close`在空会话可取消，在采集中按真实关闭流程保存，saving/finalizing/submitted关闭禁用。桌面侧栏关闭沿其真实handle处理，不以canFinish错误限制空会话取消。手机采集中仍为原模态呈现，不把桌面A录音/B编辑规则搬进手机。
+
+[开发证据](verification/mobile-debug-recording71/development/README.md)保留失败历史与准确源码指纹。浏览器390×844只证明合成设备/JS协议fixture上的真实前端路径，不证明Android WebView、系统权限、硬件音质或原版像素一致。

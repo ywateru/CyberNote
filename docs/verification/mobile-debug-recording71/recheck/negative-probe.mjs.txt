@@ -1,0 +1,29 @@
+import assert from 'node:assert/strict';
+import {openRuntime,api,idle,state,waitForState,waitForIdle} from '/private/tmp/apple-notes-mobile-debug71-01/scripts/debug/runtime.mjs';
+import {writeFile} from 'node:fs/promises';
+const results=[]; const mark=(label,data)=>results.push({label,...data});
+const runtime=await openRuntime({root:'/private/tmp/apple-notes-mobile-debug71-01',mobile:true});const {page,backend}=runtime;
+const envelope=(p)=>p.then(value=>({ok:true,value}),error=>({ok:false,code:error.code,message:error.message,lastState:!!error.lastState}));
+try{
+ for(const options of [null,false,0,'',{extra:1},JSON.parse('{"__proto__":1}'),{timeoutMs:50,constructor:1}]){
+  const result=await envelope(waitForIdle(page,options));assert.equal(result.code,'INVALID_ARGUMENT');mark('raw idle invalid input',{options,...result});
+ }
+ for(const [label,predicate] of [['late true',async()=>{await new Promise(r=>setTimeout(r,250));return true;}],['never settle',()=>new Promise(()=>{})],['false',async()=>false]]){
+  const start=performance.now();const result=await envelope(waitForState(page,predicate,{timeoutMs:75,label}));const elapsedMs=performance.now()-start;assert.equal(result.code,'TIMEOUT');assert(elapsedMs>=65&&elapsedMs<240);mark(label,{elapsedMs,...result});
+ }
+ const start=performance.now();const transport=await envelope(waitForState({evaluate:()=>new Promise(()=>{})},()=>true,{timeoutMs:60}));const elapsedMs=performance.now()-start;assert.equal(transport.code,'TIMEOUT');assert(elapsedMs<200);mark('never-settle state transport',{elapsedMs,...transport});
+ const delayedStart=performance.now();await waitForState(page,async()=>{await new Promise(r=>setTimeout(r,60));return true;},{timeoutMs:600});assert(performance.now()-delayedStart>=60);mark('delayed successful predicate',{elapsedMs:performance.now()-delayedStart});
+ await api(page,'note.select',{id:'note-a'});await api(page,'recording.open');await idle(page);await api(page,'recording.action',{action:'toggle'});await idle(page);await page.evaluate(()=>window.__DEBUG_PLATFORM__.advance(1400));await api(page,'recording.action',{action:'toggle'});await idle(page);
+ await page.evaluate(()=>window.__DEBUG_PLATFORM__.configure({delay:{save:220},fail:{save:10}}));
+ await api(page,'recording.action',{action:'finish'});const initial=await envelope(idle(page));assert.equal(initial.code,'APP_ERROR');
+ const failed=await state(page);assert(failed.save.failed>0&&failed.save.saving===0&&failed.recording.active);mark('failure without retry remains APP_ERROR',{result:initial,save:failed.save});
+ for(const success of [false,true]){
+ await page.evaluate(success=>window.__DEBUG_PLATFORM__.configure({delay:{save:260},fail:{save:success?0:10}}),success);
+ await page.locator('.error-banner button:first-of-type').click();let settled=false;const t=performance.now();const outcome=envelope(idle(page)).then(r=>{settled=true;return r;});
+ await new Promise(r=>setTimeout(r,70));const during=await state(page);assert.equal(settled,false);assert(during.save.failed>0&&during.save.saving>0&&during.busy);
+ const result=await outcome;const after=await state(page);assert(performance.now()-t>=180);if(success){assert.equal(result.ok,true);assert.equal(after.recording.active,false);assert.equal(after.save.failed,0);assert.equal(after.save.pending,0);assert.equal(backend.workspace.attachments.length,1);}else{assert.equal(result.code,'APP_ERROR');assert(after.recording.active&&after.save.failed>0&&after.save.saving===0);}
+ mark(success?'real delayed successful retry':'real delayed failed retry',{elapsedMs:performance.now()-t,during:{save:during.save,busy:during.busy},result,after:{save:after.save,recordingActive:after.recording.active},attachments:backend.workspace.attachments.length});
+ }
+ assert.equal(runtime.errors.length,0);
+}finally{await runtime.cleanup();}
+await writeFile('/private/tmp/mobile71-recheck-negative.json',JSON.stringify({pass:true,results,pageErrors:runtime.errors},null,2));console.log(JSON.stringify({pass:true,checks:results.length,results},null,2));

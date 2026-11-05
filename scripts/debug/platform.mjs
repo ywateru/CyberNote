@@ -134,19 +134,40 @@ export function installBrowserPlatform({ mobile = false } = {}) {
     },
   };
   Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async (text) => { control.clipboard = text; }, readText: async () => control.clipboard } });
+  const createURL = URL.createObjectURL.bind(URL), revokeURL = URL.revokeObjectURL.bind(URL);
+  control.objectURLs = { created: 0, revoked: 0, live: [] };
+  URL.createObjectURL = (blob) => { const url = createURL(blob); control.objectURLs.created++; control.objectURLs.live.push(url); return url; };
+  URL.revokeObjectURL = (url) => { if (control.objectURLs.live.includes(url)) { control.objectURLs.revoked++; control.objectURLs.live = control.objectURLs.live.filter((item) => item !== url); } return revokeURL(url); };
   const NativeContext = window.AudioContext; const contexts = [];
   const sourceContext = new NativeContext({ sampleRate: 24000 }); contexts.push(sourceContext); const destination = sourceContext.createMediaStreamDestination(); const oscillator = sourceContext.createOscillator(); oscillator.frequency.value = 440; oscillator.connect(destination); oscillator.start(); void sourceContext.resume();
   const nativeDecode = NativeContext.prototype.decodeAudioData;
   NativeContext.prototype.decodeAudioData = function (...args) { control.decodes++; try { fail('decode'); } catch (error) { return Promise.reject(error); } return nativeDecode.apply(this, args); };
   Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: { getUserMedia: async () => { fail('permission'); control.streams++; const stream = destination.stream.clone(); for (const track of stream.getTracks()) { const stop = track.stop.bind(track); track.stop = () => { control.trackStops++; stop(); }; } return stream; } } });
-  function wav(seconds) { const frames = Math.max(480, Math.min(24000 * 120, Math.round(seconds * 24000))); const bytes = new ArrayBuffer(44 + frames * 2), view = new DataView(bytes); const text = (at, value) => { for (let i = 0; i < value.length; i++) view.setUint8(at + i, value.charCodeAt(i)); }; text(0, 'RIFF'); view.setUint32(4, 36 + frames * 2, true); text(8, 'WAVE'); text(12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true); view.setUint32(24, 24000, true); view.setUint32(28, 48000, true); view.setUint16(32, 2, true); view.setUint16(34, 16, true); text(36, 'data'); view.setUint32(40, frames * 2, true); for (let i = 0; i < frames; i++) view.setInt16(44 + i * 2, Math.round(Math.sin(i / 24000 * Math.PI * 880) * 4096), true); control.generatedFrames += frames; return new Blob([bytes], { type: 'audio/wav' }); }
+  // MediaRecorder emits one continuous container, not a complete cumulative
+  // WAV at each requestData(). Unknown RIFF/data lengths keep every prefix
+  // decodable; subsequent events contain only PCM since the previous event.
+  function wavChunk(recorder, elapsed) {
+    const end = Math.max(480, Math.min(24000 * 120, Math.round(elapsed * 24)));
+    const start = recorder.emittedFrames || 0, frames = Math.max(0, end - start);
+    const header = recorder.headerEmitted ? 0 : 44;
+    const bytes = new ArrayBuffer(header + frames * 2), view = new DataView(bytes);
+    if (header) {
+      const text = (at, value) => { for (let i = 0; i < value.length; i++) view.setUint8(at + i, value.charCodeAt(i)); };
+      text(0, 'RIFF'); view.setUint32(4, 0xffffffff, true); text(8, 'WAVE'); text(12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true); view.setUint32(24, 24000, true); view.setUint32(28, 48000, true); view.setUint16(32, 2, true); view.setUint16(34, 16, true); text(36, 'data'); view.setUint32(40, 0xffffffff, true);
+    }
+    for (let i = 0; i < frames; i++) view.setInt16(header + i * 2, Math.round(Math.sin((start + i) / 24000 * Math.PI * 880) * 4096), true);
+    recorder.emittedFrames = end; recorder.headerEmitted = true; control.generatedFrames += frames;
+    return new Blob([bytes], { type: 'audio/wav' });
+  }
+  const nativePlay = HTMLMediaElement.prototype.play;
+  HTMLMediaElement.prototype.play = function (...args) { try { fail('play'); } catch (error) { return Promise.reject(error); } return nativePlay.apply(this, args); };
   window.MediaRecorder = class SyntheticMediaRecorder {
     static isTypeSupported() { return true; }
     constructor() { this.state = 'inactive'; this.mimeType = 'audio/wav'; }
-    start() { fail('start'); this.state = 'recording'; this.startedAt = performance.now(); this.activeMs = 0; control.starts++; }
+    start() { fail('start'); this.state = 'recording'; this.startedAt = performance.now(); this.activeMs = 0; this.emittedFrames = 0; this.headerEmitted = false; control.starts++; }
     pause() { fail('pause'); this.activeMs += performance.now() - this.startedAt; this.state = 'paused'; queueMicrotask(() => this.onpause?.(new Event('pause'))); }
     resume() { this.startedAt = performance.now(); this.state = 'recording'; }
-    requestData() { fail('seal'); this.ondataavailable?.({ data: wav((this.activeMs + (this.state === 'recording' ? performance.now() - this.startedAt : 0)) / 1000) }); }
-    stop() { fail('seal'); const elapsed = this.activeMs + (this.state === 'recording' ? performance.now() - this.startedAt : 0); this.state = 'inactive'; control.stops++; queueMicrotask(() => { this.ondataavailable?.({ data: wav(elapsed / 1000) }); this.onstop?.(new Event('stop')); }); }
+    requestData() { fail('seal'); const data = wavChunk(this, this.activeMs + (this.state === 'recording' ? performance.now() - this.startedAt : 0)); queueMicrotask(() => this.ondataavailable?.({ data })); }
+    stop() { fail('seal'); const elapsed = this.activeMs + (this.state === 'recording' ? performance.now() - this.startedAt : 0); this.state = 'inactive'; control.stops++; const data = wavChunk(this, elapsed); queueMicrotask(() => { this.ondataavailable?.({ data }); this.onstop?.(new Event('stop')); }); }
   };
 }
