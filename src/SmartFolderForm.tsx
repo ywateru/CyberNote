@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { currentKeyboardNavigation, nativeMainKeyboardAvailable } from "./native-keyboard";
 import { OrdinaryFolderKeyboard } from "./ordinary-folder-keyboard";
+import { insertOrdinaryFolderOptionTab } from "./ordinary-folder-option";
 import {
   Check,
   X,
@@ -624,6 +625,11 @@ export function SmartFolderForm({
                   aria-label="名称"
                   onFocus={(e) => e.target.select()}
                   onChange={(e) => update({ name: e.target.value })}
+                  onKeyDown={(event) => {
+                    if (!keyboardActive || busyRef.current || warning) return;
+                    if (insertOrdinaryFolderOptionTab(event.nativeEvent, event.currentTarget) === "failed")
+                      setError("无法完成输入，请检查名称后重试。");
+                  }}
                 />
               </label>
               {!folder && (
