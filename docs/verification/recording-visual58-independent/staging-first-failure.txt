@@ -1,0 +1,10 @@
+First evidence staging attempt, 2026-11-05:
+Git add returned exit 1 because repository ignore rules exclude *.log.
+Explicit ignored paths:
+analysis-first-failure.log
+analysis-second.log
+analysis-third.log
+baseline-first.log
+candidate-first.log
+The explicit indexed non-log paths were staged by that operation; no product paths were passed.
+Resolution: evidence-local .gitignore now re-includes root *.log while keeping **/vite-cache/ and **/*.bin excluded. The same explicit indexed paths are staged again and checked for exact equality; no directory force-add.
