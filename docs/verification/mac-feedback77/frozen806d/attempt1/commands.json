@@ -1,0 +1,39 @@
+{
+  "output": "/private/tmp/mac-feedback77-frozen-99206",
+  "results": [
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "wallMs": 2995
+    },
+    {
+      "name": "production",
+      "command": [
+        "pnpm",
+        "debug",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/mac-feedback77-frozen-99206/production"
+      ],
+      "exitCode": 0,
+      "wallMs": 1014
+    },
+    {
+      "name": "desktop",
+      "command": [
+        "pnpm",
+        "test:debug",
+        "--out",
+        "/private/tmp/mac-feedback77-frozen-99206/desktop"
+      ],
+      "exitCode": 1,
+      "wallMs": 2766
+    }
+  ]
+}

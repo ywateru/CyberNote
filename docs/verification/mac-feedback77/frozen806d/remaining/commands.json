@@ -1,0 +1,57 @@
+{
+  "output": "/private/tmp/mac-feedback77-frozen-99456",
+  "results": [
+    {
+      "name": "desktop",
+      "command": [
+        "node",
+        "/private/tmp/mac-feedback77-noncontract.mjs",
+        "/private/tmp/mac-feedback77-frozen-99456/desktop"
+      ],
+      "exitCode": 0,
+      "wallMs": 45932
+    },
+    {
+      "name": "mobile-notes",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "notes",
+        "--mobile",
+        "--out",
+        "/private/tmp/mac-feedback77-frozen-99456/mobile-notes"
+      ],
+      "exitCode": 0,
+      "wallMs": 4194
+    },
+    {
+      "name": "mobile-recording",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "recording",
+        "--mobile",
+        "--out",
+        "/private/tmp/mac-feedback77-frozen-99456/mobile-recording"
+      ],
+      "exitCode": 0,
+      "wallMs": 10557
+    },
+    {
+      "name": "mobile-attachments",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "attachments",
+        "--mobile",
+        "--out",
+        "/private/tmp/mac-feedback77-frozen-99456/mobile-attachments"
+      ],
+      "exitCode": 0,
+      "wallMs": 19402
+    }
+  ]
+}
