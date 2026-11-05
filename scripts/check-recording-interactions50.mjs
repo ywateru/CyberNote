@@ -162,6 +162,10 @@ try {
   await test("live card shares capture time/actions; register/update/remove leaves JSON, history, selection and document version unchanged", async () => {
     await begin();
     await page.evaluate(() => window.platform.advance(1250));
+    // Flush the next real projection after React applied the controlled clock.
+    // Task55 intentionally bounds remote projections to 10Hz.
+    await page.waitForFunction(() => document.querySelector(".recording-time")?.textContent.includes("00:01"));
+    await page.evaluate(() => window.platform.advance(0));
     await page.locator("[data-recording-live-card]").waitFor();
     assert.match(
       await page.locator(".live-recording-metadata").textContent(),
