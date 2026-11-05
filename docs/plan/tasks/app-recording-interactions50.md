@@ -1,6 +1,6 @@
 ---
 id: app-recording-interactions50
-scope: desktop recording sidebar, live card and shared transport
+scope: independent desktop recording window, background capture, live card and shared transport
 status: in-progress
 depends-on: [app-002-recording-preview-01, app-002-recording-submit-01]
 ---
@@ -28,5 +28,7 @@ depends-on: [app-002-recording-preview-01, app-002-recording-submit-01]
 用户明确独立窗口/后台录音/同时工作，优先于上述最初“右侧栏”及不能编辑的保护方案。实现遵循`recording-desktop.md`最新章节：真实非模态录音WebviewWindow，label `recording-<标准小写UUID>`；主窗自由导航/编辑，源A稳定park与真实事务bookmark映射，专用原A当前可信保存边界，禁止泛化放宽普通附件校验。录音窗持采集/File，原owner窗持同一附件operation并等待真实A正文ACK，定向session RPC幂等回传；普通主窗关闭隐藏保活，整应用退出先统一安全收尾/保存。
 
 扩张允许src/main.tsx、src/App.tsx、新recording-window/coordinator/transport与必要录音目标模块、src-tauri/capabilities专用权限、必要src-tauri/src/lib.rs只用于活跃录音窗时拦截ExitRequested并触发安全收尾，以及src-tauri/gen/schemas自动生成。若需小型process-owned会话registry可在已授权Rust内窄增但不得重写通用存储/Session授权、数据库schema或原附件journal。原用户数据/未命名测试note继续保留，52 plugin/Session路径不交叉。无下载/新依赖。
+
+原生集成补充：访问屏障当前枚举所有WebviewWindow为正文参与者，新录音入口不运行App且无正文/保存队列。允许在lib的begin与finish两处同一参与者快照过滤中仅排除精确合法`recording-<标准小写UUID>`窗口；main/note-*及其他未知窗原有严格行为保持，不扩大Session权限或将录音窗冒充正文ACK。registry可独立于lib为src-tauri/src/recording_window.rs。源owner必须仍参与真实访问屏障，屏障导致源授权失效时录音提交失败保留File，不绕过屏障。
 
 新增验收：真实两个窗口、子窗录音时主窗编辑A并切B（A/B输入与Undo保留）、切其他应用/失焦/最小化不主动停、完成只落A映射位置且B不抢焦点；主窗普通关闭后录音持续/恢复主窗、独立窗关闭保存、整体Quit等待所有录音ACK或失败保留；错误及迟到/错session/重发/回执丢失不重复附件或错note。headless可验证实际生产controller+coordinator/PM/App保存接线，不把假的窗口适配器当真实双窗证据；实包CUA为最终验收。保留已写transport/波形代码，撤下旧背景阻断/正文锁定方案，不再验证该旧方案。

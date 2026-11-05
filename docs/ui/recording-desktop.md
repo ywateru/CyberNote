@@ -1,4 +1,4 @@
-# 桌面录音栏与基本录音交互
+# 桌面独立录音窗口与基本交互
 
 更新：2026-11-05。用户要求完善录音基本交互，与原版一致；本轮明确排除听写、转写和云同步。原始截图已按原字节保存在 `references/desktop/recording-20261105/user-recording-sidebar.png`（SHA-256 `88357a65bd4a976345a80a37b74397df6ce2aafcb797a4c327f7a21de24209b6`）。手机参考继续使用已保全原视频与 `recording-mobile.md`。
 
