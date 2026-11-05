@@ -18,10 +18,17 @@ import type {
 } from "./recording-coordinator";
 import type { RecordingRevision } from "./recording-metadata";
 
+export type DesktopRecordingPanelHandle = Omit<
+  RecordingPanelHandle,
+  "close"
+> & { close: () => Promise<void> };
+
 type Props = {
-  onCancel: () => void;
+  onCancel: () => void | Promise<void>;
+  onBeforeStart?: () => Promise<void>;
+  onComplete?: (saved: boolean, revision: number) => Promise<void>;
   onRevision: (result: RecordingRevision) => Promise<void>;
-  onHandle?: (handle: RecordingPanelHandle | null) => void;
+  onHandle?: (handle: DesktopRecordingPanelHandle | null) => void;
   onState?: (state: RecordingViewState) => void;
   onPresentation?: (mode: RecordingPresentation) => void;
   switching?: boolean;
@@ -45,6 +52,8 @@ export default function DesktopRecordingPanel(props: Props) {
     candidate = useRef<RecordingRevision | undefined>(undefined);
   const busy = useRef<Promise<void> | undefined>(undefined),
     closing = useRef(false),
+    closePromise = useRef<Promise<void> | undefined>(undefined),
+    finalAck = useRef(false),
     latestBlob = useRef<Blob | undefined>(undefined);
   const actions = useRef<(action: RecordingAction) => void>(() => {}),
     currentProps = useRef(props);
@@ -74,8 +83,10 @@ export default function DesktopRecordingPanel(props: Props) {
       if (live.current) setPlayback(state);
     });
   };
-  const drain = () => {
-    if (busy.current || !live.current || phase.current === "submitted") return;
+  const drain = (): Promise<void> => {
+    if (busy.current) return busy.current;
+    if (!live.current || phase.current === "submitted")
+      return Promise.resolve();
     setWorking(true);
     const work = (async () => {
       try {
@@ -101,6 +112,7 @@ export default function DesktopRecordingPanel(props: Props) {
         revision.current = candidate.current.revision;
         candidate.current = undefined;
         if (final) {
+          finalAck.current = true;
           transition("submitted");
           return;
         }
@@ -111,34 +123,59 @@ export default function DesktopRecordingPanel(props: Props) {
         setError(text(e));
         transition("retry");
         if (latestBlob.current) makePlayer(latestBlob.current);
+        throw e;
       }
     })();
     busy.current = work;
-    void work.finally(() => {
-      if (busy.current === work) {
-        busy.current = undefined;
-        if (live.current) setWorking(false);
-      }
-      // A Close received during checkpoint must survive every await. On a
-      // failure retain the intent, but wait for an explicit retry (no loop).
-      if (live.current && closing.current && phase.current === "paused")
-        drain();
-    });
+    void work
+      .finally(() => {
+        if (busy.current === work) {
+          busy.current = undefined;
+          if (live.current) setWorking(false);
+        }
+      })
+      .catch(() => {});
+    return work;
   };
-  const close = () => {
-    if (!live.current || phase.current === "submitted") return;
+  // One close promise covers a checkpoint already in flight, its final revision,
+  // and native cleanup. A persisted final is never submitted again on retry.
+  const close = (): Promise<void> => {
+    if (closePromise.current) return closePromise.current;
+    if (!live.current) return Promise.resolve();
     closing.current = true;
-    if (
-      !recordedAt.current &&
-      ["idle", "requesting", "error"].includes(phase.current)
-    ) {
-      live.current = false;
-      session.current?.dispose();
-      currentProps.current.onCancel();
-      return;
-    }
-    drain();
+    const work = (async () => {
+      try {
+        await busy.current;
+        if (!recordedAt.current) {
+          session.current?.dispose();
+          await currentProps.current.onComplete?.(false, revision.current);
+          if (!currentProps.current.onComplete)
+            await currentProps.current.onCancel();
+        } else {
+          while (!finalAck.current) await drain();
+          await currentProps.current.onComplete?.(true, revision.current);
+        }
+        session.current?.dispose();
+        player.current?.dispose();
+        transition("submitted");
+      } catch (e) {
+        if (live.current) {
+          setError(text(e));
+          transition("retry");
+        }
+        throw e;
+      }
+    })();
+    closePromise.current = work;
+    void work
+      .finally(() => {
+        if (closePromise.current === work) closePromise.current = undefined;
+      })
+      .catch(() => {});
+    return work;
   };
+  const closeAction = useRef(close);
+  closeAction.current = close;
   const toggle = () => {
     if (closing.current || busy.current) return;
     if (phase.current === "idle") {
@@ -164,8 +201,23 @@ export default function DesktopRecordingPanel(props: Props) {
         },
       });
       session.current = capture;
-      void capture.start();
-    } else if (phase.current === "recording") drain();
+      const preparation = (async () => {
+        try {
+          await currentProps.current.onBeforeStart?.();
+          if (live.current && !closing.current) await capture.start();
+        } catch (e) {
+          setError(text(e));
+          transition("error");
+          throw e;
+        }
+      })();
+      busy.current = preparation;
+      void preparation
+        .finally(() => {
+          if (busy.current === preparation) busy.current = undefined;
+        })
+        .catch(() => {});
+    } else if (phase.current === "recording") void drain().catch(() => {});
     else if (
       phase.current === "paused" &&
       !playback.playing &&
@@ -251,7 +303,7 @@ export default function DesktopRecordingPanel(props: Props) {
     switch (action.action) {
       case "close":
       case "finish":
-        close();
+        void close().catch(() => {});
         break;
       case "toggle":
         if (canToggle) toggle();
@@ -284,25 +336,15 @@ export default function DesktopRecordingPanel(props: Props) {
       player.current?.dispose();
     };
   }, []);
+  const handle = useRef<DesktopRecordingPanelHandle>({
+    close: () => closeAction.current(),
+    toggle: () => actions.current({ action: "toggle" }),
+    dispatch: (a) => actions.current(a),
+  });
   useEffect(() => {
-    props.onHandle?.({
-      close: () => actions.current({ action: "close" }),
-      toggle: () => actions.current({ action: "toggle" }),
-      dispatch: (a) => actions.current(a),
-    });
+    props.onHandle?.(handle.current);
     return () => props.onHandle?.(null);
   }, [props.onHandle]);
-  useEffect(() => {
-    const escape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !e.isComposing) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        actions.current({ action: "close" });
-      }
-    };
-    window.addEventListener("keydown", escape, true);
-    return () => window.removeEventListener("keydown", escape, true);
-  }, []);
   const projection = useRef(state);
   projection.current = state;
   const sequence = useRef(0);
@@ -320,12 +362,22 @@ export default function DesktopRecordingPanel(props: Props) {
     return () => clearInterval(timer);
   }, []);
   return (
-    <RecordingView
-      state={state}
-      mobile={false}
-      act={(a) => actions.current(a)}
-      onPresentation={props.onPresentation}
-      switching={props.switching}
-    />
+    <div
+      className="recording-local-panel"
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && !e.nativeEvent.isComposing) {
+          e.preventDefault();
+          e.stopPropagation();
+          void closeAction.current().catch(() => {});
+        }
+      }}
+    >
+      <RecordingView
+        state={state}
+        mobile={false}
+        act={(a) => actions.current(a)}
+        presentation="dock"
+      />
+    </div>
   );
 }

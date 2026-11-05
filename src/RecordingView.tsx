@@ -113,7 +113,7 @@ export default function RecordingView({
           <button
             className="recording-cancel"
             aria-label="关闭录音"
-            disabled={closing}
+            disabled={mobile && closing}
             onClick={() => act({ action: "close" })}
           >
             {mobile ? "关闭" : <X />}

@@ -456,11 +456,12 @@ pub fn run() {
         read_attachment,
         export_archive,
         import_archive,
-        recording_window::register_recording_window,
-        recording_window::recording_window_context,
-        recording_window::recording_window_message,
-        recording_window::recording_window_finish,
-        recording_window::recording_window_abandon,
+        recording_window::register_recording_local,
+        recording_window::recording_local_validate,
+        recording_window::recording_local_started,
+        recording_window::recording_local_revision,
+        recording_window::recording_local_release,
+        recording_window::recording_quit_sealed,
         recording_window::recording_quit_ack
     ]);
     #[cfg(feature = "access-boundary-proof")]
@@ -478,11 +479,12 @@ pub fn run() {
         export_archive,
         import_archive,
         proof_access_record,
-        recording_window::register_recording_window,
-        recording_window::recording_window_context,
-        recording_window::recording_window_message,
-        recording_window::recording_window_finish,
-        recording_window::recording_window_abandon,
+        recording_window::register_recording_local,
+        recording_window::recording_local_validate,
+        recording_window::recording_local_started,
+        recording_window::recording_local_revision,
+        recording_window::recording_local_release,
+        recording_window::recording_quit_sealed,
         recording_window::recording_quit_ack
     ]);
     builder

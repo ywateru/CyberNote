@@ -1,5 +1,8 @@
 import { RecordingRevisions } from "./recording-revisions";
-import { replaceRecordingAttachment, recordingAttachmentReferencedOnce } from "./recording-replacement";
+import {
+  replaceRecordingAttachment,
+  recordingAttachmentReferencedOnce,
+} from "./recording-replacement";
 import type { RecordingRevision } from "./recording-metadata";
 import {
   useCallback,
@@ -41,16 +44,16 @@ import { SaveRevisions } from "./save-revisions";
 import { SidebarPreference } from "./sidebar-preference";
 import { secureId } from "./secure-id";
 import { invoke } from "@tauri-apps/api/core";
-import {
-  RecordingOwner,
-  type RecordingIdentity,
-  type RecordingViewState,
-} from "./recording-coordinator";
-import {
-  recordingListen,
-  recordingSend,
-  decodeRecordingFile,
-} from "./recording-window-transport";
+import type { RecordingViewState } from "./recording-coordinator";
+import DesktopRecordingPanel, {
+  type DesktopRecordingPanelHandle,
+} from "./DesktopRecordingPanel";
+type LocalRecordingIdentity = {
+  sessionId: string;
+  operationId: string;
+  owner: string;
+  incarnation: string;
+};
 import { mountRecordingCard } from "./recording-live-card";
 import { enqueueSave, type SaveOutcome } from "./save-queue";
 import {
@@ -85,11 +88,12 @@ type RecordingTicket = {
   desktop?: boolean;
   opening?: Promise<void>;
   editorCommits?: Set<AbortController>;
-  remote?: {
-    identity: RecordingIdentity;
-    owner: RecordingOwner;
+  local?: {
+    identity: LocalRecordingIdentity;
+    handle?: DesktopRecordingPanelHandle;
+    ready: Promise<DesktopRecordingPanelHandle>;
+    attach: (handle: DesktopRecordingPanelHandle) => void;
     card?: ReturnType<typeof mountRecordingCard>;
-    unlisten: () => void;
   };
 };
 import { exit, onBackButtonPress } from "@tauri-apps/api/app";
@@ -188,7 +192,6 @@ import {
   shouldClearSearchAfterAccessChange,
 } from "./search-selection";
 import { SearchEditorGate } from "./search-editor-gate";
-import RecordingDock from "./RecordingDock";
 import RecordingPanel, { type RecordingPanelHandle } from "./RecordingPanel";
 import { Fragment, Slice } from "@tiptap/pm/model";
 import {
@@ -539,10 +542,9 @@ function App() {
   const waitRecordingEditorCommit = useEditorCommit();
   const recordingPanel = useRef<RecordingPanelHandle | null>(null);
   const [, updateRecordingOwner] = useState(0);
+  const resumeDocumentAdmission = useRef<(id: string) => void>(() => {});
   const recordingLifecycle = useRef({
     active: (): boolean => false,
-    independent: (): boolean => false,
-    ensureFloating: async () => {},
     close: async () => {},
     suspend: (_ids: string[]) => {},
     detach: () => {},
@@ -1345,16 +1347,6 @@ function App() {
     if (native)
       getCurrentWindow()
         .onCloseRequested(async (event) => {
-          // Preserve the original editor, save queue and journal owner. The
-          // child continues capture independently of this window's visibility.
-          if (recordingLifecycle.current.independent()) {
-            event.preventDefault();
-            try {
-              await recordingLifecycle.current.ensureFloating();
-              await getCurrentWindow().hide();
-            } catch (error) { fail(error); }
-            return;
-          }
           if (
             pendingDocs.current.size ||
             (ownsSidebarPreference && sidebarPreference.needsConfirmation) ||
@@ -1362,7 +1354,31 @@ function App() {
             ocrLifecycle.current.active()
           ) {
             event.preventDefault();
+            if (quitState.current) return;
+            const held = {
+              id: `window-close-${secureId()}`,
+              editors: new Map<Editor, boolean>(),
+            };
+            quitState.current = held;
             try {
+              if (
+                [...editorsRef.current.values()].some(
+                  (instance) =>
+                    !instance.isDestroyed && instance.view.composing,
+                ) ||
+                [...tagCompositions.current.values()].some(
+                  (item) => item.pending,
+                )
+              )
+                throw Error("输入法仍在组字，请完成输入后重试关闭。");
+              editorGate.suspend();
+              appSurface.current?.setAttribute("inert", "");
+              setQuitPending(true);
+              for (const instance of editorsRef.current.values()) {
+                if (instance.isDestroyed) continue;
+                held.editors.set(instance, instance.isEditable);
+                editorGate.park(instance);
+              }
               // Both owners seal admission synchronously before the first wait.
               const ocrClosing = ocrLifecycle.current.close();
               const recordingClosing = recordingLifecycle.current.close();
@@ -1381,6 +1397,7 @@ function App() {
               )
                 await getCurrentWindow().destroy();
             } catch (e) {
+              resumeDocumentAdmission.current(held.id);
               fail(e);
             }
           }
@@ -1397,7 +1414,13 @@ function App() {
     if (!native) return;
     const releases: (() => void)[] = [];
     let live = true;
+    const ready = new Map<
+      string,
+      { resolve: () => void; reject: (error: Error) => void }
+    >();
     const resume = (id: string) => {
+      ready.get(id)?.reject(Error("本次退出已取消，录音仍保留"));
+      ready.delete(id);
       const held = quitState.current;
       if (!held || held.id !== id) return;
       quitState.current = null;
@@ -1425,6 +1448,16 @@ function App() {
         );
       }
     };
+    resumeDocumentAdmission.current = resume;
+    void getCurrentWindow()
+      .listen<{ id: string }>("notes-recording-quit-ready", ({ payload }) => {
+        if (quitState.current?.id === payload.id)
+          ready.get(payload.id)?.resolve();
+      })
+      .then((release) => {
+        if (live) releases.push(release);
+        else release();
+      });
     void getCurrentWindow()
       .listen<{ id: string }>("notes-recording-quit", async ({ payload }) => {
         if (quitState.current) return;
@@ -1449,8 +1482,17 @@ function App() {
             held.editors.set(instance, instance.isEditable);
             editorGate.park(instance);
           }
-          await recordingLifecycle.current.close();
-          await ocrLifecycle.current.close();
+          const sealed = new Promise<void>((resolve, reject) =>
+            ready.set(payload.id, { resolve, reject }),
+          );
+          void sealed.catch(() => {});
+          await invoke("recording_quit_sealed", { id: payload.id });
+          await sealed;
+          ready.delete(payload.id);
+          if (quitState.current !== held) throw Error("本次退出已取消");
+          const recordingClosing = recordingLifecycle.current.close();
+          const ocrClosing = ocrLifecycle.current.close();
+          await Promise.all([recordingClosing, ocrClosing]);
           if (ownsSidebarPreference) await sidebarPreference.flush();
           await flush();
           if (quitState.current !== held)
@@ -1461,7 +1503,9 @@ function App() {
           await invoke("recording_quit_ack", {
             id: payload.id,
             success: false,
-          }).then(() => resume(payload.id)).catch(() => {});
+          })
+            .then(() => resume(payload.id))
+            .catch(() => {});
           await getCurrentWindow()
             .show()
             .catch(() => {});
@@ -1472,18 +1516,24 @@ function App() {
         else release();
       });
     void getCurrentWindow()
-      .listen<{ id: string }>("notes-recording-quit-cancelled", ({ payload }) => {
+      .listen<{ id: string }>(
+        "notes-recording-quit-cancelled",
+        ({ payload }) => {
         resume(payload.id);
         fail(
           Error("退出已取消。录音或正文尚未确认保存，请保持窗口打开并重试。"),
         );
-      })
+        },
+      )
       .then((release) => {
         if (live) releases.push(release);
         else release();
       });
     return () => {
       live = false;
+      for (const waiter of ready.values())
+        waiter.reject(Error("原正文窗口已卸载"));
+      ready.clear();
       releases.forEach((release) => release());
     };
   }, [flush, fail, ownsSidebarPreference, sidebarPreference]);
@@ -2381,10 +2431,15 @@ function App() {
     const target = ticket.batch.target;
     const owned = () =>
       recordingTicket.current === ticket &&
-      !!ticket.remote &&
+      !!ticket.local &&
+      ticket.local.identity.owner === getCurrentWindow().label &&
+      ticket.local.identity.operationId === ticket.batch.operationIds[0] &&
+      !!ticket.local.identity.incarnation &&
       !ticket.detached &&
       !target.invalidated &&
       (ticket.accepting || allowSealed);
+    if (!owned()) throw Error("原录音会话已失效，音频仍保留");
+    await invoke("recording_local_validate", ticket.local!.identity);
     if (!owned()) throw Error("原录音会话已失效，音频仍保留");
     for (let attempt = 0; attempt < 4; attempt++) {
       const queue = queues.current.get(target.noteId);
@@ -2502,7 +2557,7 @@ function App() {
       const operation = submission;
       await operation.run({
         validate: () =>
-          batch.recording?.remote
+          batch.recording?.local
             ? validateRecordingTarget(batch.recording, operation.inserted)
             : validatePickerTarget(target, batch.recording, operation.inserted),
         storage: native
@@ -2524,7 +2579,7 @@ function App() {
             },
         insert: (attachment) => {
           const instance = target.editor;
-          if (batch.recording?.remote) {
+          if (batch.recording?.local) {
             const selection = target.bookmark.resolve(instance.state.doc);
             // Map the user's current selection through a normal insertion. No
             // focus or selected-note change, including while A is parked for B.
@@ -2910,8 +2965,8 @@ function App() {
   const finishRecording = (ticket: RecordingTicket) => {
     ticket.accepting = false;
     for (const controller of ticket.editorCommits || []) controller.abort();
-    ticket.remote?.card?.dispose();
-    if (ticket.remote) return; // Child closes only after receiving the real ACK.
+    ticket.local?.card?.dispose();
+    if (ticket.local) return; // Unmount only after native cleanup is confirmed.
     if (recordingTicket.current === ticket) {
       recordingTicket.current = null;
       if (!ticket.detached) setRecord(false);
@@ -3067,7 +3122,7 @@ function App() {
       !ticket.accepting ||
       ticket.detached ||
       recordingTicket.current !== ticket ||
-      !ticket.remote
+      !ticket.local
     )
       throw Error("原录音会话已失效，音频仍保留。");
     if (
@@ -3084,7 +3139,14 @@ function App() {
       validate: (inserted) => validateRecordingTarget(ticket, inserted),
       register: (operation) =>
         attachmentSubmissions.current.set(operation.operationId, operation),
-      committed: operation => attachmentSubmissions.current.delete(operation.operationId),
+      committed: async (operation) => {
+        await invoke("recording_local_revision", {
+          ...ticket.local!.identity,
+          revision: result.revision,
+          finalIntent: result.intent === "final",
+        });
+        attachmentSubmissions.current.delete(operation.operationId);
+      },
       store: (operation) =>
         storeAttachmentOperation(
           operation.operationId,
@@ -3101,7 +3163,7 @@ function App() {
           attachment,
           previous,
         ),
-      inserted: (attachment) => ticket.remote?.card?.persisted(attachment.id),
+      inserted: (attachment) => ticket.local?.card?.persisted(attachment.id),
       references: (attachment) =>
         !target.editor.isDestroyed &&
         recordingAttachmentReferencedOnce(target.editor, attachment),
@@ -3110,12 +3172,38 @@ function App() {
     });
     // The next checkpoint can replace this committed version. Do not terminate
     // the original ticket or discard its editor/bookmark on checkpoint ACK.
-    if (result.intent === "final") finishRecording(ticket);
+    // Desktop final ACK and native cleanup are separate retry boundaries.
     void metadataRefreshRef.current();
   };
+  const completeDesktopRecording = async (
+    ticket: RecordingTicket,
+    saved: boolean,
+    revision: number,
+  ) => {
+    const local = ticket.local;
+    if (!local || recordingTicket.current !== ticket || ticket.detached)
+      throw Error("原录音会话已失效，音频仍保留");
+    await invoke("recording_local_release", {
+      ...local.identity,
+      saved,
+      revision,
+    });
+    ticket.accepting = false;
+    local.card?.dispose();
+    for (const controller of ticket.editorCommits || []) controller.abort();
+    recordingTicket.current = null;
+    updateRecordingOwner((value) => value + 1);
+  };
   const openRecording = (context?: NativeContext) => {
-    if (recordingTicket.current)
+    if (recordingTicket.current) {
+      if (recordingTicket.current.desktop) {
+        document
+          .querySelector<HTMLElement>(".recording-dock")
+          ?.scrollIntoView({ block: "nearest" });
+        return;
+      }
       throw Error("上次录音操作尚未核定，请先重试保存或取消");
+    }
     const batch = capturePickerTarget(context);
     const ticket: RecordingTicket = {
       batch,
@@ -3126,147 +3214,43 @@ function App() {
     batch.recording = ticket;
     recordingTicket.current = ticket;
     setMenu(null);
-    if (native && !mobile) {
-      const sessionId = secureId();
-      let identity: RecordingIdentity | undefined;
-      let unlisten: (() => void) | undefined;
-      const release = () => {
-        ticket.remote?.card?.dispose();
-        ticket.remote?.unlisten();
+    if (ticket.desktop) {
+      ticket.opening = (async () => {
+        const identity = await invoke<LocalRecordingIdentity>(
+          "register_recording_local",
+          {
+            sessionId: secureId(),
+            operationId: batch.operationIds[0],
+          },
+              );
+        let attach!: (handle: DesktopRecordingPanelHandle) => void;
+        const ready = new Promise<DesktopRecordingPanelHandle>((resolve) => {
+          attach = resolve;
+        });
+        ticket.local = { identity: Object.freeze(identity), ready, attach };
+        updateRecordingOwner((value) => value + 1);
+      })().catch((error) => {
         if (recordingTicket.current === ticket) recordingTicket.current = null;
         updateRecordingOwner((value) => value + 1);
-      };
-      ticket.opening = (async () => {
-        identity = await invoke<RecordingIdentity>(
-          "register_recording_window",
-          { sessionId, operationId: batch.operationIds[0] },
-        );
-        const id = identity;
-        const owner = new RecordingOwner(id, {
-          send: (message) => recordingSend(id, message),
-          visibility: (target, visible) => recordingSend(id, { kind: "visibility", target, visible }),
-          decode: decodeRecordingFile,
-          submit: (result) => submitRecording(ticket, result),
-          saveRevision: (result) => submitRecordingRevision(ticket, result),
-          discard: async () => {
-            await cancelRecording(ticket);
-          },
-          reveal: async () => {
-            await getCurrentWindow().show();
-            await getCurrentWindow().setFocus();
-          },
-          view: (state: RecordingViewState) => {
-            if (
-              !ticket.remote ||
-              !ticket.accepting ||
-              state.recordedAt === undefined
-            )
-              return;
-            try {
-              ticket.remote.card ??= mountRecordingCard({
-                editor: batch.target.editor,
-                bookmark: batch.target.bookmark,
-              });
-              ticket.remote.card.update({
-                ...state,
-                recordedAt: state.recordedAt,
-                toggle: () => {
-                  void owner.toggle().catch(fail);
-                },
-                finish: () => {
-                  void owner.close().catch(fail);
-                },
-              });
-            } catch (error) {
-              fail(error);
-            }
-          },
-          closed: (saved) => {
-            if (saved) release();
-            else
-              fail(
-                Error(
-                  "录音窗口意外关闭，原笔记和待保存音频仍保留；请勿退出应用",
-                ),
-              );
-          },
-        });
-        unlisten = await recordingListen((event) => {
-          void owner.receive(event).catch(fail);
-        });
-        ticket.remote = { identity: id, owner, unlisten };
-        updateRecordingOwner((value) => value + 1);
-        const child = new WebviewWindow(id.child, {
-          url: `index.html?recording=${id.sessionId}&operation=${id.operationId}`,
-          title: "新录音",
-          width: 320,
-          minWidth: 280,
-          height: 600,
-          minHeight: 440,
-          resizable: true,
-          alwaysOnTop: false,
-        });
-        await new Promise<void>((resolve, reject) => {
-          const timer = setTimeout(
-            () => reject(Error("录音窗口打开尚未确认，请检查窗口是否已打开")),
-            15000,
-          );
-          void child
-            .once("tauri://created", () => {
-              clearTimeout(timer);
-              resolve();
-            })
-            .catch(reject);
-          void child
-            .once<string>("tauri://error", ({ payload }) => {
-              clearTimeout(timer);
-              reject(Error(payload));
-            })
-            .catch(reject);
-        });
-      })().catch(async (error) => {
-        let abandoned = !identity;
-        if (identity) {
-          try {
-            await invoke("recording_window_abandon", {
-              sessionId,
-              operationId: batch.operationIds[0],
-            });
-            abandoned = true;
-          } catch {
-            /* A real child may be capturing; retain its original owner. */
-          }
-        }
-        if (abandoned) {
-          unlisten?.();
-          release();
-        }
-        await getCurrentWindow()
-          .show()
-          .catch(() => {});
         fail(error);
+        throw error;
       });
-      updateRecordingOwner((value) => value + 1);
+      void ticket.opening.catch(() => {});
     } else setRecord(true);
   };
   recordingLifecycle.current = {
     active: () => !!recordingTicket.current,
-    independent: () => !!recordingTicket.current?.desktop,
-    ensureFloating: async () => {
-      const ticket = recordingTicket.current;
-      if (!ticket?.desktop) return;
-      await ticket.opening;
-      if (recordingTicket.current !== ticket) return;
-      if (!ticket.remote) throw Error("录音窗口尚未就绪，请保持原窗口打开");
-      await ticket.remote.owner.ensureFloating();
-    },
     close: async () => {
       const ticket = recordingTicket.current;
       if (!ticket) return;
-      if (ticket.opening) await ticket.opening;
+      await ticket.opening;
       if (recordingTicket.current !== ticket) return;
-      if (ticket.remote) {
-        await ticket.remote.owner.close();
+      if (ticket.desktop) {
+        if (!ticket.local) throw Error("录音侧栏尚未就绪，请保持原窗口打开");
+        const handle = await ticket.local.ready;
+        if (recordingTicket.current !== ticket || ticket.detached)
+          throw Error("原录音侧栏已失效");
+        await handle.close();
         return;
       }
       sealRecording(ticket);
@@ -3285,9 +3269,11 @@ function App() {
     suspend: (ids) => {
       const ticket = recordingTicket.current;
       if (ticket && ids.includes(ticket.batch.target.noteId)) {
-        if (ticket.remote) {
+        if (ticket.desktop) {
           ticket.batch.target.invalidated = true;
-          ticket.remote.card?.dispose();
+          for (const controller of ticket.editorCommits || [])
+            controller.abort();
+          ticket.local?.card?.dispose();
         } else void cancelRecording(ticket).catch(fail);
       }
     },
@@ -3298,6 +3284,37 @@ function App() {
         sealRecording(ticket);
       }
     },
+  };
+  const desktopRecording = recordingTicket.current?.local
+    ? recordingTicket.current
+    : null;
+  const projectDesktopRecording = (
+    ticket: RecordingTicket,
+    state: RecordingViewState,
+  ) => {
+    if (
+      !ticket.local ||
+      !ticket.accepting ||
+      state.recordedAt === undefined ||
+      ticket.batch.target.invalidated
+    )
+      return;
+    try {
+      ticket.local.card ??= mountRecordingCard({
+        editor: ticket.batch.target.editor,
+        bookmark: ticket.batch.target.bookmark,
+      });
+      ticket.local.card.update({
+        ...state,
+        recordedAt: state.recordedAt,
+        toggle: () => ticket.local?.handle?.toggle(),
+        finish: () => {
+          void ticket.local?.handle?.close().catch(fail);
+        },
+      });
+    } catch (error) {
+      fail(error);
+    }
   };
   const finishOcr = (operation: OcrHost<PickerTarget>) => {
     if (operation.cleaned && ocrOperation.current === operation) {
@@ -4850,7 +4867,9 @@ function App() {
                       )}
                       <div className="note-row-content">
                         <strong>
-                          {n.pinned && <Pin className="pin-marker" size={13} />}
+                            {n.pinned && (
+                              <Pin className="pin-marker" size={13} />
+                            )}
                           {n.title}
                         </strong>
                         <div className="note-snippet">
@@ -4874,7 +4893,10 @@ function App() {
                         {(folderId === "all" || query) && (
                           <span className="note-folder">
                             <Folder size={11} />
-                            {ws.folders.find((f) => f.id === n.folderId)?.name}
+                              {
+                                ws.folders.find((f) => f.id === n.folderId)
+                                  ?.name
+                              }
                           </span>
                         )}
                       </div>
@@ -5057,7 +5079,9 @@ function App() {
           <div className="editor-scroll">
             <button
               className="note-date"
-              onClick={() => setNotice(`创建于 ${fmtDate(current.createdAt)}`)}
+                onClick={() =>
+                  setNotice(`创建于 ${fmtDate(current.createdAt)}`)
+                }
             >
               {fmtDate(current.updatedAt)}
             </button>
@@ -5226,7 +5250,9 @@ function App() {
                     <input
                       autoFocus
                       aria-label={
-                        modal === "lock" || modal === "unlock" ? "密码" : "名称"
+                          modal === "lock" || modal === "unlock"
+                            ? "密码"
+                            : "名称"
                       }
                       type={
                         modal === "lock" || modal === "unlock"
@@ -5283,7 +5309,10 @@ function App() {
                     </MenuRow>
                   ))}
                 </div>
-                <button className="modal-cancel" onClick={() => setModal(null)}>
+                  <button
+                    className="modal-cancel"
+                    onClick={() => setModal(null)}
+                  >
                   取消
                 </button>
               </>
@@ -5389,7 +5418,10 @@ function App() {
                 <p className="settings-footnote">
                   所有备忘录和附件保存在此设备中。
                 </p>
-                <button className="modal-cancel" onClick={() => setModal(null)}>
+                  <button
+                    className="modal-cancel"
+                    onClick={() => setModal(null)}
+                  >
                   完成
                 </button>
               </>
@@ -5413,7 +5445,10 @@ function App() {
                     <p>无附件</p>
                   )}
                 </div>
-                <button className="modal-cancel" onClick={() => setModal(null)}>
+                  <button
+                    className="modal-cancel"
+                    onClick={() => setModal(null)}
+                  >
                   完成
                 </button>
               </>
@@ -5456,7 +5491,43 @@ function App() {
         />
       )}
     </div>
-    {!mobile && recordingTicket.current?.remote && <RecordingDock owner={recordingTicket.current.remote.owner} fail={fail} top={nativeInfo?.native.reservedTop || 0} />}
+      {!mobile && desktopRecording?.local && (
+        <aside
+          className="recording-dock"
+          aria-label="录音面板"
+          style={
+            {
+              "--recording-native-top": `${nativeInfo?.native.reservedTop || 0}px`,
+            } as CSSProperties
+          }
+        >
+          <DesktopRecordingPanel
+            key={desktopRecording.local.identity.sessionId}
+            onHandle={(handle) => {
+              if (desktopRecording.local) {
+                desktopRecording.local.handle = handle || undefined;
+                if (handle) desktopRecording.local.attach(handle);
+              }
+            }}
+            onBeforeStart={() =>
+              invoke(
+                "recording_local_started",
+                desktopRecording.local!.identity,
+              )
+            }
+            onCancel={() => {}}
+            onRevision={(result) =>
+              submitRecordingRevision(desktopRecording, result)
+            }
+            onComplete={(saved, revision) =>
+              completeDesktopRecording(desktopRecording, saved, revision)
+            }
+            onState={(state) =>
+              projectDesktopRecording(desktopRecording, state)
+            }
+          />
+        </aside>
+      )}
     </div>
   );
 }

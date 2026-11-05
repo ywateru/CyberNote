@@ -7,7 +7,7 @@ import { secureId } from "./secure-id";
 type Ports<T> = {
   validate: (inserted: boolean) => Promise<void>;
   register: (operation: AttachmentSubmission<T>) => void;
-  committed: (operation: AttachmentSubmission<T>) => void;
+  committed: (operation: AttachmentSubmission<T>) => void | Promise<void>;
   store: (
     operation: AttachmentSubmission<T>,
   ) => Promise<AttachmentOperationResult>;
@@ -96,7 +96,7 @@ export class RecordingRevisions<T> {
       await ports.validate(true);
       if (!ports.references(operation.attachment))
         throw Error("本版录音节点在提交确认期间已被移除，原音频仍保留。");
-      ports.committed(operation);
+      await ports.committed(operation);
       this.previous = operation.attachment;
       this.acknowledged = result.revision;
       this.pending = undefined;
