@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0",
+  "originalIndependentScriptSha256": "7f27dd051b27e05535be76458f32440206c26d7763b46b0e4d8cd165e37bbe11",
+  "adaptedScriptSha256": "a479b6721e863ee10d3150bed2a14ad48db71835c2a4b8eb388ee4ea0c73f682",
+  "changes": [
+    "Load the actual production SearchEditorGate class",
+    "Provide new quitState/quitPending/appSurface refs and state setter",
+    "Provide actual SearchEditorGate instance and empty tagComposition/picker target host maps",
+    "Provide Editor.setEditable host method"
+  ],
+  "unchanged": "All product App functions are AST-extracted from actual source; original Quit-edit assertion and all test algorithms unchanged."
+}

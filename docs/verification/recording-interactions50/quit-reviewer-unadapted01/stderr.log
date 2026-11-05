@@ -1,0 +1,14 @@
+<anonymous_script>:3
+with(env) { const attachmentBaseAvailable = !quitPending &&
+                                            ^
+
+ReferenceError: quitPending is not defined
+    at eval (eval at execute (file:///private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/check-quit-new-edit.mjs:136:10), <anonymous>:3:45)
+    at execute (file:///private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/check-quit-new-edit.mjs:136:48)
+    at render (file:///private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/check-quit-new-edit.mjs:552:5)
+    at fixture (file:///private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/check-quit-new-edit.mjs:713:3)
+    at file:///private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/check-quit-new-edit.mjs:881:36
+    at test (file:///private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/check-quit-new-edit.mjs:847:27)
+    at file:///private/tmp/apple-notes-recording-window50-independent-02/docs/verification/recording-interactions50-independent/check-quit-new-edit.mjs:880:11
+
+Node.js v22.16.0
