@@ -20,3 +20,5 @@
 根视觉量化与最终开发报告逐字段精确一致：暂停内芯MAE36.664→2.664；完整按钮初始31.538→26.036、录制15.924→10.185、暂停37.331→10.999，两阈值外圈IoU/XOR均改善。六桌面同props浅深样本的HTML、rect、全部computed属性与PNG严格无差；手机三尺寸/两主题/三态触达及几何保持。根[完整暂停样本](root-mobile-paused-392x840-light.png)和[224×480投影](root-projection-paused.png)保留。完整原/旧/新图见[开发证据](../README.md)，独立重算见[独审](../../../plan/reviews/app-mobile-recording-primary73-efficiency-recheck.md)。
 
 原图是有损录屏，raw PNG与浏览器色管读取分开记账；未修的红色/暂停字形、抗锯齿与全局UI残差保留。这里只授予中央按钮局部改善。24状态是实际共享View的受控合法投影；152项App检查仍使用显式合成硬件和JS协议fixture，不证明Rust真实持久化、Android WebView/IME、系统生命周期、硬件音质或完整原版像素一致。没有操作原设备、麦克风、用户录音或原版笔记，没有生成原生新包。下一项[真实Rust录音落盘74](../../../plan/tasks/app-debug-recording-rust74.md)继续补存储边界。
+
+收尾：确认开发和独审最终提交均已为主线祖先后，删除本轮73两个隔离工作区及已合入分支；随其清除工作区dist和TypeScript中间文件；runner的临时Vite缓存由正常cleanup释放。主工作区共享node_modules/.pnpm仍存在，根dist为本轮已验的有用生产构建保留；原始参考、已提交证据、其他历史工作区与Rust共享缓存未清理。六条根命令原始.log显式纳入版本管理，避免被全局忽略规则遗漏；完整根临时输出仍在`/private/tmp/notes-primary73-root-integration`供按需复核。
