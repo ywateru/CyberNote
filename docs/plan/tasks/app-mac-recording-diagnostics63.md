@@ -15,7 +15,7 @@ depends-on: [app-mac-recording-access52]
 
 ## path
 
-允许src/native-recording-access.ts、plugins/tauri-plugin-notes-ui/{guest-js/index.ts,src/lib.rs,src/macos.rs,macos/recording_access.m}，必要独立诊断helper及针对性scripts/check-mac-recording-diagnostics63*，作者证据docs/verification/mac-recording-diagnostics63/。只在需要时修改原52检查的FFI签名以保持现有真实实现测试。禁止改UI/CSS、Session/Panel/Dock/owner/transport/save、数据库、权限策略、能力配置、签名或依赖。不得读取/导出任何真实音频或笔记。
+允许src/native-recording-access.ts、plugins/tauri-plugin-notes-ui/{guest-js/index.ts,src/lib.rs,src/macos.rs,macos/recording_access.m}，必要独立诊断helper及针对性scripts/check-mac-recording-diagnostics63*，作者证据docs/verification/mac-recording-diagnostics63/。若52检查需适配新FFI，复制到本任务新路径后修改；原52及其他已封存证据保持原字节。禁止改UI/CSS、Session/Panel/Dock/owner/transport/save、数据库、权限策略、能力配置、签名或依赖。不得读取/导出任何真实音频或笔记。
 
 ## contract
 
