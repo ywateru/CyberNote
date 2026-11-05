@@ -230,3 +230,7 @@ Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许�
 复用现有Settings JSON与单键settings action，新增可选macSidebarVisible:boolean；不增加schema、IPC或第二存储副本。首次可信workspace只读恢复准确boolean，缺失/非法只在内存回退true；后续hydrate/metadata不覆盖本轮requested值。仅native Mac非独立主窗的显式显隐动作串行patch此键，并以受信返回或可信读回确认；无value、未接受或maintenanceError不作已保存。
 
 失败不写默认值、不覆盖其他设置；保留未确认意图和既有错误反馈。窗口关闭时待写/失败必须纳入现有正文/媒体关闭保护；CmdQ实际路由和快速退出另行实证。响应式mobile不是平台，独立窗投影false不是显隐意图；二者不得写主窗偏好。归档既有全settings往返保持，导入当下不自动重置或写回；下次启动读取导入值。详见[准备22](research/mac-sidebar-preference22-readiness/analysis.md)与[任务22](plan/tasks/app-mac-sidebar-preference22.md)。
+
+### 录音呈现55
+
+用户新要求允许浮窗与主窗右侧展开切换。唯一child仍全程拥有Session/File/Audio，owner展开仅共享纯视图+同session远程控制/实际状态投影，不搬迁采集或音频；目标视图确认后才隐藏原视图，主窗关闭先显示浮窗。原A附件operation/正文ACK与Quit屏障保持。详见ui/recording-desktop.md双模式合同与任务55。
