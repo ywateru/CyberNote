@@ -15,7 +15,7 @@
 
 产品/工具初次冻结提交 `0843c54f16ed92ff33535bbe4fa89247e148ab18`；旧CSS取自 `3534acaf1475c241895191d93ec839a5428cfc97`。可重放脚本：`node scripts/check-mobile-recording-primary73.mjs OUT --baseline-ref 3534acaf`。脚本将真实共享RecordingView加载同props，before只替换为该提交原CSS；脚本断言View与baseline同字节，全部输入start/end指纹见visual/summary.json。脚本不替换App私有源码，也不打开媒体、原生应用或设备。
 
-最终df3正式视觉来源为 `/private/tmp/notes-primary73-final-visual`，已自然exit0；初次0843视觉摘要另保留diagnostics/initial-visual-summary.json。原文件哈希、View/CSS身份、每态HTML/全部computed/rect/PNG哈希、像素样本、点击/键盘/禁用检验均在[visual/summary.json](visual/summary.json)。全部证据的原字节SHA、gzip解压后SHA见[visual-files.json](visual-files.json)。`.computed.json.gz`是原JSON无损压缩，`gzip -dc FILE`可读；没有截断属性或移除差异。
+最终565b8a15正式视觉来源为 `/private/tmp/notes-primary73-final-scoped-visual`，已自然exit0；df3的旧扫描437.35s摘要另保留regressions/df3e5c42/visual-summary.json，初次0843摘要另保留diagnostics/initial-visual-summary.json。原文件哈希、View/CSS身份、每态HTML/全部computed/rect/PNG哈希、像素样本、点击/键盘/禁用检验均在[visual/summary.json](visual/summary.json)。全部证据的原字节SHA、gzip解压后SHA见[visual-files.json](visual-files.json)。`.computed.json.gz`是原JSON无损压缩，`gzip -dc FILE`可读；没有截断属性或移除差异。
 
 392×840/DPR2实际渲染完整截图为784×1680，再由同一Chrome canvas high-quality drawImage均匀缩至224×480；不单独移动、缩放或配准按钮。另测320×568、280×600，三态各浅/深色，共18手机样本。桌面280×467同props三态浅/深共6样本。浏览器参数为disable-gpu、force-color-profile=srgb；等待fonts.ready、两帧、运行中的有限动画finished（上限500ms）、两帧。该正式运行无待等待动画，记录不是“已证明前次失败来自transition”。
 
@@ -70,7 +70,7 @@ PNG含gAMA0.45455与cHRM；Pillow不做色管直接采样n0960 ROI[87,422,101,44
 
 ## df3e5c42最终冻结回归
 
-下列全部命令以外层 `/usr/bin/time -p` 运行，自然exit0；real包含清理，未强退出。App/CLI78输入start/end SHA256均为 `62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44`，gitDirty=false、sourceInputsChanged=false。实际原始摘要/日志见[regressions/df3e5c42/](regressions/df3e5c42/)。该df3视觉七输入指纹见visual/summary.json，start/end相同。
+下列全部命令以外层 `/usr/bin/time -p` 运行，自然exit0；real包含清理，未强退出。App/CLI78输入start/end SHA256均为 `62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44`，gitDirty=false、sourceInputsChanged=false。实际原始摘要/日志见[regressions/df3e5c42/](regressions/df3e5c42/)。该df3视觉七输入指纹见regressions/df3e5c42/visual-summary.json，start/end相同。
 
 | 命令 | 结果 | 含清理real秒 |
 | --- | --- | --- |
@@ -84,6 +84,14 @@ PNG含gAMA0.45455与cHRM；Pillow不做色管直接采样n0960 ROI[87,422,101,44
 600ms read正例真正等待742.020ms后才获得src===currentSrc、readyState4、duration5.226208s，随后单次展开、设置4s、真实播放后段均通过。见[mobile-remount-readiness.json](regressions/df3e5c42/mobile-remount-readiness.json)。整个手机组保留错误/存储重试与延迟ACK；没有用重试DOM点击掩盖remount竞态。
 
 长清理为可复现性能残差，非永久无法释放。只读Vite6源码显示默认optimizeDeps在无entries时会glob历史HTML，close等待discover/scan/optimizer取消；本树含大量研究/验收HTML。最小诊断只显式entries=['src/RecordingView.tsx']时38.31s自然exit1：虚拟JSX bootstrap的react-dom/client未被覆盖，运行时新增依赖优化导致reload，首态mount失效。保留[失败日志](diagnostics/entries-probe.log)、[失败摘要](diagnostics/entries-probe-summary.json)。第二探针补include=['react-dom/client']后，同一24态、相同全computed/geometry/PNG断言自然exit0、real35.47s；[日志](diagnostics/entries-probe02.log)/[摘要](diagnostics/entries-probe02-summary.json)/[诊断源码](diagnostics/entries-probe.mjs)记录精确参数与自身指纹。此结果支持将后续校准脚本的依赖扫描限定为实际View与虚拟入口bootstrap依赖；没有改runtime cleanup或产品依赖。
+
+## 565b8a15限定扫描正式复验
+
+`565b8a154b16f28727f6ba83e6510d311c8f7aea`只给校准脚本createViteServer配置明确`optimizeDeps.entries=['src/RecordingView.tsx']`、`include=['react-dom/client']`，并在summary记录配置/理由。没有改产品依赖、runtime或App/debug78输入；[app-inputs-unchanged.json](regressions/565b8a15/app-inputs-unchanged.json)重算同一78文件SHA仍为62cf6dae…，且相对已完整回归的df3这些路径差异为0，因此不重复不相关App全组。
+
+提交后独立新cache正式visual-only复验自然exit0，外层real **51.16s**（user33.18/sys23.21），[原始日志](regressions/565b8a15/visual.log)保留。七输入start/end指纹同为 `105edc90f2f4f8b64010ed36f6372430a8f9958b48eead929106d63332ce9f78`。最终24样本与18手机触达/动作/深色断言通过；6桌面HTML、所有rect/computed及PNG RGBA严格0diff。三态原/旧/新ROI统计与437.35s旧扫描正式结果逐字段完全相同，故上方表格无需改值。完整最终结果与像素/DOM/无损computed都在visual/。
+
+本次完整校准437.35→51.16s，诊断第二轮35.47s；不同运行仍有wall波动，不承诺固定时间。初次错误entry漏虚拟renderer导致reload的失败同样保留。CLI runtime仍有195.48s长清理性能残差，交后续测试效率任务调查，不混入本次已证明的校准脚本扫描范围修复。
 
 ## 范围与限制
 
