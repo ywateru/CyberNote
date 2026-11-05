@@ -2664,13 +2664,23 @@ function App() {
     setMenu(null);
   };
   const retryAttachments = async () => {
-    for (const [id, doc] of [...pendingDocs.current]) await saveDoc(id, doc);
-    for (const batch of [...attachmentBatches.current]) {
-      if (batch.recording && batch.cancelRequested)
-        await cancelRecording(batch.recording);
-      else await submitAttachmentBatch(batch);
+    let debugComplete: (() => void) | undefined;
+    if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1") {
+      const work = new Promise<void>((resolve) => { debugComplete = resolve; });
+      debugPending.current.add(work);
+      void work.finally(() => debugPending.current.delete(work));
     }
-    if (ocrOperation.current) await retryOcr();
+    try {
+      for (const [id, doc] of [...pendingDocs.current]) await saveDoc(id, doc);
+      for (const batch of [...attachmentBatches.current]) {
+        if (batch.recording && batch.cancelRequested)
+          await cancelRecording(batch.recording);
+        else await submitAttachmentBatch(batch);
+      }
+      if (ocrOperation.current) await retryOcr();
+    } finally {
+      debugComplete?.();
+    }
   };
   const discardUninsertedAttachments = async () => {
     for (const batch of attachmentBatches.current) {

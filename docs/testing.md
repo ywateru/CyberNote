@@ -32,3 +32,5 @@
 
 
 任务71将手机录音作为独立命令组：`pnpm debug group recording --mobile --out DIR`。手机MediaRecorder合成边界必须输出连续单容器的增量块；多次暂停最终存储字节需实际解码完整活动时长、验证后段非零样本并真实播放，不能只检查计时器。手机暂停不套桌面checkpoint规则。异步状态用真正await的有界轮询验证；同步truthiness轮询不得接收async predicate。CLI显式waitForIdle的无效raw参数、超时与异步APP_ERROR应保留原错误code。
+
+任务71初审发现三项阻塞，修复记录见[独审后修复证据](verification/mobile-debug-recording71/fixes/README.md)。保留初审两次手机重试失败，不用历史37项通过替代可靠性结论。idle须等实际在途retry整体Promise结算后判断残留失败；deadline须覆盖state/predicate等待；rawidle JSON传输须保留own __proto__并严格拒绝。

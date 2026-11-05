@@ -360,14 +360,101 @@ export async function runMobileRecording(
           .length <= 1,
     );
     await capture(`${boundary}-failure`);
-    await configure({ delay: { [boundary]: 0 }, fail: { [boundary]: 0 } });
     if (boundary === "save") {
-      // Use the actual global Retry control: it clears its own banner and
-      // retries the retained pending document/attachment rather than dismissing.
-      await command("dom.click", {
+      let retainedFailure;
+      try {
+        await idle(page);
+      } catch (error) {
+        retainedFailure = error;
+      }
+      check(
+        "Mobile failed body without retry still reports APP_ERROR",
+        retainedFailure?.code === "APP_ERROR",
+      );
+      await configure({ delay: { save: 180 }, fail: { save: 10 } });
+      const failedRetryAt = performance.now();
+      let retryFinished = false;
+      const failedRetry = command("dom.click", {
         selector: ".error-banner button:first-of-type",
+      }).then(
+        () => {
+          retryFinished = true;
+          return null;
+        },
+        (error) => {
+          retryFinished = true;
+          return error;
+        },
+      );
+      const duringFailedRetry = await waitForState(
+        page,
+        (s) => s.save.saving > 0,
+      );
+      check(
+        "Mobile retry waits while old failure and real save coexist",
+        !retryFinished &&
+          duringFailedRetry.save.failed > 0 &&
+          duringFailedRetry.busy,
+      );
+      const retryError = await failedRetry;
+      const afterFailedRetry = await state(page);
+      check(
+        "Mobile retry failing again reports APP_ERROR only after real work settles",
+        retryError?.code === "APP_ERROR" &&
+          performance.now() - failedRetryAt >= 150 &&
+          afterFailedRetry.save.saving === 0 &&
+          afterFailedRetry.save.failed > 0 &&
+          afterFailedRetry.recording.active,
+      );
+      await configure({ delay: { save: 180 }, fail: { save: 0 } });
+      const successAt = performance.now();
+      let successFinished = false;
+      const retrySuccess = command("dom.click", {
+        selector: ".error-banner button:first-of-type",
+      }).then(
+        (value) => {
+          successFinished = true;
+          return value;
+        },
+        (error) => {
+          successFinished = true;
+          throw error;
+        },
+      );
+      // Attach rejection admission immediately while observing the genuine
+      // queued retry, so a failure cannot become an unhandled rejection.
+      void retrySuccess.catch(() => {});
+      const duringSuccess = await waitForState(page, (s) => s.save.saving > 0);
+      check(
+        "Mobile delayed successful retry does not reject the retained old failure",
+        !successFinished && duringSuccess.save.failed > 0 && duringSuccess.busy,
+      );
+      await retrySuccess;
+      check(
+        "Mobile delayed successful retry waits for body ACK",
+        performance.now() - successAt >= 150 &&
+          (await state(page)).save.failed === 0,
+      );
+      await saveJSON(resolve(output, "mobile-retry-proof.json"), {
+        duringFailedRetry: {
+          save: duringFailedRetry.save,
+          busy: duringFailedRetry.busy,
+        },
+        failedRetry: {
+          code: retryError?.code,
+          save: afterFailedRetry.save,
+          ownerRetained: afterFailedRetry.recording.active,
+        },
+        duringSuccess: { save: duringSuccess.save, busy: duringSuccess.busy },
+        success: {
+          elapsedMs: Math.round(performance.now() - successAt),
+          save: (await state(page)).save,
+        },
       });
-    } else await command("recording.action", { action: "finish" });
+    } else {
+      await configure({ delay: { store: 0 }, fail: { store: 0 } });
+      await command("recording.action", { action: "finish" });
+    }
     s = await state(page);
     check(
       `Mobile ${boundary} retry acknowledges retained bytes once without duplicate store`,

@@ -48,7 +48,7 @@ export async function openRuntime(options = {}) {
     await page.addInitScript(installBrowserPlatform, { mobile: !!options.mobile });
     await page.goto(origin + '/?notesDebug=1', { waitUntil: 'domcontentloaded', timeout: 30000 });
     if (options.enabled === false || production) await page.waitForSelector('.app');
-    else { await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await page.evaluate(() => window.__NOTES_DEBUG__.waitForIdle({ timeoutMs: 10000 })); }
+    else { await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); }
     const reset = async () => { if (!backend.reset) throw Error('Scenario reset requires default isolated fixture; use separate CLI scripts with external transport.'); backend.reset(); errors.length = 0; await page.reload(); await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); };
     return { root, directory, origin, page, mobile: !!options.mobile, viewport, backend, errors, cleanup, reset, metadata: { platform: options.mobile ? 'mobile-browser' : 'desktop-browser', backend: backend.kind, media: 'fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation', native: 'IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default', browser: await browser.version(), viewport } };
   } catch (error) { await cleanup({ keep: options.keep }); throw error; }
@@ -59,23 +59,32 @@ export async function idle(page, timeoutMs = 10000) { return waitForIdle(page, {
 export async function waitForIdle(page, options = {}) {
   // Playwright serializes Error.message/stack, not arbitrary Error.code. Keep
   // the same explicit JSON error envelope as execute() for async idle failures.
-  const response = await page.evaluate(async (options) => {
-    try { return { ok: true, value: await window.__NOTES_DEBUG__.waitForIdle(options) }; }
+  const input = JSON.stringify(options);
+  if (!input || input.length > 65536) throw Object.assign(Error('Invalid bounded idle options'), { code: 'INVALID_ARGUMENT' });
+  const response = await page.evaluate(async (input) => {
+    try { return { ok: true, value: await window.__NOTES_DEBUG__.waitForIdle(JSON.parse(input)) }; }
     catch (error) { return { ok: false, error: { code: error.code || 'APP_ERROR', message: error.message || String(error) } }; }
-  }, options);
+  }, input);
   if (!response.ok) throw Object.assign(Error(response.error.message), { code: response.error.code });
   return response.value;
 }
 export async function waitForState(page, predicate, { timeoutMs = 10000, label = 'application state' } = {}) {
   if (typeof predicate !== 'function' || !Number.isFinite(timeoutMs) || timeoutMs < 1 || timeoutMs > 30000) throw Error('Invalid bounded state wait');
-  const started = performance.now(); let lastState;
-  do {
-    lastState = await state(page);
-    if (await predicate(lastState)) return lastState;
-    // state() itself awaits two real rendering frames; no promise is treated
-    // as a truthy predicate and no synthetic clock controls this deadline.
-  } while (performance.now() - started < timeoutMs);
-  throw Object.assign(Error(`Timed out awaiting ${label}`), { code: 'TIMEOUT', lastState });
+  const deadlineAt = performance.now() + timeoutMs; let lastState, expired = false, timer;
+  const timeout = () => Object.assign(Error(`Timed out awaiting ${label}`), { code: 'TIMEOUT', lastState });
+  const deadline = new Promise((_, reject) => { timer = setTimeout(() => { expired = true; reject(timeout()); }, timeoutMs); });
+  const guard = () => { if (expired || performance.now() >= deadlineAt) throw timeout(); };
+  const polling = (async () => {
+    while (true) {
+      guard(); lastState = await state(page); guard();
+      const matched = await predicate(lastState); guard();
+      if (matched) return lastState;
+      // state() awaits two actual rendering frames. The outer deadline also
+      // covers an unsettled state read or predicate, and rejects a late true.
+    }
+  })();
+  try { return await Promise.race([polling, deadline]); }
+  finally { clearTimeout(timer); expired = true; }
 }
 export async function snapshot(page, options = {}) { return page.evaluate((options) => window.__NOTES_DEBUG__.snapshot(options), options); }
 export async function saveJSON(path, value) { await mkdir(resolve(path, '..'), { recursive: true }); await writeFile(path, JSON.stringify(value, null, 2) + '\n'); }

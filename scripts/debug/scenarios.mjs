@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { resolve } from 'node:path';
-import { openRuntime, api, idle, state, snapshot, saveJSON, waitForState } from './runtime.mjs';
+import { openRuntime, api, idle, state, snapshot, saveJSON, waitForState, waitForIdle } from './runtime.mjs';
 import { compareSnapshots, compareScreenshots } from './compare.mjs';
 import { runMobileRecording } from './mobile-recording.mjs';
 
@@ -22,6 +22,16 @@ export async function runGroups(runtime, names, output) {
         const delayedStarted = performance.now(); const delayedState = await waitForState(page, async (s) => performance.now() - delayedStarted >= 120 && s.selection.noteId === 'note-a', { timeoutMs: 1000, label: 'delayed true async predicate' });
         check('State polling awaits delayed true async predicate rather than promise truthiness', delayedState.selection.noteId === 'note-a' && performance.now() - delayedStarted >= 120);
 
+        for (const [label, predicate] of [['late true', async () => { await new Promise((resolve) => setTimeout(resolve, 220)); return true; }], ['never settles', () => new Promise(() => {})]]) {
+          const began = performance.now(); let error;
+          try { await waitForState(page, predicate, { timeoutMs: 100, label }); } catch (caught) { error = caught; }
+          check(`State deadline covers ${label} predicate`, error?.code === 'TIMEOUT' && performance.now() - began < 220);
+        }
+        const stateBegan = performance.now(); let stateError;
+        try { await waitForState({ evaluate: () => new Promise(() => {}) }, () => true, { timeoutMs: 50, label: 'unsettled state transport' }); } catch (error) { stateError = error; }
+        check('State deadline covers unsettled state transport', stateError?.code === 'TIMEOUT' && performance.now() - stateBegan < 200);
+        let idleProto; try { await waitForIdle(page, JSON.parse('{"__proto__":1}')); } catch (error) { idleProto = error; }
+        check('Idle JSON transport preserves own __proto__ for strict API rejection', idleProto?.code === 'INVALID_ARGUMENT');
         const commands = await page.evaluate(() => window.__NOTES_DEBUG__.list()); check('Versioned catalog covers semantic, DOM and explicit unsupported commands', commands.some((c) => c.id === 'note.create') && commands.some((c) => c.mode === 'unsupported') && commands.some((c) => c.mode === 'dom'));
         const reject = async (id, args, code) => { const error = await page.evaluate(async (input) => { const { id, args } = JSON.parse(input); try { await window.__NOTES_DEBUG__.execute(id, args); return null; } catch (error) { return { code: error.code, message: error.message }; } }, JSON.stringify({ id, args })); check(id + ' rejects ' + code + (error?.code === code ? '' : '; actual ' + JSON.stringify(error)), error?.code === code); };
         await reject('does.not.exist', {}, 'UNKNOWN_COMMAND'); await reject('editor.insertText', { text: 3 }, 'INVALID_ARGUMENT'); await reject('note.create', { accidental: 1 }, 'INVALID_ARGUMENT'); await reject('native.takePhoto', {}, 'UNSUPPORTED');
@@ -72,6 +82,13 @@ export async function runGroups(runtime, names, output) {
         await runMobileRecording(runtime, { command, check, output, exercised });
       } else if (name === 'recording') {
         await command('recording.open'); await command('recording.action', { action: 'close' }); check('Desktop idle close cancels without requesting device or storing audio', !(await state(page)).recording.active && runtime.backend.workspace.attachments.length === 0 && await page.evaluate(() => window.__DEBUG_PLATFORM__.starts === 0));
+        await command('recording.open'); await command('recording.action', { action: 'toggle' }); await page.evaluate(() => window.__DEBUG_PLATFORM__.advance(1200)); await page.evaluate(() => window.__DEBUG_PLATFORM__.configure({ delay: { store: 300 } }));
+        const checkpoint = api(page, 'recording.action', { action: 'toggle' }); void checkpoint.catch(() => {});
+        await waitForState(page, (s) => s.recording.state?.phase === 'saving');
+        check('Desktop close remains available during actual checkpoint save despite canFinish false', !(await state(page)).recording.state.canFinish && await page.locator('.recording-dock .recording-cancel').isEnabled());
+        await command('recording.action', { action: 'close' }); await checkpoint;
+        check('Desktop close waits in-flight checkpoint and final body ACK', !(await state(page)).recording.active && !runtime.backend.local && runtime.backend.completed?.saved && (await state(page)).save.pending === 0);
+        await runtime.reset();
         await command('recording.open'); await page.waitForSelector('.recording-dock [data-recording-state="idle"]'); await command('recording.action', { action: 'toggle' }); await page.waitForSelector('.recording-dock [data-recording-state="recording"]');
         await page.evaluate(() => window.__DEBUG_PLATFORM__.advance(2000)); await command('note.select', { id: 'note-b' }); await command('editor.insertText', { text: ' B edit during A recording' }); await command('app.flush'); await command('search.set', { query: 'Fixture' }); await command('search.set', { query: '' });
         await command('recording.action', { action: 'toggle' }); await page.waitForSelector('.recording-dock [data-recording-state="paused"]'); let s = await state(page); const a = s.workspace.notes.find((n) => n.id === 'note-a'); check('A recording parks while B editing and first checkpoint saves one original-A card', JSON.stringify(a.document).includes('attachment') && s.workspace.notes.find((n) => n.id === 'note-b').plainText.includes('B edit') && s.recording.state.elapsed >= 2000);

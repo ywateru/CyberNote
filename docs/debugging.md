@@ -58,7 +58,7 @@ await window.__NOTES_DEBUG__.waitForIdle({timeoutMs:8000});
 window.__NOTES_DEBUG__.snapshot({selector:".app",maxChars:16000,maxNodes:160});
 ```
 
-版本为1。未知命令`UNKNOWN_COMMAND`、无效或未知字段`INVALID_ARGUMENT`、未注册/当前不可用`UNAVAILABLE`、产品原有禁用项`UNSUPPORTED`、保存或应用handler错误`APP_ERROR`、等待超时`TIMEOUT`。命令复用真实handler内部捕获的错误也会被报告；`waitForIdle`检查正在执行的命令、加载/同步/设置请求、实际pending正文、保存失败与录音finalizing/saving/requesting，要求连续三帧稳定，最长30秒。失败不会清掉未保存内容；应使用真实重试操作恢复并核对保存ACK，不能用`app.dismissError`冒充恢复。CLI的execute和显式waitForIdle均保留原API错误code。录音state轮询使用runner的`waitForState`真正await条件；不把async函数传给本机Playwright的同步truthiness轮询。录音处于recording/paused可idle，表示没有在途保存，不表示会话已经结束。
+版本为1。未知命令`UNKNOWN_COMMAND`、无效或未知字段`INVALID_ARGUMENT`、未注册/当前不可用`UNAVAILABLE`、产品原有禁用项`UNSUPPORTED`、保存或应用handler错误`APP_ERROR`、等待超时`TIMEOUT`。命令复用真实handler内部捕获的错误也会被报告；`waitForIdle`检查正在执行的命令、加载/同步/设置请求、实际pending正文、保存失败与录音finalizing/saving/requesting，要求连续三帧稳定，最长30秒。失败不会清掉未保存内容；应使用真实重试操作恢复并核对保存ACK，不能用`app.dismissError`冒充恢复。CLI的execute和显式waitForIdle均以JSON字符串传输并保留原API错误code/未知own字段；own __proto__也交原API严格拒绝。idle先等待真实在途retry/保存工作，再判断残留failed/error，未重试的失败仍立即APP_ERROR。录音state轮询使用runner的`waitForState`真正await条件，全局真实deadline覆盖state读取和predicate等待，迟到true或永不settle均TIMEOUT；不把async函数传给本机Playwright的同步truthiness轮询。录音处于recording/paused可idle，表示没有在途保存，不表示会话已经结束。
 
 `list()`的`available`表示当前运行时已注册的入口，动态可操作条件由真实handler校验，不代表当前UI允许任何动作。`mode`区分semantic、DOM和unsupported。DOM原语要求恰好一个可见、可用、非inert控件；fill只支持input/textarea，编辑器文字应走真实事务。`dom.key`只派发键盘事件，不伪造浏览器默认文字输入或可信系统事件。
 

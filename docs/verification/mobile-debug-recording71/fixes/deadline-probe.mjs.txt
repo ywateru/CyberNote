@@ -1,0 +1,11 @@
+import {openRuntime,waitForState,waitForIdle,saveJSON} from '/private/tmp/apple-notes-mobile-debug71-01/scripts/debug/runtime.mjs';
+const runtime=await openRuntime({root:'/private/tmp/apple-notes-mobile-debug71-01'}),results=[];
+try {
+ for(const mode of ['late-true','never-predicate','never-state']){
+  let entered=false;const start=performance.now();let outcome;
+  try{await waitForState(mode==='never-state'?{evaluate:()=>new Promise(()=>{})}:runtime.page,()=>{entered=true;return mode==='late-true'?new Promise(resolve=>setTimeout(()=>resolve(true),300)):new Promise(()=>{});},{timeoutMs:150,label:mode});outcome={unexpected:'success'};}catch(error){outcome={code:error.code,hasLastState:!!error.lastState};}
+  const result={mode,enteredPredicate:entered,elapsedMs:Math.round(performance.now()-start),...outcome};if(result.code!=='TIMEOUT'||result.elapsedMs>=300||mode!=='never-state'&&!entered)throw Error('Deadline negative failed '+JSON.stringify(result));results.push(result);
+ }
+ let proto;try{await waitForIdle(runtime.page,JSON.parse('{"__proto__":1}'));}catch(error){proto={code:error.code,message:error.message};}if(proto?.code!=='INVALID_ARGUMENT')throw Error('own proto not rejected');results.push({mode:'raw-idle-own-proto',...proto});
+ await saveJSON('/private/tmp/mobile-debug71-fix-deadline-proof.json',{results,pageErrors:runtime.errors});console.log(JSON.stringify(results));
+}finally{await runtime.cleanup();}
