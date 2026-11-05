@@ -1,0 +1,533 @@
+{
+  "message": "授权状态已改变，请同步后重试",
+  "stack": "Error: 授权状态已改变，请同步后重试\n    at api (file:///private/tmp/apple-notes-android-attachments75-review01/scripts/debug/runtime.mjs:56:600)\n    at async beforeChange (file:///private/tmp/attachments75-independent-extra02.mjs:43:331)\n    at async chooseFiles (file:///private/tmp/apple-notes-android-attachments75-review01/scripts/debug/mobile-attachments.mjs:33:21)\n    at async file:///private/tmp/attachments75-independent-extra02.mjs:43:69",
+  "checks": [
+    "Independent empty note single insertion leaves one reference and normal text caret",
+    "Independent single Undo restores exact empty document including added paragraph",
+    "Independent Redo restores exact first attachment and paragraph transaction",
+    "Independent continuous chooser retains first and second identity",
+    "Independent second chooser Undo restores exact prior card and paragraph document",
+    "Independent explicit old image selection replaces only selected card and retains all media",
+    "Independent Undo of explicit replacement restores exact old document and all media",
+    "Independent new empty note one three-file FileList references every exact stored identity once",
+    "Empty MIME byte signature png",
+    "Empty MIME byte signature jpeg",
+    "Empty MIME byte signature gif87",
+    "Empty MIME byte signature gif89",
+    "Empty MIME byte signature webp",
+    "Empty MIME byte signature pdf",
+    "Empty MIME byte signature wav-no-inference",
+    "Empty MIME byte signature extension-only",
+    "Empty MIME byte signature empty",
+    "Declared nonempty MIME is never overridden by PNG signature",
+    "Independent abort preserves recovery identity and ends pending",
+    "Independent abort retries exact original operation and File once",
+    "Independent error preserves recovery identity and ends pending",
+    "Independent error retries exact original operation and File once"
+  ],
+  "stages": [
+    {
+      "name": "Independent empty note single insertion leaves one reference and normal text caret",
+      "proof": {
+        "before": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "after": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "72be9e65-5bb2-4b45-b0aa-58fa68ec8cf5",
+                "name": "empty-single.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "paragraph"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Independent single Undo restores exact empty document including added paragraph",
+      "proof": {
+        "actual": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Independent Redo restores exact first attachment and paragraph transaction"
+    },
+    {
+      "name": "Independent continuous chooser retains first and second identity"
+    },
+    {
+      "name": "Independent second chooser Undo restores exact prior card and paragraph document"
+    },
+    {
+      "name": "Independent explicit old image selection replaces only selected card and retains all media",
+      "proof": {
+        "before": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "72be9e65-5bb2-4b45-b0aa-58fa68ec8cf5",
+                "name": "empty-single.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "2989d720-d4b4-4b39-95d5-6606ce7d2002",
+                "name": "independent-second.png",
+                "kind": "image"
+              }
+            },
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "after": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "72be9e65-5bb2-4b45-b0aa-58fa68ec8cf5",
+                "name": "empty-single.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "799fd757-9e92-4e23-a575-ecdb9d45f81d",
+                "name": "intentional-replacement.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "paragraph"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Independent Undo of explicit replacement restores exact old document and all media"
+    },
+    {
+      "name": "Independent new empty note one three-file FileList references every exact stored identity once",
+      "proof": {
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "ea70a36f-cd49-4f15-b42f-43cc5bf10f87",
+                "name": "three-first.png",
+                "kind": "image"
+              }
+            },
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "b1a3695a-b98e-4ab1-b942-98d11cf9b3e1",
+                "name": "three-second.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "c7021c0e-818f-4a24-afce-e606c27db276",
+                "name": "three-third.pdf",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "attachments": [
+          {
+            "id": "ea70a36f-cd49-4f15-b42f-43cc5bf10f87",
+            "noteId": "3d061822-6e30-4f86-be69-7ce213e8f5c8",
+            "kind": "image",
+            "displayName": "three-first.png",
+            "mime": "image/png",
+            "size": 68,
+            "relativePath": "synthetic/586461cf-1e29-4046-a797-fe6ba4e7863c"
+          },
+          {
+            "id": "b1a3695a-b98e-4ab1-b942-98d11cf9b3e1",
+            "noteId": "3d061822-6e30-4f86-be69-7ce213e8f5c8",
+            "kind": "file",
+            "displayName": "three-second.txt",
+            "mime": "text/plain",
+            "size": 32,
+            "relativePath": "synthetic/f6062190-6d79-4f94-b11c-f06b4c4777dc"
+          },
+          {
+            "id": "c7021c0e-818f-4a24-afce-e606c27db276",
+            "noteId": "3d061822-6e30-4f86-be69-7ce213e8f5c8",
+            "kind": "file",
+            "displayName": "three-third.pdf",
+            "mime": "application/pdf",
+            "size": 24,
+            "relativePath": "synthetic/e1d2d216-6db8-40ac-a40c-d7a2916974af"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Empty MIME byte signature png",
+      "proof": {
+        "mime": "image/png",
+        "kind": "image",
+        "size": 68
+      }
+    },
+    {
+      "name": "Empty MIME byte signature jpeg",
+      "proof": {
+        "mime": "image/jpeg",
+        "kind": "image",
+        "size": 6
+      }
+    },
+    {
+      "name": "Empty MIME byte signature gif87",
+      "proof": {
+        "mime": "image/gif",
+        "kind": "image",
+        "size": 15
+      }
+    },
+    {
+      "name": "Empty MIME byte signature gif89",
+      "proof": {
+        "mime": "image/gif",
+        "kind": "image",
+        "size": 15
+      }
+    },
+    {
+      "name": "Empty MIME byte signature webp",
+      "proof": {
+        "mime": "image/webp",
+        "kind": "image",
+        "size": 21
+      }
+    },
+    {
+      "name": "Empty MIME byte signature pdf",
+      "proof": {
+        "mime": "application/pdf",
+        "kind": "file",
+        "size": 18
+      }
+    },
+    {
+      "name": "Empty MIME byte signature wav-no-inference",
+      "proof": {
+        "mime": "application/octet-stream",
+        "kind": "file",
+        "size": 25
+      }
+    },
+    {
+      "name": "Empty MIME byte signature extension-only",
+      "proof": {
+        "mime": "application/octet-stream",
+        "kind": "file",
+        "size": 12
+      }
+    },
+    {
+      "name": "Empty MIME byte signature empty",
+      "proof": {
+        "mime": "application/octet-stream",
+        "kind": "file",
+        "size": 0
+      }
+    },
+    {
+      "name": "Declared nonempty MIME is never overridden by PNG signature"
+    },
+    {
+      "name": "Independent abort preserves recovery identity and ends pending",
+      "proof": {
+        "failure": {
+          "code": "APP_ERROR",
+          "message": "附件读取已中断，文件已保留，请重试"
+        },
+        "calls": [
+          {
+            "command": "query_attachment_operation",
+            "operationId": "71f287dc-9049-4f6b-b125-4040c8301b0f"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Independent abort retries exact original operation and File once",
+      "proof": {
+        "calls": [
+          {
+            "command": "query_attachment_operation",
+            "operationId": "71f287dc-9049-4f6b-b125-4040c8301b0f"
+          },
+          {
+            "command": "query_attachment_operation",
+            "operationId": "71f287dc-9049-4f6b-b125-4040c8301b0f"
+          },
+          {
+            "command": "store_attachment_operation",
+            "operationId": "71f287dc-9049-4f6b-b125-4040c8301b0f"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Independent error preserves recovery identity and ends pending",
+      "proof": {
+        "failure": {
+          "code": "APP_ERROR",
+          "message": "无法读取附件文件，请重试"
+        },
+        "calls": [
+          {
+            "command": "query_attachment_operation",
+            "operationId": "0471ff3b-d6d7-4b1e-8620-93dad6b99874"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Independent error retries exact original operation and File once",
+      "proof": {
+        "calls": [
+          {
+            "command": "query_attachment_operation",
+            "operationId": "0471ff3b-d6d7-4b1e-8620-93dad6b99874"
+          },
+          {
+            "command": "query_attachment_operation",
+            "operationId": "0471ff3b-d6d7-4b1e-8620-93dad6b99874"
+          },
+          {
+            "command": "store_attachment_operation",
+            "operationId": "0471ff3b-d6d7-4b1e-8620-93dad6b99874"
+          }
+        ]
+      }
+    }
+  ],
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "state": {
+    "workspace": {
+      "folders": [
+        {
+          "id": "default",
+          "name": "备忘录",
+          "sortOrder": 0,
+          "createdAt": 1,
+          "kind": "default",
+          "parentId": null
+        },
+        {
+          "id": "quick",
+          "name": "快速备忘录",
+          "sortOrder": -1,
+          "createdAt": 1,
+          "kind": "quick",
+          "parentId": null
+        },
+        {
+          "id": "trash",
+          "name": "最近删除",
+          "sortOrder": 9999,
+          "createdAt": 1,
+          "kind": "trash",
+          "parentId": null
+        }
+      ],
+      "notes": [
+        {
+          "id": "note-a",
+          "folderId": "default",
+          "title": "Fixture A",
+          "plainText": "Fixture A",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Fixture A"
+                  }
+                ]
+              }
+            ]
+          },
+          "createdAt": 1,
+          "updatedAt": 1,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "plain",
+          "revision": 1
+        },
+        {
+          "id": "note-b",
+          "folderId": "default",
+          "title": "Fixture B",
+          "plainText": "Fixture B",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Fixture B"
+                  }
+                ]
+              }
+            ]
+          },
+          "createdAt": 1,
+          "updatedAt": 1,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "plain",
+          "revision": 1
+        }
+      ],
+      "attachments": [],
+      "settings": {
+        "selectedFolder": "default",
+        "selectedNote": "note-a",
+        "theme": "light",
+        "sort": "title"
+      },
+      "access": {
+        "sessionId": "debug70-54174d59-758c-4b5b-95fa-34b9342eac12",
+        "epoch": 1,
+        "notes": {
+          "note-a": {
+            "epoch": 0,
+            "authorized": true
+          },
+          "note-b": {
+            "epoch": 0,
+            "authorized": true
+          }
+        },
+        "suspended": [],
+        "operationId": null
+      },
+      "metadata": {
+        "sessionId": "debug70-54174d59-758c-4b5b-95fa-34b9342eac12",
+        "sequence": 0
+      }
+    },
+    "editorJSON": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Fixture A"
+            }
+          ]
+        }
+      ]
+    },
+    "error": "",
+    "notice": "",
+    "selection": {
+      "folderId": "default",
+      "noteId": "note-a",
+      "page": "editor",
+      "query": "",
+      "searching": false,
+      "menu": null,
+      "modal": null,
+      "listed": [
+        "note-a",
+        "note-b"
+      ]
+    },
+    "save": {
+      "pending": 0,
+      "queued": 0,
+      "failed": 0,
+      "saving": 0
+    },
+    "busy": false,
+    "failure": {
+      "serial": 0,
+      "message": ""
+    },
+    "recording": {
+      "active": false,
+      "state": null
+    },
+    "ocr": {
+      "phase": "choose",
+      "text": "",
+      "error": ""
+    },
+    "settings": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title"
+    },
+    "folderForm": false
+  },
+  "pageErrors": []
+}

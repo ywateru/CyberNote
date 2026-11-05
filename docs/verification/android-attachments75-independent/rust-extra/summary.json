@@ -1,0 +1,837 @@
+{
+  "status": "PASS",
+  "checks": 14,
+  "labels": [
+    "Real Rust stale revision failures retain one stored file, no persistent reference and visible error",
+    "Real Session body retry commits original operation and unique reference without second store",
+    "Real Store authoritatively committed retained failed-save operation",
+    "Actual Rust stored response loss queries same operation and reaches one ACK",
+    "Actual Rust ACK survives injected refresh-only failure with persistent reference",
+    "Real Rust refresh retry performs no extra store or body save",
+    "Real Rust delayed-reader cancel settles actual store then safely aborts own unreferenced file",
+    "Independent real Rust fault path has no page errors",
+    "Independent first child exits naturally before retry/recovery store reopen",
+    "Independent fresh process/session recovers all three error-retried notes and original identities",
+    "Recovered real file bytes unchanged real-conflict.txt",
+    "Recovered real file bytes unchanged real-lost.png",
+    "Recovered real file bytes unchanged real-refresh.txt",
+    "Independent recovery child naturally exits with no pending requests"
+  ],
+  "proof": [
+    {
+      "label": "Real Rust stale revision failures retain one stored file, no persistent reference and visible error",
+      "details": {
+        "error": {
+          "code": "APP_ERROR",
+          "message": "Save has failed; original pending content remains"
+        },
+        "injections": [
+          {
+            "kind": "real Session.save stale revision",
+            "originalRevision": 0,
+            "injectedRevision": 100,
+            "response": {
+              "error": {
+                "code": "conflict",
+                "message": "备忘录已更改，请重新打开后重试"
+              },
+              "events": [],
+              "ok": false,
+              "requestId": 14
+            }
+          },
+          {
+            "kind": "real Session.save stale revision",
+            "originalRevision": 0,
+            "injectedRevision": 100,
+            "response": {
+              "error": {
+                "code": "conflict",
+                "message": "备忘录已更改，请重新打开后重试"
+              },
+              "events": [],
+              "ok": false,
+              "requestId": 16
+            }
+          },
+          {
+            "kind": "drop actual successful store response",
+            "operationId": "5cd21b4b-b5ef-45e0-a14f-7a9ac83b61f3",
+            "result": {
+              "events": [
+                {
+                  "name": "notes-metadata",
+                  "payload": {
+                    "changes": [
+                      {
+                        "id": "4998f928-f991-428c-bafd-c3407015290a",
+                        "kind": "attachment"
+                      }
+                    ],
+                    "metadata": {
+                      "sequence": 5,
+                      "sessionId": "1d91f52b-f682-4c14-b8be-319a3460cf58"
+                    }
+                  }
+                }
+              ],
+              "ok": true,
+              "requestId": 30,
+              "value": {
+                "access": {
+                  "epoch": 1,
+                  "notes": {
+                    "62c352b8-60d4-4aca-b6cc-3a386a29e8a7": {
+                      "authorized": true,
+                      "epoch": 0
+                    },
+                    "804c9ff6-50bb-4c24-abdb-08c6aa4b4415": {
+                      "authorized": true,
+                      "epoch": 0
+                    }
+                  },
+                  "operationId": null,
+                  "sessionId": "1d91f52b-f682-4c14-b8be-319a3460cf58",
+                  "suspended": []
+                },
+                "attachment": {
+                  "displayName": "real-lost.png",
+                  "id": "4998f928-f991-428c-bafd-c3407015290a",
+                  "kind": "image",
+                  "mime": "image/png",
+                  "noteId": "804c9ff6-50bb-4c24-abdb-08c6aa4b4415",
+                  "relativePath": "op-5cd21b4b-b5ef-45e0-a14f-7a9ac83b61f3-4998f928-f991-428c-bafd-c3407015290a.blob",
+                  "size": 68
+                },
+                "metadata": {
+                  "sequence": 5,
+                  "sessionId": "1d91f52b-f682-4c14-b8be-319a3460cf58"
+                },
+                "noteId": "804c9ff6-50bb-4c24-abdb-08c6aa4b4415",
+                "operationId": "5cd21b4b-b5ef-45e0-a14f-7a9ac83b61f3",
+                "receipt": {
+                  "changes": [
+                    {
+                      "id": "4998f928-f991-428c-bafd-c3407015290a",
+                      "kind": "attachment"
+                    }
+                  ]
+                },
+                "status": "stored"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Real Session body retry commits original operation and unique reference without second store"
+    },
+    {
+      "label": "Real Store authoritatively committed retained failed-save operation",
+      "details": {
+        "query": {
+          "events": [],
+          "ok": true,
+          "requestId": 24,
+          "value": {
+            "access": {
+              "epoch": 1,
+              "notes": {
+                "62c352b8-60d4-4aca-b6cc-3a386a29e8a7": {
+                  "authorized": true,
+                  "epoch": 0
+                }
+              },
+              "operationId": null,
+              "sessionId": "1d91f52b-f682-4c14-b8be-319a3460cf58",
+              "suspended": []
+            },
+            "attachment": {
+              "displayName": "real-conflict.txt",
+              "id": "d17ada46-838a-4d29-8465-bf6ec317ed79",
+              "kind": "file",
+              "mime": "text/plain",
+              "noteId": "62c352b8-60d4-4aca-b6cc-3a386a29e8a7",
+              "relativePath": "op-8de631a4-c0fc-4fa7-9736-1e8d72d7a021-d17ada46-838a-4d29-8465-bf6ec317ed79.blob",
+              "size": 33
+            },
+            "metadata": {
+              "sequence": 3,
+              "sessionId": "1d91f52b-f682-4c14-b8be-319a3460cf58"
+            },
+            "noteId": "62c352b8-60d4-4aca-b6cc-3a386a29e8a7",
+            "operationId": "8de631a4-c0fc-4fa7-9736-1e8d72d7a021",
+            "status": "committed"
+          }
+        }
+      }
+    },
+    {
+      "label": "Actual Rust stored response loss queries same operation and reaches one ACK"
+    },
+    {
+      "label": "Actual Rust ACK survives injected refresh-only failure with persistent reference",
+      "details": {
+        "refreshError": {
+          "code": "APP_ERROR",
+          "message": "Independent refresh failure after real ACK"
+        },
+        "revision": 1
+      }
+    },
+    {
+      "label": "Real Rust refresh retry performs no extra store or body save"
+    },
+    {
+      "label": "Real Rust delayed-reader cancel settles actual store then safely aborts own unreferenced file",
+      "details": {
+        "query": {
+          "events": [],
+          "ok": true,
+          "requestId": 72,
+          "value": {
+            "access": {
+              "epoch": 1,
+              "notes": {
+                "1cfbdc44-2ef1-493f-b2a5-9ff8da2e66d1": {
+                  "authorized": true,
+                  "epoch": 0
+                },
+                "6260bf51-3172-4976-8a24-72b611e17f5b": {
+                  "authorized": true,
+                  "epoch": 0
+                },
+                "62c352b8-60d4-4aca-b6cc-3a386a29e8a7": {
+                  "authorized": true,
+                  "epoch": 0
+                },
+                "804c9ff6-50bb-4c24-abdb-08c6aa4b4415": {
+                  "authorized": true,
+                  "epoch": 0
+                }
+              },
+              "operationId": null,
+              "sessionId": "1d91f52b-f682-4c14-b8be-319a3460cf58",
+              "suspended": []
+            },
+            "metadata": {
+              "sequence": 12,
+              "sessionId": "1d91f52b-f682-4c14-b8be-319a3460cf58"
+            },
+            "noteId": "6260bf51-3172-4976-8a24-72b611e17f5b",
+            "operationId": "39d9ad93-0b23-49cf-bc44-f0926b1c0a78",
+            "status": "aborted"
+          }
+        }
+      }
+    },
+    {
+      "label": "Independent real Rust fault path has no page errors"
+    },
+    {
+      "label": "Independent first child exits naturally before retry/recovery store reopen",
+      "details": {
+        "lifecycle": {
+          "pid": 85839,
+          "closing": true,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "pending": 0
+        }
+      }
+    },
+    {
+      "label": "Independent fresh process/session recovers all three error-retried notes and original identities",
+      "details": {
+        "firstPID": 85839,
+        "secondPID": 85931,
+        "firstSession": "1d91f52b-f682-4c14-b8be-319a3460cf58",
+        "secondSession": "3b34ad49-89d8-489b-b140-176962bdcdfc",
+        "persisted": [
+          {
+            "id": "d17ada46-838a-4d29-8465-bf6ec317ed79",
+            "noteId": "62c352b8-60d4-4aca-b6cc-3a386a29e8a7",
+            "path": "op-8de631a4-c0fc-4fa7-9736-1e8d72d7a021-d17ada46-838a-4d29-8465-bf6ec317ed79.blob",
+            "sha256": "79dcd0b64b09ac9c32805c8c53fe02616590af3b968fb660eb82df77cc09cef5"
+          },
+          {
+            "id": "4998f928-f991-428c-bafd-c3407015290a",
+            "noteId": "804c9ff6-50bb-4c24-abdb-08c6aa4b4415",
+            "path": "op-5cd21b4b-b5ef-45e0-a14f-7a9ac83b61f3-4998f928-f991-428c-bafd-c3407015290a.blob",
+            "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+          },
+          {
+            "id": "9d09ea40-4732-4d08-acf2-cdf74332c297",
+            "noteId": "1cfbdc44-2ef1-493f-b2a5-9ff8da2e66d1",
+            "path": "op-48011f48-5cc5-4fd7-bd26-a2fb81f51051-9d09ea40-4732-4d08-acf2-cdf74332c297.blob",
+            "sha256": "eade29a83505bde70d1a67873204e7a2b38d27490e4d87374a7e2afda4ce0ba3"
+          }
+        ]
+      }
+    },
+    {
+      "label": "Recovered real file bytes unchanged real-conflict.txt"
+    },
+    {
+      "label": "Recovered real file bytes unchanged real-lost.png"
+    },
+    {
+      "label": "Recovered real file bytes unchanged real-refresh.txt"
+    },
+    {
+      "label": "Independent recovery child naturally exits with no pending requests",
+      "details": {
+        "lifecycle": {
+          "pid": 85931,
+          "closing": true,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "pending": 0
+        }
+      }
+    }
+  ],
+  "injections": [
+    {
+      "kind": "real Session.save stale revision",
+      "originalRevision": 0,
+      "injectedRevision": 100,
+      "response": {
+        "error": {
+          "code": "conflict",
+          "message": "备忘录已更改，请重新打开后重试"
+        },
+        "events": [],
+        "ok": false,
+        "requestId": 14
+      }
+    },
+    {
+      "kind": "real Session.save stale revision",
+      "originalRevision": 0,
+      "injectedRevision": 100,
+      "response": {
+        "error": {
+          "code": "conflict",
+          "message": "备忘录已更改，请重新打开后重试"
+        },
+        "events": [],
+        "ok": false,
+        "requestId": 16
+      }
+    },
+    {
+      "kind": "drop actual successful store response",
+      "operationId": "5cd21b4b-b5ef-45e0-a14f-7a9ac83b61f3",
+      "result": {
+        "events": [
+          {
+            "name": "notes-metadata",
+            "payload": {
+              "changes": [
+                {
+                  "id": "4998f928-f991-428c-bafd-c3407015290a",
+                  "kind": "attachment"
+                }
+              ],
+              "metadata": {
+                "sequence": 5,
+                "sessionId": "1d91f52b-f682-4c14-b8be-319a3460cf58"
+              }
+            }
+          }
+        ],
+        "ok": true,
+        "requestId": 30,
+        "value": {
+          "access": {
+            "epoch": 1,
+            "notes": {
+              "62c352b8-60d4-4aca-b6cc-3a386a29e8a7": {
+                "authorized": true,
+                "epoch": 0
+              },
+              "804c9ff6-50bb-4c24-abdb-08c6aa4b4415": {
+                "authorized": true,
+                "epoch": 0
+              }
+            },
+            "operationId": null,
+            "sessionId": "1d91f52b-f682-4c14-b8be-319a3460cf58",
+            "suspended": []
+          },
+          "attachment": {
+            "displayName": "real-lost.png",
+            "id": "4998f928-f991-428c-bafd-c3407015290a",
+            "kind": "image",
+            "mime": "image/png",
+            "noteId": "804c9ff6-50bb-4c24-abdb-08c6aa4b4415",
+            "relativePath": "op-5cd21b4b-b5ef-45e0-a14f-7a9ac83b61f3-4998f928-f991-428c-bafd-c3407015290a.blob",
+            "size": 68
+          },
+          "metadata": {
+            "sequence": 5,
+            "sessionId": "1d91f52b-f682-4c14-b8be-319a3460cf58"
+          },
+          "noteId": "804c9ff6-50bb-4c24-abdb-08c6aa4b4415",
+          "operationId": "5cd21b4b-b5ef-45e0-a14f-7a9ac83b61f3",
+          "receipt": {
+            "changes": [
+              {
+                "id": "4998f928-f991-428c-bafd-c3407015290a",
+                "kind": "attachment"
+              }
+            ]
+          },
+          "status": "stored"
+        }
+      }
+    }
+  ],
+  "firstCalls": [
+    {
+      "requestId": 1,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 2,
+      "command": "workspace_action",
+      "type": "createNote",
+      "ok": true
+    },
+    {
+      "requestId": 3,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 4,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 5,
+      "command": "workspace_action",
+      "type": "settings",
+      "ok": true
+    },
+    {
+      "requestId": 6,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 7,
+      "command": "store_attachment_operation",
+      "noteId": "62c352b8-60d4-4aca-b6cc-3a386a29e8a7",
+      "operationId": "8de631a4-c0fc-4fa7-9736-1e8d72d7a021",
+      "ok": true,
+      "status": "stored"
+    },
+    {
+      "requestId": 8,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 9,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 10,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 11,
+      "command": "register_save_intent",
+      "noteId": "62c352b8-60d4-4aca-b6cc-3a386a29e8a7",
+      "ok": true
+    },
+    {
+      "requestId": 12,
+      "command": "read_attachment",
+      "ok": true
+    },
+    {
+      "requestId": 13,
+      "command": "read_attachment",
+      "ok": true
+    },
+    {
+      "requestId": 14,
+      "command": "workspace_action",
+      "type": "saveNote",
+      "ok": false,
+      "error": "conflict"
+    },
+    {
+      "requestId": 15,
+      "command": "register_save_intent",
+      "noteId": "62c352b8-60d4-4aca-b6cc-3a386a29e8a7",
+      "ok": true
+    },
+    {
+      "requestId": 16,
+      "command": "workspace_action",
+      "type": "saveNote",
+      "ok": false,
+      "error": "conflict"
+    },
+    {
+      "requestId": 17,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 18,
+      "command": "register_save_intent",
+      "noteId": "62c352b8-60d4-4aca-b6cc-3a386a29e8a7",
+      "ok": true
+    },
+    {
+      "requestId": 19,
+      "command": "workspace_action",
+      "type": "saveNote",
+      "ok": true
+    },
+    {
+      "requestId": 20,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 21,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 22,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 23,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 24,
+      "command": "query_attachment_operation",
+      "noteId": "62c352b8-60d4-4aca-b6cc-3a386a29e8a7",
+      "operationId": "8de631a4-c0fc-4fa7-9736-1e8d72d7a021",
+      "ok": true,
+      "status": "committed"
+    },
+    {
+      "requestId": 25,
+      "command": "workspace_action",
+      "type": "createNote",
+      "ok": true
+    },
+    {
+      "requestId": 26,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 27,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 28,
+      "command": "workspace_action",
+      "type": "settings",
+      "ok": true
+    },
+    {
+      "requestId": 29,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 30,
+      "command": "store_attachment_operation",
+      "noteId": "804c9ff6-50bb-4c24-abdb-08c6aa4b4415",
+      "operationId": "5cd21b4b-b5ef-45e0-a14f-7a9ac83b61f3",
+      "ok": true,
+      "status": "stored"
+    },
+    {
+      "requestId": 31,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 32,
+      "command": "query_attachment_operation",
+      "noteId": "804c9ff6-50bb-4c24-abdb-08c6aa4b4415",
+      "operationId": "5cd21b4b-b5ef-45e0-a14f-7a9ac83b61f3",
+      "ok": true,
+      "status": "stored"
+    },
+    {
+      "requestId": 33,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 34,
+      "command": "register_save_intent",
+      "noteId": "804c9ff6-50bb-4c24-abdb-08c6aa4b4415",
+      "ok": true
+    },
+    {
+      "requestId": 35,
+      "command": "read_attachment",
+      "ok": true
+    },
+    {
+      "requestId": 36,
+      "command": "read_attachment",
+      "ok": true
+    },
+    {
+      "requestId": 37,
+      "command": "workspace_action",
+      "type": "saveNote",
+      "ok": true
+    },
+    {
+      "requestId": 38,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 39,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 40,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 41,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 42,
+      "command": "workspace_action",
+      "type": "createNote",
+      "ok": true
+    },
+    {
+      "requestId": 43,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 44,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 45,
+      "command": "workspace_action",
+      "type": "settings",
+      "ok": true
+    },
+    {
+      "requestId": 46,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 47,
+      "command": "store_attachment_operation",
+      "noteId": "1cfbdc44-2ef1-493f-b2a5-9ff8da2e66d1",
+      "operationId": "48011f48-5cc5-4fd7-bd26-a2fb81f51051",
+      "ok": true,
+      "status": "stored"
+    },
+    {
+      "requestId": 48,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 49,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 50,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 51,
+      "command": "register_save_intent",
+      "noteId": "1cfbdc44-2ef1-493f-b2a5-9ff8da2e66d1",
+      "ok": true
+    },
+    {
+      "requestId": 52,
+      "command": "read_attachment",
+      "ok": true
+    },
+    {
+      "requestId": 53,
+      "command": "read_attachment",
+      "ok": true
+    },
+    {
+      "requestId": 54,
+      "command": "workspace_action",
+      "type": "saveNote",
+      "ok": true
+    },
+    {
+      "requestId": 55,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 56,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 57,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 58,
+      "command": "workspace_action",
+      "type": "createNote",
+      "ok": true
+    },
+    {
+      "requestId": 59,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 60,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 61,
+      "command": "workspace_action",
+      "type": "settings",
+      "ok": true
+    },
+    {
+      "requestId": 62,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 63,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 64,
+      "command": "store_attachment_operation",
+      "noteId": "6260bf51-3172-4976-8a24-72b611e17f5b",
+      "operationId": "39d9ad93-0b23-49cf-bc44-f0926b1c0a78",
+      "ok": true,
+      "status": "stored"
+    },
+    {
+      "requestId": 65,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 66,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 67,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 68,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 69,
+      "command": "cancel_attachment_operation",
+      "noteId": "6260bf51-3172-4976-8a24-72b611e17f5b",
+      "operationId": "39d9ad93-0b23-49cf-bc44-f0926b1c0a78",
+      "ok": true,
+      "status": "aborted"
+    },
+    {
+      "requestId": 70,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 71,
+      "command": "load_workspace",
+      "ok": true
+    },
+    {
+      "requestId": 72,
+      "command": "query_attachment_operation",
+      "noteId": "6260bf51-3172-4976-8a24-72b611e17f5b",
+      "operationId": "39d9ad93-0b23-49cf-bc44-f0926b1c0a78",
+      "ok": true,
+      "status": "aborted"
+    }
+  ],
+  "binary": {
+    "path": "/private/tmp/apple-notes-recording-window50-independent-target/debug/notes-current-attachment-transport",
+    "sha256": "c91b12fb05136d4f0eb118d017abb6eaad9f8f9c8e518d7e3d7db019bbdd7086",
+    "size": 7195568
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtEnd": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  }
+}

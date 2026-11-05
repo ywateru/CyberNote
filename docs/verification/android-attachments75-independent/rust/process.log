@@ -1,0 +1,14 @@
+node:internal/fs/promises:852
+  return await PromisePrototypeThen(
+         ^
+
+Error: EEXIST: file already exists, mkdir '/private/tmp/attachments75-independent-rust'
+    at async mkdir (node:internal/fs/promises:852:10)
+    at async file:///private/tmp/apple-notes-android-attachments75-review01/scripts/debug/check-mobile-attachments-rust.mjs:39:1 {
+  errno: -17,
+  code: 'EEXIST',
+  syscall: 'mkdir',
+  path: '/private/tmp/attachments75-independent-rust'
+}
+
+Node.js v22.16.0
