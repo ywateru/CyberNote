@@ -15,6 +15,8 @@
 
 实包过程见[录音运行记录](docs/verification/recording-presentation55-runtime/README.md)和[Android11构建记录](docs/verification/unified-candidate06/android-recording-save-build11/README.md)。当前录音完整设备验收与原版像素一致性均未通过。
 
+后续[桌面/共享时间轴58](docs/plan/tasks/app-recording-visual58.md)及[手机播放图形/计时59](docs/plan/tasks/app-mobile-recording-visual59.md)已独立审查并合入源码，准确新包准备中。59仅手机样式与图形，桌面普通/深色同状态PNG、DOM、计算样式和几何保持58基线；手机新播放三角宽度9→19视频像素、原帧19，顶缘偏差12→0。仍保留字体、材料、两侧图标与波形高度等残差，不宣称完整像素一致。上述Mac16/Android11尚不含58/59。
+
 此前已有限接收的包为 **Mac14 / Android08**。Mac14固定构建源 `d9ce9c4b864c2d05bf3d2057ec48ae65fb868a46`，Android08保持 `182464bcc3055caadcd78fe4c7ce1a0ec31eea6a`。两端来源分别记录；[Mac14有限接收](docs/verification/mac-ordinary-keyboard47-root-acceptance.md)承接[上一批双端接收](docs/verification/typography-compose-keyboard36-root-acceptance.md)。
 
 | 平台 | 当前本机交付（未纳入Git） | 本批已验证 |
