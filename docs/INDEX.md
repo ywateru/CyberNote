@@ -2,7 +2,7 @@
 
 更新：2026-11-05。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
-最新优先项：统一录音为主窗口右侧非模态栏，[任务66](plan/tasks/app-mac-recording-sidebar66.md)与[首次媒体读取67](plan/tasks/app-mac-recording-media67.md)均已独审整合、typecheck/build通过。准确Mac20（源b455c140，361产品/382输入）构建与独立核包通过；[真实运行](verification/mac-recording-media67-runtime/README.md)已观察录音中编辑/切笔记/搜索/前后台、两次暂停累计、侧栏×首显播放及main close重开恢复。但实际CmdQ后原K无录音卡，进入[退出修复68](plan/tasks/app-mac-recording-quit68.md)，不能标完整交付。首进程native授权超时保留，正常重开后才实际采集；未改权限/签名。Android13秒原现场完全未操作；旧Mac18约3秒内存现场在19阶段已发现进程不在，原因/时点未知，不能称保全或恢复。整体像素目标继续开放。
+最新要求为主窗口右侧唯一非模态录音栏。66侧栏、67首次媒体读取已合入；68菜单/CmdQ与69普通原生退出桥现已独立复核并整合，见[组合审查](plan/reviews/app-mac-recording-quit6869.md)，结论 SOURCE-READY / RUNTIME-OPEN。准确新Mac21准备中；真实退出后原笔记完整录音及另一笔记最新正文仍须实包验收。[Mac20真实记录](verification/mac-recording-media67-runtime/README.md)的首次授权超时及CmdQ后K缺卡保持历史失败，不能由受控测试追认为通过。Android约13秒原现场完全不操作；旧Mac18约3秒内存现场进程已不在，原因/时点未知，不能称保全或恢复。整体像素与音质仍开放。
 
 历史64状态：最新优先项：[Mac暂停/关闭自动保存64](plan/tasks/app-mac-recording-autosave64.md)首版已独审/整合并生成[Mac18](verification/unified-candidate06/mac-recording-autosave-build18/README.md)，但[真实暂停保存被目标校验拦截](verification/mac-recording-autosave64-runtime/README.md)，**MAC18-RUNTIME-BLOCKED**，不作为修复交付。新3秒录音现场保留，继续修复实际App/Host恢复等待与投影边界。手机原现场继续保持。[最新交互契约](ui/recording-desktop.md)不变。
 

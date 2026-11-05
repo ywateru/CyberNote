@@ -1,6 +1,6 @@
 # Quit68下一准确Mac包实际验收计划
 
-2026-11-05，状态：PLANNED / NOT-RUN。此记录不表示68已实现或新包已构建。20实际CmdQ缺卡保留，见../mac-recording-media67-runtime/README.md。
+2026-11-05，状态：PLANNED / NOT-RUN。68/69源码现已独审合入；新Mac21尚未构建或实际验收。20实际CmdQ缺卡保留，见../mac-recording-media67-runtime/README.md。
 
 1. 仅在68 committed源独审、根整合、准确Mac21冻结/构建与独立核包通过后，root通过Computer Use完整新包路径打开；记录可执行/ZIP身份、准确PID与唯一相关实例。20当前无活动录音，可正常退出；不重开旧18，不触Android。
 2. 新建L/M合成笔记，从L打开唯一非模态右栏。明确Start后必须看到实际计时，不把准备期编辑记为录音并行；若native code7，再如实记录一次失败，只能在无新音频时正常收起/退出后有边界重开，不改权限/签名、不Start循环。
