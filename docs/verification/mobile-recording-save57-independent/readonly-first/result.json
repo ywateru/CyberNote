@@ -1,0 +1,116 @@
+{
+  "status": "pass",
+  "filter": "independent genuine readonly",
+  "checks": [
+    "independent genuine readonly Host commit settles then rejects without restoring editability or storage"
+  ],
+  "errors": [],
+  "observations": [
+    {
+      "independentReadonly": {
+        "validations": [
+          {
+            "available": false,
+            "editable": false,
+            "current": true,
+            "sameEditor": true,
+            "sameScope": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "stamp": {
+              "generation": 2,
+              "sessionId": "controlled-native-session",
+              "epoch": 1,
+              "noteId": "note-a",
+              "noteEpoch": 0
+            },
+            "originalStamp": {
+              "generation": 1,
+              "sessionId": "controlled-native-session",
+              "epoch": 1,
+              "noteId": "note-a",
+              "noteEpoch": 0
+            }
+          }
+        ],
+        "waits": 1,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": false
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A"
+                }
+              ]
+            }
+          ]
+        },
+        "ticket": true,
+        "panel": true,
+        "sameFile": true,
+        "submitted": 1,
+        "text": "全部备忘录\n1970年1月1日 08:00\n\nOriginal A\n\n新录音\n今天 05:59 00:06\n00:00\n00:01\n00:02\n00:03\n00:04\n00:05\n00:06\n00:07\n00:08\n00:09\n00:10\n00:11\n00:12\n00:13\n00:14\n00:15\n00:16\n00:17\n00:18\n00:06.00\n原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口\n15\n15\n重试回放\n重试"
+      }
+    }
+  ],
+  "limits": [
+    "Actual React App/Host/Gate/NoteEditor/Panel and production bridge/authority/attachment/SaveQueue; native IPC and hardware controlled.",
+    "Baseline App uses exact git 9167db9; test transforms only observe checks/gate and inject one-shot actions at real wait admission. No product algorithm replaced.",
+    "No native GUI, device, database, local audio file, valid encoded audio or pixel/playability claim."
+  ]
+}
