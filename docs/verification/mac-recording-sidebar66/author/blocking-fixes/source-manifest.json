@@ -1,0 +1,121 @@
+{
+  "sourceCommit": "f4a2fba7b5d1fda854b3bc802a629a6e1045c7f4",
+  "parentCommit": "182617db952c59540da0da7214eabbe343a923cf",
+  "originalProductCommit": "11c73a914deb6bb955fe88ec54ab70f8a5566a60",
+  "reviewBlockedCommit": "bd6172eb",
+  "date": "2026-11-05",
+  "productFiles": [
+    {
+      "path": "src/App.tsx",
+      "bytes": 206950,
+      "sha256": "ae848fb7afd0fe83687c4eba1fb778f7f5cb2d4a0c2cfb2930517d1f46c2398e"
+    },
+    {
+      "path": "src/DesktopRecordingPanel.tsx",
+      "bytes": 12917,
+      "sha256": "d5b0610c3a67174f18dc36821c7fdd93a316a436f55d3160108712eae26b00e8"
+    },
+    {
+      "path": "src/RecordingPanel.css",
+      "bytes": 20596,
+      "sha256": "d9c86e89e0a902b03a96e2dc1ce5584ba477931e8165189e5cba10e80836d8e9"
+    },
+    {
+      "path": "src-tauri/src/recording_window.rs",
+      "bytes": 58063,
+      "sha256": "37b0a640ea5fa59163bffda053c54dc61b6f4f08fb9afb4c3e9e3bf5e4d9b5ad"
+    }
+  ],
+  "preservedProductionSources": [
+    {
+      "path": "src/RecordingPanel.tsx",
+      "bytes": 16058,
+      "sha256": "6b714b5d045af4df8827aa091959204c4df687518cebd32a5c430d5e7d4fc123",
+      "unchangedFromParent": true
+    },
+    {
+      "path": "src/recording-session.ts",
+      "bytes": 14715,
+      "sha256": "fe002d7bc3670821d25884fb776fb961def3960af9e257681a57fe613581f6bc",
+      "unchangedFromParent": true
+    },
+    {
+      "path": "src/desktop-recording-session.ts",
+      "bytes": 11417,
+      "sha256": "348e0298d2a7d825977c4efc881768e2a7042d969ac4a4551f6178a75874f23c",
+      "unchangedFromParent": true
+    },
+    {
+      "path": "src/recording-pcm.ts",
+      "bytes": 2623,
+      "sha256": "733870292dc2e3f6fd87fa4bac9cf504c5da2bfe136d79556c289803bf1800c2",
+      "unchangedFromParent": true
+    },
+    {
+      "path": "src/native-recording-access.ts",
+      "bytes": 1978,
+      "sha256": "3cd44eec8fec1e9cff7535a8c3df1289090ee3025a952cab786b0db3712261d7",
+      "unchangedFromParent": true
+    },
+    {
+      "path": "src/use-editor-commit.ts",
+      "bytes": 1521,
+      "sha256": "6245351f825d3f24fc4df06413be51a3bfa56feabe3f5586931eb94e64f7b809",
+      "unchangedFromParent": true
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "bytes": 18648,
+      "sha256": "743aff7d7cdc7240c303436e24d806db59454b00bcefd9926873ceead25fbaee",
+      "unchangedFromParent": true
+    }
+  ],
+  "runnersAndDependencies": [
+    {
+      "path": "scripts/check-recording-sidebar66-recovery.mjs",
+      "bytes": 23786,
+      "sha256": "2318c18ac8377bb9ecac99a306aa5c63f620222d617f664176975454e5005e3f"
+    },
+    {
+      "path": "package.json",
+      "bytes": 1820,
+      "sha256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 69103,
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2"
+    },
+    {
+      "path": "src-tauri/Cargo.lock",
+      "bytes": 114667,
+      "sha256": "889b7f449ff4b34263139279cacf57f105fd9c3c6a7099bb56c958f3780ed1b0"
+    }
+  ],
+  "verification": {
+    "app": {
+      "path": "app-attempt03/result.json",
+      "assertions": 19,
+      "pass": true,
+      "pageErrors": 0
+    },
+    "native": {
+      "path": "native-registration.log",
+      "passed": 12,
+      "failed": 0,
+      "filtered": 95
+    },
+    "typecheck": {
+      "path": "typecheck.log",
+      "pass": true
+    },
+    "build": {
+      "path": "build.log",
+      "pass": true
+    },
+    "diffCheck": {
+      "pass": true
+    }
+  },
+  "limits": "No real GUI/device/microphone validation; native IPC is controlled in browser and Rust registry separately tested; no full matrix rerun."
+}

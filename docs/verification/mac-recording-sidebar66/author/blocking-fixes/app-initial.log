@@ -1,0 +1,15 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Error: strict mode violation: getByRole('alert').filter({ hasText: 'controlled successful registration response lost' }) resolved to 2 elements:
+    1) <div role="alert" class="error-banner">…</div> aka getByText('controlled successful registration response lost重试')
+    2) <p role="alert">controlled successful registration response lost</p> aka getByLabel('录音面板').getByText('controlled successful')
+
+Call log:
+[2m  - waiting for getByRole('alert').filter({ hasText: 'controlled successful registration response lost' }) to be visible[22m
+
+    at waitFailure (/private/tmp/apple-notes-mac-recording-sidebar66-01/scripts/check-recording-sidebar66-recovery.mjs:138:118)
+    at /private/tmp/apple-notes-mac-recording-sidebar66-01/scripts/check-recording-sidebar66-recovery.mjs:140:51
+
+Node.js v22.16.0
