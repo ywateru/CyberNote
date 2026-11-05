@@ -6,7 +6,16 @@
 
 ## 当前交付（2026-11-05）
 
-当前本机可用包为 **Mac14 / Android08**。Mac14固定构建源 `d9ce9c4b864c2d05bf3d2057ec48ae65fb868a46`，Android08保持 `182464bcc3055caadcd78fe4c7ce1a0ec31eea6a`。两端来源分别记录；[Mac14有限接收](docs/verification/mac-ordinary-keyboard47-root-acceptance.md)承接[上一批双端接收](docs/verification/typography-compose-keyboard36-root-acceptance.md)。
+本轮录音开发包为 **Mac16 / Android构建11**；两端来源不同，不能视为同一完整构建。Mac16源 `9167db94908ac635b026220e782878447c9e16a7`，包含浮窗/主窗右栏双模式与已保存录音播放修复；Android11源 `747a509bce96f72a23c2709493d7d50fe46aa53c`，另含手机录音完成保存的提交时序修复。它们仍属有限验收中的开发包。
+
+| 平台 | 最新本机录音开发包（未纳入Git） | 已验证与限制 |
+| --- | --- | --- |
+| Mac16 | [ZIP](artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.zip) / [应用](artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.app) | 实际浮窗↔右栏及Notes内编辑/撤销重做/新建/搜索/加粗通过，但新采集被系统授权请求无返回阻塞；已有长录音正常重开后播放与±15秒通过。未完成新包采集中双模式验收 |
+| Android构建11 | [APK](artifacts/unified-candidate06/android-recording-save-build11/android-attempt01/android-original.apk) | arm64-v8a debug；源码独审、准确离线构建/收集通过，尚未安装。原模拟器构建10的13秒未保存录音仍保留，保全前不覆盖升级；11是构建编号，现有设备OS为Android11/API30 |
+
+实包过程见[录音运行记录](docs/verification/recording-presentation55-runtime/README.md)和[Android11构建记录](docs/verification/unified-candidate06/android-recording-save-build11/README.md)。当前录音完整设备验收与原版像素一致性均未通过。
+
+此前已有限接收的包为 **Mac14 / Android08**。Mac14固定构建源 `d9ce9c4b864c2d05bf3d2057ec48ae65fb868a46`，Android08保持 `182464bcc3055caadcd78fe4c7ce1a0ec31eea6a`。两端来源分别记录；[Mac14有限接收](docs/verification/mac-ordinary-keyboard47-root-acceptance.md)承接[上一批双端接收](docs/verification/typography-compose-keyboard36-root-acceptance.md)。
 
 | 平台 | 当前本机交付（未纳入Git） | 本批已验证 |
 | --- | --- | --- |
@@ -15,7 +24,7 @@
 
 Mac14当前系统导航关闭条件下的Tab/OptionTab故障路径已实际有限通过；系统导航开启、多窗和完整输入仍待验。干净补拍48支持全选及部分选中文字颜色误差下降，自然态相对Mac13完整图像零变化，字形、选区背景与全界面像素仍有残差。Android空白新建返回后计数9的条目继续保留，原版相同路径语义待证。
 
-用户新增的录音基本交互要求已完成源码独审及主线整合回归，按[任务50](docs/plan/tasks/app-recording-interactions50.md)实施：桌面改为真实独立非模态录音窗口，支持后台录音、同时编辑/切换笔记和操作其他应用，完成保存回原笔记；同时完善正文进行中卡、试听定位与安全关闭，不做听写或转写。该项尚未包含在上述已交付包中；[用户桌面截图](references/desktop/recording-20261105/user-recording-sidebar.png)已原字节保存，内部样式继续以它对照。准确旧Mac14本轮仍停在麦克风准备阶段，新[授权预检52](docs/plan/tasks/app-mac-recording-access52.md)与[实包验收计划54](docs/verification/recording-window54-runtime-plan.md)分别推进，不能把代码或计时器当作实际收音通过。
+用户新增录音需求的重点是：录音时继续使用备忘录内的其他功能，包括当前A编辑/撤销重做、切换或新建B、搜索与格式工具，并始终保存回开始录音的A。[任务50](docs/plan/tasks/app-recording-interactions50.md)及[双模式55](docs/plan/tasks/app-recording-presentation55.md)已完成源码独审与整合：真实独立非模态浮窗、主窗右侧展开、同一会话连续切换；正文无阻塞遮罩，同时完善进行中卡、试听定位与安全关闭。不做听写或转写。这些变化已包含Mac16开发包，尚未进入此前有限接收的Mac14/Android08。用户[桌面截图](references/desktop/recording-20261105/user-recording-sidebar.png)已原字节保存；实际双模式采集与像素结论以运行记录为准，不能把代码或计时器当作实际收音通过。
 原始移动端录屏已保存在 `references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4`。原版删除/恢复实验按用户要求暂停；Mac对比使用Computer Use，本批未增加系统截图工具权限要求。旧包、缓存及失败证据均保留。
 
 ## 早期交付记录

@@ -26,3 +26,5 @@ depends-on: [app-recording-presentation55, app-recording-playback56]
 作者与独审通过后主线整合并精确构建 Android，现有 Android10 失败现场保留。优先在独立模拟器验新包，不能升级而丢失内存 File；如无法隔离须先提出具体保全方案。新包实际录制/暂停/试听/继续/完成/冷启/播放作为最终设备验收，源码通过不能替代。
 
 准确作者源c25cf7f已分人独验SOURCE-READY：实际React17项、独立真实readonly1项及build首跑通过；作者必要desktop A/B1项通过，root重核18源文件与15独审成员一致。root合入af8723e，证据4494e23/7f65066；全量保护未放宽。专用5582两次启动均在guest早期super分区挂载失败，已停止自有实例并保留日志，未装包/触原5580；准备另评估并行applicationId测试副本。标准新包出包与实际设备结论另记，不把不同identifier测试当标准包原字节通过。
+
+标准Android构建11已从747a509准确离线构建/收集，APK SHA256 c3eb77b3d479e6d1e51acb77583b113a5c231b04c11fcbfffd23ad2892ad9317，见verification/unified-candidate06/android-recording-save-build11/README.md。尚未安装。并行侧包虽可隔离包名/目录，启动仍可能使2GiB原模拟器回收原进程，故未执行。13秒内存录音指定本地备份仍待用户实际答复；未获答复前不复制、不覆盖升级、不停止原应用。

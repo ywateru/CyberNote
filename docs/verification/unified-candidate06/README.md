@@ -2,9 +2,13 @@
 
 ## 当前可用包（2026-11-05）
 
-当前交付为同一固定产品源d7423070207684c5a2bb584281350723c44e9d9c的[Mac12](mac-name-focus-build12/README.md)及[Android07](android-folder-visual-build07/README.md)。Mac准确核包494项、实际证据496项独立复核通过；Android准确核包391项、实际证据711项独立复核通过。两端包位于各自artifacts run的attempt01，根README提供直接链接。Mac两条侧栏恢复与正常重启偏好、普通名称操作，以及手机可见加号/导航/长按/冷启动可见内容保持均有实际记录；文字/选区/环角、手机右下图标和整体像素仍开放。准确SHA、排除项及限制见[本批根接收](../name-mobile29-root-acceptance.md)。
+最新录音开发包为Mac16（源9167db9）及[Android构建11](android-recording-save-build11/README.md)（源747a509），不同来源分别记账，直接产物链接见[根README](../../../README.md)。[实际录音记录](../recording-presentation55-runtime/README.md)区分Mac非采集双模式/Notes操作、已有长录音正常重开后播放，以及旧Android构建10的真实采集/暂停/试听/继续。Mac新采集授权请求无返回，Android11尚未安装，原13秒失败录音的指定本地备份问题待答复；完整录音与像素验收未完成。此前有限接收为Mac14/Android08，见根README。
 
 以下是按时点保留的历史交付；其中“当前”只指对应记录时点。
+
+## 2026-11-05 早前名称与手机文件夹交付
+
+当时交付为同一固定产品源d7423070207684c5a2bb584281350723c44e9d9c的[Mac12](mac-name-focus-build12/README.md)及[Android07](android-folder-visual-build07/README.md)。Mac准确核包494项、实际证据496项独立复核通过；Android准确核包391项、实际证据711项独立复核通过。两端包位于各自artifacts run的attempt01。Mac两条侧栏恢复与正常重启偏好、普通名称操作，以及手机可见加号/导航/长按/冷启动可见内容保持均有实际记录；文字/选区/环角、手机右下图标和整体像素仍开放。准确SHA、排除项及限制见[本批根接收](../name-mobile29-root-acceptance.md)。
 
 ## 2026-11-04 历史可用包
 

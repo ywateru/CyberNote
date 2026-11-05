@@ -1,0 +1,3 @@
+# 57手机保存修复标准包
+
+固定主线源747a509bce96f72a23c2709493d7d50fe46aa53c，产品331项，完整输入350项。沿用已独审构建工具，串行独占target/Gradle cache，freeze/build/collect；旧Mac16与Android构建10原包保留，原5580失败File不升级覆盖。本包实际设备保存/冷启待验，不把独立applicationId测试副本冒称标准包原字节通过。
