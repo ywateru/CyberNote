@@ -294,6 +294,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             recording_access
         ])
         .setup(|app, _| {
+            #[cfg(target_os = "macos")]
+            macos::install_termination(app)?;
             app.manage(NotesUi {
                 app: app.clone(),
                 bindings: Arc::new(Mutex::new(HashMap::new())),
@@ -309,6 +311,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
         .on_event(|app, event| {
             #[cfg(target_os = "macos")]
             match event {
+                tauri::RunEvent::Exit => macos::drop_termination(),
                 event if macos::is_search_menu_event(event) => {
                     if let Err(error) = macos::focus_search_from_menu(app) {
                         eprintln!("notes-ui: menu search focus failed: {error}");
@@ -335,6 +338,9 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
         .on_drop(|app| {
             #[cfg(target_os = "macos")]
             {
+                if let Err(error) = app.run_on_main_thread(macos::drop_termination) {
+                    eprintln!("notes-ui: native quit teardown dispatch failed: {error}");
+                }
                 macos::destroy_keyboard_policy(&app, None);
                 macos::destroy_all(&app);
             }

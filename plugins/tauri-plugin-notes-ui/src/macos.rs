@@ -7,6 +7,13 @@ use std::{
 use tauri::Emitter;
 
 extern "C" {
+    fn notes_ui_termination_install(
+        context: *mut c_void,
+        request: extern "C" fn(*mut c_void) -> i32,
+        release: extern "C" fn(*mut c_void),
+    ) -> i32;
+    fn notes_ui_termination_ready() -> i32;
+    fn notes_ui_termination_drop() -> i32;
     fn notes_ui_bind(
         window: *mut c_void,
         label: *const c_char,
@@ -40,6 +47,110 @@ extern "C" {
         request_id: u64,
         diagnostic: Option<extern "C" fn(u64, u32, i32, std::ffi::c_long)>,
     );
+}
+
+struct TerminationContext<R: Runtime> {
+    app: AppHandle<R>,
+}
+extern "C" fn termination_request<R: Runtime>(context: *mut c_void) -> i32 {
+    // AppHandle::exit queues RequestExit; the existing application RunEvent
+    // guard decides when every recording/document has really acknowledged.
+    std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| unsafe {
+        let Some(context) = (context as *const TerminationContext<R>).as_ref() else {
+            return 1;
+        };
+        context.app.exit(0);
+        0
+    }))
+    .unwrap_or(1)
+}
+extern "C" fn termination_release<R: Runtime>(context: *mut c_void) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| unsafe {
+        if !context.is_null() {
+            drop(Arc::from_raw(context as *const TerminationContext<R>));
+        }
+    }));
+}
+fn termination_status(code: i32) -> Result<()> {
+    if code == 0 {
+        Ok(())
+    } else {
+        Err(Error::new(
+            "termination_guard",
+            format!("普通退出保护尚未就绪，不能开始录音（原生状态{code}）"),
+        ))
+    }
+}
+pub(super) fn install_termination<R: Runtime>(app: &AppHandle<R>) -> Result<()> {
+    let context = Arc::into_raw(Arc::new(TerminationContext { app: app.clone() }));
+    // Native consumes this Arc reference on success, exact repeat and failure.
+    termination_status(unsafe {
+        notes_ui_termination_install(
+            context.cast_mut().cast(),
+            termination_request::<R>,
+            termination_release::<R>,
+        )
+    })
+}
+pub(super) fn drop_termination() {
+    let code = unsafe { notes_ui_termination_drop() };
+    if code != 0 {
+        eprintln!("notes-ui: native quit teardown failed ({code})");
+    }
+}
+
+#[cfg(test)]
+mod termination69_tests {
+    use super::*;
+
+    #[test]
+    fn actual_plugin_setup_rejects_missing_native_protection() {
+        // MockRuntime creates no NSApplication/windows. Rust tests run off the
+        // main thread, so the REAL plugin setup must fail before AppKit access.
+        let result = tauri::test::mock_builder()
+            .enable_macos_default_menu(false)
+            .plugin(crate::init())
+            .build(tauri::test::mock_context(tauri::test::noop_assets()));
+        let error = result.err().expect("unprotected plugin setup must fail");
+        assert!(error.to_string().contains("termination_guard"));
+    }
+
+    #[test]
+    fn callback_reaches_actual_app_exit_and_contains_runtime_panic() {
+        let app = tauri::test::mock_builder()
+            .enable_macos_default_menu(false)
+            .build(tauri::test::mock_context(tauri::test::noop_assets()))
+            .unwrap();
+        let context = Arc::new(TerminationContext {
+            app: app.handle().clone(),
+        });
+        let transferred = Arc::into_raw(context.clone()).cast_mut().cast();
+        // Exact tauri 2.12.5 MockRuntime::request_exit is unimplemented and
+        // panics. Reaching that real API verifies the production AppHandle::exit
+        // call, while the ABI trampoline converts its panic into failure.
+        assert_eq!(
+            termination_request::<tauri::test::MockRuntime>(transferred),
+            1
+        );
+        assert_eq!(Arc::strong_count(&context), 2);
+        termination_release::<tauri::test::MockRuntime>(transferred);
+        assert_eq!(Arc::strong_count(&context), 1);
+        assert_eq!(
+            termination_request::<tauri::test::MockRuntime>(std::ptr::null_mut()),
+            1
+        );
+        termination_release::<tauri::test::MockRuntime>(std::ptr::null_mut());
+    }
+
+    #[test]
+    fn native_failure_status_never_becomes_ready() {
+        assert!(termination_status(0).is_ok());
+        for code in [1, 2, 3, 4, 5, 6, 7, 8, -1, 99] {
+            let error = termination_status(code).unwrap_err();
+            assert_eq!(error.code, "termination_guard");
+            assert!(error.message.contains(&code.to_string()));
+        }
+    }
 }
 
 struct RecordingSender {
@@ -173,6 +284,10 @@ async fn recording_access_inner<R: Runtime>(
             request.emit(Stage::RustLateDispatch, 0, -1);
             return;
         }
+        if let Err(error) = termination_status(unsafe { notes_ui_termination_ready() }) {
+            let _ = tx.try_send(Err(request.error(error, Stage::RustDispatch)));
+            return;
+        }
         let start = || -> Result<usize> {
             let current = current_app
                 .get_webview_window(caller.label())
@@ -249,6 +364,7 @@ async fn recording_access_inner<R: Runtime>(
     let current_app = app.clone();
     app.run_on_main_thread(move || {
         let verify = || -> Result<RecordingAccess> {
+            termination_status(unsafe { notes_ui_termination_ready() })?;
             let current = current_app
                 .get_webview_window(window.label())
                 .ok_or_else(|| Error::new("window_closed", "录音所属窗口已关闭"))?;

@@ -23,6 +23,7 @@ fn main() {
         // Unwind this unit's strong owner/block references on the caught path.
         cc::Build::new()
             .file("macos/recording_access.m")
+            .file("macos/termination.m")
             .flag("-fobjc-arc")
             .flag("-fobjc-arc-exceptions")
             .flag("-fblocks")
@@ -42,6 +43,7 @@ fn main() {
         println!("cargo:rerun-if-changed=macos/format.m");
         println!("cargo:rerun-if-changed=macos/format.h");
         println!("cargo:rerun-if-changed=macos/keyboard.m");
+        println!("cargo:rerun-if-changed=macos/termination.m");
         println!("cargo:rerun-if-changed=macos/recording_access.m");
     }
 }
