@@ -1,0 +1,44 @@
+import assert from 'node:assert/strict';
+import {openRuntime,api,idle,state,saveJSON} from '../../../../scripts/debug/runtime.mjs';
+import {execFileSync} from 'node:child_process';
+import {resolve} from 'node:path';
+const sourceHead=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+const observations=[];let runtime;
+const files=[{name:'review-synthetic.txt',mime:'text/plain',text:'Synthetic reviewer attachment'}];
+const outcome=promise=>promise.then(value=>({value}),error=>({error:error.message}));
+try{
+ runtime=await openRuntime({tmp:'/private/tmp'});const page=runtime.page;
+ // Headless picker boundary must be acquired before opening it.
+ const chooserPending=page.waitForEvent('filechooser');await api(page,'attachment.choose',{kind:'file'});const chooser=await chooserPending;
+ await chooser.setFiles({name:'review-dom.txt',mimeType:'text/plain',buffer:Buffer.from('Synthetic DOM source')});await idle(page);
+ let s=await state(page);assert(s.workspace.attachments.length===1);assert(runtime.backend.workspace.notes.find(n=>n.id==='note-a').document.content.some(n=>n.type==='attachment'));
+ observations.push({check:'Real DOM picker boundary and body ACK',pass:true,attachmentCount:s.workspace.attachments.length});
+ await runtime.reset();
+ await api(page,'attachment.submit',{files});await idle(page);s=await state(page);assert(s.workspace.attachments.length===1);assert(JSON.stringify(runtime.backend.workspace.notes.find(n=>n.id==='note-a').document).includes('attachment'));
+ observations.push({check:'Semantic valid attachment through useEditorCommit/rebind/ACK',pass:true});
+ await runtime.reset();runtime.backend.configure({delay:{load:350}});let loads=runtime.backend.calls.filter(x=>x.command==='load_workspace').length;
+ const navSubmission=outcome(api(page,'attachment.submit',{files}));
+ await page.waitForFunction(count=>window.__DEBUG_PLATFORM__.calls.filter(x=>x.command==='load_workspace').length>count,loads);
+ const nav=await page.evaluate(()=>{document.querySelector('.note-entry:nth-child(2) .note-row').click();return {actualNoteRowHandlerDispatched:true}});
+ const navResult=await navSubmission;s=await state(page);
+ console.log(JSON.stringify({stage:'selection-result',sourceHead,nav,navResult,selection:s.selection,attachments:runtime.backend.workspace.attachments.length}));assert(navResult.error);assert(runtime.backend.workspace.attachments.length===0);assert(runtime.backend.workspace.notes.every(n=>!JSON.stringify(n.document).includes('attachment')));
+ observations.push({check:'Note selection/scope changes during trusted synchronization reject original target',pass:true,navigation:nav,result:navResult,selected:s.selection.noteId,backendAttachmentCount:runtime.backend.workspace.attachments.length});
+ await runtime.reset();runtime.backend.configure({delay:{load:350}});loads=runtime.backend.calls.filter(x=>x.command==='load_workspace').length;
+ const authSubmission=outcome(api(page,'attachment.submit',{files}));
+ await page.waitForFunction(count=>window.__DEBUG_PLATFORM__.calls.filter(x=>x.command==='load_workspace').length>count,loads);
+ runtime.backend.workspace.notes.find(n=>n.id==='note-a').locked=true;runtime.backend.sequence++;
+ const authResult=await authSubmission;s=await state(page);
+ console.log(JSON.stringify({stage:'authority-result',authResult,access:s.workspace.access}));assert(authResult.error);assert(runtime.backend.workspace.attachments.length===0);assert(!s.workspace.access.notes['note-a'].authorized);
+ observations.push({check:'Authority revoked in trusted synchronization rejects original target',pass:true,result:authResult,authorized:s.workspace.access.notes['note-a'].authorized,backendAttachmentCount:runtime.backend.workspace.attachments.length});
+ await runtime.reset();await api(page,'ocr.open');runtime.backend.configure({fail:{ocr:1}});
+ const ocrFailure=await outcome(api(page,'ocr.select',{source:'image'}));s=await state(page);assert(ocrFailure.error?.includes('APP_ERROR'));assert(s.ocr.phase==='failed');assert(!JSON.stringify(runtime.backend.workspace.notes.find(n=>n.id==='note-a').document).includes('Synthetic OCR'));
+ observations.push({check:'OCR swallowed native failure becomes explicit APP_ERROR, no body insertion',pass:true,result:ocrFailure,phase:s.ocr.phase});
+ await api(page,'ocr.cancel');await api(page,'app.dismissError');await idle(page);
+ await api(page,'ocr.open');await api(page,'ocr.select',{source:'image'});await idle(page);runtime.backend.configure({delay:{load:350}});loads=runtime.backend.calls.filter(x=>x.command==='load_workspace').length;
+ const ocrInsert=outcome(api(page,'ocr.insert'));
+ await page.waitForFunction(count=>window.__DEBUG_PLATFORM__.calls.filter(x=>x.command==='load_workspace').length>count,loads);
+ const ocrNav=await page.evaluate(()=>{document.querySelector('.note-entry:nth-child(2) .note-row').click();return {actualNoteRowHandlerDispatched:true}});const ocrResult=await ocrInsert;
+ console.log(JSON.stringify({stage:'ocr-selection-result',ocrNav,ocrResult}));assert(ocrResult.error);assert(runtime.backend.workspace.notes.every(n=>!JSON.stringify(n.document).includes('Synthetic OCR')));
+ observations.push({check:'OCR original scope rechecked after trusted synchronization/commit',pass:true,navigation:ocrNav,result:ocrResult,backendBodiesUnmodified:true});
+ await saveJSON(resolve('docs/verification/app-debug-automation70/independent/target-probe-attempt02.json'),{sourceHead,metadata:runtime.metadata,observations});console.log(JSON.stringify({sourceHead,observations}));
+}finally{await runtime?.cleanup();}

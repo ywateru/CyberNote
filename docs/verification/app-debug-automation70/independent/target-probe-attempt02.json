@@ -1,0 +1,64 @@
+{
+  "sourceHead": "d68c8540e2d6ceb5010e73f39c76ec400123951a",
+  "metadata": {
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  },
+  "observations": [
+    {
+      "check": "Real DOM picker boundary and body ACK",
+      "pass": true,
+      "attachmentCount": 1
+    },
+    {
+      "check": "Semantic valid attachment through useEditorCommit/rebind/ACK",
+      "pass": true
+    },
+    {
+      "check": "Note selection/scope changes during trusted synchronization reject original target",
+      "pass": true,
+      "navigation": {
+        "actualNoteRowHandlerDispatched": true
+      },
+      "result": {
+        "error": "page.evaluate: Error: APP_ERROR: 原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口\n    at eval (eval at evaluate (:290:30), <anonymous>:1:122)\n    at async <anonymous>:316:30"
+      },
+      "selected": "note-b",
+      "backendAttachmentCount": 0
+    },
+    {
+      "check": "Authority revoked in trusted synchronization rejects original target",
+      "pass": true,
+      "result": {
+        "error": "page.evaluate: Error: APP_ERROR: 原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口\n    at eval (eval at evaluate (:290:30), <anonymous>:1:122)\n    at async <anonymous>:316:30"
+      },
+      "authorized": false,
+      "backendAttachmentCount": 0
+    },
+    {
+      "check": "OCR swallowed native failure becomes explicit APP_ERROR, no body insertion",
+      "pass": true,
+      "result": {
+        "error": "page.evaluate: Error: APP_ERROR: Controlled ocr failure\n    at eval (eval at evaluate (:290:30), <anonymous>:1:122)\n    at async <anonymous>:316:30"
+      },
+      "phase": "failed"
+    },
+    {
+      "check": "OCR original scope rechecked after trusted synchronization/commit",
+      "pass": true,
+      "navigation": {
+        "actualNoteRowHandlerDispatched": true
+      },
+      "result": {
+        "error": "page.evaluate: Error: APP_ERROR: 原录音会话已关闭\n    at eval (eval at evaluate (:290:30), <anonymous>:1:122)\n    at async <anonymous>:316:30"
+      },
+      "backendBodiesUnmodified": true
+    }
+  ]
+}

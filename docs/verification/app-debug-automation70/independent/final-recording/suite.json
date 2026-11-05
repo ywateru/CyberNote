@@ -1,0 +1,38 @@
+{
+  "results": [
+    {
+      "group": "recording",
+      "pass": true,
+      "checks": [
+        "A recording parks while B editing and first checkpoint saves one original-A card",
+        "Paused preview uses actual browser audio playback state",
+        "Second checkpoint accumulates active time excluding paused gap",
+        "Successive cumulative revisions replace one card",
+        "Store boundary failure retains retry state",
+        "Retry saves one card and releases recording owner",
+        "Synthetic valid audio decoded by real AudioContext and capture tracks released",
+        "Actual cumulative PCM WAV independently decodes to nonempty active-duration audio",
+        "Simulated native close waits for actual recording save and release",
+        "Simulated native quit seals, saves, releases and acknowledges actual owner",
+        "Delayed checkpoint failure is APP_ERROR through execute or real idle",
+        "Actual checkpoint retry state and error retain owner",
+        "Checkpoint recovery retains committed revision media for Undo, references latest in one DOM/body card and releases acknowledged owner",
+        "No uncaught application page errors"
+      ],
+      "elapsedMs": 6688
+    }
+  ],
+  "groups": [
+    "recording"
+  ],
+  "scope": {
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  }
+}

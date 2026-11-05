@@ -1,0 +1,45 @@
+{
+  "policy": "Keep prior failures as facts; fixes are evaluated only on later identified source. Harness failures are not product failures.",
+  "records": [
+    {
+      "label": "initial settings swallowed failure",
+      "classification": "product debug completion defect, resolved by5175",
+      "evidence": "history/settings-before-fix.suite.json"
+    },
+    {
+      "label": "inherited argument names and empty sort menu",
+      "classification": "product debug contract defect, resolved by1640193c",
+      "evidence": "input-probe-attempt01.json",
+      "fixEvidence": "input-probe-attempt02.json"
+    },
+    {
+      "label": "headless picker cancel before setInputFiles",
+      "classification": "test harness sequencing defect, corrected by waiting for real filechooser",
+      "fixEvidence": "target-probe-attempt02.json"
+    },
+    {
+      "label": "target and App-unmount probe setup attempts",
+      "classification": "review harness: protected inert DOM primitive did not change selection; independent mount initially404/not ready; not product failures",
+      "fixEvidence": [
+        "target-probe-attempt02.json",
+        "cleanup-probe-attempt04.json"
+      ],
+      "detail": "Target stress test uses actual note-row DOM handler programmatic click, not claimed trusted human input."
+    },
+    {
+      "label": "delayed paused checkpoint falsely reported command/idle success",
+      "classification": "real debug async-error defect on bf248 equivalent3a0e1e1c; resolved by8885",
+      "evidence": "recording-error-probe-attempt01.json",
+      "fixEvidence": "final-probe.json"
+    },
+    {
+      "label": "last full suite demanded physical attachment count1",
+      "classification": "test assertion defect on9c72; immutable committed media intentionally retained for Undo; fixed9310",
+      "evidence": "final-suite/failure.json",
+      "fixEvidence": [
+        "final-probe.json",
+        "final-recording/summary.json"
+      ]
+    }
+  ]
+}

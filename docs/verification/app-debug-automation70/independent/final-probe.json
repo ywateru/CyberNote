@@ -1,0 +1,161 @@
+{
+  "pass": true,
+  "sourceHead": "1fe83ec86ff41072b9bb51c44eaaea802ae4a786",
+  "elapsedMs": 11290,
+  "catalog": {
+    "originalDescription": "Create through actual createNote / flush / receipt",
+    "freshDescription": "Create through actual createNote / flush / receipt",
+    "hasMutatedArg": false,
+    "rejection": {
+      "ok": false,
+      "code": "INVALID_ARGUMENT",
+      "message": "Unknown argument: acceptedByMutation"
+    }
+  },
+  "checkpoint": {
+    "ok": false,
+    "code": "APP_ERROR",
+    "message": "Controlled store failure"
+  },
+  "idle": {
+    "ok": false,
+    "code": "APP_ERROR",
+    "message": "Controlled store failure"
+  },
+  "failed": {
+    "recording": {
+      "active": true,
+      "state": {
+        "sequence": 1,
+        "phase": "retry",
+        "openedAt": 1793886456455,
+        "recordedAt": 1793886456516,
+        "elapsed": 1599.9000000953674,
+        "paused": false,
+        "canToggle": false,
+        "canFinish": true,
+        "notice": "Controlled store failure",
+        "hasError": true,
+        "position": 0,
+        "duration": 1600,
+        "previewPosition": true,
+        "playing": false,
+        "playPending": false,
+        "previewPending": false,
+        "seeking": false,
+        "canPlay": true,
+        "canSeek": true,
+        "canRetryPreview": false,
+        "seekable": [
+          [
+            0,
+            1600
+          ]
+        ],
+        "samples": [
+          {
+            "at": 1500,
+            "peak": 34.5
+          }
+        ]
+      }
+    },
+    "backendAttachments": 0,
+    "ownerRetained": true
+  },
+  "recovered": {
+    "recording": {
+      "active": false,
+      "state": null
+    },
+    "backendAttachments": 2,
+    "bodyCards": 1,
+    "DOMCards": 1,
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "attachment",
+          "attrs": {
+            "id": "893227ed-62b8-450c-bbfd-36413edaeb34",
+            "name": "新录音.wav",
+            "kind": "audio"
+          }
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Fixture A"
+            }
+          ]
+        }
+      ]
+    },
+    "attachments": [
+      {
+        "id": "1cb43f42-5614-40d0-a724-412fe7141363",
+        "noteId": "note-a",
+        "kind": "audio",
+        "displayName": "新录音.wav",
+        "mime": "audio/wav",
+        "size": 76844,
+        "relativePath": "synthetic/c5f2b2fd-67c2-4cf4-9224-a289cc5af190",
+        "recordedAt": 1793886456516
+      },
+      {
+        "id": "893227ed-62b8-450c-bbfd-36413edaeb34",
+        "noteId": "note-a",
+        "kind": "audio",
+        "displayName": "新录音.wav",
+        "mime": "audio/wav",
+        "size": 76844,
+        "relativePath": "synthetic/0d1ad20a-26b0-41ce-9eae-6c857e495e37",
+        "recordedAt": 1793886456516
+      }
+    ],
+    "journal": [
+      {
+        "operationId": "510908fe-cb0f-4506-b57c-e8edafc53afd",
+        "noteId": "note-a",
+        "status": "committed",
+        "attachment": {
+          "id": "1cb43f42-5614-40d0-a724-412fe7141363",
+          "noteId": "note-a",
+          "kind": "audio",
+          "displayName": "新录音.wav",
+          "mime": "audio/wav",
+          "size": 76844,
+          "relativePath": "synthetic/c5f2b2fd-67c2-4cf4-9224-a289cc5af190",
+          "recordedAt": 1793886456516
+        }
+      },
+      {
+        "operationId": "bb20880a-fcef-40d1-baae-18535df3c0c7",
+        "noteId": "note-a",
+        "status": "committed",
+        "attachment": {
+          "id": "893227ed-62b8-450c-bbfd-36413edaeb34",
+          "noteId": "note-a",
+          "kind": "audio",
+          "displayName": "新录音.wav",
+          "mime": "audio/wav",
+          "size": 76844,
+          "relativePath": "synthetic/0d1ad20a-26b0-41ce-9eae-6c857e495e37",
+          "recordedAt": 1793886456516
+        }
+      }
+    ],
+    "completion": {
+      "sessionId": "75819be8-3a41-4835-a878-aa4181f7ab23",
+      "operationId": "3cb39742-7dcf-432b-a267-744080d59a53",
+      "owner": "main",
+      "incarnation": "91366614-0a7d-4412-983b-33efe306bf73",
+      "saved": true,
+      "revision": 2
+    },
+    "owner": null
+  },
+  "pageErrors": []
+}

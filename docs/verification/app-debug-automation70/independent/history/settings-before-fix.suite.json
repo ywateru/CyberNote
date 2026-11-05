@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "group": "contract",
+      "pass": false,
+      "checks": [
+        "Versioned catalog covers semantic, DOM and explicit unsupported commands",
+        "does.not.exist rejects UNKNOWN_COMMAND",
+        "editor.insertText rejects INVALID_ARGUMENT",
+        "note.create rejects INVALID_ARGUMENT",
+        "native.takePhoto rejects UNSUPPORTED",
+        "settings.update rejects INVALID_ARGUMENT",
+        "settings.update rejects INVALID_ARGUMENT",
+        "folder.updateDraft rejects INVALID_ARGUMENT",
+        "attachment.submit rejects INVALID_ARGUMENT",
+        "recording.action rejects INVALID_ARGUMENT",
+        "Snapshot includes rendered HTML, DOM geometry, styles and editor JSON",
+        "Identical HTML and layout comparison passes",
+        "Text comparison detects negative fixture",
+        "Raw HTML comparison detects negative fixture",
+        "Normalized HTML comparison detects negative fixture",
+        "Identical screenshot pixels pass",
+        "Screenshot pixels detect deliberate visual regression",
+        "Layout comparison detects changed rect",
+        "Semantic note selection updates actual editor",
+        "DOM row click and semantic select show equivalent selected note/editor",
+        "Real delayed settings handler prevents false idle success",
+        "Delayed settings handler completes after release"
+      ],
+      "error": "settings.update rejects APP_ERROR",
+      "elapsedMs": 2048
+    }
+  ]
+}
