@@ -1,0 +1,28 @@
+---
+id: app-mobile-recording-visual59
+scope: mobile recorder playback row and timer against preserved video frames
+status: pending
+depends-on: [app-recording-visual58]
+---
+
+## objective
+
+继续原视频像素/交互目标，修正58同原比例手机对照中仍明显偏小/偏低的播放图形、播放行和大计时字重。手机设备验收由用户明确暂缓，只允许源码与受控共享View验证；不得操作、备份、安装、停止或重启原Android现场。
+
+## context
+
+读docs/INDEX.md、docs/ui/recording-mobile.md、docs/ui/recording-desktop.md的58规则、docs/verification/recording-visual58/README.md（58合入后可用）、原视频代表帧序列。必须等58独审合入后从root准确源创建隔离树，不能在旧源复写58时间轴/桌面样式。
+
+原帧n0960是224x480有损暂停态；同原比例392x840逻辑渲染，DPR2得784x1680，再整幅等比例缩至224x480，只比较应用区域粗几何，不能证明高清字形或系统栏相同。原状态截图的日期、波形数据、转写排除项、系统状态栏和Home区域差异必须披露，不给虚假整体像素PASS。
+
+初步只读测量（正式开发前需独立冻结）：maxRGB<96的稳定黑墨迹，原播放三角bbox[104,370,122,391]，58新图[108,382,116,393]，中心分别(113,380.5)/(112,387.5)；原左右skip中心(69,381)/(154.5,381)，新(68,387)/(155,387)，横距已接近，主要纵向低约6–7视频px。原大计时bbox[70,330,154,343]，新[70,331,153,345]，宽接近，字重偏轻；阈值不能直接证明原font-weight，需候选截图核验。不要为修播放行而移动整个sheet或已校准时间轴。
+
+## path
+
+优先src/RecordingPanel.css中仅mobile的局部选择器，必要src/RecordingView.tsx的仅手机播放/暂停图形；不得改变desktop布局/图形、58的100px/s/quartertick/seek尺度、状态机、Session、权限、owner、附件/ACK或其他全局样式。证据docs/verification/mobile-recording-visual59/及必要小检查scripts/check-mobile-recording-visual59.mjs；新增检查只覆盖真实视图、动作和范围边界，不复制实现自证。
+
+## verification
+
+先保全58同尺寸旧图，再真实共享View原/旧/新三方、命名ROI及阈值/坐标/图像差值；核初始、采集中、暂停、实际播放中投影，播放/暂停图形的可用性必须服从真实状态。中心与两侧控件互不重叠，触达框与实际图形一致，点击调用现有真实action而不伪造播放成功。手机不同窄宽及dark/错误/忙碌保持控制可用；桌面同props同尺寸图像/DOM不能变化。必要typecheck/build和受影响的最小播放动作检查，58未触逻辑不重复全矩阵。
+
+固定源后不同agent独审；通过后root合入与准确包构建。受控视图结论不追认手机设备、录音、保存或原生像素验收。保留所有首次失败，不清理旧记录与现场。
