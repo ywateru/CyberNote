@@ -1,0 +1,241 @@
+   Compiling libc v0.2.191
+   Compiling proc-macro2 v1.0.107
+   Compiling once_cell v1.21.4
+   Compiling quote v1.0.47
+   Compiling getrandom v0.2.17
+   Compiling rand_core v0.6.4
+   Compiling cpufeatures v0.2.17
+   Compiling crypto-common v0.1.7
+   Compiling serde_core v1.0.229
+   Compiling cipher v0.4.4
+   Compiling ahash v0.8.12
+   Compiling universal-hash v0.5.1
+   Compiling bitflags v2.13.2
+   Compiling polyval v0.6.2
+   Compiling digest v0.10.7
+   Compiling hashbrown v0.14.5
+   Compiling syn v3.0.9
+   Compiling getrandom v0.4.3
+   Compiling errno v0.3.14
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.154
+   Compiling password-hash v0.5.0
+   Compiling serde_derive v1.0.229
+   Compiling rand_chacha v0.3.1
+   Compiling rustix v1.1.6
+   Compiling hashlink v0.9.1
+   Compiling blake2 v0.10.6
+   Compiling ghash v0.5.1
+   Compiling ctr v0.9.2
+   Compiling aes v0.8.4
+   Compiling aead v0.5.2
+   Compiling smallvec v1.16.4
+   Compiling memchr v2.8.3
+   Compiling rusqlite v0.32.1
+   Compiling aes-gcm v0.10.3
+   Compiling tempfile v3.27.0
+   Compiling argon2 v0.5.3
+   Compiling rand v0.8.8
+   Compiling uuid v1.29.0
+   Compiling notes-autosave64-independent-store v0.1.0 (/private/tmp/apple-notes-mac-recording-autosave64-independent-01/artifacts/mac-recording-autosave64-independent/backend-base58fe1110-attempt01/harness)
+warning: methods `revoke_keys`, `folder_note_ids`, `attachment_note`, `note_text`, and `store_attachment` are never used
+   --> src/store.rs:274:19
+    |
+174 | impl Store {
+    | ---------- methods in this implementation
+...
+274 |     pub(crate) fn revoke_keys(&mut self, ids: &[String]) {
+    |                   ^^^^^^^^^^^
+...
+279 |     pub(crate) fn folder_note_ids(&self, fid: &str) -> Result<Vec<String>> {
+    |                   ^^^^^^^^^^^^^^^
+...
+303 |     pub(crate) fn attachment_note(&self, aid: &str) -> Result<String> {
+    |                   ^^^^^^^^^^^^^^^
+...
+310 |     pub(crate) fn note_text(&self, nid: &str) -> Result<Value> {
+    |                   ^^^^^^^^^
+...
+763 |     pub fn store_attachment(
+    |            ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `validated_tags` is never used
+  --> src/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+
+warning: constant `MAX_ARCHIVE` is never used
+  --> src/store/archive.rs:56:7
+   |
+56 | const MAX_ARCHIVE: u64 = 256 * 1024 * 1024;
+   |       ^^^^^^^^^^^
+
+warning: constant `MAX_ATTACHMENT` is never used
+  --> src/store/archive.rs:57:7
+   |
+57 | const MAX_ATTACHMENT: u64 = 100 * 1024 * 1024;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `MAX_DECODED` is never used
+  --> src/store/archive.rs:58:7
+   |
+58 | const MAX_DECODED: u64 = 128 * 1024 * 1024;
+   |       ^^^^^^^^^^^
+
+warning: constant `MAX_JSON_VALUES` is never used
+  --> src/store/archive.rs:61:7
+   |
+61 | const MAX_JSON_VALUES: usize = 500_000;
+   |       ^^^^^^^^^^^^^^^
+
+warning: struct `JsonBudget` is never constructed
+  --> src/store/archive.rs:66:8
+   |
+66 | struct JsonBudget<'a> {
+   |        ^^^^^^^^^^
+
+warning: function `validate_json_budget` is never used
+   --> src/store/archive.rs:128:4
+    |
+128 | fn validate_json_budget(bytes: &[u8]) -> Result<()> {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `Archive` is never constructed
+   --> src/store/archive.rs:148:8
+    |
+148 | struct Archive {
+    |        ^^^^^^^
+
+warning: struct `ImportPlan` is never constructed
+   --> src/store/archive.rs:162:8
+    |
+162 | struct ImportPlan {
+    |        ^^^^^^^^^^
+
+warning: function `write_new` is never used
+   --> src/store/archive.rs:192:4
+    |
+192 | fn write_new(path: &Path, bytes: &[u8]) -> Result<()> {
+    |    ^^^^^^^^^
+
+warning: function `validate_settings` is never used
+   --> src/store/archive.rs:251:4
+    |
+251 | fn validate_settings(settings: &Value) -> Result<()> {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `remap_document` is never used
+   --> src/store/archive.rs:387:4
+    |
+387 | fn remap_document(doc: &mut Value, ids: &HashMap<String, String>) {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `copy_ids` is never used
+   --> src/store/archive.rs:399:4
+    |
+399 | fn copy_ids<'a>(
+    |    ^^^^^^^^
+
+warning: function `validate_archive_version` is never used
+   --> src/store/archive.rs:415:4
+    |
+415 | fn validate_archive_version(archive: &Archive) -> Result<()> {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `read_archive` is never used
+   --> src/store/archive.rs:427:4
+    |
+427 | fn read_archive(path: &Path) -> Result<Archive> {
+    |    ^^^^^^^^^^^^
+
+warning: methods `prepare_archive`, `export_archive`, `preflight_archive`, and `import_archive` are never used
+   --> src/store/archive.rs:436:8
+    |
+435 | impl Store {
+    | ---------- methods in this implementation
+436 |     fn prepare_archive(&self, mut archive: Archive, transaction_id: &str) -> Result<ImportPlan> {
+    |        ^^^^^^^^^^^^^^^
+...
+564 |     pub fn export_archive(&self, path: &Path) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+...
+641 |     pub(crate) fn preflight_archive(&self, path: &Path) -> Result<()> {
+    |                   ^^^^^^^^^^^^^^^^^
+...
+644 |     pub fn import_archive(&mut self, path: &Path) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+
+warning: function `import_checkpoint` is never used
+   --> src/store/archive.rs:802:4
+    |
+802 | fn import_checkpoint(_: &str) {}
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> src/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `evaluate_smart_folder` is never used
+   --> src/store/smart.rs:314:19
+    |
+250 | impl Store {
+    | ---------- method in this implementation
+...
+314 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: field `action` is never read
+  --> src/session.rs:43:5
+   |
+36 | pub struct Pending {
+   |            ------- field in this struct
+...
+43 |     action: Value,
+   |     ^^^^^^
+
+warning: methods `export_archive`, `forget_attachment_window`, `begin`, `acknowledge`, `ready`, and `finish` are never used
+   --> src/session.rs:135:12
+    |
+ 57 | impl Session {
+    | ------------ methods in this implementation
+...
+135 |     pub fn export_archive(&self, path: &std::path::Path, token: &Token) -> Result<()> {
+    |            ^^^^^^^^^^^^^^
+...
+175 |     pub fn forget_attachment_window(&mut self, window: &str) {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+388 |     pub fn begin(
+    |            ^^^^^
+...
+446 |     pub fn acknowledge(&mut self, operation: &str, window: &str, success: bool) -> Result<()> {
+    |            ^^^^^^^^^^^
+...
+465 |     pub fn ready(&self) -> bool {
+    |            ^^^^^
+...
+470 |     pub fn finish(
+    |            ^^^^^^
+
+warning: methods `take_metadata_event`, `store_attachment`, and `smart_projection` are never used
+  --> src/session/metadata.rs:51:19
+   |
+ 4 | impl Session {
+   | ------------ methods in this implementation
+...
+51 |     pub(crate) fn take_metadata_event(&mut self) -> Option<Value> {
+   |                   ^^^^^^^^^^^^^^^^^^^
+...
+54 |     pub(crate) fn store_attachment(
+   |                   ^^^^^^^^^^^^^^^^
+...
+98 |     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: `notes-autosave64-independent-store` (bin "notes-autosave64-independent-store") generated 23 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 13.70s

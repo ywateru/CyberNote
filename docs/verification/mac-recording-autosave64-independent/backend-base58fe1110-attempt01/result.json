@@ -1,0 +1,526 @@
+{
+  "checkCount": 14,
+  "checks": [
+    {
+      "name": "saveNote real ACK does not automatically commit attachment journal",
+      "state": "stored"
+    },
+    {
+      "name": "explicit query sees real document and durably marks committed under same Session owner"
+    },
+    {
+      "code": "attachment_operation_conflict",
+      "name": "same operation exact retry is idempotent and equal-sized changed WAV bytes are rejected"
+    },
+    {
+      "name": "independent immutable versions replace one visible card while preserving supplied latest A and B bodies"
+    },
+    {
+      "name": "committed previous file survives cancel and document reference Undo/Redo simulation"
+    },
+    {
+      "code": "attachment_operation_conflict",
+      "name": "reopen retains both committed files but new Session cannot adopt old process operation ownership"
+    },
+    {
+      "attachments": [
+        {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "423c8a0e-b6a0-4ac3-9eb0-bfa23c316819",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "3b8ec4ac-faac-4e09-85e4-77e5f25787f6",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-cb61af9e-f188-4c00-a938-99803b948970-423c8a0e-b6a0-4ac3-9eb0-bfa23c316819.blob",
+          "size": 108
+        }
+      ],
+      "mode": "candidate_stored",
+      "name": "SIGKILL live SQLite worker then reopen actual Store/Session",
+      "notes": [
+        {
+          "createdAt": 1793863510306,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "A checkpoint one",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "id": "423c8a0e-b6a0-4ac3-9eb0-bfa23c316819",
+                  "kind": "audio",
+                  "name": "\u7d2f\u8ba1\u5f55\u97f3.wav"
+                },
+                "type": "attachment"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "3b8ec4ac-faac-4e09-85e4-77e5f25787f6",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "A checkpoint one",
+          "revision": 1,
+          "sealed": null,
+          "title": "A checkpoint one",
+          "updatedAt": 1793863510311
+        },
+        {
+          "createdAt": 1793863510306,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "B untouched",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "5e5ec45a-d1f0-40b7-b4d2-8b40e70f811a",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "B untouched",
+          "revision": 1,
+          "sealed": null,
+          "title": "B untouched",
+          "updatedAt": 1793863510307
+        }
+      ],
+      "signal": 9,
+      "worker": {
+        "a": "3b8ec4ac-faac-4e09-85e4-77e5f25787f6",
+        "b": "5e5ec45a-d1f0-40b7-b4d2-8b40e70f811a",
+        "mode": "candidate_stored",
+        "op1": "cb61af9e-f188-4c00-a938-99803b948970",
+        "op2": "0d6b86f2-1f13-40a3-8379-ae356253903a",
+        "state1": "committed",
+        "state2": "stored",
+        "v1": {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "423c8a0e-b6a0-4ac3-9eb0-bfa23c316819",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "3b8ec4ac-faac-4e09-85e4-77e5f25787f6",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-cb61af9e-f188-4c00-a938-99803b948970-423c8a0e-b6a0-4ac3-9eb0-bfa23c316819.blob",
+          "size": 108
+        },
+        "v2": {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "cbac5303-516a-4a1d-8343-20ea1ab5e3af",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "3b8ec4ac-faac-4e09-85e4-77e5f25787f6",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-0d6b86f2-1f13-40a3-8379-ae356253903a-cbac5303-516a-4a1d-8343-20ea1ab5e3af.blob",
+          "size": 108
+        }
+      }
+    },
+    {
+      "mode": "candidate_stored",
+      "name": "second open recovery is idempotent"
+    },
+    {
+      "attachments": [
+        {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "0d5769e8-8da8-41c3-8db9-11fb1520fde3",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "5ef16c33-0cb6-44a4-b95c-6d83394bd129",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-2cebbfd4-a52e-4cba-868c-f3d4efa4bed0-0d5769e8-8da8-41c3-8db9-11fb1520fde3.blob",
+          "size": 108
+        },
+        {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "ed05c7fd-c8db-4cd1-9c50-5db41b8002d7",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "5ef16c33-0cb6-44a4-b95c-6d83394bd129",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-8a155cf7-560d-4ea1-bca3-2998af292cf5-ed05c7fd-c8db-4cd1-9c50-5db41b8002d7.blob",
+          "size": 108
+        }
+      ],
+      "mode": "latest_document_ack",
+      "name": "SIGKILL live SQLite worker then reopen actual Store/Session",
+      "notes": [
+        {
+          "createdAt": 1793863510337,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "A edited after checkpoint",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "id": "ed05c7fd-c8db-4cd1-9c50-5db41b8002d7",
+                  "kind": "audio",
+                  "name": "\u7d2f\u8ba1\u5f55\u97f3.wav"
+                },
+                "type": "attachment"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "5ef16c33-0cb6-44a4-b95c-6d83394bd129",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "A edited after checkpoint",
+          "revision": 2,
+          "sealed": null,
+          "title": "A edited after checkpoint",
+          "updatedAt": 1793863510347
+        },
+        {
+          "createdAt": 1793863510337,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "B untouched",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "3d37ced1-fdab-42e2-8ec9-4bc398102aab",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "B untouched",
+          "revision": 1,
+          "sealed": null,
+          "title": "B untouched",
+          "updatedAt": 1793863510338
+        }
+      ],
+      "signal": 9,
+      "worker": {
+        "a": "5ef16c33-0cb6-44a4-b95c-6d83394bd129",
+        "b": "3d37ced1-fdab-42e2-8ec9-4bc398102aab",
+        "mode": "latest_document_ack",
+        "op1": "2cebbfd4-a52e-4cba-868c-f3d4efa4bed0",
+        "op2": "8a155cf7-560d-4ea1-bca3-2998af292cf5",
+        "state1": "committed",
+        "state2": "stored",
+        "v1": {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "0d5769e8-8da8-41c3-8db9-11fb1520fde3",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "5ef16c33-0cb6-44a4-b95c-6d83394bd129",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-2cebbfd4-a52e-4cba-868c-f3d4efa4bed0-0d5769e8-8da8-41c3-8db9-11fb1520fde3.blob",
+          "size": 108
+        },
+        "v2": {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "ed05c7fd-c8db-4cd1-9c50-5db41b8002d7",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "5ef16c33-0cb6-44a4-b95c-6d83394bd129",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-8a155cf7-560d-4ea1-bca3-2998af292cf5-ed05c7fd-c8db-4cd1-9c50-5db41b8002d7.blob",
+          "size": 108
+        }
+      }
+    },
+    {
+      "mode": "latest_document_ack",
+      "name": "second open recovery is idempotent"
+    },
+    {
+      "attachments": [
+        {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "e3512a83-a227-4c08-9152-f6a946ebb1e9",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "222359a8-61df-45f9-b562-da313cf4edd0",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-02e01d38-ce27-4436-8282-a5764236885a-e3512a83-a227-4c08-9152-f6a946ebb1e9.blob",
+          "size": 108
+        },
+        {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "e786a0db-bbf6-41d0-866f-bc0a0277d2cf",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "222359a8-61df-45f9-b562-da313cf4edd0",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-456d4361-53a3-4262-a598-c5ba1530fb8d-e786a0db-bbf6-41d0-866f-bc0a0277d2cf.blob",
+          "size": 108
+        }
+      ],
+      "mode": "latest_query_committed",
+      "name": "SIGKILL live SQLite worker then reopen actual Store/Session",
+      "notes": [
+        {
+          "createdAt": 1793863510369,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "A edited after checkpoint",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "id": "e786a0db-bbf6-41d0-866f-bc0a0277d2cf",
+                  "kind": "audio",
+                  "name": "\u7d2f\u8ba1\u5f55\u97f3.wav"
+                },
+                "type": "attachment"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "222359a8-61df-45f9-b562-da313cf4edd0",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "A edited after checkpoint",
+          "revision": 2,
+          "sealed": null,
+          "title": "A edited after checkpoint",
+          "updatedAt": 1793863510379
+        },
+        {
+          "createdAt": 1793863510369,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "B untouched",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "d50314b9-d3ef-470f-91e1-ada119eabf56",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "B untouched",
+          "revision": 1,
+          "sealed": null,
+          "title": "B untouched",
+          "updatedAt": 1793863510370
+        }
+      ],
+      "signal": 9,
+      "worker": {
+        "a": "222359a8-61df-45f9-b562-da313cf4edd0",
+        "b": "d50314b9-d3ef-470f-91e1-ada119eabf56",
+        "mode": "latest_query_committed",
+        "op1": "02e01d38-ce27-4436-8282-a5764236885a",
+        "op2": "456d4361-53a3-4262-a598-c5ba1530fb8d",
+        "state1": "committed",
+        "state2": "committed",
+        "v1": {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "e3512a83-a227-4c08-9152-f6a946ebb1e9",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "222359a8-61df-45f9-b562-da313cf4edd0",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-02e01d38-ce27-4436-8282-a5764236885a-e3512a83-a227-4c08-9152-f6a946ebb1e9.blob",
+          "size": 108
+        },
+        "v2": {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "e786a0db-bbf6-41d0-866f-bc0a0277d2cf",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "222359a8-61df-45f9-b562-da313cf4edd0",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-456d4361-53a3-4262-a598-c5ba1530fb8d-e786a0db-bbf6-41d0-866f-bc0a0277d2cf.blob",
+          "size": 108
+        }
+      }
+    },
+    {
+      "mode": "latest_query_committed",
+      "name": "second open recovery is idempotent"
+    },
+    {
+      "attachments": [
+        {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "4cd35658-5284-4aab-8673-34034eed1cff",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "60774a4b-58ab-4421-bd1e-115cfeea70b7",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-7eaaf5f4-cfd2-471b-a4e8-faae111c25c4-4cd35658-5284-4aab-8673-34034eed1cff.blob",
+          "size": 108
+        }
+      ],
+      "mode": "previous_not_queried",
+      "name": "SIGKILL live SQLite worker then reopen actual Store/Session",
+      "notes": [
+        {
+          "createdAt": 1793863510397,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "A edited after checkpoint",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "attrs": {
+                  "id": "4cd35658-5284-4aab-8673-34034eed1cff",
+                  "kind": "audio",
+                  "name": "\u7d2f\u8ba1\u5f55\u97f3.wav"
+                },
+                "type": "attachment"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "60774a4b-58ab-4421-bd1e-115cfeea70b7",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "A edited after checkpoint",
+          "revision": 2,
+          "sealed": null,
+          "title": "A edited after checkpoint",
+          "updatedAt": 1793863510405
+        },
+        {
+          "createdAt": 1793863510397,
+          "deletedAt": null,
+          "document": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "B untouched",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          },
+          "folderId": "default",
+          "id": "993bc8ba-2cf9-45db-a1ad-fa66d8cd3e88",
+          "locked": false,
+          "originalFolderId": null,
+          "paperStyle": "plain",
+          "pinned": false,
+          "plainText": "B untouched",
+          "revision": 1,
+          "sealed": null,
+          "title": "B untouched",
+          "updatedAt": 1793863510398
+        }
+      ],
+      "signal": 9,
+      "worker": {
+        "a": "60774a4b-58ab-4421-bd1e-115cfeea70b7",
+        "b": "993bc8ba-2cf9-45db-a1ad-fa66d8cd3e88",
+        "mode": "previous_not_queried",
+        "op1": "66b36d6f-83e0-4ee9-8278-6ddf6360d990",
+        "op2": "7eaaf5f4-cfd2-471b-a4e8-faae111c25c4",
+        "state1": "stored",
+        "state2": "committed",
+        "v1": {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "7b6013f1-78f3-4eb3-bae2-44d72b84a2a4",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "60774a4b-58ab-4421-bd1e-115cfeea70b7",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-66b36d6f-83e0-4ee9-8278-6ddf6360d990-7b6013f1-78f3-4eb3-bae2-44d72b84a2a4.blob",
+          "size": 108
+        },
+        "v2": {
+          "displayName": "\u7d2f\u8ba1\u5f55\u97f3.wav",
+          "id": "4cd35658-5284-4aab-8673-34034eed1cff",
+          "kind": "audio",
+          "mime": "audio/wav",
+          "noteId": "60774a4b-58ab-4421-bd1e-115cfeea70b7",
+          "recordedAt": 1793858400123,
+          "relativePath": "op-7eaaf5f4-cfd2-471b-a4e8-faae111c25c4-4cd35658-5284-4aab-8673-34034eed1cff.blob",
+          "size": 108
+        }
+      }
+    },
+    {
+      "mode": "previous_not_queried",
+      "name": "second open recovery is idempotent"
+    }
+  ],
+  "limits": [
+    "Exact base backend only; no task 64 frontend acceptance claim.",
+    "Synthetic complete PCM WAV bytes validate storage integrity, not live recording, decoding or audibility.",
+    "Document Undo/Redo is a reference-save simulation; PM/UI behavior is not tested here.",
+    "Crash workers are SIGKILLed only after declared Store/Session boundaries; no internal file-write fault injection.",
+    "No device, GUI, microphone, permission or signing actions."
+  ],
+  "status": "pass"
+}
