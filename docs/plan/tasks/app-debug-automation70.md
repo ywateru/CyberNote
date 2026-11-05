@@ -1,7 +1,7 @@
 ---
 id: app-debug-automation70
 scope: unified-dev-command-dom-mock-platform
-status: ready
+status: in-progress
 depends-on: []
 ---
 

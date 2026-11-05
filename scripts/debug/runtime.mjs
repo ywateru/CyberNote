@@ -13,8 +13,8 @@ const chromeDefault = '/Applications/Google Chrome.app/Contents/MacOS/Google Chr
 export async function openRuntime(options = {}) {
   const root = resolve(options.root || process.cwd());
   const directory = await mkdtemp(resolve(options.tmp || tmpdir(), 'notes-debug70-'));
-  let browser, context, vite, server, backend; const errors = [];
-  const cleanup = async ({ keep = options.keep } = {}) => { await context?.close(); await browser?.close(); await vite?.close(); await new Promise((done) => { if (!server) return done(); server.close(done); server.closeAllConnections(); }); await backend?.close(); if (!keep) await rm(directory, { recursive: true, force: true }); };
+  let browser, context, vite, server, backend; const errors = [], sockets = new Set();
+  const cleanup = async ({ keep = options.keep } = {}) => { await context?.close(); await browser?.close(); for (const socket of sockets) socket.destroy(); await vite?.close(); await new Promise((done) => { if (!server) return done(); server.close(done); server.closeAllConnections(); }); await backend?.close(); if (!keep) await rm(directory, { recursive: true, force: true }); };
   try {
     backend = options.transport ? await rustBackend(resolve(options.transport), directory) : new FakeBackend(directory);
     const production = options.production && resolve(root, options.production);
@@ -35,6 +35,7 @@ export async function openRuntime(options = {}) {
         vite.middlewares(request, response);
       } catch (error) { response.statusCode = 500; response.end(JSON.stringify({ error: String(error) })); }
     });
+    server.on('connection', (socket) => { sockets.add(socket); socket.on('close', () => sockets.delete(socket)); });
     if (!production) vite = await createViteServer({ root, configFile: false, cacheDir: resolve(directory, 'vite-cache'), plugins: [react({ exclude: /\/(?:node_modules|vite-cache)\// })], define: { 'import.meta.env.VITE_NOTES_DEBUG': JSON.stringify(options.enabled === false ? '0' : '1') }, server: { middlewareMode: true, hmr: { server } }, appType: 'custom' });
     await new Promise((done, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', done); }); const origin = 'http://127.0.0.1:' + server.address().port;
     const playwrightPath = options.playwright || process.env.PLAYWRIGHT_CORE_PATH || playwrightDefault; if (!existsSync(playwrightPath)) throw Error('Set PLAYWRIGHT_CORE_PATH to an installed playwright-core; no dependencies are installed by this runner.');
@@ -45,14 +46,14 @@ export async function openRuntime(options = {}) {
     const page = await context.newPage(); page.setDefaultTimeout(10000); page.on('pageerror', (error) => errors.push(String(error)));
     await page.route('**/*', (route) => route.request().url().startsWith(origin) || /^(data:|blob:)/.test(route.request().url()) ? route.continue() : route.abort());
     await page.addInitScript(installBrowserPlatform, { mobile: !!options.mobile });
-    await page.goto(origin + '/?notesDebug=1');
+    await page.goto(origin + '/?notesDebug=1', { waitUntil: 'domcontentloaded', timeout: 30000 });
     if (options.enabled === false || production) await page.waitForSelector('.app');
     else { await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await page.evaluate(() => window.__NOTES_DEBUG__.waitForIdle({ timeoutMs: 10000 })); }
     const reset = async () => { if (!backend.reset) throw Error('Scenario reset requires default isolated fixture; use separate CLI scripts with external transport.'); backend.reset(); errors.length = 0; await page.reload(); await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); };
     return { root, directory, origin, page, viewport, backend, errors, cleanup, reset, metadata: { backend: backend.kind, media: 'fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation', native: 'IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default', browser: await browser.version(), viewport } };
   } catch (error) { await cleanup({ keep: options.keep }); throw error; }
 }
-export async function api(page, command, args = {}) { return page.evaluate(async ({ command, args }) => { try { return await window.__NOTES_DEBUG__.execute(command, args); } catch (error) { throw Error((error.code || 'APP_ERROR') + ': ' + (error.message || String(error))); } }, { command, args }); }
+export async function api(page, command, args = {}) { const input = JSON.stringify({ command, args }); if (input.length > 2_100_000) throw Object.assign(Error('Bounded debug transport payload exceeded'), { code: 'INVALID_ARGUMENT' }); const response = await page.evaluate(async (input) => { const { command, args } = JSON.parse(input); try { return { ok: true, value: await window.__NOTES_DEBUG__.execute(command, args) }; } catch (error) { return { ok: false, error: { code: error.code || 'APP_ERROR', message: error.message || String(error) } }; } }, input); if (!response.ok) throw Object.assign(Error(response.error.message), { code: response.error.code }); return response.value; }
 export async function state(page) { return (await api(page, 'app.state')).result; }
 export async function idle(page, timeoutMs = 10000) { return page.evaluate((timeoutMs) => window.__NOTES_DEBUG__.waitForIdle({ timeoutMs }), timeoutMs); }
 export async function snapshot(page, options = {}) { return page.evaluate((options) => window.__NOTES_DEBUG__.snapshot(options), options); }

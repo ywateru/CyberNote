@@ -6,12 +6,12 @@
 
 ```sh
 pnpm test:debug --out /private/tmp/notes-debug-result
-pnpm debug all --mobile --out /private/tmp/notes-debug-mobile
+pnpm debug group notes --mobile --out /private/tmp/notes-debug-mobile
 pnpm debug list
 pnpm debug group recording --out /private/tmp/notes-debug-recording
 ```
 
-默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。
+默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。全九组主回归以桌面为基准；手机执行`notes`小组及自定义script/snapshot，桌面专用录音栏和原生退出场景不扩张为手机通过。
 
 需要本机已安装 Chrome 和 playwright-core。默认寻找 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` 和 `/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/playwright-core/index.mjs`；其他机器用 `CHROME_PATH`、`PLAYWRIGHT_CORE_PATH` 或 `--chrome`、`--playwright` 指定。runner不自动安装依赖。
 
