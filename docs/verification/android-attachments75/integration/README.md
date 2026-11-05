@@ -23,3 +23,5 @@
 下一优先为[独立Android原生76](../../../plan/tasks/app-android-attachments-native76.md)：准确新APK、全新AVD和显式新serial，保留原设备。桌面真实Rust录音74复用本次设施但录音场景尚未执行。
 
 原始/root运行目录暂保留本机`/private/tmp/notes-attachments75-root-p9nikfpv`以便复核，紧凑结果/原始命令日志已归档，未复制整个harness、Cargo缓存或合成数据库。可重用Cargo缓存保留；只清理本轮明确owned开发中间件与已合入工作树。
+
+本轮收尾已移除两个已合入开发/独审工作树及分支、9个mobile开发运行目录、3个真实Rust开发目录、2个旧harness目录。精确清单见[cleanup.json](cleanup.json)。主node_modules/dist、可复用Cargo缓存与正式原始输出保留。清理前无匹配当前Rust transport进程；未操作原Android或任何用户媒体。
