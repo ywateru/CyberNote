@@ -33,6 +33,7 @@ pnpm debug group recording --mobile
 5. 保留初始/录制/暂停/失败/保存后紧凑HTML/布局快照与PNG，可与保存的原版录屏标注对照；不以自比截图声称原版像素相同。输出覆盖数、耗时、准确源码身份、失败历史和仍未验证边界。
 6. 不操作现有Mac应用、Android设备/模拟器或真实麦克风；不读取/复制真实录音。不安装/构建原生包，不制造全量缓存。默认backend仍明确为JS protocol fixture，不能声称Rust持久化或Android硬件通过。
 7. 恢复开发时实测本机Playwright的waitForFunction未等待异步predicate，Promise真值会提前结束等待。统一scripts/debug内异步状态等待须改用真正await条件的共享有界轮询，并以恒false超时及延迟true正例证明等待有效；桌面录音同类等待一并修复。仅修本统一runner，不扩散修改历史验收脚本，不把历史最终断言通过追认为等待机制已验。
+8. 独审实证的三项必须关闭：状态轮询deadline覆盖await state/predicate（迟到true不得成功，永不settle也须超时）；raw idle参数通过JSON字符串保留own `__proto__`等字段供原API严格校验；真实重试保存仍在途时，idle等待其终态再判断残留失败，未恢复或再次失败仍必须APP_ERROR，不能删除failed检查或直接清错冒充恢复。
 
 # path
 
