@@ -33,7 +33,9 @@ export class RecordingRevisionRelay {
       this.pending?.reject(
         Error(message.error || "录音尚未保存，原音频仍保留。"),
       );
-    return complete && this.result.intent === "final";
+    // The active submit caller owns destruction. Only an ACK arriving after
+    // its waiter has gone needs the Window status handler recovery path.
+    return complete && this.result.intent === "final" && !this.pending;
   }
   async submit(result: RecordingRevision) {
     if (this.pending) throw Error("上版录音仍在等待保存，请稍后重试。");
