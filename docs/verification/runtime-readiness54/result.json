@@ -1,0 +1,64 @@
+{
+  "task": "mac-recording-runtime-readiness54",
+  "status": "LATE_TCC_REPLY_NEW_ATTEMPT_REQUIRED",
+  "date": "2026-11-05",
+  "timezone": "Asia/Shanghai",
+  "pid": 33095,
+  "source_commit": "5a147d2c5b59fcd9ca0ce4398d89cb1bb5c34a5a",
+  "bundle": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/mac-recording-window-build15/mac-attempt01/mac-sealed.app",
+  "executable_sha256": "e727118f6bcfe0c22e325542616c276d9832a453d5cccf03bd29e84a15a89197",
+  "current_cdhash": "0a258674ff1844f9fe57fc9d3619c5cd22fa7cad",
+  "designated_requirement": "cdhash H\"0a258674ff1844f9fe57fc9d3619c5cd22fa7cad\"",
+  "signature": "adhoc",
+  "recording_child": "03336ddb-ea1c-49cb-a884-f98d95287a7c",
+  "operation": "1e6dde57-4950-4458-9121-e9d1584a6adb",
+  "actual_start_transaction": {
+    "msg_id": "33095.6",
+    "request_at": "2026-11-05 10:44:51.582 +0800",
+    "prompting_at": "2026-11-05 10:44:51.589 +0800",
+    "reply_at": "2026-11-05 10:47:48.483 +0800",
+    "latency_seconds": 176.901,
+    "tcc_auth_value": 2,
+    "tcc_auth_reason": 2,
+    "error": null
+  },
+  "native_deadline_seconds": 30,
+  "query": {
+    "start": "2026-11-05 10:43:00",
+    "end": "2026-11-05 10:49:30",
+    "predicate": "process == \"tccd\" AND subsystem == \"com.apple.TCC\" AND category == \"access\" AND (eventMessage CONTAINS \"msgID=33095.2\" OR eventMessage CONTAINS \"msgID=33095.6\" OR (eventMessage CONTAINS \"com.local.notesclone\" AND eventMessage CONTAINS \"kTCCServiceMicrophone\"))"
+  },
+  "root_input_sha256": {
+    "docs/verification/recording-window54-mac-runtime/launch-identity.json": "3749e19e14f22a8174d0a8b7d3be18eb9e19e0852913c6da863f2e3830a96d2e",
+    "docs/verification/recording-window54-mac-runtime/05-start-outcome.ax.txt": "723f3f8d928ebb4d82f3f1db3e6d55c3276f2d54ff468225999f5040cb5a1f91"
+  },
+  "fixed_source_sha256": {
+    "plugins/tauri-plugin-notes-ui/macos/recording_access.m": "9ca242bc30202680f9898dc5c44c46ca2d76823774c669e4ae30059eba810a23",
+    "plugins/tauri-plugin-notes-ui/src/macos.rs": "747a45fb678bfee90d429fb598bd29e9038c3bbb062a61b6211d87cfd2b61019",
+    "src/recording-session.ts": "f3dfdb38bc61fe906bcb2cc9c793a22a39388c97aede2c26f35451cbd8b31fa2"
+  },
+  "evidence_sha256": {
+    "microphone-transactions.log": "e6c0d3828258b8bbff9aa023cad8f07dcb1b2939ad8dd045ac47578e1cfff6b4",
+    "designated-requirement-current.txt": "3365483d17c5cea94206ba0f1fc1f49050a50e0be44ec43d50b086d1021f5ccd",
+    "codesign-current.txt": "b962f25063ff85d352564b9d93232bfef070c1b33788eacf742abcfe08704aa9",
+    "README.md": "34070d1cec9ccfabd5750f93d9c26bec702b5ebb96dc39d513a5384eb0caf096",
+    "log-query-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "process-identity.txt": "5541701daf78a1c113e26843f612a6264f897c3ec06691bc44c4cbf1f174dc6a"
+  },
+  "not_performed": [
+    "TCC database reads",
+    "permission reset/change",
+    "signing change",
+    "GUI",
+    "new recording",
+    "product changes",
+    "build/tests",
+    "Android/shared cache access"
+  ],
+  "limits": [
+    "TCC internal authValue is not treated as a measured public AVAuthorizationStatus.",
+    "No claim of observed prompt choice, native completion delivery, WebKit stream or audible capture.",
+    "Current code requirement mismatch is observed but not proven to be sole cause of delay.",
+    "Late reply does not revive failed old Session; root must run a fresh explicit Start in unchanged package."
+  ]
+}
