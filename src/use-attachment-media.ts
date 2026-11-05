@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { readAttachment } from "./bridge";
 import { MetadataStale } from "./metadata-client";
+import { AccessChanged } from "./access-client";
 import { attachmentRecordedAt } from "./recording-metadata";
 import {
   createAttachmentMediaSource,
@@ -49,11 +50,23 @@ export function useAttachmentMedia(id: string, kind: string) {
           if (!current()) return;
           const recordedAt = attachmentRecordedAt(value.recordedAt, kind);
           source = createAttachmentMediaSource(value, kind);
-          setLoaded({ id, kind, version, source, name: value.name, recordedAt });
+          setLoaded({
+            id,
+            kind,
+            version,
+            source,
+            name: value.name,
+            recordedAt,
+          });
           return;
         } catch (error: unknown) {
           if (!current()) return;
-          if (error instanceof MetadataStale && attempt < 2) continue;
+          if (
+            (error instanceof MetadataStale ||
+              error instanceof AccessChanged) &&
+            attempt < 2
+          )
+            continue;
           source?.dispose();
           setLoaded(null);
           setFailure({

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 import { readFile, readdir, mkdir } from 'node:fs/promises';
-import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { performance } from 'node:perf_hooks';
 import { openRuntime, api, idle, snapshot, state, saveJSON, waitForIdle } from './runtime.mjs';
 import { compareSnapshots, compareScreenshots } from './compare.mjs';
 import { runGroups, groupNames } from './scenarios.mjs';
+import {sourceFingerprint} from './source-identity.mjs';
 
 const usage = `Notes debug v1 (isolated synthetic data, no installed app is opened)
   pnpm debug list
@@ -15,6 +15,7 @@ const usage = `Notes debug v1 (isolated synthetic data, no installed app is open
   pnpm debug snapshot --selector '.app' --out /tmp/notes-result
   pnpm debug group <${groupNames.join('|')}>
   pnpm debug all
+  pnpm debug group attachments --mobile
   pnpm debug check-production --production dist
   pnpm debug compare baseline.json current.json
   pnpm debug compare-shot baseline.png current.png
@@ -37,14 +38,6 @@ function parse(argv) {
   return { options, positional };
 }
 const bounded = (value, limit = 64000) => { const json = JSON.stringify(value, null, 2); return json.length <= limit ? json : JSON.stringify({ error: 'OUTPUT_LIMIT', chars: json.length, maxChars: limit, hint: 'Use --out to write full bounded artifacts and inspect targeted snapshots.' }); };
-async function sourceFingerprint(root) {
-  const files = [];
-  for (const directory of ['src', 'scripts/debug']) for (const entry of await readdir(resolve(root, directory), { recursive: true, withFileTypes: true })) if (entry.isFile()) files.push(resolve(entry.parentPath, entry.name));
-  for (const name of ['package.json', 'pnpm-lock.yaml', 'vite.config.ts', 'tsconfig.json']) { try { await readFile(resolve(root, name)); files.push(resolve(root, name)); } catch {} }
-  files.sort(); const hash = createHash('sha256'); for (const file of files) { hash.update(file.slice(root.length + 1)); hash.update('\0'); hash.update(await readFile(file)); hash.update('\0'); }
-  const status = execFileSync('git', ['status', '--porcelain', '--', 'src', 'scripts/debug', 'package.json', 'pnpm-lock.yaml', 'vite.config.ts', 'tsconfig.json'], { cwd: root, encoding: 'utf8' }).trim();
-  return { algorithm: 'sha256(path NUL bytes NUL, sorted)', sha256: hash.digest('hex'), fileCount: files.length, paths: ['src/**', 'scripts/debug/**', 'package.json', 'pnpm-lock.yaml', 'vite.config.ts', 'tsconfig.json'], gitDirty: !!status, gitStatus: status.split('\n').filter(Boolean) };
-}
 async function productionMarkers(directory) {
   const markers = ['__NOTES_DEBUG__', 'SyntheticMediaRecorder', '__DEBUG_PLATFORM__', 'synthetic-device-and-ipc-boundaries']; const matches = []; let files = 0;
   for (const entry of await readdir(directory, { recursive: true, withFileTypes: true })) if (entry.isFile() && /\.(js|html|json)$/.test(entry.name)) { files++; const file = resolve(entry.parentPath, entry.name), text = await readFile(file, 'utf8'); for (const marker of markers) if (text.includes(marker)) matches.push({ file: file.slice(directory.length + 1), marker }); }
@@ -62,7 +55,7 @@ try {
   else if (mode === 'compare') { if (args.length !== 2) throw Error('compare needs two snapshot paths'); console.log(bounded(compareSnapshots(JSON.parse(await readFile(args[0], 'utf8')), JSON.parse(await readFile(args[1], 'utf8'))))); }
   else {
     const allowed = ['list', 'execute', 'script', 'snapshot', 'group', 'all', 'check-production', 'compare-shot']; if (!allowed.includes(mode)) throw Error('Unknown CLI mode ' + mode);
-    if (options.mobile && (mode === 'all' || mode === 'group' && !['notes', 'recording'].includes(args[0]))) throw Object.assign(Error('Automated mobile browser coverage is groups notes and recording only. The complete nine-group suite is desktop-scoped; execute/script/snapshot remain available with --mobile.'), { code: 'UNSUPPORTED' });
+    if (options.mobile && (mode === 'all' || mode === 'group' && !['notes', 'recording', 'attachments'].includes(args[0]))) throw Object.assign(Error('Automated mobile browser coverage is groups notes, recording and attachments only. The complete nine-group suite is desktop-scoped; execute/script/snapshot remain available with --mobile.'), { code: 'UNSUPPORTED' });
     if (mode === 'check-production' && !options.production) throw Error('check-production requires --production pointing to a normal frontend build');
     sourceInputsAtStart = await sourceFingerprint(process.cwd()); runtime = await openRuntime(options); const page = runtime.page; const output = options.out ? resolve(options.out) : runtime.directory; await mkdir(output, { recursive: true });
     let result;
@@ -85,7 +78,7 @@ try {
       }
       if (!terminal) await idle(page, options.timeout); result = { steps: results, ...(terminal ? { completion: terminal } : {}), state: await state(page) };
     } else if (mode === 'snapshot') { const snap = await snapshot(page, { selector: options.selector || '.app' }); await saveJSON(resolve(output, 'snapshot.json'), snap); await page.screenshot({ path: resolve(output, 'screenshot.png') }); result = { snapshot: resolve(output, 'snapshot.json'), screenshot: resolve(output, 'screenshot.png') }; }
-    else if (mode === 'all' || mode === 'group') { const names = mode === 'all' ? groupNames : [args[0]]; if (names.some((name) => !groupNames.includes(name))) throw Error('Unknown scenario group'); result = await runGroups(runtime, names, output); }
+    else if (mode === 'all' || mode === 'group') { const names = mode === 'all' ? groupNames : [args[0]]; if (names.some((name) => !groupNames.includes(name) && !(options.mobile && name === 'attachments'))) throw Error('Unknown scenario group'); result = await runGroups(runtime, names, output); }
     else if (mode === 'compare-shot') { if (args.length !== 2) throw Error('compare-shot needs two PNG paths'); result = await compareScreenshots(page, args[0], args[1]); }
     else if (mode === 'check-production') { const bundle = await productionMarkers(resolve(runtime.root, options.production)); const absent = await page.evaluate(() => !('__NOTES_DEBUG__' in window)); if (!absent) throw Error('Production debug API is present'); await page.goto(runtime.origin + '/?notesDebug=1&VITE_NOTES_DEBUG=1'); await page.waitForSelector('.app'); if (!await page.evaluate(() => !('__NOTES_DEBUG__' in window))) throw Error('Production URL restored debug API'); result = { productionAPIAbsent: true, urlCannotEnable: true, bundle, platformMockInjectedByRunnerOnly: true }; }
     const sourceInputs = await sourceFingerprint(runtime.root); const summary = { version: 1, mode, sourceHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: runtime.root, encoding: 'utf8' }).trim(), sourceInputs, sourceInputsAtStart, sourceInputsChanged: sourceInputs.sha256 !== sourceInputsAtStart.sha256, ...runtime.metadata, elapsedMs: Math.round(performance.now() - started), result, pageErrors: runtime.errors };

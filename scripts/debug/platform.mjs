@@ -1,9 +1,8 @@
 // Isolated IPC/device boundaries for the real App/Editor/SaveQueue/recorders.
 // The default protocol fixture is NOT the production Rust Store or OS/TCC.
 import { randomUUID } from 'node:crypto';
-import { spawn } from 'node:child_process';
-import { createInterface } from 'node:readline';
-import { access, readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
+export { rustBackend } from './rust-backend.mjs';
 
 const document = (text) => ({ type: 'doc', content: [{ type: 'paragraph', content: text ? [{ type: 'text', text }] : [] }] });
 const textOf = (doc) => (doc?.content || []).map((node) => node.text ?? textOf(node)).join(doc?.type === 'doc' ? '\n' : '');
@@ -29,9 +28,9 @@ export class FakeBackend {
   tagged(value) { const state = this.state(); return { ...clone(value), access: state.access, metadata: state.metadata }; }
   configure(value) { if (!value || typeof value !== 'object' || Array.isArray(value)) throw failure('Platform configuration must be an object'); for (const key of Object.keys(value)) if (!['fail', 'delay'].includes(key)) throw failure('Unknown backend control ' + key); for (const key of ['fail', 'delay']) if (value[key]) for (const [name, number] of Object.entries(value[key])) { if (!Number.isInteger(number) || number < 0 || number > (key === 'delay' ? 10000 : 100)) throw failure('Invalid bounded platform control'); this.controls[key][name] = number; } return clone(this.controls); }
   async boundary(name) { const delay = this.controls.delay[name] || 0; if (delay) await new Promise((done) => setTimeout(done, delay)); if (this.controls.fail[name] > 0) { this.controls.fail[name]--; throw failure('Controlled ' + name + ' failure', 'controlled_' + name); } }
-  assertNote(id) { const note = this.workspace.notes.find((item) => item.id === id); if (!note) throw failure('Note does not exist'); if (note.locked && !this.unlocked?.has(id)) throw failure('Note is locked', 'access_denied'); return note; }
+  assertNote(id) { const note = this.workspace.notes.find((item) => item.id === id); if (!note) throw failure('Note does not exist'); if (note.deletedAt) throw failure('Note is deleted', 'access_denied'); if (note.locked && !this.unlocked?.has(id)) throw failure('Note is locked', 'access_denied'); return note; }
   async call(command, args = {}) {
-    this.calls.push({ command, type: args.action?.type }); if (this.calls.length > 1000) this.calls.shift();
+    this.calls.push({ command, type: args.action?.type, ...(args.operationId ? { operationId: args.operationId } : {}), ...(args.noteId ? { noteId: args.noteId } : {}) }); if (this.calls.length > 1000) this.calls.shift();
     const before = this.sequence; const events = []; let value;
     try {
       if (command === 'load_workspace') { await this.boundary('load'); value = this.state(); }
@@ -41,10 +40,10 @@ export class FakeBackend {
       else if (command === 'store_attachment' || command === 'store_attachment_operation') {
         this.assertNote(args.noteId); await this.boundary('store');
         if (command === 'store_attachment_operation' && this.journal.has(args.operationId)) value = this.tagged(this.journal.get(args.operationId));
-        else { const attachment = { id: randomUUID(), noteId: args.noteId, kind: args.mime?.startsWith('audio/') ? 'audio' : args.mime?.startsWith('image/') ? 'image' : args.mime?.startsWith('video/') ? 'video' : 'file', displayName: args.name, mime: args.mime, size: Buffer.from(args.data, 'base64').length, relativePath: 'synthetic/' + randomUUID(), ...(args.recordedAt == null ? {} : { recordedAt: args.recordedAt }) }; this.files.set(attachment.id, args.data); this.workspace.attachments.push(attachment); this.sequence++; const result = { operationId: args.operationId, noteId: args.noteId, status: 'stored', attachment }; if (args.operationId) this.journal.set(args.operationId, result); value = this.tagged(command === 'store_attachment' ? attachment : result); }
+        else { const attachment = { id: randomUUID(), noteId: args.noteId, kind: args.mime?.startsWith('audio/') ? 'audio' : args.mime?.startsWith('image/') ? 'image' : args.mime?.startsWith('video/') ? 'video' : 'file', displayName: args.name, mime: args.mime, size: Buffer.from(args.data, 'base64').length, relativePath: 'synthetic/' + randomUUID(), ...(args.recordedAt == null ? {} : { recordedAt: args.recordedAt }) }; this.files.set(attachment.id, args.data); this.workspace.attachments.push(attachment); this.sequence++; const result = { operationId: args.operationId, noteId: args.noteId, status: 'stored', attachment }; if (args.operationId) this.journal.set(args.operationId, result); value = this.tagged(command === 'store_attachment' ? attachment : result); await this.boundary('storeResponse'); }
       } else if (command === 'query_attachment_operation' || command === 'cancel_attachment_operation') {
         await this.boundary('query'); const operation = this.journal.get(args.operationId); if (operation && command === 'cancel_attachment_operation') operation.status = 'aborted'; if (operation && command === 'query_attachment_operation' && JSON.stringify(this.workspace.notes.find((n) => n.id === operation.noteId)?.document).includes(operation.attachment.id)) operation.status = 'committed'; value = this.tagged(operation || { operationId: args.operationId, noteId: args.noteId, status: 'notPersisted' });
-      } else if (command === 'read_attachment') { await this.boundary('read'); const attachment = this.workspace.attachments.find((item) => item.id === args.id); if (!attachment) throw failure('Attachment absent'); value = this.tagged({ data: this.files.get(args.id), mime: attachment.mime, name: attachment.displayName, recordedAt: attachment.recordedAt }); }
+      } else if (command === 'read_attachment') { await this.boundary('read'); const attachment = this.workspace.attachments.find((item) => item.id === args.id); if (!attachment) throw failure('Attachment absent'); this.assertNote(attachment.noteId); value = this.tagged({ data: this.files.get(args.id), mime: attachment.mime, name: attachment.displayName, recordedAt: attachment.recordedAt }); }
       else if (command === 'register_recording_local') { if (this.local && this.local.sessionId !== args.sessionId) throw failure('Another recording is active'); value = this.local ||= { ...args, owner: 'main', incarnation: randomUUID() }; }
       else if (command.startsWith('recording_local_')) { if (command === 'recording_local_release' && !this.local && this.completed && args.sessionId === this.completed.sessionId) value = null; else { if (!this.local || args.sessionId !== this.local.sessionId || args.operationId !== this.local.operationId || args.incarnation !== this.local.incarnation) throw failure('Stale local recording identity'); if (command === 'recording_local_revision') { await this.boundary('revision'); if (args.revision !== this.revision && args.revision !== this.revision + 1) throw failure('Wrong recording revision'); this.revision = args.revision; this.final = args.finalIntent; } else if (command === 'recording_local_release') { await this.boundary('release'); if (args.saved && (!this.final || args.revision !== this.revision)) throw failure('Missing final recording acknowledgement'); this.completed = clone(args); this.local = null; this.revision = 0; this.final = false; } else if (!['recording_local_started', 'recording_local_validate'].includes(command)) throw failure('Unknown local command'); value = null; } }
       else if (command === 'recording_quit_sealed') { this.quit = args.id; events.push({ name: 'notes-recording-quit-ready', payload: { id: args.id } }); value = null; }
@@ -84,14 +83,6 @@ export class FakeBackend {
     return clone(session);
   }
   close() {}
-}
-
-export async function rustBackend(binary, directory) {
-  await access(binary); const child = spawn(binary, [directory], { stdio: ['pipe', 'pipe', 'pipe'] }); let requestId = 0; const pending = new Map(); let stderr = '';
-  child.stderr.on('data', (bytes) => { stderr = (stderr + bytes).slice(-4000); });
-  createInterface({ input: child.stdout }).on('line', (line) => { const row = JSON.parse(line); const slot = pending.get(row.requestId); if (!slot) return; pending.delete(row.requestId); clearTimeout(slot.timer); slot.resolve(row); });
-  child.on('exit', (code) => { for (const slot of pending.values()) { clearTimeout(slot.timer); slot.reject(Error('Rust transport exited ' + code + ': ' + stderr)); } pending.clear(); });
-  return { kind: 'external-real-rust-session-store-transport', call(command, args = {}) { return new Promise((resolve, reject) => { const id = ++requestId; const timer = setTimeout(() => { pending.delete(id); reject(Error('Rust transport timeout')); }, 10000); pending.set(id, { resolve, reject, timer }); child.stdin.write(JSON.stringify({ requestId: id, command, args, window: 'main' }) + '\n'); }); }, close() { child.stdin.end(); }, configure() { throw failure('Fault controls unavailable for external transport'); } };
 }
 
 // Runs before any application module. No application state/handler is replaced.

@@ -16,7 +16,7 @@ export async function openRuntime(options = {}) {
   let browser, context, vite, server, backend; const errors = [], sockets = new Set();
   const cleanup = async ({ keep = options.keep } = {}) => { await context?.close(); await browser?.close(); for (const socket of sockets) socket.destroy(); await vite?.close(); await new Promise((done) => { if (!server) return done(); server.close(done); server.closeAllConnections(); }); await backend?.close(); if (!keep) await rm(directory, { recursive: true, force: true }); };
   try {
-    backend = options.transport ? await rustBackend(resolve(options.transport), directory) : new FakeBackend(directory);
+    backend = options.transport ? await rustBackend(resolve(options.transport), options.storeDirectory ? resolve(options.storeDirectory) : directory) : new FakeBackend(directory);
     const production = options.production && resolve(root, options.production);
     const html = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>';
     server = createServer(async (request, response) => {

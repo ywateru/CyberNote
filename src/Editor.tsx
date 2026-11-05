@@ -42,11 +42,13 @@ function MediaView({ node }: NodeViewProps) {
       {error ? (
         <span className="inline-error" role="alert">
           {error}
-          {kind === "audio" && (
-            <button type="button" aria-label="重试录音" onClick={retry}>
-              重试
-            </button>
-          )}
+          <button
+            type="button"
+            aria-label={kind === "audio" ? "重试录音" : "重试附件"}
+            onClick={retry}
+          >
+            重试
+          </button>
         </span>
       ) : kind === "image" ? (
         <img src={src} alt={name} draggable={false} />

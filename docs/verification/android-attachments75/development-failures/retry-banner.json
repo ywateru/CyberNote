@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "group": "attachments",
+      "pass": false,
+      "checks": [
+        "Mobile menu chooser → actual FileList/onChange → PNG bytes and body ACK",
+        "Single image reads authorized stored bytes and actually decodes in HTML",
+        "Generic file and PDF each retain correct MIME/bytes/reference and ACK",
+        "Two selected images save exactly one reference per original file",
+        "Delayed media read survives next-file synchronize via fresh fully gated read",
+        "Missing File.type PNG is identified by bytes, persisted and displayed as image",
+        "Unknown empty-MIME bytes stay generic despite PNG filename",
+        "Same filename reselection creates two distinct operations and correct cards",
+        "System picker cancellation stores nothing",
+        "Picker can reselect after cancel with a fresh captured target",
+        "Chooser roundtrip blur/visibility/focus plus delayed actual FileReader preserves original target",
+        "FileReader abort ends pending with readable explicit error, no stored bytes"
+      ],
+      "error": "附件读取已中断，文件已保留，请重试",
+      "elapsedMs": 8768
+    }
+  ]
+}
