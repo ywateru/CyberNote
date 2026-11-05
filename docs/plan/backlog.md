@@ -1,5 +1,7 @@
 # 差异与待证事项
 
+- 73限定完成后的P3残差：手机初始红色、录制暂停glyph及字体抗锯齿仍与压缩原帧不同；中央轮廓/暂停内芯改善不授予整页像素通过。视觉fixture限定扫描后根完整wall50.17s，但默认CLI仍有清理开销（根desktop检查24.425s、完整49.87s；开发曾195.48s），根因未完整定位，不能把视觉入口配置提速泛化到所有runner。见[73整合](../verification/mobile-recording-primary73/integration/README.md)及[独审](reviews/app-mobile-recording-primary73-efficiency-recheck.md)。
+
 - 原视频 224×480，iOS 版本与原始逻辑尺寸未知，高清字形无法从压缩视频恢复。
 - 原版合成笔记“Math Mode Reference”采样前数学模式为“建议结果”，探针曾切为“插入结果”；2026-11-03已再做一次有限真实恢复点击并重开核对，但CUA活动菜单无截图且AX无checked字段，未以高亮selected冒充勾选，恢复确认仍unknown。证据`docs/verification/original-math-cleanup-01/`；已恢复Notes Clone UI 对照/每日TODO与空query。避免为此继续重复切模式或扩大研究。
 - Android 系统键盘/系统状态栏/原生分享与 iOS 系统不同；需要区分应用内容与系统区域。

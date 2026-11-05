@@ -1,0 +1,317 @@
+{
+  "status": "PASS",
+  "date": "2026-11-06",
+  "testedHead": "4d98704c9c4661605da47d8a26954e74934c7604",
+  "reviewEvidenceMergeHead": "8f47a65c5a064629d7b3051378c20f8fbd8e7295",
+  "reviewMergeProductAndRunnerDiff": "empty",
+  "jobs": [
+    {
+      "name": "desktop",
+      "command": "/usr/bin/time -p pnpm test:debug --out /private/tmp/notes-primary73-root-integration/desktop",
+      "exitCode": 0,
+      "exitEvidence": "Natural process completion returned exit_code 0 through exec/write_stdin; no signal or forced exit",
+      "wallSecondsIncludingCleanup": 49.87,
+      "sourceHead": "4d98704c9c4661605da47d8a26954e74934c7604",
+      "sourceInputs": {
+        "algorithm": "sha256(path NUL bytes NUL, sorted)",
+        "sha256": "62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44",
+        "fileCount": 78,
+        "paths": [
+          "src/**",
+          "scripts/debug/**",
+          "package.json",
+          "pnpm-lock.yaml",
+          "vite.config.ts",
+          "tsconfig.json"
+        ],
+        "gitDirty": false,
+        "gitStatus": []
+      },
+      "sourceInputsAtStart": {
+        "algorithm": "sha256(path NUL bytes NUL, sorted)",
+        "sha256": "62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44",
+        "fileCount": 78,
+        "paths": [
+          "src/**",
+          "scripts/debug/**",
+          "package.json",
+          "pnpm-lock.yaml",
+          "vite.config.ts",
+          "tsconfig.json"
+        ],
+        "gitDirty": false,
+        "gitStatus": []
+      },
+      "pageErrors": [],
+      "cliElapsedMsBeforeCleanup": 24425,
+      "passedChecks": 100,
+      "groups": 9
+    },
+    {
+      "name": "mobile",
+      "command": "/usr/bin/time -p pnpm debug group recording --mobile --out /private/tmp/notes-primary73-root-integration/mobile",
+      "exitCode": 0,
+      "exitEvidence": "Natural process completion returned exit_code 0 through exec/write_stdin; no signal or forced exit",
+      "wallSecondsIncludingCleanup": 14.23,
+      "sourceHead": "4d98704c9c4661605da47d8a26954e74934c7604",
+      "sourceInputs": {
+        "algorithm": "sha256(path NUL bytes NUL, sorted)",
+        "sha256": "62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44",
+        "fileCount": 78,
+        "paths": [
+          "src/**",
+          "scripts/debug/**",
+          "package.json",
+          "pnpm-lock.yaml",
+          "vite.config.ts",
+          "tsconfig.json"
+        ],
+        "gitDirty": false,
+        "gitStatus": []
+      },
+      "sourceInputsAtStart": {
+        "algorithm": "sha256(path NUL bytes NUL, sorted)",
+        "sha256": "62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44",
+        "fileCount": 78,
+        "paths": [
+          "src/**",
+          "scripts/debug/**",
+          "package.json",
+          "pnpm-lock.yaml",
+          "vite.config.ts",
+          "tsconfig.json"
+        ],
+        "gitDirty": false,
+        "gitStatus": []
+      },
+      "pageErrors": [],
+      "cliElapsedMsBeforeCleanup": 13853,
+      "passedChecks": 43,
+      "groups": 1
+    },
+    {
+      "name": "notes",
+      "command": "/usr/bin/time -p pnpm debug group notes --mobile --out /private/tmp/notes-primary73-root-integration/notes",
+      "exitCode": 0,
+      "exitEvidence": "Natural process completion returned exit_code 0 through exec/write_stdin; no signal or forced exit",
+      "wallSecondsIncludingCleanup": 4.48,
+      "sourceHead": "4d98704c9c4661605da47d8a26954e74934c7604",
+      "sourceInputs": {
+        "algorithm": "sha256(path NUL bytes NUL, sorted)",
+        "sha256": "62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44",
+        "fileCount": 78,
+        "paths": [
+          "src/**",
+          "scripts/debug/**",
+          "package.json",
+          "pnpm-lock.yaml",
+          "vite.config.ts",
+          "tsconfig.json"
+        ],
+        "gitDirty": false,
+        "gitStatus": []
+      },
+      "sourceInputsAtStart": {
+        "algorithm": "sha256(path NUL bytes NUL, sorted)",
+        "sha256": "62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44",
+        "fileCount": 78,
+        "paths": [
+          "src/**",
+          "scripts/debug/**",
+          "package.json",
+          "pnpm-lock.yaml",
+          "vite.config.ts",
+          "tsconfig.json"
+        ],
+        "gitDirty": false,
+        "gitStatus": []
+      },
+      "pageErrors": [],
+      "cliElapsedMsBeforeCleanup": 4196,
+      "passedChecks": 9,
+      "groups": 1
+    },
+    {
+      "name": "build",
+      "command": "/usr/bin/time -p pnpm build",
+      "exitCode": 0,
+      "exitEvidence": "Natural process completion returned exit_code 0 through exec/write_stdin; no signal or forced exit",
+      "wallSecondsIncludingCleanup": 5.11
+    },
+    {
+      "name": "production",
+      "command": "/usr/bin/time -p pnpm debug check-production --production dist --out /private/tmp/notes-primary73-root-integration/production",
+      "exitCode": 0,
+      "exitEvidence": "Natural process completion returned exit_code 0 through exec/write_stdin; no signal or forced exit",
+      "wallSecondsIncludingCleanup": 4.99,
+      "sourceHead": "4d98704c9c4661605da47d8a26954e74934c7604",
+      "sourceInputs": {
+        "algorithm": "sha256(path NUL bytes NUL, sorted)",
+        "sha256": "62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44",
+        "fileCount": 78,
+        "paths": [
+          "src/**",
+          "scripts/debug/**",
+          "package.json",
+          "pnpm-lock.yaml",
+          "vite.config.ts",
+          "tsconfig.json"
+        ],
+        "gitDirty": false,
+        "gitStatus": []
+      },
+      "sourceInputsAtStart": {
+        "algorithm": "sha256(path NUL bytes NUL, sorted)",
+        "sha256": "62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44",
+        "fileCount": 78,
+        "paths": [
+          "src/**",
+          "scripts/debug/**",
+          "package.json",
+          "pnpm-lock.yaml",
+          "vite.config.ts",
+          "tsconfig.json"
+        ],
+        "gitDirty": false,
+        "gitStatus": []
+      },
+      "pageErrors": [],
+      "cliElapsedMsBeforeCleanup": 4660
+    },
+    {
+      "name": "visual",
+      "command": "/usr/bin/time -p node scripts/check-mobile-recording-primary73.mjs /private/tmp/notes-primary73-root-integration/visual",
+      "exitCode": 0,
+      "exitEvidence": "Natural process completion returned exit_code 0 through exec/write_stdin; no signal or forced exit",
+      "wallSecondsIncludingCleanup": 50.17,
+      "sourceHead": "4d98704c9c4661605da47d8a26954e74934c7604",
+      "sourceFingerprint": "105edc90f2f4f8b64010ed36f6372430a8f9958b48eead929106d63332ce9f78",
+      "errors": [],
+      "samplesPerVariant": 24
+    }
+  ],
+  "totalAppChecks": 152,
+  "visualMetricsMatchAuthorExactly": true,
+  "metrics": {
+    "idle": {
+      "coreMAEBefore": 11.328125,
+      "coreMAEAfter": 11.328125,
+      "buttonMAEBefore": 31.538027332144978,
+      "buttonMAEAfter": 26.035650623885918,
+      "outerRingMasksBefore": [
+        {
+          "threshold": 210,
+          "referencePixels": 157,
+          "clonePixels": 26,
+          "xor": 135,
+          "intersectionOverUnion": 0.1509433962264151
+        },
+        {
+          "threshold": 235,
+          "referencePixels": 213,
+          "clonePixels": 106,
+          "xor": 123,
+          "intersectionOverUnion": 0.4434389140271493
+        }
+      ],
+      "outerRingMasksAfter": [
+        {
+          "threshold": 210,
+          "referencePixels": 157,
+          "clonePixels": 156,
+          "xor": 95,
+          "intersectionOverUnion": 0.5343137254901961
+        },
+        {
+          "threshold": 235,
+          "referencePixels": 213,
+          "clonePixels": 220,
+          "xor": 109,
+          "intersectionOverUnion": 0.5977859778597786
+        }
+      ]
+    },
+    "recording": {
+      "coreMAEBefore": 0.3333333333333333,
+      "coreMAEAfter": 0.3333333333333333,
+      "buttonMAEBefore": 15.923816478033345,
+      "buttonMAEAfter": 10.185225751490812,
+      "outerRingMasksBefore": [
+        {
+          "threshold": 210,
+          "referencePixels": 394,
+          "clonePixels": 86,
+          "xor": 326,
+          "intersectionOverUnion": 0.19106699751861042
+        },
+        {
+          "threshold": 235,
+          "referencePixels": 536,
+          "clonePixels": 212,
+          "xor": 338,
+          "intersectionOverUnion": 0.3775322283609576
+        }
+      ],
+      "outerRingMasksAfter": [
+        {
+          "threshold": 210,
+          "referencePixels": 394,
+          "clonePixels": 372,
+          "xor": 50,
+          "intersectionOverUnion": 0.8774509803921569
+        },
+        {
+          "threshold": 235,
+          "referencePixels": 536,
+          "clonePixels": 418,
+          "xor": 150,
+          "intersectionOverUnion": 0.7282608695652174
+        }
+      ]
+    },
+    "paused": {
+      "coreMAEBefore": 36.664021164021165,
+      "coreMAEAfter": 2.664021164021164,
+      "buttonMAEBefore": 37.33089935499574,
+      "buttonMAEAfter": 10.999026408664962,
+      "outerRingMasksBefore": [
+        {
+          "threshold": 210,
+          "referencePixels": 331,
+          "clonePixels": 167,
+          "xor": 198,
+          "intersectionOverUnion": 0.43103448275862066
+        },
+        {
+          "threshold": 235,
+          "referencePixels": 398,
+          "clonePixels": 203,
+          "xor": 241,
+          "intersectionOverUnion": 0.42755344418052255
+        }
+      ],
+      "outerRingMasksAfter": [
+        {
+          "threshold": 210,
+          "referencePixels": 331,
+          "clonePixels": 381,
+          "xor": 124,
+          "intersectionOverUnion": 0.7033492822966507
+        },
+        {
+          "threshold": 235,
+          "referencePixels": 398,
+          "clonePixels": 400,
+          "xor": 176,
+          "intersectionOverUnion": 0.6386036960985626
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Actual shared RecordingView and frontend App/Editor/Session with explicit synthetic device and JS IPC fixture",
+    "No new native build, Rust persistence proof, Android/device operation or user audio access",
+    "Only local primary-control improvement; original video is compressed, overall pixel parity remains open",
+    "Wall timings are individual invocations including cleanup, not summed concurrent end-to-end performance"
+  ]
+}

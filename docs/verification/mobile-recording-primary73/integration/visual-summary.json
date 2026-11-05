@@ -1,0 +1,2214 @@
+{
+  "boundary": "actual shared RecordingView, controlled legal projection/action sink; no media/native/device",
+  "baselineHead": "3534acaf1475c241895191d93ec839a5428cfc97",
+  "sourceHead": "4d98704c9c4661605da47d8a26954e74934c7604",
+  "sourceInputs": [
+    "src/RecordingView.tsx",
+    "src/RecordingPanel.css",
+    "src/style.css",
+    "src/recording-coordinator.ts",
+    "src/recording-waveform.tsx",
+    "src/recording-clock.ts",
+    "scripts/check-mobile-recording-primary73.mjs"
+  ],
+  "sourceFingerprintAtStart": "105edc90f2f4f8b64010ed36f6372430a8f9958b48eead929106d63332ce9f78",
+  "baselineViewSHA256": "e18f205e9d49c96abc1c590ffd8757a10e60d9060459f04400c24bdec07d094e",
+  "rendering": {
+    "viewport": [
+      392,
+      840
+    ],
+    "deviceScaleFactor": 2,
+    "projection": [
+      224,
+      480
+    ],
+    "canvas": "high quality full-frame drawImage; browser color-managed PNG decode",
+    "chromeArgs": [
+      "--disable-gpu",
+      "--force-color-profile=srgb"
+    ],
+    "fonts": "document.fonts.ready, two frames, await running finite animations (<=500ms), two frames",
+    "thresholds": [
+      210,
+      235
+    ],
+    "contourBandPixels": 2.5,
+    "optimizeDeps": {
+      "entries": [
+        "src/RecordingView.tsx"
+      ],
+      "include": [
+        "react-dom/client"
+      ],
+      "reason": "Scope scanning to the real shared View and virtual JSX bootstrap dependency; exclude historical HTML fixtures from automatic discovery"
+    }
+  },
+  "variants": {
+    "before": {
+      "cssSHA256": "d9c86e89e0a902b03a96e2dc1ce5584ba477931e8165189e5cba10e80836d8e9",
+      "layouts": {
+        "mobile-idle-392x840-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "36bb569fea5a3c9c50b6f5f82d871c30b7bc0b9eeee181de68ca97ff8849b437",
+          "allComputedSHA256": "8514b6243ed733de075022026c2d6c4eef533a56423923741dd54d27f5bf86b4",
+          "pngSHA256": "10f4201645796bb086c17385e2836ae733d128b2c14b2da8a61aff040e2c9374",
+          "primary": {
+            "x": 167.0625,
+            "y": 726.171875,
+            "width": 57.875,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              255,
+              255
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-392x840-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "52d06142eb13146730d82e4b3b693357924b5884418a33a352cb1acb8f76043c",
+          "allComputedSHA256": "3fa7a908b28d180522d5fc6c5d64a28988d5f1f319c29a7a01300e10c6301568",
+          "pngSHA256": "4259d82f3eddeb202c7f014dee6358b76843c544c28f2ec261ec83125edfbec7",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              255,
+              255
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              255,
+              255
+            ]
+          }
+        },
+        "mobile-paused-392x840-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "cec38760be37f55f47aa03e66f03235ad5fea981ba16b2e0ed1b3bfd8135f645",
+          "allComputedSHA256": "2658d6eb27a8349e54b26760c37f6a28cba7e2fdae89241bd0c4e28450a82646",
+          "pngSHA256": "642158fae39760229f0c58cefe53bfdf7cc653c41ce5193ebcb27850d29bff71",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              240,
+              239
+            ],
+            "gap": [
+              255,
+              240,
+              239
+            ],
+            "inner": [
+              255,
+              240,
+              239
+            ]
+          }
+        },
+        "mobile-idle-392x840-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "36bb569fea5a3c9c50b6f5f82d871c30b7bc0b9eeee181de68ca97ff8849b437",
+          "allComputedSHA256": "fb24097ea4cab764ba1957af754974e3cf5722a20620491a71b2e81b6221e8d8",
+          "pngSHA256": "3153a699d7f310a787778982e4d52ce9ace8423dc4f6dcdf8bc1e7484b2a78dc",
+          "primary": {
+            "x": 167.0625,
+            "y": 726.171875,
+            "width": 57.875,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              28,
+              28,
+              30
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-392x840-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "52d06142eb13146730d82e4b3b693357924b5884418a33a352cb1acb8f76043c",
+          "allComputedSHA256": "85b7ae0275d6dd4f27a34fe5fc714076dfc79620d3133234cbf1622464a791a3",
+          "pngSHA256": "62546d504a469d298421aa5d8c41d70613c84ef471d7cde44d80310013c90932",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              28,
+              28,
+              30
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              28,
+              28,
+              30
+            ]
+          }
+        },
+        "mobile-paused-392x840-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "cec38760be37f55f47aa03e66f03235ad5fea981ba16b2e0ed1b3bfd8135f645",
+          "allComputedSHA256": "91c5fc94c912c69049098a6f12e533a2a479886567621ce2cddb85fda5c2a3c5",
+          "pngSHA256": "56c2e73f11f6c2e0c63a3e99211fdfbca7e98ac5b6d8a549d35b2ce2e577906a",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              45,
+              30,
+              31
+            ],
+            "gap": [
+              45,
+              30,
+              31
+            ],
+            "inner": [
+              45,
+              30,
+              31
+            ]
+          }
+        },
+        "mobile-idle-320x568-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "83f3241bd89e39dea6a382820d8ea89f059794cba58d951a099aa0e967e911ae",
+          "allComputedSHA256": "ef515a9514dd8eaf8a1eba63727db98a9615041a0c84e779024fbcce67bf956f",
+          "pngSHA256": "ef41e48659d6a5ffdb5e0db30bf2cb987763c3984551d0d1689b4b0fc52290bd",
+          "primary": {
+            "x": 138,
+            "y": 491.03125,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              255,
+              255
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-320x568-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "245e3717ef4ae8afea6697175da68ed58f8fe2a1605d826f65794bc7d096254c",
+          "allComputedSHA256": "ea12d57cb8aff02eeab9abb4714665d649a99e6013fc08b0da63dd0d2a126bb3",
+          "pngSHA256": "b33b6be91375269a90a0ca154667da3120601c4d6eee24aa7ec7f9b964920965",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              255,
+              255
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              255,
+              255
+            ]
+          }
+        },
+        "mobile-paused-320x568-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "55de9e6aff45b120968192733871aa9af8e92537fa3309eea7a3f32faeb8e377",
+          "allComputedSHA256": "d81adb4632b412e4dd64483b4fa2a39dcc179d03fa2e1413431adc2b3a877061",
+          "pngSHA256": "e76c7568cbb5bce2f820b9a0a3357b5d4c60045d9d4da9dff2f4ff3585249955",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              240,
+              239
+            ],
+            "gap": [
+              255,
+              240,
+              239
+            ],
+            "inner": [
+              255,
+              240,
+              239
+            ]
+          }
+        },
+        "mobile-idle-320x568-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "83f3241bd89e39dea6a382820d8ea89f059794cba58d951a099aa0e967e911ae",
+          "allComputedSHA256": "c7d09f9703406de847a80b245d531f80d7bb7092068201fe35cae42c7833cdb4",
+          "pngSHA256": "19999187cf8216130f686b0c5fd40693dce3c351d84faeb90e78a830624162b2",
+          "primary": {
+            "x": 138,
+            "y": 491.03125,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              28,
+              28,
+              30
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-320x568-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "245e3717ef4ae8afea6697175da68ed58f8fe2a1605d826f65794bc7d096254c",
+          "allComputedSHA256": "4fc50088c80277cabb0b5c18e8b9c6a16377f79976f13ce9ad461cab2e9bf119",
+          "pngSHA256": "c8bd9f0a5717861133cd358a5c483dae1976fa18175dfb68d9e8c021cc5fc624",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              28,
+              28,
+              30
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              28,
+              28,
+              30
+            ]
+          }
+        },
+        "mobile-paused-320x568-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "55de9e6aff45b120968192733871aa9af8e92537fa3309eea7a3f32faeb8e377",
+          "allComputedSHA256": "4969f46710f11e50f1fb672f50b9694a7ecf303c88d3d8987a6bc4493d5c7727",
+          "pngSHA256": "abb49478f249ec1f0630574864ca36f3d4f1e7b52adbcaf4d34f03d9054a29c6",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              45,
+              30,
+              31
+            ],
+            "gap": [
+              45,
+              30,
+              31
+            ],
+            "inner": [
+              45,
+              30,
+              31
+            ]
+          }
+        },
+        "mobile-idle-280x600-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "81d17745e0b82c31b220a538692802d08856d38a96eb31225e05c2d2cb3ee6a4",
+          "allComputedSHA256": "9582e87161b623d99b3ee7d83068500e50051d3586062319baef63732bbdb8c7",
+          "pngSHA256": "ae0cbca4b4a2fba9050074e352a01fd9c9835af90e74c92e9eaa5dae04056fcf",
+          "primary": {
+            "x": 118,
+            "y": 518.6875,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              252,
+              252,
+              252
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-280x600-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "501a6b750f3ac9122da81ade4e2ca82463424062563dcd175aa558b6f74b2518",
+          "allComputedSHA256": "410ef6ce696a92c264f49a582f7572e8fa3622435b09ec601477ea90c236500d",
+          "pngSHA256": "303e89becc4241a2d9a4c024d00a865ba3caa1f5ce99ceade3628b72e3cd51b4",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              255,
+              255
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              255,
+              255
+            ]
+          }
+        },
+        "mobile-paused-280x600-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "1c009a6730daafda1e9d7143ccddcba666564dd5fe9297a7fea5a4409de2dca6",
+          "allComputedSHA256": "c8b86f54a9de7b5f948abbbc59efa2fd501dd5b39279362d3fccca79b9706543",
+          "pngSHA256": "2b3edf1ed02513be206a3bee2adfbb4758b87727f860a05eb8e591ff8689764c",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              240,
+              239
+            ],
+            "gap": [
+              255,
+              240,
+              239
+            ],
+            "inner": [
+              255,
+              240,
+              239
+            ]
+          }
+        },
+        "mobile-idle-280x600-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "81d17745e0b82c31b220a538692802d08856d38a96eb31225e05c2d2cb3ee6a4",
+          "allComputedSHA256": "1a965298cc1c59e3e8c5883b224c7d475214d66e90d793679305ef6c05c15390",
+          "pngSHA256": "08a6f1f5700b52e9db026a43e3cb9d3ae421c50f97870ad10aa3627818d9b335",
+          "primary": {
+            "x": 118,
+            "y": 518.6875,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              32,
+              32,
+              34
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-280x600-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "501a6b750f3ac9122da81ade4e2ca82463424062563dcd175aa558b6f74b2518",
+          "allComputedSHA256": "4fc84aab768544e91b063d6992fea51a9ad0bf14f6f8d5d947ad94016ea812c0",
+          "pngSHA256": "4b0176bb3305cd913e7baf0e15e17c3874a0bf8603260210390322f8f6420532",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              28,
+              28,
+              30
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              28,
+              28,
+              30
+            ]
+          }
+        },
+        "mobile-paused-280x600-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "1c009a6730daafda1e9d7143ccddcba666564dd5fe9297a7fea5a4409de2dca6",
+          "allComputedSHA256": "bd8138eee40a12152adc79d51107c0b9f166e7636b0cb3e2b10167146bde4bbd",
+          "pngSHA256": "0e128bafbe4a81a36c71695147ab185d312e88cb27167d76f0c8fe4c173e84c7",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              45,
+              30,
+              31
+            ],
+            "gap": [
+              45,
+              30,
+              31
+            ],
+            "inner": [
+              45,
+              30,
+              31
+            ]
+          }
+        },
+        "desktop-idle-280x467-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "d83c20564b34b76b250b18c7539aa41dbe8699b566692783e717d5bd2219fc13",
+          "rectSHA256": "e82cc1e4ed19830b3b4ab6f80374db1f177ec0f64d6fe952a4697b184fe79901",
+          "allComputedSHA256": "9ec0b25631c313f4ede028cd49ad18a98bab703a3883184f17b4dbb8b05fe741",
+          "pngSHA256": "43169adfff3fc620998d09d28909f2f7ec1d72ab1e35b484612641a6f06711ea",
+          "primary": {
+            "x": 120,
+            "y": 410.5,
+            "width": 40,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-recording-280x467-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "79d59107a56361d0b140d618dd3fed7caed7493701e3716d7969f8f416cbc0ab",
+          "rectSHA256": "87c40efbf68bdc7005287f25fa874c95ee770aaf6f886aeacc70c4c664ae36e5",
+          "allComputedSHA256": "cec6465344318fcf6361f6bad73dfbf6a3be4c5e382d2c1a5527df80ceb78e46",
+          "pngSHA256": "9dc7f2e40c8b08389516ab3866ae99f9b549b7ec7ae5b5c1358463173d6f5091",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-paused-280x467-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "9417e8b28b039840701cb07939120190b16cea6800dcf4f61a2941bfaf0b7335",
+          "rectSHA256": "81ff59d5dc749344ccae45943dcf8f90d9adb15e2fc1a4c04cf55e3f6489aaef",
+          "allComputedSHA256": "ccc09fe7c3472c8432d08423a287feacb0ed44566491ce265dba1fc1ce576cab",
+          "pngSHA256": "bba3fae974a437956cc473f2fefe16a307b14450d076acf9ad39eb86fe693a8d",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-idle-280x467-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "d83c20564b34b76b250b18c7539aa41dbe8699b566692783e717d5bd2219fc13",
+          "rectSHA256": "e82cc1e4ed19830b3b4ab6f80374db1f177ec0f64d6fe952a4697b184fe79901",
+          "allComputedSHA256": "e031fcae70bfa89be3f2df716f6dfdcf92940a917fa27d1647fb394f2d3bdd1f",
+          "pngSHA256": "8d95b5be4e77f6e5f35ca7f12736d615da9be24418b6fccd6d01d83ec1583d41",
+          "primary": {
+            "x": 120,
+            "y": 410.5,
+            "width": 40,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-recording-280x467-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "79d59107a56361d0b140d618dd3fed7caed7493701e3716d7969f8f416cbc0ab",
+          "rectSHA256": "87c40efbf68bdc7005287f25fa874c95ee770aaf6f886aeacc70c4c664ae36e5",
+          "allComputedSHA256": "ee1319f9390a3d354b46f420aee13af164b8a2792d2fa254fbda80f50a21ab02",
+          "pngSHA256": "e28f250ea66f67e98679567f725a1b24f762b284e22bf21325dcf7dfe3fad705",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-paused-280x467-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "9417e8b28b039840701cb07939120190b16cea6800dcf4f61a2941bfaf0b7335",
+          "rectSHA256": "81ff59d5dc749344ccae45943dcf8f90d9adb15e2fc1a4c04cf55e3f6489aaef",
+          "allComputedSHA256": "3457d3ab0b83e6ff9b485bfbfb6d7658f0e000c353f0fdc2507ff578076c1c25",
+          "pngSHA256": "528565fd54f254ce9653f0f8680a7d8d83bba6941c1e184855c9cbeb9c8088aa",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "idle-reference": {
+          "originalPath": "docs/research/mobile-recording-sequence-01/representative/frame-n0833.png",
+          "originalSHA256": "2bef5009608d2ad4fbc920592385f854ae75a5efd84085d4350f53b66f910b5d",
+          "bounds": [
+            95,
+            415,
+            129,
+            448
+          ],
+          "coreROI": [
+            104,
+            423,
+            120,
+            439
+          ],
+          "referenceCore": {
+            "mode": [
+              255,
+              40,
+              33
+            ],
+            "modeCount": 253,
+            "pixels": 256,
+            "mean": [
+              255,
+              39.99609375,
+              33.01953125
+            ]
+          },
+          "cloneCore": {
+            "mode": [
+              255,
+              59,
+              48
+            ],
+            "modeCount": 256,
+            "pixels": 256,
+            "mean": [
+              255,
+              59,
+              48
+            ]
+          },
+          "coreMAE": 11.328125,
+          "buttonMAE": 31.538027332144978,
+          "centerGlyphMAE": 11.29689608636977,
+          "outerRingMasks": [
+            {
+              "threshold": 210,
+              "referencePixels": 157,
+              "clonePixels": 26,
+              "xor": 135,
+              "intersectionOverUnion": 0.1509433962264151
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 213,
+              "clonePixels": 106,
+              "xor": 123,
+              "intersectionOverUnion": 0.4434389140271493
+            }
+          ]
+        },
+        "recording-reference": {
+          "originalPath": "docs/research/mobile-recording-sequence-01/representative/frame-n0870.png",
+          "originalSHA256": "4b19b7a3ca1bcf7807df1190e4ac90b7e581acc1d8f8a02000d95dc51ff82d39",
+          "bounds": [
+            71,
+            415,
+            154,
+            448
+          ],
+          "coreROI": [
+            87,
+            422,
+            101,
+            440
+          ],
+          "referenceCore": {
+            "mode": [
+              255,
+              254,
+              255
+            ],
+            "modeCount": 252,
+            "pixels": 252,
+            "mean": [
+              255,
+              254,
+              255
+            ]
+          },
+          "cloneCore": {
+            "mode": [
+              255,
+              255,
+              255
+            ],
+            "modeCount": 252,
+            "pixels": 252,
+            "mean": [
+              255,
+              255,
+              255
+            ]
+          },
+          "coreMAE": 0.3333333333333333,
+          "buttonMAE": 15.923816478033345,
+          "centerGlyphMAE": 55.32793522267207,
+          "outerRingMasks": [
+            {
+              "threshold": 210,
+              "referencePixels": 394,
+              "clonePixels": 86,
+              "xor": 326,
+              "intersectionOverUnion": 0.19106699751861042
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 536,
+              "clonePixels": 212,
+              "xor": 338,
+              "intersectionOverUnion": 0.3775322283609576
+            }
+          ]
+        },
+        "paused-reference": {
+          "originalPath": "docs/research/mobile-recording-sequence-01/representative/frame-n0960.png",
+          "originalSHA256": "ed3bb1ace0f95af2721de9d600ca077223f2a5684299fe9b48d5f9b8a606d496",
+          "bounds": [
+            71,
+            415,
+            154,
+            448
+          ],
+          "coreROI": [
+            87,
+            422,
+            101,
+            440
+          ],
+          "referenceCore": {
+            "mode": [
+              255,
+              186,
+              183
+            ],
+            "modeCount": 250,
+            "pixels": 252,
+            "mean": [
+              255,
+              185.9920634920635,
+              183.015873015873
+            ]
+          },
+          "cloneCore": {
+            "mode": [
+              255,
+              240,
+              239
+            ],
+            "modeCount": 252,
+            "pixels": 252,
+            "mean": [
+              255,
+              240,
+              239
+            ]
+          },
+          "coreMAE": 36.664021164021165,
+          "buttonMAE": 37.33089935499574,
+          "centerGlyphMAE": 45.40485829959514,
+          "outerRingMasks": [
+            {
+              "threshold": 210,
+              "referencePixels": 331,
+              "clonePixels": 167,
+              "xor": 198,
+              "intersectionOverUnion": 0.43103448275862066
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 398,
+              "clonePixels": 203,
+              "xor": 241,
+              "intersectionOverUnion": 0.42755344418052255
+            }
+          ]
+        }
+      }
+    },
+    "after": {
+      "cssSHA256": "73f2029d25ad3e5a0d00b09fb226efe0146d63f244c0a9d7a6733d68be117aef",
+      "layouts": {
+        "mobile-idle-392x840-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "36bb569fea5a3c9c50b6f5f82d871c30b7bc0b9eeee181de68ca97ff8849b437",
+          "allComputedSHA256": "74655001d1b3f4836f87c2b64fdf6d402be39ed2ce014cbee4ec9186b27d261d",
+          "pngSHA256": "112492f8b944ec0bc7d55812497e2920df5f83da8b1a57802598e491bfc33654",
+          "primary": {
+            "x": 167.0625,
+            "y": 726.171875,
+            "width": 57.875,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              170,
+              170,
+              170
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-392x840-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "52d06142eb13146730d82e4b3b693357924b5884418a33a352cb1acb8f76043c",
+          "allComputedSHA256": "038cc12a92629b47300eb5f1c23301561a06b8b7fa6ce63afc725a505466b2ad",
+          "pngSHA256": "b237fb91ea95e59ee18a37d58a1724a64d18b62ac7b99b8c98fc460b3509ee4a",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              170,
+              170,
+              170
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              255,
+              255
+            ]
+          }
+        },
+        "mobile-paused-392x840-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "cec38760be37f55f47aa03e66f03235ad5fea981ba16b2e0ed1b3bfd8135f645",
+          "allComputedSHA256": "fd3eb52cc32a5c405964f6fba7aef67ddc1e814ee8ff9c802051a3f7c041350c",
+          "pngSHA256": "618e3692ea10ef21bddc06888df78c4f2813c9bdcb7ba77f3392a5c155de3073",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(255, 59, 48, 0.33)",
+              "inset": "4px",
+              "content": "\"\""
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              59,
+              48
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              190,
+              187
+            ]
+          }
+        },
+        "mobile-idle-392x840-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "36bb569fea5a3c9c50b6f5f82d871c30b7bc0b9eeee181de68ca97ff8849b437",
+          "allComputedSHA256": "12ced7258cf6f0f8b72c0d2b9f47caa6a2b31ebacbd761735199a9b179eec42e",
+          "pngSHA256": "4c7ea4ae35cf7573f447b824289685910279994e88923c6cc039a6cbc69dbdb3",
+          "primary": {
+            "x": 167.0625,
+            "y": 726.171875,
+            "width": 57.875,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              170,
+              170,
+              170
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-392x840-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "52d06142eb13146730d82e4b3b693357924b5884418a33a352cb1acb8f76043c",
+          "allComputedSHA256": "45e879b0c56fde25ce23421cac06bdb7690f3e6d2075c500aeac90acff4496b7",
+          "pngSHA256": "e3fcda0ea47eb39133fb96161092940f35144a25712354d04295238f01b1fda5",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              170,
+              170,
+              170
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              28,
+              28,
+              30
+            ]
+          }
+        },
+        "mobile-paused-392x840-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "cec38760be37f55f47aa03e66f03235ad5fea981ba16b2e0ed1b3bfd8135f645",
+          "allComputedSHA256": "72582cd575b6bbfc2b80c1f38e9fe2f5a6860cb5104dd9a1ea573abf3c25d460",
+          "pngSHA256": "a0da29e7d58ef80e176e6144bbeb87fc345f98c0f71dba9a9995cf87073d1303",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(255, 59, 48, 0.33)",
+              "inset": "4px",
+              "content": "\"\""
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              59,
+              48
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              102,
+              37,
+              36
+            ]
+          }
+        },
+        "mobile-idle-320x568-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "83f3241bd89e39dea6a382820d8ea89f059794cba58d951a099aa0e967e911ae",
+          "allComputedSHA256": "80957abd9a30c2d0959e0aee4d77556136d1b7f8b6d0e1b3c8dec1ea3c3bc0a2",
+          "pngSHA256": "a2ecda1a972e401fc96b502cf62d4138c1027849a8386d7b130db4d08b4c2411",
+          "primary": {
+            "x": 138,
+            "y": 491.03125,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              170,
+              170,
+              170
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-320x568-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "245e3717ef4ae8afea6697175da68ed58f8fe2a1605d826f65794bc7d096254c",
+          "allComputedSHA256": "4630a2db91e387fd00cf47f297233381afb51d397902e294c810a05f1e975009",
+          "pngSHA256": "03b3fe5aaac1ee30b4c91cc92bc0383a1e22adeccd49bf04e361a7e0a2766817",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              170,
+              170,
+              170
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              255,
+              255
+            ]
+          }
+        },
+        "mobile-paused-320x568-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "55de9e6aff45b120968192733871aa9af8e92537fa3309eea7a3f32faeb8e377",
+          "allComputedSHA256": "5b948c4ac14675793c6dbd47fec4914bc70e90b91094650a04248854b618d4a8",
+          "pngSHA256": "9bd3053ab7e9fd3acf0aa80ea6314216560d0e97209809c30c9e83416b86fb1e",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(255, 59, 48, 0.33)",
+              "inset": "4px",
+              "content": "\"\""
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              59,
+              48
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              190,
+              187
+            ]
+          }
+        },
+        "mobile-idle-320x568-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "83f3241bd89e39dea6a382820d8ea89f059794cba58d951a099aa0e967e911ae",
+          "allComputedSHA256": "b776590586aec86e650eafc827b76db13baaec9eeb90359897cf0e8337b76959",
+          "pngSHA256": "ef7796476ff196d32d901583adb57a793ed23d977dc1d211abc74232ad7b84a6",
+          "primary": {
+            "x": 138,
+            "y": 491.03125,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              170,
+              170,
+              170
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-320x568-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "245e3717ef4ae8afea6697175da68ed58f8fe2a1605d826f65794bc7d096254c",
+          "allComputedSHA256": "51fe6c1020d83219f4083cc1bcb4b9f61cebe3c5c8d1fca620b92da2e0f8fa47",
+          "pngSHA256": "f3696fedc25bc732cecdfcb2e7b65b816c5945a3f4f2256e795028d174302ede",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              170,
+              170,
+              170
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              28,
+              28,
+              30
+            ]
+          }
+        },
+        "mobile-paused-320x568-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "55de9e6aff45b120968192733871aa9af8e92537fa3309eea7a3f32faeb8e377",
+          "allComputedSHA256": "181d4616e6da50892c054a0a8fff6d5eeaab365cfb49d466db00ecb1bdc1d83c",
+          "pngSHA256": "ab6428495c0a1ad8f7c33f8be050554b21378106c0aaf10c203bf085e0850b58",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(255, 59, 48, 0.33)",
+              "inset": "4px",
+              "content": "\"\""
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              59,
+              48
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              102,
+              37,
+              36
+            ]
+          }
+        },
+        "mobile-idle-280x600-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "81d17745e0b82c31b220a538692802d08856d38a96eb31225e05c2d2cb3ee6a4",
+          "allComputedSHA256": "3a577611f2ef05776896d70d7fb3881093ab75cbb0e114e84ba0ccf1faa22c65",
+          "pngSHA256": "a14d7f761bfcd69105acbed24b153c6729373d9dd164412cde64add8022436fe",
+          "primary": {
+            "x": 118,
+            "y": 518.6875,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              172,
+              172,
+              172
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-280x600-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "501a6b750f3ac9122da81ade4e2ca82463424062563dcd175aa558b6f74b2518",
+          "allComputedSHA256": "392cc620c5daaf232753bdf0eba6594bb71f49f01e5cb89aed3511abf0cdd9d1",
+          "pngSHA256": "7a17480fd1fb66b36dd8d15d0b3f6cb5bebe3802fd70c18f056d1a4b177fa862",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              170,
+              170,
+              170
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              255,
+              255
+            ]
+          }
+        },
+        "mobile-paused-280x600-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "1c009a6730daafda1e9d7143ccddcba666564dd5fe9297a7fea5a4409de2dca6",
+          "allComputedSHA256": "f152e1ce8cada5e33d5045c5c1ccb0e00cd4f03e84f9480974a6ccaaec78d084",
+          "pngSHA256": "f86b633375f1f9d038bd991d48091bc830bcdc4e60979e78b9c8a462b3313372",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(255, 59, 48, 0.33)",
+              "inset": "4px",
+              "content": "\"\""
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              59,
+              48
+            ],
+            "gap": [
+              255,
+              255,
+              255
+            ],
+            "inner": [
+              255,
+              190,
+              187
+            ]
+          }
+        },
+        "mobile-idle-280x600-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "81d17745e0b82c31b220a538692802d08856d38a96eb31225e05c2d2cb3ee6a4",
+          "allComputedSHA256": "c009ee3c74cbc4eca097270d09b6f1c8f003b740931aecc173d414d5e7b16d2e",
+          "pngSHA256": "db433f395d42b1997583f6a11cc6016ae414de565c8dcaf3bb29d2245c858453",
+          "primary": {
+            "x": 118,
+            "y": 518.6875,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              162,
+              162,
+              162
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              255,
+              59,
+              48
+            ]
+          }
+        },
+        "mobile-recording-280x600-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "501a6b750f3ac9122da81ade4e2ca82463424062563dcd175aa558b6f74b2518",
+          "allComputedSHA256": "2274c133aa41b47754350bb44e11473b58ee025c54a444f395451642219a7ffb",
+          "pngSHA256": "06d3c03e2f7a7bf1256218308ccef1b9d731343605a0c0741189486eb5cd0cc9",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              170,
+              170,
+              170
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              28,
+              28,
+              30
+            ]
+          }
+        },
+        "mobile-paused-280x600-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "1c009a6730daafda1e9d7143ccddcba666564dd5fe9297a7fea5a4409de2dca6",
+          "allComputedSHA256": "41210418609b86e8b7f913353a74a1a5052714ad686be35be33c3a81449c86a4",
+          "pngSHA256": "94204af6ed9681aa2a8391bfd8cdd7a99b6b50b47ea32874c0c77a9c5fc4b7fb",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(255, 59, 48, 0.33)",
+              "inset": "4px",
+              "content": "\"\""
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "primaryPixels": {
+            "ring": [
+              255,
+              59,
+              48
+            ],
+            "gap": [
+              28,
+              28,
+              30
+            ],
+            "inner": [
+              102,
+              37,
+              36
+            ]
+          }
+        },
+        "desktop-idle-280x467-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "d83c20564b34b76b250b18c7539aa41dbe8699b566692783e717d5bd2219fc13",
+          "rectSHA256": "e82cc1e4ed19830b3b4ab6f80374db1f177ec0f64d6fe952a4697b184fe79901",
+          "allComputedSHA256": "9ec0b25631c313f4ede028cd49ad18a98bab703a3883184f17b4dbb8b05fe741",
+          "pngSHA256": "43169adfff3fc620998d09d28909f2f7ec1d72ab1e35b484612641a6f06711ea",
+          "primary": {
+            "x": 120,
+            "y": 410.5,
+            "width": 40,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "desktop-recording-280x467-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "79d59107a56361d0b140d618dd3fed7caed7493701e3716d7969f8f416cbc0ab",
+          "rectSHA256": "87c40efbf68bdc7005287f25fa874c95ee770aaf6f886aeacc70c4c664ae36e5",
+          "allComputedSHA256": "cec6465344318fcf6361f6bad73dfbf6a3be4c5e382d2c1a5527df80ceb78e46",
+          "pngSHA256": "9dc7f2e40c8b08389516ab3866ae99f9b549b7ec7ae5b5c1358463173d6f5091",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "desktop-paused-280x467-light": {
+          "settledAnimations": [],
+          "htmlSHA256": "9417e8b28b039840701cb07939120190b16cea6800dcf4f61a2941bfaf0b7335",
+          "rectSHA256": "81ff59d5dc749344ccae45943dcf8f90d9adb15e2fc1a4c04cf55e3f6489aaef",
+          "allComputedSHA256": "ccc09fe7c3472c8432d08423a287feacb0ed44566491ce265dba1fc1ce576cab",
+          "pngSHA256": "bba3fae974a437956cc473f2fefe16a307b14450d076acf9ad39eb86fe693a8d",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "desktop-idle-280x467-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "d83c20564b34b76b250b18c7539aa41dbe8699b566692783e717d5bd2219fc13",
+          "rectSHA256": "e82cc1e4ed19830b3b4ab6f80374db1f177ec0f64d6fe952a4697b184fe79901",
+          "allComputedSHA256": "e031fcae70bfa89be3f2df716f6dfdcf92940a917fa27d1647fb394f2d3bdd1f",
+          "pngSHA256": "8d95b5be4e77f6e5f35ca7f12736d615da9be24418b6fccd6d01d83ec1583d41",
+          "primary": {
+            "x": 120,
+            "y": 410.5,
+            "width": 40,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "desktop-recording-280x467-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "79d59107a56361d0b140d618dd3fed7caed7493701e3716d7969f8f416cbc0ab",
+          "rectSHA256": "87c40efbf68bdc7005287f25fa874c95ee770aaf6f886aeacc70c4c664ae36e5",
+          "allComputedSHA256": "ee1319f9390a3d354b46f420aee13af164b8a2792d2fa254fbda80f50a21ab02",
+          "pngSHA256": "e28f250ea66f67e98679567f725a1b24f762b284e22bf21325dcf7dfe3fad705",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "desktop-paused-280x467-dark": {
+          "settledAnimations": [],
+          "htmlSHA256": "9417e8b28b039840701cb07939120190b16cea6800dcf4f61a2941bfaf0b7335",
+          "rectSHA256": "81ff59d5dc749344ccae45943dcf8f90d9adb15e2fc1a4c04cf55e3f6489aaef",
+          "allComputedSHA256": "3457d3ab0b83e6ff9b485bfbfb6d7658f0e000c353f0fdc2507ff578076c1c25",
+          "pngSHA256": "528565fd54f254ce9653f0f8680a7d8d83bba6941c1e184855c9cbeb9c8088aa",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "idle-reference": {
+          "originalPath": "docs/research/mobile-recording-sequence-01/representative/frame-n0833.png",
+          "originalSHA256": "2bef5009608d2ad4fbc920592385f854ae75a5efd84085d4350f53b66f910b5d",
+          "bounds": [
+            95,
+            415,
+            129,
+            448
+          ],
+          "coreROI": [
+            104,
+            423,
+            120,
+            439
+          ],
+          "referenceCore": {
+            "mode": [
+              255,
+              40,
+              33
+            ],
+            "modeCount": 253,
+            "pixels": 256,
+            "mean": [
+              255,
+              39.99609375,
+              33.01953125
+            ]
+          },
+          "cloneCore": {
+            "mode": [
+              255,
+              59,
+              48
+            ],
+            "modeCount": 256,
+            "pixels": 256,
+            "mean": [
+              255,
+              59,
+              48
+            ]
+          },
+          "coreMAE": 11.328125,
+          "buttonMAE": 26.035650623885918,
+          "centerGlyphMAE": 11.29689608636977,
+          "outerRingMasks": [
+            {
+              "threshold": 210,
+              "referencePixels": 157,
+              "clonePixels": 156,
+              "xor": 95,
+              "intersectionOverUnion": 0.5343137254901961
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 213,
+              "clonePixels": 220,
+              "xor": 109,
+              "intersectionOverUnion": 0.5977859778597786
+            }
+          ]
+        },
+        "recording-reference": {
+          "originalPath": "docs/research/mobile-recording-sequence-01/representative/frame-n0870.png",
+          "originalSHA256": "4b19b7a3ca1bcf7807df1190e4ac90b7e581acc1d8f8a02000d95dc51ff82d39",
+          "bounds": [
+            71,
+            415,
+            154,
+            448
+          ],
+          "coreROI": [
+            87,
+            422,
+            101,
+            440
+          ],
+          "referenceCore": {
+            "mode": [
+              255,
+              254,
+              255
+            ],
+            "modeCount": 252,
+            "pixels": 252,
+            "mean": [
+              255,
+              254,
+              255
+            ]
+          },
+          "cloneCore": {
+            "mode": [
+              255,
+              255,
+              255
+            ],
+            "modeCount": 252,
+            "pixels": 252,
+            "mean": [
+              255,
+              255,
+              255
+            ]
+          },
+          "coreMAE": 0.3333333333333333,
+          "buttonMAE": 10.185225751490812,
+          "centerGlyphMAE": 55.32793522267207,
+          "outerRingMasks": [
+            {
+              "threshold": 210,
+              "referencePixels": 394,
+              "clonePixels": 372,
+              "xor": 50,
+              "intersectionOverUnion": 0.8774509803921569
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 536,
+              "clonePixels": 418,
+              "xor": 150,
+              "intersectionOverUnion": 0.7282608695652174
+            }
+          ]
+        },
+        "paused-reference": {
+          "originalPath": "docs/research/mobile-recording-sequence-01/representative/frame-n0960.png",
+          "originalSHA256": "ed3bb1ace0f95af2721de9d600ca077223f2a5684299fe9b48d5f9b8a606d496",
+          "bounds": [
+            71,
+            415,
+            154,
+            448
+          ],
+          "coreROI": [
+            87,
+            422,
+            101,
+            440
+          ],
+          "referenceCore": {
+            "mode": [
+              255,
+              186,
+              183
+            ],
+            "modeCount": 250,
+            "pixels": 252,
+            "mean": [
+              255,
+              185.9920634920635,
+              183.015873015873
+            ]
+          },
+          "cloneCore": {
+            "mode": [
+              255,
+              190,
+              187
+            ],
+            "modeCount": 252,
+            "pixels": 252,
+            "mean": [
+              255,
+              190,
+              187
+            ]
+          },
+          "coreMAE": 2.664021164021164,
+          "buttonMAE": 10.999026408664962,
+          "centerGlyphMAE": 19.870445344129553,
+          "outerRingMasks": [
+            {
+              "threshold": 210,
+              "referencePixels": 331,
+              "clonePixels": 381,
+              "xor": 124,
+              "intersectionOverUnion": 0.7033492822966507
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 398,
+              "clonePixels": 400,
+              "xor": 176,
+              "intersectionOverUnion": 0.6386036960985626
+            }
+          ]
+        }
+      }
+    }
+  },
+  "checks": [
+    "Three legal mobile phases at three viewports in light/dark: full >=44px hit targets, tap/Enter/Space, disabled no action; all before/after element geometry equal",
+    "Six desktop same-props states: HTML, every computed property, geometry and actual PNG RGBA all unchanged"
+  ],
+  "errors": [],
+  "sourceFingerprintAtEnd": "105edc90f2f4f8b64010ed36f6372430a8f9958b48eead929106d63332ce9f78",
+  "status": "PASS"
+}

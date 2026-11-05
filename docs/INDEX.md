@@ -2,7 +2,9 @@
 
 更新：2026-11-06。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
-2026-11-06：继续[手机录音中央控件73](plan/tasks/app-mobile-recording-primary73.md)，依据已保全的稳定录屏帧校准外圈、内侧间隔与暂停填色，以命令/HTML和同尺寸图像量化回归。[已存录音重命名研究72](research/saved-audio-rename72/README.md)及[独审](plan/reviews/ref-saved-audio-rename72.md)已合入：源码读写链和不可变附件边界已核对，原版AX访问拒绝，名称编辑/Undo/恢复未观察，任务继续开放，未实现猜测交互。原Android未保存录音现场保持不动。
+2026-11-06：[录音中央控件73](plan/tasks/app-mobile-recording-primary73.md)已完成[独立复审](plan/reviews/app-mobile-recording-primary73-recheck.md)、[视觉效率复核](plan/reviews/app-mobile-recording-primary73-efficiency-recheck.md)及[主线整合](verification/mobile-recording-primary73/integration/README.md)。根桌面100/手机录音43/笔记9、build/production、24态视觉均自然exit0。修正手机外圈/间隔/暂停填色；修复延迟媒体重挂载的测试竞态；同24态视觉限定依赖扫描后独审约260→50秒，六桌面严格无差。完整原生/像素与CLI清理性能仍开放；下一项[真实Rust持久化74](plan/tasks/app-debug-recording-rust74.md)ready，尚未构建执行。
+
+2026-11-06准备阶段（73现已完成，见上方整合）：按[手机录音中央控件73](plan/tasks/app-mobile-recording-primary73.md)，依据已保全的稳定录屏帧校准外圈、内侧间隔与暂停填色，以命令/HTML和同尺寸图像量化回归。[已存录音重命名研究72](research/saved-audio-rename72/README.md)及[独审](plan/reviews/ref-saved-audio-rename72.md)已合入：源码读写链和不可变附件边界已核对，原版AX访问拒绝，名称编辑/Undo/恢复未观察，任务继续开放，未实现猜测交互。原Android未保存录音现场保持不动。
 
 2026-11-06：[手机录音命令验收71](plan/tasks/app-mobile-debug-recording71.md)已[独立复审通过](plan/reviews/app-mobile-debug-recording71-recheck.md)并完成[根整合](verification/mobile-debug-recording71/integration/README.md)。桌面九组100项29.046秒、手机录音42项17.092秒、手机笔记9项11.282秒，均exit0；构建及生产排除通过。修复真实重试与旧失败竞态、有界异步等待和raw idle字段传输，补合成媒体增量字节与后段播放检查。命令/HTML路径按[使用说明](debugging.md)执行，完整原生/像素目标仍开放。
 

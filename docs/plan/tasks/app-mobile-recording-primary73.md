@@ -1,7 +1,7 @@
 ---
 id: app-mobile-recording-primary73
 scope: mobile-recording-primary-control-visual-parity
-status: in-progress
+status: done
 depends-on: [app-mobile-debug-recording71]
 ---
 
@@ -33,5 +33,7 @@ depends-on: [app-mobile-debug-recording71]
 src/RecordingPanel.css及确有必要的RecordingView局部标记；可重放的视觉校准脚本；独审实际失败所需scripts/debug/等待与资源清理边界；docs/verification/mobile-recording-primary73/及独立证据。不扩散全局样式或其他UI模块。文档说明与可见实现作为一次交付。
 
 # verification
+
+2026-11-06限定范围完成：f7d18b79开发、920827f4独审与主线[整合](../../verification/mobile-recording-primary73/integration/README.md)通过。根desktop100/mobile43/notes9、build、production排除和24态before/after视觉均自然exit0；六桌面严格无差、局部ROI/mask改善。首轮saved-card P2用600ms读取延迟和真实音源/metadata就绪等待修复，旧blocked/失败/143记录保留；视觉扫描限定后独审259.887→49.602s，根50.17s，CLI额外清理仍性能残差。只授予本控件/浏览器测试范围，完整Mac/Android及原版像素目标不标完成。
 
 独审重算原图与旧/新真实View的控件ROI和轮廓差异，确认使用相同完整尺寸、状态与合法props；核桌面隔离、窄屏/深色、真实App命令与生产排除。根整合后再运行完整回归。只授予中央控件局部改进，原生设备和整体逐像素目标仍开放。

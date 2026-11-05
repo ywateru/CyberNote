@@ -1,6 +1,8 @@
 # 交付计划
 
-2026-11-06当前工作：[手机中央录音控件73](tasks/app-mobile-recording-primary73.md)正在独立工作树开发，保持既有录音逻辑，按原视频稳定三态校准并量化同尺寸视觉差异。[重命名研究72](../research/saved-audio-rename72/README.md)已合入，[独审](reviews/ref-saved-audio-rename72.md)确认报告准确；原版AX拒绝导致名称交互未取得证据，任务保持in-progress / ORIGINAL-OPEN，不将源码方案当成功能交付。
+2026-11-06任务73已限定完成：[主线整合](../verification/mobile-recording-primary73/integration/README.md)全部自然exit0，desktop100/mobile43/notes9、构建/生产排除与24态视觉通过。独审发现的saved-card重挂载竞态已修runner真实metadata等待，旧失败保留；视觉依赖扫描提速复验通过，非CLI全局性能保证。下一项[真实Rust录音落盘74](tasks/app-debug-recording-rust74.md)ready；完整产品目标继续进行。
+
+2026-11-06准备阶段（已由上方整合结果更新）：[手机中央录音控件73](tasks/app-mobile-recording-primary73.md)当时在独立工作树开发，保持既有录音逻辑，按原视频稳定三态校准并量化同尺寸视觉差异。[重命名研究72](../research/saved-audio-rename72/README.md)已合入，[独审](reviews/ref-saved-audio-rename72.md)确认报告准确；原版AX拒绝导致名称交互未取得证据，任务保持in-progress / ORIGINAL-OPEN，不将源码方案当成功能交付。
 
 2026-11-06任务71完成：[独立最终复审](reviews/app-mobile-debug-recording71-recheck.md)与[主工作区整合](../verification/mobile-debug-recording71/integration/README.md)均通过，desktop100/mobile recording42/mobile notes9，构建和生产排除通过。三项独审阻塞已用真实故障/超时/参数负例关闭，旧blocked与两次失败不改写。默认JS fixture与合成媒体边界保持；完整Mac/Android原生及原版像素仍进行。
 
