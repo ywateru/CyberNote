@@ -2,6 +2,8 @@
 
 更新：2026-11-05。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
+当前并行源码项：[手机游标/时间轴60](plan/tasks/app-mobile-recording-wave60.md)与[Mac授权有界诊断63](plan/tasks/app-mac-recording-diagnostics63.md)。[授权链研究61](research/mac-recording-access-next61/README.md)保留真实采集未通过；[原版已存音频菜单62](research/saved-audio-menu62/README.md)仅观察菜单，未执行追加/导出/删除，菜单功能差异继续开放。两项源码工作不操作原Android现场，不追认旧包包含新改动。
+
 当前已发布接收包：Mac14（构建源d9ce9c4）/Android08（源182464b），不同来源分别记账。[Mac14普通名称/侧栏/局部选中文字有限接收](verification/mac-ordinary-keyboard47-root-acceptance.md)；上一批双端见[接收36](verification/typography-compose-keyboard36-root-acceptance.md)。整体像素与完整交互目标继续进行。
 
 本轮最新录音开发包为[Mac17](verification/unified-candidate06/mac-recording-visual-build17/README.md)/[Android构建12](verification/unified-candidate06/android-recording-visual-build12/README.md)，均固定源fa21657，333产品/352完整输入相同，含55/56/57/58/59。[Mac17真实有限复验](verification/recording-visual5859-mac17-runtime/README.md)通过未采集双模式同会话、编辑/撤销重做、B搜索、侧栏恢复和已有44:58播放/暂停/±15秒；新采集中双模式、有效收音与整体像素仍开放。Mac此前Start授权无返回及旧AndroidDone拒绝保留在[55记录](verification/recording-presentation55-runtime/README.md)。Android12未安装；用户选择保留原13秒失败File现场、暂不继续手机设备验收，不备份/安装/停止/重启原应用，源码与受控UI开发继续。不将开发包记为录音完成交付。

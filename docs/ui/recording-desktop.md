@@ -2,6 +2,22 @@
 
 更新：2026-11-05。用户要求完善录音基本交互，与原版一致；本轮明确排除听写、转写和云同步。原始截图已按原字节保存在 `references/desktop/recording-20261105/user-recording-sidebar.png`（SHA-256 `88357a65bd4a976345a80a37b74397df6ce2aafcb797a4c327f7a21de24209b6`）。手机参考继续使用已保全原视频与 `recording-mobile.md`。
 
+## 授权诊断63（内部验证，不增加产品界面）
+
+研究61表明旧Start失败只能定位在AV授权预检，尚不能区分系统completion未到、主队列未处理或桥接交付未结算。新增默认关闭的进程环境诊断，固定事件和有界预算，仅输出无内容request ID、单调时间、stage/code、公开status/Boolean等标量；不落文件、不联网、不含音频、笔记或裸指针。Rust与ObjC共用request ID，分别记录OS completion进入（主线程派发之前）和main处理，以便后续正常验收判读。关闭开关不输出诊断，不改变授权、截止或生命周期。
+
+```text
+明确Start → Rust dispatch → native/main/window → AV status → request-issued
+                                                     │
+                         OS completion-entry（任意线程）
+                                      ↓ dispatch main
+                         main completion → pending clear
+                                      ↓
+                         Rust receive → window revalidate → JS settle
+```
+
+30秒native截止、两段35秒Rust等候及Session45秒截止保持。timeout/close只交付旧结果，不清仍在系统等待的pending或释放callback context；迟到completion只清原pending、不复活Session。JS错误保留code及可选stage/request ID，UI沿用既有message；busy/timeout仍各自独立，不推断为denied。诊断源码/伪OS检查不代表真实麦克风请求成功，当前包和手机现场保持。具体范围见[任务63](../plan/tasks/app-mac-recording-diagnostics63.md)。
+
 ## 用户最新明确要求（2026-11-05，优先于下方早期右栏方案）
 
 用户补充：“录音的样式参考原版。不能是弹出框的方式，而是单独窗口，可以在后台录音，一边录音可以一边做别的工作，并不耽误。”因此桌面最终使用真实独立、非模态的Tauri录音窗口；下方早期图只保留原图内部样式依据，不再要求把录音栏嵌入主窗。不得使用遮暗弹框或阻断主界面来保护旧捕获目标。原版截图中的标题/波形/游标/计时/播放与动作视觉移入独立窗口；不自行增加品牌或转写功能。
