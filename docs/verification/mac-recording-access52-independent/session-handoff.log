@@ -1,0 +1,18 @@
+{"stopped":0,"recorded":0,"errors":0,"createRecorder":0}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: resolved stream must release its track when disposal occurs between cleanup handler and prepare handler
+
+0 !== 1
+
+    at file:///private/tmp/apple-notes-mac-recording-access52-independent-01/docs/verification/mac-recording-access52-independent/check-handoff.mjs:21:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

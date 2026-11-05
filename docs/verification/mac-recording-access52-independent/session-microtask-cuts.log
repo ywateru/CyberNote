@@ -1,0 +1,203 @@
+{
+  "status": "BLOCKED",
+  "checks": 14,
+  "results": [
+    {
+      "authorize": false,
+      "cut": 0,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 0,
+      "recorded": 0,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": false,
+      "cut": 1,
+      "stops": [
+        0,
+        0,
+        0
+      ],
+      "created": 0,
+      "recorded": 0,
+      "errors": 0,
+      "pass": false
+    },
+    {
+      "authorize": false,
+      "cut": 2,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 0,
+      "recorded": 0,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": false,
+      "cut": 3,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 1,
+      "recorded": 1,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": false,
+      "cut": 4,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 1,
+      "recorded": 1,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": false,
+      "cut": 5,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 1,
+      "recorded": 1,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": false,
+      "cut": 6,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 1,
+      "recorded": 1,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": true,
+      "cut": 0,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 0,
+      "recorded": 0,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": true,
+      "cut": 1,
+      "stops": [
+        0,
+        0,
+        0
+      ],
+      "created": 0,
+      "recorded": 0,
+      "errors": 0,
+      "pass": false
+    },
+    {
+      "authorize": true,
+      "cut": 2,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 0,
+      "recorded": 0,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": true,
+      "cut": 3,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 1,
+      "recorded": 1,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": true,
+      "cut": 4,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 1,
+      "recorded": 1,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": true,
+      "cut": 5,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 1,
+      "recorded": 1,
+      "errors": 0,
+      "pass": true
+    },
+    {
+      "authorize": true,
+      "cut": 6,
+      "stops": [
+        1,
+        1,
+        1
+      ],
+      "created": 1,
+      "recorded": 1,
+      "errors": 0,
+      "pass": true
+    }
+  ],
+  "limits": "Production Session, controlled media/context and microtask cancellation; no microphone"
+}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: every cancellation cut must release each track once
+    at file:///private/tmp/apple-notes-mac-recording-access52-independent-01/docs/verification/mac-recording-access52-independent/check-microtask-cuts.mjs:23:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '=='
+}
+
+Node.js v22.16.0

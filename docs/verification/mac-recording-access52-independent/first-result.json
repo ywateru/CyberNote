@@ -1,0 +1,21 @@
+{
+  "status": "BLOCKED",
+  "sourceCommit": "ef2fe7c3a3de7f8b7644d3ed50e0232a445b5af8",
+  "blockingFindings": 2,
+  "checks": {
+    "authorSession": 11,
+    "authorPreflight": 8,
+    "authorNative": 14,
+    "baselineSession": 26,
+    "rustPlugin": 20,
+    "typecheck": "PASS",
+    "hostCheck": "PASS",
+    "nativePublicCompile": "PASS",
+    "independentMicrotaskCuts": {
+      "passed": 12,
+      "failed": 2
+    },
+    "nativeSupplementOriginalFlags": "FAIL releaseContext=0",
+    "nativeSupplementArcExceptions": "PASS 4"
+  }
+}
