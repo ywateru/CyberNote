@@ -2,6 +2,8 @@
 
 更新：2026-11-05。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
+最新优先项：[Mac暂停/关闭自动保存64](plan/tasks/app-mac-recording-autosave64.md)进行中，[分析](plan/analysis/mac-recording-autosave64.md)与[最新交互契约](ui/recording-desktop.md)规定暂停持久化、继续累计单卡及final ACK后关闭。手机原现场继续保持。
+
 [手机游标/时间轴60](plan/tasks/app-mobile-recording-wave60.md)已独审并[合入主线](verification/mobile-recording-wave60-root-integration/README.md)，新[Android构建13](verification/unified-candidate06/android-recording-wave-build13/README.md)已本地生成、未安装；[Mac授权有界诊断63](plan/tasks/app-mac-recording-diagnostics63.md)已[独审合入](verification/mac-recording-diagnostics63-root-integration/README.md)，首版同步输出阻塞已修，默认关闭，尚未进入安装包。[授权链研究61](research/mac-recording-access-next61/README.md)保留真实采集未通过；[原版已存音频菜单62](research/saved-audio-menu62/README.md)仅观察菜单，未执行追加/导出/删除，菜单功能差异继续开放。不操作原Android现场，不追认旧包包含新改动。
 
 当前已发布接收包：Mac14（构建源d9ce9c4）/Android08（源182464b），不同来源分别记账。[Mac14普通名称/侧栏/局部选中文字有限接收](verification/mac-ordinary-keyboard47-root-acceptance.md)；上一批双端见[接收36](verification/typography-compose-keyboard36-root-acceptance.md)。整体像素与完整交互目标继续进行。

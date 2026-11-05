@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-05用户最新反馈：[Mac录音暂停/关闭自动保存64](tasks/app-mac-recording-autosave64.md)进行中。按明确用户请求修订暂停持久化、分段累计及准确final确认再关闭；独立开发与验证，手机原现场保持。见[分析](analysis/mac-recording-autosave64.md)。
+
 用户已授权完整 Mac 与 Android 开发。此计划持续执行，不以文档完成替代应用完成。
 
 2026-11-05[Mac授权诊断63](tasks/app-mac-recording-diagnostics63.md)已独审并[主线接收](../verification/mac-recording-diagnostics63-root-integration/README.md)：默认关闭的有界阶段事件及结构化错误保全，首同步输出阻断已修为64槽非阻塞producer与独立writer，保持原单pending/截止/资源语义。源码/假OS/堵塞sink通过，真实采集仍open；未入当前包，不触手机。[原版已保存音频菜单62](../research/saved-audio-menu62/README.md)已留证，追加/改名等功能尚未实现验收，不混入63。
