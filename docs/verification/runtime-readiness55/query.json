@@ -1,0 +1,21 @@
+{
+  "start": "2026-11-05 12:10:45",
+  "end": "2026-11-05 12:14:31",
+  "timezone": "Asia/Shanghai",
+  "predicate": "process == \"tccd\" AND subsystem == \"com.apple.TCC\" AND category == \"access\" AND (eventMessage CONTAINS \"msgID=71272.6\" OR (eventMessage CONTAINS \"com.local.notesclone\" AND eventMessage CONTAINS \"kTCCServiceMicrophone\"))",
+  "command": [
+    "/usr/bin/log",
+    "show",
+    "--start",
+    "2026-11-05 12:10:45",
+    "--end",
+    "2026-11-05 12:14:31",
+    "--style",
+    "compact",
+    "--info",
+    "--debug",
+    "--predicate",
+    "process == \"tccd\" AND subsystem == \"com.apple.TCC\" AND category == \"access\" AND (eventMessage CONTAINS \"msgID=71272.6\" OR (eventMessage CONTAINS \"com.local.notesclone\" AND eventMessage CONTAINS \"kTCCServiceMicrophone\"))"
+  ],
+  "queried_at": "2026-11-05T12:14:33.670742+08:00"
+}

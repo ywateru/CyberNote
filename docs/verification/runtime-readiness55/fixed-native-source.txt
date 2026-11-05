@@ -1,0 +1,72 @@
+Source 9167db94908ac635b026220e782878447c9e16a7
+plugins/tauri-plugin-notes-ui/macos/recording_access.m
+55: @implementation NotesRecordingAccess
+56: - (AVAuthorizationStatus)authorizationStatus {
+57:     return [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+58: }
+59: - (void)requestSystemAccess:(void (^)(BOOL))completion {
+60:     [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:completion];
+61: }
+62: - (void)finish:(int)code status:(long)status {
+63:     if (self.delivered) return;
+64:     self.delivered = YES;
+65:     if (self.closeObserver) {
+66:         [NSNotificationCenter.defaultCenter removeObserver:self.closeObserver];
+67:         self.closeObserver = nil;
+68:     }
+69:     // context is intentionally NOT released here. The OS block may still own
+70:     // this object. Its late callback sees delivered and never replies twice.
+71:     if (self.reply) self.reply(self.context, code, status);
+72: }
+73: - (void)scheduleTimeout {
+74:     __weak NotesRecordingAccess *weakSelf = self;
+75:     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 30 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+76:         [weakSelf finish:7 status:-1];
+77:     });
+78: }
+79: - (void)systemCompleted:(BOOL)granted {
+80:     @try {
+81:         if (!self.delivered) {
+82:             if (!self.windowValid || !self.windowValid()) {
+83:                 [self finish:2 status:-1];
+84:             } else {
+85:                 AVAuthorizationStatus status = [self authorizationStatus];
+86:                 if (status == AVAuthorizationStatusAuthorized && granted) [self finish:0 status:status];
+87:                 else if (status == AVAuthorizationStatusDenied) [self finish:3 status:status];
+88:                 else if (status == AVAuthorizationStatusRestricted) [self finish:4 status:status];
+89:                 else [self finish:9 status:status];
+90:             }
+91:         }
+92:     } @catch (NSException *exception) {
+93:         (void)exception;
+94:         [self finish:6 status:-1];
+95:     }
+96:     if (pendingRecordingAccess == self) pendingRecordingAccess = nil;
+97: }
+98: - (void)start {
+99:     @try {
+100:         if (!NSThread.isMainThread) { [self finish:1 status:-1]; return; }
+101:         if (!self.windowValid || !self.windowValid()) { [self finish:2 status:-1]; return; }
+102:         if (pendingRecordingAccess) { [self finish:8 status:-1]; return; }
+103:         AVAuthorizationStatus status = [self authorizationStatus];
+104:         switch (status) {
+105:             case AVAuthorizationStatusAuthorized: [self finish:0 status:status]; return;
+106:             case AVAuthorizationStatusDenied: [self finish:3 status:status]; return;
+107:             case AVAuthorizationStatusRestricted: [self finish:4 status:status]; return;
+108:             case AVAuthorizationStatusNotDetermined: break;
+109:             default: [self finish:5 status:status]; return;
+110:         }
+111:         pendingRecordingAccess = self;
+112:         [self scheduleTimeout];
+113:         // Capture the owning ObjC object, never a raw Rust context pointer.
+114:         // AVCaptureDevice owns its block until system completion, including
+115:         // when the Rust receiver has already expired.
+116:         NotesRecordingAccess *owner = self;
+117:         [self requestSystemAccess:^(BOOL granted) {
+118:             dispatch_async(dispatch_get_main_queue(), ^{ [owner systemCompleted:granted]; });
+119:         }];
+120:     } @catch (NSException *exception) {
+121:         (void)exception;
+122:         [self finish:6 status:-1];
+123:         if (pendingRecordingAccess == self) pendingRecordingAccess = nil;
+124:     }
