@@ -61,6 +61,10 @@ baseline: 0f2a1fc1e2c37e716ca122895fe800b6f8d4bda3
 
 原生复用 `/private/tmp/notes-native-quit69-target-01`；环境 `CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0`，jobs2。先插件测试，再完整App check；提取测试仅读取已绑定缓存依赖。没有新增全量 target、清理旧缓存或重签名。起始 df 可用3.7GiB，完整检查后约1.3GiB，已同步 root，后续打包需其安排空间。
 
+源码/格式 patch 检查在加入证据之前执行并通过；后续 `git show --check 7129cddb` 对证据提交给出 exit2，仅原始stdout/log/生成core末尾空行和行号前缀后的空白诊断，详见 `evidence-whitespace-check.txt`。这些原始证据保持字节，不把证据空行误写成生产检查失败或把最终全部证据 whitespace check 记作PASS。
+
+独审结束后不再读取该编译缓存。root 后报一次归档spool在其200MiB空间守卫处主动中止、原缓存仍完整保留，仅自建partial spool记录identity后移除；记录目录为 `/private/tmp/recording-quit6869-cache-preservation-01/`，其中 `identity.json`、`archive-abort.json`。这是root报告的后续缓存处置记录，本独审没有自行检验该归档；最终保存方式另记，不阻本次准确源码结论。缓存是运行时编译依赖产物，不是本次提交的产品源输入或后续新包freeze清单。
+
 首轮68浏览器检查受本机监听 EPERM 阻断，第二轮缺少 PLAYWRIGHT_CORE_PATH 在启动浏览器前失败，原日志/输入均保留；第三轮用已安装 Playwright/Chrome、授权本机临时服务完整通过。66/67仅对独审保存的 runner 副本增加有界浏览器/连接清理，业务断言和产品未改；准确副本及差异说明保存。独立汇总另核 result.json 为 PASS 且错误数组为空，不能仅凭清理进程 exit0判通过。
 
 ## 运行与保全边界

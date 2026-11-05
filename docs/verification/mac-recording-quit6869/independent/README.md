@@ -11,3 +11,5 @@
 - `cargo-app-check.log`、`typecheck.log`、`build.log`、`plugin-format.log`、`patch-check.log` 保存本组合源检查。`execution.json` 记录命令、环境、退出码和边界；不会把MockRuntime中实际request_exit的预期panic认作Wry成功派发。
 
 缓存、测试二进制和dist留在本独立工作树，不进入Git/证据索引；没有清理其他target或应用。真实CmdQ/Dock及重开由root对准确新包另验；Mac20授权首次超时/K缺卡历史和原手机13秒保全约束不变。
+
+产品patch检查先于证据加入。`evidence-whitespace-check.txt` 另保留证据提交的空行/行号前缀空白诊断（exit2）；原始stdout不做格式化，不宣称最终证据whitespace检查PASS。后续root编译缓存归档尝试/中止的准确记录路径见 `execution.json.nativeCacheLaterHandling`；记录为root报告，未由本独审代验最终归档。356项input-manifest的范围为所列生产目录、scripts与根构建入口，属于审查输入身份，不能替代后续完整包freeze清单。

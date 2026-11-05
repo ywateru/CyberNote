@@ -252,5 +252,26 @@
       ],
       "exit": 0
     }
-  ]
+  ],
+  "postCommitEvidenceWhitespace": {
+    "command": [
+      "git",
+      "show",
+      "--format=",
+      "--check",
+      "7129cddb8061dc92932c49af1770bb1270ab0580"
+    ],
+    "exit": 2,
+    "classification": "Raw evidence whitespace only: original stdout/log/generated-core final blank lines and line-number prefixes for empty source lines; product source fmt/patch checks were performed before adding evidence. Raw evidence retained, not normalized."
+  },
+  "nativeCacheLaterHandling": {
+    "reportedBy": "root",
+    "originalCache": "/private/tmp/notes-native-quit69-target-01",
+    "stateAtReviewSubmission": "Original complete cache preserved after archive spool attempt stopped at root 200MiB free-space guard; no cache deletion. Partial self-created spool removed only after identity record, per root. Final preservation action is separate.",
+    "recordDirectory": "/private/tmp/recording-quit6869-cache-preservation-01",
+    "identity": "/private/tmp/recording-quit6869-cache-preservation-01/identity.json",
+    "abortRecord": "/private/tmp/recording-quit6869-cache-preservation-01/archive-abort.json",
+    "independentRuntimeVerification": false,
+    "sourceInput": false
+  }
 }
