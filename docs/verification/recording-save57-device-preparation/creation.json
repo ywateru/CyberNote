@@ -1,0 +1,33 @@
+{
+  "at": "2026-11-05T12:31:21.700656+08:00",
+  "command": [
+    "/Users/water/Library/Android/sdk/cmdline-tools/latest/bin/avdmanager",
+    "create",
+    "avd",
+    "-n",
+    "notes_recording57_verify",
+    "-p",
+    "/private/tmp/apple-notes-recording57-emulator-01/avd/notes_recording57_verify.avd",
+    "-k",
+    "system-images;android-30;google_apis;arm64-v8a",
+    "-b",
+    "arm64-v8a",
+    "-g",
+    "google_apis",
+    "-d",
+    "pixel_4"
+  ],
+  "environment_overrides": {
+    "JAVA_HOME": "/opt/zerobrew/opt/openjdk@17",
+    "ANDROID_HOME": "/Users/water/Library/Android/sdk",
+    "ANDROID_SDK_ROOT": "/Users/water/Library/Android/sdk",
+    "ANDROID_AVD_HOME": "/private/tmp/apple-notes-recording57-emulator-01/avd",
+    "ANDROID_USER_HOME": "/private/tmp/apple-notes-recording57-emulator-01/android-user",
+    "ANDROID_EMULATOR_HOME": "/private/tmp/apple-notes-recording57-emulator-01/emulator-home",
+    "TMPDIR": "/private/tmp/apple-notes-recording57-emulator-01/tmp"
+  },
+  "home_changed": false,
+  "disk_free_bytes_before": 33758896128,
+  "guard_bytes": 2147483648,
+  "returncode": 0
+}

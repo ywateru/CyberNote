@@ -1,0 +1,24 @@
+1587: [    6.317052] init: Loaded kernel module /lib/modules/xhci-hcd.ko
+1588: [    6.318244] init: Loading module /lib/modules/xhci-pci.ko with args ""
+1589: [    6.363836] init: Loaded kernel module /lib/modules/xhci-pci.ko
+1590: [    6.365753] init: [libfs_mgr]ReadFstabFromDt(): failed to read fstab from dt
+1591: [    6.367737] init: Using Android DT directory /proc/device-tree/firmware/android/
+1592: [    6.372699] init: realpath failed: /dev/block/by-name/super: No such file or directory
+1593: [    6.374880] init: Failed to mount required partitions early ...
+1594: [    6.377612] init: InitFatalReboot: signal 6
+1595: [    6.385818] init: #00 pc 0000000000302c20  /init (UnwindStackCurrent::UnwindFromContext(unsigned long, void*)+96)
+1596: [    6.388358] init: #01 pc 0000000000274e88  /init (android::init::InitFatalReboot(int)+208)
+1597: [    6.390406] init: #02 pc 0000000000275268  /init (android::init::InstallRebootSignalHandlers()::$_22::__invoke(int)+32)
+1598: [    6.392552] init: #03 pc 00000000000005d0  [vdso:0000007f897da000] (__kernel_rt_sigreturn)
+1599: [    6.393816] init: #04 pc 0000000000376b84  /init (abort+160)
+1600: [    6.394738] init: #05 pc 0000000000277b50  /init (android::init::InitAborter(char const*)+44)
+1601: [    6.396014] init: #06 pc 00000000002c521c  /init (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_3::__invoke(char const*)+76)
+1602: [    6.399157] init: #07 pc 00000000002c4a3c  /init (android::base::LogMessage::~LogMessage()+320)
+1603: [    6.401042] init: #08 pc 000000000026ca38  /init (android::init::FirstStageMain(int, char**)+5796)
+1604: [    6.402836] init: #09 pc 0000000000375a18  /init (__real_libc_init(void*, void (*)(), int (*)(int, char**, char**), structors_array_t const*, bionic_tcb*)+576)
+1605: [    6.405261] init: Reboot ending, jumping to kernel
+1606: [    6.406368] cfg80211: failed to load regulatory.db
+1607: [    6.502474] reboot: Restarting system with command 'bootloader'
+1608: [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x610f0000]
+1609: [    0.000000] Linux version 5.4.249-android11-2-00004-g212a7aaded26-ab10688362 (build-user@build-host) (Android (7284624, based on r416183b) clang version 12.0.5 (https://android.googlesource.com/toolchain/llvm-project c935d99d7cf2016289302412d708641d52d2f7ee), LLD 12.0.5 (/buildbot/src/android/llvm-toolchain/out/llvm-project/lld c935d99d7cf2016289302412d708641d52d2f7ee)) #1 SMP PREEMPT Mon Aug 21 12:17:45 UTC 2023
+1610: [    0.000000] Machine model: linux,ranchu

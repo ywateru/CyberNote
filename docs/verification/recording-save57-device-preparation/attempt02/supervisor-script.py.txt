@@ -1,0 +1,57 @@
+import os,subprocess,time,json,datetime,shutil,sys
+from pathlib import Path
+root=Path('/private/tmp/apple-notes-recording57-emulator-01')
+out=Path('/Users/water/work/2026/Apple-Notes-Clone/docs/verification/recording-save57-device-preparation/attempt02')
+sdk=Path('/Users/water/Library/Android/sdk')
+guard=2*1024**3
+checks=[]
+def save(name,value): (out/name).write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+def stamp():return datetime.datetime.now().astimezone().isoformat()
+free=shutil.disk_usage(root).free
+if free<guard:raise SystemExit('2GiB guard before launch')
+port=subprocess.run(['lsof','-nP','-iTCP:5582','-iTCP:5583','-sTCP:LISTEN'],text=True,capture_output=True)
+(out/'ports-before-launch.txt').write_text(port.stdout+port.stderr)
+if port.returncode!=1 or port.stdout.strip():raise SystemExit('5582/5583 not proven free; no emulator launched')
+env=os.environ.copy()
+settings={'JAVA_HOME':'/opt/zerobrew/opt/openjdk@17','ANDROID_HOME':str(sdk),'ANDROID_SDK_ROOT':str(sdk),'ANDROID_AVD_HOME':str(root/'avd'),'ANDROID_USER_HOME':str(root/'android-user'),'ANDROID_EMULATOR_HOME':str(root/'emulator-home'),'TMPDIR':str(root/'tmp')}
+env.update(settings)
+image=sdk/'system-images/android-30/google_apis/arm64-v8a'
+key=image/'encryptionkey.img'
+if not key.exists():raise SystemExit('No installed initial encryption-key template; no launch')
+shutil.copyfile(key,root/'runtime/attempt02'/'encryptionkey.img')
+cmd=[str(sdk/'emulator/emulator'),'-avd','notes_recording57_verify','-port','5582','-no-window','-no-snapshot','-memory','2048','-cores','2','-gpu','host','-feature','-Vulkan','-show-kernel','-verbose','-data',str(root/'runtime/attempt02/userdata-qemu.img'),'-initdata',str(image/'userdata.img'),'-encryption-key',str(root/'runtime/attempt02/encryptionkey.img'),'-cache',str(root/'runtime/attempt02/cache.img')]
+log=open(out/'emulator-startup.log','w')
+process=subprocess.Popen(cmd,env=env,stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+started=time.monotonic()
+launch={'at':stamp(),'pid':process.pid,'command':cmd,'environment_overrides':settings,'home_changed':False,'disk_free_bytes_before':free,'disk_guard_bytes':guard,'max_boot_wait_seconds':120,'app_installed':False,'original_5580_actions':[]}
+save('launch.json',launch)
+print('STARTED isolated emulator process',process.pid,flush=True)
+status='BOOT_WAIT_EXPIRED'
+while time.monotonic()-started<120:
+ free=shutil.disk_usage(root).free
+ if free<guard:
+  status='DISK_GUARD_TERMINATED_NEW_INSTANCE';process.terminate();break
+ if process.poll() is not None:
+  status='EMULATOR_EXITED';break
+ adb_error=''
+ try:
+  r=subprocess.run([str(sdk/'platform-tools/adb'),'-s','emulator-5582','shell','getprop','sys.boot_completed'],text=True,capture_output=True,timeout=3)
+  boot=r.stdout.strip();adb_error=r.stderr.strip()
+ except subprocess.TimeoutExpired:boot='ADB_QUERY_TIMEOUT'
+ item={'at':stamp(),'elapsed_seconds':round(time.monotonic()-started,3),'boot_completed':boot,'adb_error':adb_error,'disk_free_bytes':free}
+ checks.append(item);save('boot-checks.json',checks)
+ print('CHECK',item,flush=True)
+ if boot=='1':status='BOOTED';break
+ time.sleep(min(5,max(0,120-(time.monotonic()-started))))
+result={'status':status,'finished_at':stamp(),'elapsed_seconds':round(time.monotonic()-started,3),'launcher_pid':process.pid,'launcher_returncode':process.poll(),'disk_free_bytes':shutil.disk_usage(root).free,'app_installed':False,'original_5580_actions':[]}
+if status=='BOOTED':
+ props={}
+ for key in ['sys.boot_completed','ro.build.version.release','ro.build.version.sdk','ro.product.cpu.abi','ro.product.cpu.abilist','ro.product.model','ro.product.name']:
+  r=subprocess.run([str(sdk/'platform-tools/adb'),'-s','emulator-5582','shell','getprop',key],text=True,capture_output=True,timeout=3)
+  props[key]=r.stdout.strip()
+ result['properties']=props
+ r=subprocess.run([str(sdk/'platform-tools/adb'),'devices','-l'],text=True,capture_output=True,timeout=3)
+ (out/'adb-devices-after-boot.txt').write_text(r.stdout+r.stderr)
+save('boot-result.json',result)
+print('RESULT',result,flush=True)
+log.close()
