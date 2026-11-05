@@ -1,0 +1,13 @@
+{
+  "lockedTauri": "2.12.5",
+  "registrySource": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/webview/webview_window.rs",
+  "registrySourceSha256": "5cf28b52b0ed7179926b1087df08d8765bf2c31805fb532f9260908a57422230",
+  "excerpts": {
+    "2030-2035": "/// Desktop window setters and actions.\n#[cfg(desktop)]\nimpl<R: Runtime> WebviewWindow<R> {\n  /// Centers the window.\n  pub fn center(&self) -> crate::Result<()> {\n    self.window.center()",
+    "2102-2105": "  /// Un-minimizes this window.\n  pub fn unminimize(&self) -> crate::Result<()> {\n    self.window.unminimize()\n  }",
+    "2313-2319": "}\n\n/// Desktop window setters and actions.\nimpl<R: Runtime> WebviewWindow<R> {\n  /// Determines if this window should be resizable.\n  /// When resizable is set to false, native window's maximize button is automatically disabled.\n  pub fn set_resizable(&self, resizable: bool) -> crate::Result<()> {",
+    "2333-2341": "  /// Show this window.\n  pub fn show(&self) -> crate::Result<()> {\n    self.window.show()\n  }\n\n  /// Hide this window.\n  pub fn hide(&self) -> crate::Result<()> {\n    self.window.hide()\n  }",
+    "2386-2389": "  /// Bring the window to front and focus.\n  pub fn set_focus(&self) -> crate::Result<()> {\n    self.window.set_focus()\n  }"
+  },
+  "otherCall": "src-tauri/src/lib.rs Reopen arm is cfg(target_os = macos)."
+}
