@@ -1,0 +1,117 @@
+{
+  "status": "preparation-only-no-candidate-tested",
+  "recordedAt": "2026-11-05T09:54:38.315259+00:00",
+  "baselineHead": "667d8771f1d8693f4f137751ce0949266b6ef454",
+  "authorBaseline": "43e16f97",
+  "baselineDifferencesOnly": [
+    "docs/plan/tasks/app-mac-recording-media67.md",
+    "docs/verification/mac-recording-sidebar66-runtime/README.md"
+  ],
+  "selectedSourceAndContractFiles": [
+    {
+      "path": "docs/plan/tasks/app-mac-recording-media67.md",
+      "bytes": 3318,
+      "sha256": "765b9e46ab559133fe28ce1acdedfdb9b7bbb11ee776d62cd54296200bda4c6a"
+    },
+    {
+      "path": "docs/plan/analysis/mac-recording-media67.md",
+      "bytes": 927,
+      "sha256": "2e4cdf57a01bd34d8580665c6998f29fbdc18ada16d805c4a19da2c7954ccc47"
+    },
+    {
+      "path": "docs/verification/mac-recording-sidebar66-runtime/README.md",
+      "bytes": 6273,
+      "sha256": "03e1013a31dd18f9aa9b9cd473ab6c92442b7ee399a9327fc01ec09b7c5b978f"
+    },
+    {
+      "path": "docs/ui/recording-desktop.md",
+      "bytes": 17234,
+      "sha256": "bd60862eb8a959c4962f00ef1b04a6e8c7f812ef8eff5c28045216875d31ed8b"
+    },
+    {
+      "path": "docs/architecture.md",
+      "bytes": 52164,
+      "sha256": "215fd0c02f7accb5a42b57a6ad94a1ce47f3868968a61ba8fae29fbf29f6ff37"
+    },
+    {
+      "path": "src/use-attachment-media.ts",
+      "bytes": 1833,
+      "sha256": "9f99e0178845f5f531f40c31fe00f7a05d6db00b8b9c7b65b42ce45da62f140a"
+    },
+    {
+      "path": "src/attachment-media.ts",
+      "bytes": 1561,
+      "sha256": "2ff17ef91d36ea1a26054004ec243dd2ee1d62e5320fd38b5054d669cffae945"
+    },
+    {
+      "path": "src/bridge.ts",
+      "bytes": 18044,
+      "sha256": "729f7dc797abb762a9382f106b1fad103335e27346e598d9b18c37a2785672fd"
+    },
+    {
+      "path": "src/access-client.ts",
+      "bytes": 1922,
+      "sha256": "2ac79fec3a00ae972f22bac2c6534aa1468b719a8be4b18c7e803549c9d99f98"
+    },
+    {
+      "path": "src/metadata-client.ts",
+      "bytes": 1322,
+      "sha256": "ca3efa81802ffdf9e5d5478dd429d2aa742d19e1e5beb04946ac4642843e9c1f"
+    },
+    {
+      "path": "src/Editor.tsx",
+      "bytes": 11594,
+      "sha256": "036b97b231d3dce02f9a9be6c60c1bb067063477974f26a01efabc308df6d6f2"
+    },
+    {
+      "path": "src/recording-live-card.ts",
+      "bytes": 4277,
+      "sha256": "b25a8e4dcf4e28f8c9223c806959169ef73340f6049d408fb98778498b63e307"
+    },
+    {
+      "path": "src/App.tsx",
+      "bytes": 206950,
+      "sha256": "ae848fb7afd0fe83687c4eba1fb778f7f5cb2d4a0c2cfb2930517d1f46c2398e"
+    },
+    {
+      "path": "src/desktop-recording-session.ts",
+      "bytes": 11417,
+      "sha256": "348e0298d2a7d825977c4efc881768e2a7042d969ac4a4551f6178a75874f23c"
+    },
+    {
+      "path": "src/use-editor-commit.ts",
+      "bytes": 1521,
+      "sha256": "6245351f825d3f24fc4df06413be51a3bfa56feabe3f5586931eb94e64f7b809"
+    },
+    {
+      "path": "src/recording-revisions.ts",
+      "bytes": 4525,
+      "sha256": "9673961f92da60d6293998fd0d789f80c68e1992a517a62c77c9fce59764ebaa"
+    },
+    {
+      "path": "scripts/check-mac-recording-sidebar66-independent.mjs",
+      "bytes": 26719,
+      "sha256": "709e15a1130afd249fa81207de1d0c692b78c32f1814f6e38d20cb352d72e87c"
+    },
+    {
+      "path": "scripts/recording-platform-fixture.mjs",
+      "bytes": 5568,
+      "sha256": "e4fd37b8ff553cc24b8a89cbb3954c954b1ea6c497c37e8ba1ed0b196a400288"
+    },
+    {
+      "path": "scripts/check-audio-controls-browser.mjs",
+      "bytes": 14120,
+      "sha256": "082f3b1b3bd5be1aea1b39de53215d368443ade3faf3ed64557939eb2d6d68e9"
+    },
+    {
+      "path": "scripts/check-audio-playback-browser.mjs",
+      "bytes": 12565,
+      "sha256": "67ee443d3f8f103ac97c1127fb8e544d74944764300e2ef4a45582ecb27e2d83"
+    }
+  ],
+  "limits": [
+    "No candidate commit received. No candidate tests, typecheck, build, GUI, application, devices or audio operation.",
+    "Runtime66 C first failure remains observed; E success cannot overwrite C.",
+    "Old Mac18 PID8002 absent after later process inspection; reason and exit time unknown, no restart/recovery claim. Android protected state untouched."
+  ]
+}

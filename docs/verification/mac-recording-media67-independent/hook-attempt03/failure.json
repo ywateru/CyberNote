@@ -1,0 +1,5435 @@
+{
+  "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+  "stack": "page.waitForFunction: Timeout 30000ms exceeded.\n    at /private/tmp/apple-notes-mac-recording-media67-independent-01/scripts/check-mac-recording-media67-independent.mjs:38:460\n    at async test (/private/tmp/apple-notes-mac-recording-media67-independent-01/scripts/check-mac-recording-media67-independent.mjs:28:47)\n    at async file:///private/tmp/apple-notes-mac-recording-media67-independent-01/scripts/check-mac-recording-media67-independent.mjs:38:52",
+  "checks": [
+    {
+      "name": "real bridge stale rejected; two new stamps and reads, only fresh bytes create source",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 8,
+          "event": "advance",
+          "sequence": 11
+        },
+        {
+          "order": 9,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 10,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 11,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 12,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 13,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 14,
+          "event": "read",
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 11
+        },
+        {
+          "order": 15,
+          "event": "release",
+          "index": 1,
+          "sequence": 11
+        },
+        {
+          "order": 16,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 17,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 18,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 19,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 20,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/0d9564ef-9a32-497a-bf0b-ff3451b613dd"
+        },
+        {
+          "order": 21,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": true,
+          "error": ""
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 11
+            }
+          }
+        }
+      ],
+      "urls": [
+        "blob:http://127.0.0.1:58281/0d9564ef-9a32-497a-bf0b-ff3451b613dd"
+      ],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "two stale then third fresh exactly total three reads",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 8,
+          "event": "advance",
+          "sequence": 11
+        },
+        {
+          "order": 9,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 10,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 11,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 12,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 13,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 14,
+          "event": "read",
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 11
+        },
+        {
+          "order": 15,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 12
+          },
+          "observed": 12,
+          "applied": 10
+        },
+        {
+          "order": 16,
+          "event": "advance",
+          "sequence": 12
+        },
+        {
+          "order": 17,
+          "event": "release",
+          "index": 1,
+          "sequence": 11
+        },
+        {
+          "order": 18,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 19,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 12,
+          "applied": 10
+        },
+        {
+          "order": 20,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 12,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 21,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 22,
+          "event": "read",
+          "index": 2,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 12
+        },
+        {
+          "order": 23,
+          "event": "release",
+          "index": 2,
+          "sequence": 12
+        },
+        {
+          "order": 24,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 25,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 12
+          },
+          "observed": 12,
+          "applied": 10
+        },
+        {
+          "order": 26,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 12
+          },
+          "observed": 12,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 27,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 28,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/35f36514-64a5-4168-950d-755ad450e3c2"
+        },
+        {
+          "order": 29,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": true,
+          "error": ""
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 11
+            }
+          }
+        },
+        {
+          "index": 2,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTI=",
+            "mime": "audio/wav",
+            "name": "synthetic-2.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 12
+            }
+          }
+        }
+      ],
+      "urls": [
+        "blob:http://127.0.0.1:58281/35f36514-64a5-4168-950d-755ad450e3c2"
+      ],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "three stale stops visibly; manual new version starts budget anew",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 8,
+          "event": "advance",
+          "sequence": 11
+        },
+        {
+          "order": 9,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 10,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 11,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 12,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 13,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 14,
+          "event": "read",
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 11
+        },
+        {
+          "order": 15,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 12
+          },
+          "observed": 12,
+          "applied": 10
+        },
+        {
+          "order": 16,
+          "event": "advance",
+          "sequence": 12
+        },
+        {
+          "order": 17,
+          "event": "release",
+          "index": 1,
+          "sequence": 11
+        },
+        {
+          "order": 18,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 19,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 12,
+          "applied": 10
+        },
+        {
+          "order": 20,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 12,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 21,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 22,
+          "event": "read",
+          "index": 2,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 12
+        },
+        {
+          "order": 23,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 13
+          },
+          "observed": 13,
+          "applied": 10
+        },
+        {
+          "order": 24,
+          "event": "advance",
+          "sequence": 13
+        },
+        {
+          "order": 25,
+          "event": "release",
+          "index": 2,
+          "sequence": 12
+        },
+        {
+          "order": 26,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 27,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 12
+          },
+          "observed": 13,
+          "applied": 10
+        },
+        {
+          "order": 28,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 12
+          },
+          "observed": 13,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 29,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": "列表已有新的变化，请重新同步"
+        },
+        {
+          "order": 30,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 31,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 32,
+          "event": "read",
+          "index": 3,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 13
+        },
+        {
+          "order": 33,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 34,
+          "event": "release",
+          "index": 3,
+          "sequence": 13
+        },
+        {
+          "order": 35,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 36,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 13
+          },
+          "observed": 13,
+          "applied": 10
+        },
+        {
+          "order": 37,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 13
+          },
+          "observed": 13,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 38,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 39,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/5477a977-b7a3-43b0-a7d9-18814785a9bf"
+        },
+        {
+          "order": 40,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": true,
+          "error": ""
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 11
+            }
+          }
+        },
+        {
+          "index": 2,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTI=",
+            "mime": "audio/wav",
+            "name": "synthetic-2.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 12
+            }
+          }
+        },
+        {
+          "index": 3,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTM=",
+            "mime": "audio/wav",
+            "name": "synthetic-3.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 13
+            }
+          }
+        }
+      ],
+      "urls": [
+        "blob:http://127.0.0.1:58281/5477a977-b7a3-43b0-a7d9-18814785a9bf"
+      ],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "non MetadataStale no retry: same-message",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "reject",
+          "index": 0,
+          "kind": "same-message"
+        },
+        {
+          "order": 8,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": "列表已有新的变化，请重新同步"
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "non MetadataStale no retry: same-code",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "reject",
+          "index": 0,
+          "kind": "same-code"
+        },
+        {
+          "order": 8,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": "[object Object]"
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "non MetadataStale no retry: access-class",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "reject",
+          "index": 0,
+          "kind": "access-class"
+        },
+        {
+          "order": 8,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": "授权状态已改变，请同步后重试"
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "non MetadataStale no retry: 请先解锁备忘录",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "reject",
+          "index": 0,
+          "kind": "请先解锁备忘录"
+        },
+        {
+          "order": 8,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": "请先解锁备忘录"
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "non MetadataStale no retry: 授权已撤回",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "reject",
+          "index": 0,
+          "kind": "授权已撤回"
+        },
+        {
+          "order": 8,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": "授权已撤回"
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "non MetadataStale no retry: 附件不可读",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "reject",
+          "index": 0,
+          "kind": "附件不可读"
+        },
+        {
+          "order": 8,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": "附件不可读"
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "actual AccessGate invalidation wins over stale metadata; no recovery",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 8,
+          "event": "advance",
+          "sequence": 11
+        },
+        {
+          "order": 9,
+          "event": "invalidate",
+          "generation": 1
+        },
+        {
+          "order": 10,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 11,
+          "event": "access-rejected",
+          "name": "AccessChanged"
+        },
+        {
+          "order": 12,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": "授权状态已改变，请同步后重试"
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "source validation failure no retry {\"recordedAt\":\"bad\"}",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 8,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 9,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 10,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 11,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 12,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": "附件录音日期无效"
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "source validation failure no retry {\"data\":\"%\"}",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 8,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 9,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 10,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 11,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 12,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": "Failed to execute 'atob' on 'Window': The string to be decoded is not correctly encoded."
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "late success sealed by id",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "mount",
+          "id": "two",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 8,
+          "event": "hook-commit",
+          "id": "two",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 9,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 10,
+          "event": "read",
+          "index": 1,
+          "id": "two",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 11,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 12,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 13,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 14,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 15,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 16,
+          "event": "release",
+          "index": 1,
+          "sequence": 10
+        },
+        {
+          "order": 17,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 18,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 19,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 20,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 21,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/26b8e7b0-975d-4d7e-98eb-945192966897"
+        },
+        {
+          "order": 22,
+          "event": "hook-commit",
+          "id": "two",
+          "kind": "audio",
+          "media": true,
+          "error": ""
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "two",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [
+        "blob:http://127.0.0.1:58281/26b8e7b0-975d-4d7e-98eb-945192966897"
+      ],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "late stale sealed by id",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 8,
+          "event": "advance",
+          "sequence": 11
+        },
+        {
+          "order": 9,
+          "event": "mount",
+          "id": "two",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 10,
+          "event": "hook-commit",
+          "id": "two",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 11,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 12,
+          "event": "read",
+          "index": 1,
+          "id": "two",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 11
+        },
+        {
+          "order": 13,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 14,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 15,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 16,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 17,
+          "event": "release",
+          "index": 1,
+          "sequence": 11
+        },
+        {
+          "order": 18,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 19,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 20,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 21,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 22,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/8edeb5a5-cfb0-4405-bec7-104c503961bc"
+        },
+        {
+          "order": 23,
+          "event": "hook-commit",
+          "id": "two",
+          "kind": "audio",
+          "media": true,
+          "error": ""
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "two",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 11
+            }
+          }
+        }
+      ],
+      "urls": [
+        "blob:http://127.0.0.1:58281/8edeb5a5-cfb0-4405-bec7-104c503961bc"
+      ],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "late success sealed by kind",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "mount",
+          "id": "one",
+          "kind": "image",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 8,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "image",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 9,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 10,
+          "event": "read",
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 11,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 12,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 13,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 14,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 15,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 16,
+          "event": "release",
+          "index": 1,
+          "sequence": 10
+        },
+        {
+          "order": 17,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 18,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 19,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 20,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 21,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "image",
+          "media": true,
+          "error": ""
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "late stale sealed by kind",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 8,
+          "event": "advance",
+          "sequence": 11
+        },
+        {
+          "order": 9,
+          "event": "mount",
+          "id": "one",
+          "kind": "image",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 10,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "image",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 11,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 12,
+          "event": "read",
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 11
+        },
+        {
+          "order": 13,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 14,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 15,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 16,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 17,
+          "event": "release",
+          "index": 1,
+          "sequence": 11
+        },
+        {
+          "order": 18,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 19,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 20,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 21,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 22,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "image",
+          "media": true,
+          "error": ""
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 11
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "late success sealed by unmount",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "unmount"
+        },
+        {
+          "order": 8,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 9,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 10,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 11,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 12,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "late stale sealed by unmount",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 8,
+          "event": "advance",
+          "sequence": 11
+        },
+        {
+          "order": 9,
+          "event": "unmount"
+        },
+        {
+          "order": 10,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 11,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 12,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 13,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": false
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "late success sealed by manual",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 8,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 9,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 10,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 11,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 12,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 13,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 14,
+          "event": "read",
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 15,
+          "event": "release",
+          "index": 1,
+          "sequence": 10
+        },
+        {
+          "order": 16,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 17,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 18,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 19,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 20,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/80936992-6447-4685-b9a1-2ac9cf189f8b"
+        },
+        {
+          "order": 21,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": true,
+          "error": ""
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [
+        "blob:http://127.0.0.1:58281/80936992-6447-4685-b9a1-2ac9cf189f8b"
+      ],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "late stale sealed by manual",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 8,
+          "event": "advance",
+          "sequence": 11
+        },
+        {
+          "order": 9,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 10,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 11,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 12,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 13,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 14,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 15,
+          "event": "read",
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 11
+        },
+        {
+          "order": 16,
+          "event": "release",
+          "index": 1,
+          "sequence": 11
+        },
+        {
+          "order": 17,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 18,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 19,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 20,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 21,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/acd417dd-d9f5-4850-9d33-f1afbe8ef4c7"
+        },
+        {
+          "order": 22,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": true,
+          "error": ""
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 11
+            }
+          }
+        }
+      ],
+      "urls": [
+        "blob:http://127.0.0.1:58281/acd417dd-d9f5-4850-9d33-f1afbe8ef4c7"
+      ],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "identity change during second automatic read seals its delayed stale",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 8,
+          "event": "advance",
+          "sequence": 11
+        },
+        {
+          "order": 9,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 10,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 11,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10
+        },
+        {
+          "order": 12,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 11,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 13,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 14,
+          "event": "read",
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 11
+        },
+        {
+          "order": 15,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 12
+          },
+          "observed": 12,
+          "applied": 10
+        },
+        {
+          "order": 16,
+          "event": "advance",
+          "sequence": 12
+        },
+        {
+          "order": 17,
+          "event": "mount",
+          "id": "two",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 18,
+          "event": "hook-commit",
+          "id": "two",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 19,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 20,
+          "event": "read",
+          "index": 2,
+          "id": "two",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 12
+        },
+        {
+          "order": 21,
+          "event": "release",
+          "index": 1,
+          "sequence": 11
+        },
+        {
+          "order": 22,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 23,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 12,
+          "applied": 10
+        },
+        {
+          "order": 24,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 11
+          },
+          "observed": 12,
+          "applied": 10,
+          "ok": false
+        },
+        {
+          "order": 25,
+          "event": "release",
+          "index": 2,
+          "sequence": 12
+        },
+        {
+          "order": 26,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 27,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 12
+          },
+          "observed": 12,
+          "applied": 10
+        },
+        {
+          "order": 28,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 12
+          },
+          "observed": 12,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 29,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 30,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/d4130685-65e4-458d-b891-c236f0079c2f"
+        },
+        {
+          "order": 31,
+          "event": "hook-commit",
+          "id": "two",
+          "kind": "audio",
+          "media": true,
+          "error": ""
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 11
+            }
+          }
+        },
+        {
+          "index": 2,
+          "id": "two",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTI=",
+            "mime": "audio/wav",
+            "name": "synthetic-2.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 12
+            }
+          }
+        }
+      ],
+      "urls": [
+        "blob:http://127.0.0.1:58281/d4130685-65e4-458d-b891-c236f0079c2f"
+      ],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    },
+    {
+      "name": "accepted source controller stops before URL revoke; no double revoke",
+      "status": "pass",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 4,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 5,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 6,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 8,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 9,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 10,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 11,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 12,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/29348123-4f0b-47db-b942-f3e1cfa45208"
+        },
+        {
+          "order": 13,
+          "event": "hook-commit",
+          "id": "one",
+          "kind": "audio",
+          "media": true,
+          "error": ""
+        },
+        {
+          "order": 14,
+          "event": "mount",
+          "id": "two",
+          "kind": "audio",
+          "view": "hook",
+          "mobile": false
+        },
+        {
+          "order": 15,
+          "event": "hook-commit",
+          "id": "two",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 16,
+          "event": "controller-stop",
+          "src": "blob:http://127.0.0.1:58281/29348123-4f0b-47db-b942-f3e1cfa45208"
+        },
+        {
+          "order": 17,
+          "event": "url-revoke",
+          "src": "blob:http://127.0.0.1:58281/29348123-4f0b-47db-b942-f3e1cfa45208"
+        },
+        {
+          "order": 18,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 19,
+          "event": "read",
+          "index": 1,
+          "id": "two",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 20,
+          "event": "hook-commit",
+          "id": "two",
+          "kind": "audio",
+          "media": false,
+          "error": ""
+        },
+        {
+          "order": 21,
+          "event": "release",
+          "index": 1,
+          "sequence": 10
+        },
+        {
+          "order": 22,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 23,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 24,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 25,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "B",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 26,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/91838594-d82c-42c4-8375-092a36aaf4f7"
+        },
+        {
+          "order": 27,
+          "event": "hook-commit",
+          "id": "two",
+          "kind": "audio",
+          "media": true,
+          "error": ""
+        },
+        {
+          "order": 28,
+          "event": "unmount"
+        },
+        {
+          "order": 29,
+          "event": "url-revoke",
+          "src": "blob:http://127.0.0.1:58281/91838594-d82c-42c4-8375-092a36aaf4f7"
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        },
+        {
+          "index": 1,
+          "id": "two",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTE=",
+            "mime": "audio/wav",
+            "name": "synthetic-1.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [
+        "blob:http://127.0.0.1:58281/29348123-4f0b-47db-b942-f3e1cfa45208",
+        "blob:http://127.0.0.1:58281/91838594-d82c-42c4-8375-092a36aaf4f7"
+      ],
+      "revoked": [
+        "blob:http://127.0.0.1:58281/29348123-4f0b-47db-b942-f3e1cfa45208",
+        "blob:http://127.0.0.1:58281/91838594-d82c-42c4-8375-092a36aaf4f7"
+      ],
+      "controls": [
+        "stop"
+      ],
+      "writes": []
+    },
+    {
+      "name": "mobile real MediaView shared audio source via complete bridge",
+      "status": "fail",
+      "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+      "trace": [
+        {
+          "order": 1,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1
+        },
+        {
+          "order": 2,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": -1,
+          "ok": true
+        },
+        {
+          "order": 3,
+          "event": "mount",
+          "id": "one",
+          "kind": "audio",
+          "view": "editor",
+          "mobile": true
+        },
+        {
+          "order": 4,
+          "event": "stamp",
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 5,
+          "event": "read",
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "sequence": 10
+        },
+        {
+          "order": 6,
+          "event": "release",
+          "index": 0,
+          "sequence": 10
+        },
+        {
+          "order": 7,
+          "event": "access-accepted",
+          "publish": false,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 8,
+          "event": "metadata-observe",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10
+        },
+        {
+          "order": 9,
+          "event": "metadata-publish",
+          "response": {
+            "sessionId": "independent67",
+            "sequence": 10
+          },
+          "observed": 10,
+          "applied": 10,
+          "ok": true
+        },
+        {
+          "order": 10,
+          "event": "access-accepted",
+          "publish": true,
+          "stamp": {
+            "generation": 0,
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteId": "A",
+            "noteEpoch": 1
+          }
+        },
+        {
+          "order": 11,
+          "event": "url-create",
+          "src": "blob:http://127.0.0.1:58281/10e8be73-34d5-4625-9534-e8badf6fa48b"
+        }
+      ],
+      "reads": [
+        {
+          "index": 0,
+          "id": "one",
+          "expected": {
+            "sessionId": "independent67",
+            "epoch": 1,
+            "noteEpoch": 1
+          },
+          "value": {
+            "data": "c3ludGhldGljLTA=",
+            "mime": "audio/wav",
+            "name": "synthetic-0.wav",
+            "recordedAt": 1793858400000,
+            "access": {
+              "sessionId": "independent67",
+              "epoch": 1,
+              "notes": {
+                "A": {
+                  "epoch": 1,
+                  "authorized": true
+                },
+                "B": {
+                  "epoch": 1,
+                  "authorized": true
+                }
+              },
+              "suspended": [],
+              "operationId": null
+            },
+            "metadata": {
+              "sessionId": "independent67",
+              "sequence": 10
+            }
+          }
+        }
+      ],
+      "urls": [
+        "blob:http://127.0.0.1:58281/10e8be73-34d5-4625-9534-e8badf6fa48b"
+      ],
+      "revoked": [],
+      "controls": [],
+      "writes": []
+    }
+  ],
+  "errors": []
+}

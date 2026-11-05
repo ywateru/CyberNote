@@ -1,0 +1,4967 @@
+{
+  "head": "440467e78d481ee2b35ea4b2f15a895e518ee780",
+  "source": "7243c649862181d35aa94063149e30653593d7dc",
+  "baseline": true,
+  "baselineHookSha256": "9f99e0178845f5f531f40c31fe00f7a05d6db00b8b9c7b65b42ce45da62f140a",
+  "status": "pass",
+  "checks": [
+    {
+      "name": "actual App final handoff with rejected old read; bounded recovery cannot write audio or body",
+      "status": "pass",
+      "observation": {
+        "baseline": true,
+        "before": {
+          "trace": [
+            {
+              "order": 1,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1
+              }
+            },
+            {
+              "order": 2,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 0
+            },
+            {
+              "order": 3,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": -1,
+              "ok": true
+            },
+            {
+              "order": 4,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": -1,
+              "ok": true
+            },
+            {
+              "order": 5,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": -1,
+              "ok": true
+            },
+            {
+              "order": 6,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 7,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 0
+            },
+            {
+              "order": 8,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 9,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 10,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 11,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 0
+            },
+            {
+              "order": 12,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 13,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 14,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 15,
+              "event": "native-enter",
+              "command": "register_recording_local",
+              "sequence": 0
+            },
+            {
+              "order": 16,
+              "event": "native-enter",
+              "command": "recording_local_started",
+              "sequence": 0
+            },
+            {
+              "order": 17,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 0
+            },
+            {
+              "order": 18,
+              "event": "stamp",
+              "stamp": {
+                "generation": 2,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 19,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 0
+            },
+            {
+              "order": 20,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 21,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 22,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 23,
+              "event": "stamp",
+              "stamp": {
+                "generation": 2,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 24,
+              "event": "stamp",
+              "stamp": {
+                "generation": 2,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 25,
+              "event": "native-enter",
+              "command": "store_attachment_operation",
+              "sequence": 0
+            },
+            {
+              "order": 26,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 27,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 1
+            },
+            {
+              "order": 28,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 29,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 1
+            },
+            {
+              "order": 30,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 31,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 32,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 33,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 34,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 1
+            },
+            {
+              "order": 35,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 36,
+              "event": "read-request",
+              "index": 0,
+              "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 1,
+              "generation": 3
+            },
+            {
+              "order": 37,
+              "event": "read-response",
+              "index": 0,
+              "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 1,
+              "generation": 3
+            },
+            {
+              "order": 38,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 39,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef",
+              "size": 48044
+            },
+            {
+              "order": 40,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 41,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 1
+            },
+            {
+              "order": 42,
+              "event": "body-ack",
+              "id": "A",
+              "sequence": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "attachment",
+                    "attrs": {
+                      "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+                      "name": "新录音.wav",
+                      "kind": "audio"
+                    }
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 43,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 44,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 45,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 46,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 47,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 48,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 2
+            },
+            {
+              "order": 49,
+              "event": "stamp",
+              "stamp": {
+                "generation": 4,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 50,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 51,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 52,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 53,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 54,
+              "event": "stamp",
+              "stamp": {
+                "generation": 4,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 55,
+              "event": "stamp",
+              "stamp": {
+                "generation": 4,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 56,
+              "event": "native-enter",
+              "command": "query_attachment_operation",
+              "sequence": 2
+            },
+            {
+              "order": 57,
+              "event": "journal-query",
+              "status": "committed",
+              "sequence": 2
+            },
+            {
+              "order": 58,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 59,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 2
+            },
+            {
+              "order": 60,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 61,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 62,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 63,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 64,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 65,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 66,
+              "event": "native-enter",
+              "command": "recording_local_revision",
+              "sequence": 2
+            },
+            {
+              "order": 67,
+              "event": "recording_local_revision",
+              "sessionId": "14bee92f-8d79-4ebc-97b7-5799cca0ece0",
+              "operationId": "c4449419-1266-4f55-b530-529d1123b61e",
+              "incarnation": "native-incarnation",
+              "owner": "main",
+              "revision": 1,
+              "finalIntent": false
+            },
+            {
+              "order": 68,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 69,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 70,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86",
+              "size": 48044
+            },
+            {
+              "order": 71,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 72,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 73,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 74,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 2
+            },
+            {
+              "order": 75,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "B",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 76,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 2
+            },
+            {
+              "order": 77,
+              "event": "body-ack",
+              "id": "B",
+              "sequence": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": " preserved B independent67B text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 78,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 79,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 3
+            },
+            {
+              "order": 80,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 81,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 82,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 83,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86"
+            },
+            {
+              "order": 84,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 3
+            },
+            {
+              "order": 85,
+              "event": "stamp",
+              "stamp": {
+                "generation": 6,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 86,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 3
+            },
+            {
+              "order": 87,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 88,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 89,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 90,
+              "event": "stamp",
+              "stamp": {
+                "generation": 6,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 91,
+              "event": "stamp",
+              "stamp": {
+                "generation": 6,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 92,
+              "event": "native-enter",
+              "command": "store_attachment_operation",
+              "sequence": 3
+            },
+            {
+              "order": 93,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 94,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 4
+            },
+            {
+              "order": 95,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 96,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 4
+            },
+            {
+              "order": 97,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 98,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 99,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 100,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 101,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 4
+            },
+            {
+              "order": 102,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef"
+            },
+            {
+              "order": 103,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 104,
+              "event": "read-request",
+              "index": 1,
+              "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 4,
+              "generation": 7
+            },
+            {
+              "order": 105,
+              "event": "read-response",
+              "index": 1,
+              "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 4,
+              "generation": 7
+            },
+            {
+              "order": 106,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 107,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e",
+              "size": 96044
+            },
+            {
+              "order": 108,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 109,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 4
+            },
+            {
+              "order": 110,
+              "event": "body-ack",
+              "id": "A",
+              "sequence": 5,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "attachment",
+                    "attrs": {
+                      "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+                      "name": "新录音.wav",
+                      "kind": "audio"
+                    }
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 111,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 112,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 113,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 114,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 115,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 116,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 5
+            },
+            {
+              "order": 117,
+              "event": "stamp",
+              "stamp": {
+                "generation": 8,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 118,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 119,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 120,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 121,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 122,
+              "event": "stamp",
+              "stamp": {
+                "generation": 8,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 123,
+              "event": "stamp",
+              "stamp": {
+                "generation": 8,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 124,
+              "event": "native-enter",
+              "command": "query_attachment_operation",
+              "sequence": 5
+            },
+            {
+              "order": 125,
+              "event": "journal-query",
+              "status": "committed",
+              "sequence": 5
+            },
+            {
+              "order": 126,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 127,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 5
+            },
+            {
+              "order": 128,
+              "event": "stamp",
+              "stamp": {
+                "generation": 9,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 129,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 130,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 131,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 132,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 133,
+              "event": "stamp",
+              "stamp": {
+                "generation": 9,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 134,
+              "event": "native-enter",
+              "command": "recording_local_revision",
+              "sequence": 5
+            },
+            {
+              "order": 135,
+              "event": "recording_local_revision",
+              "sessionId": "14bee92f-8d79-4ebc-97b7-5799cca0ece0",
+              "operationId": "c4449419-1266-4f55-b530-529d1123b61e",
+              "incarnation": "native-incarnation",
+              "owner": "main",
+              "revision": 2,
+              "finalIntent": false
+            },
+            {
+              "order": 136,
+              "event": "stamp",
+              "stamp": {
+                "generation": 9,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 137,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 138,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073",
+              "size": 96044
+            },
+            {
+              "order": 139,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 140,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 141,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 142,
+              "event": "final-close-start"
+            },
+            {
+              "order": 143,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073"
+            },
+            {
+              "order": 144,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 5
+            },
+            {
+              "order": 145,
+              "event": "stamp",
+              "stamp": {
+                "generation": 10,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 146,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 147,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 148,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 149,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 150,
+              "event": "stamp",
+              "stamp": {
+                "generation": 10,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 151,
+              "event": "stamp",
+              "stamp": {
+                "generation": 10,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 152,
+              "event": "native-enter",
+              "command": "store_attachment_operation",
+              "sequence": 5
+            },
+            {
+              "order": 153,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 154,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 6
+            },
+            {
+              "order": 155,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 156,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 6
+            },
+            {
+              "order": 157,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 158,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 159,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 160,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 161,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 6
+            },
+            {
+              "order": 162,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e"
+            },
+            {
+              "order": 163,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 164,
+              "event": "read-request",
+              "index": 2,
+              "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 6,
+              "generation": 11
+            },
+            {
+              "order": 165,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 166,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 6
+            },
+            {
+              "order": 167,
+              "event": "body-ack",
+              "id": "A",
+              "sequence": 7,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "attachment",
+                    "attrs": {
+                      "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+                      "name": "新录音.wav",
+                      "kind": "audio"
+                    }
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 168,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 169,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 7
+            },
+            {
+              "order": 170,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 6,
+              "ok": true
+            },
+            {
+              "order": 171,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 6,
+              "ok": true
+            },
+            {
+              "order": 172,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 6,
+              "ok": true
+            },
+            {
+              "order": 173,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 7
+            },
+            {
+              "order": 174,
+              "event": "post-ack-native-barrier",
+              "sequence": 7,
+              "observed": 7,
+              "generation": 11
+            }
+          ],
+          "reads": [
+            {
+              "index": 0,
+              "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 1,
+              "generation": 3
+            },
+            {
+              "index": 1,
+              "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 4,
+              "generation": 7
+            },
+            {
+              "index": 2,
+              "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 6,
+              "generation": 11
+            }
+          ],
+          "urls": [
+            "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef",
+            "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86",
+            "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e",
+            "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073"
+          ],
+          "revoked": [
+            "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86",
+            "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef",
+            "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073",
+            "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e"
+          ],
+          "generation": 11,
+          "observed": 7,
+          "applied": 7,
+          "held": {
+            "index": 2,
+            "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+            "expected": {
+              "sessionId": "controlled66",
+              "epoch": 1,
+              "noteEpoch": 1
+            },
+            "sequence": 6,
+            "generation": 11
+          },
+          "doc": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "attachment",
+                "attrs": {
+                  "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+                  "name": "新录音.wav",
+                  "kind": "audio"
+                }
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A text"
+                  }
+                ]
+              }
+            ]
+          },
+          "other": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": " preserved B independent67B text"
+                  }
+                ]
+              }
+            ]
+          },
+          "cards": 1,
+          "overlay": 1,
+          "counts": {
+            "stores": 3,
+            "body": 4,
+            "acks": 2,
+            "release": 0
+          }
+        },
+        "afterRead": {
+          "trace": [
+            {
+              "order": 1,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1
+              }
+            },
+            {
+              "order": 2,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 0
+            },
+            {
+              "order": 3,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": -1,
+              "ok": true
+            },
+            {
+              "order": 4,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": -1,
+              "ok": true
+            },
+            {
+              "order": 5,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": -1,
+              "ok": true
+            },
+            {
+              "order": 6,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 7,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 0
+            },
+            {
+              "order": 8,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 9,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 10,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 11,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 0
+            },
+            {
+              "order": 12,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 13,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 14,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 15,
+              "event": "native-enter",
+              "command": "register_recording_local",
+              "sequence": 0
+            },
+            {
+              "order": 16,
+              "event": "native-enter",
+              "command": "recording_local_started",
+              "sequence": 0
+            },
+            {
+              "order": 17,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 0
+            },
+            {
+              "order": 18,
+              "event": "stamp",
+              "stamp": {
+                "generation": 2,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 19,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 0
+            },
+            {
+              "order": 20,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 21,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 22,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 23,
+              "event": "stamp",
+              "stamp": {
+                "generation": 2,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 24,
+              "event": "stamp",
+              "stamp": {
+                "generation": 2,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 25,
+              "event": "native-enter",
+              "command": "store_attachment_operation",
+              "sequence": 0
+            },
+            {
+              "order": 26,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 27,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 1
+            },
+            {
+              "order": 28,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 29,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 1
+            },
+            {
+              "order": 30,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 31,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 32,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 33,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 34,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 1
+            },
+            {
+              "order": 35,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 36,
+              "event": "read-request",
+              "index": 0,
+              "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 1,
+              "generation": 3
+            },
+            {
+              "order": 37,
+              "event": "read-response",
+              "index": 0,
+              "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 1,
+              "generation": 3
+            },
+            {
+              "order": 38,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 39,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef",
+              "size": 48044
+            },
+            {
+              "order": 40,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 41,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 1
+            },
+            {
+              "order": 42,
+              "event": "body-ack",
+              "id": "A",
+              "sequence": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "attachment",
+                    "attrs": {
+                      "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+                      "name": "新录音.wav",
+                      "kind": "audio"
+                    }
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 43,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 44,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 45,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 46,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 47,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 48,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 2
+            },
+            {
+              "order": 49,
+              "event": "stamp",
+              "stamp": {
+                "generation": 4,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 50,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 51,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 52,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 53,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 54,
+              "event": "stamp",
+              "stamp": {
+                "generation": 4,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 55,
+              "event": "stamp",
+              "stamp": {
+                "generation": 4,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 56,
+              "event": "native-enter",
+              "command": "query_attachment_operation",
+              "sequence": 2
+            },
+            {
+              "order": 57,
+              "event": "journal-query",
+              "status": "committed",
+              "sequence": 2
+            },
+            {
+              "order": 58,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 59,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 2
+            },
+            {
+              "order": 60,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 61,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 62,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 63,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 64,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 65,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 66,
+              "event": "native-enter",
+              "command": "recording_local_revision",
+              "sequence": 2
+            },
+            {
+              "order": 67,
+              "event": "recording_local_revision",
+              "sessionId": "14bee92f-8d79-4ebc-97b7-5799cca0ece0",
+              "operationId": "c4449419-1266-4f55-b530-529d1123b61e",
+              "incarnation": "native-incarnation",
+              "owner": "main",
+              "revision": 1,
+              "finalIntent": false
+            },
+            {
+              "order": 68,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 69,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 70,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86",
+              "size": 48044
+            },
+            {
+              "order": 71,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 72,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 73,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 74,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 2
+            },
+            {
+              "order": 75,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "B",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 76,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 2
+            },
+            {
+              "order": 77,
+              "event": "body-ack",
+              "id": "B",
+              "sequence": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": " preserved B independent67B text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 78,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 79,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 3
+            },
+            {
+              "order": 80,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 81,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 82,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 83,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86"
+            },
+            {
+              "order": 84,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 3
+            },
+            {
+              "order": 85,
+              "event": "stamp",
+              "stamp": {
+                "generation": 6,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 86,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 3
+            },
+            {
+              "order": 87,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 88,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 89,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 90,
+              "event": "stamp",
+              "stamp": {
+                "generation": 6,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 91,
+              "event": "stamp",
+              "stamp": {
+                "generation": 6,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 92,
+              "event": "native-enter",
+              "command": "store_attachment_operation",
+              "sequence": 3
+            },
+            {
+              "order": 93,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 94,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 4
+            },
+            {
+              "order": 95,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 96,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 4
+            },
+            {
+              "order": 97,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 98,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 99,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 100,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 101,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 4
+            },
+            {
+              "order": 102,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef"
+            },
+            {
+              "order": 103,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 104,
+              "event": "read-request",
+              "index": 1,
+              "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 4,
+              "generation": 7
+            },
+            {
+              "order": 105,
+              "event": "read-response",
+              "index": 1,
+              "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 4,
+              "generation": 7
+            },
+            {
+              "order": 106,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 107,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e",
+              "size": 96044
+            },
+            {
+              "order": 108,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 109,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 4
+            },
+            {
+              "order": 110,
+              "event": "body-ack",
+              "id": "A",
+              "sequence": 5,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "attachment",
+                    "attrs": {
+                      "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+                      "name": "新录音.wav",
+                      "kind": "audio"
+                    }
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 111,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 112,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 113,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 114,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 115,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 116,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 5
+            },
+            {
+              "order": 117,
+              "event": "stamp",
+              "stamp": {
+                "generation": 8,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 118,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 119,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 120,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 121,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 122,
+              "event": "stamp",
+              "stamp": {
+                "generation": 8,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 123,
+              "event": "stamp",
+              "stamp": {
+                "generation": 8,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 124,
+              "event": "native-enter",
+              "command": "query_attachment_operation",
+              "sequence": 5
+            },
+            {
+              "order": 125,
+              "event": "journal-query",
+              "status": "committed",
+              "sequence": 5
+            },
+            {
+              "order": 126,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 127,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 5
+            },
+            {
+              "order": 128,
+              "event": "stamp",
+              "stamp": {
+                "generation": 9,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 129,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 130,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 131,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 132,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 133,
+              "event": "stamp",
+              "stamp": {
+                "generation": 9,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 134,
+              "event": "native-enter",
+              "command": "recording_local_revision",
+              "sequence": 5
+            },
+            {
+              "order": 135,
+              "event": "recording_local_revision",
+              "sessionId": "14bee92f-8d79-4ebc-97b7-5799cca0ece0",
+              "operationId": "c4449419-1266-4f55-b530-529d1123b61e",
+              "incarnation": "native-incarnation",
+              "owner": "main",
+              "revision": 2,
+              "finalIntent": false
+            },
+            {
+              "order": 136,
+              "event": "stamp",
+              "stamp": {
+                "generation": 9,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 137,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 138,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073",
+              "size": 96044
+            },
+            {
+              "order": 139,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 140,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 141,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 142,
+              "event": "final-close-start"
+            },
+            {
+              "order": 143,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073"
+            },
+            {
+              "order": 144,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 5
+            },
+            {
+              "order": 145,
+              "event": "stamp",
+              "stamp": {
+                "generation": 10,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 146,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 147,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 148,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 149,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 150,
+              "event": "stamp",
+              "stamp": {
+                "generation": 10,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 151,
+              "event": "stamp",
+              "stamp": {
+                "generation": 10,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 152,
+              "event": "native-enter",
+              "command": "store_attachment_operation",
+              "sequence": 5
+            },
+            {
+              "order": 153,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 154,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 6
+            },
+            {
+              "order": 155,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 156,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 6
+            },
+            {
+              "order": 157,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 158,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 159,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 160,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 161,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 6
+            },
+            {
+              "order": 162,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e"
+            },
+            {
+              "order": 163,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 164,
+              "event": "read-request",
+              "index": 2,
+              "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 6,
+              "generation": 11
+            },
+            {
+              "order": 165,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 166,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 6
+            },
+            {
+              "order": 167,
+              "event": "body-ack",
+              "id": "A",
+              "sequence": 7,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "attachment",
+                    "attrs": {
+                      "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+                      "name": "新录音.wav",
+                      "kind": "audio"
+                    }
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 168,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 169,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 7
+            },
+            {
+              "order": 170,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 6,
+              "ok": true
+            },
+            {
+              "order": 171,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 6,
+              "ok": true
+            },
+            {
+              "order": 172,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 6,
+              "ok": true
+            },
+            {
+              "order": 173,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 7
+            },
+            {
+              "order": 174,
+              "event": "post-ack-native-barrier",
+              "sequence": 7,
+              "observed": 7,
+              "generation": 11
+            },
+            {
+              "order": 175,
+              "event": "read-response",
+              "index": 2,
+              "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 6,
+              "generation": 11
+            },
+            {
+              "order": 176,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 7,
+              "applied": 7,
+              "ok": false
+            }
+          ],
+          "reads": [
+            {
+              "index": 0,
+              "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 1,
+              "generation": 3
+            },
+            {
+              "index": 1,
+              "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 4,
+              "generation": 7
+            },
+            {
+              "index": 2,
+              "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 6,
+              "generation": 11
+            }
+          ],
+          "urls": [
+            "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef",
+            "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86",
+            "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e",
+            "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073"
+          ],
+          "revoked": [
+            "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86",
+            "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef",
+            "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073",
+            "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e"
+          ],
+          "generation": 11,
+          "observed": 7,
+          "applied": 7,
+          "held": {
+            "index": 2,
+            "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+            "expected": {
+              "sessionId": "controlled66",
+              "epoch": 1,
+              "noteEpoch": 1
+            },
+            "sequence": 6,
+            "generation": 11
+          },
+          "doc": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "attachment",
+                "attrs": {
+                  "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+                  "name": "新录音.wav",
+                  "kind": "audio"
+                }
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A text"
+                  }
+                ]
+              }
+            ]
+          },
+          "other": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": " preserved B independent67B text"
+                  }
+                ]
+              }
+            ]
+          },
+          "cards": 1,
+          "overlay": 1,
+          "counts": {
+            "stores": 3,
+            "body": 4,
+            "acks": 2,
+            "release": 0
+          }
+        },
+        "final": {
+          "trace": [
+            {
+              "order": 1,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1
+              }
+            },
+            {
+              "order": 2,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 0
+            },
+            {
+              "order": 3,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": -1,
+              "ok": true
+            },
+            {
+              "order": 4,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": -1,
+              "ok": true
+            },
+            {
+              "order": 5,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": -1,
+              "ok": true
+            },
+            {
+              "order": 6,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 7,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 0
+            },
+            {
+              "order": 8,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 9,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 10,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 11,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 0
+            },
+            {
+              "order": 12,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 13,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 14,
+              "event": "stamp",
+              "stamp": {
+                "generation": 1,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 15,
+              "event": "native-enter",
+              "command": "register_recording_local",
+              "sequence": 0
+            },
+            {
+              "order": 16,
+              "event": "native-enter",
+              "command": "recording_local_started",
+              "sequence": 0
+            },
+            {
+              "order": 17,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 0
+            },
+            {
+              "order": 18,
+              "event": "stamp",
+              "stamp": {
+                "generation": 2,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 19,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 0
+            },
+            {
+              "order": 20,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 21,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 22,
+              "event": "metadata-verdict",
+              "sequence": 0,
+              "observed": 0,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 23,
+              "event": "stamp",
+              "stamp": {
+                "generation": 2,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 24,
+              "event": "stamp",
+              "stamp": {
+                "generation": 2,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 25,
+              "event": "native-enter",
+              "command": "store_attachment_operation",
+              "sequence": 0
+            },
+            {
+              "order": 26,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 27,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 1
+            },
+            {
+              "order": 28,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 29,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 1
+            },
+            {
+              "order": 30,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 31,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 32,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 0,
+              "ok": true
+            },
+            {
+              "order": 33,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 34,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 1
+            },
+            {
+              "order": 35,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 36,
+              "event": "read-request",
+              "index": 0,
+              "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 1,
+              "generation": 3
+            },
+            {
+              "order": 37,
+              "event": "read-response",
+              "index": 0,
+              "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 1,
+              "generation": 3
+            },
+            {
+              "order": 38,
+              "event": "metadata-verdict",
+              "sequence": 1,
+              "observed": 1,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 39,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef",
+              "size": 48044
+            },
+            {
+              "order": 40,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 41,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 1
+            },
+            {
+              "order": 42,
+              "event": "body-ack",
+              "id": "A",
+              "sequence": 2,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "attachment",
+                    "attrs": {
+                      "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+                      "name": "新录音.wav",
+                      "kind": "audio"
+                    }
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 43,
+              "event": "stamp",
+              "stamp": {
+                "generation": 3,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 44,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 45,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 46,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 47,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 1,
+              "ok": true
+            },
+            {
+              "order": 48,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 2
+            },
+            {
+              "order": 49,
+              "event": "stamp",
+              "stamp": {
+                "generation": 4,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 50,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 51,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 52,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 53,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 54,
+              "event": "stamp",
+              "stamp": {
+                "generation": 4,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 55,
+              "event": "stamp",
+              "stamp": {
+                "generation": 4,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 56,
+              "event": "native-enter",
+              "command": "query_attachment_operation",
+              "sequence": 2
+            },
+            {
+              "order": 57,
+              "event": "journal-query",
+              "status": "committed",
+              "sequence": 2
+            },
+            {
+              "order": 58,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 59,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 2
+            },
+            {
+              "order": 60,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 61,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 62,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 63,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 64,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 65,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 66,
+              "event": "native-enter",
+              "command": "recording_local_revision",
+              "sequence": 2
+            },
+            {
+              "order": 67,
+              "event": "recording_local_revision",
+              "sessionId": "14bee92f-8d79-4ebc-97b7-5799cca0ece0",
+              "operationId": "c4449419-1266-4f55-b530-529d1123b61e",
+              "incarnation": "native-incarnation",
+              "owner": "main",
+              "revision": 1,
+              "finalIntent": false
+            },
+            {
+              "order": 68,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 69,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 2
+            },
+            {
+              "order": 70,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86",
+              "size": 48044
+            },
+            {
+              "order": 71,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 72,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 73,
+              "event": "metadata-verdict",
+              "sequence": 2,
+              "observed": 2,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 74,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 2
+            },
+            {
+              "order": 75,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "B",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 76,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 2
+            },
+            {
+              "order": 77,
+              "event": "body-ack",
+              "id": "B",
+              "sequence": 3,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": " preserved B independent67B text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 78,
+              "event": "stamp",
+              "stamp": {
+                "generation": 5,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 79,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 3
+            },
+            {
+              "order": 80,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 81,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 82,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 2,
+              "ok": true
+            },
+            {
+              "order": 83,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86"
+            },
+            {
+              "order": 84,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 3
+            },
+            {
+              "order": 85,
+              "event": "stamp",
+              "stamp": {
+                "generation": 6,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 86,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 3
+            },
+            {
+              "order": 87,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 88,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 89,
+              "event": "metadata-verdict",
+              "sequence": 3,
+              "observed": 3,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 90,
+              "event": "stamp",
+              "stamp": {
+                "generation": 6,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 91,
+              "event": "stamp",
+              "stamp": {
+                "generation": 6,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 92,
+              "event": "native-enter",
+              "command": "store_attachment_operation",
+              "sequence": 3
+            },
+            {
+              "order": 93,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 94,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 4
+            },
+            {
+              "order": 95,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 96,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 4
+            },
+            {
+              "order": 97,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 98,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 99,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 3,
+              "ok": true
+            },
+            {
+              "order": 100,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 101,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 4
+            },
+            {
+              "order": 102,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef"
+            },
+            {
+              "order": 103,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 104,
+              "event": "read-request",
+              "index": 1,
+              "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 4,
+              "generation": 7
+            },
+            {
+              "order": 105,
+              "event": "read-response",
+              "index": 1,
+              "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 4,
+              "generation": 7
+            },
+            {
+              "order": 106,
+              "event": "metadata-verdict",
+              "sequence": 4,
+              "observed": 4,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 107,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e",
+              "size": 96044
+            },
+            {
+              "order": 108,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 109,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 4
+            },
+            {
+              "order": 110,
+              "event": "body-ack",
+              "id": "A",
+              "sequence": 5,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "attachment",
+                    "attrs": {
+                      "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+                      "name": "新录音.wav",
+                      "kind": "audio"
+                    }
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 111,
+              "event": "stamp",
+              "stamp": {
+                "generation": 7,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 112,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 113,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 114,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 115,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 4,
+              "ok": true
+            },
+            {
+              "order": 116,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 5
+            },
+            {
+              "order": 117,
+              "event": "stamp",
+              "stamp": {
+                "generation": 8,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 118,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 119,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 120,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 121,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 122,
+              "event": "stamp",
+              "stamp": {
+                "generation": 8,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 123,
+              "event": "stamp",
+              "stamp": {
+                "generation": 8,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 124,
+              "event": "native-enter",
+              "command": "query_attachment_operation",
+              "sequence": 5
+            },
+            {
+              "order": 125,
+              "event": "journal-query",
+              "status": "committed",
+              "sequence": 5
+            },
+            {
+              "order": 126,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 127,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 5
+            },
+            {
+              "order": 128,
+              "event": "stamp",
+              "stamp": {
+                "generation": 9,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 129,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 130,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 131,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 132,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 133,
+              "event": "stamp",
+              "stamp": {
+                "generation": 9,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 134,
+              "event": "native-enter",
+              "command": "recording_local_revision",
+              "sequence": 5
+            },
+            {
+              "order": 135,
+              "event": "recording_local_revision",
+              "sessionId": "14bee92f-8d79-4ebc-97b7-5799cca0ece0",
+              "operationId": "c4449419-1266-4f55-b530-529d1123b61e",
+              "incarnation": "native-incarnation",
+              "owner": "main",
+              "revision": 2,
+              "finalIntent": false
+            },
+            {
+              "order": 136,
+              "event": "stamp",
+              "stamp": {
+                "generation": 9,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 137,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 138,
+              "event": "url-create",
+              "src": "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073",
+              "size": 96044
+            },
+            {
+              "order": 139,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 140,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 141,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 142,
+              "event": "final-close-start"
+            },
+            {
+              "order": 143,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073"
+            },
+            {
+              "order": 144,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 5
+            },
+            {
+              "order": 145,
+              "event": "stamp",
+              "stamp": {
+                "generation": 10,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 146,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 5
+            },
+            {
+              "order": 147,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 148,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 149,
+              "event": "metadata-verdict",
+              "sequence": 5,
+              "observed": 5,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 150,
+              "event": "stamp",
+              "stamp": {
+                "generation": 10,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 151,
+              "event": "stamp",
+              "stamp": {
+                "generation": 10,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 152,
+              "event": "native-enter",
+              "command": "store_attachment_operation",
+              "sequence": 5
+            },
+            {
+              "order": 153,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 154,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 6
+            },
+            {
+              "order": 155,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 156,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 6
+            },
+            {
+              "order": 157,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 158,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 159,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 6,
+              "applied": 5,
+              "ok": true
+            },
+            {
+              "order": 160,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 161,
+              "event": "native-enter",
+              "command": "register_save_intent",
+              "sequence": 6
+            },
+            {
+              "order": 162,
+              "event": "url-revoke",
+              "src": "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e"
+            },
+            {
+              "order": 163,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 164,
+              "event": "read-request",
+              "index": 2,
+              "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 6,
+              "generation": 11
+            },
+            {
+              "order": 165,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 166,
+              "event": "native-enter",
+              "command": "workspace_action",
+              "sequence": 6
+            },
+            {
+              "order": 167,
+              "event": "body-ack",
+              "id": "A",
+              "sequence": 7,
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "attachment",
+                    "attrs": {
+                      "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+                      "name": "新录音.wav",
+                      "kind": "audio"
+                    }
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A text"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "order": 168,
+              "event": "stamp",
+              "stamp": {
+                "generation": 11,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 169,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 7
+            },
+            {
+              "order": 170,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 6,
+              "ok": true
+            },
+            {
+              "order": 171,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 6,
+              "ok": true
+            },
+            {
+              "order": 172,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 6,
+              "ok": true
+            },
+            {
+              "order": 173,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 7
+            },
+            {
+              "order": 174,
+              "event": "post-ack-native-barrier",
+              "sequence": 7,
+              "observed": 7,
+              "generation": 11
+            },
+            {
+              "order": 175,
+              "event": "read-response",
+              "index": 2,
+              "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 6,
+              "generation": 11
+            },
+            {
+              "order": 176,
+              "event": "metadata-verdict",
+              "sequence": 6,
+              "observed": 7,
+              "applied": 7,
+              "ok": false
+            },
+            {
+              "order": 177,
+              "event": "stamp",
+              "stamp": {
+                "generation": 12,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 178,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 7
+            },
+            {
+              "order": 179,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 7,
+              "ok": true
+            },
+            {
+              "order": 180,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 7,
+              "ok": true
+            },
+            {
+              "order": 181,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 7,
+              "ok": true
+            },
+            {
+              "order": 182,
+              "event": "stamp",
+              "stamp": {
+                "generation": 12,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 183,
+              "event": "stamp",
+              "stamp": {
+                "generation": 12,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 184,
+              "event": "native-enter",
+              "command": "query_attachment_operation",
+              "sequence": 7
+            },
+            {
+              "order": 185,
+              "event": "journal-query",
+              "status": "committed",
+              "sequence": 7
+            },
+            {
+              "order": 186,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 7,
+              "ok": true
+            },
+            {
+              "order": 187,
+              "event": "native-enter",
+              "command": "recording_local_validate",
+              "sequence": 7
+            },
+            {
+              "order": 188,
+              "event": "stamp",
+              "stamp": {
+                "generation": 13,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 189,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 7
+            },
+            {
+              "order": 190,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 7,
+              "ok": true
+            },
+            {
+              "order": 191,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 7,
+              "ok": true
+            },
+            {
+              "order": 192,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 7,
+              "ok": true
+            },
+            {
+              "order": 193,
+              "event": "stamp",
+              "stamp": {
+                "generation": 13,
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteId": "A",
+                "noteEpoch": 1
+              }
+            },
+            {
+              "order": 194,
+              "event": "native-enter",
+              "command": "recording_local_revision",
+              "sequence": 7
+            },
+            {
+              "order": 195,
+              "event": "recording_local_revision",
+              "sessionId": "14bee92f-8d79-4ebc-97b7-5799cca0ece0",
+              "operationId": "c4449419-1266-4f55-b530-529d1123b61e",
+              "incarnation": "native-incarnation",
+              "owner": "main",
+              "revision": 3,
+              "finalIntent": true
+            },
+            {
+              "order": 196,
+              "event": "stamp",
+              "stamp": {
+                "generation": 13,
+                "sessionId": "controlled66",
+                "epoch": 1
+              }
+            },
+            {
+              "order": 197,
+              "event": "native-enter",
+              "command": "load_workspace",
+              "sequence": 7
+            },
+            {
+              "order": 198,
+              "event": "native-enter",
+              "command": "recording_local_release",
+              "sequence": 7
+            },
+            {
+              "order": 199,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 7,
+              "ok": true
+            },
+            {
+              "order": 200,
+              "event": "recording_local_release",
+              "sessionId": "14bee92f-8d79-4ebc-97b7-5799cca0ece0",
+              "operationId": "c4449419-1266-4f55-b530-529d1123b61e",
+              "incarnation": "native-incarnation",
+              "owner": "main",
+              "saved": true,
+              "revision": 3
+            },
+            {
+              "order": 201,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 7,
+              "ok": true
+            },
+            {
+              "order": 202,
+              "event": "metadata-verdict",
+              "sequence": 7,
+              "observed": 7,
+              "applied": 7,
+              "ok": true
+            }
+          ],
+          "reads": [
+            {
+              "index": 0,
+              "id": "audio-07958d00-a68d-4e39-80ef-9e05e240e267",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 1,
+              "generation": 3
+            },
+            {
+              "index": 1,
+              "id": "audio-a9ed9660-197c-4ddc-ae53-af3ee97435a9",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 4,
+              "generation": 7
+            },
+            {
+              "index": 2,
+              "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+              "expected": {
+                "sessionId": "controlled66",
+                "epoch": 1,
+                "noteEpoch": 1
+              },
+              "sequence": 6,
+              "generation": 11
+            }
+          ],
+          "urls": [
+            "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef",
+            "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86",
+            "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e",
+            "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073"
+          ],
+          "revoked": [
+            "blob:http://127.0.0.1:59482/04d0f2e2-90f7-4e80-9b05-f8e4bb614c86",
+            "blob:http://127.0.0.1:59482/83275836-12d8-426c-984f-34467d853fef",
+            "blob:http://127.0.0.1:59482/03eb4252-ff30-4023-86ec-fcfd0164e073",
+            "blob:http://127.0.0.1:59482/69f8976d-e845-413c-ae52-cd8c30d2310e"
+          ],
+          "generation": 13,
+          "observed": 7,
+          "applied": 7,
+          "held": {
+            "index": 2,
+            "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+            "expected": {
+              "sessionId": "controlled66",
+              "epoch": 1,
+              "noteEpoch": 1
+            },
+            "sequence": 6,
+            "generation": 11
+          },
+          "doc": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "attachment",
+                "attrs": {
+                  "id": "audio-0effb775-30d9-45c2-92e3-cbf35befd41d",
+                  "name": "新录音.wav",
+                  "kind": "audio"
+                }
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A text"
+                  }
+                ]
+              }
+            ]
+          },
+          "other": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": " preserved B independent67B text"
+                  }
+                ]
+              }
+            ]
+          },
+          "cards": 1,
+          "overlay": 0,
+          "counts": {
+            "stores": 3,
+            "body": 4,
+            "acks": 3,
+            "release": 1
+          }
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Actual mounted App, SearchEditorHost, NoteEditor/TipTap, SearchEditorGate, useEditorCommit, SaveQueue, DesktopPanel, DesktopSession, RecordingRevisions and bridge; only debug getters inserted before App return.",
+    "Native IPC, authorization, stream, recorder and decode input are controlled synthetic fixtures. Real App/bridge/gates/MediaView/HTML audio and lifecycle remain; no hardware mic, device, user GUI, actual audio or native permission operation.",
+    "Native mac toolbar deliberately not mounted via platform boundary. No pixel/package/runtime claim."
+  ]
+}

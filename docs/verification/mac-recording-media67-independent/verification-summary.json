@@ -1,0 +1,38 @@
+{
+  "status": "pass-source-controlled-runtime-open",
+  "authorProduct": "7243c649862181d35aa94063149e30653593d7dc",
+  "independentProductMapping": "440467e78d481ee2b35ea4b2f15a895e518ee780",
+  "baseline": "667d8771f1d8693f4f137751ce0949266b6ef454",
+  "authorBase": "43e16f9707b6a602577c6793e9075e6185dd89d4",
+  "trackedProductInputsExactlyMatchAuthor": 271,
+  "checks": {
+    "hook-attempt04": {
+      "status": "pass",
+      "checks": 27
+    },
+    "authorization-attempt01": {
+      "status": "pass",
+      "checks": 2
+    },
+    "final-attempt01": {
+      "status": "pass",
+      "checks": 1
+    },
+    "final-baseline-attempt01": {
+      "status": "pass",
+      "checks": 1
+    }
+  },
+  "independentCandidateGroups": 30,
+  "independentExpectedBaselineDefectGroups": 1,
+  "typecheckExit": 0,
+  "frontendBuildExit": 0,
+  "nativeBuildRun": false,
+  "at": "2026-11-05T10:10:21.669012+00:00",
+  "limits": [
+    "Source and synthetic controlled frontend acceptance only.",
+    "Actual Mac19 C first failure remains historical; exact C internal event sequence remains unknown. E/F observations do not overwrite it.",
+    "No native build, signing, GUI, physical microphone, existing audio access/export/transcription, device or permissions operation.",
+    "Old Mac18 absent with exit cause/time unknown, not restarted or claimed recovered; Android untouched."
+  ]
+}
