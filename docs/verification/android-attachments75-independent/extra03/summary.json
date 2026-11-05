@@ -1,0 +1,461 @@
+{
+  "status": "PASS",
+  "checks": 29,
+  "labels": [
+    "Independent empty note single insertion leaves one reference and normal text caret",
+    "Independent single Undo restores exact empty document including added paragraph",
+    "Independent Redo restores exact first attachment and paragraph transaction",
+    "Independent continuous chooser retains first and second identity",
+    "Independent second chooser Undo restores exact prior card and paragraph document",
+    "Independent explicit old image selection replaces only selected card and retains all media",
+    "Independent Undo of explicit replacement restores exact old document and all media",
+    "Independent new empty note one three-file FileList references every exact stored identity once",
+    "Empty MIME byte signature png",
+    "Empty MIME byte signature jpeg",
+    "Empty MIME byte signature gif87",
+    "Empty MIME byte signature gif89",
+    "Empty MIME byte signature webp",
+    "Empty MIME byte signature pdf",
+    "Empty MIME byte signature wav-no-inference",
+    "Empty MIME byte signature extension-only",
+    "Empty MIME byte signature empty",
+    "Declared nonempty MIME is never overridden by PNG signature",
+    "Independent abort preserves recovery identity and ends pending",
+    "Independent abort retries exact original operation and File once",
+    "Independent error preserves recovery identity and ends pending",
+    "Independent error retries exact original operation and File once",
+    "Original chooser rejects changed session with no cross-authority store",
+    "Original chooser rejects changed epoch with no cross-authority store",
+    "Original chooser rejects changed noteEpoch with no cross-authority store",
+    "Cancel authority failure is surfaced and retained instead of swallowed by late observer",
+    "Retried explicit cancellation settles retained original operation without body reference",
+    "Late successful authorized bytes after navigation never publish in B",
+    "Independent extra browser scenarios have no uncaught page errors"
+  ],
+  "stages": [
+    {
+      "name": "Independent empty note single insertion leaves one reference and normal text caret",
+      "proof": {
+        "before": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "after": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "0755b174-3044-4407-a403-cb353546a420",
+                "name": "empty-single.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "paragraph"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Independent single Undo restores exact empty document including added paragraph",
+      "proof": {
+        "actual": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Independent Redo restores exact first attachment and paragraph transaction"
+    },
+    {
+      "name": "Independent continuous chooser retains first and second identity"
+    },
+    {
+      "name": "Independent second chooser Undo restores exact prior card and paragraph document"
+    },
+    {
+      "name": "Independent explicit old image selection replaces only selected card and retains all media",
+      "proof": {
+        "before": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "0755b174-3044-4407-a403-cb353546a420",
+                "name": "empty-single.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "d7fd2761-6573-4870-b8f0-e194177f3284",
+                "name": "independent-second.png",
+                "kind": "image"
+              }
+            },
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "after": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "0755b174-3044-4407-a403-cb353546a420",
+                "name": "empty-single.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "4bf8c485-aa04-4ec5-bd0e-50c27f222795",
+                "name": "intentional-replacement.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "paragraph"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Independent Undo of explicit replacement restores exact old document and all media"
+    },
+    {
+      "name": "Independent new empty note one three-file FileList references every exact stored identity once",
+      "proof": {
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "9f97d180-672d-429d-bfae-4c9fda70c81f",
+                "name": "three-first.png",
+                "kind": "image"
+              }
+            },
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "ec612b68-8fed-4453-90e8-539009d6f3a2",
+                "name": "three-second.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "19187187-3407-4b18-8e73-bcd1a696cdbc",
+                "name": "three-third.pdf",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "attachments": [
+          {
+            "id": "9f97d180-672d-429d-bfae-4c9fda70c81f",
+            "noteId": "15f233ef-dea2-4767-a3df-797820b14096",
+            "kind": "image",
+            "displayName": "three-first.png",
+            "mime": "image/png",
+            "size": 68,
+            "relativePath": "synthetic/e84f72ec-7817-40c3-ab24-c8d95cbf71b0"
+          },
+          {
+            "id": "ec612b68-8fed-4453-90e8-539009d6f3a2",
+            "noteId": "15f233ef-dea2-4767-a3df-797820b14096",
+            "kind": "file",
+            "displayName": "three-second.txt",
+            "mime": "text/plain",
+            "size": 32,
+            "relativePath": "synthetic/f96d7176-bb2a-4029-a638-e00967f4fcc0"
+          },
+          {
+            "id": "19187187-3407-4b18-8e73-bcd1a696cdbc",
+            "noteId": "15f233ef-dea2-4767-a3df-797820b14096",
+            "kind": "file",
+            "displayName": "three-third.pdf",
+            "mime": "application/pdf",
+            "size": 24,
+            "relativePath": "synthetic/9e98d30c-e132-4350-9f8e-b1d9427757cb"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Empty MIME byte signature png",
+      "proof": {
+        "mime": "image/png",
+        "kind": "image",
+        "size": 68
+      }
+    },
+    {
+      "name": "Empty MIME byte signature jpeg",
+      "proof": {
+        "mime": "image/jpeg",
+        "kind": "image",
+        "size": 6
+      }
+    },
+    {
+      "name": "Empty MIME byte signature gif87",
+      "proof": {
+        "mime": "image/gif",
+        "kind": "image",
+        "size": 15
+      }
+    },
+    {
+      "name": "Empty MIME byte signature gif89",
+      "proof": {
+        "mime": "image/gif",
+        "kind": "image",
+        "size": 15
+      }
+    },
+    {
+      "name": "Empty MIME byte signature webp",
+      "proof": {
+        "mime": "image/webp",
+        "kind": "image",
+        "size": 21
+      }
+    },
+    {
+      "name": "Empty MIME byte signature pdf",
+      "proof": {
+        "mime": "application/pdf",
+        "kind": "file",
+        "size": 18
+      }
+    },
+    {
+      "name": "Empty MIME byte signature wav-no-inference",
+      "proof": {
+        "mime": "application/octet-stream",
+        "kind": "file",
+        "size": 25
+      }
+    },
+    {
+      "name": "Empty MIME byte signature extension-only",
+      "proof": {
+        "mime": "application/octet-stream",
+        "kind": "file",
+        "size": 12
+      }
+    },
+    {
+      "name": "Empty MIME byte signature empty",
+      "proof": {
+        "mime": "application/octet-stream",
+        "kind": "file",
+        "size": 0
+      }
+    },
+    {
+      "name": "Declared nonempty MIME is never overridden by PNG signature"
+    },
+    {
+      "name": "Independent abort preserves recovery identity and ends pending",
+      "proof": {
+        "failure": {
+          "code": "APP_ERROR",
+          "message": "附件读取已中断，文件已保留，请重试"
+        },
+        "calls": [
+          {
+            "command": "query_attachment_operation",
+            "operationId": "c9caf9e4-6fb9-49a2-9f77-630b4194f266"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Independent abort retries exact original operation and File once",
+      "proof": {
+        "calls": [
+          {
+            "command": "query_attachment_operation",
+            "operationId": "c9caf9e4-6fb9-49a2-9f77-630b4194f266"
+          },
+          {
+            "command": "query_attachment_operation",
+            "operationId": "c9caf9e4-6fb9-49a2-9f77-630b4194f266"
+          },
+          {
+            "command": "store_attachment_operation",
+            "operationId": "c9caf9e4-6fb9-49a2-9f77-630b4194f266"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Independent error preserves recovery identity and ends pending",
+      "proof": {
+        "failure": {
+          "code": "APP_ERROR",
+          "message": "无法读取附件文件，请重试"
+        },
+        "calls": [
+          {
+            "command": "query_attachment_operation",
+            "operationId": "e31c13e4-bc99-42ac-baa4-bcd236990a73"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Independent error retries exact original operation and File once",
+      "proof": {
+        "calls": [
+          {
+            "command": "query_attachment_operation",
+            "operationId": "e31c13e4-bc99-42ac-baa4-bcd236990a73"
+          },
+          {
+            "command": "query_attachment_operation",
+            "operationId": "e31c13e4-bc99-42ac-baa4-bcd236990a73"
+          },
+          {
+            "command": "store_attachment_operation",
+            "operationId": "e31c13e4-bc99-42ac-baa4-bcd236990a73"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Expected changed-authority refresh rejection session",
+      "proof": {
+        "code": "APP_ERROR",
+        "message": "授权状态已改变，请同步后重试"
+      }
+    },
+    {
+      "name": "Original chooser rejects changed session with no cross-authority store",
+      "proof": {
+        "failure": {
+          "code": "APP_ERROR",
+          "message": "原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口"
+        }
+      }
+    },
+    {
+      "name": "Original chooser rejects changed epoch with no cross-authority store",
+      "proof": {
+        "failure": {
+          "code": "APP_ERROR",
+          "message": "原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口"
+        }
+      }
+    },
+    {
+      "name": "Original chooser rejects changed noteEpoch with no cross-authority store",
+      "proof": {
+        "failure": {
+          "code": "APP_ERROR",
+          "message": "原附件目标已失效，请保持窗口打开"
+        }
+      }
+    },
+    {
+      "name": "Cancel authority failure is surfaced and retained instead of swallowed by late observer",
+      "proof": {
+        "cancellation": {
+          "code": "APP_ERROR",
+          "message": "Controlled query failure"
+        },
+        "journal": [
+          [
+            "64f9ddd4-d177-4e5c-90a1-de8528299684",
+            {
+              "operationId": "64f9ddd4-d177-4e5c-90a1-de8528299684",
+              "noteId": "note-a",
+              "status": "aborted",
+              "attachment": {
+                "id": "ba6e1729-6d9b-4312-bef3-0488892128f9",
+                "noteId": "note-a",
+                "kind": "file",
+                "displayName": "cancel-failure.txt",
+                "mime": "text/plain",
+                "size": 32,
+                "relativePath": "synthetic/0c12ac49-932d-46c9-a7c8-bbcc4f5ad4fc"
+              }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "name": "Retried explicit cancellation settles retained original operation without body reference"
+    },
+    {
+      "name": "Late successful authorized bytes after navigation never publish in B",
+      "proof": {
+        "gated": 2,
+        "finished": 2
+      }
+    },
+    {
+      "name": "Independent extra browser scenarios have no uncaught page errors",
+      "proof": {
+        "pageErrors": []
+      }
+    }
+  ],
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtEnd": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  }
+}

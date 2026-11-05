@@ -1,0 +1,270 @@
+{
+  "message": "Independent single Undo restores exact empty document including added paragraph",
+  "stack": "AssertionError [ERR_ASSERTION]: Independent single Undo restores exact empty document including added paragraph\n    at check (file:///private/tmp/attachments75-independent-extra.mjs:8:60)\n    at file:///private/tmp/attachments75-independent-extra.mjs:20:2",
+  "checks": [
+    "Independent empty note single insertion leaves one reference and normal text caret"
+  ],
+  "stages": [
+    {
+      "name": "Independent empty note single insertion leaves one reference and normal text caret",
+      "proof": {
+        "before": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": []
+            }
+          ]
+        },
+        "after": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "84faf227-9d30-4f82-b9f6-49dd39fbc6a7",
+                "name": "empty-single.txt",
+                "kind": "file"
+              }
+            },
+            {
+              "type": "paragraph"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Independent single Undo restores exact empty document including added paragraph",
+      "proof": {
+        "actual": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "state": {
+    "workspace": {
+      "folders": [
+        {
+          "id": "default",
+          "name": "备忘录",
+          "sortOrder": 0,
+          "createdAt": 1,
+          "kind": "default",
+          "parentId": null
+        },
+        {
+          "id": "quick",
+          "name": "快速备忘录",
+          "sortOrder": -1,
+          "createdAt": 1,
+          "kind": "quick",
+          "parentId": null
+        },
+        {
+          "id": "trash",
+          "name": "最近删除",
+          "sortOrder": 9999,
+          "createdAt": 1,
+          "kind": "trash",
+          "parentId": null
+        }
+      ],
+      "notes": [
+        {
+          "id": "33d8c9ad-4a75-41bf-bce3-8d377f2b08b5",
+          "folderId": "default",
+          "title": "新备忘录",
+          "plainText": "",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "paragraph"
+              }
+            ]
+          },
+          "createdAt": 1793917776935,
+          "updatedAt": 1793917777555,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "plain",
+          "revision": 2
+        },
+        {
+          "id": "note-a",
+          "folderId": "default",
+          "title": "Fixture A",
+          "plainText": "Fixture A",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Fixture A"
+                  }
+                ]
+              }
+            ]
+          },
+          "createdAt": 1,
+          "updatedAt": 1,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "plain",
+          "revision": 1
+        },
+        {
+          "id": "note-b",
+          "folderId": "default",
+          "title": "Fixture B",
+          "plainText": "Fixture B",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Fixture B"
+                  }
+                ]
+              }
+            ]
+          },
+          "createdAt": 1,
+          "updatedAt": 1,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "plain",
+          "revision": 1
+        }
+      ],
+      "attachments": [
+        {
+          "id": "84faf227-9d30-4f82-b9f6-49dd39fbc6a7",
+          "noteId": "33d8c9ad-4a75-41bf-bce3-8d377f2b08b5",
+          "kind": "file",
+          "displayName": "empty-single.txt",
+          "mime": "text/plain",
+          "size": 32,
+          "relativePath": "synthetic/aae317cd-7c23-40ae-b266-cb5a176b7de0"
+        }
+      ],
+      "settings": {
+        "selectedFolder": "default",
+        "selectedNote": "33d8c9ad-4a75-41bf-bce3-8d377f2b08b5",
+        "theme": "light",
+        "sort": "title"
+      },
+      "access": {
+        "sessionId": "debug70-e5eb7ddc-7185-456a-89d0-96f10636340c",
+        "epoch": 1,
+        "notes": {
+          "33d8c9ad-4a75-41bf-bce3-8d377f2b08b5": {
+            "epoch": 0,
+            "authorized": true
+          },
+          "note-a": {
+            "epoch": 0,
+            "authorized": true
+          },
+          "note-b": {
+            "epoch": 0,
+            "authorized": true
+          }
+        },
+        "suspended": [],
+        "operationId": null
+      },
+      "metadata": {
+        "sessionId": "debug70-e5eb7ddc-7185-456a-89d0-96f10636340c",
+        "sequence": 4
+      }
+    },
+    "editorJSON": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph"
+        }
+      ]
+    },
+    "error": "",
+    "notice": "",
+    "selection": {
+      "folderId": "default",
+      "noteId": "33d8c9ad-4a75-41bf-bce3-8d377f2b08b5",
+      "page": "editor",
+      "query": "",
+      "searching": false,
+      "menu": null,
+      "modal": null,
+      "listed": [
+        "33d8c9ad-4a75-41bf-bce3-8d377f2b08b5",
+        "note-a",
+        "note-b"
+      ]
+    },
+    "save": {
+      "pending": 0,
+      "queued": 1,
+      "failed": 0,
+      "saving": 0
+    },
+    "busy": false,
+    "failure": {
+      "serial": 0,
+      "message": ""
+    },
+    "recording": {
+      "active": false,
+      "state": null
+    },
+    "ocr": {
+      "phase": "choose",
+      "text": "",
+      "error": ""
+    },
+    "settings": {
+      "selectedFolder": "default",
+      "selectedNote": "33d8c9ad-4a75-41bf-bce3-8d377f2b08b5",
+      "theme": "light",
+      "sort": "title"
+    },
+    "folderForm": false
+  },
+  "pageErrors": []
+}

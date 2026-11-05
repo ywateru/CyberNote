@@ -1,0 +1,524 @@
+{
+  "status": "PASS",
+  "sourceHead": "2b5d15ea6033a953d49c673d1b188843fd8a27af",
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7988ded2a1060c244993aa70415e5c3a59b8df8d950ec99ee7fb34704e37ff8e",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "buildIdentity": {
+    "path": "/private/tmp/apple-notes-recording-window50-independent-target/debug/notes-current-attachment-transport",
+    "sha256": "c91b12fb05136d4f0eb118d017abb6eaad9f8f9c8e518d7e3d7db019bbdd7086",
+    "size": 7195568
+  },
+  "checks": 21,
+  "labels": [
+    "Fresh real Rust workspace creates actual note through Session ordinary action",
+    "Mobile actual FileList stores image and generic file through Session and body save ACK",
+    "Store owner→Session.sensitive→tagged read actual-session.png",
+    "Actual filesystem bytes match synthetic File actual-session.png",
+    "Store owner→Session.sensitive→tagged read actual-session.txt",
+    "Actual filesystem bytes match synthetic File actual-session.txt",
+    "Original owned operation is authoritatively committed after body ACK",
+    "Original owned operation is authoritatively committed after body ACK",
+    "First mobile Rust path has no page errors",
+    "Owned first child fully exits naturally before new process opens directory",
+    "New PID and new Session recover persisted body with two unique original references",
+    "New Session owner checked read recovers original bytes actual-session.png",
+    "New Session owner checked read recovers original bytes actual-session.txt",
+    "New Session cannot adopt old operation with fresh current token",
+    "Old Session token cannot read recovered attachment",
+    "Unsupported barrier is explicit and never empty-ACKs lockNote",
+    "Unsupported barrier is explicit and never empty-ACKs deleteNote",
+    "Unsupported barrier is explicit and never empty-ACKs importArchive",
+    "Recovered mobile Rust path has no page errors",
+    "Owned second child exits naturally with no pending requests",
+    "Frontend/debug source identity remains unchanged across both owned processes"
+  ],
+  "stages": [
+    {
+      "pid": 83525,
+      "sessionId": "dea6adb9-690d-4fbb-81b0-7cb82f809ec3",
+      "workspace": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "1b78e2bb-6453-4c5f-9615-2aac3405a6ca": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "dea6adb9-690d-4fbb-81b0-7cb82f809ec3",
+          "suspended": []
+        },
+        "attachments": [
+          {
+            "displayName": "actual-session.png",
+            "id": "d722b706-5238-44e1-8839-52dc94f9b17a",
+            "kind": "image",
+            "mime": "image/png",
+            "noteId": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+            "relativePath": "op-7e300b7d-8ab2-4ad9-838a-04dce882197c-d722b706-5238-44e1-8839-52dc94f9b17a.blob",
+            "size": 68
+          },
+          {
+            "displayName": "actual-session.txt",
+            "id": "31f83c4a-18c1-4de4-b0aa-8897765aabb2",
+            "kind": "file",
+            "mime": "text/plain",
+            "noteId": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+            "relativePath": "op-b65324a0-5798-49cd-87d4-f98ab4025ada-31f83c4a-18c1-4de4-b0aa-8897765aabb2.blob",
+            "size": 49
+          }
+        ],
+        "folders": [
+          {
+            "id": "default",
+            "name": "备忘录",
+            "sortOrder": 0,
+            "createdAt": 1793917817456,
+            "kind": "default",
+            "parentId": null
+          },
+          {
+            "id": "quick",
+            "name": "快速备忘录",
+            "sortOrder": -1,
+            "createdAt": 1793917817456,
+            "kind": "quick",
+            "parentId": null
+          },
+          {
+            "id": "trash",
+            "name": "最近删除",
+            "sortOrder": 9999,
+            "createdAt": 1793917817456,
+            "kind": "trash",
+            "parentId": null
+          }
+        ],
+        "metadata": {
+          "sequence": 6,
+          "sessionId": "dea6adb9-690d-4fbb-81b0-7cb82f809ec3"
+        },
+        "notes": [
+          {
+            "createdAt": 1793917821235,
+            "deletedAt": null,
+            "document": {
+              "content": [
+                {
+                  "attrs": {
+                    "level": 1
+                  },
+                  "content": [
+                    {
+                      "text": "Synthetic attachment target 75",
+                      "type": "text"
+                    }
+                  ],
+                  "type": "heading"
+                },
+                {
+                  "attrs": {
+                    "id": "d722b706-5238-44e1-8839-52dc94f9b17a",
+                    "kind": "image",
+                    "name": "actual-session.png"
+                  },
+                  "type": "attachment"
+                },
+                {
+                  "attrs": {
+                    "id": "31f83c4a-18c1-4de4-b0aa-8897765aabb2",
+                    "kind": "file",
+                    "name": "actual-session.txt"
+                  },
+                  "type": "attachment"
+                },
+                {
+                  "type": "paragraph"
+                }
+              ],
+              "type": "doc"
+            },
+            "folderId": "default",
+            "id": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+            "locked": false,
+            "originalFolderId": null,
+            "paperStyle": "plain",
+            "pinned": false,
+            "plainText": "Synthetic attachment target 75",
+            "revision": 3,
+            "sealed": null,
+            "title": "Synthetic attachment target 75",
+            "updatedAt": 1793917823011
+          }
+        ],
+        "settings": {
+          "selectedFolder": "default",
+          "selectedNote": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca"
+        }
+      },
+      "operations": [
+        "7e300b7d-8ab2-4ad9-838a-04dce882197c",
+        "b65324a0-5798-49cd-87d4-f98ab4025ada"
+      ],
+      "persisted": [
+        {
+          "id": "d722b706-5238-44e1-8839-52dc94f9b17a",
+          "name": "actual-session.png",
+          "relativePath": "op-7e300b7d-8ab2-4ad9-838a-04dce882197c-d722b706-5238-44e1-8839-52dc94f9b17a.blob",
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f",
+          "size": 68
+        },
+        {
+          "id": "31f83c4a-18c1-4de4-b0aa-8897765aabb2",
+          "name": "actual-session.txt",
+          "relativePath": "op-b65324a0-5798-49cd-87d4-f98ab4025ada-31f83c4a-18c1-4de4-b0aa-8897765aabb2.blob",
+          "sha256": "6e3cbdc065988f5f9ce0053f6abe4e273f734750270a67930d9046f853ca5900",
+          "size": 49
+        }
+      ],
+      "calls": [
+        {
+          "requestId": 1,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 2,
+          "command": "workspace_action",
+          "type": "createNote",
+          "ok": true
+        },
+        {
+          "requestId": 3,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 4,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 5,
+          "command": "workspace_action",
+          "type": "settings",
+          "ok": true
+        },
+        {
+          "requestId": 6,
+          "command": "register_save_intent",
+          "noteId": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+          "ok": true
+        },
+        {
+          "requestId": 7,
+          "command": "workspace_action",
+          "type": "saveNote",
+          "ok": true
+        },
+        {
+          "requestId": 8,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 9,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 10,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 11,
+          "command": "store_attachment_operation",
+          "noteId": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+          "operationId": "7e300b7d-8ab2-4ad9-838a-04dce882197c",
+          "ok": true,
+          "status": "stored"
+        },
+        {
+          "requestId": 12,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 13,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 14,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 15,
+          "command": "register_save_intent",
+          "noteId": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+          "ok": true
+        },
+        {
+          "requestId": 16,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 17,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 18,
+          "command": "workspace_action",
+          "type": "saveNote",
+          "ok": true
+        },
+        {
+          "requestId": 19,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 20,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 21,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 22,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 23,
+          "command": "store_attachment_operation",
+          "noteId": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+          "operationId": "b65324a0-5798-49cd-87d4-f98ab4025ada",
+          "ok": true,
+          "status": "stored"
+        },
+        {
+          "requestId": 24,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 25,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 26,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 27,
+          "command": "register_save_intent",
+          "noteId": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+          "ok": true
+        },
+        {
+          "requestId": 28,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 29,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 30,
+          "command": "workspace_action",
+          "type": "saveNote",
+          "ok": true
+        },
+        {
+          "requestId": 31,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 32,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 33,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 34,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 35,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 36,
+          "command": "query_attachment_operation",
+          "noteId": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+          "operationId": "7e300b7d-8ab2-4ad9-838a-04dce882197c",
+          "ok": true,
+          "status": "committed"
+        },
+        {
+          "requestId": 37,
+          "command": "query_attachment_operation",
+          "noteId": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+          "operationId": "b65324a0-5798-49cd-87d4-f98ab4025ada",
+          "ok": true,
+          "status": "committed"
+        }
+      ],
+      "pageErrors": [],
+      "lifecycle": {
+        "pid": 83525,
+        "closing": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "pending": 0
+      }
+    },
+    {
+      "pid": 83731,
+      "sessionId": "835185d6-efca-47ed-98c5-f39df67bffd4",
+      "calls": [
+        {
+          "requestId": 1,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 2,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 3,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 4,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 5,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 6,
+          "command": "workspace_action",
+          "type": "settings",
+          "ok": true
+        },
+        {
+          "requestId": 7,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 8,
+          "command": "read_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 9,
+          "command": "query_attachment_operation",
+          "noteId": "1b78e2bb-6453-4c5f-9615-2aac3405a6ca",
+          "operationId": "7e300b7d-8ab2-4ad9-838a-04dce882197c",
+          "ok": false,
+          "error": "attachment_operation_conflict"
+        },
+        {
+          "requestId": 10,
+          "command": "read_attachment",
+          "ok": false,
+          "error": "access_changed"
+        },
+        {
+          "requestId": 11,
+          "command": "workspace_action",
+          "type": "lockNote",
+          "ok": false,
+          "error": "transport_unsupported"
+        },
+        {
+          "requestId": 12,
+          "command": "workspace_action",
+          "type": "deleteNote",
+          "ok": false,
+          "error": "transport_unsupported"
+        },
+        {
+          "requestId": 13,
+          "command": "workspace_action",
+          "type": "importArchive",
+          "ok": false,
+          "error": "transport_unsupported"
+        }
+      ],
+      "pageErrors": [],
+      "lifecycle": {
+        "pid": 83731,
+        "closing": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "pending": 0
+      }
+    }
+  ],
+  "boundaries": {
+    "real": "Current Rust Session/Store, SQLite, files, register_save/save, FileReader, original picker target, actual body ACK, new PID recovery",
+    "fake": "Browser mobile viewport, OS window/dialog/lifecycle, synthetic File content",
+    "notTested": "Android native WebView/chooser/URI/IME, original phone issue, Apple Notes PDF preview"
+  }
+}

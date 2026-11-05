@@ -1,0 +1,112 @@
+
+> notes-clone@0.1.0 debug /private/tmp/apple-notes-android-attachments75-review01
+> node scripts/debug/cli.mjs group recording --mobile --out /private/tmp/attachments75-independent-recording
+
+{
+  "version": 1,
+  "mode": "group",
+  "sourceHead": "4052e8aafea7fa51eda6dd5be8420901155dad7d",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "5b81e114c06b86cdd89ddcc67aa37598b080aac98e3799c88e10e56200c27d52",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "5b81e114c06b86cdd89ddcc67aa37598b080aac98e3799c88e10e56200c27d52",
+    "fileCount": 87,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsChanged": false,
+  "platform": "mobile-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "elapsedMs": 14169,
+  "result": {
+    "groups": [
+      {
+        "group": "recording",
+        "pass": true,
+        "checks": [
+          "Mobile initial real HTML has modal sheet, enabled close/start and disabled Done/playback",
+          "Mobile finish reports UNAVAILABLE",
+          "Mobile playback reports UNAVAILABLE",
+          "Mobile seek reports UNAVAILABLE",
+          "Mobile empty close cancels without requesting device or storing attachment",
+          "Mobile active Done and playback remain disabled and semantic state agrees",
+          "Mobile finish reports UNAVAILABLE",
+          "Mobile pause prepares actual decodable preview without desktop checkpoint writes",
+          "Mobile preview plays in actual browser media element and disables resume",
+          "Mobile toggle reports UNAVAILABLE",
+          "Mobile preview pause is observed and seek capability follows actual media ranges",
+          "Mobile seek reports actual media time",
+          "Mobile backward skip clamps to actual start",
+          "Mobile forward skip clamps to actual prefix end",
+          "Mobile seek reports UNAVAILABLE",
+          "Mobile resume accumulates active time and excludes five-second paused gap",
+          "Mobile second preview really plays after first pause boundary",
+          "Mobile playback reports APP_ERROR",
+          "Mobile real play rejection retains paused capture and exposes retry",
+          "Mobile preview retry clears actual error and plays same retained prefix",
+          "Mobile finish waits for original A body ACK and yields exactly one card without touching B",
+          "Mobile stored bytes really decode cumulative active audio including nonzero later samples",
+          "Mobile saved-card readiness waits for delayed persisted media metadata before expansion",
+          "Mobile saved card remounts from persisted bytes and really plays beyond first segment",
+          "Mobile successful capture stops device track and revokes obsolete preview URLs",
+          "Mobile active close seals and stores audio with body ACK",
+          "Mobile toggle reports APP_ERROR",
+          "Mobile device rejection is visible and stores no empty attachment",
+          "Mobile failed empty capture can close and release owner",
+          "Mobile delayed store remains genuinely busy before ACK",
+          "Mobile delayed store failure reports APP_ERROR after real boundary delay",
+          "Mobile store failure keeps same recoverable session and no duplicate card",
+          "Mobile store retry acknowledges retained bytes once without duplicate store",
+          "Mobile delayed save remains genuinely busy before ACK",
+          "Mobile delayed save failure reports APP_ERROR after real boundary delay",
+          "Mobile save failure keeps same recoverable session and no duplicate card",
+          "Mobile failed body without retry still reports APP_ERROR",
+          "Mobile retry waits while old failure and real save coexist",
+          "Mobile retry failing again reports APP_ERROR only after real work settles",
+          "Mobile delayed successful retry does not reject the retained old failure",
+          "Mobile delayed successful retry waits for body ACK",
+          "Mobile save retry acknowledges retained bytes once without duplicate store",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 9883
+      }
+    ],
+    "passedChecks": 43,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": [],
+  "output": "/private/tmp/attachments75-independent-recording"
+}
