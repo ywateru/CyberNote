@@ -1,0 +1,19 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: real late A ACK must release the destroyed child original owner ticket
+
+false !== true
+
+    at file:///private/tmp/apple-notes-recording-window50-independent-01/docs/verification/recording-interactions50-independent/check-owner-late-ack.mjs:890:14
+    at async test (file:///private/tmp/apple-notes-recording-window50-independent-01/docs/verification/recording-interactions50-independent/check-owner-late-ack.mjs:847:21)
+    at async file:///private/tmp/apple-notes-recording-window50-independent-01/docs/verification/recording-interactions50-independent/check-owner-late-ack.mjs:880:5 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

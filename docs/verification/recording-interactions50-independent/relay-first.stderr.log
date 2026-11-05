@@ -1,0 +1,19 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: a retry after a rejected relay must deliver the retained File to its original owner
+
+0 !== 1
+
+    at file:///private/tmp/apple-notes-recording-window50-independent-01/docs/verification/recording-interactions50-independent/check-relay-browser.mjs:144:12
+    at async test (file:///private/tmp/apple-notes-recording-window50-independent-01/docs/verification/recording-interactions50-independent/check-relay-browser.mjs:127:5)
+    at async file:///private/tmp/apple-notes-recording-window50-independent-01/docs/verification/recording-interactions50-independent/check-relay-browser.mjs:130:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

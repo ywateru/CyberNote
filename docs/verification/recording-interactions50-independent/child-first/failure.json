@@ -1,0 +1,19 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.'\n+ ]\n- []\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.'\n+ ]\n- []\n\n    at file:///private/tmp/apple-notes-recording-window50-independent-01/scripts/check-recording-window-browser50.mjs:249:10",
+  "checks": [
+    "dedicated child entry mounts only recording view and its native idle close waits original discard",
+    "a close requested before the child listener and Panel handle are ready is replayed through the actual hello handshake",
+    "actual child blur/visibility does not stop capture; OS close finalizes and rejected owner ACK retains same File for one-transfer retry",
+    "lost saved response is recovered by original owner status query without repeated bytes, decode or submission",
+    "actual owner-loss event stays visible, does not stop capture and failed completion retains File/window"
+  ],
+  "errors": [
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened."
+  ],
+  "external": []
+}

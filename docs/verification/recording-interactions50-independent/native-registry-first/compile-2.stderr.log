@@ -1,0 +1,48 @@
+warning: unused imports: `Emitter` and `Manager`
+  --> docs/verification/recording-interactions50-independent/native-registry-first/production-recording-window.rs:10:13
+   |
+10 | use tauri::{Emitter, Manager, State};
+   |             ^^^^^^^  ^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `recording_label` is never used
+  --> docs/verification/recording-interactions50-independent/native-registry-first/production-recording-window.rs:42:8
+   |
+42 | pub fn recording_label(label: &str) -> bool {
+   |        ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `document_participants` is never used
+  --> docs/verification/recording-interactions50-independent/native-registry-first/production-recording-window.rs:45:8
+   |
+45 | pub fn document_participants(windows: impl IntoIterator<Item = String>) -> HashSet<String> {
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `reveal_owner` is never used
+  --> docs/verification/recording-interactions50-independent/native-registry-first/production-recording-window.rs:51:8
+   |
+51 | pub fn reveal_owner(app: &tauri::AppHandle, child: &str) {
+   |        ^^^^^^^^^^^^
+
+warning: function `recording_window_context` is never used
+   --> docs/verification/recording-interactions50-independent/native-registry-first/production-recording-window.rs:134:8
+    |
+134 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> docs/verification/recording-interactions50-independent/native-registry-first/production-recording-window.rs:200:8
+    |
+200 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> docs/verification/recording-interactions50-independent/native-registry-first/production-recording-window.rs:215:8
+    |
+215 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: 7 warnings emitted
+

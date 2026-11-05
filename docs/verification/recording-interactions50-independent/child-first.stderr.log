@@ -1,0 +1,32 @@
+WebSocket server error: Port 24678 is already in use
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.'
++ ]
+- []
+
+    at file:///private/tmp/apple-notes-recording-window50-independent-01/scripts/check-recording-window-browser50.mjs:249:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual'
+}
+
+Node.js v22.16.0

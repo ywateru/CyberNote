@@ -1,0 +1,34 @@
+{
+  "status": "fail",
+  "results": [
+    "desktop standalone panel fills a 320px host, has no dim backdrop, and creates no live card before actual capture",
+    "live card shares capture time/actions; register/update/remove leaves JSON, history, selection and document version unchanged",
+    "source remains editable during capture; actual typing and Undo/Redo remain available",
+    "desktop transport retains paused preview position, keyboard/pointer absolute seeks and ±15 boundaries use confirmed media",
+    "mobile transport retains paused preview position, keyboard/pointer absolute seeks and ±15 boundaries use confirmed media",
+    "pending play and actual playing disable both Continue surfaces; ended replay waits actual start seek",
+    "idle and permission-wait close release only their own resources; late permission cannot capture",
+    "active-close finalizes once, waits same-file parent ACK, keeps failure retry and never cancels captured audio",
+    "paused-escape finalizes once, waits same-file parent ACK, keeps failure retry and never cancels captured audio",
+    "mobile-back-handle finalizes once, waits same-file parent ACK, keeps failure retry and never cancels captured audio",
+    "live-card-stop finalizes once, waits same-file parent ACK, keeps failure retry and never cancels captured audio",
+    "long capture waveform retains real full-timeline peaks with bounded buckets"
+  ],
+  "errors": [
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened.",
+    "Error: WebSocket closed without opened."
+  ],
+  "external": [],
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.'\n+ ]\n- []\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.',\n+   'Error: WebSocket closed without opened.'\n+ ]\n- []\n\n    at file:///private/tmp/apple-notes-recording-window50-independent-01/scripts/check-recording-interactions50.mjs:448:10"
+}

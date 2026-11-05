@@ -1,0 +1,6 @@
+
+thread 'main' (38990338) panicked at docs/verification/recording-interactions50-independent/native-registry-first/check-registry.rs:46:23:
+assertion `left == right` failed: original saved ACK plus original document Quit ACK must release the destroyed-child guard
+  left: 0
+ right: 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
