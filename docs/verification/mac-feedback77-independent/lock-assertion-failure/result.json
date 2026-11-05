@@ -1,0 +1,186 @@
+{
+  "head": "806d34322abfb4cc3f55e25cef4c760748d7c842",
+  "input": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0099747b5e39c46e22c77526c866b5cd866647cc4387d317d6752241918495ac",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0099747b5e39c46e22c77526c866b5cd866647cc4387d317d6752241918495ac",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "checks": [
+    {
+      "name": "desktop footer new-folder removed",
+      "pass": true
+    },
+    {
+      "name": "bottom more remains right aligned",
+      "pass": true
+    },
+    {
+      "name": "top new folder opens actual form",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight aLpHa",
+      "pass": true,
+      "detail": [
+        "Alpha",
+        "alpha",
+        "ALPHA",
+        "alpha"
+      ]
+    },
+    {
+      "name": "orange text transparent background aLpHa",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML aLpHa",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight 搜索",
+      "pass": true,
+      "detail": [
+        "搜索",
+        "搜索",
+        "搜索"
+      ]
+    },
+    {
+      "name": "orange text transparent background 搜索",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML 搜索",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight [x]",
+      "pass": true,
+      "detail": [
+        "[x]",
+        "[x]"
+      ]
+    },
+    {
+      "name": "orange text transparent background [x]",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML [x]",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight a+b",
+      "pass": true,
+      "detail": [
+        "a+b"
+      ]
+    },
+    {
+      "name": "orange text transparent background a+b",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML a+b",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight .*",
+      "pass": true,
+      "detail": [
+        ".*"
+      ]
+    },
+    {
+      "name": "orange text transparent background .*",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML .*",
+      "pass": true
+    },
+    {
+      "name": "literal global highlight <img src=x onerror=alert(1)>",
+      "pass": true,
+      "detail": [
+        "<img src=x onerror=alert(1)>",
+        "<img src=x onerror=alert(1)>"
+      ]
+    },
+    {
+      "name": "orange text transparent background <img src=x onerror=alert(1)>",
+      "pass": true
+    },
+    {
+      "name": "no interpreted HTML <img src=x onerror=alert(1)>",
+      "pass": true
+    },
+    {
+      "name": "body find stays separate from global highlight",
+      "pass": true
+    },
+    {
+      "name": "clear query removes list highlights",
+      "pass": true
+    },
+    {
+      "name": "search rendering never mutates saved document",
+      "pass": true
+    },
+    {
+      "name": "far body match appears in visible snippet with ellipsis",
+      "pass": true,
+      "detail": {
+        "far": "…ntext needle after match",
+        "match": {
+          "x": 351.4375,
+          "y": 132,
+          "width": 40.6875,
+          "height": 17
+        },
+        "preview": {
+          "x": 306.5,
+          "y": 132,
+          "width": 159.375,
+          "height": 17
+        }
+      }
+    },
+    {
+      "name": "locked body does not produce search result",
+      "pass": false
+    }
+  ],
+  "observations": [],
+  "pageErrors": [],
+  "failure": {
+    "message": "locked body does not produce search result",
+    "stack": "AssertionError [ERR_ASSERTION]: locked body does not produce search result\n    at check (file:///private/tmp/apple-notes-mac-feedback77/docs/verification/mac-feedback77-independent/independent-runner.mjs:11:90)\n    at file:///private/tmp/apple-notes-mac-feedback77/docs/verification/mac-feedback77-independent/independent-runner.mjs:34:249"
+  },
+  "completeWallMs": 3434
+}

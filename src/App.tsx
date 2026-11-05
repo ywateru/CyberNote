@@ -1,4 +1,9 @@
 import type { DebugAdapter } from "./debug/protocol";
+import {
+  SearchListPreview,
+  searchListText,
+  searchListSnippet,
+} from "./search-list-text";
 import { RecordingRevisions } from "./recording-revisions";
 import {
   replaceRecordingAttachment,
@@ -449,6 +454,11 @@ function App() {
   const [modal, setModal] = useState<string | null>(null);
   const [modalValue, setModalValue] = useState("");
   const [contextNote, setContextNote] = useState<string | null>(null);
+  const [noteMenuPoint, setNoteMenuPoint] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const noteMenuElement = useRef<HTMLDivElement>(null);
   const [contextFolder, setContextFolder] = useState<string | null>(null);
   const [folderForm, setFolderForm] = useState<{ folder?: FolderData } | null>(
     null,
@@ -798,6 +808,49 @@ function App() {
       n.id === (desktopSearch && !listed.length ? null : contextNote || noteId),
   );
   const editor = noteId ? editors.get(noteId) || null : null;
+  useLayoutEffect(() => {
+    if (mobile || menu !== "note") return;
+    const element = noteMenuElement.current;
+    if (!element) return;
+    const place = () => {
+      const margin = 8;
+      const target = document.querySelector<HTMLElement>(
+        `.note-row[data-note-id="${CSS.escape(contextNote || noteId || "")}"]`,
+      );
+      const rect = target?.getBoundingClientRect();
+      const point = noteMenuPoint || {
+        x: rect ? Math.max(margin, rect.left + 16) : margin,
+        y: rect ? Math.max(margin, rect.top + Math.min(rect.height, 32)) : 52,
+      };
+      element.style.maxWidth = `${Math.max(0, window.innerWidth - margin * 2)}px`;
+      element.style.maxHeight = `${Math.max(0, window.innerHeight - margin * 2)}px`;
+      const menuRect = element.getBoundingClientRect();
+      element.style.left = `${Math.max(margin, Math.min(point.x, window.innerWidth - menuRect.width - margin))}px`;
+      element.style.top = `${Math.max(margin, Math.min(point.y, window.innerHeight - menuRect.height - margin))}px`;
+    };
+    place();
+    const observer = new ResizeObserver(place);
+    observer.observe(element);
+    window.addEventListener("resize", place);
+    window.addEventListener("scroll", place, true);
+    return () => {
+      observer.disconnect();
+      for (const property of ["left", "top", "max-width", "max-height"])
+        element.style.removeProperty(property);
+      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", place, true);
+    };
+  }, [
+    mobile,
+    menu,
+    noteMenuPoint,
+    contextNote,
+    noteId,
+    sidebar,
+    view,
+    settings.sidebarWidth,
+    settings.listWidth,
+  ]);
   const onReady = useCallback(
     (id: string, instance: Editor | null) => {
       const previousComposition = tagCompositions.current.get(id);
@@ -3696,6 +3749,7 @@ function App() {
           }}
         />
         <div
+          ref={noteMenuElement}
           className={`popover menu-${menu} ${mobile && menu === "format" ? "mobile-format-panel" : ""}`}
           role={menu === "format" && mobile ? "dialog" : "menu"}
           aria-label={menu === "format" ? "格式" : undefined}
@@ -4842,7 +4896,11 @@ function App() {
             throw Object.assign(Error("当前选区不在表格中"), {
               code: "UNAVAILABLE",
             });
-          if (["more", "note"].includes(String(value))) selectedNote();
+          if (["more", "note"].includes(String(value))) {
+            selectedNote();
+            setContextNote(null);
+            setNoteMenuPoint(null);
+          }
           if (value === "folder") {
             const folder = wsRef.current.folders.find((f) => f.id === folderId);
             if (!folder || !["normal", "smart"].includes(folder.kind))
@@ -5274,13 +5332,14 @@ function App() {
           </div>
         )}
         <div className="folder-footer">
-          <button
-            aria-label="新建文件夹"
-            onClick={() => openModal("newFolder")}
-          >
-            {mobile ? <MobileAddFolderIcon /> : <FolderPlus size={21} />}
-            {!mobile && "新建文件夹"}
-          </button>
+          {mobile && (
+            <button
+              aria-label="新建文件夹"
+              onClick={() => openModal("newFolder")}
+            >
+              <MobileAddFolderIcon />
+            </button>
+          )}
           <IconButton
             label={mobile ? "新建备忘录" : "更多设置"}
             onClick={
@@ -5390,6 +5449,11 @@ function App() {
                 (ws.attachments.some((a) => a.noteId === n.id)
                   ? "附件"
                   : "无更多文本");
+              const highlightQuery = !mobile ? query : "";
+              const listPreview =
+                !n.locked && highlightQuery
+                  ? searchListSnippet(previewText, highlightQuery)
+                  : previewText;
               return (
                 <div
                   key={n.id}
@@ -5438,6 +5502,7 @@ function App() {
                     </div>
                     <button
                       className={`note-row ${noteId === n.id ? "selected" : ""}`}
+                      data-note-id={n.id}
                       onClick={(e) => {
                         e.stopPropagation();
                         if (swiped === n.id) {
@@ -5458,6 +5523,11 @@ function App() {
                       onContextMenu={(e) => {
                         e.preventDefault();
                         setContextNote(n.id);
+                        setNoteMenuPoint(
+                          !mobile && (e.clientX || e.clientY)
+                            ? { x: e.clientX, y: e.clientY }
+                            : null,
+                        );
                         setMenu("note");
                       }}
                       onTouchStart={(e) => {
@@ -5467,6 +5537,7 @@ function App() {
                         };
                         startLong(() => {
                           setContextNote(n.id);
+                          setNoteMenuPoint(null);
                           setMenu("note");
                         });
                       }}
@@ -5484,8 +5555,16 @@ function App() {
                     >
                       {view === "gallery" && (
                         <div className="gallery-preview">
-                          <strong>{n.title}</strong>
-                          <p>{n.locked ? <Lock size={26} /> : previewText}</p>
+                          <strong>
+                            {searchListText(n.title, highlightQuery)}
+                          </strong>
+                          <p>
+                            {n.locked ? (
+                              <Lock size={26} />
+                            ) : (
+                              searchListText(listPreview, highlightQuery)
+                            )}
+                          </p>
                           {JSON.stringify(n.document).includes("table") && (
                             <div className="preview-table" />
                           )}
@@ -5496,10 +5575,10 @@ function App() {
                       )}
                       <div className="note-row-content">
                         <strong>
-                            {n.pinned && (
-                              <Pin className="pin-marker" size={13} />
-                            )}
-                          {n.title}
+                          {n.pinned && (
+                            <Pin className="pin-marker" size={13} />
+                          )}
+                          {searchListText(n.title, highlightQuery)}
                         </strong>
                         <div className="note-snippet">
                           <span className="note-time">
@@ -5515,7 +5594,14 @@ function App() {
                                 <Lock size={12} /> 已锁定
                               </>
                             ) : (
-                              previewText
+                              mobile ? (
+                                previewText
+                              ) : (
+                                <SearchListPreview
+                                  text={previewText}
+                                  query={highlightQuery}
+                                />
+                              )
                             )}
                           </span>
                         </div>

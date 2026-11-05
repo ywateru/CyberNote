@@ -1,0 +1,66 @@
+{
+  "results": [
+    {
+      "group": "mac-feedback",
+      "pass": true,
+      "checks": [
+        "Mac removes only bottom new-folder entry",
+        "Remaining bottom more button retains right alignment",
+        "Existing new-folder form still persists folder",
+        "middle nonselected target menu stays inside visible viewport",
+        "middle nonselected target uses actual pointer position clamped by actual menu size",
+        "Right-click menu pin operates on target B while editor A stays selected",
+        "Toolbar more menu retains independent top-right anchor",
+        "command fallback menu stays inside visible viewport",
+        "Command note menu clears old context and uses selected-row fallback",
+        "keyboard fallback menu stays inside visible viewport",
+        "Keyboard context event anchors to visible target card",
+        "gallery and hidden sidebar menu stays inside visible viewport",
+        "gallery and hidden sidebar uses actual pointer position clamped by actual menu size",
+        "resize while open menu stays inside visible viewport",
+        "scrolled lower card menu stays inside visible viewport",
+        "scrolled lower card uses actual pointer position clamped by actual menu size",
+        "Scroll scenario actually changes list scroll position",
+        "bottom right edge event menu stays inside visible viewport",
+        "bottom right edge event uses actual pointer position clamped by actual menu size",
+        "reopen new pointer menu stays inside visible viewport",
+        "reopen new pointer uses actual pointer position clamped by actual menu size",
+        "All repeated Chinese title and snippet matches are highlighted",
+        "Highlight uses reference orange text without background",
+        "In-note find query remains independent of global search highlighting",
+        "Clearing global query removes all list highlights",
+        "Search display never changes persisted document",
+        "ASCII case preserves original text with literal complete match ranges",
+        "ASCII case renders text without injected elements",
+        "literal punctuation preserves original text with literal complete match ranges",
+        "literal punctuation renders text without injected elements",
+        "HTML text preserves original text with literal complete match ranges",
+        "HTML text renders text without injected elements",
+        "Unicode offsets after folded expansion preserves original text with literal complete match ranges",
+        "Unicode offsets after folded expansion renders text without injected elements",
+        "Unicode expanded match preserves original text with literal complete match ranges",
+        "Unicode expanded match renders text without injected elements",
+        "Far body hit is visible in ellipsized context with repeated matches",
+        "First far-body hit starts within visible snippet bounds",
+        "Gallery preview and caption both use safe global highlighting",
+        "Locked note keeps title highlight but never leaks body snippet",
+        "No uncaught application page errors"
+      ],
+      "elapsedMs": 7223
+    }
+  ],
+  "groups": [
+    "mac-feedback"
+  ],
+  "scope": {
+    "platform": "desktop-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  }
+}

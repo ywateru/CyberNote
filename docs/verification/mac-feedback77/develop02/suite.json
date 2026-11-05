@@ -1,0 +1,30 @@
+{
+  "results": [
+    {
+      "group": "mac-feedback",
+      "pass": false,
+      "checks": [
+        "Mac removes only bottom new-folder entry",
+        "Remaining bottom more button retains right alignment",
+        "Existing new-folder form still persists folder",
+        "middle nonselected target menu stays inside visible viewport",
+        "middle nonselected target uses actual pointer position clamped by actual menu size",
+        "Right-click menu pin operates on target B while editor A stays selected",
+        "Toolbar more menu retains independent top-right anchor",
+        "command fallback menu stays inside visible viewport",
+        "Command note menu clears old context and uses selected-row fallback",
+        "keyboard fallback menu stays inside visible viewport",
+        "Keyboard context event anchors to visible target card",
+        "gallery and hidden sidebar menu stays inside visible viewport",
+        "gallery and hidden sidebar uses actual pointer position clamped by actual menu size",
+        "resize while open menu stays inside visible viewport",
+        "scrolled lower card menu stays inside visible viewport",
+        "scrolled lower card uses actual pointer position clamped by actual menu size",
+        "Scroll scenario actually changes list scroll position",
+        "bottom right edge event menu stays inside visible viewport"
+      ],
+      "error": "bottom right edge event uses actual pointer position clamped by actual menu size",
+      "elapsedMs": 3171
+    }
+  ]
+}

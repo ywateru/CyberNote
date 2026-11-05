@@ -14,7 +14,7 @@ pnpm debug group recording --out /private/tmp/notes-debug-recording
 pnpm debug group recording --mobile --out /private/tmp/notes-debug-mobile-recording
 ```
 
-默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。全九组主回归以桌面为基准；手机执行`notes`、独立`recording`与`attachments`小组及自定义script/snapshot，桌面专用录音栏和原生退出场景不扩张为手机通过。
+默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。桌面全组主回归（原九组及 `mac-feedback`）以桌面为基准；手机执行`notes`、独立`recording`与`attachments`小组及自定义script/snapshot，桌面专用录音栏和原生退出场景不扩张为手机通过。
 
 需要本机已安装 Chrome 和 playwright-core。默认寻找 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` 和 `/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/playwright-core/index.mjs`；其他机器用 `CHROME_PATH`、`PLAYWRIGHT_CORE_PATH` 或 `--chrome`、`--playwright` 指定。runner不自动安装依赖。
 
@@ -125,3 +125,11 @@ node scripts/debug/check-mobile-attachments-rust.mjs /private/tmp/notes-current-
 真实Rust runner使用fresh合成目录，手机PNG和普通文件走`Session.register_save/Session.save`与Session附件方法；read先由Store查owner再`sensitive/tagged`。核实际文件字节/正文引用及同目录新PID/新Session恢复，旧op不能被新Session接管、旧token不能读。lock/delete/import屏障返回明确unsupported，不空ACK。外部transport严格拒绝启动/JSON/未知或重复ID/超长/EOF/超时异常，close等待owned child真实退出才允许删除或重开目录；故障不切换后端。
 
 此边界仍不是Android系统chooser/URI/WebView/IME或原用户设备故障验收，也不证明Apple Notes PDF预览像素一致。原Android及其未保存录音保持现场。准确失败历史与源码/运行身份见[75证据](verification/android-attachments75/README.md)。
+
+## Mac截图修正77命令回归
+
+`pnpm debug group mac-feedback --out /private/tmp/notes-mac-feedback` 使用实际列表右键事件、真实App handler与HTML/rect/PNG检验底部入口、上下文菜单和全局搜索高亮，也并入 `pnpm test:debug`。普通中部、滚动、画廊使用浏览器鼠标右键；极端右下坐标使用明确构造的MouseEvent走同一React事件handler，记录为合成边界坐标；不是系统可信点击。检查菜单实际尺寸约束、打开期间窗口缩小、不同target置顶、工具栏/命令/键盘fallback、搜索重复/大小写/中文/字面量标点/HTML文本/Unicode扩长/清空/远处正文上下文/锁定及独立正文查找。
+
+参考橙黄色由用户原版PNG的Display ICC转换至sRGB后取局部主体色 `#fcb828`；截图缩放、字体、系统色彩管理与整体原生像素仍须单独比较，不由这个浏览器组宣称通过。手机入口/高亮保持现有行为，手机notes、recording和attachments仍单独回归。
+
+修正77独审后的摘要回归另测Range逐字位置：命中前后无额外flex gap；实际copy宽不足时缩短首命中前缀，220→280→220恢复/裁短上下文，保留ellipsis与重复匹配。`contract-deadlines.json`区分真实App的异步false轮询/已观察lastState，与受控200ms首transport在50ms截止前尚无lastState；后者正确TIMEOUT，不制造占位state。late true/never谓词用立即可达的受控state保证确实调用谓词，原实时deadline算法不变。

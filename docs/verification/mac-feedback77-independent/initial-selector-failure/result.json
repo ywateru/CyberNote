@@ -1,0 +1,50 @@
+{
+  "head": "806d34322abfb4cc3f55e25cef4c760748d7c842",
+  "input": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0099747b5e39c46e22c77526c866b5cd866647cc4387d317d6752241918495ac",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0099747b5e39c46e22c77526c866b5cd866647cc4387d317d6752241918495ac",
+    "fileCount": 89,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "checks": [
+    {
+      "name": "desktop footer new-folder removed",
+      "pass": true
+    },
+    {
+      "name": "bottom more remains right aligned",
+      "pass": true
+    }
+  ],
+  "observations": [],
+  "pageErrors": [],
+  "failure": {
+    "message": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.sidebar-top [aria-label=\"新建文件夹\"]')\u001b[22m\n",
+    "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.sidebar-top [aria-label=\"新建文件夹\"]')\u001b[22m\n\n    at /private/tmp/apple-notes-mac-feedback77/docs/verification/mac-feedback77-independent/independent-runner.mjs:23:55"
+  },
+  "completeWallMs": 12084
+}

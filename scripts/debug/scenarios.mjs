@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
+import { runMacFeedback } from './mac-feedback.mjs';
 import { resolve } from 'node:path';
 import { openRuntime, api, idle, state, snapshot, saveJSON, waitForState, waitForIdle } from './runtime.mjs';
 import { compareSnapshots, compareScreenshots } from './compare.mjs';
 import { runMobileRecording } from './mobile-recording.mjs';
 import { runMobileAttachments } from './mobile-attachments.mjs';
 
-export const groupNames = ['contract', 'notes', 'folders', 'editor', 'search-tags', 'settings', 'attachments-ocr', 'archive', 'recording'];
+export const groupNames = ['contract', 'notes', 'folders', 'editor', 'search-tags', 'settings', 'attachments-ocr', 'archive', 'recording', 'mac-feedback'];
 export async function runGroups(runtime, names, output) {
   const results = [], page = runtime.page, exercised = new Map();
   const descriptors = await page.evaluate(() => window.__NOTES_DEBUG__.list());
@@ -16,19 +17,31 @@ export async function runGroups(runtime, names, output) {
     const command = async (id, args = {}) => { exercised.set(id, (exercised.get(id) || 0) + 1); const result = await api(page, id, args); await idle(page); return result.result; };
     const selected = async () => { const s = await state(page); return s.workspace.notes.find((note) => note.id === s.selection.noteId); };
     try {
-      if (name === 'attachments' && runtime.mobile) {
+      if (name === 'mac-feedback') {
+        await runMacFeedback(runtime, { command, check, output });
+      } else if (name === 'attachments' && runtime.mobile) {
         await runMobileAttachments(runtime,{command,check,output});
       } else if (name === 'contract') {
         const falseStarted = performance.now(); let waitError;
-        try { await waitForState(page, async () => false, { timeoutMs: 100, label: 'deliberately false async predicate' }); } catch (error) { waitError = error; }
-        check('State polling awaits false async predicate until real timeout with last state', waitError?.code === 'TIMEOUT' && !!waitError.lastState?.workspace && performance.now() - falseStarted >= 100);
+        let falseCalls = 0;
+        try { await waitForState(page, async () => { falseCalls++; return false; }, { timeoutMs: 750, label: 'deliberately false async predicate' }); } catch (error) { waitError = error; }
+        const falseElapsed = performance.now() - falseStarted;
+        check('Real App polling awaits false async predicate through a reasonable deadline with observed last state', waitError?.code === 'TIMEOUT' && falseCalls > 0 && !!waitError.lastState?.workspace && falseElapsed >= 745);
+        let firstCompleted = false, slowCalls = 0, slowError;
+        const slowStarted = performance.now();
+        const slowPage = { evaluate: () => new Promise((resolve) => setTimeout(() => { firstCompleted = true; resolve({ ok: true, value: { result: { workspace: {} } } }); }, 200)) };
+        try { await waitForState(slowPage, async () => { slowCalls++; return false; }, { timeoutMs: 50, label: 'slow first state transport' }); } catch (error) { slowError = error; }
+        const slowElapsed = performance.now() - slowStarted;
+        check('First transport can time out before any state without fabricated lastState or predicate call', slowError?.code === 'TIMEOUT' && !slowError.lastState && slowCalls === 0 && !firstCompleted && slowElapsed >= 45);
+        await saveJSON(resolve(output, 'contract-deadlines.json'), { realAppFalse: { elapsedMs: falseElapsed, calls: falseCalls, code: waitError?.code, hasLastState: !!waitError?.lastState?.workspace }, slowFirstTransport: { elapsedMs: slowElapsed, calls: slowCalls, code: slowError?.code, hasLastState: !!slowError?.lastState, completedAtTimeout: firstCompleted } });
         const delayedStarted = performance.now(); const delayedState = await waitForState(page, async (s) => performance.now() - delayedStarted >= 120 && s.selection.noteId === 'note-a', { timeoutMs: 1000, label: 'delayed true async predicate' });
         check('State polling awaits delayed true async predicate rather than promise truthiness', delayedState.selection.noteId === 'note-a' && performance.now() - delayedStarted >= 120);
 
+        const immediatePage = { evaluate: async () => ({ ok: true, value: { result: { workspace: {} } } }) };
         for (const [label, predicate] of [['late true', async () => { await new Promise((resolve) => setTimeout(resolve, 220)); return true; }], ['never settles', () => new Promise(() => {})]]) {
-          const began = performance.now(); let error;
-          try { await waitForState(page, predicate, { timeoutMs: 100, label }); } catch (caught) { error = caught; }
-          check(`State deadline covers ${label} predicate`, error?.code === 'TIMEOUT' && performance.now() - began < 220);
+          const began = performance.now(); let error, calls = 0;
+          try { await waitForState(immediatePage, async (value) => { calls++; return predicate(value); }, { timeoutMs: 100, label }); } catch (caught) { error = caught; }
+          check(`State deadline covers ${label} predicate`, calls === 1 && error?.code === 'TIMEOUT' && performance.now() - began < 220);
         }
         const stateBegan = performance.now(); let stateError;
         try { await waitForState({ evaluate: () => new Promise(() => {}) }, () => true, { timeoutMs: 50, label: 'unsettled state transport' }); } catch (error) { stateError = error; }
