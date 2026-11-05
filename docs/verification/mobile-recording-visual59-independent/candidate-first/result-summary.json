@@ -1,0 +1,2608 @@
+{
+  "boundary": "actual shared View, controlled valid state projection and action sink; no media/native/device",
+  "baseline": false,
+  "checks": [
+    "seven mobile states: real touch hit tests and existing actions; disabled playback emits none; playing displays pause",
+    "280/320 narrow and dark: icons inside actual hit boxes, buttons disjoint and playback action reachable",
+    "narrow long error notice clear of playback row, retry/skip/finish actionable; busy transport emits no action",
+    "desktop DOM/all computed styles/geometry unchanged; PNG byte equality recorded separately without masks",
+    "independent long notice scroll, full hit grids, waveform seek no optimistic update, closing disabled boundaries, controlled play/pause wait actual projection"
+  ],
+  "errors": [],
+  "external": [],
+  "independent": [
+    {
+      "name": "independent-long-error-320x568-light-retry",
+      "regions": [
+        {
+          "selector": ".waveform",
+          "x": 0,
+          "y": 123.140625,
+          "w": 320,
+          "h": 195.171875
+        },
+        {
+          "selector": ".recording-time",
+          "x": 97.953125,
+          "y": 383.921875,
+          "w": 124.09375,
+          "h": 36
+        },
+        {
+          "selector": ".recording-playback",
+          "x": 80,
+          "y": 429.40625,
+          "w": 160,
+          "h": 44
+        },
+        {
+          "selector": ".recording-notice",
+          "x": 12,
+          "y": 335.25,
+          "w": 220,
+          "h": 44
+        },
+        {
+          "selector": ".recording-playback-retry",
+          "x": 244,
+          "y": 335.25,
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "notice": {
+        "scrollHeight": 306,
+        "clientHeight": 44,
+        "overflow": "auto",
+        "hit": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "scrolled": 262
+      },
+      "retry": {
+        "x": 244,
+        "y": 335.25,
+        "w": 64,
+        "h": 44,
+        "hit": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "waveHit": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "seekAction": {
+        "action": "seek",
+        "milliseconds": 2400
+      },
+      "confirmedPositionUnchanged": true
+    },
+    {
+      "name": "independent-long-error-280x600-light-retry",
+      "regions": [
+        {
+          "selector": ".waveform",
+          "x": 0,
+          "y": 130.078125,
+          "w": 280,
+          "h": 206.171875
+        },
+        {
+          "selector": ".recording-time",
+          "x": 83.8125,
+          "y": 405.546875,
+          "w": 112.375,
+          "h": 33
+        },
+        {
+          "selector": ".recording-playback",
+          "x": 62,
+          "y": 453.59375,
+          "w": 156,
+          "h": 44.6875
+        },
+        {
+          "selector": ".recording-notice",
+          "x": 12,
+          "y": 354.140625,
+          "w": 180,
+          "h": 44
+        },
+        {
+          "selector": ".recording-playback-retry",
+          "x": 204,
+          "y": 354.140625,
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "notice": {
+        "scrollHeight": 357,
+        "clientHeight": 44,
+        "overflow": "auto",
+        "hit": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "scrolled": 262
+      },
+      "retry": {
+        "x": 204,
+        "y": 354.140625,
+        "w": 64,
+        "h": 44,
+        "hit": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "waveHit": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "seekAction": {
+        "action": "seek",
+        "milliseconds": 2400
+      },
+      "confirmedPositionUnchanged": true
+    },
+    {
+      "name": "independent-long-error-320x568-dark-retry",
+      "regions": [
+        {
+          "selector": ".waveform",
+          "x": 0,
+          "y": 123.140625,
+          "w": 320,
+          "h": 195.171875
+        },
+        {
+          "selector": ".recording-time",
+          "x": 97.953125,
+          "y": 383.921875,
+          "w": 124.09375,
+          "h": 36
+        },
+        {
+          "selector": ".recording-playback",
+          "x": 80,
+          "y": 429.40625,
+          "w": 160,
+          "h": 44
+        },
+        {
+          "selector": ".recording-notice",
+          "x": 12,
+          "y": 335.25,
+          "w": 220,
+          "h": 44
+        },
+        {
+          "selector": ".recording-playback-retry",
+          "x": 244,
+          "y": 335.25,
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "notice": {
+        "scrollHeight": 306,
+        "clientHeight": 44,
+        "overflow": "auto",
+        "hit": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "scrolled": 262
+      },
+      "retry": {
+        "x": 244,
+        "y": 335.25,
+        "w": 64,
+        "h": 44,
+        "hit": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "waveHit": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "seekAction": {
+        "action": "seek",
+        "milliseconds": 2400
+      },
+      "confirmedPositionUnchanged": true
+    },
+    {
+      "name": "independent-long-error-320x568-light-no-retry",
+      "regions": [
+        {
+          "selector": ".waveform",
+          "x": 0,
+          "y": 123.140625,
+          "w": 320,
+          "h": 195.171875
+        },
+        {
+          "selector": ".recording-time",
+          "x": 97.953125,
+          "y": 383.921875,
+          "w": 124.09375,
+          "h": 36
+        },
+        {
+          "selector": ".recording-playback",
+          "x": 80,
+          "y": 429.40625,
+          "w": 160,
+          "h": 44
+        },
+        {
+          "selector": ".recording-notice",
+          "x": 16,
+          "y": 335.25,
+          "w": 288,
+          "h": 21.15625
+        }
+      ],
+      "notice": {
+        "scrollHeight": 238,
+        "clientHeight": 21,
+        "overflow": "auto",
+        "hit": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "scrolled": 217
+      },
+      "retry": null,
+      "waveHit": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "seekAction": {
+        "action": "seek",
+        "milliseconds": 2400
+      },
+      "confirmedPositionUnchanged": true
+    }
+  ],
+  "independentDisabled": [
+    {
+      "phase": "requesting",
+      "disabled": true,
+      "actions": []
+    },
+    {
+      "phase": "recording",
+      "disabled": true,
+      "actions": []
+    },
+    {
+      "phase": "saving",
+      "disabled": true,
+      "actions": []
+    },
+    {
+      "phase": "finalizing",
+      "disabled": true,
+      "actions": []
+    },
+    {
+      "phase": "submitted",
+      "disabled": true,
+      "actions": []
+    }
+  ],
+  "status": "PASS",
+  "layouts": {
+    "mobile-idle-392x840": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 119.34375,
+          "y": 567.765625,
+          "width": 153.3125,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 635.046875,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 167.0625,
+          "y": 726.171875,
+          "width": 57.875,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(166, 166, 170)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 495.796875,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 177.5,
+            "y": 646.328125,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 250,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "d87ad7e001056e27324c79f94011e7c135f5b2e9aef679cbd0bc872552dcd2f2"
+    },
+    "mobile-recording-392x840": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 119.34375,
+          "y": 567.765625,
+          "width": 153.3125,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 635.046875,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(166, 166, 170)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 495.796875,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 177.5,
+            "y": 646.328125,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 250,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "760bfd88468fdfce154e172c403485f67c8ea53f913cb2988f2b67a7ed238dcd"
+    },
+    "mobile-paused-392x840": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 119.34375,
+          "y": 567.765625,
+          "width": 153.3125,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 635.046875,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 495.796875,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 177.5,
+            "y": 646.328125,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 250,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "6cf5be7184634049991048ecf6f9ce3466a2c1b74238f1e7ddd4f389bc368736"
+    },
+    "mobile-playing-392x840": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 119.34375,
+          "y": 567.765625,
+          "width": 153.3125,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 635.046875,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 495.796875,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u6682\u505c\u56de\u653e",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 177.5,
+            "y": 646.328125,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 250,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "5bf130d8cd6c402274109ff9095e3ff105e5ff78ff01a2d1ba4c0b20771a1538"
+    },
+    "mobile-pending-392x840": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 119.34375,
+          "y": 567.765625,
+          "width": 153.3125,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 635.046875,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 495.796875,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 177.5,
+            "y": 646.328125,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 250,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "e3c6af3fdd45bb31b4fc8b2537b42079149a1717a7198dc1a19cc31604164d46"
+    },
+    "mobile-error-392x840": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 119.34375,
+          "y": 567.765625,
+          "width": 153.3125,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 635.046875,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 12,
+          "y": 495.796875,
+          "width": 96,
+          "height": 17,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": {
+          "x": 316,
+          "y": 495.796875,
+          "width": 64,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        }
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 177.5,
+            "y": 646.328125,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 250,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "e7cba0f58390b50f55794f6d93068b2f311cd9d41d7e03d13069a347ac9a43cc"
+    },
+    "mobile-saving-392x840": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 119.34375,
+          "y": 567.765625,
+          "width": 153.3125,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 635.046875,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(166, 166, 170)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 160,
+          "y": 495.796875,
+          "width": 72,
+          "height": 17,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 177.5,
+            "y": 646.328125,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 250,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "c66abebb1f154e0ee5677d6be1a64473d3185e587d822c299d7f485d5b9328ef"
+    },
+    "mobile-paused-320x568": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 39.046875,
+          "width": 320,
+          "height": 528.953125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 123.140625,
+          "width": 320,
+          "height": 195.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 97.953125,
+          "y": 383.921875,
+          "width": 124.09375,
+          "height": 36,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 80,
+          "y": 429.40625,
+          "width": 160,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 100.71875,
+          "y": 491.03125,
+          "width": 118.546875,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 261.609375,
+          "y": 491.03125,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 160,
+          "y": 335.25,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 80,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 85,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 138,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 141.5,
+            "y": 431.40625,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 196,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 201,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "45d24fa49953d251be6f106acf44a04d6a58022a0a36417914fc89edef4d7d18"
+    },
+    "mobile-paused-280x600": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 41.25,
+          "width": 280,
+          "height": 558.75,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 130.078125,
+          "width": 280,
+          "height": 206.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 83.8125,
+          "y": 405.546875,
+          "width": 112.375,
+          "height": 33,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 62,
+          "y": 453.59375,
+          "width": 156,
+          "height": 44.6875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 88.125,
+          "y": 518.6875,
+          "width": 103.734375,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 223.40625,
+          "y": 518.6875,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 140,
+          "y": 354.140625,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 62,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 67,
+            "y": 456.109375,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 118,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 121.5,
+            "y": 455.9375,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 174,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 179,
+            "y": 456.109375,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "2ab345c57084bc5c3d2de7c76dbbc55f2e236ea091d1e13dbe22103c7c0f4cc6"
+    },
+    "mobile-paused-392x840-dark": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 119.34375,
+          "y": 567.765625,
+          "width": 153.3125,
+          "height": 44,
+          "color": "rgb(238, 238, 238)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 635.046875,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(228, 175, 10)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 495.796875,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(153, 153, 153)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 177.5,
+            "y": 646.328125,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 250,
+          "y": 644.328125,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 646.5,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "9540675ff2b5fa3306e7013c3e32520f12d2a7ecafa987ae95bc4da75cffa8e0"
+    },
+    "mobile-error-320x568": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 39.046875,
+          "width": 320,
+          "height": 528.953125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 123.140625,
+          "width": 320,
+          "height": 195.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 97.953125,
+          "y": 383.921875,
+          "width": 124.09375,
+          "height": 36,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 80,
+          "y": 429.40625,
+          "width": 160,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 100.71875,
+          "y": 491.03125,
+          "width": 118.546875,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 261.609375,
+          "y": 491.03125,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 12,
+          "y": 335.25,
+          "width": 220,
+          "height": 34,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": {
+          "x": 244,
+          "y": 335.25,
+          "width": 64,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        }
+      },
+      "buttons": [
+        {
+          "x": 80,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 85,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 138,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 141.5,
+            "y": 431.40625,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 196,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 201,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "07b37093943018acdcfbc57144832c7e0588ce4481ffa34edd768b3aded330b6"
+    },
+    "mobile-saving-320x568": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 39.046875,
+          "width": 320,
+          "height": 528.953125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 123.140625,
+          "width": 320,
+          "height": 195.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 97.953125,
+          "y": 383.921875,
+          "width": 124.09375,
+          "height": 36,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 80,
+          "y": 429.40625,
+          "width": 160,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 100.71875,
+          "y": 491.03125,
+          "width": 118.546875,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 261.609375,
+          "y": 491.03125,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(166, 166, 170)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 100,
+          "y": 335.25,
+          "width": 120,
+          "height": 17,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 80,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 85,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 138,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 141.5,
+            "y": 431.40625,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 196,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 201,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "59019e95afe1d43d962e9526f84f8d327f0afe4f42a633ebfb0daec65fd357d9"
+    },
+    "mobile-error-280x600": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 41.25,
+          "width": 280,
+          "height": 558.75,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 130.078125,
+          "width": 280,
+          "height": 206.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 83.8125,
+          "y": 405.546875,
+          "width": 112.375,
+          "height": 33,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 62,
+          "y": 453.59375,
+          "width": 156,
+          "height": 44.6875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 88.125,
+          "y": 518.6875,
+          "width": 103.734375,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 223.40625,
+          "y": 518.6875,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 12,
+          "y": 354.140625,
+          "width": 180,
+          "height": 34,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": {
+          "x": 204,
+          "y": 354.140625,
+          "width": 64,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        }
+      },
+      "buttons": [
+        {
+          "x": 62,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 67,
+            "y": 456.109375,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 118,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 121.5,
+            "y": 455.9375,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 174,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 179,
+            "y": 456.109375,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "3530a19937879844afea3f0582b0a4f3ed14385b7437842639fdeff9403c9228"
+    },
+    "mobile-saving-280x600": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 41.25,
+          "width": 280,
+          "height": 558.75,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 130.078125,
+          "width": 280,
+          "height": 206.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 83.8125,
+          "y": 405.546875,
+          "width": 112.375,
+          "height": 33,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 62,
+          "y": 453.59375,
+          "width": 156,
+          "height": 44.6875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 88.125,
+          "y": 518.6875,
+          "width": 103.734375,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 223.40625,
+          "y": 518.6875,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(166, 166, 170)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 80,
+          "y": 354.140625,
+          "width": 120,
+          "height": 17,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 62,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 67,
+            "y": 456.109375,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 118,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 121.5,
+            "y": 455.9375,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 174,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 179,
+            "y": 456.109375,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "8d553ea9cf9163ad7f418b1d66a261af5898cddda52e23ee069da81398d8ca13"
+    },
+    "desktop-280x467": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 0,
+          "width": 280,
+          "height": 467,
+          "color": "rgb(0, 0, 0)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 65.5,
+          "width": 280,
+          "height": 230.5,
+          "color": "rgb(0, 0, 0)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 92,
+          "y": 330,
+          "width": 95.984375,
+          "height": 27,
+          "color": "rgb(0, 0, 0)",
+          "weight": "700"
+        },
+        ".recording-playback": {
+          "x": 71,
+          "y": 359,
+          "width": 138,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 65,
+          "y": 410.5,
+          "width": 150,
+          "height": 41,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 224,
+          "y": 410.5,
+          "width": 40,
+          "height": 40,
+          "color": "rgb(255, 255, 255)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 10,
+          "y": 79,
+          "width": 252,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 71,
+          "y": 359,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 80.40625,
+            "y": 366.296875,
+            "width": 25.1875,
+            "height": 29.390625
+          }
+        },
+        {
+          "x": 118,
+          "y": 359,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 128,
+            "y": 369,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "x": 165,
+          "y": 359,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 174.40625,
+            "y": 366.296875,
+            "width": 25.1875,
+            "height": 29.390625
+          }
+        }
+      ],
+      "pngSha256": "bc7e5dd899b3a2d9fac4cc11edb3c68695572ec19f6e9f7bd5b38bfd5cd924f9",
+      "pngBytesUnchanged": true
+    },
+    "desktop-320x600-dark": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 600,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 65.5,
+          "width": 320,
+          "height": 363.5,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 112,
+          "y": 463,
+          "width": 95.984375,
+          "height": 27,
+          "color": "rgb(238, 238, 238)",
+          "weight": "700"
+        },
+        ".recording-playback": {
+          "x": 91,
+          "y": 492,
+          "width": 138,
+          "height": 44,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 65,
+          "y": 543.5,
+          "width": 190,
+          "height": 41,
+          "color": "rgb(248, 248, 248)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 264,
+          "y": 543.5,
+          "width": 40,
+          "height": 40,
+          "color": "rgb(255, 255, 255)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 10,
+          "y": 79,
+          "width": 288,
+          "height": 0,
+          "color": "rgb(153, 153, 153)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 91,
+          "y": 492,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 100.40625,
+            "y": 499.296875,
+            "width": 25.1875,
+            "height": 29.390625
+          }
+        },
+        {
+          "x": 138,
+          "y": 492,
+          "width": 44,
+          "height": 44,
+          "label": "\u6682\u505c\u56de\u653e",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 148,
+            "y": 502,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "x": 185,
+          "y": 492,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 194.40625,
+            "y": 499.296875,
+            "width": 25.1875,
+            "height": 29.390625
+          }
+        }
+      ],
+      "pngSha256": "43549434be6c0fa0278a31872a84f2b3f233f54e7cfb9d8db689c87ac935b093",
+      "pngBytesUnchanged": true
+    },
+    "independent-long-error-320x568-light-retry": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 39.046875,
+          "width": 320,
+          "height": 528.953125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 123.140625,
+          "width": 320,
+          "height": 195.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 97.953125,
+          "y": 383.921875,
+          "width": 124.09375,
+          "height": 36,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 80,
+          "y": 429.40625,
+          "width": 160,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 100.71875,
+          "y": 491.03125,
+          "width": 118.546875,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 261.609375,
+          "y": 491.03125,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 12,
+          "y": 335.25,
+          "width": 220,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": {
+          "x": 244,
+          "y": 335.25,
+          "width": 64,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        }
+      },
+      "buttons": [
+        {
+          "x": 80,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 85,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 138,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 141.5,
+            "y": 431.40625,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 196,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 201,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "57ed7147653751ff41c9bb896c80632ab2b4cd4c7eec03c5177dcefe59dc562a"
+    },
+    "independent-long-error-280x600-light-retry": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 41.25,
+          "width": 280,
+          "height": 558.75,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 130.078125,
+          "width": 280,
+          "height": 206.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 83.8125,
+          "y": 405.546875,
+          "width": 112.375,
+          "height": 33,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 62,
+          "y": 453.59375,
+          "width": 156,
+          "height": 44.6875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 88.125,
+          "y": 518.6875,
+          "width": 103.734375,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 223.40625,
+          "y": 518.6875,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 12,
+          "y": 354.140625,
+          "width": 180,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": {
+          "x": 204,
+          "y": 354.140625,
+          "width": 64,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        }
+      },
+      "buttons": [
+        {
+          "x": 62,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 67,
+            "y": 456.109375,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 118,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 121.5,
+            "y": 455.9375,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 174,
+          "y": 453.9375,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 179,
+            "y": 456.109375,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "0742420384bea83d8f7a586637a9a14cc463ac9f36858a6a07c388df6e59a54e"
+    },
+    "independent-long-error-320x568-dark-retry": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 39.046875,
+          "width": 320,
+          "height": 528.953125,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 123.140625,
+          "width": 320,
+          "height": 195.171875,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 97.953125,
+          "y": 383.921875,
+          "width": 124.09375,
+          "height": 36,
+          "color": "rgb(238, 238, 238)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 80,
+          "y": 429.40625,
+          "width": 160,
+          "height": 44,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 100.71875,
+          "y": 491.03125,
+          "width": 118.546875,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 261.609375,
+          "y": 491.03125,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(228, 175, 10)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 12,
+          "y": 335.25,
+          "width": 220,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": {
+          "x": 244,
+          "y": 335.25,
+          "width": 64,
+          "height": 44,
+          "color": "rgb(228, 175, 10)",
+          "weight": "400"
+        }
+      },
+      "buttons": [
+        {
+          "x": 80,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 85,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 138,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 141.5,
+            "y": 431.40625,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 196,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 201,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "7e4a3b6d71e127cd73bab0f4a77950694806425386fdb6ca8f24924ca8f73fc0"
+    },
+    "independent-long-error-320x568-light-no-retry": {
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 39.046875,
+          "width": 320,
+          "height": 528.953125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 123.140625,
+          "width": 320,
+          "height": 195.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 97.953125,
+          "y": 383.921875,
+          "width": 124.09375,
+          "height": 36,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 80,
+          "y": 429.40625,
+          "width": 160,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 100.71875,
+          "y": 491.03125,
+          "width": 118.546875,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 261.609375,
+          "y": 491.03125,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 16,
+          "y": 335.25,
+          "width": 288,
+          "height": 21.15625,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 80,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u540e\u900015\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 85,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 138,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u64ad\u653e\u5f55\u97f3",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 141.5,
+            "y": 431.40625,
+            "width": 39,
+            "height": 40
+          }
+        },
+        {
+          "x": 196,
+          "y": 429.40625,
+          "width": 44,
+          "height": 44,
+          "label": "\u524d\u8fdb15\u79d2",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 201,
+            "y": 431.578125,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "a77de4711af01cd755ca687b92e72d67ce065b75a7b8135cc4d7475fe64f495c"
+    }
+  },
+  "rawResultArchive": "result.json.gz",
+  "rawResultSHA256": "72592b06484f077c98522195c53be37d221247f1651bdfccd5bae76f3a34f945"
+}
