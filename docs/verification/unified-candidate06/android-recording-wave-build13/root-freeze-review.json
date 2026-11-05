@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "reviewer": "root",
+  "reviewDate": "2026-11-05",
+  "reviewPerformedBeforeStart": true,
+  "recordWrittenAfterCollection": true,
+  "sourceHead": "a236b311d7d6dcb33b0ee4f16977ebe2d2adf8ac",
+  "authorizationSha256": "09e05467f67957deddcbf4d25a76f8a4e24b04049f98c36d621769297cf77a32",
+  "freezeSha256": "67e9f04668c9d4e9049249d3326f9faf4ea84adff644e92914f665888a5df01e",
+  "productCount": 334,
+  "inputCount": 353,
+  "productAggregate": "2fe1f3489557095dae5d61f1076e12f8b98d265a3ea86bf36dbff989132fc7a3",
+  "inputAggregate": "3020f04a710133efca6a94919b48024fc24361447465f6805a2a10e8c47cc550",
+  "directlyChecked": [
+    "actual freeze file SHA256",
+    "freeze head equals authorized exact commit",
+    "product and full input counts",
+    "product and full input aggregates equal authorization and root input plan"
+  ],
+  "decision": "START attempt01 build and collect explicitly authorized after direct root review",
+  "attempt": "attempt01",
+  "nativeWorkSerialized": true,
+  "deviceOperationsAuthorized": false,
+  "deviceHoldContinues": true,
+  "scope": "local Android APK build only; no install, app lifecycle, audio copy, playback or device verification"
+}
