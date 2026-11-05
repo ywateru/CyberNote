@@ -1,0 +1,36 @@
+{
+  "rootSource": "15c9958119d3a1d767df5ce54fd45c0aebfacd83",
+  "authorSource": "de6e86c3dc2856a1e53c3e79f34f74484fe1fe8f",
+  "authorSourceAndScriptsMatched": 19,
+  "indexes": [
+    {
+      "path": "docs/verification/mac-recording-autosave64-independent/evidence-index.json",
+      "sha256": "48579ab953bd35e17c6948cb1e4ed369241b318a12fd6d82be9a26cbfe66d0b9",
+      "files": 32,
+      "totalBytes": 350411
+    },
+    {
+      "path": "docs/verification/mac-recording-autosave64-independent/backend-base58fe1110-attempt01/evidence-index.json",
+      "sha256": "198a872398e72469ded8178b035b58e0e750eab1059858eb35be9826b208a677",
+      "files": 9,
+      "totalBytes": 71145
+    }
+  ],
+  "rootCommands": [
+    {
+      "command": "git diff --exit-code de6e86c3 HEAD -- src src-tauri",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --exit-code fe602767 HEAD -- [four author autosave64 scripts]",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm typecheck && pnpm build",
+      "exitCode": 0,
+      "productionModules": 1914,
+      "buildSeconds": 3.45,
+      "note": "Observed exec session 7847; existing bundle >500 kB advisory only. This JSON is a result record, not raw stdout."
+    }
+  ]
+}
