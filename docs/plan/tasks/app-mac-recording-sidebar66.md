@@ -29,12 +29,12 @@ depends-on: []
 
 # contract
 
-1. 主App稳定布局持有唯一桌面controller/Session/累计PCM/待存File。当前note、search、folder、Host停车不卸载；blur/minimize继续。无录音child WebView、浮窗模式、切换菜单或hidden child采集。重复入口恢复当前栏，不重复采集。
+1. 每个实际文档owner窗口至多一个活动会话，不增加全进程录音锁。主App稳定布局持有唯一桌面controller/Session/累计PCM/待存File。当前note、search、folder、Host停车不卸载；blur/minimize继续。无录音child WebView、浮窗模式、切换菜单或hidden child采集。重复入口恢复当前栏，不重复采集。
 2. 同renderer File直接调用真实submitRecordingRevision。明确desktop-local owner身份；不可伪造remote绕过原安全条件。原A/Editor/bookmark/access epoch/window incarnation和真实最新正文、版本校验保持；65真实Host commit等待后重新核对。
 3. 暂停自动保存合法完整累计WAV，recordedAt固定，后续版本替换唯一确认节点；checkpoint保留会话。删除/Undo移走/重复节点、外部更改/真正撤权拒绝且保留音频，不能向B存或插第二张卡。store、saveDoc ACK、query committed均保留。
 4. ×/Done有音频时final并等持久确认后收起；未开始可安全取消。busy时记录关闭意图；多个close共享等待结果。失败保留右栏及同File/operation供重试。final正文已存而native注销/清理失败时仅重试清理，不能重跑已确认revision或重插附件。
 5. Desktop handle close必须可等待真实final+cleanup，不是void/乐观成功。Escape仅右栏自己的上下文处理，不拦正文、搜索、菜单取消。保持A/B选区与焦点、一个可见实时卡，不以inert锁整个主窗保护普通录音。
-6. main红关闭/CmdW等final和真实flush后销毁；失败取消。移除ensureFloating→hide。明确退出应用先native本地会话登记守卫→所有正文参与者seal→final+flush→准确quit ACK，不能因旧child registry为空放行；busy、清理失败、超时、真实撤权都不得丢音频或假ACK。取消退出恢复合法编辑而不绕过撤权。
+6. main红关闭/CmdW等final和真实flush后销毁；失败取消。移除ensureFloating→hide。明确退出应用先native本地会话登记守卫→所有正文参与者seal→final+flush→准确quit ACK，不能因旧child registry为空放行；busy、清理失败、超时、真实撤权都不得丢音频或假ACK。取消退出恢复合法编辑而不绕过撤权；迟到成功不能重放过期quit ID或自动再次退出。
 7. native登记在采集前，精确owner/window incarnation/session/operation，防跨窗冒认/重放/陈旧注销，正常final或明确无音频安全终态后清除；保留document参与者约束/既有权限。不放宽TCC、capability、签名、存储授权或更改应用标识。
 8. 手机源码行为与设备现场不变；不得操作原模拟器或复制13秒音频。当前Mac18未存3秒现场同样不能退出/重载/复制。所有真实GUI只Computer Use，不做原版删除实验，不导出/转写真实音频。
 
