@@ -1,0 +1,147 @@
+{
+  "sourceCommit": "11c73a914deb6bb955fe88ec54ab70f8a5566a60",
+  "baseCommit": "989f23e51896fd70cb908b8f8f77e5cc8274b1a2",
+  "productFiles": [
+    {
+      "path": "src-tauri/capabilities/macos-recording-access.json",
+      "status": "D",
+      "sha256": null
+    },
+    {
+      "path": "src-tauri/capabilities/recording-owner-window.json",
+      "status": "M",
+      "sha256": "81cc5d70f4774a122ca76935c47448e85577de3facf02846cbab3395d987a90e"
+    },
+    {
+      "path": "src-tauri/capabilities/recording-window.json",
+      "status": "D",
+      "sha256": null
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "status": "M",
+      "sha256": "743aff7d7cdc7240c303436e24d806db59454b00bcefd9926873ceead25fbaee"
+    },
+    {
+      "path": "src-tauri/src/recording_window.rs",
+      "status": "M",
+      "sha256": "c67e59f0f44c7819f5e969bdc56b4ad3444d906a5161744ef5b2ba8ba8a5a77c"
+    },
+    {
+      "path": "src/App.tsx",
+      "status": "M",
+      "sha256": "7b96bc452a9995cf97d3fb44410c289c674a99f409b666dd54f8479b96a25667"
+    },
+    {
+      "path": "src/DesktopRecordingPanel.tsx",
+      "status": "M",
+      "sha256": "147ad4f822aa61b1e69dd550275ae2fde5bc4ab27a715044e67a2cd079ccef14"
+    },
+    {
+      "path": "src/RecordingView.tsx",
+      "status": "M",
+      "sha256": "e18f205e9d49c96abc1c590ffd8757a10e60d9060459f04400c24bdec07d094e"
+    },
+    {
+      "path": "src/main.tsx",
+      "status": "M",
+      "sha256": "2a05d75ba3bc21a60366dea66f7eca99a90683bb15907b2b75df6ce686e2a7a5"
+    },
+    {
+      "path": "src/recording-revisions.ts",
+      "status": "M",
+      "sha256": "9673961f92da60d6293998fd0d789f80c68e1992a517a62c77c9fce59764ebaa"
+    }
+  ],
+  "preservedProductionSources": [
+    {
+      "path": "src/RecordingPanel.tsx",
+      "sha256": "6b714b5d045af4df8827aa091959204c4df687518cebd32a5c430d5e7d4fc123",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/recording-session.ts",
+      "sha256": "fe002d7bc3670821d25884fb776fb961def3960af9e257681a57fe613581f6bc",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/desktop-recording-session.ts",
+      "sha256": "348e0298d2a7d825977c4efc881768e2a7042d969ac4a4551f6178a75874f23c",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/recording-pcm.ts",
+      "sha256": "733870292dc2e3f6fd87fa4bac9cf504c5da2bfe136d79556c289803bf1800c2",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/use-editor-commit.ts",
+      "sha256": "6245351f825d3f24fc4df06413be51a3bfa56feabe3f5586931eb94e64f7b809",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src-tauri/capabilities/macos-notes-ui.json",
+      "sha256": "2206b0ded527b6a53ba9784bb76b4f7e884fed3173863a2bdc22a96e9cf40910",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "plugins/tauri-plugin-notes-ui/src/lib.rs",
+      "sha256": "9d6e5d52d7b6a5026479de77d78ecd8bbbfda32196355494fc5ac57c1551e42d",
+      "unchangedFromBase": true
+    }
+  ],
+  "runnersAndDependencies": [
+    {
+      "path": "scripts/check-recording-sidebar66-app.mjs",
+      "sha256": "13c084e8240290bc2d13794252fefc4e58624cb2c4d54186a2b72746f8e2fd08"
+    },
+    {
+      "path": "scripts/check-mobile-recording-save57.mjs",
+      "sha256": "ea8401fcb6b0b6058e837ecb2bda0e79b67de1cd34424b9b50f2f81b7b72b0fb"
+    },
+    {
+      "path": "scripts/check-recording-autosave64-session.mjs",
+      "sha256": "c26d6052663eed7c5f9d3cad17fde3a17b5aa079419b1cdee9354d462fbba85a"
+    },
+    {
+      "path": "scripts/recording-platform-fixture.mjs",
+      "sha256": "e4fd37b8ff553cc24b8a89cbb3954c954b1ea6c497c37e8ba1ed0b196a400288"
+    },
+    {
+      "path": "package.json",
+      "sha256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2"
+    },
+    {
+      "path": "src-tauri/Cargo.lock",
+      "sha256": "889b7f449ff4b34263139279cacf57f105fd9c3c6a7099bb56c958f3780ed1b0"
+    }
+  ],
+  "verification": {
+    "app": {
+      "path": "app-final/result.json",
+      "pass": true,
+      "uniqueAssertions": 42
+    },
+    "native": {
+      "path": "native-final.log",
+      "passed": 103,
+      "ignored": 3
+    },
+    "mobile": {
+      "path": "mobile-final/result.json",
+      "groups": 17,
+      "status": "pass"
+    },
+    "session": {
+      "path": "session/session.json",
+      "groups": 8,
+      "pass": true
+    },
+    "typecheck": "typecheck-final.log",
+    "build": "build-final.log"
+  }
+}

@@ -1,0 +1,73 @@
+WebSocket server error: Port 24678 is already in use
+RUN same actual mounted App scenario rejects unchanged target on baseline at temporary isEditable=false
+RUN unchanged mobile recording waits for actual Host/Gate commit before both store boundaries and closes only after document ACK
+RUN commit wait preserves strict rejection for scope
+RUN commit wait preserves strict rejection for owner
+RUN commit wait preserves strict rejection for editor-document
+RUN commit wait preserves strict rejection for trusted-raw
+RUN commit wait preserves strict rejection for global-epoch
+RUN commit wait preserves strict rejection for note-epoch
+RUN commit wait preserves strict rejection for unauthorized
+RUN commit wait preserves strict rejection for destroy
+RUN commit wait preserves strict rejection for sync-invalidated
+RUN stored response loss revalidates through actual commit before same-operation authoritative query recovery
+RUN stored attachment remains same operation and File after second-boundary rejection and retry
+RUN document ACK failure retains File and operation; retry confirms existing node without another store or insert
+RUN cancel during stored second-boundary commit wait aborts running submit and completes legitimate sealed cancellation
+RUN seal during actual commit wait settles without storage or hanging
+RUN unmount during actual commit wait settles without storage or hanging
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.',
++   'Error: WebSocket closed without opened.'
++ ]
+- []
+
+    at file:///private/tmp/apple-notes-mac-recording-sidebar66-01/scripts/check-mobile-recording-save57.mjs:510:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.',
+    'Error: WebSocket closed without opened.'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual'
+}
+
+Node.js v22.16.0

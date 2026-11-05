@@ -1,0 +1,258 @@
+   Compiling notes-clone v0.1.0 (/private/tmp/apple-notes-mac-recording-sidebar66-01/src-tauri)
+warning: fields `started`, `revision`, and `checkpoint_revision` are never read
+  --> src/recording_window.rs:23:5
+   |
+20 | struct Entry {
+   |        ----- fields in this struct
+...
+23 |     started: bool,
+   |     ^^^^^^^
+24 |     terminal: bool,
+25 |     revision: Option<(u64, bool)>,
+   |     ^^^^^^^^
+26 |     checkpoint_revision: u64,
+   |     ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `entry` is never used
+  --> src/recording_window.rs:89:4
+   |
+89 | fn entry<'a>(
+   |    ^^^^^
+
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:379:8
+    |
+379 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:426:8
+    |
+426 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `route_message` is never used
+   --> src/recording_window.rs:442:4
+    |
+442 | fn route_message(
+    |    ^^^^^^^^^^^^^
+
+warning: function `visibility_target` is never used
+   --> src/recording_window.rs:540:4
+    |
+540 | fn visibility_target(
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:561:8
+    |
+561 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:621:8
+    |
+621 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:643:8
+    |
+643 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `smart_projection` is never used
+  --> src/session/metadata.rs:98:19
+   |
+ 4 | impl Session {
+   | ------------ method in this implementation
+...
+98 |     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: function `validated_tags` is never used
+  --> src/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> src/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `evaluate_smart_folder` is never used
+   --> src/store/smart.rs:314:19
+    |
+250 | impl Store {
+    | ---------- method in this implementation
+...
+314 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:379:8
+    |
+379 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `notes-clone` (lib test) generated 5 warnings (4 duplicates)
+warning: `notes-clone` (lib) generated 13 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.91s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/notes_clone_lib-7e801843e09c9156)
+
+running 106 tests
+test attachment_command_tests::private_storage_errors_keep_category_without_returning_journal_details ... ok
+test media_permission::tests::compiled_macos_boundary_accepts_the_locked_tauri_root_url ... ok
+test media_permission::tests::custom_protocol_navigation_still_requires_confirmed_instance_load ... ok
+test media_permission::tests::contention_cannot_skip_a_revocation ... ok
+test media_permission::tests::same_local_url_reload_remains_a_source_boundary ... ok
+test media_permission::tests::cancelled_local_load_does_not_require_a_missing_finish ... ok
+test media_permission::tests::actual_config_blocks_frames_objects_and_form_navigation ... ok
+test media_permission::tests::exact_product_and_development_origins ... ok
+test media_permission::tests::replacement_instance_and_destroyed_resource_do_not_inherit_trust ... ok
+test media_permission::tests::custom_protocol_root_spellings_keep_the_exact_authority_boundary ... ok
+test media_permission::tests::trusted_reload_revokes_until_started_and_finished ... ok
+test recording_window::tests::exact_child_labels_and_ack_gate ... ok
+test media_permission::tests::unconfirmed_and_unknown_kinds_are_denied ... ok
+test media_permission::tests::untrusted_navigation_or_load_cannot_be_reopened_by_old_finish ... ok
+test recording_window::tests::finalized_revisions_require_exact_checkpoint_and_final_ack ... ok
+test recording_window::tests::presentation_visibility_only_original_owner_can_address_fixed_pair ... ok
+test recording_window::tests::destroyed_child_requires_authentic_late_terminal_ack_to_release_guard ... ok
+test recording_window::tests::quit_participant_changes_cancel_instead_of_reusing_old_acks ... ok
+test recording_window::tests::sidebar66_local_registration_is_per_actual_owner_and_replay_safe ... ok
+test recording_window::tests::sidebar66_acknowledged_destroyed_participant_and_expired_ids_cannot_reenter_quit ... ok
+test recording_window::tests::sidebar66_checkpoint_cannot_release_and_final_cleanup_requires_exact_ack ... ok
+test recording_window::tests::sidebar66_local_cleanup_never_bypasses_every_document_seal_and_exact_quit_ack ... ok
+test recording_window::tests::sidebar66_owner_destruction_leaves_unsafe_guard_and_new_incarnation_cannot_adopt ... ok
+test recording_window::tests::capture_child_is_not_a_document_barrier_but_original_owner_still_must_ack ... ok
+test session::metadata::tests::two_window_smart_cas_projection_and_public_workspace ... ok
+test session::metadata::tests::draining_last_sequence_aborts_barrier_before_its_commit ... ok
+test session::metadata::tests::safe_integer_overflow_precedes_intents_files_and_public_writes ... ok
+test session::smart_tests::public_smart_crud_cas_and_physical_ownership_are_one_session ... ok
+test session::metadata::tests::actual_receipts_sequence_noops_and_event_privacy ... ok
+test session::tests::attachment_owner_uses_real_session_window_incarnation_and_current_access ... ok
+test session::tests::conflict_copy_obeys_live_session_source_epoch_and_prepare ... ok
+test session::metadata::tests::attachment_public_insert_cancel_and_idempotent_journal_confirmations ... ok
+test session::tests::attachment_cancel_waits_for_other_windows_registered_save_and_retains_committed_ref ... ok
+test session::tests::live_schema_rejects_invalid_saves_without_changing_revision_or_body ... ok
+test store::archive::tests::crash_worker ... ignored, subprocess worker; invoked by real_subprocess_interruption_recovers_before_and_after_sqlite_commit
+test session::tests::pending_intent_cannot_ack_and_failed_barrier_preserves_authorization_and_retry ... ok
+test session::tests::real_revision_conflict_forces_abort_even_if_window_claims_success ... ok
+test session::smart_tests::smart_archive_public_import_restart_and_replaced_invalid_bytes ... ok
+test session::tests::recorded_at_retains_session_and_note_authority ... ok
+test session::tests::window_identity_and_session_identity_cannot_be_supplied_by_saved_action ... ok
+test session::tests::timeout_missing_window_and_failed_ack_never_commit ... ok
+test store::archive::tests::export_failure_preserves_previous_archive_and_cannot_replace_live_store ... ok
+test store::archive::tests::database_failure_after_files_publish_rolls_back_all_entities_and_settings ... ok
+test store::archive::tests::file_publish_failure_preserves_old_bytes_and_recovery_cleans_only_new_paths ... ok
+test store::archive::tests::independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads ... ok
+test store::archive::tests::invalid_archive_graphs_and_metadata_never_mutate_existing_workspace ... ok
+test store::archive::tests::qa_bad_second_blob_preserves_existing_attachment_database_settings_and_source ... ok
+test store::archive::tests::recovery_refuses_journal_path_that_could_delete_an_old_file ... ok
+
+running 1 test
+test store::archive::tests::input_limits_are_explicit_and_leave_workspace_unchanged ... ok
+test store::attachment_operations::tests::cancel_is_narrow_repeatable_and_committed_documents_are_preserved ... ok
+test store::attachment_operations::tests::crash_worker ... ignored, real subprocess worker invoked by boundary test
+test store::archive::tests::seven_papers_and_dash_lists_preserve_drawings_through_save_reopen_and_archive ... ok
+test store::archive::tests::stale_selection_defaults_without_losing_other_settings ... ok
+test store::attachment_operations::tests::duplicate_response_loss_and_foreign_identity_do_not_create_or_overwrite ... ok
+test store::attachment_operations::tests::cold_reopen_preserves_actual_reference_and_purge_retires_old_path ... ok
+
+running 1 test
+test store::archive::tests::valid_import_restores_settings_hierarchy_bytes_and_preserves_colliding_entities ... ok
+test store::attachment_operations::tests::inconsistent_identity_is_deferred_and_never_treated_as_safe_absence ... ok
+
+running 1 test
+test store::attachment_operations::tests::invalid_operation_shape_and_history_limit_fail_before_new_file_creation ... ok
+test store::attachment_operations::tests::filesystem_and_sqlite_failures_keep_recoverable_private_records ... ok
+test store::metadata_tests::actual_sql_rollback_is_not_a_commit_even_after_prior_success ... ok
+
+running 1 test
+
+running 1 test
+test store::metadata_tests::purge_and_cancel_cleanup_errors_keep_real_commit_receipts_and_access_commit ... ok
+test store::metadata_tests::response_read_failures_after_commit_preserve_created_id_revision_and_sequence ... ok
+
+running 1 test
+
+running 1 test
+test store::open::tests::archive_one_and_two_reject_hidden_folder_fields_without_changing_target ... ok
+
+running 1 test
+test store::folder_name_tests::ordinary_folder_name_utf8_boundaries_reject_before_write_and_cold_reopen ... ok
+test store::open::tests::complete_legacy_zero_preserves_rows_and_only_fills_real_missing_system_rows ... ok
+test store::open::tests::current_missing_system_rows_and_settings_are_filled_without_rewriting_custom ... ok
+
+running 1 test
+
+running 1 test
+test store::open::tests::existing_system_and_settings_rows_are_not_even_inserted_again ... ok
+test store::open::tests::new_database_initializes_current_schema_and_reopens_without_rewriting_rows ... ok
+
+running 1 test
+test store::attachment_operations::tests::true_process_crashes_recover_at_file_and_sqlite_boundaries_preserving_legacy ... ok
+
+running 1 test
+test store::open::tests::runtime_single_and_all_folder_reads_reject_key_mismatch_and_unknown_fields ... ok
+test session::tests::registered_save_drains_before_two_window_commit_and_old_access_expires ... ok
+test store::metadata_tests::lock_checkpoint_failure_preserves_access_commit_and_metadata_receipt ... ok
+test store::archive::tests::real_subprocess_interruption_recovers_before_and_after_sqlite_commit ... ok
+test store::open::tests::valid_recovery_still_runs_after_successful_initialization ... ok
+test store::recorded_at_tests::recorded_at_crash_worker ... ignored
+test store::recorded_at_tests::recorded_at_invalid_archives_reject_atomically_and_v1_stays_unknown ... ok
+test store::recorded_at_tests::recorded_at_archive_v2_twice_remaps_ids_and_preserves_date_and_bytes ... ok
+test store::open::tests::unsupported_versions_do_not_initialize_or_recover ... ok
+test store::recorded_at_tests::recorded_at_old_unknown_and_invalid_persisted_values_are_not_rewritten ... ok
+test store::recorded_at_tests::recorded_at_operation_snapshot_reopen_and_full_identity ... ok
+
+running 1 test
+test store::recorded_at_tests::recorded_at_zero_null_and_invalid_direct_requests ... ok
+
+running 1 test
+test store::smart::tests::membership_keeps_definition_and_note_rows_in_one_real_sqlite_snapshot ... ok
+test store::recorded_at_tests::recorded_at_preparing_and_public_are_the_same_durable_snapshot ... ok
+test store::smart::tests::old_physical_versions_reject_fully_valid_smart_rows_before_writes_or_recovery ... ok
+test store::smart::tests::owner_parent_restore_and_conflict_copy_share_physical_capabilities ... ok
+test session::tests::close_locks_rejects_late_commands_and_delete_response_cannot_publish_decrypted_body ... ok
+test store::attachment_operations::tests::locked_owner_defers_cold_cleanup_and_pending_purge_collects_its_new_file ... ok
+test store::smart::tests::archive_three_double_import_remaps_real_entities_dates_and_selection ... ok
+test store::smart::tests::strict_query_folder_and_action_shapes_reject_incomplete_or_future_data ... ok
+test store::tests::archive_attachments_and_cycle_guards ... ok
+test store::open::tests::partial_unknown_and_mismatched_schemas_are_preserved ... ok
+test store::smart::tests::version_one_migration_preserves_json_and_bad_graphs_rollback_before_recovery ... ok
+test store::tests::conflict_copy_sqlite_failure_keeps_source_and_creates_nothing ... ok
+test store::tests::conflict_copy_validates_and_never_changes_the_confirmed_source ... ok
+test store::open::tests::every_folder_row_is_strict_before_any_missing_row_is_created ... ok
+test store::tests::persistence_conflicts_delete_restore ... ok
+test store::open::tests::sql_failure_rolls_back_schema_system_settings_and_version_then_retry_works ... ok
+test store::smart::tests::shared_ui_corpus_runs_actual_persisted_rules_and_legal_tag_facts ... ok
+test store::tests::checkpoint_failure_after_durable_lock_commits_authorization_boundary ... ok
+test store::smart::tests::real_cas_rejects_stale_edits_delete_and_overflow_without_member_side_effects ... ok
+test store::smart::tests::real_tag_modes_boolean_unavailable_and_reopen_use_validated_spans ... ok
+test store::tests::conflict_copy_rejects_locked_and_attachment_sources_without_a_new_note ... ok
+test store::tests::encrypted_data_and_unlock ... ok
+test store::tests::tags_store_reopen_rejection_lock_and_full_archive ... ok
+test store::archive::tests::shared_editor_schema_corpus_uses_public_import_and_preserves_state_on_rejection ... ok
+test session::tests::frozen_ciphertexts_validate_after_decrypt_before_publishing_key ... ok
+
+test result: ok. 103 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 6.67s
+
+     Running unittests src/main.rs (src-tauri/target/debug/deps/notes_clone-a99aaf789538b997)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests notes_clone_lib
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
