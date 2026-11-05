@@ -1,7 +1,7 @@
 ---
 id: app-mobile-recording-visual59
 scope: mobile recorder playback row and timer against preserved video frames
-status: pending
+status: in-progress
 depends-on: [app-recording-visual58]
 ---
 

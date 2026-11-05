@@ -8,7 +8,7 @@
 
 用户新优先项：[录音交互任务50](plan/tasks/app-recording-interactions50.md)、[浮窗/主窗右栏双模式55](plan/tasks/app-recording-presentation55.md)、[桌面录音规格](ui/recording-desktop.md)、[截图/手机参考49](research/audio-interaction-readiness49/reference-layout.md)。重点为采集中仍可操作Notes其他功能，切换呈现不重启会话、保存归属原A。源码与主线整合通过，准确新包已出，真实采集中双模式仍待验；不做听写/转写，未进入Mac14/Android08。 [实际Mac准备阻塞50](verification/recording-interactions50-baseline/README.md)、[只读权限定位51](research/mac-recording-request-readiness51.md)、[明确授权预检任务52](plan/tasks/app-mac-recording-access52.md)。
 
-继续[录音可见几何校准58](plan/tasks/app-recording-visual58.md)：原图同尺寸核时间轴间距、标题、游标/播放和底部操作行；不等待麦克风授权、不触原Android失败File。源码、受控视觉与实际包像素结论分开。
+已整合[录音可见几何校准58](plan/tasks/app-recording-visual58.md)：原图同尺寸核时间轴间距、标题、游标/播放和底部操作行，[独审](verification/recording-visual58-independent/review-final.md)为SOURCE-READY / PIXEL-OPEN。继续[手机播放行校准59](plan/tasks/app-mobile-recording-visual59.md)，仅受控视图与源码；不等待麦克风授权、不触原Android失败File。源码、受控视觉与实际包像素结论分开，现有Mac16/Android11尚不含58/59。
 
 - [Mac13实际独审36](plan/reviews/mac-typography-keyboard-runtime36.md)与[Android08实际独审36](plan/reviews/android-compose-anchor-runtime36.md)
 - [Mac12准确构建](verification/unified-candidate06/mac-name-focus-build12/README.md)与[独立核包](plan/reviews/mac-name-focus-independent12.md)
