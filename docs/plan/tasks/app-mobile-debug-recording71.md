@@ -27,7 +27,7 @@ pnpm debug group recording --mobile
 ```
 
 1. `--mobile group recording`选择专门手机场景，桌面原九组保持覆盖。不要把桌面侧栏断言搬进手机或取消其他手机组的明确限制。
-2. `recording.open/action`与实际手机控件能力一致：初始close可取消；采集中close按已有流程收尾保存；finish须遵守真正Done按钮条件；禁用动作明确UNAVAILABLE，不能成功noop。复用真实handler，不修改状态/DB来实现命令。
+2. `recording.open/action`与实际控件能力一致：手机初始close可取消；采集中close按已有流程收尾保存；手机finish须遵守真正Done按钮条件；禁用动作明确UNAVAILABLE，不能成功noop。桌面同类初始close也应能调用既有local.close取消会话；在途保存按原关闭Promise等待，不能用canFinish误挡关闭。复用真实handler，不修改状态/DB来实现命令。
 3. 命令/idle等真实异步完成，申请设备、pause preview、finalizing、附件写入及正文ACK不得提前成功。真实错误要APP_ERROR，并保留可重试会话；失败不能靠app.dismissError假装修复。调试inspection只DEV开关启用，生产无全局/模拟入口。
 4. 至少覆盖初始HTML及禁用态、空会话取消、开始、暂停、继续排除暂停时间、暂停预览播放/暂停与seek/skip能力、完成正文ACK、原A归属和单卡、重新打开已保存卡、采集中关闭、设备失败、预览失败重试、延迟附件/正文保存失败及重试去重、资源释放。仅按实际产品行为断言，不能把暂停当桌面checkpoint；媒体必须实际可解码，不用假Blob/仅时钟自证。
 5. 保留初始/录制/暂停/失败/保存后紧凑HTML/布局快照与PNG，可与保存的原版录屏标注对照；不以自比截图声称原版像素相同。输出覆盖数、耗时、准确源码身份、失败历史和仍未验证边界。
