@@ -1,0 +1,418 @@
+{
+  "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+  "stack": "page.waitForFunction: Timeout 30000ms exceeded.\n    at /private/tmp/apple-notes-mobile-save57-01/scripts/check-mobile-recording-save57.mjs:304:20\n    at async test (/private/tmp/apple-notes-mobile-save57-01/scripts/check-mobile-recording-save57.mjs:217:5)\n    at async file:///private/tmp/apple-notes-mobile-save57-01/scripts/check-mobile-recording-save57.mjs:278:5",
+  "checks": [
+    "same actual mounted App scenario rejects unchanged target on baseline at temporary isEditable=false",
+    "unchanged mobile recording waits for actual Host/Gate commit before both store boundaries and closes only after document ACK",
+    "commit wait preserves strict rejection for scope",
+    "commit wait preserves strict rejection for owner",
+    "commit wait preserves strict rejection for editor-document",
+    "commit wait preserves strict rejection for trusted-raw",
+    "commit wait preserves strict rejection for global-epoch"
+  ],
+  "errors": [],
+  "observations": [
+    {
+      "baseline": {
+        "validations": [
+          {
+            "available": false,
+            "editable": false,
+            "current": true,
+            "sameEditor": true,
+            "sameScope": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "stamp": {
+              "generation": 2,
+              "sessionId": "controlled-native-session",
+              "epoch": 1,
+              "noteId": "note-a",
+              "noteEpoch": 0
+            },
+            "originalStamp": {
+              "generation": 1,
+              "sessionId": "controlled-native-session",
+              "epoch": 1,
+              "noteId": "note-a",
+              "noteEpoch": 0
+            }
+          }
+        ],
+        "waits": 0,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": false
+          }
+        ],
+        "stores": 0,
+        "saves": 0,
+        "queries": 0,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A"
+                }
+              ]
+            }
+          ]
+        },
+        "ticket": true,
+        "panel": false,
+        "text": "全部备忘录\n1970年1月1日 08:00\n\nOriginal A\n\n新录音\n今天 05:59 00:06\n00:00\n00:01\n00:02\n00:03\n00:04\n00:05\n00:06\n00:07\n00:08\n00:09\n00:10\n00:11\n00:12\n00:13\n00:14\n00:15\n00:16\n00:17\n00:18\n00:06.00\n原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口\n15\n15\n重试回放\n重试"
+      }
+    },
+    {
+      "fixed": {
+        "validations": [
+          {
+            "available": true,
+            "editable": true,
+            "current": true,
+            "sameEditor": true,
+            "sameScope": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "stamp": {
+              "generation": 2,
+              "sessionId": "controlled-native-session",
+              "epoch": 1,
+              "noteId": "note-a",
+              "noteEpoch": 0
+            },
+            "originalStamp": {
+              "generation": 1,
+              "sessionId": "controlled-native-session",
+              "epoch": 1,
+              "noteId": "note-a",
+              "noteEpoch": 0
+            }
+          },
+          {
+            "available": true,
+            "editable": true,
+            "current": true,
+            "sameEditor": true,
+            "sameScope": true,
+            "sameOwner": true,
+            "sameVersion": true,
+            "sameExternal": true,
+            "sameDocument": true,
+            "sameTrusted": true,
+            "stamp": {
+              "generation": 3,
+              "sessionId": "controlled-native-session",
+              "epoch": 1,
+              "noteId": "note-a",
+              "noteEpoch": 0
+            },
+            "originalStamp": {
+              "generation": 2,
+              "sessionId": "controlled-native-session",
+              "epoch": 1,
+              "noteId": "note-a",
+              "noteEpoch": 0
+            }
+          }
+        ],
+        "waits": 2,
+        "gate": [
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": true,
+            "editable": true
+          },
+          {
+            "action": "park",
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": false
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          },
+          {
+            "action": "activate",
+            "blocked": false,
+            "editable": true
+          }
+        ],
+        "stores": 1,
+        "saves": 1,
+        "queries": 0,
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "saved-audio",
+                "name": "新录音.webm",
+                "kind": "audio"
+              }
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A"
+                }
+              ]
+            }
+          ]
+        },
+        "ticket": false,
+        "panel": false,
+        "text": "全部备忘录\n完成\n1970年1月1日 08:00\n新录音\n2026年11月4日 05:59\n音频\n播放\n当前设备无法播放此录音格式。 重试\n\nOriginal A\n\n格式"
+      }
+    },
+    {
+      "change": "scope",
+      "validation": {
+        "available": true,
+        "editable": true,
+        "current": true,
+        "sameEditor": true,
+        "sameScope": false,
+        "sameOwner": true,
+        "sameVersion": true,
+        "sameExternal": true,
+        "sameDocument": true,
+        "sameTrusted": true,
+        "stamp": {
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        "originalStamp": {
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        }
+      }
+    },
+    {
+      "change": "owner",
+      "validation": {
+        "available": true,
+        "editable": true,
+        "current": true,
+        "sameEditor": true,
+        "sameScope": true,
+        "sameOwner": false,
+        "sameVersion": true,
+        "sameExternal": true,
+        "sameDocument": true,
+        "sameTrusted": true,
+        "stamp": {
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        "originalStamp": {
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        }
+      }
+    },
+    {
+      "change": "editor-document",
+      "validation": {
+        "available": true,
+        "editable": true,
+        "current": true,
+        "sameEditor": true,
+        "sameScope": true,
+        "sameOwner": true,
+        "sameVersion": false,
+        "sameExternal": true,
+        "sameDocument": false,
+        "sameTrusted": true,
+        "stamp": {
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        "originalStamp": {
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        }
+      }
+    },
+    {
+      "change": "trusted-raw",
+      "validation": {
+        "available": true,
+        "editable": true,
+        "current": true,
+        "sameEditor": true,
+        "sameScope": true,
+        "sameOwner": true,
+        "sameVersion": true,
+        "sameExternal": true,
+        "sameDocument": true,
+        "sameTrusted": false,
+        "stamp": {
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        "originalStamp": {
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        }
+      }
+    },
+    {
+      "change": "global-epoch",
+      "validation": {
+        "available": true,
+        "editable": true,
+        "current": true,
+        "sameEditor": true,
+        "sameScope": true,
+        "sameOwner": true,
+        "sameVersion": true,
+        "sameExternal": true,
+        "sameDocument": true,
+        "sameTrusted": true,
+        "stamp": {
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 2,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        "originalStamp": {
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        }
+      }
+    }
+  ]
+}

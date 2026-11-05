@@ -1,0 +1,231 @@
+{
+  "text": "controlled document ACK failure\n重试\n全部备忘录\n完成\n1970年1月1日 08:00\n新录音\n2026年11月4日 05:59\n音频\n播放\n当前设备无法播放此录音格式。 重试\n\nOriginal A\n\n格式",
+  "validations": [
+    {
+      "available": true,
+      "editable": true,
+      "current": true,
+      "sameEditor": true,
+      "sameScope": true,
+      "sameOwner": true,
+      "sameVersion": true,
+      "sameExternal": true,
+      "sameDocument": true,
+      "sameTrusted": true,
+      "stamp": {
+        "generation": 2,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      "originalStamp": {
+        "generation": 1,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      }
+    },
+    {
+      "available": true,
+      "editable": true,
+      "current": true,
+      "sameEditor": true,
+      "sameScope": true,
+      "sameOwner": true,
+      "sameVersion": true,
+      "sameExternal": true,
+      "sameDocument": true,
+      "sameTrusted": true,
+      "stamp": {
+        "generation": 3,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      "originalStamp": {
+        "generation": 2,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      }
+    }
+  ],
+  "calls": [
+    {
+      "command": "load_workspace"
+    },
+    {
+      "command": "workspace_action",
+      "args": {
+        "action": {
+          "type": "settings",
+          "settings": {
+            "selectedFolder": "all",
+            "selectedNote": "note-a"
+          }
+        },
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        }
+      }
+    },
+    {
+      "command": "workspace_action",
+      "args": {
+        "action": {
+          "type": "settings",
+          "settings": {
+            "selectedNote": "note-a"
+          }
+        },
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        }
+      }
+    },
+    {
+      "command": "load_workspace"
+    },
+    {
+      "command": "store_attachment_operation",
+      "args": {
+        "operationId": "e3cacf1f-94a3-49c8-b130-e4543f76c087",
+        "noteId": "note-a",
+        "name": "新录音.webm",
+        "mime": "audio/webm;codecs=opus",
+        "data": "Y29udHJvbGxlZCBwcmVmaXhjb250cm9sbGVkIGVuY29kZWQgYm91bmRhcnk=",
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteEpoch": 0
+        },
+        "recordedAt": 1793743199123
+      }
+    },
+    {
+      "command": "load_workspace"
+    },
+    {
+      "command": "register_save_intent",
+      "args": {
+        "noteId": "note-a",
+        "intent": "07718246-3f16-41ce-a805-0adbebdf1c45",
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    {
+      "command": "read_attachment",
+      "args": {
+        "id": "saved-audio",
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    {
+      "command": "workspace_action",
+      "args": {
+        "action": {
+          "type": "saveNote",
+          "id": "note-a",
+          "saveIntent": "07718246-3f16-41ce-a805-0adbebdf1c45",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "attachment",
+                "attrs": {
+                  "id": "saved-audio",
+                  "name": "新录音.webm",
+                  "kind": "audio"
+                }
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Original A"
+                  }
+                ]
+              }
+            ]
+          },
+          "revision": 1
+        },
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        }
+      }
+    },
+    {
+      "command": "register_save_intent",
+      "args": {
+        "noteId": "note-a",
+        "intent": "f62ee090-b338-4004-b22e-a862af3024ef",
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteEpoch": 0
+        }
+      }
+    },
+    {
+      "command": "workspace_action",
+      "args": {
+        "action": {
+          "type": "saveNote",
+          "id": "note-a",
+          "saveIntent": "f62ee090-b338-4004-b22e-a862af3024ef",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "attachment",
+                "attrs": {
+                  "id": "saved-audio",
+                  "name": "新录音.webm",
+                  "kind": "audio"
+                }
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Original A"
+                  }
+                ]
+              }
+            ]
+          },
+          "revision": 1
+        },
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        }
+      }
+    },
+    {
+      "command": "load_workspace"
+    },
+    {
+      "command": "load_workspace"
+    }
+  ],
+  "waits": 2
+}

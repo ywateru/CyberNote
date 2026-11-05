@@ -1,0 +1,44 @@
+{
+  "source_commit": "c25cf7fb0a085a3b01108d23cc4e0286f847f56e",
+  "base_commit": "9167db94908ac635b026220e782878447c9e16a7",
+  "recorded_at_utc": "2026-11-05T04:46:23.128174+00:00",
+  "source_matches_commit": true,
+  "sha256": {
+    "src/App.tsx": "cf3d8ca5b09b88b8b5b2df8bf4abf3b7decff92301847a307654bf11094fda11",
+    "src/use-editor-commit.ts": "6245351f825d3f24fc4df06413be51a3bfa56feabe3f5586931eb94e64f7b809",
+    "src/Editor.tsx": "036b97b231d3dce02f9a9be6c60c1bb067063477974f26a01efabc308df6d6f2",
+    "src/search-editor-gate.ts": "9dbe5495db5d9538d8b0fd7acfc8a63acaedb1c7f41c5325a58b79101407016d",
+    "src/attachment-target.ts": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+    "src/attachment-submission.ts": "4c44ecd682e8f2fa04d40a87445d6dfe47e1cc7f40dac6691367e75a74225833",
+    "src/trusted-synchronization.ts": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128",
+    "src/save-queue.ts": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+    "src/bridge.ts": "729f7dc797abb762a9382f106b1fad103335e27346e598d9b18c37a2785672fd",
+    "src/RecordingPanel.tsx": "62feeb38b451d7138693d124b6b30bbac297a59c6e347d26e2b17ced870d3a93",
+    "scripts/check-mobile-recording-save57.mjs": "ea8401fcb6b0b6058e837ecb2bda0e79b67de1cd34424b9b50f2f81b7b72b0fb",
+    "scripts/check-mobile-recording-save57-desktop.mjs": "d6d423f6ad0791dd2c14f971f3ade10c6a36069486cc704914361aaef7136367",
+    "scripts/check-recording-submit.mjs": "8a8b83812d6470787b24238f5f4114d1f9343bda709b58434bb7bbba5a379312",
+    "scripts/recording-platform-fixture.mjs": "e4fd37b8ff553cc24b8a89cbb3954c954b1ea6c497c37e8ba1ed0b196a400288",
+    "docs/architecture.md": "3a7dbb3dca66b5985654d97b083160857a16d547072b24cfe8ca347e01aa58b4",
+    "docs/ui/recording-mobile.md": "d7920598d0fd0420053fdd17ed5a89be7c11c650a81fdefc591bbf4b6d7dd71a",
+    "package.json": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007",
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2"
+  },
+  "node": "v22.16.0",
+  "pnpm": "10.15.0",
+  "browser_path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "browser_version": "156.0.8078.80",
+  "playwright_core_path": "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/playwright-core/index.mjs",
+  "exact_source_components_filter": null,
+  "preflight_filters": {
+    "attempt07": "scope|destroy|sync-invalidated|stored attachment|ACK failure|cancel during|seal during|unmount during",
+    "attempt08": "stored response loss|ACK failure|cancel during|seal during|unmount during"
+  },
+  "preflight_note": "Nine preserved attempts; failures were harness setup/assertion/API-shape issues. Attempt09 completed all 17 checks; panel observation selector and assertions were corrected before source freeze, so exact-source run is authoritative. Product runtime algorithm did not change across the attempts.",
+  "exact_source_exits": {
+    "components": 0,
+    "desktop": 0,
+    "build": 0
+  },
+  "exact_source_components_checks": 17,
+  "exact_source_baseline_error_is_temporary_editability": true
+}

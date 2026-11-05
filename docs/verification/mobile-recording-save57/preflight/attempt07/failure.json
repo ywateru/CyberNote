@@ -1,0 +1,74 @@
+{
+  "error": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.",
+  "stack": "page.waitForFunction: Timeout 10000ms exceeded.\n    at /private/tmp/apple-notes-mobile-save57-01/scripts/check-mobile-recording-save57.mjs:393:16\n    at async test (/private/tmp/apple-notes-mobile-save57-01/scripts/check-mobile-recording-save57.mjs:238:5)\n    at async file:///private/tmp/apple-notes-mobile-save57-01/scripts/check-mobile-recording-save57.mjs:388:3",
+  "checks": [
+    "commit wait preserves strict rejection for scope",
+    "commit wait preserves strict rejection for destroy",
+    "commit wait preserves strict rejection for sync-invalidated",
+    "stored attachment remains same operation and File after second-boundary rejection and retry"
+  ],
+  "errors": [],
+  "observations": [
+    {
+      "change": "scope"
+    },
+    {
+      "change": "destroy",
+      "validation": {
+        "available": false,
+        "editable": false,
+        "current": true,
+        "sameEditor": true,
+        "sameScope": true,
+        "sameOwner": true,
+        "sameVersion": true,
+        "sameExternal": true,
+        "sameDocument": false,
+        "sameTrusted": true,
+        "stamp": {
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        "originalStamp": {
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        }
+      }
+    },
+    {
+      "change": "sync-invalidated",
+      "validation": {
+        "available": true,
+        "editable": true,
+        "current": false,
+        "sameEditor": true,
+        "sameScope": true,
+        "sameOwner": true,
+        "sameVersion": true,
+        "sameExternal": true,
+        "sameDocument": true,
+        "sameTrusted": true,
+        "stamp": {
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        "originalStamp": {
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        }
+      }
+    }
+  ]
+}

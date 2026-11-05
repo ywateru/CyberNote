@@ -1,0 +1,15 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'TypeError: listener.unregister is not a function'\n+ ]\n- []\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'TypeError: listener.unregister is not a function'\n+ ]\n- []\n\n    at file:///private/tmp/apple-notes-mobile-save57-01/scripts/check-mobile-recording-save57.mjs:507:10",
+  "checks": [
+    "stored response loss revalidates through actual commit before same-operation authoritative query recovery",
+    "document ACK failure retains File and operation; retry confirms existing node without another store or insert",
+    "cancel during stored second-boundary commit wait aborts running submit and completes legitimate sealed cancellation",
+    "seal during actual commit wait settles without storage or hanging",
+    "unmount during actual commit wait settles without storage or hanging"
+  ],
+  "errors": [
+    "TypeError: listener.unregister is not a function"
+  ],
+  "observations": []
+}

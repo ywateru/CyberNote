@@ -1,0 +1,18 @@
+RUN same actual mounted App scenario rejects unchanged target on baseline at temporary isEditable=false
+RUN unchanged mobile recording waits for actual Host/Gate commit before both store boundaries and closes only after document ACK
+RUN commit wait preserves strict rejection for scope
+RUN commit wait preserves strict rejection for owner
+RUN commit wait preserves strict rejection for editor-document
+RUN commit wait preserves strict rejection for trusted-raw
+RUN commit wait preserves strict rejection for global-epoch
+RUN commit wait preserves strict rejection for note-epoch
+RUN commit wait preserves strict rejection for unauthorized
+RUN commit wait preserves strict rejection for destroy
+RUN commit wait preserves strict rejection for sync-invalidated
+RUN stored response loss revalidates through actual commit before same-operation authoritative query recovery
+RUN stored attachment remains same operation and File after second-boundary rejection and retry
+RUN document ACK failure retains File and operation; retry confirms existing node without another store or insert
+RUN cancel during stored second-boundary commit wait aborts running submit and completes legitimate sealed cancellation
+RUN seal during actual commit wait settles without storage or hanging
+RUN unmount during actual commit wait settles without storage or hanging
+{"status":"pass","checks":["same actual mounted App scenario rejects unchanged target on baseline at temporary isEditable=false","unchanged mobile recording waits for actual Host/Gate commit before both store boundaries and closes only after document ACK","commit wait preserves strict rejection for scope","commit wait preserves strict rejection for owner","commit wait preserves strict rejection for editor-document","commit wait preserves strict rejection for trusted-raw","commit wait preserves strict rejection for global-epoch","commit wait preserves strict rejection for note-epoch","commit wait preserves strict rejection for unauthorized","commit wait preserves strict rejection for destroy","commit wait preserves strict rejection for sync-invalidated","stored response loss revalidates through actual commit before same-operation authoritative query recovery","stored attachment remains same operation and File after second-boundary rejection and retry","document ACK failure retains File and operation; retry confirms existing node without another store or insert","cancel during stored second-boundary commit wait aborts running submit and completes legitimate sealed cancellation","seal during actual commit wait settles without storage or hanging","unmount during actual commit wait settles without storage or hanging"]}

@@ -1,0 +1,44 @@
+{
+  "text": "全部备忘录\n1970年1月1日 08:00\n\nOriginal A",
+  "validations": [],
+  "calls": [
+    {
+      "command": "load_workspace"
+    },
+    {
+      "command": "workspace_action",
+      "args": {
+        "action": {
+          "type": "settings",
+          "settings": {
+            "selectedFolder": "all",
+            "selectedNote": "note-a"
+          }
+        },
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        }
+      }
+    },
+    {
+      "command": "workspace_action",
+      "args": {
+        "action": {
+          "type": "settings",
+          "settings": {
+            "selectedNote": "note-a"
+          }
+        },
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        }
+      }
+    },
+    {
+      "command": "load_workspace"
+    }
+  ],
+  "waits": 1
+}

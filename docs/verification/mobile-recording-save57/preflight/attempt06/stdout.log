@@ -1,0 +1,10 @@
+RUN same actual mounted App scenario rejects unchanged target on baseline at temporary isEditable=false
+RUN unchanged mobile recording waits for actual Host/Gate commit before both store boundaries and closes only after document ACK
+RUN commit wait preserves strict rejection for scope
+RUN commit wait preserves strict rejection for owner
+RUN commit wait preserves strict rejection for editor-document
+RUN commit wait preserves strict rejection for trusted-raw
+RUN commit wait preserves strict rejection for global-epoch
+RUN commit wait preserves strict rejection for note-epoch
+RUN commit wait preserves strict rejection for unauthorized
+RUN commit wait preserves strict rejection for destroy

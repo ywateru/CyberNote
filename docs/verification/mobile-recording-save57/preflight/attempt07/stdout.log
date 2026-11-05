@@ -1,0 +1,5 @@
+RUN commit wait preserves strict rejection for scope
+RUN commit wait preserves strict rejection for destroy
+RUN commit wait preserves strict rejection for sync-invalidated
+RUN stored attachment remains same operation and File after second-boundary rejection and retry
+RUN document ACK failure retains File and operation; retry confirms existing node without another store or insert

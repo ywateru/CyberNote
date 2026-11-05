@@ -1,0 +1,5 @@
+RUN stored response loss revalidates through actual commit before same-operation authoritative query recovery
+RUN document ACK failure retains File and operation; retry confirms existing node without another store or insert
+RUN cancel during stored second-boundary commit wait aborts running submit and completes legitimate sealed cancellation
+RUN seal during actual commit wait settles without storage or hanging
+RUN unmount during actual commit wait settles without storage or hanging

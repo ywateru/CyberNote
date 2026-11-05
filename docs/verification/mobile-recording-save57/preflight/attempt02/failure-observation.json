@@ -1,0 +1,41 @@
+{
+  "text": "全部备忘录\n1970年1月1日 08:00\n\nOriginal A\n\n附加文件\n录音\n选取照片或视频\n拍照或录像\n扫描文稿\n扫描文本\n添加绘画",
+  "validations": [],
+  "calls": [
+    {
+      "command": "load_workspace"
+    },
+    {
+      "command": "workspace_action",
+      "args": {
+        "action": {
+          "type": "settings",
+          "settings": {
+            "selectedFolder": "all",
+            "selectedNote": "note-a"
+          }
+        },
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        }
+      }
+    },
+    {
+      "command": "workspace_action",
+      "args": {
+        "action": {
+          "type": "settings",
+          "settings": {
+            "selectedNote": "note-a"
+          }
+        },
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        }
+      }
+    }
+  ],
+  "waits": 0
+}
