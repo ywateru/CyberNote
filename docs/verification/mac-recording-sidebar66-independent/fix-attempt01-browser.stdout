@@ -1,0 +1,18 @@
+mounted App lost registration response retains recoverable ownership PASS
+lost registration response recovers no-audio cancel PASS
+lost registration response recovers no-audio quit PASS
+requesting close cancels pending authorization without waiting for media PASS
+requesting close cancels beforeStart and releases late resources PASS
+requesting close cancels getStream and releases late resources PASS
+actual App first and cumulative checkpoint with A parked behind editable B PASS
+final body acknowledged then cleanup failed retries only native cleanup PASS
+busy checkpoint reentrant close waits final plus cleanup PASS
+main close prevents destroy on failure and retry waits confirmed final PASS
+expired quit cannot replay success after delayed final completes PASS
+Escape in ordinary editor preserves sidebar, local Escape final closes PASS
+actual mounted Host commit wait rejects changed external PASS
+actual mounted Host commit wait rejects changed owner PASS
+actual mounted Host commit wait rejects changed epoch PASS
+actual mounted Host commit wait rejects changed blocked PASS
+real revocation invalidates original A and retains recording PASS
+{"head":"8be1427bccf633d55886bc479e50a1ce4f519324","checks":[{"name":"mounted App lost registration response retains recoverable ownership","status":"pass"},{"name":"lost registration response recovers no-audio cancel","status":"pass"},{"name":"lost registration response recovers no-audio quit","status":"pass"},{"name":"requesting close cancels pending authorization without waiting for media","status":"pass"},{"name":"requesting close cancels beforeStart and releases late resources","status":"pass"},{"name":"requesting close cancels getStream and releases late resources","status":"pass"},{"name":"actual App first and cumulative checkpoint with A parked behind editable B","status":"pass"},{"name":"final body acknowledged then cleanup failed retries only native cleanup","status":"pass"},{"name":"busy checkpoint reentrant close waits final plus cleanup","status":"pass"},{"name":"main close prevents destroy on failure and retry waits confirmed final","status":"pass"},{"name":"expired quit cannot replay success after delayed final completes","status":"pass"},{"name":"Escape in ordinary editor preserves sidebar, local Escape final closes","status":"pass"},{"name":"actual mounted Host commit wait rejects changed external","status":"pass"},{"name":"actual mounted Host commit wait rejects changed owner","status":"pass"},{"name":"actual mounted Host commit wait rejects changed epoch","status":"pass"},{"name":"actual mounted Host commit wait rejects changed blocked","status":"pass"},{"name":"real revocation invalidates original A and retains recording","status":"pass"}],"errors":[]}

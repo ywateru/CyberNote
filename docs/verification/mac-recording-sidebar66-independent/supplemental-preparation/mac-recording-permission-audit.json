@@ -1,0 +1,18 @@
+{
+  "source": "f4a2fba7b5d1fda854b3bc802a629a6e1045c7f4",
+  "path": "src-tauri/capabilities/macos-notes-ui.json",
+  "sha256": "2206b0ded527b6a53ba9784bb76b4f7e884fed3173863a2bdc22a96e9cf40910",
+  "equalTo989f23e5": true,
+  "platforms": [
+    "macOS"
+  ],
+  "windows": [
+    "main",
+    "note-*"
+  ],
+  "permissions": [
+    "notes-ui:default",
+    "notes-ui:allow-recording-access"
+  ],
+  "conclusion": "main/note already retain recording-access permission. Removed legacy child capability creates no missing main/note right. No permission expansion required."
+}

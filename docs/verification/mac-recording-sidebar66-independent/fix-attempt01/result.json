@@ -1,0 +1,284 @@
+{
+  "head": "8be1427bccf633d55886bc479e50a1ce4f519324",
+  "source": "f4a2fba7b5d1fda854b3bc802a629a6e1045c7f4",
+  "status": "pass",
+  "checks": [
+    {
+      "name": "mounted App lost registration response retains recoverable ownership",
+      "status": "pass",
+      "observation": {
+        "initial": {
+          "ticket": true,
+          "locals": 1,
+          "sheet": false
+        },
+        "retryCalls": [
+          {
+            "sessionId": "dfbab5ea-0f2d-47ce-ac97-4192fa81f6de",
+            "operationId": "ad4e6461-e0b5-442b-81ee-39d54185b2ed"
+          },
+          {
+            "sessionId": "dfbab5ea-0f2d-47ce-ac97-4192fa81f6de",
+            "operationId": "ad4e6461-e0b5-442b-81ee-39d54185b2ed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "lost registration response recovers no-audio cancel",
+      "status": "pass",
+      "observation": {
+        "register": [
+          {
+            "sessionId": "e4c1a5df-09ab-4ac8-a368-6597810c6196",
+            "operationId": "1b09d4ba-b08f-4921-9635-edac08d0cd70"
+          },
+          {
+            "sessionId": "e4c1a5df-09ab-4ac8-a368-6597810c6196",
+            "operationId": "1b09d4ba-b08f-4921-9635-edac08d0cd70"
+          }
+        ],
+        "release": [
+          {
+            "sessionId": "e4c1a5df-09ab-4ac8-a368-6597810c6196",
+            "operationId": "1b09d4ba-b08f-4921-9635-edac08d0cd70",
+            "incarnation": "native-incarnation",
+            "owner": "main",
+            "saved": false,
+            "revision": 0
+          }
+        ],
+        "quit": [],
+        "streams": 0,
+        "locals": 0,
+        "stores": 0
+      }
+    },
+    {
+      "name": "lost registration response recovers no-audio quit",
+      "status": "pass",
+      "observation": {
+        "register": [
+          {
+            "sessionId": "8e80141a-f1dd-4eec-9f55-5275fafe01be",
+            "operationId": "7eae91e5-5637-4d64-823c-2ef3947a7de5"
+          },
+          {
+            "sessionId": "8e80141a-f1dd-4eec-9f55-5275fafe01be",
+            "operationId": "7eae91e5-5637-4d64-823c-2ef3947a7de5"
+          }
+        ],
+        "release": [
+          {
+            "sessionId": "8e80141a-f1dd-4eec-9f55-5275fafe01be",
+            "operationId": "7eae91e5-5637-4d64-823c-2ef3947a7de5",
+            "incarnation": "native-incarnation",
+            "owner": "main",
+            "saved": false,
+            "revision": 0
+          }
+        ],
+        "quit": [
+          {
+            "id": "registration-quit",
+            "success": true
+          }
+        ],
+        "streams": 0,
+        "locals": 0,
+        "stores": 0
+      }
+    },
+    {
+      "name": "requesting close cancels pending authorization without waiting for media",
+      "status": "pass",
+      "observation": {
+        "ticket": false,
+        "release": 1,
+        "streams": 0
+      }
+    },
+    {
+      "name": "requesting close cancels beforeStart and releases late resources",
+      "status": "pass",
+      "observation": {
+        "streams": 0,
+        "starts": 0,
+        "stops": 0,
+        "stores": 0,
+        "release": [
+          {
+            "sessionId": "08ce39b7-711e-45cd-9b88-ff024a44e4af",
+            "operationId": "1072e9c0-119f-4778-9a92-72297e776e38",
+            "incarnation": "native-incarnation",
+            "owner": "main",
+            "saved": false,
+            "revision": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "requesting close cancels getStream and releases late resources",
+      "status": "pass",
+      "observation": {
+        "streams": 1,
+        "starts": 0,
+        "stops": 1,
+        "stores": 0,
+        "release": [
+          {
+            "sessionId": "884a4681-37f3-460e-8c01-8dfe4c9f42d3",
+            "operationId": "004cfc43-3d74-4d42-b064-22c070e552f4",
+            "incarnation": "native-incarnation",
+            "owner": "main",
+            "saved": false,
+            "revision": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "actual App first and cumulative checkpoint with A parked behind editable B",
+      "status": "pass",
+      "observation": {
+        "sameEditor": true,
+        "sameTicket": true,
+        "streams": 1,
+        "starts": 2,
+        "a": "{\"type\":\"doc\",\"content\":[{\"type\":\"attachment\",\"attrs\":{\"id\":\"audio-22f418a9-dd8b-4575-b670-acf8ddabc623\",\"name\":\"新录音.wav\",\"kind\":\"audio\"}},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\" A typedA text\"}]}]}",
+        "b": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\" B typedB text\"}]}]}",
+        "aEditable": false,
+        "stores": 2,
+        "committed": true
+      }
+    },
+    {
+      "name": "final body acknowledged then cleanup failed retries only native cleanup",
+      "status": "pass",
+      "observation": {
+        "before": {
+          "stores": 1,
+          "acks": 1,
+          "body": 3,
+          "ticket": true
+        },
+        "after": {
+          "stores": 1,
+          "acks": 1,
+          "body": 3
+        }
+      }
+    },
+    {
+      "name": "busy checkpoint reentrant close waits final plus cleanup",
+      "status": "pass",
+      "observation": {
+        "saves": [
+          {
+            "sessionId": "73baa832-ccea-44d9-88f7-90b126025f68",
+            "operationId": "5326fbe2-88b3-48d9-895f-c89aff3618bb",
+            "incarnation": "native-incarnation",
+            "owner": "main",
+            "revision": 1,
+            "finalIntent": false
+          },
+          {
+            "sessionId": "73baa832-ccea-44d9-88f7-90b126025f68",
+            "operationId": "5326fbe2-88b3-48d9-895f-c89aff3618bb",
+            "incarnation": "native-incarnation",
+            "owner": "main",
+            "revision": 2,
+            "finalIntent": true
+          }
+        ],
+        "releases": 1
+      }
+    },
+    {
+      "name": "main close prevents destroy on failure and retry waits confirmed final",
+      "status": "pass",
+      "observation": {
+        "destroyed": 1,
+        "prevented": true,
+        "locals": 0,
+        "hide": false
+      }
+    },
+    {
+      "name": "expired quit cannot replay success after delayed final completes",
+      "status": "pass",
+      "observation": {
+        "acks": [
+          {
+            "id": "quit-current",
+            "success": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "Escape in ordinary editor preserves sidebar, local Escape final closes",
+      "status": "pass",
+      "observation": {
+        "closed": true
+      }
+    },
+    {
+      "name": "actual mounted Host commit wait rejects changed external",
+      "status": "pass",
+      "observation": {
+        "waits": 1,
+        "stores": 0,
+        "owner": "A",
+        "active": true
+      }
+    },
+    {
+      "name": "actual mounted Host commit wait rejects changed owner",
+      "status": "pass",
+      "observation": {
+        "waits": 1,
+        "stores": 0,
+        "owner": "A",
+        "active": true
+      }
+    },
+    {
+      "name": "actual mounted Host commit wait rejects changed epoch",
+      "status": "pass",
+      "observation": {
+        "waits": 1,
+        "stores": 0,
+        "owner": "A",
+        "active": true
+      }
+    },
+    {
+      "name": "actual mounted Host commit wait rejects changed blocked",
+      "status": "pass",
+      "observation": {
+        "waits": 1,
+        "stores": 0,
+        "owner": "A",
+        "active": true
+      }
+    },
+    {
+      "name": "real revocation invalidates original A and retains recording",
+      "status": "pass",
+      "observation": {
+        "sameOwner": "A",
+        "streams": 1,
+        "stores": 0,
+        "invalidated": true
+      }
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Actual mounted App, SearchEditorHost, NoteEditor/TipTap, SearchEditorGate, useEditorCommit, SaveQueue, DesktopPanel, DesktopSession, RecordingRevisions and bridge; only debug getters inserted before App return.",
+    "Native IPC, authorization, stream, recorder, decoding, playback and persisted host are controlled. Tests do not use hardware mic, device, GUI or native permission.",
+    "Native mac toolbar deliberately not mounted via platform boundary. No pixel/package/runtime claim."
+  ]
+}
