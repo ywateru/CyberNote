@@ -1,0 +1,1330 @@
+{
+  "boundary": "actual shared RecordingView, controlled legal projection/action sink; no media/native/device",
+  "baselineHead": "3534acaf1475c241895191d93ec839a5428cfc97",
+  "sourceHead": "3534acaf1475c241895191d93ec839a5428cfc97",
+  "sourceInputs": [
+    "src/RecordingView.tsx",
+    "src/RecordingPanel.css",
+    "src/style.css",
+    "src/recording-coordinator.ts",
+    "src/recording-waveform.tsx",
+    "src/recording-clock.ts",
+    "scripts/check-mobile-recording-primary73.mjs"
+  ],
+  "sourceFingerprintAtStart": "ca3d6a3bc7d5604df56b34e57c3076e32fa0bbf77c0f4239f822f923a2af3995",
+  "variants": {
+    "before": {
+      "cssSHA256": "d9c86e89e0a902b03a96e2dc1ce5584ba477931e8165189e5cba10e80836d8e9",
+      "layouts": {
+        "mobile-idle-392x840-light": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "36bb569fea5a3c9c50b6f5f82d871c30b7bc0b9eeee181de68ca97ff8849b437",
+          "allComputedSHA256": "525b0f0c514bf35db69a44e9c6813d86d4ffa42eec4a38918b5f4597d286ffe6",
+          "pngSHA256": "0e7ec056e420a0674307dc80fd00f4c14ceff41b719e20619b7cad1e4aa50aef",
+          "primary": {
+            "x": 167.0625,
+            "y": 726.171875,
+            "width": 57.875,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-392x840-light": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "52d06142eb13146730d82e4b3b693357924b5884418a33a352cb1acb8f76043c",
+          "allComputedSHA256": "abfab72a2ae68868885262e9f2403a6c9561b92d7f70fc6c05113bebfda5ebed",
+          "pngSHA256": "6c20624f5a14d521be96b1e8b7cf221e5906d41b5ed574f53333b6928a08c445",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-392x840-light": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "cec38760be37f55f47aa03e66f03235ad5fea981ba16b2e0ed1b3bfd8135f645",
+          "allComputedSHA256": "1c6d3300c8f60980c7a9a038e397cff78264a48bca54761b678ed4d5d2bfbbe7",
+          "pngSHA256": "583d8830b9ff07bc7700f986458ee7d601645d131e51ea0687d69650a70e9de4",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-idle-392x840-dark": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "36bb569fea5a3c9c50b6f5f82d871c30b7bc0b9eeee181de68ca97ff8849b437",
+          "allComputedSHA256": "3c883b6e42069c4f4690f4424305756fb57ebf911518ef37dbd046c54cacb82d",
+          "pngSHA256": "85f2e47ca7f3981a4eaf02d38684c6676b364d397a8a141363fed3f95e7529ce",
+          "primary": {
+            "x": 167.0625,
+            "y": 726.171875,
+            "width": 57.875,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-392x840-dark": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "52d06142eb13146730d82e4b3b693357924b5884418a33a352cb1acb8f76043c",
+          "allComputedSHA256": "7e72dad8f64d69615e6a9b38f04b16f642165b1b38c05e05cbfffa06b293e1c8",
+          "pngSHA256": "fc5deeb2c2fc1302ede51c445d72bc1f7af08222a8a1b68559e5899f1f147931",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-392x840-dark": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "cec38760be37f55f47aa03e66f03235ad5fea981ba16b2e0ed1b3bfd8135f645",
+          "allComputedSHA256": "2e84d342e9a95f77a5328ad00f9a2991e53fb219c5b01d56755c4e2d8640b4ba",
+          "pngSHA256": "63546bbf0a4d8aff70200017efbac21eff118d4aaa41e643d49cd30a3c6d12b6",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-idle-320x568-light": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "83f3241bd89e39dea6a382820d8ea89f059794cba58d951a099aa0e967e911ae",
+          "allComputedSHA256": "90bb30954621a5d08d5da30ec2306313dee9015763a4c40e06b679400469f517",
+          "pngSHA256": "775633905c4f181c57d820e4e251e1a774ad463934fa09219cd952bbf971d0e7",
+          "primary": {
+            "x": 138,
+            "y": 491.03125,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-320x568-light": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "245e3717ef4ae8afea6697175da68ed58f8fe2a1605d826f65794bc7d096254c",
+          "allComputedSHA256": "c023edf05b13966732a3bf81105cf8aea9a820c45165f9c535ca08b9f8dc435f",
+          "pngSHA256": "d1cbe3b66f18d809890014ded65519fa74f437b63dc2d21024962cabb7267d65",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-320x568-light": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "55de9e6aff45b120968192733871aa9af8e92537fa3309eea7a3f32faeb8e377",
+          "allComputedSHA256": "f8998abd426af8a4052ac8c24917055a40ec86811922af1d67c4ec541877c4b5",
+          "pngSHA256": "b1287de9cc460e1a842c0a40d3de8bcbcd14334967d75a4510511bcff1ef958c",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-idle-320x568-dark": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "83f3241bd89e39dea6a382820d8ea89f059794cba58d951a099aa0e967e911ae",
+          "allComputedSHA256": "5f94f5db583807157e0b92b2d1ab85dc9509cff8df70e300f81187d850a5e0c0",
+          "pngSHA256": "b940ca3dfb3c2c55267e7eb11b249da36bc30e0dbde2291010762e82b4bbe3d7",
+          "primary": {
+            "x": 138,
+            "y": 491.03125,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-320x568-dark": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "245e3717ef4ae8afea6697175da68ed58f8fe2a1605d826f65794bc7d096254c",
+          "allComputedSHA256": "56db566d2d861e037234d461f99585c63551f0a526a42e38c7210e97d946fd7a",
+          "pngSHA256": "a4d6bdfa50ebb4afdee63b95910c9d5f25d6416216cb0f8d46fdf62ad545ccc5",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-320x568-dark": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "55de9e6aff45b120968192733871aa9af8e92537fa3309eea7a3f32faeb8e377",
+          "allComputedSHA256": "f77f81fbeb5939a43f9e5a1302c8e3d9fc45120582507d305d06ac38035b5e3e",
+          "pngSHA256": "fba45737b61154d5344e20bd0acb5d667624df54ebf75decd86a0aaedc23b280",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-idle-280x600-light": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "81d17745e0b82c31b220a538692802d08856d38a96eb31225e05c2d2cb3ee6a4",
+          "allComputedSHA256": "63cb8488c49c5e260b0e16cb9b674e8c22b491b3fdacb9bd3a5c1375b462a875",
+          "pngSHA256": "10511f2b7721cf9b4a41a49fcf647e672d058a9d1bedad27fc56242f0ddafe8d",
+          "primary": {
+            "x": 118,
+            "y": 518.6875,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-280x600-light": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "501a6b750f3ac9122da81ade4e2ca82463424062563dcd175aa558b6f74b2518",
+          "allComputedSHA256": "8563cf840df1d251e2cc0004b1d44e19ae76525a10d7b66d730cfc508330a545",
+          "pngSHA256": "7fd1e432d16f9967660ab69915bbc481199b43d5c1a3a5217d4e9654a5480670",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-280x600-light": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "1c009a6730daafda1e9d7143ccddcba666564dd5fe9297a7fea5a4409de2dca6",
+          "allComputedSHA256": "a8554ce21850667dbccf19cb80be13120e2b4e605962e1afc8ea0f671fc1d1a0",
+          "pngSHA256": "e988e318450e4c8b62e608e577d569a67f6880ace7647c1635ec38972ac97ce7",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-idle-280x600-dark": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "81d17745e0b82c31b220a538692802d08856d38a96eb31225e05c2d2cb3ee6a4",
+          "allComputedSHA256": "63ee400a2b997650bf08acf44d20b2a01608b70c15af46d67429b2f4041b9d4c",
+          "pngSHA256": "3ff27d9f0fd99ee2c8f9537dec3598626ea41c6d2b9a48a2324d4ef260b3bdc3",
+          "primary": {
+            "x": 118,
+            "y": 518.6875,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-280x600-dark": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "501a6b750f3ac9122da81ade4e2ca82463424062563dcd175aa558b6f74b2518",
+          "allComputedSHA256": "0fc4a2701b35074d3c3c91f54e1c21ad870cdf1bb4bc9bbd944973593f3de99e",
+          "pngSHA256": "3db672874720e4af67396ab67746a2ee2b128734d0d9348f2992232aa148c5cb",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-280x600-dark": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "1c009a6730daafda1e9d7143ccddcba666564dd5fe9297a7fea5a4409de2dca6",
+          "allComputedSHA256": "4940590665d2c1bf3ae8dd67e13dc9661af0c5b685d56bc91789b4dc16edab1b",
+          "pngSHA256": "276cb9bcb5ec7be313ce65876b6a1654a33cfd7e13e6d9f10551d402d639a871",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-idle-280x467-light": {
+          "htmlSHA256": "d83c20564b34b76b250b18c7539aa41dbe8699b566692783e717d5bd2219fc13",
+          "rectSHA256": "e82cc1e4ed19830b3b4ab6f80374db1f177ec0f64d6fe952a4697b184fe79901",
+          "allComputedSHA256": "cbcc53b6e05985ccb6d27b3617a1ecf3c6afc702c9873e18dc45139689f049c9",
+          "pngSHA256": "e3554cf6c591d4d22168b2b150c35639bb76e8293227e46fb87bf8ba9baafa36",
+          "primary": {
+            "x": 120,
+            "y": 410.5,
+            "width": 40,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-recording-280x467-light": {
+          "htmlSHA256": "79d59107a56361d0b140d618dd3fed7caed7493701e3716d7969f8f416cbc0ab",
+          "rectSHA256": "87c40efbf68bdc7005287f25fa874c95ee770aaf6f886aeacc70c4c664ae36e5",
+          "allComputedSHA256": "8a5e9d0940049055cde5f62fd9674682e7e4aaf06fb09c9aa3cb316341c5005c",
+          "pngSHA256": "ec09a177ed1ff2ad19240dde78a8d3fabc89c1d06b7faa5aeff13ede5ea1de9d",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-paused-280x467-light": {
+          "htmlSHA256": "9417e8b28b039840701cb07939120190b16cea6800dcf4f61a2941bfaf0b7335",
+          "rectSHA256": "81ff59d5dc749344ccae45943dcf8f90d9adb15e2fc1a4c04cf55e3f6489aaef",
+          "allComputedSHA256": "129759c060cf2a775340d366016d5d1c08490209f7ed03712a50d0faf0c746c1",
+          "pngSHA256": "b71538059840390823c4e26edae8fcff5f138c9b7c89fca1ede854f92d1f82a3",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-idle-280x467-dark": {
+          "htmlSHA256": "d83c20564b34b76b250b18c7539aa41dbe8699b566692783e717d5bd2219fc13",
+          "rectSHA256": "e82cc1e4ed19830b3b4ab6f80374db1f177ec0f64d6fe952a4697b184fe79901",
+          "allComputedSHA256": "f2e1d55e7e4a81d2addaff2538269bc90b17ba660475cae81b4aee80134a84ed",
+          "pngSHA256": "176a26c5b4c6558420aef8048608e5ab7abe881ac4e5a973f69b45ab83d41efb",
+          "primary": {
+            "x": 120,
+            "y": 410.5,
+            "width": 40,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-recording-280x467-dark": {
+          "htmlSHA256": "79d59107a56361d0b140d618dd3fed7caed7493701e3716d7969f8f416cbc0ab",
+          "rectSHA256": "87c40efbf68bdc7005287f25fa874c95ee770aaf6f886aeacc70c4c664ae36e5",
+          "allComputedSHA256": "f566b25e513cdde021dd6efd3da859d2b7c24af2cdf9bae85494b85ed111d370",
+          "pngSHA256": "0a0196c2cd81ee77c05020b26f89d73e05be2c9d1410b0a7de9b3588f4f7075f",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-paused-280x467-dark": {
+          "htmlSHA256": "9417e8b28b039840701cb07939120190b16cea6800dcf4f61a2941bfaf0b7335",
+          "rectSHA256": "81ff59d5dc749344ccae45943dcf8f90d9adb15e2fc1a4c04cf55e3f6489aaef",
+          "allComputedSHA256": "135f4760f487e61d6a9fcaca5309512c95b74e11e819871ef3349cdb1bed9dc5",
+          "pngSHA256": "6f4c8a49e09d88e5b5641f1d5b2ad2b2dc32bbb3fb09be6d141c823c17e9544c",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "idle-reference": {
+          "originalPath": "docs/research/mobile-recording-sequence-01/representative/frame-n0833.png",
+          "originalSHA256": "2bef5009608d2ad4fbc920592385f854ae75a5efd84085d4350f53b66f910b5d",
+          "bounds": [
+            95,
+            415,
+            129,
+            448
+          ],
+          "coreROI": [
+            104,
+            423,
+            120,
+            439
+          ],
+          "referenceCore": {
+            "mode": [
+              255,
+              40,
+              33
+            ],
+            "modeCount": 253,
+            "pixels": 256,
+            "mean": [
+              255,
+              39.99609375,
+              33.01953125
+            ]
+          },
+          "cloneCore": {
+            "mode": [
+              255,
+              59,
+              48
+            ],
+            "modeCount": 256,
+            "pixels": 256,
+            "mean": [
+              255,
+              59,
+              48
+            ]
+          },
+          "coreMAE": 11.328125,
+          "buttonMAE": 31.360368389780156,
+          "centerGlyphMAE": 11.29689608636977,
+          "outerRingMasks": [
+            {
+              "threshold": 210,
+              "referencePixels": 157,
+              "clonePixels": 28,
+              "xor": 133,
+              "intersectionOverUnion": 0.16352201257861634
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 213,
+              "clonePixels": 108,
+              "xor": 123,
+              "intersectionOverUnion": 0.44594594594594594
+            }
+          ]
+        },
+        "recording-reference": {
+          "originalPath": "docs/research/mobile-recording-sequence-01/representative/frame-n0870.png",
+          "originalSHA256": "4b19b7a3ca1bcf7807df1190e4ac90b7e581acc1d8f8a02000d95dc51ff82d39",
+          "bounds": [
+            71,
+            415,
+            154,
+            448
+          ],
+          "coreROI": [
+            87,
+            422,
+            101,
+            440
+          ],
+          "referenceCore": {
+            "mode": [
+              255,
+              254,
+              255
+            ],
+            "modeCount": 252,
+            "pixels": 252,
+            "mean": [
+              255,
+              254,
+              255
+            ]
+          },
+          "cloneCore": {
+            "mode": [
+              255,
+              255,
+              255
+            ],
+            "modeCount": 252,
+            "pixels": 252,
+            "mean": [
+              255,
+              255,
+              255
+            ]
+          },
+          "coreMAE": 0.3333333333333333,
+          "buttonMAE": 15.893513447730315,
+          "centerGlyphMAE": 55.493927125506076,
+          "outerRingMasks": [
+            {
+              "threshold": 210,
+              "referencePixels": 394,
+              "clonePixels": 78,
+              "xor": 328,
+              "intersectionOverUnion": 0.18
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 536,
+              "clonePixels": 210,
+              "xor": 338,
+              "intersectionOverUnion": 0.3763837638376384
+            }
+          ]
+        },
+        "paused-reference": {
+          "originalPath": "docs/research/mobile-recording-sequence-01/representative/frame-n0960.png",
+          "originalSHA256": "ed3bb1ace0f95af2721de9d600ca077223f2a5684299fe9b48d5f9b8a606d496",
+          "bounds": [
+            71,
+            415,
+            154,
+            448
+          ],
+          "coreROI": [
+            87,
+            422,
+            101,
+            440
+          ],
+          "referenceCore": {
+            "mode": [
+              255,
+              186,
+              183
+            ],
+            "modeCount": 250,
+            "pixels": 252,
+            "mean": [
+              255,
+              185.9920634920635,
+              183.015873015873
+            ]
+          },
+          "cloneCore": {
+            "mode": [
+              255,
+              240,
+              239
+            ],
+            "modeCount": 252,
+            "pixels": 252,
+            "mean": [
+              255,
+              240,
+              239
+            ]
+          },
+          "coreMAE": 36.664021164021165,
+          "buttonMAE": 37.299379335523916,
+          "centerGlyphMAE": 45.29554655870445,
+          "outerRingMasks": [
+            {
+              "threshold": 210,
+              "referencePixels": 331,
+              "clonePixels": 166,
+              "xor": 199,
+              "intersectionOverUnion": 0.4281609195402299
+            },
+            {
+              "threshold": 235,
+              "referencePixels": 398,
+              "clonePixels": 200,
+              "xor": 244,
+              "intersectionOverUnion": 0.42042755344418054
+            }
+          ]
+        }
+      }
+    },
+    "after": {
+      "cssSHA256": "d9c86e89e0a902b03a96e2dc1ce5584ba477931e8165189e5cba10e80836d8e9",
+      "layouts": {
+        "mobile-idle-392x840-light": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "36bb569fea5a3c9c50b6f5f82d871c30b7bc0b9eeee181de68ca97ff8849b437",
+          "allComputedSHA256": "525b0f0c514bf35db69a44e9c6813d86d4ffa42eec4a38918b5f4597d286ffe6",
+          "pngSHA256": "0e7ec056e420a0674307dc80fd00f4c14ceff41b719e20619b7cad1e4aa50aef",
+          "primary": {
+            "x": 167.0625,
+            "y": 726.171875,
+            "width": 57.875,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-392x840-light": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "52d06142eb13146730d82e4b3b693357924b5884418a33a352cb1acb8f76043c",
+          "allComputedSHA256": "abfab72a2ae68868885262e9f2403a6c9561b92d7f70fc6c05113bebfda5ebed",
+          "pngSHA256": "6c20624f5a14d521be96b1e8b7cf221e5906d41b5ed574f53333b6928a08c445",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-392x840-light": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "cec38760be37f55f47aa03e66f03235ad5fea981ba16b2e0ed1b3bfd8135f645",
+          "allComputedSHA256": "1c6d3300c8f60980c7a9a038e397cff78264a48bca54761b678ed4d5d2bfbbe7",
+          "pngSHA256": "583d8830b9ff07bc7700f986458ee7d601645d131e51ea0687d69650a70e9de4",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-idle-392x840-dark": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "36bb569fea5a3c9c50b6f5f82d871c30b7bc0b9eeee181de68ca97ff8849b437",
+          "allComputedSHA256": "3c883b6e42069c4f4690f4424305756fb57ebf911518ef37dbd046c54cacb82d",
+          "pngSHA256": "85f2e47ca7f3981a4eaf02d38684c6676b364d397a8a141363fed3f95e7529ce",
+          "primary": {
+            "x": 167.0625,
+            "y": 726.171875,
+            "width": 57.875,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-392x840-dark": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "52d06142eb13146730d82e4b3b693357924b5884418a33a352cb1acb8f76043c",
+          "allComputedSHA256": "7e72dad8f64d69615e6a9b38f04b16f642165b1b38c05e05cbfffa06b293e1c8",
+          "pngSHA256": "fc5deeb2c2fc1302ede51c445d72bc1f7af08222a8a1b68559e5899f1f147931",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-392x840-dark": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "cec38760be37f55f47aa03e66f03235ad5fea981ba16b2e0ed1b3bfd8135f645",
+          "allComputedSHA256": "2e84d342e9a95f77a5328ad00f9a2991e53fb219c5b01d56755c4e2d8640b4ba",
+          "pngSHA256": "63546bbf0a4d8aff70200017efbac21eff118d4aaa41e643d49cd30a3c6d12b6",
+          "primary": {
+            "x": 123.375,
+            "y": 726.171875,
+            "width": 145.234375,
+            "height": 57.875,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-idle-320x568-light": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "83f3241bd89e39dea6a382820d8ea89f059794cba58d951a099aa0e967e911ae",
+          "allComputedSHA256": "90bb30954621a5d08d5da30ec2306313dee9015763a4c40e06b679400469f517",
+          "pngSHA256": "775633905c4f181c57d820e4e251e1a774ad463934fa09219cd952bbf971d0e7",
+          "primary": {
+            "x": 138,
+            "y": 491.03125,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-320x568-light": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "245e3717ef4ae8afea6697175da68ed58f8fe2a1605d826f65794bc7d096254c",
+          "allComputedSHA256": "c023edf05b13966732a3bf81105cf8aea9a820c45165f9c535ca08b9f8dc435f",
+          "pngSHA256": "d1cbe3b66f18d809890014ded65519fa74f437b63dc2d21024962cabb7267d65",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-320x568-light": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "55de9e6aff45b120968192733871aa9af8e92537fa3309eea7a3f32faeb8e377",
+          "allComputedSHA256": "f8998abd426af8a4052ac8c24917055a40ec86811922af1d67c4ec541877c4b5",
+          "pngSHA256": "b1287de9cc460e1a842c0a40d3de8bcbcd14334967d75a4510511bcff1ef958c",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-idle-320x568-dark": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "83f3241bd89e39dea6a382820d8ea89f059794cba58d951a099aa0e967e911ae",
+          "allComputedSHA256": "5f94f5db583807157e0b92b2d1ab85dc9509cff8df70e300f81187d850a5e0c0",
+          "pngSHA256": "b940ca3dfb3c2c55267e7eb11b249da36bc30e0dbde2291010762e82b4bbe3d7",
+          "primary": {
+            "x": 138,
+            "y": 491.03125,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-320x568-dark": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "245e3717ef4ae8afea6697175da68ed58f8fe2a1605d826f65794bc7d096254c",
+          "allComputedSHA256": "56db566d2d861e037234d461f99585c63551f0a526a42e38c7210e97d946fd7a",
+          "pngSHA256": "a4d6bdfa50ebb4afdee63b95910c9d5f25d6416216cb0f8d46fdf62ad545ccc5",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-320x568-dark": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "55de9e6aff45b120968192733871aa9af8e92537fa3309eea7a3f32faeb8e377",
+          "allComputedSHA256": "f77f81fbeb5939a43f9e5a1302c8e3d9fc45120582507d305d06ac38035b5e3e",
+          "pngSHA256": "fba45737b61154d5344e20bd0acb5d667624df54ebf75decd86a0aaedc23b280",
+          "primary": {
+            "x": 100.71875,
+            "y": 491.03125,
+            "width": 118.546875,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-idle-280x600-light": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "81d17745e0b82c31b220a538692802d08856d38a96eb31225e05c2d2cb3ee6a4",
+          "allComputedSHA256": "63cb8488c49c5e260b0e16cb9b674e8c22b491b3fdacb9bd3a5c1375b462a875",
+          "pngSHA256": "10511f2b7721cf9b4a41a49fcf647e672d058a9d1bedad27fc56242f0ddafe8d",
+          "primary": {
+            "x": 118,
+            "y": 518.6875,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-280x600-light": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "501a6b750f3ac9122da81ade4e2ca82463424062563dcd175aa558b6f74b2518",
+          "allComputedSHA256": "8563cf840df1d251e2cc0004b1d44e19ae76525a10d7b66d730cfc508330a545",
+          "pngSHA256": "7fd1e432d16f9967660ab69915bbc481199b43d5c1a3a5217d4e9654a5480670",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-280x600-light": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "1c009a6730daafda1e9d7143ccddcba666564dd5fe9297a7fea5a4409de2dca6",
+          "allComputedSHA256": "a8554ce21850667dbccf19cb80be13120e2b4e605962e1afc8ea0f671fc1d1a0",
+          "pngSHA256": "e988e318450e4c8b62e608e577d569a67f6880ace7647c1635ec38972ac97ce7",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-idle-280x600-dark": {
+          "htmlSHA256": "8ce748e017c6ef5c959e926837dc74bdcbad001fda6f5cd9e30d8beb12d2a20c",
+          "rectSHA256": "81d17745e0b82c31b220a538692802d08856d38a96eb31225e05c2d2cb3ee6a4",
+          "allComputedSHA256": "63ee400a2b997650bf08acf44d20b2a01608b70c15af46d67429b2f4041b9d4c",
+          "pngSHA256": "3ff27d9f0fd99ee2c8f9537dec3598626ea41c6d2b9a48a2324d4ef260b3bdc3",
+          "primary": {
+            "x": 118,
+            "y": 518.6875,
+            "width": 44,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-recording-280x600-dark": {
+          "htmlSHA256": "2d3504a248af1873276a535772cee2daa4adc93dcd24dfcb98d191d614de3468",
+          "rectSHA256": "501a6b750f3ac9122da81ade4e2ca82463424062563dcd175aa558b6f74b2518",
+          "allComputedSHA256": "0fc4a2701b35074d3c3c91f54e1c21ad870cdf1bb4bc9bbd944973593f3de99e",
+          "pngSHA256": "3db672874720e4af67396ab67746a2ee2b128734d0d9348f2992232aa148c5cb",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(170, 170, 170)",
+            "background": "rgb(28, 28, 30)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "mobile-paused-280x600-dark": {
+          "htmlSHA256": "0ab786bb5bf84f8fa8e9f8268d685f5ba15d4401b1ff9e536ebf0a111efb9584",
+          "rectSHA256": "1c009a6730daafda1e9d7143ccddcba666564dd5fe9297a7fea5a4409de2dca6",
+          "allComputedSHA256": "4940590665d2c1bf3ae8dd67e13dc9661af0c5b685d56bc91789b4dc16edab1b",
+          "pngSHA256": "937840312d9ad7f5246e9aef9e129e54e532c004304e51ab39f2ab0a8dc5b922",
+          "primary": {
+            "x": 88.125,
+            "y": 518.6875,
+            "width": 103.734375,
+            "height": 44,
+            "border": "1px solid rgb(255, 59, 48)",
+            "background": "rgba(255, 59, 48, 0.08)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          }
+        },
+        "desktop-idle-280x467-light": {
+          "htmlSHA256": "d83c20564b34b76b250b18c7539aa41dbe8699b566692783e717d5bd2219fc13",
+          "rectSHA256": "e82cc1e4ed19830b3b4ab6f80374db1f177ec0f64d6fe952a4697b184fe79901",
+          "allComputedSHA256": "cbcc53b6e05985ccb6d27b3617a1ecf3c6afc702c9873e18dc45139689f049c9",
+          "pngSHA256": "e3554cf6c591d4d22168b2b150c35639bb76e8293227e46fb87bf8ba9baafa36",
+          "primary": {
+            "x": 120,
+            "y": 410.5,
+            "width": 40,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "desktop-recording-280x467-light": {
+          "htmlSHA256": "79d59107a56361d0b140d618dd3fed7caed7493701e3716d7969f8f416cbc0ab",
+          "rectSHA256": "87c40efbf68bdc7005287f25fa874c95ee770aaf6f886aeacc70c4c664ae36e5",
+          "allComputedSHA256": "8a5e9d0940049055cde5f62fd9674682e7e4aaf06fb09c9aa3cb316341c5005c",
+          "pngSHA256": "ec09a177ed1ff2ad19240dde78a8d3fabc89c1d06b7faa5aeff13ede5ea1de9d",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "desktop-paused-280x467-light": {
+          "htmlSHA256": "9417e8b28b039840701cb07939120190b16cea6800dcf4f61a2941bfaf0b7335",
+          "rectSHA256": "81ff59d5dc749344ccae45943dcf8f90d9adb15e2fc1a4c04cf55e3f6489aaef",
+          "allComputedSHA256": "129759c060cf2a775340d366016d5d1c08490209f7ed03712a50d0faf0c746c1",
+          "pngSHA256": "b71538059840390823c4e26edae8fcff5f138c9b7c89fca1ede854f92d1f82a3",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "desktop-idle-280x467-dark": {
+          "htmlSHA256": "d83c20564b34b76b250b18c7539aa41dbe8699b566692783e717d5bd2219fc13",
+          "rectSHA256": "e82cc1e4ed19830b3b4ab6f80374db1f177ec0f64d6fe952a4697b184fe79901",
+          "allComputedSHA256": "f2e1d55e7e4a81d2addaff2538269bc90b17ba660475cae81b4aee80134a84ed",
+          "pngSHA256": "176a26c5b4c6558420aef8048608e5ab7abe881ac4e5a973f69b45ab83d41efb",
+          "primary": {
+            "x": 120,
+            "y": 410.5,
+            "width": 40,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "desktop-recording-280x467-dark": {
+          "htmlSHA256": "79d59107a56361d0b140d618dd3fed7caed7493701e3716d7969f8f416cbc0ab",
+          "rectSHA256": "87c40efbf68bdc7005287f25fa874c95ee770aaf6f886aeacc70c4c664ae36e5",
+          "allComputedSHA256": "f566b25e513cdde021dd6efd3da859d2b7c24af2cdf9bae85494b85ed111d370",
+          "pngSHA256": "0a0196c2cd81ee77c05020b26f89d73e05be2c9d1410b0a7de9b3588f4f7075f",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": true,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 0,
+            "differenceRatio": 0,
+            "maximumChannelDelta": 0
+          }
+        },
+        "desktop-paused-280x467-dark": {
+          "htmlSHA256": "9417e8b28b039840701cb07939120190b16cea6800dcf4f61a2941bfaf0b7335",
+          "rectSHA256": "81ff59d5dc749344ccae45943dcf8f90d9adb15e2fc1a4c04cf55e3f6489aaef",
+          "allComputedSHA256": "135f4760f487e61d6a9fcaca5309512c95b74e11e819871ef3349cdb1bed9dc5",
+          "pngSHA256": "d54fd9239ae50648bfa01bb938876e0c156597447aace023b93b9e6e1c834327",
+          "primary": {
+            "x": 65,
+            "y": 410.5,
+            "width": 150,
+            "height": 41,
+            "border": "0px none rgb(255, 59, 48)",
+            "background": "rgb(242, 233, 232)",
+            "color": "rgb(255, 59, 48)",
+            "pseudo": {
+              "background": "rgba(0, 0, 0, 0)",
+              "inset": "auto",
+              "content": "none"
+            },
+            "disabled": false,
+            "hit": true
+          },
+          "pixelComparison": {
+            "equal": false,
+            "width": 560,
+            "height": 934,
+            "threshold": 0,
+            "differentPixels": 3,
+            "differenceRatio": 0.000005735698990516978,
+            "maximumChannelDelta": 1
+          }
+        }
+      }
+    }
+  },
+  "checks": [],
+  "errors": [],
+  "status": "FAIL",
+  "failure": "AssertionError [ERR_ASSERTION]: Desktop raster changed: desktop-paused-280x467-dark"
+}

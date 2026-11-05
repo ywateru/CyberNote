@@ -79,6 +79,12 @@ const result = {
       "document.fonts.ready, two frames, await running finite animations (<=500ms), two frames",
     thresholds: [210, 235],
     contourBandPixels: 2.5,
+    optimizeDeps: {
+      entries: ["src/RecordingView.tsx"],
+      include: ["react-dom/client"],
+      reason:
+        "Scope scanning to the real shared View and virtual JSX bootstrap dependency; exclude historical HTML fixtures from automatic discovery",
+    },
   },
   variants: {},
   checks: [],
@@ -107,6 +113,12 @@ try {
     await mkdir(directory, { recursive: true });
     const vite = await createViteServer({
       configFile: false,
+      // The actual JSX bootstrap is virtual, so include its client renderer.
+      // Avoid scanning unrelated historical HTML fixtures under docs/.
+      optimizeDeps: {
+        entries: ["src/RecordingView.tsx"],
+        include: ["react-dom/client"],
+      },
       cacheDir: resolve(temp, variant),
       plugins: [
         react(),
