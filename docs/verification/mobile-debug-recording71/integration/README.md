@@ -12,8 +12,10 @@
 | `pnpm build` | TypeScript + 生产构建 | Vite4.66s，未采总时 | 0 |
 | `pnpm debug check-production --production dist --out /private/tmp/notes-debug71-root-integration/production` | API缺失、URL不可开启、4类marker零匹配 | 4.992s | 0 |
 
-前三组共151项；分别并行运行，CLI计时含各自启动、在最终资源清理之前取样，不能相加当端到端耗时，也不是性能保证。build保留既存大chunk提示。Chrome156.0.8078.80，桌面1280×800，手机390×844。逐组结果及准确源码身份见各目录summary/suite；目录仅保留紧凑结果、手机初始/失败/已保存HTML布局与PNG，其他状态沿开发与独审证据读取。
+前三组共151项；分别并行运行，CLI计时含各自启动、在最终资源清理之前取样，不能相加当端到端耗时，也不是性能保证。[构建输出](build-output.txt)保留既存大chunk提示。Chrome156.0.8078.80，桌面1280×800，手机390×844。逐组结果及准确源码身份见各目录summary/suite；目录仅保留紧凑结果、手机初始/失败/已保存HTML布局与PNG，其他状态沿开发与独审证据读取。
 
 手机最终合成音频实际解码为 5.235583 秒、24kHz、125654帧、251352字节，RMS 0.08838794；4秒后仍有非零采样，暂停预览与保存卡重挂载均实际播放越过第一段。见[媒体证明](mobile/mobile-media-proof.json)。[重试证明](mobile/mobile-retry-proof.json)记录旧failed与真实saving/busy并存、再次失败保留会话、成功等待正文ACK。桌面保存中close及完整A录音/B编辑路径已回归。
 
 本次只验证真实前端、编辑器、录音Session/PCM、附件正文ACK与隔离JS协议fixture。未证明Rust持久化、Android WebView/IME、系统关闭/权限、真实硬件音质或苹果原版像素一致；未操作现有Mac应用、手机/模拟器、真实麦克风或用户录音，未构建原生包。旧committed录音revision按Undo契约保留。完整跨端产品目标继续进行。
+
+收尾：证据提交后已删除本轮task71隔离工作区及已合入分支，随工作区清除其dist和TypeScript中间文件；共享node_modules保持，已提交证据与原始参考保留。各runner的临时浏览器/缓存目录由正常cleanup处理；指定输出目录仍保留供重放。没有扩大清理其他历史工作区或原生编译缓存。

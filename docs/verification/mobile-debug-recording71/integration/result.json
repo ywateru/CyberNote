@@ -43,5 +43,11 @@
   "backend": "isolated-js-protocol-fixture",
   "nativePackagesBuilt": false,
   "existingDeviceOperated": false,
-  "realMicrophoneUsed": false
+  "realMicrophoneUsed": false,
+  "cleanup": {
+    "taskWorktreeRemoved": true,
+    "taskBranchRemoved": true,
+    "sharedNodeModulesPreserved": true,
+    "committedEvidencePreserved": true
+  }
 }
