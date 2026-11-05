@@ -1,0 +1,28 @@
+{
+  "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+  "stack": "page.waitForFunction: Timeout 30000ms exceeded.\n    at go (/private/tmp/apple-notes-mac-recording-autosave64-independent-01/scripts/check-mac-recording-commit-gate65-independent.mjs:24:122)\n    at async file:///private/tmp/apple-notes-mac-recording-autosave64-independent-01/scripts/check-mac-recording-commit-gate65-independent.mjs:32:1",
+  "checks": [
+    "baseline actual App validator with mounted production Host/NoteEditor rejects synchronized original editable gate before layout restoration",
+    "candidate awaits real useEditorCommit with mounted production Host/NoteEditor after delayed trusted response and retains waiter cleanup",
+    "external version, editor ownership, access epoch and blocked target changes during commit wait still reject original safety checks",
+    "actual finishRecording aborts delayed commit waiter and preserves failure instead of saving after close",
+    "actual useEditorCommit signal abort before next layout rejects and removes registered ticket controller",
+    "original A parked behind current B stays noneditable through commit wait without changing target or focus"
+  ],
+  "observations": [
+    {
+      "baselineHost": {
+        "result": {
+          "ok": false,
+          "error": "Error: 原录音笔记、编辑器或授权已改变，音频仍保留；不会写入其他笔记"
+        },
+        "waits": 0,
+        "syncEditable": false
+      }
+    }
+  ],
+  "errors": [
+    "SyntaxError: Unexpected token '<'"
+  ],
+  "head": "0079bae21338d05c2cd75cc4404754be4cf030b6"
+}

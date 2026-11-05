@@ -1,0 +1,63 @@
+{
+  "status": "pass",
+  "startingHead": "0079bae21338d05c2cd75cc4404754be4cf030b6",
+  "endingHead": "0079bae21338d05c2cd75cc4404754be4cf030b6",
+  "checks": [
+    "baseline actual App validator with mounted production Host/NoteEditor rejects synchronized original editable gate before layout restoration",
+    "candidate awaits real useEditorCommit with mounted production Host/NoteEditor after delayed trusted response and retains waiter cleanup",
+    "external version, editor ownership, access epoch and blocked target changes during commit wait still reject original safety checks",
+    "actual finishRecording aborts delayed commit waiter and preserves failure instead of saving after close",
+    "actual useEditorCommit signal abort before next layout rejects and removes registered ticket controller",
+    "original A parked behind current B stays noneditable through commit wait without changing target or focus",
+    "baseline mounted Panel independently reproduces sample-ahead and70-range invalid projections",
+    "mounted production DesktopPanel keeps waveform sample timestamp inside activity elapsed before independent projection tick",
+    "mounted paused Panel caps 70 controlled TimeRanges at64 and production validator accepts state",
+    "mounted Panel clips negative and over-duration ranges and drops NaN/empty ranges before validator",
+    "mounted retry Panel retains bounded valid preview state after controlled save failure"
+  ],
+  "observations": [
+    {
+      "baselineHost": {
+        "result": {
+          "ok": false,
+          "error": "Error: 原录音笔记、编辑器或授权已改变，音频仍保留；不会写入其他笔记"
+        },
+        "waits": 0,
+        "syncEditable": false
+      }
+    },
+    {
+      "baselinePanelSample": {
+        "elapsed": 0,
+        "lastSample": 200,
+        "valid": false
+      }
+    },
+    {
+      "baselinePanelRanges": {
+        "ranges": 70,
+        "valid": false
+      }
+    }
+  ],
+  "errors": [],
+  "bindings": {
+    "head": "0079bae21338d05c2cd75cc4404754be4cf030b6",
+    "authorSource": "24b6f45321367144fc684b0ef32a14738a7b0eba",
+    "baseline": "df54b554fe947e6758e48d65ec1e75f48ff3e08b",
+    "sourceHashes": {
+      "src/App.tsx": "186bf602cba399eb409dd700405aa648821f32d2f0ecc01bb00faebe1154421d",
+      "src/DesktopRecordingPanel.tsx": "c21f75d696d3db6482046c280f3db2a51f1481622c1506b39f306ab715db7428",
+      "src/use-editor-commit.ts": "6245351f825d3f24fc4df06413be51a3bfa56feabe3f5586931eb94e64f7b809",
+      "src/search-editor-gate.ts": "9dbe5495db5d9538d8b0fd7acfc8a63acaedb1c7f41c5325a58b79101407016d",
+      "src/Editor.tsx": "036b97b231d3dce02f9a9be6c60c1bb067063477974f26a01efabc308df6d6f2",
+      "src/recording-coordinator.ts": "a56eaae1a42f1ba7141055b52eb40f54b0729c5f2fae9b6077a895bd127fa904"
+    },
+    "staticSafetyPredicatesUnchanged": true
+  },
+  "limits": [
+    "Mounted actual extracted SearchEditorHost and App validator plus production NoteEditor/SearchGate/useEditorCommit; trusted response, save boundary and scheduling controlled. Not full mounted App persistence.",
+    "Mounted production DesktopPanel with actual validator and view, controlled capture/playback/Audio/interval boundaries. No media capture, native window, microphone, device, GUI, audio export, permission or pixel claim.",
+    "No presentation-mode regression: current user direction removes floating windows; only retained editor commit and projection contracts assessed."
+  ]
+}

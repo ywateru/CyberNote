@@ -1,0 +1,42 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n\n    at file:///private/tmp/apple-notes-mac-recording-autosave64-independent-01/scripts/check-mac-recording-commit-gate65-independent.mjs:35:334",
+  "checks": [
+    "baseline actual App validator with mounted production Host/NoteEditor rejects synchronized original editable gate before layout restoration",
+    "candidate awaits real useEditorCommit with mounted production Host/NoteEditor after delayed trusted response and retains waiter cleanup",
+    "external version, editor ownership, access epoch and blocked target changes during commit wait still reject original safety checks",
+    "actual finishRecording aborts delayed commit waiter and preserves failure instead of saving after close",
+    "actual useEditorCommit signal abort before next layout rejects and removes registered ticket controller",
+    "original A parked behind current B stays noneditable through commit wait without changing target or focus",
+    "baseline mounted Panel independently reproduces sample-ahead and70-range invalid projections",
+    "mounted production DesktopPanel keeps waveform sample timestamp inside activity elapsed before independent projection tick",
+    "mounted paused Panel caps 70 controlled TimeRanges at64 and production validator accepts state"
+  ],
+  "observations": [
+    {
+      "baselineHost": {
+        "result": {
+          "ok": false,
+          "error": "Error: 原录音笔记、编辑器或授权已改变，音频仍保留；不会写入其他笔记"
+        },
+        "waits": 0,
+        "syncEditable": false
+      }
+    },
+    {
+      "baselinePanelSample": {
+        "elapsed": 0,
+        "lastSample": 200,
+        "valid": false
+      }
+    },
+    {
+      "baselinePanelRanges": {
+        "ranges": 70,
+        "valid": false
+      }
+    }
+  ],
+  "errors": [],
+  "head": "0079bae21338d05c2cd75cc4404754be4cf030b6"
+}
