@@ -1,0 +1,35 @@
+{
+  "task": "recording-window50-native-readonly-recheck",
+  "source_commit": "8e061891cb56a404bb3ec68baafe0e587d0afa67",
+  "original_source_commit": "9141dff1941c433f3c916d60d84110867afc9ee9",
+  "scope": [
+    "src-tauri/src/recording_window.rs"
+  ],
+  "source_blob_sha256": "a2b3e1ce0c0a26b626b521f4a9f542c0e5710292a66ff727310989f43337b4f7",
+  "original_finding": "NATIVE50-01",
+  "status": "ORIGINAL_FINDING_STATICALLY_RESOLVED_WITH_QUIT_ORDERING_LIMITATION",
+  "confirmed_by_static_read": [
+    "child_destroyed initialized false and set by native Destroyed handler",
+    "session/operation, actual injected caller role and owner_alive validated before terminal mutation",
+    "only saved/discarded makes owner terminal",
+    "terminal and child_destroyed required to remove retained entry",
+    "failed/unknown/malformed status or wrong role/identity cannot clear unresolved entry",
+    "live-child terminal ACK retains entry until Destroyed",
+    "document quit ACK remains required by may_exit"
+  ],
+  "unverified_ordering_limit": "If all document Quit ACKs precede final owner terminal ACK for a destroyed child, recording_window_message removes the entry but does not invoke may_exit; pending Quit may wait for timeout/retry. Renderer ordering was outside this static scope.",
+  "reported_to": [
+    "root",
+    "verify_app"
+  ],
+  "not_performed": [
+    "product changes",
+    "build",
+    "test execution",
+    "GUI",
+    "mutable author product reads",
+    "renderer review"
+  ],
+  "original_report_preserved": true,
+  "ordering_limit_classification": "Defensive native ordering limitation only; verify_app reports renderer awaits owner.close/flush before successful Quit ACK, and abnormal child closure rejects close then ACKs failure. No new blocker from this static review."
+}

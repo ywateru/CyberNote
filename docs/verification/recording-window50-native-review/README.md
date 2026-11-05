@@ -31,3 +31,23 @@
 | capability | child recording-*仅listen/unlisten、destroy/close/drag，没有create、exit、hide/show、notes-ui默认工具栏；owner额外hide/show/focus。capability的通配符由上述原生录音命令精确角色/会话校验进一步收窄。未扩展到其他既有宿主command的权限审计。 |
 
 `result.json`固定所读blob的SHA256、结论与不执行项目。所有运行结论仍待verify_app的独审；真实系统权限、音轨、跨窗消息运行、后台工作及像素对齐均不在本补审范围。
+
+## 对固定修复8e06189的静态复核
+
+复核固定源码 `8e061891cb56a404bb3ec68baafe0e587d0afa67`，只通过git读取`recording_window.rs`及其相对首版的变化，未运行其中测试、未改产品。本节追加结论，以上首报告和`result.json`保持原始发现身份。新blob身份及结论见`result-recheck.json`。
+
+原NATIVE50-01在本次静态范围内已具备修复路径：Entry新增`child_destroyed`，登记时为false；真实Destroyed处理312–330行置为true，未终态仍保留。`route_message`161–174行先核session/operation、owner_alive及实际caller角色，再由原owner的saved/discarded置terminal。195–198行只有`terminal && child_destroyed`才移除entry。command wrapper212–218行传入的caller仍取Tauri注入Window.label，不接受前端冒填caller。
+
+| 情况 | 固定修复的静态结果 |
+|---|---|
+| 子窗已销毁，原owner晚到saved/discarded | 终态与已销毁条件同时成立，移除entry；wrapper220–223行不再向不存在的接收方发送，解除旧的永久占位。 |
+| failed、saving、unknown、缺失或未知status | 不设置terminal；未终态的已销毁entry继续保留，不能把失败当作保存/丢弃。 |
+| 错session/operation、child冒发owner-status、其他窗口冒认、已丢失owner | 在终态设置和移除之前返回错误，entry保持。 |
+| 正常child仍存活，原owner已saved/discarded | child_destroyed仍为false，不提前移除；继续定向发送ACK。后续真实Destroyed才按终态移除，正常存活child仍占退出guard。 |
+| entry已移除但文档Quit ACK未齐 | `may_exit`269–280行仍要求waiting空与entries空，不会由这次清理直接跳过文档ACK。 |
+
+还有一项顺序限制需要由总独审结合实际renderer流程确认：wrapper在已销毁entry结算后直接返回Ok，没有重新调用`may_exit`。若本轮Quit文档ACK已经先全到、当时尚因entry未清而没有退出，随后最后一个owner终态ACK才移除entry，本轮Quit可能等45秒取消并需要重试；通常的“终态先结算，再文档Quit ACK”顺序会由`recording_quit_ack`303–307行调用`may_exit`正常处理。此处没有提前退出风险，但本补审未验证实际顺序，已向root和verify_app报告，不能据静态修复关闭全部Quit运行验收。
+
+verify_app随后反馈其另行读取的真实renderer顺序：Quit handler先await录音owner close、再flush、最后才success ACK；异常子窗提前关闭会使close失败并发success:false取消本次Quit，后续保存ACK结算后由下一次Quit退出。因此该逆序在它核对的正常授权流程不可达，作为原生防御性顺序限制记录，不新增阻塞。此为总独审反馈，不计作本补审自行读取renderer或执行验证。
+
+本节只关闭原永久tombstone问题的静态推导；实际Rust复现、异常/正常关闭及完整退出结果仍由verify_app负责。
