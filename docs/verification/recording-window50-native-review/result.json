@@ -1,0 +1,54 @@
+{
+  "task": "recording-window50-native-readonly-review",
+  "source_commit": "9141dff1941c433f3c916d60d84110867afc9ee9",
+  "compatible_52_commit": "f5bc101614dcc2c144f962b41620e70d4f8657b1",
+  "review_kind": "limited static review of a different author",
+  "status": "BLOCKING_FINDING_REPORTED",
+  "findings": [
+    {
+      "id": "NATIVE50-01",
+      "priority": "P1",
+      "file": "src-tauri/src/recording_window.rs",
+      "lines": [
+        169,
+        295,
+        301,
+        229,
+        239
+      ],
+      "summary": "After a nonterminal child is destroyed, later owner saved/discarded ACK sets terminal but cannot remove the retained entry; started entries cannot be abandoned.",
+      "method": "Fixed-source state-transition deduction only; no runtime reproduction performed.",
+      "reported_to": [
+        "root",
+        "verify_app",
+        "develop_app"
+      ]
+    }
+  ],
+  "source_blobs_sha256": {
+    "src-tauri/src/lib.rs": "13ea5c0c3ebfd3ba8a01370b4206d5961f0280a5c222b33c0e8a761b52e28bd8",
+    "src-tauri/src/recording_window.rs": "63a4959ea3e65dcbe853708ba346ef3e60dffa81fc443fe0592232988dc68c3a",
+    "src-tauri/capabilities/default.json": "c23d82da76184d05410f5bd455fb70b530077ab39f73b9fbb8f3bfa12baae130",
+    "src-tauri/capabilities/macos-notes-ui.json": "a5edca803c345b81ac933a00872a1cf60530f7de334a211e4d7211796170510f",
+    "src-tauri/capabilities/recording-owner-window.json": "e001b1d44be8a9ea296dd42f9b4c7bff50de4710d9168da7ebb1da3a3c7e5cac",
+    "src-tauri/capabilities/recording-window.json": "e85e5603d86a4cbd7ae70fcaea0decba2f799f23c1cde93ef590044ca0b19907"
+  },
+  "compatibility_blobs_sha256": {
+    "plugins/tauri-plugin-notes-ui/src/lib.rs": "9e2464ce6534f9661cdb34de8824106aa3981725a21903e15f5f3aa8ba3ee7dc",
+    "src-tauri/capabilities/macos-recording-access.json": "4387271bd891609b3afa7b4298d26f4db88b657b8d182474061defd47a667587"
+  },
+  "not_performed": [
+    "product changes",
+    "build",
+    "tests",
+    "GUI",
+    "permission request",
+    "mutable author product reads",
+    "renderer review",
+    "full application command ACL audit"
+  ],
+  "limitations": [
+    "Native code validates canonical UUID format; renderer nonce generation was outside the permitted paths.",
+    "Runtime event delivery, native window destruction ordering, audio and pixel fidelity remain unverified."
+  ]
+}
