@@ -1,0 +1,21 @@
+RUN real MediaRecorder complete oscillator segments decode to ordered 24k mono PCM without pause gap
+RUN actual editor live projection hides durable revisions and disposal reveals exactly the latest card
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert(r.final.text.includes("Original text"))
+
+    at file:///private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:139:5
+    at async test (file:///private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:106:41)
+    at async file:///private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:132:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '=='
+}
+
+Node.js v22.16.0

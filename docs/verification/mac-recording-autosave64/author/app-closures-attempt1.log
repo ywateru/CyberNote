@@ -1,0 +1,19 @@
+RUN two pause checkpoints and final replace exactly one A card while B is active; query alone commits each old journal
+RUN checkpoint waits for durable document ACK, then journal query barrier before admitting the next revision
+RUN failed document ACK retains exact operation/File and retries the inserted version without another store or insert
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Missing expected rejection.
+    at async file:///private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-app.mjs:29:57
+    at async test (file:///private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-app.mjs:13:67)
+    at async file:///private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-app.mjs:28:2 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: /保存|rejected/,
+  operator: 'rejects'
+}
+
+Node.js v22.16.0

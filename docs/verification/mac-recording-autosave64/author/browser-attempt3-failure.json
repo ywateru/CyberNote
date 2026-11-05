@@ -1,0 +1,157 @@
+{
+  "pass": false,
+  "checks": [
+    {
+      "name": "real MediaRecorder complete oscillator segments decode to ordered 24k mono PCM without pause gap",
+      "pass": true,
+      "errors": [],
+      "events": [
+        "recording",
+        "stop",
+        "checkpoint1",
+        "recording",
+        "stop",
+        "checkpoint2"
+      ],
+      "auth": 1,
+      "streams": 1,
+      "recorders": 2,
+      "firstDuration": 0.42,
+      "duration": 0.84,
+      "firstFrames": 10080,
+      "frames": 20160,
+      "rate": 24000,
+      "channels": 1,
+      "f1": 436.5079365079365,
+      "f2": 876.984126984127,
+      "header": {
+        "channels": 1,
+        "rate": 24000,
+        "bits": 16,
+        "data": 40320,
+        "size": 40364
+      }
+    },
+    {
+      "name": "startup timeout late stream and preparation failures stop tracks; WAV numeric and 100MiB admission boundaries",
+      "pass": true,
+      "lateStopped": true,
+      "startup": [
+        {
+          "failure": "context",
+          "stopped": true
+        },
+        {
+          "failure": "analyser",
+          "stopped": true
+        },
+        {
+          "failure": "recorder",
+          "stopped": true
+        },
+        {
+          "failure": "start",
+          "stopped": true
+        }
+      ],
+      "empty": true,
+      "limit": true,
+      "nonfinite": true,
+      "samples": [
+        32767,
+        -32768,
+        0,
+        0
+      ],
+      "errors": [
+        "Error: 麦克风准备超时，录音未开始；请检查系统提示后重试。",
+        "Error: context",
+        "Error: analyser",
+        "Error: recorder",
+        "Error: start"
+      ]
+    },
+    {
+      "name": "production Window/Panel/Owner pause ACK leaves capture window open and continuation uses original stream",
+      "pass": true,
+      "streams": 1,
+      "starts": 2,
+      "results": [
+        {
+          "revision": 1,
+          "intent": "checkpoint",
+          "size": 31724,
+          "date": 1793864083401
+        },
+        {
+          "revision": 2,
+          "intent": "final",
+          "size": 49004,
+          "date": 1793864083401
+        }
+      ],
+      "finishes": [
+        2
+      ],
+      "destroyAttempts": 1
+    },
+    {
+      "name": "Close queues during Decode checkpoint and exact later final ACK destroys once",
+      "pass": true,
+      "results": [
+        {
+          "revision": 1,
+          "intent": "final",
+          "size": 20204
+        }
+      ],
+      "finishes": [
+        1
+      ],
+      "destroyAttempts": 1
+    },
+    {
+      "name": "Close queues during Encode checkpoint and exact later final ACK destroys once",
+      "pass": true,
+      "results": [
+        {
+          "revision": 1,
+          "intent": "checkpoint",
+          "size": 23084
+        },
+        {
+          "revision": 2,
+          "intent": "final",
+          "size": 23084
+        }
+      ],
+      "finishes": [
+        2
+      ],
+      "destroyAttempts": 1
+    },
+    {
+      "name": "Close queues during Save checkpoint and exact later final ACK destroys once",
+      "pass": true,
+      "results": [
+        {
+          "revision": 1,
+          "intent": "checkpoint",
+          "size": 20204
+        },
+        {
+          "revision": 2,
+          "intent": "final",
+          "size": 20204
+        }
+      ],
+      "finishes": [
+        2
+      ],
+      "destroyAttempts": 1
+    }
+  ],
+  "pageErrors": [],
+  "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+  "stack": "page.waitForFunction: Timeout 30000ms exceeded.\n    at /private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:44:511\n    at async test (/private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:39:86)\n    at async file:///private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:44:2"
+}

@@ -1,0 +1,193 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "name": "real MediaRecorder complete oscillator segments decode to ordered 24k mono PCM without pause gap",
+      "pass": true,
+      "errors": [],
+      "events": [
+        "recording",
+        "stop",
+        "checkpoint1",
+        "recording",
+        "stop",
+        "checkpoint2"
+      ],
+      "auth": 1,
+      "streams": 1,
+      "recorders": 2,
+      "firstDuration": 0.42,
+      "duration": 0.84,
+      "firstFrames": 10080,
+      "frames": 20160,
+      "rate": 24000,
+      "channels": 1,
+      "f1": 440.4761904761905,
+      "f2": 880.952380952381,
+      "header": {
+        "channels": 1,
+        "rate": 24000,
+        "bits": 16,
+        "data": 40320,
+        "size": 40364
+      }
+    },
+    {
+      "name": "actual editor live projection hides durable revisions and disposal reveals exactly the latest card",
+      "pass": true,
+      "first": {
+        "live": 1,
+        "hidden": "none"
+      },
+      "second": {
+        "live": 1,
+        "hidden": "none",
+        "cards": 1
+      },
+      "final": {
+        "live": 0,
+        "visible": true,
+        "id": "two",
+        "text": "Or\n\n\n\niginal text"
+      },
+      "before": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Original text\"}]}]}"
+    },
+    {
+      "name": "startup timeout late stream and preparation failures stop tracks; WAV numeric and 100MiB admission boundaries",
+      "pass": true,
+      "lateStopped": true,
+      "startup": [
+        {
+          "failure": "context",
+          "stopped": true
+        },
+        {
+          "failure": "analyser",
+          "stopped": true
+        },
+        {
+          "failure": "recorder",
+          "stopped": true
+        },
+        {
+          "failure": "start",
+          "stopped": true
+        }
+      ],
+      "empty": true,
+      "limit": true,
+      "nonfinite": true,
+      "samples": [
+        32767,
+        -32768,
+        0,
+        0
+      ],
+      "errors": [
+        "Error: 麦克风准备超时，录音未开始；请检查系统提示后重试。",
+        "Error: context",
+        "Error: analyser",
+        "Error: recorder",
+        "Error: start"
+      ]
+    },
+    {
+      "name": "production Window/Panel/Owner pause ACK leaves capture window open and continuation uses original stream",
+      "pass": true,
+      "streams": 1,
+      "starts": 2,
+      "results": [
+        {
+          "revision": 1,
+          "intent": "checkpoint",
+          "size": 34604,
+          "date": 1793864561175
+        },
+        {
+          "revision": 2,
+          "intent": "final",
+          "size": 51884,
+          "date": 1793864561175
+        }
+      ],
+      "finishes": [
+        2
+      ],
+      "destroyAttempts": 1
+    },
+    {
+      "name": "Close queues during Decode checkpoint and exact later final ACK destroys once",
+      "pass": true,
+      "results": [
+        {
+          "revision": 1,
+          "intent": "final",
+          "size": 25964
+        }
+      ],
+      "finishes": [
+        1
+      ],
+      "destroyAttempts": 1
+    },
+    {
+      "name": "Close queues during Encode checkpoint and exact later final ACK destroys once",
+      "pass": true,
+      "results": [
+        {
+          "revision": 1,
+          "intent": "checkpoint",
+          "size": 25964
+        },
+        {
+          "revision": 2,
+          "intent": "final",
+          "size": 25964
+        }
+      ],
+      "finishes": [
+        2
+      ],
+      "destroyAttempts": 1
+    },
+    {
+      "name": "Close queues during Save checkpoint and exact later final ACK destroys once",
+      "pass": true,
+      "results": [
+        {
+          "revision": 1,
+          "intent": "checkpoint",
+          "size": 23084
+        },
+        {
+          "revision": 2,
+          "intent": "final",
+          "size": 23084
+        }
+      ],
+      "finishes": [
+        2
+      ],
+      "destroyAttempts": 1
+    },
+    {
+      "name": "failed save and destroy retain same revision/File and retry without repeated encoding or audio capture",
+      "pass": true,
+      "results": 2,
+      "same": true,
+      "starts": 1,
+      "submits": [
+        {
+          "revision": 1,
+          "transfer": true
+        },
+        {
+          "revision": 1,
+          "transfer": false
+        }
+      ],
+      "destroyAttempts": 2
+    }
+  ],
+  "pageErrors": []
+}

@@ -1,0 +1,39 @@
+RUN checkpoint waits for real final tail/onstop and decodes the complete segment once
+RUN decode failure retains exact sealed Blob; explicit retry succeeds without recorder restart or data replacement
+RUN MediaRecorder error still collects its final tail and permits saving; capture cannot silently resume
+RUN finalization timeout retains late tail for explicit save retry
+RUN empty finalized media remains a visible save failure and does not fabricate a WAV
+{
+  "pass": true,
+  "checks": [
+    {
+      "name": "checkpoint waits for real final tail/onstop and decodes the complete segment once",
+      "pass": true,
+      "bytes": 64
+    },
+    {
+      "name": "decode failure retains exact sealed Blob; explicit retry succeeds without recorder restart or data replacement",
+      "pass": true,
+      "sameBlob": true
+    },
+    {
+      "name": "MediaRecorder error still collects its final tail and permits saving; capture cannot silently resume",
+      "pass": true,
+      "tailRetained": true
+    },
+    {
+      "name": "finalization timeout retains late tail for explicit save retry",
+      "pass": true,
+      "lateTailRetained": true
+    },
+    {
+      "name": "empty finalized media remains a visible save failure and does not fabricate a WAV",
+      "pass": true
+    }
+  ],
+  "hashes": {
+    "desktop-recording-session": "c730929012fa0b0ddc1571a7600f91db427d256eafe80ef7419cdb602f60829e",
+    "recording-session": "fe002d7bc3670821d25884fb776fb961def3960af9e257681a57fe613581f6bc",
+    "recording-pcm": "733870292dc2e3f6fd87fa4bac9cf504c5da2bfe136d79556c289803bf1800c2"
+  }
+}

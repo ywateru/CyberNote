@@ -1,0 +1,14 @@
+RUN real MediaRecorder complete oscillator segments decode to ordered 24k mono PCM without pause gap
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.evaluate: TypeError: Illegal invocation
+    at DesktopRecordingSession.dispose (http://127.0.0.1:51078/src/desktop-recording-session.ts:269:49)
+    at h.direct (http://127.0.0.1:51078/__autosave64.tsx:155:5)
+    at async <anonymous>:316:30
+    at /private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:40:154
+    at async test (/private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:39:86)
+    at async file:///private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:40:2
+
+Node.js v22.16.0

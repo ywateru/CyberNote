@@ -1,0 +1,51 @@
+RUN checkpoint waits for real final tail/onstop and decodes the complete segment once
+RUN decode failure retains exact sealed Blob; explicit retry succeeds without recorder restart or data replacement
+RUN MediaRecorder error still collects its final tail and permits saving; capture cannot silently resume
+RUN finalization timeout retains late tail for explicit save retry
+RUN empty finalized media remains a visible save failure and does not fabricate a WAV
+RUN stale/wrong-intent ACK cannot settle a revision; retry retains transfer bytes until owner acceptance
+RUN Owner lost checkpoint receipt replays exact ACK without resaving, then reconstructs only the next immutable version
+{
+  "pass": true,
+  "checks": [
+    {
+      "name": "checkpoint waits for real final tail/onstop and decodes the complete segment once",
+      "pass": true,
+      "bytes": 64
+    },
+    {
+      "name": "decode failure retains exact sealed Blob; explicit retry succeeds without recorder restart or data replacement",
+      "pass": true,
+      "sameBlob": true
+    },
+    {
+      "name": "MediaRecorder error still collects its final tail and permits saving; capture cannot silently resume",
+      "pass": true,
+      "tailRetained": true
+    },
+    {
+      "name": "finalization timeout retains late tail for explicit save retry",
+      "pass": true,
+      "lateTailRetained": true
+    },
+    {
+      "name": "empty finalized media remains a visible save failure and does not fabricate a WAV",
+      "pass": true
+    },
+    {
+      "name": "stale/wrong-intent ACK cannot settle a revision; retry retains transfer bytes until owner acceptance",
+      "pass": true
+    },
+    {
+      "name": "Owner lost checkpoint receipt replays exact ACK without resaving, then reconstructs only the next immutable version",
+      "pass": true
+    }
+  ],
+  "hashes": {
+    "desktop-recording-session": "348e0298d2a7d825977c4efc881768e2a7042d969ac4a4551f6178a75874f23c",
+    "recording-session": "fe002d7bc3670821d25884fb776fb961def3960af9e257681a57fe613581f6bc",
+    "recording-pcm": "733870292dc2e3f6fd87fa4bac9cf504c5da2bfe136d79556c289803bf1800c2",
+    "recording-revision-relay": "df1fe9769029a0c122d8c7827d2809d3da70a876dca385fb84fb97b627120f29",
+    "recording-coordinator": "a56eaae1a42f1ba7141055b52eb40f54b0729c5f2fae9b6077a895bd127fa904"
+  }
+}

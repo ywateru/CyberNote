@@ -1,0 +1,19 @@
+
+> notes-clone@0.1.0 build /private/tmp/apple-notes-mac-recording-autosave64-01
+> tsc -b && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 1914 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                      0.50 kB │ gzip:   0.32 kB
+dist/assets/index-DFDa1aFU.css                      79.03 kB │ gzip:  15.47 kB
+dist/assets/native-recording-access-BYtUVf8S.js      1.02 kB │ gzip:   0.65 kB
+dist/assets/index-CJjTgEwl.js                    1,030.21 kB │ gzip: 324.83 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 5.20s

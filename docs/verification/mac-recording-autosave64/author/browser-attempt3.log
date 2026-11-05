@@ -1,0 +1,19 @@
+RUN real MediaRecorder complete oscillator segments decode to ordered 24k mono PCM without pause gap
+RUN startup timeout late stream and preparation failures stop tracks; WAV numeric and 100MiB admission boundaries
+RUN production Window/Panel/Owner pause ACK leaves capture window open and continuation uses original stream
+RUN Close queues during Decode checkpoint and exact later final ACK destroys once
+RUN Close queues during Encode checkpoint and exact later final ACK destroys once
+RUN Close queues during Save checkpoint and exact later final ACK destroys once
+RUN failed save and destroy retain same revision/File and retry without repeated encoding or audio capture
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 30000ms exceeded.
+    at /private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:44:511
+    at async test (/private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:39:86)
+    at async file:///private/tmp/apple-notes-mac-recording-autosave64-01/scripts/check-recording-autosave64-browser.mjs:44:2 {
+  name: 'TimeoutError'
+}
+
+Node.js v22.16.0
