@@ -2,6 +2,8 @@
 
 状态：首版实现契约，允许依据真实对比继续完善。
 
+2026-11-05录音自动保存契约以[Mac任务64](plan/tasks/app-mac-recording-autosave64.md)和[桌面录音最新规格](ui/recording-desktop.md)为准：暂停生成完整可播放累计版本，并在原A正文ACK及journal query committed后确认；后续版本原位替换上一卡片，通用不可变附件operation语义保持。checkpoint不终结会话，关闭等准确final ACK才销毁。旧已committed媒体保留以保护Undo/历史，因此内部版本增加磁盘和归档空间；不把单可见卡等同于单物理附件。此为待实现契约，不代表源/设备已通过。
+
 ## 模块与所有权
 
 ```text
