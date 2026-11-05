@@ -1,7 +1,7 @@
 ---
 id: app-recording-presentation55
 scope: desktop floating/docked recording view with one persistent capture session
-status: in-review
+status: source-ready-runtime-pending
 depends-on: [app-recording-interactions50, app-mac-recording-access52]
 ---
 
@@ -24,3 +24,5 @@ depends-on: [app-recording-interactions50, app-mac-recording-access52]
 root整合后串行准确双端构建，Computer Use核Mac真正双模式/背景采集/真实播放与A/B保存重开，ADB保数据核手机回归。源、准确包、有效音轨与原图像素分别记账。证据仅docs/verification/recording-presentation55/和-independent/，保留前次失败和包，不删用户/合成数据、缓存或worktree。
 
 用户再次明确本需求重点为“录音的同时可以操作备忘录其他功能”。验收包含采集中当前A编辑/Undo/Redo、切换/新建B、搜索及格式工具；两种呈现均不得以背景遮罩、inert或覆盖层锁正文/原生工具栏。仅显式Quit等待允许沿50冻结；不能把使用其他应用的后台测试替代备忘录内并行操作。
+
+独审c518aa7 SOURCE-READY，原始证据db89215已整合；主线12文件与作者固定源一致，独审60成员复核通过。下一步按docs/verification/recording-presentation55-runtime-plan.md准确双端包实际验收。Mac15保存卡播放SecurityOrigin阻塞单列任务56，不用55受控通过掩盖。
