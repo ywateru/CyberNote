@@ -1,0 +1,61 @@
+{
+  "task": "recording-window50-native-quit-readonly-recheck",
+  "source_commit": "1b47c8025f3df5b43d85561566fd7ab381096820",
+  "comparison_commit": "8e061891cb56a404bb3ec68baafe0e587d0afa67",
+  "contract_commit": "b2242584ba36e26dc1ad6a43f68cfb936ea0b790",
+  "compatible_52_commit": "f5bc101614dcc2c144f962b41620e70d4f8657b1",
+  "status": "BLOCKED_KNOWN_REENTRANT_QUIT_BYPASS",
+  "source_blobs_sha256": {
+    "src-tauri/src/recording_window.rs": "9581cd9902af3c6c0702f7a1c7e64cd746dad3acc18ba9bdfa5140491da66457",
+    "src-tauri/src/lib.rs": "13ea5c0c3ebfd3ba8a01370b4206d5961f0280a5c222b33c0e8a761b52e28bd8",
+    "src-tauri/capabilities/default.json": "c23d82da76184d05410f5bd455fb70b530077ab39f73b9fbb8f3bfa12baae130",
+    "src-tauri/capabilities/macos-notes-ui.json": "a5edca803c345b81ac933a00872a1cf60530f7de334a211e4d7211796170510f",
+    "src-tauri/capabilities/recording-owner-window.json": "e001b1d44be8a9ea296dd42f9b4c7bff50de4710d9168da7ebb1da3a3c7e5cac",
+    "src-tauri/capabilities/recording-window.json": "e85e5603d86a4cbd7ae70fcaea0decba2f799f23c1cde93ef590044ca0b19907"
+  },
+  "contract_blob_sha256": "0eeec66cde5782ece9f83cfa0a75fea4a96cb44a1fe26c42c492187fa980c925",
+  "compatibility_blob_sha256": "9e2464ce6534f9661cdb34de8824106aa3981725a21903e15f5f3aa8ba3ee7dc",
+  "static_observations": [
+    "participants snapshot remains separate from shrinking waiting set",
+    "real caller and exact current Quit id checked before accepting ACK",
+    "successful ACK compares complete current document label set with initial snapshot",
+    "Destroyed cancels waiting participant loss or detected label-set changes and notifies original Quit id",
+    "all native cancellation paths use id payload; expired timeout cannot cancel newer id",
+    "waiting empty and all recording entries empty still required for may_exit",
+    "late authentic terminal ACK clears destroyed-child entry; live child keeps guard",
+    "exact recording UUID labels remain compatible with final52; lib and capabilities unchanged from 8e"
+  ],
+  "not_proven": [
+    "renderer freeze before first await",
+    "renderer cancellation id match and legal editor restoration",
+    "IME preservation",
+    "physical window incarnation ordering for same-label replacement",
+    "runtime event delivery, audio, full application quit or pixel behavior"
+  ],
+  "not_performed": [
+    "product writes",
+    "build",
+    "tests",
+    "GUI",
+    "mutable source reads",
+    "renderer reads"
+  ],
+  "previous_reports_preserved": true,
+  "findings": [
+    {
+      "id": "NATIVE50-02",
+      "priority": "P1",
+      "file": "src-tauri/src/recording_window.rs",
+      "lines": [
+        428,
+        429,
+        431,
+        432
+      ],
+      "summary": "A repeated ExitRequested returns before prevent_exit when recording entries are empty even though a Quit still awaits document ACKs.",
+      "method": "Runtime discovery reported by root from verify_app; control flow independently confirmed by this fixed-source static read. No runtime reproduction performed by this reviewer.",
+      "required_fix": "An existing pending Quit must prevent repeated ExitRequested before any empty-recording fast path."
+    }
+  ],
+  "corrects_preliminary_message": "Earlier no-new-blocker preliminary message omitted repeated ExitRequested early-return ordering; this record supersedes it."
+}

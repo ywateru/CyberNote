@@ -51,3 +51,9 @@
 verify_app随后反馈其另行读取的真实renderer顺序：Quit handler先await录音owner close、再flush、最后才success ACK；异常子窗提前关闭会使close失败并发success:false取消本次Quit，后续保存ACK结算后由下一次Quit退出。因此该逆序在它核对的正常授权流程不可达，作为原生防御性顺序限制记录，不新增阻塞。此为总独审反馈，不计作本补审自行读取renderer或执行验证。
 
 本节只关闭原永久tombstone问题的静态推导；实际Rust复现、异常/正常关闭及完整退出结果仍由verify_app负责。
+
+## 第三版Quit补充
+
+固定`1b47c8025f3df5b43d85561566fd7ab381096820`的有限原生复核见`quit-static-recheck.md`和`result-quit-recheck.json`。此源仍有总独审发现并在本次静态确认的重复退出绕过正文ACK阻塞，不可source-ready。前两轮发现、修复与限制全部保留；未运行构建/测试/GUI，未读取renderer或可变产品源码。
+
+最终窄修固定`12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0`：只复核一行退出早返回及上下文，确认已有pending Quit时即使录音entry空，重复退出仍会prevent_exit。NATIVE50-02在此静态范围关闭，首次失败及漏检更正保留；见`quit-static-recheck.md`末节和`result-quit-final-reentry.json`。完整运行验收仍由总独审负责。

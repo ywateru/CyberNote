@@ -1,0 +1,26 @@
+{
+  "task": "recording-window50-final-reentry-static-review",
+  "source_commit": "12e5cd2bfcb9dca75983a3c54f67d6f4a94c6cf0",
+  "failing_source_commit": "1b47c8025f3df5b43d85561566fd7ab381096820",
+  "scope": "One-line early-return change and exit_requested lines422-448 only",
+  "source_blob_sha256": "566040e918d535c0d4bcd7801f4a86d12614cdc8e28737747b6eeb68fc2f703c",
+  "failing_source_blob_sha256": "9581cd9902af3c6c0702f7a1c7e64cd746dad3acc18ba9bdfa5140491da66457",
+  "finding": "NATIVE50-02",
+  "status": "REENTRY_FINDING_STATICALLY_RESOLVED",
+  "original_failure": "verify_app runtime discovery reported by root: entries empty while existing Quit waits document ACK allowed second ExitRequested to return before prevent_exit. This reviewer did not execute the reproduction.",
+  "preliminary_omission_corrected": true,
+  "original_failure_and_prior_reports_preserved": true,
+  "final_static_deduction": "With pending Quit and exit_allowed=false, the entries-empty fast path is false, prevent_exit is reached, then the existing Quit is retained; document ACKs cannot be bypassed by reentry.",
+  "not_performed": [
+    "product writes",
+    "build",
+    "tests",
+    "GUI",
+    "mutable source reads",
+    "additional scope expansion"
+  ],
+  "limitations": [
+    "Static closure of reentry finding only, not product source-ready.",
+    "Actual repeated ExitRequested, renderer freeze/restoration, complete quit, audio and pixels require independent runtime verification."
+  ]
+}
