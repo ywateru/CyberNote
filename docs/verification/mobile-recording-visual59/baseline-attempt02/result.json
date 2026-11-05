@@ -1,0 +1,1671 @@
+{
+  "boundary": "actual shared View, controlled valid state projection and action sink; no media/native/device",
+  "baseline": true,
+  "checks": [
+    "seven mobile states: real touch hit tests and existing actions; disabled playback emits none; playing displays pause",
+    "280/320 narrow and dark: icons inside actual hit boxes, buttons disjoint and playback action reachable",
+    "desktop baseline bytes preserved"
+  ],
+  "layouts": {
+    "mobile-idle-392x840": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-modal=\"true\" aria-label=\"新录音\" data-recording-state=\"idle\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:00</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"-1\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"0\" aria-valuenow=\"0\" aria-valuetext=\"00:00.00\" aria-disabled=\"true\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% + 25px);\"></i><i style=\"left: calc(50% + 50px);\"></i><i style=\"left: calc(50% + 75px);\"></i><i style=\"left: calc(50% + 125px);\"></i><i style=\"left: calc(50% + 150px);\"></i><i style=\"left: calc(50% + 175px);\"></i><i style=\"left: calc(50% + 225px);\"></i><i style=\"left: calc(50% + 250px);\"></i><i style=\"left: calc(50% + 275px);\"></i><i style=\"left: calc(50% + 325px);\"></i><i style=\"left: calc(50% + 350px);\"></i><i style=\"left: calc(50% + 375px);\"></i><i style=\"left: calc(50% + 425px);\"></i><i style=\"left: calc(50% + 450px);\"></i><i style=\"left: calc(50% + 475px);\"></i><i style=\"left: calc(50% + 525px);\"></i><i style=\"left: calc(50% + 550px);\"></i><i style=\"left: calc(50% + 575px);\"></i><i style=\"left: calc(50% + 625px);\"></i><i style=\"left: calc(50% + 650px);\"></i><i style=\"left: calc(50% + 675px);\"></i><i style=\"left: calc(50% + 725px);\"></i><i style=\"left: calc(50% + 750px);\"></i><i style=\"left: calc(50% + 775px);\"></i><i style=\"left: calc(50% + 825px);\"></i><i style=\"left: calc(50% + 850px);\"></i><i style=\"left: calc(50% + 875px);\"></i><i style=\"left: calc(50% + 925px);\"></i><i style=\"left: calc(50% + 950px);\"></i><i style=\"left: calc(50% + 975px);\"></i><i style=\"left: calc(50% + 1025px);\"></i><i style=\"left: calc(50% + 1050px);\"></i><i style=\"left: calc(50% + 1075px);\"></i><i style=\"left: calc(50% + 1125px);\"></i><i style=\"left: calc(50% + 1150px);\"></i><i style=\"left: calc(50% + 1175px);\"></i><i style=\"left: calc(50% + 1225px);\"></i><i style=\"left: calc(50% + 1250px);\"></i><i style=\"left: calc(50% + 1275px);\"></i><span style=\"left: calc(50% + 0px);\">00:00</span><span style=\"left: calc(50% + 100px);\">00:01</span><span style=\"left: calc(50% + 200px);\">00:02</span><span style=\"left: calc(50% + 300px);\">00:03</span><span style=\"left: calc(50% + 400px);\">00:04</span><span style=\"left: calc(50% + 500px);\">00:05</span><span style=\"left: calc(50% + 600px);\">00:06</span><span style=\"left: calc(50% + 700px);\">00:07</span><span style=\"left: calc(50% + 800px);\">00:08</span><span style=\"left: calc(50% + 900px);\">00:09</span><span style=\"left: calc(50% + 1000px);\">00:10</span><span style=\"left: calc(50% + 1100px);\">00:11</span><span style=\"left: calc(50% + 1200px);\">00:12</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"活动录音时间\">00:00.00</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\" disabled=\"\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\" disabled=\"\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\" disabled=\"\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-idle\" aria-label=\"开始录音\"><span class=\"recording-red-core\"></span></button><button class=\"recording-done\" aria-label=\"完成录音\" disabled=\"\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 120.25,
+          "y": 569.328125,
+          "width": 151.484375,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "500"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 167.0625,
+          "y": 726.171875,
+          "width": 57.875,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(166, 166, 170)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 613.140625,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "9dd0b6a45333d17e9c288e9e8835babf10c33a9976097beb4c07b0b8cd64832d"
+    },
+    "mobile-recording-392x840": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-modal=\"true\" aria-label=\"新录音\" data-recording-state=\"recording\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:01</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"-1\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"1.07\" aria-valuetext=\"00:01.07\" aria-disabled=\"true\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 82px);\"></i><i style=\"left: calc(50% - 57px);\"></i><i style=\"left: calc(50% - 32px);\"></i><i style=\"left: calc(50% + 18px);\"></i><i style=\"left: calc(50% + 43px);\"></i><i style=\"left: calc(50% + 68px);\"></i><i style=\"left: calc(50% + 118px);\"></i><i style=\"left: calc(50% + 143px);\"></i><i style=\"left: calc(50% + 168px);\"></i><i style=\"left: calc(50% + 218px);\"></i><i style=\"left: calc(50% + 243px);\"></i><i style=\"left: calc(50% + 268px);\"></i><i style=\"left: calc(50% + 318px);\"></i><i style=\"left: calc(50% + 343px);\"></i><i style=\"left: calc(50% + 368px);\"></i><i style=\"left: calc(50% + 418px);\"></i><i style=\"left: calc(50% + 443px);\"></i><i style=\"left: calc(50% + 468px);\"></i><i style=\"left: calc(50% + 518px);\"></i><i style=\"left: calc(50% + 543px);\"></i><i style=\"left: calc(50% + 568px);\"></i><i style=\"left: calc(50% + 618px);\"></i><i style=\"left: calc(50% + 643px);\"></i><i style=\"left: calc(50% + 668px);\"></i><i style=\"left: calc(50% + 718px);\"></i><i style=\"left: calc(50% + 743px);\"></i><i style=\"left: calc(50% + 768px);\"></i><i style=\"left: calc(50% + 818px);\"></i><i style=\"left: calc(50% + 843px);\"></i><i style=\"left: calc(50% + 868px);\"></i><i style=\"left: calc(50% + 918px);\"></i><i style=\"left: calc(50% + 943px);\"></i><i style=\"left: calc(50% + 968px);\"></i><i style=\"left: calc(50% + 1018px);\"></i><i style=\"left: calc(50% + 1043px);\"></i><i style=\"left: calc(50% + 1068px);\"></i><i style=\"left: calc(50% + 1118px);\"></i><i style=\"left: calc(50% + 1143px);\"></i><i style=\"left: calc(50% + 1168px);\"></i><i style=\"left: calc(50% + 1218px);\"></i><i style=\"left: calc(50% + 1243px);\"></i><i style=\"left: calc(50% + 1268px);\"></i><span style=\"left: calc(50% - 107px);\">00:00</span><span style=\"left: calc(50% - 7px);\">00:01</span><span style=\"left: calc(50% + 93px);\">00:02</span><span style=\"left: calc(50% + 193px);\">00:03</span><span style=\"left: calc(50% + 293px);\">00:04</span><span style=\"left: calc(50% + 393px);\">00:05</span><span style=\"left: calc(50% + 493px);\">00:06</span><span style=\"left: calc(50% + 593px);\">00:07</span><span style=\"left: calc(50% + 693px);\">00:08</span><span style=\"left: calc(50% + 793px);\">00:09</span><span style=\"left: calc(50% + 893px);\">00:10</span><span style=\"left: calc(50% + 993px);\">00:11</span><span style=\"left: calc(50% + 1093px);\">00:12</span><span style=\"left: calc(50% + 1193px);\">00:13</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"活动录音时间\">00:01.07</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\" disabled=\"\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\" disabled=\"\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\" disabled=\"\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-recording\" aria-label=\"暂停录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-pause\"><rect x=\"14\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\"></rect><rect x=\"6\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\"></rect></svg></button><button class=\"recording-done\" aria-label=\"完成录音\" disabled=\"\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 120.25,
+          "y": 569.328125,
+          "width": 151.484375,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "500"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(166, 166, 170)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 613.140625,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "3be81b2427f4f1e3db1732bd5fe38f5bb9d94556ac86f013681b7af801636692"
+    },
+    "mobile-paused-392x840": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-modal=\"true\" aria-label=\"新录音\" data-recording-state=\"paused\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 120.25,
+          "y": 569.328125,
+          "width": 151.484375,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "500"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 613.140625,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "0ecc00b752baae00044a30d2c35fad50dc6b44954b27421bfce3cefe0db05a1d"
+    },
+    "mobile-playing-392x840": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-modal=\"true\" aria-label=\"新录音\" data-recording-state=\"paused\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"暂停回放\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-pause\"><rect x=\"14\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\"></rect><rect x=\"6\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\"></rect></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\" disabled=\"\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 120.25,
+          "y": 569.328125,
+          "width": 151.484375,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "500"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 613.140625,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "暂停回放",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "31baa351a00ef8b7d044dbbf0a856044a2678879120656cbf9251df47b398166"
+    },
+    "mobile-pending-392x840": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-modal=\"true\" aria-label=\"新录音\" data-recording-state=\"paused\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\" disabled=\"\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\" disabled=\"\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 120.25,
+          "y": 569.328125,
+          "width": 151.484375,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "500"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 613.140625,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "f545e34b0bc70eedb600841b387700892c7658fa929aa84ebcfc763ccd8c1c3d"
+    },
+    "mobile-error-392x840": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-modal=\"true\" aria-label=\"新录音\" data-recording-state=\"paused\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"alert\">回放失败，请重试</div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\" disabled=\"\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><button class=\"recording-playback-retry\">重试回放</button><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 120.25,
+          "y": 569.328125,
+          "width": 151.484375,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "500"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 148,
+          "y": 613.140625,
+          "width": 96,
+          "height": 17,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": {
+          "x": 172,
+          "y": 495.796875,
+          "width": 48,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        }
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "2c7a64781dee1a2a7ad69c32024324c118c27c089d5c7eb68352412fc3ffc0a0"
+    },
+    "mobile-saving-392x840": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-modal=\"true\" aria-label=\"新录音\" data-recording-state=\"saving\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\" disabled=\"\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"-1\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"true\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\">正在保存录音</div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\" disabled=\"\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\" disabled=\"\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\" disabled=\"\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-saving\" aria-label=\"暂停录音\" disabled=\"\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-pause\"><rect x=\"14\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\"></rect><rect x=\"6\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\"></rect></svg></button><button class=\"recording-done\" aria-label=\"完成录音\" disabled=\"\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 120.25,
+          "y": 569.328125,
+          "width": 151.484375,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "500"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(166, 166, 170)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 160,
+          "y": 613.140625,
+          "width": 72,
+          "height": 17,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": true,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "e6060be70d04358931c3e0c3d20e6467d857898e52ebc4f2f6ad3e057268b9dc"
+    },
+    "mobile-paused-320x568": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-modal=\"true\" aria-label=\"新录音\" data-recording-state=\"paused\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 39.046875,
+          "width": 320,
+          "height": 528.953125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 123.140625,
+          "width": 320,
+          "height": 195.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 98.515625,
+          "y": 384.96875,
+          "width": 122.96875,
+          "height": 36,
+          "color": "rgb(38, 38, 38)",
+          "weight": "500"
+        },
+        ".recording-playback": {
+          "x": 80,
+          "y": 437.875,
+          "width": 160,
+          "height": 44,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 100.71875,
+          "y": 491.03125,
+          "width": 118.546875,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 261.609375,
+          "y": 491.03125,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 160,
+          "y": 414.59375,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 80,
+          "y": 437.875,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 85,
+            "y": 440.046875,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 138,
+          "y": 437.875,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 146,
+            "y": 445.875,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 196,
+          "y": 437.875,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 201,
+            "y": 440.046875,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "fbb80b6ec681e766c19cc2597d716018c8f0355f9e33aa7e763810435a0336d9"
+    },
+    "mobile-paused-280x600": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-modal=\"true\" aria-label=\"新录音\" data-recording-state=\"paused\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 41.25,
+          "width": 280,
+          "height": 558.75,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 130.078125,
+          "width": 280,
+          "height": 206.171875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 84.234375,
+          "y": 406.671875,
+          "width": 111.53125,
+          "height": 33,
+          "color": "rgb(38, 38, 38)",
+          "weight": "500"
+        },
+        ".recording-playback": {
+          "x": 62,
+          "y": 462.546875,
+          "width": 156,
+          "height": 44.6875,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 88.125,
+          "y": 518.6875,
+          "width": 103.734375,
+          "height": 44,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 223.40625,
+          "y": 518.6875,
+          "width": 44,
+          "height": 44,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 140,
+          "y": 437.953125,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 62,
+          "y": 462.890625,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 67,
+            "y": 465.0625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 118,
+          "y": 462.890625,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 126,
+            "y": 470.890625,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 174,
+          "y": 462.890625,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 179,
+            "y": 465.0625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "6d46cc9165fd5527062ea93e32d80ee9578826bfe2de33116c2737daec38d975"
+    },
+    "mobile-paused-392x840-dark": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-modal=\"true\" aria-label=\"新录音\" data-recording-state=\"paused\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 120.25,
+          "y": 569.328125,
+          "width": 151.484375,
+          "height": 44,
+          "color": "rgb(238, 238, 238)",
+          "weight": "500"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(228, 175, 10)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 613.140625,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(153, 153, 153)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "291c90573c79dd37fe105299a451662b8a5e10b48c6a8ff5fb69e0f334ed391b"
+    },
+    "desktop-280x467": {
+      "dom": "<div class=\"recording-backdrop recording-desktop\"><section class=\"recording-sheet\" role=\"dialog\" aria-label=\"新录音\" data-recording-state=\"paused\"><header><button class=\"recording-cancel\" aria-label=\"关闭录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-x\"><path d=\"M18 6 6 18\"></path><path d=\"m6 6 12 12\"></path></svg></button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div><div class=\"recording-presentation-menu\"><button aria-label=\"录音显示选项\" aria-expanded=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-ellipsis\"><circle cx=\"12\" cy=\"12\" r=\"1\"></circle><circle cx=\"19\" cy=\"12\" r=\"1\"></circle><circle cx=\"5\" cy=\"12\" r=\"1\"></circle></svg></button></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check\"><path d=\"M20 6 9 17l-5-5\"></path></svg></button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 0,
+          "width": 280,
+          "height": 467,
+          "color": "rgb(0, 0, 0)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 65.5,
+          "width": 280,
+          "height": 230.5,
+          "color": "rgb(0, 0, 0)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 92,
+          "y": 330,
+          "width": 95.984375,
+          "height": 27,
+          "color": "rgb(0, 0, 0)",
+          "weight": "700"
+        },
+        ".recording-playback": {
+          "x": 71,
+          "y": 359,
+          "width": 138,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 65,
+          "y": 410.5,
+          "width": 150,
+          "height": 41,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 224,
+          "y": 410.5,
+          "width": 40,
+          "height": 40,
+          "color": "rgb(255, 255, 255)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 10,
+          "y": 79,
+          "width": 252,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 71,
+          "y": 359,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 80.40625,
+            "y": 366.296875,
+            "width": 25.1875,
+            "height": 29.390625
+          }
+        },
+        {
+          "x": 118,
+          "y": 359,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 128,
+            "y": 369,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "x": 165,
+          "y": 359,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 174.40625,
+            "y": 366.296875,
+            "width": 25.1875,
+            "height": 29.390625
+          }
+        }
+      ],
+      "pngSha256": "bc7e5dd899b3a2d9fac4cc11edb3c68695572ec19f6e9f7bd5b38bfd5cd924f9"
+    },
+    "desktop-320x600-dark": {
+      "dom": "<div class=\"recording-backdrop recording-desktop\"><section class=\"recording-sheet\" role=\"dialog\" aria-label=\"新录音\" data-recording-state=\"paused\"><header><button class=\"recording-cancel\" aria-label=\"关闭录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-x\"><path d=\"M18 6 6 18\"></path><path d=\"m6 6 12 12\"></path></svg></button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div><div class=\"recording-presentation-menu\"><button aria-label=\"录音显示选项\" aria-expanded=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-ellipsis\"><circle cx=\"12\" cy=\"12\" r=\"1\"></circle><circle cx=\"19\" cy=\"12\" r=\"1\"></circle><circle cx=\"5\" cy=\"12\" r=\"1\"></circle></svg></button></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"暂停回放\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-pause\"><rect x=\"14\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\"></rect><rect x=\"6\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\"></rect></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\" disabled=\"\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check\"><path d=\"M20 6 9 17l-5-5\"></path></svg></button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 600,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 65.5,
+          "width": 320,
+          "height": 363.5,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 112,
+          "y": 463,
+          "width": 95.984375,
+          "height": 27,
+          "color": "rgb(238, 238, 238)",
+          "weight": "700"
+        },
+        ".recording-playback": {
+          "x": 91,
+          "y": 492,
+          "width": 138,
+          "height": 44,
+          "color": "rgb(238, 238, 238)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 65,
+          "y": 543.5,
+          "width": 190,
+          "height": 41,
+          "color": "rgb(248, 248, 248)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 264,
+          "y": 543.5,
+          "width": 40,
+          "height": 40,
+          "color": "rgb(255, 255, 255)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 10,
+          "y": 79,
+          "width": 288,
+          "height": 0,
+          "color": "rgb(153, 153, 153)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 91,
+          "y": 492,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 100.40625,
+            "y": 499.296875,
+            "width": 25.1875,
+            "height": 29.390625
+          }
+        },
+        {
+          "x": 138,
+          "y": 492,
+          "width": 44,
+          "height": 44,
+          "label": "暂停回放",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 148,
+            "y": 502,
+            "width": 24,
+            "height": 24
+          }
+        },
+        {
+          "x": 185,
+          "y": 492,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 194.40625,
+            "y": 499.296875,
+            "width": 25.1875,
+            "height": 29.390625
+          }
+        }
+      ],
+      "pngSha256": "f6e2d8b4b231ac066e006051e9506f8024abf00b86e8a3a90188a2d2d1749995"
+    },
+    "candidate-timer-600": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-label=\"新录音\" data-recording-state=\"paused\" aria-modal=\"true\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 118.34375,
+          "y": 569.328125,
+          "width": 155.3125,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "600"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 613.140625,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "38315b3e58e7827c6912e1b3a3f11999e57c13d293db5e45a09fe6245141ea25"
+    },
+    "candidate-timer-650": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-label=\"新录音\" data-recording-state=\"paused\" aria-modal=\"true\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 117.34375,
+          "y": 569.328125,
+          "width": 157.296875,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "650"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 613.140625,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "13b3cdeab90282d763654173ac805eb7c7a3d6389275514eb98bfaf6a1a7b42b"
+    },
+    "candidate-timer-700": {
+      "dom": "<div class=\"recording-backdrop recording-mobile\"><section class=\"recording-sheet\" role=\"dialog\" aria-label=\"新录音\" data-recording-state=\"paused\" aria-modal=\"true\"><div class=\"sheet-handle\"></div><header><button class=\"recording-cancel\" aria-label=\"关闭录音\">关闭</button><div><strong>新录音</strong><small>今天 10:26<span class=\"recording-total-duration\">00:02</span></small></div></header><div class=\"waveform\" role=\"slider\" tabindex=\"0\" aria-label=\"录音回放位置\" aria-valuemin=\"0\" aria-valuemax=\"2.6\" aria-valuenow=\"2.6\" aria-valuetext=\"00:02.60\" aria-disabled=\"false\"><div class=\"wave-samples\" aria-hidden=\"true\"></div><div class=\"wave-axis\" aria-hidden=\"true\"><i style=\"left: calc(50% - 235px);\"></i><i style=\"left: calc(50% - 210px);\"></i><i style=\"left: calc(50% - 185px);\"></i><i style=\"left: calc(50% - 135px);\"></i><i style=\"left: calc(50% - 110px);\"></i><i style=\"left: calc(50% - 85px);\"></i><i style=\"left: calc(50% - 35px);\"></i><i style=\"left: calc(50% - 10px);\"></i><i style=\"left: calc(50% + 15px);\"></i><i style=\"left: calc(50% + 65px);\"></i><i style=\"left: calc(50% + 90px);\"></i><i style=\"left: calc(50% + 115px);\"></i><i style=\"left: calc(50% + 165px);\"></i><i style=\"left: calc(50% + 190px);\"></i><i style=\"left: calc(50% + 215px);\"></i><i style=\"left: calc(50% + 265px);\"></i><i style=\"left: calc(50% + 290px);\"></i><i style=\"left: calc(50% + 315px);\"></i><i style=\"left: calc(50% + 365px);\"></i><i style=\"left: calc(50% + 390px);\"></i><i style=\"left: calc(50% + 415px);\"></i><i style=\"left: calc(50% + 465px);\"></i><i style=\"left: calc(50% + 490px);\"></i><i style=\"left: calc(50% + 515px);\"></i><i style=\"left: calc(50% + 565px);\"></i><i style=\"left: calc(50% + 590px);\"></i><i style=\"left: calc(50% + 615px);\"></i><i style=\"left: calc(50% + 665px);\"></i><i style=\"left: calc(50% + 690px);\"></i><i style=\"left: calc(50% + 715px);\"></i><i style=\"left: calc(50% + 765px);\"></i><i style=\"left: calc(50% + 790px);\"></i><i style=\"left: calc(50% + 815px);\"></i><i style=\"left: calc(50% + 865px);\"></i><i style=\"left: calc(50% + 890px);\"></i><i style=\"left: calc(50% + 915px);\"></i><i style=\"left: calc(50% + 965px);\"></i><i style=\"left: calc(50% + 990px);\"></i><i style=\"left: calc(50% + 1015px);\"></i><i style=\"left: calc(50% + 1065px);\"></i><i style=\"left: calc(50% + 1090px);\"></i><i style=\"left: calc(50% + 1115px);\"></i><i style=\"left: calc(50% + 1165px);\"></i><i style=\"left: calc(50% + 1190px);\"></i><i style=\"left: calc(50% + 1215px);\"></i><span style=\"left: calc(50% - 260px);\">00:00</span><span style=\"left: calc(50% - 160px);\">00:01</span><span style=\"left: calc(50% - 60px);\">00:02</span><span style=\"left: calc(50% + 40px);\">00:03</span><span style=\"left: calc(50% + 140px);\">00:04</span><span style=\"left: calc(50% + 240px);\">00:05</span><span style=\"left: calc(50% + 340px);\">00:06</span><span style=\"left: calc(50% + 440px);\">00:07</span><span style=\"left: calc(50% + 540px);\">00:08</span><span style=\"left: calc(50% + 640px);\">00:09</span><span style=\"left: calc(50% + 740px);\">00:10</span><span style=\"left: calc(50% + 840px);\">00:11</span><span style=\"left: calc(50% + 940px);\">00:12</span><span style=\"left: calc(50% + 1040px);\">00:13</span><span style=\"left: calc(50% + 1140px);\">00:14</span></div><div class=\"recording-playhead\" aria-hidden=\"true\"></div></div><div class=\"recording-time\" aria-label=\"实际回放位置\">00:02.60</div><div class=\"recording-notice\" role=\"status\"></div><div class=\"recording-playback\" aria-label=\"录音回放\"><button aria-label=\"后退15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button><button aria-label=\"播放录音\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-play\"><polygon points=\"6 3 20 12 6 21 6 3\"></polygon></svg></button><button aria-label=\"前进15秒\"><svg viewBox=\"0 0 24 28\" aria-hidden=\"true\" class=\"recording-skip-icon\"><g transform=\"translate(24 0) scale(-1 1)\"><path d=\"M6.5 6.5a10 10 0 1 0 5.5-1.7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"></path><path d=\"M13 1 8 4.8 13 8.6Z\" fill=\"currentColor\" stroke=\"none\"></path></g><text x=\"12\" y=\"19\" text-anchor=\"middle\" fill=\"currentColor\" stroke=\"none\" font-size=\"10\" font-weight=\"600\">15</text></svg></button></div><div class=\"recording-controls\"><span class=\"recording-action-spacer\" aria-hidden=\"true\"></span><button class=\"recording-primary recording-primary-paused\" aria-label=\"继续录音\">继续</button><button class=\"recording-done\" aria-label=\"完成录音\">完成</button></div></section></div>",
+      "regions": {
+        ".recording-sheet": {
+          "x": 0,
+          "y": 57.75,
+          "width": 392,
+          "height": 782.25,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".waveform": {
+          "x": 0,
+          "y": 182.125,
+          "width": 392,
+          "height": 288.640625,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-time": {
+          "x": 116.40625,
+          "y": 569.328125,
+          "width": 159.171875,
+          "height": 44,
+          "color": "rgb(0, 0, 0)",
+          "weight": "700"
+        },
+        ".recording-playback": {
+          "x": 98,
+          "y": 647.5625,
+          "width": 196,
+          "height": 62.578125,
+          "color": "rgb(38, 38, 38)",
+          "weight": "400"
+        },
+        ".recording-primary": {
+          "x": 123.375,
+          "y": 726.171875,
+          "width": 145.234375,
+          "height": 57.875,
+          "color": "rgb(255, 59, 48)",
+          "weight": "400"
+        },
+        ".recording-done": {
+          "x": 330.375,
+          "y": 726.171875,
+          "width": 44,
+          "height": 57.875,
+          "color": "rgb(198, 158, 0)",
+          "weight": "400"
+        },
+        ".recording-notice": {
+          "x": 196,
+          "y": 613.140625,
+          "width": 0,
+          "height": 0,
+          "color": "rgb(138, 138, 138)",
+          "weight": "400"
+        },
+        ".recording-playback-retry": null
+      },
+      "buttons": [
+        {
+          "x": 98,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "后退15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 103,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        },
+        {
+          "x": 174,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "播放录音",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 182,
+            "y": 664.84375,
+            "width": 28,
+            "height": 28
+          }
+        },
+        {
+          "x": 250,
+          "y": 656.84375,
+          "width": 44,
+          "height": 44,
+          "label": "前进15秒",
+          "disabled": false,
+          "hit": true,
+          "svg": {
+            "x": 255,
+            "y": 659.015625,
+            "width": 34,
+            "height": 39.65625
+          }
+        }
+      ],
+      "pngSha256": "6f15494c8b6bf4a900004ad0e5bbba9351a5b9792097ced5f4bd399ed056c697"
+    }
+  },
+  "errors": [],
+  "external": [],
+  "status": "PASS"
+}

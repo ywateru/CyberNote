@@ -1,0 +1,20 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'f6e2d8b4b231ac066e006051e9506f8024abf00b86e8a3a90188a2d2d1749995'
+- '43549434be6c0fa0278a31872a84f2b3f233f54e7cfb9d8db689c87ac935b093'
+
+    at snap (file:///private/tmp/apple-notes-mobile-recording-visual59-01/scripts/check-mobile-recording-visual59.mjs:161:14)
+    at async file:///private/tmp/apple-notes-mobile-recording-visual59-01/scripts/check-mobile-recording-visual59.mjs:341:5 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'f6e2d8b4b231ac066e006051e9506f8024abf00b86e8a3a90188a2d2d1749995',
+  expected: '43549434be6c0fa0278a31872a84f2b3f233f54e7cfb9d8db689c87ac935b093',
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0
