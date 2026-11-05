@@ -177,18 +177,13 @@ export class RecordingSession {
         );
         if (!this.accepting) return;
       }
-      // Attach cleanup to the original promise before racing its deadline. A
-      // timed-out browser permission request can still resolve with live tracks.
+      // Take ownership in the original fulfillment callback, before prepare's
+      // promise handoff. Disposal can run between these microtasks, so every
+      // resolved stream must already belong to discard, including late streams.
       const capture = this.environment.getStream().then((stream) => {
+        this.tracks = stream.getTracks();
         if (!this.accepting) {
-          const errors: unknown[] = [];
-          for (const track of stream.getTracks()) {
-            try {
-              track.stop();
-            } catch (error) {
-              errors.push(error);
-            }
-          }
+          const errors = this.releaseCapture();
           if (errors.length) console.error("迟到录音资源释放失败。", errors);
         }
         return stream;
@@ -198,13 +193,11 @@ export class RecordingSession {
         "麦克风准备超时，录音未开始；请检查系统提示后重试。",
       );
       if (!this.accepting) {
-        // Permission can resolve after dispose; never attach it to a new session.
-        this.tracks = stream.getTracks();
+        // Disposal may already have released these tracks during the handoff.
         const errors = this.releaseCapture();
         if (errors.length) console.error("录音资源释放失败。", errors);
         return;
       }
-      this.tracks = stream.getTracks();
       for (const track of this.tracks) {
         track.addEventListener("ended", this.trackEnded);
         if (track.readyState === "ended")
