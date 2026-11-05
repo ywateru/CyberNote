@@ -1,0 +1,186 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "label": "raw idle invalid input",
+      "options": null,
+      "ok": false,
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options",
+      "lastState": false
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": false,
+      "ok": false,
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options",
+      "lastState": false
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": 0,
+      "ok": false,
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options",
+      "lastState": false
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": "",
+      "ok": false,
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options",
+      "lastState": false
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": {
+        "extra": 1
+      },
+      "ok": false,
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options",
+      "lastState": false
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": {
+        "__proto__": 1
+      },
+      "ok": false,
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options",
+      "lastState": false
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": {
+        "timeoutMs": 50,
+        "constructor": 1
+      },
+      "ok": false,
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options",
+      "lastState": false
+    },
+    {
+      "label": "late true",
+      "elapsedMs": 74.45979199999965,
+      "ok": false,
+      "code": "TIMEOUT",
+      "message": "Timed out awaiting late true",
+      "lastState": true
+    },
+    {
+      "label": "never settle",
+      "elapsedMs": 74.93408399999953,
+      "ok": false,
+      "code": "TIMEOUT",
+      "message": "Timed out awaiting never settle",
+      "lastState": true
+    },
+    {
+      "label": "false",
+      "elapsedMs": 81.40758300000016,
+      "ok": false,
+      "code": "TIMEOUT",
+      "message": "Timed out awaiting false",
+      "lastState": true
+    },
+    {
+      "label": "never-settle state transport",
+      "elapsedMs": 59.478791000000456,
+      "ok": false,
+      "code": "TIMEOUT",
+      "message": "Timed out awaiting application state",
+      "lastState": false
+    },
+    {
+      "label": "delayed successful predicate",
+      "elapsedMs": 70.91287499999999
+    },
+    {
+      "label": "failure without retry remains APP_ERROR",
+      "result": {
+        "ok": false,
+        "code": "APP_ERROR",
+        "message": "Save has failed; original pending content remains",
+        "lastState": false
+      },
+      "save": {
+        "pending": 1,
+        "queued": 1,
+        "failed": 1,
+        "saving": 0
+      }
+    },
+    {
+      "label": "real delayed failed retry",
+      "elapsedMs": 295.0221669999992,
+      "during": {
+        "save": {
+          "pending": 1,
+          "queued": 1,
+          "failed": 1,
+          "saving": 1
+        },
+        "busy": true
+      },
+      "result": {
+        "ok": false,
+        "code": "APP_ERROR",
+        "message": "Save has failed; original pending content remains",
+        "lastState": false
+      },
+      "after": {
+        "save": {
+          "pending": 1,
+          "queued": 1,
+          "failed": 1,
+          "saving": 0
+        },
+        "recordingActive": true
+      },
+      "attachments": 1
+    },
+    {
+      "label": "real delayed successful retry",
+      "elapsedMs": 374.16962500000045,
+      "during": {
+        "save": {
+          "pending": 1,
+          "queued": 1,
+          "failed": 1,
+          "saving": 1
+        },
+        "busy": true
+      },
+      "result": {
+        "ok": true,
+        "value": {
+          "version": 1,
+          "idle": true,
+          "elapsedMs": 322,
+          "save": {
+            "pending": 0,
+            "queued": 1,
+            "failed": 0,
+            "saving": 0
+          }
+        }
+      },
+      "after": {
+        "save": {
+          "pending": 0,
+          "queued": 1,
+          "failed": 0,
+          "saving": 0
+        },
+        "recordingActive": false
+      },
+      "attachments": 1
+    }
+  ],
+  "pageErrors": []
+}
