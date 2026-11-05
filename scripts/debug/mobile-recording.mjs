@@ -254,8 +254,71 @@ export async function runMobileRecording(
     backend: backend.kind,
   });
   await capture("saved", ".editor-scroll:not([hidden]) .tiptap");
+  // A remount first renders src="" and then replaces the player when the
+  // asynchronous persisted attachment read supplies its blob source. Opening
+  // the detail before that replacement loses the expanded state/input.
+  await configure({ delay: { read: 600 } });
+  const remountStarted = performance.now();
   await command("note.select", { id: "note-b" });
   await command("note.select", { id: "note-a" });
+  const readyHandle = await page.waitForFunction(
+    () => {
+      const cards = document.querySelectorAll(
+        ".editor-scroll:not([hidden]) .tiptap .audio-card",
+      );
+      if (cards.length !== 1) return false;
+      const card = cards[0];
+      const audio = card.querySelector("audio");
+      if (!(audio instanceof HTMLAudioElement)) return false;
+      if (audio.error)
+        throw Error("Saved recording metadata failed: " + audio.error.message);
+      if (
+        !audio.currentSrc ||
+        !audio.src.startsWith("blob:") ||
+        audio.readyState < HTMLMediaElement.HAVE_METADATA ||
+        !Number.isFinite(audio.duration) ||
+        audio.duration <= 4
+      )
+        return false;
+      const title = card.querySelector(".audio-title-toggle");
+      if (
+        !(title instanceof HTMLButtonElement) ||
+        title.disabled ||
+        title.getAttribute("aria-expanded") !== "false"
+      )
+        return false;
+      return {
+        src: audio.src,
+        currentSrc: audio.currentSrc,
+        readyState: audio.readyState,
+        duration: audio.duration,
+        expanded: title.getAttribute("aria-expanded"),
+      };
+    },
+    undefined,
+    { timeout: 10000 },
+  );
+  let remountReady;
+  try {
+    remountReady = await readyHandle.jsonValue();
+  } finally {
+    await readyHandle.dispose();
+  }
+  const readinessElapsedMs = performance.now() - remountStarted;
+  await configure({ delay: { read: 0 } });
+  check(
+    "Mobile saved-card readiness waits for delayed persisted media metadata before expansion",
+    readinessElapsedMs >= 500 &&
+      remountReady.duration > 4 &&
+      remountReady.src === remountReady.currentSrc,
+  );
+  await saveJSON(resolve(output, "mobile-remount-readiness.json"), {
+    readDelayMs: 600,
+    readinessElapsedMs,
+    ...remountReady,
+    boundary:
+      "Actual saved card and HTMLAudioElement metadata after B-to-A remount; no sleep or repeated title click",
+  });
   await command("dom.click", {
     selector: ".editor-scroll:not([hidden]) .tiptap .audio-title-toggle",
   });
