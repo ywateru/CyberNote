@@ -4,6 +4,8 @@
 
 **当前是可运行开发版，尚未达到原版全部UI、交互及逐像素一致，完整目标仍在进行。** 需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，细分状态见[交付计划](docs/plan/README.md)。
 
+2026-11-06新的 Mac 本地开发包为 **Mac22**：[ZIP](artifacts/mac-feedback77/备忘录-Mac22.zip) / [应用](artifacts/mac-feedback77/备忘录.app)。已包含用户截图的三处修正：移除侧栏底部新建文件夹、列表右键按鼠标位置弹出并处理边界、全局搜索的标题与摘要命中橙黄高亮。窄列表命中可见、连续文字字距和正文find独立经复核；主线桌面148/手机笔记9/录音43/附件43及build/production全部通过，见[整合记录](docs/verification/mac-feedback77/integration/README.md)。准确当前源码已本地构建并严格adhoc验签；原生窗口运行和整窗原版像素继续单独验收。Android新设备验收继续待任务76，原未保存录音现场保留。
+
 2026-11-06手机录音命令验收已完成独立复审并合入，主工作区再次通过**桌面九组100项、手机录音42项、手机笔记9项**，构建和生产调试入口排除也通过。[整合报告](docs/verification/mobile-debug-recording71/integration/README.md)记录准确源码及耗时。新增 `pnpm debug group recording --mobile`；真实保存重试等待、异步deadline和参数严格校验已修复，合成音频验证覆盖暂停后累计与后段实际播放。使用方式见[调试文档](docs/debugging.md)。原生设备、Rust持久化和原版像素继续分别验收。
 
 2026-11-05程序化测试工具已独立复核并合入：[主工作区九组91项一次通过](docs/verification/app-debug-automation70/integration/README.md)，CLI计时27.369秒（含启动，最终资源清理另计）；前端构建及生产调试排除通过。
@@ -12,7 +14,7 @@
 
 最新源码已合入[手机录音游标/时间轴60](docs/verification/mobile-recording-wave60-root-integration/README.md)：游标下缘及标签位置/字号贴近原暂停帧，三种小屏下完整标签、提示滚动、重试和触摸定位经独立复核；已进入下方第13次Android构建，**未安装到设备**。手机当前未保存录音现场继续保留，不备份/安装/停止/重启。[桌面授权诊断63](docs/verification/mac-recording-diagnostics63-root-integration/README.md)也已独审合入源码，默认关闭，尚未进入安装包；真实新采集与整体像素目标继续开放。
 
-## 当前交付（2026-11-05）
+## 历史交付（2026-11-05）
 
 本轮录音开发包为 **Mac17 / Android构建13**，分别固定于 `fa21657bc116431324d85b18fcbe9e1d328471fb`（333产品/352完整输入）和 `a236b311d7d6dcb33b0ee4f16977ebe2d2adf8ac`（334产品/353完整输入）。包含独立浮窗↔主窗右栏、保存卡播放、手机保存时序修复，以及58桌面/共享时间轴与59手机播放图形/计时校准；Android构建13另含手机游标/标签60。二者均不含63诊断，仍属有限验收中的开发包。
 

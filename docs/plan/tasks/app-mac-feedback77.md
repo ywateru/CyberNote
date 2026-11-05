@@ -1,7 +1,7 @@
 ---
 id: app-mac-feedback77
 scope: mac-sidebar-context-menu-search-highlights
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -34,3 +34,13 @@ src/App.tsx、src/style.css、必要最小展示/位置组件；scripts/debug必
 冻结806d3432的首轮独审确认两项blocking：snippet-text的flex/gap在拆分高亮span后人为增加两处4px空隙（「甲乙搜索丙丁」78→86px）；220px列表远中文摘要首命中「索」落在clip外。要求保持连续文字排版并在最窄合法列表宽度展示首命中，不能只检textContent或节点存在。
 
 完整all另连续两次止于旧contract100ms超时断言，尚未执行产品组。真实state读取在截止前未返回时，TIMEOUT可以不含lastState；不允许制造状态或移除deadline以刷绿。准许在本任务一并修正测试假设：分别验证真实App异步false及已取得状态的保留、慢首次transport的无状态超时，并保留late true/never/stalled transport截止验证。旧失败按身份保留，重新冻结后独审与主线完整回归。
+
+# completion / 2026-11-06
+
+三处修正限定范围已完成。首版806d3432经独审发现两项真实布局blocking，修复产品e760ece7、最终runner f7b3c944，经[独立复审](../reviews/app-mac-feedback77-recheck.md)a09bb916为PASS/SOURCE-READY。独立51项真实App/DOM/字符Range/PNG与6项截止场景自然exit0；原blocked和失败证据全部保留。
+
+主线c0b368ae合入后[六命令串行整合](../../verification/mac-feedback77/integration/README.md)全部自然exit0：桌面148、手机笔记9/录音43/附件43、build及production排除；89输入指纹b4d046b7…521182a前后不变、pageErrors空。修复Flex字距与220px命中裁切，未修改runtime超时算法/生产Rust/依赖/锁文件。
+
+[Mac22本地开发包](../../verification/mac-feedback77/native-build/README.md)已生成，准确当前主线离线构建、279输入不变，派生本地adhoc严格签名通过。真实WKWebView/整体像素仍开放；Android原生76继续ready，原13秒录音现场不动。此done仅关闭用户本次三处修正及命令验收，不关闭跨端全目标。
+
+Mac22独立核包`7d179a40`为PASS-PACKAGE-IDENTITY，三份实际内嵌JS/CSS资源逐字节等dist，HTML序列化token等价；严格签名/ZIP/279源码身份核对通过。当前任务worktree/分支已清理，正式证据和原始失败保留。

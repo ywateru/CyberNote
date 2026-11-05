@@ -1,8 +1,10 @@
 # 开发命令与布局检查
 
-2026-11-06，任务70/71/73/75。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
+2026-11-06，任务70/71/73/75/77。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
 
-[73主线验收](verification/mobile-recording-primary73/integration/README.md)当前为桌面100/手机录音43/手机笔记9项。手机新增600ms延迟读取后，等待同一卡片真实blob音源/metadata就绪再单次展开和后段回放，避免源更新重挂载丢失控件。程序化视觉对照可运行`node scripts/check-mobile-recording-primary73.mjs /private/tmp/notes-primary73`，它固定baseline3534acaf、真实共享View和同尺寸投影，仅适合该控件校准；输入变化必须显式审查基线。脚本限定真实依赖扫描，生产API规则不变。报告耗时须包括最终清理至进程退出，不能只引用CLI summary计时。
+[77最新整合](verification/mac-feedback77/integration/README.md)为桌面十组148项、手机笔记9/录音43/附件43，构建/生产排除通过。`pnpm debug group mac-feedback --out FRESH_DIR`单独运行本次47项真实事件/HTML/字符Range/位置回归；完整组另含45项contract，真实deadline允许首次transport尚未返回时没有lastState，不伪造状态。
+
+[73历史验收](verification/mobile-recording-primary73/integration/README.md)该批为桌面100/手机录音43/手机笔记9项。手机新增600ms延迟读取后，等待同一卡片真实blob音源/metadata就绪再单次展开和后段回放，避免源更新重挂载丢失控件。程序化视觉对照可运行`node scripts/check-mobile-recording-primary73.mjs /private/tmp/notes-primary73`，它固定baseline3534acaf、真实共享View和同尺寸投影，仅适合该控件校准；输入变化必须显式审查基线。脚本限定真实依赖扫描，生产API规则不变。报告耗时须包括最终清理至进程退出，不能只引用CLI summary计时。
 
 ## 一条命令运行
 

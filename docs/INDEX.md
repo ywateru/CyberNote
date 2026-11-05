@@ -1,6 +1,6 @@
 # Apple Notes Clone
 
-2026-11-06用户新截图优先：[Mac三处界面修正77](plan/tasks/app-mac-feedback77.md)进行中；两张参考图已保全。限定Mac底部新建入口、列表右键位置、全局搜索文字高亮，走命令/DOM独审。Android原生76继续ready，原录音现场不动。
+2026-11-06：[Mac截图三处修正77](plan/tasks/app-mac-feedback77.md)已完成限定源码/浏览器范围，[独立复审](plan/reviews/app-mac-feedback77-recheck.md)PASS（51+6）；主线桌面148、手机笔记9/录音43/附件43、build/production均自然exit0。移除Mac底部新建按钮、右键按真实坐标限制边界、标题/摘要安全橙黄高亮（连续字距和220px首命中修复）。Mac22本地包已构建且派生严格签名通过；整窗原生像素继续开放。Android原生76继续ready，原录音现场不动。
 
 
 更新：2026-11-06。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。

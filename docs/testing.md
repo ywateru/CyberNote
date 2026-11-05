@@ -2,6 +2,8 @@
 
 2026-11-06。用户要求全部应用功能可通过调试指令调用，开发工具读取渲染后的 HTML 做交互和界面对比；录音可用 Fake/Mock。测试策略以本页为准。
 
+77新增：全局搜索高亮必须验证连续字符Range位置、实际ellipsis前首命中可见及220→280→220宽度恢复，不能只检查textContent。右键须由真实鼠标/DOM contextmenu坐标触发，覆盖边界和目标笔记；调试框架的首次transport未完成时TIMEOUT可无lastState，分开验证已观察状态与真实截止，保留慢首次/迟到true/永不结束谓词场景。最新[主线148/9/43/43回归](verification/mac-feedback77/integration/README.md)与旧失败分别记账。
+
 运行命令、参数、完整入口矩阵与模拟边界见[开发命令与布局检查](debugging.md)。
 
 73新增验收约束：保存卡重挂载时不能用全局idle或标题存在冒充媒体就绪；需有界等待实际HTMLAudioElement的音源/metadata，再操作会因源变化重建的展开控件。固定600ms读延迟复现与正例纳入手机43项。每份正式结果记录自然进程退出码与含清理wall，视觉/CLI内部计时各有边界。[主线证据](verification/mobile-recording-primary73/integration/README.md)保留旧失败与后续通过，75优先补手机附件的当前Rust Session/Store真实落盘与新进程恢复；74桌面录音真实Rust链后续单独验收。
