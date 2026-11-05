@@ -23,6 +23,7 @@
 - [原版Option-Tab插入40](research/mac-folder-option-insertion-original40/README.md)、[撤销重做41](research/mac-folder-option-history-original41/README.md)、[受控WK实现准备40](research/mac-folder-option-insertion-readiness40/README.md)与[待实施任务42](plan/tasks/app-mac-ordinary-option-insertion42.md)
 - [原版连续Option-Tab同组撤销43](research/mac-folder-option-sequence-original43/README.md)：连续输入与两次插入可被一次撤销恢复到默认名，不假设逐次独立历史
 - [名称视觉残差只读准备44](research/mac-ordinary-visual-readiness44/README.md)与[浅色选中文字候选45](plan/tasks/app-mac-ordinary-selection-ink45.md)：选中明暗可单试，字体与底色残差继续开放
+- [原版名称全选/部分/末尾46](research/mac-folder-selection-original46/README.md)与[准确Mac13同态基线46](research/mac-selection-baseline13-46/README.md)：Computer Use实际原图，供Mac14后续三方比较
 
 - [需求与验收](requirements.md)
 - [架构与数据契约](architecture.md)

@@ -27,3 +27,5 @@ root创建隔离树及START后，产品仅src/smart-folders.css。在现有普�
 现有离线工具，同生产组件/完整CSS，只做一轮明确候选与旧色对照。尽可能用自有不可见WK的真实选择绘制；若捕获不含活动选择，只能标声明映射/受控证据，不能冒充实际包。全选和部分选择、自然态、底色条及非目标状态为必要范围。报告核心明暗和三阈值/完整ROI差异，不能将覆盖变多直接等同字形正确。禁止无方向字重/字号矩阵。有限检查后固定产品提交、封索引STOP，由不同作者独审，才合入准确Mac包Computer Use实拍。若候选不改善，保留结果停止并报告，不自动扩张。
 
 2026-11-05 root START45：在已整合37源的主线创建/private/tmp/apple-notes-ordinary-selection-ink45-01，native_ui_research唯一作者，仅CSS产品路径。与42代码路径不重叠，可隔离并行；verify_app不同作者独审后root串行合入。拟纳入Mac14，freeze前须两项均明确源通过，不以本条授权完整构建。
+
+2026-11-05 root源接收：source93d33f6与作者证据7675323经不同作者SOURCE-READY PASS，主线f7ef86f/f212bd4逐字合入。root fresh重核作者69/index bddc4ad9…与独立11/index63e06d62…全部匹配。独立复算支持明暗误差下降，sRGB160 mask192→196与右缘+1不利值保留；声明映射不作真实活动选择通过。本项仍in-progress，纳入Mac14后用Computer Use和原版46/旧包13基线46作实际全选/建文部分/末尾状态核对。

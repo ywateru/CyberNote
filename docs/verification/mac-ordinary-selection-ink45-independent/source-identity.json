@@ -1,0 +1,6 @@
+{
+  "base": "f2bc755f854938c3d6bdcf8e1f6f40fa200de0f5",
+  "product": "93d33f692cc3022d14dfe564db7ef460369619ff",
+  "head": "7675323329cd0e865b532999e66e83b0471d082c",
+  "patch": "diff --git a/src/smart-folders.css b/src/smart-folders.css\nindex 3b079a6..6ef48ac 100644\n--- a/src/smart-folders.css\n+++ b/src/smart-folders.css\n@@ -532,6 +532,9 @@\n   background: #fceac1;\n   color: #202020;\n }\n+:root:not(.dark) .smart-mac .smart-ordinary .smart-name input:focus::selection {\n+  color: #000;\n+}\n .smart-mac .smart-ordinary .smart-make {\n   margin: 16px 0 0;\n }\n"
+}

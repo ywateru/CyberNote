@@ -1,0 +1,994 @@
+{
+  "method": "Original JPEG decoded independently, per-file ICC converted; fixed integer crop, no registration or rescale; metrics recalculated without executing author measure.py",
+  "references": [
+    {
+      "name": "original31-selected",
+      "path": "docs/research/mac-ordinary-original31/01-name-click-select-all.cua-image",
+      "sourceSHA256": "b7e607ad4733e639b9f2fbad846badb2c2d50882b3eaa2595e9886708bbe7099",
+      "format": "JPEG",
+      "size": [
+        800,
+        414
+      ],
+      "crop": [
+        0,
+        0,
+        800,
+        414
+      ],
+      "iccSHA256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf"
+    },
+    {
+      "name": "original31-caret",
+      "path": "docs/research/mac-ordinary-original31/02-name-caret-end.cua-image",
+      "sourceSHA256": "e9776f0831f779f94108f6bbdfba802f7e721df821c0759e328e33cdc6303bc2",
+      "format": "JPEG",
+      "size": [
+        800,
+        414
+      ],
+      "crop": [
+        0,
+        0,
+        800,
+        414
+      ],
+      "iccSHA256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf"
+    },
+    {
+      "name": "mac13-selected",
+      "path": "docs/verification/mac-typography-keyboard-runtime36/11-clean-explicit-name-selected.cua-image",
+      "sourceSHA256": "3c5fb141a240fc37929b9b3400deeca32beefcf93f50df7d8f4370904120ffd9",
+      "format": "JPEG",
+      "size": [
+        2176,
+        1320
+      ],
+      "crop": [
+        688,
+        453,
+        1488,
+        867
+      ],
+      "iccSHA256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf"
+    },
+    {
+      "name": "mac13-caret",
+      "path": "docs/verification/mac-typography-keyboard-runtime36/12-clean-name-caret-end.cua-image",
+      "sourceSHA256": "3dc517e9bff1c5935272460f9a3dc5623c3b9e885f38f1b4be05596f89afd6ee",
+      "format": "JPEG",
+      "size": [
+        2176,
+        1320
+      ],
+      "crop": [
+        688,
+        453,
+        1488,
+        867
+      ],
+      "iccSHA256": "2b131b3ddbafff098096955b9e3a868ed9c261e5829a83704206086ca754c7bf"
+    }
+  ],
+  "rois": {
+    "name": [
+      135,
+      115,
+      280,
+      158
+    ],
+    "nameLabel": [
+      35,
+      115,
+      115,
+      157
+    ],
+    "smartLabel": [
+      75,
+      190,
+      330,
+      230
+    ]
+  },
+  "measurements": {
+    "baseline-all": {
+      "ink": {
+        "name": {
+          "100": {
+            "pixels": 925,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1181,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1322,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "error": {
+        "name": {
+          "raw": {
+            "fullMAE": 12.470462443197006,
+            "glyphUnionMAE": 41.125452898550726,
+            "maskXor": {
+              "100": 238,
+              "160": 200,
+              "200": 231
+            }
+          },
+          "srgb": {
+            "fullMAE": 12.136273723603315,
+            "glyphUnionMAE": 41.119145065939065,
+            "maskXor": {
+              "100": 230,
+              "160": 192,
+              "200": 229
+            }
+          }
+        },
+        "nameLabel": {
+          "raw": {
+            "fullMAE": 1.3685515873015872,
+            "glyphUnionMAE": 5.622183708838821,
+            "maskXor": {
+              "100": 8,
+              "160": 7,
+              "200": 7
+            }
+          },
+          "srgb": {
+            "fullMAE": 1.3685515873015872,
+            "glyphUnionMAE": 5.622183708838821,
+            "maskXor": {
+              "100": 8,
+              "160": 7,
+              "200": 7
+            }
+          }
+        },
+        "smartLabel": {
+          "raw": {
+            "fullMAE": 1.4257843137254902,
+            "glyphUnionMAE": 5.737704918032787,
+            "maskXor": {
+              "100": 23,
+              "160": 23,
+              "200": 13
+            }
+          },
+          "srgb": {
+            "fullMAE": 1.4257843137254902,
+            "glyphUnionMAE": 5.737704918032787,
+            "maskXor": {
+              "100": 23,
+              "160": 23,
+              "200": 13
+            }
+          }
+        }
+      },
+      "stripMedian": [
+        251.0,
+        233.0,
+        193.0
+      ]
+    },
+    "candidate-all": {
+      "ink": {
+        "name": {
+          "100": {
+            "pixels": 1012,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "160": {
+            "pixels": 1215,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1370,
+            "bbox": [
+              141,
+              124,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "error": {
+        "name": {
+          "raw": {
+            "fullMAE": 9.612403100775193,
+            "glyphUnionMAE": 28.90186810713482,
+            "maskXor": {
+              "100": 183,
+              "160": 198,
+              "200": 201
+            }
+          },
+          "srgb": {
+            "fullMAE": 9.378080727078322,
+            "glyphUnionMAE": 29.195402298850574,
+            "maskXor": {
+              "100": 191,
+              "160": 196,
+              "200": 207
+            }
+          }
+        },
+        "nameLabel": {
+          "raw": {
+            "fullMAE": 1.3685515873015872,
+            "glyphUnionMAE": 5.622183708838821,
+            "maskXor": {
+              "100": 8,
+              "160": 7,
+              "200": 7
+            }
+          },
+          "srgb": {
+            "fullMAE": 1.3685515873015872,
+            "glyphUnionMAE": 5.622183708838821,
+            "maskXor": {
+              "100": 8,
+              "160": 7,
+              "200": 7
+            }
+          }
+        },
+        "smartLabel": {
+          "raw": {
+            "fullMAE": 1.4257843137254902,
+            "glyphUnionMAE": 5.737704918032787,
+            "maskXor": {
+              "100": 23,
+              "160": 23,
+              "200": 13
+            }
+          },
+          "srgb": {
+            "fullMAE": 1.4257843137254902,
+            "glyphUnionMAE": 5.737704918032787,
+            "maskXor": {
+              "100": 23,
+              "160": 23,
+              "200": 13
+            }
+          }
+        }
+      },
+      "stripMedian": [
+        251.0,
+        233.0,
+        193.0
+      ]
+    },
+    "baseline-partial": {
+      "ink": {
+        "name": {
+          "100": {
+            "pixels": 923,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1169,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1308,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "error": {},
+      "stripMedian": [
+        251.0,
+        233.0,
+        193.0
+      ]
+    },
+    "candidate-partial": {
+      "ink": {
+        "name": {
+          "100": {
+            "pixels": 951,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1183,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1331,
+            "bbox": [
+              142,
+              125,
+              269,
+              149
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "error": {},
+      "stripMedian": [
+        251.0,
+        233.0,
+        193.0
+      ]
+    },
+    "baseline-natural": {
+      "ink": {
+        "name": {
+          "100": {
+            "pixels": 922,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1167,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1304,
+            "bbox": [
+              135,
+              125,
+              268,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "error": {
+        "name": {
+          "raw": {
+            "fullMAE": 8.885527772920673,
+            "glyphUnionMAE": 30.38412473423104,
+            "maskXor": {
+              "100": 194,
+              "160": 193,
+              "200": 216
+            }
+          },
+          "srgb": {
+            "fullMAE": 8.903013347321792,
+            "glyphUnionMAE": 30.381762343491612,
+            "maskXor": {
+              "100": 194,
+              "160": 193,
+              "200": 216
+            }
+          }
+        },
+        "nameLabel": {
+          "raw": {
+            "fullMAE": 1.3685515873015872,
+            "glyphUnionMAE": 5.622183708838821,
+            "maskXor": {
+              "100": 8,
+              "160": 7,
+              "200": 7
+            }
+          },
+          "srgb": {
+            "fullMAE": 1.3685515873015872,
+            "glyphUnionMAE": 5.622183708838821,
+            "maskXor": {
+              "100": 8,
+              "160": 7,
+              "200": 7
+            }
+          }
+        },
+        "smartLabel": {
+          "raw": {
+            "fullMAE": 1.4257843137254902,
+            "glyphUnionMAE": 5.737704918032787,
+            "maskXor": {
+              "100": 23,
+              "160": 23,
+              "200": 13
+            }
+          },
+          "srgb": {
+            "fullMAE": 1.4257843137254902,
+            "glyphUnionMAE": 5.737704918032787,
+            "maskXor": {
+              "100": 23,
+              "160": 23,
+              "200": 13
+            }
+          }
+        }
+      },
+      "stripMedian": [
+        255.0,
+        255.0,
+        255.0
+      ]
+    },
+    "candidate-natural": {
+      "ink": {
+        "name": {
+          "100": {
+            "pixels": 922,
+            "bbox": [
+              142,
+              125,
+              268,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 1167,
+            "bbox": [
+              142,
+              125,
+              268,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 1304,
+            "bbox": [
+              135,
+              125,
+              268,
+              158
+            ]
+          }
+        },
+        "nameLabel": {
+          "100": {
+            "pixels": 382,
+            "bbox": [
+              41,
+              125,
+              99,
+              148
+            ]
+          },
+          "160": {
+            "pixels": 504,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          },
+          "200": {
+            "pixels": 576,
+            "bbox": [
+              41,
+              125,
+              100,
+              149
+            ]
+          }
+        },
+        "smartLabel": {
+          "100": {
+            "pixels": 1287,
+            "bbox": [
+              85,
+              197,
+              262,
+              220
+            ]
+          },
+          "160": {
+            "pixels": 1657,
+            "bbox": [
+              85,
+              197,
+              262,
+              221
+            ]
+          },
+          "200": {
+            "pixels": 1887,
+            "bbox": [
+              85,
+              197,
+              263,
+              221
+            ]
+          }
+        }
+      },
+      "error": {
+        "name": {
+          "raw": {
+            "fullMAE": 8.885527772920673,
+            "glyphUnionMAE": 30.38412473423104,
+            "maskXor": {
+              "100": 194,
+              "160": 193,
+              "200": 216
+            }
+          },
+          "srgb": {
+            "fullMAE": 8.903013347321792,
+            "glyphUnionMAE": 30.381762343491612,
+            "maskXor": {
+              "100": 194,
+              "160": 193,
+              "200": 216
+            }
+          }
+        },
+        "nameLabel": {
+          "raw": {
+            "fullMAE": 1.3685515873015872,
+            "glyphUnionMAE": 5.622183708838821,
+            "maskXor": {
+              "100": 8,
+              "160": 7,
+              "200": 7
+            }
+          },
+          "srgb": {
+            "fullMAE": 1.3685515873015872,
+            "glyphUnionMAE": 5.622183708838821,
+            "maskXor": {
+              "100": 8,
+              "160": 7,
+              "200": 7
+            }
+          }
+        },
+        "smartLabel": {
+          "raw": {
+            "fullMAE": 1.4257843137254902,
+            "glyphUnionMAE": 5.737704918032787,
+            "maskXor": {
+              "100": 23,
+              "160": 23,
+              "200": 13
+            }
+          },
+          "srgb": {
+            "fullMAE": 1.4257843137254902,
+            "glyphUnionMAE": 5.737704918032787,
+            "maskXor": {
+              "100": 23,
+              "160": 23,
+              "200": 13
+            }
+          }
+        }
+      },
+      "stripMedian": [
+        255.0,
+        255.0,
+        255.0
+      ]
+    }
+  },
+  "comparisons": {
+    "all": {
+      "formChangedPixels": 1635,
+      "bbox": [
+        141,
+        124,
+        269,
+        149
+      ],
+      "outsideNameRoiChanged": 0,
+      "threeRoiChanged": {
+        "name": 1635,
+        "nameLabel": 0,
+        "smartLabel": 0
+      },
+      "selectionStripChanged": 0
+    },
+    "partial": {
+      "formChangedPixels": 600,
+      "bbox": [
+        219,
+        124,
+        269,
+        149
+      ],
+      "outsideNameRoiChanged": 0,
+      "threeRoiChanged": {
+        "name": 600,
+        "nameLabel": 0,
+        "smartLabel": 0
+      },
+      "selectionStripChanged": 0
+    },
+    "natural": {
+      "formChangedPixels": 0,
+      "bbox": null,
+      "outsideNameRoiChanged": 0,
+      "threeRoiChanged": {
+        "name": 0,
+        "nameLabel": 0,
+        "smartLabel": 0
+      },
+      "selectionStripChanged": 0
+    }
+  },
+  "core720": {
+    "baseline-all": [
+      32.0,
+      32.0,
+      32.0
+    ],
+    "candidate-all": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "baseline-natural": [
+      32.0,
+      32.0,
+      32.0
+    ],
+    "candidate-natural": [
+      32.0,
+      32.0,
+      32.0
+    ],
+    "original-all": [
+      10.0,
+      1.0,
+      0.0
+    ]
+  },
+  "scope": "Mapped declaration evidence only, no actual active host acceptance"
+}
