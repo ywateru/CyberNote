@@ -1,11 +1,13 @@
 ---
 id: app-mobile-recording-wave60
 scope: mobile recorder playhead and axis internal geometry against preserved video
-status: in-progress
+status: done
 depends-on: [app-mobile-recording-visual59]
 ---
 
 ## objective
+
+2026-11-05源码窄范围已接收：作者b5d008a、证据0db24aa、独审9f63dd8按序合入c61c132/848e0ec/0fc94e5。root typecheck/build通过，[主线接收](../../verification/mobile-recording-wave60-root-integration/README.md)限定SOURCE-READY / PIXEL-OPEN / DESKTOP-RASTER-OPEN；未入新APK，手机现场保持。done只指本任务局部源码和独审完成，不代表录音父目标或设备验收完成。
 
 缩小已存原暂停帧n0960与准确59手机录音视图的黄色游标底部、轴标签位置和字号差异，推进原版像素目标。原手机现场由用户明确保留，禁止设备/音频操作；本任务只源码与真实共享视图。59已独审并合入，Mac17/Android12为fa21657构建，当前6f37f77仅追加交接记录，产品同59。
 

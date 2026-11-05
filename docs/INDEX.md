@@ -2,7 +2,7 @@
 
 更新：2026-11-05。目标平台：macOS、Android。技术约束：Rust + pnpm。本地保存，无 iCloud。
 
-当前并行源码项：[手机游标/时间轴60](plan/tasks/app-mobile-recording-wave60.md)与[Mac授权有界诊断63](plan/tasks/app-mac-recording-diagnostics63.md)。[授权链研究61](research/mac-recording-access-next61/README.md)保留真实采集未通过；[原版已存音频菜单62](research/saved-audio-menu62/README.md)仅观察菜单，未执行追加/导出/删除，菜单功能差异继续开放。两项源码工作不操作原Android现场，不追认旧包包含新改动。
+[手机游标/时间轴60](plan/tasks/app-mobile-recording-wave60.md)已独审并[合入主线](verification/mobile-recording-wave60-root-integration/README.md)，尚未进入新APK；[Mac授权有界诊断63](plan/tasks/app-mac-recording-diagnostics63.md)继续隔离开发与独审，首版同步输出阻塞风险正在修复。[授权链研究61](research/mac-recording-access-next61/README.md)保留真实采集未通过；[原版已存音频菜单62](research/saved-audio-menu62/README.md)仅观察菜单，未执行追加/导出/删除，菜单功能差异继续开放。不操作原Android现场，不追认旧包包含新改动。
 
 当前已发布接收包：Mac14（构建源d9ce9c4）/Android08（源182464b），不同来源分别记账。[Mac14普通名称/侧栏/局部选中文字有限接收](verification/mac-ordinary-keyboard47-root-acceptance.md)；上一批双端见[接收36](verification/typography-compose-keyboard36-root-acceptance.md)。整体像素与完整交互目标继续进行。
 
@@ -13,7 +13,7 @@
 已整合[录音可见几何校准58](plan/tasks/app-recording-visual58.md)及[手机播放行校准59](plan/tasks/app-mobile-recording-visual59.md)：桌面时间轴/标题/计时与手机播放图形/字重、窄屏错误提示已改，[58独审](verification/recording-visual58-independent/review-final.md)与[59独审](verification/mobile-recording-visual59-independent/review-final.md)均SOURCE-READY / PIXEL-OPEN。准确Mac17/Android12已构建收集；手机设备验收继续暂缓，不触原Android失败File。源码、受控视觉与实际包像素结论分开，历史Mac16/Android11不追认包含58/59。
 
 - [Mac17/Android12准确包独立身份核对](verification/unified-candidate06/recording-visual5859-independent/README.md)
-- [手机波形游标与轴标签剩余差异准备60](research/mobile-recording-wave60-readiness/README.md)：已拆分[内部几何任务60](plan/tasks/app-mobile-recording-wave60.md)，源码开发进行中，不改变保留手机现场的决定
+- [手机波形游标与轴标签剩余差异准备60](research/mobile-recording-wave60-readiness/README.md)：[内部几何任务60](plan/tasks/app-mobile-recording-wave60.md)已独审合入，游标/标签局部改善；完整像素和设备验收继续开放，不改变保留手机现场的决定
 
 - [Mac13实际独审36](plan/reviews/mac-typography-keyboard-runtime36.md)与[Android08实际独审36](plan/reviews/android-compose-anchor-runtime36.md)
 - [Mac12准确构建](verification/unified-candidate06/mac-name-focus-build12/README.md)与[独立核包](plan/reviews/mac-name-focus-independent12.md)

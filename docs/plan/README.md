@@ -4,7 +4,7 @@
 
 2026-11-05继续[Mac授权诊断63](tasks/app-mac-recording-diagnostics63.md)：依[研究61](../research/mac-recording-access-next61/README.md)增加默认关闭的有界阶段事件及结构化错误保全，保持原单pending/截止/资源语义；只源码和伪OS验证，不触当前包或手机。[原版已保存音频菜单62](../research/saved-audio-menu62/README.md)已留证，追加/改名等功能尚未实现验收，不混入63。
 
-2026-11-05继续[手机录音波形60](tasks/app-mobile-recording-wave60.md)：只校准游标和时间轴内部几何，不触原Android现场；精度、完整axis边界及窄高触达依recording-mobile.md的60节。58/59准确包身份保持，60完成前不追认入包。
+2026-11-05[手机录音波形60](tasks/app-mobile-recording-wave60.md)已完成局部源码独审并[合入主线](../verification/mobile-recording-wave60-root-integration/README.md)：游标/标签可见改善、完整axis边界及窄高真实触达通过，root typecheck/build通过。保留PIXEL-OPEN及作者9像素微小桌面残差；未生成包含60的新APK，不触原Android现场。58/59准确包身份保持，不追认60入包。
 
 2026-11-05最新录音开发包：Mac17/Android构建12均固定源fa21657，333产品/352完整输入一致，[准确构建与准备](../verification/unified-candidate06/recording-visual5859-preparation/README.md)已完成。58/59源独审通过后已入包；[Mac17有限实际复验](../verification/recording-visual5859-mac17-runtime/README.md)覆盖未采集同会话双模式、正文编辑/撤销重做/B搜索/侧栏恢复与保存音频播放/暂停/±15秒。没有新Start，持续收音/采集中双模式/原版全像素仍open。Android12未安装，用户明确保留旧13秒File现场并暂缓设备验收，继续禁止原设备/音频操作。以下时点记录与旧任务结论按各自固定包读取，不能追认为最新包的全部通过。
 
