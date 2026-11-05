@@ -1106,6 +1106,7 @@ function App() {
         debugPending.current.add(work);
         void work.finally(() => debugPending.current.delete(work));
       }
+      return work;
     },
     [fail],
   );
@@ -2727,6 +2728,14 @@ function App() {
     const files = suppliedFiles || input.files;
     const batch = pickerTargets.current.get(input);
     pickerTargets.current.delete(input);
+    let debugComplete: (() => void) | undefined;
+    if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1") {
+      const work = new Promise<void>((resolve) => {
+        debugComplete = resolve;
+      });
+      debugPending.current.add(work);
+      void work.finally(() => debugPending.current.delete(work));
+    }
     try {
       if (!files?.length) return; // Picker cancellation has not started storage.
       if (!batch) throw Error("附件选择缺少原目标，请重新选择");
@@ -2738,6 +2747,7 @@ function App() {
     } catch (e) {
       fail(e);
     } finally {
+      debugComplete?.();
       if (fileInput.current) fileInput.current.value = "";
       if (cameraInput.current) cameraInput.current.value = "";
     }
@@ -4519,7 +4529,13 @@ function App() {
       state: () => ({
         workspace: structuredClone(wsRef.current),
         editorJSON: editor && !editor.isDestroyed ? editor.getJSON() : null,
-        error,
+        error:
+          error ||
+          (["failed", "cleanup-pending"].includes(
+            ocrOperation.current?.state.phase || "",
+          )
+            ? ocrOperation.current?.state.error || ""
+            : ""),
         notice,
         selection: {
           folderId,
@@ -4545,13 +4561,20 @@ function App() {
           debugPending.current.size > 0 ||
           sidebarPreference.needsConfirmation ||
           !!quitState.current ||
-          ["requesting", "saving", "finalizing"].includes(
-            debugRecordingState.current?.phase || "",
-          ),
+          ["processing", "confirming", "cancelling"].includes(
+            ocrOperation.current?.state.phase || "",
+          ) ||
+          (!!recordingTicket.current &&
+            (!!debugRecordingState.current?.playPending ||
+              !!debugRecordingState.current?.previewPending ||
+              !!debugRecordingState.current?.seeking ||
+              ["requesting", "saving", "finalizing"].includes(
+                debugRecordingState.current?.phase || "",
+              ))),
         failure: debugFailure.current,
         recording: {
           active: !!recordingTicket.current,
-          state: debugRecordingState.current,
+          state: recordingTicket.current ? debugRecordingState.current : null,
         },
         ocr: ocrState,
         settings,
@@ -4752,7 +4775,7 @@ function App() {
           ];
           if (Object.keys(patch).some((k) => !keys.includes(k)))
             throw Error("未知设置字段");
-          updateSettings(patch);
+          return updateSettings(patch);
         },
         "sidebar.toggle": () => {
           assert();
@@ -4835,12 +4858,16 @@ function App() {
           return retryAttachments();
         },
         "attachment.discard": () => {
-          if (!attachmentBatches.current.size) throw Object.assign(Error("没有可取消的附件"), {code: "UNAVAILABLE"});
+          if (!attachmentBatches.current.size)
+            throw Object.assign(Error("没有可取消的附件"), {
+              code: "UNAVAILABLE",
+            });
           return discardUninsertedAttachments();
         },
         "recording.open": () => {
           assert(true);
-          if (recordingTicket.current) throw Object.assign(Error("录音会话已打开"), {code: "UNAVAILABLE"});
+          if (recordingTicket.current)
+            throw Object.assign(Error("录音会话已打开"), { code: "UNAVAILABLE" });
           debugRecordingState.current = null;
           openRecording(context());
         },
@@ -4888,6 +4915,8 @@ function App() {
           const op = ocrOperation.current;
           if (!op) throw Error("识别会话不存在");
           await op.process({ kind: (source || "image") as "image" | "camera" });
+          if (op.state.phase === "failed" || op.state.phase === "cleanup-pending")
+            throw Error(op.state.error || "文字识别失败");
         },
         "ocr.insert": () => {
           const op = ocrOperation.current;
@@ -4902,7 +4931,8 @@ function App() {
           return retryOcr();
         },
         "ocr.cancel": () => {
-          if (!ocrOperation.current) throw Object.assign(Error("识别会话不存在"), {code: "UNAVAILABLE"});
+          if (!ocrOperation.current)
+            throw Object.assign(Error("识别会话不存在"), { code: "UNAVAILABLE" });
           return cancelOcr();
         },
         "archive.export": () => {
@@ -4929,8 +4959,7 @@ function App() {
     };
   }
   useEffect(() => {
-    if (!import.meta.env.DEV || import.meta.env.VITE_NOTES_DEBUG !== "1")
-      return;
+    if (!import.meta.env.DEV || import.meta.env.VITE_NOTES_DEBUG !== "1") return;
     let live = true,
       release: (() => void) | undefined;
     void import("./debug/runtime").then(({ registerDebug }) => {
