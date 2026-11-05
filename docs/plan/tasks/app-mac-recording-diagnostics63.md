@@ -19,7 +19,7 @@ depends-on: [app-mac-recording-access52]
 
 ## contract
 
-1. 诊断默认关闭，由明确进程环境开关开启；不新增产品UI、自动重试或挂载/启动授权查询。开关只影响诊断输出，不影响API返回、pending、截止、线程、授权和资源行为。使用进程内有界事件预算（至少明确固定上限及截断标记），无文件持久化、无网络、无音频/笔记/路径/标题/窗口裸指针。事件只含固定stage/code、无内容request ID、单调时间、公开status及Boolean等最小标量；不可任意序列化错误对象。
+1. 诊断默认关闭，由明确进程环境开关开启；不新增产品UI、自动重试或挂载/启动授权查询。开关只影响诊断输出，不影响API返回、pending、截止、线程、授权和资源行为。使用进程内有界事件预算（至少明确固定上限及截断标记），组件不自行持久化文件、无网络、无音频/笔记/路径/标题/窗口裸指针。受控测试可将合成事件输出保存为本任务证据。事件只含固定stage/code、无内容request ID、单调时间、公开status及Boolean等最小标量；不可任意序列化错误对象。
 2. 一个明确Start对应的Rust→ObjC链共用request ID。至少区分Rust派发/原生入口、主线程和window校验结果、pending busy、发请求前公开status、request-issued、30秒finish、OS completion-entry（必须在dispatch main之前、线程安全且不访问AppKit）、main completion处理、pending清除、Rust收到结果/等候截止、成功后window复核及最终交付。取消/关窗/异常/迟到必须可以区别；不得让日志本身抛异常跨FFI或改变context所有权。
 3. 不增加status查询次数。pending仅在真实completion或既有异常路径清除，timeout/close不释放仍可能被系统block引用的context；系统completion迟到仍不二次交付。保留30/35/35/45秒层次，不延长、不缩短、不绕过AV预检/WK策略，不为诊断触发requestAccess/getUserMedia。
 4. JS authorizeNativeRecording必须保留原生结构化错误code及可选诊断stage/request ID，保持Error.message供原UI展示；不得把timeout/busy转为denied。普通Error原样向上传递；未知错误仍给既有明确失败文案，不能伪装授权。默认关闭时是否返回安全stage须明确记录，不得暴露用户内容。

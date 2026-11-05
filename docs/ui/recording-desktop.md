@@ -4,7 +4,7 @@
 
 ## 授权诊断63（内部验证，不增加产品界面）
 
-研究61表明旧Start失败只能定位在AV授权预检，尚不能区分系统completion未到、主队列未处理或桥接交付未结算。新增默认关闭的进程环境诊断，固定事件和有界预算，仅输出无内容request ID、单调时间、stage/code、公开status/Boolean等标量；不落文件、不联网、不含音频、笔记或裸指针。Rust与ObjC共用request ID，分别记录OS completion进入（主线程派发之前）和main处理，以便后续正常验收判读。关闭开关不输出诊断，不改变授权、截止或生命周期。
+研究61表明旧Start失败只能定位在AV授权预检，尚不能区分系统completion未到、主队列未处理或桥接交付未结算。新增默认关闭的进程环境诊断，固定事件和有界预算，仅输出无内容request ID、单调时间、stage/code、公开status/Boolean等标量；组件不自行落文件、不联网、不含音频、笔记或裸指针。受控测试可保存合成事件作为验证证据。Rust与ObjC共用request ID，分别记录OS completion进入（主线程派发之前）和main处理，以便后续正常验收判读。关闭开关不输出诊断，不改变授权、截止或生命周期。
 
 ```text
 明确Start → Rust dispatch → native/main/window → AV status → request-issued
