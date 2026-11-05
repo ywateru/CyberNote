@@ -1,0 +1,12 @@
+node:url:1018
+  validateString(path, 'path');
+  ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at pathToFileURL (node:url:1018:3)
+    at file:///private/tmp/apple-notes-mac-recording-quit6869-independent-01/scripts/check-recording-quit68-app.mjs:186:3
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+
+Node.js v22.16.0

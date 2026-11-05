@@ -1,0 +1,256 @@
+{
+  "sourceHead": "1ddeca7cb51727cd40203101d5447800bd43da04",
+  "reviewTree": "/private/tmp/apple-notes-mac-recording-quit6869-independent-01",
+  "nativeTargetOriginal": "/private/tmp/notes-native-quit69-target-01",
+  "nativeCacheUse": "Compiled execution dependencies only; not source product inputs. No further reads/builds needed after review checks. Root arranging verified later archival; original paths/hashes remain in bindings.",
+  "browserEnvironment": {
+    "PLAYWRIGHT_CORE_PATH": "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/playwright-core/index.mjs",
+    "CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  },
+  "browserRuns": "Sequential headless synthetic media with permitted local temporary test servers",
+  "realNSApplication": false,
+  "realGUI": false,
+  "realMicrophone": false,
+  "deviceActions": false,
+  "checks": [
+    {
+      "result": "candidate68-app03/result.json",
+      "checks": 28,
+      "pass": true
+    },
+    {
+      "result": "baseline68-app/result.json",
+      "checks": 3,
+      "pass": true
+    },
+    {
+      "result": "sidebar66/result.json",
+      "checks": 42,
+      "pass": true
+    },
+    {
+      "result": "media67/result.json",
+      "checks": 25,
+      "pass": true
+    }
+  ],
+  "executions": [
+    {
+      "name": "source-binding",
+      "exit": 0,
+      "count": 275,
+      "allAuthorEqual": true
+    },
+    {
+      "name": "native69",
+      "command": [
+        "python3",
+        "scripts/check-mac-recording-native-quit69.py",
+        "--output",
+        "docs/verification/mac-recording-quit6869/independent/native69"
+      ],
+      "exit": 0,
+      "groups": 19
+    },
+    {
+      "name": "plugin-native69",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "plugins/tauri-plugin-notes-ui/Cargo.toml",
+        "--target-dir",
+        "/private/tmp/notes-native-quit69-target-01",
+        "--jobs",
+        "2",
+        "termination69_tests",
+        "--",
+        "--test-threads=1"
+      ],
+      "environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit": 0,
+      "tests": 3
+    },
+    {
+      "name": "candidate68-compile",
+      "command": [
+        "python3",
+        "scripts/check-recording-quit68-native.py",
+        "docs/verification/mac-recording-quit6869/independent/candidate68-native",
+        "--source",
+        "1ddeca7cb51727cd40203101d5447800bd43da04",
+        "--deps",
+        "/private/tmp/notes-native-quit69-target-01/debug/deps"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "candidate68-app01",
+      "command": [
+        "node",
+        "scripts/check-recording-quit68-app.mjs",
+        "docs/verification/mac-recording-quit6869/independent/candidate68-app",
+        "docs/verification/mac-recording-quit6869/independent/candidate68-native/native-boundary"
+      ],
+      "exit": 1,
+      "reason": "Local listen EPERM before assertions; raw log preserved"
+    },
+    {
+      "name": "candidate68-app02",
+      "command": [
+        "node",
+        "scripts/check-recording-quit68-app.mjs",
+        "docs/verification/mac-recording-quit6869/independent/candidate68-app02",
+        "docs/verification/mac-recording-quit6869/independent/candidate68-native/native-boundary"
+      ],
+      "exit": 1,
+      "reason": "PLAYWRIGHT_CORE_PATH missing before browser launch; raw log preserved"
+    },
+    {
+      "name": "candidate68-app03",
+      "command": [
+        "node",
+        "scripts/check-recording-quit68-app.mjs",
+        "docs/verification/mac-recording-quit6869/independent/candidate68-app03",
+        "docs/verification/mac-recording-quit6869/independent/candidate68-native/native-boundary"
+      ],
+      "exit": 0,
+      "checks": 28
+    },
+    {
+      "name": "baseline68-compile",
+      "command": [
+        "python3",
+        "/private/tmp/apple-notes-mac-recording-quit6869-independent-01/scripts/check-recording-quit68-native.py",
+        "../baseline68-native",
+        "--source",
+        "working",
+        "--deps",
+        "/private/tmp/notes-native-quit69-target-01/debug/deps"
+      ],
+      "cwd": "/private/tmp/apple-notes-mac-recording-quit6869-independent-01/docs/verification/mac-recording-quit6869/independent/baseline68-source",
+      "source": "0f2a1fc1e2c37e716ca122895fe800b6f8d4bda3",
+      "sourceBinding": "baseline68-source/source-origin.json",
+      "exit": 0
+    },
+    {
+      "name": "baseline68-app",
+      "command": [
+        "node",
+        "scripts/check-recording-quit68-app.mjs",
+        "docs/verification/mac-recording-quit6869/independent/baseline68-app",
+        "docs/verification/mac-recording-quit6869/independent/baseline68-native/native-boundary",
+        "--baseline"
+      ],
+      "exit": 0,
+      "checks": 3
+    },
+    {
+      "name": "sidebar66",
+      "command": [
+        "node",
+        "docs/verification/mac-recording-quit6869/independent/check-recording-sidebar66-app.mjs",
+        "docs/verification/mac-recording-quit6869/independent/sidebar66"
+      ],
+      "exit": 0,
+      "checks": 42,
+      "runnerCleanupOnlyAdaptation": true
+    },
+    {
+      "name": "native66",
+      "command": [
+        "python3",
+        "scripts/check-mac-recording-sidebar66-native-independent.py",
+        "docs/verification/mac-recording-quit6869/independent/native66",
+        "--source",
+        "1ddeca7cb51727cd40203101d5447800bd43da04",
+        "--uuid-rlib",
+        "/private/tmp/notes-native-quit69-target-01/debug/deps/libuuid-9f4c2278b9bc037c.rlib"
+      ],
+      "exit": 0,
+      "tests": 5
+    },
+    {
+      "name": "native69-extra",
+      "commandBinding": "native69-extra/result.json",
+      "exit": 0,
+      "groups": 4
+    },
+    {
+      "name": "cargo-app-check",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--target-dir",
+        "/private/tmp/notes-native-quit69-target-01",
+        "--jobs",
+        "2"
+      ],
+      "environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_INCREMENTAL": "0"
+      },
+      "exit": 0,
+      "warnings": "13 existing root dead_code"
+    },
+    {
+      "name": "media67",
+      "command": [
+        "node",
+        "docs/verification/mac-recording-quit6869/independent/check-recording-media67.mjs",
+        "docs/verification/mac-recording-quit6869/independent/media67"
+      ],
+      "exit": 0,
+      "checks": 25,
+      "runnerCleanupOnlyAdaptation": true
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exit": 0,
+      "warnings": "existing >500kB chunk"
+    },
+    {
+      "name": "plugin-format",
+      "command": [
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "plugins/tauri-plugin-notes-ui/Cargo.toml",
+        "--",
+        "--check"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "patch-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0
+    }
+  ]
+}

@@ -1,0 +1,465 @@
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/app.rs
+BYTES 94329 SHA256 ef71e5c2da6696f9bef817f5f32d34c7710b678ca7ec8a00e539527bca5ad1d4
+
+575:   ///
+576:   /// ## Platform-specific
+577:   ///
+578:   /// - **Android**: Unless the exit is prevented, the activity is finished instead of the process being exited directly,
+579:   ///   so the app closes with the system transition and the activity lifecycle callbacks run.
+580:   ///   [`RunEvent::Exit`] is triggered once the activity is destroyed, and `exit_code` is not used as the process exit code.
+581:   pub fn exit(&self, exit_code: i32) {
+582:     if let Err(e) = self.runtime_handle.request_exit(exit_code) {
+583:       log::error!("failed to exit: {}", e);
+584:       self.cleanup_before_exit();
+585:       std::process::exit(exit_code);
+586:     }
+587:   }
+588: 
+589:   /// Finishes the Android activity, and any other activity of its task, so the app closes gracefully.
+590:   #[cfg(target_os = "android")]
+
+2504:     #[cfg(any(windows, target_os = "linux"))]
+2505:     let mut runtime = if self.runtime_any_thread {
+2506:       R::new_any_thread(runtime_args)?
+2507:     } else {
+2508:       R::new(runtime_args)?
+2509:     };
+2510:     #[cfg(not(any(windows, target_os = "linux")))]
+2511:     let mut runtime = R::new(runtime_args)?;
+2512: 
+2513:     #[cfg(target_os = "macos")]
+2514:     runtime.set_activate_ignoring_other_apps(self.activate_ignoring_other_apps);
+2515: 
+2516:     #[cfg(desktop)]
+2517:     {
+2518:       // setup menu event handler
+2519:       let proxy = runtime.create_proxy();
+2520:       muda::MenuEvent::set_event_handler(Some(move |e: muda::MenuEvent| {
+2521:         let _ = proxy.send_event(EventLoopMessage::MenuEvent(e.into()));
+2522:       }));
+2523: 
+2524:       // setup tray event handler
+2525:       #[cfg(feature = "tray-icon")]
+2526:       {
+2527:         let proxy = runtime.create_proxy();
+2528:         tray_icon::TrayIconEvent::set_event_handler(Some(move |e: tray_icon::TrayIconEvent| {
+2529:           let _ = proxy.send_event(EventLoopMessage::TrayIconEvent(e.into()));
+2530:         }));
+
+2604:       }
+2605:     }
+2606: 
+2607:     app.manager.initialize_plugins(handle)?;
+2608: 
+2609:     Ok(app)
+
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/menu/builders/menu.rs
+BYTES 19997 SHA256 270946a7cd242bd14ce993ffe2df8faa08e2984dc6a362ba882c20b019632716
+
+578:       /// Add Quit app menu item to the menu.
+579:       ///
+580:       /// ## Platform-specific:
+581:       ///
+582:       /// - **Linux:** Unsupported.
+583:       pub fn quit(mut self) -> Self {
+584:         self
+585:           .items
+586:           .push(PredefinedMenuItem::quit(self.manager, None).map(|i| i.kind()));
+587:         self
+588:       }
+589: 
+590:       /// Add Quit app menu item with specified text to the menu.
+
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/menu/predefined.rs
+BYTES 10376 SHA256 dd082dcd3b4f77bd3130c567856ab2cd575b3fcb3b502e554457115411a18a07
+
+260:   ///
+261:   /// - **Linux:** Unsupported.
+262:   pub fn quit<M: Manager<R>>(manager: &M, text: Option<&str>) -> crate::Result<Self> {
+263:     let handle = manager.app_handle();
+264:     let app_handle = handle.clone();
+265: 
+266:     let text = text.map(|t| t.to_owned());
+267: 
+268:     let item = run_main_thread!(handle, || {
+269:       let item = muda::PredefinedMenuItem::quit(text.as_deref());
+270:       PredefinedMenuItemInner::new(app_handle, item)
+271:     })?;
+272: 
+273:     Ok(Self(Arc::new(item)))
+274:   }
+275: 
+276:   /// About app menu item
+277:   pub fn about<M: Manager<R>>(
+278:     manager: &M,
+279:     text: Option<&str>,
+280:     metadata: Option<AboutMetadata<'_>>,
+
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/muda-0.20.0/src/platform_impl/macos/mod.rs
+BYTES 42579 SHA256 bb44d6542eb040fd8f3ebc122c09edbef8411cfa5f96c2b312b12136454b1e9f
+
+710:         &mut self,
+711:         args: &PlatformAttachArgs,
+712:         predefined_item_type: PredefinedMenuItemType,
+713:         owner: Rc<RefCell<PlatformMenuItem>>,
+714:         menu_id: u32,
+715:     ) -> crate::Result<Retained<NSMenuItem>> {
+716:         let mtm = MainThreadMarker::new().expect("can only create menu item on the main thread");
+717:         let ns_menu_item = match &predefined_item_type {
+718:             PredefinedMenuItemType::Separator => NSMenuItem::separatorItem(mtm),
+719:             PredefinedMenuItemType::SectionHeader if objc2::available!(macos = 14.0) => {
+720:                 let title = NSString::from_str(&strip_mnemonic(&args.text));
+721:                 NSMenuItem::sectionHeaderWithTitle(&title, mtm)
+722:             }
+723:             _ => {
+724:                 let selector = predefined_item_type.selector();
+725:                 let ns_menu_item =
+726:                     NsMenuItem::create(mtm, &args.text, selector, &args.accelerator)?;
+727: 
+728:                 if let PredefinedMenuItemType::About(_) = &predefined_item_type {
+729:                     unsafe { ns_menu_item.setTarget(Some(&ns_menu_item)) };
+730:                     ns_menu_item.ivars().set(Some(owner));
+731:                 }
+732: 
+733:                 Retained::into_super(ns_menu_item)
+734:             }
+735:         };
+736: 
+737:         ns_menu_item.setEnabled(args.enabled);
+738: 
+739:         if let PredefinedMenuItemType::Services = &predefined_item_type {
+740:             self.is_services_menu = true;
+
+930:             PredefinedMenuItemType::Delete => Some(sel!(delete:)),
+931:             PredefinedMenuItemType::SelectAll => Some(sel!(selectAll:)),
+932:             PredefinedMenuItemType::Undo => Some(sel!(undo:)),
+933:             PredefinedMenuItemType::Redo => Some(sel!(redo:)),
+934:             PredefinedMenuItemType::Minimize => Some(sel!(performMiniaturize:)),
+935:             PredefinedMenuItemType::Maximize => Some(sel!(performZoom:)),
+936:             PredefinedMenuItemType::ActualSize => Some(sel!(actualSize:)),
+937:             PredefinedMenuItemType::ZoomIn => Some(sel!(zoomIn:)),
+938:             PredefinedMenuItemType::ZoomOut => Some(sel!(zoomOut:)),
+939:             PredefinedMenuItemType::Fullscreen => Some(sel!(toggleFullScreen:)),
+940:             PredefinedMenuItemType::Hide => Some(sel!(hide:)),
+941:             PredefinedMenuItemType::HideOthers => Some(sel!(hideOtherApplications:)),
+942:             PredefinedMenuItemType::ShowAll => Some(sel!(unhideAllApplications:)),
+943:             PredefinedMenuItemType::CloseWindow => Some(sel!(performClose:)),
+944:             PredefinedMenuItemType::Quit => Some(sel!(terminate:)),
+945:             PredefinedMenuItemType::About(_) => Some(sel!(customShowAboutPanel:)),
+946:             PredefinedMenuItemType::Services => None,
+947:             PredefinedMenuItemType::BringAllToFront => Some(sel!(arrangeInFront:)),
+948:             PredefinedMenuItemType::StartSpeaking => Some(sel!(startSpeaking:)),
+949:             PredefinedMenuItemType::StopSpeaking => Some(sel!(stopSpeaking:)),
+950:             PredefinedMenuItemType::StartDictation => Some(sel!(startDictation:)),
+
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tao-0.37.2/src/platform_impl/macos/app_delegate.rs
+BYTES 7281 SHA256 6db1d4abf763a65c89338d1250e720a59c5f189a456f6923727fb356fa7f43f1
+
+45: 
+46: pub static APP_DELEGATE_CLASS: LazyLock<AppDelegateClass> = LazyLock::new(|| unsafe {
+47:   let superclass = class!(NSResponder);
+48:   let mut decl = ClassDecl::new(
+49:     CStr::from_bytes_with_nul(b"TaoAppDelegateParent\0").unwrap(),
+50:     superclass,
+51:   )
+52:   .unwrap();
+53: 
+54:   decl.add_class_method(sel!(new), new as extern "C-unwind" fn(_, _) -> _);
+55:   decl.add_method(sel!(dealloc), dealloc as extern "C-unwind" fn(_, _));
+56: 
+57:   decl.add_method(
+58:     sel!(applicationDidFinishLaunching:),
+59:     did_finish_launching as extern "C-unwind" fn(_, _, _),
+60:   );
+61:   decl.add_method(
+62:     sel!(applicationWillTerminate:),
+63:     application_will_terminate as extern "C-unwind" fn(_, _, _),
+64:   );
+65:   decl.add_method(
+66:     sel!(application:openURLs:),
+67:     application_open_urls as extern "C-unwind" fn(_, _, _, _),
+68:   );
+69:   decl.add_method(
+70:     sel!(application:willContinueUserActivityWithType:),
+71:     application_will_continue_user_activity_with_type as extern "C-unwind" fn(_, _, _, _) -> _,
+72:   );
+73:   decl.add_method(
+74:     sel!(application:continueUserActivity:restorationHandler:),
+75:     application_continue_user_activity as extern "C-unwind" fn(_, _, _, _, _) -> _,
+76:   );
+77:   decl.add_method(
+78:     sel!(applicationShouldHandleReopen:hasVisibleWindows:),
+79:     application_should_handle_reopen as extern "C-unwind" fn(_, _, _, _) -> _,
+80:   );
+81:   decl.add_method(
+82:     sel!(applicationSupportsSecureRestorableState:),
+
+125:   trace!("Triggered `applicationDidFinishLaunching`");
+126:   AppState::launched(this);
+127:   trace!("Completed `applicationDidFinishLaunching`");
+128: }
+129: 
+130: extern "C-unwind" fn application_will_terminate(_: &Object, _: Sel, _: id) {
+131:   trace!("Triggered `applicationWillTerminate`");
+132:   AppState::exit();
+133:   trace!("Completed `applicationWillTerminate`");
+134: }
+135: 
+136: extern "C-unwind" fn application_open_urls(_: &Object, _: Sel, _: id, urls: &NSArray<NSURL>) {
+
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tao-0.37.2/src/platform_impl/macos/event_loop.rs
+BYTES 10604 SHA256 5a46ed47ea47e8b3ad32eb379936c2f3d6a35273a6669a4f1628629ec1857b60
+
+159: 
+160: impl<T> EventLoop<T> {
+161:   pub(crate) fn new(_: &PlatformSpecificEventLoopAttributes) -> Self {
+162:     let panic_info: Rc<PanicInfo> = Default::default();
+163:     setup_control_flow_observers(Rc::downgrade(&panic_info));
+164: 
+165:     let delegate = unsafe {
+166:       if !util::is_main_thread() {
+167:         panic!("On macOS, `EventLoop` must be created on the main thread!");
+168:       }
+169: 
+170:       // This must be done before `NSApp()` (equivalent to sending
+171:       // `sharedApplication`) is called anywhere else, or we'll end up
+172:       // with the wrong `NSApplication` class and the wrong thread could
+173:       // be marked as main.
+174:       let app: id = msg_send![APP_CLASS.0, sharedApplication];
+175: 
+176:       let delegate = IdRef::new(msg_send![APP_DELEGATE_CLASS.0, new]);
+177:       let _pool = NSAutoreleasePool::new();
+178:       let _: () = msg_send![app, setDelegate:*delegate];
+179:       delegate
+180:     };
+181: 
+182:     EventLoop {
+183:       delegate,
+184:       window_target: Rc::new(RootWindowTarget {
+185:         p: Default::default(),
+
+280:       // It's important that we set the panic before requesting a `stop`
+281:       // because some callback are still called during the `stop` message
+282:       // and we need to know in those callbacks if the application is currently
+283:       // panicking
+284:       {
+285:         let panic_info = panic_info.upgrade().unwrap();
+286:         panic_info.set_panic(e);
+287:       }
+288:       unsafe {
+289:         let app_class = class!(NSApplication);
+290:         let app: Retained<NSApplication> = msg_send![app_class, sharedApplication];
+291:         let () = msg_send![&app, stop: nil];
+292: 
+293:         // Posting a dummy event to get `stop` to take effect immediately.
+294:         // See: https://stackoverflow.com/questions/48041279/stopping-the-nsapplication-main-event-loop/48064752#48064752
+295:         post_dummy_event(&app);
+296:       }
+297:       None
+298:     }
+299:   }
+300: }
+
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tao-0.37.2/src/platform_impl/macos/app_state.rs
+BYTES 14733 SHA256 dff414b973daf831a42de625bd4ea61fa3742106bf1522999e6136334fb3e4d8
+
+268:     }));
+269:   }
+270: 
+271:   pub fn exit() -> i32 {
+272:     HANDLER.set_in_callback(true);
+273:     HANDLER.handle_nonuser_event(EventWrapper::StaticEvent(Event::LoopDestroyed));
+274:     HANDLER.set_in_callback(false);
+275:     HANDLER.callback.lock().unwrap().take();
+276:     if let ControlFlow::ExitWithCode(code) = HANDLER.get_old_and_new_control_flow().1 {
+277:       code
+278:     } else {
+
+395:     }
+396:     HANDLER.handle_nonuser_event(EventWrapper::StaticEvent(Event::MainEventsCleared));
+397:     for window_id in HANDLER.should_redraw() {
+398:       HANDLER.handle_nonuser_event(EventWrapper::StaticEvent(Event::RedrawRequested(window_id)));
+399:     }
+400:     HANDLER.handle_nonuser_event(EventWrapper::StaticEvent(Event::RedrawEventsCleared));
+401:     HANDLER.set_in_callback(false);
+402:     if HANDLER.should_exit() {
+403:       unsafe {
+404:         let mtm = MainThreadMarker::new().unwrap();
+405:         let app = NSApp(mtm);
+406:         let _pool = NSAutoreleasePool::new();
+407:         app.stop(None);
+408:         // To stop event loop immediately, we need to post some event here.
+409:         post_dummy_event(&app);
+410:       };
+411:     }
+412:     HANDLER.update_start_time();
+413:     match HANDLER.get_old_and_new_control_flow() {
+414:       (ControlFlow::ExitWithCode(_), _) | (_, ControlFlow::ExitWithCode(_)) => (),
+415:       (old, new) if old == new => (),
+
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-runtime-wry-2.12.3/src/lib.rs
+BYTES 168926 SHA256 ec343fc347aff1fb5327100df2541992e47eb6be1ddb55102170e2253b9c6d59
+
+2593:       .context
+2594:       .send_user_message(Message::SetDockVisibility(visible))
+2595:   }
+2596: 
+2597:   fn request_exit(&self, code: i32) -> Result<()> {
+2598:     // NOTE: request_exit cannot use `Context::send_user_message` because it accesses the event loop callback
+2599:     self
+2600:       .context
+2601:       .proxy
+2602:       .send_event(Message::RequestExit(code))
+2603:       .map_err(|_| Error::FailedToSendMessage)
+2604:   }
+2605: 
+
+4127:     Event::MainEventsCleared => {
+4128:       callback(RunEvent::MainEventsCleared);
+4129:     }
+4130: 
+4131:     Event::LoopDestroyed => {
+4132:       callback(RunEvent::Exit);
+4133:     }
+4134: 
+4135:     #[cfg(windows)]
+4136:     Event::RedrawRequested(id) => {
+4137:       if let Some(window_id) = window_id_map.get(&id) {
+4138:         let mut windows_ref = windows.0.borrow_mut();
+4139:         if let Some(window) = windows_ref.get_mut(&window_id) {
+4140:           if window.is_window_transparent {
+4141:             let background_color = window.background_color;
+4142:             if let Some(surface) = &mut window.surface {
+
+4250:               }
+4251:             }
+4252:           }
+4253:           TaoWindowEvent::CloseRequested => {
+4254:             on_close_requested(callback, window_id, windows);
+4255:           }
+4256:           TaoWindowEvent::Destroyed => {
+4257:             let removed = windows.0.borrow_mut().remove(&window_id).is_some();
+4258:             if removed {
+4259:               let is_empty = windows.0.borrow().is_empty();
+4260:               if is_empty {
+4261:                 let (tx, rx) = channel();
+4262:                 callback(RunEvent::ExitRequested { code: None, tx });
+4263: 
+4264:                 let recv = rx.try_recv();
+4265:                 let should_prevent = matches!(recv, Ok(ExitRequestedEventAction::Prevent));
+4266: 
+4267:                 if !should_prevent {
+4268:                   *control_flow = ControlFlow::Exit;
+4269:                 }
+4270:               }
+
+4300:       Message::RequestExit(code) => {
+4301:         let (tx, rx) = channel();
+4302:         callback(RunEvent::ExitRequested {
+4303:           code: Some(code),
+4304:           tx,
+4305:         });
+4306: 
+4307:         let recv = rx.try_recv();
+4308:         let should_prevent = matches!(recv, Ok(ExitRequestedEventAction::Prevent));
+4309: 
+4310:         if !should_prevent {
+4311:           *control_flow = ControlFlow::ExitWithCode(code);
+4312:         }
+4313:       }
+4314:       Message::Window(id, WindowMessage::Close) => {
+4315:         on_close_requested(callback, id, windows);
+4316:       }
+4317:       Message::Window(id, WindowMessage::Destroy) => {
+4318:         on_window_close(id, windows);
+4319:       }
+4320:       Message::UserEvent(t) => callback(RunEvent::UserEvent(t)),
+
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/muda-0.20.0/src/platform_impl/macos/mod.rs
+BYTES 42579 SHA256 bb44d6542eb040fd8f3ebc122c09edbef8411cfa5f96c2b312b12136454b1e9f
+680:     fn create_ns_item(
+681:         &mut self,
+682:         args: &PlatformAttachArgs,
+683:         owner: Rc<RefCell<PlatformMenuItem>>,
+684:         menu_id: u32,
+685:     ) -> crate::Result<Retained<NSMenuItem>> {
+686:         let mtm = MainThreadMarker::new().expect("can only create menu item on the main thread");
+687:         let ns_menu_item = NsMenuItem::create(
+688:             mtm,
+689:             &args.text,
+690:             Some(sel!(customAction:)),
+691:             &args.accelerator,
+692:         )?;
+693: 
+694:         unsafe {
+695:             ns_menu_item.setTarget(Some(&ns_menu_item));
+696:             ns_menu_item.setEnabled(args.enabled);
+697:         }
+698: 
+699:         ns_menu_item.ivars().replace(Some(owner));
+700: 
+812:             .push(Retained::into_super(ns_menu_item.retain()));
+813: 
+814:         Ok(Retained::into_super(ns_menu_item))
+815:     }
+816: }
+817: 
+818: impl NsMenuItem {
+819:     fn action(&self) {
+820:         // SAFETY: The ivar is initialized before the menu item is exposed and is
+821:         // never mutated afterward.
+822:         let item = unsafe { &*self.ivars().as_ptr() };
+823:         let item = item.as_ref().expect("PlatformMenuItem pointer was unset");
+824:         let click = item.borrow().click.clone();
+825: 
+826:         match click {
+827:             MenuItemAction::Emit(id) => MenuEvent::send(MenuEvent { id }),
+828:             MenuItemAction::Toggle(id, state) => {
+829:                 if let Some(state) = state.upgrade() {
+830:                     let checked = {
+831:                         let mut state = state.borrow_mut();
+832:                         state.checked = !state.checked;
+833:                         state.checked
+834:                     };
+835:                     item.borrow_mut().set_checked(checked);
+836:                 }
+837:                 MenuEvent::send(MenuEvent { id });
+838:             }
+839:             MenuItemAction::Predefined(_) => {
+840:                 unreachable!("predefined menu item used the generic click action")
+841:             }
+842:         }
+843:     }
+
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/plugin.rs
+BYTES 34621 SHA256 8c8a9c3cdb93d1d149f1f1822e5bf8cd5e454f1ce7f3e57a427b97ba59f52a9f
+788:   fn initialize(
+789:     &mut self,
+790:     app: &AppHandle<R>,
+791:     config: JsonValue,
+792:   ) -> Result<(), Box<dyn std::error::Error>> {
+793:     self.app.replace(app.clone());
+794:     if let Some(s) = self.setup.take() {
+795:       (s)(
+796:         app,
+797:         PluginApi {
+798:           name: self.name,
+799:           handle: app.clone(),
+800:           raw_config: Arc::new(config.clone()),
+801:           config: serde_json::from_value(config).map_err(|err| {
+802:             format!(
+803:               "Error deserializing 'plugins.{}' within your Tauri configuration: {err}",
+804:               self.name
+805:             )
+
+FILE /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tao-0.37.2/src/platform_impl/macos/app_delegate.rs
+REGISTRATION BLOCK END
+80:   );
+81:   decl.add_method(
+82:     sel!(applicationSupportsSecureRestorableState:),
+83:     application_supports_secure_restorable_state as extern "C-unwind" fn(_, _, _) -> _,
+84:   );
+85:   decl.add_ivar::<*mut c_void>(&CString::new(AUX_DELEGATE_STATE_NAME).unwrap());
+86: 
+87:   AppDelegateClass(decl.register())
+88: });

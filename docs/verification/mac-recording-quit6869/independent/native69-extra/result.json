@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "sourceHead": "1ddeca7cb51727cd40203101d5447800bd43da04",
+  "productionBridgeSha256": "c7eb30e43951418ac99f7c03d12e20436cfabb04cac4b968a5f9f177819a927e",
+  "runnerSha256": "765a3f01035087a53fa7b1d8fa4015ba7ab71da84cad60dc0bc174a15fcc3e7a",
+  "command": [
+    "clang",
+    "-fobjc-arc",
+    "-fobjc-arc-exceptions",
+    "-fblocks",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-mmacosx-version-min=12.0",
+    "/private/tmp/apple-notes-mac-recording-quit6869-independent-01/docs/verification/mac-recording-quit6869/independent/native69-extra/review-native69-extra.m",
+    "-framework",
+    "AppKit",
+    "-framework",
+    "Foundation",
+    "-o",
+    "/private/tmp/apple-notes-mac-recording-quit6869-independent-01/docs/verification/mac-recording-quit6869/independent/native69-extra/review-native69-extra"
+  ],
+  "groups": [
+    {
+      "case": "missing-release",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "owned-wrong-signature",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "inherited-unknown-method",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "first-refresh-exception",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    }
+  ],
+  "boundary": "Independent supplemental Foundation host cases; production bridge only NSApp lookup substituted; no NSApplication creation, GUI, terminate or audio."
+}

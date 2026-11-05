@@ -1,0 +1,126 @@
+{
+  "status": "PASS",
+  "groups": 19,
+  "results": [
+    {
+      "case": "missing-app",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "missing-delegate",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "unknown-class",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "unknown-method",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "unknown-signature",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "worker-thread",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "missing-callback",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "refresh-exception",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "install-route",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "exact-repeat",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "conflicting-context",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "changed-delegate",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "changed-implementation",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "callback-exception",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "callback-error",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "nested-request",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "drop-during-callback",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "repeated-quit",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    },
+    {
+      "case": "drop-and-reinstall",
+      "status": "PASS",
+      "realNSApplication": false,
+      "realTerminate": false
+    }
+  ],
+  "boundary": "controlled Foundation host/delegate; production bridge except NSApp lookup; no GUI/audio/terminate",
+  "sources": {
+    "plugins/tauri-plugin-notes-ui/macos/termination.m": "c7eb30e43951418ac99f7c03d12e20436cfabb04cac4b968a5f9f177819a927e",
+    "scripts/check-mac-recording-native-quit69.m": "57b173b9981efb78215cd36ddbcb8822ca74d2916c2cc673b618d18aa41cbf74",
+    "scripts/check-mac-recording-native-quit69.py": "87ea904b2bd6201efd6afaf569b2f8cbb5ab3743d69f481f8df6192f106c8e82"
+  }
+}
