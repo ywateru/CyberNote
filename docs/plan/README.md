@@ -94,3 +94,5 @@ docs/requirements.md 是功能范围，docs/architecture.md 是接入契约，do
 2026-11-05录音50最终12e5源独审SOURCE-READY，主线50+52六项整合检查通过；准确Mac15/Android09与实际后台录音待验，见[主线整合54](../verification/recording-window54-main-integration/README.md)。不追认旧Mac14/Android08或原版像素通过。
 
 2026-11-05录音后续状态：55浮窗/主窗右栏与56保存卡播放已独审合入，Mac16源9167db9实际双模式及Notes编辑/新建/搜索/加粗有限通过，但新Start被系统授权请求无返回阻塞，采集中双模式仍未通过；已有44:58长录音正常重开后播放及±15秒通过。旧Android构建10实际采集/暂停/试听/继续至13秒通过，Done拒绝的File仍保留。57手机保存修复已源独审/主整合通过，标准[Android构建11](../verification/unified-candidate06/android-recording-save-build11/README.md)源747a509准确收集完成但尚未安装；指定本地备份问题待答复，保全前不升级原设备。不把源码、构建或非采集GUI通过当完整录音设备验收。
+
+用户后续已选择保留原13秒录音现场、暂不继续手机设备验收；不备份、不装包、不关闭/停止/重启或操作原模拟器，不再重复请求该备份。完整goal保持进行，当前继续[录音视觉58](tasks/app-recording-visual58.md)及Mac独立工作。

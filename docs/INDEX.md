@@ -4,7 +4,7 @@
 
 当前已发布接收包：Mac14（构建源d9ce9c4）/Android08（源182464b），不同来源分别记账。[Mac14普通名称/侧栏/局部选中文字有限接收](verification/mac-ordinary-keyboard47-root-acceptance.md)；上一批双端见[接收36](verification/typography-compose-keyboard36-root-acceptance.md)。整体像素与完整交互目标继续进行。
 
-本轮最新录音开发包为Mac16（源9167db9）/Android构建11（源747a509），两端来源分别记录。[真实验收](verification/recording-presentation55-runtime/README.md)记录Mac保存长录音正常重开后播放、未采集下双模式/Notes内操作和旧Android构建10暂停/试听/继续。Mac新Start授权无返回、旧AndroidDone保存拒绝仍阻塞完整验收。[57手机保存修复](plan/tasks/app-mobile-recording-save57.md)已源码独审/主线整合通过，[Android11准确构建](verification/unified-candidate06/android-recording-save-build11/README.md)已收集，尚未安装；原失败File保留，其指定本地备份仍待用户答复。不将开发包记为录音完成交付。
+本轮最新录音开发包为Mac16（源9167db9）/Android构建11（源747a509），两端来源分别记录。[真实验收](verification/recording-presentation55-runtime/README.md)记录Mac保存长录音正常重开后播放、未采集下双模式/Notes内操作和旧Android构建10暂停/试听/继续。Mac新Start授权无返回、旧AndroidDone保存拒绝仍阻塞完整验收。[57手机保存修复](plan/tasks/app-mobile-recording-save57.md)已源码独审/主线整合通过，[Android11准确构建](verification/unified-candidate06/android-recording-save-build11/README.md)已收集，尚未安装。用户现已选择保留原13秒失败File现场、暂不继续手机设备验收；不备份/安装/停止/重启原应用，源码与受控UI开发继续。不将开发包记为录音完成交付。
 
 用户新优先项：[录音交互任务50](plan/tasks/app-recording-interactions50.md)、[浮窗/主窗右栏双模式55](plan/tasks/app-recording-presentation55.md)、[桌面录音规格](ui/recording-desktop.md)、[截图/手机参考49](research/audio-interaction-readiness49/reference-layout.md)。重点为采集中仍可操作Notes其他功能，切换呈现不重启会话、保存归属原A。源码与主线整合通过，准确新包已出，真实采集中双模式仍待验；不做听写/转写，未进入Mac14/Android08。 [实际Mac准备阻塞50](verification/recording-interactions50-baseline/README.md)、[只读权限定位51](research/mac-recording-request-readiness51.md)、[明确授权预检任务52](plan/tasks/app-mac-recording-access52.md)。
 

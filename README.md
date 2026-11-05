@@ -11,7 +11,7 @@
 | 平台 | 最新本机录音开发包（未纳入Git） | 已验证与限制 |
 | --- | --- | --- |
 | Mac16 | [ZIP](artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.zip) / [应用](artifacts/unified-candidate06/mac-recording-presentation-build16/mac-attempt01/mac-sealed.app) | 实际浮窗↔右栏及Notes内编辑/撤销重做/新建/搜索/加粗通过，但新采集被系统授权请求无返回阻塞；已有长录音正常重开后播放与±15秒通过。未完成新包采集中双模式验收 |
-| Android构建11 | [APK](artifacts/unified-candidate06/android-recording-save-build11/android-attempt01/android-original.apk) | arm64-v8a debug；源码独审、准确离线构建/收集通过，尚未安装。原模拟器构建10的13秒未保存录音仍保留，保全前不覆盖升级；11是构建编号，现有设备OS为Android11/API30 |
+| Android构建11 | [APK](artifacts/unified-candidate06/android-recording-save-build11/android-attempt01/android-original.apk) | arm64-v8a debug；源码独审、准确离线构建/收集通过，尚未安装。用户选择保留原构建10的13秒未保存录音现场、暂不继续手机设备验收；不备份、不覆盖升级或停止原应用。11是构建编号，现有设备OS为Android11/API30 |
 
 实包过程见[录音运行记录](docs/verification/recording-presentation55-runtime/README.md)和[Android11构建记录](docs/verification/unified-candidate06/android-recording-save-build11/README.md)。当前录音完整设备验收与原版像素一致性均未通过。
 

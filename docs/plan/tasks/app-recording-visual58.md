@@ -1,7 +1,7 @@
 ---
 id: app-recording-visual58
 scope: Mac recording pane and shared timeline geometry against preserved references
-status: ready
+status: in-progress
 depends-on: [app-recording-presentation55, app-recording-playback56, app-mobile-recording-save57]
 ---
 

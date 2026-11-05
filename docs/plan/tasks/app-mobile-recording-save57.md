@@ -1,7 +1,7 @@
 ---
 id: app-mobile-recording-save57
 scope: mobile recording trusted synchronization and actual editor commit boundary
-status: source-ready-device-pending
+status: source-ready-device-held-by-user
 depends-on: [app-recording-presentation55, app-recording-playback56]
 ---
 
@@ -28,3 +28,5 @@ depends-on: [app-recording-presentation55, app-recording-playback56]
 准确作者源c25cf7f已分人独验SOURCE-READY：实际React17项、独立真实readonly1项及build首跑通过；作者必要desktop A/B1项通过，root重核18源文件与15独审成员一致。root合入af8723e，证据4494e23/7f65066；全量保护未放宽。专用5582两次启动均在guest早期super分区挂载失败，已停止自有实例并保留日志，未装包/触原5580；准备另评估并行applicationId测试副本。标准新包出包与实际设备结论另记，不把不同identifier测试当标准包原字节通过。
 
 标准Android构建11已从747a509准确离线构建/收集，APK SHA256 c3eb77b3d479e6d1e51acb77583b113a5c231b04c11fcbfffd23ad2892ad9317，见verification/unified-candidate06/android-recording-save-build11/README.md。尚未安装。并行侧包虽可隔离包名/目录，启动仍可能使2GiB原模拟器回收原进程，故未执行。13秒内存录音指定本地备份仍待用户实际答复；未获答复前不复制、不覆盖升级、不停止原应用。
+
+用户后续已明确选择“保留当前现场，暂不继续手机设备验收”。这不是批准备份；从该答复起不备份本段音频、不安装新包、不关闭/停止/重启或操作原模拟器。手机设备验收按用户要求暂缓，不重复请求这段备份；两端源码、受控UI与Mac独立工作继续。以上待答复文字是答复前的历史检查点，不代表当前仍待选择。
