@@ -1,0 +1,106 @@
+{
+  "checks": [
+    {
+      "label": "raw idle invalid input",
+      "options": null,
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options"
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": false,
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options"
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": 0,
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options"
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": "",
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options"
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": {
+        "timeoutMs": 100,
+        "unexpected": 1
+      },
+      "code": "INVALID_ARGUMENT",
+      "message": "Invalid idle options"
+    },
+    {
+      "label": "raw idle invalid input",
+      "options": {
+        "__proto__": 1
+      },
+      "unexpectedSuccess": true
+    },
+    {
+      "label": "false asynchronous predicate",
+      "elapsedMs": 100.65241700000024,
+      "code": "TIMEOUT",
+      "lastState": true
+    },
+    {
+      "label": "real device failure execute and idle",
+      "result": {
+        "ok": true
+      },
+      "idleError": {
+        "code": "APP_ERROR",
+        "message": "Controlled permission device failure"
+      },
+      "state": {
+        "active": true,
+        "state": {
+          "sequence": 5,
+          "phase": "error",
+          "openedAt": 1793895088590,
+          "elapsed": 0,
+          "paused": false,
+          "canToggle": false,
+          "canFinish": false,
+          "notice": "Controlled permission device failure",
+          "hasError": true,
+          "position": 0,
+          "duration": 0,
+          "previewPosition": false,
+          "playing": false,
+          "playPending": false,
+          "previewPending": false,
+          "seeking": false,
+          "canPlay": false,
+          "canSeek": false,
+          "canRetryPreview": false,
+          "seekable": [],
+          "samples": []
+        }
+      }
+    },
+    {
+      "label": "failed empty session close releases owner",
+      "active": false,
+      "attachmentCount": 0
+    }
+  ],
+  "findings": [
+    {
+      "label": "true result after deadline accepted",
+      "elapsedMs": 255.06904200000008,
+      "timeoutMs": 50,
+      "returnedState": true
+    },
+    {
+      "label": "never-settling async predicate exceeds deadline",
+      "elapsedMs": 249.96762500000023,
+      "timeoutMs": 50,
+      "status": "still-pending"
+    }
+  ],
+  "pageErrors": []
+}
