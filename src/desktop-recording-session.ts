@@ -121,6 +121,9 @@ export class DesktopRecordingSession {
             Math.max(2, data.reduce((a, b) => a + b, 0) / data.length),
           );
         } catch (error) {
+          this.segmentError =
+            error instanceof Error ? error : Error(String(error));
+          void this.seal().catch(() => {});
           this.callbacks.onError(error);
         }
       }, 100);
