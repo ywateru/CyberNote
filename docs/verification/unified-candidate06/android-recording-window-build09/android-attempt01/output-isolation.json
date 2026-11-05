@@ -1,0 +1,68 @@
+{
+  "policy": "atomic-rename-final-output-and-dist",
+  "sourcePathsAbsentBeforeCommand": true,
+  "outputs": [
+    {
+      "name": "application",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-recording-window-build09/android-attempt01/prior-outputs/application",
+      "kind": "file",
+      "before": {
+        "kind": "file",
+        "device": 16777233,
+        "inode": 29578486,
+        "mode": 420,
+        "bytes": 179247354,
+        "sha256": "a7ba557478e42da0a7f0e387a772bf764b067bfe082553e765603ca700385632"
+      }
+    },
+    {
+      "name": "dist",
+      "source": "/Users/water/work/2026/Apple-Notes-Clone/dist",
+      "preserved": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-recording-window-build09/android-attempt01/prior-outputs/dist",
+      "kind": "directory",
+      "before": {
+        "kind": "directory",
+        "device": 16777233,
+        "inode": 30071147,
+        "mode": 493,
+        "directories": [
+          {
+            "path": "assets",
+            "mode": 493
+          }
+        ],
+        "files": [
+          {
+            "path": "assets/index-DTlvjFvw.css",
+            "bytes": 72479,
+            "sha256": "3aad8eb763b1a608bb81388ef59d595e300f773a6dbdce73d18d72c30675fe11",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/index-L4t2PVCF.js",
+            "bytes": 996883,
+            "sha256": "16de2273f92359e13e4ecb4ce92fc293dd7e531e4b500bf8ea04545306ed6379",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "assets/native-recording-access-OyuyQR25.js",
+            "bytes": 581,
+            "sha256": "10d27864aa07f05a16c8bc8d4864b1e4dba75d3bf145e3003b4e2da9ecbeac9a",
+            "type": "file",
+            "mode": 420
+          },
+          {
+            "path": "index.html",
+            "bytes": 498,
+            "sha256": "030502c23171fe47cda861e445e79c8788e96da7a08db42b8052a77ee5478048",
+            "type": "file",
+            "mode": 420
+          }
+        ]
+      }
+    }
+  ]
+}
