@@ -129,9 +129,17 @@ for (const p of graph.packages) {
     }
     entry.sourceSha256 = hash.digest("hex");
     entry.sourceFiles = paths.length;
-    entry.registryChecksumSha256 = digest(
-      await readFile(resolve(directory, ".cargo-checksum.json")),
-    );
+    try {
+      entry.registryChecksumSha256 = digest(
+        await readFile(resolve(directory, ".cargo-checksum.json")),
+      );
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+      // Some preinstalled source caches omit Cargo's checksum sidecar. The
+      // complete actual file digest above and exact Cargo.lock remain required.
+      entry.registryChecksumSha256 = null;
+      entry.registryChecksumMissing = true;
+    }
   }
   metadata.dependencies.push(entry);
 }
