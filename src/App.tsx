@@ -1,5 +1,9 @@
 import type { DebugAdapter } from "./debug/protocol";
-import { searchListText, searchListSnippet } from "./search-list-text";
+import {
+  SearchListPreview,
+  searchListText,
+  searchListSnippet,
+} from "./search-list-text";
 import { RecordingRevisions } from "./recording-revisions";
 import {
   replaceRecordingAttachment,
@@ -5590,7 +5594,14 @@ function App() {
                                 <Lock size={12} /> 已锁定
                               </>
                             ) : (
-                              searchListText(listPreview, highlightQuery)
+                              mobile ? (
+                                previewText
+                              ) : (
+                                <SearchListPreview
+                                  text={previewText}
+                                  query={highlightQuery}
+                                />
+                              )
                             )}
                           </span>
                         </div>

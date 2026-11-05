@@ -427,6 +427,18 @@ a {
   gap: 4px;
   align-items: center;
 }
+.desktop .snippet-text {
+  min-width: 0;
+  flex: 1;
+}
+.desktop .snippet-copy {
+  display: block;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .pin-marker {
   position: absolute;
   left: -16px;
