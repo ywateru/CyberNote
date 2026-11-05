@@ -2,6 +2,8 @@ mod model;
 pub use model::*;
 #[cfg(target_os = "macos")]
 mod macos;
+#[cfg(target_os = "macos")]
+mod recording_diagnostics;
 
 use serde::{Deserialize, Serialize};
 use std::{
@@ -26,12 +28,18 @@ pub struct RecordingAccess {
 pub struct Error {
     pub code: String,
     pub message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage: Option<String>,
+    #[serde(rename = "requestId", skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
 }
 impl Error {
     pub fn new(code: &str, message: impl Into<String>) -> Self {
         Self {
             code: code.into(),
             message: message.into(),
+            stage: None,
+            request_id: None,
         }
     }
 }
@@ -414,5 +422,29 @@ mod keyboard_query_tests {
             .lock()
             .unwrap()
             .is_empty());
+    }
+}
+
+#[cfg(test)]
+mod recording_error_wire_tests {
+    use super::*;
+    #[test]
+    fn ordinary_errors_keep_the_existing_wire_shape() {
+        assert_eq!(
+            serde_json::to_value(Error::new("microphone_busy", "same message")).unwrap(),
+            serde_json::json!({"code": "microphone_busy", "message": "same message"})
+        );
+    }
+    #[test]
+    fn optional_diagnostic_metadata_uses_content_free_wire_fields() {
+        let mut error = Error::new("microphone_timeout", "same message");
+        error.stage = Some("native_result".into());
+        error.request_id = Some("42".into());
+        assert_eq!(
+            serde_json::to_value(error).unwrap(),
+            serde_json::json!({
+                "code": "microphone_timeout", "message": "same message", "stage": "native_result", "requestId": "42"
+            })
+        );
     }
 }

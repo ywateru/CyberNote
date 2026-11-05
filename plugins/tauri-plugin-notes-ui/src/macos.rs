@@ -1,3 +1,4 @@
+use crate::recording_diagnostics::{Delivery, Request, Stage};
 use crate::*;
 use std::{
     ffi::{c_char, c_void, CStr, CString},
@@ -30,16 +31,22 @@ extern "C" {
     fn notes_ui_keyboard_navigation(window: *mut c_void, enabled: *mut i32) -> i32;
     fn notes_ui_recording_watch_windows() -> i32;
     fn notes_ui_recording_drop();
-    fn notes_ui_recording_access(
+    fn notes_ui_recording_access_diagnostic(
         webview: *mut c_void,
         window: *mut c_void,
         context: *mut c_void,
         reply: extern "C" fn(*mut c_void, i32, std::ffi::c_long),
         release: extern "C" fn(*mut c_void),
+        request_id: u64,
+        diagnostic: Option<extern "C" fn(u64, u32, i32, std::ffi::c_long)>,
     );
 }
 
-type RecordingSender = mpsc::SyncSender<Result<RecordingAccess>>;
+struct RecordingSender {
+    sender: mpsc::SyncSender<Result<RecordingAccess>>,
+    request: Request,
+}
+
 fn recording_reply_value(code: i32, status: std::ffi::c_long) -> Result<RecordingAccess> {
     match (code, status) {
         (0, 3) => Ok(RecordingAccess {
@@ -76,35 +83,81 @@ fn recording_reply_value(code: i32, status: std::ffi::c_long) -> Result<Recordin
 extern "C" fn recording_reply(context: *mut c_void, code: i32, status: std::ffi::c_long) {
     let _ = std::panic::catch_unwind(|| unsafe {
         if let Some(sender) = (context as *const RecordingSender).as_ref() {
-            let _ = sender.try_send(recording_reply_value(code, status));
+            sender.request.emit(Stage::NativeResult, code, status);
+            let value = recording_reply_value(code, status)
+                .map_err(|error| sender.request.error(error, Stage::NativeResult));
+            if let Err(error) = sender.sender.try_send(value) {
+                let code = match error {
+                    mpsc::TrySendError::Full(_) => 1,
+                    mpsc::TrySendError::Disconnected(_) => 2,
+                };
+                sender.request.emit(Stage::LateReceiver, code, -1);
+            }
         }
     });
 }
 extern "C" fn recording_release(context: *mut c_void) {
     let _ = std::panic::catch_unwind(|| unsafe {
         if !context.is_null() {
-            drop(Box::from_raw(context as *mut RecordingSender));
+            let sender = Box::from_raw(context as *mut RecordingSender);
+            sender.request.emit(Stage::ContextRelease, 0, -1);
+            drop(sender);
         }
     });
 }
-async fn recording_wait<T: Send + 'static>(rx: mpsc::Receiver<Result<T>>) -> Result<T> {
+async fn recording_wait<T: Send + 'static>(
+    rx: mpsc::Receiver<Result<T>>,
+    request: Request,
+    phase: i64,
+) -> Result<T> {
     tauri::async_runtime::spawn_blocking(move || {
-        rx.recv_timeout(std::time::Duration::from_secs(35))
-            .map_err(|error| match error {
-                mpsc::RecvTimeoutError::Timeout => {
-                    Error::new("microphone_timeout", "麦克风授权桥接等待超时，录音未开始。")
-                }
-                mpsc::RecvTimeoutError::Disconnected => {
-                    Error::new("microphone_bridge", "麦克风授权桥接已终止，录音未开始。")
-                }
-            })?
+        match rx.recv_timeout(std::time::Duration::from_secs(35)) {
+            Ok(result) => {
+                request.emit(Stage::RustWaitReceive, i32::from(result.is_err()), phase);
+                result.map_err(|error| request.error(error, Stage::RustWaitReceive))
+            }
+            Err(error) => {
+                let (code, error) = match error {
+                    mpsc::RecvTimeoutError::Timeout => (
+                        1,
+                        Error::new("microphone_timeout", "麦克风授权桥接等待超时，录音未开始。"),
+                    ),
+                    mpsc::RecvTimeoutError::Disconnected => (
+                        2,
+                        Error::new("microphone_bridge", "麦克风授权桥接已终止，录音未开始。"),
+                    ),
+                };
+                request.emit(Stage::RustWaitDeadline, code, phase);
+                Err(request.error(error, Stage::RustWaitDeadline))
+            }
+        }
     })
     .await
-    .map_err(|e| Error::new("dispatch", e.to_string()))?
+    .map_err(|e| {
+        request.error(
+            Error::new("dispatch", e.to_string()),
+            Stage::RustWaitReceive,
+        )
+    })?
 }
 pub(super) async fn recording_access<R: Runtime>(
     app: &AppHandle<R>,
     window: Window<R>,
+) -> Result<RecordingAccess> {
+    let request = Request::new();
+    let mut delivery = Delivery(request, false);
+    request.emit(Stage::RustDispatch, 0, -1);
+    let result = recording_access_inner(app, window, request)
+        .await
+        .map_err(|error| request.error(error, Stage::RustDelivery));
+    request.emit(Stage::RustDelivery, i32::from(result.is_err()), -1);
+    delivery.1 = true;
+    result
+}
+async fn recording_access_inner<R: Runtime>(
+    app: &AppHandle<R>,
+    window: Window<R>,
+    request: Request,
 ) -> Result<RecordingAccess> {
     let (tx, rx) = mpsc::sync_channel(1);
     let current_app = app.clone();
@@ -115,7 +168,9 @@ pub(super) async fn recording_access<R: Runtime>(
     let dispatch_live = live.clone();
     app.run_on_main_thread(move || {
         use std::sync::atomic::Ordering;
+        request.emit(Stage::RustMain, 0, -1);
         if !dispatch_live.load(Ordering::Acquire) {
+            request.emit(Stage::RustLateDispatch, 0, -1);
             return;
         }
         let start = || -> Result<usize> {
@@ -136,9 +191,11 @@ pub(super) async fn recording_access<R: Runtime>(
         };
         match start() {
             Err(error) => {
-                let _ = tx.try_send(Err(error));
+                request.emit(Stage::RustWindow, 0, 0);
+                let _ = tx.try_send(Err(request.error(error, Stage::RustDispatch)));
             }
             Ok(native) => {
+                request.emit(Stage::RustWindow, 0, 1);
                 let response_tx = tx.clone();
                 if let Err(error) = current_app
                     .get_webview_window(caller.label())
@@ -146,23 +203,31 @@ pub(super) async fn recording_access<R: Runtime>(
                     .and_then(|view| {
                         view.with_webview(move |view| {
                             if !dispatch_live.load(Ordering::Acquire) {
+                                request.emit(Stage::RustLateDispatch, 0, -1);
                                 return;
                             }
                             if view.ns_window() as usize != native {
+                                request.emit(Stage::RustWindow, 1, 0);
                                 let _ = response_tx.try_send(Err(Error::new(
                                     "window_mismatch",
                                     "录音视图所属窗口已改变",
                                 )));
                                 return;
                             }
-                            let context = Box::into_raw(Box::new(response_tx));
+                            request.emit(Stage::RustWindow, 1, 1);
+                            let context = Box::into_raw(Box::new(RecordingSender {
+                                sender: response_tx,
+                                request,
+                            }));
                             unsafe {
-                                notes_ui_recording_access(
+                                notes_ui_recording_access_diagnostic(
                                     view.inner(),
                                     view.ns_window(),
                                     context.cast(),
                                     recording_reply,
                                     recording_release,
+                                    request.0,
+                                    request.callback(),
                                 );
                             }
                         })
@@ -175,7 +240,7 @@ pub(super) async fn recording_access<R: Runtime>(
         }
     })
     .map_err(|e| Error::new("dispatch", e.to_string()))?;
-    let result = recording_wait(rx).await;
+    let result = recording_wait(rx, request, 1).await;
     live.store(false, std::sync::atomic::Ordering::Release);
     let result = result?;
     // Revalidate the actual injected Window, not merely a label reused by a
@@ -198,10 +263,12 @@ pub(super) async fn recording_access<R: Runtime>(
             }
             Ok(result)
         };
-        let _ = tx.try_send(verify());
+        let result = verify();
+        request.emit(Stage::RustRevalidate, i32::from(result.is_err()), -1);
+        let _ = tx.try_send(result.map_err(|error| request.error(error, Stage::RustRevalidate)));
     })
     .map_err(|e| Error::new("dispatch", e.to_string()))?;
-    recording_wait(rx).await
+    recording_wait(rx, request, 2).await
 }
 
 #[cfg(test)]
@@ -245,7 +312,11 @@ mod recording_access_tests {
     #[test]
     fn late_callback_retains_its_context_after_receiver_expires() {
         let (tx, rx) = mpsc::sync_channel(1);
-        let context = Box::into_raw(Box::new(tx as RecordingSender)).cast();
+        let context = Box::into_raw(Box::new(RecordingSender {
+            sender: tx,
+            request: Request(0),
+        }))
+        .cast();
         drop(rx);
         recording_reply(context, 0, 3);
         recording_reply(context, 7, -1);

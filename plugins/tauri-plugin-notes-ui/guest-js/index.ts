@@ -45,7 +45,7 @@ export interface NativeInfo {
   windowNumber: number; scaleFactor: number;
 }
 export interface BindingInfo { windowLabel: string; bindingId: string; stateRevision: number; native: NativeInfo }
-export interface NativeUiError { code: string; message: string }
+export interface NativeUiError { code: string; message: string; stage?: string; requestId?: string }
 
 /** Explicit recording Start only. This may show the normal system microphone prompt. */
 export async function recordingAccess(): Promise<{ status: 'authorized' }> {
