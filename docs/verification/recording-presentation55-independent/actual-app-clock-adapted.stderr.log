@@ -1,0 +1,23 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'error'
+- 'recording'
+
+    at phase (file:///private/tmp/apple-notes-recording-presentation55-independent-01/docs/verification/recording-presentation55-independent/check-actual-app-dock-clock-adapted.mjs:132:12)
+    at async begin (file:///private/tmp/apple-notes-recording-presentation55-independent-01/docs/verification/recording-presentation55-independent/check-actual-app-dock-clock-adapted.mjs:164:5)
+    at async file:///private/tmp/apple-notes-recording-presentation55-independent-01/docs/verification/recording-presentation55-independent/check-actual-app-dock-clock-adapted.mjs:169:5
+    at async test (file:///private/tmp/apple-notes-recording-presentation55-independent-01/docs/verification/recording-presentation55-independent/check-actual-app-dock-clock-adapted.mjs:117:5)
+    at async file:///private/tmp/apple-notes-recording-presentation55-independent-01/docs/verification/recording-presentation55-independent/check-actual-app-dock-clock-adapted.mjs:166:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'error',
+  expected: 'recording',
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

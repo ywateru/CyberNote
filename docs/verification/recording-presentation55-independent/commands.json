@@ -1,0 +1,76 @@
+{
+  "sourceCommit": "c518aa7d9748a2dda59c51e225d3b26ac04c1b20",
+  "browserEnv": {
+    "PLAYWRIGHT_CORE_PATH": "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/playwright-core/index.mjs",
+    "CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  },
+  "results": [
+    {
+      "command": [
+        "node",
+        "scripts/check-recording-presentation55.mjs",
+        "docs/verification/recording-presentation55-independent/components-first"
+      ],
+      "exit": 1,
+      "classification": "controlled interval clock did not progress while waiting final phase; first7 passed"
+    },
+    {
+      "command": [
+        "node",
+        "docs/verification/recording-presentation55-independent/check-presentation-clock-adapted.mjs",
+        "docs/verification/recording-presentation55-independent/components-clock-adapted"
+      ],
+      "exit": 0,
+      "checks": 8
+    },
+    {
+      "command": [
+        "node",
+        "docs/verification/recording-presentation55-independent/check-actual-app-final.mjs",
+        "docs/verification/recording-presentation55-independent/actual-app-final"
+      ],
+      "exit": 0,
+      "checks": 1
+    },
+    {
+      "command": [
+        "node",
+        "scripts/check-recording-interactions50.mjs",
+        "docs/verification/recording-presentation55-independent/interactions-mobile-final"
+      ],
+      "exit": 0,
+      "checks": 12
+    },
+    {
+      "command": [
+        "node",
+        "scripts/check-recording-submit.mjs"
+      ],
+      "exit": 0,
+      "checks": 38
+    },
+    {
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib",
+        "recording_window::tests",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/apple-notes-recording-window50-independent-target"
+      ],
+      "exit": 0,
+      "checks": 5
+    }
+  ]
+}
