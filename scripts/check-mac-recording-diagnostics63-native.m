@@ -42,13 +42,21 @@ static int countStage(uint64_t request, uint32_t stage) {
     int count = 0; for (int i=0; i<eventCount63; i++) if(events63[i].request==request && events63[i].stage==stage) count++;
     return count;
 }
+static void invokeWorker63(void (^callback)(BOOL), BOOL granted) {
+    dispatch_semaphore_t done = dispatch_semaphore_create(0);
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
+        callback(granted);
+        dispatch_semaphore_signal(done);
+    });
+    assert(dispatch_semaphore_wait(done, dispatch_time(DISPATCH_TIME_NOW, 5*NSEC_PER_SEC)) == 0);
+}
 static void complete63(DiagnosticFake63 *f, BOOL granted, BOOL enabled) {
     void (^callback)(BOOL) = f.systemCompletion; f.systemCompletion = nil;
     int beforeEntry = countStage(f.requestID, RecordingOsCompletionEntry);
     int beforeMain = countStage(f.requestID, RecordingMainCompletion);
     // Main is synchronously occupied. Entry must exist before it can process
     // any queued completion; the production callback captures only scalars.
-    dispatch_sync(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{ callback(granted); });
+    invokeWorker63(callback, granted);
     if(enabled) {
         assert(countStage(f.requestID, RecordingOsCompletionEntry) == beforeEntry+1);
         assert(countStage(f.requestID, RecordingMainCompletion) == beforeMain);
@@ -116,7 +124,7 @@ static int suite63(BOOL enabled) {
         DiagnosticFake63 *f=fixture63(&repeated,0,enabled,900); [f start];
         void (^callback)(BOOL)=f.systemCompletion; [f finish:7 status:-1];
         complete63(f,YES,enabled);
-        dispatch_sync(dispatch_get_global_queue(QOS_CLASS_DEFAULT,0),^{callback(YES);});
+        invokeWorker63(callback, YES);
         for(int i=0;i<5;i++) CFRunLoopRunInMode(kCFRunLoopDefaultMode,.001,false);
         assert(repeated.calls==1 && !pendingRecordingAccess && repeated.releases==0);
     } assert(repeated.releases==1); cases++;
