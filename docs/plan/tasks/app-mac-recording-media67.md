@@ -33,3 +33,5 @@ status: in-progress
 - 2026-11-05：66源码独审/准确Mac19核包通过，实际首显MediaView MetadataStale阻断；有界安全新读合同先落文档，待作者实施与不同作者独审。
 
 - 2026-11-05：作者新隔离树`/private/tmp/apple-notes-mac-recording-media67-01`由root43e16f97建立，正在实施真实读取竞态runner及窄修。Mac19额外E活动×保存0:21首显正常；F活动主窗close后新进程重开0:10/C1:31/D文字保持。旧18准确PID随后已不在，内存现场无法继续保证保留，原因/时点未确定，已向用户披露；不重启旧18、不声称恢复。手机仍完全未操作。
+
+- 2026-11-05：产品7243→root496707b7、作者7309→393975a4、独审f873→608d13ab已合入；独立候选30组、旧hook预期缺陷1组及typecheck/build通过。根typecheck/build通过，产品目录逐字同，见[根整合](../../verification/mac-recording-media67-root-integration/README.md)。源码接收，新Mac20冻结/核包/实际首次加载恢复待验，任务仍in-progress。

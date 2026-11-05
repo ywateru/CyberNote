@@ -2,7 +2,7 @@
 
 状态：首版实现契约，允许依据真实对比继续完善。
 
-2026-11-05录音呈现以[统一右栏66](plan/tasks/app-mac-recording-sidebar66.md)为准：App稳定持有本地录音会话、直接提交不可变版本，无child/relay；native登记本地owner会话以保留主窗关闭/整应用退出保存屏障。录音自动保存契约以[Mac任务64](plan/tasks/app-mac-recording-autosave64.md)和[桌面录音最新规格](ui/recording-desktop.md)为准：暂停生成完整可播放累计版本，并在原A正文ACK及journal query committed后确认；后续版本原位替换上一卡片，通用不可变附件operation语义保持。checkpoint不终结会话，关闭等准确final ACK才销毁。旧已committed媒体保留以保护Undo/历史，因此内部版本增加磁盘和归档空间；不把单可见卡等同于单物理附件。此为待实现契约，不代表源/设备已通过。
+2026-11-05录音呈现以[统一右栏66](plan/tasks/app-mac-recording-sidebar66.md)为准：App稳定持有本地录音会话、直接提交不可变版本，无child/relay；native登记本地owner会话以保留主窗关闭/整应用退出保存屏障。录音自动保存契约以[Mac任务64](plan/tasks/app-mac-recording-autosave64.md)和[桌面录音最新规格](ui/recording-desktop.md)为准：暂停生成完整可播放累计版本，并在原A正文ACK及journal query committed后确认；后续版本原位替换上一卡片，通用不可变附件operation语义保持。checkpoint不终结会话，关闭等准确final ACK才销毁。旧已committed媒体保留以保护Undo/历史，因此内部版本增加磁盘和归档空间；不把单可见卡等同于单物理附件。实现、受控与真实运行分别以任务进展和准确证据为准，不代表整体像素通过。
 
 ## 模块与所有权
 
@@ -238,3 +238,6 @@ Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许�
 ### 录音呈现66
 
 最新用户要求移除浮窗，统一App内右栏。55的child拥有采集、远程视图与呈现切换仅作历史。66直接owner会话、精确原A保存、可等待关闭及native本地登记退出屏障详见ui/recording-desktop.md与任务66。
+## 持久媒体陈旧读取恢复67
+
+共享媒体加载器仅对typed MetadataStale执行最多三次总readAttachment，每次重新捕获access stamp并通过现有gate；旧结果不创建URL、不发布。layout lifetime及手动version令旧读取/重试失效；其它错误不自动重试，达到上限保留显式重试。录音写入、正文ACK、版本、journal及退出守卫不改。准确范围见[67合同](plan/tasks/app-mac-recording-media67.md)。

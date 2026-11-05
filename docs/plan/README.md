@@ -1,6 +1,6 @@
 # 交付计划
 
-2026-11-05最新要求：用户要求彻底重构录音，取消浮窗、统一主窗口右侧非模态栏，见[任务66](tasks/app-mac-recording-sidebar66.md)。暂停自动保存、关闭保存收起、录音中编辑/切笔记与原A归属继续保持；本地owner与native退出守卫一起重构。当前保留Mac18未存3秒现场与手机13秒现场，不退出/重载/复制。65实际Host等待及投影修复已通过focused独审并整合（root typecheck/build通过）；66最终修复f4a2fba7已通过独审（实际App链17组、native核心5组）并合入root9199370a，根typecheck/build通过；[整合记录](../verification/mac-recording-sidebar66-root-integration/README.md)。准确Mac19已构建并独立核包；真实侧栏/录音中编辑搜索/两次暂停累计通过有限观察，但×后持久卡首显MetadataStale，手动重试才恢复播放；继续修复[读取恢复67](tasks/app-mac-recording-media67.md)，完整保存体验及像素未通过。
+2026-11-05最新要求：用户要求彻底重构录音，取消浮窗、统一主窗口右侧非模态栏，见[任务66](tasks/app-mac-recording-sidebar66.md)。暂停自动保存、关闭保存收起、录音中编辑/切笔记与原A归属继续保持；本地owner与native退出守卫一起重构。当前保留Mac18未存3秒现场与手机13秒现场，不退出/重载/复制。65实际Host等待及投影修复已通过focused独审并整合（root typecheck/build通过）；66最终修复f4a2fba7已通过独审（实际App链17组、native核心5组）并合入root9199370a，根typecheck/build通过；[整合记录](../verification/mac-recording-sidebar66-root-integration/README.md)。准确Mac19已构建并独立核包；真实侧栏/录音中编辑搜索/两次暂停累计通过有限观察，但×后持久卡首显MetadataStale，手动重试才恢复播放；继续修复[读取恢复67](tasks/app-mac-recording-media67.md)，完整保存体验及像素未通过。 67已独审30组通过并整合（root496707b7/608d13ab），根typecheck/build通过；准确Mac20和真实首显恢复待验。
 
 历史64状态：2026-11-05用户最新反馈：[Mac录音暂停/关闭自动保存64](tasks/app-mac-recording-autosave64.md)首版通过已测受控边界并合入、生成Mac18，但[实际暂停保存失败](../verification/mac-recording-autosave64-runtime/README.md)，**MAC18-RUNTIME-BLOCKED**。保持in-progress，继续实际App/Host恢复等待与投影边界修复，新3秒录音保留，首版独审不覆盖这个真实失败。手机原现场保持，见[分析](analysis/mac-recording-autosave64.md)。
 
