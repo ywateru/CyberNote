@@ -80,7 +80,7 @@ window.__NOTES_DEBUG__.snapshot({selector:".app",maxChars:16000,maxNodes:160});
 | 菜单/对话框 | `menu.open`、`modal.open/submit/cancel`、`dom.click/fill/key` | 控件真实接线；排序在view菜单，folder须普通/智能文件夹，table须实际表格选区；paper/settings/move为即时控件，不提供假submit |
 | 文件/图片/视频/相机 | `attachment.choose/submit/retry/discard`、正文附件DOM | 只模拟File/系统边界，目标/权限/ACK不绕过；实际相机另验 |
 | OCR | `ocr.open/select/insert/retry/cancel` | 实际OcrHost，识别器/系统取图显式fake |
-| 录音/暂停继续/累计checkpoint/保存/重试/播放/定位 | `recording.open`、`recording.action` | 真实Session/PCM/attachment/body ACK，设备边界合成；动作检查canX和seekable |
+| 录音/暂停继续/累计checkpoint/保存/重试/播放/定位 | `recording.open`、`recording.action` | 真实Session/PCM/attachment/body ACK，设备边界合成；动作检查canX和seekable；累计revision替换当前正文单卡，旧committed媒体按原契约保留以支持Undo，不用附件总数判断重复卡 |
 | 已保存附件预览/音频控制/菜单 | 正文卡片、预览面板、AudioPlayer真实DOM | 使用同一合成附件，真实硬件与可听性另验 |
 | 绘画/橡皮/笔色/完成取消 | `drawing.open`及DrawingPanel SVG pointer/DOM | 现有网页绘画；原生addSketch仍disabled |
 | 分享/独立窗口 | `note.share/separate` | 系统剪贴板/分享/原生窗口是fixture边界，不证明多窗OS行为 |
