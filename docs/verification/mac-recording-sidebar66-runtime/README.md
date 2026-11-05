@@ -1,6 +1,6 @@
 # 录音右栏66实际Mac验收准备
 
-2026-11-05，状态：SOURCE-INTEGRATED-WAITING-PACKAGE。源码最终修复已独审并合入root9199370a，根typecheck/build通过。此文件仍为实际验收计划，不表示新包已构建或运行。
+2026-11-05，状态：MAC19-RUNTIME-PARTIAL-MEDIA-LOAD-BLOCKED。源码最终修复已独审并合入root9199370a，根typecheck/build通过。此文件仍为实际验收计划，不表示新包已构建或运行。
 
 ## 现场保全
 
@@ -16,3 +16,17 @@
 4. 继续并再次暂停后核对累计时间和单可见卡。×/完成等保存后收起，再打开持久卡播放，检查实际界面播放/暂停/±15；不把GUI播放当解码/音轨能量鉴真。
 5. 在准确候选且现场独立可辨时，单独测试录制中×、busy close、主窗关闭与重新打开持久卡。CmdQ只能针对准确新进程，不影响旧Mac18。不能复验的项目分别标明。
 6. 同尺寸截图仅作为侧栏布局对照；全像素与所有尺寸/状态持续开放。来源、源码测试、native构建、真实录音与视觉结论分开。
+
+## Mac19实际attempt01（Computer Use，2026-11-05）
+
+准确包 `artifacts/unified-candidate06/mac-recording-sidebar-build19/mac-attempt02/mac-sealed.app`，source7c1a3e42，sealed executable SHA256 `efaaf7239cc6d84da11779b600e38e43739df72602ff85fed3f7ffa6e3420b9d`。包身份已独立核验，见同批recording-sidebar66-independent19。Computer Use可选launch_app在本运行时未提供（is not a function），随后用文档支持的getApp完整路径打开，读取进程确认新PID64494与旧Mac18 PID8002并存。未退出旧18，旧现场只读AX仍00:03/error/retry。
+
+在新19中新建C/D合成笔记，未改旧A/B：`QA-RECORDING-SIDEBAR66-C`（C录音侧栏、暂停及关闭自动保存验收/录音插入位置）与`QA-RECORDING-SIDEBAR66-D`（D中的独立文字保留，录音始终属于C）。总笔记48→50，目录15→17。录音入口只出现正常主窗右栏，无呈现切换；未开始×收起后重开成功。
+
+17:35点击开始后实际计时进入00:30，持续录制时切D并追加`D-录音期间独立编辑-66`、搜索`QA-RECORDING-SIDEBAR66`、返回C追加`C-录音期间追加文字-66`，计时连续到01:12。首次暂停经过正在完成状态，恢复继续/试听/完成且无错误；继续同会话后切D，第二次暂停累计01:32，返回C仍唯一实时卡、两篇正文完整。暂停提交期间曾见工具栏短暂disabled，下一状态恢复。
+
+点击右栏×后侧栏收起，但持久MediaView首次显示`列表已有新的变化，请重新同步`和`重试录音`，无播放器。**这是实际用户可见缺陷，不能授予完整录音保存体验PASS。** 一次正常重试后持久卡显示`新录音.wav`、时长1:31及播放/展开。点击播放后显示暂停；随后播放自然到末端1:31，展开slider实际91.3，后退15秒到76.3/1:16。仅证明GUI媒体加载/播放位置有恢复路径，不作音轨能量/音质或音频字节鉴真。未导出/复制/转写任何实际音频。
+
+准确源只读定位：typed MetadataStale经bridge完整拒绝旧sequence的readAttachment响应；useAttachmentMedia将其保留为failure且不自动重读。实时overlay仅display:none隐藏持久NodeView，×后可能暴露已失败节点。具体哪次metadata事件推进尚待受控trace，不将推断写成实际内部观测。后续任务67修复安全的有界新读，不降低门禁、不接受旧字节、不重存录音。
+
+未完成录制中×、main close、CmdQ/冷启、原版同态整窗像素比较；以上受控源码结论不替代实际运行。新19当前无活动录音，已存C卡在原应用本地，播放已到末尾，旧18与手机现场保持。暂不标任务66全部完成。

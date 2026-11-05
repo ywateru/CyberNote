@@ -1,0 +1,638 @@
+{
+  "schema": 1,
+  "sourceHead": "7c1a3e424ff0cb7343cab14559efb2a92b79140b",
+  "baselineSourceHead": "8022407f0b827a564fa64f693b5c7e7f6220b42e",
+  "scope": "Complete capability-set and registered recording handler source audit for the exact frozen root. Not a runtime/OS permission or independent security certification.",
+  "capabilitiesBefore": [
+    {
+      "path": "src-tauri/capabilities/default.json",
+      "bytes": 502,
+      "sha256": "c23d82da76184d05410f5bd455fb70b530077ab39f73b9fbb8f3bfa12baae130",
+      "content": {
+        "$schema": "../gen/schemas/desktop-schema.json",
+        "identifier": "default",
+        "description": "Notes app capabilities",
+        "windows": [
+          "main",
+          "note-*"
+        ],
+        "permissions": [
+          "core:default",
+          "core:window:allow-start-dragging",
+          "core:window:allow-close",
+          "core:window:allow-destroy",
+          "core:app:allow-exit",
+          "core:window:allow-minimize",
+          "core:window:allow-toggle-maximize",
+          "core:webview:allow-create-webview-window",
+          "dialog:default",
+          "notes-scan:default"
+        ]
+      }
+    },
+    {
+      "path": "src-tauri/capabilities/macos-notes-ui.json",
+      "bytes": 297,
+      "sha256": "2206b0ded527b6a53ba9784bb76b4f7e884fed3173863a2bdc22a96e9cf40910",
+      "content": {
+        "$schema": "../gen/schemas/desktop-schema.json",
+        "identifier": "macos-notes-ui",
+        "description": "Native toolbar for this application's local Mac windows",
+        "platforms": [
+          "macOS"
+        ],
+        "windows": [
+          "main",
+          "note-*"
+        ],
+        "permissions": [
+          "notes-ui:default",
+          "notes-ui:allow-recording-access"
+        ]
+      }
+    },
+    {
+      "path": "src-tauri/capabilities/macos-recording-access.json",
+      "bytes": 360,
+      "sha256": "4387271bd891609b3afa7b4298d26f4db88b657b8d182474061defd47a667587",
+      "content": {
+        "$schema": "../gen/schemas/desktop-schema.json",
+        "identifier": "macos-recording-access",
+        "description": "Microphone preflight only for the actual local recording window; native code validates its canonical UUID label and physical identity",
+        "platforms": [
+          "macOS"
+        ],
+        "windows": [
+          "recording-*"
+        ],
+        "permissions": [
+          "notes-ui:allow-recording-access"
+        ]
+      }
+    },
+    {
+      "path": "src-tauri/capabilities/recording-owner-window.json",
+      "bytes": 331,
+      "sha256": "e001b1d44be8a9ea296dd42f9b4c7bff50de4710d9168da7ebb1da3a3c7e5cac",
+      "content": {
+        "$schema": "../gen/schemas/desktop-schema.json",
+        "identifier": "recording-owner-window",
+        "description": "Keep the original recording owner alive when closed and reveal that same window",
+        "windows": [
+          "main",
+          "note-*"
+        ],
+        "permissions": [
+          "core:window:allow-hide",
+          "core:window:allow-show",
+          "core:window:allow-set-focus"
+        ]
+      }
+    },
+    {
+      "path": "src-tauri/capabilities/recording-window.json",
+      "bytes": 418,
+      "sha256": "e85e5603d86a4cbd7ae70fcaea0decba2f799f23c1cde93ef590044ca0b19907",
+      "content": {
+        "$schema": "../gen/schemas/desktop-schema.json",
+        "identifier": "recording-window",
+        "description": "Independent local recording window: its own lifecycle and directed session events only",
+        "windows": [
+          "recording-*"
+        ],
+        "permissions": [
+          "core:event:allow-listen",
+          "core:event:allow-unlisten",
+          "core:window:allow-destroy",
+          "core:window:allow-close",
+          "core:window:allow-start-dragging"
+        ]
+      }
+    }
+  ],
+  "capabilitiesAfter": [
+    {
+      "path": "src-tauri/capabilities/default.json",
+      "bytes": 502,
+      "sha256": "c23d82da76184d05410f5bd455fb70b530077ab39f73b9fbb8f3bfa12baae130",
+      "content": {
+        "$schema": "../gen/schemas/desktop-schema.json",
+        "identifier": "default",
+        "description": "Notes app capabilities",
+        "windows": [
+          "main",
+          "note-*"
+        ],
+        "permissions": [
+          "core:default",
+          "core:window:allow-start-dragging",
+          "core:window:allow-close",
+          "core:window:allow-destroy",
+          "core:app:allow-exit",
+          "core:window:allow-minimize",
+          "core:window:allow-toggle-maximize",
+          "core:webview:allow-create-webview-window",
+          "dialog:default",
+          "notes-scan:default"
+        ]
+      }
+    },
+    {
+      "path": "src-tauri/capabilities/macos-notes-ui.json",
+      "bytes": 297,
+      "sha256": "2206b0ded527b6a53ba9784bb76b4f7e884fed3173863a2bdc22a96e9cf40910",
+      "content": {
+        "$schema": "../gen/schemas/desktop-schema.json",
+        "identifier": "macos-notes-ui",
+        "description": "Native toolbar for this application's local Mac windows",
+        "platforms": [
+          "macOS"
+        ],
+        "windows": [
+          "main",
+          "note-*"
+        ],
+        "permissions": [
+          "notes-ui:default",
+          "notes-ui:allow-recording-access"
+        ]
+      }
+    },
+    {
+      "path": "src-tauri/capabilities/recording-owner-window.json",
+      "bytes": 278,
+      "sha256": "81cc5d70f4774a122ca76935c47448e85577de3facf02846cbab3395d987a90e",
+      "content": {
+        "$schema": "../gen/schemas/desktop-schema.json",
+        "identifier": "recording-owner-window",
+        "description": "Reveal document windows after cancelled save or exit",
+        "windows": [
+          "main",
+          "note-*"
+        ],
+        "permissions": [
+          "core:window:allow-show",
+          "core:window:allow-set-focus"
+        ]
+      }
+    }
+  ],
+  "addedPermissionGrants": [],
+  "removedPermissionGrants": [
+    {
+      "platforms": [],
+      "windows": [
+        "main",
+        "note-*"
+      ],
+      "permission": "core:window:allow-hide"
+    },
+    {
+      "platforms": [],
+      "windows": [
+        "recording-*"
+      ],
+      "permission": "core:event:allow-listen"
+    },
+    {
+      "platforms": [],
+      "windows": [
+        "recording-*"
+      ],
+      "permission": "core:event:allow-unlisten"
+    },
+    {
+      "platforms": [],
+      "windows": [
+        "recording-*"
+      ],
+      "permission": "core:window:allow-close"
+    },
+    {
+      "platforms": [],
+      "windows": [
+        "recording-*"
+      ],
+      "permission": "core:window:allow-destroy"
+    },
+    {
+      "platforms": [],
+      "windows": [
+        "recording-*"
+      ],
+      "permission": "core:window:allow-start-dragging"
+    },
+    {
+      "platforms": [
+        "macOS"
+      ],
+      "windows": [
+        "recording-*"
+      ],
+      "permission": "notes-ui:allow-recording-access"
+    }
+  ],
+  "microphoneGrant": {
+    "existingUnchanged": true,
+    "capability": {
+      "path": "src-tauri/capabilities/macos-notes-ui.json",
+      "bytes": 297,
+      "sha256": "2206b0ded527b6a53ba9784bb76b4f7e884fed3173863a2bdc22a96e9cf40910",
+      "content": {
+        "$schema": "../gen/schemas/desktop-schema.json",
+        "identifier": "macos-notes-ui",
+        "description": "Native toolbar for this application's local Mac windows",
+        "platforms": [
+          "macOS"
+        ],
+        "windows": [
+          "main",
+          "note-*"
+        ],
+        "permissions": [
+          "notes-ui:default",
+          "notes-ui:allow-recording-access"
+        ]
+      }
+    },
+    "callChain": [
+      "DesktopRecordingPanel.onBeforeStart → recording_local_started",
+      "DesktopRecordingSession.start → browserEnvironment.authorize",
+      "authorizeNativeRecording → plugin:notes-ui|recording_access"
+    ],
+    "pluginPermissionResourcesUnchanged": [
+      {
+        "path": "plugins/tauri-plugin-notes-ui/build.rs",
+        "bytes": 1623,
+        "sha256": "fa2e9b5f1b697a70e9198b1d626baf5942782be664da49dc0c4de44bc624110b"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+        "bytes": 5112,
+        "sha256": "eb8b42c3711ae95ee4eca6770b1165aad93f4b5e7b63496737ccdd36aa18f9df"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/bind.toml",
+        "bytes": 365,
+        "sha256": "e229d86937b0f5d845055336cd3312bc71e2d1526afdb4813f038b6e94618de2"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/focus_search.toml",
+        "bytes": 413,
+        "sha256": "a1d2020515e4739899f11f5e36bafc3016ae614890f56591a616d6ff93d85c67"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/inspect.toml",
+        "bytes": 383,
+        "sha256": "45d845a7371e16c8b91240d79bbfa0f49b25cf218eafa410ead168c7fa6ce3a0"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/keyboard_navigation.toml",
+        "bytes": 455,
+        "sha256": "9a5115257393707eea6ec40bbea2d0929ecaee960995f753c8437af4fd292bbe"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/recording_access.toml",
+        "bytes": 437,
+        "sha256": "56b3c069a08a22464182e8afae8cbfd24ef77d800da0a84dfde4d5729dc8f589"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/unbind.toml",
+        "bytes": 377,
+        "sha256": "b1f8c5aecf52ec6a7f61e8b382522f68d04b0b89f9a3a2371ab4181ecfaab8e6"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/permissions/autogenerated/commands/update.toml",
+        "bytes": 377,
+        "sha256": "5ecc93a34194fcdcdfec9d2e106c4dbd68cbdb06c593d19aa79ab3ea4692df8c"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/permissions/autogenerated/reference.md",
+        "bytes": 2259,
+        "sha256": "77de61a00592d6af797acf6f277641d364edf335123a119ec9176b1295f1b50f"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/permissions/default.toml",
+        "bytes": 300,
+        "sha256": "224f5bae3c1515d26022153d4730879b7a3d11822af5aa13ed8cd02d0f0cf5c6"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/permissions/schemas/schema.json",
+        "bytes": 13082,
+        "sha256": "3efc6fb0d528b2831eeaeccdb04461ebc389b39e2a94c82f416f722629e807a8"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/src/lib.rs",
+        "bytes": 14391,
+        "sha256": "9d6e5d52d7b6a5026479de77d78ecd8bbbfda32196355494fc5ac57c1551e42d"
+      },
+      {
+        "path": "plugins/tauri-plugin-notes-ui/src/macos.rs",
+        "bytes": 41112,
+        "sha256": "65844415624b99505505cd070a5408f92d718b1ba801bb97fc637e5bb0dab131"
+      }
+    ],
+    "nativeWindowValidationPath": "plugins/tauri-plugin-notes-ui/src/macos.rs"
+  },
+  "handlerBlocksBefore": [
+    {
+      "startLine": 446,
+      "commands": [
+        "load_workspace",
+        "register_save_intent",
+        "acknowledge_access",
+        "read_note_text",
+        "workspace_action",
+        "store_attachment",
+        "store_attachment_operation",
+        "query_attachment_operation",
+        "cancel_attachment_operation",
+        "read_attachment",
+        "export_archive",
+        "import_archive",
+        "recording_window::register_recording_window",
+        "recording_window::recording_window_context",
+        "recording_window::recording_window_message",
+        "recording_window::recording_window_finish",
+        "recording_window::recording_window_abandon",
+        "recording_window::recording_quit_ack"
+      ]
+    },
+    {
+      "startLine": 467,
+      "commands": [
+        "load_workspace",
+        "register_save_intent",
+        "acknowledge_access",
+        "read_note_text",
+        "workspace_action",
+        "store_attachment",
+        "store_attachment_operation",
+        "query_attachment_operation",
+        "cancel_attachment_operation",
+        "read_attachment",
+        "export_archive",
+        "import_archive",
+        "proof_access_record",
+        "recording_window::register_recording_window",
+        "recording_window::recording_window_context",
+        "recording_window::recording_window_message",
+        "recording_window::recording_window_finish",
+        "recording_window::recording_window_abandon",
+        "recording_window::recording_quit_ack"
+      ]
+    }
+  ],
+  "handlerBlocksAfter": [
+    {
+      "startLine": 446,
+      "commands": [
+        "load_workspace",
+        "register_save_intent",
+        "acknowledge_access",
+        "read_note_text",
+        "workspace_action",
+        "store_attachment",
+        "store_attachment_operation",
+        "query_attachment_operation",
+        "cancel_attachment_operation",
+        "read_attachment",
+        "export_archive",
+        "import_archive",
+        "recording_window::register_recording_local",
+        "recording_window::recording_local_validate",
+        "recording_window::recording_local_started",
+        "recording_window::recording_local_revision",
+        "recording_window::recording_local_release",
+        "recording_window::recording_quit_sealed",
+        "recording_window::recording_quit_ack"
+      ]
+    },
+    {
+      "startLine": 468,
+      "commands": [
+        "load_workspace",
+        "register_save_intent",
+        "acknowledge_access",
+        "read_note_text",
+        "workspace_action",
+        "store_attachment",
+        "store_attachment_operation",
+        "query_attachment_operation",
+        "cancel_attachment_operation",
+        "read_attachment",
+        "export_archive",
+        "import_archive",
+        "proof_access_record",
+        "recording_window::register_recording_local",
+        "recording_window::recording_local_validate",
+        "recording_window::recording_local_started",
+        "recording_window::recording_local_revision",
+        "recording_window::recording_local_release",
+        "recording_window::recording_quit_sealed",
+        "recording_window::recording_quit_ack"
+      ]
+    }
+  ],
+  "removedRegisteredRecordingCommands": [
+    "recording_window::recording_window_abandon",
+    "recording_window::recording_window_context",
+    "recording_window::recording_window_finish",
+    "recording_window::recording_window_message",
+    "recording_window::register_recording_window"
+  ],
+  "addedRegisteredRecordingCommands": [
+    "recording_window::recording_local_release",
+    "recording_window::recording_local_revision",
+    "recording_window::recording_local_started",
+    "recording_window::recording_local_validate",
+    "recording_window::recording_quit_sealed",
+    "recording_window::register_recording_local"
+  ],
+  "retainedRegisteredRecordingCommands": [
+    "recording_window::recording_quit_ack"
+  ],
+  "recordingInvokeSites": [
+    {
+      "path": "src/App.tsx",
+      "line": 1496,
+      "command": "recording_quit_sealed",
+      "legacyInactiveModule": false
+    },
+    {
+      "path": "src/App.tsx",
+      "line": 1507,
+      "command": "recording_quit_ack",
+      "legacyInactiveModule": false
+    },
+    {
+      "path": "src/App.tsx",
+      "line": 1510,
+      "command": "recording_quit_ack",
+      "legacyInactiveModule": false
+    },
+    {
+      "path": "src/App.tsx",
+      "line": 2449,
+      "command": "recording_local_validate",
+      "legacyInactiveModule": false
+    },
+    {
+      "path": "src/App.tsx",
+      "line": 3150,
+      "command": "recording_local_revision",
+      "legacyInactiveModule": false
+    },
+    {
+      "path": "src/App.tsx",
+      "line": 3193,
+      "command": "recording_local_release",
+      "legacyInactiveModule": false
+    },
+    {
+      "path": "src/App.tsx",
+      "line": 3213,
+      "command": "register_recording_local",
+      "legacyInactiveModule": false
+    },
+    {
+      "path": "src/App.tsx",
+      "line": 5578,
+      "command": "recording_local_started",
+      "legacyInactiveModule": false
+    },
+    {
+      "path": "src/RecordingWindow.tsx",
+      "line": 61,
+      "command": "recording_window_context",
+      "legacyInactiveModule": true
+    },
+    {
+      "path": "src/recording-window-transport.ts",
+      "line": 14,
+      "command": "recording_window_message",
+      "legacyInactiveModule": true
+    },
+    {
+      "path": "src/recording-window-transport.ts",
+      "line": 40,
+      "command": "recording_window_finish",
+      "legacyInactiveModule": true
+    }
+  ],
+  "nativeGuardReferences": [
+    {
+      "function": "register_local",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 119
+    },
+    {
+      "function": "local_entry",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 187
+    },
+    {
+      "function": "acknowledge_local",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 208
+    },
+    {
+      "function": "release_local",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 231
+    },
+    {
+      "function": "register_recording_local",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 276
+    },
+    {
+      "function": "recording_local_validate",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 290
+    },
+    {
+      "function": "recording_local_started",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 307
+    },
+    {
+      "function": "recording_local_revision",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 329
+    },
+    {
+      "function": "recording_local_release",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 349
+    },
+    {
+      "function": "recording_quit_sealed",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 369
+    },
+    {
+      "function": "seal_quit_participant",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 680
+    },
+    {
+      "function": "acknowledge_quit_participant",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 691
+    },
+    {
+      "function": "recording_quit_ack",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 777
+    },
+    {
+      "function": "destroyed",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 837
+    },
+    {
+      "function": "exit_requested",
+      "path": "src-tauri/src/recording_window.rs",
+      "line": 895
+    }
+  ],
+  "nativeGuardObservations": [
+    "Registration is injected-window derived; caller is main or note-* and session/operation are canonical UUIDs.",
+    "Local calls validate owner_alive, original caller label, operation id, and per-window incarnation against registry.",
+    "Repeated pre-capture registration recovers only the same original live identity; reused session/operation ids are rejected.",
+    "Revision acknowledgements are sequential and final acknowledgement gates saved cleanup; exact cleanup receipts are recoverable.",
+    "Quit snapshots document windows, requires seal then ACK, checks participant changes and live local/legacy ownership before exit."
+  ],
+  "legacyFilesStillCaptured": [
+    "src/RecordingWindow.tsx",
+    "src/RecordingDock.tsx",
+    "src/recording-window-transport.ts",
+    "src/recording-revision-relay.ts",
+    "src-tauri/src/recording_window.rs"
+  ],
+  "legacyRouteEvidence": {
+    "path": "src/main.tsx",
+    "content": "// Tiptap uses ES2023 array methods; Android 11 can ship Chromium 91.\nimport \"core-js/actual/array/find-last\";\nimport \"core-js/actual/array/find-last-index\";\nimport \"core-js/actual/array/at\";\nimport \"core-js/actual/structured-clone\";\nimport React from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App\";\nimport \"./style.css\";\ncreateRoot(document.getElementById(\"root\")!).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n);\n",
+    "note": "main.tsx renders App without the former recording query entry; legacy command definitions/files remain frozen but are absent from the active handler registrations."
+  },
+  "applicationPermissionsDirectoryExists": false,
+  "reviewEvidence": [
+    {
+      "path": "docs/plan/reviews/app-mac-recording-sidebar66-followup.md",
+      "bytes": 6353,
+      "sha256": "1aa511e758bd594c75b4e83a3982caeeeedc2afbf47b10a273f33875318f2e4a"
+    },
+    {
+      "path": "docs/verification/mac-recording-sidebar66-independent/index-followup-f4a2fba7.json",
+      "bytes": 4989,
+      "sha256": "118bbb14a032e3345d71d818f9cb3f800e965b0c71f048186eb3a214171434dc"
+    },
+    {
+      "path": "docs/verification/mac-recording-sidebar66-independent/supplemental-preparation/mac-recording-permission-audit.json",
+      "bytes": 562,
+      "sha256": "e5b012cbe66bb3f109b9096426ca90d2b60acf3afce5d121184ec294c8bd8edb"
+    }
+  ],
+  "limits": "No added grants observed in the complete capability set. Native guards summarized from source and linked to exact rows; no OS/TCC, live microphone, device, GUI, signing or lifecycle runtime claim. The earlier missing-grant suspicion is withdrawn because unchanged macos-notes-ui.json already grants main/note-* recording_access."
+}

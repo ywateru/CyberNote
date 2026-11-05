@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "sourceHead": "7c1a3e424ff0cb7343cab14559efb2a92b79140b",
+  "status": "PASS — FROZEN ONLY; no build START or runtime claim",
+  "checks": {
+    "schemaNineFields": true,
+    "sourceHeadExact": true,
+    "authorizationExact": true,
+    "productRowsMatchPlan": true,
+    "inputRowsMatchPlan": true,
+    "productRowsMatchCurrent": true,
+    "inputRowsMatchCurrent": true,
+    "productAggregateExact": true,
+    "inputAggregateExact": true,
+    "historicalInputOnlyCount21": true,
+    "historicalInputOnlyAllRetained": true,
+    "historicalInputOnlyBytesUnchanged": true,
+    "deletedOnlyTwo": true,
+    "deletedAbsentFromAuthorization": true,
+    "pluginFileCount77": true,
+    "addedGrantsEmpty": true,
+    "microphoneGrantExisting": true,
+    "newRunNoAttempt": true,
+    "artifactDirectoryNotCreated": true
+  },
+  "counts": {
+    "products": 358,
+    "inputs": 379,
+    "plugins": 77,
+    "historicalInputOnly": 21,
+    "toolVersions": 5,
+    "pythonToolFiles": 7
+  },
+  "productAggregate": "6bd522cd54a6247000cf8f3ec5b7907023fcb0438ccae347882e430bfa5f0469",
+  "inputAggregate": "b160802ef3d41e33ec42d24ecca5bcc744ee5ccc48b1469d0feca640f9bb55f1",
+  "authorization": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/recording-sidebar66-preparation/mac-authorization.json",
+    "bytes": 39238,
+    "sha256": "b63d88fba927d3fa09ee4b822d87963f1327d4491202480c21ff75ce4aaba6be"
+  },
+  "freeze": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-recording-sidebar-build19/input-freeze.json",
+    "bytes": 349550,
+    "sha256": "b9c27e759213dd31b9ed843fd4676aa9bcb6247e76478a1f29f10e2ebe956deb"
+  },
+  "trackedStatus": "",
+  "limits": "Read-only row/hash verification after authorized freeze. No build, signing, cleanup, process, GUI, device or audio action."
+}

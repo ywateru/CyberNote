@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-05T09:30:14.383130+00:00",
+  "sourceHead": "7c1a3e424ff0cb7343cab14559efb2a92b79140b",
+  "freezeSha256": "b9c27e759213dd31b9ed843fd4676aa9bcb6247e76478a1f29f10e2ebe956deb",
+  "authority": "Explicit /root retry authorization after inspecting failed attempt01; retain all failure evidence and use same normal build tools/policy with elevated execution if needed.",
+  "reason": "Existing monitored() pre-start process_listing() invokes /bin/ps; direct read-only reproduction returns PermissionError(1). No build.txt or ownedProcessGroup exists and exitCode is null. The build command never started.",
+  "attempt01Result": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-recording-sidebar-build19/mac-attempt01/result.json",
+    "bytes": 4714,
+    "sha256": "9fa535609d7806388b4fa94686f06e81176c1b632cdc5dffd58e92b5faf6d0d5"
+  },
+  "priorOutputProof": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/mac-recording-sidebar-build19/mac-attempt01/output-isolation.json",
+    "bytes": 2854,
+    "sha256": "15914edf0aee5bed5631f77860b8e43363fc40640197ff25f99c782c8c097cd5"
+  },
+  "priorOutputState": "Both application and dist are completely preserved under mac-attempt01/prior-outputs; original fixed paths absent, snapshots equal original isolation evidence.",
+  "attempt": "attempt02",
+  "changes": "Execution permission only; no source, tool, dependency, capability, signing policy, cache or app/device changes."
+}

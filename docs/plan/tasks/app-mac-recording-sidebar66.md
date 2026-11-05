@@ -56,3 +56,5 @@ depends-on: []
 - 2026-11-05：首版产品11c73a91、作者证据182617db冻结，42项作者整App检查通过。独审bd6172eb（root95fb92e8）实际挂载7组PASS、2项P1阻断：登记回复丢失丢票据导致orphan守卫；requesting关闭后迟到授权反而开始采集。首版未合入产品、未出包，原树正在修复，两项须准确新提交复验。
 
 - 2026-11-05：最终产品f4a2fba7修复两项P1，独审73505a55在实际App17组及native核心5组通过；产品/作者/复验全部整合至root9199370a。根产品与作者最终源逐字一致，typecheck/build通过，见[根整合](../../verification/mac-recording-sidebar66-root-integration/README.md)。源码阶段接收，任务仍in-progress，准确Mac19冻结/构建/独立核包及Computer Use实际运行待完成。
+
+- 2026-11-05：Mac19准确构建与独立核包通过；root真实Computer Use观测统一右栏、录音中C/D编辑/搜索、01:12→继续→01:32暂停累计及×收起。但×后首次持久卡MetadataStale，重试才恢复1:31/播放/定位，进入67窄修；不标完整runtime通过。

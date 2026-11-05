@@ -1,0 +1,127 @@
+
+> notes-clone@0.1.0 mac:build /Users/water/work/2026/Apple-Notes-Clone
+> tauri build --bundles app
+
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `pnpm build`
+
+> notes-clone@0.1.0 build /Users/water/work/2026/Apple-Notes-Clone
+> tsc -b && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 1910 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                      0.50 kB │ gzip:   0.32 kB
+dist/assets/index-Cew6zlwb.css                      79.36 kB │ gzip:  15.53 kB
+dist/assets/native-recording-access-YRzgqTY2.js      1.02 kB │ gzip:   0.65 kB
+dist/assets/index-Bsv8VnqR.js                    1,016.81 kB │ gzip: 320.94 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.44s
+   Compiling notes-clone v0.1.0 (/Users/water/work/2026/Apple-Notes-Clone/src-tauri)
+warning: fields `started`, `revision`, and `checkpoint_revision` are never read
+  --> src/recording_window.rs:23:5
+   |
+20 | struct Entry {
+   |        ----- fields in this struct
+...
+23 |     started: bool,
+   |     ^^^^^^^
+24 |     terminal: bool,
+25 |     revision: Option<(u64, bool)>,
+   |     ^^^^^^^^
+26 |     checkpoint_revision: u64,
+   |     ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `entry` is never used
+  --> src/recording_window.rs:89:4
+   |
+89 | fn entry<'a>(
+   |    ^^^^^
+
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `route_message` is never used
+   --> src/recording_window.rs:460:4
+    |
+460 | fn route_message(
+    |    ^^^^^^^^^^^^^
+
+warning: function `visibility_target` is never used
+   --> src/recording_window.rs:558:4
+    |
+558 | fn visibility_target(
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `smart_projection` is never used
+  --> src/session/metadata.rs:98:19
+   |
+ 4 | impl Session {
+   | ------------ method in this implementation
+...
+98 |     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: function `validated_tags` is never used
+  --> src/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> src/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `evaluate_smart_folder` is never used
+   --> src/store/smart.rs:314:19
+    |
+250 | impl Store {
+    | ---------- method in this implementation
+...
+314 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: `notes-clone` (lib) generated 13 warnings
+    Finished `release` profile [optimized] target(s) in 1m 17s
+       Built application at: /Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/notes-clone
+    Bundling 备忘录.app (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app)
+    Finished 1 bundle at:
+        /Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app (16.03 MiB)
+
