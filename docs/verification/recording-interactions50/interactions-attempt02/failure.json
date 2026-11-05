@@ -1,0 +1,18 @@
+{
+  "status": "fail",
+  "results": [
+    "desktop dock participates in layout, has no dim backdrop, and creates no live card before actual capture",
+    "live card shares capture time/actions; register/update/remove leaves JSON, history, selection and document version unchanged",
+    "local event guard prevents actual typing/paste-style input while preserving legitimate programmatic insertion capability",
+    "desktop transport retains paused preview position, keyboard/pointer absolute seeks and ±15 boundaries use confirmed media",
+    "mobile transport retains paused preview position, keyboard/pointer absolute seeks and ±15 boundaries use confirmed media",
+    "pending play and actual playing disable both Continue surfaces; ended replay waits actual start seek",
+    "idle and permission-wait close release only their own resources; late permission cannot capture",
+    "active-close finalizes once, waits same-file parent ACK, keeps failure retry and never cancels captured audio",
+    "paused-escape finalizes once, waits same-file parent ACK, keeps failure retry and never cancels captured audio"
+  ],
+  "errors": [],
+  "external": [],
+  "error": "TimeoutError: locator.isDisabled: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭录音', exact: true })\u001b[22m\n",
+  "stack": "locator.isDisabled: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '关闭录音', exact: true })\u001b[22m\n\n    at /private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-interactions50.mjs:411:12\n    at async test (/private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-interactions50.mjs:130:5)\n    at async file:///private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-interactions50.mjs:389:5"
+}

@@ -1,0 +1,42 @@
+{
+  "kind": "actual-production-recording-panel-with-controlled-platform",
+  "status": "pass",
+  "browser": "156.0.8078.80",
+  "checks": 25,
+  "results": [
+    "StrictMode mount remains idle, zero capture and disabled Done",
+    "Repeated explicit start during permission wait creates one real Session/recorder",
+    "Monotonic active time survives delayed redraw, pause freezes and resume continues",
+    "Paused Done stops once, releases capture and awaits last data/onstop before one parent call",
+    "Rejected parent submission keeps same File, displays error and retry never stops/captures again",
+    "Empty recording fails visibly without attachment submission",
+    "Missing MIME fails visibly without attachment submission",
+    "Non-audio MIME fails visibly without attachment submission",
+    "Unexpected onstop is an error, not implicit successful finish",
+    "Stop failure releases capture and shows actual error",
+    "Missing final event times out, disposes and rejects later captured handlers",
+    "Permission denial shows failure and never constructs recorder",
+    "Unmount during pending permission releases late stream without recorder or parent callback",
+    "Escape finishes active recording once and retains the Panel until parent ACK",
+    "Unmount while waiting onstop gates captured late data/stop",
+    "Unmount during parent save does not pretend IPC was cancelled or issue a second save",
+    "Three mobile states keep title, time, primary center and bottom Done in fixed regions",
+    "Paused preview waits actual pause/data; real media events drive play/time and confirmed skip",
+    "Pending/playing preview blocks Continue; paused preview resumes capture and seals old events",
+    "empty prefix failure is visible while main recording can continue/finalize once",
+    "unsupported prefix failure is visible while main recording can continue/finalize once",
+    "Done during pending snapshot rejects old preview and delivers all final chunks once",
+    "Close pending playback saves complete audio; explicit unmount still rejects late snapshot",
+    "Reload after media failure disables real Panel controls until new readiness",
+    "Small mobile playback/error controls retain 44px targets and separate notice/primary regions"
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "limits": [
+    "Real mounted production RecordingPanel and production RecordingSession; fake browser media/time boundaries only",
+    "No physical microphone, encoded prefix, audible playback, native app or Android acceptance; preview checks use controlled actual media event boundaries",
+    "No App/Editor/store/IPC/durable body ACK/cold persistence acceptance",
+    "390×844 headless emulation layout relationships only; original 224×480 compressed frames do not establish pixel parity",
+    "Local cancel gates component callbacks and releases capture; cannot undo an already-sent parent IPC"
+  ]
+}

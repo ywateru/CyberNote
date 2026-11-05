@@ -1,0 +1,15 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.isDisabled: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: '关闭录音', exact: true })[22m
+
+    at /private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-interactions50.mjs:411:12
+    at async test (/private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-interactions50.mjs:130:5)
+    at async file:///private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-interactions50.mjs:389:5 {
+  name: 'TimeoutError'
+}
+
+Node.js v22.16.0

@@ -1,0 +1,45 @@
+{
+  "sourceCommit": "9141dff1941c433f3c916d60d84110867afc9ee9",
+  "worktreeBaseline": "85fb9f1fd16730e6fdcd0e68a00d04446723a9d6",
+  "productBaseline": "d9ce9c4b864c2d05bf3d2057ec48ae65fb868a46",
+  "contractFreeze": "e6158b1",
+  "notIncluded": "Task52 recording-session/microphone changes; root must verify integrated source separately.",
+  "sha256": {
+    "scripts/check-recording-interactions50.mjs": "b09d02e3cea0d0400acf33ab9a7176b21384005b3f57d765b7e05b933b60b8d2",
+    "scripts/check-recording-panel-browser.mjs": "c10cf2d84a14d07654a7347267348a00f3a9bfea82589cb6d06e33c3c5c78279",
+    "scripts/check-recording-preview.mjs": "21fd3cc89dfefed5f7fc56c7a8046ec41f1b6a485efd385d55c432dd2b2bed01",
+    "scripts/check-recording-submit.mjs": "61529cab9d1012dd33a9fa563977887276fbf447747a3a5d1827d66071ecda47",
+    "scripts/check-recording-window-browser50.mjs": "8d5a54d695795916ab6c7a50ade8e4bc86bdb7361403387047da521de5c645f3",
+    "src-tauri/capabilities/recording-owner-window.json": "e001b1d44be8a9ea296dd42f9b4c7bff50de4710d9168da7ebb1da3a3c7e5cac",
+    "src-tauri/capabilities/recording-window.json": "e85e5603d86a4cbd7ae70fcaea0decba2f799f23c1cde93ef590044ca0b19907",
+    "src-tauri/src/lib.rs": "13ea5c0c3ebfd3ba8a01370b4206d5961f0280a5c222b33c0e8a761b52e28bd8",
+    "src-tauri/src/recording_window.rs": "63a4959ea3e65dcbe853708ba346ef3e60dffa81fc443fe0592232988dc68c3a",
+    "src/App.tsx": "cb21d387e28d636bbc2071e747f0a1644b27181e2ce7a998f29b1610c77b25cf",
+    "src/RecordingPanel.css": "2738c4f5be45676a74488ef129b0ab9dfb05b7932776cf84dd8102800dcbdc91",
+    "src/RecordingPanel.tsx": "7933b3fbf2d320b779efd72959236a6861bf91854d64bfeac760b063a0aad602",
+    "src/RecordingWindow.tsx": "6fb2f6a6b9cd003dc8046f5ad5db5ada5e00855a50f4e68875f15cbf77a50a68",
+    "src/main.tsx": "c2904d3273f2fe51d4e3bc9c2d2fd7e436749af46820b339efc2dff7eb40051b",
+    "src/recording-coordinator.ts": "566274cf4b65ebef2a3c834c60da278eba755e19e5a86bd0b5bef2013369f053",
+    "src/recording-live-card.ts": "61bac49c5c70d4af4306607b36370293247dfe019c1f0090f29e39d511a8ef1f",
+    "src/recording-playback.ts": "41a9f95f8673da17e532be9984022327a5449ea224db779134bbe642bceaeb95",
+    "src/recording-waveform.tsx": "04f4af0f77caf286df2d9f0e6b75d8dcefad1703a429be4f3eb941229be67c61",
+    "src/recording-window-transport.ts": "dd8214d08170431aa07f375551bad8b15cd6430a5e2986c8151807a9d865572c"
+  },
+  "latestEvidence": {
+    "build": "build-independent-final02",
+    "typecheck": "typecheck-independent-final01",
+    "actualAppFunctionsAndSaveQueue": "parent-independent-final02",
+    "preview": "preview-independent-final01",
+    "actualPanelSessionAndPM": "component-independent-attempt01",
+    "actualRecordingChildAndOwner": "child-entry-final02",
+    "nativeRegistry": "native-registry-final01"
+  },
+  "checks": {
+    "actualAppFunctionsAndSaveQueue": 31,
+    "preview": 19,
+    "actualPanelSessionAndPM": 12,
+    "actualRecordingChildAndOwner": 5,
+    "nativeRegistry": 2
+  },
+  "scope": "Controlled browser/media/IPC and Rust registry/store tests only. No real native dual window, background device recording, audibility, mobile build or pixel parity acceptance."
+}

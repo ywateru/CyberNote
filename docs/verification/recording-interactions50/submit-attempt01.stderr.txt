@@ -1,0 +1,14 @@
+<anonymous_script>:15
+    available: pickerBaseAvailable && !modal && !folderForm,
+                                                 ^
+
+ReferenceError: folderForm is not defined
+    at eval (eval at execute (file:///private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-submit.mjs:125:10), <anonymous>:15:50)
+    at execute (file:///private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-submit.mjs:125:48)
+    at render (file:///private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-submit.mjs:435:5)
+    at fixture (file:///private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-submit.mjs:590:3)
+    at file:///private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-submit.mjs:696:17
+    at test (file:///private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-submit.mjs:690:27)
+    at file:///private/tmp/apple-notes-recording-interactions50-01/scripts/check-recording-submit.mjs:695:11
+
+Node.js v22.16.0

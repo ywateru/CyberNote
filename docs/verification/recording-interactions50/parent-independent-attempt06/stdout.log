@@ -1,0 +1,505 @@
+RUN independent owner uses current A after typing/Undo/Redo and B navigation; one mapped insertion preserves B and never focuses A
+RUN independent ordinary main close only hides, preserves A and does not finalize or cancel capture
+RUN independent save failure retains original decoded File and operation; repeated finish retries actual A ACK without another transfer/insertion
+RUN independent external invalidation retains child File and cannot loosen original-target checks
+RUN independent epoch invalidation retains child File and cannot loosen original-target checks
+RUN independent editor invalidation retains child File and cannot loosen original-target checks
+RUN wrong session/operation/direction messages cannot obtain the retained owner or insert an attachment
+RUN independent duplicate submit during real SaveQueue wait stays saving until backend ACK and closes only after child destruction
+RUN recording result rejects invalid/changed dates before persistence; exact File/date retry survives
+RUN ordinary and native entries capture explicit original note, editor, bookmark and operation before Done
+RUN actual parent Done remains pending and Panel stays open until real App SaveQueue ACK
+RUN duplicate Done coalesces and a different final File is rejected without another operation
+RUN body ACK failure rejects to Panel and same File retry saves the same inserted attachment
+RUN ACK then refresh failure resolves, closes Panel and global retry only refreshes
+RUN insertFalse rejects to Panel and same operation retry inserts at most once
+RUN insertThrowBefore rejects to Panel and same operation retry inserts at most once
+RUN insertThrowAfter rejects to Panel and same operation retry inserts at most once
+RUN stored response rejected by actual bridge is recovered by query of the same operation
+RUN other overlays and stale ticket cannot obtain the own-recording exemption
+RUN late store after original note changes cannot insert or retarget
+RUN late store after original editor changes cannot insert or retarget
+RUN late store after original epoch changes cannot insert or retarget
+RUN cancel during actual FileReader seals before waiting and retains ownership for store then cancel
+RUN actual Panel cancel callback hides sealed Panel and deferred cancellation stays recoverable
+RUN actual Android Back delegates to the mounted Panel close handle without sealing an in-flight save
+RUN cancel with pending local reference preserves attachment then global retry obtains body ACK
+RUN access suspension seals admission synchronously; late store cannot insert or cancel under other authority
+RUN existing close listener waits for pending recording body ACK and idle window remains unblocked
+RUN existing effect cleanup seals detached recording against late FileReader/store completion
+{
+  "tests": 29,
+  "results": [
+    {
+      "name": "independent owner uses current A after typing/Undo/Redo and B navigation; one mapped insertion preserves B and never focuses A",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 5,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      },
+      "focused": 0
+    },
+    {
+      "name": "independent ordinary main close only hides, preserves A and does not finalize or cancel capture",
+      "pass": true
+    },
+    {
+      "name": "independent save failure retains original decoded File and operation; repeated finish retries actual A ACK without another transfer/insertion",
+      "pass": true
+    },
+    {
+      "name": "independent external invalidation retains child File and cannot loosen original-target checks",
+      "pass": true
+    },
+    {
+      "name": "independent epoch invalidation retains child File and cannot loosen original-target checks",
+      "pass": true
+    },
+    {
+      "name": "independent editor invalidation retains child File and cannot loosen original-target checks",
+      "pass": true
+    },
+    {
+      "name": "wrong session/operation/direction messages cannot obtain the retained owner or insert an attachment",
+      "pass": true
+    },
+    {
+      "name": "independent duplicate submit during real SaveQueue wait stays saving until backend ACK and closes only after child destruction",
+      "pass": true
+    },
+    {
+      "name": "recording result rejects invalid/changed dates before persistence; exact File/date retry survives",
+      "pass": true
+    },
+    {
+      "name": "ordinary and native entries capture explicit original note, editor, bookmark and operation before Done",
+      "pass": true,
+      "entries": [
+        {
+          "nativeEntry": false,
+          "counts": {
+            "stores": 1,
+            "queries": 0,
+            "cancels": 0,
+            "saves": 1,
+            "inserts": 1,
+            "batches": 0,
+            "submissions": 0,
+            "journal": 1,
+            "record": false,
+            "active": false
+          }
+        },
+        {
+          "nativeEntry": true,
+          "counts": {
+            "stores": 1,
+            "queries": 0,
+            "cancels": 0,
+            "saves": 1,
+            "inserts": 1,
+            "batches": 0,
+            "submissions": 0,
+            "journal": 1,
+            "record": false,
+            "active": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "actual parent Done remains pending and Panel stays open until real App SaveQueue ACK",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "duplicate Done coalesces and a different final File is rejected without another operation",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "body ACK failure rejects to Panel and same File retry saves the same inserted attachment",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "durable save rejected"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 3,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "ACK then refresh failure resolves, closes Panel and global retry only refreshes",
+      "pass": true,
+      "before": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": false,
+        "active": false
+      },
+      "after": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "insertFalse rejects to Panel and same operation retry inserts at most once",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "编辑器未接受附件插入，已保留原附件；请重试"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 2,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "insertThrowBefore rejects to Panel and same operation retry inserts at most once",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "insert failed before dispatch"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 2,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "insertThrowAfter rejects to Panel and same operation retry inserts at most once",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "insert failed after dispatch"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "stored response rejected by actual bridge is recovered by query of the same operation",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 1,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "other overlays and stale ticket cannot obtain the own-recording exemption",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口"
+      },
+      "late": {
+        "success": false,
+        "message": "原录音会话已关闭，不会提交到其他备忘录"
+      },
+      "counts": {
+        "stores": 0,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 0,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "late store after original note changes cannot insert or retarget",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "原录音会话已关闭，不会提交到其他备忘录"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": false,
+        "active": true
+      }
+    },
+    {
+      "name": "late store after original editor changes cannot insert or retarget",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": true,
+        "active": true
+      }
+    },
+    {
+      "name": "late store after original epoch changes cannot insert or retarget",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "原附件目标、正文或授权状态已改变；已保留恢复身份，请勿关闭窗口"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": true,
+        "active": true
+      }
+    },
+    {
+      "name": "cancel during actual FileReader seals before waiting and retains ownership for store then cancel",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 1,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 0,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "actual Panel cancel callback hides sealed Panel and deferred cancellation stays recoverable",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 2,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 0,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "actual Android Back delegates to the mounted Panel close handle without sealing an in-flight save",
+      "pass": true,
+      "requested": 1,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 1,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "cancel with pending local reference preserves attachment then global retry obtains body ACK",
+      "pass": true,
+      "failed": {
+        "success": false,
+        "message": "录音已进入待保存正文，附件已保留；请使用重试保存，不会删除"
+      },
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 3,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "access suspension seals admission synchronously; late store cannot insert or cancel under other authority",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": false,
+        "active": true
+      }
+    },
+    {
+      "name": "existing close listener waits for pending recording body ACK and idle window remains unblocked",
+      "pass": true,
+      "prevented": 1,
+      "destroyed": 1,
+      "idlePrevented": 0,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 3,
+        "inserts": 1,
+        "batches": 0,
+        "submissions": 0,
+        "journal": 1,
+        "record": false,
+        "active": false
+      }
+    },
+    {
+      "name": "existing effect cleanup seals detached recording against late FileReader/store completion",
+      "pass": true,
+      "counts": {
+        "stores": 1,
+        "queries": 0,
+        "cancels": 0,
+        "saves": 0,
+        "inserts": 0,
+        "batches": 1,
+        "submissions": 1,
+        "journal": 1,
+        "record": true,
+        "active": true
+      }
+    }
+  ],
+  "sourceHashes": {
+    "attachment-submission": "4c44ecd682e8f2fa04d40a87445d6dfe47e1cc7f40dac6691367e75a74225833",
+    "recording-metadata": "4630348ffaab79e799e5417b1b256e4957df5460fda8c3966482d0ad766d3131",
+    "audio-playback": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942",
+    "trusted-synchronization": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128",
+    "attachment-target": "3bdd7d9394f41b5839380bf55386ee70d962b1bfe204ada68d8f163cae89f16c",
+    "document-equality": "629d2729ac47626f6618f13d6858c98dc5a0f654a4b53ba70f6ec0731204db7d",
+    "bridge": "729f7dc797abb762a9382f106b1fad103335e27346e598d9b18c37a2785672fd",
+    "metadata-client": "ca3efa81802ffdf9e5d5478dd429d2aa742d19e1e5beb04946ac4642843e9c1f",
+    "smart-folders": "22a5e1b8b4767cb1a74df5ab9cc680c8aef3f4b62b0ddac72746006fa8d85d53",
+    "note-tags": "2d5460e5a70bcb7b6a5a91631e25ca6ff05c1b3aeeb79b45a4a145415c174a2f",
+    "access-client": "2ac79fec3a00ae972f22bac2c6534aa1468b719a8be4b18c7e803549c9d99f98",
+    "secure-id": "04eb982510ffd3b6a6931f3f61ddbf1cc53d981d2e8aac281a5110c7c112c3ab",
+    "proof-access": "64b235d209e03649d340354b1aa187efd2fe872cfbc9e007951306359c3ca3ca",
+    "types": "0bba2d1b9c0f46388d4a8a7b643e826517faf0e1b4018d947526b737c427a159",
+    "save-queue": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef",
+    "save-revisions": "3fbf025c8c57cbcc78cdc13d8b62962b0235feb89ea3cd23b5af8547bc940d6a",
+    "editor-save-snapshot": "4ca9f9b64f52c3558b1a843c61f0ef8d810af45743c26f2cf57974c03564d5dd",
+    "recording-coordinator": "919bd7f945c250565ae4651a576a99084d55746a7b26fd5e8d95aee3e202bfcd",
+    "App": "d22142e125f50a145699265bfa1be86e7e73ca4f929a2ece249099573bdd8852"
+  },
+  "execution": "AST-extracted actual App ordinary/native entry, Panel callbacks, submit/cancel, original target validation, hydration, saveDoc/SaveQueue, retry/Back/close/unmount; production AttachmentSubmission, bridge, AccessGate, TrustedSynchronization and PM documents/bookmarks.",
+  "limitations": [
+    "No mounted App, native window, microphone, encoded audio, Rust DB or device. FileReader, invoke/backend responses, Editor command host and React setters controlled.",
+    "Final File-shaped fixture and audio payload do not establish recording validity, audibility or media playback. Actual Panel/RecordingSession are unchanged and not mounted in this parent-boundary check."
+  ]
+}
