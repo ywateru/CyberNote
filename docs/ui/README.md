@@ -4,6 +4,7 @@
 
 - [Mac](macos.md)：本机 macOS 26.4，Notes 4.13。
 - [Android](android.md)：以 references/mobile 中保存的视频为基准。
+- [桌面录音栏与共用基本交互](recording-desktop.md)：用户新截图、会话卡、真实试听与安全完成。
 - [手机录音面板](recording-mobile.md)：原视频初始/录制/暂停三态的有限坐标与布局规格。
 - [OCR文字确认](ocr-text.md)：本地文字真实结果的工程预览；录屏未展示完成页，不作原版像素声明。
 - [本地扩展功能](local-features.md)：Mac 原版实采的标签、智能文件夹、数学结果与笔记链接，未采状态明确保留待证。
