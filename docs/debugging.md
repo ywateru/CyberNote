@@ -103,3 +103,5 @@ Apple Notes没有HTML。原版只能通过已保全录屏、原生截图和标�
 手机`finish`仅在paused/retry可用，采集中完成返回UNAVAILABLE；`close`在空会话可取消，在采集中按真实关闭流程保存，saving/finalizing/submitted关闭禁用。桌面侧栏关闭沿其真实handle处理，不以canFinish错误限制空会话取消。手机采集中仍为原模态呈现，不把桌面A录音/B编辑规则搬进手机。
 
 [开发证据](verification/mobile-debug-recording71/development/README.md)保留失败历史与准确源码指纹。浏览器390×844只证明合成设备/JS协议fixture上的真实前端路径，不证明Android WebView、系统权限、硬件音质或原版像素一致。
+
+2026-11-06任务71已通过[独立最终复审](plan/reviews/app-mobile-debug-recording71-recheck.md)及[主工作区整合](verification/mobile-debug-recording71/integration/README.md)：桌面100项、手机录音42项、手机笔记9项，构建和生产入口排除通过。初审失败保留于历史证据。日常使用以上命令；catalog可用性与各次实际覆盖分别读取，不能据此授予原生设备或原版像素通过。

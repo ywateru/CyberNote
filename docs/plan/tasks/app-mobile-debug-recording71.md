@@ -1,7 +1,7 @@
 ---
 id: app-mobile-debug-recording71
 scope: mobile-command-recording-validation
-status: in-progress
+status: done
 depends-on: [app-debug-automation70]
 ---
 
@@ -42,3 +42,7 @@ src/RecordingPanel.tsx、src/App.tsx及必要src/debug合同；scripts/debug；d
 # verification
 
 开发提交后交由另一agent独立复核。类型检查、前端生产构建及入口排除；手机录音/笔记实际组，桌面全九组回归；独立负例证明无效动作、异步错误及延迟确实被观察。根整合后再次完整测试。真实WebView、设备音质与原版像素仍开放。
+
+# delivery
+
+2026-11-06：开发修复330da9f4，独立复审4b0c8cda通过，主工作区整合122e5075后再次通过桌面100、手机录音42、手机notes9、TypeScript/生产构建及生产入口排除。见[最终复审](../reviews/app-mobile-debug-recording71-recheck.md)与[根整合](../../verification/mobile-debug-recording71/integration/README.md)。初审三项阻塞及两次失败历史原样保留。本任务仅命令/DOM/合成媒体验收与已证边界修复完成，完整产品/原生硬件/原版像素目标继续开放。

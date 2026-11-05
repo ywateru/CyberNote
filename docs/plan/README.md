@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-06任务71完成：[独立最终复审](reviews/app-mobile-debug-recording71-recheck.md)与[主工作区整合](../verification/mobile-debug-recording71/integration/README.md)均通过，desktop100/mobile recording42/mobile notes9，构建和生产排除通过。三项独审阻塞已用真实故障/超时/参数负例关闭，旧blocked与两次失败不改写。默认JS fixture与合成媒体边界保持；完整Mac/Android原生及原版像素仍进行。
+
 2026-11-05任务70已完成：[整合报告](../verification/app-debug-automation70/integration/README.md)记录单命令九组91项全部通过、27.369秒CLI计时，以及构建/生产排除结果；[独立复核](reviews/app-debug-automation70.md)八门槛PASS。后续常态回归按[调试使用说明](../debugging.md)运行，catalog可达性与实际执行覆盖分别记录。
 
 2026-11-05最新工作：[统一调试命令与HTML程序化验收70](tasks/app-debug-automation70.md)，按[测试策略](../testing.md)使用真实App和模拟设备/音源，默认隔离合成数据，生产不提供调试入口。Mac21实际有限结果见[记录](../verification/mac-recording-quit68-runtime/README.md)；主窗关闭/Dock和整体像素仍未授予通过。旧时点“21准备中”已被本次构建与有限运行记录替代。
@@ -22,6 +24,7 @@
 
 | 任务 | 当前状态 | 交付 |
 |---|---|---|
+| APP-MOBILE-DEBUG-RECORDING71 手机录音命令验收 | done（限定源码/浏览器范围） | 修复330da9f4独审与主122e5075整合通过；桌面100/手机录音42/notes9、构建/生产排除；原生/Rust/像素继续开放 |
 | APP-SMART-D1 本地库防损 | done（源码范围，独立pass） | de3c07f严格旧格式、识别版本优先、原子初始化；不代表新平台包 |
 | APP-SMART-D2 真实智能规则与归档 | done（内部源码能力），9bdc441独立pass | 标签四模式/置顶、CAS、同快照、DB2/归档3与旧UI门禁；唯一名称P2修复，作者69pass/独立窄2pass；公开UI、新包/像素仍待O/U |
 | APP-SMART-O 元数据顺序与保存所有权 | done（源码08d2206），独立pass | 最终Rust78/0/3ignored、AccessGate16/0与前端/宿主编译通过；独审最终源10项Rust+8条不同bridge/挂载路径，提交后正文撤权/旧ACK/同seq权威重读通过，实际IPC/设备/像素不外推，U门禁保持关闭 |
