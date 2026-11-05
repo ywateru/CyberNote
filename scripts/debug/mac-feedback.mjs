@@ -4,6 +4,7 @@ import { state, idle, snapshot, saveJSON } from "./runtime.mjs";
 export async function runMacFeedback(runtime, { command, check, output }) {
   const page = runtime.page;
   const observations = [];
+  const searchGeometry = {};
   const capture = async (name, selector = ".app") => {
     await saveJSON(
       resolve(output, name + ".snapshot.json"),
@@ -309,6 +310,65 @@ export async function runMacFeedback(runtime, { command, check, output }) {
     );
   }
   await command("search.set", { query: "" });
+  await command("note.select", { id: "note-a" });
+  await command("editor.setContent", {
+    document: document("Continuity", "甲乙搜索丙丁"),
+  });
+  await command("app.flush");
+  const characters = async () =>
+    row("note-a")
+      .locator(".snippet-copy")
+      .evaluate((element) => {
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT),
+          chars = [];
+        let node;
+        while ((node = walker.nextNode())) {
+          let offset = 0;
+          for (const character of node.textContent) {
+            const range = document.createRange();
+            range.setStart(node, offset);
+            offset += character.length;
+            range.setEnd(node, offset);
+            const rect = range.getBoundingClientRect();
+            chars.push({
+              character,
+              x: rect.x,
+              right: rect.right,
+              width: rect.width,
+            });
+          }
+        }
+        return {
+          text: element.textContent,
+          chars,
+          clip: element.getBoundingClientRect().toJSON(),
+          overflow: getComputedStyle(element).textOverflow,
+          scrollWidth: element.scrollWidth,
+          clientWidth: element.clientWidth,
+        };
+      });
+  searchGeometry.continuityBefore = await characters();
+  await command("search.set", { query: "搜索" });
+  searchGeometry.continuityAfter = await characters();
+  const beforeChars = searchGeometry.continuityBefore.chars,
+    afterChars = searchGeometry.continuityAfter.chars;
+  check(
+    "Highlight preserves adjacent character positions without flex gaps",
+    beforeChars.length === 6 &&
+      afterChars.length === 6 &&
+      afterChars.every(
+        (character, index) =>
+          Math.abs(
+            character.x -
+              afterChars[0].x -
+              (beforeChars[index].x - beforeChars[0].x),
+          ) < 0.1 &&
+          (!index || Math.abs(character.x - afterChars[index - 1].right) < 0.1),
+      ),
+  );
+  await capture("search-inline-continuity");
+
+  await command("search.set", { query: "" });
   await command("editor.setContent", {
     document: document(
       "Far context",
@@ -334,6 +394,59 @@ export async function runMacFeedback(runtime, { command, check, output }) {
     hitRect.x >= snippetRect.x && hitRect.x < snippetRect.x + snippetRect.width,
   );
   await capture("search-far-context");
+  await command("search.set", { query: "" });
+  await command("editor.setContent", {
+    document: document(
+      "Narrow context",
+      "上下文".repeat(80) + "搜索结尾搜索" + "后文".repeat(80),
+    ),
+  });
+  await command("app.flush");
+  await command("settings.update", { settings: { listWidth: 220 } });
+  await command("search.set", { query: "搜索" });
+  searchGeometry.narrow = await characters();
+  const firstFullyVisible = async () =>
+    row("note-a")
+      .locator(".snippet-copy")
+      .evaluate((element) => {
+        const first = element
+            .querySelector(".search-match")
+            .getBoundingClientRect(),
+          clip = element.getBoundingClientRect();
+        return first.left >= clip.left && first.right <= clip.right + 0.1;
+      });
+  check(
+    "At list width220 first repeated far Chinese match is fully visible",
+    (await firstFullyVisible()) &&
+      (await page.locator(".snippet-copy .search-match").count()) === 2 &&
+      searchGeometry.narrow.text.startsWith("…搜索"),
+  );
+  check(
+    "Highlighted single inline snippet retains real ellipsis overflow",
+    searchGeometry.narrow.overflow === "ellipsis" &&
+      searchGeometry.narrow.scrollWidth > searchGeometry.narrow.clientWidth,
+  );
+  await capture("search-narrow-220");
+  await command("settings.update", { settings: { listWidth: 280 } });
+  searchGeometry.wide = await characters();
+  check(
+    "Width220 to280 restores preceding context while keeping full first hit",
+    searchGeometry.wide.text.startsWith("…上下文上下文搜索") &&
+      (await firstFullyVisible()),
+  );
+  await capture("search-restored-280");
+  await command("settings.update", { settings: { listWidth: 220 } });
+  searchGeometry.narrowAgain = await characters();
+  check(
+    "Shrinking again recomputes first-hit visibility without stale context",
+    searchGeometry.narrowAgain.text.startsWith("…搜索") &&
+      (await firstFullyVisible()),
+  );
+  await command("settings.update", { settings: { listWidth: 280 } });
+  await saveJSON(
+    resolve(output, "mac-feedback-search-geometry.json"),
+    searchGeometry,
+  );
   await command("settings.update", { settings: { view: "gallery" } });
   check(
     "Gallery preview and caption both use safe global highlighting",

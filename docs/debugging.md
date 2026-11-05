@@ -131,3 +131,5 @@ node scripts/debug/check-mobile-attachments-rust.mjs /private/tmp/notes-current-
 `pnpm debug group mac-feedback --out /private/tmp/notes-mac-feedback` 使用实际列表右键事件、真实App handler与HTML/rect/PNG检验底部入口、上下文菜单和全局搜索高亮，也并入 `pnpm test:debug`。普通中部、滚动、画廊使用浏览器鼠标右键；极端右下坐标使用明确构造的MouseEvent走同一React事件handler，记录为合成边界坐标；不是系统可信点击。检查菜单实际尺寸约束、打开期间窗口缩小、不同target置顶、工具栏/命令/键盘fallback、搜索重复/大小写/中文/字面量标点/HTML文本/Unicode扩长/清空/远处正文上下文/锁定及独立正文查找。
 
 参考橙黄色由用户原版PNG的Display ICC转换至sRGB后取局部主体色 `#fcb828`；截图缩放、字体、系统色彩管理与整体原生像素仍须单独比较，不由这个浏览器组宣称通过。手机入口/高亮保持现有行为，手机notes、recording和attachments仍单独回归。
+
+修正77独审后的摘要回归另测Range逐字位置：命中前后无额外flex gap；实际copy宽不足时缩短首命中前缀，220→280→220恢复/裁短上下文，保留ellipsis与重复匹配。`contract-deadlines.json`区分真实App的异步false轮询/已观察lastState，与受控200ms首transport在50ms截止前尚无lastState；后者正确TIMEOUT，不制造占位state。late true/never谓词用立即可达的受控state保证确实调用谓词，原实时deadline算法不变。
