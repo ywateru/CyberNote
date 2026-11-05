@@ -17,6 +17,8 @@ depends-on: [app-recording-visual58]
 
 初步只读测量（正式开发前需独立冻结）：maxRGB<96的稳定黑墨迹，原播放三角bbox[104,370,122,391]，58新图[108,382,116,393]，中心分别(113,380.5)/(112,387.5)；原左右skip中心(69,381)/(154.5,381)，新(68,387)/(155,387)，横距已接近，主要纵向低约6–7视频px。原大计时bbox[70,330,154,343]，新[70,331,153,345]，宽接近，字重偏轻；阈值不能直接证明原font-weight，需候选截图核验。不要为修播放行而移动整个sheet或已校准时间轴。
 
+只读研究已确认两图sheet顶边均y33，392×840到224×480横纵比例均1.75，偏移不是状态栏裁切。正式依据已冻结于docs/ui/recording-mobile.md的59节：播放行可试top73.7%–73.9%，中央三角独立校形/放大，计时先试手机限定黑色与600/650/700字重、保持原字号及84–86视频px墨迹宽。允许据候选真实图像选择参数，不改变交互或扩大功能范围。所有坐标精度仍受有损原帧限制。
+
 ## path
 
 优先src/RecordingPanel.css中仅mobile的局部选择器，必要src/RecordingView.tsx的仅手机播放/暂停图形；不得改变desktop布局/图形、58的100px/s/quartertick/seek尺度、状态机、Session、权限、owner、附件/ACK或其他全局样式。证据docs/verification/mobile-recording-visual59/及必要小检查scripts/check-mobile-recording-visual59.mjs；新增检查只覆盖真实视图、动作和范围边界，不复制实现自证。
