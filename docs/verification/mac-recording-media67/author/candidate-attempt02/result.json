@@ -1,0 +1,3926 @@
+{
+  "pass": true,
+  "mode": "candidate",
+  "checks": [
+    {
+      "name": "real final body ACK advances metadata while native response gate retains the original access generation",
+      "pass": true
+    },
+    {
+      "name": "real final cleanup removes overlay and sidebar only after body and native final acknowledgement",
+      "pass": true
+    },
+    {
+      "name": "actual MediaView discards stale final read and automatically starts a fresh fully gated read",
+      "pass": true
+    },
+    {
+      "name": "stale media recovery performs no recording write, version, or duplicate-node repair",
+      "pass": true
+    },
+    {
+      "name": "first persistent card after overlay removal can play synthetic final WAV without manual retry",
+      "pass": true
+    },
+    {
+      "name": "two stale reads are rejected before third read supplies the only created media URL",
+      "pass": true
+    },
+    {
+      "name": "three total stale attempts terminate visibly without allocating media or continuing automatically",
+      "pass": true
+    },
+    {
+      "name": "explicit manual retry after exhaustion owns a new version and can load a fresh authorized response",
+      "pass": true
+    },
+    {
+      "name": "non-typed lookalike error remains visible after exactly one read",
+      "pass": true
+    },
+    {
+      "name": "non-typed unreadable error remains visible after exactly one read",
+      "pass": true
+    },
+    {
+      "name": "non-typed bad-date error remains visible after exactly one read",
+      "pass": true
+    },
+    {
+      "name": "real AccessChanged rejects in-flight response without metadata retry or media publication",
+      "pass": true
+    },
+    {
+      "name": "fresh read after stale stops at native locked denial without a third try",
+      "pass": true
+    },
+    {
+      "name": "fresh read after stale stops at native revoked denial without a third try",
+      "pass": true
+    },
+    {
+      "name": "id invalidates old stale response without old retry, URL, or failure publication",
+      "pass": true
+    },
+    {
+      "name": "kind invalidates old stale response without old retry, URL, or failure publication",
+      "pass": true
+    },
+    {
+      "name": "unmount invalidates old stale response without old retry, URL, or failure publication",
+      "pass": true
+    },
+    {
+      "name": "id discards even a fully gate-accepted late response before it can allocate an old media URL",
+      "pass": true
+    },
+    {
+      "name": "kind discards even a fully gate-accepted late response before it can allocate an old media URL",
+      "pass": true
+    },
+    {
+      "name": "unmount discards even a fully gate-accepted late response before it can allocate an old media URL",
+      "pass": true
+    },
+    {
+      "name": "manual new version cancels old pending stale attempt before its automatic retry",
+      "pass": true
+    },
+    {
+      "name": "new manual version alone publishes its accepted media",
+      "pass": true
+    },
+    {
+      "name": "accepted attachment identity replacement stops old playback and revokes its source before keeping the new source",
+      "pass": true
+    },
+    {
+      "name": "unmount stops playback and revokes each accepted object URL exactly once",
+      "pass": true
+    },
+    {
+      "name": "shared mobile NodeView recovers stale media and retains touch expand/play/pause without document edits",
+      "pass": true
+    }
+  ],
+  "observations": [
+    {
+      "scenario": "real-final-handoff",
+      "reads": [
+        {
+          "index": 0,
+          "id": "saved-2d1b61fb-c161-41ee-84c6-4ba520004865",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 3
+        },
+        {
+          "index": 1,
+          "id": "saved-09a22059-6525-40ee-af75-62ea42021581",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 3,
+          "generation": 7
+        },
+        {
+          "index": 2,
+          "id": "saved-48bcb474-a2c0-4604-83d6-af000454f1ff",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 5,
+          "generation": 11
+        },
+        {
+          "index": 3,
+          "id": "saved-48bcb474-a2c0-4604-83d6-af000454f1ff",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 6,
+          "generation": 11
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "access-stamp",
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "access-stamp",
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 1,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 2,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 1,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 3,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 1,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 1,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 1,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 3,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 3,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 3,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 3,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "saved-2d1b61fb-c161-41ee-84c6-4ba520004865",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 3
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "saved-2d1b61fb-c161-41ee-84c6-4ba520004865",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 1,
+          "applied": 1,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/2dc4ee1d-8a8e-44d6-9f2c-6b9ad8c99e7b",
+          "size": 20204
+        },
+        {
+          "event": "access-stamp",
+          "generation": 3,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 2
+        },
+        {
+          "event": "access-stamp",
+          "generation": 3,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 4,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 4,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 4,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 4,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 5,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 5,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 5,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 5,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/307695b3-d501-4732-9dc3-eb18d4cecf2d",
+          "size": 20204
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 5,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "url-revoked",
+          "url": "blob:http://127.0.0.1:55341/307695b3-d501-4732-9dc3-eb18d4cecf2d"
+        },
+        {
+          "event": "access-stamp",
+          "generation": 6,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 6,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 6,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 6,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 3,
+          "observed": 3,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 7,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 3,
+          "observed": 3,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 3,
+          "observed": 3,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 3,
+          "observed": 3,
+          "applied": 2,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 7,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 7,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 7,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "url-revoked",
+          "url": "blob:http://127.0.0.1:55341/2dc4ee1d-8a8e-44d6-9f2c-6b9ad8c99e7b"
+        },
+        {
+          "event": "access-stamp",
+          "generation": 7,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "saved-09a22059-6525-40ee-af75-62ea42021581",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 3,
+          "generation": 7
+        },
+        {
+          "event": "read-response",
+          "index": 1,
+          "id": "saved-09a22059-6525-40ee-af75-62ea42021581",
+          "sequence": 3
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 3,
+          "observed": 3,
+          "applied": 3,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/c6196230-07fc-43c8-8166-ef4c407142d0",
+          "size": 34604
+        },
+        {
+          "event": "access-stamp",
+          "generation": 7,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 4
+        },
+        {
+          "event": "access-stamp",
+          "generation": 7,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 3,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 3,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 3,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 8,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 8,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 8,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 8,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 9,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 9,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 9,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 9,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/674b9a23-a3e2-40a7-9a7f-b775670cd31d",
+          "size": 34604
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 9,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "begin-final-close",
+          "readIndex": 2
+        },
+        {
+          "event": "url-revoked",
+          "url": "blob:http://127.0.0.1:55341/674b9a23-a3e2-40a7-9a7f-b775670cd31d"
+        },
+        {
+          "event": "access-stamp",
+          "generation": 10,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 10,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 4,
+          "observed": 4,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 10,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 10,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 10,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 10,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 5,
+          "observed": 5,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 11,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 5,
+          "observed": 5,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 5,
+          "observed": 5,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 5,
+          "observed": 5,
+          "applied": 4,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 11,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 11,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 11,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "url-revoked",
+          "url": "blob:http://127.0.0.1:55341/c6196230-07fc-43c8-8166-ef4c407142d0"
+        },
+        {
+          "event": "access-stamp",
+          "generation": 11,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 2,
+          "id": "saved-48bcb474-a2c0-4604-83d6-af000454f1ff",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 5,
+          "generation": 11
+        },
+        {
+          "event": "access-stamp",
+          "generation": 11,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 6
+        },
+        {
+          "event": "access-stamp",
+          "generation": 11,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 5,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 5,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 5,
+          "accepted": true
+        },
+        {
+          "event": "post-ack-validation-held",
+          "generation": 11,
+          "sequence": 6
+        },
+        {
+          "event": "access-stamp",
+          "generation": 11,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-response",
+          "index": 2,
+          "id": "saved-48bcb474-a2c0-4604-83d6-af000454f1ff",
+          "sequence": 5
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 5,
+          "observed": 6,
+          "applied": 6,
+          "accepted": false
+        },
+        {
+          "event": "access-stamp",
+          "generation": 11,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 3,
+          "id": "saved-48bcb474-a2c0-4604-83d6-af000454f1ff",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 6,
+          "generation": 11
+        },
+        {
+          "event": "read-response",
+          "index": 3,
+          "id": "saved-48bcb474-a2c0-4604-83d6-af000454f1ff",
+          "sequence": 6
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/322f2ca8-abae-4b63-9d32-312608f6b1ed",
+          "size": 34604
+        },
+        {
+          "event": "access-stamp",
+          "generation": 12,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 12,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 12,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 12,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 13,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 13,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 13,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 13,
+          "sessionId": "controlled-native-session",
+          "epoch": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "native-release",
+          "saved": true,
+          "revision": 3
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 6,
+          "observed": 6,
+          "applied": 6,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 13,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        }
+      ],
+      "urls": [
+        {
+          "url": "blob:http://127.0.0.1:55341/2dc4ee1d-8a8e-44d6-9f2c-6b9ad8c99e7b",
+          "size": 20204,
+          "type": "audio/wav"
+        },
+        {
+          "url": "blob:http://127.0.0.1:55341/307695b3-d501-4732-9dc3-eb18d4cecf2d",
+          "size": 20204,
+          "type": "audio/wav"
+        },
+        {
+          "url": "blob:http://127.0.0.1:55341/c6196230-07fc-43c8-8166-ef4c407142d0",
+          "size": 34604,
+          "type": "audio/wav"
+        },
+        {
+          "url": "blob:http://127.0.0.1:55341/674b9a23-a3e2-40a7-9a7f-b775670cd31d",
+          "size": 34604,
+          "type": "audio/wav"
+        },
+        {
+          "url": "blob:http://127.0.0.1:55341/322f2ca8-abae-4b63-9d32-312608f6b1ed",
+          "size": 34604,
+          "type": "audio/wav"
+        }
+      ],
+      "revoked": [
+        "blob:http://127.0.0.1:55341/307695b3-d501-4732-9dc3-eb18d4cecf2d",
+        "blob:http://127.0.0.1:55341/2dc4ee1d-8a8e-44d6-9f2c-6b9ad8c99e7b",
+        "blob:http://127.0.0.1:55341/674b9a23-a3e2-40a7-9a7f-b775670cd31d",
+        "blob:http://127.0.0.1:55341/c6196230-07fc-43c8-8166-ef4c407142d0"
+      ],
+      "pending": [],
+      "observed": 6,
+      "applied": 6,
+      "accessGeneration": 13,
+      "hookMedia": false,
+      "writes": {
+        "stores": 3,
+        "body": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "saved-48bcb474-a2c0-4604-83d6-af000454f1ff",
+                "name": "新录音.wav",
+                "kind": "audio"
+              }
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original A。"
+                }
+              ]
+            }
+          ]
+        },
+        "other": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Original B。"
+                }
+              ]
+            }
+          ]
+        },
+        "released": {
+          "sessionId": "c2a05105-75e0-4cfa-b96f-2ca13ecc9c27",
+          "operationId": "87c38026-7b4b-4ed7-a9c9-a0756a4f86e3",
+          "owner": "main",
+          "incarnation": "controlled-native-incarnation",
+          "saved": true,
+          "revision": 3
+        },
+        "cards": 1
+      }
+    },
+    {
+      "scenario": "two-stale-then-success",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        },
+        {
+          "index": 2,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 2,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 1,
+          "applied": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 1,
+          "applied": 0,
+          "accepted": false
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 2
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 2,
+          "applied": 0
+        },
+        {
+          "event": "read-response",
+          "index": 1,
+          "id": "asset-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 2,
+          "applied": 0,
+          "accepted": false
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 2,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 2,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 2,
+          "id": "asset-a",
+          "sequence": 2
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 2,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/abe1e394-c145-410c-8f21-7d695df71f6a",
+          "size": 48044
+        }
+      ],
+      "urls": [
+        {
+          "url": "blob:http://127.0.0.1:55341/abe1e394-c145-410c-8f21-7d695df71f6a",
+          "size": 48044,
+          "type": "audio/wav"
+        }
+      ],
+      "revoked": [],
+      "pending": [],
+      "observed": 2,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "exhaustion-manual-retry",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        },
+        {
+          "index": 2,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 2,
+          "generation": 0
+        },
+        {
+          "index": 3,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 3,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 1,
+          "applied": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 1,
+          "applied": 0,
+          "accepted": false
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 2
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 2,
+          "applied": 0
+        },
+        {
+          "event": "read-response",
+          "index": 1,
+          "id": "asset-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 2,
+          "applied": 0,
+          "accepted": false
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 2,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 2,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 3
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 3,
+          "applied": 0
+        },
+        {
+          "event": "read-response",
+          "index": 2,
+          "id": "asset-a",
+          "sequence": 2
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 2,
+          "observed": 3,
+          "applied": 0,
+          "accepted": false
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 3,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 3,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 3,
+          "id": "asset-a",
+          "sequence": 3
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 3,
+          "observed": 3,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/3c8b032a-4db5-44b0-9455-0001add54d16",
+          "size": 48044
+        }
+      ],
+      "urls": [
+        {
+          "url": "blob:http://127.0.0.1:55341/3c8b032a-4db5-44b0-9455-0001add54d16",
+          "size": 48044,
+          "type": "audio/wav"
+        }
+      ],
+      "revoked": [],
+      "pending": [],
+      "observed": 3,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "lookalike",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "pending": [],
+      "observed": 0,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "unreadable",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "pending": [],
+      "observed": 0,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "bad-date",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "pending": [],
+      "observed": 0,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "access-generation-changed",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "pending": [],
+      "observed": 0,
+      "applied": 0,
+      "accessGeneration": 1,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "locked",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 1,
+          "applied": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 1,
+          "applied": 0,
+          "accepted": false
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "pending": [],
+      "observed": 1,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "revoked",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 1,
+          "applied": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 1,
+          "applied": 0,
+          "accepted": false
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "pending": [],
+      "observed": 1,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "changed-id",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-b",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 1,
+          "applied": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-b",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 1,
+          "id": "asset-b",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 1,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/7d95610e-996c-4365-86c2-8e040f0a572f",
+          "size": 48044
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 1,
+          "applied": 0,
+          "accepted": false
+        }
+      ],
+      "urls": [
+        {
+          "url": "blob:http://127.0.0.1:55341/7d95610e-996c-4365-86c2-8e040f0a572f",
+          "size": 48044,
+          "type": "audio/wav"
+        }
+      ],
+      "revoked": [],
+      "pending": [],
+      "observed": 1,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-b",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "changed-kind",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 1,
+          "applied": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 1,
+          "id": "asset-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 1,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 1,
+          "applied": 0,
+          "accepted": false
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "pending": [],
+      "observed": 1,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "file"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "changed-unmount",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 1,
+          "applied": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 1,
+          "applied": 0,
+          "accepted": false
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "pending": [],
+      "observed": 1,
+      "applied": 0,
+      "accessGeneration": 0,
+      "hookMedia": false
+    },
+    {
+      "scenario": "accepted-late-id",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-b",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-b",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 1,
+          "id": "asset-b",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/e359e19c-22b5-450b-bf55-6d1f9f6512cd",
+          "size": 48044
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        }
+      ],
+      "urls": [
+        {
+          "url": "blob:http://127.0.0.1:55341/e359e19c-22b5-450b-bf55-6d1f9f6512cd",
+          "size": 48044,
+          "type": "audio/wav"
+        }
+      ],
+      "revoked": [],
+      "pending": [],
+      "observed": 0,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-b",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "accepted-late-kind",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 1,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "pending": [],
+      "observed": 0,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "file"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    },
+    {
+      "scenario": "accepted-late-unmount",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        }
+      ],
+      "urls": [],
+      "revoked": [],
+      "pending": [],
+      "observed": 0,
+      "applied": 0,
+      "accessGeneration": 0,
+      "hookMedia": false
+    },
+    {
+      "scenario": "manual-version-pending",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 1,
+          "applied": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 1,
+          "applied": 0,
+          "accepted": false
+        },
+        {
+          "event": "read-response",
+          "index": 1,
+          "id": "asset-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 1,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/cd86e41d-f817-43ec-8b94-3e911bc00934",
+          "size": 48044
+        }
+      ],
+      "urls": [
+        {
+          "url": "blob:http://127.0.0.1:55341/cd86e41d-f817-43ec-8b94-3e911bc00934",
+          "size": 48044,
+          "type": "audio/wav"
+        }
+      ],
+      "revoked": [],
+      "pending": [],
+      "observed": 1,
+      "applied": 0,
+      "accessGeneration": 0,
+      "hookError": "",
+      "hookMedia": true
+    },
+    {
+      "scenario": "accepted-url-cleanup",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-b",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/1d51e0ae-2490-4cbb-9fed-40b285dcec64",
+          "size": 48044
+        },
+        {
+          "event": "url-revoked",
+          "url": "blob:http://127.0.0.1:55341/1d51e0ae-2490-4cbb-9fed-40b285dcec64"
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-b",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 1,
+          "id": "asset-b",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/069562f4-d42b-4c7c-93b5-e8086f06c696",
+          "size": 48044
+        },
+        {
+          "event": "url-revoked",
+          "url": "blob:http://127.0.0.1:55341/069562f4-d42b-4c7c-93b5-e8086f06c696"
+        }
+      ],
+      "urls": [
+        {
+          "url": "blob:http://127.0.0.1:55341/1d51e0ae-2490-4cbb-9fed-40b285dcec64",
+          "size": 48044,
+          "type": "audio/wav"
+        },
+        {
+          "url": "blob:http://127.0.0.1:55341/069562f4-d42b-4c7c-93b5-e8086f06c696",
+          "size": 48044,
+          "type": "audio/wav"
+        }
+      ],
+      "revoked": [
+        "blob:http://127.0.0.1:55341/1d51e0ae-2490-4cbb-9fed-40b285dcec64",
+        "blob:http://127.0.0.1:55341/069562f4-d42b-4c7c-93b5-e8086f06c696"
+      ],
+      "pending": [],
+      "observed": 0,
+      "applied": 0,
+      "accessGeneration": 0,
+      "hookMedia": false,
+      "cleaned": {
+        "paused": true,
+        "src": null
+      }
+    },
+    {
+      "scenario": "mobile-shared-media",
+      "reads": [
+        {
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        }
+      ],
+      "trace": [
+        {
+          "event": "access-stamp",
+          "generation": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 0,
+          "applied": -1,
+          "accepted": true
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 0,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 0,
+          "generation": 0
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "body-ack",
+          "noteId": "note-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-advanced",
+          "observed": 1,
+          "applied": 0
+        },
+        {
+          "event": "read-response",
+          "index": 0,
+          "id": "asset-a",
+          "sequence": 0
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 0,
+          "observed": 1,
+          "applied": 0,
+          "accepted": false
+        },
+        {
+          "event": "access-stamp",
+          "generation": 0,
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteId": "note-a",
+          "noteEpoch": 0
+        },
+        {
+          "event": "read-request",
+          "index": 1,
+          "id": "asset-a",
+          "expected": {
+            "sessionId": "controlled-native-session",
+            "epoch": 1,
+            "noteEpoch": 0
+          },
+          "sequence": 1,
+          "generation": 0
+        },
+        {
+          "event": "read-response",
+          "index": 1,
+          "id": "asset-a",
+          "sequence": 1
+        },
+        {
+          "event": "metadata-verdict",
+          "sequence": 1,
+          "observed": 1,
+          "applied": 0,
+          "accepted": true
+        },
+        {
+          "event": "url-created",
+          "url": "blob:http://127.0.0.1:55341/360ff5a0-3297-42c7-90dc-a8a5eddb6e4c",
+          "size": 48044
+        }
+      ],
+      "urls": [
+        {
+          "url": "blob:http://127.0.0.1:55341/360ff5a0-3297-42c7-90dc-a8a5eddb6e4c",
+          "size": 48044,
+          "type": "audio/wav"
+        }
+      ],
+      "revoked": [],
+      "pending": [],
+      "observed": 1,
+      "applied": 0,
+      "accessGeneration": 0,
+      "doc": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic media boundary"
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "attrs": {
+              "id": "asset-a",
+              "name": "Synthetic A.wav",
+              "kind": "audio"
+            }
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      },
+      "hookMedia": false
+    }
+  ],
+  "pageErrors": []
+}

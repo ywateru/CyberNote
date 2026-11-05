@@ -1,0 +1,1207 @@
+{
+  "error": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.attachment-node.audio').getByRole('alert').filter({ hasText: '列表已有新的变化' }) to be visible\u001b[22m\n",
+  "stack": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.attachment-node.audio').getByRole('alert').filter({ hasText: '列表已有新的变化' }) to be visible\u001b[22m\n\n    at /private/tmp/apple-notes-mac-recording-media67-01/scripts/check-recording-media67.mjs:261:101",
+  "checks": [
+    {
+      "name": "real final document ACK advances metadata beyond held attachment response before overlay removal",
+      "pass": true
+    }
+  ],
+  "observations": [],
+  "pageErrors": [],
+  "current": {
+    "text": "unexpected IPC plugin:notes-ui|bind\n重试\n在我的 Mac 上\n全部备忘录\n2\n备忘录\n2\n新建文件夹\n全部备忘录\n2个备忘录\n1970年1月\nOriginal A\n1970/1/1\n附件\n备忘录\nOriginal B\n1970/1/1\n无更多文本\n备忘录\n格式\n1970年1月1日 08:00\n授权状态已改变，请同步后重试重试\n\nOriginal A。",
+    "reads": [
+      {
+        "index": 0,
+        "id": "saved-29f83bbe-c1b8-404d-b0ba-d5f4264e9674",
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteEpoch": 0
+        },
+        "sequence": 1
+      },
+      {
+        "index": 1,
+        "id": "saved-7c8492ba-9e54-45f5-b285-d69f78c5c363",
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteEpoch": 0
+        },
+        "sequence": 3
+      },
+      {
+        "index": 2,
+        "id": "saved-44dad54e-c198-4a1f-9eae-d7732cf8e32a",
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteEpoch": 0
+        },
+        "sequence": 5
+      }
+    ],
+    "trace": [
+      {
+        "event": "access-stamp",
+        "generation": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 0,
+        "observed": 0,
+        "applied": -1,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 0,
+        "observed": 0,
+        "applied": -1,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 0,
+        "observed": 0,
+        "applied": -1,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 1,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 1,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 1,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "access-stamp",
+        "generation": 1,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 0,
+        "observed": 0,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 0,
+        "observed": 0,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 1,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "access-stamp",
+        "generation": 1,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 0,
+        "observed": 0,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 0,
+        "observed": 0,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 1,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 1,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 2,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 0,
+        "observed": 0,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 0,
+        "observed": 0,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 0,
+        "observed": 0,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 2,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 2,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 2,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 1,
+        "observed": 1,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 3,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 1,
+        "observed": 1,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 1,
+        "observed": 1,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 1,
+        "observed": 1,
+        "applied": 0,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 3,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 3,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 3,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 3,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "read-request",
+        "index": 0,
+        "id": "saved-29f83bbe-c1b8-404d-b0ba-d5f4264e9674",
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteEpoch": 0
+        },
+        "sequence": 1
+      },
+      {
+        "event": "read-response",
+        "index": 0,
+        "id": "saved-29f83bbe-c1b8-404d-b0ba-d5f4264e9674",
+        "sequence": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 1,
+        "observed": 1,
+        "applied": 1,
+        "accepted": true
+      },
+      {
+        "event": "url-created",
+        "url": "blob:http://127.0.0.1:52653/b75152af-cad1-4761-a96a-a15e906207c1",
+        "size": 20204
+      },
+      {
+        "event": "access-stamp",
+        "generation": 3,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "body-ack",
+        "noteId": "note-a",
+        "sequence": 2
+      },
+      {
+        "event": "access-stamp",
+        "generation": 3,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 1,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 1,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 1,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 4,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 4,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 4,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 4,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 5,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 5,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 5,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 5,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "url-created",
+        "url": "blob:http://127.0.0.1:52653/0cd018ca-8503-4ba2-8823-edc6137f4ea3",
+        "size": 20204
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 5,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "url-revoked",
+        "url": "blob:http://127.0.0.1:52653/0cd018ca-8503-4ba2-8823-edc6137f4ea3"
+      },
+      {
+        "event": "access-stamp",
+        "generation": 6,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 2,
+        "observed": 2,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 6,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 6,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 6,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 3,
+        "observed": 3,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 7,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 3,
+        "observed": 3,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 3,
+        "observed": 3,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 3,
+        "observed": 3,
+        "applied": 2,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 7,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 7,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 7,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "url-revoked",
+        "url": "blob:http://127.0.0.1:52653/b75152af-cad1-4761-a96a-a15e906207c1"
+      },
+      {
+        "event": "access-stamp",
+        "generation": 7,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "read-request",
+        "index": 1,
+        "id": "saved-7c8492ba-9e54-45f5-b285-d69f78c5c363",
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteEpoch": 0
+        },
+        "sequence": 3
+      },
+      {
+        "event": "read-response",
+        "index": 1,
+        "id": "saved-7c8492ba-9e54-45f5-b285-d69f78c5c363",
+        "sequence": 3
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 3,
+        "observed": 3,
+        "applied": 3,
+        "accepted": true
+      },
+      {
+        "event": "url-created",
+        "url": "blob:http://127.0.0.1:52653/4a9dfc55-6bda-42cf-95a6-4edd36e875da",
+        "size": 34604
+      },
+      {
+        "event": "access-stamp",
+        "generation": 7,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "body-ack",
+        "noteId": "note-a",
+        "sequence": 4
+      },
+      {
+        "event": "access-stamp",
+        "generation": 7,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 3,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 3,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 3,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 8,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 8,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 8,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 8,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 9,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 9,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 9,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 9,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "url-created",
+        "url": "blob:http://127.0.0.1:52653/a48b39fe-3d7b-4fce-a7c0-fb70f196c08a",
+        "size": 34604
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 9,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "begin-final-close",
+        "readIndex": 2
+      },
+      {
+        "event": "url-revoked",
+        "url": "blob:http://127.0.0.1:52653/a48b39fe-3d7b-4fce-a7c0-fb70f196c08a"
+      },
+      {
+        "event": "access-stamp",
+        "generation": 10,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 10,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 4,
+        "observed": 4,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 10,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 10,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 10,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 10,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 5,
+        "observed": 5,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 11,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 5,
+        "observed": 5,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 5,
+        "observed": 5,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 5,
+        "observed": 5,
+        "applied": 4,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 11,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 11,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 11,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "url-revoked",
+        "url": "blob:http://127.0.0.1:52653/4a9dfc55-6bda-42cf-95a6-4edd36e875da"
+      },
+      {
+        "event": "access-stamp",
+        "generation": 11,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "read-request",
+        "index": 2,
+        "id": "saved-44dad54e-c198-4a1f-9eae-d7732cf8e32a",
+        "expected": {
+          "sessionId": "controlled-native-session",
+          "epoch": 1,
+          "noteEpoch": 0
+        },
+        "sequence": 5
+      },
+      {
+        "event": "access-stamp",
+        "generation": 11,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "body-ack",
+        "noteId": "note-a",
+        "sequence": 6
+      },
+      {
+        "event": "access-stamp",
+        "generation": 11,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 5,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 5,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 5,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 12,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 6,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 6,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 6,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 12,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 12,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 12,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 6,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 13,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 6,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 6,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 6,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 13,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 13,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "access-stamp",
+        "generation": 13,
+        "sessionId": "controlled-native-session",
+        "epoch": 1
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 6,
+        "accepted": true
+      },
+      {
+        "event": "native-release",
+        "saved": true,
+        "revision": 3
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 6,
+        "accepted": true
+      },
+      {
+        "event": "metadata-verdict",
+        "sequence": 6,
+        "observed": 6,
+        "applied": 6,
+        "accepted": true
+      },
+      {
+        "event": "access-stamp",
+        "generation": 13,
+        "sessionId": "controlled-native-session",
+        "epoch": 1,
+        "noteId": "note-a",
+        "noteEpoch": 0
+      },
+      {
+        "event": "read-response",
+        "index": 2,
+        "id": "saved-44dad54e-c198-4a1f-9eae-d7732cf8e32a",
+        "sequence": 5
+      }
+    ],
+    "urls": [
+      {
+        "url": "blob:http://127.0.0.1:52653/b75152af-cad1-4761-a96a-a15e906207c1",
+        "size": 20204,
+        "type": "audio/wav"
+      },
+      {
+        "url": "blob:http://127.0.0.1:52653/0cd018ca-8503-4ba2-8823-edc6137f4ea3",
+        "size": 20204,
+        "type": "audio/wav"
+      },
+      {
+        "url": "blob:http://127.0.0.1:52653/4a9dfc55-6bda-42cf-95a6-4edd36e875da",
+        "size": 34604,
+        "type": "audio/wav"
+      },
+      {
+        "url": "blob:http://127.0.0.1:52653/a48b39fe-3d7b-4fce-a7c0-fb70f196c08a",
+        "size": 34604,
+        "type": "audio/wav"
+      }
+    ],
+    "revoked": [
+      "blob:http://127.0.0.1:52653/0cd018ca-8503-4ba2-8823-edc6137f4ea3",
+      "blob:http://127.0.0.1:52653/b75152af-cad1-4761-a96a-a15e906207c1",
+      "blob:http://127.0.0.1:52653/a48b39fe-3d7b-4fce-a7c0-fb70f196c08a",
+      "blob:http://127.0.0.1:52653/4a9dfc55-6bda-42cf-95a6-4edd36e875da"
+    ],
+    "pending": [],
+    "observed": 6,
+    "applied": 6,
+    "hookMedia": false
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "sourceCommit": "7243c649862181d35aa94063149e30653593d7dc",
+  "baseCommit": "43e16f9707b6a602577c6793e9075e6185dd89d4",
+  "date": "2026-11-05",
+  "productFiles": [
+    {
+      "path": "src/use-attachment-media.ts",
+      "sha256": "597df1b2e3e40b2ed6a594f32201c8fe46a19d3a98b3213daa4c4c542d430dd5"
+    }
+  ],
+  "preservedProductionSources": [
+    {
+      "path": "src/bridge.ts",
+      "sha256": "729f7dc797abb762a9382f106b1fad103335e27346e598d9b18c37a2785672fd",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/metadata-client.ts",
+      "sha256": "ca3efa81802ffdf9e5d5478dd429d2aa742d19e1e5beb04946ac4642843e9c1f",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/access-client.ts",
+      "sha256": "2ac79fec3a00ae972f22bac2c6534aa1468b719a8be4b18c7e803549c9d99f98",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/Editor.tsx",
+      "sha256": "036b97b231d3dce02f9a9be6c60c1bb067063477974f26a01efabc308df6d6f2",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/attachment-media.ts",
+      "sha256": "2ff17ef91d36ea1a26054004ec243dd2ee1d62e5320fd38b5054d669cffae945",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "ae848fb7afd0fe83687c4eba1fb778f7f5cb2d4a0c2cfb2930517d1f46c2398e",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/recording-live-card.ts",
+      "sha256": "b25a8e4dcf4e28f8c9223c806959169ef73340f6049d408fb98778498b63e307",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/recording-revisions.ts",
+      "sha256": "9673961f92da60d6293998fd0d789f80c68e1992a517a62c77c9fce59764ebaa",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/DesktopRecordingPanel.tsx",
+      "sha256": "d5b0610c3a67174f18dc36821c7fdd93a316a436f55d3160108712eae26b00e8",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/desktop-recording-session.ts",
+      "sha256": "348e0298d2a7d825977c4efc881768e2a7042d969ac4a4551f6178a75874f23c",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/recording-session.ts",
+      "sha256": "fe002d7bc3670821d25884fb776fb961def3960af9e257681a57fe613581f6bc",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/recording-pcm.ts",
+      "sha256": "733870292dc2e3f6fd87fa4bac9cf504c5da2bfe136d79556c289803bf1800c2",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src/use-editor-commit.ts",
+      "sha256": "6245351f825d3f24fc4df06413be51a3bfa56feabe3f5586931eb94e64f7b809",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src-tauri/src/recording_window.rs",
+      "sha256": "37b0a640ea5fa59163bffda053c54dc61b6f4f08fb9afb4c3e9e3bf5e4d9b5ad",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "sha256": "743aff7d7cdc7240c303436e24d806db59454b00bcefd9926873ceead25fbaee",
+      "unchangedFromBase": true
+    }
+  ],
+  "runnersAndDependencies": [
+    {
+      "path": "scripts/check-recording-media67.mjs",
+      "sha256": "87f0ac9b51f29cac8306f8c0e60f18c475f4161f68be0b6a862b8f6153a51ed8"
+    },
+    {
+      "path": "package.json",
+      "sha256": "5e654e46794539c0686b8c99ed46c972e00c89dab984c61bb95b9e3a2508b007"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2"
+    }
+  ],
+  "verification": {
+    "baseline": {
+      "path": "baseline-attempt03/result.json",
+      "compiledProductCommit": "43e16f9707b6a602577c6793e9075e6185dd89d4",
+      "checks": 3,
+      "expectedDefectReproduced": true
+    },
+    "candidate": {
+      "path": "candidate-attempt02/result.json",
+      "compiledProductCommit": "7243c649862181d35aa94063149e30653593d7dc",
+      "checks": 25,
+      "pass": true
+    },
+    "strict": {
+      "path": "strict-lifetime/result.json",
+      "compiledProductCommit": "7243c649862181d35aa94063149e30653593d7dc",
+      "checks": 2,
+      "pass": true
+    },
+    "typecheck": {
+      "path": "typecheck.log",
+      "pass": true
+    },
+    "build": {
+      "path": "build.log",
+      "pass": true
+    },
+    "diffCheck": true
+  },
+  "historicalRunnerProvenance": "Intermediate runner revisions were not separately frozen; final runner hash is not claimed as exact script hash for every preserved attempt. Product bytes for all candidate runs match frozen source.",
+  "limits": "Controlled native IPC and synthetic media; actual production bridge/gates/hook/MediaView/App lifecycle; no native build, physical GUI/microphone/device/old audio operations, no claim of Mac19 internal event order or pixel acceptance."
+}
