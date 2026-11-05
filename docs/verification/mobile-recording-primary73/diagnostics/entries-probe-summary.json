@@ -1,0 +1,55 @@
+{
+  "boundary": "actual shared RecordingView, controlled legal projection/action sink; no media/native/device",
+  "baselineHead": "3534acaf1475c241895191d93ec839a5428cfc97",
+  "diagnostic": {
+    "optimizeDepsEntries": [
+      "src/RecordingView.tsx"
+    ]
+  },
+  "sourceHead": "df3e5c42f65d72cba155b4a22be499b9bdfbeea6",
+  "sourceInputs": [
+    "src/RecordingView.tsx",
+    "src/RecordingPanel.css",
+    "src/style.css",
+    "src/recording-coordinator.ts",
+    "src/recording-waveform.tsx",
+    "src/recording-clock.ts",
+    "scripts/check-mobile-recording-primary73-entries-probe.mjs"
+  ],
+  "sourceFingerprintAtStart": "e02cc2f9e20b8af480ea1ab31da8ac98487eb090c8143711fc406dfd195ef260",
+  "baselineViewSHA256": "e18f205e9d49c96abc1c590ffd8757a10e60d9060459f04400c24bdec07d094e",
+  "rendering": {
+    "viewport": [
+      392,
+      840
+    ],
+    "deviceScaleFactor": 2,
+    "projection": [
+      224,
+      480
+    ],
+    "canvas": "high quality full-frame drawImage; browser color-managed PNG decode",
+    "chromeArgs": [
+      "--disable-gpu",
+      "--force-color-profile=srgb"
+    ],
+    "fonts": "document.fonts.ready, two frames, await running finite animations (<=500ms), two frames",
+    "thresholds": [
+      210,
+      235
+    ],
+    "contourBandPixels": 2.5
+  },
+  "variants": {
+    "before": {
+      "cssSHA256": "d9c86e89e0a902b03a96e2dc1ce5584ba477931e8165189e5cba10e80836d8e9",
+      "layouts": {}
+    }
+  },
+  "checks": [],
+  "errors": [
+    "TypeError: Cannot read properties of null (reading 'useState')"
+  ],
+  "status": "FAIL",
+  "failure": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.recording-primary-idle') to be visible\u001b[22m\n"
+}

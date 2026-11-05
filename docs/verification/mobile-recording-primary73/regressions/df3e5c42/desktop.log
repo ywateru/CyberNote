@@ -1,0 +1,228 @@
+
+> notes-clone@0.1.0 test:debug /private/tmp/apple-notes-mobile-recording-primary73-01
+> node scripts/debug/cli.mjs all --out /private/tmp/notes-primary73-final-desktop
+
+{
+  "version": 1,
+  "mode": "all",
+  "sourceHead": "df3e5c42f65d72cba155b4a22be499b9bdfbeea6",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44",
+    "fileCount": 78,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "62cf6dae5bdd04d08c3aa67756950c0cfad068a04752f7f39dd98f2fceb03c44",
+    "fileCount": 78,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsChanged": false,
+  "platform": "desktop-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "elapsedMs": 30666,
+  "result": {
+    "groups": [
+      {
+        "group": "contract",
+        "pass": true,
+        "checks": [
+          "State polling awaits false async predicate until real timeout with last state",
+          "State polling awaits delayed true async predicate rather than promise truthiness",
+          "State deadline covers late true predicate",
+          "State deadline covers never settles predicate",
+          "State deadline covers unsettled state transport",
+          "Idle JSON transport preserves own __proto__ for strict API rejection",
+          "Versioned catalog covers semantic, DOM and explicit unsupported commands",
+          "does.not.exist rejects UNKNOWN_COMMAND",
+          "editor.insertText rejects INVALID_ARGUMENT",
+          "note.create rejects INVALID_ARGUMENT",
+          "native.takePhoto rejects UNSUPPORTED",
+          "settings.update rejects INVALID_ARGUMENT",
+          "settings.update rejects INVALID_ARGUMENT",
+          "folder.updateDraft rejects INVALID_ARGUMENT",
+          "attachment.submit rejects INVALID_ARGUMENT",
+          "recording.action rejects INVALID_ARGUMENT",
+          "note.create rejects INVALID_ARGUMENT",
+          "note.create rejects INVALID_ARGUMENT",
+          "note.create rejects INVALID_ARGUMENT",
+          "note.create rejects INVALID_ARGUMENT",
+          "note.create rejects INVALID_ARGUMENT",
+          "note.create rejects INVALID_ARGUMENT",
+          "note.create rejects INVALID_ARGUMENT",
+          "CLI API JSON transport preserves own __proto__ rejection without creating note",
+          "menu.open rejects INVALID_ARGUMENT",
+          "Snapshot includes rendered HTML, DOM geometry, styles and editor JSON",
+          "Identical HTML and layout comparison passes",
+          "Text comparison detects negative fixture",
+          "Raw HTML comparison detects negative fixture",
+          "Normalized HTML comparison detects negative fixture",
+          "Identical screenshot pixels pass",
+          "Screenshot pixels detect deliberate visual regression",
+          "Layout comparison detects changed rect",
+          "Semantic note selection updates actual editor",
+          "DOM row click and semantic select show equivalent selected note/editor",
+          "Real delayed settings handler prevents false idle success",
+          "Delayed settings command returns bounded result",
+          "Delayed settings persistence reaches isolated backend before idle release",
+          "settings.update rejects APP_ERROR",
+          "Failed settings handler makes idle fail explicitly",
+          "Disposed runtime removes global and held API fails for execute/snapshot/idle",
+          "DEV flag-off and URL cannot install API",
+          "Flag-off API remains absent after requested URL reload",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 8890
+      },
+      {
+        "group": "notes",
+        "pass": true,
+        "checks": [
+          "Semantic create persists a new workspace note and rendered editor",
+          "Editor transaction saved body and DOM agrees",
+          "Pin and paper semantic patch reaches persistent workspace",
+          "Delete moves actual note into trash",
+          "Restore leaves trash",
+          "Real lock modal makes note unauthorized and hides editable content",
+          "Real unlock modal restores authorized editable note",
+          "Purge requires real confirmation and removes workspace note and DOM",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 1901
+      },
+      {
+        "group": "folders",
+        "pass": true,
+        "checks": [
+          "Real ordinary folder draft and submit creates folder",
+          "Folder navigation controls new note ownership",
+          "Move uses actual note patch",
+          "Real smart folder draft parses and persists query",
+          "Smart navigation uses normal note projection",
+          "Smart definition revision updates through form handler",
+          "Ordinary rename uses rendered modal and actual folder action",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 1434
+      },
+      {
+        "group": "editor",
+        "pass": true,
+        "checks": [
+          "Semantic formatting changes editor JSON and actual strong DOM",
+          "Undo goes through real history",
+          "Redo restores inserted text",
+          "Table semantic chain creates visible table",
+          "Table row action changes real table",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 799
+      },
+      {
+        "group": "search-tags",
+        "pass": true,
+        "checks": [
+          "Search real projection and rendered results agree",
+          "Search no-results projection is empty",
+          "Tag navigation filters actual tagged document",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 584
+      },
+      {
+        "group": "settings",
+        "pass": true,
+        "checks": [
+          "Settings use real persistence handler and rendered theme",
+          "Paper setting persists",
+          "Sidebar command changes actual surface class",
+          "Drawing semantic command opens real SVG surface",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 563
+      },
+      {
+        "group": "attachments-ocr",
+        "pass": true,
+        "checks": [
+          "Actual file-input change stores attachment and inserts DOM/body card",
+          "File picker boundary uses real attachment/body-save pipeline",
+          "Real OcrHost receives explicit fake recognition",
+          "OCR confirmation inserts text through editor and save queue",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 1066
+      },
+      {
+        "group": "archive",
+        "pass": true,
+        "checks": [
+          "Archive dialog/storage boundary and actual import handler restore workspace",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 347
+      },
+      {
+        "group": "recording",
+        "pass": true,
+        "checks": [
+          "Desktop idle close cancels without requesting device or storing audio",
+          "Desktop close remains available during actual checkpoint save despite canFinish false",
+          "Desktop close waits in-flight checkpoint and final body ACK",
+          "A recording parks while B editing and first checkpoint saves one original-A card",
+          "Paused preview uses actual browser audio playback state",
+          "Second checkpoint accumulates active time excluding paused gap",
+          "Successive cumulative revisions replace one card",
+          "Store boundary failure retains retry state",
+          "Retry saves one card and releases recording owner",
+          "Synthetic valid audio decoded by real AudioContext and capture tracks released",
+          "Actual cumulative PCM WAV independently decodes to nonempty active-duration audio",
+          "Simulated native close waits for actual recording save and release",
+          "Simulated native quit seals, saves, releases and acknowledges actual owner",
+          "Delayed checkpoint failure is APP_ERROR through execute or real idle",
+          "Actual checkpoint retry state and error retain owner",
+          "Checkpoint recovery retains committed revision media for Undo, references latest in one DOM/body card and releases acknowledged owner",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 5435
+      }
+    ],
+    "passedChecks": 100,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": [],
+  "output": "/private/tmp/notes-primary73-final-desktop"
+}
+real 195.48
+user 39.68
+sys 28.14
