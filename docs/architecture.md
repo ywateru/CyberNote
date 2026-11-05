@@ -248,3 +248,5 @@ Cmd+N、Cmd+F、Option+Cmd+F 由 AppKit 菜单处理，以实际聚焦的允许�
 `src/debug/protocol.ts`为仅类型的v1契约；App在DEV及`VITE_NOTES_DEBUG=1`下创建闭包adapter并动态注册runtime，卸载解除。真实handler、Editor链、保存队列与权限检查保持单一实现。`scripts/debug`只在独立浏览器/临时根模拟IPC、系统窗口、对话框和合成媒体，不进入产品dist，不新增Rust通用IPC。设置fire-and-forget请求在启用调试时追踪至settle，内部catch错误记录serial供execute/idle识别。文件输入允许同一`fileSelected`消费显式合成File列表，后续AttachmentSubmission/原目标校验不变；智能文件夹form handle暴露现有draft/submit/refresh，不复制业务实现。完整调用和限制见[debugging.md](debugging.md)。
 
 通用附件/OCR的可信同步也须等待现有`useEditorCommit`确认React Host恢复可编辑状态，随后执行完整`rebindAttachmentTarget`。task70 CDP定位曾发现唯一失败条件为同一目标`live.available=false`，其身份/正文/版本/可信同步均相同；同步返回不能作为Host恢复的证据。此等待不放宽原目标检查，操作被取消或编辑器销毁后仍拒绝。
+
+桌面Panel的100ms展示投影不能充当异步完成证据。仅DEV+显式开关下的handle inspection读取现有`busy/closePromise`与当前render状态；录音命令等待实际pending，idle同时拒绝hasError/注册错误并等待opening/handle挂载。正常产品不含该inspection；错误提示读取结构化message，保留重试会话。

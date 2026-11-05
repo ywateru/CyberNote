@@ -4525,12 +4525,20 @@ function App() {
       if (!folderFormHandle.current) throw Error("文件夹表单尚未打开");
       return folderFormHandle.current;
     };
+    const recordingInspection = () =>
+      recordingTicket.current?.local?.handle?.inspect?.();
+    const recordingState = () =>
+      recordingInspection()?.state || debugRecordingState.current;
     debugAdapter.current = {
       state: () => ({
         workspace: structuredClone(wsRef.current),
         editorJSON: editor && !editor.isDestroyed ? editor.getJSON() : null,
         error:
           error ||
+          (recordingTicket.current && recordingState()?.hasError
+            ? recordingState()?.notice || "录音操作失败，原会话仍保留"
+            : "") ||
+          recordingTicket.current?.registration?.error ||
           (["failed", "cleanup-pending"].includes(
             ocrOperation.current?.state.phase || "",
           )
@@ -4565,16 +4573,22 @@ function App() {
             ocrOperation.current?.state.phase || "",
           ) ||
           (!!recordingTicket.current &&
-            (!!debugRecordingState.current?.playPending ||
-              !!debugRecordingState.current?.previewPending ||
-              !!debugRecordingState.current?.seeking ||
+            (!!recordingTicket.current.opening ||
+              !!recordingTicket.current.registration?.cancelling ||
+              (recordingTicket.current.desktop
+                ? !recordingTicket.current.local?.handle
+                : !recordingPanel.current) ||
+              !!recordingInspection()?.pending ||
+              !!recordingState()?.playPending ||
+              !!recordingState()?.previewPending ||
+              !!recordingState()?.seeking ||
               ["requesting", "saving", "finalizing"].includes(
-                debugRecordingState.current?.phase || "",
+                recordingState()?.phase || "",
               ))),
         failure: debugFailure.current,
         recording: {
           active: !!recordingTicket.current,
-          state: recordingTicket.current ? debugRecordingState.current : null,
+          state: recordingTicket.current ? recordingState() : null,
         },
         ocr: ocrState,
         settings,
@@ -4784,11 +4798,17 @@ function App() {
         "menu.open": ({ menu: value }) => {
           assert();
           if (["format", "media", "table"].includes(String(value))) assert(true);
-          if (value === "table" && !editor?.isActive("table")) throw Object.assign(Error("当前选区不在表格中"), {code: "UNAVAILABLE"});
+          if (value === "table" && !editor?.isActive("table"))
+            throw Object.assign(Error("当前选区不在表格中"), {
+              code: "UNAVAILABLE",
+            });
           if (["more", "note"].includes(String(value))) selectedNote();
           if (value === "folder") {
             const folder = wsRef.current.folders.find((f) => f.id === folderId);
-            if (!folder || !["normal", "smart"].includes(folder.kind)) throw Object.assign(Error("当前文件夹没有此菜单"), {code: "UNAVAILABLE"});
+            if (!folder || !["normal", "smart"].includes(folder.kind))
+              throw Object.assign(Error("当前文件夹没有此菜单"), {
+                code: "UNAVAILABLE",
+              });
             setContextFolder(folder.id);
           }
           if (value === "format") openFormat();
@@ -4876,12 +4896,13 @@ function App() {
             throw Object.assign(Error("录音会话已打开"), { code: "UNAVAILABLE" });
           debugRecordingState.current = null;
           openRecording(context());
+          return (recordingTicket.current as RecordingTicket | null)?.opening;
         },
         "recording.action": async (args) => {
           const ticket = recordingTicket.current;
           const local = ticket?.local?.handle;
           const handle = local || recordingPanel.current;
-          const state = debugRecordingState.current;
+          const state = recordingState();
           if (!handle || !state)
             throw Object.assign(Error("录音面板未就绪"), {
               code: "UNAVAILABLE",
@@ -4911,7 +4932,10 @@ function App() {
             });
           if (local && (args.action === "close" || args.action === "finish"))
             await local.close();
-          else handle.dispatch(args);
+          else {
+            handle.dispatch(args);
+            if (local) await local.inspect?.().pending;
+          }
         },
         "ocr.open": () => {
           assert(true);

@@ -21,7 +21,10 @@ import type { RecordingRevision } from "./recording-metadata";
 export type DesktopRecordingPanelHandle = Omit<
   RecordingPanelHandle,
   "close"
-> & { close: () => Promise<void> };
+> & {
+  close: () => Promise<void>;
+  inspect?: () => { state: RecordingViewState; pending?: Promise<void> };
+};
 
 type Props = {
   onCancel: () => void | Promise<void>;
@@ -33,7 +36,7 @@ type Props = {
   onPresentation?: (mode: RecordingPresentation) => void;
   switching?: boolean;
 };
-const text = (e: unknown) => (e instanceof Error ? e.message : String(e));
+const text = (e: unknown) => (typeof e === "object" && e !== null && "message" in e ? String(e.message) : String(e));
 /** Desktop autosave is separate from the unchanged mobile recorder lifecycle. */
 export default function DesktopRecordingPanel(props: Props) {
   const live = useRef(true),
@@ -344,6 +347,9 @@ export default function DesktopRecordingPanel(props: Props) {
     close: () => closeAction.current(),
     toggle: () => actions.current({ action: "toggle" }),
     dispatch: (a) => actions.current(a),
+    ...(import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1" ? {
+      inspect: () => ({state: projection.current, pending: closePromise.current || busy.current}),
+    } : {}),
   });
   useEffect(() => {
     props.onHandle?.(handle.current);
