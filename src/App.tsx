@@ -87,6 +87,13 @@ type RecordingTicket = {
   cancelling?: Promise<void>;
   desktop?: boolean;
   opening?: Promise<void>;
+  registration?: {
+    sessionId: string;
+    operationId: string;
+    error?: string;
+    cancelRequested?: boolean;
+    cancelling?: Promise<void>;
+  };
   editorCommits?: Set<AbortController>;
   local?: {
     identity: LocalRecordingIdentity;
@@ -3194,65 +3201,108 @@ function App() {
     recordingTicket.current = null;
     updateRecordingOwner((value) => value + 1);
   };
+  const registerDesktopRecording = (ticket: RecordingTicket): Promise<void> => {
+    if (ticket.opening) return ticket.opening;
+    if (ticket.local) return Promise.resolve();
+    const registration = ticket.registration;
+    if (!registration || recordingTicket.current !== ticket || ticket.detached)
+      return Promise.reject(Error("原录音准备身份已失效"));
+    registration.error = undefined;
+    const work = (async () => {
+      try {
+        const identity = await invoke<LocalRecordingIdentity>("register_recording_local", {
+          sessionId: registration.sessionId,
+          operationId: registration.operationId,
+        });
+        if (recordingTicket.current !== ticket || ticket.detached)
+          throw Error("原录音准备窗口已失效");
+        let attach!: (handle: DesktopRecordingPanelHandle) => void;
+        const ready = new Promise<DesktopRecordingPanelHandle>(resolve => { attach = resolve; });
+        ticket.local = { identity: Object.freeze(identity), ready, attach };
+      } catch (error) {
+        registration.error = errText(error);
+        throw error;
+      }
+    })();
+    ticket.opening = work;
+    updateRecordingOwner(value => value + 1);
+    void work.finally(() => {
+      if (ticket.opening === work) ticket.opening = undefined;
+      if (recordingTicket.current === ticket && !ticket.detached)
+        updateRecordingOwner(value => value + 1);
+    }).catch(() => {});
+    return work;
+  };
+  const cancelDesktopRegistration = (ticket: RecordingTicket): Promise<void> => {
+    const registration = ticket.registration;
+    if (!registration || recordingTicket.current !== ticket || ticket.detached)
+      return Promise.reject(Error("原录音准备身份已失效"));
+    if (registration.cancelling) return registration.cancelling;
+    // No Panel has mounted and no capture is admitted while cancellation owns
+    // registration recovery. Recover its exact identity, then release empty.
+    registration.cancelRequested = true;
+    const work = (async () => {
+      try {
+        await registerDesktopRecording(ticket);
+        await completeDesktopRecording(ticket, false, 0);
+      } catch (error) {
+        registration.error = errText(error);
+        throw error;
+      }
+    })();
+    registration.cancelling = work;
+    updateRecordingOwner(value => value + 1);
+    void work.finally(() => {
+      if (registration.cancelling === work) registration.cancelling = undefined;
+      if (recordingTicket.current === ticket && !ticket.detached)
+        updateRecordingOwner(value => value + 1);
+    }).catch(() => {});
+    return work;
+  };
   const openRecording = (context?: NativeContext) => {
     if (recordingTicket.current) {
       if (recordingTicket.current.desktop) {
-        document
-          .querySelector<HTMLElement>(".recording-dock")
-          ?.scrollIntoView({ block: "nearest" });
+        document.querySelector<HTMLElement>(".recording-dock")?.scrollIntoView({ block: "nearest" });
         return;
       }
       throw Error("上次录音操作尚未核定，请先重试保存或取消");
     }
     const batch = capturePickerTarget(context);
+    const desktop = native && !mobile;
     const ticket: RecordingTicket = {
-      batch,
-      accepting: true,
-      detached: false,
-      desktop: native && !mobile,
+      batch, accepting: true, detached: false, desktop,
+      registration: desktop ? { sessionId: secureId(), operationId: batch.operationIds[0] } : undefined,
     };
     batch.recording = ticket;
     recordingTicket.current = ticket;
     setMenu(null);
-    if (ticket.desktop) {
-      ticket.opening = (async () => {
-        const identity = await invoke<LocalRecordingIdentity>(
-          "register_recording_local",
-          {
-            sessionId: secureId(),
-            operationId: batch.operationIds[0],
-          },
-              );
-        let attach!: (handle: DesktopRecordingPanelHandle) => void;
-        const ready = new Promise<DesktopRecordingPanelHandle>((resolve) => {
-          attach = resolve;
-        });
-        ticket.local = { identity: Object.freeze(identity), ready, attach };
-        updateRecordingOwner((value) => value + 1);
-      })().catch((error) => {
-        if (recordingTicket.current === ticket) recordingTicket.current = null;
-        updateRecordingOwner((value) => value + 1);
-        fail(error);
-        throw error;
-      });
-      void ticket.opening.catch(() => {});
-    } else setRecord(true);
+    if (desktop) void registerDesktopRecording(ticket).catch(fail);
+    else setRecord(true);
   };
   recordingLifecycle.current = {
     active: () => !!recordingTicket.current,
     close: async () => {
       const ticket = recordingTicket.current;
       if (!ticket) return;
-      await ticket.opening;
-      if (recordingTicket.current !== ticket) return;
       if (ticket.desktop) {
-        if (!ticket.local) throw Error("录音侧栏尚未就绪，请保持原窗口打开");
+        if (!ticket.local || ticket.registration?.cancelRequested) {
+          await cancelDesktopRegistration(ticket);
+          return;
+        }
+        if (ticket.local.handle) {
+          // Initiate close before yielding so pending capture is sealed at the
+          // same boundary as document admission on main-window close.
+          await ticket.local.handle.close();
+          return;
+        }
         const handle = await ticket.local.ready;
         if (recordingTicket.current !== ticket || ticket.detached)
           throw Error("原录音侧栏已失效");
         await handle.close();
         return;
       }
+      await ticket.opening;
+      if (recordingTicket.current !== ticket) return;
       sealRecording(ticket);
       if (!ticket.detached) setRecord(false);
       const operation = attachmentSubmissions.current.get(
@@ -3285,9 +3335,7 @@ function App() {
       }
     },
   };
-  const desktopRecording = recordingTicket.current?.local
-    ? recordingTicket.current
-    : null;
+  const desktopRecording = recordingTicket.current?.desktop ? recordingTicket.current : null;
   const projectDesktopRecording = (
     ticket: RecordingTicket,
     state: RecordingViewState,
@@ -5491,17 +5539,31 @@ function App() {
         />
       )}
     </div>
-      {!mobile && desktopRecording?.local && (
+      {!mobile && desktopRecording && (
         <aside
           className="recording-dock"
           aria-label="录音面板"
+          inert={quitPending}
           style={
             {
               "--recording-native-top": `${nativeInfo?.native.reservedTop || 0}px`,
             } as CSSProperties
           }
         >
-          <DesktopRecordingPanel
+          {!desktopRecording.local || desktopRecording.registration?.cancelRequested ? (
+            <section className="recording-registration" aria-label="准备录音">
+              <strong>新录音</strong>
+              <p role={desktopRecording.registration?.error ? "alert" : "status"}>
+                {desktopRecording.registration?.error || (desktopRecording.registration?.cancelRequested ? "正在取消录音…" : "正在准备录音…")}
+              </p>
+              <p>录音尚未开始。准备未确认时，可以重试或取消。</p>
+              <button disabled={!!desktopRecording.opening || !!desktopRecording.registration?.cancelling}
+                onClick={() => { void (desktopRecording.registration?.cancelRequested ? cancelDesktopRegistration(desktopRecording) : registerDesktopRecording(desktopRecording)).catch(fail); }}>
+                {desktopRecording.registration?.cancelRequested ? "重试取消录音" : "重试准备录音"}
+              </button>
+              <button aria-label="取消准备录音" onClick={() => { void cancelDesktopRegistration(desktopRecording).catch(fail); }}>取消录音</button>
+            </section>
+          ) : <DesktopRecordingPanel
             key={desktopRecording.local.identity.sessionId}
             onHandle={(handle) => {
               if (desktopRecording.local) {
@@ -5509,12 +5571,12 @@ function App() {
                 if (handle) desktopRecording.local.attach(handle);
               }
             }}
-            onBeforeStart={() =>
-              invoke(
-                "recording_local_started",
-                desktopRecording.local!.identity,
-              )
-            }
+            onBeforeStart={() => {
+              if (quitState.current || recordingTicket.current !== desktopRecording ||
+                  !desktopRecording.accepting || desktopRecording.batch.target.invalidated)
+                return Promise.reject(Error("当前录音准备已封存，请完成当前操作后重试"));
+              return invoke("recording_local_started", desktopRecording.local!.identity);
+            }}
             onCancel={() => {}}
             onRevision={(result) =>
               submitRecordingRevision(desktopRecording, result)
@@ -5525,7 +5587,7 @@ function App() {
             onState={(state) =>
               projectDesktopRecording(desktopRecording, state)
             }
-          />
+          />}
         </aside>
       )}
     </div>

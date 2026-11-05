@@ -143,15 +143,18 @@ export default function DesktopRecordingPanel(props: Props) {
     if (closePromise.current) return closePromise.current;
     if (!live.current) return Promise.resolve();
     closing.current = true;
+    // Before onRecording establishes recordedAt there can be no captured audio.
+    // Cancel preparation synchronously: awaiting it first admits a late stream.
+    const empty = recordedAt.current === undefined;
     const work = (async () => {
       try {
-        await busy.current;
-        if (!recordedAt.current) {
+        if (empty) {
           session.current?.dispose();
           await currentProps.current.onComplete?.(false, revision.current);
           if (!currentProps.current.onComplete)
             await currentProps.current.onCancel();
         } else {
+          await busy.current;
           while (!finalAck.current) await drain();
           await currentProps.current.onComplete?.(true, revision.current);
         }
@@ -182,7 +185,7 @@ export default function DesktopRecordingPanel(props: Props) {
       transition("requesting");
       const capture = new DesktopRecordingSession({
         onRecording: () => {
-          if (!live.current) return;
+          if (!live.current || closing.current) return;
           if (recordedAt.current === undefined) recordedAt.current = Date.now();
           clock.current.resume();
           transition("recording");
@@ -206,6 +209,7 @@ export default function DesktopRecordingPanel(props: Props) {
           await currentProps.current.onBeforeStart?.();
           if (live.current && !closing.current) await capture.start();
         } catch (e) {
+          if (!live.current || closing.current) return;
           setError(text(e));
           transition("error");
           throw e;

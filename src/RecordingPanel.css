@@ -858,3 +858,14 @@
   background: #3a3a3c;
   color: var(--ink);
 }
+
+/* Registration recovery is visible before a desktop capture Panel can mount. */
+.recording-registration {
+  padding: calc(var(--recording-native-top, 0px) + 24px) 18px 24px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.recording-registration strong { font-size: 17px; }
+.recording-registration p { overflow-wrap: anywhere; }
+.recording-registration [role="alert"] { color: var(--danger); }
+.recording-registration button { margin: 8px 8px 0 0; }

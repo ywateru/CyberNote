@@ -125,6 +125,24 @@ fn register_local(
     if !document_window(caller) || !canonical_uuid(&session) || !canonical_uuid(&operation) {
         return Err("本地录音身份无效".into());
     }
+    // A lost registration response must be recoverable only by this original
+    // live incarnation, with the same session/operation and before capture.
+    // This exact recovery is allowed during Quit so empty cleanup can finish.
+    if !registry.exit_allowed {
+        if let Some(entry) = registry.local.get(&session) {
+            if entry.owner_alive
+                && entry.identity.owner == caller
+                && entry.identity.operation_id == operation
+                && registry.incarnations.get(caller) == Some(&entry.identity.incarnation)
+                && !entry.started
+                && entry.acknowledged == 0
+                && !entry.final_ack
+            {
+                return Ok(entry.identity.clone());
+            }
+            return Err("原录音登记身份已失效或采集已开始".into());
+        }
+    }
     if registry.quit.is_some() || registry.exit_allowed {
         return Err("应用正在退出，请稍候".into());
     }
@@ -942,6 +960,74 @@ mod tests {
         .unwrap()
         .started = true;
         identity
+    }
+    #[test]
+    fn sidebar66_registration_response_loss_recovers_only_exact_live_pre_capture_identity() {
+        let mut registry = Registry::default();
+        let (session, operation) = ids();
+        let identity =
+            register_local(&mut registry, session.clone(), operation.clone(), "main").unwrap();
+        let recovered =
+            register_local(&mut registry, session.clone(), operation.clone(), "main").unwrap();
+        assert_eq!(recovered.incarnation, identity.incarnation);
+        assert_eq!(registry.local.len(), 1);
+        assert!(register_local(
+            &mut registry,
+            session.clone(),
+            operation.clone(),
+            "note-other"
+        )
+        .is_err());
+        assert!(register_local(
+            &mut registry,
+            session.clone(),
+            uuid::Uuid::new_v4().to_string(),
+            "main"
+        )
+        .is_err());
+        assert!(register_local(
+            &mut registry,
+            uuid::Uuid::new_v4().to_string(),
+            operation.clone(),
+            "main"
+        )
+        .is_err());
+        let original_incarnation = registry
+            .incarnations
+            .insert("main".into(), uuid::Uuid::new_v4().to_string())
+            .unwrap();
+        assert!(register_local(&mut registry, session.clone(), operation.clone(), "main").is_err());
+        registry
+            .incarnations
+            .insert("main".into(), original_incarnation);
+        registry.local.get_mut(&session).unwrap().owner_alive = false;
+        assert!(register_local(&mut registry, session.clone(), operation.clone(), "main").is_err());
+        registry.local.get_mut(&session).unwrap().owner_alive = true;
+        registry.local.get_mut(&session).unwrap().started = true;
+        assert!(register_local(&mut registry, session.clone(), operation.clone(), "main").is_err());
+        registry.local.get_mut(&session).unwrap().started = false;
+        quit(&mut registry, "quit-registration-loss");
+        let recovered =
+            register_local(&mut registry, session.clone(), operation.clone(), "main").unwrap();
+        assert_eq!(recovered.incarnation, identity.incarnation);
+        release_local(
+            &mut registry,
+            &session,
+            &operation,
+            &identity.incarnation,
+            "main",
+            false,
+            0,
+        )
+        .unwrap();
+        assert!(
+            !may_exit(&mut registry),
+            "empty cleanup still requires every document Quit seal and ACK"
+        );
+        assert!(
+            register_local(&mut registry, session, operation, "main").is_err(),
+            "completed registration cannot be replayed"
+        );
     }
     #[test]
     fn sidebar66_local_registration_is_per_actual_owner_and_replay_safe() {
