@@ -23,6 +23,8 @@ depends-on: [app-recording-visual58]
 
 优先src/RecordingPanel.css中仅mobile的局部选择器，必要src/RecordingView.tsx的仅手机播放/暂停图形；不得改变desktop布局/图形、58的100px/s/quartertick/seek尺度、状态机、Session、权限、owner、附件/ACK或其他全局样式。证据docs/verification/mobile-recording-visual59/及必要小检查scripts/check-mobile-recording-visual59.mjs；新增检查只覆盖真实视图、动作和范围边界，不复制实现自证。
 
+已证必要范围：播放行上移后320×568长错误notice与播放按钮重叠6.34逻辑px，原始失败已保留。允许手机限定notice top从71%试调69.7%，同时核计时/notice/播放互不重叠、4%滚动提示与56%重试入口保留；不改真实错误内容、状态或媒体逻辑。设计依据见recording-mobile.md的59节。
+
 ## verification
 
 先保全58同尺寸旧图，再真实共享View原/旧/新三方、命名ROI及阈值/坐标/图像差值；核初始、采集中、暂停、实际播放中投影，播放/暂停图形的可用性必须服从真实状态。中心与两侧控件互不重叠，触达框与实际图形一致，点击调用现有真实action而不伪造播放成功。手机不同窄宽及dark/错误/忙碌保持控制可用；桌面同props同尺寸图像/DOM不能变化。必要typecheck/build和受影响的最小播放动作检查，58未触逻辑不重复全矩阵。
