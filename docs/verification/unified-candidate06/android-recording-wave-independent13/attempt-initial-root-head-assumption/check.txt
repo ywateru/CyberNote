@@ -1,0 +1,12 @@
+PASS authorization exactly nine fields
+PASS exact source/root/run/artifact authorization
+PASS sorted unique explicit 334 product / 353 complete paths
+PASS freeze exact SHA and nested authorization/source
+Traceback (most recent call last):
+  File "/private/tmp/apple-notes-mac-recording-diagnostics63-01/docs/verification/unified-candidate06/android-recording-wave-independent13/check.py", line 133, in <module>
+    try:main()
+  File "/private/tmp/apple-notes-mac-recording-diagnostics63-01/docs/verification/unified-candidate06/android-recording-wave-independent13/check.py", line 62, in main
+    check('root checkout exact authorized source',subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()==SOURCE)
+  File "/private/tmp/apple-notes-mac-recording-diagnostics63-01/docs/verification/unified-candidate06/android-recording-wave-independent13/check.py", line 24, in check
+    assert condition,name
+AssertionError: root checkout exact authorized source

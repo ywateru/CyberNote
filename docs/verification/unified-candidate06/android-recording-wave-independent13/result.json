@@ -1,0 +1,297 @@
+{
+  "status": "PASS-local-artifact-only",
+  "at": "2026-11-05T06:59:43.729191+00:00",
+  "reviewer": "native_ui_research; neither task60 product author nor Android13 build author",
+  "sourceHead": "a236b311d7d6dcb33b0ee4f16977ebe2d2adf8ac",
+  "rootHeadAtStart": "9394bc5f812e709c8f304ccd3c67f76f9789be28",
+  "rootHeadAtEnd": "9394bc5f812e709c8f304ccd3c67f76f9789be28",
+  "productScope": "APK13 contains task60, excludes later task63 source",
+  "freezeSha256": "67e9f04668c9d4e9049249d3326f9faf4ea84adff644e92914f665888a5df01e",
+  "apk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/android-recording-wave-build13/android-attempt01/android-original.apk",
+    "bytes": 180721914,
+    "sha256": "60aa7ff23ccc91e18fd027b1bb0a9d1ce21b01410275b86f05cccee40f15358b"
+  },
+  "checks": [
+    {
+      "name": "authorization exactly nine fields",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exact source/root/run/artifact authorization",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "sorted unique explicit 334 product / 353 complete paths",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "freeze exact SHA and nested authorization/source",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "authorized Git object is a commit",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "353 inputs match freeze: exact historical Git objects plus19 actual nontracked",
+      "pass": true,
+      "detail": {
+        "historicalTracked": 334,
+        "currentNontracked": [
+          "node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.cjs",
+          "node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.d.ts",
+          "node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/dist/index.js",
+          "node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/index.ts",
+          "node_modules/.pnpm/prosemirror-view@1.42.9_patch_hash=d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d/node_modules/prosemirror-view/src/input.ts",
+          "src-tauri/gen/android/app/proguard-tauri.pro",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Ipc.kt",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Logger.kt",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/PermissionHelper.kt",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Rust.kt",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebChromeClient.kt",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebView.kt",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebViewClient.kt",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/TauriActivity.kt",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/WryActivity.kt",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/proguard-wry.pro",
+          "src-tauri/gen/android/app/tauri.build.gradle.kts",
+          "src-tauri/gen/android/app/tauri.properties",
+          "src-tauri/gen/android/tauri.settings.gradle"
+        ]
+      }
+    },
+    {
+      "name": "334 product rows and both aggregates independently recomputed",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "334 product bytes equal exact source Git objects",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all Android12 paths retained; only wave60 script path added",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "15 frozen fields unchanged inputs-before.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "15 frozen fields unchanged inputs-after.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "15 frozen fields unchanged collection/inputs-before-collection.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "15 frozen fields unchanged collection/inputs-after-collection.json",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all seven frozen build-tool source files match actual bytes",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "read-only overlay identities and aggregate",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "all 701 Gradle distribution rows match actual bytes/modes",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Gradle distribution completion marker exact identity",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "ZIP unique names /private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/com.google.mlkit/text-recognition-bundled-common/17.0.0/ad2396ea7b02feb026c821cb6aded1216509b0fd/text-recognition-bundled-common-17.0.0.aar",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "ZIP unique names /private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/com.google.mlkit/text-recognition-chinese/16.0.1/f5da4156e976f397307efeb19d1d71e4fefec3a0/text-recognition-chinese-16.0.1.aar",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "ZIP unique names /private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/com.google.android.gms/play-services-mlkit-text-recognition-chinese/16.0.1/7331e04429e14fc14a52786bbe22f40c4d81c1f2/play-services-mlkit-text-recognition-chinese-16.0.1.aar",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "ZIP unique names /private/tmp/notes-scan-gradle-home/caches/modules-2/files-2.1/com.google.android.gms/play-services-mlkit-text-recognition-common/19.1.0/c177b50c9b73291a71e331daf00db646cae417fb/play-services-mlkit-text-recognition-common-19.1.0.aar",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "four exact frozen OCR AARs; independently rehashed 25 models",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "build and collector exact source/freeze/aggregates",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "successful bounded owned build and ready collector",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "current nonce offline/workers2/cache-false from raw build log",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "child environment exactly frozen",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "owned temporary init identity, exact generated bytes and cleanup",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "generated/isolation JSON exactly matches build result",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no symlink output ancestors /Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-recording-wave-build13/android-attempt01/prior-outputs/application",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "preserved prior application exact device/inode/bytes/mode",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no symlink output ancestors /Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "fresh generated application exact device/inode/bytes/mode",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no symlink output ancestors /Users/water/work/2026/Apple-Notes-Clone/docs/verification/unified-candidate06/android-recording-wave-build13/android-attempt01/prior-outputs/dist",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "preserved prior dist exact device/inode/bytes/mode",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "no symlink output ancestors /Users/water/work/2026/Apple-Notes-Clone/dist",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "historical fresh dist has separate inode and equals build-dist record",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "collector all 15 comparisons and supplemental invariance",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "collector build-result reference actual bytes",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "exact APK size and SHA",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "ZIP unique names /Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/android-recording-wave-build13/android-attempt01/android-original.apk",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "independent APK entire ZIP bytes equal all 1066 collector rows",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "bounded decoded native member matches exact APK ZIP row",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "full CSS and both JS embedded bytes equal historical dist",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "complete serialized HTML canonical token equality",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "arm64-v8a only and 25 exact cached OCR models",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "actual apksigner v2 signature and exact existing candidate04 signer",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "sealed build evidence index exact authorized SHA",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "15 actual indexed files incl13docs+2artifacts byte-identical",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "historical source exists; freeze/APK remain unchanged after review",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "freeze summary exact file identity/head/aggregates",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "root freeze review binds actual authorization/freeze and counts",
+      "pass": true,
+      "detail": "Root before-START review timing is a recorded attestation, not independently replayable historical UI/event timing."
+    }
+  ],
+  "limits": "Read-only fixed files and apksigner verification only. No build, install, ADB, GUI, audio, runtime OCR, permission, recording or pixel acceptance.",
+  "supplementalMetadataAt": "2026-11-05T07:01:21.008121+00:00"
+}

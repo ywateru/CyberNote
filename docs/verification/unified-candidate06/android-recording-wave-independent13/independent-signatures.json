@@ -1,0 +1,44 @@
+[
+  {
+    "label": "android13",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/apksigner",
+      "verify",
+      "--verbose",
+      "--print-certs",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/android-recording-wave-build13/android-attempt01/android-original.apk"
+    ],
+    "exit": 0,
+    "apk": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate06/android-recording-wave-build13/android-attempt01/android-original.apk",
+      "bytes": 180721914,
+      "sha256": "60aa7ff23ccc91e18fd027b1bb0a9d1ce21b01410275b86f05cccee40f15358b"
+    },
+    "stdout": "Verifies\nVerified using v1 scheme (JAR signing): false\nVerified using v2 scheme (APK Signature Scheme v2): true\nVerified using v3 scheme (APK Signature Scheme v3): false\nVerified using v3.1 scheme (APK Signature Scheme v3.1): false\nVerified using v4 scheme (APK Signature Scheme v4): false\nVerified for SourceStamp: false\nNumber of signers: 1\nSigner #1 certificate DN: C=US, O=Android, CN=Android Debug\nSigner #1 certificate SHA-256 digest: e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79\nSigner #1 certificate SHA-1 digest: f5fc88ad7ecd49b61f8919e84c90cbd0cb06028e\nSigner #1 certificate MD5 digest: 65c951325c126e81599ccb9f086d72de\nSigner #1 key algorithm: RSA\nSigner #1 key size (bits): 2048\nSigner #1 public key SHA-256 digest: 47bce8463b2cccb09945765c5f520e3c569d88a58cdb8affeec265a496303465\nSigner #1 public key SHA-1 digest: a6a77d2aec5fe86aa680479839ccfc38f15384d0\nSigner #1 public key MD5 digest: 06e58a925aa0e714ad67ce4f5c63bfed\n",
+    "stderr": "",
+    "certificates": [
+      "e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79"
+    ]
+  },
+  {
+    "label": "candidate04",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/apksigner",
+      "verify",
+      "--verbose",
+      "--print-certs",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate04/NotesClone-android-arm64.apk"
+    ],
+    "exit": 0,
+    "apk": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/unified-candidate04/NotesClone-android-arm64.apk",
+      "bytes": 304110831,
+      "sha256": "bbc4c1a81d22c01082e94a169b5dedc410c8503ede7c405f32d2d0656a56c2c2"
+    },
+    "stdout": "Verifies\nVerified using v1 scheme (JAR signing): false\nVerified using v2 scheme (APK Signature Scheme v2): true\nVerified using v3 scheme (APK Signature Scheme v3): false\nVerified using v3.1 scheme (APK Signature Scheme v3.1): false\nVerified using v4 scheme (APK Signature Scheme v4): false\nVerified for SourceStamp: false\nNumber of signers: 1\nSigner #1 certificate DN: C=US, O=Android, CN=Android Debug\nSigner #1 certificate SHA-256 digest: e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79\nSigner #1 certificate SHA-1 digest: f5fc88ad7ecd49b61f8919e84c90cbd0cb06028e\nSigner #1 certificate MD5 digest: 65c951325c126e81599ccb9f086d72de\nSigner #1 key algorithm: RSA\nSigner #1 key size (bits): 2048\nSigner #1 public key SHA-256 digest: 47bce8463b2cccb09945765c5f520e3c569d88a58cdb8affeec265a496303465\nSigner #1 public key SHA-1 digest: a6a77d2aec5fe86aa680479839ccfc38f15384d0\nSigner #1 public key MD5 digest: 06e58a925aa0e714ad67ce4f5c63bfed\n",
+    "stderr": "",
+    "certificates": [
+      "e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79"
+    ]
+  }
+]

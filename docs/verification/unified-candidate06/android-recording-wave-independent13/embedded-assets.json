@@ -1,0 +1,80 @@
+{
+  "status": "DECODED",
+  "library": "lib/arm64-v8a/libnotes_clone_lib.so",
+  "librarySha256": "800c4074100728ac1dd0b334aff5a4563c6b45388b73d022f9b6c1da96629d32",
+  "libraryBytes": 155423592,
+  "assets": [
+    {
+      "path": "assets/index-C3B1l0dM.js",
+      "expectedBytes": 1008709,
+      "expectedSha256": "3e4a30786ae840e45877931ad318bf1f15fccb132fecf608058ae4ab45434cf9",
+      "filenameOffsets": [
+        2735045
+      ],
+      "match": {
+        "offset": 2735062,
+        "bytes": 1008709,
+        "sha256": "3e4a30786ae840e45877931ad318bf1f15fccb132fecf608058ae4ab45434cf9",
+        "compressedBytes": 330295,
+        "exactBytes": true
+      }
+    },
+    {
+      "path": "assets/index-DFDa1aFU.css",
+      "expectedBytes": 79034,
+      "expectedSha256": "888c58cfa31ce06e91b34082b8340a6515e75227dda1cb7ae95e0e0a36c59522",
+      "filenameOffsets": [
+        3065365
+      ],
+      "match": {
+        "offset": 3065383,
+        "bytes": 79034,
+        "sha256": "888c58cfa31ce06e91b34082b8340a6515e75227dda1cb7ae95e0e0a36c59522",
+        "compressedBytes": 18306,
+        "exactBytes": true
+      }
+    },
+    {
+      "path": "assets/native-recording-access-GWz2HQeN.js",
+      "expectedBytes": 581,
+      "expectedSha256": "255eba5cedf1b793c010b8e5311d6a7af28b71a6ec72f5888f1d1b4b62c7b86a",
+      "filenameOffsets": [
+        3084035
+      ],
+      "match": {
+        "offset": 3084070,
+        "bytes": 581,
+        "sha256": "255eba5cedf1b793c010b8e5311d6a7af28b71a6ec72f5888f1d1b4b62c7b86a",
+        "compressedBytes": 466,
+        "exactBytes": true
+      }
+    },
+    {
+      "path": "index.html",
+      "expectedBytes": 498,
+      "expectedSha256": "1999a442e09df2021bc144db3a90ab43ff58ba717688b9761564b6ae9f2f90e7",
+      "filenameOffsets": [
+        1591067,
+        1594743,
+        1668702,
+        3083690,
+        3085972,
+        3086714,
+        3086764,
+        3101699,
+        3414812,
+        3513777,
+        3519008,
+        3520616
+      ],
+      "match": {
+        "offset": 3083700,
+        "bytes": 478,
+        "sha256": "6843afbbbfb075f7ce1d009f0f9fa1ae6f7845adfd1fa3fd21bcb07abf5f3d62",
+        "compressedBytes": 327,
+        "exactBytes": false
+      }
+    }
+  ],
+  "method": "Brotli streams within 32 bytes after embedded asset filename. Compare full decoded CSS and both JS files to historical dist hashes/bytes, raw index.html if exact else complete HTML token check separately. Bounded 1.2MB input/2MB output per candidate, native member <=200MiB; no execution/injection."
+}
