@@ -966,7 +966,8 @@ if (
       assert.equal(f.hidden, 1);
       assert.equal(f.destroyed, 0);
       assert.equal(ticket.accepting, true);
-      assert.equal(f.recordingMessages.length, 0);
+      assert.deepEqual(f.recordingMessages.map(message => message.kind), ["presentation-result"]);
+      assert.equal(f.recordingMessages[0].mode, "float");
       assert.equal(f.env.recordingTicket.current, ticket);
     });
     await test("explicit Quit freezes every existing editor and new/native/format entry before its first wait and after success ACK; matching cancel restores only current legal editor", async () => {
