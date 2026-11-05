@@ -1,0 +1,25 @@
+{
+  "start": "2026-11-05 12:23:05",
+  "end": "2026-11-05 13:11:04",
+  "timezone": "CST",
+  "captured_at": "2026-11-05T13:11:04.760654+08:00",
+  "predicate": "process == \"tccd\" AND subsystem == \"com.apple.TCC\" AND category == \"access\" AND (eventMessage CONTAINS \"msgID=74528.6\" OR eventMessage CONTAINS \"msgID=71272.6\" OR (eventMessage CONTAINS \"com.local.notesclone\" AND eventMessage CONTAINS \"kTCCServiceMicrophone\"))",
+  "argv": [
+    "/usr/bin/log",
+    "show",
+    "--start",
+    "2026-11-05 12:23:05",
+    "--end",
+    "2026-11-05 13:11:04",
+    "--style",
+    "compact",
+    "--info",
+    "--debug",
+    "--predicate",
+    "process == \"tccd\" AND subsystem == \"com.apple.TCC\" AND category == \"access\" AND (eventMessage CONTAINS \"msgID=74528.6\" OR eventMessage CONTAINS \"msgID=71272.6\" OR (eventMessage CONTAINS \"com.local.notesclone\" AND eventMessage CONTAINS \"kTCCServiceMicrophone\"))"
+  ],
+  "scope": "Known old exact microphone transactions 74528.6 and 71272.6, plus this exact bundle microphone conditions. No target launch, new Start, device, permission, TCC database, or audio access.",
+  "attempt": 2,
+  "reason": "Repeat the identical bounded read outside the restricted execution context after log exit64: Cannot run while sandboxed.",
+  "attempted_at": "2026-11-05T13:11:29.878665+08:00"
+}

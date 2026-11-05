@@ -1,0 +1,29 @@
+{
+  "status": "NO_RECORDED_TERMINAL_RESULT_IN_BOUNDED_QUERY",
+  "window": {
+    "start": "2026-11-05 12:23:05",
+    "end": "2026-11-05 13:11:04",
+    "timezone": "Asia/Shanghai (+0800)"
+  },
+  "transactions": [
+    "74528.6",
+    "71272.6"
+  ],
+  "target_bundle": "com.local.notesclone",
+  "successful_log_query_attempt": 2,
+  "matched_events": [
+    {
+      "time": "2026-11-05 12:34:54.745 +0800",
+      "kind": "code-requirement-condition",
+      "subject": "com.local.notesclone",
+      "service": "kTCCServiceMicrophone",
+      "old_cdhash": "0a258674ff1844f9fe57fc9d3619c5cd22fa7cad",
+      "compared_cdhash": "469ea16128121596a2875236e9c69ef6ffa5d06b"
+    }
+  ],
+  "known_transaction_terminal_records_returned": 0,
+  "new_actionable_authorization_evidence": false,
+  "product_changes": false,
+  "target_actions": false,
+  "notes": "Absence is bounded by retained logs, predicate, and end time; it does not prove permanent pending, denial, approval, cancellation, prompt visibility, or current process authorization."
+}
