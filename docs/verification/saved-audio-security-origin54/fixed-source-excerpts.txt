@@ -1,0 +1,431 @@
+Exact immutable source: 5a147d2c5b59fcd9ca0ce4398d89cb1bb5c34a5a
+
+FILE src/Editor.tsx
+  35: function MediaView({ node }: NodeViewProps) {
+  36:   const { id, name, kind } = node.attrs;
+  37:   const [media, setMedia] = useState<{
+  38:     id: string;
+  39:     src: string;
+  40:     name: string;
+  41:     recordedAt?: number;
+  42:   } | null>(null);
+  43:   const [failure, setFailure] = useState<{
+  44:     id: string;
+  45:     message: string;
+  46:   } | null>(null);
+  47:   const src = media && media.id === id ? media.src : "";
+  48:   const error = failure && failure.id === id ? failure.message : "";
+  49:   useEffect(() => {
+  50:     let live = true;
+  51:     setMedia(null);
+  52:     setFailure(null);
+  53:     readAttachment(id)
+  54:       .then((x) => {
+  55:         if (live)
+  56:           setMedia({
+  57:             id,
+  58:             src: `data:${x.mime};base64,${x.data}`,
+  59:             name: x.name,
+  60:             recordedAt: attachmentRecordedAt(x.recordedAt, kind),
+  61:           });
+  62:       })
+  63:       .catch((e) => {
+  64:         if (live) {
+  65:           setMedia(null);
+  66:           setFailure({ id, message: e.message || String(e) });
+  67:         }
+  68:       });
+  69:     return () => {
+  70:       live = false;
+  71:     };
+  72:   }, [id, kind]);
+ 104: type AudioPlayerProps = { src: string; name: string; recordedAt?: number };
+ 105: export function AudioPlayer({ src, name, recordedAt }: AudioPlayerProps) {
+ 106:   // Different attachments get different media elements and controller lifetimes.
+ 107:   // In-flight events or play promises from the previous source cannot affect it.
+ 108:   return (
+ 109:     <AudioPlayerSession
+ 110:       key={src}
+ 111:       src={src}
+ 112:       name={name}
+ 113:       recordedAt={recordedAt}
+ 114:     />
+ 115:   );
+ 116: }
+ 117: function AudioPlayerSession({ src, name, recordedAt }: AudioPlayerProps) {
+ 118:   const audio = useRef<HTMLAudioElement>(null);
+ 119:   const controller = useRef<ReturnType<typeof createAudioPlayback> | null>(
+ 120:     null,
+ 121:   );
+ 122:   const [playback, setPlayback] = useState(initialAudioPlaybackState);
+ 123:   const [expanded, setExpanded] = useState(false);
+ 124:   const detailId = useId();
+ 125:   const toggleExpanded = () => setExpanded((value) => !value);
+ 126:   useEffect(() => {
+ 127:     if (!audio.current) return;
+ 128:     const player = createAudioPlayback(audio.current, src, setPlayback);
+ 129:     controller.current = player;
+ 130:     return () => {
+ 131:       controller.current = null;
+ 132:       player.dispose();
+ 133:     };
+ 134:   }, [src]);
+ 181:         </button>
+ 182:         <button
+ 183:           type="button"
+ 184:           className="audio-play-toggle"
+ 185:           disabled={!src || !!playback.mediaError}
+ 186:           onClick={() => controller.current?.toggle()}
+
+FILE src/bridge.ts
+ 505: export async function storeAttachmentOperation(
+ 506:   operationId: string,
+ 507:   noteId: string,
+ 508:   file: File,
+ 509:   recordedAt?: number,
+ 510: ): Promise<AttachmentOperationResult> {
+ 511:   if (!native) throw Error("附件持久提交请在已安装的应用中使用");
+ 512:   // Capture before file reading: a focus/access change during FileReader
+ 513:   // must reject the result, even if the backend has already stored bytes.
+ 514:   const stamp = accessGate.stamp(noteId);
+ 515:   const expected = accessGate.expected(noteId);
+ 516:   const date = attachmentRecordedAt(
+ 517:     recordedAt,
+ 518:     file.type.startsWith("audio/") ? "audio" : "file",
+ 519:   );
+ 520:   const data = await fileBase64(file);
+ 521:   const result = accept<AttachmentOperationResult>(
+ 522:     await invoke("store_attachment_operation", {
+ 523:       operationId,
+ 524:       noteId,
+ 525:       name: file.name,
+ 526:       mime: file.type || "application/octet-stream",
+ 527:       data,
+ 528:       expected,
+ 529:       ...(date === undefined ? {} : { recordedAt: date }),
+ 530:     }),
+ 531:     stamp,
+ 532:   );
+ 533:   if (result.attachment)
+ 534:     attachmentOwners.set(result.attachment.id, result.attachment.noteId);
+ 535:   return result;
+ 567: export async function readAttachment(id: string): Promise<{
+ 568:   data: string;
+ 569:   mime: string;
+ 570:   name: string;
+ 571:   recordedAt?: number | null;
+ 572: }> {
+ 573:   if (native) {
+ 574:     const noteId = attachmentOwners.get(id);
+ 575:     if (!noteId) throw Error("附件不存在");
+ 576:     const stamp = accessGate.stamp(noteId);
+ 577:     return accept(
+ 578:       await invoke("read_attachment", {
+ 579:         id,
+ 580:         expected: accessGate.expected(noteId),
+ 581:       }),
+ 582:       stamp,
+ 583:     );
+ 584:   }
+ 585:   const a = preview.attachments.find((x) => x.id === id);
+ 586:   return {
+ 587:     data: localStorage.getItem(`preview-file-${id}`) || "",
+ 588:     mime: a?.mime || "",
+ 589:     name: a?.displayName || "",
+ 590:     recordedAt: attachmentRecordedAt(a?.recordedAt, a?.kind || "file"),
+ 591:   };
+ 592: }
+ 593: export function fileBase64(file: Blob): Promise<string> {
+ 594:   return new Promise((resolve, reject) => {
+ 595:     const r = new FileReader();
+ 596:     r.onload = () => resolve(String(r.result).split(",")[1]);
+ 597:     r.onerror = reject;
+ 598:     r.readAsDataURL(file);
+ 599:   });
+ 600: }
+
+FILE src/recording-session.ts
+  37:   createRecorder: (stream) => {
+  38:     const mime = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm"].find(
+  39:       (type) => MediaRecorder.isTypeSupported(type),
+  40:     );
+  41:     return new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+  42:   },
+ 208:       recorder.ondataavailable = (event) => {
+ 209:         if (!this.accepting) return;
+ 210:         if (event.data.size) this.chunks.push(event.data);
+ 211:         const issued = this.issuedSnapshot;
+ 212:         if (issued) {
+ 213:           this.issuedSnapshot = undefined;
+ 214:           if (
+ 215:             issued === this.snapshotRequest &&
+ 216:             !issued.settled &&
+ 217:             issued.pause === this.observedPause &&
+ 218:             !this.stopping
+ 219:           ) {
+ 220:             const blob = new Blob([...this.chunks], {
+ 221:               type: recorder.mimeType,
+ 222:             });
+ 223:             this.settleSnapshot(
+ 224:               issued,
+ 225:               blob.size ? blob : undefined,
+ 226:               Error("暂停录音尚无可回放的数据，可继续录制或完成保存。"),
+ 227:             );
+ 228:           }
+ 229:           this.issueSnapshot();
+ 230:         }
+ 231:       };
+ 248:       recorder.onstop = () => {
+ 249:         if (!this.accepting) return;
+ 250:         this.stopping = true;
+ 251:         this.detachRecorder();
+ 252:         const errors = this.releaseCapture();
+ 253:         if (errors.length) {
+ 254:           this.fail(new AggregateError(errors, "录音资源释放失败。"));
+ 255:           return;
+ 256:         }
+ 257:         const blob = new Blob(this.chunks, { type: recorder.mimeType });
+ 258:         this.chunks = [];
+ 259:         this.finished = true;
+ 260:         this.callbacks.onStopped(blob);
+ 389:   /** A nonterminal prefix candidate, not a guarantee of a complete playable or
+ 390:    * seekable container. Main chunks and onStopped/final File are untouched. */
+ 391:   snapshot(): Promise<Blob> {
+ 392:     if (
+ 393:       !this.accepting ||
+ 394:       this.stopping ||
+ 395:       !this.recorder ||
+ 396:       (this.recorder.state !== "paused" &&
+ 397:         !this.pauseEvents.includes(this.pauseSequence))
+ 398:     )
+ 399:       return Promise.reject(Error("录音尚未实际暂停，不能创建回放快照。"));
+ 400:     if (this.snapshotRequest) return this.snapshotRequest.promise;
+ 449: export function createRecordingPreview(
+ 450:   blob: Blob,
+ 451:   urls: Pick<typeof URL, "createObjectURL" | "revokeObjectURL"> = URL,
+ 452: ) {
+ 453:   const url = urls.createObjectURL(blob);
+ 454:   let live = true;
+ 455:   return {
+ 456:     url,
+ 457:     dispose: () => {
+ 458:       if (!live) return;
+ 459:       live = false;
+ 460:       urls.revokeObjectURL(url);
+ 461:     },
+ 462:   };
+ 463: }
+
+FILE src/RecordingPanel.tsx
+  39: function recordingFile(blob: Blob): File {
+  40:   if (!blob.size) throw Error("录音没有可保存的音频，请重新录制。");
+  41:   // Use the recorder's actual format; never label unknown bytes as WebM.
+  42:   const format =
+  43:     /^audio\/(webm|mp4|ogg|wav|x-wav|aac|mpeg)(?:\s*;[^\r\n]*)?$/i.exec(
+  44:       blob.type,
+  45:     );
+  46:   if (!format) throw Error("设备返回了无法识别的录音格式，请重新录制。");
+  47:   const extensions: Record<string, string> = {
+  48:     webm: "webm",
+  49:     mp4: "m4a",
+  50:     ogg: "ogg",
+  51:     wav: "wav",
+  52:     "x-wav": "wav",
+  53:     aac: "aac",
+  54:     mpeg: "mp3",
+  55:   };
+  56:   return new File([blob], `新录音.${extensions[format[1].toLowerCase()]}`, {
+  57:     type: blob.type,
+  58:   });
+  59: }
+ 174:   useEffect(() => {
+ 175:     if (
+ 176:       !previewSource ||
+ 177:       !live.current ||
+ 178:       previewSource.generation !== previewGeneration.current ||
+ 179:       (phase.current !== "paused" && phase.current !== "retry")
+ 180:     )
+ 181:       return;
+ 182:     const generation = previewSource.generation;
+ 183:     let player: ReturnType<typeof createRecordingPlayback>;
+ 184:     try {
+ 185:       player = createRecordingPlayback(
+ 186:         new Audio(),
+ 187:         previewSource.blob,
+ 188:         (state) => {
+ 189:           if (
+ 190:             live.current &&
+ 191:             generation === previewGeneration.current &&
+ 192:             (phase.current === "paused" || phase.current === "retry")
+ 193:           ) {
+ 194:             previewStatus.current = state;
+ 195:             setPreviewState(state);
+ 196:           }
+ 197:         },
+ 198:       );
+ 199:       previewPlayer.current = player;
+ 200:     } catch (error) {
+ 201:       setPreviewError(errText(error));
+ 202:       return;
+ 203:     }
+ 204:     return () => {
+ 205:       player.dispose();
+ 206:       if (previewPlayer.current === player) previewPlayer.current = null;
+ 207:     };
+ 253:       onStopped: (blob) => {
+ 254:         if (!live.current) return;
+ 255:         if (phase.current !== "finalizing") {
+ 256:           fail(Error("录音意外停止，请重新录制。"));
+ 257:           return;
+ 258:         }
+ 259:         clearDeadline();
+ 260:         try {
+ 261:           const file = recordingFile(blob);
+ 262:           if (recordedAt.current === undefined)
+ 263:             throw Error("录音尚未确认开始时间，请重新录制。");
+ 264:           const result = Object.freeze({
+ 265:             file,
+ 266:             recordedAt: recordedAt.current,
+ 267:           });
+ 268:           finalResult.current = result;
+ 269:           void submit(result);
+ 270:         } catch (e) {
+ 271:           fail(e);
+ 272:         }
+ 273:       },
+
+FILE src/recording-playback.ts
+  29: // A recording-only skin over the existing production playback/probe controller.
+  30: // Its optimistic seek time is deliberately replaced by observed media time.
+  31: export function createRecordingPlayback(
+  32:   audio: HTMLAudioElement,
+  33:   blob: Blob,
+  34:   update: (state: RecordingPlaybackState) => void,
+  35:   options?: {
+  36:     urls?: Pick<typeof URL, "createObjectURL" | "revokeObjectURL">;
+  37:     createAudio?: () => HTMLAudioElement;
+  38:     seekTimeoutMs?: number;
+  39:   },
+  40: ) {
+  41:   const preview = createRecordingPreview(blob, options?.urls);
+  42:   let live = true;
+  43:   let media = { ...initialAudioPlaybackState };
+ 146:   let player!: ReturnType<typeof createAudioPlayback>;
+ 147:   let attached = false;
+ 148:   try {
+ 149:     player = createAudioPlayback(
+ 150:       audio,
+ 151:       preview.url,
+ 152:       (state) => {
+ 153:         media = state;
+ 154:         if (state.playError || state.mediaError) playPending = false;
+ 155:         publish();
+ 156:       },
+ 157:       { createAudio: options?.createAudio },
+ 158:     );
+ 159:     attached = true;
+ 160:     audio.load();
+
+FILE src/audio-playback.ts
+  29: function mediaErrorText(error: MediaError | null) {
+  30:   if (error?.code === 2) return "无法读取录音，请重试。";
+  31:   if (error?.code === 3) return "录音解码失败，请重试。";
+  32:   if (error?.code === 4) return "当前设备无法播放此录音格式。";
+  33:   return "录音加载失败，请重试。";
+  34: }
+ 240:     retry() {
+ 241:       if (!live) return;
+ 242:       if (state.mediaError) {
+ 243:         ++playAttempt;
+ 244:         stopProbe();
+ 245:         probeAttempted = false;
+ 246:         audio.pause();
+ 247:         publish({ ...initialAudioPlaybackState });
+ 248:         audio.load();
+
+FILE src-tauri/src/lib.rs
+ 243:     let bytes = B64.decode(data).map_err(|_| AppError {
+ 244:         code: "invalid".into(),
+ 245:         message: "文件编码错误".into(),
+ 246:         commit: None,
+ 247:     })?;
+ 248:     session_command(&app, &state, |session| {
+ 249:         session.store_attachment_operation(
+ 250:             window.label(),
+ 251:             &operation_id,
+ 252:             &note_id,
+ 253:             &name,
+ 254:             &mime,
+ 255:             &bytes,
+ 256:             &expected,
+ 257:             recorded_at,
+ 258:         )
+ 259:     })
+ 290: #[tauri::command]
+ 291: fn read_attachment(id: String, expected: Token, state: State<AppState>) -> Result<Value> {
+ 292:     let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
+ 293:     let note = session.store.attachment_note(&id)?;
+ 294:     session.sensitive(&note, &expected)?;
+ 295:     session.tagged(session.store.read_attachment(&id)?)
+ 296: }
+
+FILE src-tauri/src/store.rs
+ 818:     pub fn read_attachment(&self, aid: &str) -> Result<Value> {
+ 819:         let body: Option<String> = self
+ 820:             .db
+ 821:             .query_row("SELECT body FROM attachments WHERE id=?1", [aid], |r| {
+ 822:                 r.get(0)
+ 823:             })
+ 824:             .optional()?;
+ 825:         let a: Attachment =
+ 826:             serde_json::from_str(&body.ok_or_else(|| err("not_found", "附件不存在"))?)?;
+ 827:         let n = self.note(&a.note_id)?;
+ 828:         if n.locked && !self.keys.contains_key(&n.id) {
+ 829:             return Err(err("locked", "请先解锁"));
+ 830:         }
+ 831:         let bytes = fs::read(self.attachment_path(&a.relative_path)?)?;
+ 832:         Ok(
+ 833:             json!({"data":B64.encode(bytes),"mime":a.mime,"name":a.display_name,"recordedAt":a.recorded_at}),
+ 834:         )
+ 835:     }
+
+FILE src-tauri/tauri.conf.json
+   1: {
+   2:   "$schema": "https://schema.tauri.app/config/2",
+   3:   "productName": "备忘录",
+   4:   "version": "0.1.0",
+   5:   "identifier": "com.local.notesclone",
+   6:   "build": {
+   7:     "beforeDevCommand": "pnpm dev",
+   8:     "devUrl": "http://localhost:1420",
+   9:     "beforeBuildCommand": "pnpm build",
+  10:     "frontendDist": "../dist"
+  11:   },
+  12:   "app": {
+  13:     "windows": [
+  14:       {
+  15:         "title": "备忘录",
+  16:         "width": 1088,
+  17:         "height": 660,
+  18:         "minWidth": 700,
+  19:         "minHeight": 440,
+  20:         "titleBarStyle": "Overlay",
+  21:         "hiddenTitle": true,
+  22:         "trafficLightPosition": { "x": 18, "y": 20 }
+  23:       }
+  24:     ],
+  25:     "security": {
+  26:       "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: http://asset.localhost data: blob:; media-src 'self' asset: http://asset.localhost data: blob:; connect-src ipc: http://ipc.localhost 'self'; font-src 'self' data:; frame-src 'none'; child-src 'none'; object-src 'none'; form-action 'none'",
+  27:       "assetProtocol": { "enable": true, "scope": ["$APPDATA/attachments/**"] }
+  28:     }
+  29:   },
+  30:   "bundle": {
+  31:     "active": true,
+  32:     "targets": ["app"],
+  33:     "category": "Productivity",
+  34:     "shortDescription": "本地备忘录",
+  35:     "iOS": { "minimumSystemVersion": "15.0" },
+  36:     "android": { "minSdkVersion": 26 },
+  37:     "macOS": { "minimumSystemVersion": "12.0", "infoPlist": "Info.plist" }
+  38:   }
+  39: }
