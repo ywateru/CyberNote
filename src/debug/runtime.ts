@@ -212,14 +212,16 @@ export function registerDebug(getAdapter: () => DebugAdapter): () => void {
   const api: DebugAPI = Object.freeze({
     version: 1 as const,
     list: () =>
-      catalog.map((row) => ({
-        ...row,
-        available:
-          row.mode !== "unsupported" &&
-          (row.mode === "dom" ||
-            Object.prototype.hasOwnProperty.call(live().handlers, row.id)),
-        arguments: row.args,
-      })),
+      catalog.map((row) =>
+        structuredClone({
+          ...row,
+          available:
+            row.mode !== "unsupported" &&
+            (row.mode === "dom" ||
+              Object.prototype.hasOwnProperty.call(live().handlers, row.id)),
+          arguments: row.args,
+        }),
+      ),
     async execute(command: string, args: DebugArgs = {}) {
       live();
       const entry = catalog.find((row) => row.id === command);
@@ -299,7 +301,9 @@ export function registerDebug(getAdapter: () => DebugAdapter): () => void {
           throw error;
         fail(
           "APP_ERROR",
-          error instanceof Error ? error.message : String(error),
+          error && typeof error === "object" && "message" in error
+            ? String(error.message)
+            : String(error),
         );
       } finally {
         active--;
