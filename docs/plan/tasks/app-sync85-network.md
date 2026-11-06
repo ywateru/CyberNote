@@ -13,3 +13,5 @@
 独审设计修订：receive_head仅持久inbox，Receipt{durable,applied}区分已收与已应用；16MiB head必须分片重组，有总量/时限/深度预算，非仅blob分片。Prepared凭据→幂等DB adopt→Ready崩溃恢复，不允许身份文件与Store workspace失配时发数据。
 
 2026-11-06作者冻结：依赖5759ebe0、产品f58f63c8、证据dad423fc。14项真实网络/身份测试与clippy/fmt作者通过，独立verify进行中；未合入、未接生产Store，不视为双端同步交付。
+
+独审2026-11-06已确认阻塞：两个已配对client对相同hash均获得offset0并同时首块，Staging::write的旧offset被Protocol永久停；scripts/sync-network-test/tests/independent85.rs保留真实socket确定性栅栏复现及exit101原件。必须修复同hash正常并发的自动恢复并复验，不允许手动sync_now/串行化测试掩盖。作者新freeze后独审原测试保持不变。

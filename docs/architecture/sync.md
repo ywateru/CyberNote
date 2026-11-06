@@ -38,7 +38,7 @@ WireVersion V1：workspaceId、kind(note/folder)、entityId、vector(BTreeMap UU
 
 ## 独立附件
 
-业务库只存metadata/引用，不存图片录音二进制。同步blob保存于独立.sync/blobs/<sha256>.blob，网络先在不持Store锁时写独立随机staging，再通过本地File短调用完成发布（不得让Store reader等待socket）；校验长度和SHA256、文件fsync、原子rename并同步目录后才可被版本引用。对端不得指定本机路径。断线只重传/续传未完成blob，不创建可读坏引用；启动清理/恢复staging，不用本地attachment_operations。当前业务附件投影使用每个attachment独有的受管路径，避免purge一张笔记误删其他冲突副本共用文件。已发布冲突blob和待处理版本不得被本地journal回收。暂不自动GC未引用同步blob。
+业务库只存metadata/引用，不存图片录音二进制。同步blob保存于独立.sync/blobs/<sha256>.blob，网络先在不持Store锁时写独立随机staging，再通过本地File短调用完成发布（不得让Store reader等待socket）；校验长度和SHA256、文件fsync、原子rename并同步目录后才可被版本引用。对端不得指定本机路径。断线只重传/续传未完成blob，不创建可读坏引用；启动清理/恢复staging，不用本地attachment_operations。当前业务附件投影使用每个attachment独有的受管路径，避免purge一张笔记误删其他冲突副本共用文件。已发布冲突blob和待处理版本不得被本地journal回收。暂不自动GC未引用同步blob。同一hash允许多peer同时提供；两个peer先后取得相同续传offset是正常竞态，不能据此永久置为协议错误并等待用户手动同步。按hash串行或幂等复用均可，但必须验证长度/内容并在连接恢复后自动完成；最终发布和重复完成也应安全幂等，不增加完整文件副本或错误ACK。
 
 ## 配对、身份与传输
 
