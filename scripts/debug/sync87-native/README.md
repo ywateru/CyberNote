@@ -24,8 +24,11 @@ installs a fake platform. Native keyboard checks inspect real input_method.
 
 Screenshots are refused while a sensitive pairing/invitation input has a value;
 HTML evidence is cloned and input values removed. Invitations enter only over
-stdin, never command arguments, state files or evidence. Pair error responses
-redact details, and Runtime exceptions record only a count/event marker.
+stdin, never command arguments, state files or evidence. NDJSON is limited to 32768 UTF8 bytes before parsing; oversized streams stop
+without waiting for a newline. JSON/UTF8/schema errors emit fixed typed messages
+without request fields. All action errors also use fixed messages, never raw
+exception names/messages. Valid request IDs are protocol correlation identifiers
+and must not contain secrets. Runtime exceptions record only a count/event marker.
 
 ## Root package receipt
 
@@ -58,6 +61,7 @@ Run from this worktree, no emulator required:
 ```sh
 python3 scripts/debug/sync87-native/check_guards.py
 node scripts/debug/sync87-native/check-client.mjs
+node scripts/debug/sync87-native/check-input.mjs
 node scripts/debug/sync87-native/run.mjs --mode prepare --output /private/tmp/notes-sync87-native-new-run
 ```
 
