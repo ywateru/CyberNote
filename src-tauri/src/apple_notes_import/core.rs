@@ -651,8 +651,24 @@ fn source_note(read: Read, item: &ValidatedItem, stage: &OwnedStage) -> Result<S
     if body.attachments.len() > 1000 {
         return Err(error("source_limit", reason("source_limit")));
     }
+    let mut declared_total = 0u64;
+    for a in &body.attachments {
+        if a.status != "ok" {
+            return Err(error(
+                "source_attachment",
+                reason(a.reason.as_deref().unwrap_or(&a.status)),
+            ));
+        }
+        declared_total = declared_total
+            .checked_add(stage.export_size(a.export_index)?)
+            .ok_or_else(|| error("source_limit", reason("source_limit")))?;
+        if declared_total > 100 * 1024 * 1024 {
+            return Err(error("source_limit", reason("source_limit")));
+        }
+    }
     let mut media = Vec::new();
     let mut exports = HashSet::new();
+    let mut remaining = 100u64 * 1024 * 1024;
     for (index, a) in body.attachments.into_iter().enumerate() {
         if a.status != "ok" {
             return Err(error(
@@ -663,7 +679,8 @@ fn source_note(read: Read, item: &ValidatedItem, stage: &OwnedStage) -> Result<S
         if a.export_index != index || !exports.insert(a.export_index) {
             return Err(error("source_protocol", "源附件顺序无效"));
         }
-        let bytes = stage.read_export(a.export_index)?;
+        let bytes = stage.read_export_bounded(a.export_index, remaining)?;
+        remaining -= bytes.len() as u64;
         let name = a
             .name
             .filter(|n| !n.trim().is_empty())
@@ -765,6 +782,85 @@ impl OwnedStage {
         true
     }
     pub(crate) fn read_export(&self, index: usize) -> Result<Vec<u8>> {
+        self.read_export_bounded(index, 100 * 1024 * 1024)
+    }
+    fn export_size(&self, index: usize) -> Result<u64> {
+        if !self.intact() {
+            return Err(error("source_stage", "附件暂存已失效"));
+        }
+        let path = self
+            .exports
+            .get(index)
+            .ok_or_else(|| error("source_stage", "附件暂存索引无效"))?;
+        let m = std::fs::symlink_metadata(path)
+            .map_err(|_| error("source_attachment", reason("export_failed")))?;
+        if !m.is_file() || m.file_type().is_symlink() {
+            return Err(error("source_attachment", reason("unsupported_object")));
+        }
+        if m.len() > 100 * 1024 * 1024 {
+            return Err(error("source_limit", reason("source_limit")));
+        }
+        Ok(m.len())
+    }
+    // Admission limits for our fresh stage, not a hard quota on Notes itself.
+    // An already-dispatched save may finish inside Notes after its caller exits.
+    fn check_budget(&self) -> Result<()> {
+        if !self.intact() {
+            return Err(error("source_stage", "导入暂存已失效"));
+        }
+        let mut total = 0u64;
+        let mut count = 0usize;
+        for entry in
+            std::fs::read_dir(&self.root).map_err(|_| error("source_stage", "暂存不可读"))?
+        {
+            count += 1;
+            if count > 1002 {
+                return Err(error("source_limit", reason("source_limit")));
+            }
+            let entry = entry.map_err(|_| error("source_stage", "暂存不可读"))?;
+            let path = entry.path();
+            if path == self.root.join("stdout") || path == self.root.join("stderr") {
+                continue;
+            }
+            if !self.exports.contains(&path) {
+                return Err(error("source_stage", "导出产生了不支持的暂存文件"));
+            }
+            let m = std::fs::symlink_metadata(&path)
+                .map_err(|_| error("source_stage", "暂存不可读"))?;
+            if !m.is_file() || m.file_type().is_symlink() {
+                return Err(error("source_attachment", reason("unsupported_object")));
+            }
+            total = total
+                .checked_add(m.len())
+                .ok_or_else(|| error("source_limit", reason("source_limit")))?;
+            if m.len() > 100 * 1024 * 1024 || total > 100 * 1024 * 1024 {
+                return Err(error("source_limit", reason("source_limit")));
+            }
+        }
+        #[cfg(unix)]
+        {
+            use std::os::unix::ffi::OsStrExt;
+            let root = std::ffi::CString::new(self.root.as_os_str().as_bytes())
+                .map_err(|_| error("source_stage", "暂存路径无效"))?;
+            let mut stat: libc::statvfs = unsafe { std::mem::zeroed() };
+            if unsafe { libc::statvfs(root.as_ptr(), &mut stat) } != 0 {
+                return Err(error("source_stage", "无法确认磁盘剩余空间"));
+            }
+            let unit = if stat.f_frsize == 0 {
+                stat.f_bsize
+            } else {
+                stat.f_frsize
+            };
+            if (stat.f_bavail as u128) * (unit as u128) < 512 * 1024 * 1024 {
+                return Err(error(
+                    "source_space",
+                    "磁盘剩余空间不足512MiB，已停止本轮复制",
+                ));
+            }
+        }
+        Ok(())
+    }
+    fn read_export_bounded(&self, index: usize, remaining: u64) -> Result<Vec<u8>> {
         use std::io::Read;
         let path = self
             .exports
@@ -775,8 +871,11 @@ impl OwnedStage {
         }
         let m = std::fs::symlink_metadata(path)
             .map_err(|_| error("source_attachment", reason("export_failed")))?;
-        if !m.is_file() || m.file_type().is_symlink() || m.len() > 100 * 1024 * 1024 {
+        if !m.is_file() || m.file_type().is_symlink() {
             return Err(error("source_attachment", reason("unsupported_object")));
+        }
+        if m.len() > remaining || m.len() > 100 * 1024 * 1024 {
+            return Err(error("source_limit", reason("source_limit")));
         }
         let mut options = std::fs::OpenOptions::new();
         options.read(true);
@@ -802,7 +901,7 @@ impl OwnedStage {
             }
         }
         let mut bytes = Vec::new();
-        file.take(100 * 1024 * 1024 + 1)
+        file.take(remaining + 1)
             .read_to_end(&mut bytes)
             .map_err(|_| error("source_attachment", reason("export_failed")))?;
         if bytes.len() as u64 != m.len() {
@@ -816,14 +915,7 @@ impl Drop for OwnedStage {
         if !self.intact() {
             return;
         }
-        for path in self
-            .exports
-            .iter()
-            .chain([self.root.join("stdout"), self.root.join("stderr")].iter())
-        {
-            let _ = std::fs::remove_file(path);
-        }
-        let _ = std::fs::remove_dir(&self.root);
+        let _ = std::fs::remove_dir_all(&self.root);
     }
 }
 #[cfg(target_os = "macos")]
@@ -838,9 +930,7 @@ fn run_source(request: Value, stage: &OwnedStage, cancel: &AtomicBool) -> Result
     if cancel.load(Ordering::Acquire) {
         return Err(error("cancelled", reason("cancelled")));
     }
-    if !stage.intact() {
-        return Err(error("source_stage", "导入暂存已失效"));
-    }
+    stage.check_budget()?;
     let output = OpenOptions::new()
         .write(true)
         .create_new(true)
@@ -870,6 +960,7 @@ fn run_source(request: Value, stage: &OwnedStage, cancel: &AtomicBool) -> Result
     if !status.success() {
         return Err(error("source_process", "系统备忘录读取失败，请稍后重试"));
     }
+    stage.check_budget()?;
     let file = std::fs::File::open(stage.root.join("stdout"))
         .map_err(|_| error("source_protocol", "来源返回不可读"))?;
     let mut bytes = Vec::new();
@@ -891,6 +982,11 @@ fn wait_source(
     use std::time::{Duration, Instant};
     let start = Instant::now();
     loop {
+        if let Err(error) = stage.check_budget() {
+            let _ = child.kill();
+            let _ = child.wait();
+            return Err(error);
+        }
         if std::fs::metadata(stage.root.join("stdout")).is_ok_and(|m| m.len() > 24 * 1024 * 1024)
             || std::fs::metadata(stage.root.join("stderr")).is_ok_and(|m| m.len() > 64 * 1024)
         {

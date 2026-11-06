@@ -330,7 +330,7 @@ fn same_core_worker_runs_preview_read_stage_session_store_and_duplicate_retry() 
         );
     }
     let value = host.session.lock().unwrap().workspace().unwrap();
-    assert_eq!(value["metadata"]["sequence"],1);
+    assert_eq!(value["metadata"]["sequence"], 1);
     assert_eq!(value["notes"].as_array().unwrap().len(), 1);
     assert_eq!(value["attachments"].as_array().unwrap().len(), 2);
     assert_eq!(value["notes"][0]["createdAt"], 1000);
@@ -640,4 +640,70 @@ fn actual_readonly_source_worker_to_isolated_store() {
     let path = output.join("safe-report.json");
     std::fs::write(&path, serde_json::to_vec_pretty(&report).unwrap()).unwrap();
     std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o600)).unwrap();
+}
+#[test]
+fn oversized_combined_metadata_is_rejected_before_loading_any_attachment() {
+    let (scan, _, _) = validate_scan(scan()).unwrap();
+    let item = scan.items.values().next().unwrap();
+    let stage = OwnedStage::new().unwrap();
+    for index in 0..2 {
+        let file = std::fs::File::create(stage.export_path(index).unwrap()).unwrap();
+        file.set_len(65 * 1024 * 1024).unwrap();
+    }
+    let read = Read {
+        version: 1,
+        status: "ok".into(),
+        reason: None,
+        note: Some(Body {
+            id: item.id.clone(),
+            title: item.title.clone(),
+            folder_id: item.folder_id.clone(),
+            html: "<p>合成</p>".into(),
+            plain_text: "合成".into(),
+            created_at_ms: 1,
+            updated_at_ms: 2,
+            attachments: (0..2)
+                .map(|index| Media {
+                    id: format!("synthetic-{index}"),
+                    cid: None,
+                    name: None,
+                    status: "ok".into(),
+                    reason: None,
+                    export_index: index,
+                })
+                .collect(),
+            stable: true,
+        }),
+    };
+    assert_eq!(
+        source_note(read, item, &stage).err().unwrap().code,
+        "source_limit"
+    );
+}
+#[cfg(target_os = "macos")]
+#[test]
+fn stage_export_budget_stops_only_owned_process_before_timeout() {
+    let stage = OwnedStage::new().unwrap();
+    std::fs::File::create(stage.export_path(0).unwrap())
+        .unwrap()
+        .set_len(100 * 1024 * 1024 + 1)
+        .unwrap();
+    let mut child = std::process::Command::new("/bin/sleep")
+        .arg("20")
+        .spawn()
+        .unwrap();
+    let start = std::time::Instant::now();
+    assert_eq!(
+        wait_source(
+            &mut child,
+            &stage,
+            &AtomicBool::new(false),
+            std::time::Duration::from_secs(2)
+        )
+        .unwrap_err()
+        .code,
+        "source_limit"
+    );
+    assert!(start.elapsed() < std::time::Duration::from_secs(1));
+    assert!(child.try_wait().unwrap().is_some());
 }
