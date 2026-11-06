@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "ownedStateStatus": "stopped",
+  "processes": {
+    "ownedEmulator": {
+      "pid": 82547,
+      "present": false
+    },
+    "ownedSupervisor": {
+      "pid": 82501,
+      "present": false
+    },
+    "ownedDesktopPeer": {
+      "pid": 76549,
+      "present": false
+    }
+  },
+  "ownedPorts": {
+    "5584": {
+      "listenerPresent": false
+    },
+    "5585": {
+      "listenerPresent": false
+    },
+    "19400": {
+      "listenerPresent": false
+    },
+    "19401": {
+      "listenerPresent": false
+    }
+  },
+  "scope": "read-only checks only exact owned process IDs and ports; no other devices/processes inspected or modified"
+}
