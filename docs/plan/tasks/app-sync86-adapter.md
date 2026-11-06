@@ -35,3 +35,11 @@ run/setup创建共享Session和惰性Sync runtime state；status不启用Store�
 未启用库首次pair必须先创建可恢复本机device/Noise身份，再构建backend；其workspace查询在adopt前不得假称已启用。仅Noise成功Prepared后调用84可指定device的enable/adopt入口。Store已启用时用Store device打开85 IdentityStore，严格拒绝文件身份漂移；status无副作用。冷启失败pair也可恢复相同本机UUID；不通过读写私钥JSON猜字段绕85身份API，需要公共只读加载入口时由85所有者明确增加并复验。
 
 实现分工细化：本任务作者拥有Rust adapter/Session/lib/生命周期/真实Rust与headless测试；前端quiet接线由[86 frontend](app-sync86-frontend.md)独立worktree并行开发，均遵循[固定窗口协议](../../architecture/sync-coordinator.md)，避免两人改App/bridge同路径。生产整合及独审必须汇合两者，不能只backend或只fixture验收。
+
+### 本机真实Rust transport接线（86实现接口）
+
+`notes-current-attachment-transport ROOT`继续用逐行stdin JSON请求与逐行stdout JSON响应：`{requestId,window,command,args}`→`{requestId,ok,value?,error?,events:[]}`。新命令`sync_command`的args为`{command:<UI discriminated union>,expected:<Token>}`；`sync_window_reply`为`{reply:<固定probe/prepare union>,expected:<Token>}`。两者实际调用生产Runtime/Session/Store。`sync_command`由独立本机线程处理，pair不阻塞stdin读取；requestId关联乱序响应，客户端pair timeout至少35秒。
+
+`set_document_participants`的args为`{windows:["main","note-…"]}`，替换测试进程的真实本机窗口集合（最长64，唯一且只允许main/note-前缀）；由App DOM transport明确登记/注销，不从peer消息取窗口身份。`poll_events`的args为`{}`，返回`value:null`、`events:[{name:"notes-sync"|"notes-access"|"notes-metadata",payload:…}]`，原子排空异步事件队列。调用其他命令时也可带回已排队事件；客户端需持续并发poll，不能等pair或sync命令返回才处理probe/prepare。生产App使用AppHandle的实际document_participants和Emitter，不用这些测试命令。
+
+`headless_apply`仅stdin测试runner提供：必须先把participants设为空，显式调用才执行生产Store计划/应用；有窗口时明确拒绝。生产网络backend永远只receive inbox，不调用该命令或apply_pending。普通现有attachment transport命令保持原参数和响应。该本机stdin控制不对网络暴露，不替代真实PM/录音/窗口生命周期证明。
