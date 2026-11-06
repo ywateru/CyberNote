@@ -8,6 +8,6 @@ Noise spec及snow官方Rust文档已取得，用标准XXpsk3传输而不是自�
 
 EasyTier官方GitHub README已取得，组网只提供可达IP，业务版本/附件一致性仍由本应用保证；尚未实际建立虚拟组网，不将方案当验收。
 
-Cloudflare官方文档仓库当前路径为src/content/docs/tunnel/get-started/quick-tunnels/index.mdx，已取得原文；旧cloudflare-one路径404不追认为成功。官方说明Quick Tunnel可无账号临时公开本地HTTP服务，hostname随进程变化，适合测试开发而无uptime保证。带邮箱交互验证的模式不适合本项目非交互客户端，因此采用应用内Noise配对认证；真实用户库不会自动公开。后续只用隔离合成库实际验证隧道路线。WireGuard官网当前连接失败，尚未取得该页，不把EasyTier资料冒充WireGuard协议证据。
+Cloudflare官方文档仓库当前路径为src/content/docs/tunnel/get-started/quick-tunnels/index.mdx，已取得原文；旧cloudflare-one路径404不追认为成功。官方说明Quick Tunnel可无账号临时公开本地HTTP服务，hostname随进程变化，适合测试开发而无uptime保证。带邮箱交互验证的模式不适合本项目非交互客户端，因此采用应用内Noise配对认证；真实用户库不会自动公开。后续只用隔离合成库实际验证隧道路线。WireGuard protocol/whitepaper首次连接重置，随后官方quickstart实际取得200并保全，protocol页本身仍未取得；不把EasyTier资料冒充WireGuard协议证据。
 
 设计独审已纠正：inbox与apply/ACK区分、系统目录排除、完整依赖重投影、单体与全图验证分离、WireAttachment排除path、head分片与总预算、身份/DB跨介质恢复、quiet IME屏障与录音全局epoch重绑。实现通过仍待准确冻结源码审查。
