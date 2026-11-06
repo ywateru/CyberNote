@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "base": "95aa2c3f",
+  "frozenAuthor": "176f3dcd",
+  "results": [
+    {
+      "name": "Shared reader retries only first exact read137 and records fixed first event",
+      "pass": true
+    },
+    {
+      "name": "Shared reader second137 and other failures propagate without extra observations",
+      "pass": true
+    },
+    {
+      "name": "nativeNode shared read retry then failing hold does not replay action",
+      "pass": true
+    },
+    {
+      "name": "nativeTap uses shared reader and failing tap is never replayed",
+      "pass": true
+    },
+    {
+      "name": "Each UIA and action retains independent strict guard ownership chain (static)",
+      "pass": true
+    },
+    {
+      "name": "attachmentsOpen restores exact owned synthetic note and observes Store before chooser",
+      "pass": true
+    },
+    {
+      "name": "Recent selection uses exact package/title/fixture names and only normal native UI actions",
+      "pass": true
+    },
+    {
+      "name": "Shared observation events flush once as fixed event records before client close",
+      "pass": true
+    }
+  ],
+  "hostOnly": true,
+  "adbCalls": 0,
+  "deviceActions": 0,
+  "limits": "Source/host-only delta review; real attachment selection/persistence/export and sync remain unaccepted."
+}
