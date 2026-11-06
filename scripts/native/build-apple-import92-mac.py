@@ -23,14 +23,17 @@ def sha(data):
 
 
 def main():
-    if len(sys.argv) != 2:
-        raise SystemExit("Usage after build admission: python3 build-apple-import92-mac.py EXACT_MAIN_ROOT")
+    if len(sys.argv) not in (2, 3) or (len(sys.argv) == 3 and sys.argv[2] != "--finalize-original"):
+        raise SystemExit("Usage after build admission: python3 build-apple-import92-mac.py EXACT_MAIN_ROOT [--finalize-original]")
+    finalize = len(sys.argv) == 3
     root = Path(sys.argv[1]).resolve(strict=True)
-    out = root / "docs/verification/apple-notes-import92/mac-build"
+    out = root / ("docs/verification/apple-notes-import92/mac-build-finalize02" if finalize
+                  else "docs/verification/apple-notes-import92/mac-build")
     artifact = root / "artifacts/import92"
     if out.exists():
         raise SystemExit("Refuse overwrite existing Mac30 build evidence")
-    for name in ["mac-original.app", "备忘录.app", "备忘录-Mac30.zip", "mac-dist"]:
+    for name in (["备忘录.app", "备忘录-Mac30.zip", "mac-dist"] if finalize else
+                 ["mac-original.app", "备忘录.app", "备忘录-Mac30.zip", "mac-dist"]):
         if (artifact / name).exists():
             raise SystemExit("Refuse overwrite existing Mac30 artifact: " + name)
 
@@ -62,6 +65,16 @@ def main():
         return rows
 
     before = inputs()
+    previous = None
+    if finalize:
+        prior_path = root / "docs/verification/apple-notes-import92/mac-build/result.json"
+        previous = json.loads(prior_path.read_text())
+        if (previous.get("status") != "failed" or previous.get("approvedProductHead") != APPROVED
+                or previous.get("inputBefore") != before or previous.get("inputAfterBuild") != before
+                or not previous.get("originalFiles")
+                or not any(c["name"] == "mac-build" and c["exitCode"] == 0 for c in previous.get("commands", []))
+                or not any(c["name"] == "copy-original" and c["exitCode"] == 0 for c in previous.get("commands", []))):
+            raise RuntimeError("Cannot finalize an unverified original build stage")
     entitlements = root / "src-tauri/Entitlements.plist"
     expected_entitlements = plistlib.loads(entitlements.read_bytes())
     if expected_entitlements.get("com.apple.security.automation.apple-events") is not True:
@@ -77,6 +90,10 @@ def main():
               "inputCount": len(before), "inputPathsDynamic": True,
               "expectedEntitlements": expected_entitlements, "expectedUsageDescription": expected_usage,
               "artifactDirectory": str(artifact), "commands": []}
+    if finalize:
+        result["continuationOf"] = str(prior_path)
+        result["priorResultSha256"] = sha(prior_path.read_bytes())
+        result["compileReused"] = True
 
     def save():
         (out / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
@@ -99,17 +116,19 @@ def main():
                  "sha256": sha(p.read_bytes())} for p in sorted(folder.rglob("*"))
                 if p.is_file() and not p.is_symlink()]
 
-    def inspect_bundle(label, app):
+    def inspect_bundle(label, app, require_expected):
         # Verify the actual signed entitlement blob, never infer it from config.
         signed = run("entitlements-" + label,
                      ["codesign", "-d", "--entitlements", ":-", str(app)], capture=True)
-        actual = plistlib.loads(signed)
-        if actual != expected_entitlements:
+        actual = plistlib.loads(signed) if signed.strip() else None
+        if require_expected and actual != expected_entitlements:
             raise RuntimeError(label + " actual signature entitlements differ from approved plist")
         info = plistlib.loads((app / "Contents/Info.plist").read_bytes())
         if info.get("NSAppleEventsUsageDescription") != expected_usage:
             raise RuntimeError(label + " actual bundle usage description differs from approved source")
         result[label + "BundleInfo"] = {"entitlements": actual,
+                                       "signedEntitlementsPresent": bool(signed.strip()),
+                                       "entitlementsMatchExpected": actual == expected_entitlements,
                                        "NSAppleEventsUsageDescription": info["NSAppleEventsUsageDescription"],
                                        "CFBundleExecutable": info.get("CFBundleExecutable"),
                                        "infoSha256": sha((app / "Contents/Info.plist").read_bytes())}
@@ -117,27 +136,34 @@ def main():
         save()
 
     try:
-        env = {**os.environ, "CARGO_NET_OFFLINE": "true"}
-        # The approved package output lives at the default project target, so a
-        # caller's unrelated target override must not redirect this exact build.
-        env.pop("CARGO_TARGET_DIR", None)
-        result["buildEnvironment"] = {"CARGO_NET_OFFLINE": "true", "CARGO_TARGET_DIR": "unset"}
-        run("mac-build", ["pnpm", "mac:build"], env=env)
-        result["inputAfterBuild"] = inputs()
-        if result["inputAfterBuild"] != before:
-            raise RuntimeError("Build inputs changed")
-        source = root / "src-tauri/target/release/bundle/macos/备忘录.app"
         raw, derived = artifact / "mac-original.app", artifact / "备忘录.app"
         archive = artifact / "备忘录-Mac30.zip"
-        run("copy-original", ["ditto", str(source), str(raw)])
-        result["originalFiles"] = manifest(raw)
+        if finalize:
+            result["originalFiles"] = manifest(raw)
+            if result["originalFiles"] != previous["originalFiles"]:
+                raise RuntimeError("Original bundle differs from preserved first build")
+            result["inputAfterBuild"] = inputs()
+        else:
+            env = {**os.environ, "CARGO_NET_OFFLINE": "true"}
+            # Keep the approved default output, regardless of a caller's cache override.
+            env.pop("CARGO_TARGET_DIR", None)
+            result["buildEnvironment"] = {"CARGO_NET_OFFLINE": "true", "CARGO_TARGET_DIR": "unset"}
+            run("mac-build", ["pnpm", "mac:build"], env=env)
+            result["inputAfterBuild"] = inputs()
+            if result["inputAfterBuild"] != before:
+                raise RuntimeError("Build inputs changed")
+            source = root / "src-tauri/target/release/bundle/macos/备忘录.app"
+            run("copy-original", ["ditto", str(source), str(raw)])
+            result["originalFiles"] = manifest(raw)
         run("verify-original", ["codesign", "--verify", "--deep", "--strict", "--verbose=4", str(raw)], required=False)
-        inspect_bundle("original", raw)
+        # Preserve and describe the bundler/linker signature honestly; only the
+        # derived deliverable is required to contain the approved entitlements.
+        inspect_bundle("original", raw, require_expected=False)
         run("copy-derived", ["ditto", str(raw), str(derived)])
         run("sign-derived", ["codesign", "--force", "--sign", "-", "--timestamp=none",
                              "--entitlements", str(entitlements), str(derived)])
         run("verify-derived", ["codesign", "--verify", "--deep", "--strict", "--verbose=4", str(derived)])
-        inspect_bundle("derived", derived)
+        inspect_bundle("derived", derived, require_expected=True)
         result["derivedFiles"] = manifest(derived)
         first = {p["path"]: p for p in result["originalFiles"]}
         second = {p["path"]: p for p in result["derivedFiles"]}
