@@ -40,3 +40,9 @@
 ## 共用原生层状态（用户后续数据管理81）
 
 ToolbarState新增可选`contentOverlay:boolean`，serde缺省false以兼容旧调用；guest/App→Rust model/macOS→ObjC链同名传输。App计算图片预览或数据管理打开时为true，原生布局隐藏主编辑工具分组、标题和搜索，仅保留交通灯与52pt可拖动根区域，DOM预览/管理都从原生保留区以下排版。关闭或受权清理后恢复既有布局，迟到旧revision不能复显。不能仅提高DOM z-index。数据管理组件不负责native IPC，由App统一拥有此状态。
+
+## 原生工具栏异步同步补充
+
+普通native update仍在途时打开contentOverlay，若旧update随后因search_composition/stale_search拒绝，不得让较新的overlay desired永远停在队列；只对确有更新的desired继续处理，不重试同一失败请求造成自旋。关闭overlay也应恢复工具组，不能被此前搜索阻塞标志永久挡住。
+
+若为保留输入法未完成输入而保留旧revision搜索事件，必须提供明确`searchScope`：App根据导航、当前笔记、authority stamp、编辑器身份和正文版本生成，排除overlay状态与query值。同scope且确有overlay转换时才允许有限旧搜索provenance；普通无overlay更新/跨导航/正文/authority改变不能接受旧值或触发旧intent。scope改变、invalidate/stop/release清历史；已知旧scope序号最多仅确认transport，不能采用其query。历史数量有界；旧revision普通action继续拒绝。需要deferred更新及restore、旧action、scope变化和invalidate-inflight反例。
