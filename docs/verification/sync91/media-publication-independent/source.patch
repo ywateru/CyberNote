@@ -1,0 +1,920 @@
+diff --git a/scripts/debug/rust/Cargo.lock b/scripts/debug/rust/Cargo.lock
+index 03b2ef07..6b049043 100644
+--- a/scripts/debug/rust/Cargo.lock
++++ b/scripts/debug/rust/Cargo.lock
+@@ -624,6 +624,7 @@ dependencies = [
+  "base64",
+  "fs2",
+  "futures-util",
++ "libc",
+  "rand 0.8.8",
+  "rusqlite",
+  "rustls",
+diff --git a/scripts/debug/rust/Cargo.toml b/scripts/debug/rust/Cargo.toml
+index 36fee89b..ae252dc0 100644
+--- a/scripts/debug/rust/Cargo.toml
++++ b/scripts/debug/rust/Cargo.toml
+@@ -13,6 +13,7 @@ argon2 = "0.5"
+ rand = "0.8"
+ sha2 = "0.10"
+ fs2 = "0.4"
++libc = "0.2"
+ snow = "0.9.6"
+ url = "2"
+ tokio = { version = "1", features = ["rt", "net", "time", "sync", "macros"] }
+diff --git a/scripts/sync84/Cargo.lock b/scripts/sync84/Cargo.lock
+index 5090b02f..6cab5a3d 100644
+--- a/scripts/sync84/Cargo.lock
++++ b/scripts/sync84/Cargo.lock
+@@ -624,6 +624,7 @@ dependencies = [
+  "base64",
+  "fs2",
+  "futures-util",
++ "libc",
+  "rand 0.8.8",
+  "rusqlite",
+  "rustls",
+diff --git a/scripts/sync84/Cargo.toml b/scripts/sync84/Cargo.toml
+index 13e222cc..240a6f2d 100644
+--- a/scripts/sync84/Cargo.toml
++++ b/scripts/sync84/Cargo.toml
+@@ -13,6 +13,7 @@ argon2 = "0.5"
+ rand = "0.8"
+ sha2 = "0.10"
+ fs2 = "0.4"
++libc = "0.2"
+ tempfile = "3"
+ snow = "0.9.6"
+ url = "2"
+diff --git a/src-tauri/Cargo.lock b/src-tauri/Cargo.lock
+index 752d4d1e..c228912c 100644
+--- a/src-tauri/Cargo.lock
++++ b/src-tauri/Cargo.lock
+@@ -2115,6 +2115,7 @@ dependencies = [
+  "base64 0.22.1",
+  "fs2",
+  "futures-util",
++ "libc",
+  "rand 0.8.8",
+  "rusqlite",
+  "rustls",
+diff --git a/src-tauri/Cargo.toml b/src-tauri/Cargo.toml
+index 335421d0..fc8beeeb 100644
+--- a/src-tauri/Cargo.toml
++++ b/src-tauri/Cargo.toml
+@@ -23,6 +23,7 @@ aes-gcm = "0.10"
+ argon2 = "0.5"
+ sha2 = "0.10"
+ fs2 = "0.4"
++libc = "0.2"
+ rand = "0.8"
+ snow = "0.9.6"
+ url = "2"
+diff --git a/src-tauri/src/session/synchronization.rs b/src-tauri/src/session/synchronization.rs
+index 29ec5056..931a67a8 100644
+--- a/src-tauri/src/session/synchronization.rs
++++ b/src-tauri/src/session/synchronization.rs
+@@ -242,6 +242,11 @@ impl Session {
+             note_epoch: None,
+         }
+     }
++    pub(crate) fn sync_media_keep_all(&self) -> Option<&str> {
++        self.quiet.current.as_ref().and_then(|q| q.resolution.as_ref())
++            .filter(|r| r.keep_all && r.kind == EntityKind::Note)
++            .map(|r| r.entity_id.as_str())
++    }
+     pub(crate) fn sync_has_operation(&self) -> bool {
+         self.quiet.current.is_some()
+     }
+diff --git a/src-tauri/src/store/synchronization.rs b/src-tauri/src/store/synchronization.rs
+index d4d27d98..25d0099d 100644
+--- a/src-tauri/src/store/synchronization.rs
++++ b/src-tauri/src/store/synchronization.rs
+@@ -10,6 +10,8 @@ use std::{
+ mod blob;
+ #[path = "synchronization/media.rs"]
+ pub(crate) mod media;
++#[path = "synchronization/publication.rs"]
++mod publication;
+ #[path = "synchronization/projection.rs"]
+ mod projection;
+ #[path = "synchronization/schema.rs"]
+diff --git a/src-tauri/src/store/synchronization/media.rs b/src-tauri/src/store/synchronization/media.rs
+index de840147..96a09b8e 100644
+--- a/src-tauri/src/store/synchronization/media.rs
++++ b/src-tauri/src/store/synchronization/media.rs
+@@ -4,24 +4,24 @@ use super::*;
+ use sha2::{Digest, Sha256};
+ use std::{cell::RefCell, fs::File, sync::Arc, time::SystemTime};
+ 
+-fn stale() -> AppError {
++pub(super) fn stale() -> AppError {
+     err("sync_plan_stale", "同步媒体快照已变化，请重新准备")
+ }
+ #[derive(Clone, PartialEq, Eq)]
+-struct Stamp {
+-    size: u64,
+-    modified: Option<SystemTime>,
++pub(super) struct Stamp {
++    pub(super) size: u64,
++    pub(super) modified: Option<SystemTime>,
+     #[cfg(unix)]
+-    dev: u64,
++    pub(super) dev: u64,
+     #[cfg(unix)]
+-    ino: u64,
++    pub(super) ino: u64,
+     #[cfg(unix)]
+-    ctime: (i64, i64),
++    pub(super) ctime: (i64, i64),
+     #[cfg(unix)]
+-    links: u64,
++    pub(super) links: u64,
+ }
+ impl Stamp {
+-    fn of(meta: &fs::Metadata) -> Result<Self> {
++    pub(super) fn of(meta: &fs::Metadata) -> Result<Self> {
+         if !meta.is_file() || meta.file_type().is_symlink() || meta.len() > MAX_BLOB {
+             return Err(invalid("媒体凭据不是有界本地普通文件"));
+         }
+@@ -43,12 +43,12 @@ impl Stamp {
+ }
+ #[derive(Clone)]
+ pub(crate) struct VerifiedFile {
+-    file: Arc<File>,
+-    stamp: Stamp,
+-    hash: String,
++    pub(super) file: Arc<File>,
++    pub(super) stamp: Stamp,
++    pub(super) hash: String,
+ }
+ impl VerifiedFile {
+-    fn current(&self, path: &Path) -> bool {
++    pub(super) fn current(&self, path: &Path) -> bool {
+         let check = || -> Result<bool> {
+             Ok(Stamp::of(&fs::symlink_metadata(path)?)? == self.stamp
+                 && Stamp::of(&self.file.metadata()?)? == self.stamp)
+@@ -99,6 +99,8 @@ pub(crate) struct MediaSnapshot {
+     locals: BTreeMap<String, Local>,
+     references: BTreeMap<String, u64>,
+     targets: BTreeMap<PathBuf, (String, u64)>,
++    candidates: BTreeMap<String, BTreeMap<String, usize>>,
++    keep_all: Option<String>,
+     cache: BTreeMap<PathBuf, VerifiedFile>,
+ }
+ pub(crate) struct VerifiedMedia {
+@@ -108,6 +110,8 @@ pub(crate) struct VerifiedMedia {
+     absent: BTreeSet<PathBuf>,
+     locals: BTreeMap<String, (String, u64)>,
+     blobs: BTreeMap<String, (u64, bool)>,
++    directory: Arc<super::publication::Directory>,
++    staged: RefCell<BTreeMap<String, Vec<super::publication::Staged>>>,
+ }
+ impl Store {
+     fn media_generation(&self) -> Result<String> {
+@@ -182,6 +186,7 @@ impl Store {
+         }
+         let mut references = BTreeMap::new();
+         let mut targets = BTreeMap::new();
++        let mut candidates: BTreeMap<String, BTreeMap<String, usize>> = BTreeMap::new();
+         for wire in wires {
+             // Redacted heads have no payload. Their replacement dirty rows are
+             // captured above; incoming wire already passed the complete schema gate.
+@@ -195,6 +200,14 @@ impl Store {
+                 vec![]
+             };
+             for a in media {
++                let count = candidates
++                    .entry(wire.entity_id.clone())
++                    .or_default()
++                    .entry(a.sha256.clone())
++                    .or_default();
++                *count = count
++                    .checked_add(1)
++                    .ok_or_else(|| limit("媒体候选数量溢出"))?;
+                 if references
+                     .insert(a.sha256.clone(), a.size)
+                     .is_some_and(|s| s != a.size)
+@@ -232,6 +245,8 @@ impl Store {
+             locals,
+             references,
+             targets,
++            candidates,
++            keep_all: None,
+             cache: self.sync_media_cache.clone(),
+         })
+     }
+@@ -280,8 +295,15 @@ impl Store {
+     }
+ }
+ impl MediaSnapshot {
++    /// Reserve independent byte capabilities for IDs created by keep-all inside
++    /// the eventual transaction. No extra copies for ordinary quiet ticks.
++    pub(crate) fn reserve_keep_all(mut self, note: Option<&str>) -> Self {
++        self.keep_all = note.map(str::to_string);
++        self
++    }
+     /// Owns only root/file capabilities and metadata; never owns Session/SQLite.
+     pub(crate) fn verify(self) -> Result<VerifiedMedia> {
++        let directory = super::publication::Directory::open(self.root.join("attachments"))?;
+         let mut verified = VerifiedMedia {
+             generation: self.generation,
+             root: self.root.clone(),
+@@ -289,6 +311,8 @@ impl MediaSnapshot {
+             absent: BTreeSet::new(),
+             locals: BTreeMap::new(),
+             blobs: BTreeMap::new(),
++            directory,
++            staged: RefCell::new(BTreeMap::new()),
+         };
+         for (relative, job) in &self.locals {
+             let path = self.root.join("attachments").join(relative);
+@@ -374,6 +398,18 @@ impl MediaSnapshot {
+             verified.files.borrow_mut().insert(path, proof);
+             verified.blobs.insert(hash.clone(), (*size, true));
+         }
++        let mut demand: BTreeMap<String, usize> = BTreeMap::new();
++        if let Some(note) = &self.keep_all {
++            demand = self.candidates.get(note).cloned().unwrap_or_default();
++            // A dirty local head can be captured by flush inside the transaction.
++            // Reserve its actual local media as well, never just old wire heads.
++            for (relative, job) in &self.locals {
++                if &job.attachment.note_id == note {
++                    let hash = &verified.locals[relative].0;
++                    *demand.entry(hash.clone()).or_default() += 1;
++                }
++            }
++        }
+         for (path, (hash, size)) in self.targets {
+             match fs::symlink_metadata(&path) {
+                 Ok(_) => {
+@@ -385,10 +421,54 @@ impl MediaSnapshot {
+                 }
+                 Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
+                     verified.absent.insert(path);
++                    *demand.entry(hash).or_default() += 1;
+                 }
+                 Err(e) => return Err(e.into()),
+             }
+         }
++        let (existing_bytes, mut count) = verified.directory.stale_allocation()?;
++        let mut bytes = 0u64;
++        for (hash, copies) in &demand {
++            let Some((size, true)) = verified.blobs.get(hash) else {
++                continue;
++            };
++            count = count
++                .checked_add(*copies)
++                .ok_or_else(|| limit("媒体临时数量溢出"))?;
++            bytes = bytes
++                .checked_add(
++                    size.checked_mul(*copies as u64)
++                        .ok_or_else(|| limit("媒体临时预算溢出"))?,
++                )
++                .ok_or_else(|| limit("媒体临时预算溢出"))?;
++        }
++        if count > 65536
++            || bytes.saturating_add(existing_bytes) > 4 * 1024 * 1024 * 1024u64
++            || fs2::available_space(&self.root)?.saturating_sub(bytes) < 256 * 1024 * 1024
++        {
++            return Err(limit("同步媒体临时空间超限"));
++        }
++        for (hash, copies) in demand {
++            if !verified
++                .blobs
++                .get(&hash)
++                .is_some_and(|(_, present)| *present)
++            {
++                continue;
++            }
++            let path = verified.blob_path(&hash)?;
++            let source = verified.files.borrow()[&path].clone();
++            for _ in 0..copies {
++                let staged =
++                    super::publication::Staged::copy(verified.directory.clone(), &source, &path)?;
++                verified
++                    .staged
++                    .borrow_mut()
++                    .entry(hash.clone())
++                    .or_default()
++                    .push(staged);
++            }
++        }
+         verified.validate()?;
+         Ok(verified)
+     }
+@@ -410,6 +490,10 @@ impl VerifiedMedia {
+         VerifiedFile::read(path, cache)
+     }
+     fn validate(&self) -> Result<()> {
++        self.directory.validate()?;
++        for stage in self.staged.borrow().values().flatten() {
++            stage.validate()?;
++        }
+         for path in [
+             self.root.join("attachments"),
+             self.root.join(".sync"),
+@@ -454,6 +538,7 @@ impl VerifiedMedia {
+         }
+     }
+     pub(super) fn materialize(&self, a: &WireAttachment) -> Result<Attachment> {
++        self.directory.validate()?;
+         let local = validation::attachment(a);
+         let destination = self.root.join("attachments").join(&local.relative_path);
+         if let Some(proof) = self.files.borrow().get(&destination) {
+@@ -473,36 +558,19 @@ impl VerifiedMedia {
+         if !proof.current(&source) || proof.hash != a.sha256 || proof.stamp.size != a.size {
+             return Err(stale());
+         }
+-        // A new keep-all ID has no previous destination; hard_link refuses any
+-        // existing path atomically. No whole-file fallback is permitted here.
+-        fs::hard_link(&source, &destination)
+-            .map_err(|_| err("sync_media_publish", "无法原子发布独立附件路径"))?;
+-        let after = Stamp::of(&proof.file.metadata()?)?;
+-        let destination_stamp = Stamp::of(&fs::symlink_metadata(&destination)?)?;
+-        // Only this exact link-count increment may refresh our own proofs.
+-        // Every content identity field remains unchanged; all other changes
+-        // invalidate the scope instead of blessing arbitrary external writes.
+-        let mut expected = proof.stamp.clone();
+-        #[cfg(unix)]
+-        {
+-            expected.links = expected.links.checked_add(1).ok_or_else(stale)?;
+-            expected.ctime = after.ctime;
+-        }
+-        if after != expected || destination_stamp != after {
+-            return Err(stale());
+-        }
+-        let mut files = self.files.borrow_mut();
+-        for old in files.values_mut().filter(|old| old.stamp == proof.stamp) {
+-            old.stamp = after.clone();
+-        }
+-        files.insert(
+-            destination,
+-            VerifiedFile {
+-                stamp: after,
+-                ..proof
+-            },
+-        );
+-        blob::sync_dir(&self.root.join("attachments"))?;
++        // Every byte was copied and verified outside the Session gate. The
++        // reserved capability also covers new keep-all IDs not known in advance.
++        self.directory.validate()?;
++        let stage = self
++            .staged
++            .borrow_mut()
++            .get_mut(&a.sha256)
++            .and_then(Vec::pop)
++            .ok_or_else(stale)?;
++        let published = stage.publish(&destination)?;
++        self.files
++            .borrow_mut()
++            .insert(destination.clone(), published);
+         Ok(local)
+     }
+ }
+diff --git a/src-tauri/src/store/synchronization/media_tests.rs b/src-tauri/src/store/synchronization/media_tests.rs
+index ec38486a..95d10620 100644
+--- a/src-tauri/src/store/synchronization/media_tests.rs
++++ b/src-tauri/src/store/synchronization/media_tests.rs
+@@ -112,7 +112,7 @@ fn immutable_sha_cache_reuses_file_only_and_never_generation_or_missing_proof()
+     assert!(s.sync_media_snapshot(&[], false).unwrap().verify().is_err());
+ }
+ #[test]
+-fn controlled_hard_links_have_unique_paths_repeat_safely_and_refresh_own_identity() {
++fn prepared_copies_have_unique_inodes_repeat_safely_and_preserve_other_proofs() {
+     let (_d, mut s, id, _) = setup();
+     s.sync_flush().unwrap();
+     let v = s
+@@ -126,7 +126,12 @@ fn controlled_hard_links_have_unique_paths_repeat_safely_and_refresh_own_identit
+         .unwrap()
+         .1
+         .remove(0);
+-    let media = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
++    let media = s
++        .sync_media_snapshot(&[], false)
++        .unwrap()
++        .reserve_keep_all(Some(&id))
++        .verify()
++        .unwrap();
+     s.sync_begin_media(media).unwrap();
+     a.id = uuid::Uuid::new_v4().to_string();
+     let first = s.sync_media.as_ref().unwrap().materialize(&a).unwrap();
+@@ -146,7 +151,7 @@ fn controlled_hard_links_have_unique_paths_repeat_safely_and_refresh_own_identit
+     #[cfg(unix)]
+     {
+         use std::os::unix::fs::MetadataExt;
+-        assert_eq!(
++        assert_ne!(
+             fs::metadata(&one).unwrap().ino(),
+             fs::metadata(&blob).unwrap().ino()
+         );
+@@ -154,7 +159,7 @@ fn controlled_hard_links_have_unique_paths_repeat_safely_and_refresh_own_identit
+     fs::remove_file(&one).unwrap();
+     assert_eq!(fs::read(&two).unwrap(), vec![7; 4096]);
+     assert_eq!(fs::read(&blob).unwrap(), vec![7; 4096]);
+-    assert!(!s.sync_media_cache[&two].current(&two));
++    assert!(s.sync_media_cache[&two].current(&two));
+     let refreshed = VerifiedFile::read(&two, &s.sync_media_cache).unwrap();
+     assert!(refreshed.current(&two));
+ }
+@@ -209,3 +214,180 @@ fn different_peer_stales_preparation_and_sql_failure_preserves_inbox_for_retry()
+     assert_eq!(s.sync_pending_count().unwrap(), 0);
+     assert!(s.note(&id).is_ok());
+ }
++
++fn stage_paths(s: &Store) -> Vec<PathBuf> {
++    fs::read_dir(s.root.join("attachments"))
++        .unwrap()
++        .map(|e| e.unwrap().path())
++        .filter(|p| {
++            p.file_name()
++                .unwrap()
++                .to_str()
++                .unwrap()
++                .starts_with(".sync91-stage-")
++        })
++        .collect()
++}
++fn prepared_wire(s: &mut Store, id: &str) -> WireAttachment {
++    s.sync_flush().unwrap();
++    let v = s
++        .sync_inventory()
++        .unwrap()
++        .into_iter()
++        .find(|v| v.entity_id == id)
++        .unwrap();
++    let wire = s.sync_version(&v.digest).unwrap();
++    validation::note_payload(wire.payload.as_ref().unwrap())
++        .unwrap()
++        .1
++        .remove(0)
++}
++#[test]
++fn staged_copies_drop_on_abort_and_reuse_present_destination_without_new_copy() {
++    let (_d, mut s, id, _) = setup();
++    let a = prepared_wire(&mut s, &id);
++    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
++    assert_eq!(stage_paths(&s).len(), 1);
++    drop(snapshot);
++    assert!(stage_paths(&s).is_empty());
++    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
++    s.action(json!({"type":"patchNote","id":id,"pinned":true}))
++        .unwrap();
++    assert_eq!(
++        s.sync_begin_media(snapshot).unwrap_err().code,
++        "sync_plan_stale"
++    );
++    assert!(stage_paths(&s).is_empty());
++    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
++    s.sync_with_media(snapshot, |s| {
++        s.sync_media.as_ref().unwrap().materialize(&a)?;
++        Ok(())
++    })
++    .unwrap();
++    assert!(stage_paths(&s).is_empty());
++    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
++    assert!(stage_paths(&s).is_empty());
++    drop(snapshot);
++}
++#[test]
++fn atomic_publication_refuses_racing_destination_and_never_follows_symlink() {
++    for symlink in [false, true] {
++        let (_d, mut s, id, _) = setup();
++        let a = prepared_wire(&mut s, &id);
++        let destination = s
++            .attachment_path(&validation::attachment(&a).relative_path)
++            .unwrap();
++        let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
++        s.sync_begin_media(snapshot).unwrap();
++        let sentinel = s.root.join("sentinel");
++        fs::write(&sentinel, b"must survive").unwrap();
++        if symlink {
++            #[cfg(unix)]
++            std::os::unix::fs::symlink(&sentinel, &destination).unwrap();
++        } else {
++            fs::write(&destination, b"must survive").unwrap();
++        }
++        assert_eq!(
++            s.sync_media
++                .as_ref()
++                .unwrap()
++                .materialize(&a)
++                .err()
++                .unwrap()
++                .code,
++            "sync_media_publish"
++        );
++        assert_eq!(fs::read(&destination).unwrap(), b"must survive");
++        assert_eq!(fs::read(&sentinel).unwrap(), b"must survive");
++        s.sync_end_media();
++        assert!(stage_paths(&s).is_empty());
++    }
++}
++#[test]
++fn staged_tamper_and_parent_replacement_stale_without_publishing_or_leaking_owned_stage() {
++    let (_d, mut s, id, _) = setup();
++    let a = prepared_wire(&mut s, &id);
++    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
++    s.sync_begin_media(snapshot).unwrap();
++    fs::write(&stage_paths(&s)[0], vec![9; 4096]).unwrap();
++    assert_eq!(
++        s.sync_media
++            .as_ref()
++            .unwrap()
++            .materialize(&a)
++            .err()
++            .unwrap()
++            .code,
++        "sync_plan_stale"
++    );
++    s.sync_end_media();
++    assert!(stage_paths(&s).is_empty());
++    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
++    let old = s.root.join("attachments-old");
++    fs::rename(s.root.join("attachments"), &old).unwrap();
++    fs::create_dir(s.root.join("attachments")).unwrap();
++    let sentinel = s.root.join("attachments/.sync91-stage-user.part");
++    fs::write(&sentinel, b"untouched").unwrap();
++    assert_eq!(
++        s.sync_begin_media(snapshot).unwrap_err().code,
++        "sync_plan_stale"
++    );
++    assert_eq!(fs::read(&sentinel).unwrap(), b"untouched");
++    assert!(fs::read_dir(&old).unwrap().all(|e| !e
++        .unwrap()
++        .file_name()
++        .to_str()
++        .unwrap()
++        .starts_with(".sync91-stage-")));
++}
++#[test]
++fn prepared_keep_all_publishes_new_ids_with_original_media_bytes() {
++    let (_d, mut s, id, _) = setup();
++    s.sync_flush().unwrap();
++    let version = s
++        .sync_inventory()
++        .unwrap()
++        .into_iter()
++        .find(|v| v.entity_id == id)
++        .unwrap();
++    let original = s.sync_version(&version.digest).unwrap();
++    let mut concurrent = original.clone();
++    concurrent.vector = BTreeMap::from([(uuid::Uuid::new_v4().to_string(), 1)]);
++    concurrent.payload.as_mut().unwrap()["note"]["pinned"] = json!(true);
++    concurrent = concurrent.seal();
++    s.sync_receive(vec![concurrent]).unwrap();
++    s.sync_apply_pending().unwrap();
++    assert_eq!(s.sync_conflicts().unwrap().len(), 1);
++    let snapshot = s
++        .sync_media_snapshot(&[], false)
++        .unwrap()
++        .reserve_keep_all(Some(&id))
++        .verify()
++        .unwrap();
++    s.sync_with_media(snapshot, |s| {
++        s.sync_resolve(EntityKind::Note, &id, &original.digest, true)
++    })
++    .unwrap();
++    assert_eq!(s.notes().unwrap().len(), 2);
++    let attachments = s.attachments().unwrap();
++    let referenced = s
++        .notes()
++        .unwrap()
++        .iter()
++        .flat_map(|n| validation::references(&n.document))
++        .collect::<HashSet<_>>();
++    let media = attachments
++        .iter()
++        .filter(|a| referenced.contains(&a.id))
++        .collect::<Vec<_>>();
++    assert_eq!(media.len(), 2);
++    assert_ne!(media[0].id, media[1].id);
++    assert_ne!(media[0].relative_path, media[1].relative_path);
++    for a in media {
++        assert_eq!(
++            fs::read(s.attachment_path(&a.relative_path).unwrap()).unwrap(),
++            vec![7; 4096]
++        );
++    }
++    assert!(stage_paths(&s).is_empty());
++}
+diff --git a/src-tauri/src/store/synchronization/publication.rs b/src-tauri/src/store/synchronization/publication.rs
+new file mode 100644
+index 00000000..702dab10
+--- /dev/null
++++ b/src-tauri/src/store/synchronization/publication.rs
+@@ -0,0 +1,283 @@
++//! Prepared byte ownership and atomic no-replace publication. Copying and SHA
++//! verification happen only in MediaSnapshot::verify, never in materialize.
++use super::media::{stale, Stamp, VerifiedFile};
++use super::*;
++use sha2::{Digest, Sha256};
++#[cfg(unix)]
++use std::os::{
++    fd::{AsRawFd, FromRawFd},
++    unix::{
++        ffi::OsStrExt,
++        fs::{FileExt, MetadataExt, OpenOptionsExt},
++    },
++};
++use std::{ffi::CString, fs::File, io::Write, sync::Arc};
++
++pub(super) struct Directory {
++    file: File,
++    path: PathBuf,
++    #[cfg(unix)]
++    identity: (u64, u64),
++}
++impl Directory {
++    pub(super) fn open(path: PathBuf) -> Result<Arc<Self>> {
++        #[cfg(unix)]
++        {
++            let file = fs::OpenOptions::new()
++                .read(true)
++                .custom_flags(libc::O_DIRECTORY | libc::O_NOFOLLOW | libc::O_CLOEXEC)
++                .open(&path)?;
++            let meta = file.metadata()?;
++            let directory = Arc::new(Self {
++                file,
++                path,
++                identity: (meta.dev(), meta.ino()),
++            });
++            directory.validate()?;
++            Ok(directory)
++        }
++        #[cfg(not(unix))]
++        {
++            let _ = path;
++            Err(err("sync_media_publish", "平台不支持安全媒体发布"))
++        }
++    }
++    pub(super) fn validate(&self) -> Result<()> {
++        #[cfg(unix)]
++        {
++            for meta in [fs::symlink_metadata(&self.path)?, self.file.metadata()?] {
++                if !meta.is_dir()
++                    || meta.file_type().is_symlink()
++                    || (meta.dev(), meta.ino()) != self.identity
++                {
++                    return Err(stale());
++                }
++            }
++            Ok(())
++        }
++        #[cfg(not(unix))]
++        {
++            Err(stale())
++        }
++    }
++    pub(super) fn stale_allocation(&self) -> Result<(u64, usize)> {
++        self.validate()?;
++        let mut total = 0u64;
++        let mut count = 0usize;
++        for entry in fs::read_dir(&self.path)? {
++            let entry = entry?;
++            let name = entry.file_name();
++            let Some(name) = name.to_str() else { continue };
++            let Some(id) = name
++                .strip_prefix(".sync91-stage-")
++                .and_then(|s| s.strip_suffix(".part"))
++            else {
++                continue;
++            };
++            if uuid::Uuid::parse_str(id).is_err() {
++                continue;
++            }
++            let meta = fs::symlink_metadata(entry.path())?;
++            if !meta.is_file() || meta.file_type().is_symlink() {
++                return Err(stale());
++            }
++            count = count
++                .checked_add(1)
++                .ok_or_else(|| limit("媒体临时数量溢出"))?;
++            total = total
++                .checked_add(meta.len())
++                .ok_or_else(|| limit("媒体临时预算溢出"))?;
++        }
++        Ok((total, count))
++    }
++}
++fn name(value: &std::ffi::OsStr) -> Result<CString> {
++    #[cfg(unix)]
++    {
++        CString::new(value.as_bytes()).map_err(|_| stale())
++    }
++    #[cfg(not(unix))]
++    {
++        let _ = value;
++        Err(stale())
++    }
++}
++
++pub(super) struct Staged {
++    directory: Arc<Directory>,
++    name: Option<String>,
++    proof: VerifiedFile,
++}
++impl Staged {
++    pub(super) fn copy(
++        directory: Arc<Directory>,
++        source: &VerifiedFile,
++        source_path: &Path,
++    ) -> Result<Self> {
++        directory.validate()?;
++        if !source.current(source_path) {
++            return Err(stale());
++        }
++        let stage_name = format!(".sync91-stage-{}.part", uuid::Uuid::new_v4());
++        #[cfg(unix)]
++        let file = {
++            let c = name(std::ffi::OsStr::new(&stage_name))?;
++            // Exclusive creation relative to the retained directory. Never
++            // follows an existing name or a replaced parent directory.
++            let fd = unsafe {
++                libc::openat(
++                    directory.file.as_raw_fd(),
++                    c.as_ptr(),
++                    libc::O_RDWR
++                        | libc::O_CREAT
++                        | libc::O_EXCL
++                        | libc::O_NOFOLLOW
++                        | libc::O_CLOEXEC,
++                    0o600,
++                )
++            };
++            if fd < 0 {
++                return Err(std::io::Error::last_os_error().into());
++            }
++            unsafe { File::from_raw_fd(fd) }
++        };
++        #[cfg(not(unix))]
++        let file: File = return Err(stale());
++        // Install ownership immediately, before any fallible copy operation.
++        let mut staged = Self {
++            directory,
++            name: Some(stage_name),
++            proof: VerifiedFile {
++                stamp: source.stamp.clone(),
++                file: Arc::new(file),
++                hash: source.hash.clone(),
++            },
++        };
++        let mut total = 0u64;
++        let mut hash = Sha256::new();
++        let mut buffer = [0u8; 65536];
++        loop {
++            #[cfg(unix)]
++            let n = source.file.read_at(&mut buffer, total)?;
++            #[cfg(not(unix))]
++            let n = 0;
++            if n == 0 {
++                break;
++            }
++            total = total.checked_add(n as u64).ok_or_else(stale)?;
++            if total > source.stamp.size {
++                return Err(stale());
++            }
++            hash.update(&buffer[..n]);
++            (&*staged.proof.file).write_all(&buffer[..n])?;
++        }
++        staged.proof.file.sync_all()?;
++        // Refresh only our newly-created file, after verifying complete bytes.
++        staged.proof.stamp = Stamp::of(&staged.proof.file.metadata()?)?;
++        if total != source.stamp.size
++            || format!("{:x}", hash.finalize()) != source.hash
++            || !source.current(source_path)
++        {
++            return Err(stale());
++        }
++        staged.validate()?;
++        Ok(staged)
++    }
++    pub(super) fn validate(&self) -> Result<()> {
++        self.directory.validate()?;
++        let path = self
++            .directory
++            .path
++            .join(self.name.as_ref().ok_or_else(stale)?);
++        if !self.proof.current(&path) {
++            return Err(stale());
++        }
++        Ok(())
++    }
++    pub(super) fn publish(mut self, destination: &Path) -> Result<VerifiedFile> {
++        self.validate()?;
++        if destination.parent() != Some(self.directory.path.as_path()) {
++            return Err(stale());
++        }
++        let from = name(std::ffi::OsStr::new(self.name.as_ref().ok_or_else(stale)?))?;
++        let to = name(destination.file_name().ok_or_else(stale)?)?;
++        #[cfg(unix)]
++        let fd = self.directory.file.as_raw_fd();
++        #[cfg(any(target_os = "macos", target_os = "ios"))]
++        let result =
++            unsafe { libc::renameatx_np(fd, from.as_ptr(), fd, to.as_ptr(), libc::RENAME_EXCL) }
++                as i64;
++        // syscall is available before API30; linking renameat2 itself would
++        // incorrectly raise the Android minimum API requirement from26 to30.
++        #[cfg(any(target_os = "android", target_os = "linux"))]
++        let result = unsafe {
++            libc::syscall(
++                libc::SYS_renameat2,
++                fd,
++                from.as_ptr(),
++                fd,
++                to.as_ptr(),
++                libc::RENAME_NOREPLACE,
++            )
++        } as i64;
++        #[cfg(not(any(
++            target_os = "macos",
++            target_os = "ios",
++            target_os = "android",
++            target_os = "linux"
++        )))]
++        let result = -1i64;
++        if result != 0 {
++            return Err(err("sync_media_publish", "无法原子发布独立附件路径"));
++        }
++        self.name = None; // Published complete file may survive a later SQL rollback.
++        self.directory.validate()?;
++        let after = Stamp::of(&self.proof.file.metadata()?)?;
++        let mut expected = self.proof.stamp.clone();
++        #[cfg(unix)]
++        {
++            expected.ctime = after.ctime;
++        }
++        if after != expected || Stamp::of(&fs::symlink_metadata(destination)?)? != after {
++            return Err(stale());
++        }
++        self.proof.stamp = after;
++        self.directory.file.sync_all()?;
++        Ok(self.proof.clone())
++    }
++}
++impl Drop for Staged {
++    fn drop(&mut self) {
++        let Some(stage_name) = self.name.as_ref() else {
++            return;
++        };
++        #[cfg(unix)]
++        {
++            // Content may have changed on an error; identity, not content stamp,
++            // authorizes unlink of only this exact owned temporary directory entry.
++            let c = match name(std::ffi::OsStr::new(stage_name)) {
++                Ok(c) => c,
++                Err(_) => return,
++            };
++            let mut meta = std::mem::MaybeUninit::<libc::stat>::uninit();
++            let fd = self.directory.file.as_raw_fd();
++            if unsafe {
++                libc::fstatat(fd, c.as_ptr(), meta.as_mut_ptr(), libc::AT_SYMLINK_NOFOLLOW)
++            } != 0
++            {
++                return;
++            }
++            let meta = unsafe { meta.assume_init() };
++            if let Ok(owned) = self.proof.file.metadata() {
++                if meta.st_dev as u64 == owned.dev()
++                    && meta.st_ino as u64 == owned.ino()
++                    && (meta.st_mode & libc::S_IFMT) == libc::S_IFREG
++                {
++                    unsafe {
++                        libc::unlinkat(fd, c.as_ptr(), 0);
++                    }
++                }
++            }
++        }
++    }
++}
+diff --git a/src-tauri/src/sync/adapter.rs b/src-tauri/src/sync/adapter.rs
+index 5beac1de..452e449f 100644
+--- a/src-tauri/src/sync/adapter.rs
++++ b/src-tauri/src/sync/adapter.rs
+@@ -809,7 +809,7 @@ impl Runtime {
+                     || (self.active.load(Ordering::Acquire) && s.store.sync_pending_count()? > 0))
+             {
+                 Ok(Some((
+-                    s.store.sync_media_snapshot(&[], false)?,
++                    s.store.sync_media_snapshot(&[], false)?.reserve_keep_all(s.sync_media_keep_all()),
+                     s.sync_media_token(),
+                 )))
+             } else {
+diff --git a/src-tauri/src/sync/adapter_media_tests.rs b/src-tauri/src/sync/adapter_media_tests.rs
+index e0920c16..1d932e60 100644
+--- a/src-tauri/src/sync/adapter_media_tests.rs
++++ b/src-tauri/src/sync/adapter_media_tests.rs
+@@ -141,6 +141,13 @@ fn real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive() {
+     assert_eq!(result.unwrap_err(), SyncError::PlanStale);
+     assert!(shared.0.lock().unwrap().store.note(&id).unwrap().pinned);
+     make_backend().flush().unwrap();
++    // A new attachment ID with the same real64MiB blob requires an independent
++    // prepared publication, rather than reusing the already-present old path.
++    let replacement = remote
++        .store_attachment(&id, "new-path.png", "image/png", vec![7; 64 * 1024 * 1024])
++        .unwrap();
++    let revision = remote.note(&id).unwrap().revision;
++    remote.action(json!({"type":"saveNote","id":id,"revision":revision,"document":{"type":"doc","content":[{"type":"attachment","attrs":{"id":replacement.id,"kind":"image","name":"new-path.png"}}]}})).unwrap();
+     remote
+         .action(json!({"type":"patchNote","id":id,"title":"remote metadata"}))
+         .unwrap();

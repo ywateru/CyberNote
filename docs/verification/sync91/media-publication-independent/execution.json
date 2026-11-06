@@ -1,0 +1,50 @@
+[
+  {
+    "name": "media",
+    "argv": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--lib",
+      "store::synchronization::media_tests",
+      "--",
+      "--nocapture"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.657740125,
+    "scope": "reviewer filter matched0tests; not countedpass"
+  },
+  {
+    "name": "session",
+    "argv": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--lib",
+      "session::synchronization",
+      "--",
+      "--nocapture"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.8057278330000001
+  },
+  {
+    "name": "media-corrected",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--lib",
+      "store::synchronization::media::tests",
+      "--",
+      "--nocapture"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 1.119492917
+  }
+]

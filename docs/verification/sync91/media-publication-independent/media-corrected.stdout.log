@@ -1,0 +1,14 @@
+
+running 9 tests
+test store::synchronization::media::tests::staged_tamper_and_parent_replacement_stale_without_publishing_or_leaking_owned_stage ... ok
+test store::synchronization::media::tests::prepared_copies_have_unique_inodes_repeat_safely_and_preserve_other_proofs ... ok
+test store::synchronization::media::tests::staged_copies_drop_on_abort_and_reuse_present_destination_without_new_copy ... ok
+test store::synchronization::media::tests::immutable_sha_cache_reuses_file_only_and_never_generation_or_missing_proof ... ok
+test store::synchronization::media::tests::prepared_media_rejects_changed_generation_without_losing_dirty_and_retries ... ok
+test store::synchronization::media::tests::prepared_keep_all_publishes_new_ids_with_original_media_bytes ... ok
+test store::synchronization::media::tests::atomic_publication_refuses_racing_destination_and_never_follows_symlink ... ok
+test store::synchronization::media::tests::prepared_media_rejects_in_place_replacement_deletion_and_symlink ... ok
+test store::synchronization::media::tests::different_peer_stales_preparation_and_sql_failure_preserves_inbox_for_retry ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 178 filtered out; finished in 0.37s
+
