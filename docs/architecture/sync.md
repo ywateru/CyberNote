@@ -18,9 +18,9 @@
 
 ## 版本与删除
 
-每个实体使用device→counter版本向量与内容摘要。版本身份绑定workspace/kind/id/向量/完整payload；使用规范化JSON与SHA256。对同一实体，向量严格支配的旧头可删除payload，但保留vector→digest摘要用于拒绝同版本异内容。不可比较的头全部保留，不以本地revision、updatedAt或时钟判断胜负。重复投递100次不增加实体；接收顺序不改变head集合及确定投影。计数溢出、设备/heads数量超限明确报错。
+每个实体使用actor→counter版本向量与内容摘要。设备身份deviceId保持稳定；actor通常为该device UUID，但从该设备旧分支继续普通编辑时可分配持久branch UUID。Wire形状不变，不能把actor key始终解释为设备列表。版本身份绑定workspace/kind/id/向量/完整payload；使用规范化JSON与SHA256。对同一实体，向量严格支配的旧头可删除payload，但保留vector→digest摘要用于拒绝同版本异内容。不可比较的头全部保留，不以本地revision、updatedAt或时钟判断胜负。重复投递100次不增加实体；接收顺序不改变head集合及确定投影。计数溢出、actor/heads数量超限明确报错并保留本地dirty；本版每实体最多64 actor分量，不自动丢键或承诺显式join就能降低actor数量。
 
-本地普通编辑继承当前投影的那个head，不悄悄join其他冲突；显式解决才join所有heads。投影优先永久删除墓碑，其次回收站/目录删除，其次按稳定摘要排序挑选，余下版本仍可取回。因果后继的显式恢复可取代已观察删除；旧编辑不能复活删除。purge保留无正文墓碑，未建立设备撤销/重加入与GC证明前不自动清除墓碑。显式purge清除当前已知冲突正文，未见并发版本仍保留为可恢复冲突并不投影复活。
+本地普通编辑继承当前投影的那个head，不悄悄join其他冲突；若selected中的本机actor分量落后于该entity/actor曾分配或已见的持久frontier，则改用新branch actor，防止从A:1跳到A:3意外支配另一条A:2分支。分支head与本机actor映射持久化，正常连续autosave复用该actor而不是每次造UUID；发布前再确认未新增对selected原本不支配的其他head的支配关系。显式解决才join所有heads。投影优先永久删除墓碑，其次回收站/目录删除，其次按稳定摘要排序挑选，余下版本仍可取回。因果后继的显式恢复可取代已观察删除；旧编辑不能复活删除。purge保留无正文墓碑，未建立设备撤销/重加入与GC证明前不自动清除墓碑。显式purge清除当前已知冲突正文，未见并发版本仍保留为可恢复冲突并不投影复活。
 
 冲突列表显示笔记/目录、版本数量和时间，支持保留指定版本或全部另存后解决；操作在一事务生成join版本与必要副本。媒体版本须保全各自blob引用，locked版本须保留sealed且不要求网络层解密。不使用现有仅支持普通无附件的recoverConflictCopy冒充完整冲突处理。普通多版本预览只在本地授权后读取；锁定版本仅显示本来明文的标题和时间，解密必须显式本机密码路径。
 
@@ -32,7 +32,7 @@ WireVersion V1：workspaceId、kind(note/folder)、entityId、vector(BTreeMap UU
 
 禁止使用workspace()导出：它会把本机已解锁sealed正文解密。raw locked Note仅empty document、空plainText和sealed，既有title明文契约保留，但整条传输须认证加密。Session token、窗口、授权、settings和attachment_operations永不在wire。首次开启、重新锁定与分支压缩不额外保留线性旧明文；仍存的并发明文冲突须明确显示并允许用户处理，不能声称锁定某分支擦除了其他分支。密钥和配对凭据不进入数据库备份settings。lockNote写入同一SQL事务清除当前线性head与已知同因果inbox中的旧明文payload，保留vector/digest继承上下文，不能等后台下一flush才清；已redacted摘要不得出现在可fetch inventory。已知并发明文分支不被悄悄删除。
 
-接收先用生产字段/文档规则验证单体wire，依赖暂缺或并发环进入pending或确定性图修复，最终投影才用完整业务图验证；不可直接把raw batch包装成归档而拒绝合法乱序。验证字段、id、时间、文档节点、附件归属/类型/大小与sealed一致性；拒绝未知协议/字段、伪路径、同ID异内容、损坏hash、超过64层JSON/16MiB实体消息/64设备向量/32并发头/256MiB单blob。所有网络读有截止与帧长上限，坏数据不改变业务库与已确认状态。单个head必须分片，最多16MiB有界重组而非强塞48KiB帧。另限制全局inbox最多1024版本/64MiB、同时staging最多4个/512MiB、同步blob缓存默认4GiB并保留至少256MiB磁盘余量；超过预算不ACK且显示可重试原因，重复hash不重复分配文件。具体常量可保守降低，不能无说明提高。
+接收先用生产字段/文档规则验证单体wire，依赖暂缺或并发环进入pending或确定性图修复，最终投影才用完整业务图验证；不可直接把raw batch包装成归档而拒绝合法乱序。验证字段、id、时间、文档节点、附件归属/类型/大小与sealed一致性；拒绝未知协议/字段、伪路径、同ID异内容、损坏hash、超过64层JSON/16MiB实体消息/64 actor向量/32并发头/256MiB单blob。所有网络读有截止与帧长上限，坏数据不改变业务库与已确认状态。单个head必须分片，最多16MiB有界重组而非强塞48KiB帧。另限制全局inbox最多1024版本/64MiB、同时staging最多4个/512MiB、同步blob缓存默认4GiB并保留至少256MiB磁盘余量；超过预算不ACK且显示可重试原因，重复hash不重复分配文件。具体常量可保守降低，不能无说明提高。
 
 ## 独立附件
 
