@@ -67,6 +67,18 @@ cycle07已自然结束：外层0/618.949821708秒。真实系统Images筛选→T
 
 2026-11-06恢复时实际ps无live qemu/lifecycle/native runner，不凭旧session或state文件重启。作者树clean `7038a648`：新增`90b3ff15`/`7038a648`固定pair步骤和脱敏焦点/viewport诊断待窄审，随后同userdata cycle08定位准确失败步骤，继续真实配对/双向正文/媒体/重开与冷启。原旧agent模型不可用，现由`/root/sync87_native_resume`唯一操作5584，`/root/read_private_tmp_sync87_review_resume_task_md`独立窄审；任务和共享状态位于`/private/tmp/sync87-{native,review}-resume-{task,status}.md`，用于绕过恢复后agent消息载荷无法解读的问题。原生最终独审尚待分派，不重跑已通过的全产品套件。
 
+### Final02 与实际同 Store 重开诊断
+
+准确Android18/Mac28构建与核包已通过，见[独审](../verification/sync88/native-independent/README.md)。cycle10实际设置几何360×568/y0与名称输入通过；首次Join只收起键盘未打开加入表单的原失败保留。正常输入工具 `25c5e65c` 增加实际IME存在时一次Back及真实表单等待，经不同代理 `9cea5a72` 接收，未注入DOM点击或重试业务动作。
+
+root明确授权在同一userdata中新建独立formal02合成情景，原actual-01笔记/PNG/工具XML及所有失败不删除。formal02 runId `74da049123`，输出 `/private/tmp/notes-sync87-native-final-02`。cycle11实际配对11步通过45.458秒，Android笔记 `256cf1ef-b7c6-4c1e-a8ab-31cb5e6be460` 的完整中文正文/document已到桌面。桌面新笔记 `eac3b7e0-12cd-43cc-a1c0-2457e8cc4320` 存于桌面Store但未进入Android，反向等待40.881秒超时；[独审6cec3ac0](../verification/sync87-native/final-actual-independent/RESULT.md)保留准确部分结果。原peer自然退出0；不把之后出现的连接错误追认为超时前网络故障。cycle11生命周期自然0/620.839423291秒。
+
+成功配对后的desktop-peer目录必须原位保留。重开工具578e8af4首次被独审证明新指令未加入协议入口；原失败[保留](../verification/sync87-native/reopen-independent/RESULT.md)。d0096346修复后经d687f1d8窄审准入，主线已整合：同一规范目录/DB身份、既有自然退出、原准确peerbinary；诊断仅有限枚举/整数/哈希，不重新配对或强制apply。
+
+cycle12实际重开同一个已绑定Store通过，两个实时观察均显示Android idle、peer connected、error null、pending1，access无活动操作/挂起；桌面 listening/pending0，完整上行仍相等、反向目标仍缺失。当前尚无精确目标inbox/version计数，不将全局pending1等同缺失笔记。正在准备固定只读计数及真实事件/原处理器回复的被动观察；它们是诊断工具，不伪造事件或ACK，不放宽协议。
+
+root因free低于8GiB又正常清理五个完成/clean/无进程的源码检出，branch/已提交证据保留；dirty65/67跳过。free恢复11,079,995,392字节，见[cleanup05](../verification/sync87/source-checkout-cleanup05.json)。AVD、数据、目标二进制、SDK及共享target未动，生命周期下限保持8GiB。
+
 ## 用户原现场和范围
 
 原Android约13秒未保存录音完全不碰：禁止安装、启动、停止、重启、读取、导出、备份原应用或旧AVD（含5580）。ADB显式5584，无默认serial，无kill-server。只用合成PNG/TXT/WAV，无真实mic；Apple Notes删除实验不做。已有直接执行授权沿用，无重复询权限。
