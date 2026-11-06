@@ -1,3 +1,5 @@
+2026-11-06 最新同步进展：[SYNC91](plan/tasks/app-sync91-portable-media-publication.md)附件原子发布修复已源码独审并合入，Android21准确构建中。Android20实际诊断为 `syncMediaPublish`；真实系统连续添加TXT/PNG/WAV和三个原文件核对通过，反向同步须在同一配对Store上复验，目标仍active。恢复入口：[双端同步当前状态](plan/sync-delivery-state.md)。
+
 # Apple Notes Clone
 
 同步任务的中断恢复与准确阶段见[当前交付状态](plan/sync-delivery-state.md)。

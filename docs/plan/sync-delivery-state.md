@@ -2,7 +2,9 @@
 
 更新：2026-11-06。供中断恢复；[正式规格](../architecture/sync.md)、[窗口协议](../architecture/sync-coordinator.md)和任务文件仍是行为契约。**完整同步目标 active，正在进行新隔离 Android 的实际运行验收。** 已交付 gallery83，不再重做快速首页。
 
-最新状态：Android18/Mac28 已准确出包并通过[独立核包](../verification/sync88/native-independent/README.md)。三条 vh 回退修复了实际 API30 WebView 的设置页越界；Android18 实际设置面板现为360×568、y0，名称输入通过。final02/cycle11 的实际配对11步及 Android→桌面完整中文 document/plainText 已独立确认；桌面→Android 新笔记等待超时，完整目标仍 active。[独立证据](../verification/sync87-native/final-actual-independent/RESULT.md)保留原失败。当前须复用成功绑定的同一 DesktopPeer Store 做实时诊断；全局 pending1 不足以证明缺失的桌面笔记已入 inbox，关闭 peer 后的连接错误也不能倒推超时前网络状态。
+最新状态：Android20 有限诊断已在同一配对 Store 上确认反复失败类别为 `syncMediaPublish`；源码唯一对应操作为附件发布的 `fs::hard_link`，未推断具体系统 errno。已完成[SYNC91 可移植发布修复](tasks/app-sync91-portable-media-publication.md)并通过[独立源码审查](../verification/sync91/media-publication-independent/RESULT.md)：锁外准备独立已校验附件，锁内不可覆盖原子重命名。主线产品 `3963c3df`，作者证据 `b373ac95`、独审 `c7d0eaa8`；Android21 正在准确构建，尚未证明实际故障消除。仍复用 final02 成功绑定的同一 DesktopPeer Store，不重置配对或替换失败目标。
+
+真实 Android20 已通过正常 DocumentsUI 连续选取并保存 TXT、PNG、WAV，当前完整正文与三个附件原字节已读取核对，PNG WebView 解码通过，见[实际连续附件证据](../verification/sync90-native/native-provider21-originals/README.md)。这不等于多选、图片导出、完整双向同步或冷启动通过。cycle21 已自然退出，原 userdata 和失败目标保留。
 
 ## 已接收与剩余门槛
 
@@ -31,10 +33,10 @@
 
 ## 下一步
 
-1. 完成[SYNC90](tasks/app-sync90-apply-error-classification.md)有限apply错误分类、独审和准确Android20核包，再于5584原userdata读取具体错误。SYNC89/Android19已源码独审、准确构建核包和实际读取，确定反复applyError；同一已绑定DesktopPeer Store、原inbox目标和18/19失败保持。
-2. 读取实际apply错误类别，再做必要的最小业务修复与原反例复验。现已证明目标到达但未应用、原始回复入口ready=true、原始回执解析入口pending，Android19实际为applyError；其底层数据库/文件/媒体原因尚未确定。不再扩大前端观察工具。
-3. 完成双向完整document/plainText及PNG/WAV原字节/owner/实际解码；真实provider多选/连续PNG/TXT/WAV、图片导出原SHA、前台重连、同data应用重开及冷启动保持。附件选择使用已验证的正常系统TAB/ENTER路径；原工具XML附件及失败保留。
-4. 结束owned children后冻结安全证据，不同代理独审；更新最终使用说明与交付。真实验收未完成前不得 complete goal。
+1. 准确构建 Android21（主线冻结 `b373ac95`，产品 `3963c3df`），动态产品清单预计322项，前端必须与Android20相同。不同代理独立核包后，由root签发准确 APK/ELF hash 收据；当前不安装未核包产物。
+2. 在5584原userdata升级21，复用原 final02 Store 和 immutable11，验证原缺失桌面笔记完整 document/plainText、真实提交计数和错误类别，再验证双方录入文字及 PNG/WAV 原字节、owner、实际解码。
+3. 完成图片导出原SHA、前台重连、同data应用重开及严格同userdata冷启动。图片控件仅扩展固定、可见、归属明确的普通鼠标操作，独审准入后才执行；不注入文件选择结果。
+4. 实际回归通过后，在同一最终产品上构建 Mac29 并独立核包，执行与发布修复相关的最终整合和路线检查，接收剩余原生工具源。更新使用说明和最终交付，真实验收未完成前不得 complete goal。
 
 ## 证据和资源保全
 
