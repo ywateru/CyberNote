@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 export const providerStages=Object.freeze(['menu-read','attachment-read','attachment-start','attachment-end','menu-wait','file-read','file-start','file-end']);
 
-async function touch(client, control, checkpoint) {
+async function touch(client, control, checkpoint, mouse) {
   assert(['attachment','file'].includes(control));
   checkpoint(control+'-read');
   const point = await client.read(`(()=>{
@@ -24,19 +24,25 @@ async function touch(client, control, checkpoint) {
   assert(Object.values(descriptors).every(d=>Object.hasOwn(d,'value')&&typeof d.value==='number'&&Number.isFinite(d.value)));
   const {x,y,width,height}=Object.fromEntries(Object.entries(descriptors).map(([k,d])=>[k,d.value]));
   assert(width>0&&width<=720&&height>0&&height<=1280&&x>=0&&y>=0&&x<width&&y<height);
-  checkpoint(control+'-start');await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
-  checkpoint(control+'-end');await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  checkpoint(control+'-start');
+  if(mouse)await client.send('Input.dispatchMouseEvent',{type:'mousePressed',x,y,button:'left',clickCount:1});
+  else await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+  checkpoint(control+'-end');
+  if(mouse)await client.send('Input.dispatchMouseEvent',{type:'mouseReleased',x,y,button:'left',clickCount:1});
+  else await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
 }
 
-export async function openOwnedProvider(client) {
+async function openProvider(client,mouse) {
   let stage='menu-read';const checkpoint=value=>{assert(providerStages.includes(value));stage=value;};
   try {
     const menu=await client.read('!!document.querySelector(".menu-media[role=menu]")');
     assert(typeof menu==='boolean');
-    if(!menu)await touch(client,'attachment',checkpoint);
+    if(!menu)await touch(client,'attachment',checkpoint,mouse);
     checkpoint('menu-wait');
     await client.wait('!!document.querySelector(".menu-media[role=menu]")','fixed attachment menu');
-    await touch(client,'file',checkpoint);
-    return {normalTouch:true};
+    await touch(client,'file',checkpoint,mouse);
+    return mouse?{normalMouse:true}:{normalTouch:true};
   } catch { const error=Error('owned provider touch refused');Object.defineProperty(error,'stage',{value:stage,enumerable:true});throw error; }
 }
+export const openOwnedProvider=client=>openProvider(client,false);
+export const openOwnedProviderMouse=client=>openProvider(client,true);
