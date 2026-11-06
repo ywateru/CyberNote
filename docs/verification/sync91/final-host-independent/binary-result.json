@@ -1,0 +1,59 @@
+{
+  "status": "PASS-FROZEN91-BINARY-SOURCE",
+  "sourceHead": "7ea640a29231f231f8d5475b3972dc02f5239721",
+  "approvedCommit": "b373ac95e1d26faf03e37e5ee6c68bccf5074e00",
+  "source48CurrentGitBlobExact": true,
+  "product322ApprovedExact": true,
+  "acceptedRunnerHashes": [
+    {
+      "path": "scripts/debug/build-rust-attachments.mjs",
+      "sha256": "0ace1c00e9aa03f1c2c55a7c471eb7dc7c549a1792e3b7611bec87ce8e08f621"
+    },
+    {
+      "path": "scripts/debug/sync-rust-dom.mjs",
+      "sha256": "b8fe79058842c73303b4019e172842cd6ab74803a09f83f365d5ad6cfed62ff7"
+    },
+    {
+      "path": "scripts/debug/runtime.mjs",
+      "sha256": "f6d84cfc6b48a33b4d8c12c98e84e8635dd093b507ccdca87539b12c4b092618"
+    },
+    {
+      "path": "scripts/debug/rust-backend.mjs",
+      "sha256": "3df944b85e2e65e10a4a1eaaae5b23c6b107b73ecfd9ed071bd8de9b2f988d0f"
+    },
+    {
+      "path": "scripts/debug/sync87-routes.mjs",
+      "sha256": "6d53b6b3256958046d1f3794f9ccec1513b2dce7e17acc37192bdcd12041f044"
+    }
+  ],
+  "onlyManifestEdit": "binary.path",
+  "binary": {
+    "path": "/private/tmp/sync91-transport-final01/notes-current-attachment-transport",
+    "bytes": 25801472,
+    "sha256": "cd1e2b6fc989a9d09d69bc889704bb1fbc26bd7aa95248eea21c31c482a86077",
+    "mode": "0555"
+  },
+  "sourceManifestSha256": "5957aa2c125ae905798c4a39392ec44e7b5f82b4fa748679af610c2006832bac",
+  "compileCommands": [
+    {
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "/private/tmp/sync91-transport-build01/harness/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 7951
+    }
+  ],
+  "readOnly": true,
+  "seconds": 3.245460791,
+  "limits": [
+    "No new build/runtime/device/DB activity",
+    "DOM/routes actual evidence pending separate audit",
+    "Source provenance is not reproducible-build or full native acceptance claim"
+  ]
+}

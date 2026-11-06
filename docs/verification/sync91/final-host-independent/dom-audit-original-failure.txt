@@ -1,0 +1,1 @@
+Original reviewer assertion incorrectly looked for access commit phase in notes-sync channel. Actual frozen runner and result use notes-access commit and notes-sync probe/prepare/release commit. Corrected channel assertion only; no runtime/source/evidence changes or rerun.

@@ -1,0 +1,76 @@
+{
+  "status": "FAIL-PRESERVED-NOT-FINAL-ROUTE-PASS",
+  "resultPath": "/private/tmp/sync87-routes-final91-01/result.json",
+  "resultSha256": "ac7e1816183a9302ed33147f26564cd709e3cf6cdb49cdcc1f2b211208262f3a",
+  "completedChecks": 32,
+  "failure": [
+    {
+      "message": "timeout: tunnel-audio.wav metadata arrives",
+      "stack": "Error: timeout: tunnel-audio.wav metadata arrives\n    at eventually (file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:97:9)\n    at async media (file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:302:3)\n    at async exercise (file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:375:3)\n    at async file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:712:19"
+    }
+  ],
+  "binary": {
+    "path": "/private/tmp/sync91-transport-final01/notes-current-attachment-transport",
+    "sha256": "cd1e2b6fc989a9d09d69bc889704bb1fbc26bd7aa95248eea21c31c482a86077",
+    "after": "cd1e2b6fc989a9d09d69bc889704bb1fbc26bd7aa95248eea21c31c482a86077"
+  },
+  "sourceUnchanged": true,
+  "scriptUnchanged": true,
+  "processExits": [
+    {
+      "name": "LAN-host",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "errors": []
+    },
+    {
+      "name": "LAN-client",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "errors": []
+    },
+    {
+      "name": "LAN-client-restart",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "errors": []
+    },
+    {
+      "name": "Tunnel-host",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "errors": []
+    },
+    {
+      "name": "Tunnel-client",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "errors": []
+    }
+  ],
+  "tunnelExits": [
+    {
+      "name": "quick-tunnel-1",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false
+    }
+  ],
+  "limits": [
+    "25s metadata predicate timed out; reverse WAV read/export/hash never reached",
+    "No proven latency/network/apply cause",
+    "Read-only safe evidence review only; no device/runtime/DB query"
+  ]
+}
