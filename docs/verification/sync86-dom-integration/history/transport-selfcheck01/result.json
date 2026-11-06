@@ -1,0 +1,36 @@
+{
+  "scope": "Synthetic protocol peer validates transport infrastructure only; no real App or Rust proof",
+  "events": [
+    {
+      "name": "notes-sync",
+      "payload": {
+        "phase": "probe",
+        "seq": 1
+      }
+    },
+    {
+      "name": "notes-sync",
+      "payload": {
+        "phase": "release",
+        "seq": 2
+      }
+    }
+  ],
+  "order": [
+    "sync"
+  ],
+  "polling": {
+    "polls": 212,
+    "stopped": true
+  },
+  "lifecycle": {
+    "pid": 4821,
+    "closing": true,
+    "exit": {
+      "code": 0,
+      "signal": null
+    },
+    "pending": 0
+  },
+  "wallMs": 2607.683083
+}

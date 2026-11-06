@@ -1,0 +1,20 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Exact backend source src-tauri/src/store.rs
++ actual - expected
+
++ 'de7150eb00e9794243ec598a049932889e43f76a1a395291da333de63241bcf4'
+- 'a7c77e1d9b8760c6dc87206ad8520c6efdb526e815a0c281e41a5cfe3c9f06f4'
+
+    at verifyBackend (file:///private/tmp/apple-notes-sync86-dom/scripts/debug/sync-rust-dom.mjs:44:12)
+    at async file:///private/tmp/apple-notes-sync86-dom/scripts/debug/sync-rust-dom.mjs:51:1 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'de7150eb00e9794243ec598a049932889e43f76a1a395291da333de63241bcf4',
+  expected: 'a7c77e1d9b8760c6dc87206ad8520c6efdb526e815a0c281e41a5cfe3c9f06f4',
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0

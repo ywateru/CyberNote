@@ -1,0 +1,23 @@
+{
+  "scope": "Synthetic transport peer only; deliberate failure expects owned mock SIGTERM, not natural success",
+  "results": [
+    {
+      "status": "rejected",
+      "error": "Controlled sink failure"
+    },
+    {
+      "status": "rejected",
+      "error": "Controlled sink failure"
+    }
+  ],
+  "lifecycle": {
+    "pid": 8607,
+    "closing": true,
+    "exit": {
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    "failure": "Controlled sink failure",
+    "pending": 0
+  }
+}
