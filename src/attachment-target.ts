@@ -46,7 +46,8 @@ export function rebindAttachmentTarget<Editor, Bookmark>(
     original.epoch === undefined ||
     original.noteEpoch === undefined ||
     stamp.sessionId !== original.sessionId ||
-    stamp.epoch !== original.epoch ||
+    stamp.epoch === undefined ||
+    stamp.epoch < original.epoch ||
     stamp.noteEpoch !== original.noteEpoch ||
     stamp.noteId !== target.noteId ||
     original.noteId !== target.noteId ||

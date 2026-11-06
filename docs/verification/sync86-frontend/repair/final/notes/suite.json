@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "group": "notes",
+      "pass": true,
+      "checks": [
+        "Semantic create persists a new workspace note and rendered editor",
+        "Editor transaction saved body and DOM agrees",
+        "Pin and paper semantic patch reaches persistent workspace",
+        "Delete moves actual note into trash",
+        "Restore leaves trash",
+        "Real lock modal makes note unauthorized and hides editable content",
+        "Real unlock modal restores authorized editable note",
+        "Purge requires real confirmation and removes workspace note and DOM",
+        "No uncaught application page errors"
+      ],
+      "elapsedMs": 2148
+    }
+  ],
+  "groups": [
+    "notes"
+  ],
+  "scope": {
+    "platform": "desktop-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  }
+}

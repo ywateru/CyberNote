@@ -1,0 +1,84 @@
+{
+  "sourceHead": "06ec6a0bb59f29b290cf733c000a9655541044fd",
+  "source": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "6da26a58d14d02f0e39c3ed7091d7e739820b750a31cd91d2b45325c3dca918e",
+    "fileCount": 133,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "checks": [
+    {
+      "name": "frozen-products",
+      "command": [
+        "git",
+        "diff",
+        "--exit-code",
+        "0c84e589",
+        "--",
+        "src/App.tsx",
+        "scripts/debug/sync-window-navigation.mjs"
+      ],
+      "cwd": "/private/tmp/apple-notes-sync86-frontend",
+      "naturalExit": 0,
+      "elapsedMs": 22
+    },
+    {
+      "name": "original-evidence-unchanged",
+      "command": [
+        "git",
+        "diff",
+        "--exit-code",
+        "b4d4cdd3",
+        "--",
+        "docs/plan/reviews/app-sync86-frontend.md",
+        "docs/verification/sync86-frontend/independent"
+      ],
+      "cwd": "/private/tmp/apple-notes-sync86-frontend",
+      "naturalExit": 0,
+      "elapsedMs": 15
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/private/tmp/apple-notes-sync86-frontend",
+      "naturalExit": 0,
+      "elapsedMs": 57
+    }
+  ],
+  "artifactSha256": {
+    "README.md": "0eaf5d976872f0f0780beebba95529bf73446f8161c2ab602b2444e73cc38f0b",
+    "diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "frozen-products.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "navigation41/report.json": "66ec44d431565f8bcbdb0f1b74c74ea83ebfa9bd03c9a3f1e0604448afb73029",
+    "navigation41/search-escape-held.html": "a2c6a2995b9c1793bad59bc1a224b2ed0401a02623e8b48562871c53dbf4e4ea",
+    "navigation41/search-typing-held.html": "65bad877fdfde7220209cbb21cfb3da0f961cc92b52264f2c1751565d14e2edf",
+    "navigation41.log": "66ec44d431565f8bcbdb0f1b74c74ea83ebfa9bd03c9a3f1e0604448afb73029",
+    "original-evidence-unchanged.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original-focus-assertions.json": "cc7a18b54a727819542ffb8703e17374d7aef097494721150825068251b5d065",
+    "original-focus-probe.json": "10861c24b70d6c017ec7c73fc20bbb28766249e9a2ea70c02adb5c49231ea762",
+    "original-focus-probe.log": "3cf7d07e7b9ff54dcb10c6f9cbd056b56284f78aa2ad263d50f98876d1808a5b",
+    "original-replay-runs.json": "c59af674c49bdcfa5e0c9af6a822134193a51f6a9d10cf9f5332ad587be54638",
+    "replay-original.log": "fae81ba7234297659056fc8b505ebb5f09dd8e8855648f98a20dc5ac816d7252",
+    "replay-original.mjs": "8d6b0c3d89e1c5d60e53551f04feb214d8a12fc3e8a8ae2a3156a9c85cce5663",
+    "replayed-counterexamples.json": "b04ccf4ec9c141cddd794d7296bc5d9c64564b2b4074b83b3f4b7ebf628de030",
+    "replayed-counterexamples.log": "b04ccf4ec9c141cddd794d7296bc5d9c64564b2b4074b83b3f4b7ebf628de030",
+    "replayed-counterexamples.mjs": "271ca67c44a12cf09ecba68516a7ca87c0ae191eed3aee1cc7bb4a39e16092b3",
+    "replayed-search-escape.html": "a2c6a2995b9c1793bad59bc1a224b2ed0401a02623e8b48562871c53dbf4e4ea",
+    "replayed-search-typing.html": "65bad877fdfde7220209cbb21cfb3da0f961cc92b52264f2c1751565d14e2edf"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "sourceHead": "0c84e589398f90a403f0db7665cb6bebb9db37bb",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "6da26a58d14d02f0e39c3ed7091d7e739820b750a31cd91d2b45325c3dca918e",
+    "fileCount": 133,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "originalSource": "5950bd3074e4335d4a863b2194012d0173b0dc63",
+  "originalEvidence": "2518edd9d758d9225d65db1bc43823dc108901f3",
+  "blockingReview": "b4d4cdd3e9085a8f949a109a64f919eb7efbc402",
+  "checks": {
+    "original34": 34,
+    "navigation": 41,
+    "notes": 9
+  },
+  "runs": {
+    "build": {
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "naturalExit": 0,
+      "elapsedMs": 9087
+    },
+    "diff-check": {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "naturalExit": 0,
+      "elapsedMs": 73
+    },
+    "navigation41": {
+      "command": [
+        "node",
+        "scripts/debug/sync-window-navigation.mjs",
+        "/private/tmp/sync86-repair-final/navigation41"
+      ],
+      "naturalExit": 0,
+      "elapsedMs": 20552
+    },
+    "notes": {
+      "command": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "group",
+        "notes",
+        "--out",
+        "/private/tmp/sync86-repair-final/notes"
+      ],
+      "naturalExit": 0,
+      "elapsedMs": 10897
+    },
+    "original34": {
+      "command": [
+        "node",
+        "scripts/debug/sync-window.mjs",
+        "/private/tmp/sync86-repair-final/original34"
+      ],
+      "naturalExit": 0,
+      "elapsedMs": 20093
+    },
+    "production": {
+      "command": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/sync86-repair-final/production"
+      ],
+      "naturalExit": 0,
+      "elapsedMs": 4013
+    }
+  },
+  "status": "Author development evidence only; original blocked independent review preserved and repair awaits independent re-review."
+}

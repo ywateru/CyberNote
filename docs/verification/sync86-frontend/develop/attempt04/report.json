@@ -1,0 +1,207 @@
+{
+  "sourceHead": "d8ff33362cb2bc9adfac9cbd205b90ae3bbead73",
+  "before": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "775031d522a6003777c4e73e3d5f6c896221c3206178f353fa272f0682645ac2",
+    "fileCount": 132,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx",
+      " M src/attachment-target.ts",
+      " M src/bridge.ts",
+      "?? scripts/debug/sync-window.mjs",
+      "?? src/network-sync.ts"
+    ]
+  },
+  "after": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "775031d522a6003777c4e73e3d5f6c896221c3206178f353fa272f0682645ac2",
+    "fileCount": 132,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx",
+      " M src/attachment-target.ts",
+      " M src/bridge.ts",
+      "?? scripts/debug/sync-window.mjs",
+      "?? src/network-sync.ts"
+    ]
+  },
+  "sourceChanged": false,
+  "checks": [
+    "Probe reads real App protection without freeze, access transition, remount or focus change",
+    "Prepare freezes the target before draining its existing save queue",
+    "Ready follows real save queue ACK and leaves no pending or failed target body",
+    "Abort preserves the same target DOM and restores original editability",
+    "Prepare and abort retain the actual Tiptap Undo history",
+    "An unrelated active editor remains writable and saves while B is frozen",
+    "Real PM composition and TagComposition protect the owner and defer prepare without forcing an end",
+    "The real final IME body saves through the ordinary App handler",
+    "Navigation waits for a linearized terminal receipt while the target remains frozen",
+    "The real native/debug guard and PM transaction filter both reject target writes during cancellation",
+    "The original navigation continues after the terminal cancellation receipt",
+    "An old release cannot thaw a newer operation",
+    "A late pending ready receipt cannot recreate a finished freeze",
+    "A lost cancellation reply is recovered using the same operation and backend terminal receipt",
+    "An open picker protects its exact captured note owner",
+    "A cancelled picker releases protection without an attachment write",
+    "A paused checkpoint retains recording ticket protection after document ACK",
+    "Recording A checkpoints after trusted B lock/global epoch change and stays owned by A",
+    "Recording protection remains through final document/journal ACK until release ACK",
+    "Only final recording release removes owner protection",
+    "A real in-flight creation blocks probe before any quiet freeze",
+    "The existing access prepare barrier blocks an independent sync probe"
+  ],
+  "replies": [
+    {
+      "phase": "probe",
+      "operationId": "e658037f-2632-4ea2-b22a-4bee75175d51",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "6d0055af-c5a0-4add-b5c4-28d7b1f4dbc5",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "207e3cc6-ea76-45ab-9ee3-bc7be04c5c3f",
+      "ready": true
+    },
+    {
+      "phase": "probe",
+      "operationId": "a02d541d-3ed1-42c9-b326-edf7ea7c1250",
+      "protectedNoteIds": [
+        "note-a"
+      ],
+      "blocked": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "07f74de1-8192-43eb-a688-9f40681b3c9f",
+      "ready": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "415cf228-3511-44b6-a127-b22bca894302",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "c07f56c3-9d5c-4307-9971-cacd29fcb4a7",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "c07f56c3-9d5c-4307-9971-cacd29fcb4a7",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "f1d09c6a-b34c-4b52-845b-c9ad4da5c3cf",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "0b499b5a-f5be-4341-98df-6d89670ff1fe",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "0b499b5a-f5be-4341-98df-6d89670ff1fe",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "7e22728c-451b-4a66-8011-90a11a0d6236",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "7e22728c-451b-4a66-8011-90a11a0d6236",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "7e22728c-451b-4a66-8011-90a11a0d6236",
+      "ready": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "46366542-d211-4232-8a98-de9035427f24",
+      "protectedNoteIds": [
+        "note-a"
+      ],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "b3f5035c-b67f-4784-8f8a-eb6df884839b",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "1fc266bd-6a30-4816-aee4-32b59b174d98",
+      "protectedNoteIds": [
+        "note-a"
+      ],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "c3c62fa1-dcd0-4b68-9e00-34b7007daf85",
+      "protectedNoteIds": [
+        "note-a"
+      ],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "c8ca27d9-501e-4c82-b0a2-05cb1770f1ee",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "9ea4f996-8202-4cc7-8cda-dee39681096c",
+      "protectedNoteIds": [],
+      "blocked": true
+    },
+    {
+      "phase": "probe",
+      "operationId": "ce75fa1a-d1a3-4ff7-9922-67b74f286182",
+      "protectedNoteIds": [],
+      "blocked": true
+    }
+  ],
+  "failure": {
+    "message": "锁定未执行：请检查所有窗口是否有未保存的更改，再重试。",
+    "stack": "Error: 锁定未执行：请检查所有窗口是否有未保存的更改，再重试。\n    at waitForIdle (file:///private/tmp/apple-notes-sync86-frontend/scripts/debug/runtime.mjs:68:41)\n    at async file:///private/tmp/apple-notes-sync86-frontend/scripts/debug/sync-window.mjs:183:3"
+  },
+  "naturalExit": 1,
+  "elapsedMs": 10124,
+  "scope": "Production React/Tiptap/App handlers and real Chromium CDP IME; notes-sync/sync_window_reply plus local storage/device IPC are explicit JS fixture. No Rust/network/Android device or real microphone proof.",
+  "pageErrors": []
+}

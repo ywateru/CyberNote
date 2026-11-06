@@ -1,0 +1,280 @@
+{
+  "workspace": {
+    "folders": [
+      {
+        "id": "default",
+        "name": "备忘录",
+        "sortOrder": 0,
+        "createdAt": 1,
+        "kind": "default",
+        "parentId": null
+      },
+      {
+        "id": "quick",
+        "name": "快速备忘录",
+        "sortOrder": -1,
+        "createdAt": 1,
+        "kind": "quick",
+        "parentId": null
+      },
+      {
+        "id": "trash",
+        "name": "最近删除",
+        "sortOrder": 9999,
+        "createdAt": 1,
+        "kind": "trash",
+        "parentId": null
+      }
+    ],
+    "notes": [
+      {
+        "id": "f972f564-3358-4e82-9934-b90c7f922d17",
+        "folderId": "default",
+        "title": "新备忘录",
+        "plainText": "",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": []
+            }
+          ]
+        },
+        "createdAt": 1793950424740,
+        "updatedAt": 1793950424740,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": false,
+        "paperStyle": "plain",
+        "revision": 0
+      },
+      {
+        "id": "note-a",
+        "folderId": "default",
+        "title": "新备忘录",
+        "plainText": "\n independent-A最终Fixture A",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "f8fefa1b-ef91-4ab8-ad71-1acbff5f3aee",
+                "name": "新录音.wav",
+                "kind": "audio"
+              }
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": " independent-A最终Fixture A"
+                }
+              ]
+            }
+          ]
+        },
+        "createdAt": 1,
+        "updatedAt": 1793950424277,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": false,
+        "paperStyle": "plain",
+        "revision": 9
+      },
+      {
+        "id": "note-b",
+        "folderId": "default",
+        "title": "Fixture B",
+        "plainText": "Fixture B",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fixture B"
+                }
+              ]
+            }
+          ]
+        },
+        "createdAt": 1,
+        "updatedAt": 1,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": true,
+        "paperStyle": "plain",
+        "revision": 1
+      }
+    ],
+    "attachments": [
+      {
+        "id": "95dd0629-a5e5-4995-8647-5ad83a6b7c84",
+        "noteId": "note-a",
+        "kind": "audio",
+        "displayName": "新录音.wav",
+        "mime": "audio/wav",
+        "size": 33400,
+        "relativePath": "synthetic/ca02d8e9-164c-46f7-8ee5-e5f7e134201a",
+        "recordedAt": 1793950423151
+      },
+      {
+        "id": "f5b2855d-5144-42f7-94ad-72d5cc826c80",
+        "noteId": "note-a",
+        "kind": "audio",
+        "displayName": "新录音.wav",
+        "mime": "audio/wav",
+        "size": 70288,
+        "relativePath": "synthetic/ebfa0fe3-d9cc-4c84-b35a-b14590d2c832",
+        "recordedAt": 1793950423151
+      },
+      {
+        "id": "f8fefa1b-ef91-4ab8-ad71-1acbff5f3aee",
+        "noteId": "note-a",
+        "kind": "audio",
+        "displayName": "新录音.wav",
+        "mime": "audio/wav",
+        "size": 70288,
+        "relativePath": "synthetic/299ca051-44c0-45ef-8224-f770e59793bd",
+        "recordedAt": 1793950423151
+      }
+    ],
+    "settings": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title"
+    },
+    "access": {
+      "sessionId": "debug70-64fea003-625b-4366-ba92-cff7ea8b4d69",
+      "epoch": 2,
+      "notes": {
+        "f972f564-3358-4e82-9934-b90c7f922d17": {
+          "epoch": 0,
+          "authorized": true
+        },
+        "note-a": {
+          "epoch": 0,
+          "authorized": true
+        },
+        "note-b": {
+          "epoch": 1,
+          "authorized": false
+        }
+      },
+      "suspended": [],
+      "operationId": null
+    },
+    "metadata": {
+      "sessionId": "debug70-64fea003-625b-4366-ba92-cff7ea8b4d69",
+      "sequence": 13
+    }
+  },
+  "editorJSON": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "attachment",
+        "attrs": {
+          "id": "f8fefa1b-ef91-4ab8-ad71-1acbff5f3aee",
+          "name": "新录音.wav",
+          "kind": "audio"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": " independent-A最终Fixture A"
+          }
+        ]
+      }
+    ]
+  },
+  "editorSelection": {
+    "type": "text",
+    "anchor": 2,
+    "head": 2
+  },
+  "error": "锁定未执行：请检查所有窗口是否有未保存的更改，再重试。",
+  "notice": "",
+  "selection": {
+    "folderId": "default",
+    "noteId": "note-a",
+    "page": "editor",
+    "query": "",
+    "searching": false,
+    "menu": null,
+    "modal": null,
+    "listed": [
+      "f972f564-3358-4e82-9934-b90c7f922d17",
+      "note-a",
+      "note-b"
+    ]
+  },
+  "save": {
+    "pending": 0,
+    "queued": 1,
+    "failed": 0,
+    "saving": 0
+  },
+  "quietWindow": {
+    "frozen": false,
+    "sessionId": "debug70-64fea003-625b-4366-ba92-cff7ea8b4d69",
+    "protectedNoteIds": [],
+    "blocked": false,
+    "editors": [
+      {
+        "id": "note-a",
+        "composing": false,
+        "pendingComposition": false,
+        "editable": true,
+        "frozen": false,
+        "owner": "note-a",
+        "externalVersion": 0
+      }
+    ]
+  },
+  "busy": false,
+  "failure": {
+    "serial": 1,
+    "message": "锁定未执行：请检查所有窗口是否有未保存的更改，再重试。"
+  },
+  "recording": {
+    "active": false,
+    "state": null
+  },
+  "ocr": {
+    "phase": "choose",
+    "text": "",
+    "error": ""
+  },
+  "settings": {
+    "selectedFolder": "default",
+    "selectedNote": "note-a",
+    "theme": "light",
+    "sort": "title"
+  },
+  "synchronization": null,
+  "preferences": {
+    "open": false,
+    "tab": "settings"
+  },
+  "creation": {
+    "pending": false,
+    "receipt": null,
+    "source": null,
+    "error": "",
+    "focusTarget": null
+  },
+  "folderForm": false
+}

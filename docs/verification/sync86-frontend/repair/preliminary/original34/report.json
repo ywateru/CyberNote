@@ -1,0 +1,243 @@
+{
+  "sourceHead": "b4d4cdd3e9085a8f949a109a64f919eb7efbc402",
+  "before": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "dbf1c302bf9e65296aa5647d3f1a547b4f195f440a660d608256217bd2df5b59",
+    "fileCount": 133,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx",
+      "?? scripts/debug/sync-window-navigation.mjs"
+    ]
+  },
+  "after": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "dbf1c302bf9e65296aa5647d3f1a547b4f195f440a660d608256217bd2df5b59",
+    "fileCount": 133,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx",
+      "?? scripts/debug/sync-window-navigation.mjs"
+    ]
+  },
+  "sourceChanged": false,
+  "checks": [
+    "Probe reads real App protection without freeze, access transition, remount or focus change",
+    "Prepare freezes the target before draining its existing save queue",
+    "Ready follows real save queue ACK and leaves no pending or failed target body",
+    "Abort preserves the same target DOM and restores original editability",
+    "Prepare and abort retain the actual Tiptap Undo history",
+    "An unrelated active editor remains writable and saves while B is frozen",
+    "Real PM composition and TagComposition protect the owner and defer prepare without forcing an end",
+    "The real final IME body saves through the ordinary App handler",
+    "Navigation waits for a linearized terminal receipt while the target remains frozen",
+    "The real native/debug guard and PM transaction filter both reject target writes during cancellation",
+    "The original navigation continues after the terminal cancellation receipt",
+    "An old release cannot thaw a newer operation",
+    "A late pending ready receipt cannot recreate a finished freeze",
+    "A lost cancellation reply is recovered using the same operation and backend terminal receipt",
+    "The bounded quiet watchdog requests backend termination and keeps the target frozen while its receipt is pending",
+    "An event from another Session cannot freeze or receive a reply",
+    "An open picker protects its exact captured note owner",
+    "A cancelled picker releases protection without an attachment write",
+    "An attachment in storage/document ACK protects the original owner",
+    "Attachment protection ends only after the real App completes its journal/document ACK path",
+    "A paused checkpoint retains recording ticket protection after document ACK",
+    "Recording A checkpoints after trusted B lock/global epoch change and stays owned by A",
+    "Recording protection remains through final document/journal ACK until release ACK",
+    "Only final recording release removes owner protection",
+    "A real in-flight creation blocks probe before any quiet freeze",
+    "The existing access prepare barrier blocks an independent sync probe",
+    "Ordinary metadata/revision change with equal body retains the same DOM",
+    "Commit release retains freeze while the actual trusted metadata/body read is in flight",
+    "Commit admits writes only after the committed projection reached the real editor host",
+    "Release never restores old editable=true after trusted note authorization was revoked",
+    "The production coordinator cleans up a hung cancellation on dispose/StrictMode remount, rejects old release, and ends old trusted Session leases",
+    "Strict event/receipt validation rejects unknown fields, duplicate targets, stale IDs and non-string/unknown outcomes",
+    "Trusted global epoch rebinding preserves every Session/noteEpoch/editor/owner/document/version check and rejects epoch regression or absence",
+    "No React or browser page errors occurred"
+  ],
+  "replies": [
+    {
+      "phase": "probe",
+      "operationId": "98f8f738-3d23-4ce3-a4ba-91674f4df53d",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "08c35b2c-8b78-4579-a317-7a4f9540e5df",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "17638fc7-fd3d-4bf6-aa94-d9534e464d3f",
+      "ready": true
+    },
+    {
+      "phase": "probe",
+      "operationId": "e837bf9f-fd8d-4f11-9a62-068443f7e145",
+      "protectedNoteIds": [
+        "note-a"
+      ],
+      "blocked": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "e7b89a2c-69c7-4396-8dc3-392b421c72c3",
+      "ready": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "f5d4b9aa-739a-4e37-a77c-db678c423243",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "28e6e5a8-8d70-4dab-901e-165c02cbe4d6",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "28e6e5a8-8d70-4dab-901e-165c02cbe4d6",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "8b58d57f-bd73-4daf-9fef-24b7ee1d1325",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "88b830d5-b835-414d-9eb7-d6bbfa7f6494",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "88b830d5-b835-414d-9eb7-d6bbfa7f6494",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "550b33b7-f48d-42ad-abaa-aedfd6371e38",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "550b33b7-f48d-42ad-abaa-aedfd6371e38",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "550b33b7-f48d-42ad-abaa-aedfd6371e38",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "1739d5fe-22f5-41bc-a0fe-7a918cb90fdc",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "1739d5fe-22f5-41bc-a0fe-7a918cb90fdc",
+      "ready": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "f1d2a88f-1675-4202-b782-d54e53c4579f",
+      "protectedNoteIds": [
+        "note-a"
+      ],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "e44e1ed4-5d83-49c6-ac6a-de7487b95dca",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "efdd1245-9262-4615-b7ee-3279a628ca6d",
+      "protectedNoteIds": [
+        "note-a"
+      ],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "bffa30da-2717-4133-be9d-eb1954bd94e9",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "dd96dcb2-cd09-4b91-bfe6-e93e6560e04e",
+      "protectedNoteIds": [
+        "note-a"
+      ],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "cfbfcd6e-2125-4f50-a067-e8950ffafa7c",
+      "protectedNoteIds": [
+        "note-a"
+      ],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "ef2ef785-6bb4-423d-9961-11dca7aca08a",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "b8219fe2-62e4-4e16-a9e1-31e747f25909",
+      "protectedNoteIds": [],
+      "blocked": true
+    },
+    {
+      "phase": "probe",
+      "operationId": "3f18eb3b-b415-4b06-805e-df40a40fedf5",
+      "protectedNoteIds": [],
+      "blocked": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "8cd2c176-a535-4c46-ac87-d600145ce12f",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "b5932429-0bf6-404f-b1cd-5d47d3132880",
+      "ready": true
+    }
+  ],
+  "naturalExit": 0,
+  "elapsedMs": 14297,
+  "scope": "Production React/Tiptap/App handlers and real Chromium CDP IME; notes-sync/sync_window_reply plus local storage/device IPC are explicit JS fixture. No Rust/network/Android device or real microphone proof.",
+  "pageErrors": []
+}

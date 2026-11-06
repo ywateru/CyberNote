@@ -1,0 +1,70 @@
+{
+  "before": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "6da26a58d14d02f0e39c3ed7091d7e739820b750a31cd91d2b45325c3dca918e",
+    "fileCount": 133,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "after": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "6da26a58d14d02f0e39c3ed7091d7e739820b750a31cd91d2b45325c3dca918e",
+    "fileCount": 133,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceChanged": false,
+  "originalCounterexampleSha256": "5e1b6a9175f04118bfb68ceb05d8f1cc93b98b7d19842c05ef2ae429bc79f710",
+  "derivedCounterexampleSha256": "271ca67c44a12cf09ecba68516a7ca87c0ae191eed3aee1cc7bb4a39e16092b3",
+  "adaptations": [
+    "Absolute runtime imports because derived script runs in /private/tmp",
+    "Distinct /private/tmp output names",
+    "Add assertions for terminal replay retaining exact typed query and Escape intent",
+    "Remove known erroneous idle wait in admitted quit state; query blocked snapshot directly"
+  ],
+  "runs": [
+    {
+      "name": "replayed-counterexamples",
+      "command": [
+        "node",
+        "/private/tmp/sync86-frontend-recheck/replayed-counterexamples.mjs"
+      ],
+      "cwd": "/private/tmp/apple-notes-sync86-frontend",
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 6796
+    },
+    {
+      "name": "original-focus-probe",
+      "command": [
+        "node",
+        "docs/verification/sync86-frontend/independent/focus-probe.mjs"
+      ],
+      "cwd": "/private/tmp/apple-notes-sync86-frontend",
+      "code": 0,
+      "signal": null,
+      "elapsedMs": 6011
+    }
+  ],
+  "focusAssertions": true
+}

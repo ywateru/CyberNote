@@ -1,0 +1,694 @@
+{
+  "sourceHead": "0c84e589398f90a403f0db7665cb6bebb9db37bb",
+  "before": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "6da26a58d14d02f0e39c3ed7091d7e739820b750a31cd91d2b45325c3dca918e",
+    "fileCount": 133,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "after": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "6da26a58d14d02f0e39c3ed7091d7e739820b750a31cd91d2b45325c3dca918e",
+    "fileCount": 133,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceChanged": false,
+  "checks": [
+    "HTML typing keeps the old applied query and editor owner until terminal receipt",
+    "Multiple real HTML input events keep the latest draft visible during cancellation",
+    "The final typed query applies after terminal and selects the matching owner",
+    "Real Escape retains the old owner and applied search until terminal",
+    "Escape exits search and returns to the original owner after terminal",
+    "Programmatic global search defers its projection and retains the request",
+    "Programmatic search applies its original query after terminal",
+    "Clear search click continues to wait for terminal",
+    "Clear search click replays after terminal",
+    "Programmatic tag filter preserves the old owner until terminal",
+    "Programmatic tag filter replays after terminal",
+    "Programmatic view changes defer owner and layout until terminal",
+    "Programmatic view change replays after terminal",
+    "Folder click continues to wait for terminal",
+    "Folder click replays after terminal",
+    "Search focus defers searching state while retaining the new input focus",
+    "Search focus state replays after terminal without restoring the old editor focus",
+    "Global search keyboard shortcut defers projection until terminal",
+    "Global search keyboard shortcut replays after terminal",
+    "Prepare preserves DOM and selection while the actual focused editor is parked",
+    "Equal-body metadata keeps the same frozen editor and does not cancel the lease",
+    "Abort restores the original focused editor and exact selection on the same DOM",
+    "Actual keyboard Undo still reaches history after focus restoration",
+    "Moving focus to the actual search input prevents editor focus theft on release",
+    "A real pointer interaction on the page relinquishes saved editor focus",
+    "Keyboard Tab relinquishes saved editor focus",
+    "Release never takes focus from another real browsing document",
+    "Cross-document focus test returns to an actually focused page body",
+    "Returning to the page after trusted window blur does not reclaim abandoned editor focus",
+    "Releasing an unrelated target preserves active editor focus and real typing",
+    "A changed trusted noteEpoch cannot restore the old operation focus",
+    "A replacement trusted Session cannot restore the old operation focus",
+    "Desktop regression runtime has no React or browser errors",
+    "Native global search waits even when its old context owner is unrelated to the frozen target",
+    "Native global search retains its query through terminal replay",
+    "Native toolbar fixture has no React or browser errors",
+    "Mobile search suggestion preserves page and owner until terminal",
+    "Mobile search suggestion applies after terminal",
+    "Mobile cancel retains searching state until terminal",
+    "Mobile search cancel replays after terminal",
+    "Mobile fixture has no React or browser errors"
+  ],
+  "observations": [
+    {
+      "name": "HTML typing held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "folders",
+        "query": "",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "HTML typing after terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-b",
+        "page": "folders",
+        "query": "Fixture B",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-b"
+        ]
+      },
+      "frozen": false,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": false,
+          "owner": "note-a",
+          "externalVersion": 0
+        },
+        {
+          "id": "note-b",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": true,
+          "frozen": false,
+          "owner": "note-b",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": false
+    },
+    {
+      "name": "Escape held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-b",
+        "page": "folders",
+        "query": "Fixture B",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": false,
+          "owner": "note-a",
+          "externalVersion": 0
+        },
+        {
+          "id": "note-b",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-b",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Escape after terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "folders",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": false,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": true,
+          "frozen": false,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": false
+    },
+    {
+      "name": "Debug search held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "folders",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Clear search held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-b",
+        "page": "folders",
+        "query": "Fixture B",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": false,
+          "owner": "note-a",
+          "externalVersion": 0
+        },
+        {
+          "id": "note-b",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-b",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Programmatic tag filter held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "folders",
+        "query": "",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Programmatic view filter held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "notes",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Folder click held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "notes",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Search focus held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "notes",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Search shortcut held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "notes",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "focused editor prepared",
+      "focus": {
+        "sameDOM": true,
+        "focused": false,
+        "sameSelection": true,
+        "sameDocument": true,
+        "editable": false,
+        "pageFocused": true,
+        "activeTag": "BODY"
+      }
+    },
+    {
+      "name": "focused editor released",
+      "focus": {
+        "sameDOM": true,
+        "focused": true,
+        "sameSelection": true,
+        "sameDocument": true,
+        "editable": true,
+        "pageFocused": true,
+        "activeTag": "DIV"
+      }
+    },
+    {
+      "name": "Native search with unrelated frozen target held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "folders",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": true,
+          "frozen": false,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Mobile suggestion filter held before terminal",
+      "selection": {
+        "folderId": "all",
+        "noteId": null,
+        "page": "folders",
+        "query": "",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [],
+      "replyPending": true
+    },
+    {
+      "name": "Mobile search cancel held before terminal",
+      "selection": {
+        "folderId": "all",
+        "noteId": null,
+        "page": "notes",
+        "query": "",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": []
+      },
+      "frozen": true,
+      "editors": [],
+      "replyPending": true
+    }
+  ],
+  "replies": [
+    {
+      "phase": "prepare",
+      "operationId": "62612269-00b3-41cc-8b3b-ada5cde8ee31",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "62612269-00b3-41cc-8b3b-ada5cde8ee31",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "f3530937-6b6a-4c61-8e92-d769077aadd0",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "f3530937-6b6a-4c61-8e92-d769077aadd0",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "0b59cc5e-9db3-4050-ac69-c8ed33d66743",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "0b59cc5e-9db3-4050-ac69-c8ed33d66743",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "d3204489-e5de-434f-a2a8-7e74586558ef",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "d3204489-e5de-434f-a2a8-7e74586558ef",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "9e3fe36a-ff35-4f3e-ba6f-f53aa00c5743",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "9e3fe36a-ff35-4f3e-ba6f-f53aa00c5743",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "dc6919e4-2243-43a9-be47-6ef069364ccb",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "dc6919e4-2243-43a9-be47-6ef069364ccb",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "7ffefa66-3519-4e9d-9929-f6053c79323b",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "7ffefa66-3519-4e9d-9929-f6053c79323b",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "d03556d5-4816-41a3-9e4c-e660eef7c255",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "d03556d5-4816-41a3-9e4c-e660eef7c255",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "bf89edf8-5c71-4810-876e-6d8b09da40d9",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "bf89edf8-5c71-4810-876e-6d8b09da40d9",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "e33a9447-6af2-4bbc-9818-e01f33fcb6f5",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "8d043e3d-0828-4f1b-abb6-b16c09a6ddee",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "8d043e3d-0828-4f1b-abb6-b16c09a6ddee",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "e4de7544-44a5-45fe-85fd-38bba7e8f20f",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "107f96d1-7284-402d-be5c-fc2b18ca885b",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "145ce95a-76a7-471d-bc10-f2f0ed82757e",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "88c78c4e-a77d-4fbb-a5fd-b8c6d6c260ae",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "5b62aee8-3068-4a7d-a1bc-a664952e7ed5",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "c4602b9c-1bde-4e07-a07b-01676995d514",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "c4602b9c-1bde-4e07-a07b-01676995d514",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "4c789ad3-1dcb-4fe8-ad6d-cfbc407bf7e7",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "c2ab3acf-4ab7-43ad-92ee-889be43f092a",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "c2ab3acf-4ab7-43ad-92ee-889be43f092a",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "81842a2f-a458-4fce-b0fc-a88f2cdce658",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "81842a2f-a458-4fce-b0fc-a88f2cdce658",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "4027ce64-7cbd-49c7-b83b-896fd4c97c5a",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "4027ce64-7cbd-49c7-b83b-896fd4c97c5a",
+      "ready": false
+    }
+  ],
+  "naturalExit": 0,
+  "elapsedMs": 20348,
+  "scope": "Real React/Tiptap/Chromium DOM, input, keyboard and focus with explicit local sync/metadata/IPC fixture. No Rust, network, real mic or Android device proof."
+}
