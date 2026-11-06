@@ -1,0 +1,180 @@
+#!/usr/bin/env python3
+"""Owned-device-only native acceptance. No generic ADB/shell passthrough."""
+import argparse
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import sys
+import time
+import zipfile
+
+ROOT = Path('/private/tmp/apple-notes-sync87-environment-01')
+SERIAL, AVD, PACKAGE = 'emulator-5584', 'notes-sync87-isolated', 'com.local.notesclone'
+ADB = '/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb'
+DEVICE = '/sdcard/Download/notes-sync87-'
+MODULE = Path(__file__).resolve().parents[1] / 'sync87-environment/lifecycle.py'
+class Refused(RuntimeError): pass
+
+def require(ok, reason):
+    if not ok: raise Refused(reason)
+
+def target(serial, avd):
+    require(serial == SERIAL and avd == AVD, 'explicit isolated serial and AVD required')
+
+def stream_hash(stream):
+    digest=hashlib.sha256()
+    for block in iter(lambda:stream.read(1024*1024),b''):digest.update(block)
+    return digest.hexdigest()
+
+def receipt(path):
+    p = Path(path)
+    require(p.is_absolute() and p.is_file() and not p.is_symlink(), 'receipt must be an absolute direct file')
+    obj = json.loads(p.read_text())
+    required = {'authorizedBy','apk','sha256','sourceCommit','buildLabel','package','activity','entries'}
+    require(type(obj) is dict and set(obj) == required, 'receipt fields mismatch')
+    require(obj['authorizedBy'] == 'root-sync87-package-review', 'root package review receipt required')
+    require(obj['package'] == PACKAGE and obj['activity'] == '.MainActivity', 'unexpected application identity')
+    require(type(obj['buildLabel']) is str and re.fullmatch(r'Android[1-9][0-9]*', obj['buildLabel']) and int(obj['buildLabel'][7:]) >= 17, 'new sync build label required')
+    require(type(obj['sourceCommit']) is str and re.fullmatch(r'[0-9a-f]{40}', obj['sourceCommit']), 'full source commit required')
+    require(type(obj['sha256']) is str and re.fullmatch(r'[0-9a-f]{64}',obj['sha256']), 'full APK hash required')
+    apk = Path(obj['apk'])
+    require(apk.is_absolute() and apk.suffix == '.apk' and apk.is_file() and not apk.is_symlink(), 'absolute reviewed APK required')
+    with apk.open('rb') as stream:actual=stream_hash(stream)
+    require(actual == obj['sha256'], 'APK hash changed')
+    require(type(obj['entries']) is dict and obj['entries'], 'reviewed actual ZIP entries required')
+    with zipfile.ZipFile(apk) as z:
+        for name, expected in obj['entries'].items():
+            require(type(name) is str and not name.startswith('/') and '..' not in name.split('/') and name in z.namelist(), 'APK entry missing or unsafe')
+            require(type(expected) is str and re.fullmatch(r'[0-9a-f]{64}',expected), 'entry hash malformed')
+            with z.open(name) as entry:
+                actual = stream_hash(entry)
+            require(actual == expected, 'APK entry hash changed: '+name)
+        require(any(name.startswith('lib/arm64-v8a/') and name.endswith('.so') for name in obj['entries']), 'reviewed arm64 native library required')
+    return obj
+
+def owned_file(path):
+    p = Path(path)
+    require(p.is_absolute() and p.is_file() and not p.is_symlink(), 'direct host fixture file required')
+    require(re.fullmatch(r'sync87-[a-z0-9-]+\.(png|txt|wav)',p.name), 'synthetic fixture filename required')
+    require(p.stat().st_size <= 8*1024*1024, 'fixture exceeds 8MiB')
+    return p
+
+def device_path(value, *, file=True):
+    require(type(value) is str and re.fullmatch(r'/sdcard/Download/notes-sync87-[a-z0-9-]+(?:/sync87-[a-z0-9-]+\.(?:png|txt|wav))?' ,value), 'only this synthetic Download subtree allowed')
+    require(not file or value.count('/') == 4, 'synthetic file path required')
+    return value
+
+def run(argv, timeout=15, binary=False):
+    started=time.monotonic()
+    r=subprocess.run(argv,capture_output=True,timeout=timeout)
+    require(r.returncode == 0, 'bounded subprocess failed '+str(r.returncode)+': '+r.stderr.decode(errors='replace')[:500])
+    return r.stdout if binary else r.stdout.decode(errors='strict').strip()
+
+def ownership(serial,avd):
+    target(serial,avd)
+    spec=importlib.util.spec_from_file_location('sync87_environment_guard',MODULE)
+    env=importlib.util.module_from_spec(spec);spec.loader.exec_module(env)
+    # Environment functions emit diagnostic records to stdout; keep JSON response separate.
+    import contextlib
+    with contextlib.redirect_stdout(sys.stderr):
+        env.validate_target(argparse.Namespace(serial=serial,avd=avd))
+        state=env.read_state()
+        require(state['status']=='ready','owned emulator is not ready')
+        env.identity(state,listener=True)
+    name=run([ADB,'-s',SERIAL,'emu','avd','name'])
+    require(name.splitlines()==[AVD,'OK'],'explicit serial reports different AVD')
+    return state
+
+def adb(serial,avd,tail,timeout=15,binary=False):
+    ownership(serial,avd)
+    return run([ADB,'-s',SERIAL,*tail],timeout,binary)
+
+def app_identity(serial,avd,expected=None):
+    raw=adb(serial,avd,['shell','pidof',PACKAGE])
+    require(re.fullmatch(r'[1-9][0-9]*',raw),'exactly one app PID required')
+    pid=int(raw)
+    cmd=adb(serial,avd,['shell','cat',f'/proc/{pid}/cmdline']).rstrip('\0')
+    require(cmd==PACKAGE,'app PID command differs')
+    stat=adb(serial,avd,['shell','cat',f'/proc/{pid}/stat'])
+    # /proc PID comm can contain spaces; fields after closing parenthesis start at field3.
+    rest=stat[stat.rfind(')')+2:].split(); start=rest[19]
+    result={'pid':pid,'startTicks':start,'package':PACKAGE}
+    require(expected is None or result==expected,'app PID lifetime changed; reconnect required')
+    return result
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--serial',required=True);p.add_argument('--avd',required=True)
+    p.add_argument('operation',choices=['status','install','start','stop','home','back','identity','tap','hold','uia','ime','push','pull','forward','unforward','verify-app','foreground','screenshot','installed'])
+    p.add_argument('--receipt');p.add_argument('--path');p.add_argument('--remote');p.add_argument('--x',type=int);p.add_argument('--y',type=int);p.add_argument('--port',type=int);p.add_argument('--app-identity')
+    a=p.parse_args();target(a.serial,a.avd)
+    invoke=lambda tail,**kw:adb(a.serial,a.avd,tail,**kw)
+    result=None
+    if a.operation=='install':
+        reviewed=receipt(a.receipt)
+        result=invoke(['install','-r',reviewed['apk']],timeout=60)
+        require(result=='Success','installation did not report Success')
+        result={'installed':True,'sha256':reviewed['sha256'],'sourceCommit':reviewed['sourceCommit'],'buildLabel':reviewed['buildLabel']}
+    elif a.operation=='status':result={'emulator':ownership(a.serial,a.avd)}
+    elif a.operation in ('start','installed'):
+        reviewed=receipt(a.receipt)
+        location=invoke(['shell','pm','path',PACKAGE])
+        require(re.fullmatch(r'package:/data/app/[A-Za-z0-9_./=+-]+/base\.apk',location),'unexpected installed APK path')
+        payload=invoke(['exec-out','cat',location[len('package:'):]],binary=True)
+        require(hashlib.sha256(payload).hexdigest()==reviewed['sha256'],'installed package differs from reviewed APK')
+        result={'sha256':reviewed['sha256']}
+        if a.operation=='start':result=invoke(['shell','am','start','-W','-n',PACKAGE+'/.MainActivity'])
+    elif a.operation=='stop':result=invoke(['shell','am','force-stop',PACKAGE])
+    elif a.operation in ('identity','verify-app'):
+        expected=json.loads(a.app_identity) if a.app_identity else None
+        if a.operation=='verify-app':require(expected is not None,'exact app identity required')
+        result=app_identity(a.serial,a.avd,expected)
+    elif a.operation in ('home','back'):result=invoke(['shell','input','keyevent','3' if a.operation=='home' else '4'])
+    elif a.operation in ('tap','hold'):
+        require(type(a.x) is int and type(a.y) is int and 0<=a.x<720 and 0<=a.y<1280,'tap outside fixed isolated 720x1280 display')
+        args=['shell','input','tap',str(a.x),str(a.y)] if a.operation=='tap' else ['shell','input','swipe',str(a.x),str(a.y),str(a.x),str(a.y),'700']
+        result=invoke(args)
+    elif a.operation=='uia':
+        invoke(['shell','uiautomator','dump','/sdcard/Download/notes-sync87-uia.xml'],timeout=25)
+        result=invoke(['exec-out','cat','/sdcard/Download/notes-sync87-uia.xml'])
+    elif a.operation=='ime':result=invoke(['shell','dumpsys','input_method'])
+    elif a.operation=='screenshot':
+        dst=Path(a.path)
+        require(dst.is_absolute() and not dst.exists() and dst.suffix=='.png' and dst.parent.is_dir() and not dst.parent.is_symlink(),'new absolute PNG output required')
+        dst.write_bytes(invoke(['exec-out','screencap','-p'],binary=True));result={'bytes':dst.stat().st_size}
+    elif a.operation=='foreground':result=invoke(['shell','dumpsys','activity','activities'])
+    elif a.operation=='push':
+        src=owned_file(a.path);dst=device_path(a.remote)
+        require(src.name==dst.rsplit('/',1)[1],'fixture filename changed')
+        invoke(['shell','mkdir','-p',dst.rsplit('/',1)[0]])
+        result=invoke(['push',str(src),dst])
+    elif a.operation=='pull':
+        src=device_path(a.remote);dst=Path(a.path)
+        require(dst.is_absolute() and not dst.exists() and dst.parent.is_dir() and not dst.parent.is_symlink(),'new absolute output file required')
+        require(dst.name==src.rsplit('/',1)[1],'output filename changed')
+        result=invoke(['pull',src,str(dst)])
+    elif a.operation in ('forward','unforward'):
+        require(type(a.port) is int and 19400<=a.port<=19419,'owned CDP port range19400..19419 required')
+        expected=json.loads(a.app_identity) if a.app_identity else None
+        require(expected is not None,'app lifetime required for forwarding')
+        require(type(expected) is dict and set(expected)=={'pid','startTicks','package'} and type(expected['pid']) is int and expected['pid']>1 and expected['package']==PACKAGE and re.fullmatch(r'[0-9]+',expected['startTicks']),'invalid app identity')
+        identity=app_identity(a.serial,a.avd,expected) if a.operation=='forward' else expected
+        listing=invoke(['forward','--list']).splitlines()
+        address='tcp:'+str(a.port);remote='localabstract:webview_devtools_remote_'+str(identity['pid'])
+        rows=[line.split() for line in listing if address in line.split()]
+        if a.operation=='forward':
+            require(not rows,'CDP port already forwarded; refuse takeover')
+            result=invoke(['forward','--no-rebind',address,remote])
+        else:
+            require(rows==[[SERIAL,address,remote]],'forward no longer belongs to this exact app PID')
+            result=invoke(['forward','--remove',address])
+    print(json.dumps({'ok':True,'operation':a.operation,'result':result},ensure_ascii=False))
+
+if __name__=='__main__':
+    try:main()
+    except Exception as exc:
+        print(json.dumps({'ok':False,'error':type(exc).__name__,'message':str(exc)},ensure_ascii=False));sys.exit(2)
