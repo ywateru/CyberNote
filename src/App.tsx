@@ -203,6 +203,8 @@ import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
 import { attachmentExportPending } from "./attachment-export";
 import DataManagement, { type DataManagementHandle } from "./DataManagement";
+import SyncSettings, { type SyncSettingsHandle } from "./SyncSettings";
+import type { SyncCommand } from "./sync-client";
 import Preferences, { type PreferencesTab } from "./Preferences";
 import type { ArchiveResult } from "./data-management";
 import { documentsEqual } from "./document-equality";
@@ -653,6 +655,7 @@ function App() {
   const [syncCover, setSyncCover] = useState(false);
   const syncCoverRef = useRef(false);
   const dataManagementHandle = useRef<DataManagementHandle | null>(null);
+  const syncSettingsHandle = useRef<SyncSettingsHandle | null>(null);
   const [archiveBusy, setArchiveBusy] = useState(false);
   const archiveRunning = useRef(false);
   const blockedNotes = useRef(new Set<string>());
@@ -4888,6 +4891,7 @@ function App() {
           archiveBusy ||
           attachmentExportPending() ||
           !!dataManagementHandle.current?.inspect().busy ||
+          !!syncSettingsHandle.current?.inspect().busy ||
           synchronizingRef.current ||
           !!metadataRefreshRunning.current ||
           debugPending.current.size > 0 ||
@@ -4916,6 +4920,7 @@ function App() {
         },
         ocr: ocrState,
         settings,
+        synchronization: syncSettingsHandle.current?.inspect() || null,
         preferences: { open: modal === "preferences", tab: preferencesTab },
         creation: { pending: creatingNote, receipt: createReceipt.current?.id || null, source: createReceipt.current?.source || null, error: creationError, focusTarget: createFocus.current?.id || null },
         folderForm: !!folderForm,
@@ -4948,6 +4953,15 @@ function App() {
         },
         "image.info": () => {const button=document.querySelector<HTMLButtonElement>('.image-preview [aria-label="图片信息"]');if(!button)throw Error("图片预览尚未打开");button.click();},
         "image.close": () => setImagePreview(null),
+        ...Object.fromEntries([
+          ["sync.status", "status"], ["sync.host.start", "startHost"], ["sync.invite", "createInvite"],
+          ["sync.pair", "pair"], ["sync.now", "syncNow"], ["sync.stop", "stop"], ["sync.resume", "resume"],
+          ["sync.revoke", "revoke"], ["sync.conflicts", "conflicts"], ["sync.resolve", "resolve"],
+        ].map(([id, type]) => [id, async (args: Record<string, unknown>) => {
+          if (modal !== "preferences" || preferencesTab !== "data" || !syncSettingsHandle.current) throw Error("请先打开数据总览中的设备同步");
+          await syncSettingsHandle.current.run({ ...args, type } as SyncCommand);
+          return syncSettingsHandle.current?.inspect();
+        }])),
         "data.refresh": () => {
           if (modal !== "preferences" || preferencesTab !== "data" || !dataManagementHandle.current) throw Error("请先打开数据标签");
           return dataManagementHandle.current.refresh();
@@ -6207,6 +6221,7 @@ function App() {
           returnFocus={preferencesTrigger.current}
           data={<DataManagement
             active={preferencesTab === "data"}
+            synchronization={<SyncSettings active={preferencesTab === "data"} onHandle={(handle) => { syncSettingsHandle.current = handle; }} />}
             onHandle={(handle) => { dataManagementHandle.current = handle; }}
             onArchive={archive}
             backupBlocked={!!recordingTicket.current || record}

@@ -22,7 +22,7 @@ export function seededWorkspace() {
 }
 export class FakeBackend {
   kind = 'isolated-js-protocol-fixture';
-  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; }
+  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; this.sync = null; this.syncConflicts = []; }
   reset() { Object.assign(this, new FakeBackend(this.directory)); }
   state() { const value = clone(this.workspace); value.access = { sessionId: this.sessionId, epoch: this.accessEpoch, notes: Object.fromEntries(value.notes.map((note) => [note.id, { epoch: this.noteEpochs[note.id] || 0, authorized: !!(!note.locked || this.unlocked?.has(note.id)) }])), suspended: [...this.suspended], operationId: this.operationId }; value.metadata = { sessionId: this.sessionId, sequence: this.sequence }; return value; }
   tagged(value) { const state = this.state(); return { ...clone(value), access: state.access, metadata: state.metadata }; }
@@ -30,13 +30,14 @@ export class FakeBackend {
   async boundary(name) { const delay = this.controls.delay[name] || 0; if (delay) await new Promise((done) => setTimeout(done, delay)); if (this.controls.fail[name] > 0) { this.controls.fail[name]--; throw failure('Controlled ' + name + ' failure', 'controlled_' + name); } }
   assertNote(id) { const note = this.workspace.notes.find((item) => item.id === id); if (!note) throw failure('Note does not exist'); if (note.deletedAt) throw failure('Note is deleted', 'access_denied'); if (note.locked && !this.unlocked?.has(id)) throw failure('Note is locked', 'access_denied'); return note; }
   async call(command, args = {}) {
-    this.calls.push({ command, type: args.action?.type, ...(args.operationId ? { operationId: args.operationId } : {}), ...(args.noteId ? { noteId: args.noteId } : {}) }); if (this.calls.length > 1000) this.calls.shift();
+    this.calls.push({ command, type: args.action?.type || args.command?.type, ...(args.operationId ? { operationId: args.operationId } : {}), ...(args.noteId ? { noteId: args.noteId } : {}) }); if (this.calls.length > 1000) this.calls.shift();
     const before = this.sequence; const events = []; let value;
     try {
       if (command === 'load_workspace') { await this.boundary('load'); value = this.state(); }
       else if (command === 'register_save_intent' || command === 'acknowledge_access') value = null;
       else if (command === 'read_note_text') { const note = this.assertNote(args.id); value = this.tagged({ title: note.title, text: note.plainText }); }
       else if (command === 'workspace_action') value = await this.action(args.action || {});
+      else if (command === 'sync_command') { if (args.expected?.sessionId !== this.sessionId || args.expected?.epoch !== this.accessEpoch) throw failure('Stale local sync authority', 'access_changed'); value = await this.syncCommand(args.command); }
       else if (command === 'store_attachment' || command === 'store_attachment_operation') {
         this.assertNote(args.noteId); await this.boundary('store');
         if (command === 'store_attachment_operation' && this.journal.has(args.operationId)) value = this.tagged(this.journal.get(args.operationId));
@@ -76,6 +77,29 @@ export class FakeBackend {
       if (before !== this.sequence) events.push({ name: 'notes-metadata', payload: { metadata: this.state().metadata } });
       return { ok: true, value, events };
     } catch (error) { return { ok: false, error: { code: error.code || 'fixture_error', message: error.message }, events }; }
+  }
+  // Explicit UI-only synchronization fixture. No network, Store, pairing or
+  // causal merge is implemented here; production sync is never replaced.
+  async syncCommand(command) {
+    if (!command || typeof command.type !== 'string') throw failure('Invalid sync fixture command');
+    await this.boundary('sync');
+    await this.boundary('sync-' + command.type);
+    this.sync ||= { state: 'disabled', deviceName: '', peers: [], pendingCount: 0, conflictCount: 0 };
+    let invitation, conflicts;
+    switch (command.type) {
+      case 'status': break;
+      case 'startHost': this.sync = { ...this.sync, state: 'listening', deviceName: command.deviceName, workspaceId: 'ui-fixture-workspace', deviceId: 'ui-fixture-host', listenAddress: '0.0.0.0:' + command.port }; break;
+      case 'createInvite': invitation = 'EXPLICIT-UI-FIXTURE-NOT-A-REAL-INVITATION'; break;
+      case 'pair': this.sync = { ...this.sync, state: 'idle', deviceName: command.deviceName, workspaceId: 'ui-fixture-workspace', deviceId: 'ui-fixture-client', peers: [{ id: 'ui-fixture-peer', name: 'UI fixture Mac', connected: true }] }; break;
+      case 'syncNow': this.sync.state = 'idle'; this.sync.lastSyncAt = Date.now(); break;
+      case 'stop': this.sync.state = 'paused'; break;
+      case 'resume': this.sync.state = 'idle'; break;
+      case 'revoke': this.sync.peers = this.sync.peers.filter(peer => peer.id !== command.peerId); break;
+      case 'conflicts': conflicts = clone(this.syncConflicts || []); break;
+      case 'resolve': this.syncConflicts = (this.syncConflicts || []).filter(row => row.entityId !== command.entityId || row.kind !== command.kind); this.sync.conflictCount = this.syncConflicts.length; conflicts = clone(this.syncConflicts); break;
+      default: throw failure('Unknown sync fixture command');
+    }
+    return { status: clone(this.sync), ...(invitation ? { invitation } : {}), ...(conflicts ? { conflicts } : {}) };
   }
   async action(action) {
     const type = action.type; let value;

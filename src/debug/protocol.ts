@@ -70,6 +70,11 @@ export type DebugCommandArguments = {
       | "settings.open"
       | "data.open"
       | "data.refresh"
+      | "sync.status"
+      | "sync.now"
+      | "sync.stop"
+      | "sync.resume"
+      | "sync.conflicts"
       | "image.info"
       | "image.close"
       | "app.close"
@@ -78,6 +83,11 @@ export type DebugCommandArguments = {
       | `native.${string}`
   ]: Record<string, never>;
 } & {
+  "sync.host.start": { deviceName: string; port: number };
+  "sync.invite": { endpoint: string };
+  "sync.pair": { invitation: string; deviceName: string };
+  "sync.revoke": { peerId: string };
+  "sync.resolve": { kind: "note" | "folder"; entityId: string; digest: string; keepAll: boolean };
   "settings.tab": { tab: "settings" | "data" };
   "data.navigate": { view: StorageView };
   "data.filter": {

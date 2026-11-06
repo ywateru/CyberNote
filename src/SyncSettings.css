@@ -1,0 +1,191 @@
+.sync-settings {
+  margin-top: 26px;
+  min-width: 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.sync-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sync-heading h3 {
+  flex: 1;
+}
+.sync-settings .sync-heading button {
+  background: transparent;
+  padding: 8px;
+}
+.sync-state {
+  color: var(--secondary);
+  font-size: 12px;
+}
+.sync-state-error,
+.sync-error {
+  color: #cf3446;
+}
+.sync-description,
+.sync-live,
+.sync-pair p,
+.sync-invitation p,
+.sync-confirmation p {
+  color: var(--secondary);
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.sync-live {
+  margin-bottom: 12px;
+}
+.sync-group {
+  border-radius: 12px;
+  background: var(--grouped);
+  margin-top: 12px;
+  padding: 12px 14px;
+  min-width: 0;
+}
+.sync-settings h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+.sync-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  margin: 4px 0 10px;
+}
+.sync-field > span {
+  width: 84px;
+  flex: 0 0 84px;
+}
+.sync-field input {
+  flex: 1;
+  min-width: 0;
+  width: 0;
+  min-height: 44px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 10px;
+  font: inherit;
+}
+.sync-settings .sync-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sync-settings button {
+  min-height: 44px;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.sync-settings .sync-group button {
+  background: var(--paper);
+}
+.sync-settings input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.sync-address {
+  display: flex;
+  gap: 12px;
+  color: var(--secondary);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.sync-address span {
+  min-width: 0;
+}
+.sync-pair,
+.sync-invitation {
+  border-top: 1px solid var(--line);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.sync-peer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding: 9px 0;
+}
+.sync-peer > div {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-wrap: anywhere;
+}
+.sync-peer strong,
+.sync-variant strong {
+  font-weight: 500;
+}
+.sync-peer small,
+.sync-variant small {
+  color: var(--secondary);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.sync-settings .sync-conflict-link {
+  display: flex;
+  width: 100%;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  color: var(--ink);
+}
+.sync-conflict-link span:first-child {
+  flex: 1;
+}
+.sync-conflict-link span:nth-child(2) {
+  color: var(--secondary);
+}
+.sync-conflict {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  margin-top: 8px;
+}
+.sync-variant {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
+  overflow-wrap: anywhere;
+}
+.sync-confirmation {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 14px;
+}
+.sync-error {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.sync-error button {
+  margin-left: 8px;
+}
+@media (max-width: 699px) {
+  .sync-field {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .sync-field > span {
+    width: auto;
+    flex: none;
+  }
+  .sync-field input {
+    flex: auto;
+    width: 100%;
+  }
+  .sync-group {
+    padding: 12px;
+  }
+}
