@@ -31,9 +31,9 @@
 
 ## 下一步
 
-1. 保留 final02 成功绑定的 `/private/tmp/notes-sync87-native-final-02/desktop-peer` Store 和原失败。先窄审578e8af4的同Store重开工具，再用新5584同userdata周期采集实时安全状态、缺失合成笔记的精确入站计数，区分未送达与安全应用阻塞。
-2. 按实际证据定位并修复必要产品边界，独立复核。完成双向完整document/plainText及PNG/WAV原字节/owner/实际解码；不重置、不重新配对、不伪造ACK或强制apply。
-3. 继续真实provider多选/连续PNG/TXT/WAV、图片导出原SHA、前台重连、同data应用重开及冷启动身份/原字节保持。原actual-01含工具XML附件的失败现场完整保留，新formal02仅跟踪新合成笔记，旧笔记不删除。
+1. 完成[SYNC89](tasks/app-sync89-native-apply-diagnostics.md)三处Rust只读诊断的独立源码复核，准确构建并独立核验Android19；只在5584原userdata升级，保留同一已绑定DesktopPeer Store、原inbox目标和Android18失败。
+2. 读取实际固定中止原因，再做必要的最小业务修复与原反例复验。现已证明目标到达但未应用、原始回复入口ready=true、原始回执解析入口pending；尚不能判断解析验证完成或具体中止分支。不再扩大前端观察工具。
+3. 完成双向完整document/plainText及PNG/WAV原字节/owner/实际解码；真实provider多选/连续PNG/TXT/WAV、图片导出原SHA、前台重连、同data应用重开及冷启动保持。附件选择使用已验证的正常系统TAB/ENTER路径；原工具XML附件及失败保留。
 4. 结束owned children后冻结安全证据，不同代理独审；更新最终使用说明与交付。真实验收未完成前不得 complete goal。
 
 ## 证据和资源保全
@@ -88,6 +88,16 @@ cycle13/14的实际被动观察已排除“完全没有事件/缺少main窗口�
 cycle14close晚于生命周期截止而被guard拒绝；peer finally仍自然0，但报告的frontendUnchanged=false原件保留。root此前误以为工具文件不在sourceFingerprint内，实际包括scripts/debug/**；不改写该失败。下一次同Store重开须独立核对精确旧/新manifest，证明变更仅已审count工具且真实前端/产品/peer依赖字节相同，再追加明确continuationproof。不能广泛忽略工具变化，更不能换Store或重新配对规避。
 
 下一判别：7f0dcd0d工具通过固定Android18脚本SHA/函数位置的DevTools false条件断点，仅统计原始probe.blocked和prepare.ready布尔，不修改原函数/参数/返回、不暂停、不新增ACK。源码待独审后由唯一设备操作者实测，区分renderer主动拒绝与backend最终计划校验失败；未证明该工具实际运行前不选择产品修复。
+
+### 原始回复、回执入口和诊断89
+
+cycle15实际固定源码断点记录原始probe blocked=false ×4、prepare ready=true ×4；并行被动事件为abort ×5、commit ×0。精确目标仍在inbox且未进入note/projection/seen。两个观察区间不逐笔关联，入口记录不证明原生接受或原异步调用成功返回。[独审](../verification/sync87-native/native-ready-true15/README.md)保留全部清理和同Store续接证明；原cycle14失败未改写。
+
+cycle16双观察点实际记录prepare ready=true ×5、probe blocked=false ×4、原始回执解析入口pending ×9；被动release abort ×5、commit ×0。两个自有断点与监听器全部清理，peer和wrapper自然0，前端与二进制指纹保持。仅证明pending进入原解析入口，不声称验证完成；[实际及独审](../verification/sync87-native/final-actual-independent/RESULT.md)保留限定解释。
+
+SYNC89提供既有授权下的独立只读sync_diagnostics：Session内存有限原因计数、首次中止原因、当前阶段；不改变同步算法、网络、数据库或普通Status。作者受影响Session10、adapter17与普通Tauri检查通过，proof注册检查及源码冻结/独审进行中。准确新Android19只用于取得真实中止分支，尚不是业务修复或最终包。
+
+cycle16系统普通TAB/ENTER已进入formal02固定附件目录，真实UIA可见PNG/TXT/WAV；后续多选在生命周期结束后被guard拒绝，未发输入、不声称保存通过。[原证据](../verification/sync87-native/native-provider-progress16/README.md)保留。cycle17继续同userdata、无peer的真实provider保存/原字节门禁，不触碰待应用桌面目标。
 
 ## 用户原现场和范围
 
