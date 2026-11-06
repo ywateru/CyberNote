@@ -18,3 +18,11 @@ Protocol boundaries remain explicit:
 - Hidden attachment paths/URL auto-download are absent. Nullable name/CID and export failure are retained for host classification. Actual Notes research still has3 failed exports and no ordinary-file success; these host tests do not expand that capability.
 
 All source content here is synthetic. Product source was not modified by reviewer. Host/UI/source integration and actual read-only Notes→isolated Store evidence remain pending.
+
+## Stable-ID normalization delta
+
+`bc5585115b1eb72921e8056aa05bc80483c43b10` independently admitted, source SHA256 `6d05ee7ec69b0ac5509cfdb29fc335ae6e7c005415bbb6fe83eb715ab274843d`. Only scan row normalization changes: the first full metadata record for a stable ID is retained; exact JSON-equal repeats coalesce; any title/folder/status/reason/code difference refuses the entire scan with finite source_changed. Host strict duplicate refusal is unchanged. Scan still uses bounded raw collection and unique-note cap, no body access.
+
+New independent VM delta7/7 natural0 (exact time in dedup.result.json): identical locked rows and identical unreadable numeric-code rows coalesce; first occurrence order; conflicts in account/folder, numeric code, lock status or title refuse scan; duplicate rows do not consume cap and unprocessed rows retain truncated=true. Original fixed-source14PASS not repeated. No Notes/osascript/Rust/device operations.
+
+Actual first source→Store failure and the older real response's identical duplicates are separate evidence: the current attempt only reported scan-phase error without code, so its exact cause is not established by these VM tests or the older duplicate sample. This admission permits a designated actual rerun; it does not relabel the original failure as passed or claim the current failure's cause was logged.

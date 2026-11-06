@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: identical locked stable IDs coalesce in original first-occurrence order
+ok 1 - identical locked stable IDs coalesce in original first-occurrence order
+  ---
+  duration_ms: 1.317708
+  type: 'test'
+  ...
+# Subtest: identical unreadable metadata and numeric code coalesce, no original error
+ok 2 - identical unreadable metadata and numeric code coalesce, no original error
+  ---
+  duration_ms: 0.30325
+  type: 'test'
+  ...
+# Subtest: conflicting account-folder refuses entire scan
+ok 3 - conflicting account-folder refuses entire scan
+  ---
+  duration_ms: 0.214875
+  type: 'test'
+  ...
+# Subtest: conflicting numeric-code refuses entire scan
+ok 4 - conflicting numeric-code refuses entire scan
+  ---
+  duration_ms: 0.198833
+  type: 'test'
+  ...
+# Subtest: conflicting locked-status refuses entire scan
+ok 5 - conflicting locked-status refuses entire scan
+  ---
+  duration_ms: 0.2215
+  type: 'test'
+  ...
+# Subtest: conflicting title refuses entire scan
+ok 6 - conflicting title refuses entire scan
+  ---
+  duration_ms: 0.179083
+  type: 'test'
+  ...
+# Subtest: duplicate rows do not consume unique-note cap; unread rows remain truncated
+ok 7 - duplicate rows do not consume unique-note cap; unread rows remain truncated
+  ---
+  duration_ms: 0.226959
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 31.0975
