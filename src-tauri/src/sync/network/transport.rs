@@ -333,6 +333,10 @@ pub(super) async fn serve(
             .check_authorized(&id, &workspace, &key, &device)?;
         let response = match handler.handle(&s, request) {
             Ok(r) => r,
+            // A local metadata race says nothing about the peer protocol. End
+            // this authenticated exchange so the client uses transport backoff
+            // and prepares again; never encode it as remote Invalid data.
+            Err(SyncError::PlanStale) => return Err(SyncError::PlanStale),
             Err(e) => wire::Response::Error { code: e.into() },
         };
         s.identity
@@ -349,12 +353,13 @@ mod tests {
     use super::*;
     use sha2::{Digest, Sha256};
     use std::collections::BTreeMap;
-    use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
     struct Backend {
         workspace: String,
         device: String,
         reads: AtomicUsize,
         publications: AtomicUsize,
+        stale_flush: AtomicBool,
         blobs: Mutex<BTreeMap<String, Vec<u8>>>,
     }
     impl SyncBackend for Backend {
@@ -374,6 +379,9 @@ mod tests {
             Ok(())
         }
         fn flush(&self) -> Result<()> {
+            if self.stale_flush.swap(false, Ordering::SeqCst) {
+                return Err(SyncError::PlanStale);
+            }
             Ok(())
         }
         fn inventory(&self, _: Option<&str>, _: usize) -> Result<InventoryPage> {
@@ -424,6 +432,7 @@ mod tests {
             device: uuid::Uuid::new_v4().to_string(),
             reads: AtomicUsize::new(0),
             publications: AtomicUsize::new(0),
+            stale_flush: AtomicBool::new(false),
             blobs: Mutex::new(BTreeMap::new()),
         });
         let identity =
@@ -462,6 +471,29 @@ mod tests {
         let n = socket.noise.write_message(&plain, &mut out).unwrap();
         out.truncate(n);
         out
+    }
+    #[tokio::test(flavor = "current_thread")]
+    async fn local_stale_closes_socket_for_backoff_instead_of_poisoning_peer_protocol() {
+        let (_dir, _service, invite, backend) = host();
+        let clientdir = tempfile::tempdir().unwrap();
+        let (s, _) = shared(clientdir.path(), &invite.workspace_id);
+        let (mut socket, _) = client(&s, &invite).await.unwrap();
+        backend.stale_flush.store(true, Ordering::SeqCst);
+        let request = wire::Request::Inventory {
+            after: None,
+            limit: 1,
+        };
+        assert!(matches!(
+            socket.rpc(&request).await,
+            Err(SyncError::Transport)
+        ));
+        assert_eq!(backend.reads.load(Ordering::SeqCst), 0);
+        let (mut socket, _) = client(&s, &invite).await.unwrap();
+        assert!(matches!(
+            socket.rpc(&request).await.unwrap(),
+            wire::Response::Inventory { .. }
+        ));
+        assert_eq!(backend.reads.load(Ordering::SeqCst), 1);
     }
     #[tokio::test(flavor = "current_thread")]
     async fn encrypted_replay_and_tampering_close_connection_without_second_request() {

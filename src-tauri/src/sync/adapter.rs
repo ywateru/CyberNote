@@ -1345,3 +1345,7 @@ mod local_stage_budget_tests {
 #[cfg(test)]
 #[path = "adapter_media_tests.rs"]
 mod media_tests;
+
+#[cfg(test)]
+#[path = "adapter_retry_tests.rs"]
+mod retry_tests;
