@@ -39,3 +39,8 @@ export function validateDataManagement(value: DataManagementSnapshot): DataManag
   }
   return value;
 }
+
+export const fileOperationError = (cause: unknown): string => {
+  if (cause && typeof cause === "object" && "message" in cause && typeof cause.message === "string") return cause.message;
+  return String(cause);
+};

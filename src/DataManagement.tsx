@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { X, Download, RefreshCw } from "lucide-react";
 import { getDataManagement } from "./bridge";
 import { saveAttachmentOriginal } from "./attachment-export";
-import { formatFileSize, formatFileTime, type ArchiveResult, type DataManagementSnapshot, type ManagedFile } from "./data-management";
+import { fileOperationError, formatFileSize, formatFileTime, type ArchiveResult, type DataManagementSnapshot, type ManagedFile } from "./data-management";
 import "./DataManagement.css";
 
 type Filter = { query?: string; kind?: string; page?: number };
@@ -42,7 +42,7 @@ export default function DataManagement({ onClose, onHandle, onArchive, backupBlo
       const value = await getDataManagement();
       if (alive.current && ticket === request.current) { setData(value); dataRef.current = value; }
     } catch (cause) {
-      if (alive.current && ticket === request.current) setError(String(cause instanceof Error ? cause.message : cause));
+      if (alive.current && ticket === request.current) setError(fileOperationError(cause));
       throw cause;
     } finally {
       if (alive.current && ticket === request.current) { loadingRef.current = false; setLoading(false); }
@@ -57,7 +57,7 @@ export default function DataManagement({ onClose, onHandle, onArchive, backupBlo
       const saved = await saveAttachmentOriginal(id, file.attachment.displayName || "附件");
       if (alive.current && saved) setNotice("附件已导出");
     } catch (cause) {
-      if (alive.current) setActionError(cause instanceof Error ? cause.message : String(cause));
+      if (alive.current) setActionError(fileOperationError(cause));
       throw cause;
     } finally {
       working.current = false;
@@ -103,7 +103,7 @@ export default function DataManagement({ onClose, onHandle, onArchive, backupBlo
   }), [data, query, kind]);
   const pages = Math.max(1, Math.ceil(matches.length / pageSize)), currentPage = Math.min(page, pages - 1);
   const fileRow = (file: ManagedFile) => <article className="data-file" key={file.relativePath} data-file-path={file.relativePath}>
-    <div className="data-file-name"><strong>{file.attachment?.displayName || file.relativePath}</strong>{file.attachment?.displayName && <span>{file.relativePath}</span>}<small>{file.attachment ? kinds[file.attachment.kind] || file.attachment.kind : file.category === "import" ? "导入记录" : "未归属 / 其他"} · {statuses[file.status]}{file.attachment?.referenced === false ? " · 正文未引用（保留文件）" : file.attachment?.referenced === null ? " · 引用状态未知" : ""}</small></div>
+    <div className="data-file-name"><strong>{file.attachment?.displayName || file.relativePath}</strong>{file.attachment?.displayName && <span>{file.relativePath}</span>}<small>{file.attachment ? kinds[file.attachment.kind] || file.attachment.kind : file.category === "import" ? "导入记录" : ["database", "wal", "shm"].includes(file.category) ? "数据库 / 辅助日志" : "未归属 / 其他"} · {statuses[file.status]}{file.attachment?.referenced === false ? " · 正文未引用（保留文件）" : file.attachment?.referenced === null ? " · 引用状态未知" : ""}</small></div>
     <div className="data-file-stat"><span>{formatFileSize(file.size)}</span><time>{formatFileTime(file.modifiedAt)}</time>{file.attachment && file.size !== null && file.size !== file.attachment.declaredSize && <small role="status">与登记大小 {formatFileSize(file.attachment.declaredSize)} 不符</small>}</div>
     {file.attachment && <button type="button" className="data-export" aria-label={`导出 ${file.attachment.displayName || file.relativePath}`} disabled={!file.attachment.exportable || !!operation} onClick={() => void exportFile(file.attachment!.id).catch(() => {})}><Download size={15}/>{operation === file.attachment.id ? "导出中…" : "导出"}</button>}
   </article>;

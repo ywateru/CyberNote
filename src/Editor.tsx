@@ -20,6 +20,7 @@ import {
   RotateCw,
 } from "lucide-react";
 import { native } from "./bridge";
+import { fileOperationError } from "./data-management";
 import { saveAttachmentOriginal } from "./attachment-export";
 import "./DataManagement.css";
 import { useAttachmentMedia } from "./use-attachment-media";
@@ -87,7 +88,7 @@ function ImageAttachment({ id, src, name }: { id: string; src: string; name: str
     if (running.current) return;
     running.current = true; setBusy(true); setNotice(""); setError("");
     try { if (await saveAttachmentOriginal(id, name)) { if (live.current && identity.current === id) setNotice("图片已保存"); } }
-    catch (cause) { if (live.current && identity.current === id) setError(cause instanceof Error ? cause.message : String(cause)); }
+    catch (cause) { if (live.current && identity.current === id) setError(fileOperationError(cause)); }
     finally { running.current = false; if (live.current && identity.current === id) setBusy(false); }
   };
   return <div className="image-attachment" onMouseDown={event => event.preventDefault()}>
