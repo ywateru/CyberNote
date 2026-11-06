@@ -1,3 +1,4 @@
+import { runImagePreview } from './image-preview.mjs';
 import assert from 'node:assert/strict';
 import { runDataManagement } from './data-management.mjs';
 import { runRecordingIndicator } from './recording-indicator.mjs';
@@ -8,7 +9,7 @@ import { compareSnapshots, compareScreenshots } from './compare.mjs';
 import { runMobileRecording } from './mobile-recording.mjs';
 import { runMobileAttachments } from './mobile-attachments.mjs';
 
-export const groupNames = ['contract', 'notes', 'folders', 'editor', 'search-tags', 'settings', 'attachments-ocr', 'archive', 'recording', 'mac-feedback', 'recording-indicator', 'data-management'];
+export const groupNames = ['contract', 'notes', 'folders', 'editor', 'search-tags', 'settings', 'attachments-ocr', 'archive', 'recording', 'mac-feedback', 'recording-indicator', 'data-management', 'image-preview'];
 export async function runGroups(runtime, names, output) {
   const results = [], page = runtime.page, exercised = new Map();
   const descriptors = await page.evaluate(() => window.__NOTES_DEBUG__.list());
@@ -19,7 +20,9 @@ export async function runGroups(runtime, names, output) {
     const command = async (id, args = {}) => { exercised.set(id, (exercised.get(id) || 0) + 1); const result = await api(page, id, args); await idle(page); return result.result; };
     const selected = async () => { const s = await state(page); return s.workspace.notes.find((note) => note.id === s.selection.noteId); };
     try {
-      if (name === 'data-management') {
+      if (name === 'image-preview') {
+        await runImagePreview(runtime, { command, check, output });
+      } else if (name === 'data-management') {
         await runDataManagement(runtime, { command, check, output });
       } else if (name === 'recording-indicator') {
         await runRecordingIndicator(runtime, { command, check, output });
@@ -29,6 +32,8 @@ export async function runGroups(runtime, names, output) {
         await runMobileAttachments(runtime,{command,check,output});
         await runtime.reset();
         await runDataManagement(runtime,{command,check,output});
+        await runtime.reset();
+        await runImagePreview(runtime,{command,check,output});
       } else if (name === 'contract') {
         const falseStarted = performance.now(); let waitError;
         let falseCalls = 0;

@@ -161,8 +161,7 @@ export class NativeToolbar<C> {
       this.running ||
       this.disposed ||
       !this.binding ||
-      this.composing ||
-      this.waitSearch
+      ((this.composing || this.waitSearch) && !this.desired?.state.contentOverlay)
     )
       return;
     this.running = true;

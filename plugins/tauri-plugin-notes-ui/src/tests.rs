@@ -280,3 +280,15 @@ fn focus_command_rejects_cross_window_and_invalid_uuid_before_native_dispatch() 
     ));
     assert_eq!(invalid.unwrap_err().code, "invalid_binding");
 }
+
+#[test]
+fn content_overlay_is_optional_and_survives_strict_transport_serialization() {
+    let normal = sample();
+    assert!(!normal.content_overlay);
+    let mut value = serde_json::to_value(&normal).unwrap();
+    value["contentOverlay"] = serde_json::json!(true);
+    let overlay: ToolbarState = serde_json::from_value(value).unwrap();
+    overlay.validate().unwrap();
+    assert!(overlay.content_overlay);
+    assert_eq!(serde_json::to_value(overlay).unwrap()["contentOverlay"], true);
+}

@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useId, useRef, useState } from "react";
 import {
   EditorContent,
   NodeViewWrapper,
@@ -20,9 +20,7 @@ import {
   RotateCw,
 } from "lucide-react";
 import { native } from "./bridge";
-import { fileOperationError } from "./data-management";
-import { saveAttachmentOriginal } from "./attachment-export";
-import "./DataManagement.css";
+import { useImagePreview } from "./ImagePreview";
 import { useAttachmentMedia } from "./use-attachment-media";
 import type { AttachmentMediaSource } from "./attachment-media";
 import type { Note, DrawingStroke } from "./types";
@@ -55,7 +53,7 @@ function MediaView({ node }: NodeViewProps) {
           </button>
         </span>
       ) : kind === "image" ? (
-        <ImageAttachment id={id} src={src} name={media?.name ?? name} />
+        <ImageAttachment id={id} media={media} name={media?.name ?? name} />
       ) : kind === "audio" ? (
         <AudioPlayer
           key={id}
@@ -79,27 +77,12 @@ function MediaView({ node }: NodeViewProps) {
     </NodeViewWrapper>
   );
 }
-function ImageAttachment({ id, src, name }: { id: string; src: string; name: string }) {
-  const [preview, setPreview] = useState(false), [busy, setBusy] = useState(false), [notice, setNotice] = useState(""), [error, setError] = useState("");
-  const running = useRef(false), live = useRef(true), identity = useRef(id);
-  identity.current = id;
-  useEffect(() => { live.current = true; return () => { live.current = false; }; }, [id]);
-  const save = async () => {
-    if (running.current) return;
-    running.current = true; setBusy(true); setNotice(""); setError("");
-    try { if (await saveAttachmentOriginal(id, name)) { if (live.current && identity.current === id) setNotice("图片已保存"); } }
-    catch (cause) { if (live.current && identity.current === id) setError(fileOperationError(cause)); }
-    finally { running.current = false; if (live.current && identity.current === id) setBusy(false); }
-  };
+function ImageAttachment({ id, media, name }: { id: string; media: ReturnType<typeof useAttachmentMedia>["media"]; name: string }) {
+  const preview = useImagePreview(), trigger = useRef<HTMLButtonElement>(null);
+  const closeSource = preview.closeSource;
+  useLayoutEffect(() => () => { if(media) closeSource(media.source); }, [media?.source, closeSource]);
   return <div className="image-attachment" onMouseDown={event => event.preventDefault()}>
-    <button type="button" className="image-open" aria-label={`预览图片 ${name}`} disabled={!src} onClick={() => setPreview(true)}><img src={src || undefined} alt={name} draggable={false}/></button>
-    <button type="button" className="save-image" disabled={!src || busy} onClick={() => void save()}>{busy ? "正在保存…" : "保存图片…"}</button>
-    {!preview && (error || notice) && <span className="image-export-status" role={error ? "alert" : "status"}>{error || notice}</span>}
-    {preview && <section className="image-preview" role="dialog" aria-modal="true" aria-label="图片预览" onKeyDown={event => { if (event.key === "Escape") { event.stopPropagation(); setPreview(false); } }}>
-      <header><strong>{name}</strong><button type="button" disabled={busy} onClick={() => void save()}>{busy ? "正在导出…" : "导出原图…"}</button><button type="button" aria-label="关闭图片预览" onClick={() => setPreview(false)}>关闭</button></header>
-      {(error || notice) && <span className="image-export-status" role={error ? "alert" : "status"}>{error || notice}</span>}
-      <figure><img src={src || undefined} alt={name} draggable={false}/></figure>
-    </section>}
+    <button ref={trigger} type="button" className="image-open" aria-label={`预览图片 ${name}`} disabled={!media} onClick={() => {if(media&&trigger.current)preview.open({id,source:media.source,name:media.name,mime:media.mime,bytes:media.bytes,trigger:trigger.current});}}><img src={media?.source.src} alt={name} draggable={false}/></button>
   </div>;
 }
 type AudioPlayerProps = {

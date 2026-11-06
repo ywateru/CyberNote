@@ -4,13 +4,23 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 export async function sourceFingerprint(root) {
   const files = [];
-  for (const directory of ["src", "scripts/debug"])
+  for (const directory of [
+    "src",
+    "scripts/debug",
+    "plugins/tauri-plugin-notes-ui/src",
+    "plugins/tauri-plugin-notes-ui/macos",
+    "plugins/tauri-plugin-notes-ui/guest-js",
+    "plugins/tauri-plugin-notes-ui/examples",
+    "scripts/native",
+  ])
     for (const entry of await readdir(resolve(root, directory), {
       recursive: true,
       withFileTypes: true,
     }))
       if (entry.isFile()) files.push(resolve(entry.parentPath, entry.name));
   for (const name of [
+    "plugins/tauri-plugin-notes-ui/Cargo.toml",
+    "plugins/tauri-plugin-notes-ui/build.rs",
     "package.json",
     "pnpm-lock.yaml",
     "vite.config.ts",
@@ -37,6 +47,8 @@ export async function sourceFingerprint(root) {
       "--",
       "src",
       "scripts/debug",
+      "plugins/tauri-plugin-notes-ui",
+      "scripts/native",
       "package.json",
       "pnpm-lock.yaml",
       "vite.config.ts",
@@ -51,6 +63,8 @@ export async function sourceFingerprint(root) {
     paths: [
       "src/**",
       "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
       "package.json",
       "pnpm-lock.yaml",
       "vite.config.ts",

@@ -231,6 +231,19 @@ await test("composition preserves pending state until actual committed search ev
   assert.equal(updates[1].search.value, "中文");
   h.controller.stop();
 });
+await test("protected content overlay bypasses composition and missing-search wait, preserving exact latest query", async () => {
+  for (const code of ["search_composition", "stale_search"]) {
+    let calls=0; const updates=[];
+    const h=harness({update:async state=>{updates.push(state);if(++calls===1)throw {code};return info(state.revision);},inspect:async()=>info(1,7)});
+    h.controller.set(projection());await settle();h.controller.set(projection("pending","changed"));await settle();
+    const overlay=projection("protected","changed");overlay.state.contentOverlay=true;h.controller.set(overlay);await settle();
+    assert.equal(updates.at(-1).contentOverlay,true);assert.equal(updates.length,2);
+    h.emit(7,{kind:"search",value:"中文原值",phase:"commit"},3);await settle();
+    const normal=projection("restored","old");normal.state.contentOverlay=false;h.controller.set(normal);await settle();
+    assert.equal(updates.at(-1).contentOverlay,false);assert.equal(updates.at(-1).search.value,"中文原值");assert.equal(updates.at(-1).search.acknowledgedEvent,7);
+    h.controller.stop();await settle();assert.equal(h.errors.length,0);
+  }
+});
 await test("old note revision, duplicate sequence, and wrong window are rejected", async () => {
   const h = harness();
   h.controller.set(projection());
