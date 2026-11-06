@@ -1,0 +1,27 @@
+{
+  "command": [
+    "node",
+    "/private/tmp/sync87-continuation-independent.mjs"
+  ],
+  "exitCode": 0,
+  "wallSeconds": "not captured",
+  "result": {
+    "checks": 9,
+    "sourceCommit": "de873fd4f567736dcca061cb66a448e33c72be8b",
+    "selfSha256": "41a258bd959c4ce666f0897018da1aeca347b2418815606693382edeb1cb95f5",
+    "originalFrontendUnchanged": false,
+    "changedPaths": [
+      "scripts/debug/sync87-native/android/SyncTargetCounts.java",
+      "scripts/debug/sync87-native/check-counts.py",
+      "scripts/debug/sync87-native/guard.py"
+    ],
+    "productInputs": 321,
+    "currentFileCount": 160,
+    "currentGitDirty": false,
+    "scope": "read-only host manifests/lstat/source, rootreceipt injected in memory; no runtime/device/reopen or DB query"
+  },
+  "attempt01": {
+    "exitCode": 1,
+    "reason": "independent expected c23 frozen selfSHA ce3ef698cf0d7da180bba2ccc147833ea6b4d3cedf8c925a46ff5b2bcce2a0ad; actual newly committed de873 selfSHA 41a258bd959c4ce666f0897018da1aeca347b2418815606693382edeb1cb95f5; rejected before proof"
+  }
+}

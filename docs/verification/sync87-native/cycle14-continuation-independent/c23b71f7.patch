@@ -1,0 +1,78 @@
+commit c23b71f702c215b011b456fc3f30c8044b8efd5d
+Author:     osd-pub <osd@osd.pub>
+AuthorDate: Fri Nov 6 22:08:32 2026 +0800
+Commit:     osd-pub <osd@osd.pub>
+CommitDate: Fri Nov 6 22:08:32 2026 +0800
+
+    test: prove exact admitted tool-only delta before same Store continuation
+
+diff --git a/scripts/debug/sync87-native/desktop-peer.mjs b/scripts/debug/sync87-native/desktop-peer.mjs
+index 0a46c552..455410e6 100644
+--- a/scripts/debug/sync87-native/desktop-peer.mjs
++++ b/scripts/debug/sync87-native/desktop-peer.mjs
+@@ -3,6 +3,7 @@ import { access,readFile,lstat,realpath,mkdir,writeFile } from 'node:fs/promises
+ import { constants } from 'node:fs';
+ import { resolve,join } from 'node:path';
+ import { createHash } from 'node:crypto';
++import { execFileSync } from 'node:child_process';
+ import { createServer } from 'node:net';
+ import assert from 'node:assert/strict';
+ import { fileURLToPath } from 'node:url';
+@@ -46,6 +47,39 @@ async function freePort() {
+   const server=createServer();await new Promise((done,fail)=>{server.once('error',fail);server.listen(0,'127.0.0.1',done);});
+   const port=server.address().port;await new Promise(done=>server.close(done));return port;
+ }
++/** One exact failed aggregate; preserve it and prove the three admitted tool deltas. */
++export async function reviewCycle14ToolContinuation(output, previous) {
++  assert.equal(output,'/private/tmp/notes-sync87-native-final-02');
++  assert.equal(previous.pid,93757);assert.equal(previous.frontendUnchanged,false);
++  assert.deepEqual(previous.exit,{code:0,signal:null});assert.equal(previous.forcedOrFailed,false);assert.equal(previous.pageErrorCount,0);assert.equal(previous.binaryUnchanged,true);
++  const sourceRoot=resolve(fileURLToPath(new URL('../../../',import.meta.url)));
++  assert.equal(sourceRoot,'/private/tmp/apple-notes-sync87-native');
++  const paths=['src','scripts/debug','plugins/tauri-plugin-notes-ui/src','plugins/tauri-plugin-notes-ui/macos','plugins/tauri-plugin-notes-ui/guest-js','plugins/tauri-plugin-notes-ui/examples','scripts/native','plugins/tauri-plugin-notes-ui/Cargo.toml','plugins/tauri-plugin-notes-ui/build.rs','package.json','pnpm-lock.yaml','vite.config.ts','tsconfig.json'];
++  const git=args=>execFileSync('git',args,{cwd:sourceRoot,maxBuffer:8*1024*1024});
++  const manifests=[];
++  for(const [commit,expected] of [['ad982595','8ce891d834639f6a4bcf77fb877ef50e5b0783baaee66e3a70588a416bcc9d13'],['0be31b97','21684ce60962428ac86d16dfd92aca354d7dafce866b6bb6d8ba165569ea42f4']]){
++    const names=git(['ls-tree','-r','--name-only',commit,'--',...paths]).toString().trim().split('\n').sort();assert.equal(names.length,160);
++    const digest=createHash('sha256'),files=[];
++    for(const path of names){const bytes=git(['show',commit+':'+path]);digest.update(path);digest.update('\0');digest.update(bytes);digest.update('\0');files.push({path,bytes:bytes.length,sha256:hash(bytes)});}
++    assert.equal(digest.digest('hex'),expected);manifests.push({commit,sha256:expected,files});
++  }
++  const [before,after]=manifests;assert.equal(previous.frontendBefore.sha256,before.sha256);assert.equal(previous.frontendAfter.sha256,after.sha256);
++  assert.equal(previous.frontendBefore.gitDirty,false);assert.equal(previous.frontendAfter.gitDirty,false);
++  assert.deepEqual(before.files.map(x=>x.path),after.files.map(x=>x.path));
++  const changed=before.files.filter((f,i)=>f.sha256!==after.files[i].sha256).map(x=>x.path);
++  assert.deepEqual(changed,['scripts/debug/sync87-native/android/SyncTargetCounts.java','scripts/debug/sync87-native/check-counts.py','scripts/debug/sync87-native/guard.py']);
++  for(const f of after.files){if(f.path==='scripts/debug/sync87-native/desktop-peer.mjs')continue;const actual=await readFile(join(sourceRoot,f.path));assert.equal(actual.length,f.bytes);assert.equal(hash(actual),f.sha256);}
++  const current=await sourceFingerprint(sourceRoot);assert.equal(current.fileCount,160);assert.equal(current.gitDirty,false);
++  const productReportPath='/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/android-build/result.json';
++  const productBytes=await readFile(productReportPath);assert.equal(hash(productBytes),'a4c7040dd58f720cb75d4061316df2042bf1966fa099854bdf0267e315b0d976');
++  const product=JSON.parse(productBytes);assert.equal(product.inputBefore.length,321);assert.deepEqual(product.inputBefore,product.inputAfter);
++  for(const f of product.inputBefore){const bytes=await readFile(join(sourceRoot,f.path));assert.equal(bytes.length,f.bytes);assert.equal(hash(bytes),f.sha256);}
++  await verifyDOMDependencies(sourceRoot);
++  const lifecyclePath=join(output,'lifecycle14.execution.json'),lifecycleBytes=await readFile(lifecyclePath),lifecycle=JSON.parse(lifecycleBytes);
++  assert.equal(lifecycle.exitCode,0);assert.deepEqual(lifecycle.argv,['python3','scripts/debug/sync87-environment/lifecycle.py','cycle','--serial','emulator-5584','--avd','notes-sync87-isolated','--boot-timeout','180','--hold-seconds','600']);
++  for(const [name,path] of [['root',join(output,'desktop-peer')],['database',join(output,'desktop-peer/notes.sqlite3')]]){const stat=await lstat(path);assert.equal(stat.dev,previous.reopenProof.identities[name].device);assert.equal(stat.ino,previous.reopenProof.identities[name].inode);}
++  return {kind:'exact-cycle14-admitted-count-tool-continuation',originalAggregateFrontendUnchanged:false,manifests,changedPaths:changed,productInputs:product.inputBefore,productInputsUnchanged:true,domDependenciesUnchanged:true,currentFrontend:current,lifecycle:{path:lifecyclePath,sha256:hash(lifecycleBytes),exitCode:0},originalPeerNaturalExit:true};
++}
+ export async function reviewExistingStore(output,runId,reviewed) {
+   assert(/^\/private\/tmp\/notes-sync87-native-[a-z0-9-]+$/.test(output));assert(/^[0-9a-f]{10}$/.test(runId));
+   const root=join(output,'desktop-peer');
+@@ -55,14 +89,15 @@ export async function reviewExistingStore(output,runId,reviewed) {
+       const previous=JSON.parse(await readFile(join(output,'desktop-peer-lifecycle.json'),'utf8'));
+       assert.equal(previous.root,root);assert.equal(previous.kind,'actual-react-tiptap-dom-real-rust-session-store-network');
+       assert.equal(previous.binarySha256,reviewed.receipt.sha256);assert.equal(previous.sourceCommit,reviewed.receipt.sourceCommit);
+-      assert.deepEqual(previous.exit,{code:0,signal:null});assert.equal(previous.forcedOrFailed,false);assert.equal(previous.pageErrorCount,0);assert.equal(previous.binaryUnchanged,true);assert.equal(previous.frontendUnchanged,true);
++      assert.deepEqual(previous.exit,{code:0,signal:null});assert.equal(previous.forcedOrFailed,false);assert.equal(previous.pageErrorCount,0);assert.equal(previous.binaryUnchanged,true);let toolContinuation;
++      if(previous.frontendUnchanged===false)toolContinuation=await reviewCycle14ToolContinuation(output,previous);else assert.equal(previous.frontendUnchanged,true);
+       const identities={};
+       for(const [name,path,directory] of [['output',output,true],['root',root,true],['sync',join(root,'.sync'),true],['database',join(root,'notes.sqlite3'),false]]){
+         const stat=await lstat(path);assert(!stat.isSymbolicLink());assert.equal(await realpath(path),path);assert(directory?stat.isDirectory():stat.isFile());
+         if(!directory)assert(stat.size>0);identities[name]={device:stat.dev,inode:stat.ino,...(!directory?{size:stat.size,sha256:hash(await readFile(path))}:{})};
+       }
+       const archive=join(output,'desktop-peer-lifecycle-before-reopen-'+String(Date.now())+'.json');await writeFile(archive,JSON.stringify(previous,null,2)+'\n',{flag:'wx',mode:0o600});
+-      return {kind:'same-existing-owned-store',identities,previousLifecycle:archive};
++      return {kind:'same-existing-owned-store',identities,previousLifecycle:archive,...(toolContinuation?{toolContinuation}:{})};
+ }
+ export class DesktopPeer {
+   static async reopen(receiptPath,output,runId) { return DesktopPeer.open(receiptPath,output,runId,true); }
