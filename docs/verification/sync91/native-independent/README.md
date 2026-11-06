@@ -1,0 +1,5 @@
+# Independent Android21 exact package audit PASS
+
+APK238738727B SHA256e9e1142e9d24a13b533767173c236d1d10841d62d9709aec69e652cf0c9eb60a; ELF lib/arm64-v8a/libnotes_clone_lib.so213444256B SHAded4e40f045330f4de73cc66444d33b543c332bff5f1e3fc8c20e264c2873fdb. Source5f9dd30f product inputs322 exact approvedb373ac95 before/after/current/gitblob. Exact approved9 product input changes vs20, including added publication.rs; four reviewed harness manifests lie outside this package input inventory. Complete embedded frontend bytes/HTMLtokens exact20. arm64 ELF, signaturev2/debugsigning, package/activity, compiled backup exclusions, debug-object exclusion passed.
+
+run02/result.json is final natural0/7.186286s. Initial run01 failed only independent footer's inaccurate13path package-inventory assumption and incorrect test filename after artifact checks; retained with original script/footer-failure record. Corrected footer uses exact9 reviewed input paths; no source/artifact changes. Package read-only audit does not establish Android syscall behavior, full synchronization or pixel parity. No build/sign/install/launch/device/userdata operations.

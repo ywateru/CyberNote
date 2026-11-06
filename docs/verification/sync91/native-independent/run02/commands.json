@@ -1,0 +1,101 @@
+[
+  {
+    "label": "android-signature",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/apksigner",
+      "verify",
+      "--verbose",
+      "--print-certs",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录-Android21.apk"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.789004,
+    "stdoutSha256": "ad5dcc6a8094668d0804d0a1b19dc2bf6fcae21dbf76ff6a876d31e27e05c5ac",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-badging",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "badging",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录-Android21.apk"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.036105,
+    "stdoutSha256": "ce74105cada00a9558d2871922b0e0aa4971c3dd9b747227ac266d27e93a2b8a",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-manifest",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "xmltree",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录-Android21.apk",
+      "--file",
+      "AndroidManifest.xml"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.026355,
+    "stdoutSha256": "86a61305ff103753d11329371a8d382456669769fa7816a710a07c528ab3a1c6",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-resources",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "resources",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录-Android21.apk"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.033398,
+    "stdoutSha256": "057e2b51ba856a5f1a090c7975888a6320918fb056e23d06236545b13aff675a",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-backup_rules",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "xmltree",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录-Android21.apk",
+      "--file",
+      "res/xml/backup_rules.xml"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.025924,
+    "stdoutSha256": "e8608c8b228ed5e239d034c754cf2bd55ab92279fa0d053d46fe44ab07c5d7c3",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-data_extraction_rules",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "xmltree",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录-Android21.apk",
+      "--file",
+      "res/xml/data_extraction_rules.xml"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.025466,
+    "stdoutSha256": "0b2c2a5b6efb807b3919b719bad68bc9fd290a605a5b1066a565722b5502e0b3",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-frontend-extract",
+    "argv": [
+      "node",
+      "/private/tmp/apple-notes-sync87-webview-review/docs/verification/sync91/native-independent/extract-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync91/android-build/result.json",
+      "/private/tmp/sync91-package-review-extract-run02/android/libnotes_clone_lib.so",
+      "/private/tmp/sync91-package-review-extract-run02/android-frontend"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.315915,
+    "stdoutSha256": "a9cb2efe87ac64c37beb33ea227663887c4c61db66b6f8d826cdc06445f0caa7",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]
