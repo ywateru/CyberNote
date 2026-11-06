@@ -1,0 +1,32 @@
+[
+  {
+    "attempt": 1,
+    "argv": [
+      "python3",
+      "-B",
+      "/private/tmp/sync87-environment-independent-review-01/run_review.py"
+    ],
+    "cwd": "/private/tmp/apple-notes-sync87-environment",
+    "natural_exit": 1,
+    "signal": null,
+    "wall_source": "exec_command entire shell invocation; includes runner source creation or matcher edit; runner-only wall was not separately measured",
+    "note": "read-only aggregation matcher assertion; stderr preserved",
+    "shell_invocation_wall_seconds": 0.752776667,
+    "runner_only_wall_seconds": null
+  },
+  {
+    "attempt": 2,
+    "argv": [
+      "python3",
+      "-B",
+      "/private/tmp/sync87-environment-independent-review-01/run_review.py"
+    ],
+    "cwd": "/private/tmp/apple-notes-sync87-environment",
+    "natural_exit": 0,
+    "signal": null,
+    "wall_source": "exec_command entire shell invocation; includes runner source creation or matcher edit; runner-only wall was not separately measured",
+    "note": "corrected actual fatal-line matcher; reused single guard run",
+    "shell_invocation_wall_seconds": 0.819552625,
+    "runner_only_wall_seconds": null
+  }
+]
