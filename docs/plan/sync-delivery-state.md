@@ -12,7 +12,7 @@
 |86两实际App DOM|基础设施3352b913冻结，真实最终验收待修复后端build09与独审|探索06的36项业务断言通过，最终exit1为只读WAL证据打开；修复后尚未正式重跑，不能记完整pass|/private/tmp/apple-notes-sync86-dom，codex/sync86-dom，作者sync86_dom_develop|
 |87隔离Android环境|独审285970a1 pass且已合入，ENVIRONMENT-READY ONLY|工具62ca1cf0，17 guards；第三次18.751秒ready；未安装新APK|资源/private/tmp/apple-notes-sync87-environment-01保留；emulator-5584 stopped；环境工作树已清理|
 |87新Android原生|HOST-TOOLS-BLOCKED，安装等待准确新同步APK核包|7fd245ba/作者4f790962；独审发现malformed JSON会回显输入片段P2，交原作者修复；ADB/boot/install均0|/private/tmp/apple-notes-sync87-native，codex/sync87-native，作者sync87_native_develop|
-|87实际路由与换址UI|换址UI独审34项通过待报告冻结；LAN21项作者通过；实际wss被TLS provider panic阻断|UI66958c1d/runner7323d818/作者4e3a3f37；独审候选b508cd9f；真实路线仍需新binary验收|/private/tmp/apple-notes-sync87-routes，codex/sync87-routes；独审/private/tmp/apple-notes-sync87-ui-native-review|
+|87实际路由与换址UI|UI独审34项通过，单独接收05ee05ee；主线56+56/build/production自然0；LAN21项作者通过；实际wss被TLS provider panic阻断|UI66958c1d/runner7323d818/作者4e3a3f37；独审7ce136da对应a8687e87；真实路线仍需新binary验收|路线runner与native产品未合入；/private/tmp/apple-notes-sync87-routes保留待后续|
 |87准确包/完整目标|pending|Mac27/Android17拟号未构建；临时build驱动仅准备，未执行|根协调最终主线测试和准确包|
 
 根负责规格、派发、合入和主线完整整合；开发和独审由不同agent负责。恢复时只给明确当前任务/工作树，不能唤醒旧debug70任务。所有shell显式workdir，禁止其他agent写main；原失败保全，修复后只恢复受影响边界。
