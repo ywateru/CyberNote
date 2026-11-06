@@ -1,6 +1,6 @@
 # APP-SYNC87 隔离Android与路由环境准备
 
-状态 ready，独立于86源实现；完整87验收仍pending。仅准备本机资源、生命周期和可审计工具，不能把环境ready称真实同步pass。
+状态 done（ENVIRONMENT-READY ONLY），独立于86源实现；完整87验收仍pending。仅准备本机资源、生命周期和可审计工具，不能把环境ready称真实同步pass。
 
 objective：确认现有SDK/API30 ARM64 emulator、ADB、cloudflared和构建缓存，准备全新独立AVD HOME/AVD名称/data目录及仅允许该新serial的检查工具，完成冷启和停止可选验证，为随后准确同步APK安装与新设备原生provider验收提供可重复入口。只用已安装工具和镜像，无新SDK安装。根拥有最终源码合入与准确出包，不能运行构建或安装旧包。
 
