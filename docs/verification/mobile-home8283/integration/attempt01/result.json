@@ -1,0 +1,124 @@
+{
+  "head": "8e3e09415175633ed58703e7416ad734c0832757",
+  "output": "/private/tmp/notes-mobile-home8283-root-8dercvx0",
+  "start": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "c4fcc377e3ac0b1bac640e4a29fdc3039cf3e558dff3491ef43f1981611cdfd1",
+    "fileCount": 126,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "runs": [
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 3.549,
+      "log": "/private/tmp/notes-mobile-home8283-root-8dercvx0/build.log"
+    },
+    {
+      "name": "production",
+      "command": [
+        "pnpm",
+        "debug",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/notes-mobile-home8283-root-8dercvx0/production"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 1.611,
+      "log": "/private/tmp/notes-mobile-home8283-root-8dercvx0/production.log"
+    },
+    {
+      "name": "desktop",
+      "command": [
+        "pnpm",
+        "test:debug",
+        "--out",
+        "/private/tmp/notes-mobile-home8283-root-8dercvx0/desktop"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 76.371,
+      "log": "/private/tmp/notes-mobile-home8283-root-8dercvx0/desktop.log"
+    },
+    {
+      "name": "mobile-notes",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "notes",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-mobile-home8283-root-8dercvx0/mobile-notes"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 7.174,
+      "log": "/private/tmp/notes-mobile-home8283-root-8dercvx0/mobile-notes.log"
+    },
+    {
+      "name": "mobile-recording",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "recording",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-mobile-home8283-root-8dercvx0/mobile-recording"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 11.213,
+      "log": "/private/tmp/notes-mobile-home8283-root-8dercvx0/mobile-recording.log"
+    },
+    {
+      "name": "mobile-attachments",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "attachments",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-mobile-home8283-root-8dercvx0/mobile-attachments"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 46.303,
+      "log": "/private/tmp/notes-mobile-home8283-root-8dercvx0/mobile-attachments.log"
+    }
+  ],
+  "end": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "c4fcc377e3ac0b1bac640e4a29fdc3039cf3e558dff3491ef43f1981611cdfd1",
+    "fileCount": 126,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputUnchanged": true,
+  "status": "failed"
+}
