@@ -1,24 +1,24 @@
 # 双端同步当前交付状态
 
-更新：2026-11-06。供中断恢复；[正式规格](../architecture/sync.md)、[窗口协议](../architecture/sync-coordinator.md)和任务文件仍是行为契约。**完整同步目标 active，正在进行新隔离 Android 的实际运行验收。** 已交付 gallery83，不再重做快速首页。
+更新：2026-11-06。供中断恢复；[正式规格](../architecture/sync.md)、[窗口协议](../architecture/sync-coordinator.md)和任务文件仍是行为契约。**本轮同步目标交付完成，准确产物和验收范围见[最终交付记录](../verification/sync91/DELIVERY.md)。** 已交付 gallery83，不再重做快速首页。
 
 最新状态（2026-11-07）：[SYNC91](tasks/app-sync91-portable-media-publication.md)产品 `3963c3df` 已源码独审并生成同一322输入的 Mac29 / Android21，双方准确包均通过[独立核包](../verification/sync91/native-independent/README.md)。Android21 在原5584 userdata、同一配对 Store 下自动应用了原缺失目标：inbox1→0、targetNotes0→1、commits1、所有29类apply错误0。新双方完整document/plainText和五份原媒体文件SHA已[独审确认](../verification/sync91-native/native22-independent/result.json)。原 desktopMedia 自动动作返回通用失败仍保留，不能把Store/原字节通过追认为当时可见解码通过。
 
-当前91后端的两实际App DOM39项自然0；真实LAN在路线01通过，路线01公网反向WAV元数据等待超时仍为失败，新隧道的相同脚本/预算定向复验39项自然0并[独审接收](../verification/sync91/final-host-independent/routes02-result.json)，含双向PNG/WAV原字节、错误PSK、新hostname/原目录重启。首次复验隧道需bounded SIGKILL，原记录保持。严格Android同userdata冷启已作者通过2文档/5附件全保持，尚待纯证据及独审；手机图片导出、可见解码与前台重连继续验收。完整目标仍active。
+当前91后端的两实际App DOM39项自然0；真实LAN在路线01通过，路线01公网反向WAV元数据等待超时仍为失败，新隧道的相同脚本/预算定向复验39项自然0并[独审接收](../verification/sync91/final-host-independent/routes02-result.json)，含双向PNG/WAV原字节、错误PSK、新hostname/原目录重启。首次复验隧道需bounded SIGKILL，原记录保持。严格Android同userdata冷启、完整正文/原文件、前台自动收敛、图片导出与最终画廊均已实际通过并独审。最终媒体观察保留桌面PNG完整门槛true、WAV可见和解码元数据通过但Blob字节读回失败的精确边界；不宣称四个控件完整脚本全部通过。所有owned原生进程/监听已关闭。[交付记录](../verification/sync91/DELIVERY.md)列出原失败和真实VPN/硬件/像素等未验证范围。
 
 ## 已接收与剩余门槛
 
 | 层 | 当前状态 | 准确来源与证据 |
 | --- | --- | --- |
 | 84 Store / 85 认证网络 / 86 设置与协调 | 已独审合入 | 84 `feff050d`、85 `0ab39d70`、设置 `d8ff3336`、协调 `85b9e0eb`；历史失败保留于各自证据目录 |
-| 86 Rust adapter / Session | 最终产品已独审并整合 | 产品 `cd334bc8`，独审 `0feb310d`，主线合入 `9cbbb150` |
-| 主线完整产品回归 | PASS，十条命令自然0 | [完整整合](../verification/sync87/main-integration/README.md)：桌面464、手机笔记9/录音43/附件组合290/同步设置56，Store159 pass/3既有ignored、网络23，build/production/Tauri check；未因后续纯工具合入重跑全套 |
+| 86 原始 Rust adapter / Session | 已独审并整合，后续由91发布修复推进 | 产品 `cd334bc8`，独审 `0feb310d`，主线合入 `9cbbb150` |
+| 早期主线完整产品回归 | PASS，十条命令自然0；当前91受影响整合另记 | [完整整合](../verification/sync87/main-integration/README.md)：桌面464、手机笔记9/录音43/附件组合290/同步设置56，Store159 pass/3既有ignored、网络23，build/production/Tauri check；未因后续纯工具合入重跑全套 |
 | 86 两实际 App DOM | 作者与不同代理各39项自然0 | 最终工具 `b08c7728`，作者 `40b93a6a`、独审 `c66e18db`；[独审](reviews/app-sync86-dom-integration-independent.md)。两个 React/Tiptap、独立 Rust/SQLite/Noise、同目录重启、真实 renderer ACK；不是 fixture 或 Android |
 | 87 实际 LAN / 匿名 wss | 已独审接收 | harness `7323d818`、作者 `bd4e531e`、独审 `55b71804`；[56项实际路线](../verification/sync87-routes/build11/README.md)、[独审32项审计](../verification/sync87-routes/independent-build11/RESULT.md)。含第二 hostname 新邀请及原目录冷启；实际 WireGuard/EasyTier 无现成对端，未验证 |
 | Mac27 / Android17 准确包 | 已构建，独立核包 PASS | 两端321项产品输入相同；[Mac](../verification/sync87/native-build/result.json)、[Android](../verification/sync87/android-build/result.json)、[独立核包](../verification/sync87/native-independent/README.md)。Mac ad-hoc、Android debug，不等于原生运行 |
 | 87 原生验收工具 | 最终依赖与断言已独审 | 完整正文修复 `cb202998` / 独审 `97b048ae`；精确依赖 `16ce5779`，作者 smoke `5f0fd4df`，独审 `ad48a884`，主线合入 `5a07d842`。final11单实际 DesktopPeer10项自然0，非双端设备证明 |
 | 87 新隔离 Android 环境 | 既有 ready，实际 APK 验收进行中 | AVD `notes-sync87-isolated`，仅 `emulator-5584`；资源 `/private/tmp/apple-notes-sync87-environment-01`。reviewed lifecycle 保持至少8GiB free；不得降低 guard |
-| 87 最终实际 Android | **实际配对与完整上行通过；反向未通过** | 工作树 `/private/tmp/apple-notes-sync87-native`，作者 `/root/sync87_native_resume`；[final02独审](../verification/sync87-native/final-actual-independent/RESULT.md)。实际PNG选取/原字节保存及应用重开保持另有证据，媒体/导出/完整冷启仍待完成 |
+| 91 最终实际 Android | 双向文档/原文件、冷启/前台恢复、图片导出/首页已独审 | [最终交付](../verification/sync91/DELIVERY.md)链接原始记录与独审；保留旧反向失败及最终Blob调试读取限制，不宣称整体像素或所有媒体脚本通过 |
 | viewport88 / Mac28 / Android18 | 三条 CSS 回退已独审；准确包已独立核对 | 产品 `6553ef6f`，主线 `cb3bc1cf`；[准确新包](../verification/sync88/native-independent/README.md)，真实 Android18 设置几何已修复 |
 
 主线后续工具整合的 notes9 与真实LAN21已恢复通过；最初LAN因root输出路径不符合准入规则而在启动前拒绝，原 failed 汇总保留，见[窄恢复记录](../verification/sync87/shared-tool-integration/README.md)。不把调用错误改写成产品失败，也不覆写成原运行通过。
@@ -32,11 +32,11 @@
 - Android原反例对端仍为 immutable11：`/private/tmp/sync86-transport-build11/notes-current-attachment-transport`，SHA256 `333fcd44e19ebbd30ece11b7a595816249a9458a46fb03523855ae8c51215800`，mode0555；未替换或重建，不更换原绑定Store来取得通过。原11收据继续有效。
 - 旧Mac28/Android18和诊断19/20均保留，不追认包含91修复。七个最新原生诊断/输入工具源已经精确四路径独审整合，主线 `d0e0a9d3` 至 `d16144a6`，未覆盖原observer或91清单。
 
-## 下一步
+## 本轮收口与保留范围
 
-1. 同5584原userdata结束严格coldboot核对、媒体可见解码、图片原SHA导出、自动前台重连；原失败动作和前置状态保留。仅从实际Store验证过的owner/名字/SHA恢复测试state附件IDs，不改产品数据，不重加媒体。
-2. 冻结安全纯证据，不同代理独审后整合。结束owned子进程，保留所有userdata/原13秒录音/配对Store。不得降低8GiB生命周期guard。
-3. 最终更新使用说明、交付记录和截图；完整要求级验收完成前不得complete goal。WireGuard/EasyTier真实路线仍无受控可达对端，应用对可达ws/wss虚拟网地址的支持和实际验证范围分别说明。
+本轮无需继续操作设备。Mac29/Android21、322产品输入、最终工具修正和纯证据已整合；使用方式见[设备同步](../sync-usage.md)，准确验证范围见[最终交付](../verification/sync91/DELIVERY.md)。下方逐轮记录均为当时状态，原active/未通过陈述保留为历史，不替代本节最新结论。
+
+原13秒Android录音、旧AVD、原生userdata、配对Store和所有原始失败继续保留。WireGuard/EasyTier应用层支持可达虚拟网ws/wss地址，真实受控VPN对端未测；实体手机、硬件麦克风和原版像素目标不在本轮同步交付中追认为通过。最后生命周期自然结束，所有owned子进程和端口已确认关闭。
 
 ## 证据和资源保全
 

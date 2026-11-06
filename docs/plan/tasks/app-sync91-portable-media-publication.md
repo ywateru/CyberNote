@@ -1,6 +1,6 @@
 # SYNC91 跨平台同步附件原子发布
 
-状态：in-progress。前置SYNC90实际Android20在同一绑定Store上syncMediaPublish持续23→26，其余28分类为0、目标inbox1/note0。源码唯一对应VerifiedMedia::materialize内fs::hard_link失败。可证明操作失败，尚未证明具体OS errno、SELinux或文件系统原因。原Store/失败/安装包均保留。
+状态：done（本轮同步功能交付；具体验证范围和保留限制见[最终交付](../../verification/sync91/DELIVERY.md)）。前置SYNC90实际Android20在同一绑定Store上syncMediaPublish持续23→26，其余28分类为0、目标inbox1/note0。源码唯一对应VerifiedMedia::materialize内fs::hard_link失败。可证明操作失败，尚未证明具体OS errno、SELinux或文件系统原因。原Store/失败/安装包均保留。
 
 修复采用现有两阶段媒体准备能力：在MediaSnapshot::verify脱离Session/SQLite gate时，将已校验blob流式复制到attachments内独占临时文件，校验原SHA/长度并flush/fsync；gate内只执行身份验证和平台原子NO_REPLACE rename，不再要求硬链接，也不允许整文件复制、哈希或普通覆盖rename。Android需兼容minAPI26，不能直接依赖API30才有的renameat2动态符号；可用已有平台常量的syscall封装。Mac使用具备不覆盖语义的renameatx_np(RENAME_EXCL)。允许最小直接libc依赖（复用锁定版本）或等价经审查的封装，不引入外部服务。
 
@@ -15,3 +15,5 @@
 2026-11-07阶段：产品主线3963c3df、作者证据b373ac95、独审c7d0eaa8已接收。Android21准确322输入构建与独立核包通过，root收据已签发；同5584原userdata升级后，原缺失目标完整document/plainText自动应用，真实commits1/applyError0/syncMediaPublish0，inbox1→0、targetNotes0→1，未重置Store或配对。新一轮双方完整正文也已通过。desktopMedia原动作27.835秒返回通用失败；随后实际Android只读核对已有PNG70B/WAV32044B与原SHA一致，仍待具体可见解码阶段、独审和最终导出/重启/冷启动收据。
 
 当前91宿主实际双App39项自然0；最终当前源码公网路线首轮在反向WAV附件元数据25秒等待超时，原失败保留，不能以LAN或旧版本路线通过追认为本轮通过。将使用同一脚本/相同预算在新隧道做窄复验；准确Mac29构建与剩余原生验收并行。完整目标仍active。
+
+最终收口：Mac29/Android21相同322产品输入已独审，实际原生双向完整文档/五份原文件、严格同userdata冷启动、自动前台恢复、系统原图导出和最终画廊均已接收。当前源码双App39和LAN/匿名wss定向39通过；原超时和最终Blob读回限制保留，未声称全部媒体脚本、真实VPN、实体硬件或原版像素通过。两项额外测试修正均独审，不改变产品输入；生命周期自然结束，所有owned进程已关闭，无后续设备操作。[最终交付](../../verification/sync91/DELIVERY.md)。

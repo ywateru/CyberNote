@@ -1,3 +1,5 @@
+2026-11-07：[Mac29 / Android21 同步交付](verification/sync91/DELIVERY.md)完成本轮要求级验收和独立复核。相同322项产品输入；原Android反向失败在同数据/配对上修复，双向完整文档及原文件、冷启、前台恢复、系统图片导出通过。当前源码实际双App39项、LAN和匿名wss定向39项已验证；原公网超时、音频Blob调试读回限制及未测VPN/硬件范围逐项保留。所有owned测试运行已关闭，[使用说明](sync-usage.md)与[恢复状态](plan/sync-delivery-state.md)已更新。下方是历史阶段记录。
+
 2026-11-06 最新同步进展：[SYNC91](plan/tasks/app-sync91-portable-media-publication.md)附件原子发布修复已源码独审并合入，Android21准确构建中。Android20实际诊断为 `syncMediaPublish`；真实系统连续添加TXT/PNG/WAV和三个原文件核对通过，反向同步须在同一配对Store上复验，目标仍active。恢复入口：[双端同步当前状态](plan/sync-delivery-state.md)。
 
 # Apple Notes Clone
