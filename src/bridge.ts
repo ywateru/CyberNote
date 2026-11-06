@@ -10,6 +10,7 @@ import {
 import { AccessGate } from "./access-client";
 import { secureId } from "./secure-id";
 import { attachmentRecordedAt } from "./recording-metadata";
+import { parseSyncWindowEvent, parseSyncWindowReceipt, type SyncWindowEvent, type SyncWindowReply } from "./network-sync";
 import type { AttachmentOperationResult } from "./attachment-submission";
 import type {
   AccessEvent,
@@ -37,6 +38,16 @@ export const accessGate = new AccessGate();
 export const metadataGate = new MetadataGate();
 const attachmentOwners = new Map<string, string>();
 export const invalidateAccessRequests = () => accessGate.invalidate();
+export async function subscribeNetworkSync(handler: (event: SyncWindowEvent) => void, onError: (error: unknown) => void) {
+  if (!native) return () => {};
+  return listen<unknown>("notes-sync", ({ payload }) => {
+    try { handler(parseSyncWindowEvent(payload)); } catch (error) { onError(error); }
+  });
+}
+export async function replyNetworkSync(reply: SyncWindowReply) {
+  if (!native) throw Error("同步窗口协调需要本机应用");
+  return parseSyncWindowReceipt(await invoke("sync_window_reply", { reply, expected: accessGate.expected() }), reply.operationId);
+}
 export async function subscribeAccess(handler: (event: AccessEvent) => void) {
   if (!native) return () => {};
   return listen<AccessEvent>("notes-access", ({ payload }) => {

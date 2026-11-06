@@ -626,6 +626,7 @@ await test("actual AccessGate remains strict while original target rebinds gener
   assert.equal(target.stamp.generation, 0);
   gate.accept(gate.state, rebound);
   assert.equal(target.bookmark.resolve(state.doc).from, 3);
+  assert.equal(rebindAttachmentTarget(target, { ...live, stamp: { ...live.stamp, epoch: live.stamp.epoch + 1 } }).epoch, live.stamp.epoch + 1);
   for (const change of [
     { noteId: "note-b" },
     { scope: "another" },
@@ -638,7 +639,8 @@ await test("actual AccessGate remains strict while original target rebinds gener
     { editorDocument: { ...document, extra: 1 } },
     { trustedDocument: { ...document, extra: 1 } },
     { stamp: { ...live.stamp, sessionId: "new" } },
-    { stamp: { ...live.stamp, epoch: 3 } },
+    { stamp: { ...live.stamp, epoch: live.stamp.epoch - 1 } },
+    { stamp: { ...live.stamp, epoch: undefined } },
     { stamp: { ...live.stamp, noteEpoch: 4 } },
     { stamp: { ...live.stamp, noteId: "note-b" } },
   ])
