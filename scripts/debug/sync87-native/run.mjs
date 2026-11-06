@@ -126,6 +126,11 @@ async function execute(request){
       const owner=s.notes.at(-1);assert(owner);await nativeStep('attachments-existing-chooser-multiple',()=>chooserFiles(s,s.files.slice(0,2).map(f=>f.name),{multi:true}));
       const c=await app(),actual=await persistedNote(c,owner.id,2);assert.equal(actual.attachments.length,2);for(const f of s.files.slice(0,2))assert(actual.attachments.some(a=>a.displayName===f.name));return{count:2,names:actual.attachments.map(a=>a.displayName)};
     }
+    case 'attachmentsOpen': {
+      const c=await app(),owner=s.notes.at(-1);assert(owner);const current=await c.read('({editor:!!document.querySelector(".mobile.page-editor"),title:document.querySelector(".tiptap h1")?.textContent})');
+      if(!current.editor||current.title!==owner.marker)await openNote(c,owner.id);if(/mInputShown=true/.test(await guard('ime'))){await guard('back');await pause(200);}
+      const before=await persistedNote(c,owner.id);await nativeStep('attachments-open-only',()=>openFilePicker(c));return{opened:true,beforeCount:before.attachments.length};
+    }
     case 'attachmentsMultiple':
     case 'attachmentsAudio': {
       const c=await app(),owner=s.notes.at(-1);assert(owner);const current=await c.read('({editor:!!document.querySelector(".mobile.page-editor"),title:document.querySelector(".tiptap h1")?.textContent})');
