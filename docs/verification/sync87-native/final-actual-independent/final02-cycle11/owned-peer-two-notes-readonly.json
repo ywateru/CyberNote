@@ -1,0 +1,62 @@
+{
+  "scope": "independent exact notes-only SELECT via mode=ro&immutable=1 after natural peer close; no schema changes or secret tables",
+  "databasePath": "/private/tmp/notes-sync87-native-final-02/desktop-peer/notes.sqlite3",
+  "query": "SELECT id,body,revision FROM notes WHERE id=?",
+  "rows": [
+    {
+      "id": "256cf1ef-b7c6-4c1e-a8ab-31cb5e6be460",
+      "plainText": "SYNC87-74da049123-1\nAndroid真实输入与保存",
+      "document": {
+        "content": [
+          {
+            "attrs": {
+              "level": 1
+            },
+            "content": [
+              {
+                "text": "SYNC87-74da049123-1",
+                "type": "text"
+              }
+            ],
+            "type": "heading"
+          },
+          {
+            "content": [
+              {
+                "text": "Android真实输入与保存",
+                "type": "text"
+              }
+            ],
+            "type": "paragraph"
+          }
+        ],
+        "type": "doc"
+      },
+      "rowRevision": 0
+    },
+    {
+      "id": "eac3b7e0-12cd-43cc-a1c0-2457e8cc4320",
+      "plainText": "SYNC87-DESKTOP-74da049123 desktop real Session input",
+      "document": {
+        "content": [
+          {
+            "attrs": {
+              "level": 1
+            },
+            "content": [
+              {
+                "text": "SYNC87-DESKTOP-74da049123 desktop real Session input",
+                "type": "text"
+              }
+            ],
+            "type": "heading"
+          }
+        ],
+        "type": "doc"
+      },
+      "rowRevision": 1
+    }
+  ],
+  "freshNativeCompleteDocAndPlainTextEqualsPeer": true,
+  "desktopNoteAbsentNativeWorkspace": true
+}
