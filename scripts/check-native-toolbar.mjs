@@ -233,16 +233,124 @@ await test("composition preserves pending state until actual committed search ev
 });
 await test("protected content overlay bypasses composition and missing-search wait, preserving exact latest query", async () => {
   for (const code of ["search_composition", "stale_search"]) {
-    let calls=0; const updates=[];
-    const h=harness({update:async state=>{updates.push(state);if(++calls===1)throw {code};return info(state.revision);},inspect:async()=>info(1,7)});
-    h.controller.set(projection());await settle();h.controller.set(projection("pending","changed"));await settle();
-    const overlay=projection("protected","changed");overlay.state.contentOverlay=true;h.controller.set(overlay);await settle();
-    assert.equal(updates.at(-1).contentOverlay,true);assert.equal(updates.length,2);
-    h.emit(7,{kind:"search",value:"中文原值",phase:"commit"},3);await settle();
-    const normal=projection("restored","old");normal.state.contentOverlay=false;h.controller.set(normal);await settle();
-    assert.equal(updates.at(-1).contentOverlay,false);assert.equal(updates.at(-1).search.value,"中文原值");assert.equal(updates.at(-1).search.acknowledgedEvent,7);
-    h.controller.stop();await settle();assert.equal(h.errors.length,0);
+    let calls = 0;
+    const updates = [];
+    const h = harness({
+      update: async (state) => {
+        updates.push(state);
+        if (++calls === 1) throw { code };
+        return info(state.revision);
+      },
+      inspect: async () => info(1, 7),
+    });
+    h.controller.set(projection());
+    await settle();
+    h.controller.set(projection("pending", "changed"));
+    await settle();
+    const overlay = projection("protected", "changed");
+    overlay.state.contentOverlay = true;
+    h.controller.set(overlay);
+    await settle();
+    assert.equal(updates.at(-1).contentOverlay, true);
+    assert.equal(updates.length, 2);
+    h.emit(7, { kind: "search", value: "中文原值", phase: "commit" }, 3);
+    await settle();
+    const normal = projection("restored", "old");
+    normal.state.contentOverlay = false;
+    h.controller.set(normal);
+    await settle();
+    assert.equal(updates.at(-1).contentOverlay, false);
+    assert.equal(updates.at(-1).search.value, "中文原值");
+    assert.equal(updates.at(-1).search.acknowledgedEvent, 7);
+    h.controller.stop();
+    await settle();
+    assert.equal(h.errors.length, 0);
   }
+});
+await test("overlay queued behind a failing in-flight normal update is delivered and can restore before old search arrival", async () => {
+  for (const code of ["search_composition", "stale_search"]) {
+    const pending = deferred(),
+      updates = [];
+    let active = 0,
+      maxActive = 0;
+    const h = harness({
+      update: async (state) => {
+        updates.push(state);
+        maxActive = Math.max(maxActive, ++active);
+        try {
+          if (updates.length === 1) return await pending.promise;
+          return info(state.revision);
+        } finally {
+          active--;
+        }
+      },
+      inspect: async () => info(1, 7),
+    });
+    h.controller.set(projection());
+    await settle();
+    h.controller.set(projection("pending", "changed"));
+    const overlay = projection("protected", "changed");
+    overlay.state.contentOverlay = true;
+    h.controller.set(overlay);
+    pending.reject({ code });
+    await settle();
+    assert.equal(
+      updates.length,
+      2,
+      "queued overlay must follow old rejected update without an unrelated set",
+    );
+    assert.equal(updates[1].contentOverlay, true);
+    const restored = projection("restore", "changed");
+    restored.state.contentOverlay = false;
+    h.controller.set(restored);
+    await settle();
+    assert.equal(
+      updates.at(-1).contentOverlay,
+      false,
+      "applied overlay must permit restore despite old blocked flags",
+    );
+    assert.equal(updates.length, 3);
+    h.emit(7, { kind: "search", value: "迟到中文", phase: "commit" }, 1);
+    await settle();
+    assert.equal(h.events.at(-1)?.[0].value, "迟到中文");
+    assert.equal(updates.at(-1).search.value, "迟到中文");
+    const actions = h.events.length;
+    h.emit(8, { kind: "action", action: "newNote" }, 1);
+    assert.equal(h.events.length, actions);
+    assert.equal(maxActive, 1);
+    assert.equal(h.errors.length, 0);
+    h.controller.invalidate((context) => {
+      context.id = "sealed";
+    });
+    const sealedEvents = h.events.length;
+    h.emit(9, { kind: "search", value: "sealed late", phase: "commit" }, 1);
+    assert.equal(
+      h.events.length,
+      sealedEvents,
+      "invalidation also seals retained search provenance",
+    );
+    h.controller.stop();
+    await settle();
+  }
+});
+await test("a rejected overlay desired is not retried in a busy loop", async () => {
+  let updates = 0;
+  const h = harness({
+    update: async () => {
+      updates++;
+      throw { code: "search_composition" };
+    },
+  });
+  h.controller.set(projection());
+  await settle();
+  const overlay = projection("overlay");
+  overlay.state.contentOverlay = true;
+  h.controller.set(overlay);
+  await settle();
+  await settle();
+  assert.equal(updates, 1);
+  h.controller.stop();
+  await settle();
 });
 await test("old note revision, duplicate sequence, and wrong window are rejected", async () => {
   const h = harness();
