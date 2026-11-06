@@ -27,3 +27,5 @@ Android快速首页83和统一设置82已交付，包见[mobile-home8283](../ver
 本轮资源：84/85旧树均clean后正常移除，两个已merge分支删除，独立runner symlinks已核对指向本仓库相对源，不依赖旧树。缓存/private/tmp/apple-notes-sync84-target与/private/tmp/apple-notes-sync85-target保留供86复用，不删共享SDK/node_modules/main target。
 
 86实际两App DOM的生产连接与媒体/IME/取消验收见[整合任务](tasks/app-sync86-dom-integration.md)，待前后端源码独审合入后启动。87环境首次新AVD180秒offline，exit2/owned PID自然0停止；同新data一次software GPU/show-kernel诊断进行中，不能称ready。
+
+87新环境最小keylink修复62ca1cf0已实际冷启成功：同data、仅owned symlink，boot_devices a003800→a003600，18.751秒boot_complete，cycle21.715秒自然0。旧两次缺super失败保留，尚未App安装/provider/sync原生验收；环境作者整理证据后独审。86发现网络与Store独立stage重复计额，采用规格明确的网络3/256MiB＋Store串行1/256MiB与直接发布，防合计超过4/512MiB。

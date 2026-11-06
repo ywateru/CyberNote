@@ -34,7 +34,7 @@ WireVersion V1：workspaceId、kind(note/folder)、entityId、vector(BTreeMap UU
 
 禁止使用workspace()导出：它会把本机已解锁sealed正文解密。raw locked Note仅empty document、空plainText和sealed，既有title明文契约保留，但整条传输须认证加密。Session token、窗口、授权、settings和attachment_operations永不在wire。首次开启、重新锁定与分支压缩不额外保留线性旧明文；仍存的并发明文冲突须明确显示并允许用户处理，不能声称锁定某分支擦除了其他分支。密钥和配对凭据不进入数据库备份settings。lockNote写入同一SQL事务清除当前线性head与已知同因果inbox中的旧明文payload，保留vector/digest继承上下文，不能等后台下一flush才清；已redacted摘要不得出现在可fetch inventory。已知并发明文分支不被悄悄删除。
 
-接收先用生产字段/文档规则验证单体wire，依赖暂缺或并发环进入pending或确定性图修复，最终投影才用完整业务图验证；不可直接把raw batch包装成归档而拒绝合法乱序。验证字段、id、时间、文档节点、附件归属/类型/大小与sealed一致性；拒绝未知协议/字段、伪路径、同ID异内容、损坏hash、超过64层JSON/16MiB实体消息/64 actor向量/32并发头/256MiB单blob。所有网络读有截止与帧长上限，坏数据不改变业务库与已确认状态。单个head必须分片，最多16MiB有界重组而非强塞48KiB帧。另限制全局inbox最多1024版本/64MiB、同时staging最多4个/512MiB、同步blob缓存默认4GiB并保留至少256MiB磁盘余量；超过预算不ACK且显示可重试原因，重复hash不重复分配文件。具体常量可保守降低，不能无说明提高。
+接收先用生产字段/文档规则验证单体wire，依赖暂缺或并发环进入pending或确定性图修复，最终投影才用完整业务图验证；不可直接把raw batch包装成归档而拒绝合法乱序。验证字段、id、时间、文档节点、附件归属/类型/大小与sealed一致性；拒绝未知协议/字段、伪路径、同ID异内容、损坏hash、超过64层JSON/16MiB实体消息/64 actor向量/32并发头/256MiB单blob。所有网络读有截止与帧长上限，坏数据不改变业务库与已确认状态。单个head必须分片，最多16MiB有界重组而非强塞48KiB帧。另限制全局inbox最多1024版本/64MiB、同时staging最多4个/512MiB、同步blob缓存默认4GiB并保留至少256MiB磁盘余量；超过预算不ACK且显示可重试原因，重复hash不重复分配文件。具体常量可保守降低，不能无说明提高。86生产整合采用更保守的两层合计：网络接收staging最多3个/256MiB，本地Store capture staging串行最多1个/256MiB，合计不超过4个/512MiB；单blob仍最多256MiB。网络完整文件经Store独立校验、fsync后同文件系统rename直接发布到blob缓存，不另复制出第二份网络staging；同hash完成/清理须幂等且不得移动或覆盖非本轮验证的文件。
 
 ## 独立附件
 
