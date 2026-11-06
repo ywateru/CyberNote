@@ -43,12 +43,13 @@ async function app(){if(!context)context=await connect({receipt:options['--recei
 const chooserPackage=n=>['com.google.android.documentsui','com.android.documentsui'].includes(n.package);
 const nativeText=(text,extra=()=>true)=>nativeNode(n=>chooserPackage(n)&&n.text===text&&extra(n));
 async function chooserFiles(s,names,{multi=false}={}){
-  let nodes=parseNodes(await guard('uia'));
+  let xml=await guard('uia');await writeFile(resolve(output,'chooser-'+Date.now()+'.xml'),xml);let nodes=parseNodes(xml);
   assert(nodes.some(chooserPackage),'actual Android DocumentsUI must be open');
   const folder=basename(s.remote);
   if(!nodes.some(n=>n.text===folder)){
     const root=nodes.find(n=>chooserPackage(n)&&/^(Show roots|显示根目录|显示侧栏|打开导航抽屉)$/.test(n['content-desc']||''));
     if(root)await nativeNode(n=>chooserPackage(n)&&n['content-desc']===root['content-desc']);
+    xml=await guard('uia');await writeFile(resolve(output,'chooser-roots-'+Date.now()+'.xml'),xml);
     await nativeNode(n=>chooserPackage(n)&&/^(Downloads|下载内容|下载)$/.test(n.text||'')&&n.clickable==='true');
   }
   await nativeText(folder);await pause(200);
@@ -111,6 +112,23 @@ async function execute(request){
       await nativeStep('attachments-open-continuous',()=>openFilePicker(c));await nativeStep('attachments-choose-continuous',()=>chooserFiles(s,[s.files[2].name]));const three=await persistedNote(c,owner.id,before.attachments.length+3);
       for(const file of s.files)assert(three.attachments.some(a=>a.displayName===file.name),'selected original filename must persist');
       await c.snapshot(output,'attachments');return {cancelPreserved:true,multipleCount:two.attachments.length,continuousCount:three.attachments.length,names:three.attachments.map(x=>x.displayName)};
+    }
+    case 'attachmentsMultiple':
+    case 'attachmentsAudio': {
+      const c=await app(),owner=s.notes.at(-1);assert(owner);const current=await c.read('({editor:!!document.querySelector(".mobile.page-editor"),title:document.querySelector(".tiptap h1")?.textContent})');
+      if(!current.editor||current.title!==owner.marker)await nativeStep('attachments-resume-note',()=>openNote(c,owner.id));
+      if(/mInputShown=true/.test(await guard('ime'))){await guard('back');await pause(200);}
+      const files=request.action==='attachmentsMultiple'?s.files.slice(0,2):[s.files[2]];
+      const before=await persistedNote(c,owner.id);assert(files.every(f=>!before.attachments.some(a=>a.displayName===f.name)),'never select an already persisted fixture');
+      await nativeStep('attachments-resume-open',()=>openFilePicker(c));
+      await nativeStep('attachments-resume-choose',()=>chooserFiles(s,files.map(f=>f.name),{multi:files.length>1}));
+      const after=await persistedNote(c,owner.id,before.attachments.length+files.length);for(const f of files)assert(after.attachments.some(a=>a.displayName===f.name));
+      return{names:files.map(f=>f.name),count:after.attachments.length};
+    }
+    case 'attachmentsVerify': {
+      const c=await app(),owner=s.notes.at(-1);assert(owner);await openNote(c,owner.id);const actual=await persistedNote(c,owner.id,3);assert.equal(actual.attachments.length,3);
+      for(const file of s.files){const a=actual.attachments.find(a=>a.displayName===file.name);assert(a);await assertNativeOriginal(c,a.id,file);}
+      await c.wait('!![...document.querySelectorAll(".tiptap img")].find(x=>x.complete&&x.naturalWidth>0)','actual native image decoded');await c.snapshot(output,'attachments-complete');return{count:3,originalsVerified:true};
     }
     case 'exportImage':assert(s.notes.length);await openNote(await app(),s.notes.at(-1).id);return saveImageOriginal(await app(),s,output,1,s.files.find(f=>f.name.endsWith('.png')));
     case 'pair':await pairViaUI(await app(),request.invitation);await(await app()).snapshot(output,'paired');return{paired:true};
