@@ -2,7 +2,7 @@
 
 同步任务的中断恢复与准确阶段见[当前交付状态](plan/sync-delivery-state.md)。
 
-2026-11-06最新：Android18/Mac28已准确构建并[独立核包](verification/sync88/native-independent/README.md)，设置页高度已修复。final02实际配对与Android→桌面完整中文笔记通过独审；反向目标已到Android inbox但未应用，原回复ready=true、回执解析入口pending且release持续abort。保持同一绑定Store，通过[SYNC89只读原生诊断](plan/tasks/app-sync89-native-apply-diagnostics.md)定位具体分支；尚无业务修复或最终验收。[实际部分证据](verification/sync87-native/final-actual-independent/RESULT.md)和原失败保留，完整goal仍active。provider普通键盘已进入附件目录，保存/导出剩余门槛继续执行。
+2026-11-06最新：Android19诊断包已准确构建、独立核包并实际读取，桌面→Android目标在inbox而未应用，反复落在applyError；当前进行[SYNC90有限错误细分](plan/tasks/app-sync90-apply-error-classification.md)以定位底层原因。原配对Store、userdata及失败保留。Android→桌面完整中文笔记、单PNG及新TXT实际原字节保存分别有证据；反向完整同步、连续PNG/WAV、导出和重启门槛仍开放。[当前状态](plan/sync-delivery-state.md)，完整goal仍active。
 
 2026-11-06 当前：同步主线完整整合、两实际App DOM、LAN/匿名wss及Mac27/Android17独立核包已通过；新隔离Android实际验收进行中，完整目标保持active。[使用说明](sync-usage.md)。下方阶段记录保留原时点，不表示当前仍等待构建。
 

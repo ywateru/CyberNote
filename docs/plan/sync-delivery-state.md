@@ -31,8 +31,8 @@
 
 ## 下一步
 
-1. 完成[SYNC89](tasks/app-sync89-native-apply-diagnostics.md)三处Rust只读诊断的独立源码复核，准确构建并独立核验Android19；只在5584原userdata升级，保留同一已绑定DesktopPeer Store、原inbox目标和Android18失败。
-2. 读取实际固定中止原因，再做必要的最小业务修复与原反例复验。现已证明目标到达但未应用、原始回复入口ready=true、原始回执解析入口pending；尚不能判断解析验证完成或具体中止分支。不再扩大前端观察工具。
+1. 完成[SYNC90](tasks/app-sync90-apply-error-classification.md)有限apply错误分类、独审和准确Android20核包，再于5584原userdata读取具体错误。SYNC89/Android19已源码独审、准确构建核包和实际读取，确定反复applyError；同一已绑定DesktopPeer Store、原inbox目标和18/19失败保持。
+2. 读取实际apply错误类别，再做必要的最小业务修复与原反例复验。现已证明目标到达但未应用、原始回复入口ready=true、原始回执解析入口pending，Android19实际为applyError；其底层数据库/文件/媒体原因尚未确定。不再扩大前端观察工具。
 3. 完成双向完整document/plainText及PNG/WAV原字节/owner/实际解码；真实provider多选/连续PNG/TXT/WAV、图片导出原SHA、前台重连、同data应用重开及冷启动保持。附件选择使用已验证的正常系统TAB/ENTER路径；原工具XML附件及失败保留。
 4. 结束owned children后冻结安全证据，不同代理独审；更新最终使用说明与交付。真实验收未完成前不得 complete goal。
 
@@ -98,6 +98,16 @@ cycle16双观察点实际记录prepare ready=true ×5、probe blocked=false ×4�
 SYNC89提供既有授权下的独立只读sync_diagnostics：Session内存有限原因计数、首次中止原因、当前阶段；不改变同步算法、网络、数据库或普通Status。作者受影响Session10、adapter17与普通Tauri检查通过，proof注册检查及源码冻结/独审进行中。准确新Android19只用于取得真实中止分支，尚不是业务修复或最终包。
 
 cycle16系统普通TAB/ENTER已进入formal02固定附件目录，真实UIA可见PNG/TXT/WAV；后续多选在生命周期结束后被guard拒绝，未发输入、不声称保存通过。[原证据](../verification/sync87-native/native-provider-progress16/README.md)保留。cycle17继续同userdata、无peer的真实provider保存/原字节门禁，不触碰待应用桌面目标。
+
+### Android19实际错误与90有限细分
+
+Android19准确构建、独立核包与root流式APK/ELF哈希核对通过，见[构建](../verification/sync89/android-build/README.md)、[核包](../verification/sync89/native-independent/README.md)。准确源码75deb707，APK236,854,567字节/SHA256 `75271901683ddcf12fadc30f8cc9be3b3a59c0e3da22e0791a3a1bdb2cd0adbf`；仅三处Rust诊断变化、前端与18一致。正式桌面仍Mac28，此诊断包不是业务修复。
+
+cycle18同userdata正常升级19，实际只读诊断基线applyError4/timeout1、commits0；同一绑定peer在线时applyError55→58，timeout1不变、commits0、目标inbox1/note0/projection0/seen0，同PID/启动标识。普通status为connected/error null不能替代真实应用成功。[原始有限诊断](../verification/sync87-native/native-backend-cause18/README.md)及[独审](../verification/sync87-native/final-actual-independent/final02-cycle18-android19/RESULT.md)确认宽分支，不确定底层错误。无receipt不等于SQLite未提交：源码在撤销密钥/首个receipt前已尝试tx.commit；当前目标仍未投影的计数单独成立。
+
+cycle17实际TXT通过系统普通选择后保存于真实Store，read_attachment33字节与原fixture SHA一致；[证据](../verification/sync87-native/native-provider-txt17/README.md)。连续PNG/WAV/导出尚未通过，不能用旧actual01单PNG替代。cycle18附件按钮第一次已打开media menu，第二次“附加文件”输入被UIA guard拒绝；[修正记录](../verification/sync87-native/native-provider18/README.md)保留，不能说第一次未打开菜单。最小固定App按钮CDP正常触摸工具已获独审，系统DocumentsUI仍用普通键盘选择。cycle18生命周期自然0/618.366秒。
+
+已正常移除六个完成且包括ignored均clean、无路径进程的源码检出；两个detached提交先固定为archive分支，其余原分支保留。释放968,257,536字节，未删除target/SDK/包/AVD/数据，见[cleanup06](../verification/sync87/source-checkout-cleanup06.json)。
 
 ## 用户原现场和范围
 
