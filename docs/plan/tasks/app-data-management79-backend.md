@@ -1,7 +1,7 @@
 ---
 id: app-data-management79-backend
 scope: rust-real-inventory-original-attachment-export-and-android-document-io
-status: in-progress
+status: done
 depends-on: [app-recording-indicator78]
 ---
 
@@ -20,3 +20,7 @@ docs/INDEX.md、docs/architecture.md、docs/ui/data-management.md、docs/debuggi
 # verification
 
 先冻结产品/原生源码commit，真实Rustfresh合成目录stat/metadata/独立媒体文件/无BLOB/新PID重开/单件导出原字节/路径保护/缺文件/撤权/写失败/归档全媒体roundtrip及取消临时清理；暴露实际Session方法至现有真实Rusttransport供UI集成，不伪造命令。cargo编译及Android Kotlin/Rust构建检查，Android provider动作仅新隔离设施或不触设备的编译/原生harness，不操作原模拟器。保留输入hash、自然exit、wall和失败原件。不和前端agent共享dist/index/cargo target；根分配缓存。独审由另一agent完成，证据仅自己目录，提交后交还占用。
+
+# delivery
+
+2026-11-06：产品与runner经[独审](../reviews/app-data-management79-static.md) SOURCE-READY，已合主线并完成[六项整合](../../verification/data-management79/integration/README.md)。最终准确双端包由父任务继续。原生provider/整窗像素和既有调试CLI耗时波动边界单列，不据此授予设备运行通过。

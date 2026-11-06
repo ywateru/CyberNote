@@ -1,0 +1,120 @@
+{
+  "head": "ff3e9a195a5ccbb77a1bbfc64d86f3605c9c2c21",
+  "output": "/private/tmp/notes-data79-root-tw_ncgmb",
+  "start": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "84791745404687c6de66f83383f9519ebbb4028280df326a659c6557730726d1",
+    "fileCount": 95,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "runs": [
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 9.288,
+      "log": "/private/tmp/notes-data79-root-tw_ncgmb/build.log"
+    },
+    {
+      "name": "production",
+      "command": [
+        "pnpm",
+        "debug",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/notes-data79-root-tw_ncgmb/production"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 3.425,
+      "log": "/private/tmp/notes-data79-root-tw_ncgmb/production.log"
+    },
+    {
+      "name": "desktop",
+      "command": [
+        "pnpm",
+        "test:debug",
+        "--out",
+        "/private/tmp/notes-data79-root-tw_ncgmb/desktop"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 61.932,
+      "log": "/private/tmp/notes-data79-root-tw_ncgmb/desktop.log"
+    },
+    {
+      "name": "mobile-notes",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "notes",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-data79-root-tw_ncgmb/mobile-notes"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 5.724,
+      "log": "/private/tmp/notes-data79-root-tw_ncgmb/mobile-notes.log"
+    },
+    {
+      "name": "mobile-recording",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "recording",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-data79-root-tw_ncgmb/mobile-recording"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 11.663,
+      "log": "/private/tmp/notes-data79-root-tw_ncgmb/mobile-recording.log"
+    },
+    {
+      "name": "mobile-attachments",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "attachments",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-data79-root-tw_ncgmb/mobile-attachments"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 46.941,
+      "log": "/private/tmp/notes-data79-root-tw_ncgmb/mobile-attachments.log"
+    }
+  ],
+  "end": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "84791745404687c6de66f83383f9519ebbb4028280df326a659c6557730726d1",
+    "fileCount": 95,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputUnchanged": true,
+  "status": "pass"
+}

@@ -1,7 +1,7 @@
 ---
 id: app-data-management79-ui
 scope: attachment-flicker-image-export-data-management-ui-debug-integration
-status: in-progress
+status: done
 depends-on: [app-recording-indicator78]
 ---
 
@@ -22,3 +22,7 @@ src/**必要实现（新增DataManagement组件/DTO/bridge wrapper）、scripts/
 先修复前真实DOM/rAF/MutationObserver复现并保全，再实现quiet呈现和安全负例；修复后正常附件全过程无cover/全页hidden/Host重挂，强同步/权限prepare/陌生session/失败仍遮挡。图片真实DOM保存/预览/管理页导出原字节，取消/缺文件/写失败/撤权；数据管理真实菜单、stat显示、mtime、分页/搜索/空态/error重试、320/390浅深主题。命令handler和生产排除，默认fixture明确边界，真实Rust集成等后端合入后由根安排。
 
 冻结产品+runnercommit后独审，常规build/production、桌面197+新增、手机notes9/recording43/attachments43+新增一次即可。记录自然exit/wall/指纹/pageErrors和失败原件，不读写原设备数据。根主线完整整合及打包另外执行。
+
+# delivery
+
+2026-11-06：产品与runner经[独审](../reviews/app-data-management79-static.md) SOURCE-READY，已合主线并完成[六项整合](../../verification/data-management79/integration/README.md)。最终准确双端包由父任务继续。原生provider/整窗像素和既有调试CLI耗时波动边界单列，不据此授予设备运行通过。
