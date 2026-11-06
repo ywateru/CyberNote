@@ -1,0 +1,459 @@
+{
+  "status": "PASS-INDEPENDENT-ROUTE-EVIDENCE-AUDIT",
+  "scope": "Read-only independent audit, not an independent public-route rerun",
+  "reviewHead": "bd4e531ea877c42a977ddb263cb816c777e6da29",
+  "checks": [
+    "frozen route script equals 7323d818 object and expected SHA",
+    "author artifact manifest contains nine unique files",
+    "artifact exact bytes README.md",
+    "artifact exact bytes owned-cleanup.json",
+    "artifact exact bytes quick-tunnel-1.log",
+    "artifact exact bytes quick-tunnel-2.log",
+    "artifact exact bytes result.json",
+    "artifact exact bytes run.execution.json",
+    "artifact exact bytes run.stderr.log",
+    "artifact exact bytes run.stdout.log",
+    "artifact exact bytes source-mapping.json",
+    "immutable11 binary SHA size and mode",
+    "build metadata identifies cd334 and successful offline locked build",
+    "all 47 builder source inputs match exact product objects and copied production modules",
+    "55-input historical product and evidence-source fingerprints match",
+    "historical selected input diff is empty",
+    "author execution exact binary expected SHA all routes natural exit0",
+    "result declares unchanged exact script binary and source",
+    "56 checks exactly correspond to raw stdout and failures stderr empty",
+    "internal and external wall times consistently bounded",
+    "seven distinct Rust PIDs natural0 no pending or quiet errors",
+    "LAN restart has same root different PID",
+    "Tunnel restart has same root different PID",
+    "all Rust roots isolated under exact owned run directory",
+    "LAN explicitly same host physical interface and VPN explicitly unverified",
+    "two distinct wss endpoints match recorded cloudflared logs",
+    "first tunnel forced SIGKILL retained and second graceful natural0 retained",
+    "sequential incorrect PSK reaches origin Upgrade and exchanges Noise bytes",
+    "all proxy connections recorded closed and new-hostname restart exchanges bytes",
+    "author owned cleanup covers exact nine children with accurate exits",
+    "all 31 retained synthetic export managed media config and SQLite byte hashes match",
+    "independent scan of nine archived text files contains no invitation token PSK or private key values"
+  ],
+  "passedChecks": 32,
+  "wallMs": 1636,
+  "binary": {
+    "path": "/private/tmp/sync86-transport-build11/notes-current-attachment-transport",
+    "size": 25614448,
+    "sha256": "333fcd44e19ebbd30ece11b7a595816249a9458a46fb03523855ae8c51215800"
+  },
+  "historicalFingerprints": [
+    {
+      "commit": "cd334bc88513a89c490788d2e2e27c7967575f4a",
+      "count": 55,
+      "sha256": "77cae55ece5f66cb0c36a387ab7972056a7ab7c8d64da3da100249a4782a5d98"
+    },
+    {
+      "commit": "0feb310ddae132adb13652ba909b323a72280c3c",
+      "count": 55,
+      "sha256": "77cae55ece5f66cb0c36a387ab7972056a7ab7c8d64da3da100249a4782a5d98"
+    }
+  ],
+  "builderSourceInputs": [
+    {
+      "path": "scripts/debug/build-rust-attachments.mjs",
+      "sha256": "0ace1c00e9aa03f1c2c55a7c471eb7dc7c549a1792e3b7611bec87ce8e08f621"
+    },
+    {
+      "path": "scripts/debug/rust/Cargo.lock",
+      "sha256": "79a13cffdcf7e6bbc01f9c8931f9d2cc816ea1960cb88cde6c1839414d3ab1e6"
+    },
+    {
+      "path": "scripts/debug/rust/Cargo.toml",
+      "sha256": "685288c7a18855d64dc8aa8664aac6d545cbb5e930f6627911ad535773edd068"
+    },
+    {
+      "path": "scripts/debug/rust/transport.rs",
+      "sha256": "e33af9f51761f63a1e4c2854399fa31530316a74f3efafa919e6cdc83ae28dfc"
+    },
+    {
+      "path": "src-tauri/src/recording_window.rs",
+      "sha256": "37b0a640ea5fa59163bffda053c54dc61b6f4f08fb9afb4c3e9e3bf5e4d9b5ad"
+    },
+    {
+      "path": "src-tauri/src/session.rs",
+      "sha256": "b6ea60787e21c05e0d7a8b726777332acb65e9b8c682bc6f00c4a69fb5c2204a"
+    },
+    {
+      "path": "src-tauri/src/session/metadata.rs",
+      "sha256": "76b571060e87bbf4a12961430793d6897128852930de22b258111c19b07b0cdc"
+    },
+    {
+      "path": "src-tauri/src/session/smart_tests.rs",
+      "sha256": "3d0b99daa1842fd45a6f1ec8fe38ab935d7cb8f7590e43eeb7f9fe13dfb4a509"
+    },
+    {
+      "path": "src-tauri/src/session/synchronization.rs",
+      "sha256": "9675fbfa41433e6eed7b36aa2402c3b1ca9fe7055c41590ff6b2439bbbe39abb"
+    },
+    {
+      "path": "src-tauri/src/session/tests.rs",
+      "sha256": "e47c13dc71db3d173e90a8140863411d974db4717f1a25372f8f909689b21b83"
+    },
+    {
+      "path": "src-tauri/src/store.rs",
+      "sha256": "14c4a71ab7ec1c521e4136de99348820186166abbfab4421ce2bf3bc6b05c2e8"
+    },
+    {
+      "path": "src-tauri/src/store/archive.rs",
+      "sha256": "7ba91b39201e9d33dc71c80d327a284416089613464e054bd63086858aa3bf0f"
+    },
+    {
+      "path": "src-tauri/src/store/archive/document-cases.json",
+      "sha256": "297f9f7cd64b5489f9da69c4a54715f3b934a5634d2ed502c30505a81555e950"
+    },
+    {
+      "path": "src-tauri/src/store/archive/document-schema.json",
+      "sha256": "7cd6c3e442d968ef99019b14fcc48cf037693d7daae0506b0c47a2ec00fb007c"
+    },
+    {
+      "path": "src-tauri/src/store/archive/document.rs",
+      "sha256": "6dd018af7abb782fced57a7f46594fe8a39701777f976af34d5b6162e2daa611"
+    },
+    {
+      "path": "src-tauri/src/store/archive/tests.rs",
+      "sha256": "4dfa432e123f4b9c71e2af3ab9a10796d21f2edf7adf101ee8dbacde4bc42f43"
+    },
+    {
+      "path": "src-tauri/src/store/attachment_operations.rs",
+      "sha256": "92943f23aa259d78343f47d6d216c7e2c7486d2938fea343cdfbe3df02aa30a4"
+    },
+    {
+      "path": "src-tauri/src/store/attachment_operations/tests.rs",
+      "sha256": "f68c4e41dc35d5ee61b2db9e1a20937cef5efdadd2c521c791d81216814452b4"
+    },
+    {
+      "path": "src-tauri/src/store/commits.rs",
+      "sha256": "9fcd33383d4e3bce0a78774863323a04b1bc9b9b5fe5faf074f1a6d3963bb4e3"
+    },
+    {
+      "path": "src-tauri/src/store/data_management.rs",
+      "sha256": "fd82736bf5526e9ea44060fc7caa19e7e9600c5f88556108bbe909d2e60a0897"
+    },
+    {
+      "path": "src-tauri/src/store/folder_name_tests.rs",
+      "sha256": "de0598fed3287661d7cf347b981e4c3ea3cc955300eb7a1d2905d3fcfc924da4"
+    },
+    {
+      "path": "src-tauri/src/store/metadata_tests.rs",
+      "sha256": "c9806fc8a1877842c14c11021348d7676f35725a6e17a20439c49a051e8e4ee0"
+    },
+    {
+      "path": "src-tauri/src/store/open.rs",
+      "sha256": "dffa8804c67b1786ac4134e1aef56a5bfa9502b323fe6676117075ea68ce4442"
+    },
+    {
+      "path": "src-tauri/src/store/open_tests.rs",
+      "sha256": "13b2a33a6d4c9329fb9821412b4810f364cf1481a5a3fa378b0bf2ac1d936a07"
+    },
+    {
+      "path": "src-tauri/src/store/recorded_at_tests.rs",
+      "sha256": "b84fba310f4f9aae734661ec409bbda6d40b17cbe12158430f1f797a7610fbf7"
+    },
+    {
+      "path": "src-tauri/src/store/smart.rs",
+      "sha256": "3e952b05c19256f7144287760c287d615e41b7c55a559e80d7fa8cfba12d124e"
+    },
+    {
+      "path": "src-tauri/src/store/smart_tests.rs",
+      "sha256": "a9c8b2a4a11ce143c9f9a42bf6f9c30e2b3845148596e6d58e031469603121dd"
+    },
+    {
+      "path": "src-tauri/src/store/synchronization.rs",
+      "sha256": "f120c9a05a35da0fd865b9c2689cfd143811e92f3c2a62e2b3492a1230a3677e"
+    },
+    {
+      "path": "src-tauri/src/store/synchronization/blob.rs",
+      "sha256": "f1ecac9c059d0e66d0672bc4d94957a5e59fb3c09aad49ef3ba655e95468df62"
+    },
+    {
+      "path": "src-tauri/src/store/synchronization/media.rs",
+      "sha256": "89c5a85e3f41bb56792b2b148446187de3c6b82afc597c79d9c9d86268d3b905"
+    },
+    {
+      "path": "src-tauri/src/store/synchronization/media_tests.rs",
+      "sha256": "2eece8937c2917aa66581ba8c272e7ef6216fe4b125a093536f518f8216b6ca0"
+    },
+    {
+      "path": "src-tauri/src/store/synchronization/projection.rs",
+      "sha256": "7bc064f90ab88ffe8de1719a8a59e0ef99a4f0e9115fd6cd664f63378a5e8e04"
+    },
+    {
+      "path": "src-tauri/src/store/synchronization/schema.rs",
+      "sha256": "ecc324147398915baed2937157ffe8bccf65da5a86bbc778265099af8f69d09b"
+    },
+    {
+      "path": "src-tauri/src/store/synchronization/tests.rs",
+      "sha256": "dd82b6e804b94f52440f42af8437b5803c7a26c7474da49e5582b87f81f57870"
+    },
+    {
+      "path": "src-tauri/src/store/synchronization/validation.rs",
+      "sha256": "2d0b0c0403c918a7bdd9f48c2430d07e9435c7f5540a167d5beb9c0ae52e9621"
+    },
+    {
+      "path": "src-tauri/src/sync.rs",
+      "sha256": "bb67787192aaab58fa7af7d6d973b1ff579811427b9f496e1b07a43d8feee6cd"
+    },
+    {
+      "path": "src-tauri/src/sync/adapter.rs",
+      "sha256": "7e717976385e2a65803daee5cd1f3c3d2188a48c0f1745533d41761bfb2e6f2f"
+    },
+    {
+      "path": "src-tauri/src/sync/adapter_media_tests.rs",
+      "sha256": "86f6ce3d81a5dc9045926d4c4a07cc600a2d9ff672c80a821a640602eff7345b"
+    },
+    {
+      "path": "src-tauri/src/sync/adapter_resolve_tests.rs",
+      "sha256": "f09ab22480905ef9193ae50542356285e25474fc120a59f0dcc9a407e4e06f4b"
+    },
+    {
+      "path": "src-tauri/src/sync/adapter_retry_tests.rs",
+      "sha256": "29a8a25757e31556a7839b4f0a4983ed4e79400e70c2985f383f85122351ba73"
+    },
+    {
+      "path": "src-tauri/src/sync/identity.rs",
+      "sha256": "f11b3242c9a4dfcebda4c05646e10066504851b7a33d48bd03efe81574afcbdd"
+    },
+    {
+      "path": "src-tauri/src/sync/model.rs",
+      "sha256": "ad7a7982efb972d73f1d9f78bd84874182a97c674f592866904f69cc96ba361d"
+    },
+    {
+      "path": "src-tauri/src/sync/network.rs",
+      "sha256": "446ddeb5df7ffcc2733857a21614e3ea39f96a1831a4692abbef34ceff75e493"
+    },
+    {
+      "path": "src-tauri/src/sync/network/service.rs",
+      "sha256": "f2b276ba152c731d849f3bfd0a836534652ded54244084494537654602435d14"
+    },
+    {
+      "path": "src-tauri/src/sync/network/staging.rs",
+      "sha256": "e530fe4b3ac5cb626d42b50f6bff8bc3272affb731cc39ddb1d43341e2f0ebc9"
+    },
+    {
+      "path": "src-tauri/src/sync/network/transport.rs",
+      "sha256": "c53590d4d480d0fa74c1621318e6bb2b9da1ca46ddea854dd7fa487fe69957c3"
+    },
+    {
+      "path": "src-tauri/src/sync/network/wire.rs",
+      "sha256": "c58e2ebfd3bb9e41c144709d871e1a74d3414ea4a2c47d7799fb629f2865eb00"
+    }
+  ],
+  "authorArtifacts": [
+    {
+      "path": "README.md",
+      "size": 6345,
+      "sha256": "b372a18af3ab31d81eb97664094a0cf367ebabf64441cb3a6ff1c37333b1e7ea"
+    },
+    {
+      "path": "owned-cleanup.json",
+      "size": 1544,
+      "sha256": "b5f15a479d0bb4857c893eadb73b6be5a26db4dabc0f9ad45537823dc82d2122"
+    },
+    {
+      "path": "quick-tunnel-1.log",
+      "size": 5993,
+      "sha256": "deb95600f4003de030577eec4017d5a6267663664eb2f857da3ed8a7b1a70e91"
+    },
+    {
+      "path": "quick-tunnel-2.log",
+      "size": 6253,
+      "sha256": "4c25a44559ca594a850b3e9b66840a42499df97ecf9849cfd9065fc4a3db24d5"
+    },
+    {
+      "path": "result.json",
+      "size": 23237,
+      "sha256": "a7fbeb1a8413fdf9ddd9c58f9cd86fe5aed46fa7685840f022aafb226d7ab7a8"
+    },
+    {
+      "path": "run.execution.json",
+      "size": 365,
+      "sha256": "3f62b538cd60bf21e3f9903fd16dcfe0911eea4caa0f171256c935ff3178d62c"
+    },
+    {
+      "path": "run.stderr.log",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run.stdout.log",
+      "size": 2550,
+      "sha256": "c8e13ac07c179eaa8ae764c22bf03bb5d9e8cfadd622f27215d168e21ab3e51c"
+    },
+    {
+      "path": "source-mapping.json",
+      "size": 997,
+      "sha256": "b197935ebb8563a067c05701b01b65c3dc2fa8f334f39e97c8263cb77c538e6c"
+    }
+  ],
+  "retainedAuthorFiles": [
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/cloudflared-help.txt",
+      "size": 15261,
+      "sha256": "66c63678d86360c1bd234b1feb78a2678e41a7de07eb37a232a9b4f332e0a4dc"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/lan-audio.wav",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/lan-client/attachments/op-9e4b0e74-81ce-49cc-bfd2-bd8c85037f38-c44a4865-37a4-4aa7-bdd6-9c8dfb805627.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/lan-client/attachments/s84-10a0d893d3ad735a2913d3b9ca2e806401a9427a85a65ee1e847a31c98aae0b0-c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/lan-client/notes.sqlite3",
+      "size": 135168,
+      "sha256": "34884040673e7f2eb5ce84e676ce5a6607c6216f6c2ca4189b1bbd4d5e286a02"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/lan-host/attachments/op-66623020-17dc-4e48-a840-fd619560cf62-3b9a602f-05f9-4c50-9026-4cc29f661ad0.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/lan-host/attachments/s84-10a0d893d3ad735a2913d3b9ca2e806401a9427a85a65ee1e847a31c98aae0b0-c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/lan-host/attachments/s84-1ba2076234efcb89e164a2d0c0305e064e7559b39a9b037fb11e6725b6c058df-b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/lan-host/notes.sqlite3",
+      "size": 135168,
+      "sha256": "8078f068728e47b7a418d5a2163582742455d327074feb513cc9fa412ed8e18c"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/lan-image.png",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/quick-tunnel-1/config.yml",
+      "size": 88,
+      "sha256": "9b9a788635be7e1070909311cd8bdef2b4030cdac7147dff81b2a2be5c4ae4ce"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/quick-tunnel-2/config.yml",
+      "size": 88,
+      "sha256": "c7798a430906073ee1060fa79567aedf27bd87db891e8413355781b5adc13b47"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-audio.wav",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-bad-key/notes.sqlite3",
+      "size": 40960,
+      "sha256": "e94760fe6711bba9b0bcc0e73a8bb95c365a5e3ea591c7411345450559a169c6"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-client/attachments/op-255679d6-2a97-4f99-8238-a1aa29e67b60-1bd753d3-e593-4734-86e7-6b162f4bc970.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-client/attachments/op-da1fe1db-e622-4814-9ff6-2b9644d2c3e2-cd1f7b74-24d5-4a5f-b788-26626d76444a.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-client/attachments/s84-0288adcbc0885bd6a0f2423bcb45d16d2b260885f2eaba327e21274e8f260bca-c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-client/attachments/s84-58521f90a9f43e26322ee83a3599ece0fecf73119481e5a11fe292063b7860c1-c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-client/attachments/s84-ba47ef2c6be9b59a8da54e51069405bbbbfdcfaf0c7f2fa3c95325aae5f3a926-b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-client/attachments/s84-f4084b43a1fadf6a9b44377064cb88f50fddba774e0889efd6b785f026e124b4-b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-client/notes.sqlite3",
+      "size": 143360,
+      "sha256": "98298a12952e37b577f969e10de181ffec082ea2f494e2e9567953e8130b99a3"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-host/attachments/op-8921ffab-4e14-4e8f-ad54-93db30a878d1-2892752e-2d1f-4fc2-9c4f-9ad5e30db4ac.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-host/attachments/op-ce3943a8-b76f-4c72-81b4-eec7db9ecd8d-34a44050-16a2-4349-962a-c9deff7091ee.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-host/attachments/s84-0288adcbc0885bd6a0f2423bcb45d16d2b260885f2eaba327e21274e8f260bca-c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-host/attachments/s84-58521f90a9f43e26322ee83a3599ece0fecf73119481e5a11fe292063b7860c1-c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-host/attachments/s84-ba47ef2c6be9b59a8da54e51069405bbbbfdcfaf0c7f2fa3c95325aae5f3a926-b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-host/attachments/s84-f4084b43a1fadf6a9b44377064cb88f50fddba774e0889efd6b785f026e124b4-b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-host/notes.sqlite3",
+      "size": 143360,
+      "sha256": "774e16eb82ced2ea10ed848326b6f1e2c69d71fd4ed89c16a127f70e951c56be"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-image.png",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-new-hostname-audio.wav",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-build11-final01/tunnel-new-hostname-image.png",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    }
+  ],
+  "limits": [
+    "No independent route rerun; author 56 checks and 92.337s are reviewed evidence.",
+    "LAN is two Stores on one physical Mac, not two devices.",
+    "First owned cloudflared required SIGKILL after the graceful deadline.",
+    "WireGuard/EasyTier and native UI/Android remain outside this gate.",
+    "No Rust compile, VPN change, user database, .sync secret or real microphone."
+  ]
+}
