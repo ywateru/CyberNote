@@ -195,6 +195,9 @@ try {
     ),
   );
   await page.screenshot({ path: resolve(out, "preview.png") });
+  await page
+    .locator(".apple-import-panel")
+    .screenshot({ path: resolve(out, "preview-panel.png") });
   await api(page, "appleImport.start");
   await until(
     "copy finished",
@@ -245,6 +248,9 @@ try {
     ),
   );
   await page.screenshot({ path: resolve(out, "complete.png") });
+  await page
+    .locator(".apple-import-panel")
+    .screenshot({ path: resolve(out, "complete-panel.png") });
   await writeFile(
     resolve(out, "complete.html"),
     await page.locator(".apple-import-section").evaluate((n) => n.outerHTML),
@@ -305,7 +311,15 @@ try {
     (path) => window.__DEBUG_PLATFORM__.configure({ dialog: { save: [path] } }),
     backup,
   );
-  await api(page, "archive.export");
+  await page.getByRole("button", { name: "导出完整备份…" }).click();
+  await until("backup written", async () => {
+    try {
+      await readFile(backup);
+      return true;
+    } catch {
+      return false;
+    }
+  });
   const archive = JSON.parse(await readFile(backup, "utf8"));
   check(
     "actual backup contains all five managed original and raw blobs",
@@ -336,6 +350,63 @@ try {
     (await page.locator(".data-management").innerText()).length > 0,
   );
   check("no renderer exceptions", rt.errors.length === 0);
+  const restored = await openRuntime({
+    root,
+    transport: binary,
+    storeDirectory: resolve(out, "restored-store"),
+    nativeToolbar: true,
+    rustEvents: true,
+    bundleDebug: true,
+    keep: true,
+  });
+  runtimes.push(restored);
+  await api(restored.page, "data.open");
+  await restored.page.evaluate(
+    (path) => window.__DEBUG_PLATFORM__.configure({ dialog: { open: [path] } }),
+    backup,
+  );
+  await restored.page
+    .getByRole("button", { name: "导入备份…", exact: true })
+    .click();
+  await until(
+    "backup restored",
+    async () => (await state(restored.page)).workspace.notes.length === 3,
+  );
+  const restoredWS = (await state(restored.page)).workspace;
+  check(
+    "actual backup restore retains raw records and file ownership",
+    restoredWS.attachments.length === 5 &&
+      restoredWS.attachments.every((a) =>
+        restoredWS.notes.some((n) => n.id === a.noteId),
+      ),
+  );
+  assert((await restored.backend.call("debug_apple_source", fixture)).ok);
+  await api(restored.page, "appleImport.open");
+  await api(restored.page, "appleImport.scan");
+  await until(
+    "restored preview",
+    async () =>
+      (await api(restored.page, "appleImport.inspect")).result.state?.phase ===
+      "preview",
+  );
+  await api(restored.page, "appleImport.start");
+  await until(
+    "restored dedup",
+    async () =>
+      (await api(restored.page, "appleImport.inspect")).result.state?.phase ===
+      "complete",
+  );
+  check(
+    "restored managed raw ledger skips identical source on same worker",
+    (
+      await api(restored.page, "appleImport.inspect")
+    ).result.state.results.filter((r) => r.status === "existing").length ===
+      2 && (await state(restored.page)).workspace.notes.length === 3,
+  );
+  check(
+    "restored App has no renderer exceptions",
+    restored.errors.length === 0,
+  );
   const mobile = await openRuntime({
     root,
     transport: binary,
