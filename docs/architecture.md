@@ -2,6 +2,8 @@
 
 状态：首版实现契约，允许依据真实对比继续完善。
 
+2026-11-06数据管理与跨端文档IO新增契约见[数据管理79](ui/data-management.md)：真实磁盘快照、独立媒体原字节导出、Android ContentResolver归档读写，继续保留Store/Session权限和事务边界。SQLite仅存元数据/引用，媒体文件不迁回数据库；导入导出是逻辑归档，不是运行中SQLite文件复制。
+
 2026-11-05录音呈现以[统一右栏66](plan/tasks/app-mac-recording-sidebar66.md)为准：App稳定持有本地录音会话、直接提交不可变版本，无child/relay；native登记本地owner会话以保留主窗关闭/整应用退出保存屏障。录音自动保存契约以[Mac任务64](plan/tasks/app-mac-recording-autosave64.md)和[桌面录音最新规格](ui/recording-desktop.md)为准：暂停生成完整可播放累计版本，并在原A正文ACK及journal query committed后确认；后续版本原位替换上一卡片，通用不可变附件operation语义保持。checkpoint不终结会话，关闭等准确final ACK才销毁。旧已committed媒体保留以保护Undo/历史，因此内部版本增加磁盘和归档空间；不把单可见卡等同于单物理附件。实现、受控与真实运行分别以任务进展和准确证据为准，不代表整体像素通过。
 
 ## 模块与所有权

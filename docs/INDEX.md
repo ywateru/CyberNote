@@ -1,5 +1,7 @@
 # Apple Notes Clone
 
+2026-11-06最新goal：[附件闪烁、图片导出与数据管理79](plan/tasks/app-data-management79.md)进行中，界面/真实存储契约见[数据管理](ui/data-management.md)。媒体目前已独立文件，补真实磁盘统计、单件原字节导出和Android content URI归档IO；修正附件校验的全屏同步遮罩呈现，权限门槛保留。原Android录音现场不动。
+
 2026-11-06：[录音标识与对勾保存78](plan/tasks/app-recording-indicator78.md)已限定完成，[独审](plan/reviews/app-recording-indicator78.md)48项及静态布局对照通过，[主线整合](verification/recording-indicator78/integration/README.md)桌面197/手机9+43+43、build/production全通过。原owner列表和当前实时卡有动态标识，桌面✓采用控制器能力并走真实保存流程。Mac23本地包已构建、派生严格签名及内嵌资源/ZIP独立核对通过；原生运行及整窗像素继续开放。Android76保留、原手机录音现场不动。
 
 

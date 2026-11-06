@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-06最新goal：[数据管理79](tasks/app-data-management79.md)进行中，[后端](tasks/app-data-management79-backend.md)与[前端](tasks/app-data-management79-ui.md)按冻结[界面/API契约](../ui/data-management.md)分离实现、独立复核，最终验证真实Rust接线。原Android未保存录音现场不动。
+
 2026-11-06：[录音标识与对勾保存78](tasks/app-recording-indicator78.md)已限定完成，[独审](reviews/app-recording-indicator78.md)48项及静态布局对照通过，[主线整合](../verification/recording-indicator78/integration/README.md)桌面197/手机9+43+43、build/production全通过。原owner列表和当前实时卡有动态标识，桌面✓采用控制器能力并走真实保存流程。Mac23本地包已构建、派生严格签名及内嵌资源/ZIP独立核对通过；原生运行及整窗像素继续开放。Android76保留、原手机录音现场不动。
 
 
