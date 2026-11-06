@@ -1,0 +1,11 @@
+# Actual Android TXT selected, saved and read back with original SHA
+
+Owned5584/sameuserdata/audited18 only, no peer live. Exact final02 synthetic note256cf1ef-b7c6-4c1e-a8ab-31cb5e6be460, oldnotes including oldtoolXML preserved, exact incoming desktop target untouched.
+
+Actual start4.29509775s, attachmentsOpenPASS17.903743625s/beforeCount0, explicitclientclosePASS; outer0/22.505372875s. Picker starts Recent rather than rememberedfolder; first caller correctly refuses before any key when expectedfolder assertion fails, then inspects existing capturedUIA. Recent has exactnewTXTfirst/PNGsecond. NormalTAB focused TXT itemroot[0,629][720,773], verified against observedtitle. NormalSPACE opens the single TXT immediately; no multiselection claim. SubsequentUIA read failed twice137 through existing once-retry helper, so no further key issued. Actualforeground then returned ownedMainActivity.
+
+Actual receipt/lifetimeguarded read of REAL Store confirms note revision2 and solefinal02 attachment1a9f3ad2-d040-48bc-a43d-71c6a1cdf304 named sync87-74da049123.txt. Real read_attachment returns33B with original SHA2566e20f2196fc6ac733bda241b6c533739a4c6996081403be756f9138c1585e858 exactly matching knownfixture. Original bytes not copied into evidence; only size/hash. Read command naturally0/7.055626041s. This is actual TXT save/original PASS, not simulated provider result.
+
+Next attachmentsOpen for continuous PNG failed at existing UIA guard before media menu opened (outer2/12.518801709s, fixedstepguard-command-failed4.691186916s). Read-only DOM observation confirms same syntheticnote/editor and mediaMenufalse; bounded stableUIA inspection again failed. No extraSPACE/actionretry or PNG/WAVsave is claimed. No algorithm/provider-product failure inferred from a systemUIA guard failure.
+
+Lifecycle17 naturally0/618.05597225s; no livepeer/qemu remains. Current final02 stored attachments exactlyTXT1; PNG/WAV knownfixture bytes have been pushed but not selected/saved in this formal run. Old actual01 PNG previously saved/read/decoded/persisted is a separate scenario and cannot substitute for final02 PNG/WAV/export/strictcoldboot gates. Await auditedAndroid19 receipt; next sameuserdata upgrade+readonly abortreason is priority, with data preserved.
