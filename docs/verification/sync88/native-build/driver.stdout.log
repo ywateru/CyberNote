@@ -1,0 +1,10 @@
+{"name": "mac-build", "command": ["pnpm", "mac:build"], "exitCode": 0, "wallSeconds": 24.351}
+{"name": "copy-original", "command": ["ditto", "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app", "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/mac-original.app"], "exitCode": 0, "wallSeconds": 0.016}
+{"name": "verify-original", "command": ["codesign", "--verify", "--deep", "--strict", "--verbose=4", "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/mac-original.app"], "exitCode": 1, "wallSeconds": 0.027}
+{"name": "copy-derived", "command": ["ditto", "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/mac-original.app", "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app"], "exitCode": 0, "wallSeconds": 0.012}
+{"name": "sign-derived", "command": ["codesign", "--force", "--sign", "-", "--timestamp=none", "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app"], "exitCode": 0, "wallSeconds": 0.029}
+{"name": "verify-derived", "command": ["codesign", "--verify", "--deep", "--strict", "--verbose=4", "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app"], "exitCode": 0, "wallSeconds": 0.015}
+{"name": "inspect-derived", "command": ["codesign", "-dv", "--verbose=4", "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app"], "exitCode": 0, "wallSeconds": 0.005}
+{"name": "archive", "command": ["ditto", "-c", "-k", "--sequesterRsrc", "--keepParent", "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app", "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Mac28.zip"], "exitCode": 0, "wallSeconds": 0.378}
+{"name": "copy-frontend", "command": ["ditto", "/Users/water/work/2026/Apple-Notes-Clone/dist", "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/mac-dist"], "exitCode": 0, "wallSeconds": 0.007}
+{"status": "pass", "app": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app", "archive": {"path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Mac28.zip", "bytes": 6694058, "sha256": "8199b8feeccc548a08d5921f4473b50f0156661a021bc29e41f0ead95f76aa2d"}}
