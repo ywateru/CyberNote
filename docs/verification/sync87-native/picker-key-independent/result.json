@@ -1,0 +1,44 @@
+{
+  "status": "BLOCKED",
+  "frozenAuthor": "d034a85e",
+  "hostOnly": true,
+  "adbCalls": 0,
+  "deviceActions": 0,
+  "results": [
+    {
+      "name": "Extra foreign u10 Resumed line must reject",
+      "pass": false,
+      "error": "mixed duplicate foreground admitted keycode 66"
+    },
+    {
+      "name": "Extra foreign u10 Focus line must reject",
+      "pass": false,
+      "error": "mixed duplicate foreground admitted keycode 66"
+    },
+    {
+      "name": "Successful main path brackets fixed key with three app lifetime checks",
+      "pass": true
+    },
+    {
+      "name": "Lifetime mismatch before/middle/after aborts without action replay",
+      "pass": true
+    },
+    {
+      "name": "Raw keycodes foreign keys and shell text rejected before side effects",
+      "pass": true
+    },
+    {
+      "name": "Only six fixed navigation keys are admitted",
+      "pass": true
+    },
+    {
+      "name": "Original per-command ownership guard remains (static)",
+      "pass": true
+    }
+  ],
+  "counterexamples": {
+    "base": "    mResumedActivity: ActivityRecord{abc u0 com.google.android.documentsui/com.android.documentsui.picker.PickActivity t18}\n    mCurrentFocus=Window{def u0 com.google.android.documentsui/com.android.documentsui.picker.PickActivity}\n",
+    "extraResumed": "    mResumedActivity: ActivityRecord{xyz u10 com.foreign.app/.MainActivity t22}",
+    "extraFocus": "    mCurrentFocus=Window{xyz u10 com.foreign.app/.MainActivity}"
+  }
+}
