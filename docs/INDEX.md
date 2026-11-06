@@ -1,5 +1,7 @@
 # Apple Notes Clone
 
+2026-11-06：[图片预览与标题栏80](plan/tasks/app-image-preview80.md)进行中，按用户截图修复原生toolbar叠加、支持预览内信息/保存、移除正文外部保存入口及标题栏双击缩放。规格见[图片预览](ui/image-preview.md)。
+
 2026-11-06：[附件闪烁、图片导出与数据管理79](plan/tasks/app-data-management79.md)已完成限定范围，[交付与验证](verification/data-management79/README.md)可查。正常附件不再整窗遮挡，媒体独立文件、图片原字节导出、真实磁盘管理及备份导入导出已接入；主线桌面230/手机9+43+75与build/production全自然0，Mac24/Android构建14通过准确构建与独立核包。Android未安装，原录音现场保留，provider设备运行/整窗像素单列开放。
 
 2026-11-06：[录音标识与对勾保存78](plan/tasks/app-recording-indicator78.md)已限定完成，[独审](plan/reviews/app-recording-indicator78.md)48项及静态布局对照通过，[主线整合](verification/recording-indicator78/integration/README.md)桌面197/手机9+43+43、build/production全通过。原owner列表和当前实时卡有动态标识，桌面✓采用控制器能力并走真实保存流程。Mac23本地包已构建、派生严格签名及内嵌资源/ZIP独立核对通过；原生运行及整窗像素继续开放。Android76保留、原手机录音现场不动。

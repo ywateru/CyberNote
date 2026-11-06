@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-06：[图片预览与标题栏80](tasks/app-image-preview80.md)进行中，开发与独立复核串行，保留原Android录音现场。
+
 2026-11-06：[数据管理79](tasks/app-data-management79.md)已限定完成，[后端](tasks/app-data-management79-backend.md)/[前端](tasks/app-data-management79-ui.md)经独审SOURCE-READY、真实Rust→App成功与失败ACK验证、主线六项及Mac24/Android构建14准确构建/核包通过。详见[交付](../verification/data-management79/README.md)。原Android录音现场不动，原生provider/整窗像素及调试CLI性能波动继续单列。
 
 2026-11-06：[录音标识与对勾保存78](tasks/app-recording-indicator78.md)已限定完成，[独审](reviews/app-recording-indicator78.md)48项及静态布局对照通过，[主线整合](../verification/recording-indicator78/integration/README.md)桌面197/手机9+43+43、build/production全通过。原owner列表和当前实时卡有动态标识，桌面✓采用控制器能力并走真实保存流程。Mac23本地包已构建、派生严格签名及内嵌资源/ZIP独立核对通过；原生运行及整窗像素继续开放。Android76保留、原手机录音现场不动。
