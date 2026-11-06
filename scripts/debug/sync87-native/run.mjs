@@ -7,7 +7,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import { readRequests, actionFailure, guardFailureSummary } from './protocol.mjs';
 import assert from 'node:assert/strict';
 import { DesktopPeer } from './desktop-peer.mjs';
-import { pairViaUI,saveImageOriginal,openNote,goHome } from './native-ui.mjs';
+import { pairViaUI,observePairingUI,saveImageOriginal,openNote,goHome } from './native-ui.mjs';
 import { textRoundtrip,desktopMedia,roundtrip,backgroundRoundtrip,coldBootPrepare,coldBootVerify,assertNativeOriginal } from './scenarios.mjs';
 import { connect, guard, pause, parseNodes, nativeNode, assertHomeVisible, readNativeUI, nativeObservationEvents, SERIAL, AVD } from './client.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
@@ -149,12 +149,12 @@ async function execute(request){
       await c.wait('!![...document.querySelectorAll(".tiptap img")].find(x=>x.complete&&x.naturalWidth>0)','actual native image decoded');await c.snapshot(output,'attachments-complete');return{count:3,originalsVerified:true};
     }
     case 'exportImage':assert(s.notes.length);await openNote(await app(),s.notes.at(-1).id);return saveImageOriginal(await app(),s,output,1,s.files.find(f=>f.name.endsWith('.png')));
-    case 'pair':await pairViaUI(await app(),request.invitation);await(await app()).snapshot(output,'paired');return{paired:true};
+    case 'pair':await pairViaUI(await app(),request.invitation,{step:nativeStep});await(await app()).snapshot(output,'paired');return{paired:true};
     case 'connectDesktop':{
       assert(!peer,'desktop peer already running');assert(typeof options['--peer-receipt']==='string','root peer receipt required');
       peer=await DesktopPeer.open(options['--peer-receipt'],output,s.runId);const address=await peer.host();
       let invitation=await peer.invitation(address.endpoint);
-      try{await pairViaUI(await app(),invitation);}finally{invitation=undefined;}
+      try{await pairViaUI(await app(),invitation,{step:nativeStep});}catch(error){try{await writeFile(resolve(output,'pair-ui-failure-'+Date.now()+'.json'),JSON.stringify(await observePairingUI(await app()),null,2)+'\n');}catch{}throw error;}finally{invitation=undefined;}
       await(await app()).snapshot(output,'paired-desktop');return{paired:true,endpoint:address.endpoint,desktopPid:peer.backend.pid};
     }
     case 'textRoundtrip':assert(peer);return textRoundtrip({client:await app(),peer,state:s,output,saveState:save});
