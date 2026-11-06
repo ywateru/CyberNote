@@ -151,9 +151,9 @@ def app_identity(serial,avd,expected=None):
 
 PICKER_KEYS = {'TAB': '61', 'DPAD_DOWN': '20', 'DPAD_UP': '19', 'DPAD_CENTER': '23', 'ENTER': '66', 'SPACE': '62'}
 PICKER_COMPONENT = r'(?:com\.google\.android\.documentsui|com\.android\.documentsui)/com\.android\.documentsui\.picker\.PickActivity'
-COUNTS_DEX = Path('/private/tmp/notes-sync87-native-counts-helper01/dex/classes.dex')
-COUNTS_DEX_SHA256 = 'f98199e0a4bc9432760fa47eee2f0c0baa0c17edd5278172f9059f0776fff2a3'
-COUNTS_SOURCE_SHA256 = 'daa1d8c584715070f7b1a4a95d0c600be25d393e061cdb6def0b1a92780bc5d9'
+COUNTS_DEX = Path('/private/tmp/notes-sync87-native-counts-helper02/dex/classes.dex')
+COUNTS_DEX_SHA256 = '88898d00c8499846d197f1b976195364548dc332ae20596987e641822565afc8'
+COUNTS_SOURCE_SHA256 = '55fdc7af6f7fb6c7de06373a1722257289cb17d005e25358888597b457364611'
 def counts_preflight(state_path,expected):
     require(type(expected) is dict and set(expected)=={'pid','startTicks','package'} and type(expected['pid']) is int and expected['pid']>1 and expected['package']==PACKAGE and type(expected['startTicks']) is str and re.fullmatch(r'[0-9]+',expected['startTicks']), 'exact app lifetime required for readonly counts')
     require(state_path=='/private/tmp/notes-sync87-native-final-02/state.json','exact final02 state required')
@@ -166,6 +166,8 @@ def counts_preflight(state_path,expected):
 def counts_result(value):
     try:r=json.loads(value)
     except Exception:raise Refused('readonly counts returned invalid JSON') from None
+    if type(r) is dict and set(r)=={'ok','error','stage'} and r['ok'] is False and r['error']=='READONLY_COUNTS_FAILED' and r['stage'] in ('IDENTITY','FILE','CANONICAL','OPEN','QUERY','SCHEMA','VALUES','TRAILING'):
+        raise Refused('readonly counts helper stage '+r['stage'])
     require(type(r) is dict and set(r)=={'ok','counts'} and r['ok'] is True and type(r['counts']) is dict and set(r['counts'])=={'inboxTotal','targetInbox','targetNotes','targetProjection','targetSeen'},'readonly counts schema mismatch')
     require(all(type(n) is int and 0<=n<=2147483647 for n in r['counts'].values()),'readonly counts must be bounded integers')
     return r['counts']

@@ -8,6 +8,12 @@ assert g.counts_result(json.dumps(valid))==valid['counts'];checks+=1
 for value in [{'ok':True,'counts':{**valid['counts'],'wire':'SECRET_SENTINEL'}},{'ok':True,'counts':{**valid['counts'],'inboxTotal':True}},{'ok':False,'error':'SECRET_SENTINEL'}]:
  try:g.counts_result(json.dumps(value));raise AssertionError('accepted invalid result')
  except g.Refused:checks+=1
+for stage in ['IDENTITY','FILE','CANONICAL','OPEN','QUERY','SCHEMA','VALUES','TRAILING']:
+ try:g.counts_result(json.dumps({'ok':False,'error':'READONLY_COUNTS_FAILED','stage':stage}));raise AssertionError('stage accepted as counts')
+ except g.Refused as e:assert str(e)=='readonly counts helper stage '+stage;checks+=1
+for stage in ['SECRET_SENTINEL',None,17]:
+ try:g.counts_result(json.dumps({'ok':False,'error':'READONLY_COUNTS_FAILED','stage':stage}));raise AssertionError('unbounded stage accepted')
+ except g.Refused as e:assert str(e)=='readonly counts schema mismatch';checks+=1
 calls=[]
 def fake_adb(serial,avd,tail,**options):
  calls.append((serial,avd,tail,options));return json.dumps(valid) if 'run-as' in tail else 'synthetic push acknowledgement'

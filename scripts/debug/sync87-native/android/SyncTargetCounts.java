@@ -13,21 +13,26 @@ public final class SyncTargetCounts {
     + "(SELECT count(*) FROM sync_projection WHERE kind='note' AND entity_id=?),"
     + "(SELECT count(*) FROM sync_seen WHERE kind='note' AND entity_id=?)";
   public static void main(String[] args) {
+    String stage = "IDENTITY";
     try {
       if (args.length != 0 || android.os.Process.myUid() < 10000) throw new IllegalStateException();
-      File file = new File(DB);
-      if (!file.isFile() || !file.getCanonicalPath().equals(DB)) throw new IllegalStateException();
-      try (SQLiteDatabase db = SQLiteDatabase.openDatabase(DB, null, SQLiteDatabase.OPEN_READONLY);
-           Cursor cursor = db.rawQuery(QUERY, new String[]{TARGET,TARGET,TARGET,TARGET})) {
+      stage = "FILE"; File file = new File(DB);
+      if (!file.isFile()) throw new IllegalStateException();
+      stage = "CANONICAL"; if (!file.getCanonicalPath().equals(DB)) throw new IllegalStateException();
+      stage = "OPEN";
+      try (SQLiteDatabase db = SQLiteDatabase.openDatabase(DB, null, SQLiteDatabase.OPEN_READONLY)) {
+        stage = "QUERY";
+        try (Cursor cursor = db.rawQuery(QUERY, new String[]{TARGET,TARGET,TARGET,TARGET})) {
+        stage = "SCHEMA";
         if (!db.isReadOnly() || cursor.getColumnCount()!=5 || !cursor.moveToFirst()) throw new IllegalStateException();
-        long[] n = new long[5];
+        stage = "VALUES"; long[] n = new long[5];
         for (int i=0;i<5;i++) { n[i]=cursor.getLong(i); if(n[i]<0 || n[i]>2147483647L) throw new IllegalStateException(); }
-        if(cursor.moveToNext()) throw new IllegalStateException();
+        stage = "TRAILING"; if(cursor.moveToNext()) throw new IllegalStateException();
         System.out.println("{\"ok\":true,\"counts\":{\"inboxTotal\":"+n[0]+",\"targetInbox\":"+n[1]+",\"targetNotes\":"+n[2]+",\"targetProjection\":"+n[3]+",\"targetSeen\":"+n[4]+"}}");
+        }
       }
     } catch (Throwable ignored) {
-      System.out.println("{\"ok\":false,\"error\":\"READONLY_COUNTS_FAILED\"}");
-      System.exit(2);
+      System.out.println("{\"ok\":false,\"error\":\"READONLY_COUNTS_FAILED\",\"stage\":\""+stage+"\"}");
     }
   }
 }
