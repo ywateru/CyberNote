@@ -1,0 +1,42 @@
+   Compiling notes-sync86-lean v0.1.0 (/private/tmp/apple-notes-sync86-lean)
+warning: unused `std::result::Result` in tuple element 0 that must be used
+   --> /private/tmp/apple-notes-sync86-adapter/src-tauri/src/session/synchronization.rs:184:482
+    |
+184 | ...false).unwrap();s.finish(event["operationId"].as_str().unwrap(),&HashSet::from(["main".into()]),false).unwrap();s.quiet.retry_af...
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+    = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+
+warning: `notes-sync86-lean` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.05s
+     Running unittests /private/tmp/apple-notes-sync86-adapter/src-tauri/src/sync_test_root84.rs (/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync86_lean-0e6d0c1e48477ec1)
+
+running 5 tests
+test sync::adapter::tests::strict_command_allowlist_and_token_reject_unknown_or_remote_fields ... FAILED
+test sync::adapter::tests::required_blobs_fully_validates_before_allocating_and_adapts_hash_to_sha256 ... FAILED
+test sync::adapter::tests::blob_file_operations_do_not_require_session_guard_and_receive_is_only_durable ... ok
+test sync::adapter::tests::identity_read_only_selector_and_disabled_status_have_no_filesystem_opt_in ... ok
+test sync::adapter::tests::cold_failed_pair_device_is_reused_and_enabled_identity_drift_is_rejected ... ok
+
+failures:
+
+---- sync::adapter::tests::strict_command_allowlist_and_token_reject_unknown_or_remote_fields stdout ----
+
+thread 'sync::adapter::tests::strict_command_allowlist_and_token_reject_unknown_or_remote_fields' (42661362) panicked at /private/tmp/apple-notes-sync86-adapter/src-tauri/src/sync/adapter.rs:155:292:
+assertion failed: serde_json::from_value::<Command>(command).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- sync::adapter::tests::required_blobs_fully_validates_before_allocating_and_adapts_hash_to_sha256 stdout ----
+
+thread 'sync::adapter::tests::required_blobs_fully_validates_before_allocating_and_adapts_hash_to_sha256' (42661361) panicked at /private/tmp/apple-notes-sync86-adapter/src-tauri/src/sync/adapter.rs:158:460:
+assertion failed: backend.required_blobs(&serde_json::to_value(bad).unwrap()).is_err()
+
+
+failures:
+    sync::adapter::tests::required_blobs_fully_validates_before_allocating_and_adapts_hash_to_sha256
+    sync::adapter::tests::strict_command_allowlist_and_token_reject_unknown_or_remote_fields
+
+test result: FAILED. 3 passed; 2 failed; 0 ignored; 0 measured; 127 filtered out; finished in 0.84s
+
+error: test failed, to rerun pass `--lib`

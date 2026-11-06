@@ -1,0 +1,104 @@
+{
+  "sourceHead": "fd640fe204c009150b08f6219ba0c8528b8cdeb0",
+  "sourceBefore": "94325a24ed4a925a31872a99647e9af47bcfb345e4787eec700eb9f721e6ed3c",
+  "sourceAfter": "94325a24ed4a925a31872a99647e9af47bcfb345e4787eec700eb9f721e6ed3c",
+  "binary": {
+    "path": "/private/tmp/apple-notes-sync85-target/debug/notes-current-attachment-transport",
+    "sha256": "b30a4cf738b17afd08edb48ec2cef8e33d6fa44385b1cdd63ff381d58cd480a1"
+  },
+  "checks": [
+    "status is disabled and omits optional nulls",
+    "status does not generate Noise identity",
+    "two independent SQLite stores adopt authenticated workspace",
+    "A note, ordinary and smart folders arrive over real socket",
+    "B edit converges back to A",
+    "production media journal returns attachment metadata",
+    "multi-frame media metadata is projected remotely",
+    "remote immutable blob bytes match exact source",
+    "protected target remains durably pending",
+    "unrelated note applies while owner remains protected",
+    "owner update applies after normal protection release",
+    "remote lock revokes note authorization",
+    "remote ciphertext unlocks with original password",
+    "remote delete is projected and access revoked",
+    "restore causally supersedes old deletion",
+    "stop persists paused and closes listener",
+    "A owned Rust process exited naturally",
+    "B owned Rust process exited naturally",
+    "cold restart preserves paused identity",
+    "offline same-entity edits retain concurrent conflict heads",
+    "explicit keep-all resolution converges and retains a copy",
+    "100 repeat wakeups preserve note revision",
+    "wrong Noise key is rejected without enabling business Store",
+    "real quiet events contain probe, prepare and commit receipts",
+    "no async transport errors",
+    "A-restart owned Rust process exited naturally",
+    "B-restart owned Rust process exited naturally",
+    "Bad-auth owned Rust process exited naturally"
+  ],
+  "events": 68,
+  "processes": [
+    {
+      "name": "A",
+      "root": "/private/tmp/sync86-process-first/A",
+      "pid": 98913,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B",
+      "root": "/private/tmp/sync86-process-first/B",
+      "pid": 98914,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "A-restart",
+      "root": "/private/tmp/sync86-process-first/A",
+      "pid": 99013,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B-restart",
+      "root": "/private/tmp/sync86-process-first/B",
+      "pid": 99014,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "Bad-auth",
+      "root": "/private/tmp/sync86-process-first/bad-auth",
+      "pid": 99033,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    }
+  ],
+  "wallMs": 25008,
+  "failure": null
+}

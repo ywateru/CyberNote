@@ -1,0 +1,124 @@
+{
+  "sourceHead": "fd640fe204c009150b08f6219ba0c8528b8cdeb0",
+  "sourceBefore": "fa7274bc52bcf29c5564c977f34b1aa0e1d5918a40b51f1bc813875cb1c0162a",
+  "sourceAfter": "fa7274bc52bcf29c5564c977f34b1aa0e1d5918a40b51f1bc813875cb1c0162a",
+  "binary": {
+    "path": "/private/tmp/apple-notes-sync85-target/debug/notes-current-attachment-transport",
+    "sha256": "97e3dbcf3c5b1aff0b72f8e7404270edd7bf2f71510721aedabbf5f1f9155e37"
+  },
+  "checks": [
+    "status is disabled and omits optional nulls",
+    "status does not generate Noise identity",
+    "two independent SQLite stores adopt authenticated workspace",
+    "A note, ordinary and smart folders arrive over real socket",
+    "B edit converges back to A",
+    "production media journal returns attachment metadata",
+    "multi-frame media metadata is projected remotely",
+    "remote immutable blob bytes match exact source",
+    "protected target remains durably pending",
+    "unrelated note applies while owner remains protected",
+    "owner update applies after normal protection release",
+    "remote lock revokes note authorization",
+    "remote ciphertext unlocks with original password",
+    "remote delete is projected and access revoked",
+    "restore causally supersedes old deletion",
+    "stop persists paused and closes listener",
+    "A owned Rust process exited naturally",
+    "B owned Rust process exited naturally",
+    "cold restart preserves paused identity",
+    "offline same-entity edits retain concurrent conflict heads",
+    "explicit keep-all resolution converges and retains a copy",
+    "100 repeat wakeups preserve note revision",
+    "third device receives transitive heads and blobs",
+    "C edit forwards through host to B",
+    "pre-crash pending inbox is durable while target is protected",
+    "A-restart SIGKILL observed",
+    "same-directory SIGKILL restart safely applies durable inbox",
+    "purge projects to connected peer without resurrecting rows",
+    "old offline device consumes purge tombstone",
+    "media base arrives before independent offline edits",
+    "B-restart owned Rust process exited naturally",
+    "C-forward owned Rust process exited naturally",
+    "A-SIGKILL-restart owned Rust process exited naturally"
+  ],
+  "events": 121,
+  "processes": [
+    {
+      "name": "A",
+      "root": "/private/tmp/sync86-process-expanded-recheck/A",
+      "pid": 3356,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B",
+      "root": "/private/tmp/sync86-process-expanded-recheck/B",
+      "pid": 3362,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "A-restart",
+      "root": "/private/tmp/sync86-process-expanded-recheck/A",
+      "pid": 3413,
+      "closing": false,
+      "exit": {
+        "code": null,
+        "signal": "SIGKILL"
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B-restart",
+      "root": "/private/tmp/sync86-process-expanded-recheck/B",
+      "pid": 3414,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "C-forward",
+      "root": "/private/tmp/sync86-process-expanded-recheck/C",
+      "pid": 3439,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "A-SIGKILL-restart",
+      "root": "/private/tmp/sync86-process-expanded-recheck/A",
+      "pid": 3450,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    }
+  ],
+  "wallMs": 42831,
+  "failure": {
+    "message": "授权状态已改变，请同步后重试",
+    "stack": "Error: 授权状态已改变，请同步后重试\n    at Device.call (file:///private/tmp/apple-notes-sync86-adapter/scripts/debug/rust/check-sync.mjs:24:140)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async file:///private/tmp/apple-notes-sync86-adapter/scripts/debug/rust/check-sync.mjs:103:104\n    at async eventually (file:///private/tmp/apple-notes-sync86-adapter/scripts/debug/rust/check-sync.mjs:21:119)\n    at async file:///private/tmp/apple-notes-sync86-adapter/scripts/debug/rust/check-sync.mjs:103:2"
+  }
+}

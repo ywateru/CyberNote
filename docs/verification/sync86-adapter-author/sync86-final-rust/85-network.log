@@ -1,0 +1,34 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling notes-sync-network-tests v0.1.0 (/private/tmp/apple-notes-sync86-adapter/scripts/sync-network-test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.18s
+     Running unittests lib.rs (/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync_network_tests-83a6bc9ff12079a0)
+
+running 9 tests
+test network::staging::budget_tests::network_staging_reserves_only_three_files_and_256_mib ... ok
+test identity::tests::malformed_endpoint_identity_and_symlink_are_rejected ... ok
+test network::transport::tests::partial_staging_budget_cannot_be_bypassed_with_new_hashes ... FAILED
+test network::transport::tests::overlapping_chunks_validate_existing_bytes_and_publish_only_once ... ok
+test network::transport::tests::interrupted_blob_resumes_and_hash_failure_cannot_publish ... ok
+test identity::tests::invitation_expiration_and_revocation_are_durable ... ok
+test network::transport::tests::head_depth_length_and_unoffered_blob_rejected_before_staging ... ok
+test network::transport::tests::unauthenticated_unknown_protocol_and_oversized_frame_never_reach_backend ... ok
+test network::transport::tests::encrypted_replay_and_tampering_close_connection_without_second_request ... ok
+
+failures:
+
+---- network::transport::tests::partial_staging_budget_cannot_be_bypassed_with_new_hashes stdout ----
+
+thread 'network::transport::tests::partial_staging_budget_cannot_be_bypassed_with_new_hashes' (42716771) panicked at ../../src-tauri/src/sync/network/transport.rs:615:18:
+called `Result::unwrap()` on an `Err` value: Limit
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    network::transport::tests::partial_staging_budget_cannot_be_bypassed_with_new_hashes
+
+test result: FAILED. 8 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+error: test failed, to rerun pass `--lib`
