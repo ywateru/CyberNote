@@ -1,3 +1,5 @@
+import { isStorageView } from "./storage-usage";
+import { ImagePreview, ImagePreviewContext, type ImagePreviewRequest } from "./ImagePreview";
 import type { DebugAdapter } from "./debug/protocol";
 import {
   SearchListPreview,
@@ -506,6 +508,18 @@ function App() {
   } | null>(null);
   const [quitPending, setQuitPending] = useState(false);
   const appSurface = useRef<HTMLDivElement | null>(null);
+  const [imagePreview, setImagePreview] = useState<ImagePreviewRequest | null>(null);
+  const imagePreviewRef = useRef(imagePreview);
+  imagePreviewRef.current = imagePreview;
+  const hideImagePreview = useCallback(() => {
+    // Access transitions must seal the old image before a queued React commit.
+    const surface = appSurface.current?.querySelector<HTMLElement>(".image-preview");
+    if(surface) {surface.hidden = true;surface.querySelector("img")?.removeAttribute("src");}
+    setImagePreview(null);
+  }, []);
+  const previewOpener = useRef((_: ImagePreviewRequest) => {});
+  const openImagePreview = useCallback((request: ImagePreviewRequest) => previewOpener.current(request), []);
+  const closePreviewSource = useCallback((source: ImagePreviewRequest["source"]) => setImagePreview(value => value?.source === source ? null : value), []);
   const editorsRef = useRef(editors);
   editorsRef.current = editors;
   const [editing, setEditing] = useState(false);
@@ -1643,6 +1657,7 @@ function App() {
   }, [flush, fail, ownsSidebarPreference, sidebarPreference]);
   clearSensitive.current = (ids) => {
     if (!ids.length) return;
+    if(imagePreviewRef.current?.owner && ids.includes(imagePreviewRef.current.owner)) hideImagePreview();
     if (
       tagCompositionTarget.current &&
       ids.includes(tagCompositionTarget.current.noteId)
@@ -1696,6 +1711,7 @@ function App() {
   };
   const coverSynchronization = () => {
     syncCoverRef.current = true;
+    hideImagePreview();
     setSyncCover(true);
   };
   synchronizeRef.current = (options) => {
@@ -2182,7 +2198,8 @@ function App() {
   };
   const androidBack = useRef<() => void>(() => {});
   androidBack.current = () => {
-    if (folderForm) folderFormHandle.current?.cancel();
+    if (imagePreview) setImagePreview(null);
+    else if (folderForm) folderFormHandle.current?.cancel();
     else if (ocrOperation.current) void cancelOcr().catch(fail);
     else if (modal === "paper") closePaper();
     else if (modal) setModal(null);
@@ -4241,6 +4258,10 @@ function App() {
       </>
     );
   };
+  const previewAuthority = JSON.stringify(accessGate.stamp(noteId || undefined));
+  const imagePreviewOpen = !!imagePreview && imagePreview.owner === noteId && imagePreview.authority === previewAuthority && !quitPending && !syncCover && !synchronizing && !accessSuspended.length && !accessGate.state?.operationId && !modal && !folderForm && (!mobile || page === "editor");
+  const contentOverlay = imagePreviewOpen || modal === "data";
+  useLayoutEffect(() => {if(imagePreview && !imagePreviewOpen)setImagePreview(null);}, [imagePreview, imagePreviewOpen]);
   const nativeScope = JSON.stringify([
     folderId,
     noteId,
@@ -4312,7 +4333,7 @@ function App() {
         (blockedNotes.current.has(context.noteId) ||
           accessGate.state?.suspended.includes(context.noteId))) ||
       (!overlay &&
-        (modal || folderForm || draw || record || ocrOperation.current))
+        (modal || imagePreviewOpen || folderForm || draw || record || ocrOperation.current))
     )
       throw new Error("备忘录或授权状态已改变，请重新执行操作");
     if (
@@ -4622,6 +4643,7 @@ function App() {
       !accessSuspended.length &&
       !accessGate.state?.operationId &&
       !modal &&
+      !imagePreviewOpen &&
       !draw &&
       !record &&
       !ocr;
@@ -4634,8 +4656,20 @@ function App() {
       !!liveEditor?.isEditable;
     const stamp = accessGate.stamp(noteId || undefined);
     nativeToolbar.current.set({
+      searchScope: JSON.stringify([
+        folderId,
+        noteId,
+        view,
+        galleryEditor,
+        separate,
+        page,
+        stamp,
+        liveEditor ? nativeEditorIds.current.get(liveEditor) : null,
+        liveEditor ? nativeDocumentVersions.current.get(liveEditor) || 0 : 0,
+      ]),
       key: JSON.stringify([
         nativeScope,
+        contentOverlay,
         stamp,
         liveEditor ? nativeEditorIds.current.get(liveEditor) : null,
         liveEditor ? nativeDocumentVersions.current.get(liveEditor) || 0 : 0,
@@ -4650,7 +4684,7 @@ function App() {
           ? nativeDocumentVersions.current.get(liveEditor) || 0
           : 0,
       },
-      state: toolbarState({
+      state: { ...toolbarState({
         layout: separate
           ? "independentNote"
           : view === "gallery"
@@ -4668,7 +4702,7 @@ function App() {
         editable,
         current,
         editor: liveEditor,
-      }),
+      }), contentOverlay },
     });
   });
   // The whole adapter is eliminated by Vite in a normal production build.
@@ -4710,6 +4744,7 @@ function App() {
       state: () => ({
         workspace: structuredClone(wsRef.current),
         editorJSON: editor && !editor.isDestroyed ? editor.getJSON() : null,
+        editorSelection: editor && !editor.isDestroyed ? editor.state.selection.toJSON() : null,
         error:
           error ||
           (recordingTicket.current && recordingState()?.hasError
@@ -4787,13 +4822,22 @@ function App() {
           button.click();
         },
         "image.save": ({ id }) => {
-          const button = document.querySelector<HTMLButtonElement>(`.attachment-node[data-attachment-id="${CSS.escape(id as string)}"] .save-image`);
+          if(!imagePreviewOpen || imagePreview?.id !== id) throw Error("请先打开对应图片预览");
+          const button = document.querySelector<HTMLButtonElement>(`.image-preview[data-preview-id="${CSS.escape(id as string)}"] .save-image`);
           if (!button || button.disabled) throw Error("图片尚未可保存");
           button.click();
         },
+        "image.info": () => {const button=document.querySelector<HTMLButtonElement>('.image-preview [aria-label="图片信息"]');if(!button)throw Error("图片预览尚未打开");button.click();},
+        "image.close": () => setImagePreview(null),
         "data.refresh": () => {
           if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
           return dataManagementHandle.current.refresh();
+        },
+        "data.navigate": ({ view }) => {
+          if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
+          if (typeof view !== "string" || !isStorageView(view))
+            throw Error("未知存储类别");
+          return dataManagementHandle.current.navigate(view);
         },
         "data.filter": (args) => {
           if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
@@ -5216,7 +5260,13 @@ function App() {
     };
   }, []);
   const nativeTop = !mobile && !!nativeInfo;
+  previewOpener.current = request => {
+    const attachment = wsRef.current.attachments.find(value => value.id === request.id);
+    if(quitState.current || syncCoverRef.current || accessGate.state?.operationId || accessGate.state?.suspended.length || !noteId || modal || !attachment || attachment.noteId !== noteId || !editor || editor.isDestroyed || !documentReferencesAttachment(editor.getJSON(),attachment) || !request.trigger.isConnected || request.trigger.offsetParent === null || (current?.locked && !accessGate.state?.notes[noteId]?.authorized)) return;
+    setImagePreview({...request,owner:noteId,authority:previewAuthority,session:secureId()});
+  };
   return (
+    <ImagePreviewContext.Provider value={{open:openImagePreview, closeSource:closePreviewSource}}>
     <div className="recording-layout">
     <div
       ref={appSurface}
@@ -5313,10 +5363,7 @@ function App() {
         {!nativeTop && (
           <div
             className="sidebar-toolbar"
-            data-tauri-drag-region
-            onDoubleClick={() => {
-              if (native && !mobile) getCurrentWindow().toggleMaximize();
-            }}
+            data-tauri-drag-region={native && !mobile ? "deep" : undefined}
           >
             {!native && (
               <div className="preview-lights">
@@ -5473,7 +5520,10 @@ function App() {
         className={`notes-pane ${view === "gallery" ? "gallery-pane" : ""}`}
       >
         {!nativeTop && (
-          <header className="notes-header" data-tauri-drag-region>
+          <header
+            className="notes-header"
+            data-tauri-drag-region={native && !mobile ? "deep" : undefined}
+          >
             {mobile ? (
               <>
                 <button className="back-button" onClick={back}>
@@ -5785,7 +5835,7 @@ function App() {
         {!nativeTop && (
           <header
             className="editor-header"
-            data-tauri-drag-region
+            data-tauri-drag-region={native && !mobile ? "deep" : undefined}
             onMouseDown={(e) => {
               if ((e.target as HTMLElement).closest("button"))
                 e.preventDefault();
@@ -6024,6 +6074,7 @@ function App() {
           </div>
         </div>
       )}
+      {imagePreviewOpen && imagePreview && <ImagePreview key={imagePreview.session} request={imagePreview} onClose={() => setImagePreview(value => value === imagePreview ? null : value)} />}
       {modal === "data" && (
         <DataManagement
           onClose={() => setModal(null)}
@@ -6395,6 +6446,7 @@ function App() {
         </aside>
       )}
     </div>
+    </ImagePreviewContext.Provider>
   );
 }
 function SearchSuggestions({

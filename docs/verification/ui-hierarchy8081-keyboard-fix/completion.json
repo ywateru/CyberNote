@@ -1,0 +1,46 @@
+{
+  "frozenSourceCommit": "ad3a069f",
+  "frozenSourceInputs": "0818145c2f31dc49b58cba93ba30711747e82c405cdb6bc0923b14bc92457ab9",
+  "before": {
+    "command": "node docs/verification/ui-hierarchy8081-keyboard-fix/reproduce.mjs",
+    "exitCode": 1,
+    "naturalCompletion": true,
+    "sourceInputs": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+    "previewCount": 1,
+    "focus": {
+      "activeElement": "BODY",
+      "inside": false
+    },
+    "documentUnchanged": true
+  },
+  "after": [
+    {
+      "command": "node scripts/debug/cli.mjs group image-preview --out docs/verification/ui-hierarchy8081-keyboard-fix/desktop",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "passedChecks": 27,
+      "sourceHead": "247b6f6c41b013f35d422a173a5264df79022519",
+      "sourceInputs": "0818145c2f31dc49b58cba93ba30711747e82c405cdb6bc0923b14bc92457ab9",
+      "sourceInputsChanged": false,
+      "sourceDirty": true,
+      "pageErrors": []
+    },
+    {
+      "command": "node scripts/debug/cli.mjs group image-preview --mobile --out docs/verification/ui-hierarchy8081-keyboard-fix/mobile",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "passedChecks": 25,
+      "sourceHead": "247b6f6c41b013f35d422a173a5264df79022519",
+      "sourceInputs": "0818145c2f31dc49b58cba93ba30711747e82c405cdb6bc0923b14bc92457ab9",
+      "sourceInputsChanged": false,
+      "sourceDirty": true,
+      "pageErrors": []
+    }
+  ],
+  "typecheck": {
+    "command": "pnpm exec tsc --noEmit",
+    "exitCode": 0,
+    "naturalCompletion": true
+  },
+  "distRebuilt": false
+}

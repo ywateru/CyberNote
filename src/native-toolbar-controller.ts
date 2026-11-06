@@ -6,6 +6,9 @@ import type {
 } from "../plugins/tauri-plugin-notes-ui/guest-js";
 export interface ToolbarProjection<C> {
   key: string;
+  /** Trust scope excludes presentation/query, includes navigation, authority,
+   * editor identity and document version. Only overlays may retain old search. */
+  searchScope: string;
   state: Omit<ToolbarState, "revision">;
   context: C;
 }
@@ -24,6 +27,10 @@ const codeOf = (error: unknown) => (error as { code?: string })?.code;
 export class NativeToolbar<C> {
   private desired?: ToolbarProjection<C>;
   private records = new Map<number, ToolbarProjection<C>>();
+  // A native search event can be queued before an accepted visibility update.
+  // Retain bounded provenance for search only; old actions remain invalid.
+  private searchRecords = new Map<number, ToolbarProjection<C>>();
+  private appliedOverlay = false;
   private binding?: BindingInfo;
   private unlisten?: () => void;
   private early: ToolbarEvent[] = [];
@@ -32,7 +39,8 @@ export class NativeToolbar<C> {
   private started = false;
   private revision = 0;
   private sequence = 0;
-  private search?: { value: string; sequence: number };
+  private search?: { value: string; sequence: number; scope: string };
+  private lastSearchSequence = 0;
   private waitSearch = 0;
   private composing = false;
   private appliedHash = "";
@@ -45,6 +53,12 @@ export class NativeToolbar<C> {
   ) {}
   set(projection: ToolbarProjection<C>) {
     if (this.disposed) return;
+    if (this.desired && this.desired.searchScope !== projection.searchScope) {
+      this.searchRecords.clear();
+      this.search = undefined;
+      this.composing = false;
+      this.waitSearch = 0;
+    }
     this.desired = projection;
     // A caret-only transaction must refresh the bookmark without closing an open native menu.
     if (this.binding && this.appliedHash === this.hash(projection))
@@ -57,19 +71,23 @@ export class NativeToolbar<C> {
   }
   private merged(projection: ToolbarProjection<C>) {
     const state = projection.state;
-    if (
-      state.search &&
-      this.search &&
-      state.search.acknowledgedEvent < this.search.sequence
-    )
+    const search =
+      this.search?.scope === projection.searchScope ? this.search : undefined;
+    const acknowledged = Math.max(
+      this.lastSearchSequence,
+      search?.sequence || 0,
+    );
+    if (state.search && state.search.acknowledgedEvent < acknowledged)
       return {
         ...projection,
         state: {
           ...state,
           search: {
             ...state.search,
-            value: this.search.value,
-            acknowledgedEvent: this.search.sequence,
+            // A known old-scope event acknowledges transport sequence only. Its
+            // value never crosses a navigation/document/authority boundary.
+            value: search?.value ?? state.search.value,
+            acknowledgedEvent: acknowledged,
           },
         },
       };
@@ -99,6 +117,7 @@ export class NativeToolbar<C> {
         revision,
       });
       this.binding = bound;
+      this.appliedOverlay = !!projection.state.contentOverlay;
       this.appliedHash = this.hash(projection);
       if (this.disposed) return;
       this.info(bound);
@@ -124,19 +143,32 @@ export class NativeToolbar<C> {
       this.early.push(event);
       return;
     }
+    const projection =
+      this.records.get(event.stateRevision) ||
+      (event.intent.kind === "search"
+        ? this.searchRecords.get(event.stateRevision)
+        : undefined);
     if (
       event.bindingId !== this.binding.bindingId ||
       !Number.isSafeInteger(event.sequence) ||
       event.sequence <= this.sequence ||
-      !this.records.has(event.stateRevision)
+      !projection
     )
       return;
     this.sequence = event.sequence;
-    const projection = this.records.get(event.stateRevision)!;
     if (event.intent.kind === "search") {
-      this.search = { value: event.intent.value, sequence: event.sequence };
+      this.lastSearchSequence = event.sequence;
       this.composing = false;
       if (this.waitSearch <= event.sequence) this.waitSearch = 0;
+      if (projection.searchScope !== this.desired?.searchScope) {
+        void this.pump();
+        return;
+      }
+      this.search = {
+        value: event.intent.value,
+        sequence: event.sequence,
+        scope: projection.searchScope,
+      };
       this.intent(event.intent, projection.context, event.sequence);
       // Acknowledge the actual native value immediately, before React publishes its new query.
       void this.pump();
@@ -161,11 +193,13 @@ export class NativeToolbar<C> {
       this.running ||
       this.disposed ||
       !this.binding ||
-      this.composing ||
-      this.waitSearch
+      ((this.composing || this.waitSearch) &&
+        !this.desired?.state.contentOverlay &&
+        !this.appliedOverlay)
     )
       return;
     this.running = true;
+    let failedHash: string | undefined;
     try {
       let staleSequence: number | undefined;
       while (!this.disposed && this.desired) {
@@ -181,11 +215,32 @@ export class NativeToolbar<C> {
           });
           if (this.disposed) break;
           this.binding = info;
+          const wasOverlay = this.appliedOverlay;
+          this.appliedOverlay = !!projection.state.contentOverlay;
+          if (!this.appliedOverlay) {
+            this.composing = false;
+            this.waitSearch = 0;
+          }
           this.appliedHash = hash;
           this.info(info);
-          for (const old of this.records.keys())
-            if (old < info.stateRevision) this.records.delete(old);
+          for (const [old, record] of this.records)
+            if (old < info.stateRevision) {
+              if (
+                record.state.search &&
+                typeof projection.searchScope === "string" &&
+                projection.searchScope.length > 0 &&
+                record.searchScope === projection.searchScope &&
+                (wasOverlay ||
+                  this.appliedOverlay ||
+                  record.state.contentOverlay)
+              )
+                this.searchRecords.set(old, record);
+              this.records.delete(old);
+            }
+          while (this.searchRecords.size > 64)
+            this.searchRecords.delete(this.searchRecords.keys().next().value!);
         } catch (error) {
+          failedHash = hash;
           this.records.delete(revision);
           if (this.disposed) break;
           if (codeOf(error) === "search_composition") {
@@ -212,6 +267,14 @@ export class NativeToolbar<C> {
       if (!this.disposed) this.error(error);
     } finally {
       this.running = false;
+      // set() may have queued a protective overlay while the old request was
+      // awaiting native rejection/inspection. Do not strand that newer desired
+      // state, and never spin retrying the same rejected projection.
+      if (!this.disposed && this.desired?.state.contentOverlay) {
+        const latest = this.hash(this.desired);
+        if (latest !== this.appliedHash && latest !== failedHash)
+          void this.pump();
+      }
     }
   }
   async focusSearch() {
@@ -222,11 +285,17 @@ export class NativeToolbar<C> {
   }
   invalidate(clean: (context: C) => void) {
     const contexts = new Set(
-      [...this.records.values()].map((record) => record.context),
+      [...this.records.values(), ...this.searchRecords.values()].map(
+        (record) => record.context,
+      ),
     );
     if (this.desired) contexts.add(this.desired.context);
     contexts.forEach(clean);
     this.records.clear();
+    this.searchRecords.clear();
+    this.search = undefined;
+    this.composing = false;
+    this.waitSearch = 0;
     this.desired = undefined;
     this.appliedHash = "";
     this.early = [];
@@ -250,6 +319,7 @@ export class NativeToolbar<C> {
       this.unlisten?.();
       this.unlisten = undefined;
       this.records.clear();
+      this.searchRecords.clear();
     }
   }
 }

@@ -24,6 +24,7 @@ export interface ToolbarState {
   folderTitle: string;
   folderCount: number;
   tableFocused: boolean;
+  contentOverlay?: boolean;
   actions: { action: Action; enabled: boolean; selected: boolean }[];
   menus: { owner: Action; items: MenuEntry[] }[];
   search: { enabled: boolean; value: string; acknowledgedEvent: number } | null;

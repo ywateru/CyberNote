@@ -137,6 +137,8 @@ pub struct ToolbarState {
     pub folder_title: String,
     pub folder_count: u64,
     pub table_focused: bool,
+    #[serde(default)]
+    pub content_overlay: bool,
     pub actions: Vec<ActionState>,
     pub menus: Vec<MenuDefinition>,
     pub search: Option<SearchState>,
