@@ -149,12 +149,12 @@ async function execute(request){
       await c.wait('!![...document.querySelectorAll(".tiptap img")].find(x=>x.complete&&x.naturalWidth>0)','actual native image decoded');await c.snapshot(output,'attachments-complete');return{count:3,originalsVerified:true};
     }
     case 'exportImage':assert(s.notes.length);await openNote(await app(),s.notes.at(-1).id);return saveImageOriginal(await app(),s,output,1,s.files.find(f=>f.name.endsWith('.png')));
-    case 'pair':await pairViaUI(await app(),request.invitation);await(await app()).snapshot(output,'paired');return{paired:true};
+    case 'pair':await pairViaUI(await app(),request.invitation,{step:nativeStep});await(await app()).snapshot(output,'paired');return{paired:true};
     case 'connectDesktop':{
       assert(!peer,'desktop peer already running');assert(typeof options['--peer-receipt']==='string','root peer receipt required');
       peer=await DesktopPeer.open(options['--peer-receipt'],output,s.runId);const address=await peer.host();
       let invitation=await peer.invitation(address.endpoint);
-      try{await pairViaUI(await app(),invitation);}finally{invitation=undefined;}
+      try{await pairViaUI(await app(),invitation,{step:nativeStep});}finally{invitation=undefined;}
       await(await app()).snapshot(output,'paired-desktop');return{paired:true,endpoint:address.endpoint,desktopPid:peer.backend.pid};
     }
     case 'textRoundtrip':assert(peer);return textRoundtrip({client:await app(),peer,state:s,output,saveState:save});

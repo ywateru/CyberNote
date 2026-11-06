@@ -47,14 +47,17 @@ export async function saveImageOriginal(client,state,output,index,file) {
   await client.tap('button[aria-label="关闭图片预览"]');
   return {name:file.name,index,bytes:pulled.bytes,sha256:pulled.sha256,originalBytesVerified:true,path:pulled.path};
 }
-export async function pairViaUI(client,invitation) {
+export async function pairViaUI(client,invitation,{step=async(_label,operation)=>operation()}={}) {
   assert(typeof invitation==='string'&&invitation.length>0&&invitation.length<=16384);
-  await goHome(client);await client.tap('button[aria-label="设置"]');await client.tap('#preferences-tab-data');
-  await client.fill('input[aria-label="同步设备名称"]','SYNC87 Android');
-  await client.tap('.sync-settings button','加入同步');
-  await client.fill('input[aria-label="粘贴完整配对串"]',invitation);await client.tap('.sync-settings button','连接并加入');
-  await client.wait('!!document.querySelector(".sync-peer")&&!document.querySelector(".sync-pair")','native UI pair',40000);
-  await client.tap('button[aria-label="关闭设置"]');
+  await step('pair-home',()=>goHome(client));
+  await step('pair-open-settings',()=>client.tap('button[aria-label="设置"]'));
+  await step('pair-data-tab',()=>client.tap('#preferences-tab-data'));
+  await step('pair-device-name',()=>client.fill('input[aria-label="同步设备名称"]','SYNC87 Android'));
+  await step('pair-open-join',()=>client.tap('.sync-settings button','加入同步'));
+  await step('pair-invitation',()=>client.fill('input[aria-label="粘贴完整配对串"]',invitation));
+  await step('pair-submit',()=>client.tap('.sync-settings button','连接并加入'));
+  await step('pair-confirmed',()=>client.wait('!!document.querySelector(".sync-peer")&&!document.querySelector(".sync-pair")','native UI pair',40000));
+  await step('pair-close-settings',()=>client.tap('button[aria-label="关闭设置"]'));
 }
 export async function eventually(predicate,label,timeout=40000) {
   const deadline=Date.now()+timeout;
