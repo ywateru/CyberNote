@@ -8,7 +8,7 @@ import { readRequests, actionFailure, guardFailureSummary } from './protocol.mjs
 import assert from 'node:assert/strict';
 import { DesktopPeer } from './desktop-peer.mjs';
 import { pairViaUI,saveImageOriginal,openNote,goHome } from './native-ui.mjs';
-import { roundtrip,backgroundRoundtrip,coldBootPrepare,coldBootVerify,assertNativeOriginal } from './scenarios.mjs';
+import { textRoundtrip,desktopMedia,roundtrip,backgroundRoundtrip,coldBootPrepare,coldBootVerify,assertNativeOriginal } from './scenarios.mjs';
 import { connect, guard, pause, parseNodes, nativeNode, assertHomeVisible, readNativeUI, nativeObservationEvents, SERIAL, AVD } from './client.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const options=Object.fromEntries(process.argv.slice(2).reduce((pairs,x,i,a)=>{if(i%2===0)pairs.push([x,a[i+1]]);return pairs;},[]));
@@ -157,6 +157,8 @@ async function execute(request){
       try{await pairViaUI(await app(),invitation);}finally{invitation=undefined;}
       await(await app()).snapshot(output,'paired-desktop');return{paired:true,endpoint:address.endpoint,desktopPid:peer.backend.pid};
     }
+    case 'textRoundtrip':assert(peer);return textRoundtrip({client:await app(),peer,state:s,output,saveState:save});
+    case 'desktopMedia':assert(peer);return desktopMedia({client:await app(),peer,state:s,output,saveState:save});
     case 'roundtrip':assert(peer);return roundtrip({client:await app(),peer,state:s,output,saveState:save});
     case 'backgroundRoundtrip':assert(peer);return backgroundRoundtrip({client:await app(),closeClient,getClient:app,peer,state:s,output,receipt:options['--receipt']});
     case 'coldBootPrepare':return coldBootPrepare({client:await app(),closeClient,state:s,output});
