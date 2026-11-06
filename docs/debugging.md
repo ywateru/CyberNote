@@ -1,8 +1,14 @@
 # 开发命令与布局检查
 
-2026-11-06，任务70/71/73/75/77。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
+2026-11-06，任务70/71/73/75/77/78。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
 
-[77最新整合](verification/mac-feedback77/integration/README.md)为桌面十组148项、手机笔记9/录音43/附件43，构建/生产排除通过。`pnpm debug group mac-feedback --out FRESH_DIR`单独运行本次47项真实事件/HTML/字符Range/位置回归；完整组另含45项contract，真实deadline允许首次transport尚未返回时没有lastState，不伪造状态。
+[77历史整合](verification/mac-feedback77/integration/README.md)为桌面十组148项、手机笔记9/录音43/附件43，构建/生产排除通过。`pnpm debug group mac-feedback --out FRESH_DIR`单独运行该批47项真实事件/HTML/字符Range/位置回归；完整组另含45项contract，真实deadline允许首次transport尚未返回时没有lastState，不伪造状态。
+
+78新增`pnpm debug group recording-indicator --out FRESH_DIR`，独立运行49项桌面回归，并入`pnpm test:debug`。它实际点击侧栏✓与×，检验采集中完成与累计WAV解码、暂停/继续、原A录音同时B编辑、列表/画廊及搜索/标签过滤后的归属、220px长标题布局、减少动态效果、两个已存卡仅当前实时卡活动、故障恢复、checkpoint关闭排队和旧ticket迟到回调。测试端通过React fiber取出真实App callback来重放旧会话状态，不向生产产品添加测试入口。
+
+界面按钮必须用实际DOM点击验证：语义`recording.action finish`会绕过界面disabled属性，不能单独证明按钮可用。桌面✓遵循controller的`canFinish`；手机维持仅paused/retry完成。列表和实时卡的录音指示只随真实phase=recording运动，减少动态效果时静止；状态装饰不写正文或Undo历史。
+
+双次正文保存故障的既有全局错误提示沿用真实两步恢复：点全局错误栏“重试”并等正文ACK，再点侧栏✓结束会话。仅点侧栏重试可能已保存成功但仍留旧全局错误；不得用dismissError或手动清状态冒充恢复。修改前真实DOM复现和测试驱动失败原件见[78开发证据](verification/recording-indicator78/README.md)。合成媒体与JS协议结果不替代真实Rust、系统硬件、原生运行或整窗像素验收。
 
 [73历史验收](verification/mobile-recording-primary73/integration/README.md)该批为桌面100/手机录音43/手机笔记9项。手机新增600ms延迟读取后，等待同一卡片真实blob音源/metadata就绪再单次展开和后段回放，避免源更新重挂载丢失控件。程序化视觉对照可运行`node scripts/check-mobile-recording-primary73.mjs /private/tmp/notes-primary73`，它固定baseline3534acaf、真实共享View和同尺寸投影，仅适合该控件校准；输入变化必须显式审查基线。脚本限定真实依赖扫描，生产API规则不变。报告耗时须包括最终清理至进程退出，不能只引用CLI summary计时。
 
@@ -13,10 +19,11 @@ pnpm test:debug --out /private/tmp/notes-debug-result
 pnpm debug group notes --mobile --out /private/tmp/notes-debug-mobile
 pnpm debug list
 pnpm debug group recording --out /private/tmp/notes-debug-recording
+pnpm debug group recording-indicator --out /private/tmp/notes-debug-recording-indicator
 pnpm debug group recording --mobile --out /private/tmp/notes-debug-mobile-recording
 ```
 
-默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。桌面全组主回归（原九组及 `mac-feedback`）以桌面为基准；手机执行`notes`、独立`recording`与`attachments`小组及自定义script/snapshot，桌面专用录音栏和原生退出场景不扩张为手机通过。
+默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。桌面全组主回归（原九组、`mac-feedback`及`recording-indicator`）以桌面为基准；手机执行`notes`、独立`recording`与`attachments`小组及自定义script/snapshot，桌面专用录音栏和原生退出场景不扩张为手机通过。
 
 需要本机已安装 Chrome 和 playwright-core。默认寻找 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` 和 `/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/playwright-core/index.mjs`；其他机器用 `CHROME_PATH`、`PLAYWRIGHT_CORE_PATH` 或 `--chrome`、`--playwright` 指定。runner不自动安装依赖。
 
