@@ -1,0 +1,175 @@
+{
+  "pass": true,
+  "checks": [
+    "Actual mobile profile uses 320x360 viewport",
+    "Refresh now has a real 44x44 DOM target",
+    "Initial state stays disabled without generating device identity",
+    "Actual start button still reaches listening state",
+    "Width fix preserves real input focus and value after status refresh",
+    "Sync request still displays pending application accurately",
+    "320x360 confirmation remains visible and owns keyboard focus",
+    "Both confirmation buttons meet 44px on both axes",
+    "Opening confirmation still does not mutate paired devices",
+    "All rendered sync buttons meet 44px width and height in light",
+    "320px short-screen shared scrolling stays reachable without horizontal overflow in light",
+    "All rendered sync buttons meet 44px width and height in dark",
+    "320px short-screen shared scrolling stays reachable without horizontal overflow in dark",
+    "Cancel leaves peer unchanged and sends no revoke",
+    "No uncaught page errors"
+  ],
+  "measurements": [
+    {
+      "state": "disabled",
+      "refresh": {
+        "width": 44,
+        "height": 44,
+        "viewport": {
+          "width": 320,
+          "height": 360
+        },
+        "before": "none",
+        "after": "none"
+      }
+    },
+    {
+      "confirmation": {
+        "top": 205.40625,
+        "bottom": 359.78125,
+        "viewport": 360,
+        "focusInside": true,
+        "buttons": [
+          {
+            "width": 72,
+            "height": 44
+          },
+          {
+            "width": 46,
+            "height": 44
+          }
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "geometry": {
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "scrollHeight": 1830,
+        "clientHeight": 170,
+        "overflowY": "auto",
+        "buttons": [
+          {
+            "name": "刷新同步状态",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "name": "立即同步",
+            "width": 72,
+            "height": 44
+          },
+          {
+            "name": "停止同步",
+            "width": 72,
+            "height": 44
+          },
+          {
+            "name": "生成配对串",
+            "width": 85,
+            "height": 44
+          },
+          {
+            "name": "撤销设备 很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称",
+            "width": 46,
+            "height": 44
+          },
+          {
+            "name": "冲突版本0 项",
+            "width": 264,
+            "height": 44
+          }
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "geometry": {
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "scrollHeight": 1830,
+        "clientHeight": 170,
+        "overflowY": "auto",
+        "buttons": [
+          {
+            "name": "刷新同步状态",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "name": "立即同步",
+            "width": 72,
+            "height": 44
+          },
+          {
+            "name": "停止同步",
+            "width": 72,
+            "height": 44
+          },
+          {
+            "name": "生成配对串",
+            "width": 85,
+            "height": 44
+          },
+          {
+            "name": "撤销设备 很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称",
+            "width": 46,
+            "height": 44
+          },
+          {
+            "name": "冲突版本0 项",
+            "width": 264,
+            "height": 44
+          }
+        ]
+      }
+    }
+  ],
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "db24c8ca15e77c772de7f9a759c1c711cc3525e1c9549f25f447ba5367c9dba0",
+    "fileCount": 130,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "db24c8ca15e77c772de7f9a759c1c711cc3525e1c9549f25f447ba5367c9dba0",
+    "fileCount": 130,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsChanged": false,
+  "elapsedIncludingCleanupMs": 4447,
+  "productFreeze": "9ed9a078",
+  "boundaries": "Actual mobile-browser React/DOM/HTML with explicit isolated JS IPC fixture. No Rust/network/Android-native/device evidence."
+}

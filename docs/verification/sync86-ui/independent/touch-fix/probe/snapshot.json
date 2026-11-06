@@ -1,0 +1,1141 @@
+{
+  "version": 1,
+  "selector": ".sync-settings",
+  "html": "<section class=\"sync-settings\" aria-labelledby=\"sync-settings-title\" data-sync-state=\"idle\" aria-busy=\"false\"><header class=\"sync-heading\"><h3 id=\"sync-settings-title\">设备同步</h3><span class=\"sync-state sync-state-idle\">已连接</span><button type=\"button\" aria-label=\"刷新同步状态\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-refresh-cw\"><path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"></path><path d=\"M21 3v5h-5\"></path><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"></path><path d=\"M8 16H3v5\"></path></svg></button></header><p class=\"sync-description\">在你的设备间同步本地备忘录。可使用局域网、虚拟内网或隧道服务地址。</p><div class=\"sync-live\" role=\"status\" aria-live=\"polite\">最近传输：2026/11/6 15:15:45</div><div class=\"sync-group\"><label class=\"sync-field\"><span>本机名称</span><input aria-label=\"同步设备名称\" maxlength=\"120\" placeholder=\"例如：我的 Mac 或手机\" value=\"独立复验手机\" readonly=\"\" style=\"\"></label><div class=\"sync-actions\"><button type=\"button\">立即同步</button><button type=\"button\">停止同步</button></div></div><div class=\"sync-group\"><p class=\"sync-address\">监听地址 <span>0.0.0.0:49632</span></p><label class=\"sync-field\"><span>服务地址</span><input aria-label=\"同步服务地址\" placeholder=\"ws://192.168.1.2:49632\" autocapitalize=\"none\" autocorrect=\"off\" spellcheck=\"false\" maxlength=\"2048\" type=\"url\" value=\"\" style=\"\"></label><div class=\"sync-actions\"><button type=\"button\" disabled=\"\">生成配对串</button></div></div><div class=\"sync-group\"><h4>已配对设备</h4><div class=\"sync-peer\"><div><strong>很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称</strong><small>未连接 · 尚未成功同步</small></div><button type=\"button\" aria-label=\"撤销设备 很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称\">撤销</button></div></div><div class=\"sync-group\"><button class=\"sync-conflict-link\" type=\"button\"><span>冲突版本</span><span>0 项</span><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-right\"><path d=\"m9 18 6-6-6-6\"></path></svg></button></div></section>",
+  "normalizedHTML": "<section class=\"sync-settings\" aria-labelledby=\"sync-settings-title\" data-sync-state=\"idle\" aria-busy=\"false\"><header class=\"sync-heading\"><h3 id=\"sync-settings-title\">设备同步</h3><span class=\"sync-state sync-state-idle\">已连接</span><button type=\"button\" aria-label=\"刷新同步状态\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-refresh-cw\"><path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"></path><path d=\"M21 3v5h-5\"></path><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"></path><path d=\"M8 16H3v5\"></path></svg></button></header><p class=\"sync-description\">在你的设备间同步本地备忘录。可使用局域网、虚拟内网或隧道服务地址。</p><div class=\"sync-live\" role=\"status\" aria-live=\"polite\">最近传输：2026/11/6 15:15:45</div><div class=\"sync-group\"><label class=\"sync-field\"><span>本机名称</span><input aria-label=\"同步设备名称\" maxlength=\"120\" placeholder=\"例如：我的 Mac 或手机\" value=\"独立复验手机\" readonly=\"\" style=\"\"></label><div class=\"sync-actions\"><button type=\"button\">立即同步</button><button type=\"button\">停止同步</button></div></div><div class=\"sync-group\"><p class=\"sync-address\">监听地址 <span>0.0.0.0:49632</span></p><label class=\"sync-field\"><span>服务地址</span><input aria-label=\"同步服务地址\" placeholder=\"ws://192.168.1.2:49632\" autocapitalize=\"none\" autocorrect=\"off\" spellcheck=\"false\" maxlength=\"2048\" type=\"url\" value=\"\" style=\"\"></label><div class=\"sync-actions\"><button type=\"button\" disabled=\"\">生成配对串</button></div></div><div class=\"sync-group\"><h4>已配对设备</h4><div class=\"sync-peer\"><div><strong>很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称</strong><small>未连接 · 尚未成功同步</small></div><button type=\"button\" aria-label=\"撤销设备 很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称\">撤销</button></div></div><div class=\"sync-group\"><button class=\"sync-conflict-link\" type=\"button\"><span>冲突版本</span><span>0 项</span><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-right\"><path d=\"m9 18 6-6-6-6\"></path></svg></button></div></section>",
+  "text": "设备同步已连接在你的设备间同步本地备忘录。可使用局域网、虚拟内网或隧道服务地址。最近传输：2026/11/6 15:15:45本机名称立即同步停止同步监听地址 0.0.0.0:49632服务地址生成配对串已配对设备很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称未连接 · 尚未成功同步撤销冲突版本0 项",
+  "htmlTruncated": false,
+  "nodesTruncated": false,
+  "normalization": [
+    "UUID tokens mapped bijectively in occurrence order; text/styles retained",
+    "rect rounded to 0.01px"
+  ],
+  "nodes": [
+    {
+      "index": 0,
+      "tag": "section",
+      "role": null,
+      "label": null,
+      "text": "设备同步已连接在你的设备间同步本地备忘录。可使用局域网、虚拟内网或隧道服务地址。最近传输：2026/11/6 15:15:45本机名称立即同步停止同步监听地址 0.0.0.0:49632服务地址生成配对串已配对设备很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称未连接 · 尚未成功同步撤销冲突版本0 项",
+      "visible": true,
+      "rect": {
+        "x": 16,
+        "y": -142.75,
+        "width": 288,
+        "height": 836.16
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "22px 0px 0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 1,
+      "tag": "header",
+      "role": null,
+      "label": null,
+      "text": "设备同步已连接",
+      "visible": true,
+      "rect": {
+        "x": 16,
+        "y": -119.75,
+        "width": 288,
+        "height": 44
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "10px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 2,
+      "tag": "h3",
+      "role": null,
+      "label": null,
+      "text": "设备同步",
+      "visible": true,
+      "rect": {
+        "x": 16,
+        "y": -108.25,
+        "width": 188,
+        "height": 21
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "15px",
+        "font-weight": "600",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 3,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "已连接",
+      "visible": true,
+      "rect": {
+        "x": 214,
+        "y": -106.25,
+        "width": 36,
+        "height": 17
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(153, 153, 153)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 4,
+      "tag": "button",
+      "role": null,
+      "label": "刷新同步状态",
+      "text": "",
+      "visible": true,
+      "rect": {
+        "x": 260,
+        "y": -119.75,
+        "width": 44,
+        "height": 44
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "8px",
+        "gap": "5px",
+        "border-radius": "7px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 5,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": true,
+      "rect": {
+        "x": 274,
+        "y": -105.75,
+        "width": 16,
+        "height": 16
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 6,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": true,
+      "rect": {
+        "x": 276,
+        "y": -103.75,
+        "width": 12,
+        "height": 6
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 7,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": true,
+      "rect": {
+        "x": 284.67,
+        "y": -103.75,
+        "width": 3.33,
+        "height": 3.33
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 8,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": true,
+      "rect": {
+        "x": 276,
+        "y": -97.75,
+        "width": 12,
+        "height": 6
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 9,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": true,
+      "rect": {
+        "x": 276,
+        "y": -95.08,
+        "width": 3.33,
+        "height": 3.33
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 10,
+      "tag": "p",
+      "role": null,
+      "label": null,
+      "text": "在你的设备间同步本地备忘录。可使用局域网、虚拟内网或隧道服务地址。",
+      "visible": true,
+      "rect": {
+        "x": 16,
+        "y": -63.75,
+        "width": 288,
+        "height": 38.38
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "19.2px",
+        "color": "rgb(153, 153, 153)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 11,
+      "tag": "div",
+      "role": "status",
+      "label": null,
+      "text": "最近传输：2026/11/6 15:15:45",
+      "visible": true,
+      "rect": {
+        "x": 16,
+        "y": -13.37,
+        "width": 288,
+        "height": 19.19
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "19.2px",
+        "color": "rgb(153, 153, 153)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 12,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "本机名称立即同步停止同步",
+      "visible": true,
+      "rect": {
+        "x": 16,
+        "y": 17.81,
+        "width": 288,
+        "height": 150
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(0, 0, 0)",
+        "padding": "12px",
+        "gap": "normal",
+        "border-radius": "12px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 13,
+      "tag": "label",
+      "role": null,
+      "label": null,
+      "text": "本机名称",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 33.81,
+        "width": 264,
+        "height": 68
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "6px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 14,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "本机名称",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 33.81,
+        "width": 52,
+        "height": 18
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 15,
+      "tag": "input",
+      "role": null,
+      "label": "同步设备名称",
+      "text": "",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 57.81,
+        "width": 264,
+        "height": 44
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(28, 28, 30)",
+        "padding": "10px",
+        "gap": "normal",
+        "border-radius": "7px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 16,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "立即同步停止同步",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 111.81,
+        "width": 264,
+        "height": 44
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "8px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 17,
+      "tag": "button",
+      "role": null,
+      "label": null,
+      "text": "立即同步",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 111.81,
+        "width": 72,
+        "height": 44
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(28, 28, 30)",
+        "padding": "8px 10px",
+        "gap": "5px",
+        "border-radius": "7px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 18,
+      "tag": "button",
+      "role": null,
+      "label": null,
+      "text": "停止同步",
+      "visible": true,
+      "rect": {
+        "x": 108,
+        "y": 111.81,
+        "width": 72,
+        "height": 44
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(28, 28, 30)",
+        "padding": "8px 10px",
+        "gap": "5px",
+        "border-radius": "7px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 19,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "监听地址 0.0.0.0:49632服务地址生成配对串",
+      "visible": true,
+      "rect": {
+        "x": 16,
+        "y": 179.81,
+        "width": 288,
+        "height": 187
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(0, 0, 0)",
+        "padding": "12px",
+        "gap": "normal",
+        "border-radius": "12px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 20,
+      "tag": "p",
+      "role": null,
+      "label": null,
+      "text": "监听地址 0.0.0.0:49632",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 203.81,
+        "width": 264,
+        "height": 17
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(153, 153, 153)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "12px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 21,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "0.0.0.0:49632",
+      "visible": true,
+      "rect": {
+        "x": 88,
+        "y": 203.81,
+        "width": 79.45,
+        "height": 17
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(153, 153, 153)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 22,
+      "tag": "label",
+      "role": null,
+      "label": null,
+      "text": "服务地址",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 232.81,
+        "width": 264,
+        "height": 68
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "6px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 23,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "服务地址",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 232.81,
+        "width": 52,
+        "height": 18
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 24,
+      "tag": "input",
+      "role": null,
+      "label": "同步服务地址",
+      "text": "",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 256.81,
+        "width": 264,
+        "height": 44
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(28, 28, 30)",
+        "padding": "10px",
+        "gap": "normal",
+        "border-radius": "7px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 25,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "生成配对串",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 310.81,
+        "width": 264,
+        "height": 44
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "8px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 26,
+      "tag": "button",
+      "role": null,
+      "label": null,
+      "text": "生成配对串",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 310.81,
+        "width": 85,
+        "height": 44
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(28, 28, 30)",
+        "padding": "8px 10px",
+        "gap": "5px",
+        "border-radius": "7px",
+        "opacity": "0.45"
+      }
+    },
+    {
+      "index": 27,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "已配对设备很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称未连接 · 尚未成功同步撤销",
+      "visible": true,
+      "rect": {
+        "x": 16,
+        "y": 378.81,
+        "width": 288,
+        "height": 234.59
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(0, 0, 0)",
+        "padding": "12px",
+        "gap": "normal",
+        "border-radius": "12px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 28,
+      "tag": "h4",
+      "role": null,
+      "label": null,
+      "text": "已配对设备",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 390.81,
+        "width": 264,
+        "height": 18
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "600",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 29,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称未连接 · 尚未成功同步撤销",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 416.81,
+        "width": 264,
+        "height": 184.59
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "9px 0px",
+        "gap": "10px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 30,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称未连接 · 尚未成功同步",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 426.81,
+        "width": 208,
+        "height": 165.59
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "4px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 31,
+      "tag": "strong",
+      "role": null,
+      "label": null,
+      "text": "很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 426.81,
+        "width": 208,
+        "height": 144
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "500",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 32,
+      "tag": "small",
+      "role": null,
+      "label": null,
+      "text": "未连接 · 尚未成功同步",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 574.81,
+        "width": 208,
+        "height": 17.59
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "11px",
+        "font-weight": "400",
+        "line-height": "17.6px",
+        "color": "rgb(153, 153, 153)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 33,
+      "tag": "button",
+      "role": null,
+      "label": "撤销设备 很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称很长的设备名称",
+      "text": "撤销",
+      "visible": true,
+      "rect": {
+        "x": 246,
+        "y": 487.61,
+        "width": 46,
+        "height": 44
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(28, 28, 30)",
+        "padding": "8px 10px",
+        "gap": "5px",
+        "border-radius": "7px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 34,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "冲突版本0 项",
+      "visible": true,
+      "rect": {
+        "x": 16,
+        "y": 625.41,
+        "width": 288,
+        "height": 68
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(0, 0, 0)",
+        "padding": "12px",
+        "gap": "normal",
+        "border-radius": "12px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 35,
+      "tag": "button",
+      "role": null,
+      "label": null,
+      "text": "冲突版本0 项",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 637.41,
+        "width": 264,
+        "height": 44
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgb(28, 28, 30)",
+        "padding": "0px",
+        "gap": "5px",
+        "border-radius": "7px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 36,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "冲突版本",
+      "visible": true,
+      "rect": {
+        "x": 28,
+        "y": 650.41,
+        "width": 212.28,
+        "height": 18
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 37,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "0 项",
+      "visible": true,
+      "rect": {
+        "x": 245.28,
+        "y": 650.41,
+        "width": 24.72,
+        "height": 18
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(153, 153, 153)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 38,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": true,
+      "rect": {
+        "x": 275,
+        "y": 650.91,
+        "width": 17,
+        "height": 17
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 39,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": true,
+      "rect": {
+        "x": 281.38,
+        "y": 655.16,
+        "width": 4.25,
+        "height": 8.5
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(238, 238, 238)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    }
+  ],
+  "editorJSON": null,
+  "viewport": {
+    "width": 320,
+    "height": 360
+  },
+  "theme": "dark"
+}

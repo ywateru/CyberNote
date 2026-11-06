@@ -1,6 +1,10 @@
 # Sync86 UI 独立验证
 
-2026-11-06。**BLOCKED：刷新同步状态按钮实际32×44px，不满足规格的44×44px触达。** 交develop最小修复，本执行者未改产品源码。完整审查见[review](../../../plan/reviews/app-sync86-ui.md)。
+2026-11-06。最终 **PASS：产品冻结9ed9a078已修复刷新按钮，独立复验实际44×44px，原P2关闭。** 本执行者未改产品源码。完整审查见[review](../../../plan/reviews/app-sync86-ui.md)。
+
+修后仅增量复验受影响范围，证据在 `touch-fix/`：起始HEAD `3f81b2f091e25b79bb549c1f91d6602e46922a74`，130项源指纹 `db24c8ca15e77c772de7f9a759c1c711cc3525e1c9549f25f447ba5367c9dba0`，起止相同、product gitDirty=false。产品差异2文件3增1改，只增加同步按钮min-width44并把作者断言改为两轴。mobile sync-settings48自然exit0/11.545s，独立320×360触达/输入焦点/状态/滚动探针15项自然exit0/4.576s。实测刷新44×44，无伪元素代偿；浅深所有渲染同步按钮两轴至少44，scrollWidth/clientWidth均320、垂直overflow auto。确认top205.40625/bottom359.78125且真实聚焦，取消不发revoke。没有重跑原57项、旧桌面或build/production，不将旧通过冒充修后新运行。
+
+下文为原冻结a9221a0e的初审记录，保留 **当时BLOCKED：32×44px** 的准确结论及证据；历史测量不因后续修复改写。
 
 只在 `/private/tmp/apple-notes-sync86-ui` 执行本任务。起始HEAD `c7aec14f009b0bea9b3563dea6e2b30fa2a4bca3`，产品与冻结 `a9221a0e83b666d47b7fde3bd26a18ea63834a01` 的 `src`、`scripts/debug`、产品依赖及插件逐字diff为空。三次最终CLI和独立探针前后130项输入SHA256均为 `42867a68b354af753ec04d5ba8fb349e589c3edbc101106e8f6d1a614c9505cd`，`gitDirty:false`、输入未变。该指纹范围不包含Rust/network，不能据此授予这些模块通过。
 
@@ -16,7 +20,7 @@
 
 57项探针独立调用公共runtime、真实App/组件、实际产品 `validateSyncResult` 和 `syncCommand`，没有复用作者的sync-settings断言。覆盖10种optional-null拒绝、缺必填、逐层未知字段、计数/列表/digest/endpoint边界、合法省略字段、旧disabled状态晚回不覆盖新host、严格expected/session/epoch请求、native pair错误包含secret时不发布、关闭与分类往返清secret、五种传输状态下pending优先、320短屏真实输入焦点与长名称确认滚动、取消不发送revoke。成功短屏确认top205.40625/bottom359.78125，焦点在确认内，按钮72×44及46×44，共用scroll宽320，无横向溢出。
 
-进一步读取真实HTML snapshot时发现刷新宽度仅32。作者布局检查只检查height，故48项和上述独立功能检查通过仍不能关闭P2；已把这个反例单列，未把“测到尺寸”包装成产品合规。最终证据及阻塞结论对应原冻结产品；修后需另记新产品输入和针对性验证。
+进一步读取真实HTML snapshot时发现原刷新宽度仅32。原作者布局检查只检查height，故旧48项和上述独立功能检查通过不能关闭当时P2；反例单列，未把“测到尺寸”包装成产品合规。原阻塞结论绑定a9221a0e；修后新输入和针对性通过见本文首段与touch-fix目录。
 
 命令的输出使用fresh `/private/tmp/sync86-independent-*`，待相应runtime自然退出后拷回此目录。后续重放也应把HTML输出放到源码树之外，避免触发Vite watcher。日志、命令和失败保留；`manifest.json`列本目录文件字节及SHA256。
 

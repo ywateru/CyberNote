@@ -1,0 +1,28 @@
+[
+  {
+    "name": "mobile",
+    "argv": [
+      "pnpm",
+      "debug",
+      "group",
+      "sync-settings",
+      "--mobile",
+      "--out",
+      "/private/tmp/sync86-independent-touch-fix-mobile-20261106"
+    ],
+    "exitCode": 0,
+    "naturalExit": true,
+    "wallSeconds": 11.545
+  },
+  {
+    "name": "probe",
+    "argv": [
+      "node",
+      "docs/verification/sync86-ui/independent/touch-fix/check.mjs",
+      "/private/tmp/sync86-independent-touch-fix-probe-20261106"
+    ],
+    "exitCode": 0,
+    "naturalExit": true,
+    "wallSeconds": 4.576
+  }
+]
