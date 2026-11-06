@@ -1,0 +1,95 @@
+{
+  "status": "VERIFIED-SCOPED-SYNC-FACTS-WITH-RENDERER-INSPECTION-LIMITS",
+  "files": [
+    {
+      "name": "README.md",
+      "bytes": 1996,
+      "sha256": "a2dbf4d379abc67cceed403e4dd42340e718abb5ac85632478428aec6dc49218"
+    },
+    {
+      "name": "cycle25-audio-source-read04.json",
+      "bytes": 212,
+      "sha256": "00b3032ddfcc84b72e435f67e1b206ebfbae26fe1401f35b3a987a01011351bd",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle25-exact-media-diagnostic03.json",
+      "bytes": 1047,
+      "sha256": "1d52903d844e98fb06213ba7633b038d197a55aa7285e21302e9b754a9e3d854",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle25-final-owned-cleanup.json",
+      "bytes": 647,
+      "sha256": "2da78448b04ebd350fcb0f2515c86bd530d49f207355e33e5e6e46094fb961c2",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle25-lifecycle.execution.json",
+      "bytes": 261,
+      "sha256": "d14a9bf99da393b96682b0359dcbe4f58a4487924d3e1e622c98f77f16550640",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle25-lifecycle.stdout.txt",
+      "bytes": 41358,
+      "sha256": "13c2d801ef5e5fb30b8c47b1a1f8addbb99e9330e6513c033b7b95002278fd4c",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle25-per-media-visible-mouse02.json",
+      "bytes": 153,
+      "sha256": "ea0970e3136afd30150cdc9435b2403869c4a6cab9c29dedcb8109706a4ba335",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle25-per-media-visible-originals.json",
+      "bytes": 158,
+      "sha256": "fbc117455580df6af1ea27312c390c98427186c9f495c6ed55f937175eff8f68",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle25-visible-exception-stage.json",
+      "bytes": 352,
+      "sha256": "adfe7efdeb758a2d4e78848be87fdd5d24b3e0691477f6c34eef88ed95daaecb",
+      "originalOutputExact": true
+    }
+  ],
+  "desktopImageExactGate": true,
+  "desktopAudioPreFetchVisibleDecodeChecksReached": true,
+  "audioDuration": 1,
+  "audioReadyState": 4,
+  "audioRendererFetchUnavailable": true,
+  "nativeAndPeerOriginalBytesProvenSeparately": "native22/cold23/foreground24 independent evidence",
+  "initialTwoPerMediaRefusalsPreserved": true,
+  "initialFailureCauseUnknown": true,
+  "ownMobileControlsNotReached25": true,
+  "noBlanketFourControlPass": true,
+  "wrapperExit": {
+    "argv": [
+      "python3",
+      "scripts/debug/sync87-environment/lifecycle.py",
+      "--serial",
+      "emulator-5584",
+      "--avd",
+      "notes-sync87-isolated",
+      "cycle",
+      "--hold-seconds",
+      "240"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 260.652960083
+  },
+  "emulatorNaturalExit": 0,
+  "ownedAwakeFinallySignal": 15,
+  "owned3PidsAbsentAnd4PortsNoListener": true,
+  "all322CurrentProductInputsExactAuditedAndroid21Mac29": true,
+  "openNotePatch": "07cbabed source/7hostVM+syntax PASS; no actualuse/cause claim",
+  "limits": [
+    "No direct audio.error captured or audio playback test",
+    "Renderer blob bytecache fetch unavailable; Store originalSHA verified separately",
+    "CSP omission consistent inference only, no captured CSP violation/productcause",
+    "Original pixel/physical hardware/realWG/EasyTier/native simultaneous multiselection notverified",
+    "No reviewerdevice/runtime/newpublictunnel/DBqueries"
+  ]
+}

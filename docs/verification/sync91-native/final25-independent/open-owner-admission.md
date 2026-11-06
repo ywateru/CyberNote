@@ -1,0 +1,3 @@
+# PASS — 07cbabed exact requested owner wait (host only)
+
+Only openNote final wait changed from any .mobile.page-editor .tiptap to exact .app.mobile.page-editor [data-mobile-editor-note] dataset.mobileEditorNote===requested UUID. Existing goHome, UUID guard and single normal row tap unchanged, no retries/fallback/device writes added. Expected stale/absent owner rejects; correct owner accepts. Author7 actual-functionVM checks and node syntax natural0. Test-only source does not change322 product inputs. Admit merge; no actualruntimeuse yet and not claimed to explain/fix initial25failure (expectednotesorder desktopfirst; originalstage unknown).
