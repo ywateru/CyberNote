@@ -19,6 +19,7 @@ negative.extend((foreground+extra,'ENTER') for extra in [
  'mResumedActivity : malformed\n',
  'mCurrentFocus = malformed\n',
 ])
+negative.extend((foreground.replace('PickActivity t18',suffix),'ENTER') for suffix in ['PickActivityForeign t18','PickActivity.Foreign t18','PickActivity t18 foreign','PickActivity'])
 for text,key in negative:
     try:g.picker_key(text,key)
     except g.Refused:checks+=1

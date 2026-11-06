@@ -159,8 +159,8 @@ def picker_key(foreground, key):
     focused_lines = [line.strip() for line in foreground.splitlines() if re.match(r'^\s*mCurrentFocus\s*=', line)]
     require(len(resumed_lines) == 1, 'exactly one resumed activity field required')
     require(len(focused_lines) == 1, 'exactly one current focus field required')
-    resumed = re.fullmatch(r'mResumedActivity: ActivityRecord\{[^{}\n]* u0 (' + PICKER_COMPONENT + r')[^{}\n]*\}', resumed_lines[0])
-    focused = re.fullmatch(r'mCurrentFocus=Window\{[^{}\n]* u0 (' + PICKER_COMPONENT + r')\}', focused_lines[0])
+    resumed = re.fullmatch(r'mResumedActivity: ActivityRecord\{[0-9a-f]+ u0 (' + PICKER_COMPONENT + r') t[0-9]+\}', resumed_lines[0])
+    focused = re.fullmatch(r'mCurrentFocus=Window\{[0-9a-f]+ u0 (' + PICKER_COMPONENT + r')\}', focused_lines[0])
     require(resumed is not None, 'exact DocumentsUI resumed picker required')
     require(focused is not None and focused[1] == resumed[1], 'exact DocumentsUI focused picker required')
     return PICKER_KEYS[key]
