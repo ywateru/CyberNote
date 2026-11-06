@@ -1,8 +1,8 @@
 # APP-SYNC87 新隔离 Android 原生验收
 
-状态 in-progress（准备工具，执行等待准确新同步APK）。depends-on 86真实生产接线独审、87环境已独审ready、根准确包来源核对。使用docs/plan/tasks/app-sync87-e2e.md与app-android-attachments-native76.md的全部保全约束；不重做手机首页83。
+状态 in-progress（准确Android17已独立核包，隔离设备实际执行中；完整同步目标未完成）。depends-on 86真实生产接线独审、87环境已独审ready、根准确包来源核对均已满足。使用docs/plan/tasks/app-sync87-e2e.md与app-android-attachments-native76.md的全部保全约束；不重做手机首页83。准确阶段以[当前交付状态](../sync-delivery-state.md)为准。
 
-唯一执行设备 `notes-sync87-isolated` / `emulator-5584`，资源 `/private/tmp/apple-notes-sync87-environment-01`，API30 ARM64 Android11。目前stopped。所有ADB明确新serial并核AVD/PID/CDP身份，禁止缺省设备、kill-server、旧5580或任何原设备命令。只用合成新笔记/PNG/TXT/WAV；不启真实mic。准确新APK包hash与manifest由root交付后才安装，不运行旧16包或未经核包文件。
+唯一执行设备 `notes-sync87-isolated` / `emulator-5584`，资源 `/private/tmp/apple-notes-sync87-environment-01`，API30 ARM64 Android11。运行状态由reviewed lifecycle实际记录判定，按同userdata的有界周期继续。所有ADB明确新serial并核AVD/PID/CDP身份，禁止缺省设备、kill-server、旧5580或任何原设备命令。只用合成新笔记/PNG/TXT/WAV；不启真实mic。准确新APK包hash与manifest由root交付后才安装，不运行旧16包或未经核包文件。
 
 path：仅 `scripts/debug/sync87-native/` 新工具和 `docs/verification/sync87-native/` 证据；不得改生产源码、现有调试runtime/adapter或环境lifecycle工具。可调用已独审lifecycle cycle --serial emulator-5584 --avd notes-sync87-isolated --hold-seconds 600，在bounded owned新进程ready期间操作；其他工具也须相同所有权检查。所有本轮端口转发只绑定该新app PID并仅清自己的转发，不清全局。每次重启重新核新PID与页面URL，不能挑首个target。
 
