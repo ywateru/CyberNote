@@ -84,7 +84,9 @@ export default function RecordingView({
     canToggle,
     previewPosition,
   } = state;
-  const canFinish = status === "paused" || status === "retry";
+  const canFinish = mobile
+    ? status === "paused" || status === "retry"
+    : state.canFinish;
   const closing = ["saving", "finalizing", "submitted"].includes(status);
   const previewAllowed = status === "paused" || status === "retry";
   const seekEnabled = previewAllowed && (state.canSeek || state.seeking);
