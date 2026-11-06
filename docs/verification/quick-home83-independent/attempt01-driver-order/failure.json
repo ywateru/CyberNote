@@ -1,0 +1,200 @@
+{
+  "message": "Short dark gallery has unique title/date, row-major reading order and hidden swipe backplates",
+  "stack": "AssertionError [ERR_ASSERTION]: Short dark gallery has unique title/date, row-major reading order and hidden swipe backplates\n    at check (file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/quick-home83-independent/run-focused.mjs:12:106)\n    at file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/quick-home83-independent/run-focused.mjs:79:2",
+  "checks": [
+    {
+      "label": "Seeded selected media cold start has all gallery, null selection and zero editor/payload reads",
+      "pass": true
+    },
+    {
+      "label": "Cold initialization preserves desktop presentation and persisted selected note",
+      "pass": true
+    },
+    {
+      "label": "Real home gear exposes explicit desktop presentation labels",
+      "pass": true
+    },
+    {
+      "label": "Shared setting handlers persist while mobile remains two-column derived gallery",
+      "pass": true
+    },
+    {
+      "label": "Held creation admits one flight and disables the actual accessible plus",
+      "pass": true
+    },
+    {
+      "label": "Root Back during pre-receipt creation cannot acknowledge successful quit",
+      "pass": true
+    },
+    {
+      "label": "Joined creation commits once after Back without resurrecting editor or focus",
+      "pass": true
+    },
+    {
+      "label": "Metadata outage retains a real persisted receipt and recoverable gallery error",
+      "pass": true
+    },
+    {
+      "label": "Same-source retry opens retained exact editor with no duplicate backend create",
+      "pass": true
+    },
+    {
+      "label": "Actual Done button flushes typed body and releases editor focus",
+      "pass": true
+    },
+    {
+      "label": "Actual editor Back returns to all source and saved card once",
+      "pass": true
+    },
+    {
+      "label": "Explicit different source creates a new physical-owner entity while preserving old all receipt",
+      "pass": true
+    },
+    {
+      "label": "Late creation metadata leaves settings open and current settings focus intact",
+      "pass": true
+    },
+    {
+      "label": "Closing settings after late create never fires a stale editor focus",
+      "pass": true
+    },
+    {
+      "label": "Zero-result smart source retains its created exact editor and default physical owner",
+      "pass": true
+    },
+    {
+      "label": "Unmatched smart editor still invokes real format tool",
+      "pass": true
+    },
+    {
+      "label": "Smart-created recorder persists synthetic audio to the exact receipt owner",
+      "pass": true
+    },
+    {
+      "label": "Short dark gallery has unique title/date, row-major reading order and hidden swipe backplates",
+      "pass": false,
+      "detail": {
+        "overflow": false,
+        "ids": [
+          "independent83-card-0",
+          "independent83-card-1",
+          "independent83-card-2",
+          "independent83-card-3",
+          "independent83-card-4",
+          "independent83-card-5",
+          "independent83-card-6",
+          "independent83-card-7"
+        ],
+        "cards": [
+          {
+            "titles": 1,
+            "dates": 1,
+            "top": 190.046875,
+            "left": 32,
+            "summary": "合成正文用于两列阅读顺序。"
+          },
+          {
+            "titles": 1,
+            "dates": 1,
+            "top": 190.046875,
+            "left": 182,
+            "summary": "合成正文用于两列阅读顺序。"
+          },
+          {
+            "titles": 1,
+            "dates": 1,
+            "top": 356.203125,
+            "left": 32,
+            "summary": "已锁定"
+          },
+          {
+            "titles": 1,
+            "dates": 1,
+            "top": 346.046875,
+            "left": 182,
+            "summary": "合成正文用于两列阅读顺序。"
+          },
+          {
+            "titles": 1,
+            "dates": 1,
+            "top": 502.046875,
+            "left": 32,
+            "summary": "合成正文用于两列阅读顺序。"
+          },
+          {
+            "titles": 1,
+            "dates": 1,
+            "top": 502.046875,
+            "left": 182,
+            "summary": "合成正文用于两列阅读顺序。"
+          },
+          {
+            "titles": 1,
+            "dates": 1,
+            "top": 658.046875,
+            "left": 32,
+            "summary": "合成正文用于两列阅读顺序。"
+          },
+          {
+            "titles": 1,
+            "dates": 1,
+            "top": 658.046875,
+            "left": 182,
+            "summary": "合成正文用于两列阅读顺序。"
+          }
+        ],
+        "actions": [
+          "hidden",
+          "hidden",
+          "hidden",
+          "hidden",
+          "hidden",
+          "hidden",
+          "hidden",
+          "hidden"
+        ],
+        "plus": {
+          "width": 56,
+          "background": "rgb(255, 188, 0)",
+          "color": "rgb(255, 255, 255)"
+        },
+        "searchHeight": 44
+      }
+    }
+  ],
+  "sourceBefore": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "c4fcc377e3ac0b1bac640e4a29fdc3039cf3e558dff3491ef43f1981611cdfd1",
+    "fileCount": 126,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "c4fcc377e3ac0b1bac640e4a29fdc3039cf3e558dff3491ef43f1981611cdfd1",
+    "fileCount": 126,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "wallSeconds": 12.44608225
+}
