@@ -8,7 +8,7 @@
 |85认证网络/身份|独审pass，合入0ab39d70；组合依赖3754d60b；主线19项自然0|修复c88982a6；独审59fc3f32；原并发退出101保留|旧85树/分支已清理，缓存迁至/private/tmp/apple-notes-sync85-target|
 |86同步设置UI|合入d8ff3336，主线完整受影响组pass|修复9ed9a078；独审4c85204b|旧UI树/分支已清理|
 |86前端quiet协调|两P2独审复审pass，合入85b9e0eb；根34+41+notes9/build/production自然0|产品0c84e589；独审092ea058；根证据b563eb64＋原始log bfda3f79|旧前端树/分支已清理；原blocked与反例完整保留|
-|86Rust adapter/Session|独审c11dcc56 blocked，原作者修复中；未合入|fb6a265f/作者1b4c5d87全套通过仍漏Session内媒体IO；64MiB preflight4708ms/flush13637ms持锁，原证据保留|/private/tmp/apple-notes-sync86-adapter，codex/sync86-adapter，作者sync86_adapter_develop|
+|86Rust adapter/Session|原两P2修复f2491f61，Store152pass/3ignored及生产check通过，但build09真实进程首次传输未收敛；仍blocked未合入|旧c11dcc56长持锁原件保留；原作者定位新回归，拟新freeze/build10；独审未把f249或09算pass|/private/tmp/apple-notes-sync86-adapter，codex/sync86-adapter，作者sync86_adapter_develop|
 |86两实际App DOM|基础设施3352b913冻结，真实最终验收待修复后端build09与独审|探索06的36项业务断言通过，最终exit1为只读WAL证据打开；修复后尚未正式重跑，不能记完整pass|/private/tmp/apple-notes-sync86-dom，codex/sync86-dom，作者sync86_dom_develop|
 |87隔离Android环境|独审285970a1 pass且已合入，ENVIRONMENT-READY ONLY|工具62ca1cf0，17 guards；第三次18.751秒ready；未安装新APK|资源/private/tmp/apple-notes-sync87-environment-01保留；emulator-5584 stopped；环境工作树已清理|
 |87新Android原生|初版HOST-TOOLS独审复审通过合入fc696e96；根8+10+21自然0；剩余工具开发，安装等待准确新同步APK|修复920eb6b1/作者064e4820；独审396a7fa4对应5d48e524；原P2日志保全；ADB/boot/install均0|/private/tmp/apple-notes-sync87-native，codex/sync87-native，作者仅host补exact export/真实peer/重启编排|
@@ -35,4 +35,6 @@
 
 最新阻断：独审fb6a265f/c11dcc56确认两条媒体IO长持Session；原作者按短snapshot gate、锁外IO、最终凭据重验修复，复用不可变File凭据与独立路径hard-link契约分别见2df2ecda/b8b87db2。真实双进程独审22项（不是早先口头24）通过，锁探针自然101为负向失败。实际wss升级101后Rust在CryptoProvider选择处panic，22ms错误被误报timeout；原作者同时修TLS初始化与channel错误分类，不能延长timeout掩盖。
 
-DOM03/04/05原清理失败、错误primary假设保全；清理问题已定位为关闭回调promise未结算，观察实际terminal事件后smoke02自然0。探索06三Rust自然0、三页面无pageErrors，最终失败为SQLite只读证据打开；3352b913改为全部children退出且WAL缺失/0之后immutable只读、前后DB hash相同。07因backend源码漂移在启动前拒绝，原log保留；仍等准确build09正式重跑。native输入P2已经原作者修复、独立18项实际子进程反例及8+10+21复审通过，主线host整合也通过，原blocked/泄露原件保留；精确导出与peer/lifecycle扩充及实际设备仍待单独完成。所有host准备和修复均ADB0。
+DOM03/04/05原清理失败、错误primary假设保全；清理问题已定位为关闭回调promise未结算，观察实际terminal事件后smoke02自然0。探索06三Rust自然0、三页面无pageErrors，最终失败为SQLite只读证据打开；3352b913改为全部children退出且WAL缺失/0之后immutable只读、前后DB hash相同。07因backend源码漂移在启动前拒绝，原log保留；build09回归未通过，尚未启动DOM/routes复验，继续等修复冻结。native输入P2已经原作者修复、独立18项实际子进程反例及8+10+21复审通过，主线host整合也通过，原blocked/泄露原件保留；精确导出与peer/lifecycle扩充及实际设备仍待单独完成。所有host准备和修复均ADB0。
+
+f2491f61专项量化：64MiB cold preflight/flush/receive/quiet准备均能并发真实Session.workspace读取与普通编辑；最长一次读取44.137ms，File凭据复用后quiet plan/apply为7/9ms；媒体专项8pass，152pass/3ignored完整Store和Tauri check自然0。其不可变build09为 `/private/tmp/sync86-transport-build09/notes-current-attachment-transport`，SHA256 `895902782389431c4a3462b2bb3e80cd24c26b87248247ee96a1a62b8943afb4`，25609824B，mode0555。实际双进程初始note/folder18s未收敛失败在 `/private/tmp/sync86-media-process-final`，不能凭上述单层pass接受产品。root只读核hash；为DOM准备的 `/private/tmp/sync86-transport-build09-dom-input` 仅改build.json的binary.path指向不可变09，有原manifest与provenance，未运行。原独审尚未启动新昂贵/动态source测试，作者可继续修复；新源码与binary需另freeze和复审。
