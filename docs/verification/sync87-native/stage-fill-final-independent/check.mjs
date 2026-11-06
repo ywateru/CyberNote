@@ -1,0 +1,20 @@
+// Only the preserved cross-read witness, a necessary media positive, and fill focus.
+import assert from 'node:assert/strict';
+import {mkdir,readFile,writeFile} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {createHash} from 'node:crypto';
+import {textRoundtrip,desktopMedia,mobileInputText,desktopInputText,visibleSyntheticEditorExpression} from '../../../../scripts/debug/sync87-native/scenarios.mjs';
+const out=resolve('docs/verification/sync87-native/stage-fill-final-independent');
+const prior=await readFile('docs/verification/sync87-native/text-media-visible-independent-recheck/check.mjs','utf8');
+const definitions=prior.slice(prior.indexOf('const originalFixture='),prior.indexOf("await test('Original hidden-text"));
+const old=await readFile('docs/verification/sync87-native/text-media-stage-independent/check.mjs','utf8');
+const makeSetup=new Function('assert','mkdir','resolve','createHash','textRoundtrip','desktopMedia','mobileInputText','desktopInputText','visibleSyntheticEditorExpression','out','old',definitions+'return setup;')(assert,mkdir,resolve,createHash,textRoundtrip,desktopMedia,mobileInputText,desktopInputText,visibleSyntheticEditorExpression,out,old);
+const clientSource=await readFile('scripts/debug/sync87-native/client.mjs','utf8');
+const fillSource=clientSource.slice(clientSource.indexOf('    const fill='),clientSource.indexOf('    const workspace='));
+const results=[];async function test(name,op){try{await op();results.push({name,pass:true});}catch(e){results.push({name,pass:false,error:e.message});}}
+await test('Original cross-read substitution witness rejected with same input',async()=>{const{x}=await makeSetup('original-second-read-bytes',{media:true,swapSecondRead:true});await assert.rejects(x.run(),/HOST_VISIBLE_GATE_REFUSED/);assert(!x.saved());assert.equal(x.calls.filter(c=>c.original).length,2);});
+await test('Positive exact-owner media uses exactly one verified read per attachment',async()=>{const{x}=await makeSetup('media-positive',{media:true});const r=await x.run();assert.equal(r.originals.length,2);assert(r.decodedImageAndAudio);assert(x.saved());assert.equal(x.calls.filter(c=>c.original).length,2);});
+function fillFixture(focused){const calls=[],sentinel='SYNTHETIC_INVITATION_SENTINEL',target={disabled:false,getBoundingClientRect:()=>({width:160,height:40})};const document={activeElement:focused?target:{},querySelectorAll:()=>[target]};const wait=async(expression,label)=>{assert(!expression.includes(sentinel));assert.equal(label,'exact visible native input focus');calls.push('focus-gate');if(!new Function('document','return '+expression)(document))throw Error('HOST_FOCUS_REFUSED');};const fill=new Function('nativeTap','wait','send','insert',fillSource+'return fill;')(async()=>calls.push('nativeTap'),wait,async()=>calls.push('key'),async text=>{assert.equal(text,sentinel);calls.push('insert');});return{calls,fill,sentinel};}
+await test('fill performs native tap then exact focus gate before selection and insertion',async()=>{const x=fillFixture(true);await x.fill('input[data-sensitive]',x.sentinel);assert.deepEqual(x.calls,['nativeTap','focus-gate','key','key','insert']);assert(!JSON.stringify(x.calls).includes(x.sentinel));});
+await test('fill focus failure aborts before keys or sensitive insertion',async()=>{const x=fillFixture(false);await assert.rejects(x.fill('input[data-sensitive]',x.sentinel),/HOST_FOCUS_REFUSED/);assert.deepEqual(x.calls,['nativeTap','focus-gate']);assert(!JSON.stringify(x.calls).includes(x.sentinel));});
+const result={status:results.every(r=>r.pass)?'PASS':'BLOCKED',frozenAuthor:'a4ac8b4d',originalWitnessDefinitionsSha256:createHash('sha256').update(definitions).digest('hex'),results,hostOnly:true,adbCalls:0,deviceActions:0,syntheticOutputsOnly:true,limits:'No invitation read, actual fill/pairing, decoder, network or device acceptance; wrapper reviewed separately.'};await writeFile(resolve(out,'result.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({status:result.status,checks:results.length,failed:results.filter(r=>!r.pass),adbCalls:0}));if(results.some(r=>!r.pass))process.exitCode=1;
