@@ -262,3 +262,21 @@ fn unplaced_attachments_keep_source_order_and_warn() {
     assert_eq!(ids[1], p.attachments[1].id);
     assert!(!p.warnings.is_empty());
 }
+#[test]
+fn independent_svg_counterexample_reports_loss_and_underline_uses_real_schema() {
+    let mut svg = source();
+    svg.attachments.clear();
+    svg.html =
+        "<p>普通正文</p><svg xmlns='http://www.w3.org/2000/svg'><path d='M0 0L1 1'/></svg>".into();
+    let parsed = prepare_one(svg).unwrap();
+    assert!(!parsed.warnings.is_empty());
+    let mut underline = source();
+    underline.attachments.clear();
+    underline.html = "<p><u>应保留下划线</u></p>".into();
+    let parsed = prepare_one(underline).unwrap();
+    assert!(parsed.note.document.to_string().contains("underline"));
+    let mut styled = source();
+    styled.attachments.clear();
+    styled.html = "<p style='font-size:72px;font-family:fantasy'>样式</p>".into();
+    assert!(!prepare_one(styled).unwrap().warnings.is_empty());
+}

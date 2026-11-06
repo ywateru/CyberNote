@@ -140,6 +140,7 @@ impl Convert<'_> {
             "i" | "em" => Some("italic"),
             "s" | "strike" | "del" => Some("strike"),
             "code" => Some("code"),
+            "u" => Some("underline"),
             _ => None,
         };
         if let Some(kind) = mark {
@@ -178,19 +179,7 @@ impl Convert<'_> {
                     if !next.iter().any(|m| m["type"] == kind) {
                         next.push(json!({"type":kind}));
                     }
-                } else if ![
-                    "font-family",
-                    "font-size",
-                    "line-height",
-                    "margin",
-                    "margin-top",
-                    "margin-bottom",
-                    "padding",
-                    "white-space",
-                    "vertical-align",
-                ]
-                .contains(&key)
-                {
+                } else {
                     self.warnings.insert("部分样式仅保存在原始记录中".into());
                 }
             }
@@ -297,8 +286,18 @@ impl Convert<'_> {
                     .insert("部分原生对象仅保存在附件及原始记录中".into());
                 children
             }
-            "input" => vec![],
-            _ => children,
+            "input" => {
+                self.warnings
+                    .insert("独立表单对象仅保存在原始记录中".into());
+                vec![]
+            }
+            "" | "html" | "body" | "span" | "b" | "strong" | "i" | "em" | "s" | "strike"
+            | "del" | "code" | "u" | "a" | "tbody" | "thead" | "tfoot" => children,
+            _ => {
+                self.warnings
+                    .insert("部分不支持的标记或对象仅保存在原始记录中".into());
+                children
+            }
         }
     }
     fn wrap_blocks(&self, nodes: Vec<Value>) -> Vec<Value> {
