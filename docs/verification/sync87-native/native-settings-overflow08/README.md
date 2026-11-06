@@ -1,0 +1,11 @@
+# Actual Android11 settings overflow — failure preserved
+
+Source7038a648 (pair trace90b3ff15 and redacted diagnostics7038a648 independently admitted), reviewed APK17 and immutable11 DesktopPeer. Only new isolated emulator5584 / notes-sync87-isolated, same userdata; no original device or real microphone. Cycle08 ready at2026-11-06T12:07:52Z in18.788s. Lifecycle remains live at this evidence freeze; no lifecycle exit is claimed.
+
+Actual start passed. Actual connectDesktop failed24.480523792s; pair-home, open-settings and data-tab passed, then pair-device-name failed at the bounded native input guard before focus or any pairing request. Input lengths0; no invitation was entered or captured. Python wrapper and Node naturally exited2 (outer tool88968 observed exit2, child execution wall38.840342s), actual Rust peer naturally0/no signal,0page errors, unchanged binary/frontend. This is a preserved failing run, not synchronization acceptance.
+
+The safe actual DOM diagnostic exposes only dimensions/lengths/booleans. Viewport360×568; settings rect y−505.75/h1579.5 and device-name input y807.75/h44 remain outside viewport after scrollIntoView. Native host is720×1136 at y48; no IME. Read-only CSS support observation proved `100dvh` unsupported, `100vh` and `min(...100vh...)` supported. Computed settings height1579.5px/max-height none; inner data scroll clientHeight and scrollHeight both1389, so it cannot reveal the lower sync controls. Current Preferences.css has only dvh heights, with no vh fallback. This is a product viewport compatibility issue on the actual installed WebView, rather than a failed network handshake.
+
+No DOM/style injection, hidden control activation or relaxed coordinate guard was used. Root must route the product compatibility fix and accurate new packages; final actual pairing/text/media/restart gates remain open. The PNG picker save/original-byte/decode result from cycle07 is a separate actual success and is not reclassified by this failure.
+
+`cycle08-settings-overflow.png` was captured only after strict screenshot guard confirmed all sensitive input fields empty. No invitation, clipboard, arbitrary exception, raw activity dump or user database was copied here. `source.json` identifies the source, caller and live lifecycle boundary.
