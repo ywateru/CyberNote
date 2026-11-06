@@ -1,0 +1,132 @@
+{
+  "status": "HOST_CHECKS_PASS_WITH_P2_FINDINGS",
+  "frozenAuthor": "9c648b1f",
+  "hostOnly": true,
+  "adbCalls": 0,
+  "deviceActions": 0,
+  "sourceHashes": {
+    "client.mjs": "55888944e6b99de565155d015c3c753a23324219f64815e0578889a075c467d0",
+    "run.mjs": "4020b963c26168078d335bc3cfef61178a9fb52139cb7b766ad91590d5af99aa",
+    "guard.py": "2ba8511bbb3dfc4198791a2ca72f7414b52881ea15458be8b501655b37cc05e5"
+  },
+  "results": [
+    {
+      "name": "137 followed by success retries exactly one read-only dump and taps once",
+      "pass": true
+    },
+    {
+      "name": "second exit137 propagates without third dump or tap",
+      "pass": true
+    },
+    {
+      "name": "exit1 never retried",
+      "pass": true
+    },
+    {
+      "name": "stderr-bearing137 never retried",
+      "pass": true
+    },
+    {
+      "name": "different-error never retried",
+      "pass": true
+    },
+    {
+      "name": "malformed-output never retried",
+      "pass": true
+    },
+    {
+      "name": "non-guard never retried",
+      "pass": true
+    },
+    {
+      "name": "tap action failure is not replayed",
+      "pass": true
+    },
+    {
+      "name": "point failure stops before all native calls",
+      "pass": true
+    },
+    {
+      "name": "unique visible enabled DOM point accepted",
+      "pass": true
+    },
+    {
+      "name": "ambiguous visible targets refused",
+      "pass": true
+    },
+    {
+      "name": "disabled or zero-bound targets refused",
+      "pass": true
+    },
+    {
+      "name": "each guard UIA/tap path retains serial/AVD ownership validation (static)",
+      "pass": true
+    },
+    {
+      "name": "step pass records fixed schema and returns operation value",
+      "pass": true
+    },
+    {
+      "name": "step unclassified error never copies exception body to primary log",
+      "pass": true
+    },
+    {
+      "name": "invalid step label rejected before log or operation",
+      "pass": true
+    },
+    {
+      "name": "known exit137 detail recorded without retry by logger",
+      "pass": true
+    },
+    {
+      "name": "P2 guard detail logger accepts arbitrary parsed message (negative witness)",
+      "pass": true
+    },
+    {
+      "name": "owned note resume and Store-before-picker {\"editor\":true,\"title\":\"SYNTHETIC\"}",
+      "pass": true
+    },
+    {
+      "name": "owned note resume and Store-before-picker {\"editor\":false,\"title\":\"SYNTHETIC\"}",
+      "pass": true
+    },
+    {
+      "name": "owned note resume and Store-before-picker {\"editor\":true,\"title\":\"WRONG\"}",
+      "pass": true
+    },
+    {
+      "name": "P2 home hidden gallery can pass current exact home assertions (negative witness)",
+      "pass": true
+    }
+  ],
+  "findings": [
+    {
+      "priority": "P2",
+      "id": "home-visible-assertions",
+      "witness": {
+        "acceptedHiddenGallery": true,
+        "galleryBounds": {
+          "width": 0,
+          "height": 0
+        },
+        "returned": {
+          "columns": "160px 160px",
+          "add": {
+            "visible": true,
+            "color": "rgb(255, 188, 0)"
+          }
+        }
+      }
+    },
+    {
+      "priority": "P2",
+      "id": "guard-detail-arbitrary-message",
+      "witness": {
+        "step": "attachments-synthetic",
+        "error": "Refused",
+        "message": "SYNTHETIC_PRIVATE_SENTINEL"
+      }
+    }
+  ],
+  "limits": "Mock assertions do not prove device acceptance; actual chooser multiple/continuous/export/sync remains pending."
+}
