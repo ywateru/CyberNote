@@ -159,5 +159,19 @@
       ]
     }
   ],
-  "assessment": "After all owned processes naturally exited: receiving host has neither the160044byteblob nor a pending inbox row, and no publication stages. Sending client retains complete160044byteblob. Transparent origin shows two upgraded encrypted-data connections totaling174794 upstream bytes with a reconnect. This bounds failure before durable target metadata/materialization; it does not prove a particular network cause, frame acknowledgement or raw socket error. Keep source/time budgets unchanged for fresh tunnel-only rerun."
+  "assessment": "After all owned processes naturally exited: receiving host has neither the160044byteblob nor a pending inbox row, and no publication stages. Sending client retains complete160044byteblob. Transparent origin shows two upgraded encrypted-data connections totaling174794 upstream bytes with a reconnect. This bounds failure before durable target metadata/materialization; it does not prove a particular network cause, frame acknowledgement or raw socket error. Keep source/time budgets unchanged for fresh tunnel-only rerun.",
+  "readOnlyQueryMode": "sqlite URI mode=ro&immutable=1 after every owned Rust process naturally exited",
+  "queries": [
+    "SELECT count(*) FROM notes",
+    "SELECT count(*) FROM attachments",
+    "SELECT count(*) FROM sync_heads",
+    "SELECT count(*) FROM sync_inbox",
+    "SELECT count(*) FROM sync_dirty",
+    "SELECT count(*) FROM sync_projection"
+  ],
+  "fileInventoryScope": [
+    ".sync/blobs (metadata size/suffix only)",
+    ".sync/staging (metadata size/suffix only)",
+    "attachments/.sync91-stage-*.part (count only)"
+  ]
 }
