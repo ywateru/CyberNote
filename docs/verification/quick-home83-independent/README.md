@@ -11,3 +11,6 @@
 所有运行输出先写 `/private/tmp`，HTML扩展为 `.html.txt`，runtime cleanup后再复制至证据目录，避免Vite watcher被证据HTML触发重载。最终runtime已清理并释放index/dist。按根协调，主线暂存的独审资料已在运行结束后移至83树证据提交；驱动与进程记录保留实际运行位置。`frozen-source-identity.json` 以准确提交blob映射8项未变化native/controller输入到80/81已经验证的 `ad3a069f`，未重复Cargo/AppKit。
 
 本结果不证明Rust Store、真实Android IME/provider、实际系统对话框或原版整窗像素一致。未触碰原Android约13秒未保存录音现场、已装应用、真实麦克风或苹果备忘录。根负责82+83组合后一次全量回归、准确双端构建；组合后的截图与独立核包另存 `docs/verification/mobile-home8283/`，不混为本次源码独审结果。
+
+
+2026-11-06追加：根首轮组合的旧storage-overview正向Tab断言失败后，已对仅8行runner时序修复 `1ad73a08` 独立复核。定向11项自然exit0、完整6.0548605秒，产品78src+index全部与d73逐字节一致，当前126项指纹c04c48d4…aa5029b前后不变。详见 `focus-return/README.md`。初次22PASS仍是其准确冻结输入结果；组合尚待根恢复，不作为完整交付通过。

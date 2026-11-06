@@ -1,0 +1,48 @@
+{
+  "before": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "c04c48d484961b22efa6828ca27e5b4fc183ee5d00b0a8a36c5ba4528aa5029b",
+    "fileCount": 126,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "declaredMobile": true,
+  "declaredViewport": {
+    "width": 390,
+    "height": 844
+  },
+  "actual": {
+    "viewport": {
+      "width": 1280,
+      "height": 844
+    },
+    "mobile": false,
+    "mobileSettings": 0
+  },
+  "selection": {
+    "folderId": "default",
+    "noteId": "note-a",
+    "page": "folders",
+    "query": "",
+    "searching": false,
+    "menu": null,
+    "modal": null,
+    "listed": [
+      "note-a",
+      "note-b"
+    ]
+  },
+  "pageErrors": [],
+  "reproduced": true,
+  "scope": "Collects actual 1280 -> reset state; does not claim old mobile suites passed"
+}
