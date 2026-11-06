@@ -192,14 +192,24 @@ class Device {
     await this.command("app.back");
     return value;
   }
+  async conflict(id) {
+    const r = await this.backend.call("sync_command", {
+      command: { type: "conflicts" },
+      expected: token(await this.inspect()),
+    });
+    if (!r.ok) {
+      // Authority may advance between the real DOM state read and the query.
+      // Retry only this documented stale snapshot; other errors are failures.
+      assert.equal(r.error?.code, "sync_plan_stale", r.error?.message);
+      observations.push({ name: "actual-conflict-query-retry", device: this.name, error: r.error.code });
+      return undefined;
+    }
+    return r.value.conflicts.find((c) => c.entityId === id);
+  }
   async keepAll(id, choose) {
     let conflict;
     await until("actual conflict before explicit keep-all", async () => {
-      const r = await this.backend.call("sync_command", {
-        command: { type: "conflicts" },
-        expected: token(await this.inspect()),
-      });
-      conflict = r.ok && r.value.conflicts.find((c) => c.entityId === id);
+      conflict = await this.conflict(id);
       return conflict?.variants.length >= 2;
     });
     const version = conflict.variants.find(choose);
@@ -438,12 +448,7 @@ try {
   a.backend.call = baseCall;
   let pendingConflict;
   await until("pending save retains concurrent heads", async () => {
-    const r = await a.backend.call("sync_command", {
-      command: { type: "conflicts" },
-      expected: token(await a.inspect()),
-    });
-    pendingConflict =
-      r.ok && r.value.conflicts.find((c) => c.entityId === pendingNote);
+    pendingConflict = await a.conflict(pendingNote);
     return pendingConflict?.variants.length >= 2;
   });
   check(
@@ -695,11 +700,7 @@ try {
   // overwriting local IME input. This scenario checks retention, not last-write wins.
   let imeConflict;
   await until("both actual concurrent IME heads retained", async () => {
-    const r = await a.backend.call("sync_command", {
-      command: { type: "conflicts" },
-      expected: token(await a.inspect()),
-    });
-    imeConflict = r.ok && r.value.conflicts.find((c) => c.entityId === id);
+    imeConflict = await a.conflict(id);
     return (
       imeConflict?.variants.length >= 2 &&
       imeConflict.variants.some((v) => v.title.includes("最终组字"))
