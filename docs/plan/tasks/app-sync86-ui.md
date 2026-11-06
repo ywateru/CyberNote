@@ -1,6 +1,6 @@
 # APP-SYNC86-UI 设备同步设置与命令
 
-状态 in-progress（产品9ed9a078已独审通过4c85204b，根正在合入与主线整合；生产接线另任务）。技能docs-sprint分配的develop角色。只在根分配worktree修改，不操作设备/真实麦克风/用户数据，不push。
+状态 done（限定UI模块；产品9ed9a078独审通过4c85204b，主线d8ff3336整合148项及build/production通过；生产接线另任务）。技能docs-sprint分配的develop角色。只在根分配worktree修改，不操作设备/真实麦克风/用户数据，不push。
 
 objective：按[UI](../../ui/sync-settings.md)与[架构](../../architecture/sync.md)实现真实React同步设置组件、严格类型/IPC包装、挂到数据总览、程序化调试指令和必要DOM验证。明确当前真实IPC尚待86 adapter，不把fixture当网络完成。
 

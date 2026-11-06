@@ -1,6 +1,6 @@
 # APP-SYNC86 前端quiet coordinator
 
-状态 pending；depends-on 86UI已独审合入及固定窗口协议。前端可以不等待84/85的Rust合入并行开发，最终真实集成依赖它们。根分配隔离worktree后才开发。是[86 adapter](app-sync86-adapter.md)的前端并行子任务，最终共同独审真实接线，不单独宣称完整目标完成。
+状态 in-progress；depends-on 86UI已独审合入及固定窗口协议。前端可以不等待84/85的Rust合入并行开发，最终真实集成依赖它们。根分配隔离worktree后才开发。是[86 adapter](app-sync86-adapter.md)的前端并行子任务，最终共同独审真实接线，不单独宣称完整目标完成。
 
 context：[架构](../../architecture/sync.md)、[窗口协议](../../architecture/sync-coordinator.md)、86 adapter与87任务；不重做首页83/设置82/同步设置86UI。
 
