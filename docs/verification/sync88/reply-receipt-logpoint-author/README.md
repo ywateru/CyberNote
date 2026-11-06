@@ -1,0 +1,7 @@
+# Second original receipt logpoint: minimal author delta
+
+Exact Android18 SHA unchanged. Static c5(t,e) is the unique parseSyncWindowReceipt function and its only callsite is IM after await sync_window_reply. Added fixed false conditional at its entry, line48/column70569, allowed resolved columns70569..70581 inside first const n=CD(t) expression. It reads ONLY original response parameter t own outcome data descriptor, counting pending/abort/commit/unknown; second operationId parameter e is never read. Counts describe parser ENTRY, not completed receipt validation or commit. Exceptions remain unavailable explicitly; no new catch point.
+
+The two own breakpoints must each resolve once, to SAME scriptId, with exact full source SHA before the shared counters activate. A failure at either point cleans both known own IDs; failure removing first still attempts second, disables/deletes own state and records false cleanup flag. No other breakpoint or Debugger state is modified. Original reply condition and no-wrapper/no-ACK/no-product-change scope remain.
+
+32 narrow host checks natural0: original23 adapted to2 breakpoints plus9 necessary receipt classification/getter/sourcepoint/second-point refusal/same-script/partial-cleanup checks. No actual debugger/device execution. Raw logs and input hashes retained. Independent delta admission required before sole native execution. Full native reply values/operationIDs/tokens are not retained, and native rejected-invoke errors are not directly observed.

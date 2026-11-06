@@ -1,0 +1,34 @@
+{
+  "command": [
+    "node",
+    "scripts/debug/sync87-native/check-reply-logpoint.mjs"
+  ],
+  "naturalExit": 0,
+  "wallSeconds": 0.044438292,
+  "checks": 32,
+  "newChecks": 9,
+  "scope": "Host-only second fixed receipt logpoint delta; no actual debugger/CDP/device/network/Store/product changes.",
+  "sourceGuard": {
+    "sha256": "9db1203eb6fdf37ceb7338541943c28671f40645ec3af453d94788f836c374cf",
+    "receiptRequestedZeroBasedUTF16": {
+      "lineNumber": 48,
+      "columnNumber": 70569
+    },
+    "receiptAllowedColumns": [
+      70569,
+      70581
+    ],
+    "sameScriptIdRequired": true,
+    "bothVerifiedBeforeActivation": true
+  },
+  "files": [
+    {
+      "path": "scripts/debug/sync87-native/reply-logpoint.mjs",
+      "sha256": "1d6d43f71366d925de59cbd5d571c6548b8b7958e21bd37ad8fa6ba75ac68126"
+    },
+    {
+      "path": "scripts/debug/sync87-native/check-reply-logpoint.mjs",
+      "sha256": "e0013ad2668f7014007da81611b7649303c0efe7e3db0b75d95d0429c5dd0a7a"
+    }
+  ]
+}
