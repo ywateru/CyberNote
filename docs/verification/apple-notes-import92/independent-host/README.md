@@ -31,3 +31,15 @@ Reproduction: add only this test include temporarily to `src-tauri/src/apple_not
 #[path = "../../../docs/verification/apple-notes-import92/independent-host/review-host-tests.rs"]
 mod independent_host;
 ```
+
+## Resource repair admission
+
+Repair `bb1aff7fa3b54388b92a5678f8072a0522f6afdd` statically verified: all attachment sizes are summed before any media Vec/read_to_end; each read independently rechecks its remaining budget. Stage preflight/wait/post-success checks enforce allocated filenames only, regular/no-symlink entries,100MiB per file and aggregate; actual statvfs computes available bytes in u128 and refuses below512MiB. Identity-matching stage cleanup now handles unsupported packages with standard no-follow recursive removal. Existing replaced-stage PASS remains preserved, not rerun.
+
+`repair02`: **3 PASS**, natural cargo exit0 /13.425641208s. Original two failed assertions in unchanged `review-host-tests.rs` now pass. New `review-budget-delta.rs` directly verifies real current-filesystem free-space admission; exact100MiB accepted and aggregate+1 rejected; remaining budget refusal; unknown entry, directory package and symlink refusal; new cleanup unlinks its own symlink and retains outside synthetic sentinel. Low-space branch is statically reviewed, not dynamically executed by filling a disk. No unrelated passed tests repeated. The two sparse oversized exports use metadata lengths, not real media or source content. Only one owned sleep child runs and is reaped.
+
+**Host/core/Session PASS after narrow repair.** Target84 is released; temporary includes restored. Original `checks01`2PASS/2FAIL and all logs remain intact. Existing one-note, already-known attachment-free actual SystemSource→new0700 isolated Store test may now be dispatched to the designated research operator. This admission is not an instruction to this reviewer to access Notes. No actual source or device action was performed by reviewer. UI/debug and signed-app runtime/TCC remain separate gates.
+
+The budget is monitored admission, not a hard filesystem quota. An Apple Notes save already dispatched may finish after its client is killed; implementation kills/waits only its owned osascript child and never Notes. Do not claim instant external save termination.
+
+Also statically reviewed safe aggregate source-runtime evidence `22b4508a`: exact approved sourceSHA, scan126 metadata, one stable attachment-free read, before/after equality, private capture modes and zero exports. Scope is correctly source-script runtime, not this native host/Store, full-library preservation or successful attachment export. Raw private source was not opened by reviewer.

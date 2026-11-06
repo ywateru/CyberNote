@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "bb1aff7fa3b54388b92a5678f8072a0522f6afdd",
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "--",
+    "review_host_aggregate_media",
+    "review_host_live_export",
+    "review_host_budget_delta",
+    "--nocapture"
+  ],
+  "target": "/private/tmp/apple-notes-sync84-target",
+  "exitCode": 0,
+  "elapsedSeconds": 13.425641208,
+  "syntheticOnly": true,
+  "actualNotesCalls": false
+}
