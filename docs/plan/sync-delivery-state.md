@@ -54,6 +54,8 @@
 
 截至cycle05：系统chooser打开与取消、Store无新增已实际通过；Downloads目录点击和Recent长按未证明选中，尚无PNG/TXT/WAV实际保存。旧错名`home-filled.png`是失败比例实验中的编辑页，不用于正式首页；`home.png`是真实有卡片画廊，最终须新`home-visible-final`正向gate。下一优先为Recent普通单选PNG→实际Store，避免多选阻塞基本保存。cycle05再次在<8GiB保护停机，原失败/未发生tap均保全；[第三批清理](../verification/sync87/source-checkout-cleanup03.json)正常删除完成且clean/无进程的63/68/69源检出，含untracked的64/66仍跳过，branch/证据/targets/SDK/所有data保留。cycle06同data、5584、reviewed guard继续，完整goal仍active。
 
+cycle06已自然退出0/621.144281459秒。实际Images筛选有效、PNG行普通tap/hold仍未返回选择；经独立准入的正常TAB已使唯一PNG行获得真实系统焦点（自然0/3.455303708秒），随后的ENTER因周期已结束在guard处拒绝，未发输入。准确原始结果见[cycle06进展](../verification/sync87-native/native-picker-progress06/README.md)。最终picker-key工具`406c76f7`经独审`a99760d4`准入，含原始混合用户反例、真实foreground完整hash和严格字段计数复验；该审查只证明工具，不证明实际选取。继续同data下一周期TAB/ENTER，并独立推进真实设置配对与完整双向正文、桌面媒体收敛，原provider保存/导出门槛不删除。
+
 ## 用户原现场和范围
 
 原Android约13秒未保存录音完全不碰：禁止安装、启动、停止、重启、读取、导出、备份原应用或旧AVD（含5580）。ADB显式5584，无默认serial，无kill-server。只用合成PNG/TXT/WAV，无真实mic；Apple Notes删除实验不做。已有直接执行授权沿用，无重复询权限。
