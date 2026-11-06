@@ -7,7 +7,7 @@
 |84真实Store核心|独审pass，合入feff050d并主线121项自然0|修复7da43718；作者72936017；独审447e1360，118pass/3ignored；原locked drawing失败保留|旧84工作树正常移除后证据均在主线|
 |85认证网络/身份|独审pass，已合入主线0ab39d70；组合lock3754d60b，主线19项自然0；生产入口待86|c88982a6修复，作者7d206973，独审59fc3f32；真实19项通过，原并发退出101保留|旧85工作树/分支已正常移除，缓存迁至/private/tmp/apple-notes-sync85-target|
 |86同步设置UI|已合入＋主线整合pass|9ed9a078，独审4c85204b，主线合并d8ff3336；48＋48＋52与build/production通过|旧UI工作树/分支已正常移除，全部证据在主线|
-|86前端quiet协调|源码5950bd30、证据2518edd9已冻结，独立审查中|作者真实React/Tiptap34项通过，仍为IPC fixture；固定probe/prepare/release与取消收据|/private/tmp/apple-notes-sync86-frontend，codex/sync86-frontend，基线d8ff3336|
+|86前端quiet协调|独审b4d4cdd3 blocked，原作者修复中|两P2：search/Escape取消前导航、freeze release丢焦点；原34项通过不足以覆盖，原反例保留|/private/tmp/apple-notes-sync86-frontend，codex/sync86-frontend，基线d8ff3336|
 |86Rust adapter/Session/真实transport|in-progress|基线组合主线3754d60b之后；文件与前端不重叠|/private/tmp/apple-notes-sync86-adapter，codex/sync86-adapter|
 |87独立环境准备|in-progress|新AVD/HOME/data/serial工具；尚未安装同步APK|/private/tmp/apple-notes-sync87-environment，codex/sync87-environment|
 |87真实双端/路由/新Android/准确包|pending|两个独立生产Rust进程＋App DOM＋全新隔离Android，不用fixture代替|未创建|
@@ -25,3 +25,5 @@
 Android快速首页83和统一设置82已交付，包见[mobile-home8283](../verification/mobile-home8283/README.md)：Mac26/Android构建16。直接画廊、黄色＋一键输入已实现，不重做。**这些包不包含当前新增同步**。同步后续准确编号拟Mac27/Android构建17，实际未构建前不冒称已包含，不覆盖旧包。
 
 本轮资源：84/85旧树均clean后正常移除，两个已merge分支删除，独立runner symlinks已核对指向本仓库相对源，不依赖旧树。缓存/private/tmp/apple-notes-sync84-target与/private/tmp/apple-notes-sync85-target保留供86复用，不删共享SDK/node_modules/main target。
+
+86实际两App DOM的生产连接与媒体/IME/取消验收见[整合任务](tasks/app-sync86-dom-integration.md)，待前后端源码独审合入后启动。87环境首次新AVD180秒offline，exit2/owned PID自然0停止；同新data一次software GPU/show-kernel诊断进行中，不能称ready。
