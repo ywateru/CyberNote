@@ -80,6 +80,10 @@ WireVersion V1：workspaceId、kind(note/folder)、entityId、vector(BTreeMap UU
 
 修复验证须测真实Session普通读写在大媒体处理期间仍能完成，并覆盖准备后本地修改/删除/替换/不同peer并发、stale重试、文件与DB错误、预算及自然崩溃恢复。采样中短gate偶发WouldBlock允许；不能为了让旧负向探针blocked==0删掉最终校验或省略Session gate。原blocked证据保持不变，新修复独立冻结和复审。
 
+已完成锁外SHA验证的不可变File凭据允许在有界本机缓存中复用，但必须绑定Store/受管路径与持有File的完整身份；inode/长度/mtime/ctime任一非预期变化、身份漂移、文件替换或缺失都使其失效。复用文件SHA不复用旧DBgeneration、授权、participants或操作scope，最终gate每次仍重验。避免每个worker tick重新哈希大附件而耗尽5秒prepare期限；缓存不可成为无限File句柄/临时文件容器。
+
+materialize可对已验证且应用永不原地修改的immutable blob采用hard_link向每个attachment独有受管路径作短原子发布，随后同步目录；不同笔记/冲突副本不得共用同一relativePath。删除任一链接不得破坏其他路径，任何内容修改必须生成新不可变文件，不能原地写共享inode。已有目的文件必须有锁外完整验证凭据；不支持hard_link、跨文件系统或发布失败须明确typed error，不能在锁内降级完整copy。本次受控link导致的ctime/nlink变化须准确更新/失效自有凭据，不能被当成忽略任意外部变化的理由；预算与所有权回收规则保持。
+
 ## 验收及完成条件
 
 第一模块84是可运行的持久版本/附件核心，85是认证真实网络，两者通过不是完整目标完成。86集成Session/UI/生命周期，87完成两真实App与全新隔离AVD以及网络路线验收和准确出包。
