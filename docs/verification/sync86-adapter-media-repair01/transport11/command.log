@@ -1,0 +1,14 @@
+PASS production registration returns original owner and incarnation
+PASS exact lost registration receipt is recoverable before capture
+PASS duplicate capture start is rejected
+PASS forged recording incarnation is rejected
+PASS recording ACK skips are rejected
+PASS checkpoint alone cannot release saved recording
+PASS final ACK release is idempotent but validation then fails
+PASS released recording identity cannot be registered again
+PASS workspace barrier waits for actual window ACK false
+PASS negative actual window ACK aborts lock
+PASS workspace barrier waits for actual window ACK true
+PASS positive actual window ACK commits lock
+PASS actual access commit and metadata events are emitted
+PASS owned transport exits naturally

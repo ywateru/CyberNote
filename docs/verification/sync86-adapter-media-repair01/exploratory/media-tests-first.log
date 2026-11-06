@@ -1,0 +1,20 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/apple-notes-sync86-adapter/docs/verification/sync84-core-independent-01/runner)
+error[E0277]: `store::Attachment` doesn't implement `Debug`
+   --> store/synchronization/media_tests.rs:133:5
+    |
+133 | /     assert_eq!(
+134 | |         s.sync_media.as_ref().unwrap().materialize(&a).unwrap(),
+135 | |         first
+136 | |     );
+    | |_____^ the trait `Debug` is not implemented for `store::Attachment`
+    |
+    = note: add `#[derive(Debug)]` to `store::Attachment` or manually `impl Debug for store::Attachment`
+help: consider annotating `store::Attachment` with `#[derive(Debug)]`
+   --> store.rs:123:1
+    |
+123 + #[derive(Debug)]
+124 | pub struct Attachment {
+    |
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `notes-sync84-store-tests` (lib test) due to 2 previous errors

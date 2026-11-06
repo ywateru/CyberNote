@@ -1,0 +1,622 @@
+[
+  {
+    "device": "B",
+    "event": "probe"
+  },
+  {
+    "tick": 0,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956626,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956626,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 1,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 0
+  },
+  {
+    "device": "B",
+    "event": "prepare"
+  },
+  {
+    "tick": 1,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956626,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956626,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 1,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 0
+  },
+  {
+    "device": "B",
+    "event": "release",
+    "outcome": "commit"
+  },
+  {
+    "tick": 2,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956626,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956626,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 0
+  },
+  {
+    "tick": 3,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956626,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956626,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 1,
+      "state": "syncing",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 0
+  },
+  {
+    "device": "B",
+    "event": "probe"
+  },
+  {
+    "tick": 4,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956628,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956628,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 2,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 0
+  },
+  {
+    "device": "B",
+    "event": "prepare"
+  },
+  {
+    "tick": 5,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956628,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956628,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 2,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 0
+  },
+  {
+    "device": "B",
+    "event": "release",
+    "outcome": "commit"
+  },
+  {
+    "tick": 6,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956628,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956628,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 1
+  },
+  {
+    "tick": 7,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956630,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956630,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 1
+  },
+  {
+    "tick": 8,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956630,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956630,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 1
+  },
+  {
+    "tick": 9,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956630,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956630,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 1
+  },
+  {
+    "tick": 10,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956630,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956630,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 1
+  },
+  {
+    "tick": 11,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956633,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956633,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 1
+  },
+  {
+    "tick": 12,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956633,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956633,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 1
+  },
+  {
+    "tick": 13,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956633,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956633,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 1
+  },
+  {
+    "tick": 14,
+    "A": {
+      "conflictCount": 0,
+      "deviceId": "587b0cae-1862-47fc-904e-8e6341bbf803",
+      "deviceName": "A",
+      "listenAddress": "ws://0.0.0.0:53663",
+      "peers": [
+        {
+          "connected": false,
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "name": "cd352864-774f-4a50-9120-20593080089f"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "listening",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "B": {
+      "conflictCount": 0,
+      "deviceId": "cd352864-774f-4a50-9120-20593080089f",
+      "deviceName": "B",
+      "lastSyncAt": 1793956633,
+      "peers": [
+        {
+          "connected": true,
+          "endpoint": "ws://127.0.0.1:53663",
+          "id": "910103c8-a765-4ecc-a8be-f1cc74694e45",
+          "lastSyncAt": 1793956633,
+          "name": "587b0cae-1862-47fc-904e-8e6341bbf803"
+        }
+      ],
+      "pendingCount": 0,
+      "state": "idle",
+      "workspaceId": "78a26706-aa08-41aa-a8bd-ce6b6d4d1bd6"
+    },
+    "notesB": 1
+  },
+  {
+    "name": "A",
+    "lifecycle": {
+      "pid": 15758,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0
+    }
+  },
+  {
+    "name": "B",
+    "lifecycle": {
+      "pid": 15759,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0
+    }
+  }
+]
