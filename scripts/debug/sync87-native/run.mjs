@@ -7,7 +7,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import { readRequests, actionFailure, guardFailureSummary } from './protocol.mjs';
 import assert from 'node:assert/strict';
 import { DesktopPeer } from './desktop-peer.mjs';
-import { pairViaUI,saveImageOriginal,openNote,goHome } from './native-ui.mjs';
+import { pairViaUI,observePairingUI,saveImageOriginal,openNote,goHome } from './native-ui.mjs';
 import { textRoundtrip,desktopMedia,roundtrip,backgroundRoundtrip,coldBootPrepare,coldBootVerify,assertNativeOriginal } from './scenarios.mjs';
 import { connect, guard, pause, parseNodes, nativeNode, assertHomeVisible, readNativeUI, nativeObservationEvents, SERIAL, AVD } from './client.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
@@ -154,7 +154,7 @@ async function execute(request){
       assert(!peer,'desktop peer already running');assert(typeof options['--peer-receipt']==='string','root peer receipt required');
       peer=await DesktopPeer.open(options['--peer-receipt'],output,s.runId);const address=await peer.host();
       let invitation=await peer.invitation(address.endpoint);
-      try{await pairViaUI(await app(),invitation,{step:nativeStep});}finally{invitation=undefined;}
+      try{await pairViaUI(await app(),invitation,{step:nativeStep});}catch(error){try{await writeFile(resolve(output,'pair-ui-failure-'+Date.now()+'.json'),JSON.stringify(await observePairingUI(await app()),null,2)+'\n');}catch{}throw error;}finally{invitation=undefined;}
       await(await app()).snapshot(output,'paired-desktop');return{paired:true,endpoint:address.endpoint,desktopPid:peer.backend.pid};
     }
     case 'textRoundtrip':assert(peer);return textRoundtrip({client:await app(),peer,state:s,output,saveState:save});

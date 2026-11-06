@@ -1,7 +1,7 @@
 /** Only normal DOM Input and actual DocumentsUI. No native mutation IPC. */
 import assert from 'node:assert/strict';
 import { basename,resolve } from 'node:path';
-import { guard,parseNodes,nativeNode,pause } from './client.mjs';
+import { guard,parseNodes,nativeNode,pause,readNativeUI } from './client.mjs';
 const provider=n=>['com.google.android.documentsui','com.android.documentsui'].includes(n.package);
 export function exportPlan(state,output,index,file) {
   assert(/^[0-9a-f]{10}$/.test(state.runId));assert.equal(state.remote,'/sdcard/Download/notes-sync87-'+state.runId);
@@ -46,6 +46,14 @@ export async function saveImageOriginal(client,state,output,index,file) {
   assert.equal(pulled.sha256,file.sha256);assert.equal(pulled.bytes,file.bytes);assert.equal(pulled.originalBytesVerified,true);
   await client.tap('button[aria-label="关闭图片预览"]');
   return {name:file.name,index,bytes:pulled.bytes,sha256:pulled.sha256,originalBytesVerified:true,path:pulled.path};
+}
+export async function observePairingUI(client) {
+  const ui=await client.read(`(()=>{const selectors={name:'input[aria-label="同步设备名称"]',invitation:'input[aria-label="粘贴完整配对串"]',join:'.sync-pair',settings:'.preferences'};
+    const result={viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio,visual:visualViewport?{width:visualViewport.width,height:visualViewport.height,offsetTop:visualViewport.offsetTop,offsetLeft:visualViewport.offsetLeft,scale:visualViewport.scale}:null},activeTag:['INPUT','TEXTAREA','BUTTON','BODY'].includes(document.activeElement?.tagName)?document.activeElement.tagName:'OTHER',activeTarget:'OTHER',targets:{},peerPresent:!!document.querySelector('.sync-peer'),alertPresent:!!document.querySelector('[role=alert]')};
+    for(const [key,selector] of Object.entries(selectors)){const elements=[...document.querySelectorAll(selector)];result.targets[key]=elements.map(e=>{const r=e.getBoundingClientRect(),c=getComputedStyle(e);if(e===document.activeElement)result.activeTarget=key;return{rect:{x:r.x,y:r.y,width:r.width,height:r.height},display:c.display,visibility:c.visibility,...(key==='name'||key==='invitation'?{length:e.value.length}:{})}});}return result;})()`);
+  try{const raw=await guard('ime');ui.imeShown=/mInputShown=true/.test(raw)?true:/mInputShown=false/.test(raw)?false:null;}catch{ui.imeObservation='FAILED_REDACTED';}
+  try{ui.nativeWebViews=parseNodes(await readNativeUI()).filter(n=>n.class==='android.webkit.WebView').map(n=>({expectedPackage:n.package==='com.local.notesclone',rect:n.rect}));}catch{ui.hostObservation='FAILED_REDACTED';}
+  return ui;
 }
 export async function pairViaUI(client,invitation,{step=async(_label,operation)=>operation()}={}) {
   assert(typeof invitation==='string'&&invitation.length>0&&invitation.length<=16384);
