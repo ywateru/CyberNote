@@ -155,10 +155,14 @@ PICKER_COMPONENT = r'(?:com\.google\.android\.documentsui|com\.android\.document
 def picker_key(foreground, key):
     require(type(key) is str and key in PICKER_KEYS, 'fixed picker navigation key required')
     require(type(foreground) is str, 'actual picker foreground required')
-    resumed = re.findall(r'^\s*mResumedActivity: ActivityRecord\{[^{}\n]* u0 ([^\s}]+)[^{}\n]*\}\s*$', foreground, re.M)
-    focused = re.findall(r'^\s*mCurrentFocus=Window\{[^{}\n]* u0 ([^\s}]+)\}\s*$', foreground, re.M)
-    require(len(resumed) == 1 and re.fullmatch(PICKER_COMPONENT, resumed[0]), 'exact DocumentsUI resumed picker required')
-    require(len(focused) == 1 and focused == resumed, 'exact DocumentsUI focused picker required')
+    resumed_lines = [line.strip() for line in foreground.splitlines() if re.match(r'^\s*mResumedActivity\s*:', line)]
+    focused_lines = [line.strip() for line in foreground.splitlines() if re.match(r'^\s*mCurrentFocus\s*=', line)]
+    require(len(resumed_lines) == 1, 'exactly one resumed activity field required')
+    require(len(focused_lines) == 1, 'exactly one current focus field required')
+    resumed = re.fullmatch(r'mResumedActivity: ActivityRecord\{[^{}\n]* u0 (' + PICKER_COMPONENT + r')[^{}\n]*\}', resumed_lines[0])
+    focused = re.fullmatch(r'mCurrentFocus=Window\{[^{}\n]* u0 (' + PICKER_COMPONENT + r')\}', focused_lines[0])
+    require(resumed is not None, 'exact DocumentsUI resumed picker required')
+    require(focused is not None and focused[1] == resumed[1], 'exact DocumentsUI focused picker required')
     return PICKER_KEYS[key]
 
 def main():

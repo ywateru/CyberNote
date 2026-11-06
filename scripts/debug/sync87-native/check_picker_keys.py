@@ -11,6 +11,14 @@ for key,value in g.PICKER_KEYS.items():
     assert g.picker_key(foreground,key)==value;checks+=1
 negative=[(foreground,k) for k in ['3','HOME','BACK','ENTER;id','enter','',None,66]]
 negative.extend((text,'ENTER') for text in [None,'',foreground.replace('PickActivity','FilesActivity'),foreground.replace('com.google.android.documentsui','com.foreign.documentsui'),foreground.replace('u0','u10'),foreground+foreground,foreground.splitlines()[0],foreground.replace('mCurrentFocus','mLastFocus'),foreground.replace('mCurrentFocus=Window{def u0 '+component,'mCurrentFocus=Window{def u0 com.local.notesclone/.MainActivity')])
+negative.extend((foreground+extra,'ENTER') for extra in [
+ 'mResumedActivity: ActivityRecord{foreign u10 com.foreign/.Main t42}\n',
+ 'mCurrentFocus=Window{foreign u10 com.foreign/.Main}\n',
+ 'mResumedActivity: malformed\n',
+ 'mCurrentFocus=malformed\n',
+ 'mResumedActivity : malformed\n',
+ 'mCurrentFocus = malformed\n',
+])
 for text,key in negative:
     try:g.picker_key(text,key)
     except g.Refused:checks+=1
