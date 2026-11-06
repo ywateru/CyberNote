@@ -12,9 +12,9 @@
 
 ## 原子记录与本地身份
 
-使用独立同步扩展schema（显式版本、精确校验、事务安装），不篡改既有业务表校验。同步首次启用时分配稳定workspace UUID、device UUID与单调计数；客户端配对采用集合点workspace但保留本地device和已有业务记录。仅首次bootstrap扫描当前数据。后续使用SQLite触发器在每次业务 INSERT/UPDATE/DELETE 同一事务内记录 dirty(kind,id)，涵盖Store、smart、archive和附件写入；不在CommitReceipt之后补outbox。dirty只存身份，不复制旧正文。附件变化标记owner note；settings不触发。未启用同步的库不做网络活动。
+使用独立同步扩展schema（显式版本、精确校验、事务安装），不篡改既有业务表校验。同步首次启用时分配稳定workspace UUID、device UUID与单调计数；客户端配对采用集合点workspace但保留本地device和已有业务记录。仅首次bootstrap扫描当前数据。default/quick/trash三个系统目录固定保留在本机，不进入wire、dirty或冲突解决，避免createdAt不同产生伪冲突。后续使用SQLite触发器在每次业务 INSERT/UPDATE/DELETE 同一事务内记录 dirty(kind,id)，涵盖Store、smart、archive和附件写入；不在CommitReceipt之后补outbox。dirty只存身份，不复制旧正文。附件变化标记owner note；settings不触发。未启用同步的库不做网络活动。
 
-将dirty固化为版本的事务中同时更新计数、版本头、已见版本摘要及清除dirty。网络apply首先固化尚存的本地dirty，随后在同一事务内关闭本地capture、合并远端heads、重投影业务行、更新已见摘要、恢复capture。回滚恢复开关及原数据；远端apply不会生成无限新本地操作。ACK只能在版本与所需blob均持久提交后发出。业务行有dirty即保证重启后可补发，不要求每个尚未发送的连续按键保留旧全文历史。
+将dirty固化为版本的事务中同时更新计数、版本头、已见版本摘要及清除dirty。网络apply首先固化尚存的本地dirty，随后在同一事务内关闭本地capture、合并远端heads、重投影业务行、更新已见摘要、恢复capture。回滚恢复开关及原数据；远端apply不会生成无限新本地操作。收件ACK（durable）只表示已校验版本inbox及所需blob均持久落盘，不能显示为已应用；应用ACK（applied）必须等Session安全屏障之后版本头与业务投影事务提交。业务行有dirty即保证重启后可补发，不要求每个尚未发送的连续按键保留旧全文历史。
 
 ## 版本与删除
 
@@ -28,21 +28,21 @@
 
 ## Wire模型
 
-WireVersion V1：workspaceId、kind(note/folder)、entityId、vector(BTreeMap UUID→正整数)、payload(null为purge墓碑，其他为原始实体封装)、digest。note payload包含原始Note去除本地revision，及只被该document真实引用的附件metadata+sha256。folder去除本地definitionRevision。对端传来的local revision/path绝不直接使用；投影本地Note revision递增使旧CAS失效，smart definitionRevision同理。
+WireVersion V1：workspaceId、kind(note/folder)、entityId、vector(BTreeMap UUID→正整数)、payload(null为purge墓碑，其他为原始实体封装)、digest。note payload包含原始Note去除本地revision，及只被该document真实引用的WireAttachment{id,noteId,kind,mime,displayName,size,recordedAt?,sha256}，deny_unknown_fields，排除relativePath。folder去除本地definitionRevision。对端传来的local revision/path绝不直接使用；投影本地Note revision递增使旧CAS失效，smart definitionRevision同理。
 
-禁止使用workspace()导出：它会把本机已解锁sealed正文解密。raw locked Note仅empty document、空plainText和sealed，既有title明文契约保留，但整条传输须认证加密。Session token、窗口、授权、settings和attachment_operations永不在wire。首次开启、重新锁定与分支压缩不额外保留线性旧明文；仍存的并发明文冲突须明确显示并允许用户处理，不能声称锁定某分支擦除了其他分支。密钥和配对凭据不进入数据库备份settings。
+禁止使用workspace()导出：它会把本机已解锁sealed正文解密。raw locked Note仅empty document、空plainText和sealed，既有title明文契约保留，但整条传输须认证加密。Session token、窗口、授权、settings和attachment_operations永不在wire。首次开启、重新锁定与分支压缩不额外保留线性旧明文；仍存的并发明文冲突须明确显示并允许用户处理，不能声称锁定某分支擦除了其他分支。密钥和配对凭据不进入数据库备份settings。lockNote写入同一SQL事务清除当前线性head与已知同因果inbox中的旧明文payload，保留vector/digest继承上下文，不能等后台下一flush才清；已redacted摘要不得出现在可fetch inventory。已知并发明文分支不被悄悄删除。
 
-接收前用现有生产归档/文档验证器验证字段、id、时间、文档节点、附件归属/类型/大小与sealed一致性；拒绝未知协议/字段、伪路径、同ID异内容、损坏hash、超过64层JSON/16MiB实体消息/64设备向量/32并发头/256MiB单blob。所有网络读有截止与帧长上限，坏数据不改变业务库与已确认状态。具体常量可保守降低，不能无说明提高。
+接收先用生产字段/文档规则验证单体wire，依赖暂缺或并发环进入pending或确定性图修复，最终投影才用完整业务图验证；不可直接把raw batch包装成归档而拒绝合法乱序。验证字段、id、时间、文档节点、附件归属/类型/大小与sealed一致性；拒绝未知协议/字段、伪路径、同ID异内容、损坏hash、超过64层JSON/16MiB实体消息/64设备向量/32并发头/256MiB单blob。所有网络读有截止与帧长上限，坏数据不改变业务库与已确认状态。单个head必须分片，最多16MiB有界重组而非强塞48KiB帧。另限制全局inbox最多1024版本/64MiB、同时staging最多4个/512MiB、同步blob缓存默认4GiB并保留至少256MiB磁盘余量；超过预算不ACK且显示可重试原因，重复hash不重复分配文件。具体常量可保守降低，不能无说明提高。
 
 ## 独立附件
 
-业务库只存metadata/引用，不存图片录音二进制。同步blob保存于独立.sync/blobs/<sha256>.blob，接收写独立随机staging，校验长度和SHA256、文件fsync、原子rename并同步目录后才可被版本引用。对端不得指定本机路径。断线只重传/续传未完成blob，不创建可读坏引用；启动清理/恢复staging，不用本地attachment_operations。当前业务附件投影使用每个attachment独有的受管路径，避免purge一张笔记误删其他冲突副本共用文件。已发布冲突blob和待处理版本不得被本地journal回收。暂不自动GC未引用同步blob。
+业务库只存metadata/引用，不存图片录音二进制。同步blob保存于独立.sync/blobs/<sha256>.blob，网络先在不持Store锁时写独立随机staging，再通过本地File短调用完成发布（不得让Store reader等待socket）；校验长度和SHA256、文件fsync、原子rename并同步目录后才可被版本引用。对端不得指定本机路径。断线只重传/续传未完成blob，不创建可读坏引用；启动清理/恢复staging，不用本地attachment_operations。当前业务附件投影使用每个attachment独有的受管路径，避免purge一张笔记误删其他冲突副本共用文件。已发布冲突blob和待处理版本不得被本地journal回收。暂不自动GC未引用同步blob。
 
 ## 配对、身份与传输
 
 使用标准Noise协议实现snow：Noise_XXpsk3_25519_ChaChaPoly_BLAKE2s；每连接完整新握手，再进入有序AEAD传输。WebSocket binary frame承载Noise消息，端点可ws或wss，不能因为隧道TLS在第三方终止而裸传笔记。协议/workspace绑定到prologue，握手后验证固定远端static public key。
 
-首次配对为有时限的一次性256bit PSK邀请（10分钟），串包含V1/workspace/邀请ID/endpoint/host public key/高熵PSK；不是自制6位码。握手证明PSK后从Noise获取client static key，成功时原子消费邀请并授权设备；此后相同凭据只接受已绑定static key。邀请撤销/过期不接受首次连接。凭据与static secret在.sync目录0600文件原子替换持久化，排除日志和归档。连接在每个读写请求检查授权，撤销后旧连接也拒绝。邀请与连接错误只显示安全摘要，不记录PSK、密钥或正文。
+首次配对为有时限的一次性256bit PSK邀请（10分钟），串包含V1/workspace/邀请ID/endpoint/host public key/高熵PSK；不是自制6位码。握手证明PSK后从Noise获取client static key，成功时原子消费邀请并授权设备；此后相同凭据只接受已绑定static key。邀请撤销/过期不接受首次连接。凭据与static secret在.sync目录0600文件原子替换持久化，排除日志和归档。跨身份文件/SQLite使用可恢复Prepared→幂等DB workspace adopt→Ready过程；Prepared不可发实体数据，崩溃后同一凭据可继续而不是丢失已adopt库。连接在每个读写请求检查授权，撤销后旧连接也拒绝。邀请与连接错误只显示安全摘要，不记录PSK、密钥或正文。
 
 认证前不返回实体清单、标题、数量或blob，只提供有界握手；网络只接受固定inventory/head/blob/push/status协议，不暴露IPC、debug、任意读写/导入导出路径。已配对设备有写权限，不把加密描述成阻止合法设备恶意删除；冲突保留/备份用于恢复。peer静态key+deviceId绑定，现有已加入不同workspace必须明确错误，不默默混合两个独立网络。
 
@@ -50,7 +50,7 @@ WireVersion V1：workspaceId、kind(note/folder)、entityId、vector(BTreeMap UU
 
 ## 应用桥接及UI
 
-远端消息先进入独立持久inbox，不直接覆盖活跃编辑器。准备apply时通过本机Session保存屏障和notes-access/notes-metadata排空pending，等待composition结束、picker/附件ACK/录音owner安全点，未就绪延后重试；不能把pending=false当composition完成。接收ACK只对持久inbox和blob为已收，另区分已应用状态。接收不可伪造本地window/epoch/token。保持当前编辑焦点和Undo，不因不相关远端变化重挂。
+远端消息先进入独立持久inbox，不直接覆盖活跃编辑器。准备apply使用独立quiet两阶段屏障，不能直接复用现notes-access prepare（会全窗cover、stop录音和destroy editor）。先通知窗口等待真实TagComposition与PM事务settled且不设Session.pending，允许最终IME保存intent；目标editor短暂freeze并flush收齐ACK后，再开commit gate并重新校验dirty generation/heads/依赖targets，变化则abort/reprepare。picker/附件ACK/录音owner仍活跃时延后其依赖变更，不为了远端apply强行pause/close；无关实体继续apply。不能把pending=false当composition完成。接收ACK只对持久inbox和blob为已收，另区分已应用状态。接收不可伪造本地window/epoch/token。保持当前编辑焦点和Undo，不因不相关远端变化重挂。普通内容/置顶/命名仅metadata，不统一bump noteEpoch；锁定/删除/sealed切换才撤销目标授权。可信snapshot若证明session、noteEpoch、owner/editor/document均不变，允许附件与录音目标重绑已变化的全局epoch，不能删其他校验。
 
 继续两个现有顶部标签，在“数据”区域加入“设备同步”子区域：
 

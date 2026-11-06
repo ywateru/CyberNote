@@ -9,3 +9,5 @@
 必须作者实际socket多进程/至少独立连接证明双向opaque数据流、错误PSK/hostkey/workspace/篡改/重放/过期/重复redeem/撤销活连接/大包/短连接/停止重启；假后端只证明网络层，不代表84 Store。保证接口允许后续两个生产Store接入。API先给根再做大规模实现。不要运行旧77测试/编辑旧UI；旧任务完全结束。
 
 官方资料优先 docs.rs/snow 与 noiseprotocol.org/noise.html；HTTP已确认可读，浏览器搜索工具当前无返回，保留实际来源与抓取证据，不编造引用。云隧道只设计同一wss端点兼容，自动公开真实库禁止。源码冻结commit、必要tests及未解决风险交根，不自行merge。
+
+独审设计修订：receive_head仅持久inbox，Receipt{durable,applied}区分已收与已应用；16MiB head必须分片重组，有总量/时限/深度预算，非仅blob分片。Prepared凭据→幂等DB adopt→Ready崩溃恢复，不允许身份文件与Store workspace失配时发数据。
