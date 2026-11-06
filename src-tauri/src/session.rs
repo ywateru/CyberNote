@@ -18,10 +18,12 @@ mod metadata;
 #[cfg(test)]
 #[path = "session/smart_tests.rs"]
 mod smart_tests;
+#[path = "session/synchronization.rs"]
+pub(crate) mod synchronization;
 #[cfg(test)]
 mod tests;
 #[derive(Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Token {
     pub session_id: String,
     pub epoch: u64,
@@ -53,6 +55,7 @@ pub struct Session {
     metadata_sequence: u64,
     metadata_event: Option<Value>,
     last_commit: Option<Value>,
+    quiet: synchronization::QuietState,
 }
 impl Session {
     pub fn new(store: Store) -> Self {
@@ -67,6 +70,7 @@ impl Session {
             metadata_sequence: 0,
             metadata_event: None,
             last_commit: None,
+            quiet: Default::default(),
         }
     }
     fn note_epoch(&self, id: &str) -> u64 {

@@ -172,6 +172,42 @@ pub struct IdentityStore {
     data: Mutex<Data>,
 }
 impl IdentityStore {
+    /// Read only device selector for a previously prepared identity. Complete
+    /// credential validation still happens in open, before any network is built.
+    pub fn existing_device_id(sync_directory: &Path) -> Result<Option<String>> {
+        match fs::symlink_metadata(sync_directory) {
+            Ok(meta) if meta.is_dir() && !meta.file_type().is_symlink() => (),
+            Ok(_) => return Err(SyncError::CorruptIdentity),
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(None),
+            Err(_) => return Err(SyncError::Io),
+        }
+        let path = sync_directory.join("identity-v1.json");
+        let meta = match fs::symlink_metadata(&path) {
+            Ok(meta) => meta,
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(None),
+            Err(_) => return Err(SyncError::Io),
+        };
+        if !meta.is_file() || meta.file_type().is_symlink() || meta.len() > 512 * 1024 {
+            return Err(SyncError::CorruptIdentity);
+        }
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            if meta.permissions().mode() & 0o777 != 0o600 {
+                return Err(SyncError::CorruptIdentity);
+            }
+        }
+        let mut bytes = Vec::new();
+        File::open(path)
+            .and_then(|f| f.take(512 * 1024 + 1).read_to_end(&mut bytes))
+            .map_err(|_| SyncError::Io)?;
+        let data: Data = serde_json::from_slice(&bytes).map_err(|_| SyncError::CorruptIdentity)?;
+        if data.version != 1 {
+            return Err(SyncError::CorruptIdentity);
+        }
+        uuid(&data.device_id)?;
+        Ok(Some(data.device_id))
+    }
     /// `sync_directory` is a trusted application-owned .sync directory, never a remote path.
     pub fn open(sync_directory: &Path, device_id: &str) -> Result<Self> {
         uuid(device_id)?;

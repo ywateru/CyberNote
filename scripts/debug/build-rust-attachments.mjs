@@ -19,8 +19,8 @@ if (!process.argv[2] || !target)
     "Usage: CARGO_TARGET_DIR=exclusively-assigned-cache node scripts/debug/build-rust-attachments.mjs FRESH_OUTPUT",
   );
 const digest = (bytes) => createHash("sha256").update(bytes).digest("hex");
-const files = ["src-tauri/src/store.rs", "src-tauri/src/session.rs"];
-for (const dir of ["store", "session"])
+const files = ["src-tauri/src/store.rs", "src-tauri/src/session.rs", "src-tauri/src/sync.rs"];
+for (const dir of ["store", "session", "sync"])
   for (const ent of await readdir(resolve(root, "src-tauri/src", dir), {
     recursive: true,
     withFileTypes: true,
@@ -39,7 +39,7 @@ const harness = resolve(out, "harness");
 await mkdir(harness);
 await cp(resolve(root, "scripts/debug/rust"), harness, { recursive: true });
 await mkdir(resolve(harness, "current"));
-for (const name of ["store.rs", "store", "session.rs", "session"])
+for (const name of ["store.rs", "store", "session.rs", "session", "sync.rs", "sync"])
   await cp(
     resolve(root, "src-tauri/src", name),
     resolve(harness, "current", name),

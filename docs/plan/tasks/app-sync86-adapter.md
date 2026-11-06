@@ -43,3 +43,13 @@ run/setup创建共享Session和惰性Sync runtime state；status不启用Store�
 `set_document_participants`的args为`{windows:["main","note-…"]}`，替换测试进程的真实本机窗口集合（最长64，唯一且只允许main/note-前缀）；由App DOM transport明确登记/注销，不从peer消息取窗口身份。`poll_events`的args为`{}`，返回`value:null`、`events:[{name:"notes-sync"|"notes-access"|"notes-metadata",payload:…}]`，原子排空异步事件队列。调用其他命令时也可带回已排队事件；客户端需持续并发poll，不能等pair或sync命令返回才处理probe/prepare。生产App使用AppHandle的实际document_participants和Emitter，不用这些测试命令。
 
 `headless_apply`仅stdin测试runner提供：必须先把participants设为空，显式调用才执行生产Store计划/应用；有窗口时明确拒绝。生产网络backend永远只receive inbox，不调用该命令或apply_pending。普通现有attachment transport命令保持原参数和响应。该本机stdin控制不对网络暴露，不替代真实PM/录音/窗口生命周期证明。
+
+### Rust实现范围与交付边界（86 develop）
+
+生产入口已接入惰性Runtime、AppHandle真实document participants、独立quiet状态与退出/前台生命周期。backend在完整wire/seen/inbox/附件归属预算校验后才允许分配blob；hashing、读File与发布File不持Session锁，receive仅写durable inbox。quiet的probe/prepare不设置access pending；最终Session gate重新检查窗口集合、epoch、目标save intents与Store计划，然后用真实commit receipt发布metadata及必要access撤权。resolve等待真实commit/abort终态返回。
+
+临时文件上限遵循主线规格提交`0f95545a`：network staging最多3文件/256MiB，串行Store capture staging最多1文件/256MiB，总计4文件/512MiB，单blob最多256MiB。network发布校验受控stage路径、File身份、SHA256与磁盘预算，使用跨进程文件锁串行发布，直接rename已验证File；已有损坏cache必须报错，重复有效发布幂等。Android系统备份配置排除identity所在私有数据，手动归档契约保持；Android编译/设备运行由后续整合验证。
+
+已有业务明确禁止含附件note加锁，也禁止locked note添加附件；locked wire的空document与附件引用一致性同样排除locked+media。本实现不扩展此schema、不引入alias或放宽验证。真实进程分别验证plain图片/音频并发keep-all与locked文本并发keep-all；locked+media只验证现有拒绝边界。
+
+本作者验证使用独立临时SQLite与生产socket/Noise/Store/Session，没有真实用户库、真实麦克风或设备操作。原Android未保存录音现场未触碰。独立双App DOM、UI录音/picker生命周期、87路由与新Android包/实际运行仍是整体交付门禁，单Rust adapter回归不能代替它们。完整命令、自然退出与故意SIGKILL、原始失败和修正后结果记录在`docs/verification/sync86-adapter-author/`。

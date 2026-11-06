@@ -433,17 +433,142 @@ impl Store {
             conflicts: self.conflict_count()?,
         })
     }
+    fn sync_access_states(&self) -> Result<HashMap<String, (bool, Option<i64>, Option<Value>)>> {
+        Ok(self
+            .notes()?
+            .into_iter()
+            .map(|n| (n.id, (n.locked, n.deleted_at, n.sealed)))
+            .collect())
+    }
+    fn sync_revoke_changed_keys(
+        &mut self,
+        before: &HashMap<String, (bool, Option<i64>, Option<Value>)>,
+    ) -> Result<()> {
+        let after = self.sync_access_states()?;
+        self.keys.retain(|id, _| before.get(id) == after.get(id));
+        Ok(())
+    }
+    pub(crate) fn sync_pending_count(&self) -> Result<usize> {
+        Ok(self
+            .db
+            .query_row("SELECT count(*) FROM sync_inbox", [], |r| r.get(0))?)
+    }
+    pub(crate) fn sync_conflict_count(&self) -> Result<usize> {
+        self.conflict_count()
+    }
     fn conflict_count(&self) -> Result<usize> {
         Ok(self.db.query_row("SELECT count(*) FROM (SELECT 1 FROM sync_heads GROUP BY kind,entity_id HAVING count(*)>1)",[],|r|r.get(0))?)
     }
-    pub fn sync_receive(&mut self, versions: Vec<WireVersion>) -> Result<SyncApplyReport> {
+    /// Read-only network allocation gate. Repeated inside receive because local
+    /// state can change while a socket transfers the validated media.
+    pub(crate) fn sync_validate_receive(&self, versions: &[WireVersion]) -> Result<()> {
         if !enabled(&self.db)? {
             return Err(err("sync_disabled", "尚未开启同步"));
         }
-        if versions.len() > 128 || serde_json::to_vec(&versions)?.len() > MAX_MESSAGE {
+        if versions.len() > 128 || serde_json::to_vec(versions)?.len() > MAX_MESSAGE {
             return Err(limit("一次收件超过128版本或16MiB"));
         }
         let workspace = identity(&self.db)?.workspace_id;
+        let mut inbox = self
+            .inbox()?
+            .into_iter()
+            .map(|w| (w.digest.clone(), w))
+            .collect::<BTreeMap<_, _>>();
+        let mut descriptors = BTreeMap::<String, String>::new();
+        let mut frontiers = BTreeMap::<(EntityKind, String), HashSet<String>>::new();
+        for wire in versions {
+            let attachments = validation::validate(wire, &workspace)?;
+            let vector = serde_json::to_string(&wire.vector)?;
+            let seen: Option<String> = self
+                .db
+                .query_row(
+                    "SELECT digest FROM sync_seen WHERE kind=?1 AND entity_id=?2 AND vector=?3",
+                    params![wire.kind.as_str(), wire.entity_id, vector],
+                    |r| r.get(0),
+                )
+                .optional()?;
+            if seen.as_ref().is_some_and(|digest| digest != &wire.digest) {
+                return Err(err("sync_equivocation", "已见版本向量内容不符"));
+            }
+            if seen.is_none() {
+                inbox.insert(wire.digest.clone(), wire.clone());
+            }
+            let key = (wire.kind.clone(), wire.entity_id.clone());
+            if !frontiers.contains_key(&key) {
+                let mut q = self.db.prepare(
+                    "SELECT actor_id FROM sync_frontiers WHERE kind=?1 AND entity_id=?2",
+                )?;
+                let actors = q
+                    .query_map(params![wire.kind.as_str(), wire.entity_id], |r| {
+                        r.get::<_, String>(0)
+                    })?
+                    .collect::<std::result::Result<HashSet<_>, _>>()?;
+                frontiers.insert(key.clone(), actors);
+            }
+            let actors = frontiers.get_mut(&key).unwrap();
+            actors.extend(wire.vector.keys().cloned());
+            if actors.len() > MAX_DEVICES {
+                return Err(limit("实体已见actor超过64个"));
+            }
+            for attachment in attachments {
+                let descriptor = serde_json::to_string(&attachment)?;
+                if descriptors
+                    .insert(attachment.id.clone(), descriptor.clone())
+                    .is_some_and(|old| old != descriptor)
+                {
+                    return Err(err(
+                        "sync_attachment_conflict",
+                        "同一附件ID含不同元数据或内容",
+                    ));
+                }
+                let existing: Option<String> = self
+                    .db
+                    .query_row(
+                        "SELECT descriptor FROM sync_attachments WHERE id=?1",
+                        [&attachment.id],
+                        |r| r.get(0),
+                    )
+                    .optional()?;
+                if existing.as_ref().is_some_and(|old| old != &descriptor) {
+                    return Err(err(
+                        "sync_attachment_conflict",
+                        "同一附件ID含不同元数据或内容",
+                    ));
+                }
+                let local: Option<String> = self
+                    .db
+                    .query_row(
+                        "SELECT body FROM attachments WHERE id=?1",
+                        [&attachment.id],
+                        |r| r.get(0),
+                    )
+                    .optional()?;
+                if let Some(local) = local {
+                    let local: Attachment = serde_json::from_str(&local)?;
+                    if local.note_id != attachment.note_id
+                        || local.kind != attachment.kind
+                        || local.mime != attachment.mime
+                        || local.display_name != attachment.display_name
+                        || local.size != attachment.size
+                        || local.recorded_at != attachment.recorded_at
+                        || blob::hash_file(&self.attachment_path(&local.relative_path)?)?
+                            != (attachment.sha256.clone(), attachment.size)
+                    {
+                        return Err(err(
+                            "sync_attachment_conflict",
+                            "远端附件ID与本机现有附件不一致",
+                        ));
+                    }
+                }
+            }
+        }
+        let bytes = inbox.values().try_fold(0usize, |n, w| {
+            Ok::<_, AppError>(n.saturating_add(serde_json::to_vec(w)?.len()))
+        })?;
+        if inbox.len() > 1024 || bytes > 64 * 1024 * 1024 {
+            return Err(limit("持久收件箱超过1024版本或64MiB"));
+        }
+
         // Validate a hypothetical union before acknowledging: pending heads obey
         // exactly the same vector/equivocation/concurrency budgets as live heads.
         let mut candidates = heads(&self.db)?
@@ -481,6 +606,11 @@ impl Store {
         if vectors.len() > MAX_ENTITIES || vectors.values().any(|v| v.len() > MAX_HEADS) {
             return Err(limit("实体数或并发头超限"));
         }
+        Ok(())
+    }
+    pub fn sync_receive(&mut self, versions: Vec<WireVersion>) -> Result<SyncApplyReport> {
+        self.sync_validate_receive(&versions)?;
+        let workspace = identity(&self.db)?.workspace_id;
         let tx = self.db.unchecked_transaction()?;
         let mut requested_missing = BTreeMap::new();
         for wire in versions {
@@ -625,6 +755,7 @@ impl Store {
         Ok(plan)
     }
     pub fn sync_apply_plan(&mut self, plan: &SyncApplyPlan) -> Result<SyncApplyReport> {
+        let access_before = self.sync_access_states()?;
         if !enabled(&self.db)? {
             return Err(err("sync_disabled", "尚未开启同步"));
         }
@@ -649,13 +780,7 @@ impl Store {
         }
         tx.execute("UPDATE sync_identity SET capture=1 WHERE singleton=1", [])?;
         tx.commit()?;
-        self.revoke_keys(
-            &changes
-                .iter()
-                .filter(|x| x.kind == EntityKind::Note)
-                .map(|x| x.entity_id.clone())
-                .collect::<Vec<_>>(),
-        );
+        self.sync_revoke_changed_keys(&access_before)?;
         for change in &changes {
             let revision = if change.kind == EntityKind::Note {
                 match self.note(&change.entity_id) {
@@ -723,6 +848,7 @@ impl Store {
         if kind == EntityKind::Folder && ["default", "quick", "trash", "all"].contains(&entity_id) {
             return Err(invalid("系统目录不能解决同步冲突"));
         }
+        let access_before = self.sync_access_states()?;
         let tx = self.db.unchecked_transaction()?;
         self.flush_in(&tx)?;
         let all = heads(&tx)?
@@ -813,13 +939,7 @@ impl Store {
         let changes = self.project_in(&tx, &HashSet::new(), false)?;
         tx.execute("UPDATE sync_identity SET capture=1 WHERE singleton=1", [])?;
         tx.commit()?;
-        self.revoke_keys(
-            &changes
-                .iter()
-                .filter(|x| x.kind == EntityKind::Note)
-                .map(|x| x.entity_id.clone())
-                .collect::<Vec<_>>(),
-        );
+        self.sync_revoke_changed_keys(&access_before)?;
         for change in &changes {
             let revision = if change.kind == EntityKind::Note {
                 match self.note(&change.entity_id) {
