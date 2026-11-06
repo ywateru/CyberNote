@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "scope": "independent source/host only, no device operations",
+  "checks": [
+    "actual diagnostic expression excludes invitation/native/exception sentinels",
+    "IME/UIA failure fields fixed redaction",
+    "fixed nine-step pairing sequence; invitation used once only as input",
+    "failure stops sequence without retry",
+    "pair/connectDesktop use fixed trace, invitation cleared in finally",
+    "outer attempt02 supervisor terminal metadata exit2 observed independently"
+  ],
+  "wrapper": {
+    "sessionId": 53620,
+    "exitCode": 2
+  }
+}
