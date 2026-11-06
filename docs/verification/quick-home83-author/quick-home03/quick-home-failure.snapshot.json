@@ -1,0 +1,2282 @@
+{
+  "version": 1,
+  "selector": ".app",
+  "html": "<div class=\"app   mobile   page-editor  \" style=\"--sidebar-width: 228px; --list-width: 280px; --format-height: 290px; --native-top: 0px;\"><input class=\"hidden-input\" multiple=\"\" type=\"file\"><input class=\"hidden-input\" accept=\"image/*,video/*\" capture=\"environment\" type=\"file\"><aside class=\"sidebar\"><div class=\"sidebar-toolbar\"><div class=\"sidebar-actions\"><button type=\"button\" aria-label=\"添加文件夹\" title=\"添加文件夹\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder-plus\"><path d=\"M12 10v6\"></path><path d=\"M9 13h6\"></path><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path></svg></button><button type=\"button\" aria-label=\"隐藏文件夹\" title=\"隐藏文件夹\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-panel-left\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"></rect><path d=\"M9 3v18\"></path></svg></button></div></div><div class=\"mobile-folder-nav\"><button aria-label=\"返回全部笔记\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-left\"><path d=\"m15 18-6-6 6-6\"></path></svg>笔记</button><button>编辑</button></div><h1 class=\"folder-large-title\">文件夹</h1><div class=\"mobile-folder-search\"><div class=\"search-box \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-search\"><circle cx=\"11\" cy=\"11\" r=\"8\"></circle><path d=\"m21 21-4.3-4.3\"></path></svg><input aria-label=\"搜索备忘录\" placeholder=\"搜索笔记\" value=\"\"></div></div><div class=\"folder-scroll\"><div class=\"folder-group quick-group\"><div><button class=\"folder-row mobile-quick-folder-row \" style=\"padding-left: 16px;\"><svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><rect x=\"3.5\" y=\"2.25\" width=\"19.5\" height=\"19.5\" rx=\"1.2\"></rect><path d=\"M3.5 6.1H23M7 10h2.3m3.1 0h2.3m3.1 0h1.5M7 13.5h2.3m3.1 0h5.4M7 17h2.3m3.1 0h2.3\"></path></svg><span>快速备忘录</span><span class=\"count\">0</span><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-right chevron\"><path d=\"m9 18 6-6-6-6\"></path></svg></button></div></div><div class=\"account-title\">在我的设备上</div><div class=\"folder-group\"><button class=\"folder-row selected\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder-open\"><path d=\"m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2\"></path></svg><span>全部备忘录</span><span class=\"count\">2</span><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-right chevron\"><path d=\"m9 18 6-6-6-6\"></path></svg></button><div><button class=\"folder-row  \" style=\"padding-left: 16px;\"><svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><path d=\"M1.6 3.3h6.1l2.5 2.5h13a1.6 1.6 0 0 1 1.6 1.6v12a1.6 1.6 0 0 1-1.6 1.6H1.6A1.6 1.6 0 0 1 0 19.4V4.9a1.6 1.6 0 0 1 1.6-1.6ZM0 8.8h24.8\"></path></svg><span>备忘录</span><span class=\"count\">2</span><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-right chevron\"><path d=\"m9 18 6-6-6-6\"></path></svg></button></div></div></div><div class=\"folder-footer\"><button aria-label=\"新建文件夹\"><svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><path d=\"M24 5.6h-9l-2.5-2.5H6.2a1.6 1.6 0 0 0-1.6 1.6v14.7A1.6 1.6 0 0 0 6.2 21h19.2a1.6 1.6 0 0 0 1.6-1.6v-8.1M4.6 8.8h18.2\"></path><circle cx=\"28.6\" cy=\"5\" r=\"4\"></circle><path d=\"M26.6 5h4m-2-2v4\"></path></svg></button><button type=\"button\" aria-label=\"新建备忘录\" title=\"新建备忘录\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-square-pen\"><path d=\"M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path><path d=\"M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z\"></path></svg></button></div></aside><section class=\"notes-pane gallery-pane\"><header class=\"notes-header\"><span></span><div class=\"mobile-home-actions\"><button type=\"button\" aria-label=\"文件夹\" title=\"文件夹\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder\"><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path></svg></button><button type=\"button\" aria-label=\"设置\" title=\"设置\" class=\"icon-button  mobile-home-settings\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-settings\"><path d=\"M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z\"></path><circle cx=\"12\" cy=\"12\" r=\"3\"></circle></svg></button></div></header><h1 class=\"notes-large-title\">笔记</h1><div class=\"mobile-list-search\"><div class=\"search-box \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-search\"><circle cx=\"11\" cy=\"11\" r=\"8\"></circle><path d=\"m21 21-4.3-4.3\"></path></svg><input aria-label=\"搜索备忘录\" placeholder=\"搜索笔记\" value=\"\"></div></div><div class=\"notes-scroll mobile-gallery\"><div class=\"note-entry \"><div class=\"note-row-wrap \"><div class=\"swipe-actions\"><button aria-label=\"置顶\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-pin\"><path d=\"M12 17v5\"></path><path d=\"M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z\"></path></svg></button><button aria-label=\"移动\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder\"><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path></svg></button><button aria-label=\"删除\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-trash2\"><path d=\"M3 6h18\"></path><path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\"></path><path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\"></path><line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\"></line><line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\"></line></svg></button></div><button class=\"note-row selected\" data-note-id=\"note-a\"><div class=\"mobile-note-card\"><strong>新备忘录</strong><p>Fixture A</p><div class=\"mobile-card-date\"><time datetime=\"2026-11-06T05:35:08.419Z\">11月6日</time></div></div></button></div></div><div class=\"note-entry \"><div class=\"note-row-wrap \"><div class=\"swipe-actions\"><button aria-label=\"置顶\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-pin\"><path d=\"M12 17v5\"></path><path d=\"M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z\"></path></svg></button><button aria-label=\"移动\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder\"><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path></svg></button><button aria-label=\"删除\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-trash2\"><path d=\"M3 6h18\"></path><path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\"></path><path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\"></path><line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\"></line><line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\"></line></svg></button></div><button class=\"note-row \" data-note-id=\"note-b\"><div class=\"mobile-note-card\"><strong>Fixture B</strong><p>无更多文本</p><div class=\"mobile-card-date\"><time datetime=\"1970-01-01T00:00:00.001Z\">1月1日</time></div></div></button></div></div></div><button type=\"button\" class=\"mobile-add-note\" aria-label=\"新建备忘录\" aria-busy=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-plus\" aria-hidden=\"true\"><path d=\"M5 12h14\"></path><path d=\"M12 5v14\"></path></svg></button></section><main class=\"editor-pane\"><header class=\"editor-header\"><button class=\"back-button\" aria-label=\"返回笔记\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-left\"><path d=\"m15 18-6-6 6-6\"></path></svg></button><div class=\"mobile-header-actions\"><button type=\"button\" aria-label=\"更多\" title=\"更多\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-ellipsis\"><circle cx=\"12\" cy=\"12\" r=\"1\"></circle><circle cx=\"19\" cy=\"12\" r=\"1\"></circle><circle cx=\"5\" cy=\"12\" r=\"1\"></circle></svg></button><button class=\"mobile-editor-done icon-button\" aria-label=\"完成编辑\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check\"><path d=\"M20 6 9 17l-5-5\"></path></svg></button></div></header><div class=\"editor-scroll\" data-mobile-editor-note=\"note-a\"><button class=\"note-date\">2026年11月6日 13:35</button><div class=\"note-document paper-context-plain\"><div><div contenteditable=\"true\" role=\"textbox\" aria-label=\"备忘录正文\" spellcheck=\"true\" data-paper-style=\"plain\" translate=\"no\" class=\"tiptap ProseMirror\" tabindex=\"0\"><div class=\"react-renderer node-attachment ProseMirror-selectednode\" contenteditable=\"false\" draggable=\"true\"><div class=\"attachment-node image\" data-attachment-id=\"d063df8a-5a19-4b96-b0d0-a12d94d2685f\" contenteditable=\"false\" data-node-view-wrapper=\"\" style=\"white-space: normal;\"><div class=\"image-attachment\"><button type=\"button\" class=\"image-open\" aria-label=\"预览图片 quick-home83.png\"><img alt=\"quick-home83.png\" draggable=\"false\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jGZkAAAAASUVORK5CYII=\"></button></div></div></div><p>Fixture A</p></div></div></div></div><div class=\"editor-tools bottom-tools\"><button class=\"format-button\" aria-label=\"格式\">格式</button><button type=\"button\" aria-label=\"核对清单\" title=\"核对清单\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check-check\"><path d=\"M18 6 7 17l-5-5\"></path><path d=\"m22 10-7.5 7.5L13 16\"></path></svg></button><button type=\"button\" aria-label=\"添加附件\" title=\"添加附件\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-paperclip\"><path d=\"M13.234 20.252 21 12.3\"></path><path d=\"m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486\"></path></svg></button><button type=\"button\" aria-label=\"绘画\" title=\"绘画\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-pen-tool\"><path d=\"M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z\"></path><path d=\"m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18\"></path><path d=\"m2.3 2.3 7.286 7.286\"></path><circle cx=\"11\" cy=\"11\" r=\"2\"></circle></svg></button></div></main></div>",
+  "normalizedHTML": "<div class=\"app   mobile   page-editor  \" style=\"--sidebar-width: 228px; --list-width: 280px; --format-height: 290px; --native-top: 0px;\"><input class=\"hidden-input\" multiple=\"\" type=\"file\"><input class=\"hidden-input\" accept=\"image/*,video/*\" capture=\"environment\" type=\"file\"><aside class=\"sidebar\"><div class=\"sidebar-toolbar\"><div class=\"sidebar-actions\"><button type=\"button\" aria-label=\"添加文件夹\" title=\"添加文件夹\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder-plus\"><path d=\"M12 10v6\"></path><path d=\"M9 13h6\"></path><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path></svg></button><button type=\"button\" aria-label=\"隐藏文件夹\" title=\"隐藏文件夹\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-panel-left\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"></rect><path d=\"M9 3v18\"></path></svg></button></div></div><div class=\"mobile-folder-nav\"><button aria-label=\"返回全部笔记\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-left\"><path d=\"m15 18-6-6 6-6\"></path></svg>笔记</button><button>编辑</button></div><h1 class=\"folder-large-title\">文件夹</h1><div class=\"mobile-folder-search\"><div class=\"search-box \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-search\"><circle cx=\"11\" cy=\"11\" r=\"8\"></circle><path d=\"m21 21-4.3-4.3\"></path></svg><input aria-label=\"搜索备忘录\" placeholder=\"搜索笔记\" value=\"\"></div></div><div class=\"folder-scroll\"><div class=\"folder-group quick-group\"><div><button class=\"folder-row mobile-quick-folder-row \" style=\"padding-left: 16px;\"><svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><rect x=\"3.5\" y=\"2.25\" width=\"19.5\" height=\"19.5\" rx=\"1.2\"></rect><path d=\"M3.5 6.1H23M7 10h2.3m3.1 0h2.3m3.1 0h1.5M7 13.5h2.3m3.1 0h5.4M7 17h2.3m3.1 0h2.3\"></path></svg><span>快速备忘录</span><span class=\"count\">0</span><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-right chevron\"><path d=\"m9 18 6-6-6-6\"></path></svg></button></div></div><div class=\"account-title\">在我的设备上</div><div class=\"folder-group\"><button class=\"folder-row selected\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder-open\"><path d=\"m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2\"></path></svg><span>全部备忘录</span><span class=\"count\">2</span><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-right chevron\"><path d=\"m9 18 6-6-6-6\"></path></svg></button><div><button class=\"folder-row  \" style=\"padding-left: 16px;\"><svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><path d=\"M1.6 3.3h6.1l2.5 2.5h13a1.6 1.6 0 0 1 1.6 1.6v12a1.6 1.6 0 0 1-1.6 1.6H1.6A1.6 1.6 0 0 1 0 19.4V4.9a1.6 1.6 0 0 1 1.6-1.6ZM0 8.8h24.8\"></path></svg><span>备忘录</span><span class=\"count\">2</span><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-right chevron\"><path d=\"m9 18 6-6-6-6\"></path></svg></button></div></div></div><div class=\"folder-footer\"><button aria-label=\"新建文件夹\"><svg aria-hidden=\"true\" focusable=\"false\" pointer-events=\"none\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" overflow=\"visible\"><path d=\"M24 5.6h-9l-2.5-2.5H6.2a1.6 1.6 0 0 0-1.6 1.6v14.7A1.6 1.6 0 0 0 6.2 21h19.2a1.6 1.6 0 0 0 1.6-1.6v-8.1M4.6 8.8h18.2\"></path><circle cx=\"28.6\" cy=\"5\" r=\"4\"></circle><path d=\"M26.6 5h4m-2-2v4\"></path></svg></button><button type=\"button\" aria-label=\"新建备忘录\" title=\"新建备忘录\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-square-pen\"><path d=\"M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path><path d=\"M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z\"></path></svg></button></div></aside><section class=\"notes-pane gallery-pane\"><header class=\"notes-header\"><span></span><div class=\"mobile-home-actions\"><button type=\"button\" aria-label=\"文件夹\" title=\"文件夹\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder\"><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path></svg></button><button type=\"button\" aria-label=\"设置\" title=\"设置\" class=\"icon-button  mobile-home-settings\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-settings\"><path d=\"M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z\"></path><circle cx=\"12\" cy=\"12\" r=\"3\"></circle></svg></button></div></header><h1 class=\"notes-large-title\">笔记</h1><div class=\"mobile-list-search\"><div class=\"search-box \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-search\"><circle cx=\"11\" cy=\"11\" r=\"8\"></circle><path d=\"m21 21-4.3-4.3\"></path></svg><input aria-label=\"搜索备忘录\" placeholder=\"搜索笔记\" value=\"\"></div></div><div class=\"notes-scroll mobile-gallery\"><div class=\"note-entry \"><div class=\"note-row-wrap \"><div class=\"swipe-actions\"><button aria-label=\"置顶\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-pin\"><path d=\"M12 17v5\"></path><path d=\"M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z\"></path></svg></button><button aria-label=\"移动\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder\"><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path></svg></button><button aria-label=\"删除\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-trash2\"><path d=\"M3 6h18\"></path><path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\"></path><path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\"></path><line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\"></line><line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\"></line></svg></button></div><button class=\"note-row selected\" data-note-id=\"note-a\"><div class=\"mobile-note-card\"><strong>新备忘录</strong><p>Fixture A</p><div class=\"mobile-card-date\"><time datetime=\"2026-11-06T05:35:08.419Z\">11月6日</time></div></div></button></div></div><div class=\"note-entry \"><div class=\"note-row-wrap \"><div class=\"swipe-actions\"><button aria-label=\"置顶\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-pin\"><path d=\"M12 17v5\"></path><path d=\"M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z\"></path></svg></button><button aria-label=\"移动\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-folder\"><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path></svg></button><button aria-label=\"删除\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-trash2\"><path d=\"M3 6h18\"></path><path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\"></path><path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\"></path><line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\"></line><line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\"></line></svg></button></div><button class=\"note-row \" data-note-id=\"note-b\"><div class=\"mobile-note-card\"><strong>Fixture B</strong><p>无更多文本</p><div class=\"mobile-card-date\"><time datetime=\"1970-01-01T00:00:00.001Z\">1月1日</time></div></div></button></div></div></div><button type=\"button\" class=\"mobile-add-note\" aria-label=\"新建备忘录\" aria-busy=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-plus\" aria-hidden=\"true\"><path d=\"M5 12h14\"></path><path d=\"M12 5v14\"></path></svg></button></section><main class=\"editor-pane\"><header class=\"editor-header\"><button class=\"back-button\" aria-label=\"返回笔记\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-left\"><path d=\"m15 18-6-6 6-6\"></path></svg></button><div class=\"mobile-header-actions\"><button type=\"button\" aria-label=\"更多\" title=\"更多\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-ellipsis\"><circle cx=\"12\" cy=\"12\" r=\"1\"></circle><circle cx=\"19\" cy=\"12\" r=\"1\"></circle><circle cx=\"5\" cy=\"12\" r=\"1\"></circle></svg></button><button class=\"mobile-editor-done icon-button\" aria-label=\"完成编辑\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check\"><path d=\"M20 6 9 17l-5-5\"></path></svg></button></div></header><div class=\"editor-scroll\" data-mobile-editor-note=\"note-a\"><button class=\"note-date\">2026年11月6日 13:35</button><div class=\"note-document paper-context-plain\"><div><div contenteditable=\"true\" role=\"textbox\" aria-label=\"备忘录正文\" spellcheck=\"true\" data-paper-style=\"plain\" translate=\"no\" class=\"tiptap ProseMirror\" tabindex=\"0\"><div class=\"react-renderer node-attachment ProseMirror-selectednode\" contenteditable=\"false\" draggable=\"true\"><div class=\"attachment-node image\" data-attachment-id=\"uuid-1\" contenteditable=\"false\" data-node-view-wrapper=\"\" style=\"white-space: normal;\"><div class=\"image-attachment\"><button type=\"button\" class=\"image-open\" aria-label=\"预览图片 quick-home83.png\"><img alt=\"quick-home83.png\" draggable=\"false\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jGZkAAAAASUVORK5CYII=\"></button></div></div></div><p>Fixture A</p></div></div></div></div><div class=\"editor-tools bottom-tools\"><button class=\"format-button\" aria-label=\"格式\">格式</button><button type=\"button\" aria-label=\"核对清单\" title=\"核对清单\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check-check\"><path d=\"M18 6 7 17l-5-5\"></path><path d=\"m22 10-7.5 7.5L13 16\"></path></svg></button><button type=\"button\" aria-label=\"添加附件\" title=\"添加附件\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-paperclip\"><path d=\"M13.234 20.252 21 12.3\"></path><path d=\"m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486\"></path></svg></button><button type=\"button\" aria-label=\"绘画\" title=\"绘画\" class=\"icon-button  \"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-pen-tool\"><path d=\"M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z\"></path><path d=\"m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18\"></path><path d=\"m2.3 2.3 7.286 7.286\"></path><circle cx=\"11\" cy=\"11\" r=\"2\"></circle></svg></button></div></main></div>",
+  "text": "笔记编辑文件夹快速备忘录0在我的设备上全部备忘录2备忘录2笔记新备忘录Fixture A11月6日Fixture B无更多文本1月1日2026年11月6日 13:35Fixture A格式",
+  "htmlTruncated": false,
+  "nodesTruncated": true,
+  "normalization": [
+    "UUID tokens mapped bijectively in occurrence order; text/styles retained",
+    "rect rounded to 0.01px"
+  ],
+  "nodes": [
+    {
+      "index": 0,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "笔记编辑文件夹快速备忘录0在我的设备上全部备忘录2备忘录2笔记新备忘录Fixture A11月6日Fixture B无更多文本1月1日2026年11月6日 13:35Fixture A格式",
+      "visible": true,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "computed": {
+        "display": "block",
+        "position": "relative",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgb(242, 242, 247)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 1,
+      "tag": "input",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "none",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 2,
+      "tag": "input",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "none",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 3,
+      "tag": "aside",
+      "role": null,
+      "label": null,
+      "text": "笔记编辑文件夹快速备忘录0在我的设备上全部备忘录2备忘录2",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "none",
+        "position": "absolute",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgb(242, 242, 247)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 4,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "none",
+        "position": "relative",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px 7px 0px 0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 5,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "7px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 6,
+      "tag": "button",
+      "role": null,
+      "label": "添加文件夹",
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "8px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 7,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 8,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 9,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 10,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 11,
+      "tag": "button",
+      "role": null,
+      "label": "隐藏文件夹",
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "8px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 12,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 13,
+      "tag": "rect",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 14,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 15,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "笔记编辑",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "6px 17px 0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 16,
+      "tag": "button",
+      "role": null,
+      "label": "返回全部笔记",
+      "text": "笔记",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "2px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 17,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 18,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 19,
+      "tag": "button",
+      "role": null,
+      "label": null,
+      "text": "编辑",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "2px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 20,
+      "tag": "h1",
+      "role": null,
+      "label": null,
+      "text": "文件夹",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "34px",
+        "font-weight": "700",
+        "line-height": "41px",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 21,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px 16px",
+        "gap": "9px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 22,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(138, 138, 138)",
+        "background-color": "rgb(227, 227, 232)",
+        "padding": "0px 8px",
+        "gap": "6px",
+        "border-radius": "10px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 23,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(138, 138, 138)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 24,
+      "tag": "circle",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(138, 138, 138)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 25,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(138, 138, 138)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 26,
+      "tag": "input",
+      "role": null,
+      "label": "搜索备忘录",
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "22px",
+        "color": "rgb(138, 138, 138)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "1px 2px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 27,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "快速备忘录0在我的设备上全部备忘录2备忘录2",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "16px 0px 0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 28,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "快速备忘录0",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgb(255, 255, 255)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "10px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 29,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "快速备忘录0",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 30,
+      "tag": "button",
+      "role": null,
+      "label": null,
+      "text": "快速备忘录0",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "relative",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgb(255, 255, 255)",
+        "padding": "0px 16px",
+        "gap": "10px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 31,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 32,
+      "tag": "rect",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 33,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 34,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "快速备忘录",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 35,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "0",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(151, 151, 157)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 36,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(184, 184, 191)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 37,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(184, 184, 191)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 38,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "在我的设备上",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "19px",
+        "font-weight": "650",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "26px 17px 11px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 39,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "全部备忘录2备忘录2",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgb(255, 255, 255)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "10px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 40,
+      "tag": "button",
+      "role": null,
+      "label": null,
+      "text": "全部备忘录2",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "relative",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgb(255, 255, 255)",
+        "padding": "0px 16px",
+        "gap": "10px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 41,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 42,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 43,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "全部备忘录",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 44,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "2",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(151, 151, 157)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 45,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(184, 184, 191)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 46,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(184, 184, 191)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 47,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "备忘录2",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 48,
+      "tag": "button",
+      "role": null,
+      "label": null,
+      "text": "备忘录2",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "relative",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgb(255, 255, 255)",
+        "padding": "0px 16px",
+        "gap": "10px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 49,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 50,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 51,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "备忘录",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 52,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "2",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(151, 151, 157)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 53,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(184, 184, 191)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 54,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(184, 184, 191)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 55,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(248, 248, 250, 0.94)",
+        "padding": "0px 17px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 56,
+      "tag": "button",
+      "role": null,
+      "label": "新建文件夹",
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "7px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 57,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 58,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 59,
+      "tag": "circle",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 60,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 61,
+      "tag": "button",
+      "role": null,
+      "label": "新建备忘录",
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "7px",
+        "border-radius": "8px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 62,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 63,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 64,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(198, 158, 0)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 65,
+      "tag": "section",
+      "role": null,
+      "label": null,
+      "text": "笔记新备忘录Fixture A11月6日Fixture B无更多文本1月1日",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "none",
+        "position": "relative",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgb(242, 242, 247)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 66,
+      "tag": "header",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px 12px",
+        "gap": "4px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 67,
+      "tag": "span",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 68,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "8px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 69,
+      "tag": "button",
+      "role": null,
+      "label": "文件夹",
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "10px",
+        "gap": "normal",
+        "border-radius": "50%",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 70,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 71,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 72,
+      "tag": "button",
+      "role": null,
+      "label": "设置",
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "10px",
+        "gap": "normal",
+        "border-radius": "50%",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 73,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 74,
+      "tag": "path",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 75,
+      "tag": "circle",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "inline",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 76,
+      "tag": "h1",
+      "role": null,
+      "label": null,
+      "text": "笔记",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "34px",
+        "font-weight": "700",
+        "line-height": "42.5px",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 77,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(38, 38, 38)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px 16px",
+        "gap": "9px",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 78,
+      "tag": "div",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "flex",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(138, 138, 138)",
+        "background-color": "rgb(227, 227, 232)",
+        "padding": "0px 8px",
+        "gap": "6px",
+        "border-radius": "22px",
+        "opacity": "1"
+      }
+    },
+    {
+      "index": 79,
+      "tag": "svg",
+      "role": null,
+      "label": null,
+      "text": "",
+      "visible": false,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "computed": {
+        "display": "block",
+        "position": "static",
+        "font-family": "-apple-system, \"system-ui\", \"Helvetica Neue\", \"PingFang SC\", \"Noto Sans CJK SC\", Arial, sans-serif",
+        "font-size": "17px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(138, 138, 138)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "gap": "normal",
+        "border-radius": "0px",
+        "opacity": "1"
+      }
+    }
+  ],
+  "editorJSON": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "attachment",
+        "attrs": {
+          "id": "d063df8a-5a19-4b96-b0d0-a12d94d2685f",
+          "name": "quick-home83.png",
+          "kind": "image"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Fixture A"
+          }
+        ]
+      }
+    ]
+  },
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "theme": "light"
+}

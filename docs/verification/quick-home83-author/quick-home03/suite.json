@@ -1,0 +1,43 @@
+{
+  "results": [
+    {
+      "group": "quick-home",
+      "pass": false,
+      "checks": [
+        "Cold start opens all active notes directly with no editor focus or desktop view write",
+        "Home has one visible create action, folder/settings and no old count footer or fake microphone",
+        "Pending creation disables real plus and advertises busy",
+        "DOM double click and semantic create share one persisted receipt and exact editable focus",
+        "Done flushes real input and removes editor focus",
+        "Mobile editor keeps compact navigation and real tools without duplicate New or Share",
+        "Editor Back returns to source all gallery and retains saved body",
+        "Reload retains saved entity while cold navigation stays all without autofocus",
+        "Folders is a secondary page",
+        "Folders Back returns to all gallery instead of exiting",
+        "Physical folder creation preserves storage owner and source",
+        "Physical editor returns to its folder",
+        "Folder gallery Back returns to all",
+        "Unmatched smart-folder creation opens its receipt rather than an unrelated projected note",
+        "Unmatched smart receipt supports real input and enabled format controls without changing result membership",
+        "Unmatched smart receipt media actions save to its exact physical owner while smart count stays zero",
+        "Smart editor returns to original empty smart result",
+        "New clears temporary search while retaining physical source",
+        "Create failure keeps gallery and explicit recoverable error with no fake entity",
+        "Explicit create retry succeeds once after failure",
+        "Successful receipt survives metadata failure without pretending editor is ready",
+        "Same-source retry recovers exact existing receipt without another create",
+        "Delayed metadata never reopens or steals focus from a user-selected editor",
+        "Root Back cannot exit through a pending create",
+        "Root Back cancels pending focus but preserves committed entity",
+        "Locked card hides body preview from home HTML",
+        "Home settings opens shared settings tab with desktop-only view labels",
+        "Shared data tab remains reachable from quick home",
+        "Settings close restores actual visible home gear",
+        "Compact editor media menu still saves attachment through actual FileList and body ACK",
+        "Cold gallery leaves restored selection unmounted and does not read hidden media payloads"
+      ],
+      "error": "page.waitForFunction: Timeout 10000ms exceeded.",
+      "elapsedMs": 20935
+    }
+  ]
+}
