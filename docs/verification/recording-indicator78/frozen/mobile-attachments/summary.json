@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "mode": "group",
+  "sourceHead": "8fc060ddb0eaf85e482e7affe80883830fdd8f0f",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "09fb9ee8b4702499400963dbf4f16693cd5c8646565f06823aa9daeb39f4b9ce",
+    "fileCount": 90,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "09fb9ee8b4702499400963dbf4f16693cd5c8646565f06823aa9daeb39f4b9ce",
+    "fileCount": 90,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsChanged": false,
+  "platform": "mobile-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "elapsedMs": 32290,
+  "result": {
+    "groups": [
+      {
+        "group": "attachments",
+        "pass": true,
+        "checks": [
+          "New empty note real multi-FileList preserves both selected attachments",
+          "One Undo reverses latest insertion/history group together with its paragraph change",
+          "Redo restores latest selected file without duplicating another card",
+          "Next chooser appends after automatic insertion caret and preserves prior cards",
+          "Explicit user selection can replace old card without deleting retained media",
+          "One Undo restores explicitly replaced card through normal editor/save pipeline",
+          "Mobile menu chooser → actual FileList/onChange → PNG bytes and body ACK",
+          "Single image reads authorized stored bytes and actually decodes in HTML",
+          "Generic file and PDF each retain correct MIME/bytes/reference and ACK",
+          "Two selected images save exactly one reference per original file",
+          "Delayed media read survives next-file synchronize via fresh fully gated read",
+          "Missing File.type PNG is identified by bytes, persisted and displayed as image",
+          "Unknown empty-MIME bytes stay generic despite PNG filename",
+          "Same filename reselection creates two distinct operations and correct cards",
+          "System picker cancellation stores nothing",
+          "Picker can reselect after cancel with a fresh captured target",
+          "Chooser roundtrip blur/visibility/focus plus delayed actual FileReader preserves original target",
+          "FileReader abort ends pending with readable explicit error, no stored bytes",
+          "FileReader abort retry uses original retained operation once and reaches ACK",
+          "FileReader error ends pending with readable explicit error, no stored bytes",
+          "FileReader error retry uses original retained operation once and reaches ACK",
+          "Body save failure retains one stored attachment and explicit pending failure",
+          "Unsuccessful body retry keeps explicit error and pending/failed state",
+          "Body save retry commits same original operation without duplicate card",
+          "Lost store response queries original operation and ACKs once",
+          "Post-ACK list refresh failure retains committed body and one operation",
+          "Post-ACK retry refreshes only without another store/body save/card",
+          "Second item failure preserves first ACK and independent second operation",
+          "Multi-file retry retains first identity and inserts second exactly once",
+          "Cancel waits for actual delayed FileReader/store settling; no late body insertion",
+          "A chooser returning after navigation to B is rejected without storing/cross-note insertion",
+          "A chooser returning after original document change is rejected without storing",
+          "StrictMode canceled mount plus three live stale reads stop bounded with generic retry UI (reads=4)",
+          "Manual generic retry starts a new gated attempt and recovers correct stored content",
+          "Real boundary authorization rejection never publishes delayed bytes or an image URL",
+          "Navigation makes old media lifetime unable to publish into B",
+          "Unlocked locked-note attachment menu is disabled consistently with Rust store policy",
+          "Long generic/PDF cards stay within mobile editor at 390px light",
+          "Long generic/PDF cards stay within mobile editor at 390px dark",
+          "Long generic/PDF cards stay within mobile editor at 320px light",
+          "Long generic/PDF cards stay within mobile editor at 320px dark",
+          "Mobile attachments produce no page errors",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 28307
+      }
+    ],
+    "passedChecks": 43,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": []
+}

@@ -1,0 +1,81 @@
+{
+  "output": "/private/tmp/recording-indicator78-frozen-6781",
+  "results": [
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "wallMs": 5548
+    },
+    {
+      "name": "production",
+      "command": [
+        "pnpm",
+        "debug",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/recording-indicator78-frozen-6781/production"
+      ],
+      "exitCode": 0,
+      "wallMs": 2042
+    },
+    {
+      "name": "desktop",
+      "command": [
+        "pnpm",
+        "test:debug",
+        "--out",
+        "/private/tmp/recording-indicator78-frozen-6781/desktop"
+      ],
+      "exitCode": 0,
+      "wallMs": 53077
+    },
+    {
+      "name": "mobile-notes",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "notes",
+        "--mobile",
+        "--out",
+        "/private/tmp/recording-indicator78-frozen-6781/mobile-notes"
+      ],
+      "exitCode": 0,
+      "wallMs": 6679
+    },
+    {
+      "name": "mobile-recording",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "recording",
+        "--mobile",
+        "--out",
+        "/private/tmp/recording-indicator78-frozen-6781/mobile-recording"
+      ],
+      "exitCode": 0,
+      "wallMs": 14946
+    },
+    {
+      "name": "mobile-attachments",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "attachments",
+        "--mobile",
+        "--out",
+        "/private/tmp/recording-indicator78-frozen-6781/mobile-attachments"
+      ],
+      "exitCode": 0,
+      "wallMs": 46018
+    }
+  ]
+}
