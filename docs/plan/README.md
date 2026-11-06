@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-06：[持久同步核心84](tasks/app-sync84-core.md)与[认证网络85](tasks/app-sync85-network.md)进入实施，随后接Session/UI与真实双端验收；完整同步目标尚未完成。
+
 2026-11-06：82统一设置与83手机快速画廊已完成本轮限定交付。手机直接画廊、亮黄＋一键输入，设置/数据顶部双标签；主线桌面408/手机9+43+290、受影响组恢复与Mac26/Android构建16准确构建及独立核包通过。[交付和原始失败](../verification/mobile-home8283/README.md)、手机IME/provider及原版整窗像素边界可查，原Android录音现场未动。
 
 阶段记录（交付前，2026-11-06）：[统一设置82](tasks/app-preferences82.md)已通过作者52/50和独审32项并合入源码，无blocking；[Android快速首页83](tasks/app-android-quick-home83.md)现串行开发，最终[组合8283](tasks/app-mobile-home8283.md)一次完整回归/准确Mac26与Android16出包。此时尚未完成83或生成新包。
