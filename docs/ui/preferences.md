@@ -40,3 +40,5 @@
 新增settings.open无参（默认设置）、settings.tab {tab: settings|data}，App/catalog/protocol严格校验；app.state附preferences tab/open。既有data.open/refresh/navigate/filter/export与modal.open settings/data保持实际功能可用，必须复用真实handler；data操作在设置tab隐藏时明确拒绝或需要先切data，不允许偷偷操作不可见标签，已有在途操作可自然完成并保留结果。settings.update保留。
 
 新增preferences组覆盖真实齿轮和手机菜单入口、两tab默认/切换/键盘、控件更新和真实保存fixture、数据懒加载与状态保留、隐藏迟到请求/权限切换、备份取消/错误/恢复/活动录音禁用、关闭focus/bodyEscape、原生projection overlay、无数据正文/Undo改写、320/390/800/1280浅深长内容与短屏无横向溢出。保留并适配旧mac-feedback/data79/storage81/image80原断言（只更新真实入口/公共close选择器/几何查询，不删业务检查）。并入桌面all和手机attachments与CLI mobile allowlist。源码冻结后独审，主线build/production/desktop all/mobile notes+recording+attachments一次；双端准确Mac26/Android构建16和精简核包。只用独立合成浏览器与既有本地构建缓存，不操作已装App/真实麦克风/原Android现场；原版整窗像素继续单列。
+
+83手机快速画廊覆盖补充：手机固定画廊与不分日期时，显示方式/日期分组控件明确标为桌面设置（“桌面显示方式”“桌面按日期分组”），真实handler/持久化不变，桌面原label不变。以android-quick-home.md为准，不新造手机设置字段。

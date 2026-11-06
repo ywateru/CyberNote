@@ -26,7 +26,7 @@
 
 ## 呈现与尺寸
 
-手机采用独立derived gallery presentation，不强改共享settings.view，不向桌面写gallery，桌面列表/画廊/侧栏完全沿用原布局。手机启动只在初始化导航时进入全部notes，不在每次metadata refresh/导入hydrate时重置活跃scope；恢复/访问逻辑不得被全局替换为all。
+手机采用独立derived gallery presentation，不强改共享settings.view，不向桌面写gallery，桌面列表/画廊/侧栏完全沿用原布局。82设置在手机上将显示方式/日期分组明确标为“桌面显示方式”“桌面按日期分组”，仍调用真实共享设置handler并保留持久化；外观/排序继续影响手机，桌面现有label不变，避免手机出现无说明的显示选项。手机启动只在初始化导航时进入全部notes，不在每次metadata refresh/导入hydrate时重置活跃scope；恢复/访问逻辑不得被全局替换为all。
 
 以第一图的浅灰画布、白色圆角卡片、深色正文/灰色摘要日期和黄色主操作为方向；沿用系统字体和主题变量，避免引入字体资产。约390px：左右16px、列间12px，两列卡片，圆角约18px，标题17~18px/semibold、摘要14~15px/1.45、日期12px。标题仅出现一次，摘要排除首行标题，限制长度/行数，日期只出现一次；不再重复预览标题和卡片外标题。可用错落高度，DOM阅读/Tab顺序须与视觉从上到下、左右一致。默认不展示日期分组、计数footer、重复文件夹名；置顶/锁定/正在录音仅必要图标，不增额外操作栏。摘要不泄露未授权锁定正文，不为了缩略图批量读取媒体payload；有无附件均保持可用。
 
@@ -34,7 +34,7 @@
 
 ## 创建、编辑与返回
 
-＋、调试note.create和所有手机真实新建入口复用createNote→真实action收据→metadata/access授权→编辑器挂载→focus。有界防重复点击，pending时禁用；创建失败不假装打开新笔记、不吞错误。收据成功但metadata延迟/失败时沿用真实已创建实体恢复，不自动再create。异步结果/旧timeout不能在用户已导航、选别的笔记/关闭后把焦点抢回来；focus只针对这次成功的新noteId和当前连接的可编辑Tiptap，不能document.querySelector随便抓旧编辑器。真实Android调用既有keyboard bridge，浏览器只证明activeElement/selection，不冒充实际IME已验。新建pending期间root Back/退出不得绕过未完成创建/附件或录音的现有保存确认；导航可取消待聚焦意图但不撤销已持久化实体。
+＋、调试note.create和所有手机真实新建入口复用createNote→真实action收据→metadata/access授权→编辑器挂载→focus。有界防重复点击，pending时禁用；创建失败不假装打开新笔记、不吞错误。收据成功但metadata延迟/失败时沿用真实已创建实体恢复，不自动再create；同一来源的再次＋重试该receipt恢复，明确导航到其他来源后新一次＋可视为新的创建意图，旧实体继续保留等待同步，不能把旧owner误当新来源。异步结果/旧timeout不能在用户已导航、选别的笔记/关闭后把焦点抢回来；focus只针对这次成功的新noteId和当前连接的可编辑Tiptap，不能document.querySelector随便抓旧编辑器。真实Android调用既有keyboard bridge，浏览器只证明activeElement/selection，不冒充实际IME已验。新建pending期间root Back/退出不得绕过未完成创建/附件或录音的现有保存确认；导航可取消待聚焦意图但不撤销已持久化实体。
 
 编辑页左上简洁返回（可访问名明确），右侧撤销/重做按需、更多和完成；共享保留在已有更多菜单内，不常驻顶部。不再用长目录名挤占可输入区域；底部维持真实格式/清单/附件/绘画，去掉编辑器里重复新建按钮。完成提交/flush现有保存路径并收起键盘，返回画廊保留笔记及真实正文；不可擅自删除空白新建实体。系统Back优先关闭overlay/menu/search/IME/录音呈现等，保持现有保存链；editor→对应画廊、文件夹页→全部画廊、目录画廊→全部画廊、全部画廊root→flush成功后退出（存在未保存内容时阻止退出）。不能从首页Back再钻回文件夹旧root。搜索取消返回此前画廊，复用真实查询和权限过滤。
 
