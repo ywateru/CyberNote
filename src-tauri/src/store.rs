@@ -19,6 +19,9 @@ use uuid::Uuid;
 mod archive;
 #[path = "store/attachment_operations.rs"]
 mod attachment_operations;
+#[path = "store/data_management.rs"]
+mod data_management;
+pub(crate) use data_management::{AttachmentExport, DocumentStage};
 #[path = "store/commits.rs"]
 mod commits;
 #[path = "store/open.rs"]

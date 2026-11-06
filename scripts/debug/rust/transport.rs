@@ -46,10 +46,72 @@ fn command(session: &mut Session, row: &Value) -> Result<Value> {
                 session.ordinary(action, &token()?).map(|(value, _)| value)
             }
         }
-        "acknowledge_access" | "import_archive" | "export_archive" => Err(error(
+        "acknowledge_access" => Err(error(
             "transport_unsupported",
             "No simulated ACK/import/export barrier in attachment transport",
         )),
+        "debug_access_begin" => session.begin(
+            args["action"].clone(),
+            std::collections::HashSet::from([window.to_string()]),
+            &token()?,
+        ),
+        "debug_access_ack" => {
+            session.acknowledge(
+                field(args, "operationId")?,
+                window,
+                args["success"].as_bool().unwrap_or(false),
+            )?;
+            Ok(Value::Null)
+        }
+        "debug_access_finish" => {
+            let (result, _) = session.finish(
+                field(args, "operationId")?,
+                &std::collections::HashSet::from([window.to_string()]),
+                args["timeout"].as_bool().unwrap_or(false),
+            )?;
+            result
+        }
+        "debug_stage_document" => {
+            let stage = match field(args, "kind")? {
+                "archive" => session.stage_archive(&token()?)?,
+                "attachment" => session.stage_attachment(field(args, "id")?, &token()?)?.0,
+                "import" => session.import_stage(&token()?)?,
+                _ => return Err(error("invalid", "Unknown stage kind")),
+            };
+            let data = std::fs::read(stage.path())
+                .ok()
+                .map(|data| B64.encode(data));
+            let value = json!({"path":stage.path(), "data":data});
+            drop(stage);
+            Ok(value)
+        }
+        "get_data_management" => session.data_management(&token()?),
+        "export_attachment" => serde_json::to_value(session.export_attachment(
+            field(args, "id")?,
+            std::path::Path::new(field(args, "path")?),
+            &token()?,
+        )?)
+        .map_err(Into::into),
+        "export_archive" => {
+            session.export_archive(std::path::Path::new(field(args, "path")?), &token()?)?;
+            Ok(Value::Null)
+        }
+        // Explicit single synthetic participant. Exercise the real preflight,
+        // prepare, ACK and finish methods; this is not a multiwindow OS proof.
+        "import_archive" => {
+            let participants = std::collections::HashSet::from([window.to_string()]);
+            let event = session.begin(
+                json!({"type":"importArchive", "path":field(args, "path")?}),
+                participants.clone(),
+                &token()?,
+            )?;
+            let operation = event["operationId"]
+                .as_str()
+                .ok_or_else(|| error("internal", "Missing prepare operation"))?;
+            session.acknowledge(operation, window, true)?;
+            let (result, _) = session.finish(operation, &participants, false)?;
+            result
+        }
         "read_note_text" => {
             let id = field(args, "id")?;
             session.sensitive(id, &token()?)?;

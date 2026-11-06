@@ -561,7 +561,7 @@ impl Store {
         Ok(ImportPlan { archive, files })
     }
 
-    pub fn export_archive(&self, path: &Path) -> Result<()> {
+    fn archive_bytes(&self) -> Result<Vec<u8>> {
         let folders = self.folders()?;
         let notes = self.notes()?;
         let attachments = self.attachments()?;
@@ -578,7 +578,7 @@ impl Store {
             if a.size > MAX_ATTACHMENT || total > MAX_DECODED {
                 return Err(limit("附件超过归档大小上限"));
             }
-            let bytes = read_limited(&self.attachment_path(&a.relative_path)?, MAX_ATTACHMENT)?;
+            let bytes = self.managed_attachment_bytes(a)?;
             if bytes.len() as u64 != a.size {
                 return Err(invalid("本地附件大小与元数据不符"));
             }
@@ -607,35 +607,17 @@ impl Store {
             return Err(limit("归档超过 256 MiB 上限"));
         }
         validate_json_budget(&bytes)?;
-        let parent = path
-            .parent()
-            .filter(|p| !p.as_os_str().is_empty())
-            .unwrap_or_else(|| Path::new("."));
-        // Never allow the file picker to replace this application's live store.
-        let canonical_parent = parent.canonicalize()?;
-        let live_root = self.root.canonicalize()?;
-        let reserved_database = canonical_parent == live_root
-            && path.file_name().is_some_and(|n| {
-                ["notes.sqlite3", "notes.sqlite3-wal", "notes.sqlite3-shm"]
-                    .iter()
-                    .any(|reserved| n.to_string_lossy().eq_ignore_ascii_case(reserved))
-            });
-        if reserved_database
-            || canonical_parent.starts_with(live_root.join("attachments"))
-            || canonical_parent.starts_with(live_root.join(".imports"))
-        {
-            return Err(invalid("备份目标不能替换应用数据库或受管附件"));
-        }
-        let temporary = parent.join(format!(".notes-export-{}.tmp", id()));
-        let result: Result<()> = (|| {
-            write_new(&temporary, &bytes)?;
-            fs::rename(&temporary, path)?;
-            Ok(())
-        })();
-        if result.is_err() {
-            let _ = fs::remove_file(&temporary);
-        }
-        result
+        Ok(bytes)
+    }
+    pub fn export_archive(&self, path: &Path) -> Result<()> {
+        self.validate_export_target(path)?;
+        self.publish_export(path, &self.archive_bytes()?)
+    }
+    pub(crate) fn stage_archive(&self) -> Result<super::DocumentStage> {
+        let bytes = self.archive_bytes()?;
+        let stage = self.document_stage()?;
+        write_new(stage.path(), &bytes)?;
+        Ok(stage)
     }
 
     pub(crate) fn preflight_archive(&self, path: &Path) -> Result<()> {
