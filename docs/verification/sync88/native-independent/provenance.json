@@ -1,0 +1,19 @@
+{
+  "scope": "exact accepted read-only package audit template; no rebuild/sign/install/device operations",
+  "templateFiles": {
+    "audit-packages.py": {
+      "templateSha256": "54fa1e72e64ad9d08c0e7b62fccb10367bd1c8d3628b3768edf7e6555d4d847f",
+      "reviewToolSha256": "5d25d9998c11ccaf67a41c144957b35bfe5f55e945ccc53e7e9c7ea0493df374"
+    },
+    "extract-assets.mjs": {
+      "templateSha256": "4cc3f8387a214fc044a813e0307c4b009ac08cdf73bb39610391b2d6f90c5473",
+      "reviewToolSha256": "4cc3f8387a214fc044a813e0307c4b009ac08cdf73bb39610391b2d6f90c5473"
+    }
+  },
+  "changes": [
+    "audit docstring package labels Mac28/Android18",
+    "owned extraction prefix sync88 instead of sync87"
+  ],
+  "sourceAndroid": "2956f8fb49d8fd5b76cdcaa8de2be82126b8cfcb",
+  "sourceMac": "cf593d6303f62469a857e09e13385651737e4aac"
+}
