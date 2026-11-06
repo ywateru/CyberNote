@@ -32,6 +32,10 @@ public final class SyncTargetCounts {
         }
       }
     } catch (Throwable ignored) {
+      if (stage.equals("QUERY") && ignored instanceof android.database.sqlite.SQLiteException) {
+        String message = ignored.getMessage();
+        if (message != null && message.contains("no such function: json_extract")) stage = "QUERY_JSON_UNAVAILABLE";
+      }
       System.out.println("{\"ok\":false,\"error\":\"READONLY_COUNTS_FAILED\",\"stage\":\""+stage+"\"}");
     }
   }
