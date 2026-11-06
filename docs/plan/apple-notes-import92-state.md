@@ -6,13 +6,13 @@
 
 ## 当前主线和工作交接
 
-主线已合入 Store、固定 JXA、host/core/Session、UI/debug 及所有已准入修复。最后格式修复 `6febd39f` 已合为 `a8bc2452`；独立证据 `895652c1` 已合为 `7a602cca`。尚无 Mac30 包。
+主线已合入 Store、固定 JXA、host/core/Session、UI/debug 及所有已准入修复。最后格式修复 `6febd39f` 已合为 `a8bc2452`；独立证据 `895652c1` 已合为 `7a602cca`。Mac30 已生成，最终独立核包进行中。
 
 | 工作 | 工作树 / 负责代理 | 当前门槛 |
 | --- | --- | --- |
-| 主线集成、新 lean、实际 App DOM | `/private/tmp/apple-notes-import92-develop`；开发代理 | 已获 target84 排他使用权，按当前主线最终检查；真实来源测试默认 ignored，不再读取 Notes |
-| 保留真实内容的离线回放 | `/private/tmp/apple-notes-import92-real`；研究代理 | 方案已准备，等待最终修复后新 immutable lean；仅用保留私有快照，新建目标 Store |
-| 独立核查 | `/private/tmp/apple-notes-import92-review`；独审代理 | 格式修复已 PASS 并释放84；准备最终集成及 Mac30 包核查 |
+| 主线集成、新 lean、实际 App DOM | `/private/tmp/apple-notes-import92-develop`；开发代理 | 最终 Rust28/1ignored、类型/构建/生产排除及 AppDOM20通过；target84已释放，不再读取 Notes |
+| 保留真实内容的离线回放 | `/private/tmp/apple-notes-import92-real`；研究代理 | 新精确binary离线83项通过；六块/四br及完整raw/scalars/reopen/dedup精确，原real02不写 |
+| 独立核查 | `/private/tmp/apple-notes-import92-review`；独审代理 | 格式及最终lean/DOM证据PASS，离线安全证据已核；当前Mac30只读核包 |
 
 共享 Rust 缓存仅 `/private/tmp/apple-notes-sync84-target`，排他交接。不可并发修改。代码与测试由作者实现，不同代理独审，root 维护文档及合入。
 
@@ -26,10 +26,9 @@
 
 ## 尚待完成
 
-1. 当前主线相关 Rust/前端集成、新精确 lean、同实际 App DOM20项。
-2. 用该精确新 binary 将保留 real02 私有内容离线导入全新 Store，核对六个显示块及四个显式换行、raw、重开。此层 Source 是保留 fixture，不新增 Notes 读取，不修改原 real02 目标。
-3. 准确构建 Mac30，并由不同代理独立核对动态源码输入、内嵌前端、ZIP、实际签名 entitlement 和 `NSAppleEventsUsageDescription`。旧 adhoc 重签必须显式保留 Apple Events entitlement。
-4. 更新使用说明、最终交付记录及任务状态后再完成目标。
+Mac30 已通过作者准确构建和派生签名，独立核包进行中。相关主线集成及保留私有快照离线验证已完成。包通过后更新[最终交付](../verification/apple-notes-import92/DELIVERY.md)、[使用说明](../apple-notes-import-usage.md)和任务状态，再完成目标。
+
+Mac编译首轮自然0/30.999秒，340动态输入与批准Git逐字节一致。打包driver首轮因错误要求原linker临时签名含entitlement而停止，原失败/raw保留。独审后的postprocess续跑复用同编译raw/dist，不重编；最终derived显式Apple Events entitlement精确、Info精确、strict0，ZIP `artifacts/import92/备忘录-Mac30.zip` 已生成（SHA `6bb2553a9514a927685f13500a7ef6a87dc1c6eca13e17c561fb8936965a4655`）。这不是App实际TCC运行证明。
 
 ## 能力边界和隐私
 
