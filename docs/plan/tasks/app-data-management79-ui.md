@@ -15,7 +15,7 @@ docs/INDEX.md、docs/ui/data-management.md、docs/architecture.md、docs/debuggi
 
 # path
 
-src/**必要实现（新增DataManagement组件/DTO/bridge wrapper）、scripts/debug/**除rust-backend.rs和build-rust-attachments.mjs的UI/fixture/catalog/回归、新独立scripts/check-data-management-ui79.*、docs/verification/data-management79-ui/。不改Rust/plugins、根规格/任务/索引，不创建/删除worktree或合入。现有媒体生命周期保持，不凭猜测重写。
+src/**必要实现（新增DataManagement组件/DTO/bridge wrapper）、scripts/debug/**除rust/transport.rs和build-rust-attachments.mjs的UI/fixture/catalog/回归、新独立scripts/check-data-management-ui79.*、docs/verification/data-management79-ui/。不改Rust/plugins、根规格/任务/索引，不创建/删除worktree或合入。现有媒体生命周期保持，不凭猜测重写。
 
 # verification
 

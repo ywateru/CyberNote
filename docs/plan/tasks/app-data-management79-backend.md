@@ -15,7 +15,7 @@ docs/INDEX.md、docs/architecture.md、docs/ui/data-management.md、docs/debuggi
 
 # path
 
-仅src-tauri/**必要源码/测试、plugins/tauri-plugin-notes-scan/**的host文档流IO、scripts/debug/rust-backend.rs及必要build-rust-attachments.mjs接口、新独立scripts/check-data-management-rust79.*、docs/verification/data-management79-backend/。不改src/**前端、scripts/debug/runtime/fixture/scenarios/catalog等共享前端路径，不改根规格/任务/索引。不新增外部依赖，除非本机已存在且必要并先说明。
+仅src-tauri/**必要源码/测试、plugins/tauri-plugin-notes-scan/**的host文档流IO、scripts/debug/rust/transport.rs及必要build-rust-attachments.mjs接口、新独立scripts/check-data-management-rust79.*、docs/verification/data-management79-backend/。不改src/**前端、scripts/debug/runtime/fixture/scenarios/catalog等共享前端路径，不改根规格/任务/索引。不新增外部依赖，除非本机已存在且必要并先说明。
 
 # verification
 
