@@ -1,0 +1,20 @@
+
+running 15 tests
+test apple_notes_import::core::tests::actual_readonly_source_worker_to_isolated_store ... ignored, requires explicitly supplied private readonly source fixture and new output directory
+test apple_notes_import::core::tests::finite_failure_has_no_source_error_text ... ok
+test apple_notes_import::core::tests::bad_ancestry_is_not_guessed ... ok
+test apple_notes_import::core::tests::duplicate_source_identity_and_folder_cycles_are_rejected ... ok
+test apple_notes_import::core::tests::scan_resolves_ancestry_and_hides_source_identifiers ... ok
+test apple_notes_import::core::tests::stale_job_identity_is_rejected ... ok
+test apple_notes_import::core::tests::owned_export_rejects_links_and_reads_exact_owned_regular_bytes ... ok
+test apple_notes_import::core::tests::read_validates_stability_and_incomplete_media_never_becomes_source_note ... ok
+test apple_notes_import::core::tests::oversized_combined_metadata_is_rejected_before_loading_any_attachment ... ok
+test apple_notes_import::core::tests::stage_export_budget_stops_only_owned_process_before_timeout ... ok
+test apple_notes_import::core::tests::owned_process_cancel_and_timeout_reap_only_the_owned_child ... ok
+test apple_notes_import::core::tests::changed_access_during_read_and_foreign_owner_cannot_publish ... ok
+test apple_notes_import::core::tests::cancel_after_publication_started_reports_committed_outcome ... ok
+test apple_notes_import::core::tests::cancel_and_window_disappearance_during_read_prevent_real_store_commit ... ok
+test apple_notes_import::core::tests::same_core_worker_runs_preview_read_stage_session_store_and_duplicate_retry ... ok
+
+test result: ok. 14 passed; 0 failed; 1 ignored; 0 measured; 198 filtered out; finished in 0.11s
+
