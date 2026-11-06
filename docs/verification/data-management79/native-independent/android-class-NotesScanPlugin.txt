@@ -1,0 +1,767 @@
+Class descriptor: 'Lcom/local/notesscan/NotesScanPlugin;'
+name          : 'copyDocument$lambda$8'
+      type          : '(Lapp/tauri/plugin/Invoke;Lcom/local/notesscan/NotesScanPlugin;)Lorg/json/JSONObject;'
+      access        : 0x0018 (STATIC FINAL)
+      code          -
+      registers     : 27
+      ins           : 2
+      outs          : 6
+      insns size    : 812 16-bit code units
+007834:                                        |[007834] com.local.notesscan.NotesScanPlugin.copyDocument$lambda$8:(Lapp/tauri/plugin/Invoke;Lcom/local/notesscan/NotesScanPlugin;)Lorg/json/JSONObject;
+007844: 0801 1a00                              |0000: move-object/from16 v1, v26
+007848: 2200 0c01                              |0002: new-instance v0, Lorg/json/JSONObject; // type@010c
+00784c: 7401 b600 1900                         |0004: invoke-virtual/range {v25}, Lapp/tauri/plugin/Invoke;.getRawArgs:()Ljava/lang/String; // method@00b6
+007852: 0c02                                   |0007: move-result-object v2
+007854: 7020 c602 2000                         |0008: invoke-direct {v0, v2}, Lorg/json/JSONObject;.<init>:(Ljava/lang/String;)V // method@02c6
+00785a: 0702                                   |000b: move-object v2, v0
+00785c: 1a00 3c03                              |000c: const-string v0, "direction" // string@033c
+007860: 6e20 cc02 0200                         |000e: invoke-virtual {v2, v0}, Lorg/json/JSONObject;.getString:(Ljava/lang/String;)Ljava/lang/String; // method@02cc
+007866: 0c03                                   |0011: move-result-object v3
+007868: 1a00 1b04                              |0012: const-string v0, "maxBytes" // string@041b
+00786c: 6e20 cb02 0200                         |0014: invoke-virtual {v2, v0}, Lorg/json/JSONObject;.getLong:(Ljava/lang/String;)J // method@02cb
+007872: 0b07                                   |0017: move-result-wide v7
+007874: 1220                                   |0018: const/4 v0, #int 2 // #2
+007876: 2300 1b01                              |0019: new-array v0, v0, [Ljava/lang/String; // type@011b
+00787a: 1204                                   |001b: const/4 v4, #int 0 // #0
+00787c: 1a05 9204                              |001c: const-string v5, "read" // string@0492
+007880: 4d05 0004                              |001e: aput-object v5, v0, v4
+007884: 1216                                   |0020: const/4 v6, #int 1 // #1
+007886: 1a09 6805                              |0021: const-string v9, "write" // string@0568
+00788a: 4d09 0006                              |0023: aput-object v9, v0, v6
+00788e: 7110 a002 0000                         |0025: invoke-static {v0}, Lkotlin/collections/CollectionsKt;.listOf:([Ljava/lang/Object;)Ljava/util/List; // method@02a0
+007894: 0c00                                   |0028: move-result-object v0
+007896: 7220 8902 3000                         |0029: invoke-interface {v0, v3}, Ljava/util/List;.contains:(Ljava/lang/Object;)Z // method@0289
+00789c: 0a00                                   |002c: move-result v0
+00789e: 1a0a e103                              |002d: const-string v10, "invalid_document" // string@03e1
+0078a2: 3800 ee02                              |002f: if-eqz v0, 031d // +02ee
+0078a6: 160b 0000                              |0031: const-wide/16 v11, #int 0 // #0
+0078aa: 3100 070b                              |0033: cmp-long v0, v7, v11
+0078ae: 3a00 e802                              |0035: if-ltz v0, 031d // +02e8
+0078b2: 170d 0000 0010                         |0037: const-wide/32 v13, #float 2.52435e-29 // #10000000
+0078b8: 3100 070d                              |003a: cmp-long v0, v7, v13
+0078bc: 3c00 e102                              |003c: if-gtz v0, 031d // +02e1
+0078c0: 1a00 5705                              |003e: const-string v0, "uri" // string@0557
+0078c4: 6e20 cc02 0200                         |0040: invoke-virtual {v2, v0}, Lorg/json/JSONObject;.getString:(Ljava/lang/String;)Ljava/lang/String; // method@02cc
+0078ca: 0c00                                   |0043: move-result-object v0
+0078cc: 7110 4e00 0000                         |0044: invoke-static {v0}, Landroid/net/Uri;.parse:(Ljava/lang/String;)Landroid/net/Uri; // method@004e
+0078d2: 0c0d                                   |0047: move-result-object v13
+0078d4: 6e10 4d00 0d00                         |0048: invoke-virtual {v13}, Landroid/net/Uri;.getScheme:()Ljava/lang/String; // method@004d
+0078da: 0c00                                   |004b: move-result-object v0
+0078dc: 1a0e 1203                              |004c: const-string v14, "content" // string@0312
+0078e0: 7120 ab02 e000                         |004e: invoke-static {v0, v14}, Lkotlin/jvm/internal/Intrinsics;.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z // method@02ab
+0078e6: 0a00                                   |0051: move-result v0
+0078e8: 3800 bc02                              |0052: if-eqz v0, 030e // +02bc
+0078ec: 6e10 4c00 0d00                         |0054: invoke-virtual {v13}, Landroid/net/Uri;.getAuthority:()Ljava/lang/String; // method@004c
+0078f2: 0c00                                   |0057: move-result-object v0
+0078f4: 1f00 d900                              |0058: check-cast v0, Ljava/lang/CharSequence; // type@00d9
+0078f8: 3800 0a00                              |005a: if-eqz v0, 0064 // +000a
+0078fc: 7210 5902 0000                         |005c: invoke-interface {v0}, Ljava/lang/CharSequence;.length:()I // method@0259
+007902: 0a00                                   |005f: move-result v0
+007904: 3900 0300                              |0060: if-nez v0, 0063 // +0003
+007908: 2802                                   |0062: goto 0064 // +0002
+00790a: 0146                                   |0063: move v6, v4
+00790c: 3906 aa02                              |0064: if-nez v6, 030e // +02aa
+007910: 7120 ab02 9300                         |0066: invoke-static {v3, v9}, Lkotlin/jvm/internal/Intrinsics;.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z // method@02ab
+007916: 0a00                                   |0069: move-result v0
+007918: 3800 8800                              |006a: if-eqz v0, 00f2 // +0088
+00791c: 0000                                   |006c: nop // spacer
+00791e: 0000                                   |006d: nop // spacer
+007920: 5410 2f00                              |006e: iget-object v0, v1, Lcom/local/notesscan/NotesScanPlugin;.activity:Landroid/app/Activity; // field@002f
+007924: 6e10 0200 0000                         |0070: invoke-virtual {v0}, Landroid/app/Activity;.getPackageManager:()Landroid/content/pm/PackageManager; // method@0002
+00792a: 0c00                                   |0073: move-result-object v0
+00792c: 5416 2f00                              |0074: iget-object v6, v1, Lcom/local/notesscan/NotesScanPlugin;.activity:Landroid/app/Activity; // field@002f
+007930: 6e10 0300 0600                         |0076: invoke-virtual {v6}, Landroid/app/Activity;.getPackageName:()Ljava/lang/String; // method@0003
+007936: 0c06                                   |0079: move-result-object v6
+007938: 1309 0800                              |007a: const/16 v9, #int 8 // #8
+00793c: 6e30 0f00 6009                         |007c: invoke-virtual {v0, v6, v9}, Landroid/content/pm/PackageManager;.getPackageInfo:(Ljava/lang/String;I)Landroid/content/pm/PackageInfo; // method@000f
+007942: 0c00                                   |007f: move-result-object v0
+007944: 5400 0100                              |0080: iget-object v0, v0, Landroid/content/pm/PackageInfo;.providers:[Landroid/content/pm/ProviderInfo; // field@0001
+007948: 3800 4000                              |0082: if-eqz v0, 00c2 // +0040
+00794c: 0000                                   |0084: nop // spacer
+00794e: 0000                                   |0085: nop // spacer
+007950: 1206                                   |0086: const/4 v6, #int 0 // #0
+007952: 2209 ec00                              |0087: new-instance v9, Ljava/util/ArrayList; // type@00ec
+007956: 7010 8102 0900                         |0089: invoke-direct {v9}, Ljava/util/ArrayList;.<init>:()V // method@0281
+00795c: 1f09 ed00                              |008c: check-cast v9, Ljava/util/Collection; // type@00ed
+007960: 070e                                   |008e: move-object v14, v0
+007962: 120f                                   |008f: const/4 v15, #int 0 // #0
+007964: 0810 0e00                              |0090: move-object/from16 v16, v14
+007968: 1311 0000                              |0092: const/16 v17, #int 0 // #0
+00796c: 0513 0b00                              |0094: move-wide/from16 v19, v11
+007970: 0804 1000                              |0096: move-object/from16 v4, v16
+007974: 214b                                   |0098: array-length v11, v4
+007976: 120c                                   |0099: const/4 v12, #int 0 // #0
+007978: 35bc 1f00                              |009a: if-ge v12, v11, 00b9 // +001f
+00797c: 4610 040c                              |009c: aget-object v16, v4, v12
+007980: 0812 1000                              |009e: move-object/from16 v18, v16
+007984: 1315 0000                              |00a0: const/16 v21, #int 0 // #0
+007988: 0816 1200                              |00a2: move-object/from16 v22, v18
+00798c: 1317 0000                              |00a4: const/16 v23, #int 0 // #0
+007990: 0818 0000                              |00a6: move-object/from16 v24, v0
+007994: 0800 1600                              |00a8: move-object/from16 v0, v22
+007998: 5400 0200                              |00aa: iget-object v0, v0, Landroid/content/pm/ProviderInfo;.authority:Ljava/lang/String; // field@0002
+00799c: 3800 0700                              |00ac: if-eqz v0, 00b3 // +0007
+0079a0: 1316 0000                              |00ae: const/16 v22, #int 0 // #0
+0079a4: 7220 8302 0900                         |00b0: invoke-interface {v9, v0}, Ljava/util/Collection;.add:(Ljava/lang/Object;)Z // method@0283
+0079aa: 0000                                   |00b3: nop // spacer
+0079ac: d80c 0c01                              |00b4: add-int/lit8 v12, v12, #int 1 // #01
+0079b0: 0800 1800                              |00b6: move-object/from16 v0, v24
+0079b4: 28e2                                   |00b8: goto 009a // -001e
+0079b6: 0818 0000                              |00b9: move-object/from16 v24, v0
+0079ba: 0000                                   |00bb: nop // spacer
+0079bc: 0790                                   |00bc: move-object v0, v9
+0079be: 1f00 f000                              |00bd: check-cast v0, Ljava/util/List; // type@00f0
+0079c2: 0000                                   |00bf: nop // spacer
+0079c4: 0000                                   |00c0: nop // spacer
+0079c6: 2807                                   |00c1: goto 00c8 // +0007
+0079c8: 0513 0b00                              |00c2: move-wide/from16 v19, v11
+0079cc: 7100 9e02 0000                         |00c4: invoke-static {}, Lkotlin/collections/CollectionsKt;.emptyList:()Ljava/util/List; // method@029e
+0079d2: 0c00                                   |00c7: move-result-object v0
+0079d4: 0000                                   |00c8: nop // spacer
+0079d6: 0000                                   |00c9: nop // spacer
+0079d8: 6204 1f00                              |00ca: sget-object v4, Lcom/local/notesscan/DocumentUris;.INSTANCE:Lcom/local/notesscan/DocumentUris; // field@001f
+0079dc: 6e10 4c00 0d00                         |00cc: invoke-virtual {v13}, Landroid/net/Uri;.getAuthority:()Ljava/lang/String; // method@004c
+0079e2: 0c06                                   |00cf: move-result-object v6
+0079e4: 7110 ac02 0600                         |00d0: invoke-static {v6}, Lkotlin/jvm/internal/Intrinsics;.checkNotNull:(Ljava/lang/Object;)V // method@02ac
+0079ea: 5419 2f00                              |00d3: iget-object v9, v1, Lcom/local/notesscan/NotesScanPlugin;.activity:Landroid/app/Activity; // field@002f
+0079ee: 6e10 0300 0900                         |00d5: invoke-virtual {v9}, Landroid/app/Activity;.getPackageName:()Ljava/lang/String; // method@0003
+0079f4: 0c09                                   |00d8: move-result-object v9
+0079f6: 1a0b a203                              |00d9: const-string v11, "getPackageName(...)" // string@03a2
+0079fa: 7120 ad02 b900                         |00db: invoke-static {v9, v11}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ad
+007a00: 6e40 e800 6409                         |00de: invoke-virtual {v4, v6, v9, v0}, Lcom/local/notesscan/DocumentUris;.isManagedAuthority:(Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Z // method@00e8
+007a06: 0a04                                   |00e1: move-result v4
+007a08: 3904 0300                              |00e2: if-nez v4, 00e5 // +0003
+007a0c: 2810                                   |00e4: goto 00f4 // +0010
+007a0e: 1a04 8304                              |00e5: const-string v4, "protected_target" // string@0483
+007a12: 1a05 8a05                              |00e7: const-string v5, "导出目标不能替换应用自己的文档或缓存" // string@058a
+007a16: 7120 3402 5400                         |00e9: invoke-static {v4, v5}, Lcom/local/notesscan/SessionStoreKt;.fail:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Void; // method@0234
+007a1c: 2204 f900                              |00ec: new-instance v4, Lkotlin/KotlinNothingValueException; // type@00f9
+007a20: 7010 9a02 0400                         |00ee: invoke-direct {v4}, Lkotlin/KotlinNothingValueException;.<init>:()V // method@029a
+007a26: 2704                                   |00f1: throw v4
+007a28: 0513 0b00                              |00f2: move-wide/from16 v19, v11
+007a2c: 2200 d000                              |00f4: new-instance v0, Ljava/io/File; // type@00d0
+007a30: 5414 2f00                              |00f6: iget-object v4, v1, Lcom/local/notesscan/NotesScanPlugin;.activity:Landroid/app/Activity; // field@002f
+007a34: 6e10 0000 0400                         |00f8: invoke-virtual {v4}, Landroid/app/Activity;.getApplicationInfo:()Landroid/content/pm/ApplicationInfo; // method@0000
+007a3a: 0c04                                   |00fb: move-result-object v4
+007a3c: 5444 0000                              |00fc: iget-object v4, v4, Landroid/content/pm/ApplicationInfo;.dataDir:Ljava/lang/String; // field@0000
+007a40: 7020 3702 4000                         |00fe: invoke-direct {v0, v4}, Ljava/io/File;.<init>:(Ljava/lang/String;)V // method@0237
+007a46: 6e10 3c02 0000                         |0101: invoke-virtual {v0}, Ljava/io/File;.getCanonicalFile:()Ljava/io/File; // method@023c
+007a4c: 0c0b                                   |0104: move-result-object v11
+007a4e: 2200 d000                              |0105: new-instance v0, Ljava/io/File; // type@00d0
+007a52: 1a04 e100                              |0107: const-string v4, ".document-io" // string@00e1
+007a56: 7030 3602 b004                         |0109: invoke-direct {v0, v11, v4}, Ljava/io/File;.<init>:(Ljava/io/File;Ljava/lang/String;)V // method@0236
+007a5c: 070c                                   |010c: move-object v12, v0
+007a5e: 2200 d000                              |010d: new-instance v0, Ljava/io/File; // type@00d0
+007a62: 1a04 6904                              |010f: const-string v4, "path" // string@0469
+007a66: 6e20 cc02 4200                         |0111: invoke-virtual {v2, v4}, Lorg/json/JSONObject;.getString:(Ljava/lang/String;)Ljava/lang/String; // method@02cc
+007a6c: 0c04                                   |0114: move-result-object v4
+007a6e: 7020 3702 4000                         |0115: invoke-direct {v0, v4}, Ljava/io/File;.<init>:(Ljava/lang/String;)V // method@0237
+007a74: 070e                                   |0118: move-object v14, v0
+007a76: 6e10 3e02 0e00                         |0119: invoke-virtual {v14}, Ljava/io/File;.getParentFile:()Ljava/io/File; // method@023e
+007a7c: 0c00                                   |011c: move-result-object v0
+007a7e: 3800 e601                              |011d: if-eqz v0, 0303 // +01e6
+007a82: 070f                                   |011f: move-object v15, v0
+007a84: 6e10 4002 0c00                         |0120: invoke-virtual {v12}, Ljava/io/File;.isDirectory:()Z // method@0240
+007a8a: 0a00                                   |0123: move-result v0
+007a8c: 3800 d001                              |0124: if-eqz v0, 02f4 // +01d0
+007a90: 6e10 3c02 0c00                         |0126: invoke-virtual {v12}, Ljava/io/File;.getCanonicalFile:()Ljava/io/File; // method@023c
+007a96: 0c00                                   |0129: move-result-object v0
+007a98: 6e10 3b02 0c00                         |012a: invoke-virtual {v12}, Ljava/io/File;.getAbsoluteFile:()Ljava/io/File; // method@023b
+007a9e: 0c04                                   |012d: move-result-object v4
+007aa0: 7120 ab02 4000                         |012e: invoke-static {v0, v4}, Lkotlin/jvm/internal/Intrinsics;.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z // method@02ab
+007aa6: 0a00                                   |0131: move-result v0
+007aa8: 3800 c201                              |0132: if-eqz v0, 02f4 // +01c2
+007aac: 6e10 4002 0f00                         |0134: invoke-virtual {v15}, Ljava/io/File;.isDirectory:()Z // method@0240
+007ab2: 0a00                                   |0137: move-result v0
+007ab4: 3800 b701                              |0138: if-eqz v0, 02ef // +01b7
+007ab8: 6200 ce00                              |013a: sget-object v0, Lcom/local/notesscan/SessionStore;.Companion:Lcom/local/notesscan/SessionStore$Companion; // field@00ce
+007abc: 6e10 3d02 0f00                         |013c: invoke-virtual {v15}, Ljava/io/File;.getName:()Ljava/lang/String; // method@023d
+007ac2: 0c04                                   |013f: move-result-object v4
+007ac4: 1a06 9d03                              |0140: const-string v6, "getName(...)" // string@039d
+007ac8: 7120 ad02 6400                         |0142: invoke-static {v4, v6}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ad
+007ace: 6e20 1902 4000                         |0145: invoke-virtual {v0, v4}, Lcom/local/notesscan/SessionStore$Companion;.validId:(Ljava/lang/String;)Z // method@0219
+007ad4: 0a00                                   |0148: move-result v0
+007ad6: 3800 a601                              |0149: if-eqz v0, 02ef // +01a6
+007ada: 6e10 3c02 0f00                         |014b: invoke-virtual {v15}, Ljava/io/File;.getCanonicalFile:()Ljava/io/File; // method@023c
+007ae0: 0c00                                   |014e: move-result-object v0
+007ae2: 6e10 3b02 0f00                         |014f: invoke-virtual {v15}, Ljava/io/File;.getAbsoluteFile:()Ljava/io/File; // method@023b
+007ae8: 0c04                                   |0152: move-result-object v4
+007aea: 7120 ab02 4000                         |0153: invoke-static {v0, v4}, Lkotlin/jvm/internal/Intrinsics;.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z // method@02ab
+007af0: 0a00                                   |0156: move-result v0
+007af2: 3800 9301                              |0157: if-eqz v0, 02ea // +0193
+007af6: 6e10 3e02 0f00                         |0159: invoke-virtual {v15}, Ljava/io/File;.getParentFile:()Ljava/io/File; // method@023e
+007afc: 0c00                                   |015c: move-result-object v0
+007afe: 7120 ab02 c000                         |015d: invoke-static {v0, v12}, Lkotlin/jvm/internal/Intrinsics;.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z // method@02ab
+007b04: 0a00                                   |0160: move-result v0
+007b06: 3800 8901                              |0161: if-eqz v0, 02ea // +0189
+007b0a: 6e10 3d02 0e00                         |0163: invoke-virtual {v14}, Ljava/io/File;.getName:()Ljava/lang/String; // method@023d
+007b10: 0c00                                   |0166: move-result-object v0
+007b12: 1a04 6a04                              |0167: const-string v4, "payload" // string@046a
+007b16: 7120 ab02 4000                         |0169: invoke-static {v0, v4}, Lkotlin/jvm/internal/Intrinsics;.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z // method@02ab
+007b1c: 0a00                                   |016c: move-result v0
+007b1e: 3800 7801                              |016d: if-eqz v0, 02e5 // +0178
+007b22: 6e10 3c02 0e00                         |016f: invoke-virtual {v14}, Ljava/io/File;.getCanonicalFile:()Ljava/io/File; // method@023c
+007b28: 0c00                                   |0172: move-result-object v0
+007b2a: 6e10 3b02 0e00                         |0173: invoke-virtual {v14}, Ljava/io/File;.getAbsoluteFile:()Ljava/io/File; // method@023b
+007b30: 0c04                                   |0176: move-result-object v4
+007b32: 7120 ab02 4000                         |0177: invoke-static {v0, v4}, Lkotlin/jvm/internal/Intrinsics;.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z // method@02ab
+007b38: 0a00                                   |017a: move-result v0
+007b3a: 3800 6a01                              |017b: if-eqz v0, 02e5 // +016a
+007b3e: 1a00 5c03                              |017d: const-string v0, "expectedBytes" // string@035c
+007b42: 6e20 ce02 0200                         |017f: invoke-virtual {v2, v0}, Lorg/json/JSONObject;.isNull:(Ljava/lang/String;)Z // method@02ce
+007b48: 0a04                                   |0182: move-result v4
+007b4a: 1206                                   |0183: const/4 v6, #int 0 // #0
+007b4c: 3804 0400                              |0184: if-eqz v4, 0188 // +0004
+007b50: 0769                                   |0186: move-object v9, v6
+007b52: 280a                                   |0187: goto 0191 // +000a
+007b54: 6e20 cb02 0200                         |0188: invoke-virtual {v2, v0}, Lorg/json/JSONObject;.getLong:(Ljava/lang/String;)J // method@02cb
+007b5a: 0b10                                   |018b: move-result-wide v16
+007b5c: 7702 6502 1000                         |018c: invoke-static/range {v16, v17}, Ljava/lang/Long;.valueOf:(J)Ljava/lang/Long; // method@0265
+007b62: 0c00                                   |018f: move-result-object v0
+007b64: 0709                                   |0190: move-object v9, v0
+007b66: 3809 1e00                              |0191: if-eqz v9, 01af // +001e
+007b6a: 6e10 6402 0900                         |0193: invoke-virtual {v9}, Ljava/lang/Long;.longValue:()J // method@0264
+007b70: 0b10                                   |0196: move-result-wide v16
+007b72: 3100 1013                              |0197: cmp-long v0, v16, v19
+007b76: 3a00 0b00                              |0199: if-ltz v0, 01a4 // +000b
+007b7a: 6e10 6402 0900                         |019b: invoke-virtual {v9}, Ljava/lang/Long;.longValue:()J // method@0264
+007b80: 0b10                                   |019e: move-result-wide v16
+007b82: 3100 1007                              |019f: cmp-long v0, v16, v7
+007b86: 3c00 0300                              |01a1: if-gtz v0, 01a4 // +0003
+007b8a: 280c                                   |01a3: goto 01af // +000c
+007b8c: 1a00 b805                              |01a4: const-string v0, "无效预期文档长度" // string@05b8
+007b90: 7120 3402 0a00                         |01a6: invoke-static {v10, v0}, Lcom/local/notesscan/SessionStoreKt;.fail:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Void; // method@0234
+007b96: 2200 f900                              |01a9: new-instance v0, Lkotlin/KotlinNothingValueException; // type@00f9
+007b9a: 7010 9a02 0000                         |01ab: invoke-direct {v0}, Lkotlin/KotlinNothingValueException;.<init>:()V // method@029a
+007ba0: 2700                                   |01ae: throw v0
+007ba2: 7120 ab02 5300                         |01af: invoke-static {v3, v5}, Lkotlin/jvm/internal/Intrinsics;.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z // method@02ab
+007ba8: 0a00                                   |01b2: move-result v0
+007baa: 1a04 3e03                              |01b3: const-string v4, "document_io" // string@033e
+007bae: 3800 9c00                              |01b5: if-eqz v0, 0251 // +009c
+007bb2: 6e10 3a02 0e00                         |01b7: invoke-virtual {v14}, Ljava/io/File;.exists:()Z // method@023a
+007bb8: 0a00                                   |01ba: move-result v0
+007bba: 3900 8700                              |01bb: if-nez v0, 0242 // +0087
+007bbe: 6e10 3802 0e00                         |01bd: invoke-virtual {v14}, Ljava/io/File;.createNewFile:()Z // method@0238
+007bc4: 0a00                                   |01c0: move-result v0
+007bc6: 3800 8100                              |01c1: if-eqz v0, 0242 // +0081
+007bca: 5410 2f00                              |01c3: iget-object v0, v1, Lcom/local/notesscan/NotesScanPlugin;.activity:Landroid/app/Activity; // field@002f
+007bce: 6e10 0100 0000                         |01c5: invoke-virtual {v0}, Landroid/app/Activity;.getContentResolver:()Landroid/content/ContentResolver; // method@0001
+007bd4: 0c00                                   |01c8: move-result-object v0
+007bd6: 6e20 0400 d000                         |01c9: invoke-virtual {v0, v13}, Landroid/content/ContentResolver;.openInputStream:(Landroid/net/Uri;)Ljava/io/InputStream; // method@0004
+007bdc: 0c00                                   |01cc: move-result-object v0
+007bde: 3800 6a00                              |01cd: if-eqz v0, 0237 // +006a
+007be2: 070a                                   |01cf: move-object v10, v0
+007be4: 07a4                                   |01d0: move-object v4, v10
+007be6: 1f04 cf00                              |01d1: check-cast v4, Ljava/io/Closeable; // type@00cf
+007bea: 0745                                   |01d3: move-object v5, v4
+007bec: 1f05 d500                              |01d4: check-cast v5, Ljava/io/InputStream; // type@00d5
+007bf0: 1310 0000                              |01d6: const/16 v16, #int 0 // #0
+007bf4: 2200 d300                              |01d8: new-instance v0, Ljava/io/FileOutputStream; // type@00d3
+007bf8: 7020 4902 e000                         |01da: invoke-direct {v0, v14}, Ljava/io/FileOutputStream;.<init>:(Ljava/io/File;)V // method@0249
+007bfe: 0811 0200                              |01dd: move-object/from16 v17, v2
+007c02: 0702                                   |01df: move-object v2, v0
+007c04: 1f02 cf00                              |01e0: check-cast v2, Ljava/io/Closeable; // type@00cf
+007c08: 0720                                   |01e2: move-object v0, v2
+007c0a: 1f00 d300                              |01e3: check-cast v0, Ljava/io/FileOutputStream; // type@00d3
+007c0e: 1312 0000                              |01e5: const/16 v18, #int 0 // #0
+007c12: 0813 0400                              |01e7: move-object/from16 v19, v4
+007c16: 6204 1e00                              |01e9: sget-object v4, Lcom/local/notesscan/DocumentStreams;.INSTANCE:Lcom/local/notesscan/DocumentStreams; // field@001e
+007c1a: 0814 0600                              |01eb: move-object/from16 v20, v6
+007c1e: 0706                                   |01ed: move-object v6, v0
+007c20: 1f06 d600                              |01ee: check-cast v6, Ljava/io/OutputStream; // type@00d6
+007c24: 0815 0300                              |01f0: move-object/from16 v21, v3
+007c28: 0803 1300                              |01f2: move-object/from16 v3, v19
+007c2c: 0813 0000                              |01f4: move-object/from16 v19, v0
+007c30: 0800 1400                              |01f6: move-object/from16 v0, v20
+007c34: 7406 e500 0400                         |01f8: invoke-virtual/range {v4, v5, v6, v7, v8, v9}, Lcom/local/notesscan/DocumentStreams;.copy:(Ljava/io/InputStream;Ljava/io/OutputStream;JLjava/lang/Long;)J // method@00e5
+007c3a: 0b16                                   |01fb: move-result-wide v22
+007c3c: 7401 4a02 1300                         |01fc: invoke-virtual/range {v19}, Ljava/io/FileOutputStream;.getFD:()Ljava/io/FileDescriptor; // method@024a
+007c42: 0c04                                   |01ff: move-result-object v4
+007c44: 6e10 4702 0400                         |0200: invoke-virtual {v4}, Ljava/io/FileDescriptor;.sync:()V // method@0247
+007c4a: 0000                                   |0203: nop // spacer
+007c4c: 7120 a602 0200                         |0204: invoke-static {v2, v0}, Lkotlin/io/CloseableKt;.closeFinally:(Ljava/io/Closeable;Ljava/lang/Throwable;)V // method@02a6
+007c52: 0000                                   |0207: nop // spacer
+007c54: 7120 a602 0300                         |0208: invoke-static {v3, v0}, Lkotlin/io/CloseableKt;.closeFinally:(Ljava/io/Closeable;Ljava/lang/Throwable;)V // method@02a6
+007c5a: 2900 9700                              |020b: goto/16 02a2 // +0097
+007c5e: 0d00                                   |020d: move-exception v0
+007c60: 0704                                   |020e: move-object v4, v0
+007c62: 280c                                   |020f: goto 021b // +000c
+007c64: 0d00                                   |0210: move-exception v0
+007c66: 0815 0300                              |0211: move-object/from16 v21, v3
+007c6a: 0803 1300                              |0213: move-object/from16 v3, v19
+007c6e: 2805                                   |0215: goto 021a // +0005
+007c70: 0d00                                   |0216: move-exception v0
+007c72: 0815 0300                              |0217: move-object/from16 v21, v3
+007c76: 0743                                   |0219: move-object v3, v4
+007c78: 0704                                   |021a: move-object v4, v0
+007c7a: 2704                                   |021b: throw v4
+007c7c: 0d00                                   |021c: move-exception v0
+007c7e: 7120 a602 4200                         |021d: invoke-static {v2, v4}, Lkotlin/io/CloseableKt;.closeFinally:(Ljava/io/Closeable;Ljava/lang/Throwable;)V // method@02a6
+007c84: 2700                                   |0220: throw v0
+007c86: 0d00                                   |0221: move-exception v0
+007c88: 0702                                   |0222: move-object v2, v0
+007c8a: 280e                                   |0223: goto 0231 // +000e
+007c8c: 0d00                                   |0224: move-exception v0
+007c8e: 0815 0300                              |0225: move-object/from16 v21, v3
+007c92: 0743                                   |0227: move-object v3, v4
+007c94: 0702                                   |0228: move-object v2, v0
+007c96: 2808                                   |0229: goto 0231 // +0008
+007c98: 0d00                                   |022a: move-exception v0
+007c9a: 0811 0200                              |022b: move-object/from16 v17, v2
+007c9e: 0815 0300                              |022d: move-object/from16 v21, v3
+007ca2: 0743                                   |022f: move-object v3, v4
+007ca4: 0702                                   |0230: move-object v2, v0
+007ca6: 2702                                   |0231: throw v2
+007ca8: 0d00                                   |0232: move-exception v0
+007caa: 7120 a602 2300                         |0233: invoke-static {v3, v2}, Lkotlin/io/CloseableKt;.closeFinally:(Ljava/io/Closeable;Ljava/lang/Throwable;)V // method@02a6
+007cb0: 2700                                   |0236: throw v0
+007cb2: 1a00 c105                              |0237: const-string v0, "无法读取所选文档" // string@05c1
+007cb6: 7120 3402 0400                         |0239: invoke-static {v4, v0}, Lcom/local/notesscan/SessionStoreKt;.fail:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Void; // method@0234
+007cbc: 2200 f900                              |023c: new-instance v0, Lkotlin/KotlinNothingValueException; // type@00f9
+007cc0: 7010 9a02 0000                         |023e: invoke-direct {v0}, Lkotlin/KotlinNothingValueException;.<init>:()V // method@029a
+007cc6: 2700                                   |0241: throw v0
+007cc8: 0811 0200                              |0242: move-object/from16 v17, v2
+007ccc: 0815 0300                              |0244: move-object/from16 v21, v3
+007cd0: 1a00 a805                              |0246: const-string v0, "文档暂存文件已存在" // string@05a8
+007cd4: 7120 3402 0a00                         |0248: invoke-static {v10, v0}, Lcom/local/notesscan/SessionStoreKt;.fail:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Void; // method@0234
+007cda: 2200 f900                              |024b: new-instance v0, Lkotlin/KotlinNothingValueException; // type@00f9
+007cde: 7010 9a02 0000                         |024d: invoke-direct {v0}, Lkotlin/KotlinNothingValueException;.<init>:()V // method@029a
+007ce4: 2700                                   |0250: throw v0
+007ce6: 0811 0200                              |0251: move-object/from16 v17, v2
+007cea: 0815 0300                              |0253: move-object/from16 v21, v3
+007cee: 0760                                   |0255: move-object v0, v6
+007cf0: 6e10 4102 0e00                         |0256: invoke-virtual {v14}, Ljava/io/File;.isFile:()Z // method@0241
+007cf6: 0a02                                   |0259: move-result v2
+007cf8: 3802 8000                              |025a: if-eqz v2, 02da // +0080
+007cfc: 3809 7e00                              |025c: if-eqz v9, 02da // +007e
+007d00: 6e10 4302 0e00                         |025e: invoke-virtual {v14}, Ljava/io/File;.length:()J // method@0243
+007d06: 0b02                                   |0261: move-result-wide v2
+007d08: 6e10 6402 0900                         |0262: invoke-virtual {v9}, Ljava/lang/Long;.longValue:()J // method@0264
+007d0e: 0b05                                   |0265: move-result-wide v5
+007d10: 3102 0205                              |0266: cmp-long v2, v2, v5
+007d14: 3902 7200                              |0268: if-nez v2, 02da // +0072
+007d18: 2202 d200                              |026a: new-instance v2, Ljava/io/FileInputStream; // type@00d2
+007d1c: 7020 4802 e200                         |026c: invoke-direct {v2, v14}, Ljava/io/FileInputStream;.<init>:(Ljava/io/File;)V // method@0248
+007d22: 1f02 cf00                              |026f: check-cast v2, Ljava/io/Closeable; // type@00cf
+007d26: 0723                                   |0271: move-object v3, v2
+007d28: 1f03 d200                              |0272: check-cast v3, Ljava/io/FileInputStream; // type@00d2
+007d2c: 120a                                   |0274: const/4 v10, #int 0 // #0
+007d2e: 5415 2f00                              |0275: iget-object v5, v1, Lcom/local/notesscan/NotesScanPlugin;.activity:Landroid/app/Activity; // field@002f
+007d32: 6e10 0100 0500                         |0277: invoke-virtual {v5}, Landroid/app/Activity;.getContentResolver:()Landroid/content/ContentResolver; // method@0001
+007d38: 0c05                                   |027a: move-result-object v5
+007d3a: 1a06 6b05                              |027b: const-string v6, "wt" // string@056b
+007d3e: 6e30 0500 d506                         |027d: invoke-virtual {v5, v13, v6}, Landroid/content/ContentResolver;.openOutputStream:(Landroid/net/Uri;Ljava/lang/String;)Ljava/io/OutputStream; // method@0005
+007d44: 0c05                                   |0280: move-result-object v5
+007d46: 3805 4600                              |0281: if-eqz v5, 02c7 // +0046
+007d4a: 0810 0500                              |0283: move-object/from16 v16, v5
+007d4e: 0804 1000                              |0285: move-object/from16 v4, v16
+007d52: 1f04 cf00                              |0287: check-cast v4, Ljava/io/Closeable; // type@00cf
+007d56: 0746                                   |0289: move-object v6, v4
+007d58: 1f06 d600                              |028a: check-cast v6, Ljava/io/OutputStream; // type@00d6
+007d5c: 1312 0000                              |028c: const/16 v18, #int 0 // #0
+007d60: 0745                                   |028e: move-object v5, v4
+007d62: 6204 1e00                              |028f: sget-object v4, Lcom/local/notesscan/DocumentStreams;.INSTANCE:Lcom/local/notesscan/DocumentStreams; // field@001e
+007d66: 0813 0500                              |0291: move-object/from16 v19, v5
+007d6a: 0735                                   |0293: move-object v5, v3
+007d6c: 1f05 d500                              |0294: check-cast v5, Ljava/io/InputStream; // type@00d5
+007d70: 0801 1300                              |0296: move-object/from16 v1, v19
+007d74: 7406 e500 0400                         |0298: invoke-virtual/range {v4, v5, v6, v7, v8, v9}, Lcom/local/notesscan/DocumentStreams;.copy:(Ljava/io/InputStream;Ljava/io/OutputStream;JLjava/lang/Long;)J // method@00e5
+007d7a: 0b16                                   |029b: move-result-wide v22
+007d7c: 7120 a602 0100                         |029c: invoke-static {v1, v0}, Lkotlin/io/CloseableKt;.closeFinally:(Ljava/io/Closeable;Ljava/lang/Throwable;)V // method@02a6
+007d82: 7120 a602 0200                         |029f: invoke-static {v2, v0}, Lkotlin/io/CloseableKt;.closeFinally:(Ljava/io/Closeable;Ljava/lang/Throwable;)V // method@02a6
+007d88: 0500 1600                              |02a2: move-wide/from16 v0, v22
+007d8c: 2202 0c01                              |02a4: new-instance v2, Lorg/json/JSONObject; // type@010c
+007d90: 7010 c502 0200                         |02a6: invoke-direct {v2}, Lorg/json/JSONObject;.<init>:()V // method@02c5
+007d96: 1a03 dd02                              |02a9: const-string v3, "bytes" // string@02dd
+007d9a: 6e40 d202 3210                         |02ab: invoke-virtual {v2, v3, v0, v1}, Lorg/json/JSONObject;.put:(Ljava/lang/String;J)Lorg/json/JSONObject; // method@02d2
+007da0: 0c02                                   |02ae: move-result-object v2
+007da2: 1a03 8904                              |02af: const-string v3, "put(...)" // string@0489
+007da6: 7120 ad02 3200                         |02b1: invoke-static {v2, v3}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ad
+007dac: 1102                                   |02b4: return-object v2
+007dae: 0d00                                   |02b5: move-exception v0
+007db0: 280a                                   |02b6: goto 02c0 // +000a
+007db2: 0d00                                   |02b7: move-exception v0
+007db4: 0801 1300                              |02b8: move-object/from16 v1, v19
+007db8: 2806                                   |02ba: goto 02c0 // +0006
+007dba: 0d00                                   |02bb: move-exception v0
+007dbc: 0751                                   |02bc: move-object v1, v5
+007dbe: 2803                                   |02bd: goto 02c0 // +0003
+007dc0: 0d00                                   |02be: move-exception v0
+007dc2: 0741                                   |02bf: move-object v1, v4
+007dc4: 0704                                   |02c0: move-object v4, v0
+007dc6: 2704                                   |02c1: throw v4
+007dc8: 0d00                                   |02c2: move-exception v0
+007dca: 7120 a602 4100                         |02c3: invoke-static {v1, v4}, Lkotlin/io/CloseableKt;.closeFinally:(Ljava/io/Closeable;Ljava/lang/Throwable;)V // method@02a6
+007dd0: 2700                                   |02c6: throw v0
+007dd2: 1a00 ba05                              |02c7: const-string v0, "无法写入所选文档" // string@05ba
+007dd6: 7120 3402 0400                         |02c9: invoke-static {v4, v0}, Lcom/local/notesscan/SessionStoreKt;.fail:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Void; // method@0234
+007ddc: 2200 f900                              |02cc: new-instance v0, Lkotlin/KotlinNothingValueException; // type@00f9
+007de0: 7010 9a02 0000                         |02ce: invoke-direct {v0}, Lkotlin/KotlinNothingValueException;.<init>:()V // method@029a
+007de6: 2700                                   |02d1: throw v0
+007de8: 0d00                                   |02d2: move-exception v0
+007dea: 0701                                   |02d3: move-object v1, v0
+007dec: 2701                                   |02d4: throw v1
+007dee: 0d00                                   |02d5: move-exception v0
+007df0: 7120 a602 1200                         |02d6: invoke-static {v2, v1}, Lkotlin/io/CloseableKt;.closeFinally:(Ljava/io/Closeable;Ljava/lang/Throwable;)V // method@02a6
+007df6: 2700                                   |02d9: throw v0
+007df8: 1a00 c205                              |02da: const-string v0, "暂存文档长度不符" // string@05c2
+007dfc: 7120 3402 0a00                         |02dc: invoke-static {v10, v0}, Lcom/local/notesscan/SessionStoreKt;.fail:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Void; // method@0234
+007e02: 2200 f900                              |02df: new-instance v0, Lkotlin/KotlinNothingValueException; // type@00f9
+007e06: 7010 9a02 0000                         |02e1: invoke-direct {v0}, Lkotlin/KotlinNothingValueException;.<init>:()V // method@029a
+007e0c: 2700                                   |02e4: throw v0
+007e0e: 0811 0200                              |02e5: move-object/from16 v17, v2
+007e12: 0815 0300                              |02e7: move-object/from16 v21, v3
+007e16: 280f                                   |02e9: goto 02f8 // +000f
+007e18: 0811 0200                              |02ea: move-object/from16 v17, v2
+007e1c: 0815 0300                              |02ec: move-object/from16 v21, v3
+007e20: 280a                                   |02ee: goto 02f8 // +000a
+007e22: 0811 0200                              |02ef: move-object/from16 v17, v2
+007e26: 0815 0300                              |02f1: move-object/from16 v21, v3
+007e2a: 2805                                   |02f3: goto 02f8 // +0005
+007e2c: 0811 0200                              |02f4: move-object/from16 v17, v2
+007e30: 0815 0300                              |02f6: move-object/from16 v21, v3
+007e34: 1a00 a905                              |02f8: const-string v0, "文档暂存路径不属于当前应用" // string@05a9
+007e38: 7120 3402 0a00                         |02fa: invoke-static {v10, v0}, Lcom/local/notesscan/SessionStoreKt;.fail:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Void; // method@0234
+007e3e: 2200 f900                              |02fd: new-instance v0, Lkotlin/KotlinNothingValueException; // type@00f9
+007e42: 7010 9a02 0000                         |02ff: invoke-direct {v0}, Lkotlin/KotlinNothingValueException;.<init>:()V // method@029a
+007e48: 2700                                   |0302: throw v0
+007e4a: 1a00 d405                              |0303: const-string v0, "缺少文档暂存目录" // string@05d4
+007e4e: 7120 3402 0a00                         |0305: invoke-static {v10, v0}, Lcom/local/notesscan/SessionStoreKt;.fail:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Void; // method@0234
+007e54: 2200 f900                              |0308: new-instance v0, Lkotlin/KotlinNothingValueException; // type@00f9
+007e58: 7010 9a02 0000                         |030a: invoke-direct {v0}, Lkotlin/KotlinNothingValueException;.<init>:()V // method@029a
+007e5e: 2700                                   |030d: throw v0
+007e60: 0811 0200                              |030e: move-object/from16 v17, v2
+007e64: 0815 0300                              |0310: move-object/from16 v21, v3
+007e68: 1a00 e605                              |0312: const-string v0, "需要系统文档 URI" // string@05e6
+007e6c: 7120 3402 0a00                         |0314: invoke-static {v10, v0}, Lcom/local/notesscan/SessionStoreKt;.fail:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Void; // method@0234
+007e72: 2200 f900                              |0317: new-instance v0, Lkotlin/KotlinNothingValueException; // type@00f9
+007e76: 7010 9a02 0000                         |0319: invoke-direct {v0}, Lkotlin/KotlinNothingValueException;.<init>:()V // method@029a
+007e7c: 2700                                   |031c: throw v0
+007e7e: 0811 0200                              |031d: move-object/from16 v17, v2
+007e82: 0815 0300                              |031f: move-object/from16 v21, v3
+007e86: 1a00 b505                              |0321: const-string v0, "无效文档传输限制" // string@05b5
+007e8a: 7120 3402 0a00                         |0323: invoke-static {v10, v0}, Lcom/local/notesscan/SessionStoreKt;.fail:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Void; // method@0234
+007e90: 2200 f900                              |0326: new-instance v0, Lkotlin/KotlinNothingValueException; // type@00f9
+007e94: 7010 9a02 0000                         |0328: invoke-direct {v0}, Lkotlin/KotlinNothingValueException;.<init>:()V // method@029a
+007e9a: 2700                                   |032b: throw v0
+      catches       : 18
+        0x01d3 - 0x01dd
+          <any> -> 0x022a
+        0x01df - 0x01e2
+          <any> -> 0x0224
+        0x01e2 - 0x01e5
+          <any> -> 0x0216
+        0x01e9 - 0x01f0
+          <any> -> 0x0210
+        0x01f8 - 0x0203
+          <any> -> 0x020d
+        0x0204 - 0x0207
+          <any> -> 0x0221
+        0x021b - 0x021c
+          <any> -> 0x021c
+        0x021d - 0x0221
+          <any> -> 0x0221
+        0x0231 - 0x0232
+          <any> -> 0x0232
+        0x0271 - 0x0289
+          <any> -> 0x02d2
+        0x0289 - 0x028c
+          <any> -> 0x02be
+        0x028f - 0x0291
+          <any> -> 0x02bb
+        0x0293 - 0x0296
+          <any> -> 0x02b7
+        0x0298 - 0x029c
+          <any> -> 0x02b5
+        0x029c - 0x029f
+          <any> -> 0x02d2
+        0x02c1 - 0x02c2
+          <any> -> 0x02c2
+        0x02c3 - 0x02d2
+          <any> -> 0x02d2
+        0x02d4 - 0x02d5
+          <any> -> 0x02d5
+      positions     :
+        0x0000 line=79
+        0x000c line=80
+        0x0012 line=81
+        0x0018 line=82
+        0x003e line=84
+        0x0048 line=85
+        0x0066 line=86
+        0x006c line=91
+        0x006d line=93
+        0x006e line=91
+        0x0074 line=92
+        0x007a line=91
+        0x0082 line=93
+        0x0084 line=91
+        0x0085 line=93
+        0x0087 line=155
+        0x0090 line=163
+        0x0094 line=164
+        0x00a2 line=163
+        0x00a6 line=93
+        0x00ac line=163
+        0x00ae line=165
+        0x00b0 line=163
+        0x00b3 line=164
+        0x00b9 line=166
+        0x00bb line=167
+        0x00bf line=155
+        0x00c0 line=93
+        0x00c1 line=91
+        0x00c2 line=93
+        0x00c8 line=91
+        0x00c9 line=90
+        0x00ca line=94
+        0x00e5 line=95
+        0x00f2 line=86
+        0x00f4 line=97
+        0x0105 line=98
+        0x010d line=99
+        0x0119 line=100
+        0x0120 line=101
+        0x0134 line=102
+        0x014b line=103
+        0x0163 line=104
+        0x017d line=106
+        0x0191 line=107
+        0x01af line=108
+        0x01b7 line=109
+        0x01c3 line=112
+        0x01d0 line=113
+        0x01d6 line=168
+        0x01d8 line=113
+        0x01e7 line=114
+        0x01fc line=115
+        0x0203 line=116
+        0x0204 line=113
+        0x0207 line=117
+        0x0208 line=113
+        0x0237 line=112
+        0x0242 line=109
+        0x0251 line=119
+        0x026a line=120
+        0x0275 line=121
+        0x0285 line=122
+        0x028c line=168
+        0x028e line=122
+        0x029f line=120
+        0x02a2 line=108
+        0x02a4 line=127
+        0x02b5 line=122
+        0x02c7 line=121
+        0x02d2 line=120
+        0x02da line=119
+        0x02e5 line=104
+        0x02ea line=103
+        0x02ef line=102
+        0x02f4 line=101
+        0x02f8 line=105
+        0x0303 line=100
+        0x030e line=85
+        0x031d line=82
+        0x0321 line=83
+      locals        :
+        0x0092 - 0x0098 reg=16 $this$forEach$iv$iv$iv [Ljava/lang/Object;
+        0x00a4 - 0x00aa reg=22 it Landroid/content/pm/ProviderInfo;
+        0x0086 - 0x00aa reg=0 $this$mapNotNull$iv [Ljava/lang/Object;
+        0x00aa - 0x00ac reg=0 it Landroid/content/pm/ProviderInfo;
+        0x00a6 - 0x00ac reg=23 $i$a$-mapNotNull-NotesScanPlugin$copyDocument$1$providers$1 I
+        0x00ae - 0x00b3 reg=0 it$iv$iv Ljava/lang/Object;
+        0x00a0 - 0x00b3 reg=18 element$iv$iv Ljava/lang/Object;
+        0x00a2 - 0x00b3 reg=21 $i$a$-forEach-ArraysKt___ArraysKt$mapNotNullTo$1$iv$iv I
+        0x00b0 - 0x00b3 reg=22 $i$a$-let-ArraysKt___ArraysKt$mapNotNullTo$1$1$iv$iv I
+        0x009e - 0x00b4 reg=16 element$iv$iv$iv Ljava/lang/Object;
+        0x00aa - 0x00b9 reg=24 $this$mapNotNull$iv [Ljava/lang/Object;
+        0x00b9 - 0x00bb reg=0 $this$mapNotNull$iv [Ljava/lang/Object;
+        0x0098 - 0x00bb reg=4 $this$forEach$iv$iv$iv [Ljava/lang/Object;
+        0x0094 - 0x00bb reg=17 $i$f$forEach I
+        0x008e - 0x00bc reg=9 destination$iv$iv Ljava/util/Collection;
+        0x008f - 0x00bc reg=14 $this$mapNotNullTo$iv$iv [Ljava/lang/Object;
+        0x0090 - 0x00bc reg=15 $i$f$mapNotNullTo I
+        0x0087 - 0x00c0 reg=6 $i$f$mapNotNull I
+        0x00bb - 0x00c0 reg=24 $this$mapNotNull$iv [Ljava/lang/Object;
+        0x00ca - 0x00f2 reg=0 providers Ljava/util/List;
+        0x000c - 0x01df reg=2 args Lorg/json/JSONObject;
+        0x01e5 - 0x01f8 reg=0 output Ljava/io/FileOutputStream;
+        0x0012 - 0x01f8 reg=3 direction Ljava/lang/String;
+        0x01e7 - 0x0204 reg=18 $i$a$-use-NotesScanPlugin$copyDocument$1$bytes$1$1 I
+        0x01f8 - 0x0204 reg=19 output Ljava/io/FileOutputStream;
+        0x01fc - 0x0204 reg=22 n J
+        0x01d6 - 0x0208 reg=5 input Ljava/io/InputStream;
+        0x01d8 - 0x0208 reg=16 $i$a$-use-NotesScanPlugin$copyDocument$1$bytes$1 I
+        0x01f8 - 0x0210 reg=21 direction Ljava/lang/String;
+        0x0210 - 0x021b reg=3 direction Ljava/lang/String;
+        0x020d - 0x021b reg=5 input Ljava/io/InputStream;
+        0x0018 - 0x021b reg=7 maxBytes J
+        0x0191 - 0x021b reg=9 expected Ljava/lang/Long;
+        0x01d0 - 0x021b reg=10 source Ljava/io/InputStream;
+        0x0105 - 0x021b reg=11 root Ljava/io/File;
+        0x010d - 0x021b reg=12 parent Ljava/io/File;
+        0x0048 - 0x021b reg=13 uri Landroid/net/Uri;
+        0x0119 - 0x021b reg=14 file Ljava/io/File;
+        0x0120 - 0x021b reg=15 operation Ljava/io/File;
+        0x020d - 0x021b reg=16 $i$a$-use-NotesScanPlugin$copyDocument$1$bytes$1 I
+        0x01df - 0x021b reg=17 args Lorg/json/JSONObject;
+        0x0000 - 0x021b reg=25 $invoke Lapp/tauri/plugin/Invoke;
+        0x0000 - 0x021b reg=26 this$0 Lcom/local/notesscan/NotesScanPlugin;
+        0x021c - 0x0220 reg=7 maxBytes J
+        0x021c - 0x0220 reg=9 expected Ljava/lang/Long;
+        0x021c - 0x0220 reg=10 source Ljava/io/InputStream;
+        0x021c - 0x0220 reg=11 root Ljava/io/File;
+        0x021c - 0x0220 reg=12 parent Ljava/io/File;
+        0x021c - 0x0220 reg=13 uri Landroid/net/Uri;
+        0x021c - 0x0220 reg=14 file Ljava/io/File;
+        0x021c - 0x0220 reg=15 operation Ljava/io/File;
+        0x021c - 0x0220 reg=17 args Lorg/json/JSONObject;
+        0x021c - 0x0220 reg=21 direction Ljava/lang/String;
+        0x021c - 0x0220 reg=25 $invoke Lapp/tauri/plugin/Invoke;
+        0x021c - 0x0220 reg=26 this$0 Lcom/local/notesscan/NotesScanPlugin;
+        0x021c - 0x0221 reg=5 input Ljava/io/InputStream;
+        0x021c - 0x0221 reg=16 $i$a$-use-NotesScanPlugin$copyDocument$1$bytes$1 I
+        0x0221 - 0x0224 reg=21 direction Ljava/lang/String;
+        0x0224 - 0x0229 reg=3 direction Ljava/lang/String;
+        0x0221 - 0x022a reg=17 args Lorg/json/JSONObject;
+        0x0229 - 0x022a reg=21 direction Ljava/lang/String;
+        0x022a - 0x0231 reg=2 args Lorg/json/JSONObject;
+        0x022a - 0x0231 reg=3 direction Ljava/lang/String;
+        0x0221 - 0x0231 reg=7 maxBytes J
+        0x0221 - 0x0231 reg=9 expected Ljava/lang/Long;
+        0x0221 - 0x0231 reg=10 source Ljava/io/InputStream;
+        0x0221 - 0x0231 reg=11 root Ljava/io/File;
+        0x0221 - 0x0231 reg=12 parent Ljava/io/File;
+        0x0221 - 0x0231 reg=13 uri Landroid/net/Uri;
+        0x0221 - 0x0231 reg=14 file Ljava/io/File;
+        0x0221 - 0x0231 reg=15 operation Ljava/io/File;
+        0x0221 - 0x0231 reg=25 $invoke Lapp/tauri/plugin/Invoke;
+        0x0221 - 0x0231 reg=26 this$0 Lcom/local/notesscan/NotesScanPlugin;
+        0x0232 - 0x0237 reg=10 source Ljava/io/InputStream;
+        0x0232 - 0x0237 reg=17 args Lorg/json/JSONObject;
+        0x0232 - 0x0237 reg=21 direction Ljava/lang/String;
+        0x0237 - 0x0246 reg=2 args Lorg/json/JSONObject;
+        0x0237 - 0x0246 reg=3 direction Ljava/lang/String;
+        0x0246 - 0x0251 reg=17 args Lorg/json/JSONObject;
+        0x0246 - 0x0251 reg=21 direction Ljava/lang/String;
+        0x0251 - 0x0256 reg=2 args Lorg/json/JSONObject;
+        0x0251 - 0x0256 reg=3 direction Ljava/lang/String;
+        0x028c - 0x029c reg=6 output Ljava/io/OutputStream;
+        0x028e - 0x029c reg=18 $i$a$-use-NotesScanPlugin$copyDocument$1$bytes$2$1 I
+        0x0274 - 0x029f reg=3 input Ljava/io/FileInputStream;
+        0x0275 - 0x029f reg=10 $i$a$-use-NotesScanPlugin$copyDocument$1$bytes$2 I
+        0x0285 - 0x029f reg=16 target Ljava/io/OutputStream;
+        0x02a4 - 0x02b5 reg=0 bytes J
+        0x02b5 - 0x02c1 reg=3 input Ljava/io/FileInputStream;
+        0x0232 - 0x02c1 reg=7 maxBytes J
+        0x0232 - 0x02c1 reg=9 expected Ljava/lang/Long;
+        0x02b5 - 0x02c1 reg=10 $i$a$-use-NotesScanPlugin$copyDocument$1$bytes$2 I
+        0x0232 - 0x02c1 reg=11 root Ljava/io/File;
+        0x0232 - 0x02c1 reg=12 parent Ljava/io/File;
+        0x0232 - 0x02c1 reg=13 uri Landroid/net/Uri;
+        0x0232 - 0x02c1 reg=14 file Ljava/io/File;
+        0x0232 - 0x02c1 reg=15 operation Ljava/io/File;
+        0x02b5 - 0x02c1 reg=16 target Ljava/io/OutputStream;
+        0x0256 - 0x02c1 reg=17 args Lorg/json/JSONObject;
+        0x0256 - 0x02c1 reg=21 direction Ljava/lang/String;
+        0x0232 - 0x02c1 reg=25 $invoke Lapp/tauri/plugin/Invoke;
+        0x0232 - 0x02c1 reg=26 this$0 Lcom/local/notesscan/NotesScanPlugin;
+        0x02c2 - 0x02c6 reg=7 maxBytes J
+        0x02c2 - 0x02c6 reg=9 expected Ljava/lang/Long;
+        0x02c2 - 0x02c6 reg=11 root Ljava/io/File;
+        0x02c2 - 0x02c6 reg=12 parent Ljava/io/File;
+        0x02c2 - 0x02c6 reg=13 uri Landroid/net/Uri;
+        0x02c2 - 0x02c6 reg=14 file Ljava/io/File;
+        0x02c2 - 0x02c6 reg=15 operation Ljava/io/File;
+        0x02c2 - 0x02c6 reg=17 args Lorg/json/JSONObject;
+        0x02c2 - 0x02c6 reg=21 direction Ljava/lang/String;
+        0x02c2 - 0x02c6 reg=25 $invoke Lapp/tauri/plugin/Invoke;
+        0x02c2 - 0x02c6 reg=26 this$0 Lcom/local/notesscan/NotesScanPlugin;
+        0x02c2 - 0x02c7 reg=16 target Ljava/io/OutputStream;
+        0x02c7 - 0x02d1 reg=7 maxBytes J
+        0x02c7 - 0x02d1 reg=9 expected Ljava/lang/Long;
+        0x02c7 - 0x02d1 reg=11 root Ljava/io/File;
+        0x02c7 - 0x02d1 reg=12 parent Ljava/io/File;
+        0x02c7 - 0x02d1 reg=13 uri Landroid/net/Uri;
+        0x02c7 - 0x02d1 reg=14 file Ljava/io/File;
+        0x02c7 - 0x02d1 reg=15 operation Ljava/io/File;
+        0x02c7 - 0x02d1 reg=17 args Lorg/json/JSONObject;
+        0x02c7 - 0x02d1 reg=21 direction Ljava/lang/String;
+        0x02c7 - 0x02d1 reg=25 $invoke Lapp/tauri/plugin/Invoke;
+        0x02c7 - 0x02d1 reg=26 this$0 Lcom/local/notesscan/NotesScanPlugin;
+        0x02c2 - 0x02d2 reg=3 input Ljava/io/FileInputStream;
+        0x02c2 - 0x02d2 reg=10 $i$a$-use-NotesScanPlugin$copyDocument$1$bytes$2 I
+        0x02d2 - 0x02d4 reg=7 maxBytes J
+        0x02d2 - 0x02d4 reg=9 expected Ljava/lang/Long;
+        0x02d2 - 0x02d4 reg=11 root Ljava/io/File;
+        0x02d2 - 0x02d4 reg=12 parent Ljava/io/File;
+        0x02d2 - 0x02d4 reg=13 uri Landroid/net/Uri;
+        0x02d2 - 0x02d4 reg=14 file Ljava/io/File;
+        0x02d2 - 0x02d4 reg=15 operation Ljava/io/File;
+        0x02d2 - 0x02d4 reg=17 args Lorg/json/JSONObject;
+        0x02d2 - 0x02d4 reg=21 direction Ljava/lang/String;
+        0x02d2 - 0x02d4 reg=25 $invoke Lapp/tauri/plugin/Invoke;
+        0x02d2 - 0x02d4 reg=26 this$0 Lcom/local/notesscan/NotesScanPlugin;
+        0x02d5 - 0x02e5 reg=9 expected Ljava/lang/Long;
+        0x02d5 - 0x02e5 reg=17 args Lorg/json/JSONObject;
+        0x02d5 - 0x02e5 reg=21 direction Ljava/lang/String;
+        0x02e5 - 0x02e9 reg=2 args Lorg/json/JSONObject;
+        0x02e5 - 0x02e9 reg=3 direction Ljava/lang/String;
+        0x02e9 - 0x02ea reg=17 args Lorg/json/JSONObject;
+        0x02e9 - 0x02ea reg=21 direction Ljava/lang/String;
+        0x02ea - 0x02ee reg=2 args Lorg/json/JSONObject;
+        0x02ea - 0x02ee reg=3 direction Ljava/lang/String;
+        0x02ee - 0x02ef reg=17 args Lorg/json/JSONObject;
+        0x02ee - 0x02ef reg=21 direction Ljava/lang/String;
+        0x02ef - 0x02f3 reg=2 args Lorg/json/JSONObject;
+        0x02ef - 0x02f3 reg=3 direction Ljava/lang/String;
+        0x02f3 - 0x02f4 reg=17 args Lorg/json/JSONObject;
+        0x02f3 - 0x02f4 reg=21 direction Ljava/lang/String;
+        0x02f4 - 0x02f8 reg=2 args Lorg/json/JSONObject;
+        0x02f4 - 0x02f8 reg=3 direction Ljava/lang/String;
+        0x02d5 - 0x0303 reg=15 operation Ljava/io/File;
+        0x02f8 - 0x0303 reg=17 args Lorg/json/JSONObject;
+        0x02f8 - 0x0303 reg=21 direction Ljava/lang/String;
+        0x02d5 - 0x030e reg=11 root Ljava/io/File;
+        0x02d5 - 0x030e reg=12 parent Ljava/io/File;
+        0x02d5 - 0x030e reg=14 file Ljava/io/File;
+        0x0303 - 0x0312 reg=2 args Lorg/json/JSONObject;
+        0x0303 - 0x0312 reg=3 direction Ljava/lang/String;
+        0x02d5 - 0x031d reg=13 uri Landroid/net/Uri;
+        0x0312 - 0x031d reg=17 args Lorg/json/JSONObject;
+        0x0312 - 0x031d reg=21 direction Ljava/lang/String;
+        0x031d - 0x0321 reg=2 args Lorg/json/JSONObject;
+        0x031d - 0x0321 reg=3 direction Ljava/lang/String;
+        0x02d5 - 0x032c reg=7 maxBytes J
+        0x0321 - 0x032c reg=17 args Lorg/json/JSONObject;
+        0x0321 - 0x032c reg=21 direction Ljava/lang/String;
+        0x02d5 - 0x032c reg=25 $invoke Lapp/tauri/plugin/Invoke;
+        0x02d5 - 0x032c reg=26 this$0 Lcom/local/notesscan/NotesScanPlugin;
+
+    #3              : (in Lcom/local/notesscan/NotesScanPlugin;)
+      
+name          : 'copyDocument'
+      type          : '(Lapp/tauri/plugin/Invoke;)V'
+      access        : 0x0011 (PUBLIC FINAL)
+      code          -
+      registers     : 3
+      ins           : 2
+      outs          : 3
+      insns size    : 14 16-bit code units
+0085d0:                                        |[0085d0] com.local.notesscan.NotesScanPlugin.copyDocument:(Lapp/tauri/plugin/Invoke;)V
+0085e0: 1a00 eb03                              |0000: const-string v0, "invoke" // string@03eb
+0085e4: 7120 ae02 0200                         |0002: invoke-static {v2, v0}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ae
+0085ea: 2200 7b00                              |0005: new-instance v0, Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0; // type@007b
+0085ee: 7030 f600 2001                         |0007: invoke-direct {v0, v2, v1}, Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;.<init>:(Lapp/tauri/plugin/Invoke;Lcom/local/notesscan/NotesScanPlugin;)V // method@00f6
+0085f4: 7030 0b01 2100                         |000a: invoke-direct {v1, v2, v0}, Lcom/local/notesscan/NotesScanPlugin;.work:(Lapp/tauri/plugin/Invoke;Lkotlin/jvm/functions/Function0;)V // method@010b
+0085fa: 0e00                                   |000d: return-void
+      catches       : (none)
+      positions     :
+        0x0005 line=78
+        0x000d line=129
+      locals        :
+        0x0000 - 0x000e reg=1 this Lcom/local/notesscan/NotesScanPlugin;
+        0x0000 - 0x000e reg=2 invoke Lapp/tauri/plugin/Invoke;
+
+    #2              : (in Lcom/local/notesscan/NotesScanPlugin;)
+      

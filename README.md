@@ -1,10 +1,12 @@
 # Apple Notes Clone
 
-用 Rust + pnpm 构建的本地备忘录应用，目标为 macOS 与 Android。Tauri 2提供安装应用与原生窗口，React/Tiptap提供编辑器，Rust/SQLite保存笔记与附件。不接入iCloud。
+用 Rust + pnpm 构建的本地备忘录应用，目标为 macOS 与 Android。Tauri 2提供安装应用与原生窗口，React/Tiptap提供编辑器，Rust/SQLite保存笔记及附件元数据，图片和录音等媒体独立保存在本地文件中。不接入iCloud。
 
 **当前是可运行开发版，尚未达到原版全部UI、交互及逐像素一致，完整目标仍在进行。** 需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，细分状态见[交付计划](docs/plan/README.md)。
 
-2026-11-06新的 Mac 本地开发包为 **Mac22**：[ZIP](artifacts/mac-feedback77/备忘录-Mac22.zip) / [应用](artifacts/mac-feedback77/备忘录.app)。已包含用户截图的三处修正：移除侧栏底部新建文件夹、列表右键按鼠标位置弹出并处理边界、全局搜索的标题与摘要命中橙黄高亮。窄列表命中可见、连续文字字距和正文find独立经复核；主线桌面148/手机笔记9/录音43/附件43及build/production全部通过，见[整合记录](docs/verification/mac-feedback77/integration/README.md)。准确当前源码已本地构建并严格adhoc验签；原生窗口运行和整窗原版像素继续单独验收。Android新设备验收继续待任务76，原未保存录音现场保留。
+2026-11-06当前本地开发包为 **Mac24 / Android构建14**：[Mac ZIP](artifacts/data-management79/备忘录-Mac24.zip) / [Mac应用](artifacts/data-management79/备忘录.app) / [Android APK](artifacts/data-management79/备忘录-Android14.apk)。本轮修复附件添加全屏闪烁，新增图片原字节保存/预览导出及“数据管理”真实文件统计、筛选和完整备份导入导出。媒体继续独立文件存储。源码独审、真实Rust→App、主线桌面230/手机笔记9/录音43/附件75、构建/生产排除和双端独立核包已通过，见[交付与边界](docs/verification/data-management79/README.md)。Android未安装，原未保存录音现场保留；原生provider/整窗像素不由程序化结果代替。
+
+2026-11-06历史 Mac 本地开发包为 **Mac22**：[ZIP](artifacts/mac-feedback77/备忘录-Mac22.zip) / [应用](artifacts/mac-feedback77/备忘录.app)。已包含用户截图的三处修正：移除侧栏底部新建文件夹、列表右键按鼠标位置弹出并处理边界、全局搜索的标题与摘要命中橙黄高亮。窄列表命中可见、连续文字字距和正文find独立经复核；主线桌面148/手机笔记9/录音43/附件43及build/production全部通过，见[整合记录](docs/verification/mac-feedback77/integration/README.md)。准确当前源码已本地构建并严格adhoc验签；原生窗口运行和整窗原版像素继续单独验收。Android新设备验收继续待任务76，原未保存录音现场保留。
 
 2026-11-06手机录音命令验收已完成独立复审并合入，主工作区再次通过**桌面九组100项、手机录音42项、手机笔记9项**，构建和生产调试入口排除也通过。[整合报告](docs/verification/mobile-debug-recording71/integration/README.md)记录准确源码及耗时。新增 `pnpm debug group recording --mobile`；真实保存重试等待、异步deadline和参数严格校验已修复，合成音频验证覆盖暂停后累计与后段实际播放。使用方式见[调试文档](docs/debugging.md)。原生设备、Rust持久化和原版像素继续分别验收。
 

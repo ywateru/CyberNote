@@ -1,0 +1,62 @@
+  Class descriptor  : 'Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;'
+  Access flags      : 0x1011 (PUBLIC FINAL SYNTHETIC)
+  Superclass        : 'Ljava/lang/Object;'
+  Interfaces        -
+    #0              : 'Lkotlin/jvm/functions/Function0;'
+  Static fields     -
+  Instance fields   -
+    #0              : (in Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;)
+      name          : 'f$0'
+      type          : 'Lapp/tauri/plugin/Invoke;'
+      access        : 0x1011 (PUBLIC FINAL SYNTHETIC)
+    #1              : (in Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;)
+      name          : 'f$1'
+      type          : 'Lcom/local/notesscan/NotesScanPlugin;'
+      access        : 0x1011 (PUBLIC FINAL SYNTHETIC)
+  Direct methods    -
+    #0              : (in Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;)
+      name          : '<init>'
+      type          : '(Lapp/tauri/plugin/Invoke;Lcom/local/notesscan/NotesScanPlugin;)V'
+      access        : 0x11001 (PUBLIC SYNTHETIC CONSTRUCTOR)
+      code          -
+      registers     : 3
+      ins           : 3
+      outs          : 1
+      insns size    : 8 16-bit code units
+0076d0:                                        |[0076d0] com.local.notesscan.NotesScanPlugin$$ExternalSyntheticLambda0.<init>:(Lapp/tauri/plugin/Invoke;Lcom/local/notesscan/NotesScanPlugin;)V
+0076e0: 7010 6e02 0000                         |0000: invoke-direct {v0}, Ljava/lang/Object;.<init>:()V // method@026e
+0076e6: 5b01 2200                              |0003: iput-object v1, v0, Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;.f$0:Lapp/tauri/plugin/Invoke; // field@0022
+0076ea: 5b02 2300                              |0005: iput-object v2, v0, Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;.f$1:Lcom/local/notesscan/NotesScanPlugin; // field@0023
+0076ee: 0e00                                   |0007: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=0
+      locals        :
+        0x0000 - 0x0008 reg=0 this Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;
+        0x0000 - 0x0008 reg=1 (null) Lapp/tauri/plugin/Invoke;
+        0x0000 - 0x0008 reg=2 (null) Lcom/local/notesscan/NotesScanPlugin;
+
+  Virtual methods   -
+    #0              : (in Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;)
+      name          : 'invoke'
+      type          : '()Ljava/lang/Object;'
+      access        : 0x0011 (PUBLIC FINAL)
+      code          -
+      registers     : 3
+      ins           : 1
+      outs          : 2
+      insns size    : 9 16-bit code units
+0076ac:                                        |[0076ac] com.local.notesscan.NotesScanPlugin$$ExternalSyntheticLambda0.invoke:()Ljava/lang/Object;
+0076bc: 5420 2200                              |0000: iget-object v0, v2, Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;.f$0:Lapp/tauri/plugin/Invoke; // field@0022
+0076c0: 5421 2300                              |0002: iget-object v1, v2, Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;.f$1:Lcom/local/notesscan/NotesScanPlugin; // field@0023
+0076c4: 7120 0401 1000                         |0004: invoke-static {v0, v1}, Lcom/local/notesscan/NotesScanPlugin;.copyDocument$lambda$8:(Lapp/tauri/plugin/Invoke;Lcom/local/notesscan/NotesScanPlugin;)Lorg/json/JSONObject; // method@0104
+0076ca: 0c00                                   |0007: move-result-object v0
+0076cc: 1100                                   |0008: return-object v0
+      catches       : (none)
+      positions     :
+        0x0000 line=0
+      locals        :
+        0x0000 - 0x0009 reg=2 this Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;
+
+  source_file_idx   : 248 (D8$$SyntheticClass)
+

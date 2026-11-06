@@ -1,0 +1,425 @@
+  Class descriptor  : 'Lcom/local/notesscan/DocumentUris;'
+  Access flags      : 0x0011 (PUBLIC FINAL)
+  Superclass        : 'Ljava/lang/Object;'
+  Interfaces        -
+  Static fields     -
+    #0              : (in Lcom/local/notesscan/DocumentUris;)
+      name          : 'INSTANCE'
+      type          : 'Lcom/local/notesscan/DocumentUris;'
+      access        : 0x0019 (PUBLIC STATIC FINAL)
+  Instance fields   -
+  Direct methods    -
+    #0              : (in Lcom/local/notesscan/DocumentUris;)
+      name          : '<clinit>'
+      type          : '()V'
+      access        : 0x10008 (STATIC CONSTRUCTOR)
+      code          -
+      registers     : 1
+      ins           : 0
+      outs          : 1
+      insns size    : 8 16-bit code units
+0064e4:                                        |[0064e4] com.local.notesscan.DocumentUris.<clinit>:()V
+0064f4: 2200 7800                              |0000: new-instance v0, Lcom/local/notesscan/DocumentUris; // type@0078
+0064f8: 7010 e700 0000                         |0002: invoke-direct {v0}, Lcom/local/notesscan/DocumentUris;.<init>:()V // method@00e7
+0064fe: 6900 1f00                              |0005: sput-object v0, Lcom/local/notesscan/DocumentUris;.INSTANCE:Lcom/local/notesscan/DocumentUris; // field@001f
+006502: 0e00                                   |0007: return-void
+      catches       : (none)
+      positions     :
+      locals        :
+
+    #1              : (in Lcom/local/notesscan/DocumentUris;)
+      name          : '<init>'
+      type          : '()V'
+      access        : 0x10002 (PRIVATE CONSTRUCTOR)
+      code          -
+      registers     : 1
+      ins           : 1
+      outs          : 1
+      insns size    : 4 16-bit code units
+006504:                                        |[006504] com.local.notesscan.DocumentUris.<init>:()V
+006514: 7010 6e02 0000                         |0000: invoke-direct {v0}, Ljava/lang/Object;.<init>:()V // method@026e
+00651a: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=6
+      locals        :
+        0x0000 - 0x0004 reg=0 this Lcom/local/notesscan/DocumentUris;
+
+  Virtual methods   -
+    #0              : (in Lcom/local/notesscan/DocumentUris;)
+      name          : 'isManagedAuthority'
+      type          : '(Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Z'
+      access        : 0x0011 (PUBLIC FINAL)
+      code          -
+      registers     : 27
+      ins           : 4
+      outs          : 6
+      insns size    : 258 16-bit code units
+006120:                                        |[006120] com.local.notesscan.DocumentUris.isManagedAuthority:(Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Z
+006130: 0800 1900                              |0000: move-object/from16 v0, v25
+006134: 0801 1a00                              |0002: move-object/from16 v1, v26
+006138: 1a02 3203                              |0004: const-string v2, "decodedAuthority" // string@0332
+00613c: 0803 1800                              |0006: move-object/from16 v3, v24
+006140: 7120 ae02 2300                         |0008: invoke-static {v3, v2}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ae
+006146: 1a02 6004                              |000b: const-string v2, "packageName" // string@0460
+00614a: 7120 ae02 2000                         |000d: invoke-static {v0, v2}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ae
+006150: 1a02 2e03                              |0010: const-string v2, "declaredAuthorities" // string@032e
+006154: 7120 ae02 2100                         |0012: invoke-static {v1, v2}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ae
+00615a: 7402 e900 1700                         |0015: invoke-virtual/range {v23, v24}, Lcom/local/notesscan/DocumentUris;.normalizedAuthority:(Ljava/lang/String;)Ljava/lang/String; // method@00e9
+006160: 0c02                                   |0018: move-result-object v2
+006162: 6204 d600                              |0019: sget-object v4, Ljava/util/Locale;.ROOT:Ljava/util/Locale; // field@00d6
+006166: 1a05 4d02                              |001b: const-string v5, "ROOT" // string@024d
+00616a: 7120 ad02 5400                         |001d: invoke-static {v4, v5}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ad
+006170: 6e20 7702 4000                         |0020: invoke-virtual {v0, v4}, Ljava/lang/String;.toLowerCase:(Ljava/util/Locale;)Ljava/lang/String; // method@0277
+006176: 0c04                                   |0023: move-result-object v4
+006178: 1a05 4805                              |0024: const-string v5, "toLowerCase(...)" // string@0548
+00617c: 7120 ad02 5400                         |0026: invoke-static {v4, v5}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ad
+006182: 7120 ab02 4200                         |0029: invoke-static {v2, v4}, Lkotlin/jvm/internal/Intrinsics;.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z // method@02ab
+006188: 0a05                                   |002c: move-result v5
+00618a: 1216                                   |002d: const/4 v6, #int 1 // #1
+00618c: 3905 d300                              |002e: if-nez v5, 0101 // +00d3
+006190: 2205 e600                              |0030: new-instance v5, Ljava/lang/StringBuilder; // type@00e6
+006194: 7010 7802 0500                         |0032: invoke-direct {v5}, Ljava/lang/StringBuilder;.<init>:()V // method@0278
+00619a: 6e20 7c02 4500                         |0035: invoke-virtual {v5, v4}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@027c
+0061a0: 0c05                                   |0038: move-result-object v5
+0061a2: 1307 2e00                              |0039: const/16 v7, #int 46 // #2e
+0061a6: 6e20 7902 7500                         |003b: invoke-virtual {v5, v7}, Ljava/lang/StringBuilder;.append:(C)Ljava/lang/StringBuilder; // method@0279
+0061ac: 0c05                                   |003e: move-result-object v5
+0061ae: 6e10 7d02 0500                         |003f: invoke-virtual {v5}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@027d
+0061b4: 0c05                                   |0042: move-result-object v5
+0061b6: 1227                                   |0043: const/4 v7, #int 2 // #2
+0061b8: 1208                                   |0044: const/4 v8, #int 0 // #0
+0061ba: 1209                                   |0045: const/4 v9, #int 0 // #0
+0061bc: 7158 bd02 5279                         |0046: invoke-static {v2, v5, v9, v7, v8}, Lkotlin/text/StringsKt;.startsWith$default:(Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Z // method@02bd
+0061c2: 0a05                                   |0049: move-result v5
+0061c4: 3805 0400                              |004a: if-eqz v5, 004e // +0004
+0061c8: 2900 b500                              |004c: goto/16 0101 // +00b5
+0061cc: 0715                                   |004e: move-object v5, v1
+0061ce: 1f05 df00                              |004f: check-cast v5, Ljava/lang/Iterable; // type@00df
+0061d2: 1207                                   |0051: const/4 v7, #int 0 // #0
+0061d4: 2208 ec00                              |0052: new-instance v8, Ljava/util/ArrayList; // type@00ec
+0061d8: 7010 8102 0800                         |0054: invoke-direct {v8}, Ljava/util/ArrayList;.<init>:()V // method@0281
+0061de: 1f08 ed00                              |0057: check-cast v8, Ljava/util/Collection; // type@00ed
+0061e2: 075a                                   |0059: move-object v10, v5
+0061e4: 120b                                   |005a: const/4 v11, #int 0 // #0
+0061e6: 7210 6302 0a00                         |005b: invoke-interface {v10}, Ljava/lang/Iterable;.iterator:()Ljava/util/Iterator; // method@0263
+0061ec: 0c0c                                   |005e: move-result-object v12
+0061ee: 7210 8502 0c00                         |005f: invoke-interface {v12}, Ljava/util/Iterator;.hasNext:()Z // method@0285
+0061f4: 0a0d                                   |0062: move-result v13
+0061f6: 380d 2d00                              |0063: if-eqz v13, 0090 // +002d
+0061fa: 7210 8602 0c00                         |0065: invoke-interface {v12}, Ljava/util/Iterator;.next:()Ljava/lang/Object; // method@0286
+006200: 0c0d                                   |0068: move-result-object v13
+006202: 07de                                   |0069: move-object v14, v13
+006204: 1f0e e500                              |006a: check-cast v14, Ljava/lang/String; // type@00e5
+006208: 120f                                   |006c: const/4 v15, #int 0 // #0
+00620a: 0810 0e00                              |006d: move-object/from16 v16, v14
+00620e: 1f10 d900                              |006f: check-cast v16, Ljava/lang/CharSequence; // type@00d9
+006212: 0216 0900                              |0071: move/from16 v22, v9
+006216: 2369 1001                              |0073: new-array v9, v6, [C // type@0110
+00621a: 1311 3b00                              |0075: const/16 v17, #int 59 // #3b
+00621e: 5011 0916                              |0077: aput-char v17, v9, v22
+006222: 1314 0600                              |0079: const/16 v20, #int 6 // #6
+006226: 1315 0000                              |007b: const/16 v21, #int 0 // #0
+00622a: 1312 0000                              |007d: const/16 v18, #int 0 // #0
+00622e: 1313 0000                              |007f: const/16 v19, #int 0 // #0
+006232: 0811 0900                              |0081: move-object/from16 v17, v9
+006236: 7706 bc02 1000                         |0083: invoke-static/range {v16, v17, v18, v19, v20, v21}, Lkotlin/text/StringsKt;.split$default:(Ljava/lang/CharSequence;[CZIILjava/lang/Object;)Ljava/util/List; // method@02bc
+00623c: 0c09                                   |0086: move-result-object v9
+00623e: 1f09 df00                              |0087: check-cast v9, Ljava/lang/Iterable; // type@00df
+006242: 0000                                   |0089: nop // spacer
+006244: 7120 9c02 9800                         |008a: invoke-static {v8, v9}, Lkotlin/collections/CollectionsKt;.addAll:(Ljava/util/Collection;Ljava/lang/Iterable;)Z // method@029c
+00624a: 0209 1600                              |008d: move/from16 v9, v22
+00624e: 28d0                                   |008f: goto 005f // -0030
+006250: 0216 0900                              |0090: move/from16 v22, v9
+006254: 1f08 f000                              |0092: check-cast v8, Ljava/util/List; // type@00f0
+006258: 0000                                   |0094: nop // spacer
+00625a: 1f08 df00                              |0095: check-cast v8, Ljava/lang/Iterable; // type@00df
+00625e: 0000                                   |0097: nop // spacer
+006260: 1205                                   |0098: const/4 v5, #int 0 // #0
+006262: 2207 ec00                              |0099: new-instance v7, Ljava/util/ArrayList; // type@00ec
+006266: 7010 8102 0700                         |009b: invoke-direct {v7}, Ljava/util/ArrayList;.<init>:()V // method@0281
+00626c: 1f07 ed00                              |009e: check-cast v7, Ljava/util/Collection; // type@00ed
+006270: 0789                                   |00a0: move-object v9, v8
+006272: 120a                                   |00a1: const/4 v10, #int 0 // #0
+006274: 7210 6302 0900                         |00a2: invoke-interface {v9}, Ljava/lang/Iterable;.iterator:()Ljava/util/Iterator; // method@0263
+00627a: 0c0b                                   |00a5: move-result-object v11
+00627c: 7210 8502 0b00                         |00a6: invoke-interface {v11}, Ljava/util/Iterator;.hasNext:()Z // method@0285
+006282: 0a0c                                   |00a9: move-result v12
+006284: 380c 1d00                              |00aa: if-eqz v12, 00c7 // +001d
+006288: 7210 8602 0b00                         |00ac: invoke-interface {v11}, Ljava/util/Iterator;.next:()Ljava/lang/Object; // method@0286
+00628e: 0c0c                                   |00af: move-result-object v12
+006290: 07cd                                   |00b0: move-object v13, v12
+006292: 1f0d e500                              |00b1: check-cast v13, Ljava/lang/String; // type@00e5
+006296: 120e                                   |00b3: const/4 v14, #int 0 // #0
+006298: 07df                                   |00b4: move-object v15, v13
+00629a: 1f0f d900                              |00b5: check-cast v15, Ljava/lang/CharSequence; // type@00d9
+00629e: 7210 5902 0f00                         |00b7: invoke-interface {v15}, Ljava/lang/CharSequence;.length:()I // method@0259
+0062a4: 0a0f                                   |00ba: move-result v15
+0062a6: 3d0f 0400                              |00bb: if-lez v15, 00bf // +0004
+0062aa: 016f                                   |00bd: move v15, v6
+0062ac: 2803                                   |00be: goto 00c1 // +0003
+0062ae: 020f 1600                              |00bf: move/from16 v15, v22
+0062b2: 380f e5ff                              |00c1: if-eqz v15, 00a6 // -001b
+0062b6: 7220 8302 c700                         |00c3: invoke-interface {v7, v12}, Ljava/util/Collection;.add:(Ljava/lang/Object;)Z // method@0283
+0062bc: 28e0                                   |00c6: goto 00a6 // -0020
+0062be: 0000                                   |00c7: nop // spacer
+0062c0: 1f07 f000                              |00c8: check-cast v7, Ljava/util/List; // type@00f0
+0062c4: 0000                                   |00ca: nop // spacer
+0062c6: 1f07 df00                              |00cb: check-cast v7, Ljava/lang/Iterable; // type@00df
+0062ca: 0000                                   |00cd: nop // spacer
+0062cc: 1205                                   |00ce: const/4 v5, #int 0 // #0
+0062ce: 2078 ed00                              |00cf: instance-of v8, v7, Ljava/util/Collection; // type@00ed
+0062d2: 3808 0e00                              |00d1: if-eqz v8, 00df // +000e
+0062d6: 0778                                   |00d3: move-object v8, v7
+0062d8: 1f08 ed00                              |00d4: check-cast v8, Ljava/util/Collection; // type@00ed
+0062dc: 7210 8402 0800                         |00d6: invoke-interface {v8}, Ljava/util/Collection;.isEmpty:()Z // method@0284
+0062e2: 0a08                                   |00d9: move-result v8
+0062e4: 3808 0500                              |00da: if-eqz v8, 00df // +0005
+0062e8: 0206 1600                              |00dc: move/from16 v6, v22
+0062ec: 2822                                   |00de: goto 0100 // +0022
+0062ee: 7210 6302 0700                         |00df: invoke-interface {v7}, Ljava/lang/Iterable;.iterator:()Ljava/util/Iterator; // method@0263
+0062f4: 0c08                                   |00e2: move-result-object v8
+0062f6: 7210 8502 0800                         |00e3: invoke-interface {v8}, Ljava/util/Iterator;.hasNext:()Z // method@0285
+0062fc: 0a09                                   |00e6: move-result v9
+0062fe: 3809 1700                              |00e7: if-eqz v9, 00fe // +0017
+006302: 7210 8602 0800                         |00e9: invoke-interface {v8}, Ljava/util/Iterator;.next:()Ljava/lang/Object; // method@0286
+006308: 0c09                                   |00ec: move-result-object v9
+00630a: 079a                                   |00ed: move-object v10, v9
+00630c: 1f0a e500                              |00ee: check-cast v10, Ljava/lang/String; // type@00e5
+006310: 120b                                   |00f0: const/4 v11, #int 0 // #0
+006312: 620c 1f00                              |00f1: sget-object v12, Lcom/local/notesscan/DocumentUris;.INSTANCE:Lcom/local/notesscan/DocumentUris; // field@001f
+006316: 6e20 e900 ac00                         |00f3: invoke-virtual {v12, v10}, Lcom/local/notesscan/DocumentUris;.normalizedAuthority:(Ljava/lang/String;)Ljava/lang/String; // method@00e9
+00631c: 0c0c                                   |00f6: move-result-object v12
+00631e: 7120 ab02 c200                         |00f7: invoke-static {v2, v12}, Lkotlin/jvm/internal/Intrinsics;.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z // method@02ab
+006324: 0a0a                                   |00fa: move-result v10
+006326: 380a e8ff                              |00fb: if-eqz v10, 00e3 // -0018
+00632a: 2803                                   |00fd: goto 0100 // +0003
+00632c: 0206 1600                              |00fe: move/from16 v6, v22
+006330: 0f06                                   |0100: return v6
+006332: 0f06                                   |0101: return v6
+      catches       : (none)
+      positions     :
+        0x0015 line=21
+        0x0019 line=22
+        0x0029 line=23
+        0x004e line=24
+        0x0052 line=32
+        0x005b line=33
+        0x0069 line=34
+        0x006d line=24
+        0x0089 line=34
+        0x008a line=35
+        0x0090 line=37
+        0x0094 line=32
+        0x0097 line=24
+        0x0099 line=38
+        0x00a2 line=39
+        0x00b4 line=24
+        0x00c1 line=39
+        0x00c7 line=40
+        0x00ca line=38
+        0x00cd line=25
+        0x00cf line=41
+        0x00df line=42
+        0x00f1 line=25
+        0x00fb line=42
+        0x00fe line=43
+        0x0100 line=24
+        0x0101 line=23
+      locals        :
+        0x006c - 0x0089 reg=14 it Ljava/lang/String;
+        0x006d - 0x0089 reg=15 $i$a$-flatMap-DocumentUris$isManagedAuthority$1 I
+        0x008a - 0x008f reg=9 list$iv$iv Ljava/lang/Iterable;
+        0x0069 - 0x0090 reg=13 element$iv$iv Ljava/lang/Object;
+        0x0059 - 0x0092 reg=8 destination$iv$iv Ljava/util/Collection;
+        0x005a - 0x0092 reg=10 $this$flatMapTo$iv$iv Ljava/lang/Iterable;
+        0x005b - 0x0092 reg=11 $i$f$flatMapTo I
+        0x0051 - 0x0095 reg=5 $this$flatMap$iv Ljava/lang/Iterable;
+        0x0052 - 0x0095 reg=7 $i$f$flatMap I
+        0x00b3 - 0x00c1 reg=13 it Ljava/lang/String;
+        0x00b4 - 0x00c1 reg=14 $i$a$-filter-DocumentUris$isManagedAuthority$2 I
+        0x00b0 - 0x00c7 reg=12 element$iv$iv Ljava/lang/Object;
+        0x00a0 - 0x00c8 reg=7 destination$iv$iv Ljava/util/Collection;
+        0x00a1 - 0x00c8 reg=9 $this$filterTo$iv$iv Ljava/lang/Iterable;
+        0x00a2 - 0x00c8 reg=10 $i$f$filterTo I
+        0x0099 - 0x00cb reg=5 $i$f$filter I
+        0x0098 - 0x00cb reg=8 $this$filter$iv Ljava/lang/Iterable;
+        0x00f0 - 0x00fb reg=10 it Ljava/lang/String;
+        0x00f1 - 0x00fb reg=11 $i$a$-any-DocumentUris$isManagedAuthority$3 I
+        0x00ed - 0x00fe reg=9 element$iv Ljava/lang/Object;
+        0x00cf - 0x0100 reg=5 $i$f$any I
+        0x00ce - 0x0100 reg=7 $this$any$iv Ljava/lang/Iterable;
+        0x0019 - 0x0102 reg=2 authority Ljava/lang/String;
+        0x0029 - 0x0102 reg=4 app Ljava/lang/String;
+        0x0000 - 0x0102 reg=23 this Lcom/local/notesscan/DocumentUris;
+        0x0000 - 0x0102 reg=24 decodedAuthority Ljava/lang/String;
+        0x0000 - 0x0102 reg=25 packageName Ljava/lang/String;
+        0x0000 - 0x0102 reg=26 declaredAuthorities Ljava/util/List;
+
+    #1              : (in Lcom/local/notesscan/DocumentUris;)
+      name          : 'normalizedAuthority'
+      type          : '(Ljava/lang/String;)Ljava/lang/String;'
+      access        : 0x0011 (PUBLIC FINAL)
+      code          -
+      registers     : 14
+      ins           : 2
+      outs          : 6
+      insns size    : 208 16-bit code units
+006334:                                        |[006334] com.local.notesscan.DocumentUris.normalizedAuthority:(Ljava/lang/String;)Ljava/lang/String;
+006344: 1a00 3203                              |0000: const-string v0, "decodedAuthority" // string@0332
+006348: 7120 ae02 0d00                         |0002: invoke-static {v13, v0}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ae
+00634e: 07d1                                   |0005: move-object v1, v13
+006350: 1f01 d900                              |0006: check-cast v1, Ljava/lang/CharSequence; // type@00d9
+006354: 1265                                   |0008: const/4 v5, #int 6 // #6
+006356: 1206                                   |0009: const/4 v6, #int 0 // #0
+006358: 1302 4000                              |000a: const/16 v2, #int 64 // #40
+00635c: 1203                                   |000c: const/4 v3, #int 0 // #0
+00635e: 1204                                   |000d: const/4 v4, #int 0 // #0
+006360: 7706 bb02 0100                         |000e: invoke-static/range {v1, v2, v3, v4, v5, v6}, Lkotlin/text/StringsKt;.lastIndexOf$default:(Ljava/lang/CharSequence;CIZILjava/lang/Object;)I // method@02bb
+006366: 0a00                                   |0011: move-result v0
+006368: 1a01 b705                              |0012: const-string v1, "无效文档提供程序" // string@05b7
+00636c: 1202                                   |0014: const/4 v2, #int 0 // #0
+00636e: 3a00 3000                              |0015: if-ltz v0, 0045 // +0030
+006372: 6e30 7602 2d00                         |0017: invoke-virtual {v13, v2, v0}, Ljava/lang/String;.substring:(II)Ljava/lang/String; // method@0276
+006378: 0c03                                   |001a: move-result-object v3
+00637a: 1a04 3105                              |001b: const-string v4, "substring(...)" // string@0531
+00637e: 7120 ad02 4300                         |001d: invoke-static {v3, v4}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ad
+006384: 1f03 d900                              |0020: check-cast v3, Ljava/lang/CharSequence; // type@00d9
+006388: 2205 0901                              |0022: new-instance v5, Lkotlin/text/Regex; // type@0109
+00638c: 1a06 8502                              |0024: const-string v6, "[0-9]+" // string@0285
+006390: 7020 b802 6500                         |0026: invoke-direct {v5, v6}, Lkotlin/text/Regex;.<init>:(Ljava/lang/String;)V // method@02b8
+006396: 6e20 b902 3500                         |0029: invoke-virtual {v5, v3}, Lkotlin/text/Regex;.matches:(Ljava/lang/CharSequence;)Z // method@02b9
+00639c: 0a03                                   |002c: move-result v3
+00639e: 3803 0c00                              |002d: if-eqz v3, 0039 // +000c
+0063a2: d803 0001                              |002f: add-int/lit8 v3, v0, #int 1 // #01
+0063a6: 6e20 7502 3d00                         |0031: invoke-virtual {v13, v3}, Ljava/lang/String;.substring:(I)Ljava/lang/String; // method@0275
+0063ac: 0c03                                   |0034: move-result-object v3
+0063ae: 7120 ad02 4300                         |0035: invoke-static {v3, v4}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ad
+0063b4: 280e                                   |0038: goto 0046 // +000e
+0063b6: 1202                                   |0039: const/4 v2, #int 0 // #0
+0063b8: 0000                                   |003a: nop // spacer
+0063ba: 2202 dd00                              |003b: new-instance v2, Ljava/lang/IllegalArgumentException; // type@00dd
+0063be: 6e10 6f02 0100                         |003d: invoke-virtual {v1}, Ljava/lang/Object;.toString:()Ljava/lang/String; // method@026f
+0063c4: 0c01                                   |0040: move-result-object v1
+0063c6: 7020 6002 1200                         |0041: invoke-direct {v2, v1}, Ljava/lang/IllegalArgumentException;.<init>:(Ljava/lang/String;)V // method@0260
+0063cc: 2702                                   |0044: throw v2
+0063ce: 07d3                                   |0045: move-object v3, v13
+0063d0: 0000                                   |0046: nop // spacer
+0063d2: 0734                                   |0047: move-object v4, v3
+0063d4: 1f04 d900                              |0048: check-cast v4, Ljava/lang/CharSequence; // type@00d9
+0063d8: 7210 5902 0400                         |004a: invoke-interface {v4}, Ljava/lang/CharSequence;.length:()I // method@0259
+0063de: 0a04                                   |004d: move-result v4
+0063e0: 1215                                   |004e: const/4 v5, #int 1 // #1
+0063e2: 3d04 0400                              |004f: if-lez v4, 0053 // +0004
+0063e6: 0154                                   |0051: move v4, v5
+0063e8: 2802                                   |0052: goto 0054 // +0002
+0063ea: 0124                                   |0053: move v4, v2
+0063ec: 3804 5d00                              |0054: if-eqz v4, 00b1 // +005d
+0063f0: 6e10 7402 0300                         |0056: invoke-virtual {v3}, Ljava/lang/String;.length:()I // method@0274
+0063f6: 0a04                                   |0059: move-result v4
+0063f8: 1306 0002                              |005a: const/16 v6, #int 512 // #200
+0063fc: 3664 5500                              |005c: if-gt v4, v6, 00b1 // +0055
+006400: 0734                                   |005e: move-object v4, v3
+006402: 1f04 d900                              |005f: check-cast v4, Ljava/lang/CharSequence; // type@00d9
+006406: 1206                                   |0061: const/4 v6, #int 0 // #0
+006408: 0127                                   |0062: move v7, v2
+00640a: 7210 5902 0400                         |0063: invoke-interface {v4}, Ljava/lang/CharSequence;.length:()I // method@0259
+006410: 0a08                                   |0066: move-result v8
+006412: 3587 4600                              |0067: if-ge v7, v8, 00ad // +0046
+006416: 7220 5802 7400                         |0069: invoke-interface {v4, v7}, Ljava/lang/CharSequence;.charAt:(I)C // method@0258
+00641c: 0a08                                   |006c: move-result v8
+00641e: 0189                                   |006d: move v9, v8
+006420: 120a                                   |006e: const/4 v10, #int 0 // #0
+006422: 130b 6100                              |006f: const/16 v11, #int 97 // #61
+006426: 369b 0800                              |0071: if-gt v11, v9, 0079 // +0008
+00642a: 130b 7b00                              |0073: const/16 v11, #int 123 // #7b
+00642e: 35b9 0400                              |0075: if-ge v9, v11, 0079 // +0004
+006432: 015b                                   |0077: move v11, v5
+006434: 2802                                   |0078: goto 007a // +0002
+006436: 012b                                   |0079: move v11, v2
+006438: 390b 2b00                              |007a: if-nez v11, 00a5 // +002b
+00643c: 130b 4100                              |007c: const/16 v11, #int 65 // #41
+006440: 369b 0800                              |007e: if-gt v11, v9, 0086 // +0008
+006444: 130b 5b00                              |0080: const/16 v11, #int 91 // #5b
+006448: 35b9 0400                              |0082: if-ge v9, v11, 0086 // +0004
+00644c: 015b                                   |0084: move v11, v5
+00644e: 2802                                   |0085: goto 0087 // +0002
+006450: 012b                                   |0086: move v11, v2
+006452: 390b 1e00                              |0087: if-nez v11, 00a5 // +001e
+006456: 130b 3000                              |0089: const/16 v11, #int 48 // #30
+00645a: 369b 0800                              |008b: if-gt v11, v9, 0093 // +0008
+00645e: 130b 3a00                              |008d: const/16 v11, #int 58 // #3a
+006462: 35b9 0400                              |008f: if-ge v9, v11, 0093 // +0004
+006466: 015b                                   |0091: move v11, v5
+006468: 2802                                   |0092: goto 0094 // +0002
+00646a: 012b                                   |0093: move v11, v2
+00646c: 390b 1100                              |0094: if-nez v11, 00a5 // +0011
+006470: 130b 2e00                              |0096: const/16 v11, #int 46 // #2e
+006474: 32b9 0d00                              |0098: if-eq v9, v11, 00a5 // +000d
+006478: 130b 5f00                              |009a: const/16 v11, #int 95 // #5f
+00647c: 32b9 0900                              |009c: if-eq v9, v11, 00a5 // +0009
+006480: 130b 2d00                              |009e: const/16 v11, #int 45 // #2d
+006484: 33b9 0300                              |00a0: if-ne v9, v11, 00a3 // +0003
+006488: 2803                                   |00a2: goto 00a5 // +0003
+00648a: 0129                                   |00a3: move v9, v2
+00648c: 2802                                   |00a4: goto 00a6 // +0002
+00648e: 0159                                   |00a5: move v9, v5
+006490: 3909 0400                              |00a6: if-nez v9, 00aa // +0004
+006494: 0124                                   |00a8: move v4, v2
+006496: 2805                                   |00a9: goto 00ae // +0005
+006498: d807 0701                              |00aa: add-int/lit8 v7, v7, #int 1 // #01
+00649c: 28b7                                   |00ac: goto 0063 // -0049
+00649e: 0154                                   |00ad: move v4, v5
+0064a0: 3804 0300                              |00ae: if-eqz v4, 00b1 // +0003
+0064a4: 0152                                   |00b0: move v2, v5
+0064a6: 3802 1300                              |00b1: if-eqz v2, 00c4 // +0013
+0064aa: 6201 d600                              |00b3: sget-object v1, Ljava/util/Locale;.ROOT:Ljava/util/Locale; // field@00d6
+0064ae: 1a02 4d02                              |00b5: const-string v2, "ROOT" // string@024d
+0064b2: 7120 ad02 2100                         |00b7: invoke-static {v1, v2}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ad
+0064b8: 6e20 7702 1300                         |00ba: invoke-virtual {v3, v1}, Ljava/lang/String;.toLowerCase:(Ljava/util/Locale;)Ljava/lang/String; // method@0277
+0064be: 0c01                                   |00bd: move-result-object v1
+0064c0: 1a02 4805                              |00be: const-string v2, "toLowerCase(...)" // string@0548
+0064c4: 7120 ad02 2100                         |00c0: invoke-static {v1, v2}, Lkotlin/jvm/internal/Intrinsics;.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V // method@02ad
+0064ca: 1101                                   |00c3: return-object v1
+0064cc: 1202                                   |00c4: const/4 v2, #int 0 // #0
+0064ce: 0000                                   |00c5: nop // spacer
+0064d0: 2202 dd00                              |00c6: new-instance v2, Ljava/lang/IllegalArgumentException; // type@00dd
+0064d4: 6e10 6f02 0100                         |00c8: invoke-virtual {v1}, Ljava/lang/Object;.toString:()Ljava/lang/String; // method@026f
+0064da: 0c01                                   |00cb: move-result-object v1
+0064dc: 7020 6002 1200                         |00cc: invoke-direct {v2, v1}, Ljava/lang/IllegalArgumentException;.<init>:(Ljava/lang/String;)V // method@0260
+0064e2: 2702                                   |00cf: throw v2
+      catches       : (none)
+      positions     :
+        0x0005 line=10
+        0x0012 line=11
+        0x0017 line=12
+        0x002f line=13
+        0x0039 line=29
+        0x003a line=12
+        0x0045 line=14
+        0x0046 line=11
+        0x0047 line=15
+        0x0062 line=30
+        0x006f line=16
+        0x00a6 line=30
+        0x00ad line=31
+        0x00ae line=15
+        0x00b3 line=18
+        0x00c4 line=15
+        0x00c5 line=17
+        0x00c6 line=15
+      locals        :
+        0x003a - 0x003b reg=2 $i$a$-require-DocumentUris$normalizedAuthority$authority$1 I
+        0x006e - 0x00a6 reg=9 it C
+        0x006f - 0x00a6 reg=10 $i$a$-all-DocumentUris$normalizedAuthority$1 I
+        0x006d - 0x00aa reg=8 element$iv C
+        0x0061 - 0x00ae reg=4 $this$all$iv Ljava/lang/CharSequence;
+        0x0062 - 0x00ae reg=6 $i$f$all I
+        0x00c5 - 0x00c6 reg=2 $i$a$-require-DocumentUris$normalizedAuthority$2 I
+        0x0012 - 0x00d0 reg=0 split I
+        0x0047 - 0x00d0 reg=3 authority Ljava/lang/String;
+        0x0000 - 0x00d0 reg=12 this Lcom/local/notesscan/DocumentUris;
+        0x0000 - 0x00d0 reg=13 decodedAuthority Ljava/lang/String;
+
+  source_file_idx   : 253 (DocumentUris.kt)
+

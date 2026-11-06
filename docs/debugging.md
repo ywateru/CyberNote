@@ -6,6 +6,8 @@
 
 78新增`recording-indicator`组49项，并入桌面全组197项；真实按钮、状态和故障恢复说明见本文末“桌面录音状态与真实完成按钮78”。[独立48项检查及静态布局对照](verification/recording-indicator78-independent/README.md)通过，主线整合和准确包身份单独记录。
 
+79新增`data-management`组33项，已并入桌面全组230项；手机attachments组合75项含该批业务检查。完整主线六项自然通过及真实Rust验证见[交付](verification/data-management79/README.md)。正常附件用逐帧轨迹验证，无数据变更时不因trusted校验遮住整窗；陌生authority/强同步仍保护。
+
 [73历史验收](verification/mobile-recording-primary73/integration/README.md)该批为桌面100/手机录音43/手机笔记9项。手机新增600ms延迟读取后，等待同一卡片真实blob音源/metadata就绪再单次展开和后段回放，避免源更新重挂载丢失控件。程序化视觉对照可运行`node scripts/check-mobile-recording-primary73.mjs /private/tmp/notes-primary73`，它固定baseline3534acaf、真实共享View和同尺寸投影，仅适合该控件校准；输入变化必须显式审查基线。脚本限定真实依赖扫描，生产API规则不变。报告耗时须包括最终清理至进程退出，不能只引用CLI summary计时。
 
 ## 一条命令运行

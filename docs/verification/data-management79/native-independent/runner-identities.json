@@ -1,0 +1,167 @@
+{
+  "sourceHead": "9afb86b1e18932e59f890d6d6cdb532082ea59b9",
+  "identityRecordedAt": "2026-11-06T03:23:33.849802+00:00",
+  "scriptsAndFixedMappings": {
+    "extract-assets.mjs": {
+      "bytes": 3532,
+      "sha256": "57a15300de04c6a057641655ccf3a7f5158b2a0c2c8adf483cb98f530c41950e"
+    },
+    "audit.py": {
+      "bytes": 10910,
+      "sha256": "cff6b5c082ce089c33affb9cb4469891f57b6e26a7f1205e8ccbd4a41d905ec9"
+    },
+    "audit-android.py": {
+      "bytes": 8851,
+      "sha256": "3562ec69fe7879930278337a81497b7fa69090e28b290f2576c2ddcf0b4360ce"
+    },
+    "android-assets-manifest.json": {
+      "bytes": 779,
+      "sha256": "c817b489c0de109a7b1ca84be8f3c52649772dc8ab8a8800bfe0165b38d89913"
+    },
+    "payload-preservation-map.json": {
+      "bytes": 3788,
+      "sha256": "51500acc769484a60df1a0d85dd9b45215cd11d7da9307f00232751e7d79cbec"
+    }
+  },
+  "runs": [
+    {
+      "label": "extract-original",
+      "reproductionArgv": [
+        "node",
+        "docs/verification/data-management79/native-independent/extract-assets.mjs",
+        "docs/verification/data-management79/native-build/result.json",
+        "artifacts/data-management79/mac-original.app/Contents/MacOS/notes-clone",
+        "docs/verification/data-management79/native-independent/original-assets"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "naturalExitCode": 0,
+      "exitEvidence": "Successful natural completion observed during execution; wall/user/sys retained in stderr.",
+      "wallSecondsFromTimeLog": 0.08,
+      "stdout": "docs/verification/data-management79/native-independent/extract-original.stdout.txt",
+      "stdoutSha256": "953438827963f30dd1308b39e398bf9a818951fe268a6d95d8c3f7245bee0c60",
+      "stderr": "docs/verification/data-management79/native-independent/extract-original.stderr.txt",
+      "stderrSha256": "1f00c70a85b25c45237e698754bbdddf8fd5ead47ffa49dd985ec51b93d2688a"
+    },
+    {
+      "label": "extract-derived",
+      "reproductionArgv": [
+        "node",
+        "docs/verification/data-management79/native-independent/extract-assets.mjs",
+        "docs/verification/data-management79/native-build/result.json",
+        "artifacts/data-management79/备忘录.app/Contents/MacOS/notes-clone",
+        "docs/verification/data-management79/native-independent/derived-assets"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "naturalExitCode": 0,
+      "exitEvidence": "Successful natural completion observed during execution; wall/user/sys retained in stderr.",
+      "wallSecondsFromTimeLog": 0.08,
+      "stdout": "docs/verification/data-management79/native-independent/extract-derived.stdout.txt",
+      "stdoutSha256": "719c3ca5202dcad23b295f6a5ad94eaa35943411fd7684911165425de4f531a2",
+      "stderr": "docs/verification/data-management79/native-independent/extract-derived.stderr.txt",
+      "stderrSha256": "5f4b508766774f2f308f397ed816e220cbd72d600e9c5d1c52a2447a7b3d7c3c"
+    },
+    {
+      "label": "extract-android",
+      "reproductionArgv": [
+        "node",
+        "docs/verification/data-management79/native-independent/extract-assets.mjs",
+        "docs/verification/data-management79/native-independent/android-assets-manifest.json",
+        "artifacts/data-management79/verification-extract/android/libnotes_clone_lib.so",
+        "artifacts/data-management79/verification-extract/android/embedded-assets"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "naturalExitCode": 0,
+      "exitEvidence": "Successful natural completion observed during execution; wall/user/sys retained in stderr.",
+      "wallSecondsFromTimeLog": 0.25,
+      "stdout": "docs/verification/data-management79/native-independent/extract-android.stdout.txt",
+      "stdoutSha256": "7747f1a7704b735c8166df9721dc6d2bb0f476530fca999ba328516df94db718",
+      "stderr": "docs/verification/data-management79/native-independent/extract-android.stderr.txt",
+      "stderrSha256": "6aa6fc0cbc264972ec65706f782d0aa5ddd0095945958a230b15f565a9225f86"
+    },
+    {
+      "label": "android-dexdump",
+      "reproductionArgv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/dexdump",
+        "-d",
+        "-f",
+        "artifacts/data-management79/verification-extract/android/classes4.dex"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "naturalExitCode": 0,
+      "exitEvidence": "Successful natural completion observed during execution; wall/user/sys retained in stderr.",
+      "wallSecondsFromTimeLog": 0.43,
+      "stdout": "artifacts/data-management79/verification-extract/android/dexdump.stdout.txt",
+      "stdoutSha256": "c01aaf4158f0150021a3ec2f68c443d4b4d7e081db05f22be35d449e327950e3",
+      "stderr": "docs/verification/data-management79/native-independent/android-dexdump.stderr.txt",
+      "stderrSha256": "61309293cac01d7fdafe825eed6a7e7a0e74516f48f0ac1307d4c9a8f42b876d"
+    },
+    {
+      "label": "audit",
+      "reproductionArgv": [
+        "python3",
+        "docs/verification/data-management79/native-independent/audit.py",
+        "docs/verification/data-management79/native-build/result.json"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "naturalExitCode": 0,
+      "exitEvidence": "Successful natural completion observed during execution; wall/user/sys retained in stderr.",
+      "wallSecondsFromTimeLog": 3.56,
+      "stdout": "docs/verification/data-management79/native-independent/audit.stdout.txt",
+      "stdoutSha256": "a2840807fa4ab49cb2c1561521f83f0a9eb8e05be3512ba2aa03a7fba235a14e",
+      "stderr": "docs/verification/data-management79/native-independent/audit.stderr.txt",
+      "stderrSha256": "f2f200af9884d56bfc0c170048722fc46e45688592c6f000ab9252861780b291"
+    },
+    {
+      "label": "audit-preserved",
+      "reproductionArgv": [
+        "python3",
+        "docs/verification/data-management79/native-independent/audit.py",
+        "docs/verification/data-management79/native-build/result.json"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "naturalExitCode": 0,
+      "exitEvidence": "Successful natural completion observed during execution; wall/user/sys retained in stderr.",
+      "wallSecondsFromTimeLog": 1.67,
+      "stdout": "docs/verification/data-management79/native-independent/audit-preserved.stdout.txt",
+      "stdoutSha256": "7e04023f9a48ab582898aa74e9130b6bff623c4ddcdb82aa1338f8539b5a25e6",
+      "stderr": "docs/verification/data-management79/native-independent/audit-preserved.stderr.txt",
+      "stderrSha256": "d72fc84c013e0f86245d3125eb4a65e186ff8781e97af676f5e36299cc61a197"
+    },
+    {
+      "label": "android-audit",
+      "reproductionArgv": [
+        "python3",
+        "docs/verification/data-management79/native-independent/audit-android.py"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "naturalExitCode": 0,
+      "exitEvidence": "Successful natural completion observed during execution; wall/user/sys retained in stderr.",
+      "wallSecondsFromTimeLog": 2.71,
+      "stdout": "docs/verification/data-management79/native-independent/android-audit.stdout.txt",
+      "stdoutSha256": "7218ac02e547da5c72fe54b626a56024f151169cb1ac94447f992012c4a7ef61",
+      "stderr": "docs/verification/data-management79/native-independent/android-audit.stderr.txt",
+      "stderrSha256": "2fe75ac9f73f8061f7cd498e917144869c4ce66b8e9c4a7c39c2a4456393b0db"
+    },
+    {
+      "label": "android-audit-preserved",
+      "reproductionArgv": [
+        "python3",
+        "docs/verification/data-management79/native-independent/audit-android.py"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "naturalExitCode": 0,
+      "exitEvidence": "Successful natural completion observed during execution; wall/user/sys retained in stderr.",
+      "wallSecondsFromTimeLog": 2.46,
+      "stdout": "docs/verification/data-management79/native-independent/android-audit-preserved.stdout.txt",
+      "stdoutSha256": "8d5d059d36d7d603014bf9a1528e65facba6e364a06d25d0280836e6e4d5ca9e",
+      "stderr": "docs/verification/data-management79/native-independent/android-audit-preserved.stderr.txt",
+      "stderrSha256": "0951f681267329d58bbe72e82b6df5dcf6778d77ee109e4165ea4c17cd50efd9"
+    }
+  ],
+  "notes": [
+    "Reproduction argv describes executed program parameters, not a verbatim shell history or output redirection.",
+    "Initial Mac extraction outputs were moved to artifact preservation paths; see payload-preservation-map.json. Re-extraction would recreate those outputs and requires applying that preservation step again.",
+    "Final audit scripts read retained payloads through preservation map. No checks were rerun to generate this index.",
+    "Internal signature/manifest command argv, exits, precise wallMs and log hashes are retained in result.json and android-result.json."
+  ]
+}

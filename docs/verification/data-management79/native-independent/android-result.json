@@ -1,0 +1,341 @@
+{
+  "status": "PASS-APK-IDENTITY",
+  "sourceHead": "9afb86b1e18932e59f890d6d6cdb532082ea59b9",
+  "trackedInputCount": 288,
+  "inputBeforeAfterCurrentAndCommitMatch": true,
+  "apk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/data-management79/备忘录-Android14.apk",
+    "bytes": 182425850,
+    "sha256": "8eeb51ff8b4f95f152d8a48a19b8ef5addf5e0201ac327e6f2aa53931128f6d6"
+  },
+  "abis": [
+    "arm64-v8a"
+  ],
+  "elf": {
+    "member": "lib/arm64-v8a/libnotes_clone_lib.so",
+    "bytes": 157132648,
+    "sha256": "d9b68d1aff1874b12ebb5526723ccc5526592965ebefff2cbceaea863ae68a1c",
+    "ELF64LittleEndianAArch64": true
+  },
+  "dexes": [
+    {
+      "path": "classes.dex",
+      "bytes": 11894236,
+      "sha256": "522073c04e6d02ffafb75f2f7e58426e0dd729da555eedc911d4400f9d35744f"
+    },
+    {
+      "path": "classes10.dex",
+      "bytes": 9214792,
+      "sha256": "457243a7199bc0ab4d11fa3cf62d6673b467e8803dd1b392e3ae0266a51f2a35"
+    },
+    {
+      "path": "classes11.dex",
+      "bytes": 4110996,
+      "sha256": "469ef675ba25f7afb4805af7a1d5f3f66a8f477d8fa0cddca22e1596a9108436"
+    },
+    {
+      "path": "classes2.dex",
+      "bytes": 3076,
+      "sha256": "ee094efda9968a0aa5757bc3e0ec496d4dcd8bcee77168774bda1f7459cbb8d8"
+    },
+    {
+      "path": "classes3.dex",
+      "bytes": 27568,
+      "sha256": "aef4b00876cfab58d2de7639b4d5a9e66e76a22d2674639cdedc6668f1c9a326"
+    },
+    {
+      "path": "classes4.dex",
+      "bytes": 131224,
+      "sha256": "a2bbccc0204c25874f7156818a55f6487d3bc5b62235446afa951a3d1ebcf29d"
+    },
+    {
+      "path": "classes5.dex",
+      "bytes": 26876,
+      "sha256": "506c8419c63856eec0f08c0718981c963c4b89f9ccfbfbc4cfd26ddc9f4b13ad"
+    },
+    {
+      "path": "classes6.dex",
+      "bytes": 58792,
+      "sha256": "7be9e302e70898eef2cff551e4e7665c83036664e5a97ae3d812b6ba05bb03ec"
+    },
+    {
+      "path": "classes7.dex",
+      "bytes": 517424,
+      "sha256": "3d5bc1738080c5d44a27dc3628b3a1d404a2f5b19384a508f0bab14227aab8fc"
+    },
+    {
+      "path": "classes8.dex",
+      "bytes": 68092,
+      "sha256": "62eabfc2422b02eb0bb0f2e97bdf0a80f7eb9936ca5af92123c09966a6e4f003"
+    },
+    {
+      "path": "classes9.dex",
+      "bytes": 112076,
+      "sha256": "c29c3c64666337d59f62736ab9cddf048ab05401b5309fcfdc05ff2c406cdc6b"
+    }
+  ],
+  "policyClasses": [
+    {
+      "descriptor": "Lcom/local/notesscan/DocumentStreams;",
+      "dex": "classes4.dex",
+      "file": "android-class-DocumentStreams.txt",
+      "bytes": 11392,
+      "sha256": "35bbb4c470fbb20b2f708449a810aa590a0b4c83a7b377360a051c580e5faaf2"
+    },
+    {
+      "descriptor": "Lcom/local/notesscan/DocumentUris;",
+      "dex": "classes4.dex",
+      "file": "android-class-DocumentUris.txt",
+      "bytes": 32206,
+      "sha256": "fffa40c11f2abd394c8a11c146dcab39adf88a302b5d05495ee93c0ffa12cd77"
+    },
+    {
+      "descriptor": "Lcom/local/notesscan/NotesScanPlugin$$ExternalSyntheticLambda0;",
+      "dex": "classes4.dex",
+      "file": "android-class-NotesScanPlugin__ExternalSyntheticLambda0.txt",
+      "bytes": 3804,
+      "sha256": "d590d580f8ade1a07c5a795ab0385f5bd7e63c603d90cb2dfd0b05ea88200d82"
+    },
+    {
+      "descriptor": "Lcom/local/notesscan/NotesScanPlugin;",
+      "dex": "classes4.dex",
+      "file": "android-class-NotesScanPlugin.txt",
+      "bytes": 59677,
+      "sha256": "ef9b3f2cf8ff3c3194bba52105971a015405be5d591f9e310bce389994fd17bf"
+    }
+  ],
+  "staticMethodEvidence": {
+    "guardBeforeOutputStream": true,
+    "decodedAuthorityAndPackageManagerProviders": true,
+    "bounded32KiBRawCopyFlushAndCloseFinally": true,
+    "actualDEXClassMethodsNotFilenameOnly": true
+  },
+  "frontendPayloads": [
+    {
+      "path": "assets/index-CRozYZJJ.js",
+      "embeddedBytes": 1038890,
+      "embeddedSha256": "8b3b66f1a2a01d8c056a81197c20fc1af122a3d02b75351976c76a7c558daf19",
+      "rawDistEqual": true
+    },
+    {
+      "path": "assets/index-DSx5KCxz.css",
+      "embeddedBytes": 85101,
+      "embeddedSha256": "7bc3e44946fffaa89b11fac029eb10fd8d386f8eea05ffc2880ff1237d37f35c",
+      "rawDistEqual": true
+    },
+    {
+      "path": "assets/native-recording-access-BXnjOlDB.js",
+      "embeddedBytes": 1018,
+      "embeddedSha256": "e69f86cdf0c57c7f6acf330add5c565f11fc58030dab43b2f2447a8b21942785",
+      "rawDistEqual": true
+    },
+    {
+      "path": "index.html",
+      "embeddedBytes": 478,
+      "embeddedSha256": "f8c1500ae3355dcd57b739335d1020eb6d92e6c16a5ec65ffbe8de634bf9b2d2",
+      "rawDistEqual": false
+    }
+  ],
+  "htmlComparison": [
+    {
+      "rawBytesEqual": false,
+      "distBytes": 498,
+      "embeddedBytes": 478,
+      "completeNormalizedTokensEqual": true,
+      "tokens": [
+        [
+          "decl",
+          "doctype html"
+        ],
+        [
+          "start",
+          "html",
+          [
+            [
+              "lang",
+              "zh-CN"
+            ]
+          ]
+        ],
+        [
+          "start",
+          "head",
+          []
+        ],
+        [
+          "start",
+          "meta",
+          [
+            [
+              "charset",
+              "UTF-8"
+            ]
+          ]
+        ],
+        [
+          "start",
+          "meta",
+          [
+            [
+              "content",
+              "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+            ],
+            [
+              "name",
+              "viewport"
+            ]
+          ]
+        ],
+        [
+          "start",
+          "meta",
+          [
+            [
+              "content",
+              "#f2f2f7"
+            ],
+            [
+              "name",
+              "theme-color"
+            ]
+          ]
+        ],
+        [
+          "start",
+          "title",
+          []
+        ],
+        [
+          "data",
+          "备忘录"
+        ],
+        [
+          "end",
+          "title"
+        ],
+        [
+          "start",
+          "script",
+          [
+            [
+              "crossorigin",
+              ""
+            ],
+            [
+              "src",
+              "/assets/index-CRozYZJJ.js"
+            ],
+            [
+              "type",
+              "module"
+            ]
+          ]
+        ],
+        [
+          "end",
+          "script"
+        ],
+        [
+          "start",
+          "link",
+          [
+            [
+              "crossorigin",
+              ""
+            ],
+            [
+              "href",
+              "/assets/index-DSx5KCxz.css"
+            ],
+            [
+              "rel",
+              "stylesheet"
+            ]
+          ]
+        ],
+        [
+          "end",
+          "head"
+        ],
+        [
+          "start",
+          "body",
+          []
+        ],
+        [
+          "start",
+          "div",
+          [
+            [
+              "id",
+              "root"
+            ]
+          ]
+        ],
+        [
+          "end",
+          "div"
+        ],
+        [
+          "end",
+          "body"
+        ],
+        [
+          "end",
+          "html"
+        ]
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "label": "android-signature",
+      "argv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/apksigner",
+        "verify",
+        "--verbose",
+        "--print-certs",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/data-management79/备忘录-Android14.apk"
+      ],
+      "exit": 0,
+      "wallMs": 654.55,
+      "stdoutSha256": "ad5dcc6a8094668d0804d0a1b19dc2bf6fcae21dbf76ff6a876d31e27e05c5ac",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "android-badging",
+      "argv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+        "dump",
+        "badging",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/data-management79/备忘录-Android14.apk"
+      ],
+      "exit": 0,
+      "wallMs": 28.54,
+      "stdoutSha256": "ce74105cada00a9558d2871922b0e0aa4971c3dd9b747227ac266d27e93a2b8a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "android-manifest",
+      "argv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+        "dump",
+        "xmltree",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/data-management79/备忘录-Android14.apk",
+        "--file",
+        "AndroidManifest.xml"
+      ],
+      "exit": 0,
+      "wallMs": 27.84,
+      "stdoutSha256": "b5d9c90106993139f719bd8dc782326b71fcedb3a2be5adef3192fadf92c1bb5",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "completeWallMs": 2423.73,
+  "limits": [
+    "Read-only APK/DEX/ELF/signature audit; APK never installed or launched.",
+    "DEX method/disassembly is static inclusion and instruction evidence, not Android Uri/provider/ContentResolver execution proof.",
+    "Actual JSX/CSS/HTML payload identity does not establish Android native rendering or Apple Notes pixel parity.",
+    "REA Android provider unavailable: REA_JADX_MCP_JAR not configured; used installed SDK dexdump/aapt2 fallback, no setup or installation."
+  ]
+}
