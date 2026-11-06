@@ -31,3 +31,5 @@ run/setup创建共享Session和惰性Sync runtime state；status不启用Store�
 再两个真实App DOM各自独立Rust transport：A普通输入pending期间B更新、真实PM composition（不能只dispatch空event）settled后保存、原editor/view/DOM与Undo保持；录音合成A期间B普通修改及B lock/delete，A仍可连续checkpoint/最终保存到A，A本身远端更新待正常release才应用；附件picker/ACK同理。精确记录哪些路径来自真实Rust，JS fixture不能替代。原Android录音现场不动，真实麦克风不用。
 
 新模块通过后才根主线一次受影响整合；保留原始失败，修正后只恢复相关边界。全部同步目标包括87路由和实际新Android运行/包验证，单adapter测试不标goal complete。
+
+未启用库首次pair必须先创建可恢复本机device/Noise身份，再构建backend；其workspace查询在adopt前不得假称已启用。仅Noise成功Prepared后调用84可指定device的enable/adopt入口。Store已启用时用Store device打开85 IdentityStore，严格拒绝文件身份漂移；status无副作用。冷启失败pair也可恢复相同本机UUID；不通过读写私钥JSON猜字段绕85身份API，需要公共只读加载入口时由85所有者明确增加并复验。

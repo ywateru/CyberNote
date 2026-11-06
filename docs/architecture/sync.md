@@ -14,6 +14,8 @@
 
 使用独立同步扩展schema（显式版本、精确校验、事务安装），不篡改既有业务表校验。同步首次启用时分配稳定workspace UUID、device UUID与单调计数；客户端配对采用集合点workspace但保留本地device和已有业务记录。仅首次bootstrap扫描当前数据。default/quick/trash三个系统目录固定保留在本机，不进入wire、dirty或冲突解决，避免createdAt不同产生伪冲突。后续使用SQLite触发器在每次业务 INSERT/UPDATE/DELETE 同一事务内记录 dirty(kind,id)，涵盖Store、smart、archive和附件写入；不在CommitReceipt之后补outbox。dirty只存身份，不复制旧正文。附件变化标记owner note；settings不触发。未启用同步的库不做网络活动。
 
+首次加入且Store未启用时，显式pair可先生成并持久本机device UUID与Noise身份，但不安装同步schema、不选定workspace、不扫描笔记。认证凭据Prepared后，Store提供可指定该device UUID的原子enable/adopt入口，采用邀请workspace并bootstrap现有记录；重复调用严格验证workspace和device相同。不能用sync_enable(None)临时开启另一workspace，也不能在认证前启用邀请workspace。已启用库以Store身份为准；文件/Store身份不一致明确拒绝，不生成新身份掩盖。status查询不创建上述任何文件。
+
 将dirty固化为版本的事务中同时更新计数、版本头、已见版本摘要及清除dirty。网络apply首先固化尚存的本地dirty，随后在同一事务内关闭本地capture、合并远端heads、重投影业务行、更新已见摘要、恢复capture。回滚恢复开关及原数据；远端apply不会生成无限新本地操作。收件ACK（durable）只表示已校验版本inbox及所需blob均持久落盘，不能显示为已应用；应用ACK（applied）必须等Session安全屏障之后版本头与业务投影事务提交。业务行有dirty即保证重启后可补发，不要求每个尚未发送的连续按键保留旧全文历史。
 
 ## 版本与删除

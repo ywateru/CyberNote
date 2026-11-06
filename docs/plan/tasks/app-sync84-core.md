@@ -11,3 +11,5 @@
 提交源码+作者必要测试（不覆盖根正式规格），记录准确命令/自然退出与边界，给根最终commit、API、未解决问题。不得自行merge主线。旧任务全部结束，本任务不是77/81 UI。
 
 真实并发用例发现单device actor从旧投影A:1续写A:3会意外支配未join的A:2；正式改actor→counter，稳定deviceId另留。持久branch actor仅旧分支时分配、连续autosave复用，判定基于同entity/actor的持久maxSeen frontier而非仅当前heads；测试须确定remote selected及A2已被其他head支配后的路径、跨重启与两端收敛。不得drop actor keys或用随机digest排序掩盖。
+
+生产配对补充：提供sync_enable_with_device(workspace,device_id)等价入口，使尚未启用Store可在85认证Prepared之后采用已持久的本机device UUID。安装schema/bootstrap仍单事务，既有身份仅在workspace/device均匹配时幂等返回，不容许重置。sync_enable便捷方法保持现有测试接口。覆盖已有本地笔记、指定device重启稳定、mismatch回滚。
