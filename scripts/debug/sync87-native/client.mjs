@@ -63,8 +63,8 @@ export async function connect({receipt,port=19400}) {
     assert.equal(await read('typeof window.__NOTES_DEBUG__'),'undefined','production debug object must be absent');
     assert.equal(await read('localStorage.getItem("notes-browser-preview")'),null,'native app must not be preview fixture');
     const wait=async(predicate,label,timeout=15000)=>{const end=Date.now()+timeout;while(Date.now()<end){const value=await read(predicate);if(value)return value;await pause(150);}throw Error('Timed out: '+label);};
-    const point=async(selector)=>read(`(()=>{const found=[...document.querySelectorAll(${JSON.stringify(selector)})].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&!e.disabled});if(found.length!==1)throw Error('Expected one visible enabled target');const r=found[0].getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
-    const tap=async(selector)=>{const p=await point(selector);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});};
+    const point=async(selector,text)=>read(`(()=>{const found=[...document.querySelectorAll(${JSON.stringify(selector)})].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&!e.disabled&&(${JSON.stringify(text===undefined?null:text)}===null||e.textContent.trim()===${JSON.stringify(text===undefined?null:text)})});if(found.length!==1)throw Error('Expected one visible enabled target');found[0].scrollIntoView({block:'nearest',inline:'nearest'});const r=found[0].getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
+    const tap=async(selector,text)=>{const p=await point(selector,text);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});};
     const nativeTap=async(selector)=>{
       const p=await point(selector);const nodes=parseNodes(await guard('uia'));
       const views=nodes.filter(n=>n.class==='android.webkit.WebView'&&n.package===PACKAGE&&n.rect?.width>0);
@@ -75,6 +75,13 @@ export async function connect({receipt,port=19400}) {
     const insert=async text=>{assert(typeof text==='string'&&text.length<=16384);await send('Input.insertText',{text});};
     const fill=async(selector,text)=>{await tap(selector);await send('Input.dispatchKeyEvent',{type:'keyDown',key:'a',code:'KeyA',modifiers:2,windowsVirtualKeyCode:65});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'a',code:'KeyA',modifiers:2,windowsVirtualKeyCode:65});await insert(text);};
     const workspace=()=>read('window.__TAURI_INTERNALS__.invoke("load_workspace")'); // observation only
+    const readAttachment=async id=>{
+      assert(typeof id==='string'&&/^[0-9a-f-]{36}$/.test(id));
+      const w=await workspace(),attachment=w.attachments.find(x=>x.id===id);assert(attachment,'actual attachment missing');
+      const access=w.access,noteAccess=access?.notes[attachment.noteId];assert(noteAccess?.authorized,'attachment owner is not authorized');
+      const args={id,expected:{sessionId:access.sessionId,epoch:access.epoch,noteEpoch:noteAccess.epoch}};
+      return read(`window.__TAURI_INTERNALS__.invoke('read_attachment',${JSON.stringify(args)})`);
+    };
     const snapshot=async(directory,name)=>{
       assert(/^[a-z0-9-]+$/.test(name));
       // Refuse screenshots while any invitation field has a value. DOM is cloned and scrubbed separately.
@@ -84,6 +91,6 @@ export async function connect({receipt,port=19400}) {
       await writeFile(resolve(directory,name+'.json'),JSON.stringify({...state,identity,serial:SERIAL,avd:AVD,errors},null,2)+'\n');
       await writeFile(resolve(directory,name+'.png'),Buffer.from(image.data,'base64'));return state;
     };
-    return {identity,target:{id:target.id,url:target.url},send,read,wait,tap,nativeTap,insert,fill,workspace,snapshot,errors,close:cleanup};
+    return {identity,target:{id:target.id,url:target.url},send,read,wait,tap,nativeTap,insert,fill,workspace,readAttachment,snapshot,errors,close:cleanup};
   }catch(error){await cleanup();throw error;}
 }
