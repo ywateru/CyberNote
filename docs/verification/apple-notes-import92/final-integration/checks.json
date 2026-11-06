@@ -1,0 +1,81 @@
+{
+  "sourceHead": "7a602ccaefe34aa357b8fc6cd384f9d51d35a30e",
+  "commands": [
+    {
+      "name": "affected-rust",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "apple_",
+        "--",
+        "--nocapture"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 10.273218458999999
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 2.3895054579999986
+    },
+    {
+      "name": "frontend-build",
+      "command": [
+        "pnpm",
+        "exec",
+        "vite",
+        "build",
+        "--outDir",
+        "/private/tmp/apple-notes-import92-final-production"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 1.9743471660000012
+    },
+    {
+      "name": "production-exclusion",
+      "command": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "check-production",
+        "--production",
+        "/private/tmp/apple-notes-import92-final-production",
+        "--out",
+        "/private/tmp/apple-notes-import92-final-exclusion"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 1.377128625000001
+    },
+    {
+      "name": "lean-build",
+      "command": [
+        "node",
+        "scripts/debug/build-rust-attachments.mjs",
+        "/private/tmp/apple-notes-import92-final-lean01"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 9.593307874999997
+    },
+    {
+      "name": "app-dom",
+      "command": [
+        "node",
+        "scripts/debug/apple-notes-import92.mjs",
+        "/private/tmp/apple-notes-import92-final-lean-immutable01",
+        "/private/tmp/apple-notes-import92-final-dom01"
+      ],
+      "exitCode": 0,
+      "runnerWallSeconds": 19.203528042000002,
+      "checks": 20,
+      "scope": "actual App DOM and exact production core/Session/Store; fixed synthetic OS Source, native windows/dialogs/media mocked; no Apple Notes/device access"
+    }
+  ],
+  "scope": "No real source reads; actual source test stays ignored; relevant real Store/Session/core and frontend checks only."
+}

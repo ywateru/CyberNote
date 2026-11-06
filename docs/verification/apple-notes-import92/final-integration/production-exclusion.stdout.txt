@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "mode": "check-production",
+  "sourceHead": "7a602ccaefe34aa357b8fc6cd384f9d51d35a30e",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7695620a074c9dd1a484b57565ea04b08b77ae02f9aab0a389d2b28268836118",
+    "fileCount": 176,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7695620a074c9dd1a484b57565ea04b08b77ae02f9aab0a389d2b28268836118",
+    "fileCount": 176,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsChanged": false,
+  "platform": "desktop-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "frontendTransport": "production-static",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "elapsedMs": 1168,
+  "result": {
+    "productionAPIAbsent": true,
+    "urlCannotEnable": true,
+    "bundle": {
+      "files": 3,
+      "markers": [
+        "__NOTES_DEBUG__",
+        "SyntheticMediaRecorder",
+        "__DEBUG_PLATFORM__",
+        "synthetic-device-and-ipc-boundaries"
+      ],
+      "matches": []
+    },
+    "platformMockInjectedByRunnerOnly": true
+  },
+  "pageErrors": [],
+  "output": "/private/tmp/apple-notes-import92-final-exclusion"
+}

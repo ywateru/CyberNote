@@ -1,0 +1,209 @@
+   Compiling rustls v0.23.46
+   Compiling rusqlite v0.32.1
+   Compiling tungstenite v0.29.0
+   Compiling tokio-rustls v0.26.6
+   Compiling tokio-tungstenite v0.29.0
+   Compiling notes-qa-fix-store v0.1.0 (/private/tmp/apple-notes-import92-final-lean01/harness)
+warning: method `forget_attachment_window` is never used
+   --> current/session.rs:234:12
+    |
+ 60 | impl Session {
+    | ------------ method in this implementation
+...
+234 |     pub fn forget_attachment_window(&mut self, window: &str) {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: methods `store_attachment` and `smart_projection` are never used
+  --> current/session/metadata.rs:54:19
+   |
+ 4 | impl Session {
+   | ------------ methods in this implementation
+...
+54 |     pub(crate) fn store_attachment(
+   |                   ^^^^^^^^^^^^^^^^
+...
+98 |     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: associated constant `ALL` is never used
+  --> current/session/synchronization.rs:60:11
+   |
+59 | impl AbortReason {
+   | ---------------- associated constant in this implementation
+60 |     const ALL: [Self; 19] = [
+   |           ^^^
+
+warning: method `sync_diagnostics` is never used
+   --> current/session/synchronization.rs:418:19
+    |
+237 | impl Session {
+    | ------------ method in this implementation
+...
+418 |     pub(crate) fn sync_diagnostics(&self) -> Value {
+    |                   ^^^^^^^^^^^^^^^^
+
+warning: method `store_attachment` is never used
+   --> current/store.rs:778:12
+    |
+184 | impl Store {
+    | ---------- method in this implementation
+...
+778 |     pub fn store_attachment(
+    |            ^^^^^^^^^^^^^^^^
+
+warning: function `validated_tags` is never used
+  --> current/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+
+warning: method `sync_enable` is never used
+   --> current/store/synchronization/schema.rs:127:12
+    |
+ 84 | impl Store {
+    | ---------- method in this implementation
+...
+127 |     pub fn sync_enable(&mut self, workspace: Option<&str>) -> Result<SyncIdentity> {
+    |            ^^^^^^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> current/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `evaluate_smart_folder` is never used
+   --> current/store/smart.rs:314:19
+    |
+250 | impl Store {
+    | ---------- method in this implementation
+...
+314 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `diagnostics` and `foreground` are never used
+   --> current/sync/adapter.rs:797:19
+    |
+299 | impl Runtime {
+    | ------------ methods in this implementation
+...
+797 |     pub(crate) fn diagnostics(&self, window: &str, expected: &Token) -> Result<Value> {
+    |                   ^^^^^^^^^^^
+...
+904 |     pub(crate) fn foreground(&self) {
+    |                   ^^^^^^^^^^
+
+warning: method `public_key` is never used
+   --> current/sync/identity.rs:312:12
+    |
+175 | impl IdentityStore {
+    | ------------------ method in this implementation
+...
+312 |     pub fn public_key(&self) -> Result<String> {
+    |            ^^^^^^^^^^
+
+warning: struct `SystemSource` is never constructed
+  --> current/apple_notes_import/core.rs:27:19
+   |
+27 | pub(crate) struct SystemSource;
+   |                   ^^^^^^^^^^^^
+
+warning: methods `read_export` and `check_budget` are never used
+   --> current/apple_notes_import/core.rs:784:19
+    |
+741 | impl OwnedStage {
+    | --------------- methods in this implementation
+...
+784 |     pub(crate) fn read_export(&self, index: usize) -> Result<Vec<u8>> {
+    |                   ^^^^^^^^^^^
+...
+807 |     fn check_budget(&self) -> Result<()> {
+    |        ^^^^^^^^^^^^
+
+warning: function `run_source` is never used
+   --> current/apple_notes_import/core.rs:922:4
+    |
+922 | fn run_source(request: Value, stage: &OwnedStage, cancel: &AtomicBool) -> Result<Value> {
+    |    ^^^^^^^^^^
+
+warning: function `wait_source` is never used
+   --> current/apple_notes_import/core.rs:976:4
+    |
+976 | fn wait_source(
+    |    ^^^^^^^^^^^
+
+warning: function `destroyed` is never used
+    --> current/apple_notes_import/core.rs:1028:15
+     |
+1028 | pub(crate) fn destroyed(imports: &Imports, owner: &str) {
+     |               ^^^^^^^^^
+
+warning: multiple fields are never read
+  --> current/recording_local_core.rs:14:5
+   |
+12 | struct Entry {
+   |        ----- fields in this struct
+13 |     identity: Identity,
+14 |     owner_alive: bool,
+   |     ^^^^^^^^^^^
+15 |     started: bool,
+   |     ^^^^^^^
+16 |     terminal: bool,
+   |     ^^^^^^^^
+17 |     revision: Option<(u64, bool)>,
+   |     ^^^^^^^^
+18 |     checkpoint_revision: u64,
+   |     ^^^^^^^^^^^^^^^^^^^
+19 |     child_destroyed: bool,
+   |     ^^^^^^^^^^^^^^^
+20 |     docked: bool,
+   |     ^^^^^^
+
+warning: fields `sealing`, `id`, `participants`, and `waiting` are never read
+  --> current/recording_local_core.rs:23:5
+   |
+22 | struct Quit {
+   |        ---- fields in this struct
+23 |     sealing: HashSet<String>,
+   |     ^^^^^^^
+24 |     id: String,
+   |     ^^
+25 |     participants: HashSet<String>,
+   |     ^^^^^^^^^^^^
+26 |     waiting: HashSet<String>,
+   |     ^^^^^^^
+
+warning: struct `Recordings` is never constructed
+  --> current/recording_local_core.rs:29:12
+   |
+29 | pub struct Recordings(Mutex<Registry>);
+   |            ^^^^^^^^^^
+
+warning: function `recording_label` is never used
+  --> current/recording_local_core.rs:45:8
+   |
+45 | pub fn recording_label(label: &str) -> bool {
+   |        ^^^^^^^^^^^^^^^
+
+warning: function `document_participants` is never used
+  --> current/recording_local_core.rs:48:8
+   |
+48 | pub fn document_participants(windows: impl IntoIterator<Item = String>) -> HashSet<String> {
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `envelope` is never used
+  --> current/recording_local_core.rs:57:4
+   |
+57 | fn envelope(entry: &Entry, from: &str, message: Value) -> Value {
+   |    ^^^^^^^^
+
+warning: function `entry` is never used
+  --> current/recording_local_core.rs:63:4
+   |
+63 | fn entry<'a>(
+   |    ^^^^^
+
+warning: `notes-qa-fix-store` (bin "notes-current-attachment-transport") generated 23 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.52s
