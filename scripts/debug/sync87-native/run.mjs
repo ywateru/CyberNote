@@ -6,14 +6,18 @@ import { resolve, basename } from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
 import { readRequests, actionFailure } from './protocol.mjs';
 import assert from 'node:assert/strict';
+import { DesktopPeer } from './desktop-peer.mjs';
+import { pairViaUI,saveImageOriginal,openNote,goHome } from './native-ui.mjs';
+import { roundtrip,backgroundRoundtrip,coldBootPrepare,coldBootVerify,assertNativeOriginal } from './scenarios.mjs';
 import { connect, guard, pause, parseNodes, nativeNode, SERIAL, AVD } from './client.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const options=Object.fromEntries(process.argv.slice(2).reduce((pairs,x,i,a)=>{if(i%2===0)pairs.push([x,a[i+1]]);return pairs;},[]));
-assert(Object.keys(options).every(x=>['--output','--receipt','--mode'].includes(x)),'unknown option');
+assert(Object.keys(options).every(x=>['--output','--receipt','--peer-receipt','--mode'].includes(x)),'unknown option');
 assert(['prepare','serve'].includes(options['--mode']),'explicit --mode prepare|serve required');
 const output=resolve(options['--output']||'');
 assert(/^\/private\/tmp\/notes-sync87-native-[a-z0-9-]+$/.test(output),'new isolated /private/tmp/notes-sync87-native-* output required');
-let context;
+let context,peer;
+const closeClient=async()=>{const owned=context;context=undefined;await owned?.close();};
 async function prepare(){
   assert(!existsSync(output),'never replace a native evidence directory');await mkdir(output,{mode:0o700});
   const id=randomBytes(5).toString('hex'),remote='/sdcard/Download/notes-sync87-'+id;
@@ -25,7 +29,12 @@ async function prepare(){
   for(const [ext,bytes] of [['png',png],['txt',Buffer.from('SYNC87 synthetic text attachment\n')],['wav',wav]]){
     const name=`sync87-${id}.${ext}`;await writeFile(resolve(output,name),bytes);files.push({name,path:resolve(output,name),remote:remote+'/'+name,sha256:hash(bytes),bytes:bytes.length});
   }
-  const state={version:1,serial:SERIAL,avd:AVD,runId:id,remote,files,notes:[]};
+  const desktopFiles=[];
+  for(const f of files.filter(f=>/\.(png|wav)$/.test(f.name))){
+    const name='sync87-desktop-'+id+f.name.slice(f.name.lastIndexOf('.')),path=resolve(output,name);
+    await writeFile(path,await readFile(f.path));desktopFiles.push({...f,name,path,remote:remote+'/'+name});
+  }
+  const state={version:1,serial:SERIAL,avd:AVD,runId:id,remote,files,desktopFiles,notes:[]};
   await writeFile(resolve(output,'state.json'),JSON.stringify(state,null,2)+'\n');return state;
 }
 async function state(){const s=JSON.parse(await readFile(resolve(output,'state.json'),'utf8'));assert.equal(s.serial,SERIAL);assert.equal(s.avd,AVD);assert.equal(s.version,1);return s;}
@@ -67,7 +76,7 @@ async function execute(request){
   switch(request.action){
     case 'install':assert(Object.keys(request).every(k=>['action','requestId'].includes(k)));return guard('install',{receipt:options['--receipt']});
     case 'start':assert(Object.keys(request).every(k=>['action','requestId'].includes(k)));return guard('start',{receipt:options['--receipt']});
-    case 'pushFixtures':for(const f of s.files){assert.equal(hash(await readFile(f.path)),f.sha256);await guard('push',{path:f.path,remote:f.remote});}return s.files.map(({name,sha256,bytes})=>({name,sha256,bytes}));
+    case 'pushFixtures':for(const f of s.files){assert.equal(hash(await readFile(f.path)),f.sha256);await guard('push',{'run-state':resolve(output,'state.json'),path:f.path,remote:f.remote});}return s.files.map(({name,sha256,bytes})=>({name,sha256,bytes}));
     case 'home':{
       const c=await app();await c.wait('!!document.querySelector(".mobile.page-notes .mobile-gallery")','direct gallery');
       const columns=await c.read('getComputedStyle(document.querySelector(".mobile-gallery")).gridTemplateColumns');assert.equal(columns.trim().split(/\s+/).length,2,'two real gallery columns');
@@ -75,7 +84,7 @@ async function execute(request){
       await c.snapshot(output,'home');return{columns,add};
     }
     case 'createNote':{
-      const c=await app();const marker=`SYNC87-${s.runId}-${s.notes.length+1}`;
+      const c=await app();await goHome(c);const marker=`SYNC87-${s.runId}-${s.notes.length+1}`;
       await c.nativeTap('button.mobile-add-note[aria-label="新建备忘录"]');
       await c.wait('document.activeElement===document.querySelector(".tiptap[contenteditable=true]")','automatic editor focus');
       assert(/mInputShown=true/.test(await guard('ime')),'actual Android keyboard did not open');
@@ -95,31 +104,32 @@ async function execute(request){
       for(const file of s.files)assert(three.attachments.some(a=>a.displayName===file.name),'selected original filename must persist');
       await c.snapshot(output,'attachments');return {cancelPreserved:true,multipleCount:two.attachments.length,continuousCount:three.attachments.length,names:three.attachments.map(x=>x.displayName)};
     }
-    case 'exportImage':{
-      const c=await app();const file=s.files[0];await c.tap('button.image-open');await c.wait('!!document.querySelector(".image-preview")','image preview');await c.tap('.image-preview [aria-label="图片信息"]');await c.snapshot(output,'image-info');
-      await c.tap('.image-preview .save-image');await nativeNode(n=>chooserPackage(n)&&n['resource-id']==='com.android.documentsui:id/action_menu_select'||chooserPackage(n)&&/^(SAVE|Save|保存)$/.test(n.text||''));
-      await c.wait('document.querySelector(".image-preview")?.innerText.includes("图片已保存")','native export acknowledgement');
-      // Resolve actual saved Downloads path through chooser before claiming byte equality.
-      return{savedUI:true,expected:{name:file.name,sha256:file.sha256},originalBytesVerified:false};
+    case 'exportImage':assert(s.notes.length);await openNote(await app(),s.notes.at(-1).id);return saveImageOriginal(await app(),s,output,1,s.files.find(f=>f.name.endsWith('.png')));
+    case 'pair':await pairViaUI(await app(),request.invitation);await(await app()).snapshot(output,'paired');return{paired:true};
+    case 'connectDesktop':{
+      assert(!peer,'desktop peer already running');assert(typeof options['--peer-receipt']==='string','root peer receipt required');
+      peer=await DesktopPeer.open(options['--peer-receipt'],output,s.runId);const address=await peer.host();
+      let invitation=await peer.invitation(address.endpoint);
+      try{await pairViaUI(await app(),invitation);}finally{invitation=undefined;}
+      await(await app()).snapshot(output,'paired-desktop');return{paired:true,endpoint:address.endpoint,desktopPid:peer.backend.pid};
     }
-    case 'pair':{
-      assert(typeof request.invitation==='string'&&request.invitation.length>0&&request.invitation.length<=16384);
-      const c=await app();await c.tap('button[aria-label="设置"]');await c.tap('#preferences-tab-data');await c.fill('input[aria-label="同步设备名称"]','SYNC87 Android');
-      const tapText=async text=>{const p=await c.read(`(()=>{const a=[...document.querySelectorAll('.sync-settings button')].filter(e=>e.textContent.trim()===${JSON.stringify(text)});if(a.length!==1)throw Error('sync button absent');const r=a[0].getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2}})()`);await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});};
-      await tapText('加入同步');await c.fill('input[aria-label="粘贴完整配对串"]',request.invitation);await tapText('连接并加入');
-      // Pair can take27s: terminal UI rather than a fixed short timeout.
-      await c.wait('!!document.querySelector(".sync-peer") && !document.querySelector(".sync-pair")','native actual UI pairing',40000);
-      await c.tap('button[aria-label="关闭设置"]');await c.snapshot(output,'paired');return{paired:true};
-    }
+    case 'roundtrip':assert(peer);return roundtrip({client:await app(),peer,state:s,output,saveState:save});
+    case 'backgroundRoundtrip':assert(peer);return backgroundRoundtrip({client:await app(),closeClient,getClient:app,peer,state:s,output,receipt:options['--receipt']});
+    case 'coldBootPrepare':return coldBootPrepare({client:await app(),closeClient,state:s,output});
+    case 'coldBootVerify':return coldBootVerify({getClient:app,state:s,output,receipt:options['--receipt']});
     case 'observe':{const c=await app();const w=await c.workspace();return{notes:w.notes,attachments:w.attachments,identity:c.identity};}
     case 'background':{await guard('home');return{backgrounded:true};}
     case 'foreground':{await guard('start',{receipt:options['--receipt']});return{foregrounded:true};}
     case 'reopen':{
-      const c=await app(),before=await c.workspace();await c.close();context=undefined;await guard('stop');await guard('start',{receipt:options['--receipt']});await pause(500);const after=await(await app()).workspace();
-      for(const own of s.notes){assert.deepEqual(after.notes.find(n=>n.id===own.id)?.document,before.notes.find(n=>n.id===own.id)?.document);assert.deepEqual(after.attachments.filter(a=>a.noteId===own.id),before.attachments.filter(a=>a.noteId===own.id));}
+      const c=await app();await goHome(c);const before=await c.workspace(),oldIdentity=c.identity;await closeClient();await guard('stop');await guard('start',{receipt:options['--receipt']});await pause(500);const after=await(await app()).workspace();assert(context.identity.pid!==oldIdentity.pid||context.identity.startTicks!==oldIdentity.startTicks,'new native app lifetime required');
+      for(const own of [...s.notes,...(s.desktopNote?[s.desktopNote]:[])]){
+        assert.deepEqual(after.notes.find(n=>n.id===own.id)?.document,before.notes.find(n=>n.id===own.id)?.document);
+        assert.deepEqual(after.attachments.filter(a=>a.noteId===own.id),before.attachments.filter(a=>a.noteId===own.id));
+        for(const attachment of after.attachments.filter(a=>a.noteId===own.id)){const file=[...s.files,...s.desktopFiles].find(f=>f.name===attachment.displayName);assert(file);await assertNativeOriginal(context,attachment.id,file);}
+      }
       await(await app()).snapshot(output,'reopened');return{sameNativeData:true,notes:s.notes.length,identity:context.identity};
     }
-    case 'close':await context?.close();context=undefined;return{closed:true};
+    case 'close':await closeClient();if(peer){await peer.close();peer=undefined;}return{closed:true};
     default:throw Error('unsupported native acceptance action');
   }
 }
@@ -141,7 +151,9 @@ else{
   } catch {
     console.log(JSON.stringify({ok:false,error:'INPUT_READ_FAILED',message:'Native input stream failed; no input or exception recorded'}));process.exitCode=2;
   } finally {
-    try { await context?.close(); }
+    try { await closeClient(); }
     catch { console.log(JSON.stringify({ok:false,error:'CLEANUP_FAILED',message:'Native cleanup failed; no input or exception recorded'}));process.exitCode=2; }
+    try { await peer?.close(); }
+    catch { console.log(JSON.stringify({ok:false,error:'PEER_CLEANUP_FAILED',message:'Peer cleanup failed; no input or exception recorded'}));process.exitCode=2; }
   }
 }

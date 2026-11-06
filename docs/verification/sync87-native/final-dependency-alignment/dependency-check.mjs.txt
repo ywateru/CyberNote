@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {mkdtemp,mkdir,readFile,writeFile} from 'node:fs/promises';
+import {join} from 'node:path';
+import {verifyDOMDependencies,DOM_DEPENDENCIES} from './scripts/debug/sync87-native/desktop-peer.mjs';
+const root=process.cwd(),expected=await verifyDOMDependencies(root);let checks=0;
+assert.equal(expected.sourceCommit,'b08c77289203691c30026ce673116721c5ca5a59');checks++;
+assert.equal(Object.keys(expected.files).length,3);checks++;
+const temp=await mkdtemp('/private/tmp/notes-sync87-native-frozen-dependency-');await mkdir(join(temp,'scripts/debug'),{recursive:true});
+for(const name of Object.keys(DOM_DEPENDENCIES))await writeFile(join(temp,name),await readFile(join(root,name)));
+await verifyDOMDependencies(temp);checks++;
+for(const name of Object.keys(DOM_DEPENDENCIES)){const bytes=await readFile(join(temp,name));await writeFile(join(temp,name),Buffer.concat([bytes,Buffer.from('changed')]));await assert.rejects(()=>verifyDOMDependencies(temp));checks++;await writeFile(join(temp,name),bytes);}
+console.log(JSON.stringify({passed:checks,sourceCommit:expected.sourceCommit,files:expected.files,scope:'host-only exact dependency admission and one tamper rejection per shared file; no backend or browser'}));

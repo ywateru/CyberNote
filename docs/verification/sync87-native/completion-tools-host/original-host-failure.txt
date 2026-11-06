@@ -1,0 +1,9 @@
+Before source freeze, the first expanded Python guard run had18 tests/errors1.
+ERROR test_exact_run_scope: run_scope rejected the TemporaryDirectory fixture
+because tempfile can generate an underscore while the owned-root contract
+permits only lowercase letters/digits/hyphens. Natural Python exit1; no ADB or
+other subprocess was reachable (global subprocess.run stub).
+The host fixture now uses a UUID-hex direct directory created exclusively and
+cleans only that freshly created known directory. Guard path restrictions were
+not weakened. The original failing wrapper output is retained in the tool-call
+history; no original wall time is invented here.

@@ -68,6 +68,39 @@ def device_path(value, *, file=True):
     require(not file or value.count('/') == 4, 'synthetic file path required')
     return value
 
+def run_scope(path):
+    p=Path(path)
+    require(p.is_absolute() and re.fullmatch(r'/private/tmp/notes-sync87-native-[a-z0-9-]+/state.json',str(p)), 'exact owned run-state path required')
+    require(p.is_file() and not p.is_symlink() and p.parent.is_dir() and not p.parent.is_symlink() and p.resolve()==p, 'run state must be a confined direct file')
+    state=json.loads(p.read_text())
+    require(type(state) is dict and state.get('version')==1 and state.get('serial')==SERIAL and state.get('avd')==AVD, 'run state identity mismatch')
+    ident=state.get('runId')
+    require(type(ident) is str and re.fullmatch(r'[0-9a-f]{10}',ident), 'synthetic run id required')
+    require(state.get('remote')=='/sdcard/Download/notes-sync87-'+ident, 'run remote directory mismatch')
+    require(type(state.get('files')) is list and type(state.get('desktopFiles',[])) is list, 'fixture lists required')
+    files=state['files']+state.get('desktopFiles',[])
+    require(len(files) in (3,5), 'synthetic fixture manifest required')
+    seen=set()
+    for f in files:
+        require(type(f) is dict and set(f)=={'name','path','remote','sha256','bytes'}, 'fixture manifest fields mismatch')
+        name=f['name']
+        require(type(name) is str and re.fullmatch(r'sync87-(?:desktop-)?'+ident+r'\.(?:png|txt|wav)',name) and name not in seen, 'fixture does not belong to this run')
+        seen.add(name)
+        require(f['path']==str(p.parent/name) and f['remote']==state['remote']+'/'+name, 'fixture path differs from owned run')
+        require(type(f['bytes']) is int and 0<f['bytes']<=8*1024*1024 and type(f['sha256']) is str and re.fullmatch(r'[0-9a-f]{64}',f['sha256']), 'fixture size/hash malformed')
+        direct=owned_file(f['path'])
+        with direct.open('rb') as stream: actual=stream_hash(stream)
+        require(direct.stat().st_size==f['bytes'] and actual==f['sha256'], 'host fixture changed')
+    return p.parent,state,files
+
+def export_scope(path,index,name):
+    root,state,files=run_scope(path)
+    require(type(index) is int and 1<=index<=20, 'export index must be1..20')
+    found=[f for f in files if f['name']==name]
+    require(len(found)==1, 'export filename must identify a known original fixture')
+    folder='exports-'+str(index)
+    return root/folder, state['remote']+'/'+folder, found[0]
+
 def run(argv, timeout=15, binary=False):
     started=time.monotonic()
     r=subprocess.run(argv,capture_output=True,timeout=timeout)
@@ -109,8 +142,8 @@ def app_identity(serial,avd,expected=None):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--serial',required=True);p.add_argument('--avd',required=True)
-    p.add_argument('operation',choices=['status','install','start','stop','home','back','identity','tap','hold','uia','ime','push','pull','forward','unforward','verify-app','foreground','screenshot','installed'])
-    p.add_argument('--receipt');p.add_argument('--path');p.add_argument('--remote');p.add_argument('--x',type=int);p.add_argument('--y',type=int);p.add_argument('--port',type=int);p.add_argument('--app-identity')
+    p.add_argument('operation',choices=['status','install','start','stop','home','back','identity','tap','hold','uia','ime','push','pull','forward','unforward','verify-app','foreground','screenshot','installed','prepare-export','checkpoint'])
+    p.add_argument('--run-state');p.add_argument('--export-index',type=int);p.add_argument('--name');p.add_argument('--receipt');p.add_argument('--path');p.add_argument('--remote');p.add_argument('--x',type=int);p.add_argument('--y',type=int);p.add_argument('--port',type=int);p.add_argument('--app-identity')
     a=p.parse_args();target(a.serial,a.avd)
     invoke=lambda tail,**kw:adb(a.serial,a.avd,tail,**kw)
     result=None
@@ -148,15 +181,39 @@ def main():
         dst.write_bytes(invoke(['exec-out','screencap','-p'],binary=True));result={'bytes':dst.stat().st_size}
     elif a.operation=='foreground':result=invoke(['shell','dumpsys','activity','activities'])
     elif a.operation=='push':
+        root,state,files=run_scope(a.run_state)
+        found=[f for f in files if f['path']==a.path and f['remote']==a.remote]
+        require(len(found)==1, 'push must match this exact run fixture')
         src=owned_file(a.path);dst=device_path(a.remote)
-        require(src.name==dst.rsplit('/',1)[1],'fixture filename changed')
-        invoke(['shell','mkdir','-p',dst.rsplit('/',1)[0]])
+        invoke(['shell','mkdir','-p',state['remote']])
         result=invoke(['push',str(src),dst])
-    elif a.operation=='pull':
-        src=device_path(a.remote);dst=Path(a.path)
-        require(dst.is_absolute() and not dst.exists() and dst.parent.is_dir() and not dst.parent.is_symlink(),'new absolute output file required')
-        require(dst.name==src.rsplit('/',1)[1],'output filename changed')
-        result=invoke(['pull',src,str(dst)])
+    elif a.operation in ('prepare-export','pull'):
+        local,remote,fixture=export_scope(a.run_state,a.export_index,a.name)
+        source=remote+'/'+fixture['name'];target_file=local/fixture['name']
+        if a.operation=='prepare-export':
+            require(not local.exists() and not local.is_symlink(), 'export directory must be new')
+            local.mkdir(mode=0o700)
+            invoke(['shell','mkdir',remote])
+            invoke(['shell','test','-d',remote]);invoke(['shell','test','!','-L',remote])
+            invoke(['shell','test','!','-e',source])
+            result={'remoteDirectory':remote,'localDirectory':str(local),'name':fixture['name']}
+        else:
+            require(local.is_dir() and not local.is_symlink() and local.resolve()==local and not target_file.exists() and not target_file.is_symlink(), 'new output inside exact owned export directory required')
+            require(a.path==str(target_file) and a.remote==source, 'pull path differs from exact run/index/original')
+            invoke(['shell','test','!','-L',remote]);invoke(['shell','test','!','-L',source]);invoke(['shell','test','-f',source])
+            size=invoke(['shell','stat','-c','%s',source]);require(size==str(fixture['bytes']), 'exported size differs from original')
+            payload=invoke(['exec-out','cat',source],binary=True)
+            actual=hashlib.sha256(payload).hexdigest()
+            require(len(payload)==fixture['bytes'] and actual==fixture['sha256'], 'exported original bytes differ')
+            fd=os.open(target_file,os.O_CREAT|os.O_EXCL|os.O_WRONLY|os.O_NOFOLLOW,0o600)
+            with os.fdopen(fd,'wb') as stream:stream.write(payload);stream.flush();os.fsync(stream.fileno())
+            result={'path':str(target_file),'bytes':len(payload),'sha256':actual,'originalBytesVerified':True}
+    elif a.operation=='checkpoint':
+        owned=ownership(a.serial,a.avd)
+        boot=invoke(['shell','cat','/proc/sys/kernel/random/boot_id'])
+        require(re.fullmatch(r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',boot), 'guest boot identity malformed')
+        data=ROOT/'data/userdata-qemu.img';require(data.is_file() and not data.is_symlink(),'owned existing userdata required')
+        stat=data.stat();result={'emulatorPid':owned['pid'],'emulatorStart':owned['lstart'],'bootId':boot,'userdataDevice':stat.st_dev,'userdataInode':stat.st_ino,'userdataSize':stat.st_size}
     elif a.operation in ('forward','unforward'):
         require(type(a.port) is int and 19400<=a.port<=19419,'owned CDP port range19400..19419 required')
         expected=json.loads(a.app_identity) if a.app_identity else None

@@ -46,6 +46,73 @@ class Guards(unittest.TestCase):
  def test_target_fails_before_any_process(self):
   with patch.object(g.subprocess,'run',side_effect=AssertionError('host subprocess forbidden')):
    with self.assertRaises(g.Refused):g.ownership('emulator-5580',g.AVD)
+class RunScopes(unittest.TestCase):
+ def setUp(self):
+  import uuid
+  self.root=Path('/private/tmp/notes-sync87-native-'+uuid.uuid4().hex);self.root.mkdir();self.ident='abcd123456'
+  self.state=dict(version=1,serial=g.SERIAL,avd=g.AVD,runId=self.ident,remote='/sdcard/Download/notes-sync87-'+self.ident,notes=[],files=[])
+  for ext in ['png','txt','wav']:
+   name='sync87-'+self.ident+'.'+ext;payload=('synthetic-'+ext).encode();path=self.root/name;path.write_bytes(payload)
+   self.state['files'].append(dict(name=name,path=str(path),remote=self.state['remote']+'/'+name,sha256=hashlib.sha256(payload).hexdigest(),bytes=len(payload)))
+  self.path=self.root/'state.json';self.write()
+ def tearDown(self):
+  import shutil
+  self.assertTrue(str(self.root).startswith('/private/tmp/notes-sync87-native-'));shutil.rmtree(self.root)
+ def write(self):self.path.write_text(json.dumps(self.state))
+ def test_exact_run_scope(self):
+  root,state,files=g.run_scope(self.path);self.assertEqual(root,self.root);self.assertEqual(len(files),3)
+ def test_wrong_remote_and_identity(self):
+  for key,value in [('remote','/sdcard/Download/notes-sync87-other'),('serial','emulator-5580'),('runId','other')]:
+   saved=self.state[key];self.state[key]=value;self.write()
+   with self.assertRaises(g.Refused):g.run_scope(self.path)
+   self.state[key]=saved;self.write()
+ def test_changed_fixture(self):
+  Path(self.state['files'][0]['path']).write_bytes(b'changed')
+  with self.assertRaises(g.Refused):g.run_scope(self.path)
+ def test_foreign_fixture_path(self):
+  self.state['files'][0]['remote']='/sdcard/Download/notes-sync87-other/sync87-'+self.ident+'.png';self.write()
+  with self.assertRaises(g.Refused):g.run_scope(self.path)
+ def test_fixture_symlink(self):
+  original=Path(self.state['files'][0]['path']);original.unlink();original.symlink_to(self.state['files'][1]['path'])
+  with self.assertRaises(g.Refused):g.run_scope(self.path)
+ def test_export_derivation(self):
+  name=self.state['files'][0]['name'];local,remote,f=g.export_scope(self.path,2,name)
+  self.assertEqual(local,self.root/'exports-2');self.assertEqual(remote,self.state['remote']+'/exports-2');self.assertEqual(f['name'],name)
+  for index in [0,21,True,None]:
+   with self.assertRaises(g.Refused):g.export_scope(self.path,index,name)
+  with self.assertRaises(g.Refused):g.export_scope(self.path,1,'sync87-other.png')
+ def test_run_state_symlink(self):
+  self.path.rename(self.root/'real-state.json');self.path.symlink_to(self.root/'real-state.json')
+  with self.assertRaises(g.Refused):g.run_scope(self.path)
+ def call_main(self,op,extra,answers):
+  import contextlib,io
+  calls=[]
+  def fake(serial,avd,tail,**kwargs):
+   self.assertEqual((serial,avd),(g.SERIAL,g.AVD));calls.append(tail);return answers(tail,kwargs)
+  args=['guard.py','--serial',g.SERIAL,'--avd',g.AVD,op,'--run-state',str(self.path),'--export-index','1','--name',self.state['files'][0]['name'],*extra]
+  with patch.object(g.sys,'argv',args),patch.object(g,'adb',side_effect=fake),contextlib.redirect_stdout(io.StringIO()):g.main()
+  return calls
+ def test_prepare_and_verified_pull(self):
+  file=self.state['files'][0];local=self.root/'exports-1'/file['name'];remote=self.state['remote']+'/exports-1/'+file['name']
+  prepared=self.call_main('prepare-export',[],lambda a,k:'');self.assertEqual(prepared[0],['shell','mkdir',self.state['remote']+'/exports-1'])
+  payload=Path(file['path']).read_bytes()
+  def answer(args,kwargs):
+   if args[:3]==['shell','stat','-c']:return str(len(payload))
+   if args[:2]==['exec-out','cat']:self.assertEqual(args[2],remote);return payload
+   return ''
+  self.call_main('pull',['--path',str(local),'--remote',remote],answer);self.assertEqual(local.read_bytes(),payload)
+  with self.assertRaises(g.Refused):self.call_main('pull',['--path',str(local),'--remote',remote],answer)
+ def test_pull_foreign_destination_refused_before_adb(self):
+  (self.root/'exports-1').mkdir()
+  with self.assertRaises(g.Refused):self.call_main('pull',['--path',str(self.root/'outside.png'),'--remote',self.state['remote']+'/exports-1/'+self.state['files'][0]['name']],lambda a,k:self.fail('no device command expected'))
+ def test_pull_hash_mismatch_never_publishes(self):
+  file=self.state['files'][0];(self.root/'exports-1').mkdir();destination=self.root/'exports-1'/file['name']
+  def answer(args,kwargs):
+   if args[:3]==['shell','stat','-c']:return str(file['bytes'])
+   if args[:2]==['exec-out','cat']:return b'x'*file['bytes']
+   return ''
+  with self.assertRaises(g.Refused):self.call_main('pull',['--path',str(destination),'--remote',self.state['remote']+'/exports-1/'+file['name']],answer)
+  self.assertFalse(destination.exists())
 if __name__=='__main__':
  with patch.object(g.subprocess,'run',side_effect=AssertionError('host subprocess forbidden')):
   unittest.main()

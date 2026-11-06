@@ -1,0 +1,59 @@
+[
+  {
+    "name": "independent-text",
+    "argv": [
+      "node",
+      "/private/tmp/notes-sync87-native-text-independent-01/independent-text-probe.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 4.276665917
+  },
+  {
+    "name": "author-text",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-roundtrip-text.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.8719322089999997
+  },
+  {
+    "name": "scenario",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-scenarios.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.1805680840000008
+  },
+  {
+    "name": "scenario-syntax",
+    "argv": [
+      "node",
+      "--check",
+      "scripts/debug/sync87-native/scenarios.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.02957600000000049
+  },
+  {
+    "name": "text-syntax",
+    "argv": [
+      "node",
+      "--check",
+      "scripts/debug/sync87-native/check-roundtrip-text.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.03233825000000046
+  },
+  {
+    "name": "diff",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.13579616700000052
+  }
+]
