@@ -1,6 +1,6 @@
 # APP-SYNC86-ADAPTER 生产接线及安全应用协调
 
-状态 pending，depends-on 84与85冻结API（UI86并行）。用户完整同步目标尚未完成。本任务实现由develop代理，独立verify不同作者，根负责合并/整合。
+状态 in-progress，depends-on 84与85已独审并合入、主线完整回归通过（UI86已合入，frontend协调并行）。用户完整同步目标尚未完成。本任务实现由develop代理，独立verify不同作者，根负责合并/整合。
 
 objective：创建真实SyncService、注入生产Store/Session backend、实现真实sync_command UI契约，连接持久收件到安全apply与metadata/access，做两真实Rust进程/两个真实App页面端到端，禁止stub/fake残留。读[架构](../../architecture/sync.md)、[UI IPC契约](../../ui/sync-settings.md)、84/85实际冻结API，必要设计先补文档。
 

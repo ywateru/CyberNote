@@ -1,6 +1,6 @@
 # APP-SYNC85 认证网络与配对
 
-状态 in-progress。根规格：[sync](../../architecture/sync.md)。84并行实现Store；本任务先独立生产网络/凭据服务，随后统一适配。冻结后独审。
+状态 done（85模块范围；86/87完整同步仍进行）。根规格：[sync](../../architecture/sync.md)。84并行实现Store；本任务先独立生产网络/凭据服务，随后统一适配。冻结后独审。
 
 实现 `src-tauri/src/sync/network.rs`、`identity.rs`（可子目录）、对应真实网络/crypto tests；不得修改84持有的Store/model/sync.rs。可在独立test crate #[path] 编译实际模块；最终Cargo.toml snow/tungstenite/rustls等依赖通过单独patch交根整合，不在主线运行。标准库线程或runtime均可，socket网络绝不持Store锁。生产服务设计SyncBackend trait短暂调用持久层，返回Opaque JSON版本及摘要/本机blob reader，网络不猜Store细节。
 
@@ -17,3 +17,5 @@
 独审2026-11-06已确认阻塞：两个已配对client对相同hash均获得offset0并同时首块，Staging::write的旧offset被Protocol永久停；scripts/sync-network-test/tests/independent85.rs保留真实socket确定性栅栏复现及exit101原件。必须修复同hash正常并发的自动恢复并复验，不允许手动sync_now/串行化测试掩盖。作者新freeze后独审原测试保持不变。
 
 2026-11-06复审通过：产品c88982a6、作者证据7d206973、独审59fc3f32；完整19项真实网络/身份测试自然0，原共同offset0失败用例未改且自动收敛。自然连接预算走Transport自动退避重握手。仅85模块pass，待与84一起合入和86真实接线，不等价完整同步已完成。
+
+2026-11-06已合入0ab39d70，组合依赖3754d60b；主线完整19项自然0，见[整合证据](../../verification/sync8485-main-integration/README.md)。生产模块声明与Store/Session适配仍由86完成。

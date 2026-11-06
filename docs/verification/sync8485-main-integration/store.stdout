@@ -1,0 +1,159 @@
+
+running 121 tests
+test session::metadata::tests::actual_receipts_sequence_noops_and_event_privacy ... ok
+test independent::adoption_mismatch_preserves_exact_identity_and_system_folders_never_enter_wire ... ok
+test session::metadata::tests::attachment_public_insert_cancel_and_idempotent_journal_confirmations ... ok
+test independent::external_archive_attachment_and_cycle_guard_remain_compatible ... ok
+test session::metadata::tests::draining_last_sequence_aborts_barrier_before_its_commit ... ok
+test session::metadata::tests::safe_integer_overflow_precedes_intents_files_and_public_writes ... ok
+test independent::external_invalid_recorded_at_archives_reject_atomically_v1_stays_unknown ... ok
+test session::metadata::tests::two_window_smart_cas_projection_and_public_workspace ... ok
+test session::smart_tests::public_smart_crud_cas_and_physical_ownership_are_one_session ... ok
+test independent::receive_rejects_attachment_owner_and_reference_mismatch_atomically ... ok
+test session::tests::attachment_owner_uses_real_session_window_incarnation_and_current_access ... ok
+test independent::planning_never_publishes_files_and_stale_plan_cannot_apply_after_blob_loss ... ok
+test independent::external_archive_recorded_at_twice_remaps_ids_and_preserves_date_bytes ... ok
+test session::tests::attachment_cancel_waits_for_other_windows_registered_save_and_retains_committed_ref ... ok
+test session::tests::conflict_copy_obeys_live_session_source_epoch_and_prepare ... ok
+test session::smart_tests::smart_archive_public_import_restart_and_replaced_invalid_bytes ... ok
+test session::tests::live_schema_rejects_invalid_saves_without_changing_revision_or_body ... ok
+test session::tests::real_revision_conflict_forces_abort_even_if_window_claims_success ... ok
+test session::tests::pending_intent_cannot_ack_and_failed_barrier_preserves_authorization_and_retry ... ok
+test store::archive::tests::crash_worker ... ignored, subprocess worker; invoked by real_subprocess_interruption_recovers_before_and_after_sqlite_commit
+test session::tests::recorded_at_retains_session_and_note_authority ... ok
+test independent::natural_compaction_frontier_keeps_old_selected_branch_independent_across_restart ... ok
+test independent::locked_wire_must_reject_unencrypted_drawing_body ... ok
+test session::tests::window_identity_and_session_identity_cannot_be_supplied_by_saved_action ... ok
+test session::tests::timeout_missing_window_and_failed_ack_never_commit ... ok
+test store::archive::tests::export_failure_preserves_previous_archive_and_cannot_replace_live_store ... ok
+test store::archive::tests::database_failure_after_files_publish_rolls_back_all_entities_and_settings ... ok
+test store::archive::tests::file_publish_failure_preserves_old_bytes_and_recovery_cleans_only_new_paths ... ok
+test store::archive::tests::input_limits_are_explicit_and_leave_workspace_unchanged ... ok
+test store::archive::tests::qa_bad_second_blob_preserves_existing_attachment_database_settings_and_source ... ok
+
+running 1 test
+test store::archive::tests::recovery_refuses_journal_path_that_could_delete_an_old_file ... ok
+test store::archive::tests::independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads ... ok
+test store::archive::tests::invalid_archive_graphs_and_metadata_never_mutate_existing_workspace ... ok
+test store::attachment_operations::tests::cancel_is_narrow_repeatable_and_committed_documents_are_preserved ... ok
+
+running 1 test
+test store::archive::tests::seven_papers_and_dash_lists_preserve_drawings_through_save_reopen_and_archive ... ok
+test store::attachment_operations::tests::crash_worker ... ignored, real subprocess worker invoked by boundary test
+test store::archive::tests::stale_selection_defaults_without_losing_other_settings ... ok
+test independent::inbox_delete_failure_rolls_back_local_lock_and_late_replay_keeps_wal_clean ... ok
+test store::attachment_operations::tests::duplicate_response_loss_and_foreign_identity_do_not_create_or_overwrite ... ok
+test session::tests::registered_save_drains_before_two_window_commit_and_old_access_expires ... ok
+test store::attachment_operations::tests::cold_reopen_preserves_actual_reference_and_purge_retires_old_path ... ok
+
+running 1 test
+test store::archive::tests::valid_import_restores_settings_hierarchy_bytes_and_preserves_colliding_entities ... ok
+test store::attachment_operations::tests::inconsistent_identity_is_deferred_and_never_treated_as_safe_absence ... ok
+
+running 1 test
+test store::metadata_tests::actual_sql_rollback_is_not_a_commit_even_after_prior_success ... ok
+
+running 1 test
+test store::attachment_operations::tests::filesystem_and_sqlite_failures_keep_recoverable_private_records ... ok
+test store::attachment_operations::tests::invalid_operation_shape_and_history_limit_fail_before_new_file_creation ... ok
+test store::metadata_tests::response_read_failures_after_commit_preserve_created_id_revision_and_sequence ... ok
+test session::tests::close_locks_rejects_late_commands_and_delete_response_cannot_publish_decrypted_body ... ok
+test store::metadata_tests::purge_and_cancel_cleanup_errors_keep_real_commit_receipts_and_access_commit ... ok
+
+running 1 test
+
+running 1 test
+test store::open::tests::current_missing_system_rows_and_settings_are_filled_without_rewriting_custom ... ok
+test store::open::tests::complete_legacy_zero_preserves_rows_and_only_fills_real_missing_system_rows ... ok
+test store::open::tests::archive_one_and_two_reject_hidden_folder_fields_without_changing_target ... ok
+test store::open::tests::existing_system_and_settings_rows_are_not_even_inserted_again ... ok
+
+running 1 test
+test store::open::tests::new_database_initializes_current_schema_and_reopens_without_rewriting_rows ... ok
+test store::metadata_tests::lock_checkpoint_failure_preserves_access_commit_and_metadata_receipt ... ok
+test store::open::tests::runtime_single_and_all_folder_reads_reject_key_mismatch_and_unknown_fields ... ok
+
+running 1 test
+test store::folder_name_tests::ordinary_folder_name_utf8_boundaries_reject_before_write_and_cold_reopen ... ok
+
+running 1 test
+test store::open::tests::valid_recovery_still_runs_after_successful_initialization ... ok
+
+running 1 test
+
+running 1 test
+test store::open::tests::unsupported_versions_do_not_initialize_or_recover ... ok
+test store::recorded_at_tests::recorded_at_crash_worker ... ignored
+test store::attachment_operations::tests::locked_owner_defers_cold_cleanup_and_pending_purge_collects_its_new_file ... ok
+test store::attachment_operations::tests::true_process_crashes_recover_at_file_and_sqlite_boundaries_preserving_legacy ... ok
+test store::archive::tests::real_subprocess_interruption_recovers_before_and_after_sqlite_commit ... ok
+
+running 1 test
+test store::recorded_at_tests::recorded_at_archive_v2_twice_remaps_ids_and_preserves_date_and_bytes ... ok
+test store::recorded_at_tests::recorded_at_operation_snapshot_reopen_and_full_identity ... ok
+test store::recorded_at_tests::recorded_at_old_unknown_and_invalid_persisted_values_are_not_rewritten ... ok
+
+running 1 test
+test store::recorded_at_tests::recorded_at_invalid_archives_reject_atomically_and_v1_stays_unknown ... ok
+test store::recorded_at_tests::recorded_at_preparing_and_public_are_the_same_durable_snapshot ... ok
+test store::recorded_at_tests::recorded_at_zero_null_and_invalid_direct_requests ... ok
+test store::smart::tests::membership_keeps_definition_and_note_rows_in_one_real_sqlite_snapshot ... ok
+test store::smart::tests::owner_parent_restore_and_conflict_copy_share_physical_capabilities ... ok
+test store::smart::tests::old_physical_versions_reject_fully_valid_smart_rows_before_writes_or_recovery ... ok
+test store::smart::tests::strict_query_folder_and_action_shapes_reject_incomplete_or_future_data ... ok
+test store::smart::tests::archive_three_double_import_remaps_real_entities_dates_and_selection ... ok
+test store::synchronization::tests::actor_and_counter_budgets_roll_back_without_losing_dirty ... ok
+test store::synchronization::tests::apply_and_flush_faults_roll_back_capture_counter_inbox_heads_and_rows ... ok
+test store::smart::tests::shared_ui_corpus_runs_actual_persisted_rules_and_legal_tag_facts ... ok
+test store::smart::tests::version_one_migration_preserves_json_and_bad_graphs_rollback_before_recovery ... ok
+test store::open::tests::partial_unknown_and_mismatched_schemas_are_preserved ... ok
+test store::synchronization::tests::bad_extension_schema_is_rejected_and_failed_bootstrap_leaves_old_store_usable ... ok
+test store::open::tests::every_folder_row_is_strict_before_any_missing_row_is_created ... ok
+test store::synchronization::tests::blob_budgets_duplicate_hash_staging_recovery_and_corruption_are_explicit ... ok
+test store::synchronization::tests::crash84_child ... ok
+test store::open::tests::sql_failure_rolls_back_schema_system_settings_and_version_then_retry_works ... ok
+test store::synchronization::tests::concurrent_folder_cycle_projection_converges_in_reverse_delivery_order ... ok
+test store::synchronization::tests::branch_actor_forks_deterministically_and_reuses_across_restart ... ok
+test store::smart::tests::real_cas_rejects_stale_edits_delete_and_overflow_without_member_side_effects ... ok
+test store::synchronization::tests::dirty_is_transactional_for_replace_smart_archive_and_attachment_owner ... ok
+test store::synchronization::tests::initial_enable_is_opt_in_and_persistent ... ok
+test store::smart::tests::real_tag_modes_boolean_unavailable_and_reopen_use_validated_spans ... ok
+test store::synchronization::tests::frontier_protects_pending_and_compacted_history_after_restart ... ok
+test store::synchronization::tests::concurrent_heads_converge_and_local_edit_does_not_implicitly_join ... ok
+test store::synchronization::tests::deleted_beats_old_edit_restore_is_causal_and_purge_does_not_resurrect ... ok
+test store::synchronization::tests::known_version_with_missing_blob_cannot_ack_durable ... ok
+test store::synchronization::tests::independent_blobs_stage_then_publish_and_survive_conflict_copy_purge ... ok
+test store::synchronization::tests::malformed_wire_system_edits_paths_time_depth_and_head_overflow_are_atomic ... ok
+test store::synchronization::tests::out_of_order_folder_dependency_reprojects_existing_note_and_reports_derived_target ... ok
+test store::synchronization::tests::plans_exclude_busy_owner_and_folder_updates_but_apply_unrelated_notes ... ok
+test store::synchronization::tests::locked_wire_accepts_canonical_local_bootstrap_and_rejects_nonempty_node_content ... ok
+test store::synchronization::tests::prepared_identity_adoption_is_atomic_opt_in_and_cannot_drift ... ok
+test store::synchronization::tests::real_sigkill_preserves_exact_business_and_dirty_commit_boundary ... ok
+test store::synchronization::tests::remote_attachment_id_cannot_replace_unreferenced_local_bytes ... ok
+test store::synchronization::tests::causal_round_trip_restarts_and_does_not_echo_local_operations ... ok
+test store::synchronization::tests::stale_plan_cannot_cover_a_new_local_edit_or_changed_target ... ok
+test store::synchronization::tests::same_vector_different_content_rejected_even_after_compaction ... ok
+test store::synchronization::tests::unseen_concurrent_version_after_purge_is_preserved_as_conflict_only ... ok
+test store::synchronization::tests::lock_clears_staged_causal_ancestors_before_flush_and_keeps_concurrent_plaintext ... ok
+test store::tests::archive_attachments_and_cycle_guards ... ok
+test store::tests::conflict_copy_sqlite_failure_keeps_source_and_creates_nothing ... ok
+test store::tests::conflict_copy_validates_and_never_changes_the_confirmed_source ... ok
+test store::tests::persistence_conflicts_delete_restore ... ok
+test session::tests::frozen_ciphertexts_validate_after_decrypt_before_publishing_key ... ok
+test store::synchronization::tests::remote_lock_retires_local_media_metadata_and_preserves_explicit_plaintext_conflict ... ok
+test store::tests::checkpoint_failure_after_durable_lock_commits_authorization_boundary ... ok
+test store::synchronization::tests::locked_heads_round_trip_and_keep_all_without_decryption ... ok
+test store::synchronization::tests::lock_prunes_linear_plaintext_inside_business_sql_and_rolls_back_on_failure ... ok
+test store::tests::conflict_copy_rejects_locked_and_attachment_sources_without_a_new_note ... ok
+test store::tests::encrypted_data_and_unlock ... ok
+test store::synchronization::tests::inbox_count_limit_and_wire_shape_are_strict ... ok
+test store::tests::tags_store_reopen_rejection_lock_and_full_archive ... ok
+test store::archive::tests::shared_editor_schema_corpus_uses_public_import_and_preserves_state_on_rejection ... ok
+
+test result: ok. 118 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 5.55s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

@@ -1,6 +1,6 @@
 # APP-SYNC84 持久同步核心
 
-状态 in-progress。根规格：[sync](../../architecture/sync.md)。主线起点 f4caa90e。开发与独审分离，冻结源码commit之后再独审，不操作设备、不用真实麦克风、不push。
+状态 done（84模块范围；86/87完整同步仍进行）。根规格：[sync](../../architecture/sync.md)。主线起点 f4caa90e。开发与独审分离，冻结源码commit之后再独审，不操作设备、不用真实麦克风、不push。
 
 实现委派的边界：生产 Store同步扩展schema+触发dirty原子捕获、raw wire版本向量/摘要/冲突删除、文件blob/staging、确定性投影和完整性验证、显式冲突解决。新增 `src-tauri/src/store/synchronization.rs`及子文件、`src-tauri/src/sync/model.rs`，必要的Store/open接入和sha2依赖。网络另85，不实现JS网络fixture冒充核心，不修改UI。schema初始化必须兼容旧库并对坏扩展schema拒绝，只有用户开启sync才bootstrap。
 
@@ -15,3 +15,5 @@
 生产配对补充：提供sync_enable_with_device(workspace,device_id)等价入口，使尚未启用Store可在85认证Prepared之后采用已持久的本机device UUID。安装schema/bootstrap仍单事务，既有身份仅在workspace/device均匹配时幂等返回，不容许重置。sync_enable便捷方法保持现有测试接口。覆盖已有本地笔记、指定device重启稳定、mismatch回滚。
 
 2026-11-06作者冻结d484ab95、证据e69d7a7c，29选中测试通过；不同agent正在审查并跑完整111项lean Store/Session suite，不采用filtered作者结果替代旧业务回归。
+
+2026-11-06修复7da43718，作者72936017，独审447e1360通过；原locked drawing未改回归通过，独审完整121项118pass/3ignored。已合入feff050d，组合依赖3754d60b；主线完整121项自然0，见[整合证据](../../verification/sync8485-main-integration/README.md)。原始失败保留，不外推生产同步。
