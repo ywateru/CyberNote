@@ -3,6 +3,7 @@
 import contextlib
 import importlib.util
 import io
+import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
@@ -90,6 +91,60 @@ class Guards(unittest.TestCase):
             with self.assertRaisesRegex(life.Refused, 'less than 8GiB'):
                 life.free_bytes()
             kill.assert_not_called()
+
+    def key_fixture(self):
+        temporary = tempfile.TemporaryDirectory(prefix='sync87-key-guard-')
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name).resolve()
+        data, avd = root / 'data', root / 'avd'
+        data.mkdir(); avd.mkdir()
+        key = data / 'encryptionkey.img'
+        key.write_bytes(b'synthetic-key-fixture')
+        patches = patch.multiple(life, ROOT=root, DATA=data, AVD=avd)
+        patches.start(); self.addCleanup(patches.stop)
+        return key, avd / 'encryptionkey.img', root
+
+    def test_key_link_creation_is_same_file_and_idempotent(self):
+        key, link, _ = self.key_fixture()
+        before = key.read_bytes()
+        with patch.object(life, 'emit'):
+            life.validate_key_link(required=True, create=True)
+            life.validate_key_link(required=True, create=True)
+        self.assertTrue(link.is_symlink())
+        self.assertTrue(link.samefile(key))
+        self.assertEqual(key.read_bytes(), before)
+
+    def test_external_key_link_refused_without_reading_target(self):
+        _, link, root = self.key_fixture()
+        link.symlink_to(root.parent / 'outside-key-never-read')
+        with self.assertRaisesRegex(life.Refused, 'not the exact owned data key'):
+            life.validate_key_link(required=True, create=True)
+
+    def test_existing_avd_key_is_never_overwritten(self):
+        _, link, _ = self.key_fixture()
+        link.write_bytes(b'preserve-existing-file')
+        with self.assertRaisesRegex(life.Refused, 'refuse overwrite'):
+            life.validate_key_link(required=True, create=True)
+        self.assertEqual(link.read_bytes(), b'preserve-existing-file')
+
+    def test_symlinked_data_key_refused(self):
+        key, _, root = self.key_fixture()
+        key.unlink(); key.symlink_to(root / 'other-key')
+        with self.assertRaisesRegex(life.Refused, 'direct owned file'):
+            life.validate_key_link(required=True, create=True)
+
+    def test_key_parent_symlink_escape_refused(self):
+        key, _, root = self.key_fixture()
+        key.unlink(); (root / 'data').rmdir(); (root / 'data').symlink_to(root / 'outside-data')
+        with self.assertRaisesRegex(life.Refused, 'parent must not be a symlink'):
+            life.validate_key_link(required=True, create=True)
+
+    def test_missing_key_never_copied_or_recreated(self):
+        key, link, _ = self.key_fixture()
+        key.unlink()
+        with self.assertRaisesRegex(life.Refused, 'never copy or recreate'):
+            life.validate_key_link(required=True, create=True)
+        self.assertFalse(key.exists()); self.assertFalse(link.exists())
 
 
 if __name__ == '__main__':

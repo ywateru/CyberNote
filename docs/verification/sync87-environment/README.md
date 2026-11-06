@@ -19,6 +19,15 @@ python3 scripts/debug/sync87-environment/lifecycle.py cycle --serial emulator-55
 
 prepare拒绝覆盖已存在资源。cycle冷启后等待 `sys.boot_completed=1` 并核实API30/arm64-v8a，然后默认立即停止；供后续准确新APK验收时，可显式设置最多600秒hold，在另一命令调用 `status` / `stop`，所有入口仍必须提供同一serial/AVD。600秒是本工具单轮持有上限，不能当后台常驻服务；后续验收若需延长，应在独立审查后调整有界契约。
 
+原两次尝试的缺super失败已发现AVD content目录不能看到独立datadir中的encryption key这一线索。最小修复入口仅在本轮stopped/owned资源中建立 `AVD/encryptionkey.img -> /private/tmp/apple-notes-sync87-environment-01/data/encryptionkey.img` 的精确绝对symlink，指向同一既有文件，不复制或重建key。外部target、symlink父目录/source、既存普通AVD key及不符target均拒绝，源key前后SHA256必须一致。cycle现在要求此受控link，防止重复已知缺盘计数条件；全新prepare尚无data key时不能据此自动初始化或重建，本轮修复只服务已经创建的隔离资源。
+
+```sh
+python3 scripts/debug/sync87-environment/lifecycle.py repair-key-link --serial emulator-5584 --avd notes-sync87-isolated
+python3 scripts/debug/sync87-environment/lifecycle.py cycle --serial emulator-5584 --avd notes-sync87-isolated --boot-timeout 180 --hold-seconds 0
+```
+
+此前“kernel枚举PCI因此system盘可能PCI”的推断撤回：所见PCI是touch输入，磁盘在virtio_mmio模块阶段枚举。不会尝试PCI boot-device override或重复kernel参数覆盖；Android11 fs_mgr从头取首个匹配kernel值，追加重复参数不构成有效修复。第三次只检验精确keylink能否让实际安装版本生成正确boot_devices及消除缺super，结果待源码冻结后记录。
+
 ```sh
 python3 scripts/debug/sync87-environment/lifecycle.py cycle --serial emulator-5584 --avd notes-sync87-isolated --boot-timeout 180 --hold-seconds 600
 python3 scripts/debug/sync87-environment/lifecycle.py status --serial emulator-5584 --avd notes-sync87-isolated

@@ -72,6 +72,53 @@ def validate_target(args):
     for path in (AVD_HOME, AVD, DATA, ROOT / 'state.json', ROOT / 'events.jsonl', ROOT / 'owner.json',
                  ROOT / 'lifecycle.lock', DATA / 'userdata-qemu.img', DATA / 'cache.img'):
         require(not path.is_symlink(), 'isolated path must not be a symlink: ' + str(path))
+    validate_key_link()
+
+
+def validate_key_link(required=False, create=False):
+    """Only AVD/encryptionkey.img -> this resource's existing DATA key is allowed."""
+    source, link = DATA / 'encryptionkey.img', AVD / 'encryptionkey.img'
+    for folder in (ROOT, DATA, AVD):
+        require(not folder.is_symlink(), 'key parent must not be a symlink: ' + str(folder))
+        if folder.exists():
+            require(folder.is_dir() and folder.resolve(strict=True) == folder,
+                    'key parent escapes the exact owned directory')
+    require(not source.is_symlink(), 'data encryption key must be a direct owned file')
+    if source.exists():
+        require(source.is_file() and source.resolve(strict=True) == source, 'data encryption key is not confined')
+    else:
+        require(not required and not create and not link.is_symlink() and not link.exists(),
+                'existing owned data encryption key is required; never copy or recreate a key')
+        return
+    if not link.is_symlink() and not link.exists() and create:
+        require(AVD.is_dir(), 'owned AVD content directory is required')
+        link.symlink_to(source)
+        emit('key_link_created', link=str(link), target=str(source))
+    if link.is_symlink():
+        # Check raw text before resolving: never follow an external/dangling target.
+        require(os.readlink(link) == str(source), 'AVD encryption key symlink target is not the exact owned data key')
+        require(link.resolve(strict=True) == source and link.samefile(source), 'AVD encryption key does not name the same owned file')
+    else:
+        require(not link.exists(), 'existing AVD encryption key is not the controlled symlink; refuse overwrite')
+        require(not required, 'controlled AVD encryption key symlink is required before boot')
+
+
+def repair_key_link():
+    require(ROOT.is_dir() and (ROOT / 'owner.json').is_file(), 'owned isolated resource is required')
+    owner = json.loads((ROOT / 'owner.json').read_text())
+    require(owner['avd'] == NAME and owner['serial'] == SERIAL, 'resource owner target mismatch')
+    state = json.loads((ROOT / 'state.json').read_text())
+    require(state['status'] == 'stopped' and state['owner_token'] == owner['token'], 'repair requires stopped owned emulator')
+    ports_free()
+    source = DATA / 'encryptionkey.img'
+    validate_key_link(required=False)
+    require(source.is_file(), 'existing owned data encryption key is required')
+    before = hashlib.sha256(source.read_bytes()).hexdigest()
+    validate_key_link(required=True, create=True)
+    after = hashlib.sha256(source.read_bytes()).hexdigest()
+    require(before == after, 'owned encryption key changed while linking')
+    emit('key_link_verified', link=str(AVD / 'encryptionkey.img'), target=str(source),
+         key_sha256_before=before, key_sha256_after=after, same_file=True)
 
 
 def free_bytes():
@@ -211,6 +258,7 @@ def cycle(args):
     require(ROOT.is_dir() and (ROOT / 'owner.json').is_file(), 'prepare the new isolated resource first')
     require(not (ROOT / 'state.json').exists() or json.loads((ROOT / 'state.json').read_text())['status'] == 'stopped',
             'an owned lifecycle is already active')
+    validate_key_link(required=True)
     preflight()
     ports_free()
     argv = [str(EMULATOR), '-avd', NAME, '-port', str(PORT), '-datadir', str(DATA),
@@ -278,7 +326,7 @@ def bounded_int(low, high):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['prepare', 'cycle', 'status', 'stop'])
+    parser.add_argument('action', choices=['prepare', 'repair-key-link', 'cycle', 'status', 'stop'])
     parser.add_argument('--serial', required=True)
     parser.add_argument('--avd', required=True)
     parser.add_argument('--boot-timeout', type=bounded_int(15, 180), default=180)
@@ -287,13 +335,16 @@ def main():
     validate_target(args)
     if args.action == 'prepare':
         prepare()
-    elif args.action == 'cycle':
+    elif args.action in ('cycle', 'repair-key-link'):
         require(ROOT.is_dir(), 'resource does not exist')
         with (ROOT / 'lifecycle.lock').open('a') as lock:
             try:
                 fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             except BlockingIOError as exc:
                 raise Refused('another lifecycle holds the owned lock') from exc
+            if args.action == 'repair-key-link':
+                repair_key_link()
+                return
             awake_argv = ['/usr/bin/caffeinate', '-dimsu', '-t', str(args.boot_timeout + args.hold_seconds + 60),
                           '-w', str(os.getpid())]
             awake = subprocess.Popen(awake_argv, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
