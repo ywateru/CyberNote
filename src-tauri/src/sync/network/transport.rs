@@ -336,6 +336,7 @@ mod tests {
         workspace: String,
         device: String,
         reads: AtomicUsize,
+        publications: AtomicUsize,
         blobs: Mutex<BTreeMap<String, Vec<u8>>>,
     }
     impl SyncBackend for Backend {
@@ -376,8 +377,12 @@ mod tests {
         fn has_blob(&self, b: &BlobRef) -> Result<bool> {
             Ok(self.blobs.lock().unwrap().contains_key(&b.sha256))
         }
-        fn read_blob_chunk(&self, _: &BlobRef, _: u64, _: usize) -> Result<Vec<u8>> {
-            Err(SyncError::Backend)
+        fn read_blob_chunk(&self, b: &BlobRef, offset: u64, max: usize) -> Result<Vec<u8>> {
+            let blobs = self.blobs.lock().unwrap();
+            let bytes = blobs.get(&b.sha256).ok_or(SyncError::Backend)?;
+            let offset = usize::try_from(offset).map_err(|_| SyncError::Protocol)?;
+            let remaining = bytes.get(offset..).ok_or(SyncError::Protocol)?;
+            Ok(remaining[..remaining.len().min(max)].to_vec())
         }
         fn store_blob(&self, b: &BlobRef, p: &Path) -> Result<()> {
             let bytes = std::fs::read(p).map_err(|_| SyncError::Io)?;
@@ -385,6 +390,7 @@ mod tests {
                 return Err(SyncError::Protocol);
             }
             self.blobs.lock().unwrap().insert(b.sha256.clone(), bytes);
+            self.publications.fetch_add(1, Ordering::SeqCst);
             Ok(())
         }
         fn receive_head(&self, _: Value) -> Result<Receipt> {
@@ -399,6 +405,7 @@ mod tests {
             workspace: workspace.into(),
             device: uuid::Uuid::new_v4().to_string(),
             reads: AtomicUsize::new(0),
+            publications: AtomicUsize::new(0),
             blobs: Mutex::new(BTreeMap::new()),
         });
         let identity =
@@ -620,6 +627,113 @@ mod tests {
         assert_eq!(
             std::fs::read_dir(dir.path().join("stage")).unwrap().count(),
             4
+        );
+    }
+    #[test]
+    fn overlapping_chunks_validate_existing_bytes_and_publish_only_once() {
+        let dir = tempfile::tempdir().unwrap();
+        let (s, b) = shared(dir.path(), &uuid::Uuid::new_v4().to_string());
+        let data: Vec<u8> = (0..(CHUNK * 2 + 137)).map(|i| (i % 251) as u8).collect();
+        let reference = BlobRef {
+            sha256: format!("{:x}", Sha256::digest(&data)),
+            size: data.len() as u64,
+        };
+        assert_eq!(
+            s.staging
+                .write(b.as_ref(), &reference, 0, &data[..CHUNK], false)
+                .unwrap(),
+            CHUNK as u64
+        );
+        // A peer still using offset zero can repeat a prefix without allocating or rewinding.
+        assert_eq!(
+            s.staging
+                .write(b.as_ref(), &reference, 0, &data[..CHUNK], false)
+                .unwrap(),
+            CHUNK as u64
+        );
+        let start = CHUNK - 7;
+        let end = start + CHUNK;
+        assert_eq!(
+            s.staging
+                .write(
+                    b.as_ref(),
+                    &reference,
+                    start as u64,
+                    &data[start..end],
+                    false
+                )
+                .unwrap(),
+            end as u64
+        );
+        let before = std::fs::read(
+            dir.path()
+                .join("stage")
+                .join(format!("{}-{}.part", reference.sha256, reference.size)),
+        )
+        .unwrap();
+        let mut wrong = data[..CHUNK].to_vec();
+        wrong[3] ^= 1;
+        assert_eq!(
+            s.staging
+                .write(b.as_ref(), &reference, 0, &wrong, false)
+                .unwrap_err(),
+            SyncError::Protocol
+        );
+        assert_eq!(
+            s.staging.offset(b.as_ref(), &reference).unwrap(),
+            end as u64
+        );
+        assert_eq!(
+            std::fs::read(
+                dir.path()
+                    .join("stage")
+                    .join(format!("{}-{}.part", reference.sha256, reference.size))
+            )
+            .unwrap(),
+            before
+        );
+        assert_eq!(
+            s.staging
+                .write(b.as_ref(), &reference, (end + 1) as u64, b"gap", false)
+                .unwrap_err(),
+            SyncError::Protocol
+        );
+        assert_eq!(
+            s.staging
+                .write(b.as_ref(), &reference, end as u64, &data[end..], true)
+                .unwrap(),
+            reference.size
+        );
+        // Another download/upload can complete after publication, including its stale first chunk.
+        assert_eq!(
+            s.staging
+                .write(b.as_ref(), &reference, 0, &data[..CHUNK], false)
+                .unwrap(),
+            reference.size
+        );
+        assert_eq!(
+            s.staging
+                .write(b.as_ref(), &reference, reference.size, &[], true)
+                .unwrap(),
+            reference.size
+        );
+        assert_eq!(
+            s.staging
+                .write(b.as_ref(), &reference, 0, &wrong, false)
+                .unwrap_err(),
+            SyncError::Protocol
+        );
+        assert_eq!(
+            s.staging
+                .write(b.as_ref(), &reference, reference.size, &[1], true)
+                .unwrap_err(),
+            SyncError::Protocol
+        );
+        assert_eq!(b.publications.load(Ordering::SeqCst), 1);
+        assert_eq!(b.blobs.lock().unwrap().get(&reference.sha256), Some(&data));
+        assert_eq!(
+            std::fs::read_dir(dir.path().join("stage")).unwrap().count(),
+            0
         );
     }
 }

@@ -2,7 +2,7 @@ use super::*;
 use sha2::{Digest, Sha256};
 use std::{
     fs::{self, File, OpenOptions},
-    io::{Read, Write},
+    io::{Read, Seek, SeekFrom, Write},
 };
 /// Bounded transport staging survives interrupted connections. Final publication belongs to
 /// the backend's hash-checked immutable blob store; no remote-controlled filesystem path exists.
@@ -55,6 +55,9 @@ impl Staging {
         if backend.has_blob(b)? {
             return Ok(b.size);
         }
+        self.partial_offset(b)
+    }
+    fn partial_offset(&self, b: &BlobRef) -> Result<u64> {
         match fs::symlink_metadata(self.path(b)) {
             Ok(m) => {
                 if !m.is_file() || m.file_type().is_symlink() || m.len() > b.size {
@@ -79,11 +82,8 @@ impl Staging {
         finish: bool,
     ) -> Result<u64> {
         let _g = self.lock.lock().map_err(|_| SyncError::Io)?;
-        if backend.has_blob(b)? {
-            return Ok(b.size);
-        }
-        if bytes.len() > CHUNK || offset != self.offset_inner(backend, b)? {
-            return Err(SyncError::Protocol);
+        if bytes.len() > CHUNK {
+            return Err(SyncError::Limit);
         }
         let end = offset
             .checked_add(bytes.len() as u64)
@@ -92,7 +92,39 @@ impl Staging {
         if finish != (end == b.size) || (!finish && bytes.is_empty()) {
             return Err(SyncError::Protocol);
         }
-        self.budget(bytes.len() as u64, usize::from(!self.path(b).exists()))?;
+        // Another connection can publish after our caller read BlobOffset. A late
+        // completion is idempotent, but its supplied bytes must still match the
+        // immutable published object rather than receiving an unchecked ACK.
+        if backend.has_blob(b)? {
+            if !bytes.is_empty() && backend.read_blob_chunk(b, offset, bytes.len())? != bytes {
+                return Err(SyncError::Protocol);
+            }
+            self.remove_partial(b)?;
+            return Ok(b.size);
+        }
+        let current = self.partial_offset(b)?;
+        if offset > current {
+            return Err(SyncError::Protocol);
+        }
+        let overlap = (current - offset).min(bytes.len() as u64) as usize;
+        if overlap > 0 {
+            let mut file = File::open(self.path(b)).map_err(|_| SyncError::Io)?;
+            file.seek(SeekFrom::Start(offset))
+                .map_err(|_| SyncError::Io)?;
+            let mut existing = vec![0; overlap];
+            file.read_exact(&mut existing).map_err(|_| SyncError::Io)?;
+            if existing != bytes[..overlap] {
+                return Err(SyncError::Protocol);
+            }
+        }
+        let suffix = &bytes[overlap..];
+        let committed = current.max(end);
+        // Repeated/overlapping chunks reuse the same partial and consume only
+        // their new suffix budget. They must never rewind or truncate progress.
+        if suffix.is_empty() && committed < b.size {
+            return Ok(committed);
+        }
+        self.budget(suffix.len() as u64, usize::from(!self.path(b).exists()))?;
         let path = self.path(b);
         let mut opts = OpenOptions::new();
         opts.write(true).append(true);
@@ -107,8 +139,8 @@ impl Staging {
             opts.mode(0o600);
         }
         let mut f = opts.open(&path).map_err(|_| SyncError::Io)?;
-        f.write_all(bytes).map_err(|_| SyncError::Io)?;
-        if finish {
+        f.write_all(suffix).map_err(|_| SyncError::Io)?;
+        if committed == b.size {
             f.sync_all().map_err(|_| SyncError::Io)?;
             drop(f);
             let mut f = File::open(&path).map_err(|_| SyncError::Io)?;
@@ -129,11 +161,24 @@ impl Staging {
             if !backend.has_blob(b)? {
                 return Err(SyncError::Backend);
             }
-            fs::remove_file(&path).map_err(|_| SyncError::Io)?;
-            File::open(&self.dir)
-                .and_then(|f| f.sync_all())
-                .map_err(|_| SyncError::Io)?;
+            self.remove_partial(b)?;
         }
-        Ok(end)
+        Ok(committed)
+    }
+    fn remove_partial(&self, b: &BlobRef) -> Result<()> {
+        let path = self.path(b);
+        match fs::symlink_metadata(&path) {
+            Ok(meta) => {
+                if !meta.is_file() || meta.file_type().is_symlink() {
+                    return Err(SyncError::Io);
+                }
+                fs::remove_file(path).map_err(|_| SyncError::Io)?;
+                File::open(&self.dir)
+                    .and_then(|f| f.sync_all())
+                    .map_err(|_| SyncError::Io)
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(()),
+            Err(_) => Err(SyncError::Io),
+        }
     }
 }

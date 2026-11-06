@@ -525,7 +525,7 @@ impl Client {
                 })
                 .await?
             {
-                wire::Response::Offset { offset: o } if o == end => offset = end,
+                wire::Response::Offset { offset: o } if o >= end && o <= b.size => offset = o,
                 _ => return Err(SyncError::Protocol),
             }
         }
