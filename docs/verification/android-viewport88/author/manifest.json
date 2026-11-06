@@ -1,0 +1,56 @@
+{
+  "task": "APP-ANDROID-VIEWPORT88",
+  "base": "51978a26de55fbc33e7f1110a15b73f25b72fdbd",
+  "productFile": "src/Preferences.css",
+  "productSHA256": "98c78d2eea6a53abe3ce7d294adafe8a565c02d0e8cf12b7aa0ed928ef0f288f",
+  "productDelta": "Three equivalent vh declarations immediately precede unchanged dvh declarations; desktop max760/native-top, mobile full viewport, same internal scrolling and tabs.",
+  "runs": [
+    {
+      "name": "preferences-mobile",
+      "naturalExit": 0,
+      "elapsedMs": 15026,
+      "checks": 50,
+      "pageErrors": [],
+      "sourceInputsChanged": false
+    },
+    {
+      "name": "sync-settings-mobile",
+      "naturalExit": 0,
+      "elapsedMs": 8514,
+      "checks": 56,
+      "pageErrors": [],
+      "sourceInputsChanged": false
+    },
+    {
+      "name": "preferences-desktop",
+      "naturalExit": 0,
+      "elapsedMs": 11268,
+      "checks": 52,
+      "pageErrors": [],
+      "sourceInputsChanged": false
+    },
+    {
+      "name": "pnpm build",
+      "naturalExit": 0,
+      "viteSeconds": 1.34,
+      "warning": "Existing >500kB JS chunk warning; not a build failure."
+    }
+  ],
+  "initialSetupFailures": {
+    "count": 4,
+    "naturalExit": 1,
+    "commands": [
+      "mobile preferences",
+      "mobile sync-settings",
+      "desktop preferences",
+      "pnpm build"
+    ],
+    "message": "Failed to resolve import ../assets/mobile-paper-previews/lines-small.svg from src/App.tsx",
+    "cause": "Supplied sparse-checkout excluded tracked assets; added assets to sparse checkout, no product code adjustment. Runtime startup failed before summary/output assignment; original console output retained in agent tool transcript, no archived raw log for those first invocations."
+  },
+  "limits": [
+    "Modern Chromium156 real React DOM/CSS with isolated JS protocol/IPC/media fixtures only.",
+    "No Android device operation, old Android WebView test, Rust Store/socket, package build or network delivery proof performed by this author.",
+    "Actual Android old-unit confirmation and new accurate package native acceptance remain root/sole-device and independent-verifier gates."
+  ]
+}
