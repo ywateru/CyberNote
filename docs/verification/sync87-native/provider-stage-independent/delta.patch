@@ -1,0 +1,61 @@
+commit 433604cd6dfc60dde1746a36ae13868ec94c27cc
+Author:     osd-pub <osd@osd.pub>
+AuthorDate: Fri Nov 6 23:31:26 2026 +0800
+Commit:     osd-pub <osd@osd.pub>
+CommitDate: Fri Nov 6 23:31:26 2026 +0800
+
+    test(sync87): retain finite provider-touch failure stages
+
+diff --git a/scripts/debug/sync87-native/check-provider-touch.mjs b/scripts/debug/sync87-native/check-provider-touch.mjs
+index 68f9bf21..d28d3227 100644
+--- a/scripts/debug/sync87-native/check-provider-touch.mjs
++++ b/scripts/debug/sync87-native/check-provider-touch.mjs
+@@ -15,4 +15,6 @@ for(const value of [{...point,x:360},{...point,width:721},{...point,y:NaN},{...p
+   const c=fake({value});await assert.rejects(openOwnedProvider(c),e=>e.message==='owned provider touch refused'&&!e.cause&&!Object.hasOwn(e,'actual'));assert.equal(c.calls.filter(c=>c[0]==='send').length,0);
+ }
+ const failed=fake({failAt:1});await assert.rejects(openOwnedProvider(failed),{message:'owned provider touch refused'});assert.equal(failed.calls.filter(c=>c[0]==='send').length,1);
+-console.log(JSON.stringify({ok:true,checks:8}));
++await assert.rejects(openOwnedProvider(fake({failAt:1})),e=>e.stage==='attachment-start'&&e.message==='owned provider touch refused'&&!e.cause);
++const waiting=fake();waiting.wait=async()=>{throw Error('SECRET_WAIT');};await assert.rejects(openOwnedProvider(waiting),e=>e.stage==='menu-wait'&&e.message==='owned provider touch refused'&&!e.cause);assert.equal(waiting.calls.filter(c=>c[0]==='send').length,2);
++console.log(JSON.stringify({ok:true,checks:10}));
+diff --git a/scripts/debug/sync87-native/provider-touch.mjs b/scripts/debug/sync87-native/provider-touch.mjs
+index d9880764..f4753ea2 100644
+--- a/scripts/debug/sync87-native/provider-touch.mjs
++++ b/scripts/debug/sync87-native/provider-touch.mjs
+@@ -1,8 +1,10 @@
+ /** Normal CDP touch for two fixed visible provider controls on the owned final02 note. */
+ import assert from 'node:assert/strict';
++export const providerStages=Object.freeze(['menu-read','attachment-read','attachment-start','attachment-end','menu-wait','file-read','file-start','file-end']);
+ 
+-async function touch(client, control) {
++async function touch(client, control, checkpoint) {
+   assert(['attachment','file'].includes(control));
++  checkpoint(control+'-read');
+   const point = await client.read(`(()=>{
+     if(!document.querySelector('.mobile.page-editor')||document.querySelector('.tiptap h1')?.textContent!=='SYNC87-74da049123-1')throw Error('owned editor required');
+     const control=${JSON.stringify(control)};
+@@ -22,17 +24,19 @@ async function touch(client, control) {
+   assert(Object.values(descriptors).every(d=>Object.hasOwn(d,'value')&&typeof d.value==='number'&&Number.isFinite(d.value)));
+   const {x,y,width,height}=Object.fromEntries(Object.entries(descriptors).map(([k,d])=>[k,d.value]));
+   assert(width>0&&width<=720&&height>0&&height<=1280&&x>=0&&y>=0&&x<width&&y<height);
+-  await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+-  await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
++  checkpoint(control+'-start');await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
++  checkpoint(control+'-end');await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+ }
+ 
+ export async function openOwnedProvider(client) {
++  let stage='menu-read';const checkpoint=value=>{assert(providerStages.includes(value));stage=value;};
+   try {
+     const menu=await client.read('!!document.querySelector(".menu-media[role=menu]")');
+     assert(typeof menu==='boolean');
+-    if(!menu)await touch(client,'attachment');
++    if(!menu)await touch(client,'attachment',checkpoint);
++    checkpoint('menu-wait');
+     await client.wait('!!document.querySelector(".menu-media[role=menu]")','fixed attachment menu');
+-    await touch(client,'file');
++    await touch(client,'file',checkpoint);
+     return {normalTouch:true};
+-  } catch { throw Error('owned provider touch refused'); }
++  } catch { const error=Error('owned provider touch refused');Object.defineProperty(error,'stage',{value:stage,enumerable:true});throw error; }
+ }
