@@ -48,10 +48,18 @@ export async function runStorageOverview(runtime, { command, check, output }) {
     await page.waitForSelector(".storage-summary");
   };
   const back = async () => {
+    const source = await page.locator(".data-management").getAttribute("data-storage-view");
     await page
       .getByRole("button", { name: "返回数据管理总览", exact: true })
       .click();
     await page.waitForSelector(".storage-summary");
+    // Returning focus is part of this navigation, scheduled by the real
+    // DataManagement handler for the next frame. Wait for it before another
+    // focus/keyboard action; DOM mounting alone is not navigation completion.
+    await page.waitForFunction(
+      (source) => document.activeElement?.getAttribute("data-storage-category") === source,
+      source,
+    );
   };
   const category = async (id) => {
     await page.locator(`[data-storage-category="${id}"]`).click();
