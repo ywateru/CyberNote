@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: source parses and scan preserves complete nested ancestry without bodies or saves
+ok 1 - source parses and scan preserves complete nested ancestry without bodies or saves
+  ---
+  duration_ms: 1.111458
+  type: 'test'
+  ...
+# Subtest: scan cap reports truncation rather than silently losing notes
+ok 2 - scan cap reports truncation rather than silently losing notes
+  ---
+  duration_ms: 0.300708
+  type: 'test'
+  ...
+# Subtest: missing ancestor affects notes without inventing root
+ok 3 - missing ancestor affects notes without inventing root
+  ---
+  duration_ms: 0.290958
+  type: 'test'
+  ...
+# Subtest: ancestry cycle is unreadable without recursion or activation
+ok 4 - ancestry cycle is unreadable without recursion or activation
+  ---
+  duration_ms: 0.32675
+  type: 'test'
+  ...
+# Subtest: locked read never gets body or exports
+ok 5 - locked read never gets body or exports
+  ---
+  duration_ms: 0.406208
+  type: 'test'
+  ...
+# Subtest: read keeps required body/dates and nullable CID/name in original attachment order
+ok 6 - read keeps required body/dates and nullable CID/name in original attachment order
+  ---
+  duration_ms: 1.003458
+  type: 'test'
+  ...
+# Subtest: native export -10000 retained as failed item and never retried
+ok 7 - native export -10000 retained as failed item and never retried
+  ---
+  duration_ms: 0.38
+  type: 'test'
+  ...
+# Subtest: insufficient paths preserves unsupported items without out-of-bounds save
+ok 8 - insufficient paths preserves unsupported items without out-of-bounds save
+  ---
+  duration_ms: 0.344083
+  type: 'test'
+  ...
+# Subtest: over 1000 attachments refuses whole note before any export
+ok 9 - over 1000 attachments refuses whole note before any export
+  ---
+  duration_ms: 0.606792
+  type: 'test'
+  ...
+# Subtest: source id changed during export is not stable
+ok 10 - source id changed during export is not stable
+  ---
+  duration_ms: 0.490625
+  type: 'test'
+  ...
+# Subtest: source title changed during export is not stable
+ok 11 - source title changed during export is not stable
+  ---
+  duration_ms: 0.355916
+  type: 'test'
+  ...
+# Subtest: source folder changed during export is not stable
+ok 12 - source folder changed during export is not stable
+  ---
+  duration_ms: 0.315167
+  type: 'test'
+  ...
+# Subtest: source date changed during export is not stable
+ok 13 - source date changed during export is not stable
+  ---
+  duration_ms: 0.282167
+  type: 'test'
+  ...
+# Subtest: wrong source ID cannot be imported
+ok 14 - wrong source ID cannot be imported
+  ---
+  duration_ms: 0.528583
+  type: 'test'
+  ...
+# Subtest: source failure -1743 produces finite private-safe output
+ok 15 - source failure -1743 produces finite private-safe output
+  ---
+  duration_ms: 0.227208
+  type: 'test'
+  ...
+# Subtest: source failure -1712 produces finite private-safe output
+ok 16 - source failure -1712 produces finite private-safe output
+  ---
+  duration_ms: 0.240083
+  type: 'test'
+  ...
+# Subtest: source failure -1728 produces finite private-safe output
+ok 17 - source failure -1728 produces finite private-safe output
+  ---
+  duration_ms: 0.262958
+  type: 'test'
+  ...
+# Subtest: failed body is not imported as an empty note
+ok 18 - failed body is not imported as an empty note
+  ---
+  duration_ms: 0.260208
+  type: 'test'
+  ...
+# Subtest: invalid extra source code has no source calls
+ok 19 - invalid extra source code has no source calls
+  ---
+  duration_ms: 0.22725
+  type: 'test'
+  ...
+# Subtest: invalid zero cap has no source calls
+ok 20 - invalid zero cap has no source calls
+  ---
+  duration_ms: 0.201792
+  type: 'test'
+  ...
+# Subtest: invalid large cap has no source calls
+ok 21 - invalid large cap has no source calls
+  ---
+  duration_ms: 0.207333
+  type: 'test'
+  ...
+# Subtest: invalid unknown mode has no source calls
+ok 22 - invalid unknown mode has no source calls
+  ---
+  duration_ms: 0.186333
+  type: 'test'
+  ...
+# Subtest: invalid relative path has no source calls
+ok 23 - invalid relative path has no source calls
+  ---
+  duration_ms: 0.204042
+  type: 'test'
+  ...
+# Subtest: invalid traversal has no source calls
+ok 24 - invalid traversal has no source calls
+  ---
+  duration_ms: 0.19025
+  type: 'test'
+  ...
+# Subtest: invalid duplicate has no source calls
+ok 25 - invalid duplicate has no source calls
+  ---
+  duration_ms: 0.203709
+  type: 'test'
+  ...
+# Subtest: invalid different parents has no source calls
+ok 26 - invalid different parents has no source calls
+  ---
+  duration_ms: 0.205
+  type: 'test'
+  ...
+# Subtest: invalid null ID has no source calls
+ok 27 - invalid null ID has no source calls
+  ---
+  duration_ms: 0.184792
+  type: 'test'
+  ...
+# Subtest: invalid malformed JSON has no source calls
+ok 28 - invalid malformed JSON has no source calls
+  ---
+  duration_ms: 0.211084
+  type: 'test'
+  ...
+# Subtest: wrong argv count has no source calls
+ok 29 - wrong argv count has no source calls
+  ---
+  duration_ms: 0.202875
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 44.764958
