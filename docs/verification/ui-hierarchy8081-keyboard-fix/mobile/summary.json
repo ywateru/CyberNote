@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "mode": "group",
+  "sourceHead": "247b6f6c41b013f35d422a173a5264df79022519",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0818145c2f31dc49b58cba93ba30711747e82c405cdb6bc0923b14bc92457ab9",
+    "fileCount": 122,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/image-preview-lifetime.tsx",
+      " M scripts/debug/image-preview.mjs",
+      " M src/ImagePreview.tsx",
+      "?? scripts/debug/image-preview-keyboard.mjs"
+    ]
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0818145c2f31dc49b58cba93ba30711747e82c405cdb6bc0923b14bc92457ab9",
+    "fileCount": 122,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/image-preview-lifetime.tsx",
+      " M scripts/debug/image-preview.mjs",
+      " M src/ImagePreview.tsx",
+      "?? scripts/debug/image-preview-keyboard.mjs"
+    ]
+  },
+  "sourceInputsChanged": false,
+  "platform": "mobile-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "elapsedMs": 17151,
+  "result": {
+    "groups": [
+      {
+        "group": "image-preview",
+        "pass": true,
+        "checks": [
+          "Body contains only the image preview trigger, no outside save or export status",
+          "Preview is a direct protected app child outside editor ancestors",
+          "Opening preview focuses its actual close control",
+          "Information uses authorized name, MIME, original byte length and natural image size with no invented timestamp",
+          "Tab wraps from close to information",
+          "Shift Tab wraps back to close",
+          "320px light reservedTop 0 keeps all header actions visible, nonoverlapping and no horizontal overflow",
+          "390px dark reservedTop 0 keeps all header actions visible, nonoverlapping and no horizontal overflow",
+          "800px light reservedTop 52 keeps all header actions visible, nonoverlapping and no horizontal overflow",
+          "800px dark reservedTop 52 keeps all header actions visible, nonoverlapping and no horizontal overflow",
+          "Close restores image trigger focus without changing editor JSON",
+          "Escape closes actual preview and returns focus",
+          "cancel export preserves its result and immediate Escape closes preview from returned focus",
+          "cancel export lets Tab recover body focus and Shift Tab wrap inside preview",
+          "success export preserves its result and immediate Escape closes preview from returned focus",
+          "success export lets Tab recover body focus and Shift Tab wrap inside preview",
+          "error export preserves its result and immediate Escape closes preview from returned focus",
+          "error export lets Tab recover body focus and Shift Tab wrap inside preview",
+          "Opening/info/closing preview adds no Undo entry",
+          "Navigation closes preview and removes protected image bytes from overlay",
+          "Access prepare closes app-level preview synchronously under protected cover",
+          "Actual media source disposal synchronously hides overlay bytes and calls close once",
+          "Hidden, disconnected, disposed and unmounted previews do not consume global Escape or Tab",
+          "Mobile headers have no native desktop drag regions",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 9510
+      }
+    ],
+    "passedChecks": 25,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": []
+}
