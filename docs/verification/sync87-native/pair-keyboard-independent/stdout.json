@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "sourceCommit": "25c5e65c5000a466c84b281bf61dd6e2e64ecad3",
+  "sha256": "5abac3ed0ad232988f7a669be45d85d294cf23ba39010cd728f599bd7778bc9b",
+  "scope": "actual pairing function with fake client/guard; no real device operations",
+  "checks": [
+    {
+      "imeShown": false,
+      "backCalls": 0,
+      "joinTapCalls": 1,
+      "submitTapCalls": 1,
+      "actualPanelWaitBeforeInvitation": true
+    },
+    {
+      "imeShown": true,
+      "backCalls": 2,
+      "joinTapCalls": 1,
+      "submitTapCalls": 1,
+      "actualPanelWaitBeforeInvitation": true
+    },
+    {
+      "joinPanelTimeoutStopsBeforeInvitation": true,
+      "joinTapCalls": 1
+    }
+  ]
+}
