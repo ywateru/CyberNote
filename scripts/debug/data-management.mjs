@@ -122,7 +122,8 @@ export async function runDataManagement(runtime, { command, check, output }) {
   await page.waitForFunction(count=>window.__DEBUG_PLATFORM__.calls.filter(x=>x.command==='plugin:dialog|save').length>count,dialogsBefore);
   await prepare();backend.workspace.notes.find(n=>n.id==='note-a').locked=true;
   await commit();await idle(page);
-  check('Revocation while the original-image picker waits leaves no exported bytes and no stale success notice',backend.exports.length===0&&await page.locator('.image-notice').count()===0&&await page.locator('.image-open').count()===0);
+  await saveJSON(resolve(output,'data79-revoked-export.json'),{exports:backend.exports.length,statuses:await page.locator('.image-export-status').allTextContents(),images:await page.locator('.image-open').evaluateAll(nodes=>nodes.map(n=>({html:n.outerHTML,visible:!!n.offsetParent}))),workspace:backend.state(),state:await state(page)});
+  check('Revocation while the original-image picker waits leaves no exported bytes and no stale success notice',backend.exports.length===0&&await page.locator('.image-export-status[role="status"]').count()===0&&await page.locator('.image-open').count()===0);
 
   await reset();backend.configure({delay:{load:250,store:80}});await startSurfaceTrace(page);
   const choosing=chooseFiles(page,[{name:'concurrent79.png',mimeType:'image/png',buffer:tinyPNG}]);

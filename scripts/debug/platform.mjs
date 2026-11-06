@@ -22,7 +22,7 @@ export function seededWorkspace() {
 }
 export class FakeBackend {
   kind = 'isolated-js-protocol-fixture';
-  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; }
+  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; }
   reset() { Object.assign(this, new FakeBackend(this.directory)); }
   state() { const value = clone(this.workspace); value.access = { sessionId: this.sessionId, epoch: this.accessEpoch, notes: Object.fromEntries(value.notes.map((note) => [note.id, { epoch: this.noteEpochs[note.id] || 0, authorized: !!(!note.locked || this.unlocked?.has(note.id)) }])), suspended: [...this.suspended], operationId: this.operationId }; value.metadata = { sessionId: this.sessionId, sequence: this.sequence }; return value; }
   tagged(value) { const state = this.state(); return { ...clone(value), access: state.access, metadata: state.metadata }; }
