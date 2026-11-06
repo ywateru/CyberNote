@@ -79,6 +79,16 @@ cycle12实际重开同一个已绑定Store通过，两个实时观察均显示An
 
 root因free低于8GiB又正常清理五个完成/clean/无进程的源码检出，branch/已提交证据保留；dirty65/67跳过。free恢复11,079,995,392字节，见[cleanup05](../verification/sync87/source-checkout-cleanup05.json)。AVD、数据、目标二进制、SDK及共享target未动，生命周期下限保持8GiB。
 
+### 目标接收已证明，应用连续中止
+
+cycle13/14的实际被动观察已排除“完全没有事件/缺少main窗口”：12秒内4次probe、4次prepare、4次release，真实窗口仅main；[release结果](../verification/sync87-native/native-abort-diagnosis14/README.md)为commit0/abort4。没有改写invoke/IPC/回调或发送观察者ACK，原始回复因Tauri invoke不可写而未观察。
+
+实际get_data_management仅返回的rootPath为 `/data/data/com.local.notesclone`。最初计数工具错误加入files子目录导致FILE失败，修正后只读打开成功但SQLite JSON查询失败；原件均保留。a65a6853经独审接收，改为两个固定只读查询+Android org.json仅计数root kind/entityId；没有输出、复制或保存wire/body/config。cycle14实际得到 `inboxTotal=1,targetInbox=1,targetNotes=0,targetProjection=0,targetSeen=0`，1.7176秒、同app PID/startTicks前后未变、同一配对peer在线。**到此才证明exact目标已到达Android，但尚未应用。** 两查询顺序执行不声称原子快照；原先pending1推断不追认为早先已证实。
+
+cycle14close晚于生命周期截止而被guard拒绝；peer finally仍自然0，但报告的frontendUnchanged=false原件保留。root此前误以为工具文件不在sourceFingerprint内，实际包括scripts/debug/**；不改写该失败。下一次同Store重开须独立核对精确旧/新manifest，证明变更仅已审count工具且真实前端/产品/peer依赖字节相同，再追加明确continuationproof。不能广泛忽略工具变化，更不能换Store或重新配对规避。
+
+下一判别：7f0dcd0d工具通过固定Android18脚本SHA/函数位置的DevTools false条件断点，仅统计原始probe.blocked和prepare.ready布尔，不修改原函数/参数/返回、不暂停、不新增ACK。源码待独审后由唯一设备操作者实测，区分renderer主动拒绝与backend最终计划校验失败；未证明该工具实际运行前不选择产品修复。
+
 ## 用户原现场和范围
 
 原Android约13秒未保存录音完全不碰：禁止安装、启动、停止、重启、读取、导出、备份原应用或旧AVD（含5580）。ADB显式5584，无默认serial，无kill-server。只用合成PNG/TXT/WAV，无真实mic；Apple Notes删除实验不做。已有直接执行授权沿用，无重复询权限。
