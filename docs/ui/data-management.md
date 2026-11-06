@@ -33,7 +33,7 @@
 
 已定位：AttachmentSubmission存前/存后validate→validatePickerTarget→trusted同步→setSynchronizing(true)→根access-sync和全屏access-cover。不得删除trusted/权限/原owner/正文版本/书签校验来消除闪烁。正常同一已知authority的附件校验允许quiet呈现，保留原同步准入、失效generation和实际Host commit等待；不隐藏整窗、重挂Host或重载已有媒体。同步期间原编辑准入照旧，不伪称始终可写。
 
-权限prepare/撤权/陌生session、真正需要强同步及任何同步失败仍立即隐藏受保护内容。强请求与quiet并发时不能降级遮挡；失败保留遮挡直至可信恢复，不显示旧受保护正文。用全过程MutationObserver+rAF记录cover、visibility、原Host/Tiptap/媒体节点身份，不能只测最终状态。修复前必须先在合成附件添加链复现遮罩。
+权限prepare/撤权/陌生session、真正需要强同步及任何同步失败仍立即隐藏受保护内容。强请求与quiet并发时不能降级遮挡；失败保留遮挡直至可信恢复，不显示旧受保护正文。附件写入的metadata被动读取若因在途trusted同步失效，可等待该同步完成；没有在途同步或真正失败时仍按强同步处理，不能吞撤权。用全过程MutationObserver+rAF记录cover、visibility、原Host/Tiptap/媒体节点身份，不能只测最终状态。修复前必须先在合成附件添加链复现遮罩。
 
 ## 真实存储与只读接口
 
@@ -82,7 +82,7 @@ type DataManagementSnapshot = {
 
 本项目锁定dialog 2.8.4的Android save实际支持ACTION_CREATE_DOCUMENT，但返回content://URI；open亦返回URI。保留系统选择器，Rust不能把URI当PathBuf。现`export_archive/import_archive`与新单附件导出需统一使用平台IO。可扩展现notes-scan插件的host-only Rust复制方法：Android ContentResolver有界输入/输出流；host决定独立临时路径，WebView不能指定任意私有源/暂存路径；不新增JS通用文件访问或扩大扫描execute权限。普通Mac路径继续原子发布。
 
-Android导入URI先有界复制至本操作唯一私有temp，再走原归档preflight/参与窗口prepare-ACK/合并事务/恢复journal，不绕Session；生命周期覆盖最终import Promise并仅清自己temp。导出先生成一致归档/附件staging再向URI写出，全部流flush/close成功才报成功。provider可能不支持原子rename，失败必须明确，不能声称等同桌面原子替换；不删除用户已有文档。
+Android导入URI先有界复制至本操作唯一私有temp，再走原归档preflight/参与窗口prepare-ACK/合并事务/恢复journal，不绕Session；生命周期覆盖最终import Promise并仅清自己temp。导出先生成一致归档/附件staging再向URI写出，全部流flush/close成功才报成功。目标保护也覆盖URI：拒绝通过本应用FileProvider等自有provider写回应用管理目录，不能仅依赖正常picker不会返回该URI。provider可能不支持原子rename，失败必须明确，不能声称等同桌面原子替换；不删除用户已有文档。
 
 ## 备份语义与验收
 
