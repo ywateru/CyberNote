@@ -1,0 +1,1329 @@
+{
+  "status": "PASS-READONLY-FROZEN-LEAN-IDENTITY",
+  "sourceHead": "7a602ccaefe34aa357b8fc6cd384f9d51d35a30e",
+  "sourceInputs": 55,
+  "sourceBeforeAfterCurrentGitExact": true,
+  "currentFixedJXA": "6d05ee7ec69b0ac5509cfdb29fc335ae6e7c005415bbb6fe83eb715ab274843d",
+  "currentSpacingFixExact": true,
+  "binary": {
+    "path": "/private/tmp/apple-notes-import92-final-lean-immutable01/notes-current-attachment-transport",
+    "sha256": "75abd375fad6277cae5453d50b48fb9bd52b9018410da0a538ba05e3ba6abb3b",
+    "size": 27899808
+  },
+  "mode": "0555",
+  "literalFixedScriptPresent": false,
+  "scriptLiteralScope": "Lean fixture Source does not instantiate SystemSource; absence is not native package evidence",
+  "commands": [
+    {
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "/private/tmp/apple-notes-import92-final-lean01/harness/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 7544
+    }
+  ],
+  "dependencyPackages": 185,
+  "registrySourceDigestsRecomputed": [
+    {
+      "name": "aead",
+      "version": "0.5.2",
+      "sourceFiles": 11,
+      "sourceSha256": "5e83a813828be996f95282c0040650f095b873e0bd00952838070211ec804c35",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "aes",
+      "version": "0.8.4",
+      "sourceFiles": 33,
+      "sourceSha256": "8b481c2dc10b30baacff012fe21643718ffe6e13f79667ade3d53f45bc985825",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "aes-gcm",
+      "version": "0.10.3",
+      "sourceFiles": 15,
+      "sourceSha256": "a462a1122568bc85a64e9216f542f33e5c3d0a9875226772a40a39ac71a5c412",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "ahash",
+      "version": "0.8.12",
+      "sourceFiles": 25,
+      "sourceSha256": "06137ee1bdf92eab3e81d02bcb74b81e0b15c0eb574525309177e35980a985f7",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "argon2",
+      "version": "0.5.3",
+      "sourceFiles": 17,
+      "sourceSha256": "0831f45d2ffe8c5c36ed063bc4590cc970a7207487007ef044449f8e0a7dccff",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "base64",
+      "version": "0.22.1",
+      "sourceFiles": 39,
+      "sourceSha256": "870409d821d1f522a7296f3ef183cdc0dc87a82b4e37355faf0171664a691988",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "base64ct",
+      "version": "1.8.3",
+      "sourceFiles": 33,
+      "sourceSha256": "32e50d7c647b4c9d138bb987f0b2b8ed4dcb134838292629b67946d978b61813",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "bitflags",
+      "version": "2.13.2",
+      "sourceFiles": 65,
+      "sourceSha256": "4cfece539f79655055cf202343dd270f14eb808b9f4cb0408e98d5a68623687e",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "blake2",
+      "version": "0.10.6",
+      "sourceFiles": 28,
+      "sourceSha256": "b54f9620be4c2094cbc4bc23aa7f0dcd22ce95d85473b0372dac3e5aa5a75d0b",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "block-buffer",
+      "version": "0.10.4",
+      "sourceFiles": 11,
+      "sourceSha256": "2f01881e8006fdbe37b8c8d4c52522d054d6012f2630ac5a327470d5e072874d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "bumpalo",
+      "version": "3.20.3",
+      "sourceFiles": 21,
+      "sourceSha256": "637ec5e20aa56bebe0b3d37259f640a1829ab692d2180bcd9964357334629e5e",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "bytes",
+      "version": "1.12.1",
+      "sourceFiles": 41,
+      "sourceSha256": "c2acbb393ebfefb81d1c247aef9efbf58c97de7d7e976a64c1312f2ead9c37b1",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "cc",
+      "version": "1.11.0",
+      "sourceFiles": 40,
+      "sourceSha256": "a82dc92e5db15f473ef6c6cbe9c49ff4bc47be8120620fd450c3737a00005d77",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "cfg-if",
+      "version": "1.0.5",
+      "sourceFiles": 15,
+      "sourceSha256": "92eb45cef4174d5f938b7021b74434b66c29720dfe5bb76924e5e9eadce29138",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "chacha20",
+      "version": "0.9.1",
+      "sourceFiles": 20,
+      "sourceSha256": "9a2907d5641b3e63644f3074d063a8b522b780c7ce26a08ff4f4f4d90d75618d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "chacha20poly1305",
+      "version": "0.10.1",
+      "sourceFiles": 13,
+      "sourceSha256": "8a8f3f3bbf3d13699f20c2ed0a35baa3c37016f869136cdc77bc80df670965eb",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "cipher",
+      "version": "0.4.4",
+      "sourceFiles": 17,
+      "sourceSha256": "d9cf3bc64e89efd954e70aa22498b5f3dae387ed9679fc1429feb8a4026a5b1c",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "cpufeatures",
+      "version": "0.2.17",
+      "sourceFiles": 17,
+      "sourceSha256": "26500b91bbac8848dd89f2f895fc9de732a05f3e23b728b4caa9342ed28e2d45",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "crypto-common",
+      "version": "0.1.7",
+      "sourceFiles": 10,
+      "sourceSha256": "6237773e3c4bfe5f89643315c46b8b785a7c74c8680fe33ba3201f3ef6fc9937",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "ctr",
+      "version": "0.9.2",
+      "sourceFiles": 24,
+      "sourceSha256": "6f8c9236d61d3842b5972a176005b3da3cd9bac71f3a461f3b80acb35484460d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "curve25519-dalek",
+      "version": "4.1.3",
+      "sourceFiles": 64,
+      "sourceSha256": "f1afbf55114594ca335d223818423526a2cb6624c80b1a15396eeb85c9502791",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "curve25519-dalek-derive",
+      "version": "0.1.1",
+      "sourceFiles": 10,
+      "sourceSha256": "74558711a21196d6464ae15a410bcb24069478c6ba7b7d861fad56f769291790",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "data-encoding",
+      "version": "2.11.1",
+      "sourceFiles": 8,
+      "sourceSha256": "384030bb3add42ffcae35196d2c38e9f1d8dff6d1da847aae8bfe1ee0c123ad2",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "digest",
+      "version": "0.10.7",
+      "sourceFiles": 22,
+      "sourceSha256": "00e396e12e8e04b36f1181b7af37bfa18b2f28f22f9d758860acde705651c750",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "displaydoc",
+      "version": "0.2.7",
+      "sourceFiles": 26,
+      "sourceSha256": "96b3612182558e0da733f29a621096d1de75cb2940ef660ef47525baa78372a8",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "errno",
+      "version": "0.3.14",
+      "sourceFiles": 19,
+      "sourceSha256": "fed6a59c1bd93ed464770173d6700c0da1491733c7a6f2ffcf943b3172276d13",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "fallible-iterator",
+      "version": "0.3.0",
+      "sourceFiles": 12,
+      "sourceSha256": "131a06034ff7cfa6e41f79006b62601345cbd150127fabab29d369a4ba17e944",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "fallible-streaming-iterator",
+      "version": "0.1.9",
+      "sourceFiles": 9,
+      "sourceSha256": "b50f156e3dc797eabdf6f96e60666bf0677f76a36244ad4862ad769538a22ed6",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "fastrand",
+      "version": "2.5.0",
+      "sourceFiles": 14,
+      "sourceSha256": "b401a8789b7f51a1ae2ad2acc48b9906199e495a27e7ab6f073f9a5337428baf",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "fiat-crypto",
+      "version": "0.2.9",
+      "sourceFiles": 40,
+      "sourceSha256": "da41c592c7560dd1e2bbec18c6bc4b619d0a102ea9f75ae772a0469463f758c4",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "find-msvc-tools",
+      "version": "0.1.15",
+      "sourceFiles": 20,
+      "sourceSha256": "85bc58571de8c31f9986fa9975fd0783dee61b5a9347b12b2e9b83b99e7ca720",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "form_urlencoded",
+      "version": "1.2.2",
+      "sourceFiles": 8,
+      "sourceSha256": "82e861e4ab91cedae58e0c6f930c3ae9ca2a60b9d9cb0ebb21bdfe9437b38650",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "fs2",
+      "version": "0.4.3",
+      "sourceFiles": 12,
+      "sourceSha256": "8cc707a6085d897ffc78f7a1c62f6ed7e20e482a263dd3a979ad63b948b8118f",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "futures-core",
+      "version": "0.3.34",
+      "sourceFiles": 15,
+      "sourceSha256": "43ffd07816b1405aaabd525495a96380f825bde30a06b0906e824a0141275840",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "futures-macro",
+      "version": "0.3.34",
+      "sourceFiles": 12,
+      "sourceSha256": "2685384ed94fa461d23f28dec7f9eb0678fa0e3045f4696fa1a31a65db7f10c3",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "futures-sink",
+      "version": "0.3.34",
+      "sourceFiles": 9,
+      "sourceSha256": "4e18dfabc7f7de2f88c4276309cb6d5dbe45939eaa01a5f9036cb9c43cbbb4d5",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "futures-task",
+      "version": "0.3.34",
+      "sourceFiles": 15,
+      "sourceSha256": "fa9a7792a202fbc60f4183aa445f81a3e1b7a40657a6746e43b810a696be3b95",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "futures-util",
+      "version": "0.3.34",
+      "sourceFiles": 194,
+      "sourceSha256": "724b300569713d3a52c46e451b667fc672909d2f28fa5f7431137a0bd1c07ec4",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "generic-array",
+      "version": "0.14.7",
+      "sourceFiles": 17,
+      "sourceSha256": "ee8858090e7e963c70d3979287eed72d1c6077b9c80478c8729e81b481765450",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "getrandom",
+      "version": "0.2.17",
+      "sourceFiles": 39,
+      "sourceSha256": "7b76ae58653bdeb66d2ecf740cb14bfadb8384ac308dc6d343795699e5e37e77",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "getrandom",
+      "version": "0.3.4",
+      "sourceFiles": 44,
+      "sourceSha256": "af15b9c0acaf049af29af2cb01dc02fbf2a5834c9666a52939439797c2cc4539",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "getrandom",
+      "version": "0.4.3",
+      "sourceFiles": 49,
+      "sourceSha256": "e3ecc3652768fe27c8de275dad20db6131823fb100022665283360b9af9435e3",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "ghash",
+      "version": "0.5.1",
+      "sourceFiles": 11,
+      "sourceSha256": "a61c3fbf5b5ec96ec65eecbfe3b8121ad2ed1a8c2440c7cbe288b68755749b0a",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.14.5",
+      "sourceFiles": 42,
+      "sourceSha256": "809d403b06a8416f14ee3040338dd8302da565783b898826f48db3dc3dffe028",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "hashlink",
+      "version": "0.9.1",
+      "sourceFiles": 19,
+      "sourceSha256": "9970330c8497dd99a7559787a0d0bb8caa0b4a51b41ef8c95ec5dbb3c0f6a23a",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "html5ever",
+      "version": "0.39.0",
+      "sourceFiles": 36,
+      "sourceSha256": "92fecf9fc26d849e442a70495e9678b59f7b056ae4290a6423a18d0a2932f8b6",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "http",
+      "version": "1.5.0",
+      "sourceFiles": 36,
+      "sourceSha256": "33111a4b59fccf6e1217627700886a065df6910874901536763d9012f2a40c76",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "httparse",
+      "version": "1.10.1",
+      "sourceFiles": 26,
+      "sourceSha256": "30d24a0eaf7d0f770dcc11cc750d948730609c7418adea98083d28d759d33c82",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "icu_collections",
+      "version": "2.4.0",
+      "sourceFiles": 77,
+      "sourceSha256": "a9929c3c1a61c539b2835679793ac49e8bf5cb2f7e348aa1b368aa919042a8e8",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "icu_locale_core",
+      "version": "2.4.0",
+      "sourceFiles": 88,
+      "sourceSha256": "e478d52575b607edff08ff00a347ab288f38160bbd0d83baadb7fcda12eadc03",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "icu_normalizer",
+      "version": "2.4.0",
+      "sourceFiles": 39,
+      "sourceSha256": "481a2db26471dfa5b1581581c3c30eb40eb9c1d9b0dd943e676101ffe0035878",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "icu_normalizer_data",
+      "version": "2.4.0",
+      "sourceFiles": 17,
+      "sourceSha256": "5d8e098d0707a59868e9e4d81be29eefa0302c92fbd554456d64cacbf7937a80",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "icu_properties",
+      "version": "2.4.0",
+      "sourceFiles": 25,
+      "sourceSha256": "c75bc4d8387db9d77b75bbe22db82d2e1f0eeea6ec9b8e0aa96618617ced3df1",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "icu_properties_data",
+      "version": "2.4.0",
+      "sourceFiles": 151,
+      "sourceSha256": "ff1885d8f759cb9c6e6f3b8e4b515bad9355bc27ff4d0189b2f0d11a5d7f7c87",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "icu_provider",
+      "version": "2.4.0",
+      "sourceFiles": 26,
+      "sourceSha256": "aa72aec925061cf7d8e4c2afb09d28cd153e61952ced6d69c2cf60d72b0861cf",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "idna",
+      "version": "1.1.0",
+      "sourceFiles": 22,
+      "sourceSha256": "aed3af4225d47bd480e845302f714ee8f64c9ac856bf50df12c569311e6a1741",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "idna_adapter",
+      "version": "1.2.2",
+      "sourceFiles": 10,
+      "sourceSha256": "6aa21d4cf5bae9b35077ef06c9d01b7b1ef84ecef59baa0dc516fa337c7e71a8",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "inout",
+      "version": "0.1.4",
+      "sourceFiles": 13,
+      "sourceSha256": "ba165e29522830b40ab022a91fb0f6d46adce0f7249eb727ef86805b9b4e744f",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "itoa",
+      "version": "1.0.18",
+      "sourceFiles": 15,
+      "sourceSha256": "4ae6a817b7005f3c8fffc98e66f8ca213b102fb38c5270f9484ed00aeb26cae2",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "js-sys",
+      "version": "0.3.107",
+      "sourceFiles": 19,
+      "sourceSha256": "0f8b76440a5e652451331ad35065a8ac0c870b8c1ab35dfb1a4f3631a520cfd1",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "libc",
+      "version": "0.2.191",
+      "sourceFiles": 453,
+      "sourceSha256": "8ee940b56b781bf90b45c10c980a63ece6daa3ab5b08241d012d9b044291f0a1",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "libsqlite3-sys",
+      "version": "0.30.1",
+      "sourceFiles": 28,
+      "sourceSha256": "d45ad82483381e19f55d1f7b50bf216f504024788b5fa578169218c2f3168dc7",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "linux-raw-sys",
+      "version": "0.12.1",
+      "sourceFiles": 474,
+      "sourceSha256": "78f8746cb0f7aceb0914745efb0dd5141fda5a5841a82239c10596d08f4fa65b",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "litemap",
+      "version": "0.8.3",
+      "sourceFiles": 24,
+      "sourceSha256": "3fc369a1c4c56c80b1679f03d0fe5364124813c1a528f189de5f00442e22d00c",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "lock_api",
+      "version": "0.4.14",
+      "sourceFiles": 11,
+      "sourceSha256": "02498d09b36eae709b89406511a3a53e3037d4a92496bbf83761105b15a5dd1e",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "log",
+      "version": "0.4.35",
+      "sourceFiles": 26,
+      "sourceSha256": "c20d9899c9ceeb1b07ab61efe540265a5d1a2cfdbbd3547a0f20ec0757de9460",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "markup5ever",
+      "version": "0.39.0",
+      "sourceFiles": 13,
+      "sourceSha256": "01109d259c258229ff087ab76b288f4d5c4e05aa75ba9ba1febcba297c4a6df5",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "memchr",
+      "version": "2.8.3",
+      "sourceFiles": 60,
+      "sourceSha256": "02684f87f4940ace43574850185648751918d6a7293c2bdf68fc1dcb800b3071",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "mio",
+      "version": "1.2.4",
+      "sourceFiles": 72,
+      "sourceSha256": "5476536a7dd5c60f382a18febcae80102f8dbb37f4deae9a960a9f02081fa075",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "new_debug_unreachable",
+      "version": "1.0.6",
+      "sourceFiles": 12,
+      "sourceSha256": "4b71e6334ee09e15ea6318e77a643570f5ea39bf009e8d6eb4f36c55fe6a04ed",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "once_cell",
+      "version": "1.21.4",
+      "sourceFiles": 30,
+      "sourceSha256": "3f41535e35c8fb325381ece70fbc63e479e29cd9816d1354ab8cce09bd6a8d4b",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "opaque-debug",
+      "version": "0.3.1",
+      "sourceFiles": 10,
+      "sourceSha256": "0b6ac6a7607267ee7dd9a7266796789f8b079cb2865e47418ac0b1b6e4f7bca0",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "parking_lot",
+      "version": "0.12.5",
+      "sourceFiles": 29,
+      "sourceSha256": "48295188dff77156fa1b74d48c348785573e563504c86f472b2eddfda4db49e9",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "parking_lot_core",
+      "version": "0.9.12",
+      "sourceFiles": 25,
+      "sourceSha256": "e11d35158e94a451f22d338626bc5e015abe8a0af507f47f51d00156dea892a7",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "password-hash",
+      "version": "0.5.0",
+      "sourceFiles": 21,
+      "sourceSha256": "354d28dd94a32a686b3f13ff66926c21762d7dd0cde267591a326c07320ba323",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "percent-encoding",
+      "version": "2.3.2",
+      "sourceFiles": 9,
+      "sourceSha256": "c7667512b8ba4229b6de1eed42cf4244f99267c097c844b7466363e8e2dcb028",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "phf",
+      "version": "0.13.1",
+      "sourceFiles": 13,
+      "sourceSha256": "219463e3ca7d6288c22e450409ade7c6364b795e5f05c4d7f1490272cceb46df",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "phf_codegen",
+      "version": "0.13.1",
+      "sourceFiles": 9,
+      "sourceSha256": "3d367b170ff8e464db31fd17204db2d6bbffadbdc648447e329475e68798eb5b",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "phf_generator",
+      "version": "0.13.1",
+      "sourceFiles": 11,
+      "sourceSha256": "c0c675ff7494aba2ee3526b761f2a6f93c2c438f7b3c1e61d1043adc63a3f317",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "phf_shared",
+      "version": "0.13.1",
+      "sourceFiles": 9,
+      "sourceSha256": "080a2bbba3acb5d51006c3c69b4989fcae1a27e0fb4525ef03ef0742842a1c7a",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "pin-project-lite",
+      "version": "0.2.17",
+      "sourceFiles": 82,
+      "sourceSha256": "3b5d5061b27fd65422eba372ff718a50eb0f56fa56c449803a15435561de7803",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "pkg-config",
+      "version": "0.3.34",
+      "sourceFiles": 17,
+      "sourceSha256": "5383d9aa1fd69c6e07ab93c156b1153ec223c620c0cb2bee13ed7d53e41ade8b",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "poly1305",
+      "version": "0.8.0",
+      "sourceFiles": 27,
+      "sourceSha256": "52c82bd02e5801d1e24bec718519c6739d090e61cca5d94a10773e0a3917316e",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "polyval",
+      "version": "0.6.2",
+      "sourceFiles": 18,
+      "sourceSha256": "f608f9034be764196b5e4904d30397c077466b715ab3fee59037185154659b43",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "potential_utf",
+      "version": "0.1.6",
+      "sourceFiles": 11,
+      "sourceSha256": "cf82b03aa87235b6237a798c07bed25700b7fb84771e992964902c9a3c382e03",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "ppv-lite86",
+      "version": "0.2.21",
+      "sourceFiles": 13,
+      "sourceSha256": "1f95afeb46a816efd21f70793a20f69017dd420e02ee2e09b8fb4a772d616816",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "precomputed-hash",
+      "version": "0.1.1",
+      "sourceFiles": 6,
+      "sourceSha256": "13af43d841180e5eef85ce9e2fe751b09cefbdaa2939446c353b2598b61ea04d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "sourceFiles": 34,
+      "sourceSha256": "f949e20adddbd3cabe9a5f2e29a1bacd8527042b8fa87fe4217f175a7d22effa",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "quote",
+      "version": "1.0.47",
+      "sourceFiles": 36,
+      "sourceSha256": "cb11c378237004e5205d481cf2d2ccf2cf245406246d65025e2f070d9965ea23",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "r-efi",
+      "version": "5.3.0",
+      "sourceFiles": 70,
+      "sourceSha256": "1ac5adfcc1c54aa2bbfa1deb49153dc7dffb5ef3596cbb80b5904eb9e0cf8fb6",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "r-efi",
+      "version": "6.0.0",
+      "sourceFiles": 70,
+      "sourceSha256": "08d6750ee6507e80bcdde34861ae830722d4f6489d1e8f47dc2d25134143c128",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rand",
+      "version": "0.8.8",
+      "sourceFiles": 36,
+      "sourceSha256": "c944d4bcf5c6f852de4fc38d62630e13d00d6ba6fbae5cb0521c7bbc40fa633a",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rand",
+      "version": "0.9.5",
+      "sourceFiles": 41,
+      "sourceSha256": "0681076503f492309d2acf1b72ab9c07331d2eaf2f992a20eb059e71c025638d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rand_chacha",
+      "version": "0.3.1",
+      "sourceFiles": 12,
+      "sourceSha256": "93b2605ff8569c2eb2f93ea397ccecb20e1262b460e12452cab582c9082fb604",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rand_chacha",
+      "version": "0.9.0",
+      "sourceFiles": 13,
+      "sourceSha256": "88565a1e53a49d55377339babbab89a0538bf41d5efac69e81e69e1f058b1bcc",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rand_core",
+      "version": "0.6.4",
+      "sourceFiles": 15,
+      "sourceSha256": "5346fd790d2e1600c93b8a8ded970b01a7a55cd0803817f577cb768c36658601",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rand_core",
+      "version": "0.9.5",
+      "sourceFiles": 15,
+      "sourceSha256": "9c0bede6397cbab18f2f42d8786d6ef40d77b185ed765ee2d4691642e6828ee5",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "redox_syscall",
+      "version": "0.5.18",
+      "sourceFiles": 33,
+      "sourceSha256": "6fff5b7e9c95f0c261cbaa584d83a5273e42fcbd24af3d35d7bb7e9e5177493e",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "ring",
+      "version": "0.17.14",
+      "sourceFiles": 392,
+      "sourceSha256": "7b649daa512c1966bd4f163a52b6700b4607362c9096171528f76a5f5bfb8a24",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rusqlite",
+      "version": "0.32.1",
+      "sourceFiles": 66,
+      "sourceSha256": "dc20f2c6c29a1ddacd539e8eb16775b573e3f34ee8a0f6d8d4086f11a00e580e",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rustc_version",
+      "version": "0.4.1",
+      "sourceFiles": 14,
+      "sourceSha256": "1418be052a7615334d9f63461a0558342cb0a3497744fac9c74d58b151a3c215",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rustix",
+      "version": "1.1.6",
+      "sourceFiles": 333,
+      "sourceSha256": "a1e9a0d9096e1b36f4104a08c49a583d38c27cd4809da1c850e3bb161e4c432e",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rustls",
+      "version": "0.23.46",
+      "sourceFiles": 120,
+      "sourceSha256": "7fc57bd008e5413e3d021510823faa63495f6cf23fae1b3327a3be849238b77d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rustls-pki-types",
+      "version": "1.15.1",
+      "sourceFiles": 33,
+      "sourceSha256": "2ad41103fb74df6140ad9a7d63963fe48e9aea83a9b331e2196bc35098a01f2f",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rustls-webpki",
+      "version": "0.103.16",
+      "sourceFiles": 37,
+      "sourceSha256": "175b1af6a0d43e4f82129e5b46cec2c3b0ebff4b378a8dde1508ea1aedaba0c9",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "rustversion",
+      "version": "1.0.23",
+      "sourceFiles": 40,
+      "sourceSha256": "63484d0573d8fbecfc60cc89e6d0285fe58f9d18d8f0edbefa82afef592ac7f1",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "scopeguard",
+      "version": "1.2.0",
+      "sourceFiles": 12,
+      "sourceSha256": "e1310d03de430f2b5d8648df7d24285cca5d9771ad46b54be3ccad3abf1cff74",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "semver",
+      "version": "1.0.28",
+      "sourceFiles": 26,
+      "sourceSha256": "af03334f4e3408f2b61dd3ea03bd9a78c335110edb1e9169b8e04db7359bfe94",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "serde",
+      "version": "1.0.229",
+      "sourceFiles": 34,
+      "sourceSha256": "bad8743acb758995f0c5d9589b5aa81c4a37186ef8914de4887dab0d2bc72dc9",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "serde_core",
+      "version": "1.0.229",
+      "sourceFiles": 28,
+      "sourceSha256": "8d36a184d6574ab34aed6ca1c5776ada9ee51cbb3dd81ed128ae43bae87b12f2",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "serde_derive",
+      "version": "1.0.229",
+      "sourceFiles": 37,
+      "sourceSha256": "d719937f4eb3a629fe75a882e4e9afcc8bc853699c840dbe7cf5e19c832b1044",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "serde_json",
+      "version": "1.0.154",
+      "sourceFiles": 91,
+      "sourceSha256": "495293379ac78aabd987ec9de323830154928720ceeede1f1b1eb1aaf4579e6d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "sha1",
+      "version": "0.10.7",
+      "sourceFiles": 17,
+      "sourceSha256": "a4980003f63601dff53e954a61d759862951eca98047a5bdf19a98a9a75b5e35",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "sha2",
+      "version": "0.10.9",
+      "sourceFiles": 32,
+      "sourceSha256": "93f76d52754e52531fe5ea8c742b3fc83da5e869a60275fea9f4a66b961bb40f",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "shlex",
+      "version": "2.0.1",
+      "sourceFiles": 14,
+      "sourceSha256": "499ff7df2e49f9e16cbcf68c522bac1685a0ce7bfab347736e19a3dd1d7d212a",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "siphasher",
+      "version": "1.0.4",
+      "sourceFiles": 18,
+      "sourceSha256": "04fce897aa89c5d9abad46ea797b02364261f5b8eb16095e67256fa07cd224e6",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "slab",
+      "version": "0.4.12",
+      "sourceFiles": 14,
+      "sourceSha256": "df9ca80141b0add81905f2e222d67133db21d6f4a4f9ceded08c439a63634bc1",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "smallvec",
+      "version": "1.16.4",
+      "sourceFiles": 12,
+      "sourceSha256": "50f80dc863dc5669f4c796db9e0197ae80f3fab981a314a80fcb34ee22ed50cb",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "snow",
+      "version": "0.9.6",
+      "sourceFiles": 39,
+      "sourceSha256": "b5e2ec3fcdb9d144a311203fb63f1c4915ee345756bbb0cd7c477068a49d62a1",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "socket2",
+      "version": "0.6.5",
+      "sourceFiles": 14,
+      "sourceSha256": "012add73ed0c3df87a78837096f5ac525d6e6303f6b4d7ab3b2cc9e7d0654fd4",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "stable_deref_trait",
+      "version": "1.2.1",
+      "sourceFiles": 10,
+      "sourceSha256": "64d9549f1be030120b4ea65f7b8451c0a46f45c77459a3b19f18688169cf777c",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "string_cache",
+      "version": "0.9.0",
+      "sourceFiles": 17,
+      "sourceSha256": "acae27903d8153e560d3796962d9e0de2a7cfc90197029411a5eb570836c1e71",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "string_cache_codegen",
+      "version": "0.6.1",
+      "sourceFiles": 7,
+      "sourceSha256": "3b259cedd6efcb6dab4ebe66ae790efc199f9c88ce0d308443058450eb9e2e5b",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "subtle",
+      "version": "2.6.1",
+      "sourceFiles": 11,
+      "sourceSha256": "1c3fa823d85fe7b91b0ada9ef26d6a7eadf72651c60a44e7c43919d29e0b5c1f",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "syn",
+      "version": "2.0.119",
+      "sourceFiles": 106,
+      "sourceSha256": "0b3da493a9c75cc9117c70ffcc1c55d95298dc9d9a6a5d5035a9f3c98ad0128d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "syn",
+      "version": "3.0.9",
+      "sourceFiles": 105,
+      "sourceSha256": "34126c9dfbdb8630dac8eda313ac196f3064ccbade792c7ccd6fd7fb965f25b4",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "synstructure",
+      "version": "0.14.0",
+      "sourceFiles": 9,
+      "sourceSha256": "25ad0ba63257a91ab5f3b3073017cb3e0f45a7066b874f87e9707c8c940c8b67",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "tempfile",
+      "version": "3.27.0",
+      "sourceFiles": 28,
+      "sourceSha256": "58fa434946ba0076c94e57bc87c5732ff12079d4cd2fed0d06476da279aade4a",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "tendril",
+      "version": "0.5.1",
+      "sourceFiles": 19,
+      "sourceSha256": "5ab38ec92841a91ef1a2dc9a475f6cad63c2d40b33efb4147325218143930786",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "thiserror",
+      "version": "2.0.21",
+      "sourceFiles": 106,
+      "sourceSha256": "a157f93bc23c0284dbfcdb2ba0a5f552529c1746c10d48d1602996837b26de1b",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "thiserror-impl",
+      "version": "2.0.21",
+      "sourceFiles": 18,
+      "sourceSha256": "64d7a1233d8cbc5f0685b361d5d6282c470f2fdc5f1da61e64ff5982ae7d25e6",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "tinystr",
+      "version": "0.8.5",
+      "sourceFiles": 23,
+      "sourceSha256": "2b689a0da8a3ebdecd6e850fb410e54a593cda285558979afa65e9836bd88181",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "tokio",
+      "version": "1.54.1",
+      "sourceFiles": 582,
+      "sourceSha256": "d24425f8bd1885adc34347c5781f38f8d3bdedb0aed99ee872e6df34bbb2a9fd",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "tokio-macros",
+      "version": "2.7.2",
+      "sourceFiles": 11,
+      "sourceSha256": "9bf509d4066a04aea372845844037f65110458ab3ab5aa0acabfcb220a1e764c",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "tokio-rustls",
+      "version": "0.26.6",
+      "sourceFiles": 17,
+      "sourceSha256": "c21efa62aa007b8c11d458c98bdb10ad875ab3c0e69e4db71aaef859af2ff585",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "tokio-tungstenite",
+      "version": "0.29.0",
+      "sourceFiles": 23,
+      "sourceSha256": "caf0782c779224bec88de840551b1654edf66314dbf8b7dd123c21b215166e31",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "tungstenite",
+      "version": "0.29.0",
+      "sourceFiles": 40,
+      "sourceSha256": "4fadfb6291a8ed312aafb817e7bfd472a57396af6ad226fa46ff9a0c95787f2b",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "typenum",
+      "version": "1.20.1",
+      "sourceFiles": 27,
+      "sourceSha256": "fd1ae89c844e73231cf3d9ef3df790be44b9c805533f68c119705edfd6cdb034",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "sourceFiles": 27,
+      "sourceSha256": "00b87421b516e14b33af0e3ba12cd2e52a381acb16f60a78c68ffbb8647ad63d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "universal-hash",
+      "version": "0.5.1",
+      "sourceFiles": 9,
+      "sourceSha256": "09533932aae30d79ddfc767dd06b66fc817a3f009588634a3983250c2dcc9506",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "untrusted",
+      "version": "0.9.0",
+      "sourceFiles": 20,
+      "sourceSha256": "20a49272d836ac52fdb707c07489d6c00f0b406cf3ee53dfc1b0d4d4ae2cfc6a",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "url",
+      "version": "2.5.8",
+      "sourceFiles": 20,
+      "sourceSha256": "6a32f8c06d98a1e30dab737c39f78945d3fa1da331d84ce8f5a8f6176ddd216e",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "utf8_iter",
+      "version": "1.1.0",
+      "sourceFiles": 17,
+      "sourceSha256": "f6492eed3867a052f164db406ac919e29d14564cd841b23e1b46b3b3a588d0c7",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "utf_types",
+      "version": "1.0.0",
+      "sourceFiles": 14,
+      "sourceSha256": "6a6deb97deb0b430c0cda4542305d04cf4d00de97e25d8d4bba177454d439716",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "uuid",
+      "version": "1.29.0",
+      "sourceFiles": 31,
+      "sourceSha256": "a3672f5ee78e7649e1ff4d097d2515fc99566fc0b0edd41671dc4c8dbb99750d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "vcpkg",
+      "version": "0.2.15",
+      "sourceFiles": 834,
+      "sourceSha256": "0f4a0463d00c545190f74b56aa38b8287dc3e5b51276f8e5ac3b67490e3aff10",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "version_check",
+      "version": "0.9.5",
+      "sourceFiles": 14,
+      "sourceSha256": "9b09e2fee431feec2817fc6191556db71503635af13457148c9b176016e47ae5",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "wasi",
+      "version": "0.11.1+wasi-snapshot-preview1",
+      "sourceFiles": 18,
+      "sourceSha256": "4e0f0a2a4f40d86f6da89322a992dc97d793b88adf804338dc262dd92c8cc41b",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "wasip2",
+      "version": "1.0.4+wasi-0.2.12",
+      "sourceFiles": 29,
+      "sourceSha256": "7ce49093bd7588513698ca7eb8e69c4488172622a3a87bc3d4fc36e871b278c6",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "wasm-bindgen",
+      "version": "0.2.130",
+      "sourceFiles": 28,
+      "sourceSha256": "e12dd2b29006d89ae36a0c1abda149c2a30fd993bf4eac03260be8daa65b8f5e",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "wasm-bindgen-macro",
+      "version": "0.2.130",
+      "sourceFiles": 10,
+      "sourceSha256": "95da6f504d046d16d412c02199a2a8dcd81da32539aa303d39983c96327575b8",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "wasm-bindgen-macro-support",
+      "version": "0.2.130",
+      "sourceFiles": 15,
+      "sourceSha256": "9343a9139325f8f372b8ed308b5446e6805e270ab3aac88531b4d0ab793bbaa9",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "wasm-bindgen-shared",
+      "version": "0.2.130",
+      "sourceFiles": 12,
+      "sourceSha256": "e12c9f01c54dc3c0a9546954312b8455d7635dce67478dbb9821fff2509a32e9",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "web_atoms",
+      "version": "0.2.6",
+      "sourceFiles": 11,
+      "sourceSha256": "e746f26d059842e9079b6dbda8ccb3b4386ba59f7149b53c6d627d0feecf7768",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "webpki-roots",
+      "version": "0.26.11",
+      "sourceFiles": 12,
+      "sourceSha256": "16a9db39a1ee1dd4156e6e647ee2164d55ffdaa49ebb488328db0f6bfb9e1b03",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "webpki-roots",
+      "version": "1.0.9",
+      "sourceFiles": 13,
+      "sourceSha256": "2d9214f40fe0458bfdaedf04c7677767635ab0163e69de403d81f089ef503582",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "winapi",
+      "version": "0.3.9",
+      "sourceFiles": 412,
+      "sourceSha256": "19d53be9714982908b622b37077e2f6f971fca8c4a18989f08c031e920660231",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "winapi-i686-pc-windows-gnu",
+      "version": "0.4.0",
+      "sourceFiles": 1392,
+      "sourceSha256": "3f3a3c96f11239694e84f8deb8823786b531b8e7592080cb99e2c417b059217a",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "winapi-x86_64-pc-windows-gnu",
+      "version": "0.4.0",
+      "sourceFiles": 1421,
+      "sourceSha256": "8f59c17cedad8c3fa1d51302e130dd2889db361a397b8f57d632354fec5e5e2d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows-link",
+      "version": "0.2.1",
+      "sourceFiles": 9,
+      "sourceSha256": "f4b0b79286429e9c951c9d010ef554f5deb875e9f19724bb30f25b59d114b973",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows-sys",
+      "version": "0.52.0",
+      "sourceFiles": 242,
+      "sourceSha256": "d91e0906bb3b19b409c4c18294be2f6d8ad990c0ada38f6b05c38bfca8722baa",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows-sys",
+      "version": "0.61.2",
+      "sourceFiles": 258,
+      "sourceSha256": "5b787ebbd5c39e9e314ee3b6ea42db8a88b4f8c3c077d0e05041316d3698e4fc",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows-targets",
+      "version": "0.52.6",
+      "sourceFiles": 8,
+      "sourceSha256": "6983044a4a94def903f33aceebb25f65bd1f69da641797bbc8bff724f7f74197",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows_aarch64_gnullvm",
+      "version": "0.52.6",
+      "sourceFiles": 9,
+      "sourceSha256": "cf21ce93c04a5e69741ee01f3c00a5ee5eed4a8a7efccfd02ccc974ecf09ad06",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows_aarch64_msvc",
+      "version": "0.52.6",
+      "sourceFiles": 9,
+      "sourceSha256": "85a1008573597d01cbb2e39c2507f37fb0e8eca46bb1c6f3844f6f0a3a453623",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows_i686_gnu",
+      "version": "0.52.6",
+      "sourceFiles": 9,
+      "sourceSha256": "21ad3bd0b9e9aad46112f7279fbd9467ed7cb59a2af046cdc432ac22809bbbf2",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows_i686_gnullvm",
+      "version": "0.52.6",
+      "sourceFiles": 9,
+      "sourceSha256": "670d5bd5116ca691912f3be7c52368f8d1bd325e8d06f2ba82c54cfc82626684",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows_i686_msvc",
+      "version": "0.52.6",
+      "sourceFiles": 9,
+      "sourceSha256": "0a345e3c70650e98442bb239626464fed89f5ba2605e728cfd66958f95546195",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows_x86_64_gnu",
+      "version": "0.52.6",
+      "sourceFiles": 9,
+      "sourceSha256": "06888aa981b37cd07d9bf3d118e02c0f397ea788700dc07fb187e3747d300fb8",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows_x86_64_gnullvm",
+      "version": "0.52.6",
+      "sourceFiles": 9,
+      "sourceSha256": "7acfb5c12ef835599473406ae8422a8366d5220f7e80d533479502a276178594",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "windows_x86_64_msvc",
+      "version": "0.52.6",
+      "sourceFiles": 9,
+      "sourceSha256": "943923d762d1d6bcc959c10b5cfe5a0509fa285dd6ede28aa704f14a2cb6aa7d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "wit-bindgen",
+      "version": "0.57.1",
+      "sourceFiles": 43,
+      "sourceSha256": "4f9b9e20b454faf99d26e27ae02fdbf15a63ce9db2e8ed67304ed8ca79c4d4c3",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "writeable",
+      "version": "0.6.4",
+      "sourceFiles": 22,
+      "sourceSha256": "8b954dd47d0ab7d341aa4e6deef0fb979187edb027cb391de1268b2d6a39eb55",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "yoke",
+      "version": "0.8.4",
+      "sourceFiles": 19,
+      "sourceSha256": "951b8bd072ca3355bbff66a9b193a8c139e4fb3162dffe33a5455705ea3ea1a2",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "yoke-derive",
+      "version": "0.8.4",
+      "sourceFiles": 11,
+      "sourceSha256": "134e1de06d56568c5ec5a0845c1eba068365ed5ce9e5c1a556a36a6e159c0081",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "zerocopy",
+      "version": "0.8.63",
+      "sourceFiles": 410,
+      "sourceSha256": "63d077f431be2755943dc9531fc764e973b8ccd90b9830e91c0dcaea162a4ffe",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "zerocopy-derive",
+      "version": "0.8.63",
+      "sourceFiles": 176,
+      "sourceSha256": "7ef5227e03f8276c5f6e9185b7ed503bd82ce4461ef47c6df40948a2db017601",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "zerofrom",
+      "version": "0.1.8",
+      "sourceFiles": 10,
+      "sourceSha256": "a4b3d51eabe9c7ed3779159b22e913e29fedd4dd1b8351b4bd34611b90d132e8",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "zerofrom-derive",
+      "version": "0.1.8",
+      "sourceFiles": 10,
+      "sourceSha256": "ccbedcb27ab415719f1d9557286eb595a2c616b29cb8946ed2c8aa8981e5031d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "zeroize",
+      "version": "1.9.1",
+      "sourceFiles": 17,
+      "sourceSha256": "12f79c309a3ea79967a1600d0647dbbf5b553f8a42d539fad2c63c18d422309d",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "zerotrie",
+      "version": "0.2.5",
+      "sourceFiles": 40,
+      "sourceSha256": "1e53c818c413d0a963878d5313e73468367c14eb7dcc7bb63fa0fd3b798b3319",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "zerovec",
+      "version": "0.11.9",
+      "sourceFiles": 68,
+      "sourceSha256": "062aea8d785de88542fbb87ad4890922fce364027c195a79e0250a4dc60c47d8",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "zerovec-derive",
+      "version": "0.11.7",
+      "sourceFiles": 19,
+      "sourceSha256": "547c0882ee650180683faa14c0c3c30b0d06f534a26fe282b733cb2a7bed795a",
+      "checksumSidecarPresent": false
+    },
+    {
+      "name": "zmij",
+      "version": "1.0.23",
+      "sourceFiles": 18,
+      "sourceSha256": "f8e1f9495baa29ea54387be147fbf563326ef86c78275fb4aa8f1dabcf0dabdd",
+      "checksumSidecarPresent": false
+    }
+  ],
+  "checksumSidecarsMissing": 184,
+  "wallSeconds": 2.114225459,
+  "limits": [
+    "Independent read-only metadata/source/cache/binary audit; no cargo, runtime, Notes, devices or private databases",
+    "Missing registry checksum sidecars are explicitly preserved; actual full source digest matched, not a hermetic supply-chain reproducibility proof",
+    "DOM and private offline replay acceptance separate"
+  ]
+}

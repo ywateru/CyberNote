@@ -1,0 +1,139 @@
+{
+  "status": "PASS-READONLY-FINAL-APP-INTEGRATION-EVIDENCE",
+  "sourceHead": "7a602ccaefe34aa357b8fc6cd384f9d51d35a30e",
+  "broadTrackedInputs": 505,
+  "allCurrentGitBytesEqual": true,
+  "immutableExecutedBinary": {
+    "path": "/private/tmp/apple-notes-import92-final-lean-immutable01/notes-current-attachment-transport",
+    "sha256": "75abd375fad6277cae5453d50b48fb9bd52b9018410da0a538ba05e3ba6abb3b",
+    "size": 27899808
+  },
+  "authorChecks": [
+    {
+      "name": "affected-rust",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "apple_",
+        "--",
+        "--nocapture"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 10.273218458999999
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 2.3895054579999986
+    },
+    {
+      "name": "frontend-build",
+      "command": [
+        "pnpm",
+        "exec",
+        "vite",
+        "build",
+        "--outDir",
+        "/private/tmp/apple-notes-import92-final-production"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 1.9743471660000012
+    },
+    {
+      "name": "production-exclusion",
+      "command": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "check-production",
+        "--production",
+        "/private/tmp/apple-notes-import92-final-production",
+        "--out",
+        "/private/tmp/apple-notes-import92-final-exclusion"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 1.377128625000001
+    },
+    {
+      "name": "lean-build",
+      "command": [
+        "node",
+        "scripts/debug/build-rust-attachments.mjs",
+        "/private/tmp/apple-notes-import92-final-lean01"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 9.593307874999997
+    },
+    {
+      "name": "app-dom",
+      "command": [
+        "node",
+        "scripts/debug/apple-notes-import92.mjs",
+        "/private/tmp/apple-notes-import92-final-lean-immutable01",
+        "/private/tmp/apple-notes-import92-final-dom01"
+      ],
+      "exitCode": 0,
+      "runnerWallSeconds": 19.203528042000002,
+      "checks": 20,
+      "scope": "actual App DOM and exact production core/Session/Store; fixed synthetic OS Source, native windows/dialogs/media mocked; no Apple Notes/device access"
+    }
+  ],
+  "appChecks": [
+    "baseline real Store note saved",
+    "actual preview lists hierarchy and locked reason",
+    "source raw IDs absent from rendered HTML",
+    "complete result distinguishes imported loss and export failure",
+    "real Store append preserves baseline and settings",
+    "real source media and raw records separately managed",
+    "rich existing Editor schema and original dates retained",
+    "actual result DOM exposes loss and source failure details",
+    "original imported image export bytes exact",
+    "repeat same worker skips copies without duplicates",
+    "cancel scan stops owned worker without writes",
+    "actual backup contains all five managed original and raw blobs",
+    "raw source HTML is a separate backup file",
+    "same Store reopening retains imported data",
+    "data inventory sees all retained files",
+    "no renderer exceptions",
+    "actual backup restore retains raw records and file ownership",
+    "restored managed raw ledger skips identical source on same worker",
+    "restored App has no renderer exceptions",
+    "Mac source entry absent in actual mobile App DOM"
+  ],
+  "actualBackupNotes": 3,
+  "actualBackupManagedFiles": 5,
+  "actualBackupRawRecords": 2,
+  "PNGOriginalBytes": 68,
+  "exportedPNGOriginalSHA256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f",
+  "sourceFixtureOnly": true,
+  "cleanupScope": "Outer natural0 plus awaited cleanup implementation rejects forced/nonzero backend/browser; no invented separate PID-exit receipts",
+  "productionExclusion": {
+    "productionAPIAbsent": true,
+    "urlCannotEnable": true,
+    "bundle": {
+      "files": 3,
+      "markers": [
+        "__NOTES_DEBUG__",
+        "SyntheticMediaRecorder",
+        "__DEBUG_PLATFORM__",
+        "synthetic-device-and-ipc-boundaries"
+      ],
+      "matches": []
+    },
+    "platformMockInjectedByRunnerOnly": true
+  },
+  "wallSeconds": 6.313039958999999,
+  "limits": [
+    "Independent read-only evidence/source/known synthetic files audit; no duplicated App/Rust run, Notes, devices or private source snapshot read",
+    "Data inventory assertion is UI content smoke, not exact size-total proof",
+    "Author tests use synthetic OS Source; real02 and offline retained-snapshot review separate",
+    "Mac package entitlements/TCC/native launch not covered"
+  ]
+}

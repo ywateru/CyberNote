@@ -1,0 +1,41 @@
+{
+  "macBuildDriver": {
+    "sourceCommit": "5f227e32",
+    "path": "scripts/native/build-apple-import92-mac.py",
+    "sha256": "83b42ed42ac5a3b5c5e9613d527948c8501ad141f0c3055d0ef734c6e8f81a52",
+    "ASTParse": true,
+    "status": "PASS-SOURCE-ONLY-ROOT-CONDITIONALLY-AUTHORIZED-BUILD",
+    "checks": [
+      "approved dynamic complete path set and per-file Git equality",
+      "dirty/untracked/nonregular product paths rejected",
+      "before/after build/packaging unchanged",
+      "explicit source entitlements for derived signing",
+      "actual original and derived signed plist exact dictionary equality",
+      "actual Apple Events usage source equality",
+      "raw original copy preserved and changed-path allowlist",
+      "actual original verify exit preserved; derived strict required",
+      "no runtime/source call or signing by reviewer"
+    ]
+  },
+  "offlineReplayDriver": {
+    "path": "/private/tmp/apple-notes-import92-offline-driver.mjs",
+    "sha256": "84a63584ad69ad05535ec80ac9f733b0ba26e1bc67b320372b5f1d2f83cd9b1c",
+    "status": "PASS-SOURCE-ONLY-ROOT-AUTHORIZED-OFFLINE-REPLAY",
+    "checks": [
+      "fixed immutable binary and55 source hashes",
+      "retained source/raw only; no Notes/device/browser call",
+      "new0700 private output/store,0600 captures,umask077",
+      "manual six-block/four-break expected independent of converter output",
+      "source scalars/raw bytes/source identity folder chain exact",
+      "baseline note/settings/reopen/dedup comparisons",
+      "backend close natural0 and pending0 checked",
+      "failure raw stack private only; fixed stdout; safe aggregate only for Git"
+    ],
+    "privateFilesReadByReviewer": false,
+    "driverExecutedByReviewer": false
+  },
+  "limits": [
+    "Source/entry/privacy/admission review only; actual build and replay evidence separately reviewed",
+    "No expanded framework, cargo, Notes, devices or private source reads"
+  ]
+}
