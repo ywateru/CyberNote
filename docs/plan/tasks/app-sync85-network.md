@@ -15,3 +15,5 @@
 2026-11-06作者冻结：依赖5759ebe0、产品f58f63c8、证据dad423fc。14项真实网络/身份测试与clippy/fmt作者通过，独立verify进行中；未合入、未接生产Store，不视为双端同步交付。
 
 独审2026-11-06已确认阻塞：两个已配对client对相同hash均获得offset0并同时首块，Staging::write的旧offset被Protocol永久停；scripts/sync-network-test/tests/independent85.rs保留真实socket确定性栅栏复现及exit101原件。必须修复同hash正常并发的自动恢复并复验，不允许手动sync_now/串行化测试掩盖。作者新freeze后独审原测试保持不变。
+
+2026-11-06复审通过：产品c88982a6、作者证据7d206973、独审59fc3f32；完整19项真实网络/身份测试自然0，原共同offset0失败用例未改且自动收敛。自然连接预算走Transport自动退避重握手。仅85模块pass，待与84一起合入和86真实接线，不等价完整同步已完成。
