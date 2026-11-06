@@ -7,3 +7,5 @@ Current readonly preflight independently admitted exact ordered desktop IDs6055 
 Actual DOM shows exact desktop owner/H1 and trailing P innerText newline; original raw-block-join gate therefore false despite canonical full document equality. Decoded PNG1x1/audio duration1 observed. Original readonly media diagnostic01 refused; no claim of complete visible/source gate yet. Original desktopMedia action failure remains unchanged.
 
 Admitted fixed normal mouse mobile image controls successfully opened preview, info, and requested real CreateDocument. Screenshot/DOM retained. Export file saving/hash remains pending; do not interpret dialog open as export success. Foreground reconnect remains pending.
+
+Actual normal directory tap returned but exports-1 was not found; finite export-directory failure retained. Normal system Back canceled unsaved CreateDocument successfully. Actual activity component was not captured; no speculative keyboard guard change made.
