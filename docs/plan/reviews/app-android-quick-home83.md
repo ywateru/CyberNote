@@ -2,7 +2,15 @@
 
 状态：**PASS / 冻结源码独立定向复核通过，无blocking**。2026-11-06复核产品 `d73e1f30a04ccf578f7df64b2a2b873a18c3d64d`、作者证据 `b74f60d9895d624eeaed1cbad51caa18771ad272`。规格为主线 `docs/ui/android-quick-home.md`，包括来源scope/owner、800断点、手机设置桌面label、same-source receipt恢复、亮黄按钮/隐藏后层操作与冷启noteId为空且不预读媒体的补充。独立未修改产品。
 
-## 验证结果
+## 组合失败后的最小runner修复独审
+
+**PASS / 定向修复复核通过；组合尚待根恢复，完整交付未宣布通过。** 根首轮82+83组合在 `storage-overview.mjs:596` 的原正向Tab断言失败；原始失败保存在主线 `docs/verification/mobile-home8283/integration/attempt01/`。自然复现trace第二轮实际落other/all，其最后focus栈来自 `DataManagement.back()` 的下一帧来源按钮恢复，说明旧helper仅等待总览DOM挂载便紧接键盘断言，存在导航焦点尚未完成的竞态。
+
+修复 `1ad73a08b52c4b38ec4693872eeda13eba3d6437` 仅给 `scripts/debug/storage-overview.mjs` 的back helper新增8行：记录实际来源，返回后等待真实 `document.activeElement[data-storage-category]` 恢复该来源。保留原正反Tab业务断言，没有sleep，未改产品。独立逐文件SHA核对 **78个src与index.html，共79项** 均与 `d73e1f30` 相同。
+
+独立提取并运行已提交的确切back helper，使用自然浏览器调度器，在all/other/all三次返回后立即执行原Shift+Tab/Tab往返，**11项自然exit0，完整外层6.0548605秒**。页面错误为空，126项当前输入指纹前后均为 `c04c48d484961b22efa6828ca27e5b4fc183ee5d00b0a8a36c5ba4528aa5029b`；相对原83指纹只改变上述runner输入。证据位于 [focus-return](../../verification/quick-home83-independent/focus-return/README.md)。未重复整组storage或attachments，根继续build/production、desktop storage-overview和完整mobile attachments；首轮其他通过结果仅按精确相同产品输入映射复用。
+
+## 初次冻结产品验证结果
 
 独立受控浏览器 **22项自然exit0，完整外层12.493247833秒**；126项输入SHA256运行前后均为 `c4fcc377e3ac0b1bac640e4a29fdc3039cf3e558dff3491ef43f1981611cdfd1`，candidate clean。页面错误为空。驱动、进程自然退出、前后指纹、实际HTML/PNG/几何、全部逐项结果见 [独立证据](../../verification/quick-home83-independent/README.md)。未复制作者45项组或重复完整桌面/附件回归。
 
