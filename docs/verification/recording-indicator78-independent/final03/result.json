@@ -1,0 +1,413 @@
+{
+  "input": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "09fb9ee8b4702499400963dbf4f16693cd5c8646565f06823aa9daeb39f4b9ce",
+    "fileCount": 90,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "09fb9ee8b4702499400963dbf4f16693cd5c8646565f06823aa9daeb39f4b9ce",
+    "fileCount": 90,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "checks": [
+    {
+      "name": "idle has no fabricated capture status",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-a",
+      "pass": true
+    },
+    {
+      "name": "actual desktop finish enabled during recording",
+      "pass": true
+    },
+    {
+      "name": "one live indicator and no saved-card capture activity",
+      "pass": true
+    },
+    {
+      "name": "indicator leaves original persisted document unchanged",
+      "pass": true
+    },
+    {
+      "name": "pulse animation really runs and has changing opacity keyframes",
+      "pass": true,
+      "detail": {
+        "name": "recording-capture-pulse",
+        "state": "running",
+        "first": 50.05599995501342,
+        "second": 83.29599995501357,
+        "frames": [
+          {
+            "offset": 0,
+            "easing": "ease-in-out",
+            "composite": "auto",
+            "opacity": "1",
+            "computedOffset": 0
+          },
+          {
+            "offset": 0.5,
+            "easing": "ease-in-out",
+            "composite": "auto",
+            "opacity": "0.3",
+            "computedOffset": 0.5
+          },
+          {
+            "offset": 1,
+            "easing": "ease-in-out",
+            "composite": "auto",
+            "opacity": "1",
+            "computedOffset": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "reduced motion disables every active animation but retains readable status",
+      "pass": true,
+      "detail": [
+        {
+          "animation": "none",
+          "display": "block",
+          "opacity": "1"
+        },
+        {
+          "animation": "none",
+          "display": "block",
+          "opacity": "1"
+        }
+      ]
+    },
+    {
+      "name": "Undo ignores status-only decoration",
+      "pass": true
+    },
+    {
+      "name": "Redo restores user content without activity schema",
+      "pass": true
+    },
+    {
+      "name": "retain real old owner callback for delayed delivery",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-a",
+      "pass": true
+    },
+    {
+      "name": "live card remains parked only in A editor while B editable",
+      "pass": true
+    },
+    {
+      "name": "filtered owner hides badge without changing recording phase",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-a",
+      "pass": true
+    },
+    {
+      "name": "220px long search title badge neither overlaps nor exceeds row",
+      "pass": true,
+      "detail": {
+        "row": {
+          "x": 238,
+          "y": 103,
+          "width": 199,
+          "height": 75,
+          "top": 103,
+          "right": 437,
+          "bottom": 178,
+          "left": 238
+        },
+        "title": {
+          "x": 263,
+          "y": 114,
+          "width": 103,
+          "height": 18,
+          "top": 114,
+          "right": 366,
+          "bottom": 132,
+          "left": 263
+        },
+        "badge": {
+          "x": 372,
+          "y": 115,
+          "width": 40,
+          "height": 16,
+          "top": 115,
+          "right": 412,
+          "bottom": 131,
+          "left": 372
+        },
+        "highlight": true
+      }
+    },
+    {
+      "name": "badge does not intercept actual row context menu",
+      "pass": true
+    },
+    {
+      "name": "gallery badge remains within owner row and separate from title",
+      "pass": true,
+      "detail": {
+        "row": {
+          "x": 244,
+          "y": 100,
+          "width": 184,
+          "height": 214,
+          "top": 100,
+          "right": 428,
+          "bottom": 314,
+          "left": 244
+        },
+        "title": {
+          "x": 244,
+          "y": 248,
+          "width": 138,
+          "height": 32,
+          "top": 248,
+          "right": 382,
+          "bottom": 280,
+          "left": 244
+        },
+        "badge": {
+          "x": 388,
+          "y": 256,
+          "width": 40,
+          "height": 16,
+          "top": 256,
+          "right": 428,
+          "bottom": 272,
+          "left": 388
+        }
+      }
+    },
+    {
+      "name": "paused removes list capture and live motion immediately",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-a",
+      "pass": true
+    },
+    {
+      "name": "actual checkmark finalizes and clears state after repeated click",
+      "pass": true
+    },
+    {
+      "name": "A finish preserves B saved edit",
+      "pass": true
+    },
+    {
+      "name": "DOM checkmark cumulative pause/resume full WAV and nonzero tail decode for owner note-a",
+      "pass": true
+    },
+    {
+      "name": "DOM checkmark cumulative pause/resume sole current owner document reference",
+      "pass": true
+    },
+    {
+      "name": "late old callback cannot revive finished A indicator",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-a",
+      "pass": true
+    },
+    {
+      "name": "old saved audio card stays static beside new live capture",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-b",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-b",
+      "pass": true
+    },
+    {
+      "name": "late old A cannot overwrite new B owner",
+      "pass": true
+    },
+    {
+      "name": "DOM close finalizes new B full WAV and nonzero tail decode for owner note-b",
+      "pass": true
+    },
+    {
+      "name": "DOM close finalizes new B sole current owner document reference",
+      "pass": true
+    },
+    {
+      "name": "new B closure clears all active decorators",
+      "pass": true
+    },
+    {
+      "name": "checkpoint saving is static while X remains usable",
+      "pass": true
+    },
+    {
+      "name": "X during pending checkpoint full WAV and nonzero tail decode for owner note-a",
+      "pass": true
+    },
+    {
+      "name": "X during pending checkpoint sole current owner document reference",
+      "pass": true
+    },
+    {
+      "name": "queued X preserves final ACK and releases ownership",
+      "pass": true
+    },
+    {
+      "name": "storage failure retains retryable owner without capture animation",
+      "pass": true
+    },
+    {
+      "name": "storage failure DOM retry full WAV and nonzero tail decode for owner note-a",
+      "pass": true
+    },
+    {
+      "name": "storage failure DOM retry sole current owner document reference",
+      "pass": true
+    },
+    {
+      "name": "store retry creates one attachment",
+      "pass": true
+    },
+    {
+      "name": "body ACK failure retains original owner and static retry card",
+      "pass": true
+    },
+    {
+      "name": "body global retry then checkmark full WAV and nonzero tail decode for owner note-a",
+      "pass": true
+    },
+    {
+      "name": "body global retry then checkmark sole current owner document reference",
+      "pass": true
+    },
+    {
+      "name": "body retry deduplicates original attachment",
+      "pass": true
+    },
+    {
+      "name": "desktop pageErrors absent",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "mobile recording finish remains disabled",
+      "pass": true
+    },
+    {
+      "name": "mobile has no desktop owner badges or decorations",
+      "pass": true
+    },
+    {
+      "name": "mobile pageErrors absent",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "observations": [
+    {
+      "label": "DOM checkmark cumulative pause/resume",
+      "bytes": 285300,
+      "attachmentId": "017d470c-9cee-43ed-a38b-18d54e2557af",
+      "owner": "note-a",
+      "decoded": {
+        "duration": 5.942833333333334,
+        "frames": 285256,
+        "peak": 0.12663140892982483,
+        "tail": 0.12663140892982483
+      },
+      "refs": [
+        "017d470c-9cee-43ed-a38b-18d54e2557af"
+      ]
+    },
+    {
+      "label": "DOM close finalizes new B",
+      "bytes": 62794,
+      "attachmentId": "13559162-7cb0-45f8-b541-2690eb3c485a",
+      "owner": "note-b",
+      "decoded": {
+        "duration": 1.3072916666666667,
+        "frames": 62750,
+        "peak": 0.12849898636341095,
+        "tail": 0.12849898636341095
+      },
+      "refs": [
+        "13559162-7cb0-45f8-b541-2690eb3c485a"
+      ]
+    },
+    {
+      "label": "X during pending checkpoint",
+      "bytes": 57932,
+      "attachmentId": "eac263e7-5ce1-4db5-a301-2a06d839b231",
+      "owner": "note-a",
+      "decoded": {
+        "duration": 1.206,
+        "frames": 57888,
+        "peak": 0.1250038594007492,
+        "tail": 0.1250038594007492
+      },
+      "refs": [
+        "eac263e7-5ce1-4db5-a301-2a06d839b231"
+      ]
+    },
+    {
+      "label": "storage failure DOM retry",
+      "bytes": 73062,
+      "attachmentId": "fe2e5d33-f3aa-4cde-8108-44e25be55f17",
+      "owner": "note-a",
+      "decoded": {
+        "duration": 1.5212083333333333,
+        "frames": 73018,
+        "peak": 0.13185885548591614,
+        "tail": 0.13185885548591614
+      },
+      "refs": [
+        "fe2e5d33-f3aa-4cde-8108-44e25be55f17"
+      ]
+    },
+    {
+      "label": "body global retry then checkmark",
+      "bytes": 67244,
+      "attachmentId": "a50faf06-0d91-405b-b826-4d07633742ef",
+      "owner": "note-a",
+      "decoded": {
+        "duration": 1.4,
+        "frames": 67200,
+        "peak": 0.1250038594007492,
+        "tail": 0.1250038594007492
+      },
+      "refs": [
+        "a50faf06-0d91-405b-b826-4d07633742ef"
+      ]
+    }
+  ],
+  "pageErrors": [],
+  "completeWallMs": 20138
+}
