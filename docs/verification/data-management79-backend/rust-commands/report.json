@@ -1,0 +1,34 @@
+{
+  "head": "d74d76f486b69fe2b27da533b84be4e341a25bc4",
+  "commands": [
+    {
+      "name": "build",
+      "command": [
+        "node",
+        "scripts/debug/build-rust-attachments.mjs",
+        "/private/tmp/data79-rust-build-02"
+      ],
+      "cwd": "/private/tmp/apple-notes-data79-backend",
+      "environment": {
+        "CARGO_TARGET_DIR": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target"
+      },
+      "exitCode": 0,
+      "wallSeconds": 3.652788208
+    },
+    {
+      "name": "scenario",
+      "command": [
+        "node",
+        "scripts/check-data-management-rust79.mjs",
+        "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-current-attachment-transport",
+        "/private/tmp/data79-rust-validation-04"
+      ],
+      "cwd": "/private/tmp/apple-notes-data79-backend",
+      "environment": {
+        "CARGO_TARGET_DIR": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target"
+      },
+      "exitCode": 0,
+      "wallSeconds": 0.7559745420000001
+    }
+  ]
+}

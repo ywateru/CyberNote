@@ -1,0 +1,729 @@
+{
+  "sourceHead": "e9635f3a45d1f8c9a22989054521ea151b1af14e",
+  "binary": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-current-attachment-transport",
+  "sha256": "6ec3b9ecc31a075a75d17d8518e4199c1b5216262b0022682a7ae0b03eda7a17",
+  "output": "/private/tmp/data79-rust-validation-03",
+  "wallMs": 291,
+  "results": [
+    {
+      "name": "tagged v1 Session inventory and original owner, no document/title disclosure",
+      "pass": true
+    },
+    {
+      "name": "actual filesystem size and mtime notes.sqlite3",
+      "pass": true
+    },
+    {
+      "name": "actual filesystem size and mtime notes.sqlite3-wal",
+      "pass": true
+    },
+    {
+      "name": "actual filesystem size and mtime notes.sqlite3-shm",
+      "pass": true
+    },
+    {
+      "name": "independent original file image/png",
+      "pass": true
+    },
+    {
+      "name": "exact original bytes outside SQLite image/png",
+      "pass": true
+    },
+    {
+      "name": "original byte export image/png",
+      "pass": true
+    },
+    {
+      "name": "independent original file audio/wav",
+      "pass": true
+    },
+    {
+      "name": "exact original bytes outside SQLite audio/wav",
+      "pass": true
+    },
+    {
+      "name": "original byte export audio/wav",
+      "pass": true
+    },
+    {
+      "name": "independent original file video/mp4",
+      "pass": true
+    },
+    {
+      "name": "exact original bytes outside SQLite video/mp4",
+      "pass": true
+    },
+    {
+      "name": "original byte export video/mp4",
+      "pass": true
+    },
+    {
+      "name": "independent original file application/octet-stream",
+      "pass": true
+    },
+    {
+      "name": "exact original bytes outside SQLite application/octet-stream",
+      "pass": true
+    },
+    {
+      "name": "original byte export application/octet-stream",
+      "pass": true
+    },
+    {
+      "name": "SQLite contains text metadata only and no media payload/BLOB column",
+      "pass": true
+    },
+    {
+      "name": "reject managed output source/notes.sqlite3",
+      "pass": true
+    },
+    {
+      "name": "reject managed output source/notes.sqlite3-wal",
+      "pass": true
+    },
+    {
+      "name": "reject managed output source/notes.sqlite3-shm",
+      "pass": true
+    },
+    {
+      "name": "reject managed output attachments/new.png",
+      "pass": true
+    },
+    {
+      "name": "reject managed output .imports/new.png",
+      "pass": true
+    },
+    {
+      "name": "reject managed output source/other79.json",
+      "pass": true
+    },
+    {
+      "name": "reject canonical alias into live data root",
+      "pass": true
+    },
+    {
+      "name": "reject symlink destination",
+      "pass": true
+    },
+    {
+      "name": "symlink target untouched",
+      "pass": true
+    },
+    {
+      "name": "unknown ID refuses export",
+      "pass": true
+    },
+    {
+      "name": "missing parent write failure",
+      "pass": true
+    },
+    {
+      "name": "directory output refused",
+      "pass": true
+    },
+    {
+      "name": "OS write permission failure",
+      "pass": true
+    },
+    {
+      "name": "size mismatch is actual size, warning and nonexportable",
+      "pass": true
+    },
+    {
+      "name": "size mismatch refuses successful export",
+      "pass": true
+    },
+    {
+      "name": "failed export preserves preexisting destination",
+      "pass": true
+    },
+    {
+      "name": "missing registered attachment remains listed with count",
+      "pass": true
+    },
+    {
+      "name": "missing original refuses export",
+      "pass": true
+    },
+    {
+      "name": "managed symlink reported and never followed or counted",
+      "pass": true
+    },
+    {
+      "name": "managed source symlink refuses export",
+      "pass": true
+    },
+    {
+      "name": "archive also refuses source symlink",
+      "pass": true
+    },
+    {
+      "name": "actual old filesystem mtime, not now",
+      "pass": true
+    },
+    {
+      "name": "untracked media and empty runtime directory are visible",
+      "pass": true
+    },
+    {
+      "name": "external symlink not descended",
+      "pass": true
+    },
+    {
+      "name": "all file totals equal per-path actual stat lengths, dirs and symlinks excluded",
+      "pass": true
+    },
+    {
+      "name": "global stale token refuses inventory",
+      "pass": true
+    },
+    {
+      "name": "host staging scoped cleanup attachment",
+      "pass": true
+    },
+    {
+      "name": "host staging scoped cleanup archive",
+      "pass": true
+    },
+    {
+      "name": "host staging scoped cleanup import",
+      "pass": true
+    },
+    {
+      "name": "inventory leaves foreign import entry untouched",
+      "pass": true
+    },
+    {
+      "name": "new PID and Session identity after real reopen",
+      "pass": true
+    },
+    {
+      "name": "previous PID token cannot export",
+      "pass": true
+    },
+    {
+      "name": "new PID recovers media inventory and old mtime",
+      "pass": true
+    },
+    {
+      "name": "complete archive contains four media originals and recordedAt",
+      "pass": true
+    },
+    {
+      "name": "pending real access barrier blocks inventory",
+      "pass": true
+    },
+    {
+      "name": "pending owner barrier blocks export",
+      "pass": true
+    },
+    {
+      "name": "failed participant ACK preserves source note",
+      "pass": true
+    },
+    {
+      "name": "failed barrier leaves source note live",
+      "pass": true
+    },
+    {
+      "name": "deleted owner refuses original export",
+      "pass": true
+    },
+    {
+      "name": "unauthorized owner display names redacted and exports disabled",
+      "pass": true
+    },
+    {
+      "name": "invalid archive preflight leaves target unchanged",
+      "pass": true
+    },
+    {
+      "name": "invalid import preserved existing note and access epoch",
+      "pass": true
+    },
+    {
+      "name": "real Session preflight prepare ACK finish merged complete archive",
+      "pass": true
+    },
+    {
+      "name": "fresh directory imported original image/png",
+      "pass": true
+    },
+    {
+      "name": "fresh directory imported original audio/wav",
+      "pass": true
+    },
+    {
+      "name": "fresh directory imported original video/mp4",
+      "pass": true
+    },
+    {
+      "name": "fresh directory imported original application/octet-stream",
+      "pass": true
+    },
+    {
+      "name": "second import resolves ID collisions with separate copies and preserves local note",
+      "pass": true
+    },
+    {
+      "name": "collision copies preserve original image/png",
+      "pass": true
+    },
+    {
+      "name": "collision copies preserve original audio/wav",
+      "pass": true
+    },
+    {
+      "name": "collision copies preserve original video/mp4",
+      "pass": true
+    },
+    {
+      "name": "collision copies preserve original application/octet-stream",
+      "pass": true
+    },
+    {
+      "name": "new target process recovers imported metadata and settings",
+      "pass": true
+    },
+    {
+      "name": "new PID roundtrip re-export exact image/png",
+      "pass": true
+    },
+    {
+      "name": "new PID roundtrip re-export exact audio/wav",
+      "pass": true
+    },
+    {
+      "name": "new PID roundtrip re-export exact video/mp4",
+      "pass": true
+    },
+    {
+      "name": "new PID roundtrip re-export exact application/octet-stream",
+      "pass": true
+    }
+  ],
+  "processes": [
+    {
+      "lifecycle": {
+        "pid": 18232,
+        "closing": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "pending": 0
+      },
+      "calls": [
+        {
+          "requestId": 1,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 2,
+          "command": "workspace_action",
+          "type": "createNote",
+          "ok": true
+        },
+        {
+          "requestId": 3,
+          "command": "store_attachment_operation",
+          "noteId": "f86e8d02-62ef-4b79-b915-7e8660051166",
+          "operationId": "251cd93c-efae-41ea-b5d5-2969ea151eff",
+          "ok": true,
+          "status": "stored"
+        },
+        {
+          "requestId": 4,
+          "command": "store_attachment_operation",
+          "noteId": "f86e8d02-62ef-4b79-b915-7e8660051166",
+          "operationId": "b4a4311f-facc-45de-a9f0-954d1515e3b8",
+          "ok": true,
+          "status": "stored"
+        },
+        {
+          "requestId": 5,
+          "command": "store_attachment_operation",
+          "noteId": "f86e8d02-62ef-4b79-b915-7e8660051166",
+          "operationId": "eeb5720b-6c11-4124-804c-f0590bb94fc3",
+          "ok": true,
+          "status": "stored"
+        },
+        {
+          "requestId": 6,
+          "command": "store_attachment_operation",
+          "noteId": "f86e8d02-62ef-4b79-b915-7e8660051166",
+          "operationId": "6f75d6ef-e584-4e0a-9de1-16e38e46e31e",
+          "ok": true,
+          "status": "stored"
+        },
+        {
+          "requestId": 7,
+          "command": "register_save_intent",
+          "noteId": "f86e8d02-62ef-4b79-b915-7e8660051166",
+          "ok": true
+        },
+        {
+          "requestId": 8,
+          "command": "workspace_action",
+          "type": "saveNote",
+          "ok": true
+        },
+        {
+          "requestId": 9,
+          "command": "get_data_management",
+          "ok": true
+        },
+        {
+          "requestId": 10,
+          "command": "export_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 11,
+          "command": "export_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 12,
+          "command": "export_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 13,
+          "command": "export_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 14,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 15,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 16,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 17,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 18,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "filesystem"
+        },
+        {
+          "requestId": 19,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 20,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 21,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 22,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "not_found"
+        },
+        {
+          "requestId": 23,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "filesystem"
+        },
+        {
+          "requestId": 24,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 25,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "filesystem"
+        },
+        {
+          "requestId": 26,
+          "command": "get_data_management",
+          "ok": true
+        },
+        {
+          "requestId": 27,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 28,
+          "command": "get_data_management",
+          "ok": true
+        },
+        {
+          "requestId": 29,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "filesystem"
+        },
+        {
+          "requestId": 30,
+          "command": "get_data_management",
+          "ok": true
+        },
+        {
+          "requestId": 31,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 32,
+          "command": "export_archive",
+          "ok": false,
+          "error": "invalid"
+        },
+        {
+          "requestId": 33,
+          "command": "get_data_management",
+          "ok": true
+        },
+        {
+          "requestId": 34,
+          "command": "get_data_management",
+          "ok": false,
+          "error": "access_changed"
+        },
+        {
+          "requestId": 35,
+          "command": "debug_stage_document",
+          "ok": true
+        },
+        {
+          "requestId": 36,
+          "command": "debug_stage_document",
+          "ok": true
+        },
+        {
+          "requestId": 37,
+          "command": "debug_stage_document",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "lifecycle": {
+        "pid": 18237,
+        "closing": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "pending": 0
+      },
+      "calls": [
+        {
+          "requestId": 1,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 2,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "access_changed"
+        },
+        {
+          "requestId": 3,
+          "command": "get_data_management",
+          "ok": true
+        },
+        {
+          "requestId": 4,
+          "command": "export_archive",
+          "ok": true
+        },
+        {
+          "requestId": 5,
+          "command": "debug_access_begin",
+          "type": "deleteNote",
+          "ok": true
+        },
+        {
+          "requestId": 6,
+          "command": "get_data_management",
+          "ok": false,
+          "error": "access_changed"
+        },
+        {
+          "requestId": 7,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "access_changed"
+        },
+        {
+          "requestId": 8,
+          "command": "debug_access_ack",
+          "operationId": "71bbff63-54ce-4d4a-9b0e-1cef7eb0c6c4",
+          "ok": true
+        },
+        {
+          "requestId": 9,
+          "command": "debug_access_finish",
+          "operationId": "71bbff63-54ce-4d4a-9b0e-1cef7eb0c6c4",
+          "ok": false,
+          "error": "access_changed"
+        },
+        {
+          "requestId": 10,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 11,
+          "command": "debug_access_begin",
+          "type": "deleteNote",
+          "ok": true
+        },
+        {
+          "requestId": 12,
+          "command": "debug_access_ack",
+          "operationId": "80cf53af-6ee6-479c-8b8e-a08eb2687a0b",
+          "ok": true
+        },
+        {
+          "requestId": 13,
+          "command": "debug_access_finish",
+          "operationId": "80cf53af-6ee6-479c-8b8e-a08eb2687a0b",
+          "ok": true
+        },
+        {
+          "requestId": 14,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 15,
+          "command": "export_attachment",
+          "ok": false,
+          "error": "access_changed"
+        },
+        {
+          "requestId": 16,
+          "command": "get_data_management",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "lifecycle": {
+        "pid": 18238,
+        "closing": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "pending": 0
+      },
+      "calls": [
+        {
+          "requestId": 1,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 2,
+          "command": "workspace_action",
+          "type": "createNote",
+          "ok": true
+        },
+        {
+          "requestId": 3,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 4,
+          "command": "import_archive",
+          "ok": false,
+          "error": "archive_invalid"
+        },
+        {
+          "requestId": 5,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 6,
+          "command": "import_archive",
+          "ok": true
+        },
+        {
+          "requestId": 7,
+          "command": "import_archive",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "lifecycle": {
+        "pid": 18239,
+        "closing": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "pending": 0
+      },
+      "calls": [
+        {
+          "requestId": 1,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 2,
+          "command": "export_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 3,
+          "command": "export_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 4,
+          "command": "export_attachment",
+          "ok": true
+        },
+        {
+          "requestId": 5,
+          "command": "export_attachment",
+          "ok": true
+        }
+      ]
+    }
+  ]
+}
