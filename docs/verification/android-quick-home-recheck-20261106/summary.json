@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "mode": "group",
+  "sourceHead": "a8687e87f2d6a25ef66dae140ffd4f20acb3638a",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "f76443c5336b5055ffcbcd48d7b0a86e7e8791a9a8981ed54fe47b4ceae43665",
+    "fileCount": 135,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "f76443c5336b5055ffcbcd48d7b0a86e7e8791a9a8981ed54fe47b4ceae43665",
+    "fileCount": 135,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsChanged": false,
+  "platform": "mobile-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "elapsedMs": 30139,
+  "result": {
+    "groups": [
+      {
+        "group": "quick-home",
+        "pass": true,
+        "checks": [
+          "Cold start opens all active notes directly with no editor focus or desktop view write",
+          "Home has one visible create action, folder/settings and no old count footer or fake microphone",
+          "Pending creation disables real plus and advertises busy",
+          "DOM double click and semantic create share one persisted receipt and exact editable focus",
+          "Done flushes real input and removes editor focus",
+          "Mobile editor keeps compact navigation and real tools without duplicate New or Share",
+          "Editor Back returns to source all gallery and retains saved body",
+          "Reload retains saved entity while cold navigation stays all without autofocus",
+          "Folders is a secondary page",
+          "Folders Back returns to all gallery instead of exiting",
+          "Physical folder creation preserves storage owner and source",
+          "Physical editor returns to its folder",
+          "Folder gallery Back returns to all",
+          "Unmatched smart-folder creation opens its receipt rather than an unrelated projected note",
+          "Unmatched smart receipt supports real input and enabled format controls without changing result membership",
+          "Unmatched smart receipt media actions save to its exact physical owner while smart count stays zero",
+          "Smart editor returns to original empty smart result",
+          "New clears temporary search while retaining physical source",
+          "Create failure keeps gallery and explicit recoverable error with no fake entity",
+          "Explicit create retry succeeds once after failure",
+          "Successful receipt survives metadata failure without pretending editor is ready",
+          "Same-source retry recovers exact existing receipt without another create",
+          "Delayed metadata never reopens or steals focus from a user-selected editor",
+          "Root Back cannot exit through a pending create",
+          "Root Back cancels pending focus but preserves committed entity",
+          "Locked card hides body preview from home HTML",
+          "Home settings opens shared settings tab with desktop-only view labels",
+          "Shared data tab remains reachable from quick home",
+          "Settings close restores actual visible home gear",
+          "Compact editor media menu still saves attachment through actual FileList and body ACK",
+          "Cold gallery leaves restored selection unmounted and does not read hidden media payloads",
+          "Opening a media card mounts only its chosen editor and reads its saved attachment",
+          "Existing synthetic recorder remains reachable and closes through audio/body save",
+          "320px light presentation fits without overflow or duplicate card title/date",
+          "320px dark presentation fits without overflow or duplicate card title/date",
+          "390px light presentation fits without overflow or duplicate card title/date",
+          "390px dark presentation fits without overflow or duplicate card title/date",
+          "430px light presentation fits without overflow or duplicate card title/date",
+          "430px dark presentation fits without overflow or duplicate card title/date",
+          "800px light presentation fits without overflow or duplicate card title/date",
+          "800px dark presentation fits without overflow or duplicate card title/date",
+          "Short screens can scroll the last card above the plus",
+          "Two hundred percent card text remains inside narrow viewport",
+          "All-gallery root Back reaches real flush and simulated successful quit without folders detour",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 16529
+      }
+    ],
+    "passedChecks": 45,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": []
+}
