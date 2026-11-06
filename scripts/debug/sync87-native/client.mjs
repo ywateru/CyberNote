@@ -23,21 +23,27 @@ export function chooseTarget(targets,port) {
   assert.equal(url.pathname,'/devtools/page/'+target.id);assert.equal(url.search,'');assert.equal(url.hash,'');
   assert(/^[A-Za-z0-9-]+$/.test(target.id));return target;
 }
-export function layoutTouchPoint(point,metrics) {
-  const physical=metrics.layoutViewport,css=metrics.cssLayoutViewport;
-  assert(physical&&css&&css.clientWidth>0&&css.clientHeight>0);
-  const sx=physical.clientWidth/css.clientWidth,sy=physical.clientHeight/css.clientHeight;
-  assert(Number.isFinite(sx)&&Number.isFinite(sy)&&sx>=1&&sx<=4&&sy>=1&&sy<=4);
-  assert(Number.isFinite(point.x)&&Number.isFinite(point.y)&&point.x>=0&&point.y>=0&&point.x<css.clientWidth&&point.y<css.clientHeight);
-  return {x:point.x*sx,y:point.y*sy};
-}
 export function parseNodes(xml) {
   const decode=s=>s.replace(/&(amp|quot|apos|lt|gt);/g,(_,x)=>({amp:'&',quot:'"',apos:"'",lt:'<',gt:'>'}[x]));
-  return [...xml.matchAll(/<node\s+([^>]+)>/g)].map(m=>{
-    const attrs=Object.fromEntries([...m[1].matchAll(/([a-z-]+)="([^"]*)"/g)].map(a=>[a[1],decode(a[2])]));
+  const nodes=[],stack=[];
+  for(const token of xml.matchAll(/<node\s+([^>]+)>|<\/node\s*>/g)) {
+    if(token[1]===undefined){assert(stack.length,'unbalanced native XML');stack.pop();continue;}
+    const attrs=Object.fromEntries([...token[1].matchAll(/([a-z-]+)="([^"]*)"/g)].map(a=>[a[1],decode(a[2])]));
     const bounds=/^\[(\d+),(\d+)\]\[(\d+),(\d+)\]$/.exec(attrs.bounds||'');
-    if(bounds)attrs.rect={x:+bounds[1],y:+bounds[2],width:+bounds[3]-bounds[1],height:+bounds[4]-bounds[2]};return attrs;
-  });
+    if(bounds)attrs.rect={x:+bounds[1],y:+bounds[2],width:+bounds[3]-bounds[1],height:+bounds[4]-bounds[2]};
+    attrs.nodeIndex=nodes.length;attrs.parentIndex=stack.at(-1)??null;nodes.push(attrs);
+    if(!/\/\s*$/.test(token[1]))stack.push(attrs.nodeIndex);
+  }
+  assert.equal(stack.length,0,'unbalanced native XML');return nodes;
+}
+export function nativeWebViewRect(nodes) {
+  const views=nodes.filter(n=>n.class==='android.webkit.WebView'&&n.package===PACKAGE&&n.rect?.width>0&&n.rect.height>0);
+  assert(views.length>0,'app WebView rectangle absent');const first=views[0];
+  for(let i=1;i<views.length;i++){
+    assert.equal(views[i].parentIndex,views[i-1].nodeIndex,'different WebView hosts');
+    assert.deepEqual(views[i].rect,first.rect,'different WebView rectangles');
+  }
+  return first.rect;
 }
 export async function nativeNode(match,{hold=false,timeout=12000}={}) {
   const end=Date.now()+timeout;
@@ -72,11 +78,10 @@ export async function connect({receipt,port=19400}) {
     assert.equal(await read('localStorage.getItem("notes-browser-preview")'),null,'native app must not be preview fixture');
     const wait=async(predicate,label,timeout=15000)=>{const end=Date.now()+timeout;while(Date.now()<end){const value=await read(predicate);if(value)return value;await pause(150);}throw Error('Timed out: '+label);};
     const point=async(selector,text)=>read(`(()=>{const found=[...document.querySelectorAll(${JSON.stringify(selector)})].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&!e.disabled&&(${JSON.stringify(text===undefined?null:text)}===null||e.textContent.trim()===${JSON.stringify(text===undefined?null:text)})});if(found.length!==1)throw Error('Expected one visible enabled target');found[0].scrollIntoView({block:'nearest',inline:'nearest'});const r=found[0].getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
-    const tap=async(selector,text)=>{const css=await point(selector,text);const p=layoutTouchPoint(css,await send('Page.getLayoutMetrics'));await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});};
+    const tap=async(selector,text)=>{const p=await point(selector,text);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});};
     const nativeTap=async(selector)=>{
       const p=await point(selector);const nodes=parseNodes(await guard('uia'));
-      const views=nodes.filter(n=>n.class==='android.webkit.WebView'&&n.package===PACKAGE&&n.rect?.width>0);
-      assert.equal(views.length,1,'exactly one app WebView rectangle');const rect=views[0].rect;
+      const rect=nativeWebViewRect(nodes);
       const viewport=await read('({width:innerWidth,height:innerHeight})');
       await guard('tap',{x:Math.round(rect.x+p.x*rect.width/viewport.width),y:Math.round(rect.y+p.y*rect.height/viewport.height)});
     };
