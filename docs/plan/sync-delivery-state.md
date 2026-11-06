@@ -8,11 +8,11 @@
 |85认证网络/身份|独审pass，合入0ab39d70；组合依赖3754d60b；主线19项自然0|修复c88982a6；独审59fc3f32；原并发退出101保留|旧85树/分支已清理，缓存迁至/private/tmp/apple-notes-sync85-target|
 |86同步设置UI|合入d8ff3336，主线完整受影响组pass|修复9ed9a078；独审4c85204b|旧UI树/分支已清理|
 |86前端quiet协调|两P2独审复审pass，合入85b9e0eb；根34+41+notes9/build/production自然0|产品0c84e589；独审092ea058；根证据b563eb64＋原始log bfda3f79|旧前端树/分支已清理；原blocked与反例完整保留|
-|86Rust adapter/Session|原两媒体P2和stale自动重试已由17af独审2a6d404通过；整体仍blocked，等locked resolve回包修复build11|Store152/3ignored、85网络23、原22与64MiB独审通过；10真实locked resolve已commit却旧Token误报，原件保留未放行|/private/tmp/apple-notes-sync86-adapter，codex/sync86-adapter，作者sync86_adapter_develop|
-|86两实际App DOM|基础设施3352b913冻结，真实最终验收待修复后端build09与独审|探索06的36项业务断言通过，最终exit1为只读WAL证据打开；修复后尚未正式重跑，不能记完整pass|/private/tmp/apple-notes-sync86-dom，codex/sync86-dom，作者sync86_dom_develop|
+|86Rust adapter/Session|最终cd334bc8独审0feb310d PASS，主线9cbbb150已合入，根完整整合进行中|exact11原49+14自然0，独审7项及17af负向；原媒体64MiB/22/stale证据按17af范围复用，未冒称11重跑|/private/tmp/apple-notes-sync86-adapter只读供DOM/routes，暂保留|
+|86两实际App DOM|3352b913接exact11正式运行39项业务通过，但外层Node未退出，工具清理修复中|formal01原件保留；浏览器/Rust自然结束后唯一owned esbuild服务PipeWrap残留，须另freeze并完整自然退出复跑及独审|/private/tmp/apple-notes-sync86-dom，codex/sync86-dom，作者sync86_dom_develop|
 |87隔离Android环境|独审285970a1 pass且已合入，ENVIRONMENT-READY ONLY|工具62ca1cf0，17 guards；第三次18.751秒ready；未安装新APK|资源/private/tmp/apple-notes-sync87-environment-01保留；emulator-5584 stopped；环境工作树已清理|
-|87新Android原生|初版HOST-TOOLS已合入；后续工具803c680d/证据06d7f473冻结，独审进行中；设备等待新APK|新增host82项、单实际DOM DesktopPeer10项通过（exact10不含resolve）；149输入一致；ADB/boot/install均0|/private/tmp/apple-notes-sync87-native由原独审接手，只host；旧独审candidate工作树已正常清理，branch保留|
-|87实际路由与换址UI|UI独审34项通过，单独接收05ee05ee；主线56+56/build/production自然0；LAN21项作者通过；实际wss被TLS provider panic阻断|UI66958c1d/runner7323d818/作者4e3a3f37；独审7ce136da对应a8687e87；真实路线仍需新binary验收|路线runner与native产品未合入；/private/tmp/apple-notes-sync87-routes保留待后续|
+|87新Android原生|初版HOST-TOOLS已合入；后续803c680d工具独审d122daf3发现P2正文断言不足，原作者窄修中，设备仍等待新APK|host82与独立guard9/单实际DesktopPeer10通过，不证明两方向完整正文；缺失/错误/截断正文负向补齐后再复审；ADB/boot/install均0|/private/tmp/apple-notes-sync87-native，只host；原独审candidate工作树已正常清理，branch保留|
+|87实际路由与换址UI|UI已独审/主线通过；固定immutable11实际LAN和匿名wss复验正在执行|UI66958c1d/runner7323d818；原build TLS panic保留，源码修复不能代替真实路线实测|路线runner尚未合入；/private/tmp/apple-notes-sync87-routes作者接续|
 |87准确包/完整目标|pending|Mac27/Android17拟号未构建；临时build驱动仅准备，未执行|根协调最终主线测试和准确包|
 
 根负责规格、派发、合入和主线完整整合；开发和独审由不同agent负责。恢复时只给明确当前任务/工作树，不能唤醒旧debug70任务。所有shell显式workdir，禁止其他agent写main；原失败保全，修复后只恢复受影响边界。
