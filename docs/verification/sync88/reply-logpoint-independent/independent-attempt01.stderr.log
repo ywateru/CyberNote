@@ -1,0 +1,21 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ '}async function IM(t){'
+- 'async function IM(t){'
+
+    at file:///private/tmp/sync87-reply-logpoint-independent-attempt01.mjs:20:169
+    at check (file:///private/tmp/sync87-reply-logpoint-independent-attempt01.mjs:8:25)
+    at file:///private/tmp/sync87-reply-logpoint-independent-attempt01.mjs:20:1 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '}async function IM(t){',
+  expected: 'async function IM(t){',
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0
