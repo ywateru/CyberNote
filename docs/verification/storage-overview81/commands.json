@@ -1,0 +1,39 @@
+{
+  "startedAtUtc": "2026-11-06T03:54:10.722552+00:00",
+  "commit": "4a996cfcf51c0fed7fb7ac85860b8c71f819276a",
+  "commands": [
+    {
+      "name": "typecheck",
+      "argv": [
+        "pnpm",
+        "typecheck"
+      ],
+      "cwd": "/private/tmp/apple-notes-storage-overview81",
+      "exitCode": 0,
+      "wallMs": 2206
+    },
+    {
+      "name": "build",
+      "argv": [
+        "pnpm",
+        "build"
+      ],
+      "cwd": "/private/tmp/apple-notes-storage-overview81",
+      "exitCode": 0,
+      "wallMs": 3616
+    },
+    {
+      "name": "specialist",
+      "argv": [
+        "node",
+        "/private/tmp/storage81-author.mjs",
+        "/private/tmp/storage81-frozen-01"
+      ],
+      "cwd": "/private/tmp/apple-notes-storage-overview81",
+      "exitCode": 0,
+      "wallMs": 14967
+    }
+  ],
+  "wallMs": 20886,
+  "sourceUnchanged": true
+}

@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "First pending inventory exposes both actual enabled archive controls without snapshot",
+    "First inventory failure retains import/export recovery and explicit retry without totals",
+    "No-snapshot import cancellation keeps both controls and performs no archive write",
+    "No-snapshot export cancellation keeps both controls and performs no archive write",
+    "No-snapshot export failure remains explicit and retry controls stay reachable",
+    "No-snapshot import failure remains explicit and retry controls stay reachable",
+    "No-snapshot archive in flight keeps both controls visible and disabled",
+    "No-snapshot export retry completes through actual App archive handler",
+    "No-snapshot import prepare retains both controls disabled behind access cover",
+    "No-snapshot import commit leaves recovery controls enabled even if inventory fails again",
+    "Inventory retry restores overview without duplicating or losing backup controls",
+    "No page errors during no-snapshot archive recovery"
+  ],
+  "pageErrors": [],
+  "wallMs": 8027,
+  "directory": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-debug70-JQPr04"
+}
