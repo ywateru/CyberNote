@@ -1,0 +1,178 @@
+{
+  "passed": 18,
+  "cases": [
+    {
+      "name": "original-short",
+      "bytes": 7,
+      "inputSha256": "cd2a3d33d5f31e7f99489c58e6214f9fed3e6733beb8f0a2e61926f18644d3c8",
+      "expected": "INVALID_JSON",
+      "exitCode": 2,
+      "wallSeconds": 0.028912416000000003,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "original-prefix",
+      "bytes": 35,
+      "inputSha256": "0b7955b5863301aedde6dcb334e59e6bdbe3ddca59f5fa8733798c8da1e2472e",
+      "expected": "INVALID_JSON",
+      "exitCode": 2,
+      "wallSeconds": 0.029641249999999994,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "truncated",
+      "bytes": 37,
+      "inputSha256": "c249f253a3d6f5b570505d92a9a3cb1600a6a0197be7ccb1f7189f2b40fe968f",
+      "expected": "INVALID_JSON",
+      "exitCode": 2,
+      "wallSeconds": 0.029864333000000007,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "truncated-escape",
+      "bytes": 38,
+      "inputSha256": "bd736c4873b154a0b06f6f989a2e39b7f39261383d051e9744032fea112505b6",
+      "expected": "INVALID_JSON",
+      "exitCode": 2,
+      "wallSeconds": 0.030256584000000003,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "oversize-ascii",
+      "bytes": 32770,
+      "inputSha256": "e598690c3de8c094d6084c0fd88b78ee3f51704c0a3ecbd300a59141a5f6a413",
+      "expected": "INPUT_TOO_LARGE",
+      "exitCode": 2,
+      "wallSeconds": 0.03065516600000001,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "oversize-utf8",
+      "bytes": 32770,
+      "inputSha256": "6e7be39ad1bd48251a734d6644dd8b627d6812205b0e63b1ac122f46011d425c",
+      "expected": "INPUT_TOO_LARGE",
+      "exitCode": 2,
+      "wallSeconds": 0.03193537499999999,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "invalid-utf8",
+      "bytes": 41,
+      "inputSha256": "ae49234dc4590071ed5882c2c0e54eb9dad964a17ded80ad23d66a559fe94380",
+      "expected": "INVALID_JSON",
+      "exitCode": 2,
+      "wallSeconds": 0.029830125000000013,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "schema-requestid",
+      "bytes": 47,
+      "inputSha256": "de017f070cd65de21e3db59aec6d33ebb9e6c50cca3f709c3b9921bba8ea60d3",
+      "expected": "INVALID_REQUEST",
+      "exitCode": 2,
+      "wallSeconds": 0.03141287500000001,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "schema-action",
+      "bytes": 21,
+      "inputSha256": "33531a54b25c5d467c163d89df7c823bfc2c34600402e92fce8338859c9b8920",
+      "expected": "INVALID_REQUEST",
+      "exitCode": 2,
+      "wallSeconds": 0.03203241699999998,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "schema-secretkey",
+      "bytes": 40,
+      "inputSha256": "ff2df1c1f8d0f9a5f3d52e4ec71bfba31f2278f5668964be37d34914d81000f7",
+      "expected": "INVALID_REQUEST",
+      "exitCode": 2,
+      "wallSeconds": 0.03571891700000002,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "schema-null",
+      "bytes": 5,
+      "inputSha256": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+      "expected": "INVALID_REQUEST",
+      "exitCode": 2,
+      "wallSeconds": 0.03396125,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "schema-array",
+      "bytes": 3,
+      "inputSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "expected": "INVALID_REQUEST",
+      "exitCode": 2,
+      "wallSeconds": 0.032341958000000004,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "schema-invitationtype",
+      "bytes": 51,
+      "inputSha256": "5444f74c636fa5c0a314e03e31d6cefa810aa2ce955fbfaa26e81f850922be83",
+      "expected": "INVALID_REQUEST",
+      "exitCode": 2,
+      "wallSeconds": 0.034004584000000004,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "schema-other-invitation",
+      "bytes": 44,
+      "inputSha256": "253d3cf516a55c27f9b8727bc46da3c428f6443d19f326ae3fdcd304e8a1daba",
+      "expected": "INVALID_REQUEST",
+      "exitCode": 2,
+      "wallSeconds": 0.03150729200000002,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "failure-no-next-dispatch",
+      "bytes": 31,
+      "inputSha256": "d6b2d44ab276b8d0e9c90ba8eae054cadd1bc40a25c22250e8bf1be360a63b29",
+      "expected": "INVALID_JSON",
+      "exitCode": 2,
+      "wallSeconds": 0.03177404200000006,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "schema-no-next-dispatch",
+      "bytes": 60,
+      "inputSha256": "37b178b0d306fc5f9b4952b32d1910023e1f25174eb2eda9c4c6153d99fe123e",
+      "expected": "INVALID_REQUEST",
+      "exitCode": 2,
+      "wallSeconds": 0.031550332999999986,
+      "stdoutLines": 1,
+      "secretAbsent": true
+    },
+    {
+      "name": "oversize-open-stream",
+      "exitCode": 2,
+      "wallSeconds": 0.03681737500000004,
+      "terminatedWithoutNewlineOrEOF": true
+    },
+    {
+      "name": "exact-byte-limit",
+      "requestBytes": 32768,
+      "exitCode": 0,
+      "wallSeconds": 0.03116229100000001
+    }
+  ],
+  "scope": "host-only; child PATH excludes Python and ADB; no valid receipt or device operation"
+}
