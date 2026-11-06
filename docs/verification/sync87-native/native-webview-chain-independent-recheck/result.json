@@ -1,0 +1,126 @@
+{
+  "status": "PASS",
+  "sourceBefore": "5fcee95cf2a5e6ee66da3ea2f8110562229fbe5e58c214a61cf2ceda5a44e674",
+  "sourceAfter": "5fcee95cf2a5e6ee66da3ea2f8110562229fbe5e58c214a61cf2ceda5a44e674",
+  "actualUIASha256": "35ff0a54ec4e1f46d107258de5149aa790e1bf81944d3057e00859ed476e342c",
+  "actualViews": [
+    {
+      "nodeIndex": 5,
+      "parentIndex": 4,
+      "package": "com.local.notesclone",
+      "rect": {
+        "x": 0,
+        "y": 48,
+        "width": 720,
+        "height": 1136
+      }
+    },
+    {
+      "nodeIndex": 6,
+      "parentIndex": 5,
+      "package": "com.local.notesclone",
+      "rect": {
+        "x": 0,
+        "y": 48,
+        "width": 720,
+        "height": 1136
+      }
+    }
+  ],
+  "observations": [
+    {
+      "name": "Actual preserved UIA direct same-package same-bounds chain",
+      "xml": "<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation=\"0\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.FrameLayout\" package=\"com.local.notesclone\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][720,1184]\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.LinearLayout\" package=\"com.local.notesclone\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][720,1184]\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.FrameLayout\" package=\"com.local.notesclone\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][720,1184]\"><node index=\"0\" text=\"\" resource-id=\"com.local.notesclone:id/action_bar_root\" class=\"android.widget.LinearLayout\" package=\"com.local.notesclone\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][720,1184]\"><node index=\"0\" text=\"\" resource-id=\"android:id/content\" class=\"android.widget.FrameLayout\" package=\"com.local.notesclone\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][720,1184]\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.webkit.WebView\" package=\"com.local.notesclone\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,48][720,1184]\"><node index=\"0\" text=\"备忘录\" resource-id=\"\" class=\"android.webkit.WebView\" package=\"com.local.notesclone\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"true\" focused=\"true\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,48][720,1184]\" /></node></node></node></node></node><node index=\"1\" text=\"\" resource-id=\"android:id/navigationBarBackground\" class=\"android.view.View\" package=\"com.local.notesclone\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][0,0]\" /></node></hierarchy>",
+      "expected": "accept",
+      "accepted": true,
+      "rect": {
+        "x": 0,
+        "y": 48,
+        "width": 720,
+        "height": 1136
+      },
+      "pass": true
+    },
+    {
+      "name": "Single exact-package host",
+      "xml": "<node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][720,1184]\"/>",
+      "expected": "accept",
+      "accepted": true,
+      "rect": {
+        "x": 0,
+        "y": 48,
+        "width": 720,
+        "height": 1136
+      },
+      "pass": true
+    },
+    {
+      "name": "Same-package sibling hosts",
+      "xml": "<node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][720,1184]\"/><node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][720,1184]\"/>",
+      "expected": "reject",
+      "accepted": false,
+      "error": "ERR_ASSERTION",
+      "pass": true
+    },
+    {
+      "name": "Different-bounds direct child",
+      "xml": "<node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][720,1184]\"><node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][700,1184]\"/></node>",
+      "expected": "reject",
+      "accepted": false,
+      "error": "ERR_ASSERTION",
+      "pass": true
+    },
+    {
+      "name": "Closed intermediate wrapper",
+      "xml": "<node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][720,1184]\"><node class=\"android.widget.FrameLayout\"><node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][720,1184]\"/></node></node>",
+      "expected": "reject",
+      "accepted": false,
+      "error": "ERR_ASSERTION",
+      "pass": true
+    },
+    {
+      "name": "Foreign package alone",
+      "xml": "<node class=\"android.webkit.WebView\" package=\"other\" bounds=\"[0,48][720,1184]\"/>",
+      "expected": "reject",
+      "accepted": false,
+      "error": "ERR_ASSERTION",
+      "pass": true
+    },
+    {
+      "name": "Unclosed attributed host",
+      "xml": "<node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][720,1184]\">",
+      "expected": "reject",
+      "accepted": false,
+      "error": "ERR_ASSERTION",
+      "pass": true
+    },
+    {
+      "name": "Unclosed attribute-less outer node",
+      "xml": "<node><node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][720,1184]\"/>",
+      "expected": "reject",
+      "accepted": false,
+      "error": "ERR_ASSERTION",
+      "pass": true
+    },
+    {
+      "name": "Foreign WebView direct parent",
+      "xml": "<node class=\"android.webkit.WebView\" package=\"other\" bounds=\"[0,48][720,1184]\"><node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][720,1184]\"/></node>",
+      "expected": "reject",
+      "accepted": false,
+      "error": "ERR_ASSERTION",
+      "pass": true
+    },
+    {
+      "name": "Foreign WebView sibling",
+      "xml": "<node class=\"android.webkit.WebView\" package=\"com.local.notesclone\" bounds=\"[0,48][720,1184]\"/><node class=\"android.webkit.WebView\" package=\"other\" bounds=\"[0,48][720,1184]\"/>",
+      "expected": "reject",
+      "accepted": false,
+      "error": "ERR_ASSERTION",
+      "pass": true
+    }
+  ],
+  "failed": [],
+  "hostOnly": true,
+  "adbCalls": 0,
+  "mainWrites": 0
+}

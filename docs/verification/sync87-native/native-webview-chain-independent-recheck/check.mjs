@@ -1,0 +1,43 @@
+// Narrow host-only direct-chain contract checks. Never calls native helpers.
+import assert from 'node:assert/strict';
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+const root=process.cwd(),out=resolve(root,'docs/verification/sync87-native/native-webview-chain-independent-recheck');
+const {parseNodes,nativeWebViewRect}=await import(pathToFileURL(resolve(root,'scripts/debug/sync87-native/client.mjs')));
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const before=sha(await readFile(resolve(root,'scripts/debug/sync87-native/client.mjs')));
+const own='class="android.webkit.WebView" package="com.local.notesclone" bounds="[0,48][720,1184]"';
+const foreign='class="android.webkit.WebView" package="other" bounds="[0,48][720,1184]"';
+const observations=[];
+const test=(name,xml,expectAccept)=>{
+ let accepted=false,rect,error;
+ try {rect=nativeWebViewRect(parseNodes(xml));accepted=true;}catch(e){error=e.code||e.name;}
+ observations.push({name,xml,expected:expectAccept?'accept':'reject',accepted,...(rect?{rect}:{}),...(error?{error}:{}),pass:accepted===expectAccept});
+};
+const actualPath=resolve(root,'docs/verification/sync87-native/native-webview-chain/cycle02-editor-before-attachment-uia.xml');
+const actualXML=await readFile(actualPath,'utf8'),actualNodes=parseNodes(actualXML);
+const actualViews=actualNodes.filter(n=>n.class==='android.webkit.WebView');
+assert.equal(actualViews.length,2);
+assert(actualViews.every(n=>n.package==='com.local.notesclone'));
+assert.equal(actualViews[1].parentIndex,actualViews[0].nodeIndex);
+assert.deepEqual(actualViews[0].rect,{x:0,y:48,width:720,height:1136});
+assert.deepEqual(actualViews[1].rect,actualViews[0].rect);
+test('Actual preserved UIA direct same-package same-bounds chain',actualXML,true);
+test('Single exact-package host',`<node ${own}/>`,true);
+test('Same-package sibling hosts',`<node ${own}/><node ${own}/>`,false);
+test('Different-bounds direct child',`<node ${own}><node class="android.webkit.WebView" package="com.local.notesclone" bounds="[0,48][700,1184]"/></node>`,false);
+test('Closed intermediate wrapper',`<node ${own}><node class="android.widget.FrameLayout"><node ${own}/></node></node>`,false);
+test('Foreign package alone',`<node ${foreign}/>`,false);
+test('Unclosed attributed host',`<node ${own}>`,false);
+test('Unclosed attribute-less outer node',`<node><node ${own}/>`,false);
+test('Foreign WebView direct parent',`<node ${foreign}><node ${own}/></node>`,false);
+test('Foreign WebView sibling',`<node ${own}/><node ${foreign}/>`,false);
+const after=sha(await readFile(resolve(root,'scripts/debug/sync87-native/client.mjs')));
+assert.equal(before,after);
+const failures=observations.filter(o=>!o.pass);
+const result={status:failures.length?'BLOCKED':'PASS',sourceBefore:before,sourceAfter:after,actualUIASha256:sha(Buffer.from(actualXML)),actualViews:actualViews.map(n=>({nodeIndex:n.nodeIndex,parentIndex:n.parentIndex,package:n.package,rect:n.rect})),observations,failed:failures.map(o=>o.name),hostOnly:true,adbCalls:0,mainWrites:0};
+await writeFile(resolve(out,'result.json'),JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify({status:result.status,checks:observations.length,failures:result.failed,adbCalls:0}));
+if(failures.length)process.exitCode=1;
