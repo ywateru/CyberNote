@@ -1,0 +1,16 @@
+{
+  "mode": "inline Node ESM using public scripts/debug/runtime.mjs",
+  "operations": [
+    "openRuntime({mobile:true})",
+    "page.setViewportSize({width:320,height:360})",
+    "api(page,\"data.open\")",
+    "idle(page)",
+    "getByRole(\"button\",{name:\"刷新同步状态\",exact:true}).scrollIntoViewIfNeeded()",
+    "evaluate getBoundingClientRect and before/after computed content",
+    "screenshot",
+    "await runtime.cleanup()"
+  ],
+  "exitCode": 0,
+  "naturalExit": true,
+  "elapsedIncludingCleanupMs": 5648
+}

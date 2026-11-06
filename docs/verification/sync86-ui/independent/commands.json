@@ -1,0 +1,45 @@
+[
+  {
+    "name": "desktop",
+    "argv": [
+      "pnpm",
+      "debug",
+      "group",
+      "sync-settings",
+      "--out",
+      "/private/tmp/apple-notes-sync86-ui/docs/verification/sync86-ui/independent/desktop"
+    ],
+    "exitCode": 1,
+    "wallSeconds": 9.531,
+    "naturalExit": true
+  },
+  {
+    "name": "desktop-retry",
+    "argv": [
+      "pnpm",
+      "debug",
+      "group",
+      "sync-settings",
+      "--out",
+      "/private/tmp/sync86-independent-desktop-retry-20261106"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 11.889,
+    "naturalExit": true
+  },
+  {
+    "name": "mobile",
+    "argv": [
+      "pnpm",
+      "debug",
+      "group",
+      "sync-settings",
+      "--mobile",
+      "--out",
+      "/private/tmp/sync86-independent-mobile-20261106"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 8.147,
+    "naturalExit": true
+  }
+]
