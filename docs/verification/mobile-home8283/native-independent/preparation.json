@@ -1,0 +1,25 @@
+{
+  "status": "PREPARED-NOT-EXECUTED",
+  "expectedManifestArguments": [
+    "docs/verification/mobile-home8283/native-build/result.json",
+    "docs/verification/mobile-home8283/android-build/result.json"
+  ],
+  "expectedArtifacts": [
+    "artifacts/mobile-home8283/备忘录-Mac26.zip",
+    "artifacts/mobile-home8283/备忘录-Android16.apk"
+  ],
+  "sourceTemplate": "docs/verification/ui-hierarchy8081/native-independent",
+  "checks": "Python AST parse only; no audit/build/sign/install/launch command executed.",
+  "scripts": [
+    {
+      "path": "docs/verification/mobile-home8283/native-independent/audit-packages.py",
+      "bytes": 12334,
+      "sha256": "fddc8414a9d58dfcec520ede567a94e54ff1cad97b43f2a65213556fea733a97"
+    },
+    {
+      "path": "docs/verification/mobile-home8283/native-independent/extract-assets.mjs",
+      "bytes": 3551,
+      "sha256": "4cc3f8387a214fc044a813e0307c4b009ac08cdf73bb39610391b2d6f90c5473"
+    }
+  ]
+}
