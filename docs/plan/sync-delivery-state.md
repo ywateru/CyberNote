@@ -14,7 +14,7 @@
 | Mac27 / Android17 准确包 | 已构建，独立核包 PASS | 两端321项产品输入相同；[Mac](../verification/sync87/native-build/result.json)、[Android](../verification/sync87/android-build/result.json)、[独立核包](../verification/sync87/native-independent/README.md)。Mac ad-hoc、Android debug，不等于原生运行 |
 | 87 原生验收工具 | 最终依赖与断言已独审 | 完整正文修复 `cb202998` / 独审 `97b048ae`；精确依赖 `16ce5779`，作者 smoke `5f0fd4df`，独审 `ad48a884`，主线合入 `5a07d842`。final11单实际 DesktopPeer10项自然0，非双端设备证明 |
 | 87 新隔离 Android 环境 | 既有 ready，实际 APK 验收进行中 | AVD `notes-sync87-isolated`，仅 `emulator-5584`；资源 `/private/tmp/apple-notes-sync87-environment-01`。reviewed lifecycle 保持至少8GiB free；不得降低 guard |
-| 87 最终实际 Android | **待完成，已派发原工具作者** | 工作树 `/private/tmp/apple-notes-sync87-native`，分支 `codex/sync87-native`，作者 `/root/sync87_native_develop`。最终实际结果还需不同代理独审 |
+| 87 最终实际 Android | **stage01已实际通过；附件与同步阶段仍进行中** | 工作树 `/private/tmp/apple-notes-sync87-native`，分支 `codex/sync87-native`，作者 `/root/sync87_native_develop`。最终实际结果还需不同代理独审 |
 
 主线后续工具整合的 notes9 与真实LAN21已恢复通过；最初LAN因root输出路径不符合准入规则而在启动前拒绝，原 failed 汇总保留，见[窄恢复记录](../verification/sync87/shared-tool-integration/README.md)。不把调用错误改写成产品失败，也不覆写成原运行通过。
 
@@ -40,6 +40,13 @@
 原TLS CryptoProvider panic、长持Session gate、PlanStale错误分类、locked resolve提交后旧Token、正文断言缺失等均有独立失败及修复证据，按准确源码和binary范围解释，不能追认旧版本通过。首个实际cloudflared在SIGTERM后8秒仍未退出，最后SIGKILL；第二个自然0。所有真实Rust进程自然退出与工具清理准确区分。
 
 已正常清理完成的adapter/routes/DOM/package-review及较旧干净源工作树，分支/已提交证据保留，见[source-checkout-cleanup](../verification/sync87/source-checkout-cleanup.json)。当前native工作树保留；共享SDK、node_modules、主线target、84/85target保留，不并发借用target编译。根负责文档/派发/合入/主线整合与准确包，开发和独审由不同代理负责，不唤醒旧debug70。
+
+## 原生实际验收进行记录（非完成收据）
+
+- actual-01 首次stage01自然exit2/1.007秒。真实安装成功，原工具未兼容 `Performing Streamed Install` 及Android11的 `~~token` 安装父目录；最小工具修复 `febe6174` 经不同代理 `b8e1a7aa` 窄审（原20+独立45项host断言自然0）并已主线合入。没有产品修改或绕过installed完整hash。
+- stage01-retry01 **实际自然0/19.919秒**：准确Android17安装/完整installed hash、直接画廊/黄色＋、原生tap新建、真实contenteditable焦点和系统 `mInputShown=true`、完整中文正文Store revision1保存。截图/HTML在 `/private/tmp/notes-sync87-native-actual-01`，后续结束owned进程后归档；此处尚不是独立设备最终收据。
+- stage02首次自然exit2/8.555秒，未进入DocumentsUI。后续观察有CDP触摸15秒超时及UIA两个WebView矩形导致严格定位拒绝，尚不能据此判产品故障；原失败和截图保全，正在依据实际层级定位，不无条件取第一个。
+- lifecycle01自然结束，完整外层exit0/624.453秒，owned emulator自然0、无signal；停止后guard正确拒绝无active emulator。同AVD/serial/既有userdata的reviewed lifecycle02已开始，guard下限不变。仅新5584，未碰原设备。
 
 ## 用户原现场和范围
 
