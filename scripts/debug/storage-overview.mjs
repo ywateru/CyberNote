@@ -566,14 +566,12 @@ export async function runStorageOverview(runtime, { command, check, output }) {
     await page.evaluate(() =>
       document.querySelector(".app").style.setProperty("--native-top", "44px"),
     );
-    const native = await page
-      .locator(".data-management")
-      .evaluate((node) => ({
-        top: node.getBoundingClientRect().top,
-        close: node
-          .querySelector('[aria-label="关闭数据管理"]')
-          .getBoundingClientRect().top,
-      }));
+    const native = await page.locator(".data-management").evaluate((node) => ({
+      top: node.getBoundingClientRect().top,
+      close: node
+        .querySelector('[aria-label="关闭数据管理"]')
+        .getBoundingClientRect().top,
+    }));
     check(
       "Reserved native title area keeps management header clear",
       native.top >= 44 && native.close >= 44,
@@ -793,6 +791,211 @@ export async function runStorageOverview(runtime, { command, check, output }) {
       runtime.errors.length === 0,
     );
   } finally {
+    backend.call = originalCall;
+  }
+}
+
+/** Regression: archive recovery must not depend on successful file inventory. */
+export async function runStorageBackupAvailability(
+  runtime,
+  { command, check, output },
+) {
+  const { page, backend } = runtime;
+  const originalCall = backend.call.bind(backend);
+  const configure = (value) =>
+    page.evaluate((value) => window.__DEBUG_PLATFORM__.configure(value), value);
+  const buttons = page.locator(".data-backup-actions button");
+  const available = async () =>
+    (await buttons.count()) === 2 &&
+    (await buttons.evaluateAll((nodes) =>
+      nodes.every((node) => !node.disabled),
+    ));
+  const capture = async (name) => {
+    await saveJSON(
+      resolve(output, name + ".snapshot.json"),
+      await snapshot(page, { selector: ".data-management", maxChars: 60000 }),
+    );
+    await page.screenshot({ path: resolve(output, name + ".png") });
+  };
+  const archiveCalls = () =>
+    backend.calls.filter(
+      (row) =>
+        row.command === "export_archive" || row.command === "import_archive",
+    ).length;
+  let releaseInventory;
+  const initialInventory = new Promise((resolve) => {
+    releaseInventory = resolve;
+  });
+  let holdInventory = true;
+  backend.configure({ fail: { inventory: 100 } });
+  backend.call = async (c, a) => {
+    if (c === "get_data_management" && holdInventory) await initialInventory;
+    return originalCall(c, a);
+  };
+  const emit = async (name, payload) =>
+    page.evaluate(
+      ({ name, payload }) => window.__DEBUG_PLATFORM__.emit(name, payload),
+      { name, payload },
+    );
+  const prepare = async () => {
+    backend.suspended = ["note-a"];
+    backend.operationId = "storage81-no-inventory";
+    await emit("notes-access", {
+      phase: "prepare",
+      operationId: backend.operationId,
+      noteIds: ["note-a"],
+      access: backend.state().access,
+    });
+  };
+  const commit = async () => {
+    backend.suspended = [];
+    backend.operationId = null;
+    backend.accessEpoch++;
+    backend.noteEpochs["note-a"] = (backend.noteEpochs["note-a"] || 0) + 1;
+    await emit("notes-access", {
+      phase: "commit",
+      operationId: "storage81-no-inventory",
+      noteIds: ["note-a"],
+      access: backend.state().access,
+    });
+  };
+  try {
+    const opening = api(page, "data.open");
+    await page.waitForSelector(".data-backup-section");
+    check(
+      "First pending inventory exposes both actual enabled archive controls without snapshot",
+      (await available()) &&
+        (await page.locator(".data-loading").count()) === 1 &&
+        (await page.locator("[data-storage-total]").count()) === 0,
+    );
+    await capture("storage81-inventory-pending");
+    holdInventory = false;
+    releaseInventory();
+    await opening;
+    await idle(page);
+    await page.getByRole("button", { name: "重试读取", exact: true }).waitFor();
+    check(
+      "First inventory failure retains import/export recovery and explicit retry without totals",
+      (await available()) &&
+        (await page.locator(".storage-summary").count()) === 0,
+    );
+    await capture("storage81-inventory-failed");
+    for (const mode of ["import", "export"]) {
+      const before = archiveCalls();
+      await configure({
+        dialog: { [mode === "import" ? "open" : "save"]: [null] },
+      });
+      await page
+        .getByRole("button", {
+          name: mode === "import" ? "导入备份…" : "导出完整备份…",
+          exact: true,
+        })
+        .click();
+      await idle(page);
+      check(
+        `No-snapshot ${mode} cancellation keeps both controls and performs no archive write`,
+        archiveCalls() === before &&
+          (await available()) &&
+          (await page.locator(".data-notice").count()) === 0,
+      );
+    }
+    for (const mode of ["export", "import"]) {
+      backend.configure({ fail: { archive: 1 } });
+      await page
+        .getByRole("button", {
+          name: mode === "import" ? "导入备份…" : "导出完整备份…",
+          exact: true,
+        })
+        .click();
+      await idle(page).catch((cause) => {
+        if (!cause.message.includes("Controlled archive")) throw cause;
+      });
+      check(
+        `No-snapshot ${mode} failure remains explicit and retry controls stay reachable`,
+        (await page.locator(".data-error").allTextContents()).some((text) =>
+          text.includes("Controlled archive"),
+        ) &&
+          (await available()) &&
+          (await page.locator(".storage-summary").count()) === 0 &&
+          (await page.locator(".data-notice").count()) === 0,
+      );
+      await command("app.dismissError");
+    }
+    let releaseArchive;
+    const exporting = new Promise((resolve) => {
+      releaseArchive = resolve;
+    });
+    backend.call = async (c, a) => {
+      if (c === "export_archive") await exporting;
+      return originalCall(c, a);
+    };
+    await page
+      .getByRole("button", { name: "导出完整备份…", exact: true })
+      .click();
+    await page.getByRole("button", { name: "导出中…", exact: true }).waitFor();
+    check(
+      "No-snapshot archive in flight keeps both controls visible and disabled",
+      (await buttons.count()) === 2 &&
+        (await buttons.evaluateAll((nodes) =>
+          nodes.every((node) => node.disabled),
+        )),
+    );
+    releaseArchive();
+    await idle(page);
+    check(
+      "No-snapshot export retry completes through actual App archive handler",
+      (await available()) &&
+        (await page.getByText("完整备份已导出", { exact: true }).count()) ===
+          1 &&
+        (await page.locator(".storage-summary").count()) === 0,
+    );
+    backend.call = async (c, a) => {
+      if (c === "import_archive") {
+        await prepare();
+        await page.waitForSelector(".access-cover");
+        check(
+          "No-snapshot import prepare retains both controls disabled behind access cover",
+          (await buttons.count()) === 2 &&
+            (await buttons.evaluateAll((nodes) =>
+              nodes.every((node) => node.disabled),
+            )) &&
+            (await page.locator("[data-storage-total]").count()) === 0,
+        );
+        const result = await originalCall(c, a);
+        await commit();
+        return { ...result, value: backend.state() };
+      }
+      return originalCall(c, a);
+    };
+    await page.getByRole("button", { name: "导入备份…", exact: true }).click();
+    await idle(page);
+    check(
+      "No-snapshot import commit leaves recovery controls enabled even if inventory fails again",
+      (await available()) &&
+        (await page.locator(".access-cover").count()) === 0 &&
+        (await page.locator(".data-management").count()) === 1 &&
+        (await page.getByText("本地备份已导入", { exact: true }).count()) ===
+          1 &&
+        (await page.locator(".storage-summary").count()) === 0,
+    );
+    await capture("storage81-recovered-without-inventory");
+    backend.call = originalCall;
+    backend.configure({ fail: { inventory: 0 } });
+    await page.getByRole("button", { name: "重试读取", exact: true }).click();
+    await idle(page);
+    check(
+      "Inventory retry restores overview without duplicating or losing backup controls",
+      (await available()) &&
+        (await page.locator(".storage-summary").count()) === 1 &&
+        (await page.locator(".data-backup-section").count()) === 1,
+    );
+    check(
+      "No page errors during no-snapshot archive recovery",
+      runtime.errors.length === 0,
+    );
+  } finally {
+    holdInventory = false;
+    releaseInventory();
     backend.call = originalCall;
   }
 }
