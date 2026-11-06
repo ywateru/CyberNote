@@ -105,11 +105,29 @@ fn noise_read(h: &mut HandshakeState, bytes: &[u8]) -> Result<Vec<u8>> {
     out.truncate(n);
     Ok(out)
 }
+fn tls_connector() -> Result<tokio_tungstenite::Connector> {
+    // Bind this client to one explicit provider; do not depend on process-wide
+    // auto-detection, which panics when transitive feature sets are ambiguous.
+    let roots = rustls::RootCertStore::from_iter(webpki_roots::TLS_SERVER_ROOTS.iter().cloned());
+    let config = rustls::ClientConfig::builder_with_provider(Arc::new(
+        rustls::crypto::ring::default_provider(),
+    ))
+    .with_safe_default_protocol_versions()
+    .map_err(|_| SyncError::Transport)?
+    .with_root_certificates(roots)
+    .with_no_client_auth();
+    Ok(tokio_tungstenite::Connector::Rustls(Arc::new(config)))
+}
 pub(super) async fn client(s: &Shared, invite: &PairingInvite) -> Result<(SecureSocket, String)> {
     super::super::identity::endpoint(&invite.endpoint)?;
     let (mut ws, _) = timeout(
         NETWORK_TIMEOUT,
-        tokio_tungstenite::connect_async_with_config(&invite.endpoint, Some(config()), true),
+        tokio_tungstenite::connect_async_tls_with_config(
+            &invite.endpoint,
+            Some(config()),
+            true,
+            Some(tls_connector()?),
+        ),
     )
     .await
     .map_err(|_| SyncError::Timeout)?
@@ -315,6 +333,10 @@ pub(super) async fn serve(
             .check_authorized(&id, &workspace, &key, &device)?;
         let response = match handler.handle(&s, request) {
             Ok(r) => r,
+            // A local metadata race says nothing about the peer protocol. End
+            // this authenticated exchange so the client uses transport backoff
+            // and prepares again; never encode it as remote Invalid data.
+            Err(SyncError::PlanStale) => return Err(SyncError::PlanStale),
             Err(e) => wire::Response::Error { code: e.into() },
         };
         s.identity
@@ -331,12 +353,13 @@ mod tests {
     use super::*;
     use sha2::{Digest, Sha256};
     use std::collections::BTreeMap;
-    use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
     struct Backend {
         workspace: String,
         device: String,
         reads: AtomicUsize,
         publications: AtomicUsize,
+        stale_flush: AtomicBool,
         blobs: Mutex<BTreeMap<String, Vec<u8>>>,
     }
     impl SyncBackend for Backend {
@@ -356,6 +379,9 @@ mod tests {
             Ok(())
         }
         fn flush(&self) -> Result<()> {
+            if self.stale_flush.swap(false, Ordering::SeqCst) {
+                return Err(SyncError::PlanStale);
+            }
             Ok(())
         }
         fn inventory(&self, _: Option<&str>, _: usize) -> Result<InventoryPage> {
@@ -406,6 +432,7 @@ mod tests {
             device: uuid::Uuid::new_v4().to_string(),
             reads: AtomicUsize::new(0),
             publications: AtomicUsize::new(0),
+            stale_flush: AtomicBool::new(false),
             blobs: Mutex::new(BTreeMap::new()),
         });
         let identity =
@@ -444,6 +471,29 @@ mod tests {
         let n = socket.noise.write_message(&plain, &mut out).unwrap();
         out.truncate(n);
         out
+    }
+    #[tokio::test(flavor = "current_thread")]
+    async fn local_stale_closes_socket_for_backoff_instead_of_poisoning_peer_protocol() {
+        let (_dir, _service, invite, backend) = host();
+        let clientdir = tempfile::tempdir().unwrap();
+        let (s, _) = shared(clientdir.path(), &invite.workspace_id);
+        let (mut socket, _) = client(&s, &invite).await.unwrap();
+        backend.stale_flush.store(true, Ordering::SeqCst);
+        let request = wire::Request::Inventory {
+            after: None,
+            limit: 1,
+        };
+        assert!(matches!(
+            socket.rpc(&request).await,
+            Err(SyncError::Transport)
+        ));
+        assert_eq!(backend.reads.load(Ordering::SeqCst), 0);
+        let (mut socket, _) = client(&s, &invite).await.unwrap();
+        assert!(matches!(
+            socket.rpc(&request).await.unwrap(),
+            wire::Response::Inventory { .. }
+        ));
+        assert_eq!(backend.reads.load(Ordering::SeqCst), 1);
     }
     #[tokio::test(flavor = "current_thread")]
     async fn encrypted_replay_and_tampering_close_connection_without_second_request() {
@@ -605,7 +655,7 @@ mod tests {
     fn partial_staging_budget_cannot_be_bypassed_with_new_hashes() {
         let dir = tempfile::tempdir().unwrap();
         let (s, b) = shared(dir.path(), &uuid::Uuid::new_v4().to_string());
-        for i in 0..4 {
+        for i in 0..3 {
             let reference = BlobRef {
                 sha256: format!("{i:064x}"),
                 size: 10,
@@ -614,19 +664,19 @@ mod tests {
                 .write(b.as_ref(), &reference, 0, b"x", false)
                 .unwrap();
         }
-        let fifth = BlobRef {
+        let fourth = BlobRef {
             sha256: "f".repeat(64),
             size: 10,
         };
         assert_eq!(
             s.staging
-                .write(b.as_ref(), &fifth, 0, b"x", false)
+                .write(b.as_ref(), &fourth, 0, b"x", false)
                 .unwrap_err(),
             SyncError::Limit
         );
         assert_eq!(
             std::fs::read_dir(dir.path().join("stage")).unwrap().count(),
-            4
+            3
         );
     }
     #[test]
@@ -735,5 +785,18 @@ mod tests {
             std::fs::read_dir(dir.path().join("stage")).unwrap().count(),
             0
         );
+    }
+}
+
+#[cfg(test)]
+mod tls_provider_tests {
+    use super::*;
+    #[test]
+    fn production_connector_has_explicit_ring_provider_and_public_roots() {
+        let tokio_tungstenite::Connector::Rustls(config) = tls_connector().unwrap() else {
+            panic!("rustls connector required")
+        };
+        assert!(!config.crypto_provider().cipher_suites.is_empty());
+        assert!(config.enable_sni);
     }
 }

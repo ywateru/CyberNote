@@ -1,0 +1,27 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/sync86-independent-review-01/lock-harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.43s
+     Running unittests root.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_sync84_store_tests-2d5cba25240c03da)
+
+running 2 tests
+
+thread 'sync::adapter::independent_mutex_review::independent_flush_must_not_capture_64mib_under_session_mutex' (42748814) panicked at current/sync/adapter.rs:1276:180:
+called `Result::unwrap()` on an `Err` value: AppError { code: "invalid", message: "未知操作: updateNote", commit: None }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test sync::adapter::independent_mutex_review::independent_flush_must_not_capture_64mib_under_session_mutex ... FAILED
+INDEPENDENT_MUTEX preflight wall_ms=6140 blocked_samples=1951 available_samples=2097
+
+thread 'sync::adapter::independent_mutex_review::independent_preflight_must_not_hash_64mib_under_session_mutex' (42748815) panicked at current/sync/adapter.rs:1260:3:
+assertion `left == right` failed: preflight: hashing/capture held Session mutex
+  left: 1951
+ right: 0
+test sync::adapter::independent_mutex_review::independent_preflight_must_not_hash_64mib_under_session_mutex ... FAILED
+
+failures:
+
+failures:
+    sync::adapter::independent_mutex_review::independent_flush_must_not_capture_64mib_under_session_mutex
+    sync::adapter::independent_mutex_review::independent_preflight_must_not_hash_64mib_under_session_mutex
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 138 filtered out; finished in 36.26s
+
+error: test failed, to rerun pass `--lib`

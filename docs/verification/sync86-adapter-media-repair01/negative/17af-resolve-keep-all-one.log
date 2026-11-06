@@ -1,0 +1,24 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/sync86-resolve-negative17af/tree/scripts/sync84)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.63s
+     Running unittests ../../src-tauri/src/sync_test_root84.rs (/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync84_store_tests-269f9d3d0ce0a367)
+
+running 2 tests
+
+thread 'sync::adapter::resolve_tests::locked_keep_one_returns_committed_rows_after_real_epoch_change' (42903848) panicked at ../../src-tauri/src/sync/adapter_resolve_tests.rs:154:28:
+called `Result::unwrap()` on an `Err` value: AppError { code: "access_changed", message: "授权状态已改变，请同步后重试", commit: None }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test sync::adapter::resolve_tests::locked_keep_one_returns_committed_rows_after_real_epoch_change ... FAILED
+
+thread 'sync::adapter::resolve_tests::locked_keep_all_returns_committed_rows_after_real_epoch_change' (42903847) panicked at ../../src-tauri/src/sync/adapter_resolve_tests.rs:154:28:
+called `Result::unwrap()` on an `Err` value: AppError { code: "access_changed", message: "授权状态已改变，请同步后重试", commit: None }
+test sync::adapter::resolve_tests::locked_keep_all_returns_committed_rows_after_real_epoch_change ... FAILED
+
+failures:
+
+failures:
+    sync::adapter::resolve_tests::locked_keep_all_returns_committed_rows_after_real_epoch_change
+    sync::adapter::resolve_tests::locked_keep_one_returns_committed_rows_after_real_epoch_change
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 151 filtered out; finished in 0.50s
+
+error: test failed, to rerun pass `--lib`

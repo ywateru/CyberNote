@@ -58,6 +58,9 @@ fn detach_cycles(folders: &mut BTreeMap<String, Folder>) {
 }
 impl Store {
     fn materialize(&self, attachment: &WireAttachment) -> Result<Attachment> {
+        if let Some(media) = &self.sync_media {
+            return media.materialize(attachment);
+        }
         let local = validation::attachment(attachment);
         let reference = BlobRef {
             hash: attachment.sha256.clone(),

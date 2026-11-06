@@ -1,0 +1,19 @@
+   Compiling notes-sync-network-tests v0.1.0 (/private/tmp/apple-notes-sync86-adapter/scripts/sync-network-test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.54s
+     Running unittests lib.rs (/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync_network_tests-df604f19d4e58afb)
+
+running 1 test
+
+thread 'network::transport::tests::local_stale_closes_socket_for_backoff_instead_of_poisoning_peer_protocol' (42862117) panicked at ../../src-tauri/src/sync/network/transport.rs:482:9:
+assertion failed: matches!(socket.rpc(&request).await, Err(SyncError::Transport))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test network::transport::tests::local_stale_closes_socket_for_backoff_instead_of_poisoning_peer_protocol ... FAILED
+
+failures:
+
+failures:
+    network::transport::tests::local_stale_closes_socket_for_backoff_instead_of_poisoning_peer_protocol
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.07s
+
+error: test failed, to rerun pass `--lib`

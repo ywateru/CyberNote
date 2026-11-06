@@ -1,0 +1,19 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/apple-notes-sync86-adapter/docs/verification/sync84-core-independent-01/runner)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.69s
+     Running unittests root.rs (/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync84_store_tests-269f9d3d0ce0a367)
+
+running 1 test
+
+thread 'sync::adapter::retry_tests::actual_store_stale_automatically_reconnects_and_quiet_converges_dirty_and_inbox' (42870547) panicked at sync/adapter_retry_tests.rs:146:9:
+automatic retry/quiet did not converge
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test sync::adapter::retry_tests::actual_store_stale_automatically_reconnects_and_quiet_converges_dirty_and_inbox ... FAILED
+
+failures:
+
+failures:
+    sync::adapter::retry_tests::actual_store_stale_automatically_reconnects_and_quiet_converges_dirty_and_inbox
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 156 filtered out; finished in 10.13s
+
+error: test failed, to rerun pass `--lib`

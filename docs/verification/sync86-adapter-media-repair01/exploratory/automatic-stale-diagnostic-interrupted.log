@@ -1,0 +1,12 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/apple-notes-sync86-adapter/docs/verification/sync84-core-independent-01/runner)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.15s
+     Running unittests root.rs (/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync84_store_tests-269f9d3d0ce0a367)
+
+running 1 test
+AUTO_STALE_EVENT phase="probe" outcome=null
+AUTO_STALE_EVENT phase="prepare" outcome=null
+AUTO_STALE_EVENT phase="release" outcome="commit"
+error: test failed, to rerun pass `--lib`
+
+Caused by:
+  process didn't exit successfully: `/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync84_store_tests-269f9d3d0ce0a367 actual_store_stale --nocapture` (signal: 2, SIGINT: terminal interrupt signal)

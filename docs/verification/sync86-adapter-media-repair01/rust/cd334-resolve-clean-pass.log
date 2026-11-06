@@ -1,0 +1,18 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/apple-notes-sync86-adapter/scripts/sync84)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.98s
+     Running unittests ../../src-tauri/src/sync_test_root84.rs (/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync84_store_tests-269f9d3d0ce0a367)
+
+running 5 tests
+RESOLVE_RECEIPT keep_all=false commit_count=1 original_epoch=1 final_epoch=2 returned_success=true all_copies_decrypt=true
+test sync::adapter::resolve_tests::locked_keep_one_returns_committed_rows_after_real_epoch_change ... ok
+RESOLVE_RECEIPT keep_all=true commit_count=1 original_epoch=1 final_epoch=2 returned_success=false all_copies_decrypt=true
+test sync::adapter::resolve_tests::committed_resolve_rejects_closed_current_window ... ok
+RESOLVE_RECEIPT keep_all=true commit_count=1 original_epoch=1 final_epoch=2 returned_success=true all_copies_decrypt=true
+RESOLVE_RECEIPT keep_all=true commit_count=1 original_epoch=1 final_epoch=2 returned_success=false all_copies_decrypt=true
+RESOLVE_RECEIPT keep_all=true commit_count=1 original_epoch=1 final_epoch=1 returned_success=false all_copies_decrypt=true
+test sync::adapter::resolve_tests::locked_keep_all_returns_committed_rows_after_real_epoch_change ... ok
+test sync::adapter::resolve_tests::committed_resolve_rejects_reopened_store_in_same_session ... ok
+test sync::adapter::resolve_tests::committed_resolve_rejects_replaced_session ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 148 filtered out; finished in 2.09s
+

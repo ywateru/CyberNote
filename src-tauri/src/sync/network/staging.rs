@@ -46,7 +46,13 @@ impl Staging {
             count += 1;
             total = total.checked_add(m.len()).ok_or(SyncError::Limit)?;
         }
-        if count > 4 || total > 512 * 1024 * 1024 {
+        if count > 3
+            || total > 256 * 1024 * 1024
+            || fs2::available_space(&self.dir)
+                .map_err(|_| SyncError::Io)?
+                .saturating_sub(extra)
+                < 256 * 1024 * 1024
+        {
             return Err(SyncError::Limit);
         }
         Ok(())
@@ -180,5 +186,32 @@ impl Staging {
             Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(()),
             Err(_) => Err(SyncError::Io),
         }
+    }
+}
+
+#[cfg(test)]
+mod budget_tests {
+    use super::*;
+    #[test]
+    fn network_staging_reserves_only_three_files_and_256_mib() {
+        let root = tempfile::tempdir().unwrap();
+        let stage = Staging::open(root.path().join("network")).unwrap();
+        for n in 0..3 {
+            File::create(stage.dir.join(format!("{n}.part"))).unwrap();
+        }
+        stage.budget(0, 0).unwrap();
+        assert_eq!(stage.budget(0, 1).unwrap_err(), SyncError::Limit);
+        File::open(stage.dir.join("0.part"))
+            .unwrap()
+            .set_len(256 * 1024 * 1024)
+            .unwrap_err();
+        OpenOptions::new()
+            .write(true)
+            .open(stage.dir.join("0.part"))
+            .unwrap()
+            .set_len(256 * 1024 * 1024)
+            .unwrap();
+        stage.budget(0, 0).unwrap();
+        assert_eq!(stage.budget(1, 0).unwrap_err(), SyncError::Limit);
     }
 }

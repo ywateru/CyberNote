@@ -1,0 +1,123 @@
+{
+  "sourceHead": "fd640fe204c009150b08f6219ba0c8528b8cdeb0",
+  "sourceBefore": "afbacd14e6a57226c250e1b0b311c257d7a22e43add27237fadc0d7f4d87ff92",
+  "sourceAfter": "afbacd14e6a57226c250e1b0b311c257d7a22e43add27237fadc0d7f4d87ff92",
+  "binary": {
+    "path": "/private/tmp/apple-notes-sync85-target/debug/notes-current-attachment-transport",
+    "sha256": "410d35cf731168a198ad048f043d0cc802d67c395e43d4c82f70e1c25d75066a"
+  },
+  "checks": [
+    "status is disabled and omits optional nulls",
+    "status does not generate Noise identity",
+    "two independent SQLite stores adopt authenticated workspace",
+    "A note, ordinary and smart folders arrive over real socket",
+    "B edit converges back to A",
+    "production media journal returns attachment metadata",
+    "multi-frame media metadata is projected remotely",
+    "remote immutable blob bytes match exact source",
+    "protected target remains durably pending",
+    "unrelated note applies while owner remains protected",
+    "owner update applies after normal protection release",
+    "remote lock revokes note authorization",
+    "remote ciphertext unlocks with original password",
+    "remote delete is projected and access revoked",
+    "restore causally supersedes old deletion",
+    "stop persists paused and closes listener",
+    "A owned Rust process exited naturally",
+    "B owned Rust process exited naturally",
+    "cold restart preserves paused identity",
+    "offline same-entity edits retain concurrent conflict heads",
+    "explicit keep-all resolution converges and retains a copy",
+    "100 repeat wakeups preserve note revision",
+    "third device receives transitive heads and blobs",
+    "C edit forwards through host to B",
+    "pre-crash pending inbox is durable while target is protected",
+    "A-restart SIGKILL observed",
+    "same-directory SIGKILL restart safely applies durable inbox",
+    "purge projects to connected peer without resurrecting rows",
+    "old offline device consumes purge tombstone",
+    "B-restart owned Rust process exited naturally",
+    "C-forward owned Rust process exited naturally",
+    "A-SIGKILL-restart owned Rust process exited naturally"
+  ],
+  "events": 97,
+  "processes": [
+    {
+      "name": "A",
+      "root": "/private/tmp/sync86-process-expanded-first/A",
+      "pid": 813,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B",
+      "root": "/private/tmp/sync86-process-expanded-first/B",
+      "pid": 815,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "A-restart",
+      "root": "/private/tmp/sync86-process-expanded-first/A",
+      "pid": 835,
+      "closing": false,
+      "exit": {
+        "code": null,
+        "signal": "SIGKILL"
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B-restart",
+      "root": "/private/tmp/sync86-process-expanded-first/B",
+      "pid": 836,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "C-forward",
+      "root": "/private/tmp/sync86-process-expanded-first/C",
+      "pid": 847,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "A-SIGKILL-restart",
+      "root": "/private/tmp/sync86-process-expanded-first/A",
+      "pid": 856,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    }
+  ],
+  "wallMs": 38974,
+  "failure": {
+    "message": "锁定或已删除备忘录不能添加附件",
+    "stack": "Error: 锁定或已删除备忘录不能添加附件\n    at Device.call (file:///private/tmp/apple-notes-sync86-adapter/scripts/debug/rust/check-sync.mjs:24:140)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async file:///private/tmp/apple-notes-sync86-adapter/scripts/debug/rust/check-sync.mjs:96:14"
+  }
+}

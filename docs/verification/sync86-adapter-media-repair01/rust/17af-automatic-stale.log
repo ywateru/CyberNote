@@ -1,0 +1,13 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/apple-notes-sync86-adapter/docs/verification/sync84-core-independent-01/runner)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.60s
+     Running unittests root.rs (/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync84_store_tests-269f9d3d0ce0a367)
+
+running 1 test
+AUTO_STALE_EVENT phase="probe" outcome=null
+AUTO_STALE_EVENT phase="prepare" outcome=null
+AUTO_STALE_EVENT phase="release" outcome="commit"
+AUTO_STALE_RECOVERY actual_foreground_edit=true rejected=1 flush_attempts=2 automatic_reconnect=true quiet_commit=true both_dirty=0 both_inbox=0
+test sync::adapter::retry_tests::actual_store_stale_automatically_reconnects_and_quiet_converges_dirty_and_inbox ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 156 filtered out; finished in 2.06s
+

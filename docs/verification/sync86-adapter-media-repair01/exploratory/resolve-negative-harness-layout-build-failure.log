@@ -1,0 +1,188 @@
+   Compiling notes-qa-fix-store v0.1.0 (/private/tmp/sync86-resolve-negative17af/harness)
+error[E0583]: file not found for module `tests`
+  --> current/session.rs:24:1
+   |
+24 | mod tests;
+   | ^^^^^^^^^^
+   |
+   = help: to create the module `tests`, create file "current/tests.rs" or "current/tests/mod.rs"
+   = note: if there is a `mod tests` elsewhere in the crate already, import it with `use crate::...` instead
+
+error: couldn't read `current/store/archive/../../../../docs/verification/qa-fix-00/schema-fixtures/inline-at-doc-root.notesbackup`: No such file or directory (os error 2)
+   --> current/store/archive/tests.rs:654:32
+    |
+654 | ...t-doc-root", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/inline-at-doc-root.notesbackup")),
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: couldn't read `current/store/archive/../../../../docs/verification/qa-fix-00/schema-fixtures/block-inside-paragraph.notesbackup`: No such file or directory (os error 2)
+   --> current/store/archive/tests.rs:655:36
+    |
+655 | ...aragraph", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/block-inside-paragraph.notesbackup")),
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: couldn't read `current/store/archive/../../../../docs/verification/qa-fix-00/schema-fixtures/paragraph-inside-table.notesbackup`: No such file or directory (os error 2)
+   --> current/store/archive/tests.rs:656:36
+    |
+656 | ...de-table", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/paragraph-inside-table.notesbackup")),
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: couldn't read `current/store/archive/../../../../docs/verification/qa-001/store-probes/fixtures/valid.notesbackup`: No such file or directory (os error 2)
+   --> current/store/archive/tests.rs:674:18
+    |
+674 |       let legacy = include_str!(
+    |  __________________^
+675 | |         "../../../../docs/verification/qa-001/store-probes/fixtures/valid.notesbackup"
+676 | |     );
+    | |_____^
+
+error: couldn't read `current/store/../../../docs/fixtures/smart-projection09.json`: No such file or directory (os error 2)
+   --> current/store/smart_tests.rs:758:46
+    |
+758 |       let corpus: Value = serde_json::from_str(include_str!(
+    |  ______________________________________________^
+759 | |         "../../../docs/fixtures/smart-projection09.json"
+760 | |     ))
+    | |_____^
+
+error[E0432]: unresolved import `rusqlite::hooks`
+   --> current/store/metadata_tests.rs:3:15
+    |
+  3 | use rusqlite::hooks::{AuthAction, AuthContext, Authorization};
+    |               ^^^^^ could not find `hooks` in `rusqlite`
+    |
+note: found an item that was configured out
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rusqlite-0.32.1/src/lib.rs:118:9
+    |
+116 | #[cfg(feature = "hooks")]
+    |       ----------------- the item is gated behind the `hooks` feature
+117 | #[cfg_attr(docsrs, doc(cfg(feature = "hooks")))]
+118 | pub mod hooks;
+    |         ^^^^^
+
+error[E0432]: unresolved import `rusqlite::hooks`
+   --> current/store/smart_tests.rs:192:19
+    |
+192 |     use rusqlite::hooks::{AuthAction, AuthContext, Authorization};
+    |                   ^^^^^ could not find `hooks` in `rusqlite`
+    |
+note: found an item that was configured out
+   --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rusqlite-0.32.1/src/lib.rs:118:9
+    |
+116 | #[cfg(feature = "hooks")]
+    |       ----------------- the item is gated behind the `hooks` feature
+117 | #[cfg_attr(docsrs, doc(cfg(feature = "hooks")))]
+118 | pub mod hooks;
+    |         ^^^^^
+
+error[E0432]: unresolved import `rusqlite::hooks`
+    --> current/store.rs:1147:23
+     |
+1147 |         use rusqlite::hooks::{AuthAction, AuthContext, Authorization};
+     |                       ^^^^^ could not find `hooks` in `rusqlite`
+     |
+note: found an item that was configured out
+    --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rusqlite-0.32.1/src/lib.rs:118:9
+     |
+ 116 | #[cfg(feature = "hooks")]
+     |       ----------------- the item is gated behind the `hooks` feature
+ 117 | #[cfg_attr(docsrs, doc(cfg(feature = "hooks")))]
+ 118 | pub mod hooks;
+     |         ^^^^^
+
+error[E0432]: unresolved import `rusqlite::hooks`
+    --> current/store.rs:1182:23
+     |
+1182 |         use rusqlite::hooks::{AuthAction, AuthContext, Authorization};
+     |                       ^^^^^ could not find `hooks` in `rusqlite`
+     |
+note: found an item that was configured out
+    --> /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rusqlite-0.32.1/src/lib.rs:118:9
+     |
+ 116 | #[cfg(feature = "hooks")]
+     |       ----------------- the item is gated behind the `hooks` feature
+ 117 | #[cfg_attr(docsrs, doc(cfg(feature = "hooks")))]
+ 118 | pub mod hooks;
+     |         ^^^^^
+
+error[E0599]: no method named `authorizer` found for struct `rusqlite::Connection` in the current scope
+   --> current/store/smart_tests.rs:215:14
+    |
+215 |     store.db.authorizer(Some(move |context: AuthContext<'_>| {
+    |     ---------^^^^^^^^^^ method not found in `rusqlite::Connection`
+
+error[E0599]: no method named `authorizer` found for struct `rusqlite::Connection` in the current scope
+   --> current/store/smart_tests.rs:235:10
+    |
+233 | /     store
+234 | |         .db
+235 | |         .authorizer(None::<fn(AuthContext<'_>) -> Authorization>);
+    | |         -^^^^^^^^^^ method not found in `rusqlite::Connection`
+    | |_________|
+    |
+
+error[E0599]: no method named `authorizer` found for struct `rusqlite::Connection` in the current scope
+   --> current/store/metadata_tests.rs:141:10
+    |
+138 | /     session
+139 | |         .store
+140 | |         .db
+141 | |         .authorizer(Some(|ctx: AuthContext<'_>| match ctx.action {
+    | |         -^^^^^^^^^^ method not found in `rusqlite::Connection`
+    | |_________|
+    |
+
+error[E0599]: no method named `authorizer` found for struct `rusqlite::Connection` in the current scope
+   --> current/store/metadata_tests.rs:159:10
+    |
+156 | /     session
+157 | |         .store
+158 | |         .db
+159 | |         .authorizer(None::<fn(AuthContext<'_>) -> Authorization>);
+    | |         -^^^^^^^^^^ method not found in `rusqlite::Connection`
+    | |_________|
+    |
+
+error[E0599]: no method named `authorizer` found for struct `rusqlite::Connection` in the current scope
+   --> current/store/metadata_tests.rs:172:10
+    |
+169 | /     session
+170 | |         .store
+171 | |         .db
+172 | |         .authorizer(Some(|ctx: AuthContext<'_>| match ctx.action {
+    | |         -^^^^^^^^^^ method not found in `rusqlite::Connection`
+    | |_________|
+    |
+
+error[E0599]: no method named `authorizer` found for struct `rusqlite::Connection` in the current scope
+   --> current/store/metadata_tests.rs:206:10
+    |
+204 | /     store
+205 | |         .db
+206 | |         .authorizer(Some(|ctx: AuthContext<'_>| match ctx.action {
+    | |         -^^^^^^^^^^ method not found in `rusqlite::Connection`
+    | |_________|
+    |
+
+error[E0599]: no method named `authorizer` found for struct `rusqlite::Connection` in the current scope
+    --> current/store.rs:1158:14
+     |
+1156 | /         store
+1157 | |             .db
+1158 | |             .authorizer(Some(|ctx: AuthContext<'_>| match ctx.action {
+     | |             -^^^^^^^^^^ method not found in `rusqlite::Connection`
+     | |_____________|
+     |
+
+error[E0599]: no method named `authorizer` found for struct `rusqlite::Connection` in the current scope
+    --> current/store.rs:1194:14
+     |
+1192 | /         store
+1193 | |             .db
+1194 | |             .authorizer(Some(|ctx: AuthContext<'_>| match ctx.action {
+     | |             -^^^^^^^^^^ method not found in `rusqlite::Connection`
+     | |_____________|
+     |
+
+Some errors have detailed explanations: E0432, E0583, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `notes-qa-fix-store` (bin "notes-current-attachment-transport" test) due to 18 previous errors

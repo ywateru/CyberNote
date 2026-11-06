@@ -1,0 +1,140 @@
+{
+  "sourceHead": "17af6dfc148e5d84de924ac47b69611e627e5722",
+  "sourceBefore": "bb626563a56526d778a9fb56b18b30ee5cf910bff5267a2c5e5cc9a78280d528",
+  "sourceAfter": "bb626563a56526d778a9fb56b18b30ee5cf910bff5267a2c5e5cc9a78280d528",
+  "binary": {
+    "path": "/private/tmp/sync86-transport-build10/notes-current-attachment-transport",
+    "sha256": "2f21f7ff9f6abad3b341585a16e973714c81af7c93eef0f4e2a435bd2eb53515"
+  },
+  "driver": {
+    "path": "/private/tmp/apple-notes-sync86-adapter/docs/verification/sync86-adapter-media-repair01/check-sync-token-retry.mjs",
+    "sha256": "9d0977d09a55fe90f827d0ad2ce2c21bc1d7cf1809f9e628e16278c983042d00",
+    "variant": "original check-sync.mjs assertions; only access_changed sync commands refetch Token, max3 attempts"
+  },
+  "commandRetries": [
+    {
+      "device": "A-SIGKILL-restart",
+      "command": "resolve",
+      "code": "access_changed",
+      "attempt": 1
+    }
+  ],
+  "checks": [
+    "status is disabled and omits optional nulls",
+    "status does not generate Noise identity",
+    "two independent SQLite stores adopt authenticated workspace",
+    "A note, ordinary and smart folders arrive over real socket",
+    "B edit converges back to A",
+    "production media journal returns attachment metadata",
+    "multi-frame media metadata is projected remotely",
+    "remote immutable blob bytes match exact source",
+    "protected target remains durably pending",
+    "unrelated note applies while owner remains protected",
+    "owner update applies after normal protection release",
+    "remote lock revokes note authorization",
+    "remote ciphertext unlocks with original password",
+    "remote delete is projected and access revoked",
+    "restore causally supersedes old deletion",
+    "stop persists paused and closes listener",
+    "A owned Rust process exited naturally",
+    "B owned Rust process exited naturally",
+    "cold restart preserves paused identity",
+    "offline same-entity edits retain concurrent conflict heads",
+    "explicit keep-all resolution converges and retains a copy",
+    "100 repeat wakeups preserve note revision",
+    "third device receives transitive heads and blobs",
+    "C edit forwards through host to B",
+    "pre-crash pending inbox is durable while target is protected",
+    "A-restart SIGKILL observed",
+    "same-directory SIGKILL restart safely applies durable inbox",
+    "purge projects to connected peer without resurrecting rows",
+    "old offline device consumes purge tombstone",
+    "media base arrives before independent offline edits",
+    "plain image and audio branches are retained as concurrent heads",
+    "plain audio and image copies retain separate attachment owners",
+    "locked text concurrent heads survive transport",
+    "B-restart owned Rust process exited naturally",
+    "C-forward owned Rust process exited naturally",
+    "A-SIGKILL-restart owned Rust process exited naturally"
+  ],
+  "events": 150,
+  "processes": [
+    {
+      "name": "A",
+      "root": "/private/tmp/sync86-media-process-final10-token-retry/A",
+      "pid": 17317,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B",
+      "root": "/private/tmp/sync86-media-process-final10-token-retry/B",
+      "pid": 17318,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "A-restart",
+      "root": "/private/tmp/sync86-media-process-final10-token-retry/A",
+      "pid": 17343,
+      "closing": false,
+      "exit": {
+        "code": null,
+        "signal": "SIGKILL"
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B-restart",
+      "root": "/private/tmp/sync86-media-process-final10-token-retry/B",
+      "pid": 17344,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "C-forward",
+      "root": "/private/tmp/sync86-media-process-final10-token-retry/C",
+      "pid": 17359,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "A-SIGKILL-restart",
+      "root": "/private/tmp/sync86-media-process-final10-token-retry/A",
+      "pid": 17370,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    }
+  ],
+  "wallMs": 47721,
+  "failure": {
+    "message": "设备同步未完成，请检查连接后重试",
+    "stack": "Error: 设备同步未完成，请检查连接后重试\n    at Device.call (file:///private/tmp/apple-notes-sync86-adapter/docs/verification/sync86-adapter-media-repair01/check-sync-token-retry.mjs:25:140)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Device.sync (file:///private/tmp/apple-notes-sync86-adapter/docs/verification/sync86-adapter-media-repair01/check-sync-token-retry.mjs:28:95)\n    at async file:///private/tmp/apple-notes-sync86-adapter/docs/verification/sync86-adapter-media-repair01/check-sync-token-retry.mjs:110:2"
+  }
+}

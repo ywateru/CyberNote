@@ -14,6 +14,41 @@ use std::{
 use store::{AppError, Result, Store};
 use tauri::{Emitter, Manager, State};
 struct AppState(Arc<(Mutex<Session>, Condvar)>);
+struct SyncState(Arc<sync::adapter::Runtime>);
+struct SyncWindows(tauri::AppHandle);
+impl sync::adapter::WindowHost for SyncWindows {
+    fn participants(&self) -> std::collections::HashSet<String> {
+        recording_window::document_participants(self.0.webview_windows().into_keys())
+    }
+    fn emit(&self, name: &str, payload: &Value) -> Result<()> {
+        self.0
+            .emit(name, payload)
+            .map_err(|_| failure("无法通知同步参与窗口"))
+    }
+}
+#[tauri::command]
+async fn sync_command(
+    command: sync::adapter::Command,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    state: State<'_, SyncState>,
+) -> Result<Value> {
+    let runtime = state.0.clone();
+    let label = window.label().to_string();
+    tauri::async_runtime::spawn_blocking(move || runtime.command(command, &label, &expected))
+        .await
+        .map_err(|_| failure("同步命令执行失败"))?
+}
+#[tauri::command]
+fn sync_window_reply(
+    reply: session::synchronization::WindowReply,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    state: State<SyncState>,
+) -> Result<Value> {
+    state.0.reply(window.label(), reply, &expected)
+}
+
 #[cfg(feature = "access-boundary-proof")]
 #[tauri::command]
 fn proof_access_record(event: Value, window: tauri::WebviewWindow) -> Result<()> {
@@ -467,12 +502,20 @@ pub fn run() {
         .plugin(tauri_plugin_notes_scan::init())
         .setup(|app| {
             let root = app.path().app_data_dir()?;
-            app.manage(AppState(Arc::new((
+            let shared = Arc::new((
                 Mutex::new(Session::new(
-                    Store::open(root).map_err(|e| std::io::Error::other(e.message))?,
+                    Store::open(&root).map_err(|e| std::io::Error::other(e.message))?,
                 )),
                 Condvar::new(),
-            ))));
+            ));
+            app.manage(AppState(shared.clone()));
+            let sync = sync::adapter::Runtime::new(
+                shared,
+                root,
+                Arc::new(SyncWindows(app.handle().clone())),
+            )
+            .map_err(|e| std::io::Error::other(e.message))?;
+            app.manage(SyncState(sync));
             #[cfg(desktop)]
             {
                 use tauri::menu::{
@@ -582,6 +625,8 @@ pub fn run() {
     #[cfg(not(feature = "access-boundary-proof"))]
     let builder = builder.invoke_handler(tauri::generate_handler![
         load_workspace,
+        sync_command,
+        sync_window_reply,
         register_save_intent,
         acknowledge_access,
         read_note_text,
@@ -606,6 +651,8 @@ pub fn run() {
     #[cfg(feature = "access-boundary-proof")]
     let builder = builder.invoke_handler(tauri::generate_handler![
         load_workspace,
+        sync_command,
+        sync_window_reply,
         register_save_intent,
         acknowledge_access,
         read_note_text,
@@ -632,6 +679,17 @@ pub fn run() {
         .build(tauri::generate_context!())
         .expect("Notes failed to start")
         .run(|app, event| match event {
+            tauri::RunEvent::Exit => {
+                if let Some(state) = app.try_state::<SyncState>() {
+                    let _ = state.0.shutdown();
+                }
+            }
+            tauri::RunEvent::Resumed => {
+                if let Some(state) = app.try_state::<SyncState>() {
+                    let runtime = state.0.clone();
+                    tauri::async_runtime::spawn_blocking(move || runtime.foreground());
+                }
+            }
             tauri::RunEvent::ExitRequested { api, .. } => {
                 recording_window::exit_requested(app, &api)
             }

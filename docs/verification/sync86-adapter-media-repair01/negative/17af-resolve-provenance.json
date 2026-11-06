@@ -1,0 +1,11 @@
+{
+  "base": "17af6dfc148e5d84de924ac47b69611e627e5722",
+  "baseBuild": "/private/tmp/sync86-transport-build10/build.json",
+  "productionChanges": [],
+  "testInjection": "adapter_resolve_tests.rs copied verbatim, mod added",
+  "testSha256": "f09ab22480905ef9193ae50542356285e25474fc120a59f0dcc9a407e4e06f4b",
+  "successfulNegativeInvocation": "cargo test --locked --offline --manifest-path /private/tmp/sync86-resolve-negative17af/tree/scripts/sync84/Cargo.toml locked_keep_ -- --nocapture",
+  "negativeResult": "natural exit 101, two failures with access_changed after confirmed commit and epoch increase",
+  "treePreparation": "git archive 17af6dfc src-tauri/src scripts/sync84 docs/fixtures docs/verification/qa-fix-00/schema-fixtures docs/verification/qa-001/store-probes/fixtures; inject identical test module only",
+  "firstAttempt": "copied transport harness lacked test fixtures/hooks; compile failure kept in exploratory; not product negative"
+}
