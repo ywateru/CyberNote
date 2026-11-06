@@ -4,11 +4,7 @@
 
 [77历史整合](verification/mac-feedback77/integration/README.md)为桌面十组148项、手机笔记9/录音43/附件43，构建/生产排除通过。`pnpm debug group mac-feedback --out FRESH_DIR`单独运行该批47项真实事件/HTML/字符Range/位置回归；完整组另含45项contract，真实deadline允许首次transport尚未返回时没有lastState，不伪造状态。
 
-78新增`pnpm debug group recording-indicator --out FRESH_DIR`，独立运行49项桌面回归，并入`pnpm test:debug`。它实际点击侧栏✓与×，检验采集中完成与累计WAV解码、暂停/继续、原A录音同时B编辑、列表/画廊及搜索/标签过滤后的归属、220px长标题布局、减少动态效果、两个已存卡仅当前实时卡活动、故障恢复、checkpoint关闭排队和旧ticket迟到回调。测试端通过React fiber取出真实App callback来重放旧会话状态，不向生产产品添加测试入口。
-
-界面按钮必须用实际DOM点击验证：语义`recording.action finish`会绕过界面disabled属性，不能单独证明按钮可用。桌面✓遵循controller的`canFinish`；手机维持仅paused/retry完成。列表和实时卡的录音指示只随真实phase=recording运动，减少动态效果时静止；状态装饰不写正文或Undo历史。
-
-双次正文保存故障的既有全局错误提示沿用真实两步恢复：点全局错误栏“重试”并等正文ACK，再点侧栏✓结束会话。仅点侧栏重试可能已保存成功但仍留旧全局错误；不得用dismissError或手动清状态冒充恢复。修改前真实DOM复现和测试驱动失败原件见[78开发证据](verification/recording-indicator78/README.md)。合成媒体与JS协议结果不替代真实Rust、系统硬件、原生运行或整窗像素验收。
+78新增`recording-indicator`组49项，并入桌面全组197项；真实按钮、状态和故障恢复说明见本文末“桌面录音状态与真实完成按钮78”。[独立48项检查及静态布局对照](verification/recording-indicator78-independent/README.md)通过，主线整合和准确包身份单独记录。
 
 [73历史验收](verification/mobile-recording-primary73/integration/README.md)该批为桌面100/手机录音43/手机笔记9项。手机新增600ms延迟读取后，等待同一卡片真实blob音源/metadata就绪再单次展开和后段回放，避免源更新重挂载丢失控件。程序化视觉对照可运行`node scripts/check-mobile-recording-primary73.mjs /private/tmp/notes-primary73`，它固定baseline3534acaf、真实共享View和同尺寸投影，仅适合该控件校准；输入变化必须显式审查基线。脚本限定真实依赖扫描，生产API规则不变。报告耗时须包括最终清理至进程退出，不能只引用CLI summary计时。
 
@@ -147,5 +143,7 @@ node scripts/debug/check-mobile-attachments-rust.mjs /private/tmp/notes-current-
 ## 桌面录音状态与真实完成按钮78
 
 `pnpm debug group recording-indicator --out /private/tmp/notes-recording-indicator` 使用真实侧栏录制、暂停、继续、✓与×的DOM按钮，检查原始owner列表“录音中”红点、仅当前live卡动效、220px长标题/高亮/画廊与reduced-motion。并入桌面全组；手机仍保留原✓策略并单独回归。Synthetic 440Hz输入保留真实RecordingPcm累计、附件/正文ACK及浏览器独立WAV解码；不接触现有手机录音、不证明原生Rust/硬件。
+
+界面按钮必须用实际DOM点击验证：语义`recording.action finish`会绕过界面disabled属性，不能单独证明按钮可用。桌面✓遵循controller的`canFinish`；手机维持仅paused/retry完成。列表和实时卡的录音指示只随真实phase=recording运动，减少动态效果时静止；状态装饰不写正文或Undo历史。
 
 Runner在测试浏览器中从React fiber保留真实`onState` callback，模拟完成后与新B会话时旧A回调晚到，验证不会复活或覆盖活动owner；产品没有新增调试后门。正文双次保存失败沿用已有两步恢复：先点实际全局错误栏“重试”提交pending正文，再点实际侧栏✓结束session；只点侧栏✓虽可结束但原全局错误栏状态未清，此既有错误展示行为仍在范围外。原始失败记录保留于[78证据](verification/recording-indicator78/README.md)。
