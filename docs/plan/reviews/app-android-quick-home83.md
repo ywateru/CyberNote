@@ -1,6 +1,17 @@
 # Android快速画廊首页83独立复核
 
-状态：**PASS / 冻结源码独立定向复核通过，无blocking**。2026-11-06复核产品 `d73e1f30a04ccf578f7df64b2a2b873a18c3d64d`、作者证据 `b74f60d9895d624eeaed1cbad51caa18771ad272`。规格为主线 `docs/ui/android-quick-home.md`，包括来源scope/owner、800断点、手机设置桌面label、same-source receipt恢复、亮黄按钮/隐藏后层操作与冷启noteId为空且不预读媒体的补充。独立未修改产品。
+
+## 当前正式结论：本轮组合与准确双端核包通过
+
+**PASS-BOTH-PACKAGE-IDENTITY / PASS-AFFECTED-BOUNDARY-RESUME。** 2026-11-06，最终构建来源为主线 `1f735ebe4881399699b6ba769e29f82a52278e7c`。根三个attempt原始结果保留；按293项产品/原生/配置输入逐项等字节映射复用未受影响的已通过组，并复跑受影响边界：桌面完整408项、手机notes9项、recording43项、恢复后desktop storage-overview99项，以及最终完整mobile attachments290项（含preferences和quick-home）均自然0，最终手机组合完整69.003秒。build/production通过，准确双端构建通过。详情见 [组合来源映射](../../verification/mobile-home8283/integration/README.md)；两次aggregate失败没有追认为零。
+
+独立串行生成4张390×844浅深首页/编辑器合成截图并逐张目视，**自然exit0、完整6.3015895秒**，实际HTML/DOM及index/dist逐文件恢复记录在 [screenshots](../../verification/mobile-home8283/screenshots/README.md)。随后只读核包 **自然exit0、完整6.911609542秒**，两个manifest各293项before/after/current/准确来源commit一致。Mac原始strict自然1原件保留；派生交付strict自然0，实际Mach-O全部section内容一致，ZIP条目/权限/字节与app一致。Android APK v2签名自然0、唯一arm64-v8a、实际ELF64 AArch64及Manifest通过。实际内嵌3个JS/CSS与构建snapshot逐字节相同；HTML raw不同、完整有序tokens相同，未混同两种判定。见 [独立核包](../../verification/mobile-home8283/native-independent/README.md)。
+
+准确包：Mac26 ZIP 5,066,010字节，SHA256 `799ff1907dc5c692e29fc6d72bd08898a3e6dd7010a3fa364717265bada2e903`；Android16 APK 182,442,234字节，SHA256 `26a9d3a9fcd42cd89d9e5e43117b67e2fbf3ff2c20e684322d8cb31488e3dc60`。截图前后、核包后126项源码指纹均为 `1a7374f011f8d8e89134b6068e4b8e21615a8ea12d2b437999ba7f20fbef4e94`，git source clean，runtime已cleanup且index/dist前后逐字节相同。
+
+本结论限定于本轮要求的源码/真实App处理器与受控DOM、组合回归、准确包身份和只读签名验证。**原Android约13秒未保存录音现场未动，真实设备IME/系统chooser、实际Android WebView运行和与原版整窗逐像素一致尚未验收。** 未安装/启动新包、未用真实麦克风、未操作苹果备忘录。以下段落保留各次独审的时间点与当时待恢复事项，当前状态以上述最终证据为准。
+
+初次冻结源码记录：**PASS / 独立定向复核通过，无blocking**。2026-11-06复核产品 `d73e1f30a04ccf578f7df64b2a2b873a18c3d64d`、作者证据 `b74f60d9895d624eeaed1cbad51caa18771ad272`。规格为主线 `docs/ui/android-quick-home.md`，包括来源scope/owner、800断点、手机设置桌面label、same-source receipt恢复、亮黄按钮/隐藏后层操作与冷启noteId为空且不预读媒体的补充。独立未修改产品。
 
 ## 组合第二次失败后的手机入口独审
 

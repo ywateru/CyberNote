@@ -1,0 +1,129 @@
+[
+  {
+    "label": "mac-original-extract",
+    "argv": [
+      "node",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mobile-home8283/native-independent/extract-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mobile-home8283/native-build/result.json",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/mac-original.app/Contents/MacOS/notes-clone",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/verification-extract/mac-original"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.052874,
+    "stdoutSha256": "465828e94157a436497df630cfd309c801525bee648b2adb05565067fe47f03a",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "mac-derived-extract",
+    "argv": [
+      "node",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mobile-home8283/native-independent/extract-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mobile-home8283/native-build/result.json",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/备忘录.app/Contents/MacOS/notes-clone",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/verification-extract/mac-derived"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.048295,
+    "stdoutSha256": "e64f2db859c9f6bc21a11f15f624331ec40894239a01ee7aceb5649b59a66e14",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "original-strict",
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/mac-original.app"
+    ],
+    "naturalExitCode": 1,
+    "wallSeconds": 0.02348,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "ddd1ddd4757fb6f58a644dc85f38f532d09e06ee1d423333bc5bbe2d57b2b251"
+  },
+  {
+    "label": "derived-strict",
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/备忘录.app"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.011698,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "2f2508a8e2eb728dde647a391ea1602abe2d1c0693b4b8078d3a3aa2605a6d3d"
+  },
+  {
+    "label": "derived-signature",
+    "argv": [
+      "/usr/bin/codesign",
+      "-dv",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/备忘录.app"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.004016,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "5b975c759ced20fa2320b852831d6f11fdcd5ea4abf3f682349cb38fc7415098"
+  },
+  {
+    "label": "android-signature",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/apksigner",
+      "verify",
+      "--verbose",
+      "--print-certs",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/备忘录-Android16.apk"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.642087,
+    "stdoutSha256": "ad5dcc6a8094668d0804d0a1b19dc2bf6fcae21dbf76ff6a876d31e27e05c5ac",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-badging",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "badging",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/备忘录-Android16.apk"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.052113,
+    "stdoutSha256": "ce74105cada00a9558d2871922b0e0aa4971c3dd9b747227ac266d27e93a2b8a",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-manifest",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "xmltree",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/备忘录-Android16.apk",
+      "--file",
+      "AndroidManifest.xml"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.024747,
+    "stdoutSha256": "b5d9c90106993139f719bd8dc782326b71fcedb3a2be5adef3192fadf92c1bb5",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-frontend-extract",
+    "argv": [
+      "node",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mobile-home8283/native-independent/extract-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/mobile-home8283/android-build/result.json",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/verification-extract/android/libnotes_clone_lib.so",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/mobile-home8283/verification-extract/android-frontend"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.213295,
+    "stdoutSha256": "e5718e7d9891e23293f9d68723d3f6b6ac1672a8caf04552b76875beb8b2645a",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

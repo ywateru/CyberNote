@@ -1,0 +1,87 @@
+{
+  "status": "PASS-COMBINED-SYNTHETIC-SCREENSHOTS",
+  "captures": [
+    {
+      "name": "home-390-light",
+      "selector": ".notes-pane",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "name": "editor-390-light",
+      "selector": ".editor-pane",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "name": "home-390-dark",
+      "selector": ".notes-pane",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "name": "editor-390-dark",
+      "selector": ".editor-pane",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ],
+  "sourceBefore": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "1a7374f011f8d8e89134b6068e4b8e21615a8ea12d2b437999ba7f20fbef4e94",
+    "fileCount": 126,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "1a7374f011f8d8e89134b6068e4b8e21615a8ea12d2b437999ba7f20fbef4e94",
+    "fileCount": 126,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "wallSeconds": 6.1831446660000005,
+  "scope": {
+    "platform": "mobile-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "limits": [
+    "Eight synthetic Chinese text-only notes, no media payload or private data.",
+    "Browser DOM/CSS presentation reference; not native Android IME/provider or original full-window pixel acceptance."
+  ]
+}
