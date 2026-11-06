@@ -1,6 +1,6 @@
 # 图片预览、标题栏与数据管理层次80/81
 
-2026-11-06。最终产品源码 `ad3a069f`，组合合入 `44ea616b`；产品与调试输入指纹 `0818145c2f31dc49b58cba93ba30711747e82c405cdb6bc0923b14bc92457ab9`。独审已 SOURCE-READY，主线回归和构建记录随后补全。本轮不操作原 Android 未保存录音现场。
+2026-11-06。最终产品源码 `ad3a069f`，组合合入 `44ea616b`；产品与调试输入指纹 `0818145c2f31dc49b58cba93ba30711747e82c405cdb6bc0923b14bc92457ab9`。独审已 SOURCE-READY，主线六项、双端构建与独立核包全部自然通过。本轮不操作原 Android 未保存录音现场。
 
 ## 用户可见的结果
 
@@ -18,7 +18,18 @@
 
 [独立复核](../../plan/reviews/app-ui-hierarchy8081.md)与[独立原始证据](../ui-hierarchy8081-independent/)分别记录源码、程序化 DOM、真实 AppKit 与 Rust 模型的结论。中间失败与修复前现场保留，不追认为通过。[作者组合记录](../ui-hierarchy8081-author/README.md)、[键盘修复](../ui-hierarchy8081-keyboard-fix/README.md)与[81统计/布局记录](../storage-overview81/README.md)可追溯。
 
-主线六项、准确 Mac25/Android15 构建、签名与独立核包待记录。
+[主线六项](integration/README.md)全部自然0：build/production、桌面356、手机笔记9/录音43/附件197。122输入指纹前后相同，各次pageErrors=[]。独立精准DOM38、controller20通过，真实AppKit和Rust1项按最终未变输入SHA复用。
+
+[Mac25构建](native-build/README.md)42.634s，[Android15构建](android-build/README.md)28.255s均自然0，291跟踪输入前后不变。原Mac构建app strict签名失败原件保留；派生ad-hoc交付副本strict验证通过。Android签名验证通过，未安装。两端准确前端快照保留，[独立核包](native-independent/README.md)自然0/7.930828s，验证291输入与commit/当前源、实际MachO/ELF内嵌JS/CSS/HTML、签名和归档完整性；没有将旧79 DEX分析重复计作本轮通过。
+
+| 交付 | 文件 | SHA256 |
+| --- | --- | --- |
+| Mac25（arm64本地开发包） | [ZIP](../../../artifacts/ui-hierarchy8081/备忘录-Mac25.zip) / [应用](../../../artifacts/ui-hierarchy8081/备忘录.app) | `a097dfcd27bddac55af23d31f4a79065c3a4f4ebe840f5116689780fe7ef60a2` |
+| Android构建15（arm64 debug，未安装） | [APK](../../../artifacts/ui-hierarchy8081/备忘录-Android15.apk) | `0e52c5872c9d294808d9afa5752e29cb1d9bdeb7c8a15988f95bb236cfcce9ac` |
+
+[最终主线截图](screenshots/README.md)保全了合成数据的1280浅色总览、390深色详情及800图片信息页与几何快照。
+
+本轮三个隔离worktree及分支在clean、head已合入主线后正常删除，无force；其源码/原始证据均已保全。未动其他历史worktree、主node_modules、共享target或用户数据。
 
 ## 验收边界
 

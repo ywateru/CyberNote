@@ -51,3 +51,11 @@ attempt01 未追认为通过；attempt02/03 已排除 watcher reload。之后 ru
 - focused-dom-command.json / stdout / stderr 与 run-focused-dom.mjs：最终准确命令、自然退出、完整 wall、runner SHA；final-source-identity.json 映射最终冻结源码及复用 native/model 输入。
 
 未 stage/commit；验证驱动未操作候选 index/dist（runtime 使用独立临时 Vite cache）；未启动已安装应用、原版备忘录、真实麦克风或 Android 设备，原 Android 约13秒未保存录音现场未触碰。AppKit/Cargo/runtime 自然结束，主项目 target 缓存与候选共享测试环境均已交还。
+
+## 最终双端只读核包
+
+2026-11-06：**PASS-BOTH-PACKAGE-IDENTITY**。根主线六项全自然0后，Mac25与Android15以准确 `2709aa558d0bc6dc453ceb49b10ba4b896e96e27` 构建。独立精简核包自然 exit0，完整外层 wall7.930828s；两个 manifest 各291输入 before/after/current/commit 逐字一致。准确产物与原始证据：[核包记录](../../verification/ui-hierarchy8081/native-independent/README.md)。
+
+Mac25 ZIP SHA `a097dfcd27bddac55af23d31f4a79065c3a4f4ebe840f5116689780fe7ef60a2`；Android15 APK SHA `0e52c5872c9d294808d9afa5752e29cb1d9bdeb7c8a15988f95bb236cfcce9ac`。Mac原构建app严格签名仍自然1，与构建原始记录一致；派生交付adhoc严格0。原/派生app清单、仅签名路径差异、Mach-O section内容、ZIP完整字节/权限、APK CRC/安全路径、包名/ABI/AArch64 ELF/v2签名均通过。三处实际binary嵌入JS/CSS逐字等冻结snapshot，HTML完整有序tokens等价，原HTML字节不同如实保留。
+
+未重跑旧79完整DEX/provider/OCR审计，没有安装/启动应用、设备、麦克风或用户数据操作。核包不替代实际渲染或像素验收。所有核包日志、驱动与小结果位于上述 native-independent，大提取物仅 artifacts/ui-hierarchy8081/verification-extract。根已安全清理本轮3个干净且合入主线的worktree/分支；独审无遗留进程，新增证据与报告未自行stage/commit，交根统一收尾。

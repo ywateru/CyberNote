@@ -1,8 +1,6 @@
 # 交付计划
 
-2026-11-06：[空间总览81](tasks/app-storage-overview81.md)按用户新增参考图开发，与[预览80](tasks/app-image-preview80.md)共享原生层状态，产品文件分离，集成与独审串行。
-
-2026-11-06：[图片预览与标题栏80](tasks/app-image-preview80.md)进行中，开发与独立复核串行，保留原Android录音现场。
+2026-11-06：[空间总览81](tasks/app-storage-overview81.md)、[图片预览与标题栏80](tasks/app-image-preview80.md)及[组合8081](tasks/app-ui-hierarchy8081.md)限定完成，最终ad3a069f经独审SOURCE-READY、主线356/9+43+197与build/production、Mac25/Android15准确构建/独立核包通过。[交付](../verification/ui-hierarchy8081/README.md)保留中间失败与真实边界；原Android现场保持，本轮3个已合隔离worktree/分支已清理。
 
 2026-11-06：[数据管理79](tasks/app-data-management79.md)已限定完成，[后端](tasks/app-data-management79-backend.md)/[前端](tasks/app-data-management79-ui.md)经独审SOURCE-READY、真实Rust→App成功与失败ACK验证、主线六项及Mac24/Android构建14准确构建/核包通过。详见[交付](../verification/data-management79/README.md)。原Android录音现场不动，原生provider/整窗像素及调试CLI性能波动继续单列。
 

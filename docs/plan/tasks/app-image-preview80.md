@@ -1,7 +1,7 @@
 ---
 id: app-image-preview80
 scope: desktop-titlebar-double-click-image-preview-layout-info-and-internal-save
-status: in-progress
+status: done
 depends-on: [app-data-management79]
 ---
 
@@ -20,3 +20,7 @@ src/Editor.tsx、use-attachment-media/预览模块与CSS、App/native toolbar桥
 # verification
 
 保全用户截图和修前可复现证据；桌面原生标题栏双击放大/再双击还原且按钮/输入不触发，普通拖动保留；原生toolbar与预览不叠加；真实DOM独立层/信息/无外部保存/窄屏与长文件名/浅深/焦点与Escape；保存原字节及取消/错误/重试/重复/撤权与Undo保持；prepare/锁定/跨笔记/源失效不残留portal或原生toolbar状态。主线build/production/桌面全组与相关手机组；准确Mac新包本地交付，原生与浏览器/核包/原版像素边界分开。
+
+# delivery
+
+2026-11-06限定完成。最终源码ad3a069f，组合44ea616b，独审SOURCE-READY且无未关闭blocking。主线六项自然0（desktop356/mobile9+43+197），准确Mac25/Android15构建及独立核包通过；原失败/日志/来源与未验收边界见[交付](../../verification/ui-hierarchy8081/README.md)和[独审](../reviews/app-ui-hierarchy8081.md)。本轮隔离worktree/分支clean且已合后正常清理，未动原Android录音现场。

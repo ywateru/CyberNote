@@ -4,7 +4,7 @@
 
 **当前是可运行开发版，尚未达到原版全部UI、交互及逐像素一致，完整目标仍在进行。** 需求、UI、调研及原视频保全见[文档索引](docs/INDEX.md)和[参考资料](references/README.md)，细分状态见[交付计划](docs/plan/README.md)。
 
-2026-11-06当前本地开发包为 **Mac24 / Android构建14**：[Mac ZIP](artifacts/data-management79/备忘录-Mac24.zip) / [Mac应用](artifacts/data-management79/备忘录.app) / [Android APK](artifacts/data-management79/备忘录-Android14.apk)。本轮修复附件添加全屏闪烁，新增图片原字节保存/预览导出及“数据管理”真实文件统计、筛选和完整备份导入导出。媒体继续独立文件存储。源码独审、真实Rust→App、主线桌面230/手机笔记9/录音43/附件75、构建/生产排除和双端独立核包已通过，见[交付与边界](docs/verification/data-management79/README.md)。Android未安装，原未保存录音现场保留；原生provider/整窗像素不由程序化结果代替。
+2026-11-06当前本地开发包为 **Mac25 / Android构建15**：[Mac ZIP](artifacts/ui-hierarchy8081/备忘录-Mac25.zip) / [Mac应用](artifacts/ui-hierarchy8081/备忘录.app) / [Android APK](artifacts/ui-hierarchy8081/备忘录-Android15.apk)。数据管理重组为总占用、分类容量条与可点击文件详情；图片信息和原图保存收进预览，并修复原生工具栏叠加、导出后键盘失焦及标题栏双击。主线桌面356/手机9+43+197、生产排除、真实AppKit/模型与双端独立核包通过，详见[本轮交付与边界](docs/verification/ui-hierarchy8081/README.md)。Android未安装，原录音现场保留；实包OS运行与原版整窗像素继续单独验收。
 
 2026-11-06历史 Mac 本地开发包为 **Mac22**：[ZIP](artifacts/mac-feedback77/备忘录-Mac22.zip) / [应用](artifacts/mac-feedback77/备忘录.app)。已包含用户截图的三处修正：移除侧栏底部新建文件夹、列表右键按鼠标位置弹出并处理边界、全局搜索的标题与摘要命中橙黄高亮。窄列表命中可见、连续文字字距和正文find独立经复核；主线桌面148/手机笔记9/录音43/附件43及build/production全部通过，见[整合记录](docs/verification/mac-feedback77/integration/README.md)。准确当前源码已本地构建并严格adhoc验签；原生窗口运行和整窗原版像素继续单独验收。Android新设备验收继续待任务76，原未保存录音现场保留。
 
