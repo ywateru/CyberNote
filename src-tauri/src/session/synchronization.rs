@@ -242,6 +242,11 @@ impl Session {
             note_epoch: None,
         }
     }
+    pub(crate) fn sync_media_keep_all(&self) -> Option<&str> {
+        self.quiet.current.as_ref().and_then(|q| q.resolution.as_ref())
+            .filter(|r| r.keep_all && r.kind == EntityKind::Note)
+            .map(|r| r.entity_id.as_str())
+    }
     pub(crate) fn sync_has_operation(&self) -> bool {
         self.quiet.current.is_some()
     }

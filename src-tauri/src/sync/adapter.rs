@@ -809,7 +809,7 @@ impl Runtime {
                     || (self.active.load(Ordering::Acquire) && s.store.sync_pending_count()? > 0))
             {
                 Ok(Some((
-                    s.store.sync_media_snapshot(&[], false)?,
+                    s.store.sync_media_snapshot(&[], false)?.reserve_keep_all(s.sync_media_keep_all()),
                     s.sync_media_token(),
                 )))
             } else {

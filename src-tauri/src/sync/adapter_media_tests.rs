@@ -141,6 +141,13 @@ fn real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive() {
     assert_eq!(result.unwrap_err(), SyncError::PlanStale);
     assert!(shared.0.lock().unwrap().store.note(&id).unwrap().pinned);
     make_backend().flush().unwrap();
+    // A new attachment ID with the same real64MiB blob requires an independent
+    // prepared publication, rather than reusing the already-present old path.
+    let replacement = remote
+        .store_attachment(&id, "new-path.png", "image/png", vec![7; 64 * 1024 * 1024])
+        .unwrap();
+    let revision = remote.note(&id).unwrap().revision;
+    remote.action(json!({"type":"saveNote","id":id,"revision":revision,"document":{"type":"doc","content":[{"type":"attachment","attrs":{"id":replacement.id,"kind":"image","name":"new-path.png"}}]}})).unwrap();
     remote
         .action(json!({"type":"patchNote","id":id,"title":"remote metadata"}))
         .unwrap();

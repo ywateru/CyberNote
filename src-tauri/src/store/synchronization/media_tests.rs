@@ -112,7 +112,7 @@ fn immutable_sha_cache_reuses_file_only_and_never_generation_or_missing_proof() 
     assert!(s.sync_media_snapshot(&[], false).unwrap().verify().is_err());
 }
 #[test]
-fn controlled_hard_links_have_unique_paths_repeat_safely_and_refresh_own_identity() {
+fn prepared_copies_have_unique_inodes_repeat_safely_and_preserve_other_proofs() {
     let (_d, mut s, id, _) = setup();
     s.sync_flush().unwrap();
     let v = s
@@ -126,7 +126,12 @@ fn controlled_hard_links_have_unique_paths_repeat_safely_and_refresh_own_identit
         .unwrap()
         .1
         .remove(0);
-    let media = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
+    let media = s
+        .sync_media_snapshot(&[], false)
+        .unwrap()
+        .reserve_keep_all(Some(&id))
+        .verify()
+        .unwrap();
     s.sync_begin_media(media).unwrap();
     a.id = uuid::Uuid::new_v4().to_string();
     let first = s.sync_media.as_ref().unwrap().materialize(&a).unwrap();
@@ -146,7 +151,7 @@ fn controlled_hard_links_have_unique_paths_repeat_safely_and_refresh_own_identit
     #[cfg(unix)]
     {
         use std::os::unix::fs::MetadataExt;
-        assert_eq!(
+        assert_ne!(
             fs::metadata(&one).unwrap().ino(),
             fs::metadata(&blob).unwrap().ino()
         );
@@ -154,7 +159,7 @@ fn controlled_hard_links_have_unique_paths_repeat_safely_and_refresh_own_identit
     fs::remove_file(&one).unwrap();
     assert_eq!(fs::read(&two).unwrap(), vec![7; 4096]);
     assert_eq!(fs::read(&blob).unwrap(), vec![7; 4096]);
-    assert!(!s.sync_media_cache[&two].current(&two));
+    assert!(s.sync_media_cache[&two].current(&two));
     let refreshed = VerifiedFile::read(&two, &s.sync_media_cache).unwrap();
     assert!(refreshed.current(&two));
 }
@@ -208,4 +213,181 @@ fn different_peer_stales_preparation_and_sql_failure_preserves_inbox_for_retry()
         .unwrap();
     assert_eq!(s.sync_pending_count().unwrap(), 0);
     assert!(s.note(&id).is_ok());
+}
+
+fn stage_paths(s: &Store) -> Vec<PathBuf> {
+    fs::read_dir(s.root.join("attachments"))
+        .unwrap()
+        .map(|e| e.unwrap().path())
+        .filter(|p| {
+            p.file_name()
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .starts_with(".sync91-stage-")
+        })
+        .collect()
+}
+fn prepared_wire(s: &mut Store, id: &str) -> WireAttachment {
+    s.sync_flush().unwrap();
+    let v = s
+        .sync_inventory()
+        .unwrap()
+        .into_iter()
+        .find(|v| v.entity_id == id)
+        .unwrap();
+    let wire = s.sync_version(&v.digest).unwrap();
+    validation::note_payload(wire.payload.as_ref().unwrap())
+        .unwrap()
+        .1
+        .remove(0)
+}
+#[test]
+fn staged_copies_drop_on_abort_and_reuse_present_destination_without_new_copy() {
+    let (_d, mut s, id, _) = setup();
+    let a = prepared_wire(&mut s, &id);
+    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
+    assert_eq!(stage_paths(&s).len(), 1);
+    drop(snapshot);
+    assert!(stage_paths(&s).is_empty());
+    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
+    s.action(json!({"type":"patchNote","id":id,"pinned":true}))
+        .unwrap();
+    assert_eq!(
+        s.sync_begin_media(snapshot).unwrap_err().code,
+        "sync_plan_stale"
+    );
+    assert!(stage_paths(&s).is_empty());
+    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
+    s.sync_with_media(snapshot, |s| {
+        s.sync_media.as_ref().unwrap().materialize(&a)?;
+        Ok(())
+    })
+    .unwrap();
+    assert!(stage_paths(&s).is_empty());
+    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
+    assert!(stage_paths(&s).is_empty());
+    drop(snapshot);
+}
+#[test]
+fn atomic_publication_refuses_racing_destination_and_never_follows_symlink() {
+    for symlink in [false, true] {
+        let (_d, mut s, id, _) = setup();
+        let a = prepared_wire(&mut s, &id);
+        let destination = s
+            .attachment_path(&validation::attachment(&a).relative_path)
+            .unwrap();
+        let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
+        s.sync_begin_media(snapshot).unwrap();
+        let sentinel = s.root.join("sentinel");
+        fs::write(&sentinel, b"must survive").unwrap();
+        if symlink {
+            #[cfg(unix)]
+            std::os::unix::fs::symlink(&sentinel, &destination).unwrap();
+        } else {
+            fs::write(&destination, b"must survive").unwrap();
+        }
+        assert_eq!(
+            s.sync_media
+                .as_ref()
+                .unwrap()
+                .materialize(&a)
+                .err()
+                .unwrap()
+                .code,
+            "sync_media_publish"
+        );
+        assert_eq!(fs::read(&destination).unwrap(), b"must survive");
+        assert_eq!(fs::read(&sentinel).unwrap(), b"must survive");
+        s.sync_end_media();
+        assert!(stage_paths(&s).is_empty());
+    }
+}
+#[test]
+fn staged_tamper_and_parent_replacement_stale_without_publishing_or_leaking_owned_stage() {
+    let (_d, mut s, id, _) = setup();
+    let a = prepared_wire(&mut s, &id);
+    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
+    s.sync_begin_media(snapshot).unwrap();
+    fs::write(&stage_paths(&s)[0], vec![9; 4096]).unwrap();
+    assert_eq!(
+        s.sync_media
+            .as_ref()
+            .unwrap()
+            .materialize(&a)
+            .err()
+            .unwrap()
+            .code,
+        "sync_plan_stale"
+    );
+    s.sync_end_media();
+    assert!(stage_paths(&s).is_empty());
+    let snapshot = s.sync_media_snapshot(&[], false).unwrap().verify().unwrap();
+    let old = s.root.join("attachments-old");
+    fs::rename(s.root.join("attachments"), &old).unwrap();
+    fs::create_dir(s.root.join("attachments")).unwrap();
+    let sentinel = s.root.join("attachments/.sync91-stage-user.part");
+    fs::write(&sentinel, b"untouched").unwrap();
+    assert_eq!(
+        s.sync_begin_media(snapshot).unwrap_err().code,
+        "sync_plan_stale"
+    );
+    assert_eq!(fs::read(&sentinel).unwrap(), b"untouched");
+    assert!(fs::read_dir(&old).unwrap().all(|e| !e
+        .unwrap()
+        .file_name()
+        .to_str()
+        .unwrap()
+        .starts_with(".sync91-stage-")));
+}
+#[test]
+fn prepared_keep_all_publishes_new_ids_with_original_media_bytes() {
+    let (_d, mut s, id, _) = setup();
+    s.sync_flush().unwrap();
+    let version = s
+        .sync_inventory()
+        .unwrap()
+        .into_iter()
+        .find(|v| v.entity_id == id)
+        .unwrap();
+    let original = s.sync_version(&version.digest).unwrap();
+    let mut concurrent = original.clone();
+    concurrent.vector = BTreeMap::from([(uuid::Uuid::new_v4().to_string(), 1)]);
+    concurrent.payload.as_mut().unwrap()["note"]["pinned"] = json!(true);
+    concurrent = concurrent.seal();
+    s.sync_receive(vec![concurrent]).unwrap();
+    s.sync_apply_pending().unwrap();
+    assert_eq!(s.sync_conflicts().unwrap().len(), 1);
+    let snapshot = s
+        .sync_media_snapshot(&[], false)
+        .unwrap()
+        .reserve_keep_all(Some(&id))
+        .verify()
+        .unwrap();
+    s.sync_with_media(snapshot, |s| {
+        s.sync_resolve(EntityKind::Note, &id, &original.digest, true)
+    })
+    .unwrap();
+    assert_eq!(s.notes().unwrap().len(), 2);
+    let attachments = s.attachments().unwrap();
+    let referenced = s
+        .notes()
+        .unwrap()
+        .iter()
+        .flat_map(|n| validation::references(&n.document))
+        .collect::<HashSet<_>>();
+    let media = attachments
+        .iter()
+        .filter(|a| referenced.contains(&a.id))
+        .collect::<Vec<_>>();
+    assert_eq!(media.len(), 2);
+    assert_ne!(media[0].id, media[1].id);
+    assert_ne!(media[0].relative_path, media[1].relative_path);
+    for a in media {
+        assert_eq!(
+            fs::read(s.attachment_path(&a.relative_path).unwrap()).unwrap(),
+            vec![7; 4096]
+        );
+    }
+    assert!(stage_paths(&s).is_empty());
 }

@@ -10,6 +10,8 @@ use std::{
 mod blob;
 #[path = "synchronization/media.rs"]
 pub(crate) mod media;
+#[path = "synchronization/publication.rs"]
+mod publication;
 #[path = "synchronization/projection.rs"]
 mod projection;
 #[path = "synchronization/schema.rs"]

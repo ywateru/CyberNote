@@ -4,24 +4,24 @@ use super::*;
 use sha2::{Digest, Sha256};
 use std::{cell::RefCell, fs::File, sync::Arc, time::SystemTime};
 
-fn stale() -> AppError {
+pub(super) fn stale() -> AppError {
     err("sync_plan_stale", "同步媒体快照已变化，请重新准备")
 }
 #[derive(Clone, PartialEq, Eq)]
-struct Stamp {
-    size: u64,
-    modified: Option<SystemTime>,
+pub(super) struct Stamp {
+    pub(super) size: u64,
+    pub(super) modified: Option<SystemTime>,
     #[cfg(unix)]
-    dev: u64,
+    pub(super) dev: u64,
     #[cfg(unix)]
-    ino: u64,
+    pub(super) ino: u64,
     #[cfg(unix)]
-    ctime: (i64, i64),
+    pub(super) ctime: (i64, i64),
     #[cfg(unix)]
-    links: u64,
+    pub(super) links: u64,
 }
 impl Stamp {
-    fn of(meta: &fs::Metadata) -> Result<Self> {
+    pub(super) fn of(meta: &fs::Metadata) -> Result<Self> {
         if !meta.is_file() || meta.file_type().is_symlink() || meta.len() > MAX_BLOB {
             return Err(invalid("媒体凭据不是有界本地普通文件"));
         }
@@ -43,12 +43,12 @@ impl Stamp {
 }
 #[derive(Clone)]
 pub(crate) struct VerifiedFile {
-    file: Arc<File>,
-    stamp: Stamp,
-    hash: String,
+    pub(super) file: Arc<File>,
+    pub(super) stamp: Stamp,
+    pub(super) hash: String,
 }
 impl VerifiedFile {
-    fn current(&self, path: &Path) -> bool {
+    pub(super) fn current(&self, path: &Path) -> bool {
         let check = || -> Result<bool> {
             Ok(Stamp::of(&fs::symlink_metadata(path)?)? == self.stamp
                 && Stamp::of(&self.file.metadata()?)? == self.stamp)
@@ -99,6 +99,8 @@ pub(crate) struct MediaSnapshot {
     locals: BTreeMap<String, Local>,
     references: BTreeMap<String, u64>,
     targets: BTreeMap<PathBuf, (String, u64)>,
+    candidates: BTreeMap<String, BTreeMap<String, usize>>,
+    keep_all: Option<String>,
     cache: BTreeMap<PathBuf, VerifiedFile>,
 }
 pub(crate) struct VerifiedMedia {
@@ -108,6 +110,8 @@ pub(crate) struct VerifiedMedia {
     absent: BTreeSet<PathBuf>,
     locals: BTreeMap<String, (String, u64)>,
     blobs: BTreeMap<String, (u64, bool)>,
+    directory: Arc<super::publication::Directory>,
+    staged: RefCell<BTreeMap<String, Vec<super::publication::Staged>>>,
 }
 impl Store {
     fn media_generation(&self) -> Result<String> {
@@ -182,6 +186,7 @@ impl Store {
         }
         let mut references = BTreeMap::new();
         let mut targets = BTreeMap::new();
+        let mut candidates: BTreeMap<String, BTreeMap<String, usize>> = BTreeMap::new();
         for wire in wires {
             // Redacted heads have no payload. Their replacement dirty rows are
             // captured above; incoming wire already passed the complete schema gate.
@@ -195,6 +200,14 @@ impl Store {
                 vec![]
             };
             for a in media {
+                let count = candidates
+                    .entry(wire.entity_id.clone())
+                    .or_default()
+                    .entry(a.sha256.clone())
+                    .or_default();
+                *count = count
+                    .checked_add(1)
+                    .ok_or_else(|| limit("媒体候选数量溢出"))?;
                 if references
                     .insert(a.sha256.clone(), a.size)
                     .is_some_and(|s| s != a.size)
@@ -232,6 +245,8 @@ impl Store {
             locals,
             references,
             targets,
+            candidates,
+            keep_all: None,
             cache: self.sync_media_cache.clone(),
         })
     }
@@ -280,8 +295,15 @@ impl Store {
     }
 }
 impl MediaSnapshot {
+    /// Reserve independent byte capabilities for IDs created by keep-all inside
+    /// the eventual transaction. No extra copies for ordinary quiet ticks.
+    pub(crate) fn reserve_keep_all(mut self, note: Option<&str>) -> Self {
+        self.keep_all = note.map(str::to_string);
+        self
+    }
     /// Owns only root/file capabilities and metadata; never owns Session/SQLite.
     pub(crate) fn verify(self) -> Result<VerifiedMedia> {
+        let directory = super::publication::Directory::open(self.root.join("attachments"))?;
         let mut verified = VerifiedMedia {
             generation: self.generation,
             root: self.root.clone(),
@@ -289,6 +311,8 @@ impl MediaSnapshot {
             absent: BTreeSet::new(),
             locals: BTreeMap::new(),
             blobs: BTreeMap::new(),
+            directory,
+            staged: RefCell::new(BTreeMap::new()),
         };
         for (relative, job) in &self.locals {
             let path = self.root.join("attachments").join(relative);
@@ -374,6 +398,18 @@ impl MediaSnapshot {
             verified.files.borrow_mut().insert(path, proof);
             verified.blobs.insert(hash.clone(), (*size, true));
         }
+        let mut demand: BTreeMap<String, usize> = BTreeMap::new();
+        if let Some(note) = &self.keep_all {
+            demand = self.candidates.get(note).cloned().unwrap_or_default();
+            // A dirty local head can be captured by flush inside the transaction.
+            // Reserve its actual local media as well, never just old wire heads.
+            for (relative, job) in &self.locals {
+                if &job.attachment.note_id == note {
+                    let hash = &verified.locals[relative].0;
+                    *demand.entry(hash.clone()).or_default() += 1;
+                }
+            }
+        }
         for (path, (hash, size)) in self.targets {
             match fs::symlink_metadata(&path) {
                 Ok(_) => {
@@ -385,8 +421,52 @@ impl MediaSnapshot {
                 }
                 Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
                     verified.absent.insert(path);
+                    *demand.entry(hash).or_default() += 1;
                 }
                 Err(e) => return Err(e.into()),
+            }
+        }
+        let (existing_bytes, mut count) = verified.directory.stale_allocation()?;
+        let mut bytes = 0u64;
+        for (hash, copies) in &demand {
+            let Some((size, true)) = verified.blobs.get(hash) else {
+                continue;
+            };
+            count = count
+                .checked_add(*copies)
+                .ok_or_else(|| limit("媒体临时数量溢出"))?;
+            bytes = bytes
+                .checked_add(
+                    size.checked_mul(*copies as u64)
+                        .ok_or_else(|| limit("媒体临时预算溢出"))?,
+                )
+                .ok_or_else(|| limit("媒体临时预算溢出"))?;
+        }
+        if count > 65536
+            || bytes.saturating_add(existing_bytes) > 4 * 1024 * 1024 * 1024u64
+            || fs2::available_space(&self.root)?.saturating_sub(bytes) < 256 * 1024 * 1024
+        {
+            return Err(limit("同步媒体临时空间超限"));
+        }
+        for (hash, copies) in demand {
+            if !verified
+                .blobs
+                .get(&hash)
+                .is_some_and(|(_, present)| *present)
+            {
+                continue;
+            }
+            let path = verified.blob_path(&hash)?;
+            let source = verified.files.borrow()[&path].clone();
+            for _ in 0..copies {
+                let staged =
+                    super::publication::Staged::copy(verified.directory.clone(), &source, &path)?;
+                verified
+                    .staged
+                    .borrow_mut()
+                    .entry(hash.clone())
+                    .or_default()
+                    .push(staged);
             }
         }
         verified.validate()?;
@@ -410,6 +490,10 @@ impl VerifiedMedia {
         VerifiedFile::read(path, cache)
     }
     fn validate(&self) -> Result<()> {
+        self.directory.validate()?;
+        for stage in self.staged.borrow().values().flatten() {
+            stage.validate()?;
+        }
         for path in [
             self.root.join("attachments"),
             self.root.join(".sync"),
@@ -454,6 +538,7 @@ impl VerifiedMedia {
         }
     }
     pub(super) fn materialize(&self, a: &WireAttachment) -> Result<Attachment> {
+        self.directory.validate()?;
         let local = validation::attachment(a);
         let destination = self.root.join("attachments").join(&local.relative_path);
         if let Some(proof) = self.files.borrow().get(&destination) {
@@ -473,36 +558,19 @@ impl VerifiedMedia {
         if !proof.current(&source) || proof.hash != a.sha256 || proof.stamp.size != a.size {
             return Err(stale());
         }
-        // A new keep-all ID has no previous destination; hard_link refuses any
-        // existing path atomically. No whole-file fallback is permitted here.
-        fs::hard_link(&source, &destination)
-            .map_err(|_| err("sync_media_publish", "无法原子发布独立附件路径"))?;
-        let after = Stamp::of(&proof.file.metadata()?)?;
-        let destination_stamp = Stamp::of(&fs::symlink_metadata(&destination)?)?;
-        // Only this exact link-count increment may refresh our own proofs.
-        // Every content identity field remains unchanged; all other changes
-        // invalidate the scope instead of blessing arbitrary external writes.
-        let mut expected = proof.stamp.clone();
-        #[cfg(unix)]
-        {
-            expected.links = expected.links.checked_add(1).ok_or_else(stale)?;
-            expected.ctime = after.ctime;
-        }
-        if after != expected || destination_stamp != after {
-            return Err(stale());
-        }
-        let mut files = self.files.borrow_mut();
-        for old in files.values_mut().filter(|old| old.stamp == proof.stamp) {
-            old.stamp = after.clone();
-        }
-        files.insert(
-            destination,
-            VerifiedFile {
-                stamp: after,
-                ..proof
-            },
-        );
-        blob::sync_dir(&self.root.join("attachments"))?;
+        // Every byte was copied and verified outside the Session gate. The
+        // reserved capability also covers new keep-all IDs not known in advance.
+        self.directory.validate()?;
+        let stage = self
+            .staged
+            .borrow_mut()
+            .get_mut(&a.sha256)
+            .and_then(Vec::pop)
+            .ok_or_else(stale)?;
+        let published = stage.publish(&destination)?;
+        self.files
+            .borrow_mut()
+            .insert(destination.clone(), published);
         Ok(local)
     }
 }
