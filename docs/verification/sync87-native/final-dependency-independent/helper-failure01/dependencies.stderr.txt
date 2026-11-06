@@ -1,0 +1,40 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  Comparison {
++   message: 'Frozen DOM dependency changed\n' +
++     '+ actual - expected\n' +
++     '\n' +
++     "+ '2dfbe6b29f0ec267da22761c62f39db3a90a2d1fb3bc0c44bcae8e9ca965a70f'\n" +
++     "- 'f6d84cfc6b48a33b4d8c12c98e84e8635dd093b507ccdca87539b12c4b092618'\n"
+-   message: 'Frozen DOM dependency changed'
+  }
+
+    at async file:///private/tmp/apple-notes-sync87-native/docs/verification/sync87-native/final-dependency-independent/dependencies.mjs:27:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: AssertionError [ERR_ASSERTION]: Frozen DOM dependency changed
+  + actual - expected
+  
+  + '2dfbe6b29f0ec267da22761c62f39db3a90a2d1fb3bc0c44bcae8e9ca965a70f'
+  - 'f6d84cfc6b48a33b4d8c12c98e84e8635dd093b507ccdca87539b12c4b092618'
+  
+      at verifyDOMDependencies (file:///private/tmp/apple-notes-sync87-native/scripts/debug/sync87-native/desktop-peer.mjs:14:118)
+      at async waitForActual (node:assert:566:5)
+      at async Function.rejects (node:assert:687:25)
+      at async file:///private/tmp/apple-notes-sync87-native/docs/verification/sync87-native/final-dependency-independent/dependencies.mjs:27:3 {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '2dfbe6b29f0ec267da22761c62f39db3a90a2d1fb3bc0c44bcae8e9ca965a70f',
+    expected: 'f6d84cfc6b48a33b4d8c12c98e84e8635dd093b507ccdca87539b12c4b092618',
+    operator: 'strictEqual'
+  },
+  expected: { message: 'Frozen DOM dependency changed' },
+  operator: 'rejects'
+}
+
+Node.js v22.16.0

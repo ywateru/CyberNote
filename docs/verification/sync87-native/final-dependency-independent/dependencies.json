@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "checks": [
+    "Exact three reviewed dependency entries, no additions or omissions",
+    "Current candidate admitted with exact b08c7728 source label",
+    "Complete byte-identical owned snapshot admitted",
+    "One-bit corruption rejected: scripts/debug/runtime.mjs",
+    "One-bit corruption rejected: scripts/debug/rust-backend.mjs",
+    "One-bit corruption rejected: scripts/debug/sync-rust-dom.mjs"
+  ],
+  "passed": 6,
+  "sourceBefore": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "6b143fb87d3cbf6b5ca8b44e912c2a21a0e857d817a8569ff05bea09178105f9",
+    "fileCount": 153,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "6b143fb87d3cbf6b5ca8b44e912c2a21a0e857d817a8569ff05bea09178105f9",
+    "fileCount": 153,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "reviewedReceiptPath": "/private/tmp/sync87-peer-final11/receipt.json",
+  "reviewed": {
+    "receipt": {
+      "authorizedBy": "root-sync87-peer-review",
+      "binary": "/private/tmp/sync86-transport-build11/notes-current-attachment-transport",
+      "sha256": "333fcd44e19ebbd30ece11b7a595816249a9458a46fb03523855ae8c51215800",
+      "sourceCommit": "cd334bc88513a89c490788d2e2e27c7967575f4a",
+      "buildLabel": "build11"
+    },
+    "identity": {
+      "device": 16777233,
+      "inode": 34742252,
+      "size": 25614448
+    }
+  },
+  "ownedSnapshotRemoved": true,
+  "noPeerSpawn": true,
+  "noAndroidOrAdb": true
+}
