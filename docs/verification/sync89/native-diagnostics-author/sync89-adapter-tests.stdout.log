@@ -1,0 +1,38 @@
+
+running 17 tests
+test sync::adapter::local_stage_budget_tests::local_capture_stage_allows_only_one_serial_file ... ok
+test sync::adapter::publication_tests::controlled_stage_rename_reuses_inode_duplicate_cleanup_and_bad_cache_are_safe ... ok
+test sync::adapter::allocation_tests::all_media_cache_budget_and_same_vector_equivocation_fail_before_allocation ... ok
+test sync::adapter::tests::blob_file_operations_do_not_require_session_guard_and_receive_is_only_durable ... ok
+test sync::adapter::allocation_tests::locked_media_is_rejected_at_existing_business_and_wire_boundaries ... ok
+test sync::adapter::tests::required_blobs_fully_validates_before_allocating_and_adapts_hash_to_sha256 ... ok
+test sync::adapter::tests::strict_command_allowlist_and_token_reject_unknown_or_remote_fields ... ok
+test sync::adapter::tests::cold_failed_pair_device_is_reused_and_enabled_identity_drift_is_rejected ... ok
+test sync::adapter::tests::identity_read_only_selector_and_disabled_status_have_no_filesystem_opt_in ... ok
+test sync::adapter::tests::trusted_diagnostics_read_requires_window_token_and_has_no_opt_in_or_mutation ... ok
+RESOLVE_RECEIPT keep_all=false commit_count=1 original_epoch=1 final_epoch=2 returned_success=true all_copies_decrypt=true
+test sync::adapter::resolve_tests::locked_keep_one_returns_committed_rows_after_real_epoch_change ... ok
+AUTO_STALE_EVENT phase="probe" outcome=null
+RESOLVE_RECEIPT keep_all=true commit_count=1 original_epoch=1 final_epoch=2 returned_success=false all_copies_decrypt=true
+test sync::adapter::resolve_tests::committed_resolve_rejects_closed_current_window ... ok
+RESOLVE_RECEIPT keep_all=true commit_count=1 original_epoch=1 final_epoch=2 returned_success=false all_copies_decrypt=true
+test sync::adapter::resolve_tests::committed_resolve_rejects_reopened_store_in_same_session ... ok
+RESOLVE_RECEIPT keep_all=true commit_count=1 original_epoch=1 final_epoch=1 returned_success=false all_copies_decrypt=true
+test sync::adapter::resolve_tests::committed_resolve_rejects_replaced_session ... ok
+RESOLVE_RECEIPT keep_all=true commit_count=1 original_epoch=1 final_epoch=2 returned_success=true all_copies_decrypt=true
+test sync::adapter::resolve_tests::locked_keep_all_returns_committed_rows_after_real_epoch_change ... ok
+AUTO_STALE_EVENT phase="prepare" outcome=null
+AUTO_STALE_EVENT phase="release" outcome="commit"
+AUTO_STALE_RECOVERY actual_foreground_edit=true rejected=1 flush_attempts=2 automatic_reconnect=true quiet_commit=true both_dirty=0 both_inbox=0
+test sync::adapter::retry_tests::actual_store_stale_automatically_reconnects_and_quiet_converges_dirty_and_inbox ... ok
+MEDIA_RESPONSE name=cold_required_blobs_stale wall_ms=4331 foreground_reads=1388 ordinary_writes=1 max_us=475 p99_us=185
+MEDIA_RESPONSE name=cold_flush_capture_stale wall_ms=6651 foreground_reads=2129 ordinary_writes=1 max_us=1087 p99_us=349
+test sync::adapter::media_tests::real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive has been running for over 60 seconds
+MEDIA_RESPONSE name=cold_receive wall_ms=4326 foreground_reads=1386 ordinary_writes=0 max_us=536 p99_us=164
+MEDIA_RESPONSE name=cold_quiet_prepare wall_ms=4326 foreground_reads=1386 ordinary_writes=0 max_us=755 p99_us=162
+MEDIA_RESPONSE name=cached_quiet_plan wall_ms=3 foreground_reads=1 ordinary_writes=0 max_us=778 p99_us=778
+MEDIA_RESPONSE name=cached_quiet_apply wall_ms=7 foreground_reads=2 ordinary_writes=0 max_us=691 p99_us=328
+test sync::adapter::media_tests::real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 164 filtered out; finished in 72.11s
+

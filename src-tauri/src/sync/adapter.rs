@@ -6,7 +6,7 @@ use super::{
 };
 use crate::{
     session::{
-        synchronization::{Resolution, WindowReply},
+        synchronization::{AbortReason, Resolution, WindowReply},
         Session, Token,
     },
     store::{AppError, Result, Store},
@@ -605,7 +605,7 @@ impl Runtime {
                             .0
                             .lock()
                             .map_err(|_| error("sync_internal"))?
-                            .sync_abort();
+                            .sync_abort_reason(AbortReason::EmitError);
                         return Err(e);
                     }
                     let deadline = Instant::now() + Duration::from_secs(11);
@@ -794,6 +794,11 @@ impl Runtime {
         s.sync_check_window(window, &live, expected)?;
         s.sync_reply(window, reply, expected)
     }
+    pub(crate) fn diagnostics(&self, window: &str, expected: &Token) -> Result<Value> {
+        let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+        s.sync_check_window(window, &self.host.participants(), expected)?;
+        Ok(s.sync_diagnostics())
+    }
     fn coordinate(&self) {
         // No runtime lock is required while waiting for renderers. A network
         // pair command can remain in flight while stdin/IPC processes replies.
@@ -824,13 +829,17 @@ impl Runtime {
                     match s.store.sync_begin_media(media) {
                         Ok(()) => true,
                         Err(_) => {
-                            s.sync_abort();
+                            s.sync_abort_reason(AbortReason::MediaInstallError);
                             false
                         }
                     }
                 }
-                Err(_) | Ok(Some(_)) => {
-                    s.sync_abort();
+                Err(_) => {
+                    s.sync_abort_reason(AbortReason::MediaPrepareError);
+                    false
+                }
+                Ok(Some(_)) => {
+                    s.sync_abort_reason(AbortReason::MediaAuthorityChanged);
                     false
                 }
                 Ok(None) => false,
@@ -838,7 +847,7 @@ impl Runtime {
             let outcome = (|| -> Result<_> {
                 let tick = s.sync_tick(&live);
                 if tick.is_err() {
-                    s.sync_abort();
+                    s.sync_abort_reason(AbortReason::EvaluationError);
                 }
                 let mut events = vec![];
                 match tick {
@@ -886,7 +895,7 @@ impl Runtime {
             for (name, event) in events {
                 if self.host.emit(name, &event).is_err() {
                     if let Ok(mut s) = self.shared.0.lock() {
-                        s.sync_abort();
+                        s.sync_abort_reason(AbortReason::EmitError);
                     }
                 }
             }
@@ -970,6 +979,33 @@ mod tests {
     fn token(s: &SharedSession) -> Token {
         serde_json::from_value(json!({"sessionId":s.0.lock().unwrap().sync_session_id(),"epoch":1}))
             .unwrap()
+    }
+    #[test]
+    fn trusted_diagnostics_read_requires_window_token_and_has_no_opt_in_or_mutation() {
+        let d = tempfile::tempdir().unwrap();
+        let shared = shared(d.path());
+        let runtime =
+            Runtime::new(shared.clone(), d.path().to_path_buf(), Arc::new(Windows)).unwrap();
+        let expected = token(&shared);
+        let before = shared.0.lock().unwrap().workspace().unwrap();
+        let first = runtime.diagnostics("main", &expected).unwrap();
+        assert_eq!(first["version"], 1);
+        assert_eq!(first["commits"], 0);
+        assert_eq!(first["aborts"], 0);
+        assert_eq!(first, runtime.diagnostics("main", &expected).unwrap());
+        assert!(!d.path().join(".sync").exists());
+        assert!(runtime.diagnostics("foreign-window", &expected).is_err());
+        let mut stale = expected.clone();
+        stale.epoch += 1;
+        assert!(runtime.diagnostics("main", &stale).is_err());
+        let mut foreign = expected.clone();
+        foreign.session_id = "foreign".into();
+        assert!(runtime.diagnostics("main", &foreign).is_err());
+        assert_eq!(shared.0.lock().unwrap().workspace().unwrap(), before);
+        assert_eq!(first, runtime.diagnostics("main", &expected).unwrap());
+        assert!(runtime.inner.lock().unwrap().identity.is_none());
+        assert!(runtime.inner.lock().unwrap().service.is_none());
+        runtime.shutdown().unwrap();
     }
     #[test]
     fn identity_read_only_selector_and_disabled_status_have_no_filesystem_opt_in() {

@@ -40,6 +40,14 @@ async fn sync_command(
         .map_err(|_| failure("同步命令执行失败"))?
 }
 #[tauri::command]
+fn sync_diagnostics(
+    expected: Token,
+    window: tauri::WebviewWindow,
+    state: State<SyncState>,
+) -> Result<Value> {
+    state.0.diagnostics(window.label(), &expected)
+}
+#[tauri::command]
 fn sync_window_reply(
     reply: session::synchronization::WindowReply,
     expected: Token,
@@ -626,6 +634,7 @@ pub fn run() {
     let builder = builder.invoke_handler(tauri::generate_handler![
         load_workspace,
         sync_command,
+        sync_diagnostics,
         sync_window_reply,
         register_save_intent,
         acknowledge_access,
@@ -652,6 +661,7 @@ pub fn run() {
     let builder = builder.invoke_handler(tauri::generate_handler![
         load_workspace,
         sync_command,
+        sync_diagnostics,
         sync_window_reply,
         register_save_intent,
         acknowledge_access,

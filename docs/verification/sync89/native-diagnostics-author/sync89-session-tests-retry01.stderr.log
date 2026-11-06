@@ -1,0 +1,29 @@
+   Compiling notes-clone v0.1.0 (/private/tmp/apple-notes-viewport88/src-tauri)
+error: couldn't read `src/store/archive/../../../../docs/verification/qa-fix-00/schema-fixtures/inline-at-doc-root.notesbackup`: No such file or directory (os error 2)
+   --> src/store/archive/tests.rs:654:32
+    |
+654 | ...t-doc-root", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/inline-at-doc-root.notesbackup")),
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: couldn't read `src/store/archive/../../../../docs/verification/qa-fix-00/schema-fixtures/block-inside-paragraph.notesbackup`: No such file or directory (os error 2)
+   --> src/store/archive/tests.rs:655:36
+    |
+655 | ...aragraph", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/block-inside-paragraph.notesbackup")),
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: couldn't read `src/store/archive/../../../../docs/verification/qa-fix-00/schema-fixtures/paragraph-inside-table.notesbackup`: No such file or directory (os error 2)
+   --> src/store/archive/tests.rs:656:36
+    |
+656 | ...de-table", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/paragraph-inside-table.notesbackup")),
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: couldn't read `src/store/archive/../../../../docs/verification/qa-001/store-probes/fixtures/valid.notesbackup`: No such file or directory (os error 2)
+   --> src/store/archive/tests.rs:674:18
+    |
+674 |       let legacy = include_str!(
+    |  __________________^
+675 | |         "../../../../docs/verification/qa-001/store-probes/fixtures/valid.notesbackup"
+676 | |     );
+    | |_____^
+
+error: could not compile `notes-clone` (lib test) due to 4 previous errors

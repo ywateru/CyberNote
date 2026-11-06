@@ -1,0 +1,104 @@
+{
+  "baselineCommit": "5d600d7779802e0caea3f65c9aa7d88602895ab6",
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/apple-notes-sync84-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "productFiles": [
+    {
+      "path": "src-tauri/src/session/synchronization.rs",
+      "sha256": "69d7ecafcad9faa7148fe676770b3c090863a7727200f1095e180c238042444a"
+    },
+    {
+      "path": "src-tauri/src/sync/adapter.rs",
+      "sha256": "107077b88cd59728aaca583c0253abf29bbe67451e809f694664a4d96968d7d0"
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "sha256": "a1fa1edd1d7722299aa128b38a1a128c3ac017e02d49e4e9f627b686ba3d9701"
+    }
+  ],
+  "checks": [
+    {
+      "prefix": "sync89-session-tests",
+      "exitCode": 101,
+      "testCount": null,
+      "scope": "setup failure: missing existing sparse fixtures"
+    },
+    {
+      "prefix": "sync89-session-tests-retry01",
+      "exitCode": 101,
+      "testCount": null,
+      "scope": "setup failure: four existing archive fixtures still sparse-excluded"
+    },
+    {
+      "prefix": "sync89-session-tests-retry02",
+      "exitCode": 0,
+      "testCount": 9,
+      "scope": "earlier pass before adding metadata-error assertion"
+    },
+    {
+      "prefix": "sync89-session-tests-final",
+      "exitCode": 0,
+      "testCount": 10,
+      "scope": "final Session affected group"
+    },
+    {
+      "prefix": "sync89-adapter-tests",
+      "exitCode": 0,
+      "testCount": 17,
+      "scope": "final adapter affected group",
+      "execution": {
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "src-tauri/Cargo.toml",
+          "--lib",
+          "sync::adapter",
+          "--",
+          "--nocapture"
+        ],
+        "exitCode": 0,
+        "wallSeconds": 88.89926983299999
+      }
+    },
+    {
+      "prefix": "sync89-tauri-check",
+      "exitCode": 0,
+      "testCount": null,
+      "scope": "normal handler compilation",
+      "execution": {
+        "command": [
+          "cargo",
+          "check",
+          "--manifest-path",
+          "src-tauri/Cargo.toml",
+          "--lib"
+        ],
+        "exitCode": 0,
+        "wallSeconds": 39.223672125
+      }
+    },
+    {
+      "prefix": "sync89-tauri-proof-check",
+      "exitCode": 0,
+      "testCount": null,
+      "scope": "access-boundary-proof handler compilation",
+      "execution": {
+        "command": [
+          "cargo",
+          "check",
+          "--manifest-path",
+          "src-tauri/Cargo.toml",
+          "--lib",
+          "--features",
+          "access-boundary-proof"
+        ],
+        "exitCode": 0,
+        "wallSeconds": 4.614720458
+      }
+    }
+  ]
+}

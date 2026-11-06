@@ -32,11 +32,66 @@ pub(crate) struct Resolution {
     pub digest: String,
     pub keep_all: bool,
 }
+/// Process-local diagnostics only: never persisted or used by the sync gate.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum AbortReason {
+    AuthorityChanged,
+    ParticipantChanged,
+    PendingBarrier,
+    Timeout,
+    ProbeBlocked,
+    PrepareNotReady,
+    ProtectedTarget,
+    NoEligiblePlan,
+    LocalIntent,
+    PlanChanged,
+    PlanStale,
+    PrepareMetadataError,
+    ApplyError,
+    EvaluationError,
+    MediaPrepareError,
+    MediaAuthorityChanged,
+    MediaInstallError,
+    EmitError,
+    ExternalAbort,
+}
+impl AbortReason {
+    const ALL: [Self; 19] = [
+        Self::AuthorityChanged,
+        Self::ParticipantChanged,
+        Self::PendingBarrier,
+        Self::Timeout,
+        Self::ProbeBlocked,
+        Self::PrepareNotReady,
+        Self::ProtectedTarget,
+        Self::NoEligiblePlan,
+        Self::LocalIntent,
+        Self::PlanChanged,
+        Self::PlanStale,
+        Self::PrepareMetadataError,
+        Self::ApplyError,
+        Self::EvaluationError,
+        Self::MediaPrepareError,
+        Self::MediaAuthorityChanged,
+        Self::MediaInstallError,
+        Self::EmitError,
+        Self::ExternalAbort,
+    ];
+}
+#[derive(Default)]
+struct DiagnosticCounts {
+    commits: u64,
+    aborts: u64,
+    latest_abort_reason: Option<AbortReason>,
+    reasons: [u64; 19],
+}
 #[derive(Default)]
 pub(super) struct QuietState {
     current: Option<Quiet>,
     completed: VecDeque<Terminal>,
     retry_after: Option<Instant>,
+    diagnostics: DiagnosticCounts,
 }
 struct Terminal {
     id: String,
@@ -54,6 +109,7 @@ struct Quiet {
     protected: HashSet<String>,
     phase: &'static str,
     aborted: bool,
+    abort_reason: Option<AbortReason>,
     started: Instant,
     plan: Option<SyncApplyPlan>,
     resolution: Option<Resolution>,
@@ -105,6 +161,7 @@ impl Session {
             protected: HashSet::new(),
             phase: "probe",
             aborted: false,
+            abort_reason: None,
             started: Instant::now(),
             plan: None,
             resolution,
@@ -135,6 +192,7 @@ impl Session {
         }
         if q.epoch != expected.epoch {
             q.aborted = true;
+            q.abort_reason.get_or_insert(AbortReason::AuthorityChanged);
             return Err(denied("同步授权已变化"));
         }
         match reply {
@@ -149,6 +207,7 @@ impl Session {
                         .any(|id| !crate::sync::model::valid_id(id))
                 {
                     q.aborted = true;
+                    q.abort_reason.get_or_insert(AbortReason::EvaluationError);
                     return Err(denied("同步保护集合无效"));
                 }
                 if !q.replies.insert(window.into()) {
@@ -156,6 +215,9 @@ impl Session {
                 }
                 q.protected.extend(protected_note_ids);
                 q.aborted |= blocked;
+                if blocked {
+                    q.abort_reason.get_or_insert(AbortReason::ProbeBlocked);
+                }
             }
             WindowReply::Prepare { ready, .. } if q.phase == "prepare" => {
                 // A participant may cancel after its ready ACK. The same Session
@@ -165,6 +227,7 @@ impl Session {
                 }
                 if !ready {
                     q.aborted = true;
+                    q.abort_reason.get_or_insert(AbortReason::PrepareNotReady);
                 }
             }
             _ => return Err(denied("同步回复阶段无效")),
@@ -203,9 +266,32 @@ impl Session {
         self.sync_check_window(window, live, &terminal.authority)
     }
     pub(crate) fn sync_abort(&mut self) {
+        self.sync_abort_reason(AbortReason::ExternalAbort);
+    }
+    pub(crate) fn sync_abort_reason(&mut self, reason: AbortReason) {
         if let Some(q) = &mut self.quiet.current {
             q.aborted = true;
+            q.abort_reason.get_or_insert(reason);
         }
+    }
+    fn sync_note_abort_reason(&mut self, reason: AbortReason) {
+        if let Some(q) = &mut self.quiet.current {
+            q.abort_reason.get_or_insert(reason);
+        }
+    }
+    fn sync_release_abort(&mut self, reason: AbortReason) -> Result<(Value, Option<Value>)> {
+        self.sync_note_abort_reason(reason);
+        self.sync_release("abort", None)
+    }
+    pub(crate) fn sync_diagnostics(&self) -> Value {
+        let d = &self.quiet.diagnostics;
+        let reasons: BTreeMap<_, _> = AbortReason::ALL
+            .into_iter()
+            .map(|reason| (reason, d.reasons[reason as usize]))
+            .collect();
+        json!({"version":1,"commits":d.commits,"aborts":d.aborts,
+            "latestAbortReason":d.latest_abort_reason,"abortReasons":reasons,
+            "activePhase":self.quiet.current.as_ref().map(|q|q.phase)})
     }
     pub(crate) fn sync_tick(
         &mut self,
@@ -214,21 +300,41 @@ impl Session {
         let Some(q) = self.quiet.current.as_ref() else {
             return Ok(None);
         };
-        if q.store_instance != self.store.sync_store_instance()
+        let store_changed = q.store_instance != self.store.sync_store_instance();
+        if store_changed
             || q.aborted
             || q.epoch != self.epoch
             || q.participants != *live
             || self.pending.is_some()
             || q.started.elapsed() >= Duration::from_secs(5)
         {
-            return self.sync_release("abort", None).map(Some);
+            let reason = if store_changed {
+                AbortReason::AuthorityChanged
+            } else if q.aborted {
+                q.abort_reason.unwrap_or(AbortReason::ExternalAbort)
+            } else if q.epoch != self.epoch {
+                AbortReason::AuthorityChanged
+            } else if q.participants != *live {
+                AbortReason::ParticipantChanged
+            } else if self.pending.is_some() {
+                AbortReason::PendingBarrier
+            } else {
+                AbortReason::Timeout
+            };
+            return self.sync_release_abort(reason).map(Some);
         }
         if q.replies != q.participants {
             return Ok(None);
         }
         if q.phase == "probe" {
             let protected: Vec<_> = q.protected.iter().cloned().collect();
-            let plan = self.store.sync_plan_apply(&protected)?;
+            let plan = match self.store.sync_plan_apply(&protected) {
+                Ok(plan) => plan,
+                Err(e) => {
+                    self.sync_note_abort_reason(AbortReason::EvaluationError);
+                    return Err(e);
+                }
+            };
             let mut targets = plan.targets.clone();
             if let Some(r) = &q.resolution {
                 // Folder resolution can reparent descendants and restore orphan
@@ -238,10 +344,14 @@ impl Session {
                     EntityKind::Folder => self.store.notes()?.into_iter().map(|n| n.id).collect(),
                 });
                 if targets.iter().any(|id| q.protected.contains(id)) {
-                    return self.sync_release("abort", None).map(Some);
+                    return self
+                        .sync_release_abort(AbortReason::ProtectedTarget)
+                        .map(Some);
                 }
             } else if plan.eligible_digests.is_empty() {
-                return self.sync_release("abort", None).map(Some);
+                return self
+                    .sync_release_abort(AbortReason::NoEligiblePlan)
+                    .map(Some);
             }
             targets.sort();
             targets.dedup();
@@ -264,14 +374,22 @@ impl Session {
             });
         }
         if self.intents.values().any(|i| targets.contains(&i.note)) {
-            return self.sync_release("abort", None).map(Some);
+            return self.sync_release_abort(AbortReason::LocalIntent).map(Some);
         }
         let plan = q.plan.clone().unwrap();
         let resolution = q.resolution.clone();
         // Flush/recompute under the same final gate as intents and participant
         // validation. A registered save during prepare makes generation stale.
-        if self.store.sync_plan_apply(&plan.excluded_note_ids)? != plan {
-            return self.sync_release("abort", None).map(Some);
+        if self
+            .store
+            .sync_plan_apply(&plan.excluded_note_ids)
+            .map_err(|e| {
+                self.sync_note_abort_reason(AbortReason::EvaluationError);
+                e
+            })?
+            != plan
+        {
+            return self.sync_release_abort(AbortReason::PlanChanged).map(Some);
         }
         let before = self
             .store
@@ -279,7 +397,10 @@ impl Session {
             .into_iter()
             .map(|n| (n.id.clone(), (n.locked, n.deleted_at, n.sealed)))
             .collect::<HashMap<_, _>>();
-        self.prepare_metadata(true)?;
+        self.prepare_metadata(true).map_err(|e| {
+            self.sync_note_abort_reason(AbortReason::PrepareMetadataError);
+            e
+        })?;
         let result = self.apply_store(|store| {
             let report = if let Some(r) = resolution {
                 store.sync_resolve(r.kind, &r.entity_id, &r.digest, r.keep_all)?
@@ -290,7 +411,11 @@ impl Session {
         });
         if let Err(e) = result {
             if self.last_commit.is_none() {
-                self.sync_abort();
+                self.sync_abort_reason(if e.code == "sync_plan_stale" {
+                    AbortReason::PlanStale
+                } else {
+                    AbortReason::ApplyError
+                });
                 if e.code == "sync_plan_stale" {
                     return self.sync_release("abort", None).map(Some);
                 };
@@ -338,6 +463,15 @@ impl Session {
             .current
             .take()
             .ok_or_else(|| denied("同步操作已结束"))?;
+        let d = &mut self.quiet.diagnostics;
+        if outcome == "abort" {
+            let reason = q.abort_reason.unwrap_or(AbortReason::ExternalAbort);
+            d.aborts = d.aborts.saturating_add(1);
+            d.reasons[reason as usize] = d.reasons[reason as usize].saturating_add(1);
+            d.latest_abort_reason = Some(reason);
+        } else if outcome == "commit" {
+            d.commits = d.commits.saturating_add(1);
+        }
         let event =
             json!({"phase":"release","operationId":q.id,"sessionId":self.id,"outcome":outcome});
         self.quiet.retry_after = if outcome == "abort" {
@@ -500,6 +634,7 @@ mod tests {
         );
         assert!(s.store.note(&nid).is_err());
         assert_eq!(s.store.sync_pending_count().unwrap(), 1);
+        assert_eq!(s.sync_diagnostics()["latestAbortReason"], "prepareNotReady");
     }
     #[test]
     fn participant_added_or_dirty_save_after_prepare_aborts_without_apply() {
@@ -525,6 +660,10 @@ mod tests {
             "abort"
         );
         assert!(s.store.note(&nid).is_err());
+        assert_eq!(
+            s.sync_diagnostics()["latestAbortReason"],
+            "participantChanged"
+        );
         s.quiet.retry_after = None;
         let id = begin(&mut s);
         prepare(&mut s, &id);
@@ -545,6 +684,95 @@ mod tests {
                 .0["outcome"],
             "abort"
         );
+        assert!(s.store.note(&nid).is_err());
+        assert_eq!(s.sync_diagnostics()["latestAbortReason"], "planChanged");
+        assert_eq!(s.sync_diagnostics()["aborts"], 2);
+    }
+    #[test]
+    fn diagnostics_preserve_first_abort_cause_read_only_and_saturate() {
+        let (_d, mut s) = session();
+        let nid = incoming(&mut s);
+        let id = begin(&mut s);
+        let t = token(&s);
+        s.sync_reply(
+            "main",
+            WindowReply::Probe {
+                operation_id: id,
+                protected_note_ids: vec![],
+                blocked: true,
+            },
+            &t,
+        )
+        .unwrap();
+        s.sync_abort(); // Adapter's later generic catch must not overwrite probeBlocked.
+        let before = s.workspace().unwrap();
+        let observed = s.sync_diagnostics();
+        assert_eq!(observed["activePhase"], "probe");
+        assert_eq!(observed["aborts"], 0); // Count only original release, not flagging/read.
+        assert_eq!(s.workspace().unwrap(), before);
+        s.quiet.diagnostics.aborts = u64::MAX;
+        s.quiet.diagnostics.reasons[AbortReason::ProbeBlocked as usize] = u64::MAX;
+        assert_eq!(
+            s.sync_tick(&HashSet::from(["main".into()]))
+                .unwrap()
+                .unwrap()
+                .0["outcome"],
+            "abort"
+        );
+        let observed = s.sync_diagnostics();
+        assert_eq!(observed["aborts"], u64::MAX);
+        assert_eq!(observed["abortReasons"]["probeBlocked"], u64::MAX);
+        assert_eq!(observed["latestAbortReason"], "probeBlocked");
+        assert!(s.store.note(&nid).is_err());
+        assert_eq!(s.store.sync_pending_count().unwrap(), 1);
+        assert!(observed["activePhase"].is_null());
+        let object = observed.as_object().unwrap();
+        assert_eq!(object.len(), 6);
+        assert_eq!(
+            object["abortReasons"].as_object().unwrap().len(),
+            AbortReason::ALL.len()
+        );
+        let serialized = observed.to_string();
+        assert!(!serialized.contains(&s.id));
+        assert!(!serialized.contains(&nid));
+        assert!(!serialized.contains("operationId"));
+        assert!(!serialized.contains("epoch"));
+    }
+    #[test]
+    fn metadata_failure_propagates_unchanged_and_retains_reason_through_adapter_abort() {
+        let (_d, mut s) = session();
+        let nid = incoming(&mut s);
+        let id = begin(&mut s);
+        prepare(&mut s, &id);
+        let t = token(&s);
+        s.sync_reply(
+            "main",
+            WindowReply::Prepare {
+                operation_id: id,
+                ready: true,
+            },
+            &t,
+        )
+        .unwrap();
+        s.metadata_sequence = 9_007_199_254_740_991;
+        let error = s.sync_tick(&HashSet::from(["main".into()])).unwrap_err();
+        assert_eq!(error.code, "metadata_overflow");
+        assert!(error.commit.is_none());
+        assert_eq!(s.sync_diagnostics()["aborts"], 0);
+        s.sync_abort_reason(AbortReason::EvaluationError); // Exact generic adapter catch.
+        assert_eq!(
+            s.sync_tick(&HashSet::from(["main".into()]))
+                .unwrap()
+                .unwrap()
+                .0["outcome"],
+            "abort"
+        );
+        assert_eq!(
+            s.sync_diagnostics()["latestAbortReason"],
+            "prepareMetadataError"
+        );
+        assert_eq!(s.sync_diagnostics()["abortReasons"]["evaluationError"], 0);
+        assert_eq!(s.store.sync_pending_count().unwrap(), 1);
         assert!(s.store.note(&nid).is_err());
     }
     #[test]
@@ -569,6 +797,8 @@ mod tests {
             .unwrap()
             .unwrap();
         assert_eq!(event["outcome"], "commit");
+        assert_eq!(s.sync_diagnostics()["commits"], 1);
+        assert_eq!(s.sync_diagnostics()["aborts"], 0);
         assert!(access.is_none());
         assert_eq!(s.epoch, epoch);
         assert!(s.store.note(&nid).is_ok());
@@ -682,6 +912,7 @@ mod final_gate_tests {
         );
         assert!(!s.store.note(&id).unwrap().pinned);
         assert_eq!(s.store.sync_pending_count().unwrap(), 1);
+        assert_eq!(s.sync_diagnostics()["latestAbortReason"], "localIntent");
     }
     #[test]
     fn access_barrier_and_timeout_abort_quiet_without_touching_business_rows() {
@@ -703,6 +934,7 @@ mod final_gate_tests {
             "abort"
         );
         assert!(s.store.note(&id).unwrap().deleted_at.is_none());
+        assert_eq!(s.sync_diagnostics()["latestAbortReason"], "pendingBarrier");
         s.acknowledge(event["operationId"].as_str().unwrap(), "main", false)
             .unwrap();
         let _ = s
@@ -723,6 +955,8 @@ mod final_gate_tests {
             "abort"
         );
         assert!(!s.store.note(&id).unwrap().pinned);
+        assert_eq!(s.sync_diagnostics()["latestAbortReason"], "timeout");
+        assert_eq!(s.sync_diagnostics()["aborts"], 2);
     }
     #[test]
     fn changed_sealed_lock_delete_revoke_only_the_actual_target_note_epoch() {
