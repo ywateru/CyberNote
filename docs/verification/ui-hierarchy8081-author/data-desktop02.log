@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "mode": "group",
+  "sourceHead": "5b6c23c826534ee9fcfeb083df6f91d3f7de8896",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+    "fileCount": 121,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/cli.mjs",
+      " M scripts/debug/data-management.mjs",
+      " M scripts/debug/image-preview-lifetime.tsx",
+      " M scripts/debug/image-preview.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M src/App.tsx",
+      " M src/DataManagement.css",
+      " M src/debug/catalog.ts",
+      " M src/debug/protocol.ts",
+      " M src/native-toolbar-controller.ts",
+      " D src/window-drag.ts",
+      "?? scripts/debug/fixtures/",
+      "?? scripts/debug/storage-navigation.mjs"
+    ]
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+    "fileCount": 121,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/cli.mjs",
+      " M scripts/debug/data-management.mjs",
+      " M scripts/debug/image-preview-lifetime.tsx",
+      " M scripts/debug/image-preview.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M src/App.tsx",
+      " M src/DataManagement.css",
+      " M src/debug/catalog.ts",
+      " M src/debug/protocol.ts",
+      " M src/native-toolbar-controller.ts",
+      " D src/window-drag.ts",
+      "?? scripts/debug/fixtures/",
+      "?? scripts/debug/storage-navigation.mjs"
+    ]
+  },
+  "sourceInputsChanged": false,
+  "platform": "desktop-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "elapsedMs": 19614,
+  "result": {
+    "groups": [
+      {
+        "group": "data-management",
+        "pass": true,
+        "checks": [
+          "Normal attachment trusted validations never cover or hide the window and retain Host/editor/existing media identities throughout rAF and MutationObserver",
+          "Quiet presentation retains storage/body ACK and two original-owner cards",
+          "Actual preview save cancellation performs no export and no success notice",
+          "Actual preview save sends original ID and untouched bytes to selected URI",
+          "Image preview exports identical original bytes without document changes",
+          "Image write failure stays visible and does not report success",
+          "Actual preview save retry succeeds once",
+          "Actual preview missing-file export fails visibly without success or an output write",
+          "Repeated image clicks during processing open and write only one export",
+          "Image export adds no document or Undo entry",
+          "Actual more-settings entry opens data management with real bridge DTO",
+          "DB/WAL/SHM statuses and actual filesystem timestamp are rendered without payload reads",
+          "Data row shares original-byte export without reading media into management DOM",
+          "All files are counted and paginated without silent truncation",
+          "Actual pagination reveals next files",
+          "Command filter uses actual file view",
+          "Filename search has explicit empty state",
+          "320px light data management retains reachable close and no horizontal overflow",
+          "390px dark data management retains reachable close and no horizontal overflow",
+          "Inventory failure retains prior data and explicit retry",
+          "Actual inventory retry restores current snapshot",
+          "Missing registered file is retained as missing and export disabled",
+          "Late older refresh cannot overwrite newer snapshot",
+          "Closed management page is not revived by late refresh",
+          "Actual management backup export shows completion after bridge finishes",
+          "Import prepare/commit keeps the open management page and refreshes statistics after sensitive state clears",
+          "Active recording disables both backups with explicit unsaved-audio explanation",
+          "Revocation while the original-image picker waits leaves no exported bytes and no stale success notice",
+          "Strong synchronization arriving during quiet validation upgrades and retains security cover",
+          "Unknown trusted response session upgrades quiet presentation to a committed security cover",
+          "Actual access prepare immediately covers protected content until trusted completion",
+          "Quiet trusted-load failure immediately leaves security cover and no inserted media",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 12740
+      }
+    ],
+    "passedChecks": 33,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": [],
+  "output": "/private/tmp/apple-notes-ui8081-candidate/docs/verification/ui-hierarchy8081-author/data-desktop02"
+}

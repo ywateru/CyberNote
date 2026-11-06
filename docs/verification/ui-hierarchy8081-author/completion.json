@@ -1,0 +1,162 @@
+{
+  "frozenSourceCommit": "74108461",
+  "frozenSourceSha256": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+  "runs": [
+    {
+      "run": "image-desktop01",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceHead": "5b6c23c826534ee9fcfeb083df6f91d3f7de8896",
+      "sourceInputs": "1a4b1c9d4f9d0c2f8aa3c87284c24c85fbd4919d7c0c1b29d367fe8d2ed03aa5",
+      "sourceInputsChanged": false,
+      "sourceDirty": true,
+      "passedChecks": 20,
+      "pageErrors": []
+    },
+    {
+      "run": "image-mobile01",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceHead": "5b6c23c826534ee9fcfeb083df6f91d3f7de8896",
+      "sourceInputs": "1a4b1c9d4f9d0c2f8aa3c87284c24c85fbd4919d7c0c1b29d367fe8d2ed03aa5",
+      "sourceInputsChanged": false,
+      "sourceDirty": true,
+      "passedChecks": 18,
+      "pageErrors": []
+    },
+    {
+      "run": "storage-desktop01",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceHead": "5b6c23c826534ee9fcfeb083df6f91d3f7de8896",
+      "sourceInputs": "1a4b1c9d4f9d0c2f8aa3c87284c24c85fbd4919d7c0c1b29d367fe8d2ed03aa5",
+      "sourceInputsChanged": false,
+      "sourceDirty": true,
+      "passedChecks": 99,
+      "pageErrors": []
+    },
+    {
+      "run": "storage-mobile01",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceHead": "5b6c23c826534ee9fcfeb083df6f91d3f7de8896",
+      "sourceInputs": "1a4b1c9d4f9d0c2f8aa3c87284c24c85fbd4919d7c0c1b29d367fe8d2ed03aa5",
+      "sourceInputsChanged": false,
+      "sourceDirty": true,
+      "passedChecks": 99,
+      "pageErrors": []
+    },
+    {
+      "run": "data-desktop01",
+      "exitCode": 1,
+      "naturalCompletion": true,
+      "sourceInputs": "1a4b1c9d4f9d0c2f8aa3c87284c24c85fbd4919d7c0c1b29d367fe8d2ed03aa5",
+      "failure": "data-management: All files are counted and paginated without silent truncation"
+    },
+    {
+      "run": "data-desktop02",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceHead": "5b6c23c826534ee9fcfeb083df6f91d3f7de8896",
+      "sourceInputs": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+      "sourceInputsChanged": false,
+      "sourceDirty": true,
+      "passedChecks": 33,
+      "pageErrors": []
+    },
+    {
+      "run": "data-mobile02",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceHead": "5b6c23c826534ee9fcfeb083df6f91d3f7de8896",
+      "sourceInputs": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+      "sourceInputsChanged": false,
+      "sourceDirty": true,
+      "passedChecks": 33,
+      "pageErrors": []
+    },
+    {
+      "run": "image-desktop-frozen",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceHead": "74108461aef56c0f8d904cb4b96ba235d978e13a",
+      "sourceInputs": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+      "sourceInputsChanged": false,
+      "sourceDirty": false,
+      "passedChecks": 20,
+      "pageErrors": []
+    },
+    {
+      "run": "image-mobile-frozen",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceHead": "74108461aef56c0f8d904cb4b96ba235d978e13a",
+      "sourceInputs": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+      "sourceInputsChanged": false,
+      "sourceDirty": false,
+      "passedChecks": 18,
+      "pageErrors": []
+    },
+    {
+      "run": "storage-desktop-frozen",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceHead": "74108461aef56c0f8d904cb4b96ba235d978e13a",
+      "sourceInputs": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+      "sourceInputsChanged": false,
+      "sourceDirty": false,
+      "passedChecks": 99,
+      "pageErrors": []
+    },
+    {
+      "run": "storage-mobile-frozen",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceHead": "74108461aef56c0f8d904cb4b96ba235d978e13a",
+      "sourceInputs": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+      "sourceInputsChanged": false,
+      "sourceDirty": false,
+      "passedChecks": 99,
+      "pageErrors": []
+    }
+  ],
+  "otherCommands": [
+    {
+      "command": "node scripts/check-native-toolbar.mjs",
+      "stdout": "controller-final.log",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "tests": 20
+    },
+    {
+      "command": "pnpm exec tsc --noEmit",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceInputs": "1a4b1c9d4f9d0c2f8aa3c87284c24c85fbd4919d7c0c1b29d367fe8d2ed03aa5"
+    },
+    {
+      "command": "pnpm build",
+      "stdout": "build-final.log",
+      "exitCode": 0,
+      "naturalCompletion": true,
+      "sourceInputs": "1a4b1c9d4f9d0c2f8aa3c87284c24c85fbd4919d7c0c1b29d367fe8d2ed03aa5"
+    },
+    {
+      "command": "clang -fobjc-arc -fblocks -framework AppKit -framework QuartzCore scripts/native/image-preview80.m plugins/tauri-plugin-notes-ui/macos/format.m -o /tmp/image-preview8081-native",
+      "exitCode": 0,
+      "naturalCompletion": true
+    },
+    {
+      "command": "/tmp/image-preview8081-native",
+      "stdout": "native-final.json",
+      "stderr": "native-final.stderr.log",
+      "exitCode": 0,
+      "naturalCompletion": true
+    }
+  ],
+  "limits": [
+    "The typecheck/build preceded final formatting-only App/catalog changes and the data79 expected inventory total correction. Final production build belongs to root full verification.",
+    "Browser runs execute real React/Tiptap/DOM with explicit synthetic platform and persistence boundaries; mobile-browser does not prove installed Android behavior.",
+    "Native harness creates an isolated NSWindow and runs production ObjC; drag is overridden to count, while zoom uses real NSWindow geometry. No installed apps or user data touched."
+  ]
+}

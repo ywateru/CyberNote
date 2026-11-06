@@ -1,0 +1,52 @@
+{
+  "metrics": [
+    {
+      "width": 320,
+      "theme": "light",
+      "geometry": {
+        "width": 320,
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "close": {
+          "left": 276,
+          "right": 308,
+          "top": 14,
+          "bottom": 46
+        },
+        "viewport": 320
+      }
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "geometry": {
+        "width": 390,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "close": {
+          "left": 346,
+          "right": 378,
+          "top": 14,
+          "bottom": 46
+        },
+        "viewport": 390
+      }
+    }
+  ],
+  "pageErrors": [],
+  "scope": {
+    "platform": "desktop-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  },
+  "limitations": [
+    "Synthetic file stat and output URI fixture; real Rust files/platform IO verified separately.",
+    "Import access events injected at protocol boundary, real App clearSensitive/trusted/Host lifecycle retained."
+  ]
+}

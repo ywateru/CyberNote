@@ -1,0 +1,19 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: queued overlay must follow old rejected update without an unrelated set
+
+1 !== 2
+
+    at file:///private/tmp/apple-notes-ui8081-candidate/scripts/check-native-toolbar.mjs:254:12
+    at async test (file:///private/tmp/apple-notes-ui8081-candidate/scripts/check-native-toolbar.mjs:108:3)
+    at async file:///private/tmp/apple-notes-ui8081-candidate/scripts/check-native-toolbar.mjs:247:1 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 2,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0
