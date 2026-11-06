@@ -2,9 +2,9 @@
 
 更新：2026-11-06。供中断恢复；[正式规格](../architecture/sync.md)、[窗口协议](../architecture/sync-coordinator.md)和任务文件仍是行为契约。**完整同步目标 active，正在进行新隔离 Android 的实际运行验收。** 已交付 gallery83，不再重做快速首页。
 
-最新状态：Android20 有限诊断已在同一配对 Store 上确认反复失败类别为 `syncMediaPublish`；源码唯一对应操作为附件发布的 `fs::hard_link`，未推断具体系统 errno。已完成[SYNC91 可移植发布修复](tasks/app-sync91-portable-media-publication.md)并通过[独立源码审查](../verification/sync91/media-publication-independent/RESULT.md)：锁外准备独立已校验附件，锁内不可覆盖原子重命名。主线产品 `3963c3df`，作者证据 `b373ac95`、独审 `c7d0eaa8`；Android21 正在准确构建，尚未证明实际故障消除。仍复用 final02 成功绑定的同一 DesktopPeer Store，不重置配对或替换失败目标。
+最新状态（2026-11-07）：[SYNC91](tasks/app-sync91-portable-media-publication.md)产品 `3963c3df` 已源码独审并生成同一322输入的 Mac29 / Android21，双方准确包均通过[独立核包](../verification/sync91/native-independent/README.md)。Android21 在原5584 userdata、同一配对 Store 下自动应用了原缺失目标：inbox1→0、targetNotes0→1、commits1、所有29类apply错误0。新双方完整document/plainText和五份原媒体文件SHA已[独审确认](../verification/sync91-native/native22-independent/result.json)。原 desktopMedia 自动动作返回通用失败仍保留，不能把Store/原字节通过追认为当时可见解码通过。
 
-真实 Android20 已通过正常 DocumentsUI 连续选取并保存 TXT、PNG、WAV，当前完整正文与三个附件原字节已读取核对，PNG WebView 解码通过，见[实际连续附件证据](../verification/sync90-native/native-provider21-originals/README.md)。这不等于多选、图片导出、完整双向同步或冷启动通过。cycle21 已自然退出，原 userdata 和失败目标保留。
+当前91后端的两实际App DOM39项自然0；真实LAN在路线01通过，路线01公网反向WAV元数据等待超时仍为失败，新隧道的相同脚本/预算定向复验39项自然0并[独审接收](../verification/sync91/final-host-independent/routes02-result.json)，含双向PNG/WAV原字节、错误PSK、新hostname/原目录重启。首次复验隧道需bounded SIGKILL，原记录保持。严格Android同userdata冷启已作者通过2文档/5附件全保持，尚待纯证据及独审；手机图片导出、可见解码与前台重连继续验收。完整目标仍active。
 
 ## 已接收与剩余门槛
 
@@ -25,18 +25,18 @@
 
 ## 当前准确产物和准入
 
-- Mac：`artifacts/sync88/备忘录-Mac28.zip`，6,694,058字节，SHA256 `8199b8feeccc548a08d5921f4473b50f0156661a021bc29e41f0ead95f76aa2d`；ad-hoc、未公证。
-- Android：`artifacts/sync88/备忘录-Android18.apk`，236,444,967字节，SHA256 `c2c5c2ce528c83cca9bc0a31740af3614ce778a529e51df7c5554dd31718bd5c`；arm64/API26+、debug签名/debuggable。
-- 两端321项构建输入一致，准确源码 `2956f8fb49d8fd5b76cdcaa8de2be82126b8cfcb`；相比27/17仅产品 Preferences.css 三条vh回退。旧包保留，非本轮最终同步验收交付。
-- 对端 immutable11：`/private/tmp/sync86-transport-build11/notes-current-attachment-transport`，SHA256 `333fcd44e19ebbd30ece11b7a595816249a9458a46fb03523855ae8c51215800`，产品 `cd334bc88513a89c490788d2e2e27c7967575f4a`，mode0555。旧可变 target 路径不得替代它；CSS回退不影响Rust输入。
-- peer receipt `/private/tmp/sync87-peer-final11/receipt.json`，authority `root-sync87-peer-review`；Android18 receipt `/private/tmp/sync88-apk-final18/receipt.json`，authority `root-sync87-package-review`。均mode0600，已独立核包及root APK/ELF完整hash确认。
+- Mac29：`artifacts/sync91/备忘录-Mac29.zip`，6,720,140字节，SHA256 `a8896b23d08a2a30832780ef50b97c964d9310fa4a85e47d34226a1cb82227fd`；本地ad-hoc、未公证。准确构建head `c6de6a68`。
+- Android21：`artifacts/sync91/备忘录-Android21.apk`，238,738,727字节，SHA256 `e9e1142e9d24a13b533767173c236d1d10841d62d9709aec69e652cf0c9eb60a`；arm64/API26+、debug签名/debuggable。准确构建head `5f9dd30f`。
+- 两端322项构建输入均与批准 `b373ac95` 相同，嵌入前端相同。[Android构建](../verification/sync91/android-build/README.md)、[Mac构建](../verification/sync91/mac-build/README.md)。root收据 `/private/tmp/sync91-apk-final21/receipt.json`、`/private/tmp/sync91-mac-final29/receipt.json`，mode0600。
+- 新最终宿主二进制 `/private/tmp/sync91-transport-final01/notes-current-attachment-transport`，25,801,472字节、mode0555、SHA256 `cd1e2b6fc989a9d09d69bc889704bb1fbc26bd7aa95248eea21c31c482a86077`，48项输入准确，322产品与批准源码相同。供当前91 DOM/路线证明。
+- Android原反例对端仍为 immutable11：`/private/tmp/sync86-transport-build11/notes-current-attachment-transport`，SHA256 `333fcd44e19ebbd30ece11b7a595816249a9458a46fb03523855ae8c51215800`，mode0555；未替换或重建，不更换原绑定Store来取得通过。原11收据继续有效。
+- 旧Mac28/Android18和诊断19/20均保留，不追认包含91修复。七个最新原生诊断/输入工具源已经精确四路径独审整合，主线 `d0e0a9d3` 至 `d16144a6`，未覆盖原observer或91清单。
 
 ## 下一步
 
-1. 准确构建 Android21（主线冻结 `b373ac95`，产品 `3963c3df`），动态产品清单预计322项，前端必须与Android20相同。不同代理独立核包后，由root签发准确 APK/ELF hash 收据；当前不安装未核包产物。
-2. 在5584原userdata升级21，复用原 final02 Store 和 immutable11，验证原缺失桌面笔记完整 document/plainText、真实提交计数和错误类别，再验证双方录入文字及 PNG/WAV 原字节、owner、实际解码。
-3. 完成图片导出原SHA、前台重连、同data应用重开及严格同userdata冷启动。图片控件仅扩展固定、可见、归属明确的普通鼠标操作，独审准入后才执行；不注入文件选择结果。
-4. 实际回归通过后，在同一最终产品上构建 Mac29 并独立核包，执行与发布修复相关的最终整合和路线检查，接收剩余原生工具源。更新使用说明和最终交付，真实验收未完成前不得 complete goal。
+1. 同5584原userdata结束严格coldboot核对、媒体可见解码、图片原SHA导出、自动前台重连；原失败动作和前置状态保留。仅从实际Store验证过的owner/名字/SHA恢复测试state附件IDs，不改产品数据，不重加媒体。
+2. 冻结安全纯证据，不同代理独审后整合。结束owned子进程，保留所有userdata/原13秒录音/配对Store。不得降低8GiB生命周期guard。
+3. 最终更新使用说明、交付记录和截图；完整要求级验收完成前不得complete goal。WireGuard/EasyTier真实路线仍无受控可达对端，应用对可达ws/wss虚拟网地址的支持和实际验证范围分别说明。
 
 ## 证据和资源保全
 
