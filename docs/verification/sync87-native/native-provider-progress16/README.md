@@ -1,0 +1,7 @@
+# Actual provider folder entered by normal keyboard, no attachment saved yet
+
+Owned5584/sameuserdata only; no peer live. Root authorized unaffected provider work while Android19 diagnostic build is pending. Existing admitted attachmentsMultiple normal workflow opened actual Android DocumentsUI and Downloads; foldertitle tap did not enter the exact final02 folder and the existing step failed, naturally outer2/42.06100025s. Original failure preserved; this is selection/navigation failure, not evidence attachment bytes failed saving.
+
+Private UIA reads use /data/local/tmp, never refresh Downloads/Recent; old public toolXML and accidental synthetic note attachment remain untouched. Actual UIA at Downloads lists firstfolder notes-sync87-74da049123. Reviewed picker-key TAB focused its first item_root bounds[0,488][720,632]; ordinary ENTER entered that exact folder. Actual subsequent UIA shows breadcrumb/toolbar folder name and exactly known synthetic PNG70B/TXT33B/WAV32.04KB titles. No URI/result injection or arbitrary text input.
+
+Next requested TAB/SPACE/DOWN/SPACE sequence was refused at initial identity guard with fixed no active owned emulator, BEFORE any key was issued. Lifecycle16 had ended naturally0/624.972295959s. Therefore there is no PNG/TXT selection, file save, WAV selection or export PASS here. Same Store/pending desktop target remain preserved. Next valid cycle may resume ordinary keyboard selection; Android19 update must use root-audited receipt first.
