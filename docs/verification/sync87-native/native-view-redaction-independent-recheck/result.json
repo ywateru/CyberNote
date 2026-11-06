@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "frozenAuthor": "95aa2c3f",
+  "results": [
+    {
+      "name": "Original P2 hidden gallery rejected by exact final home path before snapshot",
+      "pass": true
+    },
+    {
+      "name": "Visible mobile notes gallery passes exact home path after goHome with final evidence name",
+      "pass": true
+    },
+    {
+      "name": "Original P2 arbitrary guard message removed from both exact final step logs",
+      "pass": true
+    },
+    {
+      "name": "Exact exit137 still records only fixed event and preserves original failure",
+      "pass": true
+    }
+  ],
+  "priorFindingsClosed": [
+    "home-visible-assertions",
+    "guard-detail-arbitrary-message"
+  ],
+  "hostOnly": true,
+  "adbCalls": 0,
+  "deviceActions": 0,
+  "limits": "No selector acceptance, device tests, attachment multi/continuous/export or sync acceptance was run."
+}
