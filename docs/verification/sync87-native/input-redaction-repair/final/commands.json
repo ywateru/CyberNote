@@ -1,0 +1,79 @@
+[
+  {
+    "label": "01-python-guards",
+    "argv": [
+      "python3",
+      "scripts/debug/sync87-native/check_guards.py"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.120702
+  },
+  {
+    "label": "02-client-guards",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-client.mjs"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.045265
+  },
+  {
+    "label": "03-input-redaction",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-input.mjs"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.682658
+  },
+  {
+    "label": "04-client-syntax",
+    "argv": [
+      "node",
+      "--check",
+      "scripts/debug/sync87-native/client.mjs"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.025696
+  },
+  {
+    "label": "05-runner-syntax",
+    "argv": [
+      "node",
+      "--check",
+      "scripts/debug/sync87-native/run.mjs"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.025649
+  },
+  {
+    "label": "06-protocol-syntax",
+    "argv": [
+      "node",
+      "--check",
+      "scripts/debug/sync87-native/protocol.mjs"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.027472
+  },
+  {
+    "label": "07-input-check-syntax",
+    "argv": [
+      "node",
+      "--check",
+      "scripts/debug/sync87-native/check-input.mjs"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.027166
+  },
+  {
+    "label": "08-diff-check",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.084493
+  }
+]
