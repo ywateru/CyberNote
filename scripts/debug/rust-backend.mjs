@@ -10,8 +10,15 @@ export async function rustBackend(
     timeoutMs = 10000,
     closeTimeoutMs = 2000,
     maxLineBytes = 20 * 1024 * 1024,
+    onEvents,
+    windowLabel = "main",
+    recordPolls = true,
   } = {},
 ) {
+  if (onEvents !== undefined && typeof onEvents !== "function")
+    throw Error("Invalid Rust event handler");
+  if (typeof windowLabel !== "string" || !windowLabel)
+    throw Error("Invalid Rust window label");
   await access(binary);
   const child = spawn(binary, [directory], { stdio: ["pipe", "pipe", "pipe"] });
   let nextId = 0,
@@ -103,6 +110,18 @@ export async function rustBackend(
         status: row.value?.status,
         error: row.error?.code,
       });
+      // The sink owns events from every response exactly once. Never await it
+      // here: a probe handler sends a concurrent reply through this transport.
+      if (onEvents && row.events.length) {
+        try {
+          Promise.resolve(onEvents(row.events)).catch(fail);
+        } catch (error) {
+          slot.reject(error);
+          fail(error);
+          return;
+        }
+        row.events = [];
+      }
       slot.resolve(row);
     }
   });
@@ -140,11 +159,16 @@ export async function rustBackend(
         const call = {
           requestId,
           command,
-          type: args.action?.type,
+          type: args.action?.type || args.command?.type,
+          phase: args.reply?.phase,
+          ready: args.reply?.ready,
+          protectedNoteIds: args.reply?.protectedNoteIds,
+          revision: args.revision,
+          finalIntent: args.finalIntent,
           noteId: args.noteId,
           operationId: args.operationId,
         };
-        calls.push(call);
+        if (recordPolls || command !== "poll_events") calls.push(call);
         if (calls.length > 1000) calls.shift();
         const timer = setTimeout(
           () => fail(Error("Rust transport timeout for " + command)),
@@ -152,7 +176,8 @@ export async function rustBackend(
         );
         pending.set(requestId, { resolve, reject, timer, call });
         child.stdin.write(
-          JSON.stringify({ requestId, command, args, window: "main" }) + "\n",
+          JSON.stringify({ requestId, command, args, window: windowLabel }) +
+            "\n",
           (error) => {
             if (error) fail(error);
           },
@@ -192,6 +217,47 @@ export async function rustBackend(
     },
     configure() {
       throw Error("Fault controls unavailable for external transport");
+    },
+  };
+}
+
+// Opt-in concurrent polling for a real WindowHost. Events still pass through
+// rustBackend's single sink, including events returned by non-poll requests.
+export function pollRustEvents(backend, { intervalMs = 30 } = {}) {
+  if (!Number.isInteger(intervalMs) || intervalMs < 5 || intervalMs > 1000)
+    throw Error("Invalid bounded event poll interval");
+  let stopped = false,
+    failure,
+    timer,
+    wake,
+    polls = 0;
+  const task = (async () => {
+    while (!stopped) {
+      const response = await backend.call("poll_events");
+      if (!response.ok)
+        throw Object.assign(Error(response.error.message), response.error);
+      if (response.events.length)
+        throw Error("Polling requires one configured event sink");
+      polls++;
+      if (!stopped)
+        await new Promise((resolve) => {
+          wake = resolve;
+          timer = setTimeout(resolve, intervalMs);
+        });
+    }
+  })().catch((error) => {
+    failure = error;
+  });
+  return {
+    get state() {
+      return { polls, stopped, failure: failure?.message };
+    },
+    async stop() {
+      stopped = true;
+      clearTimeout(timer);
+      wake?.();
+      await task;
+      if (failure) throw failure;
     },
   };
 }
