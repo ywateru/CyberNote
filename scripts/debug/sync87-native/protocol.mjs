@@ -1,6 +1,6 @@
 /** Bounded NDJSON parsing. Never expose input-derived exception text. */
 export const MAX_REQUEST_BYTES = 32768;
-const actions = new Set(['install','start','pushFixtures','home','createNote','attachments','attachmentsMultiple','attachmentsChooseMultiple','attachmentsAudio','attachmentsVerify','exportImage','pair','observe','background','foreground','reopen','close','connectDesktop','roundtrip','backgroundRoundtrip','coldBootPrepare','coldBootVerify']);
+const actions = new Set(['install','start','pushFixtures','home','createNote','attachments','attachmentsMultiple','attachmentsChooseMultiple','attachmentsRecentMultiple','attachmentsAudio','attachmentsVerify','exportImage','pair','observe','background','foreground','reopen','close','connectDesktop','roundtrip','backgroundRoundtrip','coldBootPrepare','coldBootVerify']);
 const messages = {
   INVALID_JSON: 'Invalid JSON request; no input recorded',
   INVALID_REQUEST: 'Invalid native request; no input recorded',

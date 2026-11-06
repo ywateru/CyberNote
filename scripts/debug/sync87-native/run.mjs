@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 import { DesktopPeer } from './desktop-peer.mjs';
 import { pairViaUI,saveImageOriginal,openNote,goHome } from './native-ui.mjs';
 import { roundtrip,backgroundRoundtrip,coldBootPrepare,coldBootVerify,assertNativeOriginal } from './scenarios.mjs';
-import { connect, guard, pause, parseNodes, nativeNode, assertHomeVisible, SERIAL, AVD } from './client.mjs';
+import { connect, guard, pause, parseNodes, nativeNode, assertHomeVisible, readNativeUI, nativeObservationEvents, SERIAL, AVD } from './client.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const options=Object.fromEntries(process.argv.slice(2).reduce((pairs,x,i,a)=>{if(i%2===0)pairs.push([x,a[i+1]]);return pairs;},[]));
 assert(Object.keys(options).every(x=>['--output','--receipt','--peer-receipt','--mode'].includes(x)),'unknown option');
@@ -17,7 +17,7 @@ assert(['prepare','serve'].includes(options['--mode']),'explicit --mode prepare|
 const output=resolve(options['--output']||'');
 assert(/^\/private\/tmp\/notes-sync87-native-[a-z0-9-]+$/.test(output),'new isolated /private/tmp/notes-sync87-native-* output required');
 let context,peer;
-const closeClient=async()=>{const owned=context;context=undefined;if(owned?.errors.length)await appendFile(resolve(output,'native-client-events.jsonl'),JSON.stringify({identity:owned.identity,events:owned.errors})+'\n');await owned?.close();};
+const closeClient=async()=>{const owned=context;context=undefined;if(nativeObservationEvents.length)await appendFile(resolve(output,'native-client-events.jsonl'),JSON.stringify({events:nativeObservationEvents.splice(0)})+'\n');if(owned?.errors.length)await appendFile(resolve(output,'native-client-events.jsonl'),JSON.stringify({identity:owned.identity,events:owned.errors})+'\n');await owned?.close();};
 async function prepare(){
   assert(!existsSync(output),'never replace a native evidence directory');await mkdir(output,{mode:0o700});
   const id=randomBytes(5).toString('hex'),remote='/sdcard/Download/notes-sync87-'+id;
@@ -112,6 +112,15 @@ async function execute(request){
       await nativeStep('attachments-open-continuous',()=>openFilePicker(c));await nativeStep('attachments-choose-continuous',()=>chooserFiles(s,[s.files[2].name]));const three=await persistedNote(c,owner.id,before.attachments.length+3);
       for(const file of s.files)assert(three.attachments.some(a=>a.displayName===file.name),'selected original filename must persist');
       await c.snapshot(output,'attachments');return {cancelPreserved:true,multipleCount:two.attachments.length,continuousCount:three.attachments.length,names:three.attachments.map(x=>x.displayName)};
+    }
+    case 'attachmentsRecentMultiple': {
+      const owner=s.notes.at(-1);assert(owner);await nativeStep('attachments-recent-multiple',async()=>{
+        let nodes=parseNodes(await readNativeUI());assert(nodes.some(chooserPackage));
+        if(!nodes.some(n=>chooserPackage(n)&&n.text==='Recent'&&n['resource-id']?.endsWith('/title')))await nativeNode(n=>chooserPackage(n)&&n['content-desc']==='Show roots');
+        await nativeNode(n=>chooserPackage(n)&&n.text==='Recent'&&n['resource-id']?.endsWith('/title'));
+        await nativeNode(n=>chooserPackage(n)&&n.text===s.files[0].name,{hold:true});await nativeText(s.files[1].name);
+        await nativeNode(n=>chooserPackage(n)&&(/^(Open|OPEN|打开|选择)$/.test(n.text||'')||/^(Open|打开)$/.test(n['content-desc']||'')));
+      });const c=await app(),actual=await persistedNote(c,owner.id,2);assert.equal(actual.attachments.length,2);for(const f of s.files.slice(0,2))assert(actual.attachments.some(a=>a.displayName===f.name));return{count:2,names:actual.attachments.map(a=>a.displayName)};
     }
     case 'attachmentsChooseMultiple': {
       const owner=s.notes.at(-1);assert(owner);await nativeStep('attachments-existing-chooser-multiple',()=>chooserFiles(s,s.files.slice(0,2).map(f=>f.name),{multi:true}));
