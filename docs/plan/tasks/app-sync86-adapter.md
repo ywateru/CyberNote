@@ -2,6 +2,8 @@
 
 状态 in-progress，depends-on 84与85已独审并合入、主线完整回归通过（UI86已合入，frontend协调并行）。用户完整同步目标尚未完成。本任务实现由develop代理，独立verify不同作者，根负责合并/整合。
 
+2026-11-06：fb6a265f经独审c11dcc56 blocked。64MiB已有媒体preflight与flush分别约4708/13637ms持Session锁，原作者修复中；同类receive/report/plan/apply/resolve/bootstrap路径也纳入根因修复。按正式架构“86本机媒体准备与提交”新增仅本机opaque prepare/finish scope：短snapshot gate、锁外完整File处理、最终版本/文件凭据重验，无锁内IO fallback或另一SQLite长写锁。全部安全/预算/崩溃恢复不降级，旧失败保全，修复产品单独冻结并交原独审复审。
+
 objective：创建真实SyncService、注入生产Store/Session backend、实现真实sync_command UI契约，连接持久收件到安全apply与metadata/access，做两真实Rust进程/两个真实App页面端到端，禁止stub/fake残留。读[架构](../../architecture/sync.md)、[UI IPC契约](../../ui/sync-settings.md)、84/85实际冻结API，必要设计先补文档。
 
 path：src-tauri/src/sync/adapter.rs及子文件、lib.rs/setup/commands生命周期、session/synchronization.rs和Session必要字段、生产模块入口/Cargo依赖、Android备份配置；scripts/debug/rust真实生产同步headless和对应驱动。前端network-sync/App/bridge/attachment-target归86 frontend作者，不可交叠修改；UI86已合入，不重做。

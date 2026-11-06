@@ -70,6 +70,16 @@ WireVersion V1：workspaceId、kind(note/folder)、entityId、vector(BTreeMap UU
 
 手机首页不新增同步按钮，回前台由Rust服务触发重连；设置状态可人工立即同步。320px/深色、键盘焦点和关闭恢复均沿用82设置壳；调用真实IPC且生产不开放debug。临时邀请只在显式展开时展示，关闭清理可见secret。
 
+## 86 本机媒体准备与提交
+
+2026-11-06，独审c11dcc56发现已有64MiB附件的preflight与flush在Session mutex内完整哈希/capture，分别约4.7秒与13.6秒。生产backend不得在Session gate或其他长SQLite写事务中执行全量媒体读、哈希、复制或发布验证；该约束同样覆盖receive/register、report/plan的blob检查、apply/resolve的附件materialize，以及首次bootstrap/adopt。不得仅修两条探针入口而让相同路径从其他命令进入。
+
+采用仅本机、不可由peer/IPC反序列化或任意构造的媒体准备凭据，继续复用84验证和合并算法。短Session gate完成DB元数据检查，取得绑定本次操作/输入、Session与Store身份的快照；版本凭据覆盖该操作依赖的dirty/counter/heads/inbox、附件行和计划目标，不能只凭旧revision。锁外从受管文件描述执行完整inode/长度/mtime/ctime与SHA校验、capture及发布，并预先准备投影需要的独立附件文件。最终短gate重新核实同一操作、身份、完整generation/目标与全部文件凭据；一次调用scope只允许使用该scope已校验的结果及短文件发布，不允许缺证明时回退到锁内hash/copy。stale明确返回sync_plan_stale，保留dirty/inbox并有界重试，不吞差异或伪造成功。现有直接Store/headless API可保留独立语义，生产接线必须经过上述scope。
+
+媒体准备不扩大预算：所有尚未完成校验的临时写文件继续计入网络3文件/256MiB与本地串行1文件/256MiB，磁盘余量和blob缓存总额仍检查。多个附件只能按预算逐一完成；完整校验且已原子发布到受管最终路径的不可变文件与普通完整blob一样按实际存储占用计数，不能以“已准备”为名留下无限临时文件。最终DB gate之前不把未验证路径投影给用户；stale/失败只能回收本次操作确切拥有且未被有效引用的文件，已有cache、用户附件与其他操作文件不得删除。崩溃后的准备文件继续沿用明确所有权/恢复机制，不能由peer指定路径。
+
+修复验证须测真实Session普通读写在大媒体处理期间仍能完成，并覆盖准备后本地修改/删除/替换/不同peer并发、stale重试、文件与DB错误、预算及自然崩溃恢复。采样中短gate偶发WouldBlock允许；不能为了让旧负向探针blocked==0删掉最终校验或省略Session gate。原blocked证据保持不变，新修复独立冻结和复审。
+
 ## 验收及完成条件
 
 第一模块84是可运行的持久版本/附件核心，85是认证真实网络，两者通过不是完整目标完成。86集成Session/UI/生命周期，87完成两真实App与全新隔离AVD以及网络路线验收和准确出包。
