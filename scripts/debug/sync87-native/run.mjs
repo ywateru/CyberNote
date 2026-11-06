@@ -94,6 +94,7 @@ async function execute(request){
     }
     case 'attachments':{
       const c=await app();const owner=s.notes.at(-1);assert(owner,'create test note first');
+      await openNote(c,owner.id);
       if(/mInputShown=true/.test(await guard('ime'))){await guard('back');await pause(200);} // close actual IME only
       await openFilePicker(c);const before=await persistedNote(c,owner.id);await guard('back');await pause(300);
       assert.equal((await persistedNote(c,owner.id)).attachments.length,before.attachments.length,'cancel must add no attachment');
