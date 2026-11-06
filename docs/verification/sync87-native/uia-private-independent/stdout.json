@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "scope": "source and mocked adb main dispatch only; no devices operated",
+  "sourceSha256": "555732cf30d528880e158d6cb7bead593c07fff3e4828a87f7b0e3c22fd158fc",
+  "checks": [
+    "exact two path replacements only",
+    "fixed shell-private dump and matching cat",
+    "bounded25second dump unchanged",
+    "normal result forwarding unchanged",
+    "foreign serial refused before adb stub"
+  ],
+  "realAdbCalls": 0
+}
