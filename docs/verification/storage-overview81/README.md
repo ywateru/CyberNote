@@ -1,5 +1,7 @@
 # Storage overview81 frozen verification
 
+后续独审发现首次采样失败时备份入口被隐藏，已在 `0662a336` 修复；修后类型/构建与12项专项raw证据见 `recovery-fix/README.md`。下述68项与16图针对最初冻结提交，不冒充修后全组重跑。
+
 产品与专项 runner 冻结提交：`4a996cfcf51c0fed7fb7ac85860b8c71f819276a`，基线 `a3fb1370`。仅修改 `src/DataManagement.tsx`、`src/DataManagement.css`、`src/data-management.ts`、新增 `src/storage-usage.ts` 与 `scripts/debug/storage-overview.mjs`。本目录为该提交的作者验证，不是独立审查或主线组合验收。
 
 依据 `docs/ui/storage-overview.md` 与用户保全的 macOS 储存空间参考图，将数据管理重组为总占用、连续彩色比例条、图例、七个分类和同面板详情。按 frontend-design 指引，在已有系统风格内使用系统字体、paper/grouped 背景、14/16px 圆角、细分隔线与克制阴影。类别色为图片橙、录音红、视频紫、其他附件蓝、数据库青、日志灰、其他文件浅灰；文本同时表达类型与用量。总览不使用设备全盘容量，也不提供删除/清理。详情保留原文件信息与原字节导出。

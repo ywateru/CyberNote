@@ -1,0 +1,39 @@
+{
+  "recordedAtUtc": "2026-11-06T03:59:04.438422+00:00",
+  "commit": "0662a336540c5cef103d916a2ae86dc9ddeb6e24",
+  "commands": [
+    {
+      "name": "typecheck",
+      "argv": [
+        "pnpm",
+        "typecheck"
+      ],
+      "cwd": "/private/tmp/apple-notes-storage-overview81",
+      "exitCode": 0,
+      "wallMs": 2108
+    },
+    {
+      "name": "build",
+      "argv": [
+        "pnpm",
+        "build"
+      ],
+      "cwd": "/private/tmp/apple-notes-storage-overview81",
+      "exitCode": 0,
+      "wallMs": 3870
+    },
+    {
+      "name": "specialist",
+      "argv": [
+        "node",
+        "/private/tmp/storage81-recovery.mjs",
+        "/private/tmp/storage81-recovery-frozen-01"
+      ],
+      "cwd": "/private/tmp/apple-notes-storage-overview81",
+      "exitCode": 0,
+      "wallMs": 8129
+    }
+  ],
+  "wallMs": 14206,
+  "sourceUnchanged": true
+}

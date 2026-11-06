@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "First pending inventory exposes both actual enabled archive controls without snapshot",
+    "First inventory failure retains import/export recovery and explicit retry without totals",
+    "No-snapshot import cancellation keeps both controls and performs no archive write",
+    "No-snapshot export cancellation keeps both controls and performs no archive write"
+  ],
+  "error": "Error: Controlled archive failure\n    at waitForIdle (file:///private/tmp/apple-notes-storage-overview81/scripts/debug/runtime.mjs:68:41)\n    at async runStorageBackupAvailability (file:///private/tmp/apple-notes-storage-overview81/scripts/debug/storage-overview.mjs:910:7)\n    at async file:///private/tmp/storage81-recovery.mjs:10:49",
+  "pageErrors": [],
+  "wallMs": 7958,
+  "directory": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-debug70-MeVBQ5"
+}
