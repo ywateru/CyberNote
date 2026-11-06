@@ -47,3 +47,8 @@ export function actionFailure(request) {
     message:request.action==='pair'?'Native UI pairing failed; no input or exception recorded':'Native acceptance action failed; no input or exception recorded',
   };
 }
+
+export function guardFailureSummary(stdout) {
+  let value;try{value=JSON.parse(stdout);}catch{}
+  return value?.ok===false&&value.error==='Refused'&&value.message==='bounded subprocess failed 137: '?{event:'GUARD_BOUNDED_EXIT_137'}:{event:'GUARD_FAILURE_REDACTED'};
+}

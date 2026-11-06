@@ -23,6 +23,17 @@ export function chooseTarget(targets,port) {
   assert.equal(url.pathname,'/devtools/page/'+target.id);assert.equal(url.search,'');assert.equal(url.hash,'');
   assert(/^[A-Za-z0-9-]+$/.test(target.id));return target;
 }
+export function assertHomeVisible(view) {
+  assert(view.app.split(/\s+/).includes('page-notes'),'actual notes page required');
+  assert(view.app.split(/\s+/).includes('mobile'),'actual mobile layout required');
+  const visible=r=>r&&r.width>0&&r.height>0&&r.x<view.viewport.width&&r.y<view.viewport.height&&r.x+r.width>0&&r.y+r.height>0;
+  assert(visible(view.gallery),'gallery must have visible bounds');
+  assert(view.galleryDisplay!=='none'&&view.galleryVisibility==='visible','gallery CSS must be visible');
+  assert(!visible(view.editor),'editor must be hidden');
+  assert(visible(view.add)&&view.add.width>=44&&view.add.height>=44,'visible large add control required');
+  assert.equal(view.addColor,'rgb(255, 188, 0)');assert.equal(view.columns.trim().split(/\s+/).length,2);
+  return view;
+}
 export function parseNodes(xml) {
   const decode=s=>s.replace(/&(amp|quot|apos|lt|gt);/g,(_,x)=>({amp:'&',quot:'"',apos:"'",lt:'<',gt:'>'}[x]));
   const nodes=[],stack=[];

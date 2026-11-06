@@ -4,12 +4,12 @@ import { mkdir, readFile, writeFile, appendFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { resolve, basename } from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
-import { readRequests, actionFailure } from './protocol.mjs';
+import { readRequests, actionFailure, guardFailureSummary } from './protocol.mjs';
 import assert from 'node:assert/strict';
 import { DesktopPeer } from './desktop-peer.mjs';
 import { pairViaUI,saveImageOriginal,openNote,goHome } from './native-ui.mjs';
 import { roundtrip,backgroundRoundtrip,coldBootPrepare,coldBootVerify,assertNativeOriginal } from './scenarios.mjs';
-import { connect, guard, pause, parseNodes, nativeNode, SERIAL, AVD } from './client.mjs';
+import { connect, guard, pause, parseNodes, nativeNode, assertHomeVisible, SERIAL, AVD } from './client.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const options=Object.fromEntries(process.argv.slice(2).reduce((pairs,x,i,a)=>{if(i%2===0)pairs.push([x,a[i+1]]);return pairs;},[]));
 assert(Object.keys(options).every(x=>['--output','--receipt','--peer-receipt','--mode'].includes(x)),'unknown option');
@@ -69,7 +69,7 @@ async function nativeStep(label,operation){
   assert(/^[a-z0-9-]+$/.test(label));const start=performance.now();
   await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'start',time:new Date().toISOString()})+'\n');
   try{const value=await operation();await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'pass',wallSeconds:(performance.now()-start)/1000})+'\n');return value;}
-  catch(error){const safe=['read-only page evaluation failed','app WebView rectangle absent','different WebView hosts','different WebView rectangles','foreign WebView host','invalid WebView rectangle','unbalanced native XML'];const reason=safe.includes(error.message)?error.message:(error.stdout?'guard-command-failed':'unclassified-fixed-step-failure');if(label.startsWith('attachments-')&&typeof error.stdout==='string'){let detail;try{detail=JSON.parse(error.stdout);}catch{}if(detail?.ok===false&&typeof detail.error==='string'&&typeof detail.message==='string')await appendFile(resolve(output,'attachment-guard-failures.jsonl'),JSON.stringify({step:label,error:detail.error,message:detail.message})+'\n');}await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'fail',reason,wallSeconds:(performance.now()-start)/1000})+'\n');throw error;}
+  catch(error){const safe=['read-only page evaluation failed','app WebView rectangle absent','different WebView hosts','different WebView rectangles','foreign WebView host','invalid WebView rectangle','unbalanced native XML'];const reason=safe.includes(error.message)?error.message:(error.stdout?'guard-command-failed':'unclassified-fixed-step-failure');if(label.startsWith('attachments-')&&typeof error.stdout==='string')await appendFile(resolve(output,'attachment-guard-failures.jsonl'),JSON.stringify({step:label,...guardFailureSummary(error.stdout)})+'\n');await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'fail',reason,wallSeconds:(performance.now()-start)/1000})+'\n');throw error;}
 }
 async function persistedNote(c,id,expected=0){
   const end=Date.now()+15000;
@@ -86,10 +86,9 @@ async function execute(request){
     case 'start':assert(Object.keys(request).every(k=>['action','requestId'].includes(k)));return guard('start',{receipt:options['--receipt']});
     case 'pushFixtures':for(const f of s.files){assert.equal(hash(await readFile(f.path)),f.sha256);await guard('push',{'run-state':resolve(output,'state.json'),path:f.path,remote:f.remote});}return s.files.map(({name,sha256,bytes})=>({name,sha256,bytes}));
     case 'home':{
-      const c=await app();await c.wait('!!document.querySelector(".mobile.page-notes .mobile-gallery")','direct gallery');
-      const columns=await c.read('getComputedStyle(document.querySelector(".mobile-gallery")).gridTemplateColumns');assert.equal(columns.trim().split(/\s+/).length,2,'two real gallery columns');
-      const add=await c.read('(()=>{const b=document.querySelector(".mobile-add-note");const r=b.getBoundingClientRect();return {visible:r.width>=44&&r.height>=44,color:getComputedStyle(b).backgroundColor}})()');assert(add.visible);assert.equal(add.color,'rgb(255, 188, 0)');
-      await c.snapshot(output,'home');return{columns,add};
+      const c=await app();await goHome(c);await c.wait('!!document.querySelector(".mobile.page-notes .mobile-gallery")','direct gallery');
+      const view=assertHomeVisible(await c.read(`(()=>{const rect=e=>{if(!e)return null;const r=e.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height}};const g=document.querySelector('.mobile-gallery'),a=document.querySelector('.mobile-add-note');return{app:document.querySelector('.app').className,viewport:{width:innerWidth,height:innerHeight},gallery:rect(g),galleryDisplay:getComputedStyle(g).display,galleryVisibility:getComputedStyle(g).visibility,editor:rect(document.querySelector('.tiptap')),add:rect(a),addColor:getComputedStyle(a).backgroundColor,columns:getComputedStyle(g).gridTemplateColumns}})()`));
+      await c.snapshot(output,'home-visible-final');return view;
     }
     case 'createNote':{
       const c=await app();await goHome(c);const marker=`SYNC87-${s.runId}-${s.notes.length+1}`;
