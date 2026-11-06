@@ -1,0 +1,7 @@
+# Independent actual Android20 finite subtype review
+
+Author36af024f/main88320cb4 inspected; actualbaseline/live/count/lifecycle archivedbytes match originals. Baselinev2 syncMediaPublish2/applyError2/timeout1/commits0; two live samples syncMediaPublish23→26 matchesapplyError23→26, all28otherapplycategories0, commits0, samePID3949/startTicks4926. Readerclosed. Exact20 auditedreceipt/install used; no new source/Store/re-pair. Fixed target counts1/1/0/0/0 under samebeforeafterlifetime, sequentialqueries/non-atomic; fullChineseuplinkhashes match, desktop target absentnative.
+
+Frozen90 classifier maps originalcode sync_media_publish to fixed syncMediaPublish. Source has unique original producer at VerifiedMedia::materialize fs::hard_link(...).map_err(sync_media_publish). This establishes that original publication operation is failing in actualAndroid; no rawOSerrno/filesystem/SELinuxcause is claimed or needed for authorizedportable91fix. No actualrepair/convergencePASS yet.
+
+SameStore root/dbinodes35260086/35260089 preserved; database hash maylegitimately evolve (not requiredunchanged), immutable11binary+fullsourcefingerprintsunchangedtrue, peerbackendnatural0/98.6254435s/noerrors, explicitclose.62443775s and wrappernatural0/145.387167791s. Statusnativeconnectedtrue but desktopconnectedfalse readssequential; no simultaneousmutualconnectionclaim. Lifecycle20stilllive atarchive, notterminal. No reviewerdevices/CDP/runtime/DBqueries. FullgoalINCOMPLETE; source91freezepending.
