@@ -1,0 +1,169 @@
+{
+  "status": "PASS-FOCUSED-PREFERENCES82",
+  "checks": [
+    {
+      "label": "Actual Mac gear opens one direct App child shared shell without inventory",
+      "pass": true
+    },
+    {
+      "label": "Native App projection hides toolbar throughout settings",
+      "pass": true
+    },
+    {
+      "label": "Setting failure is explicit and not persisted by fixture",
+      "pass": true
+    },
+    {
+      "label": "Setting retry uses actual handler and persists only requested value",
+      "pass": true
+    },
+    {
+      "label": "Keyboard End focuses data tab and lazily mounts its single body",
+      "pass": true
+    },
+    {
+      "label": "Hidden public data.refresh rejects new operations",
+      "pass": true
+    },
+    {
+      "label": "Hidden public data.navigate rejects new operations",
+      "pass": true
+    },
+    {
+      "label": "Hidden public data.filter rejects new operations",
+      "pass": true
+    },
+    {
+      "label": "Hidden public data.exportAttachment rejects new operations",
+      "pass": true
+    },
+    {
+      "label": "Forward Tab from settings tab enters visible settings controls",
+      "pass": true
+    },
+    {
+      "label": "Hidden data retains exact instance, shell, query, page and scroll without resampling",
+      "pass": true
+    },
+    {
+      "label": "Tab navigation preserves note, folder, page, editor DOM and authority",
+      "pass": true
+    },
+    {
+      "label": "Actual export busy disables both backup controls",
+      "pass": true
+    },
+    {
+      "label": "Hidden export failure preserves current settings focus and does not claim success",
+      "pass": true
+    },
+    {
+      "label": "Hidden export error remains after returning, with snapshot and retry enabled",
+      "pass": true
+    },
+    {
+      "label": "Cancellation after failure clears old error and never reports success",
+      "pass": true
+    },
+    {
+      "label": "BODY Tab returns to shared close and skips hidden settings",
+      "pass": true
+    },
+    {
+      "label": "Reverse trap targets visible data summary and excludes hidden settings action",
+      "pass": true
+    },
+    {
+      "label": "BODY Escape closes only shared shell and restores actual Mac gear",
+      "pass": true
+    },
+    {
+      "label": "Shared capture removes listener on unmount",
+      "pass": true
+    },
+    {
+      "label": "Hidden access prepare synchronously removes old snapshot and sensitive DOM",
+      "pass": true
+    },
+    {
+      "label": "Late hidden inventory cannot refill protected data or take focus",
+      "pass": true
+    },
+    {
+      "label": "Recovered authority preserves body instance and reads current snapshot",
+      "pass": true
+    },
+    {
+      "label": "Recovered body and shell survive another tab roundtrip",
+      "pass": true
+    },
+    {
+      "label": "Native overlay remains true on both tabs after access recovery",
+      "pass": true
+    },
+    {
+      "label": "Reopen settings resets lazy lifetime and entry tab",
+      "pass": true
+    },
+    {
+      "label": "All preference operations preserve note documents",
+      "pass": true
+    },
+    {
+      "label": "Real mobile recorder remains active with same owner and no stop after tab switches",
+      "pass": true
+    },
+    {
+      "label": "Mobile recording blocks both backup buttons",
+      "pass": true
+    },
+    {
+      "label": "Android Back closes preferences before touching recording",
+      "pass": true
+    },
+    {
+      "label": "320px short mobile keeps one reachable shared header and scrolling data",
+      "pass": true
+    },
+    {
+      "label": "Independent desktop/mobile page errors empty",
+      "pass": true,
+      "detail": [
+        [],
+        []
+      ]
+    }
+  ],
+  "sourceUnchanged": true,
+  "sourceFingerprint": "7a7025e49d58a4846ee6a4d984833b88c4723c9043b1859d9611fba3e4ce6ac7",
+  "runnerSha256": "fa1857e70d20069f64350b2e871912b6cedaa7632e206b2f272f78ade04d85a9",
+  "wallSeconds": 12.373448959000001,
+  "scopes": [
+    {
+      "platform": "desktop-browser",
+      "backend": "isolated-js-protocol-fixture",
+      "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+      "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+      "browser": "156.0.8078.80",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      }
+    },
+    {
+      "platform": "mobile-browser",
+      "backend": "isolated-js-protocol-fixture",
+      "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+      "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+      "browser": "156.0.8078.80",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ],
+  "limits": [
+    "Synthetic browser IPC/device/archives; no actual Rust Store, Android device, OS dialog, real microphone or original pixel acceptance.",
+    "Native controller/ObjC unchanged and mapped by SHA to prior results; no Cargo/AppKit rerun."
+  ]
+}

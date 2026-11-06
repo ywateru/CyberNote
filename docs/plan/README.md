@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-06：[统一设置82](tasks/app-preferences82.md)已通过作者52/50和独审32项并合入源码，无blocking；[Android快速首页83](tasks/app-android-quick-home83.md)现串行开发，最终[组合8283](tasks/app-mobile-home8283.md)一次完整回归/准确Mac26与Android16出包。此时尚未完成83或生成新包。
+
 2026-11-06：[Android快速画廊首页83](tasks/app-android-quick-home83.md)等待82独审合入后串行开发；手机打开即画廊、一键新建聚焦、精简编辑，82/83合并回归出包。
 
 2026-11-06：[统一设置与数据82](tasks/app-preferences82.md)进行中，按用户第三图合并设置和数据；冻结后独审及主线回归/双端出包。

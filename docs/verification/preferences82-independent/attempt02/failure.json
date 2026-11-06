@@ -1,0 +1,97 @@
+{
+  "message": "Controlled archive failure",
+  "stack": "Error: Controlled archive failure\n    at waitForIdle (file:///private/tmp/apple-notes-preferences82/scripts/debug/runtime.mjs:68:41)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/preferences82-independent/run-focused.mjs:60:26",
+  "checks": [
+    {
+      "label": "Actual Mac gear opens one direct App child shared shell without inventory",
+      "pass": true
+    },
+    {
+      "label": "Native App projection hides toolbar throughout settings",
+      "pass": true
+    },
+    {
+      "label": "Setting failure is explicit and not persisted by fixture",
+      "pass": true
+    },
+    {
+      "label": "Setting retry uses actual handler and persists only requested value",
+      "pass": true
+    },
+    {
+      "label": "Keyboard End focuses data tab and lazily mounts its single body",
+      "pass": true
+    },
+    {
+      "label": "Hidden public data.refresh rejects new operations",
+      "pass": true
+    },
+    {
+      "label": "Hidden public data.navigate rejects new operations",
+      "pass": true
+    },
+    {
+      "label": "Hidden public data.filter rejects new operations",
+      "pass": true
+    },
+    {
+      "label": "Hidden public data.exportAttachment rejects new operations",
+      "pass": true
+    },
+    {
+      "label": "Forward Tab from settings tab enters visible settings controls",
+      "pass": true
+    },
+    {
+      "label": "Hidden data retains exact instance, shell, query, page and scroll without resampling",
+      "pass": true
+    },
+    {
+      "label": "Tab navigation preserves note, folder, page, editor DOM and authority",
+      "pass": true
+    },
+    {
+      "label": "Actual export busy disables both backup controls",
+      "pass": true
+    },
+    {
+      "label": "Hidden export failure preserves current settings focus and does not claim success",
+      "pass": true
+    }
+  ],
+  "sourceBefore": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7a7025e49d58a4846ee6a4d984833b88c4723c9043b1859d9611fba3e4ce6ac7",
+    "fileCount": 125,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "7a7025e49d58a4846ee6a4d984833b88c4723c9043b1859d9611fba3e4ce6ac7",
+    "fileCount": 125,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "wallSeconds": 8.6007555
+}

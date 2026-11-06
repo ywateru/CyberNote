@@ -1,5 +1,7 @@
 # Apple Notes Clone
 
+2026-11-06：[统一设置82](plan/tasks/app-preferences82.md)已通过作者52/50和独审32项并合入源码，无blocking；[Android快速首页83](plan/tasks/app-android-quick-home83.md)现串行开发，最终[组合8283](plan/tasks/app-mobile-home8283.md)一次完整回归/准确Mac26与Android16出包。此时尚未完成83或生成新包。
+
 2026-11-06：新增[Android快速画廊首页83](plan/tasks/app-android-quick-home83.md)，按[手机规格](ui/android-quick-home.md)直接画廊、明显＋和一键输入；等待82独审合入后串行实施，最终82/83组合回归与Mac26/Android16交付。
 
 2026-11-06：[统一设置与数据82](plan/tasks/app-preferences82.md)进行中：footer改齿轮，公共界面顶部“设置”“数据”两图标标签，[规格](ui/preferences.md)。

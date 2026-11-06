@@ -1,0 +1,180 @@
+{
+  "workspace": {
+    "folders": [
+      {
+        "id": "default",
+        "name": "备忘录",
+        "sortOrder": 0,
+        "createdAt": 1,
+        "kind": "default",
+        "parentId": null
+      },
+      {
+        "id": "quick",
+        "name": "快速备忘录",
+        "sortOrder": -1,
+        "createdAt": 1,
+        "kind": "quick",
+        "parentId": null
+      },
+      {
+        "id": "trash",
+        "name": "最近删除",
+        "sortOrder": 9999,
+        "createdAt": 1,
+        "kind": "trash",
+        "parentId": null
+      }
+    ],
+    "notes": [
+      {
+        "id": "note-a",
+        "folderId": "default",
+        "title": "Fixture A",
+        "plainText": "Fixture A",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fixture A"
+                }
+              ]
+            }
+          ]
+        },
+        "createdAt": 1,
+        "updatedAt": 1,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": false,
+        "paperStyle": "plain",
+        "revision": 1
+      },
+      {
+        "id": "note-b",
+        "folderId": "default",
+        "title": "Fixture B",
+        "plainText": "Fixture B",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fixture B"
+                }
+              ]
+            }
+          ]
+        },
+        "createdAt": 1,
+        "updatedAt": 1,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": false,
+        "paperStyle": "plain",
+        "revision": 1
+      }
+    ],
+    "attachments": [],
+    "settings": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "updated"
+    },
+    "access": {
+      "sessionId": "debug70-f908d72c-e403-4c21-bd44-f49963a85bab",
+      "epoch": 1,
+      "notes": {
+        "note-a": {
+          "epoch": 0,
+          "authorized": true
+        },
+        "note-b": {
+          "epoch": 0,
+          "authorized": true
+        }
+      },
+      "suspended": [],
+      "operationId": null
+    },
+    "metadata": {
+      "sessionId": "debug70-f908d72c-e403-4c21-bd44-f49963a85bab",
+      "sequence": 0
+    }
+  },
+  "editorJSON": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Fixture A"
+          }
+        ]
+      }
+    ]
+  },
+  "editorSelection": {
+    "type": "text",
+    "anchor": 1,
+    "head": 1
+  },
+  "error": "Controlled archive failure",
+  "notice": "",
+  "selection": {
+    "folderId": "default",
+    "noteId": "note-a",
+    "page": "editor",
+    "query": "",
+    "searching": false,
+    "menu": null,
+    "modal": "preferences",
+    "listed": [
+      "note-a",
+      "note-b"
+    ]
+  },
+  "save": {
+    "pending": 0,
+    "queued": 0,
+    "failed": 0,
+    "saving": 0
+  },
+  "busy": false,
+  "failure": {
+    "serial": 2,
+    "message": "Controlled archive failure"
+  },
+  "recording": {
+    "active": false,
+    "state": null
+  },
+  "ocr": {
+    "phase": "choose",
+    "text": "",
+    "error": ""
+  },
+  "settings": {
+    "selectedFolder": "default",
+    "selectedNote": "note-a",
+    "theme": "light",
+    "sort": "updated"
+  },
+  "preferences": {
+    "open": true,
+    "tab": "data"
+  },
+  "folderForm": false
+}
