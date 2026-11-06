@@ -82,8 +82,12 @@ export async function connect({receipt,port=19400}) {
     const point=async(selector,text)=>read(`(()=>{const found=[...document.querySelectorAll(${JSON.stringify(selector)})].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&!e.disabled&&(${JSON.stringify(text===undefined?null:text)}===null||e.textContent.trim()===${JSON.stringify(text===undefined?null:text)})});if(found.length!==1)throw Error('Expected one visible enabled target');found[0].scrollIntoView({block:'nearest',inline:'nearest'});const r=found[0].getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
     const tap=async(selector,text)=>{const p=await point(selector,text);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});};
     const nativeTap=async(selector,text)=>{
-      const p=await point(selector,text);const nodes=parseNodes(await guard('uia'));
-      const rect=nativeWebViewRect(nodes);
+      const p=await point(selector,text);let xml;
+      for(let attempt=0;attempt<2;attempt++){
+        try{xml=await guard('uia');break;}
+        catch(error){let result;try{result=JSON.parse(error.stdout);}catch{}if(attempt!==0||result?.error!=='Refused'||result.message!=='bounded subprocess failed 137: ')throw error;errors.push({event:'UIA_DUMP_EXIT_137',retry:1});await pause(250);}
+      }
+      const nodes=parseNodes(xml);const rect=nativeWebViewRect(nodes);
       const viewport=await read('({width:innerWidth,height:innerHeight})');
       await guard('tap',{x:Math.round(rect.x+p.x*rect.width/viewport.width),y:Math.round(rect.y+p.y*rect.height/viewport.height)});
     };

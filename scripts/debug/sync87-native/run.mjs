@@ -17,7 +17,7 @@ assert(['prepare','serve'].includes(options['--mode']),'explicit --mode prepare|
 const output=resolve(options['--output']||'');
 assert(/^\/private\/tmp\/notes-sync87-native-[a-z0-9-]+$/.test(output),'new isolated /private/tmp/notes-sync87-native-* output required');
 let context,peer;
-const closeClient=async()=>{const owned=context;context=undefined;await owned?.close();};
+const closeClient=async()=>{const owned=context;context=undefined;if(owned?.errors.length)await appendFile(resolve(output,'native-client-events.jsonl'),JSON.stringify({identity:owned.identity,events:owned.errors})+'\n');await owned?.close();};
 async function prepare(){
   assert(!existsSync(output),'never replace a native evidence directory');await mkdir(output,{mode:0o700});
   const id=randomBytes(5).toString('hex'),remote='/sdcard/Download/notes-sync87-'+id;
