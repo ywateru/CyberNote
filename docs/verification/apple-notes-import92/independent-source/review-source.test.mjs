@@ -1,0 +1,32 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+import test from 'node:test';
+const source=fs.readFileSync(new URL('../../../../src-tauri/src/apple_notes_source.js',import.meta.url),'utf8');
+function harness(o={}) {
+ const calls=[];let locks=0,containers=0; const error=code=>Object.defineProperties({errorNumber:code},{message:{get(){throw Error('RAW_MESSAGE_ACCESSED')}},stack:{get(){throw Error('RAW_STACK_ACCESSED')}}});
+ const account={id:()=> 'acct',name:()=> '合成账户'};
+ const folder={id:()=> 'folder',name:()=> {if(o.folderError)throw error(-1728);return '合成文件夹'},container:()=> ({id:()=>o.cycle?'folder':'acct'}),folders:()=>[]};
+ const attachments=Array.from({length:o.count??2},(_,i)=>({id:()=>`attachment-${i}`,name:()=>i?null:'../SYNTHETIC_PRIVATE.png',contentIdentifier:()=>i?null:'cid:first'}));
+ const note={id:()=>o.wrongId?'foreign':'note',name:()=> '合成标题',container:()=>{containers++;return {id:()=>o.moved&&containers>1?'other':'folder'}},modificationDate:()=>new Date(2),creationDate:()=>new Date(1),passwordProtected:()=>{calls.push('locked');locks++;return o.locked||!!(o.lockAfter&&locks>1)},body:()=>{calls.push('body');if(o.bodyError)throw error(-1728);return '<p>合成正文</p>'},plaintext:()=>{calls.push('plain');return '合成正文'},attachments:()=>attachments};
+ const notes=()=>[note];notes.byId=id=>{assert.equal(id,'note');return note};
+ const app={accounts:()=>o.duplicateAccounts?[account,account]:[account],folders:()=>o.repeatFolders?[folder,folder]:[folder],notes,save:(object,params)=>{assert.ok(attachments.includes(object));assert.deepEqual(Object.keys(params),['in']);calls.push(['save',attachments.indexOf(object),params.in]);if(o.saveError)throw error(o.saveError)}};
+ const c=vm.createContext({Application:name=>{assert.equal(name,'Notes');calls.push('Application');return new Proxy(app,{get(target,key){assert.ok(['accounts','folders','notes','save'].includes(key),`forbidden source member ${String(key)}`);return target[key]}})},Path:p=>{calls.push(['Path',p]);return p}});
+ vm.runInContext(source,c,{timeout:1000});
+ return {calls,run:r=>JSON.parse(c.run([JSON.stringify(r)]))};
+}
+const scan={version:1,mode:'scan',maxNotes:5000};const read={version:1,mode:'read',noteId:'note',exportPaths:['/private/tmp/owned-review/one','/private/tmp/owned-review/two']};
+test('fixed structured request refuses extra executable selector before Notes',()=>{const h=harness();assert.equal(h.run({...read,script:'delete note'}).status,'invalid_request');assert.equal(h.calls.length,0)});
+test('path control/traversal/alias parents rejected before any source event',()=>{for(const paths of [['/a/x/../y'],['/a//y'],['/a/\u0000y'],['/a/y','/b/z']]){const h=harness();assert.equal(h.run({...read,exportPaths:paths}).status,'invalid_request');assert.equal(h.calls.length,0)}});
+test('duplicate accounts invalidate scan and do not leak incomplete hierarchy',()=>{const h=harness({duplicateAccounts:true});const r=h.run(scan);assert.equal(r.status,'unreadable');assert.equal(r.reason,'hierarchy_unreadable');assert.deepEqual(r.notes,[])});
+test('repeated global folder objects collapse without body access',()=>{const h=harness({repeatFolders:true});const r=h.run(scan);assert.equal(r.folders.length,1);assert.equal(r.notes[0].status,'ok');assert.ok(!h.calls.includes('body'))});
+test('unreadable folder property returns finite error without touching raw message',()=>{const h=harness({folderError:true});const r=h.run(scan);assert.equal(r.reason,'hierarchy_unreadable');assert.deepEqual(r.notes,[]);assert.ok(!JSON.stringify(r).includes('RAW_'))});
+test('cyclic ancestry marks affected note unreadable without bodies',()=>{const h=harness({cycle:true});const r=h.run(scan);assert.equal(r.notes[0].reason,'hierarchy_unreadable');assert.ok(!h.calls.includes('body'))});
+test('initial locked note never reads body or calls save',()=>{const h=harness({locked:true});const r=h.run(read);assert.equal(r.status,'locked');assert.equal(r.note,null);assert.ok(!h.calls.includes('body'));assert.ok(!h.calls.some(x=>Array.isArray(x)&&x[0]==='save'))});
+test('note relocked after read is changed rather than stable success',()=>{const h=harness({lockAfter:true});const r=h.run(read);assert.equal(r.status,'changed');assert.equal(r.note.stable,false)});
+test('stable ID mismatch refuses before body read',()=>{const h=harness({wrongId:true});const r=h.run(read);assert.equal(r.status,'unreadable');assert.equal(r.note,null);assert.ok(!h.calls.includes('body'))});
+test('only attachment objects receive exactly supplied paths, nullable metadata retained',()=>{const h=harness();const r=h.run(read);assert.equal(r.status,'ok');assert.equal(r.note.attachments.length,2);assert.equal(r.note.attachments[1].name,null);assert.deepEqual(h.calls.filter(x=>Array.isArray(x)&&x[0]==='save'),[['save',0,read.exportPaths[0]],['save',1,read.exportPaths[1]]]);assert.ok(h.calls.indexOf('locked')<h.calls.indexOf('body'))});
+test('automation denial during export ends item without second save or raw error',()=>{const h=harness({saveError:-1743});const r=h.run(read);assert.equal(r.status,'automation_denied');assert.equal(r.note,null);assert.equal(h.calls.filter(x=>Array.isArray(x)&&x[0]==='save').length,1);assert.ok(!JSON.stringify(r).includes('RAW_'))});
+test('generic export failure is finite per-item and does not invent success',()=>{const h=harness({saveError:-10000});const r=h.run(read);assert.equal(r.note.attachments[0].status,'export_failed');assert.equal(r.note.attachments[0].code,-10000);assert.ok(!JSON.stringify(r).includes('RAW_'))});
+test('attachment bound checked before any file export',()=>{const h=harness({count:1001});const r=h.run(read);assert.equal(r.reason,'source_limit');assert.equal(r.note,null);assert.ok(!h.calls.some(x=>Array.isArray(x)&&x[0]==='save'))});
+test('folder change after export is not stable',()=>{const h=harness({moved:true});const r=h.run(read);assert.equal(r.status,'changed');assert.equal(r.note.stable,false)});

@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: fixed structured request refuses extra executable selector before Notes
+ok 1 - fixed structured request refuses extra executable selector before Notes
+  ---
+  duration_ms: 0.960958
+  type: 'test'
+  ...
+# Subtest: path control/traversal/alias parents rejected before any source event
+ok 2 - path control/traversal/alias parents rejected before any source event
+  ---
+  duration_ms: 0.973958
+  type: 'test'
+  ...
+# Subtest: duplicate accounts invalidate scan and do not leak incomplete hierarchy
+ok 3 - duplicate accounts invalidate scan and do not leak incomplete hierarchy
+  ---
+  duration_ms: 0.533708
+  type: 'test'
+  ...
+# Subtest: repeated global folder objects collapse without body access
+ok 4 - repeated global folder objects collapse without body access
+  ---
+  duration_ms: 0.310458
+  type: 'test'
+  ...
+# Subtest: unreadable folder property returns finite error without touching raw message
+ok 5 - unreadable folder property returns finite error without touching raw message
+  ---
+  duration_ms: 0.295209
+  type: 'test'
+  ...
+# Subtest: cyclic ancestry marks affected note unreadable without bodies
+ok 6 - cyclic ancestry marks affected note unreadable without bodies
+  ---
+  duration_ms: 0.33325
+  type: 'test'
+  ...
+# Subtest: initial locked note never reads body or calls save
+ok 7 - initial locked note never reads body or calls save
+  ---
+  duration_ms: 0.281459
+  type: 'test'
+  ...
+# Subtest: note relocked after read is changed rather than stable success
+ok 8 - note relocked after read is changed rather than stable success
+  ---
+  duration_ms: 0.699792
+  type: 'test'
+  ...
+# Subtest: stable ID mismatch refuses before body read
+ok 9 - stable ID mismatch refuses before body read
+  ---
+  duration_ms: 0.390167
+  type: 'test'
+  ...
+# Subtest: only attachment objects receive exactly supplied paths, nullable metadata retained
+ok 10 - only attachment objects receive exactly supplied paths, nullable metadata retained
+  ---
+  duration_ms: 0.478958
+  type: 'test'
+  ...
+# Subtest: automation denial during export ends item without second save or raw error
+ok 11 - automation denial during export ends item without second save or raw error
+  ---
+  duration_ms: 0.296667
+  type: 'test'
+  ...
+# Subtest: generic export failure is finite per-item and does not invent success
+ok 12 - generic export failure is finite per-item and does not invent success
+  ---
+  duration_ms: 0.247166
+  type: 'test'
+  ...
+# Subtest: attachment bound checked before any file export
+ok 13 - attachment bound checked before any file export
+  ---
+  duration_ms: 0.257833
+  type: 'test'
+  ...
+# Subtest: folder change after export is not stable
+ok 14 - folder change after export is not stable
+  ---
+  duration_ms: 0.229375
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 36.554209
