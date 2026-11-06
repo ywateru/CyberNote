@@ -1,0 +1,32 @@
+   Compiling libsqlite3-sys v0.30.1
+   Compiling rusqlite v0.32.1
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/sync86-independent-review-01/lock-harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.91s
+     Running unittests root.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_sync84_store_tests-2d5cba25240c03da)
+
+running 2 tests
+INDEPENDENT_MUTEX preflight wall_ms=4708 blocked_samples=1627 available_samples=1519
+
+thread 'sync::adapter::independent_mutex_review::independent_preflight_must_not_hash_64mib_under_session_mutex' (42751765) panicked at current/sync/adapter.rs:1260:3:
+assertion `left == right` failed: preflight: hashing/capture held Session mutex
+  left: 1627
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test sync::adapter::independent_mutex_review::independent_preflight_must_not_hash_64mib_under_session_mutex ... FAILED
+INDEPENDENT_MUTEX flush wall_ms=13637 blocked_samples=9106 available_samples=1
+
+thread 'sync::adapter::independent_mutex_review::independent_flush_must_not_capture_64mib_under_session_mutex' (42751764) panicked at current/sync/adapter.rs:1260:3:
+assertion `left == right` failed: flush: hashing/capture held Session mutex
+  left: 9106
+ right: 0
+test sync::adapter::independent_mutex_review::independent_flush_must_not_capture_64mib_under_session_mutex ... FAILED
+
+failures:
+
+failures:
+    sync::adapter::independent_mutex_review::independent_flush_must_not_capture_64mib_under_session_mutex
+    sync::adapter::independent_mutex_review::independent_preflight_must_not_hash_64mib_under_session_mutex
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 138 filtered out; finished in 44.08s
+
+error: test failed, to rerun pass `--lib`

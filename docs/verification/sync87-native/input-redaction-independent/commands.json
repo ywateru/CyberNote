@@ -1,0 +1,59 @@
+[
+  {
+    "name": "python-guards",
+    "argv": [
+      "python3",
+      "scripts/debug/sync87-native/check_guards.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.103693
+  },
+  {
+    "name": "node-guards",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-client.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.033733333000000004
+  },
+  {
+    "name": "author-input-checks",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-input.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.571113875
+  },
+  {
+    "name": "protocol-syntax",
+    "argv": [
+      "node",
+      "--check",
+      "scripts/debug/sync87-native/protocol.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.020840375000000022
+  },
+  {
+    "name": "run-syntax",
+    "argv": [
+      "node",
+      "--check",
+      "scripts/debug/sync87-native/run.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.020684541999999917
+  },
+  {
+    "name": "diff-check",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.07169708399999997
+  }
+]

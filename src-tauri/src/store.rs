@@ -171,20 +171,26 @@ impl TryFrom<AttachmentRecord> for Attachment {
     }
 }
 pub struct Store {
+    instance_id: Uuid,
     db: Connection,
     root: PathBuf,
     keys: HashMap<String, [u8; 32]>,
     receipt: Option<CommitReceipt>,
+    sync_media: Option<synchronization::media::VerifiedMedia>,
+    sync_media_cache: std::collections::BTreeMap<PathBuf, synchronization::media::VerifiedFile>,
 }
 impl Store {
     pub fn open(root: impl AsRef<Path>) -> Result<Self> {
         fs::create_dir_all(root.as_ref())?;
         let db = Connection::open(root.as_ref().join("notes.sqlite3"))?;
         let mut s = Self {
+            instance_id: Uuid::new_v4(),
             db,
             root: root.as_ref().into(),
             keys: HashMap::new(),
             receipt: None,
+            sync_media: None,
+            sync_media_cache: std::collections::BTreeMap::new(),
         };
         s.validate_sync_schema()?;
         s.initialize_storage()?;

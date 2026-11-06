@@ -1,0 +1,38 @@
+{
+  "scope": "Synthetic frozen build08 client TLS diagnostic; previously owned stopped QuickTunnel hostname. No new tunnel, no payload log.",
+  "result": {
+    "ok": false,
+    "errorCode": "sync_timeout",
+    "wallMs": 22
+  },
+  "processes": [
+    {
+      "pid": 8451,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0
+    },
+    {
+      "pid": 8452,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0
+    }
+  ],
+  "logs": [
+    {
+      "pid": 8451,
+      "stderr": ""
+    },
+    {
+      "pid": 8452,
+      "stderr": "\nthread 'notes-sync' (42770464) panicked at /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rustls-0.23.46/src/crypto/mod.rs:249:14:\n\nCould not automatically determine the process-level CryptoProvider from Rustls crate features.\nCall CryptoProvider::install_default() before this point to select a provider manually, or make sure exactly one of the 'aws-lc-rs' and 'ring' features is enabled.\nSee the documentation of the CryptoProvider type for more information.\n            \nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+warning: unused `std::result::Result` in tuple element 0 that must be used
+   --> /private/tmp/apple-notes-sync86-adapter/src-tauri/src/session/synchronization.rs:184:482
+    |
+184 | ...false).unwrap();s.finish(event["operationId"].as_str().unwrap(),&HashSet::from(["main".into()]),false).unwrap();s.quiet.retry_af...
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+    = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+
+warning: `notes-sync86-lean` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running unittests /private/tmp/apple-notes-sync86-adapter/src-tauri/src/sync_test_root84.rs (/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync86_lean-0e6d0c1e48477ec1)
+
+running 7 tests
+test session::synchronization::tests::strict_replies_real_window_phase_token_and_cancellation_receipt ... ok
+test session::synchronization::tests::participant_added_or_dirty_save_after_prepare_aborts_without_apply ... ok
+test session::synchronization::tests::ready_then_cancel_is_terminal_before_commit_and_inbox_survives ... ok
+test session::synchronization::tests::normal_note_apply_has_actual_metadata_without_global_access_bump ... ok
+test session::synchronization::final_gate_tests::final_gate_rechecks_registered_save_intents_and_preserves_authority_for_drain ... ok
+test session::synchronization::final_gate_tests::access_barrier_and_timeout_abort_quiet_without_touching_business_rows ... ok
+test session::synchronization::final_gate_tests::changed_sealed_lock_delete_revoke_only_the_actual_target_note_epoch ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 125 filtered out; finished in 0.26s
+

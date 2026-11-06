@@ -1,0 +1,28 @@
+PASS status is disabled and omits optional nulls
+PASS status does not generate Noise identity
+PASS two independent SQLite stores adopt authenticated workspace
+PASS A note, ordinary and smart folders arrive over real socket
+PASS B edit converges back to A
+PASS production media journal returns attachment metadata
+PASS multi-frame media metadata is projected remotely
+PASS remote immutable blob bytes match exact source
+PASS protected target remains durably pending
+PASS unrelated note applies while owner remains protected
+PASS owner update applies after normal protection release
+PASS remote lock revokes note authorization
+PASS remote ciphertext unlocks with original password
+PASS remote delete is projected and access revoked
+PASS restore causally supersedes old deletion
+PASS stop persists paused and closes listener
+PASS A owned Rust process exited naturally
+PASS B owned Rust process exited naturally
+PASS cold restart preserves paused identity
+PASS offline same-entity edits retain concurrent conflict heads
+PASS explicit keep-all resolution converges and retains a copy
+PASS 100 repeat wakeups preserve note revision
+PASS wrong Noise key is rejected without enabling business Store
+PASS real quiet events contain probe, prepare and commit receipts
+PASS no async transport errors
+PASS A-restart owned Rust process exited naturally
+PASS B-restart owned Rust process exited naturally
+PASS Bad-auth owned Rust process exited naturally

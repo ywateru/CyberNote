@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "mode": "check-production",
+  "sourceHead": "9cbbb150dfebf1f5fb4afcae454b5133b6ded220",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "3b4fbbddf5b04e9acfb3fae9ed81d56cd657e19c30619d582926cecfe7f27f84",
+    "fileCount": 145,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "3b4fbbddf5b04e9acfb3fae9ed81d56cd657e19c30619d582926cecfe7f27f84",
+    "fileCount": 145,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsChanged": false,
+  "platform": "desktop-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "elapsedMs": 8841,
+  "result": {
+    "productionAPIAbsent": true,
+    "urlCannotEnable": true,
+    "bundle": {
+      "files": 3,
+      "markers": [
+        "__NOTES_DEBUG__",
+        "SyntheticMediaRecorder",
+        "__DEBUG_PLATFORM__",
+        "synthetic-device-and-ipc-boundaries"
+      ],
+      "matches": []
+    },
+    "platformMockInjectedByRunnerOnly": true
+  },
+  "pageErrors": [],
+  "output": "/private/tmp/sync87-main-integration-final01/production"
+}

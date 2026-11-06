@@ -1,0 +1,158 @@
+{
+  "head": "9cbbb150dfebf1f5fb4afcae454b5133b6ded220",
+  "runs": [
+    {
+      "name": "build",
+      "args": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 8.607,
+      "environmentOverrides": {}
+    },
+    {
+      "name": "production",
+      "args": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/sync87-main-integration-final01/production"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 9.236,
+      "environmentOverrides": {}
+    },
+    {
+      "name": "desktop",
+      "args": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "all",
+        "--out",
+        "/private/tmp/sync87-main-integration-final01/desktop"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 123.338,
+      "environmentOverrides": {}
+    },
+    {
+      "name": "mobile-notes",
+      "args": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "group",
+        "notes",
+        "--mobile",
+        "--out",
+        "/private/tmp/sync87-main-integration-final01/mobile-notes"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 14.191,
+      "environmentOverrides": {}
+    },
+    {
+      "name": "mobile-recording",
+      "args": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "group",
+        "recording",
+        "--mobile",
+        "--out",
+        "/private/tmp/sync87-main-integration-final01/mobile-recording"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 20.503,
+      "environmentOverrides": {}
+    },
+    {
+      "name": "store",
+      "args": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "docs/verification/sync84-core-independent-01/runner/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 199.463,
+      "environmentOverrides": {
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_TARGET_DIR": "/private/tmp/apple-notes-sync84-target",
+        "CARGO_BUILD_JOBS": "2"
+      }
+    },
+    {
+      "name": "network",
+      "args": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "scripts/sync-network-test/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 45.751,
+      "environmentOverrides": {
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_TARGET_DIR": "/private/tmp/apple-notes-sync85-target",
+        "CARGO_BUILD_JOBS": "2"
+      }
+    },
+    {
+      "name": "mobile-attachments",
+      "args": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "group",
+        "attachments",
+        "--mobile",
+        "--out",
+        "/private/tmp/sync87-main-integration-final01/mobile-attachments"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 106.513,
+      "environmentOverrides": {}
+    },
+    {
+      "name": "tauri-check",
+      "args": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 69.848,
+      "environmentOverrides": {
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_BUILD_JOBS": "2"
+      }
+    },
+    {
+      "name": "mobile-sync-settings",
+      "args": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "group",
+        "sync-settings",
+        "--mobile",
+        "--out",
+        "/private/tmp/sync87-main-integration-final01/mobile-sync-settings"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 46.699,
+      "environmentOverrides": {}
+    }
+  ],
+  "inputUnchanged": true,
+  "status": "pass"
+}

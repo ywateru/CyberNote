@@ -1,0 +1,24 @@
+   Compiling notes-sync86-independent-resolve-baseline v0.1.0 (/private/tmp/sync86-independent-review-03/baseline-harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 19.30s
+     Running unittests root.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_sync86_independent_resolve_baseline-bfe15aef253ad8ee)
+
+running 2 tests
+
+thread 'sync::adapter::resolve_tests::locked_keep_one_returns_committed_rows_after_real_epoch_change' (42924858) panicked at current/sync/adapter_resolve_tests.rs:177:28:
+called `Result::unwrap()` on an `Err` value: AppError { code: "access_changed", message: "授权状态已改变，请同步后重试", commit: None }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test sync::adapter::resolve_tests::locked_keep_one_returns_committed_rows_after_real_epoch_change ... FAILED
+
+thread 'sync::adapter::resolve_tests::locked_keep_all_returns_committed_rows_after_real_epoch_change' (42924857) panicked at current/sync/adapter_resolve_tests.rs:177:28:
+called `Result::unwrap()` on an `Err` value: AppError { code: "access_changed", message: "授权状态已改变，请同步后重试", commit: None }
+test sync::adapter::resolve_tests::locked_keep_all_returns_committed_rows_after_real_epoch_change ... FAILED
+
+failures:
+
+failures:
+    sync::adapter::resolve_tests::locked_keep_all_returns_committed_rows_after_real_epoch_change
+    sync::adapter::resolve_tests::locked_keep_one_returns_committed_rows_after_real_epoch_change
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 153 filtered out; finished in 1.46s
+
+error: test failed, to rerun pass `--lib`

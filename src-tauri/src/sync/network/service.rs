@@ -14,6 +14,12 @@ use tokio::{
     task::JoinSet,
     time::{sleep, timeout},
 };
+fn channel_error(error: mpsc::RecvTimeoutError) -> SyncError {
+    match error {
+        mpsc::RecvTimeoutError::Timeout => SyncError::Timeout,
+        mpsc::RecvTimeoutError::Disconnected => SyncError::Transport,
+    }
+}
 struct Worker {
     stop: watch::Sender<bool>,
     done: mpsc::Receiver<()>,
@@ -24,9 +30,9 @@ impl Worker {
         let _ = self.stop.send(true);
         match self.done.recv_timeout(Duration::from_secs(7)) {
             Ok(()) => Ok(()),
-            Err(_) => {
+            Err(error) => {
                 self.abort.abort();
-                Err(SyncError::Timeout)
+                Err(channel_error(error))
             }
         }
     }
@@ -178,7 +184,7 @@ impl SyncService {
         // Holding clients map avoids duplicate connection tasks for one credential. No Store lock.
         let result = ready
             .recv_timeout(Duration::from_secs(27))
-            .map_err(|_| SyncError::Timeout)?;
+            .unwrap_or_else(|error| Err(channel_error(error)));
         match result {
             Ok(info) => {
                 clients.insert(
@@ -667,7 +673,10 @@ async fn client_loop(
         }
         shared.status(&id, "error", Some(e), false);
         // Protocol, auth, invalid data and budget errors require explicit retry. Never hot-loop bad heads.
-        if !matches!(e, SyncError::Transport | SyncError::Timeout | SyncError::Io) {
+        if !matches!(
+            e,
+            SyncError::Transport | SyncError::Timeout | SyncError::Io | SyncError::PlanStale
+        ) {
             tokio::select! {_=wake.notified()=>{},_=stop.changed()=>break}
         } else {
             tokio::select! {_=sleep(backoff)=>{},_=wake.notified()=>{},_=stop.changed()=>break}
@@ -675,4 +684,22 @@ async fn client_loop(
         }
     }
     shared.status(&id, "stopped", None, false);
+}
+
+#[cfg(test)]
+mod channel_tests {
+    use super::*;
+    #[test]
+    fn ready_channel_disconnect_is_transport_and_elapsed_wait_is_timeout() {
+        let (tx, rx) = mpsc::channel::<()>();
+        assert_eq!(
+            channel_error(rx.recv_timeout(Duration::from_millis(1)).unwrap_err()),
+            SyncError::Timeout
+        );
+        drop(tx);
+        assert_eq!(
+            channel_error(rx.recv_timeout(Duration::from_secs(27)).unwrap_err()),
+            SyncError::Transport
+        );
+    }
 }

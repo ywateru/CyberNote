@@ -1,0 +1,15 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.22s
+     Running unittests ../../src-tauri/src/sync_test_root84.rs (/private/tmp/apple-notes-sync85-target/debug/deps/notes_sync84_store_tests-269f9d3d0ce0a367)
+
+running 8 tests
+test session::synchronization::tests::strict_replies_real_window_phase_token_and_cancellation_receipt ... ok
+test session::synchronization::tests::ready_then_cancel_is_terminal_before_commit_and_inbox_survives ... ok
+test session::synchronization::tests::participant_added_or_dirty_save_after_prepare_aborts_without_apply ... ok
+test session::synchronization::final_gate_tests::final_gate_rechecks_registered_save_intents_and_preserves_authority_for_drain ... ok
+test session::synchronization::tests::normal_note_apply_has_actual_metadata_without_global_access_bump ... ok
+test session::synchronization::final_gate_tests::access_barrier_and_timeout_abort_quiet_without_touching_business_rows ... ok
+test session::synchronization::final_gate_tests::changed_sealed_lock_delete_revoke_only_the_actual_target_note_epoch ... ok
+test session::synchronization::unlocked_key_tests::ordinary_remote_metadata_retains_unlocked_key_and_note_epoch ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 145 filtered out; finished in 0.47s
+

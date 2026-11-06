@@ -9,3 +9,7 @@ path：仅 `scripts/debug/sync87-native/` 新工具和 `docs/verification/sync87
 先实现严格串号及所有权安全入口、CDP读取HTML/真实输入、原生系统chooser操作与新目录状态恢复，保存自然exit/wall与原始错误。真实执行覆盖：初开两列画廊、黄色＋直入真实编辑器/输入保存；真实系统chooser取消/再选/连续多个附件（PNG/TXT至少）后卡片、图片载入/导出原字节；同新app关闭重开与同data冷启恢复；准确新App通过实际设置UI连接独立桌面合成Store，手机创建→桌面、桌面修改→手机回前台、后台恢复重连；双向图片/合成音频文件hash。邀请secret仅内存传递，截图/HTML/日志避开邀请字段。不能用写数据库/文档赋值/伪metadata证明业务通过；读取真实native IPC/Store仅观测允许。生产无debug全局对象；测试使用真实DOM事件/CDP input及有限本机IPC观测，不新增后门。
 
 发现产品问题先保全最小失败，报root转原作者，工具不改生产以迎合断言。输出先/private/tmp，关闭持有窗口/进程/转发后保全紧凑证据。准确source/package/PID/serial/AVD标识与已验范围全部记录。当前API30结果不外推真实硬件/其他系统或完整苹果像素。工具冻结源码再受影响验证，交不同agent独审；root统合完成目标，不能只工具准备就标全任务done。
+
+## 最终共享工具依赖衔接
+
+原生工具803c680d/cb202998以3352b913的三个共享文件为冻结依赖。真实双App验收后，工具按6d33147e/b08c7728修正owned browser pipe退出与合法stale观察轮询；产品不变。独立复核通过后根统一合入共享文件和native工具，再由native原作者把DesktopPeer的精确依赖hash/commit映射更新为同一套最终共享文件，不维护第二份runtime，不放宽哈希检查。手机实包使用根准确Mac27/Android17冻结产品，DesktopPeer前端必须与该包产品输入一致（包括更新连接UI）；必要依赖单Peer smoke使用根immutable11回执，另代理窄复核依赖映射和自然退出。旧3352/exact10 smoke只保留历史范围，不追认为最终组合已验。

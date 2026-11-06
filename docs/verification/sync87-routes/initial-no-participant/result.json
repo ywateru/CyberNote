@@ -1,0 +1,150 @@
+{
+  "mode": "lan",
+  "scriptHead": "dfc65dcea1fd1457fa7e467731fa7d245679a005",
+  "script": {
+    "sha256": "a32afdb4b36d464b44a4af0d710dbbb36136106cbd8539e033912421a1d32a4b",
+    "after": "a32afdb4b36d464b44a4af0d710dbbb36136106cbd8539e033912421a1d32a4b"
+  },
+  "sourceBefore": {
+    "head": "1b4c5d879d4c7919fea2c03a376d3e9592d2ca1a",
+    "dirty": "",
+    "files": 50,
+    "sha256": "4f3ef2ed169455e6a60f8cf892fee28f482253f20cc90878f6bb28e5bb80036e"
+  },
+  "sourceAfter": {
+    "head": "1b4c5d879d4c7919fea2c03a376d3e9592d2ca1a",
+    "dirty": "",
+    "files": 50,
+    "sha256": "4f3ef2ed169455e6a60f8cf892fee28f482253f20cc90878f6bb28e5bb80036e"
+  },
+  "binary": {
+    "path": "/private/tmp/sync86-transport-build08/notes-current-attachment-transport",
+    "sha256": "898331177b9f3f40fcc197c84acd1d93622bc3d453da078cf0c1429ebc81acc3",
+    "after": "898331177b9f3f40fcc197c84acd1d93622bc3d453da078cf0c1429ebc81acc3"
+  },
+  "routes": {
+    "virtualNetwork": {
+      "verified": false,
+      "reason": "No explicitly owned reachable WireGuard/EasyTier peer network supplied; generic utun and 198.18/15 proxy address are not proof of either product.",
+      "commands": {
+        "wg": null,
+        "easytier-core": null,
+        "easytier-cli": null
+      },
+      "interfaces": [
+        {
+          "name": "utun0",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::3d5d:998c:dd36:300"
+            }
+          ]
+        },
+        {
+          "name": "utun1",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::e3a9:8462:12ef:8c89"
+            }
+          ]
+        },
+        {
+          "name": "utun2",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::7155:a2c9:81f0:c511"
+            }
+          ]
+        },
+        {
+          "name": "utun3",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::ce81:b1c:bd2c:69e"
+            }
+          ]
+        },
+        {
+          "name": "utun4",
+          "addresses": [
+            {
+              "family": "IPv4",
+              "address": "198.18.0.1"
+            }
+          ]
+        }
+      ],
+      "usage": "Set invite endpoint to ws://<reachable-virtual-IP>:<listen-port> (or TLS wss endpoint); system client owns network and routes."
+    }
+  },
+  "checks": [
+    {
+      "name": "LAN-host natural process exit"
+    },
+    {
+      "name": "LAN-client natural process exit"
+    },
+    {
+      "name": "frozen binary unchanged"
+    },
+    {
+      "name": "source fingerprint unchanged"
+    },
+    {
+      "name": "route harness unchanged"
+    }
+  ],
+  "processes": [
+    {
+      "name": "LAN-host",
+      "root": "/private/tmp/sync87-routes-development01/lan-host",
+      "pid": 6561,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "wallMs": 424,
+      "events": 0
+    },
+    {
+      "name": "LAN-client",
+      "root": "/private/tmp/sync87-routes-development01/lan-client",
+      "pid": 6562,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "wallMs": 825,
+      "events": 0
+    }
+  ],
+  "tunnels": [],
+  "files": [
+    {
+      "path": "/private/tmp/sync87-routes-development01/lan-client/notes.sqlite3",
+      "size": 40960,
+      "sha256": "b80072e11d63ce8d174fb9329c1587fc8b0b9820269eee878300a02c127c5137"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-development01/lan-host/notes.sqlite3",
+      "size": 40960,
+      "sha256": "cb6690888901b4facd3704181eef4ef9eb76f0851fc215c6e6a1cc0aa200f059"
+    }
+  ],
+  "wallMs": 910,
+  "failures": [
+    {
+      "message": "同步请求不属于文档窗口",
+      "code": "access_changed",
+      "stack": "Error: 同步请求不属于文档窗口\n    at Device.call (file:///private/tmp/apple-notes-sync87-routes/scripts/debug/sync87-routes.mjs:32:150)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async file:///private/tmp/apple-notes-sync87-routes/scripts/debug/sync87-routes.mjs:54:164"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/apple-notes-sync86-adapter/docs/verification/sync84-core-independent-01/runner)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.72s
+     Running unittests root.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_sync84_store_tests-269f9d3d0ce0a367)
+
+running 8 tests
+test store::synchronization::media::tests::prepared_media_rejects_changed_generation_without_losing_dirty_and_retries ... ok
+test store::synchronization::media::tests::immutable_sha_cache_reuses_file_only_and_never_generation_or_missing_proof ... ok
+test store::synchronization::media::tests::controlled_hard_links_have_unique_paths_repeat_safely_and_refresh_own_identity ... ok
+test sync::adapter::allocation_tests::all_media_cache_budget_and_same_vector_equivocation_fail_before_allocation ... ok
+test store::synchronization::media::tests::prepared_media_rejects_in_place_replacement_deletion_and_symlink ... ok
+test sync::adapter::allocation_tests::locked_media_is_rejected_at_existing_business_and_wire_boundaries ... ok
+test store::synchronization::tests::remote_lock_retires_local_media_metadata_and_preserves_explicit_plaintext_conflict ... ok
+MEDIA_RESPONSE name=cold_required_blobs_stale wall_ms=7933 foreground_reads=2758 ordinary_writes=1 max_us=2982 p99_us=631
+test sync::adapter::media_tests::real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive has been running for over 60 seconds
+MEDIA_RESPONSE name=cold_flush_capture_stale wall_ms=21614 foreground_reads=6404 ordinary_writes=1 max_us=44137 p99_us=4912
+MEDIA_RESPONSE name=cold_receive wall_ms=7580 foreground_reads=2675 ordinary_writes=0 max_us=18738 p99_us=521
+MEDIA_RESPONSE name=cold_quiet_prepare wall_ms=7349 foreground_reads=2607 ordinary_writes=0 max_us=1509 p99_us=534
+MEDIA_RESPONSE name=cached_quiet_plan wall_ms=7 foreground_reads=2 ordinary_writes=0 max_us=1537 p99_us=432
+MEDIA_RESPONSE name=cached_quiet_apply wall_ms=9 foreground_reads=2 ordinary_writes=0 max_us=3429 p99_us=1337
+test sync::adapter::media_tests::real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 146 filtered out; finished in 142.59s
+

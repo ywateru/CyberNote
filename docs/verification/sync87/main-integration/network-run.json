@@ -1,0 +1,18 @@
+{
+  "name": "network",
+  "args": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "scripts/sync-network-test/Cargo.toml"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 45.751,
+  "environmentOverrides": {
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/private/tmp/apple-notes-sync85-target",
+    "CARGO_BUILD_JOBS": "2"
+  }
+}

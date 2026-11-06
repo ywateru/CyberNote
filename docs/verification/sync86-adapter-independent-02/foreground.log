@@ -1,0 +1,22 @@
+   Compiling ring v0.17.14
+   Compiling libsqlite3-sys v0.30.1
+   Compiling rustls v0.23.46
+   Compiling rustls-webpki v0.103.16
+   Compiling rusqlite v0.32.1
+   Compiling tokio-rustls v0.26.6
+   Compiling tungstenite v0.29.0
+   Compiling tokio-tungstenite v0.29.0
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/sync86-independent-review-02/lock-harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 21.93s
+     Running unittests root.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_sync84_store_tests-030dc32bff5cf8dd)
+
+running 2 tests
+test sync::adapter::independent_mutex_recheck::independent_64mib_capture_real_foreground_write_preserves_dirty_and_retries has been running for over 60 seconds
+test sync::adapter::independent_mutex_recheck::independent_64mib_existing_preflight_real_foreground_write_stales_and_retries has been running for over 60 seconds
+INDEPENDENT_FOREGROUND preflight wall_ms=9866 reads=2304 ordinary_writes=1 max_us=27060
+INDEPENDENT_FOREGROUND capture wall_ms=14654 reads=3474 ordinary_writes=1 max_us=11314
+test sync::adapter::independent_mutex_recheck::independent_64mib_existing_preflight_real_foreground_write_stales_and_retries ... ok
+test sync::adapter::independent_mutex_recheck::independent_64mib_capture_real_foreground_write_preserves_dirty_and_retries ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 148 filtered out; finished in 82.72s
+

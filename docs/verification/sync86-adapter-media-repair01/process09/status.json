@@ -1,0 +1,48 @@
+{
+  "sourceHead": "f2491f61d0096e629d4982d5011b3c5958bc7c2d",
+  "sourceBefore": "8cf32a033c2aa48ad804fe4a37d51cec85c7fddd11a204f23733f406a3ecef45",
+  "sourceAfter": "8cf32a033c2aa48ad804fe4a37d51cec85c7fddd11a204f23733f406a3ecef45",
+  "binary": {
+    "path": "/private/tmp/sync86-transport-build09/notes-current-attachment-transport",
+    "sha256": "895902782389431c4a3462b2bb3e80cd24c26b87248247ee96a1a62b8943afb4"
+  },
+  "checks": [
+    "status is disabled and omits optional nulls",
+    "status does not generate Noise identity",
+    "two independent SQLite stores adopt authenticated workspace",
+    "A owned Rust process exited naturally",
+    "B owned Rust process exited naturally"
+  ],
+  "events": 4,
+  "processes": [
+    {
+      "name": "A",
+      "root": "/private/tmp/sync86-media-process-final/A",
+      "pid": 15185,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B",
+      "root": "/private/tmp/sync86-media-process-final/B",
+      "pid": 15190,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    }
+  ],
+  "wallMs": 19845,
+  "failure": {
+    "message": "Timed out: A note, ordinary and smart folders arrive over real socket",
+    "stack": "Error: Timed out: A note, ordinary and smart folders arrive over real socket\n    at eventually (file:///private/tmp/apple-notes-sync86-adapter/scripts/debug/rust/check-sync.mjs:21:185)\n    at async file:///private/tmp/apple-notes-sync86-adapter/scripts/debug/rust/check-sync.mjs:47:2"
+  }
+}

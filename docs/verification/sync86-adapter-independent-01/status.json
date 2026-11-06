@@ -1,0 +1,262 @@
+{
+  "sourceHead": "1b4c5d879d4c7919fea2c03a376d3e9592d2ca1a",
+  "before": "e1ee38964affa299310853b40458ce28c4a653db5f85f045bfb767bddb377729",
+  "after": "e1ee38964affa299310853b40458ce28c4a653db5f85f045bfb767bddb377729",
+  "binaryBefore": "898331177b9f3f40fcc197c84acd1d93622bc3d453da078cf0c1429ebc81acc3",
+  "binaryAfter": "898331177b9f3f40fcc197c84acd1d93622bc3d453da078cf0c1429ebc81acc3",
+  "wallMs": 22395,
+  "checks": [
+    "strict no-arg command rejects hidden input",
+    "strict Token rejects unknown fields",
+    "actual window rejects forged label",
+    "stale session rejects command",
+    "headless apply rejects live participants",
+    "invalid commands leave sync disabled",
+    "real prepare targets actual received note",
+    "cancel after ready returns linearized abort",
+    "cancel releases abort and retains inbox",
+    "terminal abort receipt remains idempotent",
+    "participant addition aborts prepared plan",
+    "actual five second prepare timeout retains inbox",
+    "only later successful gate commits real SQLite row",
+    "real metadata is delivered before commit release",
+    "late cancel cannot change committed terminal outcome",
+    "probe protection preserves real owner pending",
+    "production never silently headless-applies with no windows",
+    "returning real participant permits normal commit",
+    "A natural exit",
+    "B natural exit",
+    "product source remains unchanged",
+    "immutable binary remains unchanged"
+  ],
+  "events": [
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "9853b90c-3304-428a-9c8a-87d64fd4e32a",
+        "phase": "probe",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "noteIds": [
+          "8a70fd68-d4dd-4067-98aa-84d5b1a84bbe"
+        ],
+        "operationId": "9853b90c-3304-428a-9c8a-87d64fd4e32a",
+        "phase": "prepare",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "9853b90c-3304-428a-9c8a-87d64fd4e32a",
+        "outcome": "abort",
+        "phase": "release",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "bab65767-9810-47ad-b863-75943937cb65",
+        "phase": "probe",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "noteIds": [
+          "8a70fd68-d4dd-4067-98aa-84d5b1a84bbe"
+        ],
+        "operationId": "bab65767-9810-47ad-b863-75943937cb65",
+        "phase": "prepare",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "bab65767-9810-47ad-b863-75943937cb65",
+        "outcome": "abort",
+        "phase": "release",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "c344901f-d517-49b9-9f90-39cd42e6e1b1",
+        "phase": "probe",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "noteIds": [
+          "8a70fd68-d4dd-4067-98aa-84d5b1a84bbe"
+        ],
+        "operationId": "c344901f-d517-49b9-9f90-39cd42e6e1b1",
+        "phase": "prepare",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "c344901f-d517-49b9-9f90-39cd42e6e1b1",
+        "outcome": "abort",
+        "phase": "release",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "ea514dcf-c868-4539-bf88-0c6dfebd92ec",
+        "phase": "probe",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "noteIds": [
+          "8a70fd68-d4dd-4067-98aa-84d5b1a84bbe"
+        ],
+        "operationId": "ea514dcf-c868-4539-bf88-0c6dfebd92ec",
+        "phase": "prepare",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-metadata",
+      "payload": {
+        "changes": [
+          {
+            "id": "8a70fd68-d4dd-4067-98aa-84d5b1a84bbe",
+            "kind": "note",
+            "revision": 0
+          }
+        ],
+        "metadata": {
+          "sequence": 1,
+          "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+        }
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "ea514dcf-c868-4539-bf88-0c6dfebd92ec",
+        "outcome": "commit",
+        "phase": "release",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "517323bb-e5a6-4adc-ba97-0b090bd5e74e",
+        "phase": "probe",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "517323bb-e5a6-4adc-ba97-0b090bd5e74e",
+        "outcome": "abort",
+        "phase": "release",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "9d79c296-a853-4bf5-83b1-dc003d3a9edf",
+        "phase": "probe",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "noteIds": [
+          "ac23b690-e01c-4bc9-83bb-39c0c4036a74"
+        ],
+        "operationId": "9d79c296-a853-4bf5-83b1-dc003d3a9edf",
+        "phase": "prepare",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-metadata",
+      "payload": {
+        "changes": [
+          {
+            "id": "ac23b690-e01c-4bc9-83bb-39c0c4036a74",
+            "kind": "note",
+            "revision": 0
+          }
+        ],
+        "metadata": {
+          "sequence": 2,
+          "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+        }
+      }
+    },
+    {
+      "device": "A",
+      "name": "notes-sync",
+      "payload": {
+        "operationId": "9d79c296-a853-4bf5-83b1-dc003d3a9edf",
+        "outcome": "commit",
+        "phase": "release",
+        "sessionId": "a4a28d3a-1dc7-4662-9d80-f90d8db3558a"
+      }
+    }
+  ],
+  "processes": [
+    {
+      "name": "A",
+      "pid": 6449,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "stderr": ""
+    },
+    {
+      "name": "B",
+      "pid": 6450,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "stderr": ""
+    }
+  ]
+}

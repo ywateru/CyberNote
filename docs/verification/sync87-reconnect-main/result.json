@@ -1,0 +1,60 @@
+{
+  "sourceHead": "a8687e87f2d6a25ef66dae140ffd4f20acb3638a",
+  "sourceChanged": false,
+  "runs": [
+    {
+      "name": "desktop",
+      "argv": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "group",
+        "sync-settings",
+        "--out",
+        "/private/tmp/sync87-main-reconnect-integration-01/desktop"
+      ],
+      "sourceHead": "a8687e87f2d6a25ef66dae140ffd4f20acb3638a",
+      "exitCode": 0,
+      "wallSeconds": 21.866729417000002
+    },
+    {
+      "name": "mobile",
+      "argv": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "group",
+        "sync-settings",
+        "--mobile",
+        "--out",
+        "/private/tmp/sync87-main-reconnect-integration-01/mobile"
+      ],
+      "sourceHead": "a8687e87f2d6a25ef66dae140ffd4f20acb3638a",
+      "exitCode": 0,
+      "wallSeconds": 22.039344125
+    },
+    {
+      "name": "build",
+      "argv": [
+        "pnpm",
+        "build"
+      ],
+      "sourceHead": "a8687e87f2d6a25ef66dae140ffd4f20acb3638a",
+      "exitCode": 0,
+      "wallSeconds": 18.647327208
+    },
+    {
+      "name": "production",
+      "argv": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/sync87-main-reconnect-integration-01/production"
+      ],
+      "sourceHead": "a8687e87f2d6a25ef66dae140ffd4f20acb3638a",
+      "exitCode": 0,
+      "wallSeconds": 5.567228209
+    }
+  ]
+}

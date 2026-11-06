@@ -1,0 +1,185 @@
+{
+  "sourceHead": "fb6a265f4274334352c5a584a918da80f23f70ee",
+  "sourceBefore": "1735bf7ab078ca7bf35303eabf7d55187f31af4ad3fe8039f7428d72f21ee8c9",
+  "sourceAfter": "1735bf7ab078ca7bf35303eabf7d55187f31af4ad3fe8039f7428d72f21ee8c9",
+  "binary": {
+    "path": "/private/tmp/sync86-transport-build08/notes-current-attachment-transport",
+    "sha256": "898331177b9f3f40fcc197c84acd1d93622bc3d453da078cf0c1429ebc81acc3"
+  },
+  "checks": [
+    "status is disabled and omits optional nulls",
+    "status does not generate Noise identity",
+    "two independent SQLite stores adopt authenticated workspace",
+    "A note, ordinary and smart folders arrive over real socket",
+    "B edit converges back to A",
+    "production media journal returns attachment metadata",
+    "multi-frame media metadata is projected remotely",
+    "remote immutable blob bytes match exact source",
+    "protected target remains durably pending",
+    "unrelated note applies while owner remains protected",
+    "owner update applies after normal protection release",
+    "remote lock revokes note authorization",
+    "remote ciphertext unlocks with original password",
+    "remote delete is projected and access revoked",
+    "restore causally supersedes old deletion",
+    "stop persists paused and closes listener",
+    "A owned Rust process exited naturally",
+    "B owned Rust process exited naturally",
+    "cold restart preserves paused identity",
+    "offline same-entity edits retain concurrent conflict heads",
+    "explicit keep-all resolution converges and retains a copy",
+    "100 repeat wakeups preserve note revision",
+    "third device receives transitive heads and blobs",
+    "C edit forwards through host to B",
+    "pre-crash pending inbox is durable while target is protected",
+    "A-restart SIGKILL observed",
+    "same-directory SIGKILL restart safely applies durable inbox",
+    "purge projects to connected peer without resurrecting rows",
+    "old offline device consumes purge tombstone",
+    "media base arrives before independent offline edits",
+    "plain image and audio branches are retained as concurrent heads",
+    "plain audio and image copies retain separate attachment owners",
+    "locked text concurrent heads survive transport",
+    "locked keep-all copies reach remote Store",
+    "every locked text keep-all copy decrypts without losing branches",
+    "wrong Noise key is rejected without enabling business Store",
+    "authenticated Prepared failure does not bootstrap business Store",
+    "Prepared-adoption owned Rust process exited naturally",
+    "cold restart recovers Prepared credentials and adopts idempotently",
+    "adopted preexisting local note and media sync without loss",
+    "already enabled other workspace rejects pair without adopting",
+    "real quiet events contain probe, prepare and commit receipts",
+    "no async transport errors",
+    "B-restart owned Rust process exited naturally",
+    "C-forward owned Rust process exited naturally",
+    "A-SIGKILL-restart owned Rust process exited naturally",
+    "Bad-auth owned Rust process exited naturally",
+    "Prepared-recovered owned Rust process exited naturally",
+    "Other-workspace owned Rust process exited naturally"
+  ],
+  "events": 163,
+  "processes": [
+    {
+      "name": "A",
+      "root": "/private/tmp/sync86-process-final/A",
+      "pid": 5370,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B",
+      "root": "/private/tmp/sync86-process-final/B",
+      "pid": 5371,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "A-restart",
+      "root": "/private/tmp/sync86-process-final/A",
+      "pid": 5404,
+      "closing": false,
+      "exit": {
+        "code": null,
+        "signal": "SIGKILL"
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "B-restart",
+      "root": "/private/tmp/sync86-process-final/B",
+      "pid": 5405,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "C-forward",
+      "root": "/private/tmp/sync86-process-final/C",
+      "pid": 5409,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "A-SIGKILL-restart",
+      "root": "/private/tmp/sync86-process-final/A",
+      "pid": 5412,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "Bad-auth",
+      "root": "/private/tmp/sync86-process-final/bad-auth",
+      "pid": 5446,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "Prepared-adoption",
+      "root": "/private/tmp/sync86-process-final/prepared",
+      "pid": 5447,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "Prepared-recovered",
+      "root": "/private/tmp/sync86-process-final/prepared",
+      "pid": 5448,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    },
+    {
+      "name": "Other-workspace",
+      "root": "/private/tmp/sync86-process-final/other-workspace",
+      "pid": 5458,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "errors": []
+    }
+  ],
+  "wallMs": 49474,
+  "failure": null
+}

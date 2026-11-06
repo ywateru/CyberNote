@@ -1,0 +1,48 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/sync86-independent-review-01/lock-harness)
+error[E0583]: file not found for module `tests`
+  --> current/session.rs:24:1
+   |
+24 | mod tests;
+   | ^^^^^^^^^^
+   |
+   = help: to create the module `tests`, create file "current/tests.rs" or "current/tests/mod.rs"
+   = note: if there is a `mod tests` elsewhere in the crate already, import it with `use crate::...` instead
+
+error: couldn't read `current/store/archive/../../../../docs/verification/qa-fix-00/schema-fixtures/inline-at-doc-root.notesbackup`: No such file or directory (os error 2)
+   --> current/store/archive/tests.rs:654:32
+    |
+654 | ...t-doc-root", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/inline-at-doc-root.notesbackup")),
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: couldn't read `current/store/archive/../../../../docs/verification/qa-fix-00/schema-fixtures/block-inside-paragraph.notesbackup`: No such file or directory (os error 2)
+   --> current/store/archive/tests.rs:655:36
+    |
+655 | ...aragraph", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/block-inside-paragraph.notesbackup")),
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: couldn't read `current/store/archive/../../../../docs/verification/qa-fix-00/schema-fixtures/paragraph-inside-table.notesbackup`: No such file or directory (os error 2)
+   --> current/store/archive/tests.rs:656:36
+    |
+656 | ...de-table", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/paragraph-inside-table.notesbackup")),
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: couldn't read `current/store/archive/../../../../docs/verification/qa-001/store-probes/fixtures/valid.notesbackup`: No such file or directory (os error 2)
+   --> current/store/archive/tests.rs:674:18
+    |
+674 |       let legacy = include_str!(
+    |  __________________^
+675 | |         "../../../../docs/verification/qa-001/store-probes/fixtures/valid.notesbackup"
+676 | |     );
+    | |_____^
+
+error: couldn't read `current/store/../../../docs/fixtures/smart-projection09.json`: No such file or directory (os error 2)
+   --> current/store/smart_tests.rs:758:46
+    |
+758 |       let corpus: Value = serde_json::from_str(include_str!(
+    |  ______________________________________________^
+759 | |         "../../../docs/fixtures/smart-projection09.json"
+760 | |     ))
+    | |_____^
+
+For more information about this error, try `rustc --explain E0583`.
+error: could not compile `notes-sync84-store-tests` (lib test) due to 6 previous errors

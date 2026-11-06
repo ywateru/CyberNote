@@ -1,0 +1,114 @@
+{
+  "sourceHead": "fb6a265f4274334352c5a584a918da80f23f70ee",
+  "binary": {
+    "path": "/private/tmp/sync86-transport-build08/notes-current-attachment-transport",
+    "sha256": "898331177b9f3f40fcc197c84acd1d93622bc3d453da078cf0c1429ebc81acc3"
+  },
+  "wallMs": 442,
+  "checks": [
+    "production registration returns original owner and incarnation",
+    "exact lost registration receipt is recoverable before capture",
+    "duplicate capture start is rejected",
+    "forged recording incarnation is rejected",
+    "recording ACK skips are rejected",
+    "checkpoint alone cannot release saved recording",
+    "final ACK release is idempotent but validation then fails",
+    "released recording identity cannot be registered again",
+    "workspace barrier waits for actual window ACK false",
+    "negative actual window ACK aborts lock",
+    "workspace barrier waits for actual window ACK true",
+    "positive actual window ACK commits lock",
+    "actual access commit and metadata events are emitted",
+    "owned transport exits naturally"
+  ],
+  "process": {
+    "pid": 5374,
+    "closing": true,
+    "exit": {
+      "code": 0,
+      "signal": null
+    },
+    "pending": 0
+  },
+  "events": [
+    {
+      "name": "notes-metadata",
+      "payload": {
+        "changes": [
+          {
+            "id": "988dbe9a-8c4a-46e4-af86-2b02a8b74139",
+            "kind": "note",
+            "revision": 0
+          }
+        ],
+        "metadata": {
+          "sequence": 1,
+          "sessionId": "8b42b186-1c81-4a9c-aa17-0bee1a7bea4a"
+        }
+      }
+    },
+    {
+      "name": "notes-access",
+      "payload": {
+        "access": {
+          "epoch": 1,
+          "notes": {
+            "988dbe9a-8c4a-46e4-af86-2b02a8b74139": {
+              "authorized": true,
+              "epoch": 0
+            }
+          },
+          "operationId": null,
+          "sessionId": "8b42b186-1c81-4a9c-aa17-0bee1a7bea4a",
+          "suspended": []
+        },
+        "noteIds": [
+          "988dbe9a-8c4a-46e4-af86-2b02a8b74139"
+        ],
+        "operationId": "6a8d705a-fa44-48f4-b978-de8d58f28c52",
+        "participantWindows": [],
+        "phase": "abort"
+      }
+    },
+    {
+      "name": "notes-access",
+      "payload": {
+        "access": {
+          "epoch": 2,
+          "notes": {
+            "988dbe9a-8c4a-46e4-af86-2b02a8b74139": {
+              "authorized": false,
+              "epoch": 2
+            }
+          },
+          "operationId": null,
+          "sessionId": "8b42b186-1c81-4a9c-aa17-0bee1a7bea4a",
+          "suspended": []
+        },
+        "noteIds": [
+          "988dbe9a-8c4a-46e4-af86-2b02a8b74139"
+        ],
+        "operationId": "9de5e0fa-6fb0-4b25-9b26-e0a97a420c39",
+        "participantWindows": [],
+        "phase": "commit"
+      }
+    },
+    {
+      "name": "notes-metadata",
+      "payload": {
+        "changes": [
+          {
+            "id": "988dbe9a-8c4a-46e4-af86-2b02a8b74139",
+            "kind": "note",
+            "revision": 1
+          }
+        ],
+        "metadata": {
+          "sequence": 2,
+          "sessionId": "8b42b186-1c81-4a9c-aa17-0bee1a7bea4a"
+        }
+      }
+    }
+  ],
+  "failure": null
+}

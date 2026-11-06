@@ -1,0 +1,41 @@
+PASS status is disabled and omits optional nulls
+PASS status does not generate Noise identity
+PASS two independent SQLite stores adopt authenticated workspace
+PASS A note, ordinary and smart folders arrive over real socket
+PASS B edit converges back to A
+PASS production media journal returns attachment metadata
+PASS multi-frame media metadata is projected remotely
+PASS remote immutable blob bytes match exact source
+PASS protected target remains durably pending
+PASS unrelated note applies while owner remains protected
+PASS owner update applies after normal protection release
+PASS remote lock revokes note authorization
+PASS remote ciphertext unlocks with original password
+PASS remote delete is projected and access revoked
+PASS restore causally supersedes old deletion
+PASS stop persists paused and closes listener
+PASS A owned Rust process exited naturally
+PASS B owned Rust process exited naturally
+PASS cold restart preserves paused identity
+PASS offline same-entity edits retain concurrent conflict heads
+PASS explicit keep-all resolution converges and retains a copy
+PASS 100 repeat wakeups preserve note revision
+PASS third device receives transitive heads and blobs
+PASS C edit forwards through host to B
+PASS pre-crash pending inbox is durable while target is protected
+PASS A-restart SIGKILL observed
+PASS same-directory SIGKILL restart safely applies durable inbox
+PASS purge projects to connected peer without resurrecting rows
+PASS old offline device consumes purge tombstone
+PASS media base arrives before independent offline edits
+PASS plain image and audio branches are retained as concurrent heads
+PASS plain audio and image copies retain separate attachment owners
+PASS locked text concurrent heads survive transport
+Error: 设备同步未完成，请检查连接后重试
+    at Device.call (file:///private/tmp/apple-notes-sync86-adapter/docs/verification/sync86-adapter-media-repair01/check-sync-token-retry.mjs:25:140)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Device.sync (file:///private/tmp/apple-notes-sync86-adapter/docs/verification/sync86-adapter-media-repair01/check-sync-token-retry.mjs:28:95)
+    at async file:///private/tmp/apple-notes-sync86-adapter/docs/verification/sync86-adapter-media-repair01/check-sync-token-retry.mjs:110:2
+PASS B-restart owned Rust process exited naturally
+PASS C-forward owned Rust process exited naturally
+PASS A-SIGKILL-restart owned Rust process exited naturally

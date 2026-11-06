@@ -23,3 +23,6 @@
 布局沿用系统字体、圆角行组、secondary/line/accent变量，浅深色与320px/短屏滚动可达；按钮最小44px触达，横向无溢出。页面aria-live只报安全状态不念配对secret，键盘focus/Tab复用Preferences壳。后台状态刷新不抢焦点；关闭或在途返回的迟到响应不得重新展开secret或覆盖另一操作状态。
 
 程序化命令覆盖真实handlers：sync.status、sync.host.start、sync.invite、sync.pair、sync.now、sync.stop、sync.resume、sync.revoke、sync.conflicts、sync.resolve。命令受既有DEV allowlist，读取HTML和控件状态核验；真实Rust网络另由84/85/86证明，UI fixture通过不能代表网络已工作。
+
+
+2026-11-06：匿名隧道换址的既有设备入口补充。未启用时继续“加入同步”；已启用的设备仍显示“更新连接”入口，复用完整配对串输入和“连接并加入”handler，不生成新device/workspace、不清本地数据。在途singleflight限制保持；暂停时须按backend实际能力明确提示先继续同步或允许真实恢复，不能伪报更新成功。新地址用服务端重新生成的新邀请；不能只篡改旧邀请URL。连接其他workspace仍由backend明确拒绝并保留本地库。更新成功清secret、关闭输入并刷新真实status，取消/切标签/关闭仍清secret。手机首页不新增入口。

@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "mode": "group",
+  "sourceHead": "4b370ed33ce66379f0e8fa8d45b2c2d0b42cab8f",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "3b4fbbddf5b04e9acfb3fae9ed81d56cd657e19c30619d582926cecfe7f27f84",
+    "fileCount": 145,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "3b4fbbddf5b04e9acfb3fae9ed81d56cd657e19c30619d582926cecfe7f27f84",
+    "fileCount": 145,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceInputsChanged": false,
+  "platform": "mobile-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "elapsedMs": 13762,
+  "result": {
+    "groups": [
+      {
+        "group": "notes",
+        "pass": true,
+        "checks": [
+          "Semantic create persists a new workspace note and rendered editor",
+          "Editor transaction saved body and DOM agrees",
+          "Pin and paper semantic patch reaches persistent workspace",
+          "Delete moves actual note into trash",
+          "Restore leaves trash",
+          "Real lock modal makes note unauthorized and hides editable content",
+          "Real unlock modal restores authorized editable note",
+          "Purge requires real confirmation and removes workspace note and DOM",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 2484
+      }
+    ],
+    "passedChecks": 9,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": [],
+  "output": "/private/tmp/sync87-main-integration-final01/mobile-notes"
+}

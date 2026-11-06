@@ -146,7 +146,7 @@ export default function SyncSettings({
         setInvitationExpires(Date.now() + 10 * 60 * 1000);
       }
       if (result.conflicts !== undefined) setConflicts(result.conflicts);
-      if (command.type === "pair") {
+      if (command.type === "pair" || command.type === "stop") {
         setPairing("");
         setJoining(false);
       }
@@ -318,20 +318,18 @@ export default function SyncSettings({
               开启此设备同步服务
             </button>
           )}
-          {!enabled && (
-            <button
-              type="button"
-              disabled={busy}
-              onClick={() => {
-                setJoining((value) => !value);
-                setPairing("");
-                setError("");
-              }}
-            >
-              <Link size={17} />
-              加入同步
-            </button>
-          )}
+          <button
+            type="button"
+            disabled={busy || status?.state === "paused"}
+            onClick={() => {
+              setJoining((value) => !value);
+              setPairing("");
+              setError("");
+            }}
+          >
+            <Link size={17} />
+            {joining ? "取消连接" : enabled ? "更新连接" : "加入同步"}
+          </button>
           {enabled && (
             <>
               <button
@@ -355,6 +353,9 @@ export default function SyncSettings({
             </>
           )}
         </div>
+        {enabled && status.state === "paused" && (
+          <p className="sync-description">请先继续同步，再更新连接。</p>
+        )}
         {joining && (
           <div className="sync-pair">
             <label className="sync-field">
@@ -369,7 +370,11 @@ export default function SyncSettings({
                 onChange={(event) => setPairing(event.target.value)}
               />
             </label>
-            <p>从另一台设备生成配对串后粘贴。两端已有笔记会合并保留。</p>
+            <p>
+              {enabled
+                ? "请在原同步服务端为新地址重新生成配对串后粘贴。本机身份和已有笔记会保留。"
+                : "从另一台设备生成配对串后粘贴。两端已有笔记会合并保留。"}
+            </p>
             <button
               type="button"
               disabled={busy || !name.trim() || !pairing.trim()}
