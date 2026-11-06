@@ -38,13 +38,15 @@ export async function waitForNoteReplica(readWorkspace,expected,files,label,time
 }
 const textProof=note=>({id:note.id,documentSha256:hash(JSON.stringify(note.document)),plainTextSha256:hash(note.plainText),completeDocumentAndPlainTextVerified:true});
 export function visibleSyntheticEditorExpression(expected,media=[]) {
-  return `(async()=>{const id=${JSON.stringify(expected.id)},plain=${JSON.stringify(expected.plainText)},media=${JSON.stringify(media)};
+  const textOf=node=>node.type==='text'?node.text:node.type==='hardBreak'?'\n':(node.content||[]).map(textOf).join('');
+  const textBlocks=expected.document.content.filter(n=>n.type!=='attachment').map(n=>{assert(['paragraph','heading'].includes(n.type),'supported exact text block required');if(n.type==='heading')assert(Number.isInteger(n.attrs?.level)&&n.attrs.level>=1&&n.attrs.level<=6);return {tag:n.type==='heading'?'H'+n.attrs.level:'P',text:textOf(n)};});
+  return `(async()=>{const id=${JSON.stringify(expected.id)},blocksExpected=${JSON.stringify(textBlocks)},media=${JSON.stringify(media)};
     const visible=e=>{if(!e)return false;for(let p=e;p;p=p.parentElement){const c=getComputedStyle(p);if(c.display==='none'||c.visibility!=='visible'||+c.opacity===0)return false;}const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&r.x<innerWidth&&r.y<innerHeight&&r.right>0&&r.bottom>0};
     const apps=[...document.querySelectorAll('.app.mobile.page-editor')].filter(visible);if(apps.length!==1)return false;
     const editors=[...apps[0].querySelectorAll('[data-mobile-editor-note] .tiptap')].filter(visible);if(editors.length!==1)return false;
     const e=editors[0];if(e.closest('[data-mobile-editor-note]')?.dataset.mobileEditorNote!==id)return false;
-    const blocks=[...e.children].filter(x=>!x.matches('.node-attachment,.attachment-node'));if(blocks.map(x=>x.innerText).join('\\n')!==plain)return false;
-    if(blocks[0]?.innerText!==plain.split('\\n')[0])return false;
+    const blocks=[...e.children].filter(x=>!x.matches('.node-attachment,.attachment-node'));if(blocks.length!==blocksExpected.length)return false;
+    for(let i=0;i<blocks.length;i++){const x=blocks[i],expected=blocksExpected[i];if(x.tagName!==expected.tag)return false;const empty=expected.text===''&&x.textContent===''&&(x.innerText===''||x.innerText==='\\n')&&[...x.children].every(c=>c.tagName==='BR');if((empty?'':x.innerText)!==expected.text)return false;}
     for(const m of media){const cards=[...e.querySelectorAll('.attachment-node[data-attachment-id]')].filter(x=>x.dataset.attachmentId===m.id);if(cards.length!==1||!visible(cards[0]))return false;
       const card=cards[0],kind=m.mime.startsWith('image/')?'img':'audio',elements=card.querySelectorAll(kind);if(elements.length!==1)return false;const element=elements[0],control=kind==='img'?card.querySelector('.image-open'):card.querySelector('.audio-card');if(!visible(control))return false;
       if(kind==='img'&&(!visible(element)||!element.complete||element.naturalWidth<=0||element.alt!==m.name))return false;
