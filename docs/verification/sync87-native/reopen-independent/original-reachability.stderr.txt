@@ -1,0 +1,17 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: new reviewed action must be reachable
+
+false !== true
+
+    at file:///private/tmp/apple-notes-sync87-webview-review/docs/verification/sync87-native/reopen-independent/original-reachability-check.mjs:7:31 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual'
+}
+
+Node.js v22.16.0
