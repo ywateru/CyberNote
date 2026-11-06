@@ -37,19 +37,21 @@ export async function waitForNoteReplica(readWorkspace,expected,files,label,time
 }
 const textProof=note=>({id:note.id,documentSha256:hash(JSON.stringify(note.document)),plainTextSha256:hash(note.plainText),completeDocumentAndPlainTextVerified:true});
 export function visibleSyntheticEditorExpression(expected,media=[]) {
-  return `(()=>{const id=${JSON.stringify(expected.id)},plain=${JSON.stringify(expected.plainText)},media=${JSON.stringify(media)};
+  return `(async()=>{const id=${JSON.stringify(expected.id)},plain=${JSON.stringify(expected.plainText)},media=${JSON.stringify(media)};
     const visible=e=>{if(!e)return false;for(let p=e;p;p=p.parentElement){const c=getComputedStyle(p);if(c.display==='none'||c.visibility!=='visible'||+c.opacity===0)return false;}const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&r.x<innerWidth&&r.y<innerHeight&&r.right>0&&r.bottom>0};
     const apps=[...document.querySelectorAll('.app.mobile.page-editor')].filter(visible);if(apps.length!==1)return false;
     const editors=[...apps[0].querySelectorAll('[data-mobile-editor-note] .tiptap')].filter(visible);if(editors.length!==1)return false;
     const e=editors[0];if(e.closest('[data-mobile-editor-note]')?.dataset.mobileEditorNote!==id)return false;
     const blocks=[...e.children].filter(x=>!x.matches('.node-attachment,.attachment-node'));if(blocks.map(x=>x.innerText).join('\\n')!==plain)return false;
     if(blocks[0]?.innerText!==plain.split('\\n')[0])return false;
-    return media.every(m=>{const cards=[...e.querySelectorAll('.attachment-node[data-attachment-id]')].filter(x=>x.dataset.attachmentId===m.id);if(cards.length!==1||!visible(cards[0]))return false;
+    for(const m of media){const cards=[...e.querySelectorAll('.attachment-node[data-attachment-id]')].filter(x=>x.dataset.attachmentId===m.id);if(cards.length!==1||!visible(cards[0]))return false;
       const card=cards[0],kind=m.mime.startsWith('image/')?'img':'audio',elements=card.querySelectorAll(kind);if(elements.length!==1)return false;const element=elements[0],control=kind==='img'?card.querySelector('.image-open'):card.querySelector('.audio-card');if(!visible(control))return false;
       if(kind==='img'&&(!visible(element)||!element.complete||element.naturalWidth<=0||element.alt!==m.name))return false;
-      if(kind==='audio'&&(!Number.isFinite(element.duration)||element.duration<=0||card.querySelector('.audio-title-toggle')?.textContent.trim()!==m.name))return false;
-      return (element.currentSrc||element.src)==='data:'+m.mime+';base64,'+m.data;
-    });})()`;
+      if(kind==='audio'&&(!Number.isFinite(element.duration)||element.duration<=0||card.querySelector('.audio-title-toggle strong')?.textContent!==m.name.replace(/\\.[^.]+$/,'')))return false;
+      const src=element.currentSrc||element.src;if(src==='data:'+m.mime+';base64,'+m.data)continue;
+      if(!src.startsWith('blob:'+location.origin+'/'))return false;
+      const bytes=new Uint8Array(await (await fetch(src)).arrayBuffer());let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);if(btoa(binary)!==m.data)return false;
+    }return true;})()`;
 }
 async function visibleSyntheticEditor(client,expected,media=[]) {
   await client.wait(visibleSyntheticEditorExpression(expected,media),'unique visible exact owner editor, full body and exact original media sources');
