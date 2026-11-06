@@ -4,20 +4,131 @@ import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve, extname } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { createServer as createViteServer } from 'vite';
+import { createServer as createViteServer, build as buildVite } from 'vite';
 import react from '@vitejs/plugin-react';
 import { FakeBackend, rustBackend, installBrowserPlatform } from './platform.mjs';
+import { pollRustEvents } from './rust-backend.mjs';
 
 const playwrightDefault = '/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/playwright-core/index.mjs';
 const chromeDefault = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 export async function openRuntime(options = {}) {
   const root = resolve(options.root || process.cwd());
   const directory = await mkdtemp(resolve(options.tmp || tmpdir(), 'notes-debug70-'));
-  let browser, context, vite, server, backend; const errors = [], sockets = new Set();
-  const cleanup = async ({ keep = options.keep } = {}) => { await context?.close(); await browser?.close(); for (const socket of sockets) socket.destroy(); await vite?.close(); await new Promise((done) => { if (!server) return done(); server.close(done); server.closeAllConnections(); }); await backend?.close(); if (!keep) await rm(directory, { recursive: true, force: true }); };
+  let browser,
+    browserServer,
+    browserServerClosed = false,
+    browserProcessExit,
+    context,
+    vite,
+    server,
+    backend,
+    pump,
+    eventPage,
+    eventTask = Promise.resolve();
+  let contextClosed = false;
+  let eventReady = false,
+    participantsRegistered = false;
+  const errors = [],
+    sockets = new Set(),
+    eventQueue = [],
+    eventHistory = [];
+  const dispatchEvents = () => {
+    if (!eventReady) return;
+    eventTask = eventTask.then(async () => {
+      while (eventQueue.length) {
+        const event = eventQueue.shift();
+        await options.beforeRustEvent?.(event);
+        // No invitation or request argument is included in event history.
+        eventHistory.push(structuredClone(event));
+        await eventPage.evaluate(async (event) => {
+          window.__DEBUG_PLATFORM__.events.push(event.name);
+          await window.__DEBUG_PLATFORM__.emit(event.name, event.payload);
+        }, event);
+      }
+    });
+    eventTask.catch((error) =>
+      errors.push("Rust event delivery: " + error.message),
+    );
+  };
+  const receiveEvents = (events) => {
+    for (const event of events) if (!event || typeof event.name !== "string" || !("payload" in event)) throw Error("Invalid Rust event envelope");
+    eventQueue.push(...events);
+    dispatchEvents();
+  };
+  const settleEvents = async () => {
+    for (;;) { const current = eventTask; await current; if (current === eventTask && !eventQueue.length) return; }
+  };
+  const resourceClosures = [];
+  const closeResource = async (resource, event, close, complete) => {
+    if (!resource || complete()) return;
+    let terminal, timer;
+    const observed = new Promise(done => { terminal = done; resource.once(event, terminal); });
+    try {
+      // Playwright can publish the resource terminal event while its close IPC
+      // response is still pending. The actual terminal event is authoritative.
+      await Promise.race([close(), observed, new Promise((_, reject) => { timer = setTimeout(() => reject(Error(event + " resource close timed out")), 10000); })]);
+      if (!complete()) throw Error(event + " resource did not reach terminal state");
+      resourceClosures.push({ event, terminal: true });
+    } finally { clearTimeout(timer); resource.off(event, terminal); }
+  };
+  const cleanup = async ({ keep = options.keep } = {}) => {
+    // Teardown always owns all resources, even after a failed poll/event/IPC.
+    // Preserve the first failure while awaiting every independent cleanup.
+    const cleanupStarted = performance.now();
+    let failure;
+    const attempt = async fn => { try { await fn(); } catch (error) { failure ||= error; } };
+    if (participantsRegistered) await attempt(async () => {
+      const response = await backend.call("set_document_participants", { windows: [] });
+      if (!response.ok) throw Error(response.error.message);
+      participantsRegistered = false;
+    });
+    await attempt(() => pump?.stop());
+    await attempt(settleEvents);
+    eventReady = false;
+    await attempt(() => options.rustEvents
+      ? closeResource(context, 'close', () => context.close(), () => contextClosed)
+      : context?.close());
+    await attempt(async () => {
+      if (!browserServer) {
+        await browser?.close();
+        return;
+      }
+      let timer;
+      try {
+        await Promise.race([
+          browserServer.close(),
+          new Promise((_, reject) => { timer = setTimeout(() => reject(Error("Owned browser server close timed out")), 10000); }),
+        ]);
+      } finally { clearTimeout(timer); }
+      if (!browserServerClosed || browser?.isConnected() ||
+          browserProcessExit?.code !== 0 || browserProcessExit?.signal !== null)
+        throw Error("Owned browser process did not close naturally");
+    });
+    for (const socket of sockets) socket.destroy();
+    const closeServer = new Promise(done => {
+      if (!server) return done();
+      server.close(done); server.closeAllConnections();
+    });
+    let closeTimer;
+    await attempt(() => Promise.race([
+      Promise.all([vite?.close(), closeServer]),
+      new Promise((_, reject) => { closeTimer = setTimeout(() => reject(Error("Vite/HTTP cleanup timed out")), 10000); }),
+    ]).finally(() => clearTimeout(closeTimer)));
+    await attempt(() => backend?.close());
+    if (!keep) await attempt(() => rm(directory, { recursive: true, force: true }));
+    if (options.rustEvents) resourceClosures.push({ event: "cleanup", terminal: !failure, wallMs: performance.now() - cleanupStarted });
+    if (failure) throw failure;
+  };
   try {
-    backend = options.transport ? await rustBackend(resolve(options.transport), options.storeDirectory ? resolve(options.storeDirectory) : directory) : new FakeBackend(directory);
-    const production = options.production && resolve(root, options.production);
+    backend = options.transport ? await rustBackend(resolve(options.transport), options.storeDirectory ? resolve(options.storeDirectory) : directory, { ...options.transportOptions, ...(options.rustEvents ? { timeoutMs: Math.max(35000, options.transportOptions?.timeoutMs || 0), onEvents: receiveEvents } : {}) }) : new FakeBackend(directory);
+    if (options.rustEvents && !options.transport) throw Error("Rust events require an explicit real transport");
+    let production = options.production && resolve(root, options.production);
+    if (options.bundleDebug) {
+      if (options.production || options.enabled === false) throw Error("Bundled debug runtime cannot be a production-exclusion check");
+      production = resolve(directory, 'debug-bundle');
+      await buildVite({ root, configFile: false, plugins: [react()], logLevel: 'error', define: { 'import.meta.env.DEV': 'true', 'import.meta.env.VITE_NOTES_DEBUG': JSON.stringify('1'), 'process.env.NODE_ENV': JSON.stringify('development') }, build: { outDir: production, emptyOutDir: true, minify: false, cssCodeSplit: false, rollupOptions: { input: resolve(root, 'src/main.tsx'), output: { entryFileNames: 'app.js', assetFileNames: '[name][extname]' } } } });
+      await writeFile(resolve(production, 'index.html'), '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/style.css"></head><body><div id="root"></div><script type="module" src="/app.js"></script></body></html>');
+    }
     const html = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>';
     server = createServer(async (request, response) => {
       try {
@@ -40,17 +151,50 @@ export async function openRuntime(options = {}) {
     await new Promise((done, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', done); }); const origin = 'http://127.0.0.1:' + server.address().port;
     const playwrightPath = options.playwright || process.env.PLAYWRIGHT_CORE_PATH || playwrightDefault; if (!existsSync(playwrightPath)) throw Error('Set PLAYWRIGHT_CORE_PATH to an installed playwright-core; no dependencies are installed by this runner.');
     const { chromium } = await import(pathToFileURL(playwrightPath));
-    browser = await chromium.launch({ executablePath: options.chrome || process.env.CHROME_PATH || chromeDefault, headless: true, args: ['--autoplay-policy=no-user-gesture-required', '--mute-audio', '--disable-background-timer-throttling'] });
+    const launchOptions = { executablePath: options.chrome || process.env.CHROME_PATH || chromeDefault, headless: true, args: ['--autoplay-policy=no-user-gesture-required', '--mute-audio', '--disable-background-timer-throttling'] };
+    if (options.rustEvents) {
+      // Public process ownership lets us close this child's inherited log pipes
+      // after its actual exit. Chrome updater/crashpad descendants may otherwise
+      // keep stderr open, delaying Playwright's child `close` indefinitely.
+      browserServer = await chromium.launchServer({ ...launchOptions, host: "127.0.0.1" });
+      const ownedProcess = browserServer.process();
+      ownedProcess.once("exit", (code, signal) => {
+        browserProcessExit = { code, signal };
+        const pipes = ownedProcess.stdio.filter(pipe => typeof pipe?.destroy === "function");
+        for (const pipe of pipes) pipe.destroy();
+        resourceClosures.push({ event: "browser-process-exit", terminal: true, pid: ownedProcess.pid, code, signal, stdioDestroyed: pipes.every(pipe => pipe.destroyed) });
+      });
+      browserServer.once("close", (code, signal) => {
+        browserServerClosed = true;
+        resourceClosures.push({ event: "browser-server-close", terminal: true, code, signal });
+      });
+      browser = await chromium.connect(browserServer.wsEndpoint());
+      browser.once("disconnected", () => resourceClosures.push({ event: "disconnected", terminal: true }));
+    } else {
+      browser = await chromium.launch(launchOptions);
+    }
     const viewport = options.mobile ? { width: 390, height: 844 } : { width: 1280, height: 800 };
     context = await browser.newContext({ viewport, ...(options.mobile ? { isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/130 Mobile Safari/537.36' } : {}) });
+    context.on('close', () => { contextClosed = true; });
     const page = await context.newPage(); page.setDefaultTimeout(10000); page.on('pageerror', (error) => errors.push(String(error)));
     await page.route('**/*', (route) => route.request().url().startsWith(origin) || /^(data:|blob:)/.test(route.request().url()) ? route.continue() : route.abort());
     await page.addInitScript(installBrowserPlatform, { mobile: !!options.mobile, nativeToolbar: !!options.nativeToolbar });
     await page.goto(origin + '/?notesDebug=1', { waitUntil: 'domcontentloaded', timeout: 30000 });
-    if (options.enabled === false || production) await page.waitForSelector('.app');
+    if (options.enabled === false || options.production) await page.waitForSelector('.app');
     else { await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); }
+    if (options.rustEvents) {
+      eventPage = page;
+      eventReady = true;
+      const response = await backend.call("set_document_participants", {
+        windows: ["main"],
+      });
+      if (!response.ok) throw Error(response.error.message);
+      participantsRegistered = true;
+      dispatchEvents();
+      pump = pollRustEvents(backend);
+    }
     const reset = async () => { if (!backend.reset) throw Error('Scenario reset requires default isolated fixture; use separate CLI scripts with external transport.'); backend.reset(); await page.reload(); await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); };
-    return { root, directory, origin, page, mobile: !!options.mobile, viewport, backend, errors, cleanup, reset, metadata: { platform: options.mobile ? 'mobile-browser' : 'desktop-browser', backend: backend.kind, media: 'fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation', native: 'IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default', browser: await browser.version(), viewport } };
+    return { root, directory, origin, page, rustEvents: { history: eventHistory, resourceClosures, get pending() { return eventQueue.length; }, get polling() { return pump?.state; }, async settled() { await settleEvents(); } }, mobile: !!options.mobile, viewport, backend, errors, cleanup, reset, metadata: { platform: options.mobile ? 'mobile-browser' : 'desktop-browser', backend: backend.kind, media: 'fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation', native: 'IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default', browser: await browser.version(), frontendTransport: options.bundleDebug ? 'isolated-static-debug-bundle' : production ? 'production-static' : 'vite-development', viewport } };
   } catch (error) { await cleanup({ keep: options.keep }); throw error; }
 }
 export async function api(page, command, args = {}) { const input = JSON.stringify({ command, args }); if (input.length > 2_100_000) throw Object.assign(Error('Bounded debug transport payload exceeded'), { code: 'INVALID_ARGUMENT' }); const response = await page.evaluate(async (input) => { const { command, args } = JSON.parse(input); try { return { ok: true, value: await window.__NOTES_DEBUG__.execute(command, args) }; } catch (error) { return { ok: false, error: { code: error.code || 'APP_ERROR', message: error.message || String(error) } }; } }, input); if (!response.ok) throw Object.assign(Error(response.error.message), { code: response.error.code }); return response.value; }
