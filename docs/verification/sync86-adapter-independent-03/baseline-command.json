@@ -1,0 +1,14 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "--manifest-path",
+    "/private/tmp/sync86-independent-review-03/baseline-harness/Cargo.toml",
+    "resolve_tests::locked_keep",
+    "--",
+    "--nocapture"
+  ],
+  "wallMs": 21825,
+  "exitCode": 101
+}
