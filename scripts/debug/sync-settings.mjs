@@ -438,7 +438,8 @@ export async function runSyncSettings(runtime, { command, check, output }) {
           smallButtons: [...node.querySelectorAll("button")].filter(
             (x) =>
               x.getClientRects().length &&
-              x.getBoundingClientRect().height < 44,
+              (x.getBoundingClientRect().width < 44 ||
+                x.getBoundingClientRect().height < 44),
           ).length,
           scrollWidth: container.scrollWidth,
           clientWidth: container.clientWidth,
