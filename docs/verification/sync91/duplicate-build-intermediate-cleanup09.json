@@ -1,0 +1,45 @@
+{
+  "updatedAt": "2026-11-07T00:16:23.724521+08:00",
+  "scope": "Only reconstructable duplicate APK build intermediates; all named deliverables, source, SDK, AVD/userdata and paired stores preserved. No compiler active at admission.",
+  "files": [
+    {
+      "removed": "artifacts/sync91/prior-android-output.apk",
+      "retained": "artifacts/sync90/备忘录-Android20.apk",
+      "removedProof": {
+        "bytes": 237378855,
+        "sha256": "e16423edae823a0a9789f6813b709d391abadffc8b4ef1e6f0ffc48d691de3e5",
+        "device": 16777233,
+        "inode": 35463727,
+        "mtimeNs": 1793978351652977165
+      },
+      "retainedProof": {
+        "bytes": 237378855,
+        "sha256": "e16423edae823a0a9789f6813b709d391abadffc8b4ef1e6f0ffc48d691de3e5",
+        "device": 16777233,
+        "inode": 35463739,
+        "mtimeNs": 1793978351652977165
+      },
+      "removedAfterExactEquality": true
+    },
+    {
+      "removed": "src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+      "retained": "artifacts/sync91/备忘录-Android21.apk",
+      "removedProof": {
+        "bytes": 238738727,
+        "sha256": "e9e1142e9d24a13b533767173c236d1d10841d62d9709aec69e652cf0c9eb60a",
+        "device": 16777233,
+        "inode": 35544917,
+        "mtimeNs": 1793980212232851342
+      },
+      "retainedProof": {
+        "bytes": 238738727,
+        "sha256": "e9e1142e9d24a13b533767173c236d1d10841d62d9709aec69e652cf0c9eb60a",
+        "device": 16777233,
+        "inode": 35544935,
+        "mtimeNs": 1793980212232851342
+      },
+      "removedAfterExactEquality": true
+    }
+  ],
+  "freedBytes": 476117582
+}
