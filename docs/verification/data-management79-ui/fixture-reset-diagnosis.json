@@ -1,0 +1,14 @@
+{
+  "before": {
+    "setup": "unlocked=Set(note-a); reset(); note-a.locked=true",
+    "resetRetainsUnlock": true,
+    "authorized": true
+  },
+  "after": {
+    "constructor": "unlocked=new Set()",
+    "resetRetainsUnlock": false,
+    "authorized": false
+  },
+  "sourceBefore": "a4ab8130",
+  "sourceAfter": "1833bb53"
+}

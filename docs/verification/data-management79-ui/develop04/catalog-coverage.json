@@ -1,0 +1,1505 @@
+{
+  "commands": [
+    {
+      "id": "app.state",
+      "group": "app",
+      "description": "Read current application projection and workspace snapshot",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "app.flush",
+      "group": "app",
+      "description": "Await actual document save queue ACK",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "executed",
+      "executions": 1
+    },
+    {
+      "id": "app.refresh",
+      "group": "app",
+      "description": "Reload through trusted application bridge",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "app.back",
+      "group": "app",
+      "description": "Application Back including overlay dismissal",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "app.dismissError",
+      "group": "app",
+      "description": "Dismiss application error banner",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "folder.select",
+      "group": "navigation",
+      "description": "Navigate physical or smart folder",
+      "args": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "note.select",
+      "group": "navigation",
+      "description": "Select note using real navigation",
+      "args": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "tag.select",
+      "group": "navigation",
+      "description": "Select tag or all tags",
+      "args": {
+        "name": {
+          "type": "string",
+          "required": true,
+          "nullable": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "name": {
+          "type": "string",
+          "required": true,
+          "nullable": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "note.create",
+      "group": "notes",
+      "description": "Create through actual createNote / flush / receipt",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "note.patch",
+      "group": "notes",
+      "description": "Move, pin or change paper using actual note patch",
+      "args": {
+        "pinned": {
+          "type": "boolean"
+        },
+        "folderId": {
+          "type": "string",
+          "required": false
+        },
+        "paperStyle": {
+          "type": "string",
+          "enum": [
+            "plain",
+            "lines-small",
+            "lines-medium",
+            "lines-large",
+            "grid-small",
+            "grid-medium",
+            "grid-large"
+          ],
+          "required": false
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "pinned": {
+          "type": "boolean"
+        },
+        "folderId": {
+          "type": "string",
+          "required": false
+        },
+        "paperStyle": {
+          "type": "string",
+          "enum": [
+            "plain",
+            "lines-small",
+            "lines-medium",
+            "lines-large",
+            "grid-small",
+            "grid-medium",
+            "grid-large"
+          ],
+          "required": false
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "note.delete",
+      "group": "notes",
+      "description": "delete selected note through application action",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "note.restore",
+      "group": "notes",
+      "description": "restore selected note through application action",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "note.purge",
+      "group": "notes",
+      "description": "purge selected note through application action",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "note.separate",
+      "group": "notes",
+      "description": "Open independent note window",
+      "args": {},
+      "boundary": "Native window mocked by fixture; browser preview selects note",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "note.share",
+      "group": "notes",
+      "description": "Use actual share handler",
+      "args": {},
+      "boundary": "System share/clipboard boundary",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "folder.open",
+      "group": "folders",
+      "description": "Open new/edit folder form",
+      "args": {
+        "id": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "id": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "folder.updateDraft",
+      "group": "folders",
+      "description": "Update real form draft retaining validation/conflict rules",
+      "args": {
+        "draft": {
+          "type": "object",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "draft": {
+          "type": "object",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "folder.submit",
+      "group": "folders",
+      "description": "Real folder form submit",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "folder.cancel",
+      "group": "folders",
+      "description": "Real folder form cancel",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "folder.refresh",
+      "group": "folders",
+      "description": "Real folder form refresh",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "folder.draft",
+      "group": "folders",
+      "description": "Real folder form draft",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "folder.rename",
+      "group": "folders",
+      "description": "Open real rename/edit form",
+      "args": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "folder.delete",
+      "group": "folders",
+      "description": "Open real deletion confirmation",
+      "args": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "editor.insertText",
+      "group": "editor",
+      "description": "Insert literal text through Tiptap transaction",
+      "args": {
+        "text": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "text": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "executed",
+      "executions": 2
+    },
+    {
+      "id": "editor.setContent",
+      "group": "editor",
+      "description": "Set validated editor JSON through actual transaction/save",
+      "args": {
+        "document": {
+          "type": "object",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "document": {
+          "type": "object",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "editor.select",
+      "group": "editor",
+      "description": "Set real text selection",
+      "args": {
+        "from": {
+          "type": "number",
+          "required": true
+        },
+        "to": {
+          "type": "number",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "from": {
+          "type": "number",
+          "required": true
+        },
+        "to": {
+          "type": "number",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "editor.format",
+      "group": "editor",
+      "description": "Execute actual format menu command",
+      "args": {
+        "command": {
+          "type": "string",
+          "enum": [
+            "bold",
+            "italic",
+            "underline",
+            "strikethrough",
+            "highlight",
+            "colorDefault",
+            "colorPurple",
+            "colorPink",
+            "colorOrange",
+            "colorMint",
+            "colorBlue",
+            "styleTitle",
+            "styleHeading",
+            "styleSubheading",
+            "styleBody",
+            "styleMonospaced",
+            "listBullet",
+            "listDash",
+            "listNumber",
+            "blockquote",
+            "checklist",
+            "table",
+            "convertTableToText"
+          ],
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "command": {
+          "type": "string",
+          "enum": [
+            "bold",
+            "italic",
+            "underline",
+            "strikethrough",
+            "highlight",
+            "colorDefault",
+            "colorPurple",
+            "colorPink",
+            "colorOrange",
+            "colorMint",
+            "colorBlue",
+            "styleTitle",
+            "styleHeading",
+            "styleSubheading",
+            "styleBody",
+            "styleMonospaced",
+            "listBullet",
+            "listDash",
+            "listNumber",
+            "blockquote",
+            "checklist",
+            "table",
+            "convertTableToText"
+          ],
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "editor.undo",
+      "group": "editor",
+      "description": "Actual editor history undo",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "executed",
+      "executions": 1
+    },
+    {
+      "id": "editor.redo",
+      "group": "editor",
+      "description": "Actual editor history redo",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "editor.table",
+      "group": "editor",
+      "description": "Actual table chain",
+      "args": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "insert",
+            "addRowBefore",
+            "addRowAfter",
+            "addColumnBefore",
+            "addColumnAfter",
+            "deleteRow",
+            "deleteColumn",
+            "deleteTable",
+            "mergeCells",
+            "splitCell",
+            "toggleHeaderRow",
+            "convertToText"
+          ],
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "insert",
+            "addRowBefore",
+            "addRowAfter",
+            "addColumnBefore",
+            "addColumnAfter",
+            "deleteRow",
+            "deleteColumn",
+            "deleteTable",
+            "mergeCells",
+            "splitCell",
+            "toggleHeaderRow",
+            "convertToText"
+          ],
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "search.set",
+      "group": "search",
+      "description": "Use global search state and normal projection",
+      "args": {
+        "query": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "query": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "search.find",
+      "group": "search",
+      "description": "Open/find inside current note",
+      "args": {
+        "query": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "query": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "settings.update",
+      "group": "settings",
+      "description": "Persist application settings",
+      "args": {
+        "settings": {
+          "type": "object",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "settings": {
+          "type": "object",
+          "required": true
+        }
+      },
+      "status": "executed",
+      "executions": 3
+    },
+    {
+      "id": "sidebar.toggle",
+      "group": "settings",
+      "description": "Use sidebar preference handler",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "data.open",
+      "group": "data",
+      "description": "Open actual local data management page",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "executed",
+      "executions": 6
+    },
+    {
+      "id": "data.refresh",
+      "group": "data",
+      "description": "Refresh real data-management bridge snapshot",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "executed",
+      "executions": 2
+    },
+    {
+      "id": "data.filter",
+      "group": "data",
+      "description": "Filter or paginate actual file listing",
+      "args": {
+        "query": {
+          "type": "string",
+          "required": false
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "all",
+            "image",
+            "audio",
+            "video",
+            "file",
+            "unowned"
+          ],
+          "required": false
+        },
+        "page": {
+          "type": "number"
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "query": {
+          "type": "string",
+          "required": false
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "all",
+            "image",
+            "audio",
+            "video",
+            "file",
+            "unowned"
+          ],
+          "required": false
+        },
+        "page": {
+          "type": "number"
+        }
+      },
+      "status": "executed",
+      "executions": 3
+    },
+    {
+      "id": "data.exportAttachment",
+      "group": "data",
+      "description": "Export original attachment from management listing",
+      "args": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "Native dialog and original-owner export boundary",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "image.preview",
+      "group": "data",
+      "description": "Open actual image preview",
+      "args": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "executed",
+      "executions": 1
+    },
+    {
+      "id": "image.save",
+      "group": "data",
+      "description": "Use actual image save control",
+      "args": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "Native dialog and original-byte export boundary",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "executed",
+      "executions": 1
+    },
+    {
+      "id": "menu.open",
+      "group": "menus",
+      "description": "Open existing menu",
+      "args": {
+        "menu": {
+          "type": "string",
+          "enum": [
+            "format",
+            "view",
+            "media",
+            "more",
+            "folder",
+            "table",
+            "note",
+            "app"
+          ],
+          "required": true
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "menu": {
+          "type": "string",
+          "enum": [
+            "format",
+            "view",
+            "media",
+            "more",
+            "folder",
+            "table",
+            "note",
+            "app"
+          ],
+          "required": true
+        }
+      },
+      "status": "executed",
+      "executions": 1
+    },
+    {
+      "id": "modal.open",
+      "group": "menus",
+      "description": "Open real modal",
+      "args": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "lock",
+            "unlock",
+            "paper",
+            "settings",
+            "move",
+            "purge"
+          ],
+          "required": true
+        },
+        "value": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "lock",
+            "unlock",
+            "paper",
+            "settings",
+            "move",
+            "purge"
+          ],
+          "required": true
+        },
+        "value": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "modal.submit",
+      "group": "menus",
+      "description": "Submit current real confirmation; fill its input with dom.fill first",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "modal.cancel",
+      "group": "menus",
+      "description": "Dismiss current modal through Back",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "attachment.choose",
+      "group": "attachments",
+      "description": "Open actual picker for a captured editor target",
+      "args": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "file",
+            "media",
+            "camera"
+          ],
+          "required": false
+        }
+      },
+      "boundary": "OS picker/camera boundary; fixture synthetic File only",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "file",
+            "media",
+            "camera"
+          ],
+          "required": false
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "attachment.submit",
+      "group": "attachments",
+      "description": "Submit bounded synthetic files through actual picker batch",
+      "args": {
+        "files": {
+          "type": "array",
+          "required": true
+        }
+      },
+      "boundary": "File input boundary; actual AttachmentSubmission/save ACK",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "files": {
+          "type": "array",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "attachment.retry",
+      "group": "attachments",
+      "description": "Actual attachment retry",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "attachment.discard",
+      "group": "attachments",
+      "description": "Actual attachment discard",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "ocr.open",
+      "group": "ocr",
+      "description": "Create real OcrHost operation",
+      "args": {},
+      "boundary": "Native OCR platform mocked; no real recognition claim",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "ocr.select",
+      "group": "ocr",
+      "description": "Process real OcrHost source",
+      "args": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "image",
+            "camera"
+          ],
+          "required": false
+        }
+      },
+      "boundary": "OCR device/recognition boundary",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "image",
+            "camera"
+          ],
+          "required": false
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "ocr.insert",
+      "group": "ocr",
+      "description": "Actual OcrHost insert",
+      "args": {},
+      "boundary": "OCR platform boundary",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "ocr.retry",
+      "group": "ocr",
+      "description": "Actual OcrHost retry",
+      "args": {},
+      "boundary": "OCR platform boundary",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "ocr.cancel",
+      "group": "ocr",
+      "description": "Actual OcrHost cancel",
+      "args": {},
+      "boundary": "OCR platform boundary",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "recording.open",
+      "group": "recording",
+      "description": "Open real owner/Panel/session",
+      "args": {},
+      "boundary": "App handler / editor / save queue",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "executed",
+      "executions": 1
+    },
+    {
+      "id": "recording.action",
+      "group": "recording",
+      "description": "Dispatch validated real recording action",
+      "args": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "toggle",
+            "close",
+            "finish",
+            "playback",
+            "preview-retry",
+            "skip",
+            "seek"
+          ],
+          "required": true
+        },
+        "seconds": {
+          "type": "number",
+          "enum": [
+            -15,
+            15
+          ]
+        },
+        "milliseconds": {
+          "type": "number"
+        }
+      },
+      "boundary": "Fixture fixed synthetic media only; actual Session/PCM/revisions/body ACK",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "toggle",
+            "close",
+            "finish",
+            "playback",
+            "preview-retry",
+            "skip",
+            "seek"
+          ],
+          "required": true
+        },
+        "seconds": {
+          "type": "number",
+          "enum": [
+            -15,
+            15
+          ]
+        },
+        "milliseconds": {
+          "type": "number"
+        }
+      },
+      "status": "executed",
+      "executions": 2
+    },
+    {
+      "id": "archive.export",
+      "group": "archive",
+      "description": "Actual archive export handler",
+      "args": {},
+      "boundary": "System dialog and native storage mocked by default fixture",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "archive.import",
+      "group": "archive",
+      "description": "Actual archive import handler",
+      "args": {},
+      "boundary": "System dialog and native storage mocked by default fixture",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "app.close",
+      "group": "lifecycle",
+      "description": "Request native window close intent",
+      "args": {},
+      "boundary": "Native event delivery mocked; actual app save barrier",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "app.quit",
+      "group": "lifecycle",
+      "description": "Request native app quit intent",
+      "args": {},
+      "boundary": "Native exit delivery mocked; no OS termination claim",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "drawing.open",
+      "group": "drawing",
+      "description": "Open existing drawing editor",
+      "args": {},
+      "boundary": "Draw with DOM pointer interaction; native sketch menu remains disabled",
+      "mode": "semantic",
+      "available": true,
+      "arguments": {},
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "dom.click",
+      "group": "dom",
+      "description": "Click one visible enabled actual element",
+      "args": {
+        "selector": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "DOM supplementary control wiring",
+      "mode": "dom",
+      "available": true,
+      "arguments": {
+        "selector": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "dom.fill",
+      "group": "dom",
+      "description": "Fill one real input using input/change events",
+      "args": {
+        "selector": {
+          "type": "string",
+          "required": true
+        },
+        "value": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "boundary": "DOM supplementary control wiring",
+      "mode": "dom",
+      "available": true,
+      "arguments": {
+        "selector": {
+          "type": "string",
+          "required": true
+        },
+        "value": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "dom.key",
+      "group": "dom",
+      "description": "Dispatch actual key event (not text synthesis)",
+      "args": {
+        "selector": {
+          "type": "string",
+          "required": true
+        },
+        "key": {
+          "type": "string",
+          "required": true
+        },
+        "ctrlKey": {
+          "type": "boolean"
+        },
+        "metaKey": {
+          "type": "boolean"
+        },
+        "shiftKey": {
+          "type": "boolean"
+        }
+      },
+      "boundary": "DOM supplementary control wiring",
+      "mode": "dom",
+      "available": true,
+      "arguments": {
+        "selector": {
+          "type": "string",
+          "required": true
+        },
+        "key": {
+          "type": "string",
+          "required": true
+        },
+        "ctrlKey": {
+          "type": "boolean"
+        },
+        "metaKey": {
+          "type": "boolean"
+        },
+        "shiftKey": {
+          "type": "boolean"
+        }
+      },
+      "status": "not-exercised",
+      "executions": 0,
+      "limitation": "Catalog validation/availability is separate from executed scenario coverage."
+    },
+    {
+      "id": "native.viewAttachments",
+      "group": "unsupported",
+      "description": "Existing native menu is explicitly disabled",
+      "args": {},
+      "boundary": "Existing product limitation; web camera/drawing are separately reachable",
+      "mode": "unsupported",
+      "available": false,
+      "arguments": {},
+      "status": "unsupported",
+      "executions": 0
+    },
+    {
+      "id": "native.takePhoto",
+      "group": "unsupported",
+      "description": "Existing native menu is explicitly disabled",
+      "args": {},
+      "boundary": "Existing product limitation; web camera/drawing are separately reachable",
+      "mode": "unsupported",
+      "available": false,
+      "arguments": {},
+      "status": "unsupported",
+      "executions": 0
+    },
+    {
+      "id": "native.scanDocument",
+      "group": "unsupported",
+      "description": "Existing native menu is explicitly disabled",
+      "args": {},
+      "boundary": "Existing product limitation; web camera/drawing are separately reachable",
+      "mode": "unsupported",
+      "available": false,
+      "arguments": {},
+      "status": "unsupported",
+      "executions": 0
+    },
+    {
+      "id": "native.addSketch",
+      "group": "unsupported",
+      "description": "Existing native menu is explicitly disabled",
+      "args": {},
+      "boundary": "Existing product limitation; web camera/drawing are separately reachable",
+      "mode": "unsupported",
+      "available": false,
+      "arguments": {},
+      "status": "unsupported",
+      "executions": 0
+    },
+    {
+      "id": "native.recentNotes",
+      "group": "unsupported",
+      "description": "Existing native menu is explicitly disabled",
+      "args": {},
+      "boundary": "Existing product limitation; web camera/drawing are separately reachable",
+      "mode": "unsupported",
+      "available": false,
+      "arguments": {},
+      "status": "unsupported",
+      "executions": 0
+    },
+    {
+      "id": "native.mathInsert",
+      "group": "unsupported",
+      "description": "Existing native menu is explicitly disabled",
+      "args": {},
+      "boundary": "Existing product limitation; web camera/drawing are separately reachable",
+      "mode": "unsupported",
+      "available": false,
+      "arguments": {},
+      "status": "unsupported",
+      "executions": 0
+    },
+    {
+      "id": "native.mathSuggest",
+      "group": "unsupported",
+      "description": "Existing native menu is explicitly disabled",
+      "args": {},
+      "boundary": "Existing product limitation; web camera/drawing are separately reachable",
+      "mode": "unsupported",
+      "available": false,
+      "arguments": {},
+      "status": "unsupported",
+      "executions": 0
+    },
+    {
+      "id": "native.mathOff",
+      "group": "unsupported",
+      "description": "Existing native menu is explicitly disabled",
+      "args": {},
+      "boundary": "Existing product limitation; web camera/drawing are separately reachable",
+      "mode": "unsupported",
+      "available": false,
+      "arguments": {},
+      "status": "unsupported",
+      "executions": 0
+    },
+    {
+      "id": "native.attachmentsSmall",
+      "group": "unsupported",
+      "description": "Existing native menu is explicitly disabled",
+      "args": {},
+      "boundary": "Existing product limitation; web camera/drawing are separately reachable",
+      "mode": "unsupported",
+      "available": false,
+      "arguments": {},
+      "status": "unsupported",
+      "executions": 0
+    },
+    {
+      "id": "native.attachmentsLarge",
+      "group": "unsupported",
+      "description": "Existing native menu is explicitly disabled",
+      "args": {},
+      "boundary": "Existing product limitation; web camera/drawing are separately reachable",
+      "mode": "unsupported",
+      "available": false,
+      "arguments": {},
+      "status": "unsupported",
+      "executions": 0
+    }
+  ]
+}

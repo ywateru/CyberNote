@@ -36,7 +36,7 @@ export async function openRuntime(options = {}) {
       } catch (error) { response.statusCode = 500; response.end(JSON.stringify({ error: String(error) })); }
     });
     server.on('connection', (socket) => { sockets.add(socket); socket.on('close', () => sockets.delete(socket)); });
-    if (!production) vite = await createViteServer({ root, configFile: false, cacheDir: resolve(directory, 'vite-cache'), plugins: [react({ exclude: /\/(?:node_modules|vite-cache)\// })], define: { 'import.meta.env.VITE_NOTES_DEBUG': JSON.stringify(options.enabled === false ? '0' : '1') }, server: { middlewareMode: true, hmr: { server } }, appType: 'custom' });
+    if (!production) vite = await createViteServer({ root, configFile: false, cacheDir: resolve(directory, 'vite-cache'), optimizeDeps: { include: ['react-dom', 'react-dom/client'] }, plugins: [react({ exclude: /\/(?:node_modules|vite-cache)\// })], define: { 'import.meta.env.VITE_NOTES_DEBUG': JSON.stringify(options.enabled === false ? '0' : '1') }, server: { middlewareMode: true, hmr: { server } }, appType: 'custom' });
     await new Promise((done, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', done); }); const origin = 'http://127.0.0.1:' + server.address().port;
     const playwrightPath = options.playwright || process.env.PLAYWRIGHT_CORE_PATH || playwrightDefault; if (!existsSync(playwrightPath)) throw Error('Set PLAYWRIGHT_CORE_PATH to an installed playwright-core; no dependencies are installed by this runner.');
     const { chromium } = await import(pathToFileURL(playwrightPath));
@@ -49,7 +49,7 @@ export async function openRuntime(options = {}) {
     await page.goto(origin + '/?notesDebug=1', { waitUntil: 'domcontentloaded', timeout: 30000 });
     if (options.enabled === false || production) await page.waitForSelector('.app');
     else { await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); }
-    const reset = async () => { if (!backend.reset) throw Error('Scenario reset requires default isolated fixture; use separate CLI scripts with external transport.'); backend.reset(); errors.length = 0; await page.reload(); await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); };
+    const reset = async () => { if (!backend.reset) throw Error('Scenario reset requires default isolated fixture; use separate CLI scripts with external transport.'); backend.reset(); await page.reload(); await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); };
     return { root, directory, origin, page, mobile: !!options.mobile, viewport, backend, errors, cleanup, reset, metadata: { platform: options.mobile ? 'mobile-browser' : 'desktop-browser', backend: backend.kind, media: 'fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation', native: 'IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default', browser: await browser.version(), viewport } };
   } catch (error) { await cleanup({ keep: options.keep }); throw error; }
 }

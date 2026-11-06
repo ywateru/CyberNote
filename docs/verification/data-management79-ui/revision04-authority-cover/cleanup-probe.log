@@ -1,0 +1,25 @@
+OPENED
+GROUP DONE 33
+CLEAN context begin
+CLEAN context done; browser begin
+CLEAN browser done; sockets begin
+CLEAN sockets done; vite begin [ 'client', 'ssr' ]
+ENV client pending []
+ENV ssr pending []
+BEGIN watcher
+BEGIN ws
+BEGIN client environment
+BEGIN client container
+BEGIN client optimizer
+BEGIN ssr environment
+BEGIN ssr container
+DONE client optimizer
+DONE watcher
+DONE ssr container
+DONE client container
+DONE client environment
+DONE ssr environment
+DONE ws
+CLEAN vite done; server begin
+CLEAN server done
+CLOSED

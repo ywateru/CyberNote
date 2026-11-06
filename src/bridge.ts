@@ -1,4 +1,6 @@
 import { listen } from "@tauri-apps/api/event";
+import { AccessChanged } from "./access-client";
+import { validateDataManagement, type DataManagementSnapshot } from "./data-management";
 import { MetadataGate, MetadataStale } from "./metadata-client";
 import {
   parseFolder,
@@ -117,6 +119,21 @@ export async function readNoteText(
     await invoke("read_note_text", { id, expected: accessGate.expected(id) }),
     stamp,
   );
+}
+export async function getDataManagement(): Promise<DataManagementSnapshot> {
+  if (!native) throw Error("请在已安装的应用中查看真实本地文件信息");
+  const stamp = accessGate.stamp();
+  return validateDataManagement(accept(await invoke<DataManagementSnapshot>("get_data_management", { expected: accessGate.expected() }), stamp));
+}
+export async function exportAttachment(id: string, path: string): Promise<{ name: string; bytes: number; mime: string }> {
+  const owner = attachmentOwners.get(id);
+  if (!owner) throw Error("附件不存在，请刷新后重试");
+  const stamp = accessGate.stamp(owner);
+  const result = await invoke<{ name: string; bytes: number; mime: string }>("export_attachment", { id, path, expected: accessGate.expected(owner) });
+  const now = accessGate.stamp(owner);
+  if (stamp.generation !== now.generation || stamp.sessionId !== now.sessionId || stamp.epoch !== now.epoch || stamp.noteEpoch !== now.noteEpoch) throw new AccessChanged();
+  if (!result || typeof result.name !== "string" || typeof result.mime !== "string" || !Number.isSafeInteger(result.bytes) || result.bytes < 0) throw Error("附件导出回执无效");
+  return result;
 }
 export async function exportArchive(path: string) {
   await invoke("export_archive", { path, expected: accessGate.expected() });

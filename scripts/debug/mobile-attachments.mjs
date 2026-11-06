@@ -169,7 +169,7 @@ export async function runMobileAttachments(
       backend.workspace.attachments.length === 3,
   );
   await page
-    .locator(".attachment-node.image img")
+    .locator(".attachment-node.file .file-card")
     .first()
     .click({ force: true });
   await page.waitForSelector(".node-attachment.ProseMirror-selectednode");
@@ -180,7 +180,8 @@ export async function runMobileAttachments(
     "Explicit user selection can replace old card without deleting retained media",
     refs(emptyNote.document).length === 3 &&
       backend.workspace.attachments.length === 4 &&
-      !refs(emptyNote.document).includes(backend.workspace.attachments[0].id),
+      !refs(emptyNote.document).includes(backend.workspace.attachments[1].id) &&
+      refs(emptyNote.document).includes(backend.workspace.attachments[0].id),
   );
   await command("editor.undo");
   await command("app.flush");
@@ -188,6 +189,7 @@ export async function runMobileAttachments(
   check(
     "One Undo restores explicitly replaced card through normal editor/save pipeline",
     refs(emptyNote.document).length === 3 &&
+      refs(emptyNote.document).includes(backend.workspace.attachments[1].id) &&
       refs(emptyNote.document).includes(backend.workspace.attachments[0].id),
   );
   await reset();

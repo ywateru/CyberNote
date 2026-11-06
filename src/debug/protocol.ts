@@ -64,12 +64,18 @@ export type DebugCommandArguments = {
       | "ocr.cancel"
       | "archive.export"
       | "archive.import"
+      | "data.open"
+      | "data.refresh"
       | "app.close"
       | "app.quit"
       | "drawing.open"
       | `native.${string}`
   ]: Record<string, never>;
 } & {
+  "data.filter": { query?: string; kind?: "all" | "image" | "audio" | "video" | "file" | "unowned"; page?: number };
+  "data.exportAttachment": { id: string };
+  "image.preview": { id: string };
+  "image.save": { id: string };
   "folder.select": { id: string };
   "note.select": { id: string };
   "tag.select": { name: string | null };

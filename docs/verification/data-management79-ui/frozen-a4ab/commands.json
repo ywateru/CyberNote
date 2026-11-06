@@ -1,0 +1,99 @@
+{
+  "output": "/private/tmp/data-management79-ui-frozen-20403",
+  "sourceAtStart": {
+    "head": "a4ab81308af8c96e86f50af038f4ae2375ab670b",
+    "inputs": {
+      "algorithm": "sha256(path NUL bytes NUL, sorted)",
+      "sha256": "151e9d807aa0735f4d51410f06f654d521b9155d1f331e91ebb98de920d58e92",
+      "fileCount": 95,
+      "paths": [
+        "src/**",
+        "scripts/debug/**",
+        "package.json",
+        "pnpm-lock.yaml",
+        "vite.config.ts",
+        "tsconfig.json"
+      ],
+      "gitDirty": false,
+      "gitStatus": []
+    }
+  },
+  "results": [
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "wallMs": 6930
+    },
+    {
+      "name": "production",
+      "command": [
+        "pnpm",
+        "debug",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/data-management79-ui-frozen-20403/production"
+      ],
+      "exitCode": 0,
+      "wallMs": 1997
+    },
+    {
+      "name": "desktop",
+      "command": [
+        "pnpm",
+        "test:debug",
+        "--out",
+        "/private/tmp/data-management79-ui-frozen-20403/desktop"
+      ],
+      "exitCode": 0,
+      "wallMs": 58722
+    },
+    {
+      "name": "mobile-notes",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "notes",
+        "--mobile",
+        "--out",
+        "/private/tmp/data-management79-ui-frozen-20403/mobile-notes"
+      ],
+      "exitCode": 0,
+      "wallMs": 6248
+    },
+    {
+      "name": "mobile-recording",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "recording",
+        "--mobile",
+        "--out",
+        "/private/tmp/data-management79-ui-frozen-20403/mobile-recording"
+      ],
+      "exitCode": 0,
+      "wallMs": 13698
+    },
+    {
+      "name": "mobile-attachments",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "attachments",
+        "--mobile",
+        "--out",
+        "/private/tmp/data-management79-ui-frozen-20403/mobile-attachments"
+      ],
+      "exitCode": 1,
+      "wallMs": 15815
+    }
+  ]
+}
