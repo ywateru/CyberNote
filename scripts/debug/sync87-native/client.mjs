@@ -23,6 +23,17 @@ export function chooseTarget(targets,port) {
   assert.equal(url.pathname,'/devtools/page/'+target.id);assert.equal(url.search,'');assert.equal(url.hash,'');
   assert(/^[A-Za-z0-9-]+$/.test(target.id));return target;
 }
+export function assertHomeVisible(view) {
+  assert(view.app.split(/\s+/).includes('page-notes'),'actual notes page required');
+  assert(view.app.split(/\s+/).includes('mobile'),'actual mobile layout required');
+  const visible=r=>r&&r.width>0&&r.height>0&&r.x<view.viewport.width&&r.y<view.viewport.height&&r.x+r.width>0&&r.y+r.height>0;
+  assert(visible(view.gallery),'gallery must have visible bounds');
+  assert(view.galleryDisplay!=='none'&&view.galleryVisibility==='visible','gallery CSS must be visible');
+  assert(!visible(view.editor),'editor must be hidden');
+  assert(visible(view.add)&&view.add.width>=44&&view.add.height>=44,'visible large add control required');
+  assert.equal(view.addColor,'rgb(255, 188, 0)');assert.equal(view.columns.trim().split(/\s+/).length,2);
+  return view;
+}
 export function parseNodes(xml) {
   const decode=s=>s.replace(/&(amp|quot|apos|lt|gt);/g,(_,x)=>({amp:'&',quot:'"',apos:"'",lt:'<',gt:'>'}[x]));
   const nodes=[],stack=[];
@@ -47,10 +58,17 @@ export function nativeWebViewRect(nodes) {
   }
   return first.rect;
 }
+export const nativeObservationEvents=[];
+export async function readNativeUI(){
+  for(let attempt=0;attempt<2;attempt++){
+    try{return await guard('uia');}
+    catch(error){let result;try{result=JSON.parse(error.stdout);}catch{}if(attempt!==0||result?.error!=='Refused'||result.message!=='bounded subprocess failed 137: ')throw error;nativeObservationEvents.push({event:'UIA_DUMP_EXIT_137',retry:1});await pause(250);}
+  }
+}
 export async function nativeNode(match,{hold=false,timeout=12000}={}) {
   const end=Date.now()+timeout;
   while(Date.now()<end){
-    const nodes=parseNodes(await guard('uia'));
+    const nodes=parseNodes(await readNativeUI());
     const found=nodes.filter(n=>n.rect?.width>0&&n.rect.height>0&&match(n));
     if(found.length===1){const n=found[0];await guard(hold?'hold':'tap',{x:Math.round(n.rect.x+n.rect.width/2),y:Math.round(n.rect.y+n.rect.height/2)});return n;}
     if(found.length>1)throw Error('ambiguous native node');await pause(200);
@@ -81,14 +99,13 @@ export async function connect({receipt,port=19400}) {
     const wait=async(predicate,label,timeout=15000)=>{const end=Date.now()+timeout;while(Date.now()<end){const value=await read(predicate);if(value)return value;await pause(150);}throw Error('Timed out: '+label);};
     const point=async(selector,text)=>read(`(()=>{const found=[...document.querySelectorAll(${JSON.stringify(selector)})].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&!e.disabled&&(${JSON.stringify(text===undefined?null:text)}===null||e.textContent.trim()===${JSON.stringify(text===undefined?null:text)})});if(found.length!==1)throw Error('Expected one visible enabled target');found[0].scrollIntoView({block:'nearest',inline:'nearest'});const r=found[0].getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
     const tap=async(selector,text)=>{const p=await point(selector,text);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});};
-    const nativeTap=async(selector)=>{
-      const p=await point(selector);const nodes=parseNodes(await guard('uia'));
-      const rect=nativeWebViewRect(nodes);
+    const nativeTap=async(selector,text)=>{
+      const p=await point(selector,text);const nodes=parseNodes(await readNativeUI());const rect=nativeWebViewRect(nodes);
       const viewport=await read('({width:innerWidth,height:innerHeight})');
       await guard('tap',{x:Math.round(rect.x+p.x*rect.width/viewport.width),y:Math.round(rect.y+p.y*rect.height/viewport.height)});
     };
     const insert=async text=>{assert(typeof text==='string'&&text.length<=16384);await send('Input.insertText',{text});};
-    const fill=async(selector,text)=>{await tap(selector);await send('Input.dispatchKeyEvent',{type:'keyDown',key:'a',code:'KeyA',modifiers:2,windowsVirtualKeyCode:65});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'a',code:'KeyA',modifiers:2,windowsVirtualKeyCode:65});await insert(text);};
+    const fill=async(selector,text)=>{await nativeTap(selector);await wait(`(()=>{const targets=[...document.querySelectorAll(${JSON.stringify(selector)})].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&!e.disabled});return targets.length===1&&document.activeElement===targets[0]})()`,'exact visible native input focus');await send('Input.dispatchKeyEvent',{type:'keyDown',key:'a',code:'KeyA',modifiers:2,windowsVirtualKeyCode:65});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'a',code:'KeyA',modifiers:2,windowsVirtualKeyCode:65});await insert(text);};
     const workspace=()=>read('window.__TAURI_INTERNALS__.invoke("load_workspace")'); // observation only
     const readAttachment=async id=>{
       assert(typeof id==='string'&&/^[0-9a-f-]{36}$/.test(id));
@@ -106,6 +123,6 @@ export async function connect({receipt,port=19400}) {
       await writeFile(resolve(directory,name+'.json'),JSON.stringify({...state,identity,serial:SERIAL,avd:AVD,errors},null,2)+'\n');
       await writeFile(resolve(directory,name+'.png'),Buffer.from(image.data,'base64'));return state;
     };
-    return {identity,target:{id:target.id,url:target.url},send,read,wait,tap,nativeTap,insert,fill,workspace,readAttachment,snapshot,errors,close:cleanup};
+    return {identity,target:{id:target.id,url:target.url},send,read,wait,tap:nativeTap,nativeTap,insert,fill,workspace,readAttachment,snapshot,errors,close:cleanup};
   }catch(error){await cleanup();throw error;}
 }

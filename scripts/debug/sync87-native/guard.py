@@ -149,11 +149,27 @@ def app_identity(serial,avd,expected=None):
     require(expected is None or result==expected,'app PID lifetime changed; reconnect required')
     return result
 
+PICKER_KEYS = {'TAB': '61', 'DPAD_DOWN': '20', 'DPAD_UP': '19', 'DPAD_CENTER': '23', 'ENTER': '66', 'SPACE': '62'}
+PICKER_COMPONENT = r'(?:com\.google\.android\.documentsui|com\.android\.documentsui)/com\.android\.documentsui\.picker\.PickActivity'
+
+def picker_key(foreground, key):
+    require(type(key) is str and key in PICKER_KEYS, 'fixed picker navigation key required')
+    require(type(foreground) is str, 'actual picker foreground required')
+    resumed_lines = [line.strip() for line in foreground.splitlines() if re.match(r'^\s*mResumedActivity\s*:', line)]
+    focused_lines = [line.strip() for line in foreground.splitlines() if re.match(r'^\s*mCurrentFocus\s*=', line)]
+    require(len(resumed_lines) == 1, 'exactly one resumed activity field required')
+    require(len(focused_lines) == 1, 'exactly one current focus field required')
+    resumed = re.fullmatch(r'mResumedActivity: ActivityRecord\{[0-9a-f]+ u0 (' + PICKER_COMPONENT + r') t[0-9]+\}', resumed_lines[0])
+    focused = re.fullmatch(r'mCurrentFocus=Window\{[0-9a-f]+ u0 (' + PICKER_COMPONENT + r')\}', focused_lines[0])
+    require(resumed is not None, 'exact DocumentsUI resumed picker required')
+    require(focused is not None and focused[1] == resumed[1], 'exact DocumentsUI focused picker required')
+    return PICKER_KEYS[key]
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--serial',required=True);p.add_argument('--avd',required=True)
-    p.add_argument('operation',choices=['status','install','start','stop','home','back','identity','tap','hold','uia','ime','push','pull','forward','unforward','verify-app','foreground','screenshot','installed','prepare-export','checkpoint'])
-    p.add_argument('--run-state');p.add_argument('--export-index',type=int);p.add_argument('--name');p.add_argument('--receipt');p.add_argument('--path');p.add_argument('--remote');p.add_argument('--x',type=int);p.add_argument('--y',type=int);p.add_argument('--port',type=int);p.add_argument('--app-identity')
+    p.add_argument('operation',choices=['status','install','start','stop','home','back','identity','tap','hold','uia','ime','push','pull','forward','unforward','verify-app','foreground','screenshot','installed','prepare-export','checkpoint','picker-key'])
+    p.add_argument('--key');p.add_argument('--run-state');p.add_argument('--export-index',type=int);p.add_argument('--name');p.add_argument('--receipt');p.add_argument('--path');p.add_argument('--remote');p.add_argument('--x',type=int);p.add_argument('--y',type=int);p.add_argument('--port',type=int);p.add_argument('--app-identity')
     a=p.parse_args();target(a.serial,a.avd)
     invoke=lambda tail,**kw:adb(a.serial,a.avd,tail,**kw)
     result=None
@@ -218,6 +234,17 @@ def main():
             fd=os.open(target_file,os.O_CREAT|os.O_EXCL|os.O_WRONLY|os.O_NOFOLLOW,0o600)
             with os.fdopen(fd,'wb') as stream:stream.write(payload);stream.flush();os.fsync(stream.fileno())
             result={'path':str(target_file),'bytes':len(payload),'sha256':actual,'originalBytesVerified':True}
+    elif a.operation=='picker-key':
+        require(type(a.key) is str and a.key in PICKER_KEYS, 'fixed picker navigation key required')
+        expected=json.loads(a.app_identity) if a.app_identity else None
+        require(type(expected) is dict and set(expected)=={'pid','startTicks','package'} and type(expected['pid']) is int and expected['pid']>1 and expected['package']==PACKAGE and type(expected['startTicks']) is str and re.fullmatch(r'[0-9]+',expected['startTicks']), 'exact app lifetime required for picker navigation')
+        before=app_identity(a.serial,a.avd,expected)
+        foreground=invoke(['shell','dumpsys','activity','activities'])
+        keycode=picker_key(foreground,a.key)
+        app_identity(a.serial,a.avd,expected)
+        invoke(['shell','input','keyevent',keycode])
+        after=app_identity(a.serial,a.avd,expected)
+        result={'key':a.key,'appIdentityBefore':before,'appIdentityAfter':after,'pickerForegroundVerified':True}
     elif a.operation=='checkpoint':
         owned=ownership(a.serial,a.avd)
         boot=invoke(['shell','cat','/proc/sys/kernel/random/boot_id'])

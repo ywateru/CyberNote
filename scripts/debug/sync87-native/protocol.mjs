@@ -1,6 +1,6 @@
 /** Bounded NDJSON parsing. Never expose input-derived exception text. */
 export const MAX_REQUEST_BYTES = 32768;
-const actions = new Set(['install','start','pushFixtures','home','createNote','attachments','exportImage','pair','observe','background','foreground','reopen','close','connectDesktop','roundtrip','backgroundRoundtrip','coldBootPrepare','coldBootVerify']);
+const actions = new Set(['install','start','pushFixtures','home','createNote','attachments','attachmentsOpen','attachmentsMultiple','attachmentsChooseMultiple','attachmentsRecentMultiple','attachmentsAudio','attachmentsVerify','exportImage','pair','observe','background','foreground','reopen','close','connectDesktop','textRoundtrip','desktopMedia','roundtrip','backgroundRoundtrip','coldBootPrepare','coldBootVerify']);
 const messages = {
   INVALID_JSON: 'Invalid JSON request; no input recorded',
   INVALID_REQUEST: 'Invalid native request; no input recorded',
@@ -46,4 +46,9 @@ export function actionFailure(request) {
     error:'ACTION_FAILED',
     message:request.action==='pair'?'Native UI pairing failed; no input or exception recorded':'Native acceptance action failed; no input or exception recorded',
   };
+}
+
+export function guardFailureSummary(stdout) {
+  let value;try{value=JSON.parse(stdout);}catch{}
+  return value?.ok===false&&value.error==='Refused'&&value.message==='bounded subprocess failed 137: '?{event:'GUARD_BOUNDED_EXIT_137'}:{event:'GUARD_FAILURE_REDACTED'};
 }

@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /** NDJSON native session; invitations accepted in stdin memory only. */
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, appendFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { resolve, basename } from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
-import { readRequests, actionFailure } from './protocol.mjs';
+import { readRequests, actionFailure, guardFailureSummary } from './protocol.mjs';
 import assert from 'node:assert/strict';
 import { DesktopPeer } from './desktop-peer.mjs';
 import { pairViaUI,saveImageOriginal,openNote,goHome } from './native-ui.mjs';
-import { roundtrip,backgroundRoundtrip,coldBootPrepare,coldBootVerify,assertNativeOriginal } from './scenarios.mjs';
-import { connect, guard, pause, parseNodes, nativeNode, SERIAL, AVD } from './client.mjs';
+import { textRoundtrip,desktopMedia,roundtrip,backgroundRoundtrip,coldBootPrepare,coldBootVerify,assertNativeOriginal } from './scenarios.mjs';
+import { connect, guard, pause, parseNodes, nativeNode, assertHomeVisible, readNativeUI, nativeObservationEvents, SERIAL, AVD } from './client.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const options=Object.fromEntries(process.argv.slice(2).reduce((pairs,x,i,a)=>{if(i%2===0)pairs.push([x,a[i+1]]);return pairs;},[]));
 assert(Object.keys(options).every(x=>['--output','--receipt','--peer-receipt','--mode'].includes(x)),'unknown option');
@@ -17,7 +17,7 @@ assert(['prepare','serve'].includes(options['--mode']),'explicit --mode prepare|
 const output=resolve(options['--output']||'');
 assert(/^\/private\/tmp\/notes-sync87-native-[a-z0-9-]+$/.test(output),'new isolated /private/tmp/notes-sync87-native-* output required');
 let context,peer;
-const closeClient=async()=>{const owned=context;context=undefined;await owned?.close();};
+const closeClient=async()=>{const owned=context;context=undefined;if(nativeObservationEvents.length)await appendFile(resolve(output,'native-client-events.jsonl'),JSON.stringify({events:nativeObservationEvents.splice(0)})+'\n');if(owned?.errors.length)await appendFile(resolve(output,'native-client-events.jsonl'),JSON.stringify({identity:owned.identity,events:owned.errors})+'\n');await owned?.close();};
 async function prepare(){
   assert(!existsSync(output),'never replace a native evidence directory');await mkdir(output,{mode:0o700});
   const id=randomBytes(5).toString('hex'),remote='/sdcard/Download/notes-sync87-'+id;
@@ -43,13 +43,15 @@ async function app(){if(!context)context=await connect({receipt:options['--recei
 const chooserPackage=n=>['com.google.android.documentsui','com.android.documentsui'].includes(n.package);
 const nativeText=(text,extra=()=>true)=>nativeNode(n=>chooserPackage(n)&&n.text===text&&extra(n));
 async function chooserFiles(s,names,{multi=false}={}){
-  let nodes=parseNodes(await guard('uia'));
+  let xml=await guard('uia');await writeFile(resolve(output,'chooser-'+Date.now()+'.xml'),xml);let nodes=parseNodes(xml);
   assert(nodes.some(chooserPackage),'actual Android DocumentsUI must be open');
   const folder=basename(s.remote);
   if(!nodes.some(n=>n.text===folder)){
     const root=nodes.find(n=>chooserPackage(n)&&/^(Show roots|显示根目录|显示侧栏|打开导航抽屉)$/.test(n['content-desc']||''));
-    if(root)await nativeNode(n=>chooserPackage(n)&&n['content-desc']===root['content-desc']);
-    await nativeNode(n=>chooserPackage(n)&&/^(Downloads|下载内容|下载)$/.test(n.text||'')&&n.clickable==='true');
+    const downloadVisible=nodes.some(n=>chooserPackage(n)&&/^(Downloads|下载内容|下载)$/.test(n.text||'')&&n['resource-id']?.endsWith('/title'));
+    if(root&&!downloadVisible)await nativeNode(n=>chooserPackage(n)&&n['content-desc']===root['content-desc']);
+    xml=await guard('uia');await writeFile(resolve(output,'chooser-roots-'+Date.now()+'.xml'),xml);
+    await nativeNode(n=>chooserPackage(n)&&/^(Downloads|下载内容|下载)$/.test(n.text||'')&&n['resource-id']?.endsWith('/title'));
   }
   await nativeText(folder);await pause(200);
   if(multi){
@@ -59,9 +61,15 @@ async function chooserFiles(s,names,{multi=false}={}){
   }else{assert.equal(names.length,1);await nativeText(names[0]);}
 }
 async function openFilePicker(c){
-  await c.tap('button[aria-label="添加附件"]');
+  if(!await c.read('!!document.querySelector(".menu-media[role=menu]")'))await c.tap('button[aria-label="添加附件"]');
   await c.wait('!!document.querySelector("[role=menu]")','attachment menu');
   await c.tap('[role="menu"] button','附加文件');
+}
+async function nativeStep(label,operation){
+  assert(/^[a-z0-9-]+$/.test(label));const start=performance.now();
+  await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'start',time:new Date().toISOString()})+'\n');
+  try{const value=await operation();await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'pass',wallSeconds:(performance.now()-start)/1000})+'\n');return value;}
+  catch(error){const safe=['read-only page evaluation failed','app WebView rectangle absent','different WebView hosts','different WebView rectangles','foreign WebView host','invalid WebView rectangle','unbalanced native XML'];const reason=safe.includes(error.message)?error.message:(error.stdout?'guard-command-failed':'unclassified-fixed-step-failure');if(label.startsWith('attachments-')&&typeof error.stdout==='string')await appendFile(resolve(output,'attachment-guard-failures.jsonl'),JSON.stringify({step:label,...guardFailureSummary(error.stdout)})+'\n');await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'fail',reason,wallSeconds:(performance.now()-start)/1000})+'\n');throw error;}
 }
 async function persistedNote(c,id,expected=0){
   const end=Date.now()+15000;
@@ -78,10 +86,9 @@ async function execute(request){
     case 'start':assert(Object.keys(request).every(k=>['action','requestId'].includes(k)));return guard('start',{receipt:options['--receipt']});
     case 'pushFixtures':for(const f of s.files){assert.equal(hash(await readFile(f.path)),f.sha256);await guard('push',{'run-state':resolve(output,'state.json'),path:f.path,remote:f.remote});}return s.files.map(({name,sha256,bytes})=>({name,sha256,bytes}));
     case 'home':{
-      const c=await app();await c.wait('!!document.querySelector(".mobile.page-notes .mobile-gallery")','direct gallery');
-      const columns=await c.read('getComputedStyle(document.querySelector(".mobile-gallery")).gridTemplateColumns');assert.equal(columns.trim().split(/\s+/).length,2,'two real gallery columns');
-      const add=await c.read('(()=>{const b=document.querySelector(".mobile-add-note");const r=b.getBoundingClientRect();return {visible:r.width>=44&&r.height>=44,color:getComputedStyle(b).backgroundColor}})()');assert(add.visible);assert.equal(add.color,'rgb(255, 188, 0)');
-      await c.snapshot(output,'home');return{columns,add};
+      const c=await app();await goHome(c);await c.wait('!!document.querySelector(".mobile.page-notes .mobile-gallery")','direct gallery');
+      const view=assertHomeVisible(await c.read(`(()=>{const rect=e=>{if(!e)return null;const r=e.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height}};const g=document.querySelector('.mobile-gallery'),a=document.querySelector('.mobile-add-note');return{app:document.querySelector('.app').className,viewport:{width:innerWidth,height:innerHeight},gallery:rect(g),galleryDisplay:getComputedStyle(g).display,galleryVisibility:getComputedStyle(g).visibility,editor:rect(document.querySelector('.tiptap')),add:rect(a),addColor:getComputedStyle(a).backgroundColor,columns:getComputedStyle(g).gridTemplateColumns}})()`));
+      await c.snapshot(output,'home-visible-final');return view;
     }
     case 'createNote':{
       const c=await app();await goHome(c);const marker=`SYNC87-${s.runId}-${s.notes.length+1}`;
@@ -94,15 +101,52 @@ async function execute(request){
     }
     case 'attachments':{
       const c=await app();const owner=s.notes.at(-1);assert(owner,'create test note first');
+      const current=await c.read('({editor:!!document.querySelector(".mobile.page-editor"),title:document.querySelector(".tiptap h1")?.textContent})');
+      if(!current.editor||current.title!==owner.marker)await nativeStep('attachments-open-note',()=>openNote(c,owner.id));
       if(/mInputShown=true/.test(await guard('ime'))){await guard('back');await pause(200);} // close actual IME only
-      await openFilePicker(c);const before=await persistedNote(c,owner.id);await guard('back');await pause(300);
+      const before=await persistedNote(c,owner.id);await nativeStep('attachments-open-cancel',()=>openFilePicker(c));await nativeStep('attachments-cancel',()=>guard('back'));await pause(300);
       assert.equal((await persistedNote(c,owner.id)).attachments.length,before.attachments.length,'cancel must add no attachment');
-      await openFilePicker(c);await chooserFiles(s,[s.files[0].name,s.files[1].name],{multi:true});
+      await nativeStep('attachments-open-multiple',()=>openFilePicker(c));await nativeStep('attachments-choose-multiple',()=>chooserFiles(s,[s.files[0].name,s.files[1].name],{multi:true}));
       const two=await persistedNote(c,owner.id,before.attachments.length+2);
       await c.wait('!![...document.querySelectorAll(".tiptap img")].find(x=>x.complete&&x.naturalWidth>0)','decoded native image');
-      await openFilePicker(c);await chooserFiles(s,[s.files[2].name]);const three=await persistedNote(c,owner.id,before.attachments.length+3);
+      await nativeStep('attachments-open-continuous',()=>openFilePicker(c));await nativeStep('attachments-choose-continuous',()=>chooserFiles(s,[s.files[2].name]));const three=await persistedNote(c,owner.id,before.attachments.length+3);
       for(const file of s.files)assert(three.attachments.some(a=>a.displayName===file.name),'selected original filename must persist');
       await c.snapshot(output,'attachments');return {cancelPreserved:true,multipleCount:two.attachments.length,continuousCount:three.attachments.length,names:three.attachments.map(x=>x.displayName)};
+    }
+    case 'attachmentsRecentMultiple': {
+      const owner=s.notes.at(-1);assert(owner);await nativeStep('attachments-recent-multiple',async()=>{
+        let nodes=parseNodes(await readNativeUI());assert(nodes.some(chooserPackage));
+        if(!nodes.some(n=>chooserPackage(n)&&n.text==='Recent'&&n['resource-id']?.endsWith('/title')))await nativeNode(n=>chooserPackage(n)&&n['content-desc']==='Show roots');
+        await nativeNode(n=>chooserPackage(n)&&n.text==='Recent'&&n['resource-id']?.endsWith('/title'));
+        await nativeNode(n=>chooserPackage(n)&&n.text===s.files[0].name,{hold:true});await nativeText(s.files[1].name);
+        await nativeNode(n=>chooserPackage(n)&&(/^(Open|OPEN|打开|选择)$/.test(n.text||'')||/^(Open|打开)$/.test(n['content-desc']||'')));
+      });const c=await app(),actual=await persistedNote(c,owner.id,2);assert.equal(actual.attachments.length,2);for(const f of s.files.slice(0,2))assert(actual.attachments.some(a=>a.displayName===f.name));return{count:2,names:actual.attachments.map(a=>a.displayName)};
+    }
+    case 'attachmentsChooseMultiple': {
+      const owner=s.notes.at(-1);assert(owner);await nativeStep('attachments-existing-chooser-multiple',()=>chooserFiles(s,s.files.slice(0,2).map(f=>f.name),{multi:true}));
+      const c=await app(),actual=await persistedNote(c,owner.id,2);assert.equal(actual.attachments.length,2);for(const f of s.files.slice(0,2))assert(actual.attachments.some(a=>a.displayName===f.name));return{count:2,names:actual.attachments.map(a=>a.displayName)};
+    }
+    case 'attachmentsOpen': {
+      const c=await app(),owner=s.notes.at(-1);assert(owner);const current=await c.read('({editor:!!document.querySelector(".mobile.page-editor"),title:document.querySelector(".tiptap h1")?.textContent})');
+      if(!current.editor||current.title!==owner.marker)await openNote(c,owner.id);if(/mInputShown=true/.test(await guard('ime'))){await guard('back');await pause(200);}
+      const before=await persistedNote(c,owner.id);await nativeStep('attachments-open-only',()=>openFilePicker(c));return{opened:true,beforeCount:before.attachments.length};
+    }
+    case 'attachmentsMultiple':
+    case 'attachmentsAudio': {
+      const c=await app(),owner=s.notes.at(-1);assert(owner);const current=await c.read('({editor:!!document.querySelector(".mobile.page-editor"),title:document.querySelector(".tiptap h1")?.textContent})');
+      if(!current.editor||current.title!==owner.marker)await nativeStep('attachments-resume-note',()=>openNote(c,owner.id));
+      if(/mInputShown=true/.test(await guard('ime'))){await guard('back');await pause(200);}
+      const files=request.action==='attachmentsMultiple'?s.files.slice(0,2):[s.files[2]];
+      const before=await persistedNote(c,owner.id);assert(files.every(f=>!before.attachments.some(a=>a.displayName===f.name)),'never select an already persisted fixture');
+      await nativeStep('attachments-resume-open',()=>openFilePicker(c));
+      await nativeStep('attachments-resume-choose',()=>chooserFiles(s,files.map(f=>f.name),{multi:files.length>1}));
+      const after=await persistedNote(c,owner.id,before.attachments.length+files.length);for(const f of files)assert(after.attachments.some(a=>a.displayName===f.name));
+      return{names:files.map(f=>f.name),count:after.attachments.length};
+    }
+    case 'attachmentsVerify': {
+      const c=await app(),owner=s.notes.at(-1);assert(owner);await openNote(c,owner.id);const actual=await persistedNote(c,owner.id,3);assert.equal(actual.attachments.length,3);
+      for(const file of s.files){const a=actual.attachments.find(a=>a.displayName===file.name);assert(a);await assertNativeOriginal(c,a.id,file);}
+      await c.wait('!![...document.querySelectorAll(".tiptap img")].find(x=>x.complete&&x.naturalWidth>0)','actual native image decoded');await c.snapshot(output,'attachments-complete');return{count:3,originalsVerified:true};
     }
     case 'exportImage':assert(s.notes.length);await openNote(await app(),s.notes.at(-1).id);return saveImageOriginal(await app(),s,output,1,s.files.find(f=>f.name.endsWith('.png')));
     case 'pair':await pairViaUI(await app(),request.invitation);await(await app()).snapshot(output,'paired');return{paired:true};
@@ -113,6 +157,8 @@ async function execute(request){
       try{await pairViaUI(await app(),invitation);}finally{invitation=undefined;}
       await(await app()).snapshot(output,'paired-desktop');return{paired:true,endpoint:address.endpoint,desktopPid:peer.backend.pid};
     }
+    case 'textRoundtrip':assert(peer);return textRoundtrip({client:await app(),peer,state:s,output,saveState:save});
+    case 'desktopMedia':assert(peer);return desktopMedia({client:await app(),peer,state:s,output,saveState:save});
     case 'roundtrip':assert(peer);return roundtrip({client:await app(),peer,state:s,output,saveState:save});
     case 'backgroundRoundtrip':assert(peer);return backgroundRoundtrip({client:await app(),closeClient,getClient:app,peer,state:s,output,receipt:options['--receipt']});
     case 'coldBootPrepare':return coldBootPrepare({client:await app(),closeClient,state:s,output});
