@@ -1,0 +1,100 @@
+[
+  {
+    "label": "01-python-guards",
+    "argv": [
+      "python3",
+      "scripts/debug/sync87-native/check_guards.py"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.071845,
+    "expectedExit": 0
+  },
+  {
+    "label": "02-client-guards",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-client.mjs"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.026393,
+    "expectedExit": 0
+  },
+  {
+    "label": "03-client-syntax",
+    "argv": [
+      "node",
+      "--check",
+      "scripts/debug/sync87-native/client.mjs"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.016469,
+    "expectedExit": 0
+  },
+  {
+    "label": "04-runner-syntax",
+    "argv": [
+      "node",
+      "--check",
+      "scripts/debug/sync87-native/run.mjs"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.016173,
+    "expectedExit": 0
+  },
+  {
+    "label": "05-old-target-refused",
+    "argv": [
+      "python3",
+      "scripts/debug/sync87-native/guard.py",
+      "--serial",
+      "emulator-5580",
+      "--avd",
+      "notes-sync87-isolated",
+      "status"
+    ],
+    "naturalExit": 2,
+    "wallSeconds": 0.031692,
+    "expectedExit": 2
+  },
+  {
+    "label": "06-host-fixtures",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/run.mjs",
+      "--mode",
+      "prepare",
+      "--output",
+      "/private/tmp/notes-sync87-native-hostcheck03"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.025236,
+    "expectedExit": 0
+  },
+  {
+    "label": "07-invalid-request-redaction",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/run.mjs",
+      "--mode",
+      "serve",
+      "--output",
+      "/private/tmp/notes-sync87-native-hostcheck03",
+      "--receipt",
+      "/private/tmp/nonexistent-root-receipt.json"
+    ],
+    "naturalExit": 2,
+    "wallSeconds": 0.023887,
+    "expectedExit": 2
+  },
+  {
+    "label": "08-diff-check",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "naturalExit": 0,
+    "wallSeconds": 0.079641,
+    "expectedExit": 0
+  }
+]
