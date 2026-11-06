@@ -22,7 +22,7 @@
 
 | 命令 | 自然退出 | 证据 | 范围 |
 | --- | --- | --- | --- |
-| `pnpm build` | 0 | `develop/final-build/result.json` 与 `build.log` | tsc + Vite；既有 >500kB chunk 提示继续存在 |
+| `pnpm build` | 0 | `develop/final-build/result.json` 与 `build.txt` | tsc + Vite；既有 >500kB chunk 提示继续存在 |
 | `pnpm debug group sync-settings --out /tmp/sync86-ui-final-desktop` | 0，48项 | `develop/final-desktop/summary.json`、suite、HTML、PNG | 真实 App/React/严格 wrapper；合成 IPC |
 | `pnpm debug group sync-settings --mobile --out /tmp/sync86-ui-final-mobile` | 0，48项 | `develop/final-mobile/summary.json`、HTML、PNG | mobile browser，非 Android WebView/IME |
 | `pnpm debug group preferences --out /tmp/sync86-ui-final-preferences` | 0，52项 | `develop/final-preferences/summary.json` | 原82设置、备份、录音保有、授权变化、键盘与布局回归 |
