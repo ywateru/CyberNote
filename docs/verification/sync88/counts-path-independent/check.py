@@ -1,0 +1,10 @@
+from pathlib import Path
+import subprocess,hashlib,json,importlib.util,re
+root=Path('/private/tmp/apple-notes-sync87-native');source=root/'scripts/debug/sync87-native/android/SyncTargetCounts.java';old=subprocess.check_output(['git','show','ad982595:scripts/debug/sync87-native/android/SyncTargetCounts.java'],cwd=root,text=True)
+assert source.read_text()==old.replace('/data/user/0/com.local.notesclone/files/notes.sqlite3','/data/data/com.local.notesclone/notes.sqlite3')
+spec=importlib.util.spec_from_file_location('g',root/'scripts/debug/sync87-native/guard.py');g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
+assert hashlib.sha256(source.read_bytes()).hexdigest()==g.COUNTS_SOURCE_SHA256=='5b7daae84f94f714c2de616fd14ccb95b86c7bdd1eb0f2dddb4877b66df70ef8'
+assert hashlib.sha256(g.COUNTS_DEX.read_bytes()).hexdigest()==g.COUNTS_DEX_SHA256=='877d02dd60c1df03e0a70579e3e4c9e3e363e0d2072455ee85cc44a5a3fa5e1e'
+asm=subprocess.check_output(['/Users/water/Library/Android/sdk/build-tools/36.0.0/dexdump','-d',str(g.COUNTS_DEX)],text=True);assert '/data/data/com.local.notesclone/notes.sqlite3' in asm and '/files/notes.sqlite3' not in asm;assert len(re.findall(r'invoke-virtual.*SQLiteDatabase;\.rawQuery',asm))==1;assert 'SQLiteDatabase;.isReadOnly' in asm;assert not any(x in asm for x in ['execSQL','openOrCreateDatabase','Runtime;.exec','FileOutputStream'])
+observed=json.load(open('/private/tmp/notes-sync87-native-final-02/cycle14-root-path02.json'));assert observed['rootPath']+'/notes.sqlite3'=='/data/data/com.local.notesclone/notes.sqlite3'
+print(json.dumps({'ok':True,'sourceCommit':'d67194508c9665466540cfe538688cd4af88e7ed','javaSha256':g.COUNTS_SOURCE_SHA256,'dexSha256':g.COUNTS_DEX_SHA256,'scope':'exactsourcepath/actualDEX/hash/observedreadonlyroot only; no devices/helperexecution','checks':['exact one Java path replacement only','fixed observed actual root plus notes.sqlite3','actualDEX exact new path and unchanged readonlyquery target/count shape','canonical equality/finite error stages/guardownership unchanged'],'actualCanonicalCheckOrCountsNotYetProven':True},indent=2))

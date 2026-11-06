@@ -1,0 +1,7 @@
+# Exact actual Android database root helper literal — independent PASS
+
+Reviewed d67194508c9665466540cfe538688cd4af88e7ed vsad982595. Java changes exactlyone literal from the previous assumed files path to /data/data/com.local.notesclone/notes.sqlite3. Actual readonly get_data_management.rootPath observation retained here is /data/data/com.local.notesclone; no inventoryrows were copied. This observed path is authoritative, stronger than earlier static platform path inference. We do not infer canonical alias equality or actual helper success from it.
+
+JavaSHA5b7daae84f94f714c2de616fd14ccb95b86c7bdd1eb0f2dddb4877b66df70ef8 and actualDEX03SHA877d02dd60c1df03e0a70579e3e4c9e3e363e0d2072455ee85cc44a5a3fa5e1e match frozen guard. Disassembly retains exactnewpath, one samefixedreadonlyrawQuery/isReadOnly and target, no SQL/file/network mutation path. All canonical/file/readonly/target/query/count/stage gates unchanged. Guard changes onlyDEXpath andtwohashes.
+
+Independent narrow check naturally exited0; exact timing and disassembly retained. No helper/runtime/CDP/ADB/device was executed by reviewer. Prompt admission through /private/tmp/sync87-counts-path-review-status.md was delivered before evidence commit. Sole operator can execute exacthelper03; any actual canonical/file/query stage failure must remain failure. OriginalFILE/genericfailures are preserved. Source admission does not prove targetarrival/fullsync or any media/export gate.
