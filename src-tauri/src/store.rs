@@ -17,6 +17,7 @@ use std::{
 use uuid::Uuid;
 #[path = "store/archive.rs"]
 mod archive;
+pub(crate) mod apple_import;
 #[path = "store/attachment_operations.rs"]
 mod attachment_operations;
 #[path = "store/data_management.rs"]

@@ -145,13 +145,13 @@ fn validate_json_budget(bytes: &[u8]) -> Result<()> {
 }
 
 #[derive(Serialize, Deserialize)]
-struct Archive {
-    version: u32,
-    folders: Vec<Folder>,
-    notes: Vec<Note>,
-    attachments: Vec<Attachment>,
-    settings: Value,
-    blobs: HashMap<String, String>,
+pub(super) struct Archive {
+    pub(super) version: u32,
+    pub(super) folders: Vec<Folder>,
+    pub(super) notes: Vec<Note>,
+    pub(super) attachments: Vec<Attachment>,
+    pub(super) settings: Value,
+    pub(super) blobs: HashMap<String, String>,
 }
 #[derive(Serialize, Deserialize)]
 struct ImportJournal {
@@ -624,7 +624,15 @@ impl Store {
         read_archive(path).map(|_| ())
     }
     pub fn import_archive(&mut self, path: &Path) -> Result<()> {
-        let archive = read_archive(path)?;
+        self.commit_archive(read_archive(path)?, false)
+    }
+
+    // Dedicated append boundary: source imports must preserve settings and unlocked keys.
+    pub(super) fn append_apple_archive(&mut self, archive: Archive) -> Result<()> {
+        self.commit_archive(archive, true)
+    }
+
+    fn commit_archive(&mut self, archive: Archive, append_only: bool) -> Result<()> {
         let transaction_id = id();
         let plan = self.prepare_archive(archive, &transaction_id)?;
         self.recover_imports()?;
@@ -691,10 +699,12 @@ impl Store {
                 )?;
                 changes.push(("attachment", a.id.clone(), None));
             }
-            tx.execute(
-                "UPDATE settings SET body=?1 WHERE id=1",
-                [serde_json::to_string(&plan.archive.settings)?],
-            )?;
+            if !append_only {
+                tx.execute(
+                    "UPDATE settings SET body=?1 WHERE id=1",
+                    [serde_json::to_string(&plan.archive.settings)?],
+                )?;
+            }
             import_checkpoint("before_commit");
             tx.commit()?;
             for (kind, id, revision) in changes {
@@ -703,7 +713,7 @@ impl Store {
             import_checkpoint("after_commit");
             Ok(())
         })();
-        if result.is_ok() {
+        if result.is_ok() && !append_only {
             self.keys.clear();
         }
         // Recovery consults committed DB references. It is safe on both sides
