@@ -2,6 +2,7 @@ mod media_permission;
 mod recording_window;
 mod session;
 mod store;
+mod sync;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use serde_json::{json, Value};
 use session::{Session, Token};
