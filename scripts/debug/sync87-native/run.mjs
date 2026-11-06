@@ -59,7 +59,7 @@ async function chooserFiles(s,names,{multi=false}={}){
   }else{assert.equal(names.length,1);await nativeText(names[0]);}
 }
 async function openFilePicker(c){
-  await c.tap('button[aria-label="添加附件"]');
+  if(!await c.read('!!document.querySelector(".menu-media[role=menu]")'))await c.tap('button[aria-label="添加附件"]');
   await c.wait('!!document.querySelector("[role=menu]")','attachment menu');
   await c.tap('[role="menu"] button','附加文件');
 }
@@ -100,9 +100,10 @@ async function execute(request){
     }
     case 'attachments':{
       const c=await app();const owner=s.notes.at(-1);assert(owner,'create test note first');
-      await nativeStep('attachments-open-note',()=>openNote(c,owner.id));
+      const current=await c.read('({editor:!!document.querySelector(".mobile.page-editor"),title:document.querySelector(".tiptap h1")?.textContent})');
+      if(!current.editor||current.title!==owner.marker)await nativeStep('attachments-open-note',()=>openNote(c,owner.id));
       if(/mInputShown=true/.test(await guard('ime'))){await guard('back');await pause(200);} // close actual IME only
-      await nativeStep('attachments-open-cancel',()=>openFilePicker(c));const before=await persistedNote(c,owner.id);await nativeStep('attachments-cancel',()=>guard('back'));await pause(300);
+      const before=await persistedNote(c,owner.id);await nativeStep('attachments-open-cancel',()=>openFilePicker(c));await nativeStep('attachments-cancel',()=>guard('back'));await pause(300);
       assert.equal((await persistedNote(c,owner.id)).attachments.length,before.attachments.length,'cancel must add no attachment');
       await nativeStep('attachments-open-multiple',()=>openFilePicker(c));await nativeStep('attachments-choose-multiple',()=>chooserFiles(s,[s.files[0].name,s.files[1].name],{multi:true}));
       const two=await persistedNote(c,owner.id,before.attachments.length+2);
