@@ -2,6 +2,8 @@
 
 同步任务的中断恢复与准确阶段见[当前交付状态](plan/sync-delivery-state.md)。
 
+2026-11-06最新：隔离Android17真实定位设置页dvh不兼容、配对输入屏外；[原失败](verification/sync87-native/native-settings-overflow08/README.md)保留。[vh回退修复88](plan/tasks/app-android-viewport88.md)已实现、独审并合入，Android18/Mac28准确出包与实际双向同步复验进行中，完整goal仍active。单PNG系统选取/原字节保存及owned-app重开保持已实际通过。
+
 2026-11-06 当前：同步主线完整整合、两实际App DOM、LAN/匿名wss及Mac27/Android17独立核包已通过；新隔离Android实际验收进行中，完整目标保持active。[使用说明](sync-usage.md)。下方阶段记录保留原时点，不表示当前仍等待构建。
 
 2026-11-06：同步后续生产接线见[86 adapter](plan/tasks/app-sync86-adapter.md)，[最终双端与路由87](plan/tasks/app-sync87-e2e.md)；各层证明范围独立。

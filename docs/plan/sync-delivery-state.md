@@ -2,6 +2,8 @@
 
 更新：2026-11-06。供中断恢复；[正式规格](../architecture/sync.md)、[窗口协议](../architecture/sync-coordinator.md)和任务文件仍是行为契约。**完整同步目标 active，正在进行新隔离 Android 的实际运行验收。** 已交付 gallery83，不再重做快速首页。
 
+最新阻断与修复：cycle08真实Android17确认WebView不支持dvh，设置面板1579.5px超出568px视口，实际pair-device-name屏外失败；[原始证据](../verification/sync87-native/native-settings-overflow08/README.md)保留。[viewport88](tasks/app-android-viewport88.md)三条vh回退`6553ef6f`已独审并主线合入`cb3bc1cf`，作者手机设置50/桌面52/手机同步设置56及build通过，独审12CSS布局案例通过；真实新Android尚待准确Android18/Mac28构建与核包，不能把旧包配对记为成功。构建状态`/private/tmp/sync88-build-status.md`，核包状态`/private/tmp/sync88-package-review-status.md`；root新18回执尚待核包后签发。
+
 ## 已接收与剩余门槛
 
 | 层 | 当前状态 | 准确来源与证据 |
