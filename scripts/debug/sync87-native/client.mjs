@@ -81,8 +81,8 @@ export async function connect({receipt,port=19400}) {
     const wait=async(predicate,label,timeout=15000)=>{const end=Date.now()+timeout;while(Date.now()<end){const value=await read(predicate);if(value)return value;await pause(150);}throw Error('Timed out: '+label);};
     const point=async(selector,text)=>read(`(()=>{const found=[...document.querySelectorAll(${JSON.stringify(selector)})].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&!e.disabled&&(${JSON.stringify(text===undefined?null:text)}===null||e.textContent.trim()===${JSON.stringify(text===undefined?null:text)})});if(found.length!==1)throw Error('Expected one visible enabled target');found[0].scrollIntoView({block:'nearest',inline:'nearest'});const r=found[0].getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
     const tap=async(selector,text)=>{const p=await point(selector,text);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});};
-    const nativeTap=async(selector)=>{
-      const p=await point(selector);const nodes=parseNodes(await guard('uia'));
+    const nativeTap=async(selector,text)=>{
+      const p=await point(selector,text);const nodes=parseNodes(await guard('uia'));
       const rect=nativeWebViewRect(nodes);
       const viewport=await read('({width:innerWidth,height:innerHeight})');
       await guard('tap',{x:Math.round(rect.x+p.x*rect.width/viewport.width),y:Math.round(rect.y+p.y*rect.height/viewport.height)});
@@ -106,6 +106,6 @@ export async function connect({receipt,port=19400}) {
       await writeFile(resolve(directory,name+'.json'),JSON.stringify({...state,identity,serial:SERIAL,avd:AVD,errors},null,2)+'\n');
       await writeFile(resolve(directory,name+'.png'),Buffer.from(image.data,'base64'));return state;
     };
-    return {identity,target:{id:target.id,url:target.url},send,read,wait,tap,nativeTap,insert,fill,workspace,readAttachment,snapshot,errors,close:cleanup};
+    return {identity,target:{id:target.id,url:target.url},send,read,wait,tap:nativeTap,nativeTap,insert,fill,workspace,readAttachment,snapshot,errors,close:cleanup};
   }catch(error){await cleanup();throw error;}
 }
