@@ -1,0 +1,5 @@
+# Narrow fixed provider CDP touch admission PASS — e472b68a
+
+Reviewed exactnewprovider-touch.mjs+author8hostchecks. Only fixed owned final02editor title + actualmobile.pageeditor, fixed添加附件button/附加文件menuitem. Unique visible enabledpositivegeometry + viewportbounded + elementFromPoint ownhit required; existingguardedclient used. Only ordinaryInput.dispatchTouchEvent touchStart/end, menuopen skipsfirstgesture; no DOMclick/URI/result/selection/DBinjection, nativepickerkeyboardunchanged, no actionretry/fallback. Failed firstinput stops and fixederror stripsrawexception.
+
+Author8host0 + independent7hostVMrealexpression semantics0: closed/openmenu success, wrongeditor/title/obscured/duplicatetargetreject beforeinput, firstsendfailureexactly1attempt. Independent7 evaluates original exactDOMreadexpressions in mock VM; no realCDP/device/providerselection. This admits soleoperator fixedAppcontrols only under ownedreceipt/lifetime client; does not claim providerselection/save/export passed. Pureevidencefollows.
