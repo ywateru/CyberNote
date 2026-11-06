@@ -54,6 +54,13 @@ class Guards(unittest.TestCase):
 
     def test_unowned_command_refused(self):
         with patch.object(life, 'command', return_value=SimpleNamespace(returncode=0, stdout='birth other-command')):
+            with self.assertRaisesRegex(life.Refused, 'not the SDK emulator'):
+                life.identity({'pid': 123, 'lstart': 'birth'})
+
+    def test_prefix_matching_is_not_owned_identity(self):
+        process = 'birth /Users/water/Library/Android/sdk/emulator/qemu -avd ' + life.NAME + '-other'
+        process += ' -port 5584 -data ' + str(life.DATA / 'userdata-qemu.img')
+        with patch.object(life, 'command', return_value=SimpleNamespace(returncode=0, stdout=process)):
             with self.assertRaisesRegex(life.Refused, 'command mismatch'):
                 life.identity({'pid': 123, 'lstart': 'birth'})
 

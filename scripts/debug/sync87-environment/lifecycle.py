@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import shutil
 import signal
+import shlex
 import socket
 import subprocess
 import sys
@@ -115,9 +116,11 @@ def identity(state, listener=False):
     require(ps.returncode == 0, 'owned PID is no longer running')
     text = ps.stdout.strip()
     require(text.startswith(state['lstart']), 'owned PID start time changed')
-    for fragment in ('-avd ' + NAME, '-port ' + str(PORT), '-data ' + str(DATA / 'userdata-qemu.img')):
-        require(fragment in text, 'owned PID command mismatch: ' + fragment)
-    require('/Users/water/Library/Android/sdk/emulator/' in text, 'owned PID is not the SDK emulator')
+    words = shlex.split(text[len(state['lstart']):].strip())
+    require(words and words[0].startswith(str(SDK / 'emulator') + '/'), 'owned PID is not the SDK emulator')
+    for flag, expected in (('-avd', NAME), ('-port', str(PORT)), ('-data', str(DATA / 'userdata-qemu.img'))):
+        require(words.count(flag) == 1 and words.index(flag) + 1 < len(words)
+                and words[words.index(flag) + 1] == expected, 'owned PID command mismatch: ' + flag)
     if listener:
         found = command(['/usr/sbin/lsof', '-nP', '-t', '-iTCP:' + str(PORT), '-sTCP:LISTEN'], check=False)
         require(found.returncode == 0 and set(found.stdout.split()) == {str(state['pid'])}, 'console listener is not the owned PID')
@@ -164,7 +167,9 @@ def prepare():
             timeout=45, input_text='no\n', env=ENV)
     config = AVD / 'config.ini'
     settings = dict(line.split('=', 1) for line in config.read_text().splitlines() if '=' in line)
-    settings.update({'hw.ramSize': '1536', 'hw.cpu.ncore': '2', 'disk.dataPartition.size': '2G',
+    # Emulator 37.1.11 raised the first 1536MiB/2G request to 2048MiB/6GiB.
+    # Use the observed effective budget; never recreate the already-owned data.
+    settings.update({'hw.ramSize': '2048', 'hw.cpu.ncore': '2', 'disk.dataPartition.size': '6442450944',
                      'disk.cachePartition.size': '128M', 'hw.lcd.width': '720', 'hw.lcd.height': '1280',
                      'hw.lcd.density': '320', 'hw.audioInput': 'no', 'hw.audioOutput': 'no',
                      'hw.sdCard': 'no', 'showDeviceFrame': 'no', 'fastboot.forceColdBoot': 'yes',
@@ -210,8 +215,8 @@ def cycle(args):
     ports_free()
     argv = [str(EMULATOR), '-avd', NAME, '-port', str(PORT), '-datadir', str(DATA),
             '-data', str(DATA / 'userdata-qemu.img'), '-cache', str(DATA / 'cache.img'),
-            '-cache-size', '128', '-memory', '1536', '-cores', '2', '-no-snapshot', '-no-audio',
-            '-no-window', '-no-boot-anim', '-no-metrics', '-gpu', 'swiftshader_indirect',
+            '-cache-size', '128', '-memory', '2048', '-cores', '2', '-no-snapshot', '-no-audio',
+            '-no-window', '-no-boot-anim', '-no-metrics', '-gpu', 'software', '-show-kernel',
             '-camera-back', 'none', '-camera-front', 'none']
     start = time.monotonic()
     log_path = ROOT / ('emulator-' + time.strftime('%Y%m%dT%H%M%S', time.gmtime()) + '.log')
@@ -289,7 +294,18 @@ def main():
                 fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             except BlockingIOError as exc:
                 raise Refused('another lifecycle holds the owned lock') from exc
-            cycle(args)
+            awake_argv = ['/usr/bin/caffeinate', '-dimsu', '-t', str(args.boot_timeout + args.hold_seconds + 60),
+                          '-w', str(os.getpid())]
+            awake = subprocess.Popen(awake_argv, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            emit('owned_awake_started', pid=awake.pid, argv=awake_argv)
+            try:
+                cycle(args)
+            finally:
+                if awake.poll() is None:
+                    awake.terminate()  # Popen child only; no global power setting is changed.
+                code = awake.wait(timeout=15)
+                emit('owned_awake_exit', pid=awake.pid, natural_exit=code if code >= 0 else None,
+                     signal=-code if code < 0 else None)
     else:
         state = read_state()
         if args.action == 'status':

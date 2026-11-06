@@ -6,7 +6,9 @@
 
 工具是 `scripts/debug/sync87-environment/lifecycle.py`，仅Python标准库。环境固定使用已缓存API30 `google_apis/arm64-v8a` 镜像、指定SDK/ADB/cloudflared。准备只用avdmanager创建全新配置与data目录，不读取或复制旧AVD/userdata/snapshot；不安装新SDK。cloudflared仅执行版本核验，不启动公网。工具要求已有5037监听作为ADB前置条件，不运行server管理命令，不枚举设备。所有设备命令都先核对owned PID启动时间/命令/console端口，再对显式新serial校验AVD名。
 
-预算为1536MiB RAM、2核心、data上限配置2GiB、cache128MiB、720×1280。起始磁盘可用约14.49GiB，任何准备/启动与每轮等待均要求至少8GiB剩余。已有共享SDK/Cargo target保持；低于门槛直接失败，保留目录，不删用户数据。模拟器使用cold/no-snapshot/no-audio/no-window、无摄像头。API30只证明Android11 ARM64模拟器。
+有效预算为2048MiB RAM、2核心、data逻辑6GiB稀疏镜像、cache128MiB、720×1280。首次请求1536MiB/2G被emulator37.1.11自动提升为此有效值，原始日志/配置偏差保留；初次新目录实际约126MiB，不把逻辑大小当实际占用。起始磁盘可用约14.49GiB，任何准备/启动与每轮等待均要求至少8GiB剩余。已有共享SDK/Cargo target保持；低于门槛直接失败，保留目录，不删用户数据。模拟器使用cold/no-snapshot/no-audio/no-window、无摄像头。API30只证明Android11 ARM64模拟器。
+
+首次运行180秒内新guest持续offline，监督命令exit2、181.699秒，owned emulator通过新serial控制台停止并自然exit0。该失败不计ready。诊断版改用当前帮助列出的 `-gpu software`、`-show-kernel` 和明确2048MiB RAM，复用同一新data；每轮有单独owned `caffeinate -dimsu -w <supervisor PID>` 防止闲置显示休眠，超时预算为boot+hold+60秒，结束仅终止本轮caffeinate子进程。host样本显示vCPU处于HVF/pselect等待，电源观察显示UserIsActive=0且无防显示休眠assertion；这些只是选择一次有界诊断的依据，未证明失败根因。
 
 在当前独立worktree使用下列精确入口：
 
