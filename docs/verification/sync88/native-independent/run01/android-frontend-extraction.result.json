@@ -1,0 +1,127 @@
+{
+  "manifest": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/android-build/result.json",
+  "binary": "/private/tmp/sync88-package-review-extract-run01/android/libnotes_clone_lib.so",
+  "binaryBytes": 211140864,
+  "binarySha256": "8030d033d09cbbd349726edba6ec7fb635b6c0c5ad02b060126b7c04f40992d9",
+  "method": "Bounded complete Brotli decode in offsets 0..32 after embedded basenames. Every non-HTML asset must equal current dist and recorded bytes/SHA. HTML requires independent complete ordered token comparison.",
+  "records": [
+    {
+      "path": "assets/index-Cd_C-xBt.js",
+      "expectedBytes": 1085373,
+      "expectedSha256": "9db1203eb6fdf37ceb7338541943c28671f40645ec3af453d94788f836c374cf",
+      "inputBound": 2236282,
+      "outputBound": 2236282,
+      "filenameOffsets": [
+        2215188
+      ],
+      "match": {
+        "offset": 2215205,
+        "bytes": 1085373,
+        "sha256": "9db1203eb6fdf37ceb7338541943c28671f40645ec3af453d94788f836c374cf",
+        "compressedBytes": 354960,
+        "exactDist": true
+      },
+      "candidates": [
+        {
+          "offset": 2215205,
+          "bytes": 1085373,
+          "sha256": "9db1203eb6fdf37ceb7338541943c28671f40645ec3af453d94788f836c374cf",
+          "compressedBytes": 354960
+        }
+      ]
+    },
+    {
+      "path": "assets/index-DZHLsM9K.css",
+      "expectedBytes": 98510,
+      "expectedSha256": "bf15e2454e138690b79e84342f072c8333a598266c3487ba04f66c5bc75138ca",
+      "inputBound": 1200000,
+      "outputBound": 2000000,
+      "filenameOffsets": [
+        2191531
+      ],
+      "match": {
+        "offset": 2191549,
+        "bytes": 98510,
+        "sha256": "bf15e2454e138690b79e84342f072c8333a598266c3487ba04f66c5bc75138ca",
+        "compressedBytes": 22558,
+        "exactDist": true
+      },
+      "candidates": [
+        {
+          "offset": 2191549,
+          "bytes": 98510,
+          "sha256": "bf15e2454e138690b79e84342f072c8333a598266c3487ba04f66c5bc75138ca",
+          "compressedBytes": 22558
+        }
+      ]
+    },
+    {
+      "path": "assets/native-recording-access-1xHBG_Gb.js",
+      "expectedBytes": 1018,
+      "expectedSha256": "f29d1db22ee98ad976032ae07a5b697804f747afc15056630139e2cc5ab6497e",
+      "inputBound": 1200000,
+      "outputBound": 2000000,
+      "filenameOffsets": [
+        2214456
+      ],
+      "match": {
+        "offset": 2214491,
+        "bytes": 1018,
+        "sha256": "f29d1db22ee98ad976032ae07a5b697804f747afc15056630139e2cc5ab6497e",
+        "compressedBytes": 689,
+        "exactDist": true
+      },
+      "candidates": [
+        {
+          "offset": 2214491,
+          "bytes": 1018,
+          "sha256": "f29d1db22ee98ad976032ae07a5b697804f747afc15056630139e2cc5ab6497e",
+          "compressedBytes": 689
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "expectedBytes": 498,
+      "expectedSha256": "ba1c452eeca71ba3c0989f2f9c2ab5e5ee96975aab76019c9115bde2a96b54b2",
+      "inputBound": 1200000,
+      "outputBound": 2000000,
+      "filenameOffsets": [
+        2085721,
+        2090669,
+        2160422,
+        2177342,
+        2189302,
+        2189352,
+        2214108,
+        2693955,
+        3832235,
+        4387092,
+        4486057,
+        4491288,
+        4492896
+      ],
+      "match": {
+        "offset": 2214118,
+        "bytes": 478,
+        "sha256": "7ca3f5921229c2d3de9ab52f453dcc2f62d5fecb078a16b9783bb455a6c39837",
+        "compressedBytes": 330,
+        "exactDist": false
+      },
+      "candidates": [
+        {
+          "offset": 2189333,
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compressedBytes": 1
+        },
+        {
+          "offset": 2214118,
+          "bytes": 478,
+          "sha256": "7ca3f5921229c2d3de9ab52f453dcc2f62d5fecb078a16b9783bb455a6c39837",
+          "compressedBytes": 330
+        }
+      ]
+    }
+  ]
+}

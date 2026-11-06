@@ -1,0 +1,6414 @@
+{
+  "mac": {
+    "status": "PASS-PACKAGE-IDENTITY",
+    "manifest": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/native-build/result.json",
+    "source": {
+      "head": "cf593d6303f62469a857e09e13385651737e4aac",
+      "count": 321,
+      "beforeAfterCurrentAndCommitMatch": true
+    },
+    "archive": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Mac28.zip",
+      "bytes": 6694058,
+      "sha256": "8199b8feeccc548a08d5921f4473b50f0156661a021bc29e41f0ead95f76aa2d"
+    },
+    "onlySigningPathsChanged": [
+      "Contents/MacOS/notes-clone",
+      "Contents/_CodeSignature/CodeResources"
+    ],
+    "zipFileEntries": [
+      {
+        "path": "备忘录.app/Contents/_CodeSignature/CodeResources",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+      },
+      {
+        "path": "备忘录.app/Contents/MacOS/notes-clone",
+        "bytes": 20833984,
+        "sha256": "620a0b7cde9203e0f1d85b8d5043f632ce4b57588378ad43faa8fd0b41192212"
+      },
+      {
+        "path": "__MACOSX/备忘录.app/Contents/MacOS/._notes-clone",
+        "bytes": 163,
+        "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+      },
+      {
+        "path": "__MACOSX/备忘录.app/Contents/._MacOS",
+        "bytes": 163,
+        "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+      },
+      {
+        "path": "备忘录.app/Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3"
+      },
+      {
+        "path": "__MACOSX/备忘录.app/Contents/._Info.plist",
+        "bytes": 163,
+        "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+      },
+      {
+        "path": "__MACOSX/备忘录.app/._Contents",
+        "bytes": 163,
+        "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+      }
+    ],
+    "info": {
+      "CFBundleDevelopmentRegion": "English",
+      "CFBundleDisplayName": "备忘录",
+      "CFBundleExecutable": "notes-clone",
+      "CFBundleIdentifier": "com.local.notesclone",
+      "CFBundleInfoDictionaryVersion": "6.0",
+      "CFBundleName": "备忘录",
+      "CFBundlePackageType": "APPL",
+      "CFBundleShortVersionString": "0.1.0",
+      "CFBundleVersion": "0.1.0",
+      "CSResourcesFileMapped": true,
+      "LSApplicationCategoryType": "public.app-category.productivity",
+      "LSMinimumSystemVersion": "12.0",
+      "LSRequiresCarbon": true,
+      "NSHighResolutionCapable": true,
+      "NSMicrophoneUsageDescription": "将录音添加到本地备忘录。",
+      "NSCameraUsageDescription": "拍摄照片添加到本地备忘录。"
+    },
+    "machOSectionContentsUnchanged": [
+      {
+        "segment": "__TEXT",
+        "section": "__text",
+        "length": 10106628,
+        "zeroFill": false,
+        "sha256": "42bbde3eeb48825537c3e8135bbc4e92e81c2b3f31807717d69df64149981532"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__text_startup",
+        "length": 428,
+        "zeroFill": false,
+        "sha256": "46990eca779cf35b63db7808e4fb4906e4c1c5a6b6e45258778029ef1ce44c84"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__stubs",
+        "length": 3780,
+        "zeroFill": false,
+        "sha256": "ace3d3e64fa50ca3a3fdb54504a3a5316656c18bffe829bb188e72ee87d84b82"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_stubs",
+        "length": 10304,
+        "zeroFill": false,
+        "sha256": "30528b88efeafa22578a1a407ed8065c5440e83ba4509db55f809d3107217714"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__init_offsets",
+        "length": 4,
+        "zeroFill": false,
+        "sha256": "49a100a2399b7c31302213b673e9a67734affe2f73b210b888207800008cf1e6"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_methlist",
+        "length": 2684,
+        "zeroFill": false,
+        "sha256": "4919c5cc86d4f7b82cef7f6ad475fd428ef7262dc9c44296dffae92c44bd8b65"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__gcc_except_tab",
+        "length": 664768,
+        "zeroFill": false,
+        "sha256": "eefb0d66ddcef01d6780e24df45ce3928b75e47824770a0cab8cfbca3edb515b"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__const",
+        "length": 2264720,
+        "zeroFill": false,
+        "sha256": "ba35b06050f60c7ba0fa063b70701fe3aa2c4334bb9e87bc2a5278164d069ca1"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__cstring",
+        "length": 151479,
+        "zeroFill": false,
+        "sha256": "2a7835b004c70b6f0954f028b3f1cdcb7427dd149623f24a381289b89e3bb40b"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_methname",
+        "length": 8616,
+        "zeroFill": false,
+        "sha256": "dc3b7fbe44ae5ef41bc84dc1d262fa6fa2c892d703ea1aa88469d259710c1238"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_classname",
+        "length": 341,
+        "zeroFill": false,
+        "sha256": "43a9a3821d13a899f1de34e5dc1547ded6e222210d1b0483bb5de659591ec09c"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_methtype",
+        "length": 1760,
+        "zeroFill": false,
+        "sha256": "fbecd86d87d86b3aba9d99f18a06ffd24b173f62ccdc9fa187b9738d194aa6d6"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__ustring",
+        "length": 696,
+        "zeroFill": false,
+        "sha256": "7db0b61fb9b5ef9ee8f12b1e772a3ff09ffed6f02e4414be42e1adbdd1b72576"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__unwind_info",
+        "length": 231056,
+        "zeroFill": false,
+        "sha256": "9e0a2faed165cdc9a12e370aa5102486085c23c45c5a4a02e1f636f9b3274c23"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__eh_frame",
+        "length": 1241764,
+        "zeroFill": false,
+        "sha256": "7f92ce347c25e6993ad18b4c118b3a814a832ea97a7e4dde205a6e720d30cd93"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__got",
+        "length": 3408,
+        "zeroFill": false,
+        "sha256": "1567f700640a6e5b4ba7500f48726cbf70188e3e74bb2823b4fe53ee4bdd4b9d"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__const",
+        "length": 261664,
+        "zeroFill": false,
+        "sha256": "7049b2e57864dc37ed207aae1f5c483e39f77e168fcfd33f60173e1f1782ea72"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__cfstring",
+        "length": 6336,
+        "zeroFill": false,
+        "sha256": "ca13fe89cdd75820c023bcb5cd432558f2ef16065516874b7980d4ad1b70175a"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_classlist",
+        "length": 104,
+        "zeroFill": false,
+        "sha256": "d0fdc60f2847bd822c8dc74d4137de673912869f5d6f3582b8d3f2f99298fc7f"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_protolist",
+        "length": 32,
+        "zeroFill": false,
+        "sha256": "bb72ded223d03db508a7ccda1d2c4f5a2d8968224a2355baa82a7eb13731fb3a"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_imageinfo",
+        "length": 8,
+        "zeroFill": false,
+        "sha256": "94039884329d3732c577860f40d0dfdf883ff89dac332f87216e692c08892fa2"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_arraydata",
+        "length": 1096,
+        "zeroFill": false,
+        "sha256": "6bb4443d5c8b6ef8f07963ed7a1eb4a7e4f84639262cc081d4be888aa4bf31f2"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_arrayobj",
+        "length": 552,
+        "zeroFill": false,
+        "sha256": "f5918b3aee1d52af82e32f454dddc2ca715e8939547d16b956b58d112e8ad95a"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_dictobj",
+        "length": 320,
+        "zeroFill": false,
+        "sha256": "b81777230670933a4a743c23e6f2d4ffac7faeceafcf4552f1c8aaecb31de5d6"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_intobj",
+        "length": 24,
+        "zeroFill": false,
+        "sha256": "8641ad5afc7f95b19ed984fc7c1bb99beecd312797258624a2da959daafd521b"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_const",
+        "length": 5008,
+        "zeroFill": false,
+        "sha256": "dd3b941cea6fd8b5497d56eb6a0db52edca434644d601adc3aa1c6b8b63cb6b8"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_selrefs",
+        "length": 3040,
+        "zeroFill": false,
+        "sha256": "499dbbb1d174d3aaa1e67910e2b32b9125bb063ef32bcbfc3cfe271ee750f85f"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_classrefs",
+        "length": 408,
+        "zeroFill": false,
+        "sha256": "f556c8f447107020a55f5a5d28c575e6ce3dd53cc251573b40720d6bec85d01a"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_superrefs",
+        "length": 64,
+        "zeroFill": false,
+        "sha256": "770b0280d112874947a9f91813ea5a2197384dad2429be4d8ec66fc0327d120d"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_ivar",
+        "length": 208,
+        "zeroFill": false,
+        "sha256": "adf595189f589bc91ed38c362a39c7157161023dbb0edae11c03f664d220cf5f"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_data",
+        "length": 1040,
+        "zeroFill": false,
+        "sha256": "75c3ce99286062e70a3951a89b78f2f52fd15c41301fa93a4baf5656e777f192"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__data",
+        "length": 19008,
+        "zeroFill": false,
+        "sha256": "e0c354e3f4f73d4ad391fe4a8e99d97f973950f01a29e8ebce817211140efb80"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__thread_vars",
+        "length": 408,
+        "zeroFill": false,
+        "sha256": "ce3214514b84b84fb5305a0e1d6ff00ea8eb620c107befab8028eba3a4fa8524"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__thread_data",
+        "length": 120,
+        "zeroFill": false,
+        "sha256": "3a33ad708d05f1861b37727ba14351ddbaa5570fa8b5273198bb4e627898cc5f"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__thread_bss",
+        "length": 256,
+        "zeroFill": true,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__common",
+        "length": 10360,
+        "zeroFill": true,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__bss",
+        "length": 5744,
+        "zeroFill": true,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "completeMachOPrefixSigningDelta": {
+      "signature": {
+        "dataOffset": 20775104,
+        "originalBytes": 162480,
+        "derivedBytes": 58880
+      },
+      "onlyMaskedLoadCommandFields": [
+        [
+          3312,
+          8,
+          "__LINKEDIT.vmsize"
+        ],
+        [
+          3328,
+          8,
+          "__LINKEDIT.filesize"
+        ],
+        [
+          5276,
+          4,
+          "LC_CODE_SIGNATURE.datasize"
+        ]
+      ],
+      "entirePrefixBytesCompared": 20775104,
+      "normalizedPrefixSha256": "fea96cd8d9c5181c7d0de28911130c6f5765c1985772798ef7b5edb811489808",
+      "nonSignatureContentEqual": true
+    },
+    "embeddedFrontend": [
+      {
+        "path": "assets/index-Cd_C-xBt.js",
+        "bytes": 1085373,
+        "sha256": "9db1203eb6fdf37ceb7338541943c28671f40645ec3af453d94788f836c374cf",
+        "rawSnapshotEqual": true
+      },
+      {
+        "path": "assets/index-DZHLsM9K.css",
+        "bytes": 98510,
+        "sha256": "bf15e2454e138690b79e84342f072c8333a598266c3487ba04f66c5bc75138ca",
+        "rawSnapshotEqual": true
+      },
+      {
+        "path": "assets/native-recording-access-1xHBG_Gb.js",
+        "bytes": 1018,
+        "sha256": "f29d1db22ee98ad976032ae07a5b697804f747afc15056630139e2cc5ab6497e",
+        "rawSnapshotEqual": true
+      },
+      {
+        "path": "index.html",
+        "bytes": 478,
+        "sha256": "7ca3f5921229c2d3de9ab52f453dcc2f62d5fecb078a16b9783bb455a6c39837",
+        "rawSnapshotEqual": false,
+        "completeOrderedHTMLTokensEqual": true,
+        "tokens": [
+          [
+            "decl",
+            "doctype html"
+          ],
+          [
+            "start",
+            "html",
+            [
+              [
+                "lang",
+                "zh-CN"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "head",
+            []
+          ],
+          [
+            "start",
+            "meta",
+            [
+              [
+                "charset",
+                "UTF-8"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "meta",
+            [
+              [
+                "content",
+                "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+              ],
+              [
+                "name",
+                "viewport"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "meta",
+            [
+              [
+                "content",
+                "#f2f2f7"
+              ],
+              [
+                "name",
+                "theme-color"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "title",
+            []
+          ],
+          [
+            "data",
+            "备忘录"
+          ],
+          [
+            "end",
+            "title"
+          ],
+          [
+            "start",
+            "script",
+            [
+              [
+                "crossorigin",
+                ""
+              ],
+              [
+                "src",
+                "/assets/index-Cd_C-xBt.js"
+              ],
+              [
+                "type",
+                "module"
+              ]
+            ]
+          ],
+          [
+            "end",
+            "script"
+          ],
+          [
+            "start",
+            "link",
+            [
+              [
+                "crossorigin",
+                ""
+              ],
+              [
+                "href",
+                "/assets/index-DZHLsM9K.css"
+              ],
+              [
+                "rel",
+                "stylesheet"
+              ]
+            ]
+          ],
+          [
+            "end",
+            "head"
+          ],
+          [
+            "start",
+            "body",
+            []
+          ],
+          [
+            "start",
+            "div",
+            [
+              [
+                "id",
+                "root"
+              ]
+            ]
+          ],
+          [
+            "end",
+            "div"
+          ],
+          [
+            "end",
+            "body"
+          ],
+          [
+            "end",
+            "html"
+          ]
+        ]
+      }
+    ]
+  },
+  "android": {
+    "status": "PASS-APK-IDENTITY",
+    "manifest": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/android-build/result.json",
+    "source": {
+      "head": "2956f8fb49d8fd5b76cdcaa8de2be82126b8cfcb",
+      "count": 321,
+      "beforeAfterCurrentAndCommitMatch": true
+    },
+    "apk": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk",
+      "bytes": 236444967,
+      "sha256": "c2c5c2ce528c83cca9bc0a31740af3614ce778a529e51df7c5554dd31718bd5c"
+    },
+    "abis": [
+      "arm64-v8a"
+    ],
+    "ELF64LittleEndianAArch64": true,
+    "elf": {
+      "path": "/private/tmp/sync88-package-review-extract-run01/android/libnotes_clone_lib.so",
+      "bytes": 211140864,
+      "sha256": "8030d033d09cbbd349726edba6ec7fb635b6c0c5ad02b060126b7c04f40992d9"
+    },
+    "zipEntries": [
+      {
+        "path": "META-INF/com/android/build/gradle/app-metadata.properties",
+        "bytes": 56,
+        "crc32": 1560306037
+      },
+      {
+        "path": "classes.dex",
+        "bytes": 11894236,
+        "crc32": 3870902919
+      },
+      {
+        "path": "classes10.dex",
+        "bytes": 9214792,
+        "crc32": 1066833965
+      },
+      {
+        "path": "classes11.dex",
+        "bytes": 4110996,
+        "crc32": 947029514
+      },
+      {
+        "path": "classes2.dex",
+        "bytes": 3076,
+        "crc32": 2204217760
+      },
+      {
+        "path": "classes3.dex",
+        "bytes": 27568,
+        "crc32": 476749753
+      },
+      {
+        "path": "classes4.dex",
+        "bytes": 131224,
+        "crc32": 129561749
+      },
+      {
+        "path": "classes5.dex",
+        "bytes": 26876,
+        "crc32": 3728526047
+      },
+      {
+        "path": "classes6.dex",
+        "bytes": 58792,
+        "crc32": 89783108
+      },
+      {
+        "path": "classes7.dex",
+        "bytes": 517496,
+        "crc32": 4077942103
+      },
+      {
+        "path": "classes8.dex",
+        "bytes": 68092,
+        "crc32": 2234647549
+      },
+      {
+        "path": "classes9.dex",
+        "bytes": 112076,
+        "crc32": 396639024
+      },
+      {
+        "path": "lib/arm64-v8a/libimage_processing_util_jni.so",
+        "bytes": 32528,
+        "crc32": 3502586347
+      },
+      {
+        "path": "lib/arm64-v8a/libmlkit_google_ocr_pipeline.so",
+        "bytes": 11064544,
+        "crc32": 1510142391
+      },
+      {
+        "path": "lib/arm64-v8a/libnotes_clone_lib.so",
+        "bytes": 211140864,
+        "crc32": 869238322
+      },
+      {
+        "path": "lib/arm64-v8a/libsurface_util_jni.so",
+        "bytes": 4896,
+        "crc32": 3738354362
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/aksara/aksara_page_layout_analysis_rpn_gcn.binarypb",
+        "bytes": 276,
+        "crc32": 3364651609
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/aksara/aksara_page_layout_analysis_ti_rpn_gcn.binarypb",
+        "bytes": 278,
+        "crc32": 1359240862
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Hani_ctc/optical/assets.extra/LabelMap.pb",
+        "bytes": 70403,
+        "crc32": 3747502095
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Hani_ctc/optical/conv_model.fb",
+        "bytes": 40808,
+        "crc32": 2399509101
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Hani_ctc/optical/lstm_model.fb",
+        "bytes": 891872,
+        "crc32": 3597274506
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Hani_ctc_cpu.binarypb",
+        "bytes": 329,
+        "crc32": 1752007551
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Latn_ctc/optical/assets.extra/LabelMap.pb",
+        "bytes": 3809,
+        "crc32": 2045719922
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Latn_ctc/optical/conv_model.fb",
+        "bytes": 40848,
+        "crc32": 3139105529
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Latn_ctc/optical/lstm_model.fb",
+        "bytes": 309568,
+        "crc32": 1457013890
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/Latn_ctc_cpu.binarypb",
+        "bytes": 333,
+        "crc32": 4209861512
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/gocr_models/line_recognition_legacy_mobile/tflite_langid.tflite",
+        "bytes": 315520,
+        "crc32": 961437549
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/layout/line_clustering_custom_ops/model.tflite",
+        "bytes": 129612,
+        "crc32": 2357447520
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/gocr/layout/line_splitting_custom_ops/model.tflite",
+        "bytes": 114384,
+        "crc32": 744595560
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser/detector/region_proposal_text_detector_tflite_vertical_mbv2_v1.bincfg",
+        "bytes": 452,
+        "crc32": 2841287559
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser/detector/rpn_text_detector_mobile_space_to_depth_quantized_mbv2_v1.tflite",
+        "bytes": 340760,
+        "crc32": 2650962453
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser/rpn_text_detection_tflite_mobile_mbv2.binarypb",
+        "bytes": 194,
+        "crc32": 1352413731
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser/segmenter/tflite_script_detector_0.3.bincfg",
+        "bytes": 1118,
+        "crc32": 3319152261
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser/segmenter/tflite_script_detector_0.3.conv_model",
+        "bytes": 40808,
+        "crc32": 3970733450
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser/segmenter/tflite_script_detector_0.3.lstm_model",
+        "bytes": 161448,
+        "crc32": 1132239964
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser/taser_script_identification_tflite_mobile.binarypb",
+        "bytes": 136,
+        "crc32": 1569589439
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser_tflite_gocrchinese_and_latin_mbv2_aksara_layout_gcn_mobile_engine.binarypb",
+        "bytes": 13181,
+        "crc32": 523650189
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser_tflite_gocrchinese_and_latin_mbv2_aksara_layout_gcn_mobile_engine_ti.binarypb",
+        "bytes": 13186,
+        "crc32": 488400395
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser_tflite_gocrchinese_and_latin_mbv2_aksara_layout_gcn_mobile_recognizer.binarypb",
+        "bytes": 316,
+        "crc32": 1192484703
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser_tflite_gocrchinese_and_latin_mbv2_aksara_layout_gcn_mobile_runner.binarypb",
+        "bytes": 334,
+        "crc32": 2206913185
+      },
+      {
+        "path": "assets/mlkit-google-ocr-models/taser_tflite_gocrchinese_and_latin_mbv2_aksara_layout_gcn_mobile_runner_ti.binarypb",
+        "bytes": 337,
+        "crc32": 3184622566
+      },
+      {
+        "path": "assets/tauri.conf.json",
+        "bytes": 2827,
+        "crc32": 1788393022
+      },
+      {
+        "path": "AndroidManifest.xml",
+        "bytes": 11752,
+        "crc32": 128599451
+      },
+      {
+        "path": "res/anim-v21/fragment_fast_out_extra_slow_in.xml",
+        "bytes": 364,
+        "crc32": 1981137860
+      },
+      {
+        "path": "res/anim/abc_fade_in.xml",
+        "bytes": 388,
+        "crc32": 1651564388
+      },
+      {
+        "path": "res/anim/abc_fade_out.xml",
+        "bytes": 388,
+        "crc32": 1955312412
+      },
+      {
+        "path": "res/anim/abc_grow_fade_in_from_bottom.xml",
+        "bytes": 852,
+        "crc32": 2593375466
+      },
+      {
+        "path": "res/anim/abc_popup_enter.xml",
+        "bytes": 508,
+        "crc32": 3103774694
+      },
+      {
+        "path": "res/anim/abc_popup_exit.xml",
+        "bytes": 508,
+        "crc32": 1399865687
+      },
+      {
+        "path": "res/anim/abc_shrink_fade_out_from_bottom.xml",
+        "bytes": 852,
+        "crc32": 1989455988
+      },
+      {
+        "path": "res/anim/abc_slide_in_bottom.xml",
+        "bytes": 396,
+        "crc32": 3429890783
+      },
+      {
+        "path": "res/anim/abc_slide_in_top.xml",
+        "bytes": 396,
+        "crc32": 4277221070
+      },
+      {
+        "path": "res/anim/abc_slide_out_bottom.xml",
+        "bytes": 396,
+        "crc32": 4004511851
+      },
+      {
+        "path": "res/anim/abc_slide_out_top.xml",
+        "bytes": 396,
+        "crc32": 4033410565
+      },
+      {
+        "path": "res/anim/abc_tooltip_enter.xml",
+        "bytes": 388,
+        "crc32": 125124923
+      },
+      {
+        "path": "res/anim/abc_tooltip_exit.xml",
+        "bytes": 388,
+        "crc32": 544611708
+      },
+      {
+        "path": "res/anim/btn_checkbox_to_checked_box_inner_merged_animation.xml",
+        "bytes": 2124,
+        "crc32": 1341441224
+      },
+      {
+        "path": "res/anim/btn_checkbox_to_checked_box_outer_merged_animation.xml",
+        "bytes": 2780,
+        "crc32": 3491829324
+      },
+      {
+        "path": "res/anim/btn_checkbox_to_checked_icon_null_animation.xml",
+        "bytes": 1196,
+        "crc32": 3665673361
+      },
+      {
+        "path": "res/anim/btn_checkbox_to_unchecked_box_inner_merged_animation.xml",
+        "bytes": 2360,
+        "crc32": 142801413
+      },
+      {
+        "path": "res/anim/btn_checkbox_to_unchecked_check_path_merged_animation.xml",
+        "bytes": 2520,
+        "crc32": 2150850351
+      },
+      {
+        "path": "res/anim/btn_checkbox_to_unchecked_icon_null_animation.xml",
+        "bytes": 1196,
+        "crc32": 2445334536
+      },
+      {
+        "path": "res/anim/btn_radio_to_off_mtrl_dot_group_animation.xml",
+        "bytes": 1656,
+        "crc32": 4032970438
+      },
+      {
+        "path": "res/anim/btn_radio_to_off_mtrl_ring_outer_animation.xml",
+        "bytes": 1656,
+        "crc32": 2475346897
+      },
+      {
+        "path": "res/anim/btn_radio_to_off_mtrl_ring_outer_path_animation.xml",
+        "bytes": 1028,
+        "crc32": 3227503577
+      },
+      {
+        "path": "res/anim/btn_radio_to_on_mtrl_dot_group_animation.xml",
+        "bytes": 1656,
+        "crc32": 2047058048
+      },
+      {
+        "path": "res/anim/btn_radio_to_on_mtrl_ring_outer_animation.xml",
+        "bytes": 1656,
+        "crc32": 273301465
+      },
+      {
+        "path": "res/anim/btn_radio_to_on_mtrl_ring_outer_path_animation.xml",
+        "bytes": 1028,
+        "crc32": 687296157
+      },
+      {
+        "path": "res/anim/design_bottom_sheet_slide_in.xml",
+        "bytes": 616,
+        "crc32": 3248188121
+      },
+      {
+        "path": "res/anim/design_bottom_sheet_slide_out.xml",
+        "bytes": 616,
+        "crc32": 1919652721
+      },
+      {
+        "path": "res/anim/design_snackbar_in.xml",
+        "bytes": 312,
+        "crc32": 3620062310
+      },
+      {
+        "path": "res/anim/design_snackbar_out.xml",
+        "bytes": 312,
+        "crc32": 244987842
+      },
+      {
+        "path": "res/anim/linear_indeterminate_line1_head_interpolator.xml",
+        "bytes": 400,
+        "crc32": 3080065691
+      },
+      {
+        "path": "res/anim/linear_indeterminate_line1_tail_interpolator.xml",
+        "bytes": 400,
+        "crc32": 935504197
+      },
+      {
+        "path": "res/anim/linear_indeterminate_line2_head_interpolator.xml",
+        "bytes": 400,
+        "crc32": 1664007024
+      },
+      {
+        "path": "res/anim/linear_indeterminate_line2_tail_interpolator.xml",
+        "bytes": 400,
+        "crc32": 3187288992
+      },
+      {
+        "path": "res/anim/m3_bottom_sheet_slide_in.xml",
+        "bytes": 616,
+        "crc32": 3506257673
+      },
+      {
+        "path": "res/anim/m3_bottom_sheet_slide_out.xml",
+        "bytes": 656,
+        "crc32": 365891915
+      },
+      {
+        "path": "res/anim/m3_motion_fade_enter.xml",
+        "bytes": 812,
+        "crc32": 3716690595
+      },
+      {
+        "path": "res/anim/m3_motion_fade_exit.xml",
+        "bytes": 508,
+        "crc32": 1388356269
+      },
+      {
+        "path": "res/anim/m3_side_sheet_enter_from_left.xml",
+        "bytes": 464,
+        "crc32": 1369062450
+      },
+      {
+        "path": "res/anim/m3_side_sheet_enter_from_right.xml",
+        "bytes": 464,
+        "crc32": 439344149
+      },
+      {
+        "path": "res/anim/m3_side_sheet_exit_to_left.xml",
+        "bytes": 464,
+        "crc32": 4265976809
+      },
+      {
+        "path": "res/anim/m3_side_sheet_exit_to_right.xml",
+        "bytes": 464,
+        "crc32": 869787763
+      },
+      {
+        "path": "res/anim/mtrl_bottom_sheet_slide_in.xml",
+        "bytes": 616,
+        "crc32": 612089289
+      },
+      {
+        "path": "res/anim/mtrl_bottom_sheet_slide_out.xml",
+        "bytes": 616,
+        "crc32": 3799187722
+      },
+      {
+        "path": "res/anim/mtrl_card_lowers_interpolator.xml",
+        "bytes": 400,
+        "crc32": 1050886711
+      },
+      {
+        "path": "res/animator/chevron_checked_unchecked.xml",
+        "bytes": 444,
+        "crc32": 1921536773
+      },
+      {
+        "path": "res/animator/chevron_unchecked_checked.xml",
+        "bytes": 444,
+        "crc32": 1344601748
+      },
+      {
+        "path": "res/animator/design_appbar_state_list_animator.xml",
+        "bytes": 1216,
+        "crc32": 2887004001
+      },
+      {
+        "path": "res/animator/design_fab_hide_motion_spec.xml",
+        "bytes": 796,
+        "crc32": 1931940455
+      },
+      {
+        "path": "res/animator/design_fab_show_motion_spec.xml",
+        "bytes": 796,
+        "crc32": 3150016441
+      },
+      {
+        "path": "res/animator/fragment_close_enter.xml",
+        "bytes": 1128,
+        "crc32": 3840576019
+      },
+      {
+        "path": "res/animator/fragment_close_exit.xml",
+        "bytes": 1128,
+        "crc32": 89389386
+      },
+      {
+        "path": "res/animator/fragment_fade_enter.xml",
+        "bytes": 452,
+        "crc32": 607080404
+      },
+      {
+        "path": "res/animator/fragment_fade_exit.xml",
+        "bytes": 452,
+        "crc32": 3619842007
+      },
+      {
+        "path": "res/animator/fragment_open_enter.xml",
+        "bytes": 1128,
+        "crc32": 4141880360
+      },
+      {
+        "path": "res/animator/fragment_open_exit.xml",
+        "bytes": 1128,
+        "crc32": 926252761
+      },
+      {
+        "path": "res/animator/m3_appbar_state_list_animator.xml",
+        "bytes": 1216,
+        "crc32": 846112073
+      },
+      {
+        "path": "res/animator/m3_btn_elevated_btn_state_list_anim.xml",
+        "bytes": 1796,
+        "crc32": 1736583320
+      },
+      {
+        "path": "res/animator/m3_btn_state_list_anim.xml",
+        "bytes": 1796,
+        "crc32": 1739787885
+      },
+      {
+        "path": "res/animator/m3_card_elevated_state_list_anim.xml",
+        "bytes": 1632,
+        "crc32": 962746378
+      },
+      {
+        "path": "res/animator/m3_card_state_list_anim.xml",
+        "bytes": 1584,
+        "crc32": 3558230104
+      },
+      {
+        "path": "res/animator/m3_chip_state_list_anim.xml",
+        "bytes": 1180,
+        "crc32": 771777534
+      },
+      {
+        "path": "res/animator/m3_elevated_chip_state_list_anim.xml",
+        "bytes": 1072,
+        "crc32": 4223496706
+      },
+      {
+        "path": "res/animator/m3_extended_fab_change_size_collapse_motion_spec.xml",
+        "bytes": 1116,
+        "crc32": 1046015802
+      },
+      {
+        "path": "res/animator/m3_extended_fab_change_size_expand_motion_spec.xml",
+        "bytes": 1116,
+        "crc32": 3798904616
+      },
+      {
+        "path": "res/animator/m3_extended_fab_hide_motion_spec.xml",
+        "bytes": 820,
+        "crc32": 942475689
+      },
+      {
+        "path": "res/animator/m3_extended_fab_show_motion_spec.xml",
+        "bytes": 820,
+        "crc32": 994922470
+      },
+      {
+        "path": "res/animator/m3_extended_fab_state_list_animator.xml",
+        "bytes": 2724,
+        "crc32": 3272142288
+      },
+      {
+        "path": "res/animator/m3_fab_state_list_animator.xml",
+        "bytes": 2724,
+        "crc32": 3277930884
+      },
+      {
+        "path": "res/animator/m3_split_button_chevron_overshoot_interpolator.xml",
+        "bytes": 284,
+        "crc32": 1741764322
+      },
+      {
+        "path": "res/animator/m3_split_button_chevron_reverse_rotation.xml",
+        "bytes": 604,
+        "crc32": 3473640241
+      },
+      {
+        "path": "res/animator/m3_split_button_chevron_rotation.xml",
+        "bytes": 604,
+        "crc32": 3689056740
+      },
+      {
+        "path": "res/animator/mtrl_btn_state_list_anim.xml",
+        "bytes": 2664,
+        "crc32": 3955148643
+      },
+      {
+        "path": "res/animator/mtrl_btn_unelevated_state_list_anim.xml",
+        "bytes": 120,
+        "crc32": 1914039208
+      },
+      {
+        "path": "res/animator/mtrl_card_state_list_anim.xml",
+        "bytes": 1208,
+        "crc32": 3578952578
+      },
+      {
+        "path": "res/animator/mtrl_chip_state_list_anim.xml",
+        "bytes": 1072,
+        "crc32": 3248295794
+      },
+      {
+        "path": "res/animator/mtrl_extended_fab_change_size_collapse_motion_spec.xml",
+        "bytes": 1116,
+        "crc32": 2008345777
+      },
+      {
+        "path": "res/animator/mtrl_extended_fab_change_size_expand_motion_spec.xml",
+        "bytes": 1116,
+        "crc32": 3573931479
+      },
+      {
+        "path": "res/animator/mtrl_extended_fab_hide_motion_spec.xml",
+        "bytes": 608,
+        "crc32": 4200116686
+      },
+      {
+        "path": "res/animator/mtrl_extended_fab_show_motion_spec.xml",
+        "bytes": 820,
+        "crc32": 3312229236
+      },
+      {
+        "path": "res/animator/mtrl_extended_fab_state_list_animator.xml",
+        "bytes": 2724,
+        "crc32": 4268735347
+      },
+      {
+        "path": "res/animator/mtrl_fab_hide_motion_spec.xml",
+        "bytes": 796,
+        "crc32": 441175936
+      },
+      {
+        "path": "res/animator/mtrl_fab_show_motion_spec.xml",
+        "bytes": 796,
+        "crc32": 3893977649
+      },
+      {
+        "path": "res/animator/mtrl_fab_transformation_sheet_collapse_spec.xml",
+        "bytes": 1888,
+        "crc32": 1255551011
+      },
+      {
+        "path": "res/animator/mtrl_fab_transformation_sheet_expand_spec.xml",
+        "bytes": 1888,
+        "crc32": 3859046487
+      },
+      {
+        "path": "res/color-night-v8/material_timepicker_button_stroke.xml",
+        "bytes": 376,
+        "crc32": 2290344587
+      },
+      {
+        "path": "res/color-night-v8/material_timepicker_clockface.xml",
+        "bytes": 376,
+        "crc32": 2140519331
+      },
+      {
+        "path": "res/color-night-v8/material_timepicker_modebutton_tint.xml",
+        "bytes": 340,
+        "crc32": 248331998
+      },
+      {
+        "path": "res/color-v23/abc_btn_colored_borderless_text_material.xml",
+        "bytes": 500,
+        "crc32": 3674623781
+      },
+      {
+        "path": "res/color-v23/abc_btn_colored_text_material.xml",
+        "bytes": 500,
+        "crc32": 2018759506
+      },
+      {
+        "path": "res/color-v23/abc_color_highlight_material.xml",
+        "bytes": 544,
+        "crc32": 478502154
+      },
+      {
+        "path": "res/color-v23/abc_tint_btn_checkable.xml",
+        "bytes": 624,
+        "crc32": 1125857705
+      },
+      {
+        "path": "res/color-v23/abc_tint_default.xml",
+        "bytes": 1120,
+        "crc32": 2550396511
+      },
+      {
+        "path": "res/color-v23/abc_tint_edittext.xml",
+        "bytes": 668,
+        "crc32": 831671912
+      },
+      {
+        "path": "res/color-v23/abc_tint_seek_thumb.xml",
+        "bytes": 500,
+        "crc32": 1541515780
+      },
+      {
+        "path": "res/color-v23/abc_tint_spinner.xml",
+        "bytes": 668,
+        "crc32": 831671912
+      },
+      {
+        "path": "res/color-v23/abc_tint_switch_track.xml",
+        "bytes": 664,
+        "crc32": 1445328641
+      },
+      {
+        "path": "res/color-v31/m3_dynamic_dark_default_color_primary_text.xml",
+        "bytes": 500,
+        "crc32": 1326545122
+      },
+      {
+        "path": "res/color-v31/m3_dynamic_dark_default_color_secondary_text.xml",
+        "bytes": 500,
+        "crc32": 3243493852
+      },
+      {
+        "path": "res/color-v31/m3_dynamic_dark_highlighted_text.xml",
+        "bytes": 376,
+        "crc32": 461572918
+      },
+      {
+        "path": "res/color-v31/m3_dynamic_dark_hint_foreground.xml",
+        "bytes": 564,
+        "crc32": 743691613
+      },
+      {
+        "path": "res/color-v31/m3_dynamic_dark_primary_text_disable_only.xml",
+        "bytes": 500,
+        "crc32": 3413309398
+      },
+      {
+        "path": "res/color-v31/m3_dynamic_default_color_primary_text.xml",
+        "bytes": 500,
+        "crc32": 3469643769
+      },
+      {
+        "path": "res/color-v31/m3_dynamic_default_color_secondary_text.xml",
+        "bytes": 500,
+        "crc32": 1082932935
+      },
+      {
+        "path": "res/color-v31/m3_dynamic_highlighted_text.xml",
+        "bytes": 376,
+        "crc32": 1290497543
+      },
+      {
+        "path": "res/color-v31/m3_dynamic_hint_foreground.xml",
+        "bytes": 564,
+        "crc32": 986860163
+      },
+      {
+        "path": "res/color-v31/m3_dynamic_primary_text_disable_only.xml",
+        "bytes": 500,
+        "crc32": 1252851917
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral12.xml",
+        "bytes": 376,
+        "crc32": 4031275867
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral17.xml",
+        "bytes": 376,
+        "crc32": 207538851
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral22.xml",
+        "bytes": 376,
+        "crc32": 1896790006
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral24.xml",
+        "bytes": 376,
+        "crc32": 2343456092
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral4.xml",
+        "bytes": 376,
+        "crc32": 2888402289
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral6.xml",
+        "bytes": 376,
+        "crc32": 2086801746
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral87.xml",
+        "bytes": 376,
+        "crc32": 1960127704
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral92.xml",
+        "bytes": 376,
+        "crc32": 3851437689
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral94.xml",
+        "bytes": 376,
+        "crc32": 3461205911
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral96.xml",
+        "bytes": 376,
+        "crc32": 1217113871
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral98.xml",
+        "bytes": 376,
+        "crc32": 1666590433
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant12.xml",
+        "bytes": 376,
+        "crc32": 4256193252
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant17.xml",
+        "bytes": 376,
+        "crc32": 27718428
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant22.xml",
+        "bytes": 376,
+        "crc32": 2096533065
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant24.xml",
+        "bytes": 376,
+        "crc32": 2253812963
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant4.xml",
+        "bytes": 376,
+        "crc32": 2714877134
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant6.xml",
+        "bytes": 376,
+        "crc32": 1905928429
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant87.xml",
+        "bytes": 376,
+        "crc32": 2032997735
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant92.xml",
+        "bytes": 376,
+        "crc32": 3899162566
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant94.xml",
+        "bytes": 376,
+        "crc32": 3283482152
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant96.xml",
+        "bytes": 376,
+        "crc32": 1165203120
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_neutral_variant98.xml",
+        "bytes": 376,
+        "crc32": 2396417990
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_primary98.xml",
+        "bytes": 376,
+        "crc32": 3584665819
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_secondary98.xml",
+        "bytes": 376,
+        "crc32": 171809032
+      },
+      {
+        "path": "res/color-v31/m3_ref_palette_dynamic_tertiary98.xml",
+        "bytes": 376,
+        "crc32": 2193739242
+      },
+      {
+        "path": "res/color/abc_background_cache_hint_selector_material_dark.xml",
+        "bytes": 468,
+        "crc32": 2581007395
+      },
+      {
+        "path": "res/color/abc_background_cache_hint_selector_material_light.xml",
+        "bytes": 468,
+        "crc32": 1089449890
+      },
+      {
+        "path": "res/color/abc_hint_foreground_material_dark.xml",
+        "bytes": 564,
+        "crc32": 369617655
+      },
+      {
+        "path": "res/color/abc_hint_foreground_material_light.xml",
+        "bytes": 564,
+        "crc32": 2578740605
+      },
+      {
+        "path": "res/color/abc_primary_text_disable_only_material_dark.xml",
+        "bytes": 464,
+        "crc32": 1683073253
+      },
+      {
+        "path": "res/color/abc_primary_text_disable_only_material_light.xml",
+        "bytes": 464,
+        "crc32": 4149139359
+      },
+      {
+        "path": "res/color/abc_primary_text_material_dark.xml",
+        "bytes": 464,
+        "crc32": 1925155355
+      },
+      {
+        "path": "res/color/abc_primary_text_material_light.xml",
+        "bytes": 464,
+        "crc32": 1215742959
+      },
+      {
+        "path": "res/color/abc_search_url_text.xml",
+        "bytes": 588,
+        "crc32": 3675557954
+      },
+      {
+        "path": "res/color/abc_secondary_text_material_dark.xml",
+        "bytes": 464,
+        "crc32": 2349920533
+      },
+      {
+        "path": "res/color/abc_secondary_text_material_light.xml",
+        "bytes": 464,
+        "crc32": 521113199
+      },
+      {
+        "path": "res/color/common_google_signin_btn_text_dark.xml",
+        "bytes": 712,
+        "crc32": 559484924
+      },
+      {
+        "path": "res/color/common_google_signin_btn_text_light.xml",
+        "bytes": 712,
+        "crc32": 839277475
+      },
+      {
+        "path": "res/color/common_google_signin_btn_tint.xml",
+        "bytes": 464,
+        "crc32": 1144351805
+      },
+      {
+        "path": "res/color/design_box_stroke_color.xml",
+        "bytes": 712,
+        "crc32": 3981403701
+      },
+      {
+        "path": "res/color/design_error.xml",
+        "bytes": 464,
+        "crc32": 1846296498
+      },
+      {
+        "path": "res/color/design_icon_tint.xml",
+        "bytes": 376,
+        "crc32": 3518958606
+      },
+      {
+        "path": "res/color/m3_appbar_overlay_color.xml",
+        "bytes": 376,
+        "crc32": 215228883
+      },
+      {
+        "path": "res/color/m3_assist_chip_icon_tint_color.xml",
+        "bytes": 500,
+        "crc32": 1850335015
+      },
+      {
+        "path": "res/color/m3_assist_chip_stroke_color.xml",
+        "bytes": 872,
+        "crc32": 540549399
+      },
+      {
+        "path": "res/color/m3_bottom_sheet_drag_handle_color.xml",
+        "bytes": 340,
+        "crc32": 3375979235
+      },
+      {
+        "path": "res/color/m3_button_background_color_selector.xml",
+        "bytes": 748,
+        "crc32": 1237392496
+      },
+      {
+        "path": "res/color/m3_button_foreground_color_selector.xml",
+        "bytes": 768,
+        "crc32": 4033020200
+      },
+      {
+        "path": "res/color/m3_button_outline_color_selector.xml",
+        "bytes": 500,
+        "crc32": 4234650475
+      },
+      {
+        "path": "res/color/m3_button_ripple_color.xml",
+        "bytes": 808,
+        "crc32": 290966514
+      },
+      {
+        "path": "res/color/m3_button_ripple_color_selector.xml",
+        "bytes": 1936,
+        "crc32": 3128595817
+      },
+      {
+        "path": "res/color/m3_calendar_item_disabled_text.xml",
+        "bytes": 376,
+        "crc32": 1234384556
+      },
+      {
+        "path": "res/color/m3_calendar_item_stroke_color.xml",
+        "bytes": 712,
+        "crc32": 1544107104
+      },
+      {
+        "path": "res/color/m3_card_foreground_color.xml",
+        "bytes": 768,
+        "crc32": 1577485796
+      },
+      {
+        "path": "res/color/m3_card_ripple_color.xml",
+        "bytes": 1556,
+        "crc32": 1772351287
+      },
+      {
+        "path": "res/color/m3_card_stroke_color.xml",
+        "bytes": 1224,
+        "crc32": 188494055
+      },
+      {
+        "path": "res/color/m3_checkbox_button_icon_tint.xml",
+        "bytes": 964,
+        "crc32": 4081529629
+      },
+      {
+        "path": "res/color/m3_checkbox_button_tint.xml",
+        "bytes": 1000,
+        "crc32": 4171676100
+      },
+      {
+        "path": "res/color/m3_chip_assist_text_color.xml",
+        "bytes": 500,
+        "crc32": 3682404021
+      },
+      {
+        "path": "res/color/m3_chip_background_color.xml",
+        "bytes": 712,
+        "crc32": 2207515047
+      },
+      {
+        "path": "res/color/m3_chip_ripple_color.xml",
+        "bytes": 1556,
+        "crc32": 2034414422
+      },
+      {
+        "path": "res/color/m3_chip_stroke_color.xml",
+        "bytes": 872,
+        "crc32": 444841375
+      },
+      {
+        "path": "res/color/m3_chip_text_color.xml",
+        "bytes": 624,
+        "crc32": 1723794322
+      },
+      {
+        "path": "res/color/m3_dark_default_color_primary_text.xml",
+        "bytes": 500,
+        "crc32": 2325750815
+      },
+      {
+        "path": "res/color/m3_dark_default_color_secondary_text.xml",
+        "bytes": 500,
+        "crc32": 81958177
+      },
+      {
+        "path": "res/color/m3_dark_highlighted_text.xml",
+        "bytes": 376,
+        "crc32": 2676741606
+      },
+      {
+        "path": "res/color/m3_dark_hint_foreground.xml",
+        "bytes": 564,
+        "crc32": 2701851001
+      },
+      {
+        "path": "res/color/m3_dark_primary_text_disable_only.xml",
+        "bytes": 500,
+        "crc32": 247704363
+      },
+      {
+        "path": "res/color/m3_default_color_primary_text.xml",
+        "bytes": 500,
+        "crc32": 2864661181
+      },
+      {
+        "path": "res/color/m3_default_color_secondary_text.xml",
+        "bytes": 500,
+        "crc32": 620622723
+      },
+      {
+        "path": "res/color/m3_efab_ripple_color_selector.xml",
+        "bytes": 808,
+        "crc32": 4045892885
+      },
+      {
+        "path": "res/color/m3_elevated_chip_background_color.xml",
+        "bytes": 748,
+        "crc32": 3907573309
+      },
+      {
+        "path": "res/color/m3_fab_efab_background_color_selector.xml",
+        "bytes": 500,
+        "crc32": 3376287596
+      },
+      {
+        "path": "res/color/m3_fab_efab_foreground_color_selector.xml",
+        "bytes": 500,
+        "crc32": 775999726
+      },
+      {
+        "path": "res/color/m3_fab_ripple_color_selector.xml",
+        "bytes": 808,
+        "crc32": 2596893119
+      },
+      {
+        "path": "res/color/m3_filled_icon_button_container_color_selector.xml",
+        "bytes": 668,
+        "crc32": 619525702
+      },
+      {
+        "path": "res/color/m3_floating_toolbar_vibrant_icon_button_container_color_selector.xml",
+        "bytes": 668,
+        "crc32": 3146048473
+      },
+      {
+        "path": "res/color/m3_floating_toolbar_vibrant_icon_button_text_color_selector.xml",
+        "bytes": 668,
+        "crc32": 591789227
+      },
+      {
+        "path": "res/color/m3_highlighted_text.xml",
+        "bytes": 376,
+        "crc32": 1721637353
+      },
+      {
+        "path": "res/color/m3_hint_foreground.xml",
+        "bytes": 564,
+        "crc32": 1829941307
+      },
+      {
+        "path": "res/color/m3_icon_button_icon_color_selector.xml",
+        "bytes": 668,
+        "crc32": 2137093615
+      },
+      {
+        "path": "res/color/m3_navigation_bar_item_with_indicator_icon_tint.xml",
+        "bytes": 1196,
+        "crc32": 2498435960
+      },
+      {
+        "path": "res/color/m3_navigation_bar_item_with_indicator_label_tint.xml",
+        "bytes": 1196,
+        "crc32": 2100511161
+      },
+      {
+        "path": "res/color/m3_navigation_bar_ripple_color_selector.xml",
+        "bytes": 1232,
+        "crc32": 1343835339
+      },
+      {
+        "path": "res/color/m3_navigation_item_background_color.xml",
+        "bytes": 588,
+        "crc32": 123753448
+      },
+      {
+        "path": "res/color/m3_navigation_item_icon_tint.xml",
+        "bytes": 1356,
+        "crc32": 69853639
+      },
+      {
+        "path": "res/color/m3_navigation_item_ripple_color.xml",
+        "bytes": 1372,
+        "crc32": 2954964830
+      },
+      {
+        "path": "res/color/m3_navigation_item_text_color.xml",
+        "bytes": 1356,
+        "crc32": 2930174086
+      },
+      {
+        "path": "res/color/m3_navigation_rail_item_with_indicator_icon_tint.xml",
+        "bytes": 464,
+        "crc32": 3743009033
+      },
+      {
+        "path": "res/color/m3_navigation_rail_item_with_indicator_label_tint.xml",
+        "bytes": 464,
+        "crc32": 1574784125
+      },
+      {
+        "path": "res/color/m3_navigation_rail_ripple_color_selector.xml",
+        "bytes": 1232,
+        "crc32": 1389032428
+      },
+      {
+        "path": "res/color/m3_popupmenu_overlay_color.xml",
+        "bytes": 376,
+        "crc32": 791272632
+      },
+      {
+        "path": "res/color/m3_primary_text_disable_only.xml",
+        "bytes": 500,
+        "crc32": 1080065412
+      },
+      {
+        "path": "res/color/m3_radiobutton_button_tint.xml",
+        "bytes": 1576,
+        "crc32": 242262047
+      },
+      {
+        "path": "res/color/m3_radiobutton_ripple_tint.xml",
+        "bytes": 1372,
+        "crc32": 485803629
+      },
+      {
+        "path": "res/color/m3_selection_control_ripple_color_selector.xml",
+        "bytes": 1372,
+        "crc32": 1110647431
+      },
+      {
+        "path": "res/color/m3_simple_item_ripple_color.xml",
+        "bytes": 748,
+        "crc32": 3576905558
+      },
+      {
+        "path": "res/color/m3_slider_active_tick_marks_color.xml",
+        "bytes": 500,
+        "crc32": 1668620466
+      },
+      {
+        "path": "res/color/m3_slider_active_track_color.xml",
+        "bytes": 500,
+        "crc32": 3294270790
+      },
+      {
+        "path": "res/color/m3_slider_active_track_color_legacy.xml",
+        "bytes": 500,
+        "crc32": 922733321
+      },
+      {
+        "path": "res/color/m3_slider_halo_color_legacy.xml",
+        "bytes": 500,
+        "crc32": 1549956677
+      },
+      {
+        "path": "res/color/m3_slider_inactive_tick_marks_color.xml",
+        "bytes": 500,
+        "crc32": 819287578
+      },
+      {
+        "path": "res/color/m3_slider_inactive_track_color.xml",
+        "bytes": 500,
+        "crc32": 1582225361
+      },
+      {
+        "path": "res/color/m3_slider_inactive_track_color_legacy.xml",
+        "bytes": 500,
+        "crc32": 2670242922
+      },
+      {
+        "path": "res/color/m3_slider_thumb_color.xml",
+        "bytes": 500,
+        "crc32": 2640149782
+      },
+      {
+        "path": "res/color/m3_slider_thumb_color_legacy.xml",
+        "bytes": 500,
+        "crc32": 572569242
+      },
+      {
+        "path": "res/color/m3_standard_toolbar_button_text_color_selector.xml",
+        "bytes": 1460,
+        "crc32": 2966574008
+      },
+      {
+        "path": "res/color/m3_standard_toolbar_icon_button_container_color_selector.xml",
+        "bytes": 632,
+        "crc32": 1276472779
+      },
+      {
+        "path": "res/color/m3_standard_toolbar_icon_button_icon_color_selector.xml",
+        "bytes": 1460,
+        "crc32": 3519916360
+      },
+      {
+        "path": "res/color/m3_standard_toolbar_icon_button_ripple_color_selector.xml",
+        "bytes": 1336,
+        "crc32": 2832580134
+      },
+      {
+        "path": "res/color/m3_switch_thumb_tint.xml",
+        "bytes": 588,
+        "crc32": 2944068252
+      },
+      {
+        "path": "res/color/m3_switch_track_tint.xml",
+        "bytes": 624,
+        "crc32": 2960730315
+      },
+      {
+        "path": "res/color/m3_tabs_icon_color.xml",
+        "bytes": 624,
+        "crc32": 2739787648
+      },
+      {
+        "path": "res/color/m3_tabs_icon_color_secondary.xml",
+        "bytes": 624,
+        "crc32": 1191726567
+      },
+      {
+        "path": "res/color/m3_tabs_ripple_color.xml",
+        "bytes": 1372,
+        "crc32": 1026256383
+      },
+      {
+        "path": "res/color/m3_tabs_ripple_color_secondary.xml",
+        "bytes": 1372,
+        "crc32": 1325961737
+      },
+      {
+        "path": "res/color/m3_tabs_text_color.xml",
+        "bytes": 624,
+        "crc32": 2739787648
+      },
+      {
+        "path": "res/color/m3_tabs_text_color_secondary.xml",
+        "bytes": 624,
+        "crc32": 1191726567
+      },
+      {
+        "path": "res/color/m3_text_button_background_color_selector.xml",
+        "bytes": 508,
+        "crc32": 3330835862
+      },
+      {
+        "path": "res/color/m3_text_button_foreground_color_selector.xml",
+        "bytes": 748,
+        "crc32": 3474815097
+      },
+      {
+        "path": "res/color/m3_text_button_ripple_color_selector.xml",
+        "bytes": 1936,
+        "crc32": 910940356
+      },
+      {
+        "path": "res/color/m3_textfield_filled_background_color.xml",
+        "bytes": 500,
+        "crc32": 1776397514
+      },
+      {
+        "path": "res/color/m3_textfield_indicator_text_color.xml",
+        "bytes": 872,
+        "crc32": 1345981865
+      },
+      {
+        "path": "res/color/m3_textfield_input_text_color.xml",
+        "bytes": 748,
+        "crc32": 3485674918
+      },
+      {
+        "path": "res/color/m3_textfield_label_color.xml",
+        "bytes": 624,
+        "crc32": 2090622323
+      },
+      {
+        "path": "res/color/m3_textfield_stroke_color.xml",
+        "bytes": 748,
+        "crc32": 2309244429
+      },
+      {
+        "path": "res/color/m3_timepicker_button_background_color.xml",
+        "bytes": 528,
+        "crc32": 577760875
+      },
+      {
+        "path": "res/color/m3_timepicker_button_ripple_color.xml",
+        "bytes": 1536,
+        "crc32": 3578200372
+      },
+      {
+        "path": "res/color/m3_timepicker_button_text_color.xml",
+        "bytes": 768,
+        "crc32": 1118003536
+      },
+      {
+        "path": "res/color/m3_timepicker_clock_text_color.xml",
+        "bytes": 464,
+        "crc32": 337855101
+      },
+      {
+        "path": "res/color/m3_timepicker_display_background_color.xml",
+        "bytes": 464,
+        "crc32": 775089771
+      },
+      {
+        "path": "res/color/m3_timepicker_display_ripple_color.xml",
+        "bytes": 1372,
+        "crc32": 1644666896
+      },
+      {
+        "path": "res/color/m3_timepicker_display_text_color.xml",
+        "bytes": 624,
+        "crc32": 2529498230
+      },
+      {
+        "path": "res/color/m3_timepicker_secondary_text_button_ripple_color.xml",
+        "bytes": 808,
+        "crc32": 4030094904
+      },
+      {
+        "path": "res/color/m3_timepicker_secondary_text_button_text_color.xml",
+        "bytes": 500,
+        "crc32": 3690684112
+      },
+      {
+        "path": "res/color/m3_timepicker_time_input_stroke_color.xml",
+        "bytes": 464,
+        "crc32": 4212553131
+      },
+      {
+        "path": "res/color/m3_tonal_button_ripple_color_selector.xml",
+        "bytes": 808,
+        "crc32": 1367651439
+      },
+      {
+        "path": "res/color/m3_vibrant_toolbar_button_text_color_selector.xml",
+        "bytes": 1460,
+        "crc32": 1530247852
+      },
+      {
+        "path": "res/color/m3_vibrant_toolbar_icon_button_container_color_selector.xml",
+        "bytes": 632,
+        "crc32": 1091090480
+      },
+      {
+        "path": "res/color/m3_vibrant_toolbar_icon_button_icon_color_selector.xml",
+        "bytes": 1460,
+        "crc32": 3120503068
+      },
+      {
+        "path": "res/color/m3_vibrant_toolbar_icon_button_ripple_color_selector.xml",
+        "bytes": 1336,
+        "crc32": 1506188376
+      },
+      {
+        "path": "res/color/m3expressive_bottom_nav_item_icon_tint.xml",
+        "bytes": 464,
+        "crc32": 3913945536
+      },
+      {
+        "path": "res/color/m3expressive_bottom_nav_item_label_tint.xml",
+        "bytes": 464,
+        "crc32": 1120087615
+      },
+      {
+        "path": "res/color/m3expressive_bottom_nav_item_ripple_tint.xml",
+        "bytes": 1232,
+        "crc32": 3410207495
+      },
+      {
+        "path": "res/color/m3expressive_button_outline_color_selector.xml",
+        "bytes": 464,
+        "crc32": 4282105274
+      },
+      {
+        "path": "res/color/m3expressive_button_outlined_background_color_selector.xml",
+        "bytes": 768,
+        "crc32": 2257765092
+      },
+      {
+        "path": "res/color/m3expressive_nav_rail_item_icon_tint.xml",
+        "bytes": 464,
+        "crc32": 3913945536
+      },
+      {
+        "path": "res/color/m3expressive_nav_rail_item_label_tint.xml",
+        "bytes": 464,
+        "crc32": 1120087615
+      },
+      {
+        "path": "res/color/m3expressive_nav_rail_item_ripple_tint.xml",
+        "bytes": 1232,
+        "crc32": 3410207495
+      },
+      {
+        "path": "res/color/material_cursor_color.xml",
+        "bytes": 340,
+        "crc32": 1536521346
+      },
+      {
+        "path": "res/color/material_divider_color.xml",
+        "bytes": 376,
+        "crc32": 2140519331
+      },
+      {
+        "path": "res/color/material_on_background_disabled.xml",
+        "bytes": 376,
+        "crc32": 1391045697
+      },
+      {
+        "path": "res/color/material_on_background_emphasis_high_type.xml",
+        "bytes": 376,
+        "crc32": 1756863025
+      },
+      {
+        "path": "res/color/material_on_background_emphasis_medium.xml",
+        "bytes": 376,
+        "crc32": 553733938
+      },
+      {
+        "path": "res/color/material_on_primary_disabled.xml",
+        "bytes": 376,
+        "crc32": 4251814414
+      },
+      {
+        "path": "res/color/material_on_primary_emphasis_high_type.xml",
+        "bytes": 376,
+        "crc32": 3342056574
+      },
+      {
+        "path": "res/color/material_on_primary_emphasis_medium.xml",
+        "bytes": 376,
+        "crc32": 2391107965
+      },
+      {
+        "path": "res/color/material_on_surface_disabled.xml",
+        "bytes": 376,
+        "crc32": 284017449
+      },
+      {
+        "path": "res/color/material_on_surface_emphasis_high_type.xml",
+        "bytes": 376,
+        "crc32": 716436825
+      },
+      {
+        "path": "res/color/material_on_surface_emphasis_medium.xml",
+        "bytes": 376,
+        "crc32": 1661280346
+      },
+      {
+        "path": "res/color/material_on_surface_stroke.xml",
+        "bytes": 376,
+        "crc32": 881849157
+      },
+      {
+        "path": "res/color/material_personalized__highlighted_text.xml",
+        "bytes": 376,
+        "crc32": 638349718
+      },
+      {
+        "path": "res/color/material_personalized__highlighted_text_inverse.xml",
+        "bytes": 376,
+        "crc32": 1131441235
+      },
+      {
+        "path": "res/color/material_personalized_color_primary_text.xml",
+        "bytes": 500,
+        "crc32": 3399412059
+      },
+      {
+        "path": "res/color/material_personalized_color_primary_text_inverse.xml",
+        "bytes": 500,
+        "crc32": 190649002
+      },
+      {
+        "path": "res/color/material_personalized_color_secondary_text.xml",
+        "bytes": 500,
+        "crc32": 4181748458
+      },
+      {
+        "path": "res/color/material_personalized_color_secondary_text_inverse.xml",
+        "bytes": 500,
+        "crc32": 1899286468
+      },
+      {
+        "path": "res/color/material_personalized_hint_foreground.xml",
+        "bytes": 564,
+        "crc32": 3299413055
+      },
+      {
+        "path": "res/color/material_personalized_hint_foreground_inverse.xml",
+        "bytes": 564,
+        "crc32": 335953564
+      },
+      {
+        "path": "res/color/material_personalized_primary_inverse_text_disable_only.xml",
+        "bytes": 500,
+        "crc32": 670870768
+      },
+      {
+        "path": "res/color/material_personalized_primary_text_disable_only.xml",
+        "bytes": 500,
+        "crc32": 1711754965
+      },
+      {
+        "path": "res/color/material_slider_active_tick_marks_color.xml",
+        "bytes": 520,
+        "crc32": 4040405635
+      },
+      {
+        "path": "res/color/material_slider_active_track_color.xml",
+        "bytes": 500,
+        "crc32": 1518868782
+      },
+      {
+        "path": "res/color/material_slider_halo_color.xml",
+        "bytes": 500,
+        "crc32": 2638044681
+      },
+      {
+        "path": "res/color/material_slider_inactive_tick_marks_color.xml",
+        "bytes": 520,
+        "crc32": 1470406120
+      },
+      {
+        "path": "res/color/material_slider_inactive_track_color.xml",
+        "bytes": 520,
+        "crc32": 2584322224
+      },
+      {
+        "path": "res/color/material_slider_thumb_color.xml",
+        "bytes": 500,
+        "crc32": 1395725096
+      },
+      {
+        "path": "res/color/material_timepicker_button_background.xml",
+        "bytes": 500,
+        "crc32": 1077386220
+      },
+      {
+        "path": "res/color/material_timepicker_button_stroke.xml",
+        "bytes": 376,
+        "crc32": 2879059748
+      },
+      {
+        "path": "res/color/material_timepicker_clock_text_color.xml",
+        "bytes": 464,
+        "crc32": 237767148
+      },
+      {
+        "path": "res/color/material_timepicker_clockface.xml",
+        "bytes": 376,
+        "crc32": 2161249670
+      },
+      {
+        "path": "res/color/material_timepicker_modebutton_tint.xml",
+        "bytes": 376,
+        "crc32": 922712546
+      },
+      {
+        "path": "res/color/mtrl_btn_bg_color_selector.xml",
+        "bytes": 500,
+        "crc32": 4013753062
+      },
+      {
+        "path": "res/color/mtrl_btn_ripple_color.xml",
+        "bytes": 948,
+        "crc32": 2962837934
+      },
+      {
+        "path": "res/color/mtrl_btn_stroke_color_selector.xml",
+        "bytes": 520,
+        "crc32": 3647485460
+      },
+      {
+        "path": "res/color/mtrl_btn_text_btn_bg_color_selector.xml",
+        "bytes": 520,
+        "crc32": 2576080771
+      },
+      {
+        "path": "res/color/mtrl_btn_text_btn_ripple_color.xml",
+        "bytes": 948,
+        "crc32": 1644118556
+      },
+      {
+        "path": "res/color/mtrl_btn_text_color_selector.xml",
+        "bytes": 500,
+        "crc32": 1912477411
+      },
+      {
+        "path": "res/color/mtrl_calendar_item_stroke_color.xml",
+        "bytes": 808,
+        "crc32": 863827429
+      },
+      {
+        "path": "res/color/mtrl_calendar_selected_range.xml",
+        "bytes": 376,
+        "crc32": 2456053387
+      },
+      {
+        "path": "res/color/mtrl_card_view_foreground.xml",
+        "bytes": 788,
+        "crc32": 4018219949
+      },
+      {
+        "path": "res/color/mtrl_card_view_ripple.xml",
+        "bytes": 768,
+        "crc32": 1556751823
+      },
+      {
+        "path": "res/color/mtrl_chip_background_color.xml",
+        "bytes": 848,
+        "crc32": 2856974392
+      },
+      {
+        "path": "res/color/mtrl_chip_close_icon_tint.xml",
+        "bytes": 1092,
+        "crc32": 2945021810
+      },
+      {
+        "path": "res/color/mtrl_chip_surface_color.xml",
+        "bytes": 340,
+        "crc32": 151660796
+      },
+      {
+        "path": "res/color/mtrl_chip_text_color.xml",
+        "bytes": 520,
+        "crc32": 1762994369
+      },
+      {
+        "path": "res/color/mtrl_choice_chip_background_color.xml",
+        "bytes": 848,
+        "crc32": 3300917027
+      },
+      {
+        "path": "res/color/mtrl_choice_chip_ripple_color.xml",
+        "bytes": 948,
+        "crc32": 30035179
+      },
+      {
+        "path": "res/color/mtrl_choice_chip_text_color.xml",
+        "bytes": 808,
+        "crc32": 3743636952
+      },
+      {
+        "path": "res/color/mtrl_error.xml",
+        "bytes": 464,
+        "crc32": 2654891796
+      },
+      {
+        "path": "res/color/mtrl_fab_bg_color_selector.xml",
+        "bytes": 500,
+        "crc32": 3160365610
+      },
+      {
+        "path": "res/color/mtrl_fab_icon_text_color_selector.xml",
+        "bytes": 500,
+        "crc32": 2205177912
+      },
+      {
+        "path": "res/color/mtrl_fab_ripple_color.xml",
+        "bytes": 948,
+        "crc32": 2327010235
+      },
+      {
+        "path": "res/color/mtrl_filled_background_color.xml",
+        "bytes": 808,
+        "crc32": 47554038
+      },
+      {
+        "path": "res/color/mtrl_filled_icon_tint.xml",
+        "bytes": 644,
+        "crc32": 1758663056
+      },
+      {
+        "path": "res/color/mtrl_filled_stroke_color.xml",
+        "bytes": 788,
+        "crc32": 4206541893
+      },
+      {
+        "path": "res/color/mtrl_indicator_text_color.xml",
+        "bytes": 520,
+        "crc32": 2628327748
+      },
+      {
+        "path": "res/color/mtrl_navigation_bar_colored_item_tint.xml",
+        "bytes": 520,
+        "crc32": 1139446342
+      },
+      {
+        "path": "res/color/mtrl_navigation_bar_colored_ripple_color.xml",
+        "bytes": 948,
+        "crc32": 2393909833
+      },
+      {
+        "path": "res/color/mtrl_navigation_bar_item_tint.xml",
+        "bytes": 520,
+        "crc32": 3835542829
+      },
+      {
+        "path": "res/color/mtrl_navigation_bar_ripple_color.xml",
+        "bytes": 1672,
+        "crc32": 819071966
+      },
+      {
+        "path": "res/color/mtrl_navigation_item_background_color.xml",
+        "bytes": 644,
+        "crc32": 3607586246
+      },
+      {
+        "path": "res/color/mtrl_navigation_item_icon_tint.xml",
+        "bytes": 624,
+        "crc32": 3597470849
+      },
+      {
+        "path": "res/color/mtrl_navigation_item_text_color.xml",
+        "bytes": 624,
+        "crc32": 3597470849
+      },
+      {
+        "path": "res/color/mtrl_on_primary_text_btn_text_color_selector.xml",
+        "bytes": 500,
+        "crc32": 2995890104
+      },
+      {
+        "path": "res/color/mtrl_on_surface_ripple_color.xml",
+        "bytes": 808,
+        "crc32": 762032396
+      },
+      {
+        "path": "res/color/mtrl_outlined_icon_tint.xml",
+        "bytes": 644,
+        "crc32": 1314770299
+      },
+      {
+        "path": "res/color/mtrl_outlined_stroke_color.xml",
+        "bytes": 788,
+        "crc32": 1453455182
+      },
+      {
+        "path": "res/color/mtrl_popupmenu_overlay_color.xml",
+        "bytes": 376,
+        "crc32": 4107251536
+      },
+      {
+        "path": "res/color/mtrl_switch_thumb_icon_tint.xml",
+        "bytes": 1236,
+        "crc32": 2338582636
+      },
+      {
+        "path": "res/color/mtrl_switch_thumb_tint.xml",
+        "bytes": 1028,
+        "crc32": 828096829
+      },
+      {
+        "path": "res/color/mtrl_switch_track_decoration_tint.xml",
+        "bytes": 624,
+        "crc32": 781660654
+      },
+      {
+        "path": "res/color/mtrl_switch_track_tint.xml",
+        "bytes": 1236,
+        "crc32": 3024104050
+      },
+      {
+        "path": "res/color/mtrl_tabs_colored_ripple_color.xml",
+        "bytes": 948,
+        "crc32": 2393909833
+      },
+      {
+        "path": "res/color/mtrl_tabs_icon_color_selector.xml",
+        "bytes": 500,
+        "crc32": 2383004568
+      },
+      {
+        "path": "res/color/mtrl_tabs_icon_color_selector_colored.xml",
+        "bytes": 500,
+        "crc32": 1095143284
+      },
+      {
+        "path": "res/color/mtrl_tabs_legacy_text_color_selector.xml",
+        "bytes": 464,
+        "crc32": 301181175
+      },
+      {
+        "path": "res/color/mtrl_tabs_ripple_color.xml",
+        "bytes": 1672,
+        "crc32": 819071966
+      },
+      {
+        "path": "res/color/mtrl_text_btn_text_color_selector.xml",
+        "bytes": 888,
+        "crc32": 1601825398
+      },
+      {
+        "path": "res/color/switch_thumb_material_dark.xml",
+        "bytes": 464,
+        "crc32": 2147597019
+      },
+      {
+        "path": "res/color/switch_thumb_material_light.xml",
+        "bytes": 464,
+        "crc32": 320783777
+      },
+      {
+        "path": "res/drawable-anydpi-v21/ic_call_answer.xml",
+        "bytes": 1356,
+        "crc32": 3877115436
+      },
+      {
+        "path": "res/drawable-anydpi-v21/ic_call_answer_low.xml",
+        "bytes": 1320,
+        "crc32": 2216379136
+      },
+      {
+        "path": "res/drawable-anydpi-v21/ic_call_answer_video.xml",
+        "bytes": 772,
+        "crc32": 1837259622
+      },
+      {
+        "path": "res/drawable-anydpi-v21/ic_call_answer_video_low.xml",
+        "bytes": 736,
+        "crc32": 1149510206
+      },
+      {
+        "path": "res/drawable-anydpi-v21/ic_call_decline.xml",
+        "bytes": 1528,
+        "crc32": 2392760916
+      },
+      {
+        "path": "res/drawable-anydpi-v21/ic_call_decline_low.xml",
+        "bytes": 1492,
+        "crc32": 3701032626
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png",
+        "bytes": 272,
+        "crc32": 3772779402
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_btn_check_to_on_mtrl_000.png",
+        "bytes": 227,
+        "crc32": 1441099833
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_btn_check_to_on_mtrl_015.png",
+        "bytes": 404,
+        "crc32": 321481106
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_btn_radio_to_on_mtrl_000.png",
+        "bytes": 464,
+        "crc32": 3529884127
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_btn_radio_to_on_mtrl_015.png",
+        "bytes": 563,
+        "crc32": 2601789887
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
+        "bytes": 1096,
+        "crc32": 1160393035
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "bytes": 1243,
+        "crc32": 3998844923
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_cab_background_top_mtrl_alpha.9.png",
+        "bytes": 226,
+        "crc32": 2300076096
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_ic_commit_search_api_mtrl_alpha.png",
+        "bytes": 171,
+        "crc32": 3460175463
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_list_divider_mtrl_alpha.9.png",
+        "bytes": 167,
+        "crc32": 895755044
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_list_focused_holo.9.png",
+        "bytes": 244,
+        "crc32": 2387452425
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_list_longpressed_holo.9.png",
+        "bytes": 212,
+        "crc32": 2175872990
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_list_pressed_holo_dark.9.png",
+        "bytes": 208,
+        "crc32": 2446542945
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_list_pressed_holo_light.9.png",
+        "bytes": 208,
+        "crc32": 3760170106
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_list_selector_disabled_holo_dark.9.png",
+        "bytes": 228,
+        "crc32": 3800832344
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_list_selector_disabled_holo_light.9.png",
+        "bytes": 229,
+        "crc32": 3515550235
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png",
+        "bytes": 738,
+        "crc32": 844900423
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_popup_background_mtrl_mult.9.png",
+        "bytes": 1098,
+        "crc32": 1031932723
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_scrubber_control_off_mtrl_alpha.png",
+        "bytes": 201,
+        "crc32": 2261669305
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png",
+        "bytes": 196,
+        "crc32": 555162946
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png",
+        "bytes": 272,
+        "crc32": 1476959993
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_scrubber_primary_mtrl_alpha.9.png",
+        "bytes": 205,
+        "crc32": 2890324705
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_scrubber_track_mtrl_alpha.9.png",
+        "bytes": 196,
+        "crc32": 59030235
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_spinner_mtrl_am_alpha.9.png",
+        "bytes": 345,
+        "crc32": 2381112638
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_switch_track_mtrl_alpha.9.png",
+        "bytes": 484,
+        "crc32": 4104789679
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_tab_indicator_mtrl_alpha.9.png",
+        "bytes": 190,
+        "crc32": 1541371996
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_text_select_handle_left_mtrl.png",
+        "bytes": 278,
+        "crc32": 2698233155
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_text_select_handle_middle_mtrl.png",
+        "bytes": 396,
+        "crc32": 3189883063
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_text_select_handle_right_mtrl.png",
+        "bytes": 262,
+        "crc32": 3743792235
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_textfield_activated_mtrl_alpha.9.png",
+        "bytes": 186,
+        "crc32": 1954287679
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_textfield_default_mtrl_alpha.9.png",
+        "bytes": 192,
+        "crc32": 695154500
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_textfield_search_activated_mtrl_alpha.9.png",
+        "bytes": 178,
+        "crc32": 3137624786
+      },
+      {
+        "path": "res/drawable-hdpi-v4/abc_textfield_search_default_mtrl_alpha.9.png",
+        "bytes": 178,
+        "crc32": 2866005597
+      },
+      {
+        "path": "res/drawable-hdpi-v4/common_full_open_on_phone.png",
+        "bytes": 681,
+        "crc32": 988198958
+      },
+      {
+        "path": "res/drawable-hdpi-v4/common_google_signin_btn_icon_dark_normal_background.9.png",
+        "bytes": 897,
+        "crc32": 2238276728
+      },
+      {
+        "path": "res/drawable-hdpi-v4/common_google_signin_btn_icon_light_normal_background.9.png",
+        "bytes": 683,
+        "crc32": 1492856915
+      },
+      {
+        "path": "res/drawable-hdpi-v4/common_google_signin_btn_text_dark_normal_background.9.png",
+        "bytes": 960,
+        "crc32": 3644452365
+      },
+      {
+        "path": "res/drawable-hdpi-v4/common_google_signin_btn_text_light_normal_background.9.png",
+        "bytes": 694,
+        "crc32": 2589311544
+      },
+      {
+        "path": "res/drawable-hdpi-v4/googleg_disabled_color_18.png",
+        "bytes": 410,
+        "crc32": 213222193
+      },
+      {
+        "path": "res/drawable-hdpi-v4/googleg_standard_color_18.png",
+        "bytes": 808,
+        "crc32": 2103637412
+      },
+      {
+        "path": "res/drawable-hdpi-v4/ic_call_answer.png",
+        "bytes": 472,
+        "crc32": 54480522
+      },
+      {
+        "path": "res/drawable-hdpi-v4/ic_call_answer_low.png",
+        "bytes": 472,
+        "crc32": 54480522
+      },
+      {
+        "path": "res/drawable-hdpi-v4/ic_call_answer_video.png",
+        "bytes": 254,
+        "crc32": 2883782038
+      },
+      {
+        "path": "res/drawable-hdpi-v4/ic_call_answer_video_low.png",
+        "bytes": 254,
+        "crc32": 2883782038
+      },
+      {
+        "path": "res/drawable-hdpi-v4/ic_call_decline.png",
+        "bytes": 375,
+        "crc32": 2813752212
+      },
+      {
+        "path": "res/drawable-hdpi-v4/ic_call_decline_low.png",
+        "bytes": 375,
+        "crc32": 2813752212
+      },
+      {
+        "path": "res/drawable-hdpi-v4/notification_bg_low_normal.9.png",
+        "bytes": 212,
+        "crc32": 931926398
+      },
+      {
+        "path": "res/drawable-hdpi-v4/notification_bg_low_pressed.9.png",
+        "bytes": 225,
+        "crc32": 1348069157
+      },
+      {
+        "path": "res/drawable-hdpi-v4/notification_bg_normal.9.png",
+        "bytes": 212,
+        "crc32": 3257712287
+      },
+      {
+        "path": "res/drawable-hdpi-v4/notification_bg_normal_pressed.9.png",
+        "bytes": 225,
+        "crc32": 2715192528
+      },
+      {
+        "path": "res/drawable-hdpi-v4/notification_oversize_large_icon_bg.png",
+        "bytes": 909,
+        "crc32": 3411348247
+      },
+      {
+        "path": "res/drawable-hdpi-v4/notify_panel_notification_icon_bg.png",
+        "bytes": 107,
+        "crc32": 1859699185
+      },
+      {
+        "path": "res/drawable-ldpi-v4/ic_call_answer.png",
+        "bytes": 270,
+        "crc32": 3183415812
+      },
+      {
+        "path": "res/drawable-ldpi-v4/ic_call_answer_low.png",
+        "bytes": 270,
+        "crc32": 3183415812
+      },
+      {
+        "path": "res/drawable-ldpi-v4/ic_call_answer_video.png",
+        "bytes": 199,
+        "crc32": 480365690
+      },
+      {
+        "path": "res/drawable-ldpi-v4/ic_call_answer_video_low.png",
+        "bytes": 199,
+        "crc32": 480365690
+      },
+      {
+        "path": "res/drawable-ldpi-v4/ic_call_decline.png",
+        "bytes": 201,
+        "crc32": 2641708250
+      },
+      {
+        "path": "res/drawable-ldpi-v4/ic_call_decline_low.png",
+        "bytes": 201,
+        "crc32": 2641708250
+      },
+      {
+        "path": "res/drawable-ldrtl-hdpi-v17/abc_spinner_mtrl_am_alpha.9.png",
+        "bytes": 345,
+        "crc32": 3173566568
+      },
+      {
+        "path": "res/drawable-ldrtl-mdpi-v17/abc_spinner_mtrl_am_alpha.9.png",
+        "bytes": 318,
+        "crc32": 248812699
+      },
+      {
+        "path": "res/drawable-ldrtl-xhdpi-v17/abc_spinner_mtrl_am_alpha.9.png",
+        "bytes": 417,
+        "crc32": 1015364852
+      },
+      {
+        "path": "res/drawable-ldrtl-xxhdpi-v17/abc_spinner_mtrl_am_alpha.9.png",
+        "bytes": 525,
+        "crc32": 3370132065
+      },
+      {
+        "path": "res/drawable-ldrtl-xxxhdpi-v17/abc_spinner_mtrl_am_alpha.9.png",
+        "bytes": 437,
+        "crc32": 997246448
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png",
+        "bytes": 267,
+        "crc32": 2512112895
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_btn_check_to_on_mtrl_000.png",
+        "bytes": 214,
+        "crc32": 1784469944
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_btn_check_to_on_mtrl_015.png",
+        "bytes": 321,
+        "crc32": 417858442
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_btn_radio_to_on_mtrl_000.png",
+        "bytes": 324,
+        "crc32": 4269054707
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_btn_radio_to_on_mtrl_015.png",
+        "bytes": 356,
+        "crc32": 483927252
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
+        "bytes": 754,
+        "crc32": 2251795253
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "bytes": 825,
+        "crc32": 746268540
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_cab_background_top_mtrl_alpha.9.png",
+        "bytes": 216,
+        "crc32": 1331007226
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_ic_commit_search_api_mtrl_alpha.png",
+        "bytes": 173,
+        "crc32": 188325625
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_list_divider_mtrl_alpha.9.png",
+        "bytes": 167,
+        "crc32": 895755044
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_list_focused_holo.9.png",
+        "bytes": 222,
+        "crc32": 2980814083
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_list_longpressed_holo.9.png",
+        "bytes": 211,
+        "crc32": 2026076309
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_list_pressed_holo_dark.9.png",
+        "bytes": 207,
+        "crc32": 247870200
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_list_pressed_holo_light.9.png",
+        "bytes": 207,
+        "crc32": 1914292392
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_list_selector_disabled_holo_dark.9.png",
+        "bytes": 217,
+        "crc32": 3133734934
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_list_selector_disabled_holo_light.9.png",
+        "bytes": 217,
+        "crc32": 3973609307
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png",
+        "bytes": 541,
+        "crc32": 3321814959
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_popup_background_mtrl_mult.9.png",
+        "bytes": 776,
+        "crc32": 3500926200
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_scrubber_control_off_mtrl_alpha.png",
+        "bytes": 159,
+        "crc32": 1388505315
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png",
+        "bytes": 145,
+        "crc32": 771315572
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png",
+        "bytes": 197,
+        "crc32": 2807669343
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_scrubber_primary_mtrl_alpha.9.png",
+        "bytes": 203,
+        "crc32": 3639754282
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_scrubber_track_mtrl_alpha.9.png",
+        "bytes": 194,
+        "crc32": 2184050449
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_spinner_mtrl_am_alpha.9.png",
+        "bytes": 327,
+        "crc32": 2691882830
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_switch_track_mtrl_alpha.9.png",
+        "bytes": 395,
+        "crc32": 2536390643
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_tab_indicator_mtrl_alpha.9.png",
+        "bytes": 186,
+        "crc32": 2826766600
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_text_select_handle_left_mtrl.png",
+        "bytes": 203,
+        "crc32": 558759102
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_text_select_handle_middle_mtrl.png",
+        "bytes": 310,
+        "crc32": 1086079552
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_text_select_handle_right_mtrl.png",
+        "bytes": 186,
+        "crc32": 1494279640
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_textfield_activated_mtrl_alpha.9.png",
+        "bytes": 181,
+        "crc32": 2009755725
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_textfield_default_mtrl_alpha.9.png",
+        "bytes": 178,
+        "crc32": 3312395994
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_textfield_search_activated_mtrl_alpha.9.png",
+        "bytes": 178,
+        "crc32": 1754865820
+      },
+      {
+        "path": "res/drawable-mdpi-v4/abc_textfield_search_default_mtrl_alpha.9.png",
+        "bytes": 178,
+        "crc32": 2945574860
+      },
+      {
+        "path": "res/drawable-mdpi-v4/common_google_signin_btn_icon_dark_normal_background.9.png",
+        "bytes": 610,
+        "crc32": 2288616960
+      },
+      {
+        "path": "res/drawable-mdpi-v4/common_google_signin_btn_icon_light_normal_background.9.png",
+        "bytes": 500,
+        "crc32": 3337974316
+      },
+      {
+        "path": "res/drawable-mdpi-v4/common_google_signin_btn_text_dark_normal_background.9.png",
+        "bytes": 615,
+        "crc32": 1100604633
+      },
+      {
+        "path": "res/drawable-mdpi-v4/common_google_signin_btn_text_light_normal_background.9.png",
+        "bytes": 465,
+        "crc32": 3713891439
+      },
+      {
+        "path": "res/drawable-mdpi-v4/googleg_disabled_color_18.png",
+        "bytes": 281,
+        "crc32": 4200621726
+      },
+      {
+        "path": "res/drawable-mdpi-v4/googleg_standard_color_18.png",
+        "bytes": 562,
+        "crc32": 1980127520
+      },
+      {
+        "path": "res/drawable-mdpi-v4/ic_call_answer.png",
+        "bytes": 317,
+        "crc32": 2722807442
+      },
+      {
+        "path": "res/drawable-mdpi-v4/ic_call_answer_low.png",
+        "bytes": 317,
+        "crc32": 2722807442
+      },
+      {
+        "path": "res/drawable-mdpi-v4/ic_call_answer_video.png",
+        "bytes": 206,
+        "crc32": 3592200609
+      },
+      {
+        "path": "res/drawable-mdpi-v4/ic_call_answer_video_low.png",
+        "bytes": 206,
+        "crc32": 3592200609
+      },
+      {
+        "path": "res/drawable-mdpi-v4/ic_call_decline.png",
+        "bytes": 264,
+        "crc32": 3180674096
+      },
+      {
+        "path": "res/drawable-mdpi-v4/ic_call_decline_low.png",
+        "bytes": 264,
+        "crc32": 3180674096
+      },
+      {
+        "path": "res/drawable-mdpi-v4/notification_bg_low_normal.9.png",
+        "bytes": 215,
+        "crc32": 3657061815
+      },
+      {
+        "path": "res/drawable-mdpi-v4/notification_bg_low_pressed.9.png",
+        "bytes": 223,
+        "crc32": 3087982136
+      },
+      {
+        "path": "res/drawable-mdpi-v4/notification_bg_normal.9.png",
+        "bytes": 215,
+        "crc32": 3241529748
+      },
+      {
+        "path": "res/drawable-mdpi-v4/notification_bg_normal_pressed.9.png",
+        "bytes": 223,
+        "crc32": 3978292842
+      },
+      {
+        "path": "res/drawable-mdpi-v4/notify_panel_notification_icon_bg.png",
+        "bytes": 98,
+        "crc32": 782467851
+      },
+      {
+        "path": "res/drawable-v21/abc_action_bar_item_background_material.xml",
+        "bytes": 264,
+        "crc32": 893712625
+      },
+      {
+        "path": "res/drawable-v21/abc_btn_colored_material.xml",
+        "bytes": 1716,
+        "crc32": 588475328
+      },
+      {
+        "path": "res/drawable-v21/abc_dialog_material_background.xml",
+        "bytes": 716,
+        "crc32": 801073181
+      },
+      {
+        "path": "res/drawable-v21/abc_edit_text_material.xml",
+        "bytes": 1172,
+        "crc32": 3077337422
+      },
+      {
+        "path": "res/drawable-v21/abc_list_divider_material.xml",
+        "bytes": 516,
+        "crc32": 2198710727
+      },
+      {
+        "path": "res/drawable-v21/notification_action_background.xml",
+        "bytes": 1180,
+        "crc32": 82580078
+      },
+      {
+        "path": "res/drawable-v23/abc_control_background_material.xml",
+        "bytes": 304,
+        "crc32": 4045142754
+      },
+      {
+        "path": "res/drawable-v23/m3_radiobutton_ripple.xml",
+        "bytes": 304,
+        "crc32": 2095081250
+      },
+      {
+        "path": "res/drawable-v23/m3_selection_control_ripple.xml",
+        "bytes": 304,
+        "crc32": 1385740835
+      },
+      {
+        "path": "res/drawable-v23/m3_tabs_background.xml",
+        "bytes": 868,
+        "crc32": 474768605
+      },
+      {
+        "path": "res/drawable-v23/m3_tabs_transparent_background.xml",
+        "bytes": 632,
+        "crc32": 1467684752
+      },
+      {
+        "path": "res/drawable-v23/mtrl_popupmenu_background_overlay.xml",
+        "bytes": 1228,
+        "crc32": 3346493670
+      },
+      {
+        "path": "res/drawable-v24/$ic_launcher_foreground__0.xml",
+        "bytes": 788,
+        "crc32": 486164930
+      },
+      {
+        "path": "res/drawable-v24/ic_launcher_foreground.xml",
+        "bytes": 1572,
+        "crc32": 4224526576
+      },
+      {
+        "path": "res/drawable-watch-v20/abc_dialog_material_background.xml",
+        "bytes": 372,
+        "crc32": 3900596090
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png",
+        "bytes": 280,
+        "crc32": 2800204248
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_000.png",
+        "bytes": 281,
+        "crc32": 3939724375
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_btn_check_to_on_mtrl_015.png",
+        "bytes": 432,
+        "crc32": 208515363
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_btn_radio_to_on_mtrl_000.png",
+        "bytes": 651,
+        "crc32": 586767697
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_btn_radio_to_on_mtrl_015.png",
+        "bytes": 785,
+        "crc32": 2989948258
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
+        "bytes": 1526,
+        "crc32": 3811158005
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "bytes": 1731,
+        "crc32": 813343295
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_cab_background_top_mtrl_alpha.9.png",
+        "bytes": 229,
+        "crc32": 1667644415
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_ic_commit_search_api_mtrl_alpha.png",
+        "bytes": 228,
+        "crc32": 2697974740
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_list_divider_mtrl_alpha.9.png",
+        "bytes": 167,
+        "crc32": 895755044
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_list_focused_holo.9.png",
+        "bytes": 244,
+        "crc32": 3185719638
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_list_longpressed_holo.9.png",
+        "bytes": 214,
+        "crc32": 2225572006
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_list_pressed_holo_dark.9.png",
+        "bytes": 209,
+        "crc32": 1422722026
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_list_pressed_holo_light.9.png",
+        "bytes": 209,
+        "crc32": 1178912481
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_list_selector_disabled_holo_dark.9.png",
+        "bytes": 236,
+        "crc32": 1482420428
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_list_selector_disabled_holo_light.9.png",
+        "bytes": 235,
+        "crc32": 809869208
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png",
+        "bytes": 966,
+        "crc32": 2649911443
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_popup_background_mtrl_mult.9.png",
+        "bytes": 1544,
+        "crc32": 1027634507
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_scrubber_control_off_mtrl_alpha.png",
+        "bytes": 267,
+        "crc32": 4059471923
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png",
+        "bytes": 267,
+        "crc32": 1780540927
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png",
+        "bytes": 391,
+        "crc32": 1338981723
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_scrubber_primary_mtrl_alpha.9.png",
+        "bytes": 208,
+        "crc32": 2771497611
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_scrubber_track_mtrl_alpha.9.png",
+        "bytes": 198,
+        "crc32": 417197097
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_spinner_mtrl_am_alpha.9.png",
+        "bytes": 448,
+        "crc32": 3658321470
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_switch_track_mtrl_alpha.9.png",
+        "bytes": 618,
+        "crc32": 3979131439
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png",
+        "bytes": 194,
+        "crc32": 2489264528
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_text_select_handle_left_mtrl.png",
+        "bytes": 335,
+        "crc32": 1833493827
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_text_select_handle_middle_mtrl.png",
+        "bytes": 585,
+        "crc32": 325182543
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_text_select_handle_right_mtrl.png",
+        "bytes": 318,
+        "crc32": 1402001197
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_textfield_activated_mtrl_alpha.9.png",
+        "bytes": 189,
+        "crc32": 872981899
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_textfield_default_mtrl_alpha.9.png",
+        "bytes": 187,
+        "crc32": 1388684995
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_textfield_search_activated_mtrl_alpha.9.png",
+        "bytes": 184,
+        "crc32": 3559073720
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/abc_textfield_search_default_mtrl_alpha.9.png",
+        "bytes": 182,
+        "crc32": 755703140
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/common_full_open_on_phone.png",
+        "bytes": 489,
+        "crc32": 3430853609
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/common_google_signin_btn_icon_dark_normal_background.9.png",
+        "bytes": 1032,
+        "crc32": 4109422305
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/common_google_signin_btn_icon_light_normal_background.9.png",
+        "bytes": 776,
+        "crc32": 3250139977
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/common_google_signin_btn_text_dark_normal_background.9.png",
+        "bytes": 1086,
+        "crc32": 4274790820
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/common_google_signin_btn_text_light_normal_background.9.png",
+        "bytes": 808,
+        "crc32": 3675975048
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/googleg_disabled_color_18.png",
+        "bytes": 516,
+        "crc32": 3992036987
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/googleg_standard_color_18.png",
+        "bytes": 982,
+        "crc32": 3154794586
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/ic_call_answer.png",
+        "bytes": 623,
+        "crc32": 3432186952
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/ic_call_answer_low.png",
+        "bytes": 623,
+        "crc32": 3432186952
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/ic_call_answer_video.png",
+        "bytes": 290,
+        "crc32": 3827667733
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/ic_call_answer_video_low.png",
+        "bytes": 290,
+        "crc32": 3827667733
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/ic_call_decline.png",
+        "bytes": 452,
+        "crc32": 3965349958
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/ic_call_decline_low.png",
+        "bytes": 452,
+        "crc32": 3965349958
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/notification_bg_low_normal.9.png",
+        "bytes": 221,
+        "crc32": 986722933
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/notification_bg_low_pressed.9.png",
+        "bytes": 252,
+        "crc32": 3364883086
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/notification_bg_normal.9.png",
+        "bytes": 221,
+        "crc32": 2571432730
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/notification_bg_normal_pressed.9.png",
+        "bytes": 247,
+        "crc32": 3264922968
+      },
+      {
+        "path": "res/drawable-xhdpi-v4/notify_panel_notification_icon_bg.png",
+        "bytes": 138,
+        "crc32": 72836353
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png",
+        "bytes": 286,
+        "crc32": 576729413
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_btn_check_to_on_mtrl_000.png",
+        "bytes": 307,
+        "crc32": 869620432
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_btn_check_to_on_mtrl_015.png",
+        "bytes": 593,
+        "crc32": 3224174817
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_btn_radio_to_on_mtrl_000.png",
+        "bytes": 984,
+        "crc32": 4146354561
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_btn_radio_to_on_mtrl_015.png",
+        "bytes": 1208,
+        "crc32": 3007401224
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
+        "bytes": 2463,
+        "crc32": 2880238290
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "bytes": 2834,
+        "crc32": 3665934704
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_cab_background_top_mtrl_alpha.9.png",
+        "bytes": 237,
+        "crc32": 2168414641
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_ic_commit_search_api_mtrl_alpha.png",
+        "bytes": 224,
+        "crc32": 1570594586
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_list_divider_mtrl_alpha.9.png",
+        "bytes": 171,
+        "crc32": 431487046
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_list_focused_holo.9.png",
+        "bytes": 245,
+        "crc32": 432053287
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_list_longpressed_holo.9.png",
+        "bytes": 221,
+        "crc32": 594243224
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_list_pressed_holo_dark.9.png",
+        "bytes": 212,
+        "crc32": 1908284469
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_list_pressed_holo_light.9.png",
+        "bytes": 212,
+        "crc32": 1004408383
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_list_selector_disabled_holo_dark.9.png",
+        "bytes": 260,
+        "crc32": 453810333
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_list_selector_disabled_holo_light.9.png",
+        "bytes": 258,
+        "crc32": 3488899570
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png",
+        "bytes": 1779,
+        "crc32": 3916506578
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_popup_background_mtrl_mult.9.png",
+        "bytes": 2305,
+        "crc32": 52525934
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_scrubber_control_off_mtrl_alpha.png",
+        "bytes": 322,
+        "crc32": 1734458370
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png",
+        "bytes": 403,
+        "crc32": 4036591387
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png",
+        "bytes": 595,
+        "crc32": 25460445
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_scrubber_primary_mtrl_alpha.9.png",
+        "bytes": 210,
+        "crc32": 1410922532
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_scrubber_track_mtrl_alpha.9.png",
+        "bytes": 207,
+        "crc32": 979167309
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_spinner_mtrl_am_alpha.9.png",
+        "bytes": 524,
+        "crc32": 3031614610
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_switch_track_mtrl_alpha.9.png",
+        "bytes": 851,
+        "crc32": 2747826869
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png",
+        "bytes": 204,
+        "crc32": 3823791286
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_text_select_handle_left_mtrl.png",
+        "bytes": 420,
+        "crc32": 2871662675
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_text_select_handle_middle_mtrl.png",
+        "bytes": 753,
+        "crc32": 2467554754
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_text_select_handle_right_mtrl.png",
+        "bytes": 422,
+        "crc32": 961476924
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_textfield_activated_mtrl_alpha.9.png",
+        "bytes": 199,
+        "crc32": 814610337
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_textfield_default_mtrl_alpha.9.png",
+        "bytes": 200,
+        "crc32": 807658458
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_textfield_search_activated_mtrl_alpha.9.png",
+        "bytes": 187,
+        "crc32": 1097119443
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/abc_textfield_search_default_mtrl_alpha.9.png",
+        "bytes": 186,
+        "crc32": 4113473045
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/common_google_signin_btn_icon_dark_normal_background.9.png",
+        "bytes": 1510,
+        "crc32": 817334723
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/common_google_signin_btn_icon_light_normal_background.9.png",
+        "bytes": 1138,
+        "crc32": 2935798361
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/common_google_signin_btn_text_dark_normal_background.9.png",
+        "bytes": 1638,
+        "crc32": 2313397113
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/common_google_signin_btn_text_light_normal_background.9.png",
+        "bytes": 1255,
+        "crc32": 1034823145
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/googleg_disabled_color_18.png",
+        "bytes": 727,
+        "crc32": 745918827
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/googleg_standard_color_18.png",
+        "bytes": 1441,
+        "crc32": 3786580475
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/ic_call_answer.png",
+        "bytes": 884,
+        "crc32": 250722604
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/ic_call_answer_low.png",
+        "bytes": 884,
+        "crc32": 250722604
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/ic_call_answer_video.png",
+        "bytes": 384,
+        "crc32": 1929539317
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/ic_call_answer_video_low.png",
+        "bytes": 384,
+        "crc32": 1929539317
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/ic_call_decline.png",
+        "bytes": 628,
+        "crc32": 2135501436
+      },
+      {
+        "path": "res/drawable-xxhdpi-v4/ic_call_decline_low.png",
+        "bytes": 628,
+        "crc32": 2135501436
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_btn_check_to_on_mtrl_000.png",
+        "bytes": 275,
+        "crc32": 2530292092
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_btn_check_to_on_mtrl_015.png",
+        "bytes": 476,
+        "crc32": 3302913083
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_btn_radio_to_on_mtrl_000.png",
+        "bytes": 785,
+        "crc32": 485101068
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_btn_radio_to_on_mtrl_015.png",
+        "bytes": 946,
+        "crc32": 1611553141
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
+        "bytes": 2505,
+        "crc32": 2088096877
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "bytes": 2816,
+        "crc32": 25828836
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png",
+        "bytes": 415,
+        "crc32": 3959787419
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png",
+        "bytes": 631,
+        "crc32": 2208892088
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_spinner_mtrl_am_alpha.9.png",
+        "bytes": 430,
+        "crc32": 3351663510
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_switch_track_mtrl_alpha.9.png",
+        "bytes": 813,
+        "crc32": 3743424033
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png",
+        "bytes": 202,
+        "crc32": 2751740222
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_text_select_handle_left_mtrl.png",
+        "bytes": 513,
+        "crc32": 3304201615
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/abc_text_select_handle_right_mtrl.png",
+        "bytes": 513,
+        "crc32": 1860041182
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/ic_call_answer.png",
+        "bytes": 1171,
+        "crc32": 220143978
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/ic_call_answer_low.png",
+        "bytes": 1171,
+        "crc32": 220143978
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/ic_call_answer_video.png",
+        "bytes": 465,
+        "crc32": 4165134444
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/ic_call_answer_video_low.png",
+        "bytes": 465,
+        "crc32": 4165134444
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/ic_call_decline.png",
+        "bytes": 823,
+        "crc32": 3035224781
+      },
+      {
+        "path": "res/drawable-xxxhdpi-v4/ic_call_decline_low.png",
+        "bytes": 823,
+        "crc32": 3035224781
+      },
+      {
+        "path": "res/drawable/$avd_hide_password__0.xml",
+        "bytes": 1176,
+        "crc32": 183059734
+      },
+      {
+        "path": "res/drawable/$avd_hide_password__1.xml",
+        "bytes": 592,
+        "crc32": 2213824488
+      },
+      {
+        "path": "res/drawable/$avd_hide_password__2.xml",
+        "bytes": 556,
+        "crc32": 2279129487
+      },
+      {
+        "path": "res/drawable/$avd_show_password__0.xml",
+        "bytes": 1136,
+        "crc32": 3701826017
+      },
+      {
+        "path": "res/drawable/$avd_show_password__1.xml",
+        "bytes": 592,
+        "crc32": 3537732363
+      },
+      {
+        "path": "res/drawable/$avd_show_password__2.xml",
+        "bytes": 556,
+        "crc32": 544261594
+      },
+      {
+        "path": "res/drawable/$m3_avd_hide_password__0.xml",
+        "bytes": 1176,
+        "crc32": 183059734
+      },
+      {
+        "path": "res/drawable/$m3_avd_hide_password__1.xml",
+        "bytes": 592,
+        "crc32": 697732099
+      },
+      {
+        "path": "res/drawable/$m3_avd_hide_password__2.xml",
+        "bytes": 556,
+        "crc32": 1548356027
+      },
+      {
+        "path": "res/drawable/$m3_avd_show_password__0.xml",
+        "bytes": 1136,
+        "crc32": 3701826017
+      },
+      {
+        "path": "res/drawable/$m3_avd_show_password__1.xml",
+        "bytes": 592,
+        "crc32": 25959482
+      },
+      {
+        "path": "res/drawable/$m3_avd_show_password__2.xml",
+        "bytes": 556,
+        "crc32": 265541188
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_checked_unchecked__0.xml",
+        "bytes": 592,
+        "crc32": 3689152332
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_checked_unchecked__1.xml",
+        "bytes": 592,
+        "crc32": 1714631551
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_checked_unchecked__2.xml",
+        "bytes": 592,
+        "crc32": 1407714353
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_checked_indeterminate__0.xml",
+        "bytes": 592,
+        "crc32": 2902187445
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_checked_unchecked__0.xml",
+        "bytes": 592,
+        "crc32": 3689152332
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_checked_unchecked__1.xml",
+        "bytes": 592,
+        "crc32": 1714631551
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_checked_unchecked__2.xml",
+        "bytes": 592,
+        "crc32": 1407714353
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_indeterminate_checked__0.xml",
+        "bytes": 592,
+        "crc32": 707558105
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_indeterminate_unchecked__0.xml",
+        "bytes": 592,
+        "crc32": 3689152332
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_indeterminate_unchecked__1.xml",
+        "bytes": 592,
+        "crc32": 1714631551
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_indeterminate_unchecked__2.xml",
+        "bytes": 592,
+        "crc32": 1407714353
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_unchecked_checked__0.xml",
+        "bytes": 592,
+        "crc32": 1100098334
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_unchecked_checked__1.xml",
+        "bytes": 592,
+        "crc32": 4232242989
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_unchecked_checked__2.xml",
+        "bytes": 596,
+        "crc32": 84874632
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_unchecked_indeterminate__0.xml",
+        "bytes": 592,
+        "crc32": 1100098334
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_unchecked_indeterminate__1.xml",
+        "bytes": 592,
+        "crc32": 4232242989
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_icon_unchecked_indeterminate__2.xml",
+        "bytes": 592,
+        "crc32": 1140540735
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_unchecked_checked__0.xml",
+        "bytes": 592,
+        "crc32": 1100098334
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_unchecked_checked__1.xml",
+        "bytes": 592,
+        "crc32": 4232242989
+      },
+      {
+        "path": "res/drawable/$mtrl_checkbox_button_unchecked_checked__2.xml",
+        "bytes": 592,
+        "crc32": 1140540735
+      },
+      {
+        "path": "res/drawable/$mtrl_switch_thumb_checked_pressed__0.xml",
+        "bytes": 592,
+        "crc32": 2967309040
+      },
+      {
+        "path": "res/drawable/$mtrl_switch_thumb_checked_unchecked__0.xml",
+        "bytes": 548,
+        "crc32": 155643693
+      },
+      {
+        "path": "res/drawable/$mtrl_switch_thumb_checked_unchecked__1.xml",
+        "bytes": 592,
+        "crc32": 1715402286
+      },
+      {
+        "path": "res/drawable/$mtrl_switch_thumb_pressed_checked__0.xml",
+        "bytes": 592,
+        "crc32": 1969356330
+      },
+      {
+        "path": "res/drawable/$mtrl_switch_thumb_pressed_unchecked__0.xml",
+        "bytes": 592,
+        "crc32": 2102471316
+      },
+      {
+        "path": "res/drawable/$mtrl_switch_thumb_unchecked_checked__0.xml",
+        "bytes": 548,
+        "crc32": 2798855449
+      },
+      {
+        "path": "res/drawable/$mtrl_switch_thumb_unchecked_checked__1.xml",
+        "bytes": 592,
+        "crc32": 1878856064
+      },
+      {
+        "path": "res/drawable/$mtrl_switch_thumb_unchecked_pressed__0.xml",
+        "bytes": 592,
+        "crc32": 1306077976
+      },
+      {
+        "path": "res/drawable/abc_btn_borderless_material.xml",
+        "bytes": 588,
+        "crc32": 2977916775
+      },
+      {
+        "path": "res/drawable/abc_btn_check_material.xml",
+        "bytes": 464,
+        "crc32": 2118382851
+      },
+      {
+        "path": "res/drawable/abc_btn_check_material_anim.xml",
+        "bytes": 816,
+        "crc32": 3867412818
+      },
+      {
+        "path": "res/drawable/abc_btn_default_mtrl_shape.xml",
+        "bytes": 932,
+        "crc32": 4276139754
+      },
+      {
+        "path": "res/drawable/abc_btn_radio_material.xml",
+        "bytes": 464,
+        "crc32": 1198145356
+      },
+      {
+        "path": "res/drawable/abc_btn_radio_material_anim.xml",
+        "bytes": 816,
+        "crc32": 2591502713
+      },
+      {
+        "path": "res/drawable/abc_cab_background_internal_bg.xml",
+        "bytes": 372,
+        "crc32": 3601541619
+      },
+      {
+        "path": "res/drawable/abc_cab_background_top_material.xml",
+        "bytes": 336,
+        "crc32": 2782933000
+      },
+      {
+        "path": "res/drawable/abc_ic_ab_back_material.xml",
+        "bytes": 692,
+        "crc32": 3479619956
+      },
+      {
+        "path": "res/drawable/abc_ic_arrow_drop_right_black_24dp.xml",
+        "bytes": 1000,
+        "crc32": 111446039
+      },
+      {
+        "path": "res/drawable/abc_ic_clear_material.xml",
+        "bytes": 684,
+        "crc32": 2518034136
+      },
+      {
+        "path": "res/drawable/abc_ic_go_search_api_material.xml",
+        "bytes": 640,
+        "crc32": 4088137098
+      },
+      {
+        "path": "res/drawable/abc_ic_menu_copy_mtrl_am_alpha.xml",
+        "bytes": 756,
+        "crc32": 141324321
+      },
+      {
+        "path": "res/drawable/abc_ic_menu_cut_mtrl_alpha.xml",
+        "bytes": 1096,
+        "crc32": 459529817
+      },
+      {
+        "path": "res/drawable/abc_ic_menu_overflow_material.xml",
+        "bytes": 792,
+        "crc32": 3469773925
+      },
+      {
+        "path": "res/drawable/abc_ic_menu_paste_mtrl_am_alpha.xml",
+        "bytes": 796,
+        "crc32": 1534258133
+      },
+      {
+        "path": "res/drawable/abc_ic_menu_selectall_mtrl_alpha.xml",
+        "bytes": 920,
+        "crc32": 1929046294
+      },
+      {
+        "path": "res/drawable/abc_ic_menu_share_mtrl_alpha.xml",
+        "bytes": 980,
+        "crc32": 547834227
+      },
+      {
+        "path": "res/drawable/abc_ic_search_api_material.xml",
+        "bytes": 812,
+        "crc32": 2773539127
+      },
+      {
+        "path": "res/drawable/abc_ic_voice_search_api_material.xml",
+        "bytes": 828,
+        "crc32": 269552529
+      },
+      {
+        "path": "res/drawable/abc_item_background_holo_dark.xml",
+        "bytes": 1012,
+        "crc32": 4134736141
+      },
+      {
+        "path": "res/drawable/abc_item_background_holo_light.xml",
+        "bytes": 1012,
+        "crc32": 2466022717
+      },
+      {
+        "path": "res/drawable/abc_list_selector_background_transition_holo_dark.xml",
+        "bytes": 424,
+        "crc32": 4048230182
+      },
+      {
+        "path": "res/drawable/abc_list_selector_background_transition_holo_light.xml",
+        "bytes": 424,
+        "crc32": 3601679850
+      },
+      {
+        "path": "res/drawable/abc_list_selector_holo_dark.xml",
+        "bytes": 1064,
+        "crc32": 2458946443
+      },
+      {
+        "path": "res/drawable/abc_list_selector_holo_light.xml",
+        "bytes": 1064,
+        "crc32": 899096147
+      },
+      {
+        "path": "res/drawable/abc_ratingbar_indicator_material.xml",
+        "bytes": 124,
+        "crc32": 1548506544
+      },
+      {
+        "path": "res/drawable/abc_ratingbar_material.xml",
+        "bytes": 124,
+        "crc32": 1548506544
+      },
+      {
+        "path": "res/drawable/abc_ratingbar_small_material.xml",
+        "bytes": 124,
+        "crc32": 1548506544
+      },
+      {
+        "path": "res/drawable/abc_seekbar_thumb_material.xml",
+        "bytes": 1100,
+        "crc32": 1755576257
+      },
+      {
+        "path": "res/drawable/abc_seekbar_tick_mark_material.xml",
+        "bytes": 516,
+        "crc32": 1781499921
+      },
+      {
+        "path": "res/drawable/abc_seekbar_track_material.xml",
+        "bytes": 1408,
+        "crc32": 2756349811
+      },
+      {
+        "path": "res/drawable/abc_spinner_textfield_background_material.xml",
+        "bytes": 1160,
+        "crc32": 2731002432
+      },
+      {
+        "path": "res/drawable/abc_star_black_48dp.xml",
+        "bytes": 640,
+        "crc32": 1103021236
+      },
+      {
+        "path": "res/drawable/abc_star_half_black_48dp.xml",
+        "bytes": 600,
+        "crc32": 2883468376
+      },
+      {
+        "path": "res/drawable/abc_switch_thumb_material.xml",
+        "bytes": 464,
+        "crc32": 3123038201
+      },
+      {
+        "path": "res/drawable/abc_tab_indicator_material.xml",
+        "bytes": 468,
+        "crc32": 3734926563
+      },
+      {
+        "path": "res/drawable/abc_text_cursor_material.xml",
+        "bytes": 516,
+        "crc32": 46912569
+      },
+      {
+        "path": "res/drawable/abc_textfield_search_material.xml",
+        "bytes": 756,
+        "crc32": 1557313508
+      },
+      {
+        "path": "res/drawable/abc_vector_test.xml",
+        "bytes": 612,
+        "crc32": 2880143774
+      },
+      {
+        "path": "res/drawable/avd_hide_password.xml",
+        "bytes": 660,
+        "crc32": 3587021746
+      },
+      {
+        "path": "res/drawable/avd_show_password.xml",
+        "bytes": 660,
+        "crc32": 1739150367
+      },
+      {
+        "path": "res/drawable/btn_checkbox_checked_mtrl.xml",
+        "bytes": 2688,
+        "crc32": 3365929405
+      },
+      {
+        "path": "res/drawable/btn_checkbox_checked_to_unchecked_mtrl_animation.xml",
+        "bytes": 688,
+        "crc32": 3789217677
+      },
+      {
+        "path": "res/drawable/btn_checkbox_unchecked_mtrl.xml",
+        "bytes": 2660,
+        "crc32": 1605872269
+      },
+      {
+        "path": "res/drawable/btn_checkbox_unchecked_to_checked_mtrl_animation.xml",
+        "bytes": 688,
+        "crc32": 3877819593
+      },
+      {
+        "path": "res/drawable/btn_radio_off_mtrl.xml",
+        "bytes": 1728,
+        "crc32": 1230695815
+      },
+      {
+        "path": "res/drawable/btn_radio_off_to_on_mtrl_animation.xml",
+        "bytes": 680,
+        "crc32": 1486794041
+      },
+      {
+        "path": "res/drawable/btn_radio_on_mtrl.xml",
+        "bytes": 1656,
+        "crc32": 2509231663
+      },
+      {
+        "path": "res/drawable/btn_radio_on_to_off_mtrl_animation.xml",
+        "bytes": 680,
+        "crc32": 4098317842
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_icon_dark.xml",
+        "bytes": 588,
+        "crc32": 1287211957
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_icon_dark_focused.xml",
+        "bytes": 892,
+        "crc32": 2754577365
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_icon_dark_normal.xml",
+        "bytes": 548,
+        "crc32": 416116819
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_icon_disabled.xml",
+        "bytes": 1132,
+        "crc32": 4202459032
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_icon_light.xml",
+        "bytes": 588,
+        "crc32": 2053196175
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_icon_light_focused.xml",
+        "bytes": 892,
+        "crc32": 601105319
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_icon_light_normal.xml",
+        "bytes": 548,
+        "crc32": 3921178241
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_text_dark.xml",
+        "bytes": 588,
+        "crc32": 3852353663
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_text_dark_focused.xml",
+        "bytes": 892,
+        "crc32": 1152043680
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_text_dark_normal.xml",
+        "bytes": 584,
+        "crc32": 2918953082
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_text_disabled.xml",
+        "bytes": 1152,
+        "crc32": 2054410972
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_text_light.xml",
+        "bytes": 588,
+        "crc32": 1166336846
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_text_light_focused.xml",
+        "bytes": 892,
+        "crc32": 2377330754
+      },
+      {
+        "path": "res/drawable/common_google_signin_btn_text_light_normal.xml",
+        "bytes": 584,
+        "crc32": 3067973888
+      },
+      {
+        "path": "res/drawable/design_fab_background.xml",
+        "bytes": 372,
+        "crc32": 522588254
+      },
+      {
+        "path": "res/drawable/design_ic_visibility.xml",
+        "bytes": 540,
+        "crc32": 1697068532
+      },
+      {
+        "path": "res/drawable/design_ic_visibility_off.xml",
+        "bytes": 1144,
+        "crc32": 2435754287
+      },
+      {
+        "path": "res/drawable/design_password_eye.xml",
+        "bytes": 816,
+        "crc32": 3664977902
+      },
+      {
+        "path": "res/drawable/design_snackbar_background.xml",
+        "bytes": 484,
+        "crc32": 1912213646
+      },
+      {
+        "path": "res/drawable/ic_arrow_back_black_24.xml",
+        "bytes": 652,
+        "crc32": 1181768559
+      },
+      {
+        "path": "res/drawable/ic_clear_black_24.xml",
+        "bytes": 684,
+        "crc32": 1462334449
+      },
+      {
+        "path": "res/drawable/ic_clock_black_24dp.xml",
+        "bytes": 752,
+        "crc32": 3221945446
+      },
+      {
+        "path": "res/drawable/ic_expand_less_22px.xml",
+        "bytes": 840,
+        "crc32": 1569214766
+      },
+      {
+        "path": "res/drawable/ic_expand_more_22px.xml",
+        "bytes": 840,
+        "crc32": 3956852145
+      },
+      {
+        "path": "res/drawable/ic_keyboard_black_24dp.xml",
+        "bytes": 852,
+        "crc32": 173715929
+      },
+      {
+        "path": "res/drawable/ic_launcher_background.xml",
+        "bytes": 5696,
+        "crc32": 3985735082
+      },
+      {
+        "path": "res/drawable/ic_m3_chip_check.xml",
+        "bytes": 704,
+        "crc32": 8311004
+      },
+      {
+        "path": "res/drawable/ic_m3_chip_checked_circle.xml",
+        "bytes": 900,
+        "crc32": 1590090170
+      },
+      {
+        "path": "res/drawable/ic_m3_chip_close.xml",
+        "bytes": 648,
+        "crc32": 1348968016
+      },
+      {
+        "path": "res/drawable/ic_mtrl_arrow_circle.xml",
+        "bytes": 828,
+        "crc32": 23194701
+      },
+      {
+        "path": "res/drawable/ic_mtrl_checked_circle.xml",
+        "bytes": 672,
+        "crc32": 3351102043
+      },
+      {
+        "path": "res/drawable/ic_mtrl_chip_checked_black.xml",
+        "bytes": 600,
+        "crc32": 1633852816
+      },
+      {
+        "path": "res/drawable/ic_mtrl_chip_checked_circle.xml",
+        "bytes": 940,
+        "crc32": 1250486260
+      },
+      {
+        "path": "res/drawable/ic_mtrl_chip_close_circle.xml",
+        "bytes": 808,
+        "crc32": 4134878258
+      },
+      {
+        "path": "res/drawable/ic_search_black_24.xml",
+        "bytes": 800,
+        "crc32": 2723883756
+      },
+      {
+        "path": "res/drawable/m3_avd_hide_password.xml",
+        "bytes": 660,
+        "crc32": 3470485244
+      },
+      {
+        "path": "res/drawable/m3_avd_show_password.xml",
+        "bytes": 660,
+        "crc32": 4068822730
+      },
+      {
+        "path": "res/drawable/m3_bottom_sheet_drag_handle.xml",
+        "bytes": 628,
+        "crc32": 2382842497
+      },
+      {
+        "path": "res/drawable/m3_password_eye.xml",
+        "bytes": 816,
+        "crc32": 2441373011
+      },
+      {
+        "path": "res/drawable/m3_popupmenu_background_overlay.xml",
+        "bytes": 740,
+        "crc32": 3451945169
+      },
+      {
+        "path": "res/drawable/m3_split_button_chevron_avd.xml",
+        "bytes": 1136,
+        "crc32": 4007129377
+      },
+      {
+        "path": "res/drawable/m3_tabs_line_indicator.xml",
+        "bytes": 480,
+        "crc32": 2072278454
+      },
+      {
+        "path": "res/drawable/m3_tabs_rounded_line_indicator.xml",
+        "bytes": 956,
+        "crc32": 1609584624
+      },
+      {
+        "path": "res/drawable/material_cursor_drawable.xml",
+        "bytes": 588,
+        "crc32": 703718256
+      },
+      {
+        "path": "res/drawable/material_ic_calendar_black_24dp.xml",
+        "bytes": 696,
+        "crc32": 1880928615
+      },
+      {
+        "path": "res/drawable/material_ic_clear_black_24dp.xml",
+        "bytes": 752,
+        "crc32": 2137394315
+      },
+      {
+        "path": "res/drawable/material_ic_edit_black_24dp.xml",
+        "bytes": 716,
+        "crc32": 604732683
+      },
+      {
+        "path": "res/drawable/material_ic_keyboard_arrow_left_black_24dp.xml",
+        "bytes": 712,
+        "crc32": 3810637404
+      },
+      {
+        "path": "res/drawable/material_ic_keyboard_arrow_right_black_24dp.xml",
+        "bytes": 700,
+        "crc32": 2949343725
+      },
+      {
+        "path": "res/drawable/material_ic_menu_arrow_down_black_24dp.xml",
+        "bytes": 648,
+        "crc32": 1326784656
+      },
+      {
+        "path": "res/drawable/material_ic_menu_arrow_up_black_24dp.xml",
+        "bytes": 648,
+        "crc32": 3498257513
+      },
+      {
+        "path": "res/drawable/mtrl_bottomsheet_drag_handle.xml",
+        "bytes": 628,
+        "crc32": 3095376237
+      },
+      {
+        "path": "res/drawable/mtrl_checkbox_button.xml",
+        "bytes": 1332,
+        "crc32": 1532801232
+      },
+      {
+        "path": "res/drawable/mtrl_checkbox_button_checked_unchecked.xml",
+        "bytes": 724,
+        "crc32": 3498189952
+      },
+      {
+        "path": "res/drawable/mtrl_checkbox_button_icon.xml",
+        "bytes": 1572,
+        "crc32": 3455194953
+      },
+      {
+        "path": "res/drawable/mtrl_checkbox_button_icon_checked_indeterminate.xml",
+        "bytes": 524,
+        "crc32": 815803862
+      },
+      {
+        "path": "res/drawable/mtrl_checkbox_button_icon_checked_unchecked.xml",
+        "bytes": 724,
+        "crc32": 1699198049
+      },
+      {
+        "path": "res/drawable/mtrl_checkbox_button_icon_indeterminate_checked.xml",
+        "bytes": 524,
+        "crc32": 2394027734
+      },
+      {
+        "path": "res/drawable/mtrl_checkbox_button_icon_indeterminate_unchecked.xml",
+        "bytes": 724,
+        "crc32": 3820611102
+      },
+      {
+        "path": "res/drawable/mtrl_checkbox_button_icon_unchecked_checked.xml",
+        "bytes": 724,
+        "crc32": 2364005076
+      },
+      {
+        "path": "res/drawable/mtrl_checkbox_button_icon_unchecked_indeterminate.xml",
+        "bytes": 724,
+        "crc32": 1212256746
+      },
+      {
+        "path": "res/drawable/mtrl_checkbox_button_unchecked_checked.xml",
+        "bytes": 724,
+        "crc32": 1937650979
+      },
+      {
+        "path": "res/drawable/mtrl_dialog_background.xml",
+        "bytes": 716,
+        "crc32": 123993836
+      },
+      {
+        "path": "res/drawable/mtrl_dropdown_arrow.xml",
+        "bytes": 464,
+        "crc32": 1526088734
+      },
+      {
+        "path": "res/drawable/mtrl_ic_arrow_drop_down.xml",
+        "bytes": 564,
+        "crc32": 1573648397
+      },
+      {
+        "path": "res/drawable/mtrl_ic_arrow_drop_up.xml",
+        "bytes": 564,
+        "crc32": 2337635253
+      },
+      {
+        "path": "res/drawable/mtrl_ic_cancel.xml",
+        "bytes": 724,
+        "crc32": 2597530252
+      },
+      {
+        "path": "res/drawable/mtrl_ic_check_mark.xml",
+        "bytes": 744,
+        "crc32": 146485353
+      },
+      {
+        "path": "res/drawable/mtrl_ic_checkbox_checked.xml",
+        "bytes": 904,
+        "crc32": 117315020
+      },
+      {
+        "path": "res/drawable/mtrl_ic_checkbox_unchecked.xml",
+        "bytes": 612,
+        "crc32": 3331869839
+      },
+      {
+        "path": "res/drawable/mtrl_ic_error.xml",
+        "bytes": 644,
+        "crc32": 1937222060
+      },
+      {
+        "path": "res/drawable/mtrl_ic_indeterminate.xml",
+        "bytes": 744,
+        "crc32": 4002062694
+      },
+      {
+        "path": "res/drawable/mtrl_navigation_bar_item_background.xml",
+        "bytes": 264,
+        "crc32": 1498931279
+      },
+      {
+        "path": "res/drawable/mtrl_popupmenu_background.xml",
+        "bytes": 740,
+        "crc32": 2486300275
+      },
+      {
+        "path": "res/drawable/mtrl_switch_thumb.xml",
+        "bytes": 2004,
+        "crc32": 2339908715
+      },
+      {
+        "path": "res/drawable/mtrl_switch_thumb_checked.xml",
+        "bytes": 744,
+        "crc32": 2799326404
+      },
+      {
+        "path": "res/drawable/mtrl_switch_thumb_checked_pressed.xml",
+        "bytes": 524,
+        "crc32": 2987192385
+      },
+      {
+        "path": "res/drawable/mtrl_switch_thumb_checked_unchecked.xml",
+        "bytes": 784,
+        "crc32": 2486004928
+      },
+      {
+        "path": "res/drawable/mtrl_switch_thumb_pressed.xml",
+        "bytes": 744,
+        "crc32": 3729493612
+      },
+      {
+        "path": "res/drawable/mtrl_switch_thumb_pressed_checked.xml",
+        "bytes": 524,
+        "crc32": 2544778555
+      },
+      {
+        "path": "res/drawable/mtrl_switch_thumb_pressed_unchecked.xml",
+        "bytes": 524,
+        "crc32": 3794926502
+      },
+      {
+        "path": "res/drawable/mtrl_switch_thumb_unchecked.xml",
+        "bytes": 744,
+        "crc32": 2882816241
+      },
+      {
+        "path": "res/drawable/mtrl_switch_thumb_unchecked_checked.xml",
+        "bytes": 784,
+        "crc32": 1072493080
+      },
+      {
+        "path": "res/drawable/mtrl_switch_thumb_unchecked_pressed.xml",
+        "bytes": 524,
+        "crc32": 3572950567
+      },
+      {
+        "path": "res/drawable/mtrl_switch_track.xml",
+        "bytes": 588,
+        "crc32": 344343288
+      },
+      {
+        "path": "res/drawable/mtrl_switch_track_decoration.xml",
+        "bytes": 636,
+        "crc32": 1916853414
+      },
+      {
+        "path": "res/drawable/mtrl_tabs_default_indicator.xml",
+        "bytes": 628,
+        "crc32": 3107043299
+      },
+      {
+        "path": "res/drawable/navigation_empty_icon.xml",
+        "bytes": 516,
+        "crc32": 1038515666
+      },
+      {
+        "path": "res/drawable/notification_bg.xml",
+        "bytes": 532,
+        "crc32": 2290808883
+      },
+      {
+        "path": "res/drawable/notification_bg_low.xml",
+        "bytes": 532,
+        "crc32": 3557125516
+      },
+      {
+        "path": "res/drawable/notification_icon_background.xml",
+        "bytes": 372,
+        "crc32": 609694283
+      },
+      {
+        "path": "res/drawable/notification_tile_bg.xml",
+        "bytes": 304,
+        "crc32": 3443560225
+      },
+      {
+        "path": "res/drawable/test_level_drawable.xml",
+        "bytes": 448,
+        "crc32": 2153211964
+      },
+      {
+        "path": "res/drawable/tooltip_frame_dark.xml",
+        "bytes": 484,
+        "crc32": 1647241198
+      },
+      {
+        "path": "res/drawable/tooltip_frame_light.xml",
+        "bytes": 484,
+        "crc32": 2138253738
+      },
+      {
+        "path": "res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml",
+        "bytes": 316,
+        "crc32": 1170948913
+      },
+      {
+        "path": "res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml",
+        "bytes": 328,
+        "crc32": 3970749230
+      },
+      {
+        "path": "res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml",
+        "bytes": 316,
+        "crc32": 1170948913
+      },
+      {
+        "path": "res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml",
+        "bytes": 328,
+        "crc32": 3970749230
+      },
+      {
+        "path": "res/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml",
+        "bytes": 320,
+        "crc32": 2960756502
+      },
+      {
+        "path": "res/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml",
+        "bytes": 320,
+        "crc32": 2960756502
+      },
+      {
+        "path": "res/interpolator/fast_out_slow_in.xml",
+        "bytes": 400,
+        "crc32": 2971224
+      },
+      {
+        "path": "res/interpolator/m3_sys_motion_easing_emphasized.xml",
+        "bytes": 280,
+        "crc32": 1726181871
+      },
+      {
+        "path": "res/interpolator/m3_sys_motion_easing_emphasized_accelerate.xml",
+        "bytes": 400,
+        "crc32": 3521062491
+      },
+      {
+        "path": "res/interpolator/m3_sys_motion_easing_emphasized_decelerate.xml",
+        "bytes": 400,
+        "crc32": 1539819987
+      },
+      {
+        "path": "res/interpolator/m3_sys_motion_easing_linear.xml",
+        "bytes": 400,
+        "crc32": 3792974507
+      },
+      {
+        "path": "res/interpolator/m3_sys_motion_easing_standard.xml",
+        "bytes": 400,
+        "crc32": 2952316126
+      },
+      {
+        "path": "res/interpolator/m3_sys_motion_easing_standard_accelerate.xml",
+        "bytes": 400,
+        "crc32": 1248477216
+      },
+      {
+        "path": "res/interpolator/m3_sys_motion_easing_standard_decelerate.xml",
+        "bytes": 400,
+        "crc32": 2030687978
+      },
+      {
+        "path": "res/interpolator/mtrl_fast_out_linear_in.xml",
+        "bytes": 400,
+        "crc32": 4110565064
+      },
+      {
+        "path": "res/interpolator/mtrl_fast_out_slow_in.xml",
+        "bytes": 400,
+        "crc32": 3270361557
+      },
+      {
+        "path": "res/interpolator/mtrl_linear.xml",
+        "bytes": 132,
+        "crc32": 558115064
+      },
+      {
+        "path": "res/interpolator/mtrl_linear_out_slow_in.xml",
+        "bytes": 400,
+        "crc32": 34232731
+      },
+      {
+        "path": "res/layout-land/material_clock_period_toggle_land.xml",
+        "bytes": 1232,
+        "crc32": 551162874
+      },
+      {
+        "path": "res/layout-land/material_timepicker.xml",
+        "bytes": 1676,
+        "crc32": 3598576098
+      },
+      {
+        "path": "res/layout-land/mtrl_picker_header_dialog.xml",
+        "bytes": 1588,
+        "crc32": 2165731284
+      },
+      {
+        "path": "res/layout-sw600dp-v13/design_layout_snackbar.xml",
+        "bytes": 528,
+        "crc32": 1053919793
+      },
+      {
+        "path": "res/layout-sw600dp-v13/mtrl_layout_snackbar.xml",
+        "bytes": 492,
+        "crc32": 3789317044
+      },
+      {
+        "path": "res/layout-v21/notification_action.xml",
+        "bytes": 1052,
+        "crc32": 1568925774
+      },
+      {
+        "path": "res/layout-v21/notification_action_tombstone.xml",
+        "bytes": 1228,
+        "crc32": 3643603289
+      },
+      {
+        "path": "res/layout-v21/notification_template_custom_big.xml",
+        "bytes": 2456,
+        "crc32": 362851076
+      },
+      {
+        "path": "res/layout-v21/notification_template_icon_group.xml",
+        "bytes": 988,
+        "crc32": 2947755415
+      },
+      {
+        "path": "res/layout-v26/abc_screen_toolbar.xml",
+        "bytes": 1560,
+        "crc32": 586209751
+      },
+      {
+        "path": "res/layout-v26/mtrl_calendar_month.xml",
+        "bytes": 744,
+        "crc32": 3235056037
+      },
+      {
+        "path": "res/layout-watch-v20/abc_alert_dialog_button_bar_material.xml",
+        "bytes": 1208,
+        "crc32": 1230672507
+      },
+      {
+        "path": "res/layout-watch-v20/abc_alert_dialog_title_material.xml",
+        "bytes": 1352,
+        "crc32": 1113884462
+      },
+      {
+        "path": "res/layout/abc_action_bar_title_item.xml",
+        "bytes": 872,
+        "crc32": 2405666934
+      },
+      {
+        "path": "res/layout/abc_action_bar_up_container.xml",
+        "bytes": 440,
+        "crc32": 769408111
+      },
+      {
+        "path": "res/layout/abc_action_menu_item_layout.xml",
+        "bytes": 768,
+        "crc32": 2886638531
+      },
+      {
+        "path": "res/layout/abc_action_menu_layout.xml",
+        "bytes": 576,
+        "crc32": 2829136083
+      },
+      {
+        "path": "res/layout/abc_action_mode_bar.xml",
+        "bytes": 464,
+        "crc32": 604835355
+      },
+      {
+        "path": "res/layout/abc_action_mode_close_item_material.xml",
+        "bytes": 840,
+        "crc32": 766460787
+      },
+      {
+        "path": "res/layout/abc_activity_chooser_view.xml",
+        "bytes": 1684,
+        "crc32": 32928192
+      },
+      {
+        "path": "res/layout/abc_activity_chooser_view_list_item.xml",
+        "bytes": 1304,
+        "crc32": 3671387594
+      },
+      {
+        "path": "res/layout/abc_alert_dialog_button_bar_material.xml",
+        "bytes": 1584,
+        "crc32": 2788447768
+      },
+      {
+        "path": "res/layout/abc_alert_dialog_material.xml",
+        "bytes": 2648,
+        "crc32": 2274863475
+      },
+      {
+        "path": "res/layout/abc_alert_dialog_title_material.xml",
+        "bytes": 1560,
+        "crc32": 3095443559
+      },
+      {
+        "path": "res/layout/abc_cascading_menu_item_layout.xml",
+        "bytes": 1868,
+        "crc32": 853789584
+      },
+      {
+        "path": "res/layout/abc_dialog_title_material.xml",
+        "bytes": 1116,
+        "crc32": 3016957093
+      },
+      {
+        "path": "res/layout/abc_expanded_menu_layout.xml",
+        "bytes": 388,
+        "crc32": 2146102466
+      },
+      {
+        "path": "res/layout/abc_list_menu_item_checkbox.xml",
+        "bytes": 528,
+        "crc32": 830987003
+      },
+      {
+        "path": "res/layout/abc_list_menu_item_icon.xml",
+        "bytes": 780,
+        "crc32": 422736176
+      },
+      {
+        "path": "res/layout/abc_list_menu_item_layout.xml",
+        "bytes": 1396,
+        "crc32": 2715482218
+      },
+      {
+        "path": "res/layout/abc_list_menu_item_radio.xml",
+        "bytes": 532,
+        "crc32": 2913405632
+      },
+      {
+        "path": "res/layout/abc_popup_menu_header_item_layout.xml",
+        "bytes": 848,
+        "crc32": 4025428726
+      },
+      {
+        "path": "res/layout/abc_popup_menu_item_layout.xml",
+        "bytes": 2072,
+        "crc32": 2932573359
+      },
+      {
+        "path": "res/layout/abc_screen_content_include.xml",
+        "bytes": 548,
+        "crc32": 1320615647
+      },
+      {
+        "path": "res/layout/abc_screen_simple.xml",
+        "bytes": 832,
+        "crc32": 1536651086
+      },
+      {
+        "path": "res/layout/abc_screen_simple_overlay_action_mode.xml",
+        "bytes": 792,
+        "crc32": 2273449076
+      },
+      {
+        "path": "res/layout/abc_search_dropdown_item_icons_2line.xml",
+        "bytes": 1916,
+        "crc32": 2282684681
+      },
+      {
+        "path": "res/layout/abc_search_view.xml",
+        "bytes": 3472,
+        "crc32": 1973805867
+      },
+      {
+        "path": "res/layout/abc_select_dialog_material.xml",
+        "bytes": 1020,
+        "crc32": 3876303738
+      },
+      {
+        "path": "res/layout/abc_tooltip.xml",
+        "bytes": 1056,
+        "crc32": 40053711
+      },
+      {
+        "path": "res/layout/activity_main.xml",
+        "bytes": 880,
+        "crc32": 2466021232
+      },
+      {
+        "path": "res/layout/custom_dialog.xml",
+        "bytes": 612,
+        "crc32": 1237772803
+      },
+      {
+        "path": "res/layout/design_bottom_navigation_item.xml",
+        "bytes": 2356,
+        "crc32": 1178478055
+      },
+      {
+        "path": "res/layout/design_bottom_sheet_dialog.xml",
+        "bytes": 1224,
+        "crc32": 1629446949
+      },
+      {
+        "path": "res/layout/design_layout_snackbar.xml",
+        "bytes": 528,
+        "crc32": 1917632542
+      },
+      {
+        "path": "res/layout/design_layout_snackbar_include.xml",
+        "bytes": 1444,
+        "crc32": 1491291497
+      },
+      {
+        "path": "res/layout/design_layout_tab_icon.xml",
+        "bytes": 408,
+        "crc32": 434011758
+      },
+      {
+        "path": "res/layout/design_layout_tab_text.xml",
+        "bytes": 436,
+        "crc32": 2617238905
+      },
+      {
+        "path": "res/layout/design_menu_item_action_area.xml",
+        "bytes": 320,
+        "crc32": 308712715
+      },
+      {
+        "path": "res/layout/design_navigation_item.xml",
+        "bytes": 632,
+        "crc32": 2192382021
+      },
+      {
+        "path": "res/layout/design_navigation_item_header.xml",
+        "bytes": 440,
+        "crc32": 1518870576
+      },
+      {
+        "path": "res/layout/design_navigation_item_separator.xml",
+        "bytes": 472,
+        "crc32": 411075014
+      },
+      {
+        "path": "res/layout/design_navigation_item_subheader.xml",
+        "bytes": 608,
+        "crc32": 4059735914
+      },
+      {
+        "path": "res/layout/design_navigation_menu.xml",
+        "bytes": 528,
+        "crc32": 311550608
+      },
+      {
+        "path": "res/layout/design_navigation_menu_item.xml",
+        "bytes": 908,
+        "crc32": 3436621211
+      },
+      {
+        "path": "res/layout/design_text_input_end_icon.xml",
+        "bytes": 656,
+        "crc32": 3881071824
+      },
+      {
+        "path": "res/layout/design_text_input_start_icon.xml",
+        "bytes": 652,
+        "crc32": 2652457736
+      },
+      {
+        "path": "res/layout/ime_base_split_test_activity.xml",
+        "bytes": 364,
+        "crc32": 1066515116
+      },
+      {
+        "path": "res/layout/ime_secondary_split_test_activity.xml",
+        "bytes": 876,
+        "crc32": 1733932222
+      },
+      {
+        "path": "res/layout/m3_alert_dialog.xml",
+        "bytes": 2760,
+        "crc32": 3188417913
+      },
+      {
+        "path": "res/layout/m3_alert_dialog_actions.xml",
+        "bytes": 1584,
+        "crc32": 269919867
+      },
+      {
+        "path": "res/layout/m3_alert_dialog_title.xml",
+        "bytes": 956,
+        "crc32": 743379653
+      },
+      {
+        "path": "res/layout/m3_auto_complete_simple_item.xml",
+        "bytes": 612,
+        "crc32": 981947113
+      },
+      {
+        "path": "res/layout/m3_navigation_menu_divider.xml",
+        "bytes": 712,
+        "crc32": 2745703628
+      },
+      {
+        "path": "res/layout/m3_navigation_menu_subheader.xml",
+        "bytes": 716,
+        "crc32": 1465286634
+      },
+      {
+        "path": "res/layout/m3_side_sheet_dialog.xml",
+        "bytes": 1140,
+        "crc32": 3383238582
+      },
+      {
+        "path": "res/layout/material_chip_input_combo.xml",
+        "bytes": 372,
+        "crc32": 3247936327
+      },
+      {
+        "path": "res/layout/material_clock_display.xml",
+        "bytes": 796,
+        "crc32": 860073237
+      },
+      {
+        "path": "res/layout/material_clock_display_divider.xml",
+        "bytes": 444,
+        "crc32": 3945856693
+      },
+      {
+        "path": "res/layout/material_clock_period_toggle.xml",
+        "bytes": 1220,
+        "crc32": 3453050422
+      },
+      {
+        "path": "res/layout/material_clockface_textview.xml",
+        "bytes": 476,
+        "crc32": 2877530086
+      },
+      {
+        "path": "res/layout/material_clockface_view.xml",
+        "bytes": 1012,
+        "crc32": 3007576046
+      },
+      {
+        "path": "res/layout/material_radial_view_group.xml",
+        "bytes": 768,
+        "crc32": 4213834548
+      },
+      {
+        "path": "res/layout/material_textinput_timepicker.xml",
+        "bytes": 720,
+        "crc32": 2484180303
+      },
+      {
+        "path": "res/layout/material_time_chip.xml",
+        "bytes": 380,
+        "crc32": 213220745
+      },
+      {
+        "path": "res/layout/material_time_input.xml",
+        "bytes": 956,
+        "crc32": 2292016231
+      },
+      {
+        "path": "res/layout/material_timepicker.xml",
+        "bytes": 1608,
+        "crc32": 414625268
+      },
+      {
+        "path": "res/layout/material_timepicker_dialog.xml",
+        "bytes": 2892,
+        "crc32": 1749300901
+      },
+      {
+        "path": "res/layout/material_timepicker_textinput_display.xml",
+        "bytes": 728,
+        "crc32": 980082719
+      },
+      {
+        "path": "res/layout/mtrl_alert_dialog.xml",
+        "bytes": 2476,
+        "crc32": 1645998506
+      },
+      {
+        "path": "res/layout/mtrl_alert_dialog_actions.xml",
+        "bytes": 1676,
+        "crc32": 4191512762
+      },
+      {
+        "path": "res/layout/mtrl_alert_dialog_title.xml",
+        "bytes": 956,
+        "crc32": 4134414120
+      },
+      {
+        "path": "res/layout/mtrl_alert_select_dialog_item.xml",
+        "bytes": 588,
+        "crc32": 1224796216
+      },
+      {
+        "path": "res/layout/mtrl_alert_select_dialog_multichoice.xml",
+        "bytes": 940,
+        "crc32": 3234311016
+      },
+      {
+        "path": "res/layout/mtrl_alert_select_dialog_singlechoice.xml",
+        "bytes": 940,
+        "crc32": 856419948
+      },
+      {
+        "path": "res/layout/mtrl_auto_complete_simple_item.xml",
+        "bytes": 612,
+        "crc32": 239149824
+      },
+      {
+        "path": "res/layout/mtrl_calendar_day.xml",
+        "bytes": 352,
+        "crc32": 3040730203
+      },
+      {
+        "path": "res/layout/mtrl_calendar_day_of_week.xml",
+        "bytes": 352,
+        "crc32": 4046228841
+      },
+      {
+        "path": "res/layout/mtrl_calendar_days_of_week.xml",
+        "bytes": 436,
+        "crc32": 3321069353
+      },
+      {
+        "path": "res/layout/mtrl_calendar_horizontal.xml",
+        "bytes": 1176,
+        "crc32": 2592234505
+      },
+      {
+        "path": "res/layout/mtrl_calendar_month_labeled.xml",
+        "bytes": 728,
+        "crc32": 2126492536
+      },
+      {
+        "path": "res/layout/mtrl_calendar_month_navigation.xml",
+        "bytes": 1804,
+        "crc32": 2627984954
+      },
+      {
+        "path": "res/layout/mtrl_calendar_months.xml",
+        "bytes": 428,
+        "crc32": 2686865315
+      },
+      {
+        "path": "res/layout/mtrl_calendar_vertical.xml",
+        "bytes": 740,
+        "crc32": 3297476681
+      },
+      {
+        "path": "res/layout/mtrl_calendar_year.xml",
+        "bytes": 352,
+        "crc32": 1760999319
+      },
+      {
+        "path": "res/layout/mtrl_layout_snackbar.xml",
+        "bytes": 492,
+        "crc32": 2906728859
+      },
+      {
+        "path": "res/layout/mtrl_layout_snackbar_include.xml",
+        "bytes": 952,
+        "crc32": 4193928691
+      },
+      {
+        "path": "res/layout/mtrl_navigation_rail_item.xml",
+        "bytes": 2432,
+        "crc32": 3030443308
+      },
+      {
+        "path": "res/layout/mtrl_picker_actions.xml",
+        "bytes": 984,
+        "crc32": 3315166070
+      },
+      {
+        "path": "res/layout/mtrl_picker_dialog.xml",
+        "bytes": 1172,
+        "crc32": 1035376227
+      },
+      {
+        "path": "res/layout/mtrl_picker_fullscreen.xml",
+        "bytes": 880,
+        "crc32": 2633283364
+      },
+      {
+        "path": "res/layout/mtrl_picker_header_dialog.xml",
+        "bytes": 1548,
+        "crc32": 380886754
+      },
+      {
+        "path": "res/layout/mtrl_picker_header_fullscreen.xml",
+        "bytes": 2812,
+        "crc32": 3605050572
+      },
+      {
+        "path": "res/layout/mtrl_picker_header_selection_text.xml",
+        "bytes": 668,
+        "crc32": 3589703745
+      },
+      {
+        "path": "res/layout/mtrl_picker_header_title_text.xml",
+        "bytes": 624,
+        "crc32": 2595030610
+      },
+      {
+        "path": "res/layout/mtrl_picker_header_toggle.xml",
+        "bytes": 528,
+        "crc32": 2935970526
+      },
+      {
+        "path": "res/layout/mtrl_picker_text_input_date.xml",
+        "bytes": 1104,
+        "crc32": 686468734
+      },
+      {
+        "path": "res/layout/mtrl_picker_text_input_date_range.xml",
+        "bytes": 1696,
+        "crc32": 3886385433
+      },
+      {
+        "path": "res/layout/mtrl_search_bar.xml",
+        "bytes": 844,
+        "crc32": 1793047126
+      },
+      {
+        "path": "res/layout/mtrl_search_view.xml",
+        "bytes": 3444,
+        "crc32": 2917274135
+      },
+      {
+        "path": "res/layout/notification_template_part_chronometer.xml",
+        "bytes": 440,
+        "crc32": 3568538713
+      },
+      {
+        "path": "res/layout/notification_template_part_time.xml",
+        "bytes": 440,
+        "crc32": 959273906
+      },
+      {
+        "path": "res/layout/select_dialog_item_material.xml",
+        "bytes": 640,
+        "crc32": 1371797406
+      },
+      {
+        "path": "res/layout/select_dialog_multichoice_material.xml",
+        "bytes": 864,
+        "crc32": 2808105652
+      },
+      {
+        "path": "res/layout/select_dialog_singlechoice_material.xml",
+        "bytes": 864,
+        "crc32": 283222487
+      },
+      {
+        "path": "res/layout/support_simple_spinner_dropdown_item.xml",
+        "bytes": 464,
+        "crc32": 4104010911
+      },
+      {
+        "path": "res/mipmap-anydpi-v26/ic_launcher.xml",
+        "bytes": 448,
+        "crc32": 1447850674
+      },
+      {
+        "path": "res/mipmap-hdpi-v4/ic_launcher.png",
+        "bytes": 1688,
+        "crc32": 773016150
+      },
+      {
+        "path": "res/mipmap-hdpi-v4/ic_launcher_foreground.png",
+        "bytes": 2016,
+        "crc32": 907853524
+      },
+      {
+        "path": "res/mipmap-hdpi-v4/ic_launcher_round.png",
+        "bytes": 1071,
+        "crc32": 3899465934
+      },
+      {
+        "path": "res/mipmap-mdpi-v4/ic_launcher.png",
+        "bytes": 1313,
+        "crc32": 1133450729
+      },
+      {
+        "path": "res/mipmap-mdpi-v4/ic_launcher_foreground.png",
+        "bytes": 1478,
+        "crc32": 2504779990
+      },
+      {
+        "path": "res/mipmap-mdpi-v4/ic_launcher_round.png",
+        "bytes": 910,
+        "crc32": 3651672348
+      },
+      {
+        "path": "res/mipmap-xhdpi-v4/ic_launcher.png",
+        "bytes": 2201,
+        "crc32": 753499765
+      },
+      {
+        "path": "res/mipmap-xhdpi-v4/ic_launcher_foreground.png",
+        "bytes": 2682,
+        "crc32": 2687138887
+      },
+      {
+        "path": "res/mipmap-xhdpi-v4/ic_launcher_round.png",
+        "bytes": 1394,
+        "crc32": 1523576675
+      },
+      {
+        "path": "res/mipmap-xxhdpi-v4/ic_launcher.png",
+        "bytes": 3377,
+        "crc32": 2570386747
+      },
+      {
+        "path": "res/mipmap-xxhdpi-v4/ic_launcher_foreground.png",
+        "bytes": 4051,
+        "crc32": 1581705823
+      },
+      {
+        "path": "res/mipmap-xxhdpi-v4/ic_launcher_round.png",
+        "bytes": 1663,
+        "crc32": 2389049836
+      },
+      {
+        "path": "res/mipmap-xxxhdpi-v4/ic_launcher.png",
+        "bytes": 4277,
+        "crc32": 3725086071
+      },
+      {
+        "path": "res/mipmap-xxxhdpi-v4/ic_launcher_foreground.png",
+        "bytes": 5514,
+        "crc32": 1694738015
+      },
+      {
+        "path": "res/mipmap-xxxhdpi-v4/ic_launcher_round.png",
+        "bytes": 1892,
+        "crc32": 3321201460
+      },
+      {
+        "path": "res/xml/backup_rules.xml",
+        "bytes": 748,
+        "crc32": 3725120835
+      },
+      {
+        "path": "res/xml/data_extraction_rules.xml",
+        "bytes": 1408,
+        "crc32": 302280200
+      },
+      {
+        "path": "res/xml/file_paths.xml",
+        "bytes": 532,
+        "crc32": 2071591094
+      },
+      {
+        "path": "res/xml/m3_button_group_child_size_change.xml",
+        "bytes": 572,
+        "crc32": 2806199290
+      },
+      {
+        "path": "res/xml/m3_split_button_inner_corner_size_state_list.xml",
+        "bytes": 740,
+        "crc32": 2485439653
+      },
+      {
+        "path": "res/xml/m3expressive_button_shape_state_list.xml",
+        "bytes": 700,
+        "crc32": 2904916910
+      },
+      {
+        "path": "res/xml/m3expressive_connected_buttons_inner_corner_size_state_list.xml",
+        "bytes": 740,
+        "crc32": 2633887363
+      },
+      {
+        "path": "resources.arsc",
+        "bytes": 1269112,
+        "crc32": 1073830781
+      },
+      {
+        "path": "DebugProbesKt.bin",
+        "bytes": 1728,
+        "crc32": 3370351647
+      },
+      {
+        "path": "META-INF/FastDoubleParser-LICENSE",
+        "bytes": 11358,
+        "crc32": 2263004340
+      },
+      {
+        "path": "META-INF/FastDoubleParser-NOTICE",
+        "bytes": 1704,
+        "crc32": 41594214
+      },
+      {
+        "path": "META-INF/NOTICE.md",
+        "bytes": 1074,
+        "crc32": 2087696881
+      },
+      {
+        "path": "META-INF/androidx.activity_activity-ktx.version",
+        "bytes": 7,
+        "crc32": 3606051087
+      },
+      {
+        "path": "META-INF/androidx.activity_activity.version",
+        "bytes": 7,
+        "crc32": 3606051087
+      },
+      {
+        "path": "META-INF/androidx.annotation_annotation-experimental.version",
+        "bytes": 6,
+        "crc32": 1795624574
+      },
+      {
+        "path": "META-INF/androidx.appcompat_appcompat-resources.version",
+        "bytes": 6,
+        "crc32": 2041749904
+      },
+      {
+        "path": "META-INF/androidx.appcompat_appcompat.version",
+        "bytes": 6,
+        "crc32": 2041749904
+      },
+      {
+        "path": "META-INF/androidx.arch.core_core-runtime.version",
+        "bytes": 67,
+        "crc32": 1307063212
+      },
+      {
+        "path": "META-INF/androidx.camera.featurecombinationquery_featurecombinationquery.version",
+        "bytes": 6,
+        "crc32": 3928200502
+      },
+      {
+        "path": "META-INF/androidx.camera.viewfinder_viewfinder-core.version",
+        "bytes": 6,
+        "crc32": 3552274715
+      },
+      {
+        "path": "META-INF/androidx.camera_camera-camera2-pipe.version",
+        "bytes": 6,
+        "crc32": 3928200502
+      },
+      {
+        "path": "META-INF/androidx.camera_camera-camera2.version",
+        "bytes": 6,
+        "crc32": 3928200502
+      },
+      {
+        "path": "META-INF/androidx.camera_camera-core.version",
+        "bytes": 6,
+        "crc32": 3928200502
+      },
+      {
+        "path": "META-INF/androidx.camera_camera-lifecycle.version",
+        "bytes": 6,
+        "crc32": 3928200502
+      },
+      {
+        "path": "META-INF/androidx.camera_camera-video.version",
+        "bytes": 6,
+        "crc32": 3928200502
+      },
+      {
+        "path": "META-INF/androidx.camera_camera-view.version",
+        "bytes": 6,
+        "crc32": 3928200502
+      },
+      {
+        "path": "META-INF/androidx.cardview_cardview.version",
+        "bytes": 6,
+        "crc32": 4252936296
+      },
+      {
+        "path": "META-INF/androidx.coordinatorlayout_coordinatorlayout.version",
+        "bytes": 6,
+        "crc32": 1170394893
+      },
+      {
+        "path": "META-INF/androidx.core_core-backported-fixes.version",
+        "bytes": 6,
+        "crc32": 4252936296
+      },
+      {
+        "path": "META-INF/androidx.core_core-ktx.version",
+        "bytes": 7,
+        "crc32": 3294254817
+      },
+      {
+        "path": "META-INF/androidx.core_core-viewtree.version",
+        "bytes": 6,
+        "crc32": 4252936296
+      },
+      {
+        "path": "META-INF/androidx.core_core.version",
+        "bytes": 7,
+        "crc32": 3294254817
+      },
+      {
+        "path": "META-INF/androidx.cursoradapter_cursoradapter.version",
+        "bytes": 6,
+        "crc32": 4252936296
+      },
+      {
+        "path": "META-INF/androidx.customview_customview.version",
+        "bytes": 6,
+        "crc32": 1170394893
+      },
+      {
+        "path": "META-INF/androidx.drawerlayout_drawerlayout.version",
+        "bytes": 6,
+        "crc32": 1557790284
+      },
+      {
+        "path": "META-INF/androidx.dynamicanimation_dynamicanimation.version",
+        "bytes": 6,
+        "crc32": 1170394893
+      },
+      {
+        "path": "META-INF/androidx.emoji2_emoji2-views-helper.version",
+        "bytes": 6,
+        "crc32": 4023060358
+      },
+      {
+        "path": "META-INF/androidx.emoji2_emoji2.version",
+        "bytes": 6,
+        "crc32": 4023060358
+      },
+      {
+        "path": "META-INF/androidx.exifinterface_exifinterface.version",
+        "bytes": 6,
+        "crc32": 1076518333
+      },
+      {
+        "path": "META-INF/androidx.fragment_fragment.version",
+        "bytes": 6,
+        "crc32": 2932645214
+      },
+      {
+        "path": "META-INF/androidx.graphics_graphics-shapes.version",
+        "bytes": 6,
+        "crc32": 3831863593
+      },
+      {
+        "path": "META-INF/androidx.interpolator_interpolator.version",
+        "bytes": 6,
+        "crc32": 4252936296
+      },
+      {
+        "path": "META-INF/androidx.lifecycle_lifecycle-livedata-core-ktx.version",
+        "bytes": 7,
+        "crc32": 4263301843
+      },
+      {
+        "path": "META-INF/androidx.lifecycle_lifecycle-livedata-core.version",
+        "bytes": 7,
+        "crc32": 4263301843
+      },
+      {
+        "path": "META-INF/androidx.lifecycle_lifecycle-livedata.version",
+        "bytes": 7,
+        "crc32": 4263301843
+      },
+      {
+        "path": "META-INF/androidx.lifecycle_lifecycle-process.version",
+        "bytes": 7,
+        "crc32": 4263301843
+      },
+      {
+        "path": "META-INF/androidx.lifecycle_lifecycle-runtime-ktx.version",
+        "bytes": 7,
+        "crc32": 4263301843
+      },
+      {
+        "path": "META-INF/androidx.lifecycle_lifecycle-runtime.version",
+        "bytes": 7,
+        "crc32": 4263301843
+      },
+      {
+        "path": "META-INF/androidx.lifecycle_lifecycle-viewmodel-ktx.version",
+        "bytes": 7,
+        "crc32": 4263301843
+      },
+      {
+        "path": "META-INF/androidx.lifecycle_lifecycle-viewmodel-savedstate.version",
+        "bytes": 7,
+        "crc32": 4263301843
+      },
+      {
+        "path": "META-INF/androidx.lifecycle_lifecycle-viewmodel.version",
+        "bytes": 7,
+        "crc32": 4263301843
+      },
+      {
+        "path": "META-INF/androidx.loader_loader.version",
+        "bytes": 6,
+        "crc32": 4252936296
+      },
+      {
+        "path": "META-INF/androidx.profileinstaller_profileinstaller.version",
+        "bytes": 6,
+        "crc32": 1914453823
+      },
+      {
+        "path": "META-INF/androidx.recyclerview_recyclerview.version",
+        "bytes": 6,
+        "crc32": 1315721634
+      },
+      {
+        "path": "META-INF/androidx.savedstate_savedstate-ktx.version",
+        "bytes": 6,
+        "crc32": 1914453823
+      },
+      {
+        "path": "META-INF/androidx.savedstate_savedstate.version",
+        "bytes": 6,
+        "crc32": 1914453823
+      },
+      {
+        "path": "META-INF/androidx.startup_startup-runtime.version",
+        "bytes": 6,
+        "crc32": 1557790284
+      },
+      {
+        "path": "META-INF/androidx.tracing_tracing-ktx.version",
+        "bytes": 6,
+        "crc32": 4023060358
+      },
+      {
+        "path": "META-INF/androidx.tracing_tracing.version",
+        "bytes": 6,
+        "crc32": 4023060358
+      },
+      {
+        "path": "META-INF/androidx.transition_transition.version",
+        "bytes": 6,
+        "crc32": 3399506010
+      },
+      {
+        "path": "META-INF/androidx.vectordrawable_vectordrawable-animated.version",
+        "bytes": 6,
+        "crc32": 1170394893
+      },
+      {
+        "path": "META-INF/androidx.vectordrawable_vectordrawable.version",
+        "bytes": 6,
+        "crc32": 1170394893
+      },
+      {
+        "path": "META-INF/androidx.versionedparcelable_versionedparcelable.version",
+        "bytes": 6,
+        "crc32": 1557790284
+      },
+      {
+        "path": "META-INF/androidx.viewpager2_viewpager2.version",
+        "bytes": 6,
+        "crc32": 4252936296
+      },
+      {
+        "path": "META-INF/androidx.viewpager_viewpager.version",
+        "bytes": 6,
+        "crc32": 4252936296
+      },
+      {
+        "path": "META-INF/androidx.webkit_webkit.version",
+        "bytes": 7,
+        "crc32": 1083596569
+      },
+      {
+        "path": "META-INF/androidx/annotation/annotation/LICENSE.txt",
+        "bytes": 10175,
+        "crc32": 4188542632
+      },
+      {
+        "path": "META-INF/androidx/lifecycle/lifecycle-common/LICENSE.txt",
+        "bytes": 10175,
+        "crc32": 4188542632
+      },
+      {
+        "path": "META-INF/bigint-LICENSE",
+        "bytes": 1274,
+        "crc32": 639001569
+      },
+      {
+        "path": "META-INF/com.google.android.material_material.version",
+        "bytes": 7,
+        "crc32": 3712051104
+      },
+      {
+        "path": "META-INF/com.google.dagger_dagger.version",
+        "bytes": 5,
+        "crc32": 2447345449
+      },
+      {
+        "path": "META-INF/kotlinx_coroutines_android.version",
+        "bytes": 5,
+        "crc32": 485120441
+      },
+      {
+        "path": "META-INF/kotlinx_coroutines_core.version",
+        "bytes": 5,
+        "crc32": 485120441
+      },
+      {
+        "path": "META-INF/services/com.fasterxml.jackson.core.JsonFactory",
+        "bytes": 39,
+        "crc32": 3004789347
+      },
+      {
+        "path": "META-INF/services/com.fasterxml.jackson.core.ObjectCodec",
+        "bytes": 44,
+        "crc32": 166341626
+      },
+      {
+        "path": "META-INF/services/com.fasterxml.jackson.databind.Module",
+        "bytes": 53,
+        "crc32": 3830398284
+      },
+      {
+        "path": "META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler",
+        "bytes": 54,
+        "crc32": 2404993872
+      },
+      {
+        "path": "META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory",
+        "bytes": 52,
+        "crc32": 1268078975
+      },
+      {
+        "path": "common.properties",
+        "bytes": 52,
+        "crc32": 4174404066
+      },
+      {
+        "path": "firebase-annotations.properties",
+        "bytes": 78,
+        "crc32": 2854804104
+      },
+      {
+        "path": "firebase-components.properties",
+        "bytes": 76,
+        "crc32": 2888498571
+      },
+      {
+        "path": "firebase-encoders-json.properties",
+        "bytes": 82,
+        "crc32": 4268596668
+      },
+      {
+        "path": "firebase-encoders.properties",
+        "bytes": 72,
+        "crc32": 594333342
+      },
+      {
+        "path": "image.properties",
+        "bytes": 58,
+        "crc32": 828290987
+      },
+      {
+        "path": "kotlin/annotation/annotation.kotlin_builtins",
+        "bytes": 1006,
+        "crc32": 96078319
+      },
+      {
+        "path": "kotlin/collections/collections.kotlin_builtins",
+        "bytes": 8308,
+        "crc32": 327658458
+      },
+      {
+        "path": "kotlin/concurrent/atomics/atomics.kotlin_builtins",
+        "bytes": 2674,
+        "crc32": 1252866643
+      },
+      {
+        "path": "kotlin/coroutines/coroutines.kotlin_builtins",
+        "bytes": 137,
+        "crc32": 1360136731
+      },
+      {
+        "path": "kotlin/internal/internal.kotlin_builtins",
+        "bytes": 590,
+        "crc32": 3555873624
+      },
+      {
+        "path": "kotlin/kotlin.kotlin_builtins",
+        "bytes": 29399,
+        "crc32": 2183354053
+      },
+      {
+        "path": "kotlin/ranges/ranges.kotlin_builtins",
+        "bytes": 4184,
+        "crc32": 1405855901
+      },
+      {
+        "path": "kotlin/reflect/reflect.kotlin_builtins",
+        "bytes": 4827,
+        "crc32": 3719567087
+      },
+      {
+        "path": "play-services-base.properties",
+        "bytes": 74,
+        "crc32": 3071319275
+      },
+      {
+        "path": "play-services-basement.properties",
+        "bytes": 82,
+        "crc32": 3242057829
+      },
+      {
+        "path": "play-services-mlkit-text-recognition-chinese.properties",
+        "bytes": 126,
+        "crc32": 3591867240
+      },
+      {
+        "path": "play-services-mlkit-text-recognition-common.properties",
+        "bytes": 124,
+        "crc32": 3458620456
+      },
+      {
+        "path": "play-services-tasks.properties",
+        "bytes": 76,
+        "crc32": 1559446414
+      },
+      {
+        "path": "text-recognition-bundled-common.properties",
+        "bytes": 100,
+        "crc32": 2761452596
+      },
+      {
+        "path": "text-recognition-chinese.properties",
+        "bytes": 86,
+        "crc32": 3434967322
+      },
+      {
+        "path": "transport-api.properties",
+        "bytes": 62,
+        "crc32": 3934013488
+      },
+      {
+        "path": "transport-backend-cct.properties",
+        "bytes": 78,
+        "crc32": 2226910247
+      },
+      {
+        "path": "transport-runtime.properties",
+        "bytes": 70,
+        "crc32": 3739748350
+      },
+      {
+        "path": "vision-common.properties",
+        "bytes": 64,
+        "crc32": 2940076309
+      },
+      {
+        "path": "vision-interfaces.properties",
+        "bytes": 72,
+        "crc32": 1947420475
+      }
+    ],
+    "embeddedFrontend": [
+      {
+        "path": "assets/index-Cd_C-xBt.js",
+        "bytes": 1085373,
+        "sha256": "9db1203eb6fdf37ceb7338541943c28671f40645ec3af453d94788f836c374cf",
+        "rawSnapshotEqual": true
+      },
+      {
+        "path": "assets/index-DZHLsM9K.css",
+        "bytes": 98510,
+        "sha256": "bf15e2454e138690b79e84342f072c8333a598266c3487ba04f66c5bc75138ca",
+        "rawSnapshotEqual": true
+      },
+      {
+        "path": "assets/native-recording-access-1xHBG_Gb.js",
+        "bytes": 1018,
+        "sha256": "f29d1db22ee98ad976032ae07a5b697804f747afc15056630139e2cc5ab6497e",
+        "rawSnapshotEqual": true
+      },
+      {
+        "path": "index.html",
+        "bytes": 478,
+        "sha256": "7ca3f5921229c2d3de9ab52f453dcc2f62d5fecb078a16b9783bb455a6c39837",
+        "rawSnapshotEqual": false,
+        "completeOrderedHTMLTokensEqual": true,
+        "tokens": [
+          [
+            "decl",
+            "doctype html"
+          ],
+          [
+            "start",
+            "html",
+            [
+              [
+                "lang",
+                "zh-CN"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "head",
+            []
+          ],
+          [
+            "start",
+            "meta",
+            [
+              [
+                "charset",
+                "UTF-8"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "meta",
+            [
+              [
+                "content",
+                "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+              ],
+              [
+                "name",
+                "viewport"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "meta",
+            [
+              [
+                "content",
+                "#f2f2f7"
+              ],
+              [
+                "name",
+                "theme-color"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "title",
+            []
+          ],
+          [
+            "data",
+            "备忘录"
+          ],
+          [
+            "end",
+            "title"
+          ],
+          [
+            "start",
+            "script",
+            [
+              [
+                "crossorigin",
+                ""
+              ],
+              [
+                "src",
+                "/assets/index-Cd_C-xBt.js"
+              ],
+              [
+                "type",
+                "module"
+              ]
+            ]
+          ],
+          [
+            "end",
+            "script"
+          ],
+          [
+            "start",
+            "link",
+            [
+              [
+                "crossorigin",
+                ""
+              ],
+              [
+                "href",
+                "/assets/index-DZHLsM9K.css"
+              ],
+              [
+                "rel",
+                "stylesheet"
+              ]
+            ]
+          ],
+          [
+            "end",
+            "head"
+          ],
+          [
+            "start",
+            "body",
+            []
+          ],
+          [
+            "start",
+            "div",
+            [
+              [
+                "id",
+                "root"
+              ]
+            ]
+          ],
+          [
+            "end",
+            "div"
+          ],
+          [
+            "end",
+            "body"
+          ],
+          [
+            "end",
+            "html"
+          ]
+        ]
+      }
+    ],
+    "compiledBackupExclusions": {
+      "allowBackup": false,
+      "rules": [
+        {
+          "manifestAttribute": "fullBackupContent",
+          "resourceId": "0x7f120000",
+          "sourcePath": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/src/main/res/xml/backup_rules.xml",
+          "compiledPath": "res/xml/backup_rules.xml",
+          "completeElementAttributeTreeEqual": true,
+          "tree": {
+            "tag": "full-backup-content",
+            "attributes": {},
+            "children": [
+              {
+                "tag": "exclude",
+                "attributes": {
+                  "domain": "root",
+                  "path": "."
+                },
+                "children": []
+              },
+              {
+                "tag": "exclude",
+                "attributes": {
+                  "domain": "file",
+                  "path": "."
+                },
+                "children": []
+              },
+              {
+                "tag": "exclude",
+                "attributes": {
+                  "domain": "database",
+                  "path": "."
+                },
+                "children": []
+              },
+              {
+                "tag": "exclude",
+                "attributes": {
+                  "domain": "sharedpref",
+                  "path": "."
+                },
+                "children": []
+              },
+              {
+                "tag": "exclude",
+                "attributes": {
+                  "domain": "external",
+                  "path": "."
+                },
+                "children": []
+              }
+            ]
+          }
+        },
+        {
+          "manifestAttribute": "dataExtractionRules",
+          "resourceId": "0x7f120001",
+          "sourcePath": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/gen/android/app/src/main/res/xml/data_extraction_rules.xml",
+          "compiledPath": "res/xml/data_extraction_rules.xml",
+          "completeElementAttributeTreeEqual": true,
+          "tree": {
+            "tag": "data-extraction-rules",
+            "attributes": {},
+            "children": [
+              {
+                "tag": "cloud-backup",
+                "attributes": {},
+                "children": [
+                  {
+                    "tag": "exclude",
+                    "attributes": {
+                      "domain": "root",
+                      "path": "."
+                    },
+                    "children": []
+                  },
+                  {
+                    "tag": "exclude",
+                    "attributes": {
+                      "domain": "file",
+                      "path": "."
+                    },
+                    "children": []
+                  },
+                  {
+                    "tag": "exclude",
+                    "attributes": {
+                      "domain": "database",
+                      "path": "."
+                    },
+                    "children": []
+                  },
+                  {
+                    "tag": "exclude",
+                    "attributes": {
+                      "domain": "sharedpref",
+                      "path": "."
+                    },
+                    "children": []
+                  },
+                  {
+                    "tag": "exclude",
+                    "attributes": {
+                      "domain": "external",
+                      "path": "."
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "tag": "device-transfer",
+                "attributes": {},
+                "children": [
+                  {
+                    "tag": "exclude",
+                    "attributes": {
+                      "domain": "root",
+                      "path": "."
+                    },
+                    "children": []
+                  },
+                  {
+                    "tag": "exclude",
+                    "attributes": {
+                      "domain": "file",
+                      "path": "."
+                    },
+                    "children": []
+                  },
+                  {
+                    "tag": "exclude",
+                    "attributes": {
+                      "domain": "database",
+                      "path": "."
+                    },
+                    "children": []
+                  },
+                  {
+                    "tag": "exclude",
+                    "attributes": {
+                      "domain": "sharedpref",
+                      "path": "."
+                    },
+                    "children": []
+                  },
+                  {
+                    "tag": "exclude",
+                    "attributes": {
+                      "domain": "external",
+                      "path": "."
+                    },
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "scope": "Compiled resource identity, not an OS backup/restore experiment"
+    }
+  },
+  "crossPackageInputsByteIdentical": true,
+  "status": "PASS-BOTH-PACKAGE-IDENTITY",
+  "commands": [
+    {
+      "label": "mac-original-extract",
+      "argv": [
+        "node",
+        "/private/tmp/apple-notes-sync87-webview-review/docs/verification/sync88/native-independent/extract-assets.mjs",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/native-build/result.json",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/mac-original.app/Contents/MacOS/notes-clone",
+        "/private/tmp/sync88-package-review-extract-run01/mac-original"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.056455,
+      "stdoutSha256": "44a8e33a84e52b533032f6548551af2e25ee6cc6f262bddce306da04307120af",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "mac-derived-extract",
+      "argv": [
+        "node",
+        "/private/tmp/apple-notes-sync87-webview-review/docs/verification/sync88/native-independent/extract-assets.mjs",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/native-build/result.json",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app/Contents/MacOS/notes-clone",
+        "/private/tmp/sync88-package-review-extract-run01/mac-derived"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.054619,
+      "stdoutSha256": "bd40084bd07764491e21ba23e237b15be588f7892de3ce50eb3001fa06a07f82",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "original-strict",
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/mac-original.app"
+      ],
+      "naturalExitCode": 1,
+      "wallSeconds": 0.025156,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "a774b22c783c13cf6cfee456fa2e8383ad9084c9c0b0f1ca75b4231719e30e7b"
+    },
+    {
+      "label": "derived-strict",
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.013505,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "00d2aa5866903ef1fdc0a9243bc0088f865f46ab52de6ceb8ace8473f29b3481"
+    },
+    {
+      "label": "derived-signature",
+      "argv": [
+        "/usr/bin/codesign",
+        "-dv",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.004087,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "465652601ae38c97d45afcf67b4c3e2068a82a73718764a257b71bef14789180"
+    },
+    {
+      "label": "android-signature",
+      "argv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/apksigner",
+        "verify",
+        "--verbose",
+        "--print-certs",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.761278,
+      "stdoutSha256": "ad5dcc6a8094668d0804d0a1b19dc2bf6fcae21dbf76ff6a876d31e27e05c5ac",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "android-badging",
+      "argv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+        "dump",
+        "badging",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.04273,
+      "stdoutSha256": "ce74105cada00a9558d2871922b0e0aa4971c3dd9b747227ac266d27e93a2b8a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "android-manifest",
+      "argv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+        "dump",
+        "xmltree",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk",
+        "--file",
+        "AndroidManifest.xml"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.026049,
+      "stdoutSha256": "86a61305ff103753d11329371a8d382456669769fa7816a710a07c528ab3a1c6",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "android-resources",
+      "argv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+        "dump",
+        "resources",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.03344,
+      "stdoutSha256": "057e2b51ba856a5f1a090c7975888a6320918fb056e23d06236545b13aff675a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "android-backup_rules",
+      "argv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+        "dump",
+        "xmltree",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk",
+        "--file",
+        "res/xml/backup_rules.xml"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.026241,
+      "stdoutSha256": "e8608c8b228ed5e239d034c754cf2bd55ab92279fa0d053d46fe44ab07c5d7c3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "android-data_extraction_rules",
+      "argv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+        "dump",
+        "xmltree",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk",
+        "--file",
+        "res/xml/data_extraction_rules.xml"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.026178,
+      "stdoutSha256": "0b2c2a5b6efb807b3919b719bad68bc9fd290a605a5b1066a565722b5502e0b3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "android-frontend-extract",
+      "argv": [
+        "node",
+        "/private/tmp/apple-notes-sync87-webview-review/docs/verification/sync88/native-independent/extract-assets.mjs",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/android-build/result.json",
+        "/private/tmp/sync88-package-review-extract-run01/android/libnotes_clone_lib.so",
+        "/private/tmp/sync88-package-review-extract-run01/android-frontend"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.285585,
+      "stdoutSha256": "bf78426c3dc6c97c78763dc5e3e7a355698973296d3ae99e2f4595543f49afb1",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "completeWallSeconds": 9.142455,
+  "limits": [
+    "Read-only supplied artifact/source/signature audit; no build, sign, install, launch, device, microphone or user-data access.",
+    "Mac signature is local ad-hoc; Android is development build, not public distribution certification.",
+    "Embedded JS/CSS bytes and ordered HTML tokens do not prove native runtime rendering or Apple Notes pixel parity.",
+    "Legacy data79 DEX/provider/OCR audit is not repeated or newly claimed by this focused package audit.",
+    "Actual compiled Android backup exclusions are compared with frozen XML; no OS backup/restore experiment is claimed."
+  ]
+}

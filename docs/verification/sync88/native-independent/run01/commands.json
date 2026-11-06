@@ -1,0 +1,172 @@
+[
+  {
+    "label": "mac-original-extract",
+    "argv": [
+      "node",
+      "/private/tmp/apple-notes-sync87-webview-review/docs/verification/sync88/native-independent/extract-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/native-build/result.json",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/mac-original.app/Contents/MacOS/notes-clone",
+      "/private/tmp/sync88-package-review-extract-run01/mac-original"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.056455,
+    "stdoutSha256": "44a8e33a84e52b533032f6548551af2e25ee6cc6f262bddce306da04307120af",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "mac-derived-extract",
+    "argv": [
+      "node",
+      "/private/tmp/apple-notes-sync87-webview-review/docs/verification/sync88/native-independent/extract-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/native-build/result.json",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app/Contents/MacOS/notes-clone",
+      "/private/tmp/sync88-package-review-extract-run01/mac-derived"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.054619,
+    "stdoutSha256": "bd40084bd07764491e21ba23e237b15be588f7892de3ce50eb3001fa06a07f82",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "original-strict",
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/mac-original.app"
+    ],
+    "naturalExitCode": 1,
+    "wallSeconds": 0.025156,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "a774b22c783c13cf6cfee456fa2e8383ad9084c9c0b0f1ca75b4231719e30e7b"
+  },
+  {
+    "label": "derived-strict",
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.013505,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "00d2aa5866903ef1fdc0a9243bc0088f865f46ab52de6ceb8ace8473f29b3481"
+  },
+  {
+    "label": "derived-signature",
+    "argv": [
+      "/usr/bin/codesign",
+      "-dv",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录.app"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.004087,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "465652601ae38c97d45afcf67b4c3e2068a82a73718764a257b71bef14789180"
+  },
+  {
+    "label": "android-signature",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/apksigner",
+      "verify",
+      "--verbose",
+      "--print-certs",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.761278,
+    "stdoutSha256": "ad5dcc6a8094668d0804d0a1b19dc2bf6fcae21dbf76ff6a876d31e27e05c5ac",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-badging",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "badging",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.04273,
+    "stdoutSha256": "ce74105cada00a9558d2871922b0e0aa4971c3dd9b747227ac266d27e93a2b8a",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-manifest",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "xmltree",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk",
+      "--file",
+      "AndroidManifest.xml"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.026049,
+    "stdoutSha256": "86a61305ff103753d11329371a8d382456669769fa7816a710a07c528ab3a1c6",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-resources",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "resources",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.03344,
+    "stdoutSha256": "057e2b51ba856a5f1a090c7975888a6320918fb056e23d06236545b13aff675a",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-backup_rules",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "xmltree",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk",
+      "--file",
+      "res/xml/backup_rules.xml"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.026241,
+    "stdoutSha256": "e8608c8b228ed5e239d034c754cf2bd55ab92279fa0d053d46fe44ab07c5d7c3",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-data_extraction_rules",
+    "argv": [
+      "/Users/water/Library/Android/sdk/build-tools/36.0.0/aapt2",
+      "dump",
+      "xmltree",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync88/备忘录-Android18.apk",
+      "--file",
+      "res/xml/data_extraction_rules.xml"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.026178,
+    "stdoutSha256": "0b2c2a5b6efb807b3919b719bad68bc9fd290a605a5b1066a565722b5502e0b3",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "android-frontend-extract",
+    "argv": [
+      "node",
+      "/private/tmp/apple-notes-sync87-webview-review/docs/verification/sync88/native-independent/extract-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/android-build/result.json",
+      "/private/tmp/sync88-package-review-extract-run01/android/libnotes_clone_lib.so",
+      "/private/tmp/sync88-package-review-extract-run01/android-frontend"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.285585,
+    "stdoutSha256": "bf78426c3dc6c97c78763dc5e3e7a355698973296d3ae99e2f4595543f49afb1",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]
