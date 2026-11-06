@@ -1,5 +1,7 @@
 # Apple Notes Clone
 
+2026-11-06：[数据管理空间总览81](plan/tasks/app-storage-overview81.md)与[预览80](plan/tasks/app-image-preview80.md)组合开发；参考系统储存空间风格，默认总占用/分类条，点击类型进入明细，[布局与统计契约](ui/storage-overview.md)。
+
 2026-11-06：[图片预览与标题栏80](plan/tasks/app-image-preview80.md)进行中，按用户截图修复原生toolbar叠加、支持预览内信息/保存、移除正文外部保存入口及标题栏双击缩放。规格见[图片预览](ui/image-preview.md)。
 
 2026-11-06：[附件闪烁、图片导出与数据管理79](plan/tasks/app-data-management79.md)已完成限定范围，[交付与验证](verification/data-management79/README.md)可查。正常附件不再整窗遮挡，媒体独立文件、图片原字节导出、真实磁盘管理及备份导入导出已接入；主线桌面230/手机9+43+75与build/production全自然0，Mac24/Android构建14通过准确构建与独立核包。Android未安装，原录音现场保留，provider设备运行/整窗像素单列开放。

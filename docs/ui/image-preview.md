@@ -36,3 +36,7 @@
 ## 验证边界
 
 程序化调试覆盖真实DOM图片打开/关闭/信息/保存/取消/错误/重复/撤权与选区历史，增加本轮布局断言和快照；更新79用例到预览内入口，不删除原断言。native标题栏/工具栏状态及双击通过真实AppKit隔离harness或同源实包验证，不用browser fixture冒充原生运行。系统应用/真实麦克风/原Android约13秒现场完全不操作，原版完整像素结论继续单列。
+
+## 共用原生层状态（用户后续数据管理81）
+
+ToolbarState新增可选`contentOverlay:boolean`，serde缺省false以兼容旧调用；guest/App→Rust model/macOS→ObjC链同名传输。App计算图片预览或数据管理打开时为true，原生布局隐藏主编辑工具分组、标题和搜索，仅保留交通灯与52pt可拖动根区域，DOM预览/管理都从原生保留区以下排版。关闭或受权清理后恢复既有布局，迟到旧revision不能复显。不能仅提高DOM z-index。数据管理组件不负责native IPC，由App统一拥有此状态。
