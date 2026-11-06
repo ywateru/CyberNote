@@ -107,8 +107,8 @@ export class FakeBackend {
 }
 
 // Runs before any application module. No application state/handler is replaced.
-export function installBrowserPlatform({ mobile = false } = {}) {
-  Object.defineProperty(navigator, 'platform', { value: mobile ? 'Android' : 'Linux' });
+export function installBrowserPlatform({ mobile = false, nativeToolbar = false } = {}) {
+  Object.defineProperty(navigator, 'platform', { value: mobile ? 'Android' : nativeToolbar ? 'MacIntel' : 'Linux' });
   const nativePerformanceNow = performance.now.bind(performance); let offset = 0; const intervals = new Map(); const timers = { set: window.setInterval.bind(window), clear: window.clearInterval.bind(window) };
   Object.defineProperty(performance, 'now', { value: () => nativePerformanceNow() + offset });
   window.setInterval = (fn, ms, ...args) => { const id = timers.set(fn, ms, ...args); intervals.set(id, () => fn(...args)); return id; };
@@ -124,6 +124,8 @@ export function installBrowserPlatform({ mobile = false } = {}) {
   };
   const fail = (name) => { if (control.fail[name] > 0) { control.fail[name]--; throw Error('Controlled ' + name + ' device failure'); } };
   const callbacks = new Map(), listeners = new Map(), appListeners = new Map(); let callbackId = 0;
+  let toolbarState; control.toolbarStates = [];
+  const toolbarInfo = () => ({windowLabel:'main',bindingId:'synthetic-toolbar82',stateRevision:toolbarState?.revision || 0,native:{material:'legacyHeader',reservedTop:52,contentWidth:1280,active:true,overflowActions:[],searchSequence:0,fullSizeContent:true,symbolFallbacks:[],windowNumber:0,scaleFactor:1}});
   window.isTauri = true; window.__TAURI_EVENT_PLUGIN_INTERNALS__ = { unregisterListener() {} };
   window.__TAURI_INTERNALS__ = {
     metadata: { currentWindow: { label: 'main' }, currentWebview: { label: 'main' } }, transformCallback(fn) { const id = ++callbackId; callbacks.set(id, fn); return id; }, unregisterCallback(id) { callbacks.delete(id); }, convertFileSrc: (path) => path,
@@ -133,6 +135,12 @@ export function installBrowserPlatform({ mobile = false } = {}) {
       if (command === 'plugin:event|unlisten') { for (const [name, ids] of listeners) listeners.set(name, ids.filter((id) => id !== args.eventId)); return; }
       if (command === 'plugin:event|emit' || command === 'plugin:event|emit_to') { control.emit(args.event, args.payload); return; }
       if (command === 'plugin:dialog|save' || command === 'plugin:dialog|open') { if (control.dialogDelay) await new Promise(done=>setTimeout(done,control.dialogDelay)); const kind=command.endsWith('|save')?'save':'open'; return control.dialogResults[kind].length ? control.dialogResults[kind].shift() : '/synthetic-fixture/fixture-export.json'; }
+      if (nativeToolbar && command.startsWith('plugin:notes-ui|')) {
+        if (command.endsWith('|keyboard_navigation')) return {enabled:true};
+        if (command.endsWith('|unbind')) return null;
+        if (command.endsWith('|bind') || command.endsWith('|update')) { toolbarState=args.toolbar; control.toolbarStates.push(structuredClone(toolbarState)); return toolbarInfo(); }
+        if (command.endsWith('|inspect') || command.endsWith('|focus_search')) return toolbarInfo();
+      }
       if (command === 'plugin:notes-ui|recording_access') { fail('authorization'); return { status: 'authorized' }; }
       if (command.startsWith('plugin:window|') || command.startsWith('plugin:webview|') || command.startsWith('plugin:webview-window|')) { if (command.endsWith('|close')) { await control.emit('tauri://close-requested', null); return; } if (command.endsWith('|destroy')) control.destroyed = true; if (command.endsWith('|is_focused')) return true; return null; }
       if (command === 'plugin:app|exit') { control.exited = true; return control.quitIntent(); }

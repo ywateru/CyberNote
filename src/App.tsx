@@ -153,8 +153,6 @@ import {
   Camera,
   ScanText,
   ScanLine,
-  Sun,
-  Moon,
   Highlighter,
   Copy,
   ArrowDownToLine,
@@ -204,6 +202,7 @@ import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
 import { attachmentExportPending } from "./attachment-export";
 import DataManagement, { type DataManagementHandle } from "./DataManagement";
+import Preferences, { type PreferencesTab } from "./Preferences";
 import type { ArchiveResult } from "./data-management";
 import { documentsEqual } from "./document-equality";
 import {
@@ -459,6 +458,8 @@ function App() {
   const [menu, setMenu] = useState<string | null>(null);
   const [modal, setModal] = useState<string | null>(null);
   const [modalValue, setModalValue] = useState("");
+  const [preferencesTab, setPreferencesTab] = useState<PreferencesTab>("settings");
+  const preferencesTrigger = useRef<HTMLElement | null>(null);
   const [contextNote, setContextNote] = useState<string | null>(null);
   const [noteMenuPoint, setNoteMenuPoint] = useState<{
     x: number;
@@ -1689,7 +1690,7 @@ function App() {
       formatTarget.current = null;
       paperTarget.current = null;
       setMenu(null);
-      setModal((current) => current === "data" ? current : null);
+      setModal((current) => current === "preferences" ? current : null);
       setModalValue("");
       setDraw(null);
       setRecord(false);
@@ -2140,6 +2141,13 @@ function App() {
     return { id, complete: true };
   };
   const openModal = (type: string, value = "") => {
+    if (type === "settings" || type === "data") {
+      if (modal !== "preferences") preferencesTrigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      setPreferencesTab(type === "data" ? "data" : "settings");
+      setModal("preferences");
+      setMenu(null);
+      return;
+    }
     if (type === "deleteSmartFolder") {
       const f = wsRef.current.folders.find((f) => f.id === contextFolder);
       smartDeleteTarget.current =
@@ -4260,7 +4268,7 @@ function App() {
   };
   const previewAuthority = JSON.stringify(accessGate.stamp(noteId || undefined));
   const imagePreviewOpen = !!imagePreview && imagePreview.owner === noteId && imagePreview.authority === previewAuthority && !quitPending && !syncCover && !synchronizing && !accessSuspended.length && !accessGate.state?.operationId && !modal && !folderForm && (!mobile || page === "editor");
-  const contentOverlay = imagePreviewOpen || modal === "data";
+  const contentOverlay = imagePreviewOpen || modal === "preferences";
   useLayoutEffect(() => {if(imagePreview && !imagePreviewOpen)setImagePreview(null);}, [imagePreview, imagePreviewOpen]);
   const nativeScope = JSON.stringify([
     folderId,
@@ -4807,6 +4815,7 @@ function App() {
         },
         ocr: ocrState,
         settings,
+        preferences: { open: modal === "preferences", tab: preferencesTab },
         folderForm: !!folderForm,
       }),
       handlers: {
@@ -4815,6 +4824,12 @@ function App() {
         "app.refresh": () => refresh(),
         "app.back": () => androidBack.current(),
         "app.dismissError": () => setError(""),
+        "settings.open": () => openModal("settings"),
+        "settings.tab": ({ tab }) => {
+          if (modal !== "preferences") throw Error("设置尚未打开");
+          if (tab !== "settings" && tab !== "data") throw Error("未知设置标签");
+          setPreferencesTab(tab);
+        },
         "data.open": () => openModal("data"),
         "image.preview": ({ id }) => {
           const button = document.querySelector<HTMLButtonElement>(`.attachment-node[data-attachment-id="${CSS.escape(id as string)}"] .image-open`);
@@ -4830,21 +4845,21 @@ function App() {
         "image.info": () => {const button=document.querySelector<HTMLButtonElement>('.image-preview [aria-label="图片信息"]');if(!button)throw Error("图片预览尚未打开");button.click();},
         "image.close": () => setImagePreview(null),
         "data.refresh": () => {
-          if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
+          if (modal !== "preferences" || preferencesTab !== "data" || !dataManagementHandle.current) throw Error("请先打开数据标签");
           return dataManagementHandle.current.refresh();
         },
         "data.navigate": ({ view }) => {
-          if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
+          if (modal !== "preferences" || preferencesTab !== "data" || !dataManagementHandle.current) throw Error("请先打开数据标签");
           if (typeof view !== "string" || !isStorageView(view))
             throw Error("未知存储类别");
           return dataManagementHandle.current.navigate(view);
         },
         "data.filter": (args) => {
-          if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
+          if (modal !== "preferences" || preferencesTab !== "data" || !dataManagementHandle.current) throw Error("请先打开数据标签");
           return dataManagementHandle.current.filter(args);
         },
         "data.exportAttachment": ({ id }) => {
-          if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
+          if (modal !== "preferences" || preferencesTab !== "data" || !dataManagementHandle.current) throw Error("请先打开数据标签");
           return dataManagementHandle.current.exportAttachment(id as string);
         },
         "folder.select": ({ id }) => {
@@ -5497,12 +5512,12 @@ function App() {
             </button>
           )}
           <IconButton
-            label={mobile ? "新建备忘录" : "更多设置"}
+            label={mobile ? "新建备忘录" : "设置"}
             onClick={
-              mobile ? newNote : () => setMenu(menu === "app" ? null : "app")
+              mobile ? newNote : () => openModal("settings")
             }
           >
-            {mobile ? <SquarePen /> : <MoreHorizontal />}
+            {mobile ? <SquarePen /> : <SettingsIcon />}
           </IconButton>
         </div>
       </aside>
@@ -6075,18 +6090,27 @@ function App() {
         </div>
       )}
       {imagePreviewOpen && imagePreview && <ImagePreview key={imagePreview.session} request={imagePreview} onClose={() => setImagePreview(value => value === imagePreview ? null : value)} />}
-      {modal === "data" && (
-        <DataManagement
+      {modal === "preferences" && (
+        <Preferences
+          tab={preferencesTab}
+          onTab={setPreferencesTab}
           onClose={() => setModal(null)}
-          onHandle={(handle) => { dataManagementHandle.current = handle; }}
-          onArchive={archive}
-          backupBlocked={!!recordingTicket.current || record}
-          archiveBusy={archiveBusy}
-          accessKey={`${ws.access?.sessionId || ""}:${ws.access?.epoch || 0}:${ws.access?.operationId || ""}`}
-          accessBlocked={!!accessSuspended.length || !!accessGate.state?.operationId}
+          settings={settings}
+          onSettings={updateSettings}
+          onCloseLocks={() => patch({type: "closeLocks"})}
+          returnFocus={preferencesTrigger.current}
+          data={<DataManagement
+            active={preferencesTab === "data"}
+            onHandle={(handle) => { dataManagementHandle.current = handle; }}
+            onArchive={archive}
+            backupBlocked={!!recordingTicket.current || record}
+            archiveBusy={archiveBusy}
+            accessKey={`${ws.access?.sessionId || ""}:${ws.access?.epoch || 0}:${ws.access?.operationId || ""}`}
+            accessBlocked={!!accessSuspended.length || !!accessGate.state?.operationId}
+          />}
         />
       )}
-      {modal && modal !== "data" && (
+      {modal && modal !== "preferences" && (
         <div
           className="modal-backdrop"
           onClick={() => (modal === "paper" ? closePaper() : setModal(null))}
@@ -6265,67 +6289,6 @@ function App() {
                     </button>
                   ))}
                 </div>
-              </>
-            )}
-            {modal === "settings" && (
-              <>
-                <h2>设置</h2>
-                <div className="settings-section">
-                  <h3>外观</h3>
-                  {[
-                    {
-                      key: "system",
-                      text: "跟随系统",
-                      icon: <Sun size={18} />,
-                    },
-                    { key: "light", text: "浅色", icon: <Sun size={18} /> },
-                    { key: "dark", text: "深色", icon: <Moon size={18} /> },
-                  ].map((t) => (
-                    <MenuRow
-                      key={t.key}
-                      icon={t.icon}
-                      checked={theme === t.key}
-                      onClick={() =>
-                        updateSettings({ theme: t.key as Settings["theme"] })
-                      }
-                    >
-                      {t.text}
-                    </MenuRow>
-                  ))}
-                </div>
-                <div className="settings-section">
-                  <h3>本地数据</h3>
-                  <MenuRow onClick={() => openModal("data")} icon={<FileText size={18} />}>数据管理</MenuRow>
-                  <MenuRow
-                    disabled={archiveBusy || !!recordingTicket.current || record}
-                onClick={() => archive("export")}
-                    icon={<ArrowDownToLine size={18} />}
-                  >
-                    导出本地备份
-                  </MenuRow>
-                  <MenuRow
-                    disabled={archiveBusy || !!recordingTicket.current || record}
-                onClick={() => archive("import")}
-                    icon={<ArrowUpFromLine size={18} />}
-                  >
-                    导入本地备份
-                  </MenuRow>
-                  <MenuRow
-                    onClick={() => patch({ type: "closeLocks" })}
-                    icon={<Lock size={18} />}
-                  >
-                    关闭所有已锁定的备忘录
-                  </MenuRow>
-                </div>
-                <p className="settings-footnote">
-                  所有备忘录和附件保存在此设备中。
-                </p>
-                  <button
-                    className="modal-cancel"
-                    onClick={() => setModal(null)}
-                  >
-                  完成
-                </button>
               </>
             )}
             {modal === "attachments" && (

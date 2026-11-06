@@ -39,7 +39,7 @@ export async function runStorageOverview(runtime, { command, check, output }) {
   };
   const close = async () => {
     await page
-      .getByRole("button", { name: "关闭数据管理", exact: true })
+      .getByRole("button", { name: "关闭设置", exact: true })
       .click();
     await idle(page);
   };
@@ -504,11 +504,11 @@ export async function runStorageOverview(runtime, { command, check, output }) {
         await command("settings.update", { settings: { theme } });
         await open();
         const geometry = await page
-          .locator(".data-management")
+          .locator(".preferences")
           .evaluate((node) => {
             const r = node.getBoundingClientRect();
             const close = node
-              .querySelector('[aria-label="关闭数据管理"]')
+              .querySelector('[aria-label="关闭设置"]')
               .getBoundingClientRect();
             return {
               width: r.width,
@@ -566,10 +566,10 @@ export async function runStorageOverview(runtime, { command, check, output }) {
     await page.evaluate(() =>
       document.querySelector(".app").style.setProperty("--native-top", "44px"),
     );
-    const native = await page.locator(".data-management").evaluate((node) => ({
+    const native = await page.locator(".preferences").evaluate((node) => ({
       top: node.getBoundingClientRect().top,
       close: node
-        .querySelector('[aria-label="关闭数据管理"]')
+        .querySelector('[aria-label="关闭设置"]')
         .getBoundingClientRect().top,
     }));
     check(
@@ -580,7 +580,7 @@ export async function runStorageOverview(runtime, { command, check, output }) {
       document.querySelector(".app").style.removeProperty("--native-top"),
     );
     const first = page.getByRole("button", {
-      name: "刷新数据管理",
+      name: "关闭设置",
       exact: true,
     });
     await first.focus();

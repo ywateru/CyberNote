@@ -65,6 +65,7 @@ export type DebugCommandArguments = {
       | "ocr.cancel"
       | "archive.export"
       | "archive.import"
+      | "settings.open"
       | "data.open"
       | "data.refresh"
       | "image.info"
@@ -75,6 +76,7 @@ export type DebugCommandArguments = {
       | `native.${string}`
   ]: Record<string, never>;
 } & {
+  "settings.tab": { tab: "settings" | "data" };
   "data.navigate": { view: StorageView };
   "data.filter": {
     query?: string;

@@ -1,0 +1,180 @@
+.preferences-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: #0004;
+  display: grid;
+  place-items: center;
+  padding: max(24px, var(--native-top, 0px)) 24px 24px;
+}
+.preferences {
+  width: min(840px, 100%);
+  height: min(760px, calc(100dvh - max(24px, var(--native-top, 0px)) - 24px));
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 20px 80px #0003;
+  font-size: 13px;
+}
+.preferences-header {
+  position: relative;
+  flex: none;
+  padding: 17px 48px 7px;
+  text-align: center;
+}
+.preferences-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+.preferences button,
+.preferences select {
+  font: inherit;
+  color: inherit;
+}
+.preferences-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  border: 0;
+  padding: 5px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--secondary);
+  display: grid;
+  place-items: center;
+}
+.preferences-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 16px 13px;
+  border-bottom: 1px solid var(--line);
+  flex: none;
+}
+.preferences-tabs button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 70px;
+  padding: 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--secondary);
+  cursor: pointer;
+}
+.preferences-tabs button[aria-selected="true"] {
+  color: var(--accent);
+  background: var(--grouped);
+}
+.preferences button:focus-visible,
+.preferences select:focus-visible,
+.preferences input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.preferences-panel {
+  min-height: 0;
+  min-width: 0;
+  flex: 1;
+}
+.preferences-panel[hidden] {
+  display: none;
+}
+.preferences-settings {
+  overflow: auto;
+  padding: 28px;
+  overscroll-behavior: contain;
+}
+.preferences-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.preferences-group {
+  padding: 12px 0 23px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 17px;
+}
+.preferences-row {
+  display: grid;
+  grid-template-columns: 145px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  margin: 13px 0;
+  min-width: 0;
+}
+.preferences-row > span:first-child {
+  text-align: right;
+}
+.preferences-row select,
+.preferences-row > button {
+  justify-self: start;
+  max-width: 100%;
+  min-width: 0;
+  background: var(--grouped);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.preferences-row select {
+  width: 210px;
+}
+.preferences-row > button {
+  white-space: normal;
+  text-align: left;
+}
+.preferences-check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.preferences-check input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+.preferences-footnote {
+  color: var(--secondary);
+  text-align: center;
+  line-height: 1.7;
+  margin: 24px 0;
+}
+.preferences-data {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+@media (max-width: 699px) {
+  .preferences-backdrop {
+    padding: 0;
+  }
+  .preferences {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border: 0;
+    border-radius: 0;
+    padding-top: max(env(safe-area-inset-top), var(--native-top, 0px));
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .preferences-settings {
+    padding: 15px;
+  }
+  .preferences-row {
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 7px;
+  }
+  .preferences-row select {
+    width: 100%;
+  }
+  .preferences-header {
+    padding-top: 14px;
+  }
+}

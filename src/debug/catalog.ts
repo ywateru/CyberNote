@@ -173,6 +173,8 @@ add("search", "search.find", "Open/find inside current note", {
 add("settings", "settings.update", "Persist application settings", {
   settings: o(),
 });
+add("settings", "settings.open", "Open actual unified preferences on settings tab");
+add("settings", "settings.tab", "Select actual preferences tab", { tab: e(["settings", "data"]) });
 add("settings", "sidebar.toggle", "Use sidebar preference handler");
 add("data", "data.open", "Open actual local data management page");
 add("data", "data.refresh", "Refresh real data-management bridge snapshot");

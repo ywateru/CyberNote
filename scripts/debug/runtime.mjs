@@ -45,7 +45,7 @@ export async function openRuntime(options = {}) {
     context = await browser.newContext({ viewport, ...(options.mobile ? { isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/130 Mobile Safari/537.36' } : {}) });
     const page = await context.newPage(); page.setDefaultTimeout(10000); page.on('pageerror', (error) => errors.push(String(error)));
     await page.route('**/*', (route) => route.request().url().startsWith(origin) || /^(data:|blob:)/.test(route.request().url()) ? route.continue() : route.abort());
-    await page.addInitScript(installBrowserPlatform, { mobile: !!options.mobile });
+    await page.addInitScript(installBrowserPlatform, { mobile: !!options.mobile, nativeToolbar: !!options.nativeToolbar });
     await page.goto(origin + '/?notesDebug=1', { waitUntil: 'domcontentloaded', timeout: 30000 });
     if (options.enabled === false || production) await page.waitForSelector('.app');
     else { await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); }
