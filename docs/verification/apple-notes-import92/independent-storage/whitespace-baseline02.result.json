@@ -1,0 +1,21 @@
+{
+  "source": "6febd39f parent html.rs only; current isolated test modules unchanged",
+  "fixtureCommits": [
+    "dc312b33",
+    "b7196467"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "store::apple_import::independent_whitespace",
+    "--",
+    "--nocapture"
+  ],
+  "target": "/private/tmp/apple-notes-sync84-target",
+  "exitCode": 101,
+  "wallSeconds": 2.736313583,
+  "scope": "distinguishing prior converter baseline, synthetic only"
+}

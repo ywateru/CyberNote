@@ -1,0 +1,21 @@
+{
+  "sourceCommit": "6febd39f2219f716eb0ada1d02ec407b6e62f86d",
+  "fixtureCommits": [
+    "dc312b33",
+    "b7196467"
+  ],
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "store::apple_import::independent_whitespace",
+    "--",
+    "--nocapture"
+  ],
+  "target": "/private/tmp/apple-notes-sync84-target",
+  "exitCode": 0,
+  "wallSeconds": 13.570975541,
+  "scope": "synthetic exact converter/prepare/raw only, no actual Notes/device"
+}

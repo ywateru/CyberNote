@@ -41,3 +41,18 @@ Product repair `9f1eb115793c02144ea2a6e52eed08c4c4061554`: maps `u` to schema un
 First attempt to write the repair harness failed before file creation/cargo because cherry-pick reapplied the sparse exclude to evidence; materialized only this evidence directory, then ran `repair03`. No product/runtime assertion was bypassed. Test-only includes restored after run. Target84 released. Original `checks01` and `checks02` failures remain intact.
 
 **Phase1 admission: PASS after narrow repair.** This covers source-independent Store/converter and existing journal integration only. Fixed source worker, host ownership/regular-file validation, Session gates, UI, actual Apple Notes and final package acceptance remain separate pending stages.
+
+
+## APP92 real-source spacing finding: independent synthetic repair admission
+
+**PASS for 6febd39f2219f716eb0ada1d02ec407b6e62f86d.** Frozen independent fixtures dc312b33 + b7196467 were executed unchanged. Fixed converter/prepare: 3 passed, natural cargo exit0 /13.570975541 s. A distinguishing control then temporarily restored only the prior converter html.rs and reran the exact same fixtures: 3 failed, natural exit101 /2.736313583 s. Every temporary include and converter change was restored; Git product bytes match frozen6feb. No real Notes/source, device or user data was read. Target84 was exclusively handed over and immediately released after these checks.
+
+- Six div /one nested h1 /four br /six outside ASCII newline tokens: old converter produces12 blocks where6 required; fixed produces exactly6, heading level1, matching ordered text and4 hardBreak nodes.
+- Explicit empty div/br/inline spaces and bold: old converter produces7 blocks where4 required; fixed retains explicit empty paragraph, hardBreak nodes, exact inline spaces and bold.
+- pre and NBSP: pre text remains exact, including leading/internal spaces, newline and tab; separate explicit NBSP div remains content. Old converter additionally inserts formatting paragraphs (5 vs3); fixed has exactly3.
+
+Each fixture also calls actual prepare_one, decodes the separately managed RawRecord bytes, verifies valid source/content fingerprint, exact original HTML/plainText and unchanged dates. The repair changes only sibling ASCII whitespace admission and adds regression tests; it does not change raw creation, fingerprinting, plaintext/date handling, managed files or warning insertion. Static review confirms skipped candidates are only text tokens of space/tab/newline/CR/formfeed and both neighboring non-format siblings must be structural blocks or an edge with at least one block. Explicit elements and NBSP never qualify; direct pre content is excluded. Unknown tag/style warnings remain on the original nodes path, not bypassed by this filter. No remaining blocker in the assigned real-note simple block-formatting repair scope.
+
+Execution order was fixed PASS first, then prior-code failing control; filenames preserve that order rather than pretending an earlier baseline run. Initial independent fixture draft accidentally contained only3 br despite its4-br assertion; this was corrected before any execution by b7196467. No fixture failure was counted as a product defect.
+
+Real02 worker copy/reopen/retry/source-preservation evidence remains separate: its worker PASS did not prove document spacing fidelity. These synthetic checks do not establish packaged Apple Events authorization, complete source rich-object coverage, actual source attachment export, or pixel parity. Final mainline assembly/build and private retained-snapshot conversion are separate root-managed gates.
