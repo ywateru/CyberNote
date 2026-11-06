@@ -1,0 +1,66 @@
+[
+  {
+    "name": "adapter-media",
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--lib",
+      "sync::adapter::media_tests",
+      "--",
+      "--nocapture"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 83.444554625
+  },
+  {
+    "name": "session",
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--lib",
+      "session::synchronization::tests",
+      "--",
+      "--nocapture"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.5070570000000032
+  },
+  {
+    "name": "adapter-resolve",
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--lib",
+      "sync::adapter::resolve_tests",
+      "--",
+      "--nocapture"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 2.801733999999996
+  },
+  {
+    "name": "tauri-check",
+    "command": [
+      "cargo",
+      "check",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "src-tauri/Cargo.toml"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 4.858429417000011
+  }
+]

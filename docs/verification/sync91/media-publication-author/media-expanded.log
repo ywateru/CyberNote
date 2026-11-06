@@ -1,0 +1,35 @@
+   Compiling notes-clone v0.1.0 (/private/tmp/apple-notes-viewport88/src-tauri)
+error[E0277]: `store::Attachment` doesn't implement `Debug`
+   --> src/store/synchronization/media_tests.rs:295:18
+    |
+295 |                 .unwrap_err()
+    |                  ^^^^^^^^^^ the trait `Debug` is not implemented for `store::Attachment`
+    |
+    = note: add `#[derive(Debug)]` to `store::Attachment` or manually `impl Debug for store::Attachment`
+note: required by a bound in `std::result::Result::<T, E>::unwrap_err`
+   --> /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/core/src/result.rs:1324:4
+help: consider annotating `store::Attachment` with `#[derive(Debug)]`
+   --> src/store.rs:123:1
+    |
+123 + #[derive(Debug)]
+124 | pub struct Attachment {
+    |
+
+error[E0277]: `store::Attachment` doesn't implement `Debug`
+   --> src/store/synchronization/media_tests.rs:317:14
+    |
+317 |             .unwrap_err()
+    |              ^^^^^^^^^^ the trait `Debug` is not implemented for `store::Attachment`
+    |
+    = note: add `#[derive(Debug)]` to `store::Attachment` or manually `impl Debug for store::Attachment`
+note: required by a bound in `std::result::Result::<T, E>::unwrap_err`
+   --> /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/core/src/result.rs:1324:4
+help: consider annotating `store::Attachment` with `#[derive(Debug)]`
+   --> src/store.rs:123:1
+    |
+123 + #[derive(Debug)]
+124 | pub struct Attachment {
+    |
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `notes-clone` (lib test) due to 2 previous errors

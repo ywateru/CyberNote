@@ -1,0 +1,101 @@
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `stage_attachment`, `stage_archive`, and `import_stage` are never used
+   --> src/session.rs:171:19
+    |
+ 60 | impl Session {
+    | ------------ methods in this implementation
+...
+171 |     pub(crate) fn stage_attachment(
+    |                   ^^^^^^^^^^^^^^^^
+...
+180 |     pub(crate) fn stage_archive(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+...
+184 |     pub(crate) fn import_stage(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^
+
+warning: method `stage_archive` is never used
+   --> src/store/archive.rs:616:19
+    |
+435 | impl Store {
+    | ---------- method in this implementation
+...
+616 |     pub(crate) fn stage_archive(&self) -> Result<super::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+
+warning: method `path` is never used
+  --> src/store/data_management.rs:79:12
+   |
+78 | impl DocumentStage {
+   | ------------------ method in this implementation
+79 |     pub fn path(&self) -> &Path {
+   |            ^^^^
+
+warning: methods `document_stage` and `stage_attachment` are never used
+   --> src/store/data_management.rs:316:19
+    |
+159 | impl Store {
+    | ---------- methods in this implementation
+...
+316 |     pub(crate) fn document_stage(&self) -> Result<DocumentStage> {
+    |                   ^^^^^^^^^^^^^^
+...
+446 |     pub(crate) fn stage_attachment(&self, id: &str) -> Result<(DocumentStage, AttachmentExport)> {
+    |                   ^^^^^^^^^^^^^^^^
+
+warning: method `public_key` is never used
+   --> src/sync/identity.rs:312:12
+    |
+175 | impl IdentityStore {
+    | ------------------ method in this implementation
+...
+312 |     pub fn public_key(&self) -> Result<String> {
+    |            ^^^^^^^^^^
+
+warning: `notes-clone` (lib test) generated 10 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.56s
+     Running unittests src/lib.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_clone_lib-387f51f065ad1b75)
+
+running 1 test
+MEDIA_RESPONSE name=cold_required_blobs_stale wall_ms=4512 foreground_reads=1724 ordinary_writes=1 max_us=10014 p99_us=414
+MEDIA_RESPONSE name=cold_flush_capture_stale wall_ms=6713 foreground_reads=2574 ordinary_writes=1 max_us=10647 p99_us=377
+test sync::adapter::media_tests::real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive has been running for over 60 seconds
+MEDIA_RESPONSE name=cold_receive wall_ms=6716 foreground_reads=2574 ordinary_writes=0 max_us=3624 p99_us=352
+MEDIA_RESPONSE name=cold_quiet_prepare wall_ms=6745 foreground_reads=2582 ordinary_writes=0 max_us=1087 p99_us=474
+MEDIA_RESPONSE name=cached_quiet_plan wall_ms=2426 foreground_reads=900 ordinary_writes=0 max_us=5091 p99_us=531
+MEDIA_RESPONSE name=cached_quiet_apply wall_ms=2408 foreground_reads=915 ordinary_writes=0 max_us=3743 p99_us=429
+test sync::adapter::media_tests::real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 186 filtered out; finished in 82.75s
+

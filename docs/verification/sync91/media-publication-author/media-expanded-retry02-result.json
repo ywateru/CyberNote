@@ -1,0 +1,16 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "--offline",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "store::synchronization::media::tests",
+    "--",
+    "--nocapture"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 4.733167417
+}

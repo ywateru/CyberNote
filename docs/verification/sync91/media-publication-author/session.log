@@ -1,0 +1,101 @@
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `stage_attachment`, `stage_archive`, and `import_stage` are never used
+   --> src/session.rs:171:19
+    |
+ 60 | impl Session {
+    | ------------ methods in this implementation
+...
+171 |     pub(crate) fn stage_attachment(
+    |                   ^^^^^^^^^^^^^^^^
+...
+180 |     pub(crate) fn stage_archive(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+...
+184 |     pub(crate) fn import_stage(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^
+
+warning: method `stage_archive` is never used
+   --> src/store/archive.rs:616:19
+    |
+435 | impl Store {
+    | ---------- method in this implementation
+...
+616 |     pub(crate) fn stage_archive(&self) -> Result<super::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+
+warning: method `path` is never used
+  --> src/store/data_management.rs:79:12
+   |
+78 | impl DocumentStage {
+   | ------------------ method in this implementation
+79 |     pub fn path(&self) -> &Path {
+   |            ^^^^
+
+warning: methods `document_stage` and `stage_attachment` are never used
+   --> src/store/data_management.rs:316:19
+    |
+159 | impl Store {
+    | ---------- methods in this implementation
+...
+316 |     pub(crate) fn document_stage(&self) -> Result<DocumentStage> {
+    |                   ^^^^^^^^^^^^^^
+...
+446 |     pub(crate) fn stage_attachment(&self, id: &str) -> Result<(DocumentStage, AttachmentExport)> {
+    |                   ^^^^^^^^^^^^^^^^
+
+warning: method `public_key` is never used
+   --> src/sync/identity.rs:312:12
+    |
+175 | impl IdentityStore {
+    | ------------------ method in this implementation
+...
+312 |     pub fn public_key(&self) -> Result<String> {
+    |            ^^^^^^^^^^
+
+warning: `notes-clone` (lib test) generated 10 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.40s
+     Running unittests src/lib.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_clone_lib-387f51f065ad1b75)
+
+running 8 tests
+test session::synchronization::tests::fixed_apply_error_classifier_never_retains_original_detail ... ok
+test session::synchronization::tests::strict_replies_real_window_phase_token_and_cancellation_receipt ... ok
+test session::synchronization::tests::diagnostics_preserve_first_abort_cause_read_only_and_saturate ... ok
+test session::synchronization::tests::participant_added_or_dirty_save_after_prepare_aborts_without_apply ... ok
+test session::synchronization::tests::ready_then_cancel_is_terminal_before_commit_and_inbox_survives ... ok
+test session::synchronization::tests::metadata_failure_propagates_unchanged_and_retains_reason_through_adapter_abort ... ok
+test session::synchronization::tests::normal_note_apply_has_actual_metadata_without_global_access_bump ... ok
+test session::synchronization::tests::real_apply_database_failure_preserves_error_rollback_first_category_and_release_counts ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 179 filtered out; finished in 0.06s
+

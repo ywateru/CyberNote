@@ -1,0 +1,48 @@
+[
+  {
+    "name": "session-all",
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--lib",
+      "session::synchronization::",
+      "--",
+      "--nocapture"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 1.163996916
+  },
+  {
+    "name": "lean-harness-check",
+    "command": [
+      "cargo",
+      "check",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "scripts/sync84/Cargo.toml"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.1243732079999997
+  },
+  {
+    "name": "debug-manifest-lock",
+    "command": [
+      "cargo",
+      "metadata",
+      "--locked",
+      "--offline",
+      "--no-deps",
+      "--format-version",
+      "1",
+      "--manifest-path",
+      "scripts/debug/rust/Cargo.toml"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.01962475000000019
+  }
+]
