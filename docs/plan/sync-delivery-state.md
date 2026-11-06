@@ -48,6 +48,8 @@
 - stage02首次自然exit2/8.555秒，未进入DocumentsUI。后续观察有CDP触摸15秒超时及UIA两个WebView矩形导致严格定位拒绝，尚不能据此判产品故障；原失败和截图保全，正在依据实际层级定位，不无条件取第一个。
 - lifecycle01自然结束，完整外层exit0/624.453秒，owned emulator自然0、无signal；停止后guard正确拒绝无active emulator。同AVD/serial/既有userdata的reviewed lifecycle02已开始，guard下限不变。仅新5584，未碰原设备。
 
+后续定位：cycle02在可用磁盘低于8GiB时触发reviewed保护停机（外层exit2/403.385秒）；installed hash mismatch落在保护停机的读窗口，首次读的具体bytes/SHA未被旧guard保存，不编造截断细节。未重新安装，须同data下完整installed hash再确认。根正常移除已完成63独审干净源码检出、保留branch/证据，64含untracked cache树未删；[清理记录](../verification/sync87/source-checkout-cleanup02.json)。作者和reviewer分别sparse无关历史verification检出，保留Git对象/分支/当前证据及全部产品输入，free恢复约10.39GiB。cycle03使用原data继续，guard下限不变。
+
 ## 用户原现场和范围
 
 原Android约13秒未保存录音完全不碰：禁止安装、启动、停止、重启、读取、导出、备份原应用或旧AVD（含5580）。ADB显式5584，无默认serial，无kill-server。只用合成PNG/TXT/WAV，无真实mic；Apple Notes删除实验不做。已有直接执行授权沿用，无重复询权限。

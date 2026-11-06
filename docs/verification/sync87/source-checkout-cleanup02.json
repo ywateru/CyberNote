@@ -1,0 +1,24 @@
+{
+  "reason": "Restore reviewed native environment >=8GiB free without deleting shared SDK/targets, original AVD, packages or user data",
+  "entries": [
+    {
+      "path": "/private/tmp/apple-notes-mac-recording-autosave64-independent-01",
+      "head": "e03de37546300d068c3b128bf2625e99d670e79d",
+      "branch": "verify/mac-recording-autosave64",
+      "dirty": "?? docs/verification/mac-recording-autosave64-independent/frontend-8b77a62c/browser-attempt01/vite-cache/\n?? docs/verification/mac-recording-autosave64-independent/frontend-f1044762/browser-attempt02/vite-cache/\n?? docs/verification/mac-recording-commit-gate65-independent/attempt01/vite-cache/\n?? docs/verification/mac-recording-commit-gate65-independent/attempt02/vite-cache/\n?? docs/verification/mac-recording-commit-gate65-independent/attempt03/vite-cache/\n",
+      "processMatches": [],
+      "removed": false,
+      "decision": "preserved because untracked caches exist; no force"
+    },
+    {
+      "path": "/private/tmp/apple-notes-mac-recording-diagnostics63-independent-01",
+      "head": "813bf706a68466a0ba243990b368fda7ce767449",
+      "branch": "verify/mac-recording-diagnostics63",
+      "dirty": "",
+      "processMatches": [],
+      "removed": true,
+      "decision": "normal worktree removal; branch and Git evidence retained"
+    }
+  ],
+  "afterFreeBytes": 10268696576
+}
