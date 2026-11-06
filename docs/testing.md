@@ -2,6 +2,8 @@
 
 2026-11-06。用户要求全部应用功能可通过调试指令调用，开发工具读取渲染后的 HTML 做交互和界面对比；录音可用 Fake/Mock。测试策略以本页为准。
 
+79新增验收：附件闪烁须在实际FileChooser→FileReader→保存/正文ACK全过程用MutationObserver+rAF记录遮罩、visibility和Host/既有媒体节点身份，保留修复前可捕获的反例；quiet显示不取消trusted/access/owner闸门，权限prepare/陌生session/失败/强同步并发仍应遮挡。数据管理默认fixture只证明UI，正式统计需与真实Rustfresh目录逐文件stat/mtime/分类总量独立核对，缺失/未知/symlink不能伪装成功；图片卡/预览/管理行导出须比较原文件完整字节，并经真实Session测试撤权、目标保护、失败。实际Rust→bridge→App接线、全媒体归档导入新PID恢复、Android ContentResolver编译与provider运行分别记账，不把content URI假设成普通路径。完整规格见[数据管理79](ui/data-management.md)。
+
 77新增：全局搜索高亮必须验证连续字符Range位置、实际ellipsis前首命中可见及220→280→220宽度恢复，不能只检查textContent。右键须由真实鼠标/DOM contextmenu坐标触发，覆盖边界和目标笔记；调试框架的首次transport未完成时TIMEOUT可无lastState，分开验证已观察状态与真实截止，保留慢首次/迟到true/永不结束谓词场景。最新[主线148/9/43/43回归](verification/mac-feedback77/integration/README.md)与旧失败分别记账。
 
 运行命令、参数、完整入口矩阵与模拟边界见[开发命令与布局检查](debugging.md)。
