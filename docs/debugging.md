@@ -142,3 +142,10 @@ node scripts/debug/check-mobile-attachments-rust.mjs /private/tmp/notes-current-
 参考橙黄色由用户原版PNG的Display ICC转换至sRGB后取局部主体色 `#fcb828`；截图缩放、字体、系统色彩管理与整体原生像素仍须单独比较，不由这个浏览器组宣称通过。手机入口/高亮保持现有行为，手机notes、recording和attachments仍单独回归。
 
 修正77独审后的摘要回归另测Range逐字位置：命中前后无额外flex gap；实际copy宽不足时缩短首命中前缀，220→280→220恢复/裁短上下文，保留ellipsis与重复匹配。`contract-deadlines.json`区分真实App的异步false轮询/已观察lastState，与受控200ms首transport在50ms截止前尚无lastState；后者正确TIMEOUT，不制造占位state。late true/never谓词用立即可达的受控state保证确实调用谓词，原实时deadline算法不变。
+
+
+## 桌面录音状态与真实完成按钮78
+
+`pnpm debug group recording-indicator --out /private/tmp/notes-recording-indicator` 使用真实侧栏录制、暂停、继续、✓与×的DOM按钮，检查原始owner列表“录音中”红点、仅当前live卡动效、220px长标题/高亮/画廊与reduced-motion。并入桌面全组；手机仍保留原✓策略并单独回归。Synthetic 440Hz输入保留真实RecordingPcm累计、附件/正文ACK及浏览器独立WAV解码；不接触现有手机录音、不证明原生Rust/硬件。
+
+Runner在测试浏览器中从React fiber保留真实`onState` callback，模拟完成后与新B会话时旧A回调晚到，验证不会复活或覆盖活动owner；产品没有新增调试后门。正文双次保存失败沿用已有两步恢复：先点实际全局错误栏“重试”提交pending正文，再点实际侧栏✓结束session；只点侧栏✓虽可结束但原全局错误栏状态未清，此既有错误展示行为仍在范围外。原始失败记录保留于[78证据](verification/recording-indicator78/README.md)。

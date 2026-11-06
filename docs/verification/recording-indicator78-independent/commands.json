@@ -1,0 +1,47 @@
+{
+  "productFreeze": "206557bb",
+  "runnerFreeze": "8fc060dd",
+  "fingerprint": "09fb9ee8b4702499400963dbf4f16693cd5c8646565f06823aa9daeb39f4b9ce",
+  "fileCount": 90,
+  "commands": [
+    {
+      "runner": "independent.mjs",
+      "output": "attempt01-duration-assumption",
+      "naturalExitCode": 1,
+      "completeProcessRealSeconds": 9.57,
+      "checksReached": 22,
+      "classification": "independent upper duration assumption invalid; full decoded audio nonzero but actual UI time increased cumulative duration"
+    },
+    {
+      "runner": "independent.mjs",
+      "output": "attempt02-mobile-preparation",
+      "naturalExitCode": 1,
+      "completeProcessRealSeconds": 20.37,
+      "checksPassed": 43,
+      "classification": "desktop passed; mobile recorder correctly refused attachment preparation because independent runner omitted note.select"
+    },
+    {
+      "runner": "independent.mjs",
+      "output": "final03",
+      "naturalExitCode": 0,
+      "completeProcessRealSeconds": 20.28,
+      "checksPassed": 48
+    },
+    {
+      "runner": "static-layout.mjs",
+      "output": "layout01-transition",
+      "naturalExitCode": 1,
+      "completeProcessRealSeconds": 13.08,
+      "classification": "desktop identical; mobile captured at different positions in actual CSS slide transitions; not static geometry regression"
+    },
+    {
+      "runner": "static-layout.mjs",
+      "output": "layout02-settled",
+      "naturalExitCode": 0,
+      "completeProcessRealSeconds": 13.81,
+      "classification": "awaited actual getAnimations().finished; desktop and mobile title/row geometry and complete PNG exactly equal baseline"
+    }
+  ],
+  "wallSource": "PTY /usr/bin/time -p natural process output; full start through cleanup/exit, not internal group timers",
+  "pageErrors": []
+}

@@ -886,3 +886,31 @@
 .recording-registration p { overflow-wrap: anywhere; }
 .recording-registration [role="alert"] { color: var(--danger); }
 .recording-registration button { margin: 8px 8px 0 0; }
+
+/* State-only capture indicators: these do not encode or simulate audio levels. */
+.recording-activity-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: #e63946;
+}
+.recording-active .recording-activity-dot {
+  animation: recording-capture-pulse 1.3s ease-in-out infinite;
+}
+.live-recording-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--secondary);
+}
+.live-recording-status.recording-active { color: #d92d3b; }
+.live-recording-status:not(.recording-active) .recording-activity-dot { display: none; }
+@keyframes recording-capture-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .3; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .recording-active .recording-activity-dot { animation: none; }
+}

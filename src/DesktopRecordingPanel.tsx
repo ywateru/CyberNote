@@ -371,6 +371,9 @@ export default function DesktopRecordingPanel(props: Props) {
     const timer = setInterval(tick, 100);
     return () => clearInterval(timer);
   }, []);
+  useEffect(() => {
+    currentProps.current.onState?.({ ...projection.current, sequence: ++sequence.current });
+  }, [status, state.hasError]);
   return (
     <div
       className="recording-local-panel"

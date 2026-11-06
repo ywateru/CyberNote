@@ -3353,3 +3353,22 @@ a {
 .tag-chips button { border: 0; border-radius: 5px; padding: 4px 7px; font: inherit; font-size: 12px; background: #dedddb; color: inherit; }
 .tag-chips button:hover { background: #cecdca; }
 .tag-chips button.selected { background: #f2ce58; color: #3a2d05; }
+
+.desktop .note-row-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.desktop .note-row-title > strong { flex: 1; min-width: 0; }
+.recording-note-badge {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
+  color: #d92d3b;
+  font-size: 10px;
+  line-height: 16px;
+  white-space: nowrap;
+  pointer-events: none;
+}

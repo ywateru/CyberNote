@@ -1,0 +1,50 @@
+{
+  "results": [
+    {
+      "group": "recording-indicator",
+      "pass": false,
+      "checks": [
+        "Idle preparation has no active recording badge or fake activity card",
+        "Only capture owner note-a has one recording badge",
+        "Only live recording card carries recording activity",
+        "Recording controller canFinish is reflected by enabled actual desktop checkmark",
+        "Activity decorations do not alter document JSON before a checkpoint",
+        "Recording dot has state pulse animation rather than synthetic level bars",
+        "Activity updates do not intercept real editor Undo history",
+        "Real editor Redo restores only user edit",
+        "Actual production onState callback retained for stale-delivery regression",
+        "Only capture owner note-a has one recording badge",
+        "Only live recording card carries recording activity",
+        "Switching B keeps original A card parked and no live card in B editor",
+        "Filtering original A out hides badge without stopping capture",
+        "Only capture owner note-a has one recording badge",
+        "Only live recording card carries recording activity",
+        "Tag filter hides owner without transferring badge or ending capture",
+        "Only capture owner note-a has one recording badge",
+        "Only live recording card carries recording activity",
+        "220px long highlighted title and recording badge neither overlap nor overflow",
+        "Gallery caption retains owner badge without title overlap",
+        "Reduced-motion preserves readable red badge while disabling dot movement",
+        "Reduced-motion also stops live-card indicator animation",
+        "Pause checkpoint stops active badges and live-card pulse with accurate paused text",
+        "Pause commits one original A card while B edits remain untouched",
+        "Only capture owner note-a has one recording badge",
+        "Only live recording card carries recording activity",
+        "Actual recording checkmark plus repeated close shares final save and cleans all activity",
+        "Checkmark after pause/resume actual accumulated WAV independently decodes with complete active duration and nonzero audio",
+        "Late completed-ticket callback cannot resurrect an activity badge or card",
+        "Only capture owner note-b has one recording badge",
+        "Only live recording card carries recording activity",
+        "Old A callback cannot override newer B session owner",
+        "Only capture owner note-a has one recording badge",
+        "Only live recording card carries recording activity",
+        "Actual recording close button follows same final original-owner save",
+        "Close while recording actual accumulated WAV independently decodes with complete active duration and nonzero audio",
+        "store failure stops all capture activity but retains same retry owner and media",
+        "store actual DOM retry finishes one owner card without duplication"
+      ],
+      "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.recording-dock [data-recording-state=\"retry\"]') to be visible\u001b[22m\n",
+      "elapsedMs": 20029
+    }
+  ]
+}

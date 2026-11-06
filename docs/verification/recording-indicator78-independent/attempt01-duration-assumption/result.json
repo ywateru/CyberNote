@@ -1,0 +1,251 @@
+{
+  "input": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "09fb9ee8b4702499400963dbf4f16693cd5c8646565f06823aa9daeb39f4b9ce",
+    "fileCount": 90,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "09fb9ee8b4702499400963dbf4f16693cd5c8646565f06823aa9daeb39f4b9ce",
+    "fileCount": 90,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "checks": [
+    {
+      "name": "idle has no fabricated capture status",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-a",
+      "pass": true
+    },
+    {
+      "name": "actual desktop finish enabled during recording",
+      "pass": true
+    },
+    {
+      "name": "one live indicator and no saved-card capture activity",
+      "pass": true
+    },
+    {
+      "name": "indicator leaves original persisted document unchanged",
+      "pass": true
+    },
+    {
+      "name": "pulse animation really runs and has changing opacity keyframes",
+      "pass": true,
+      "detail": {
+        "name": "recording-capture-pulse",
+        "state": "running",
+        "first": 33.36400002387174,
+        "second": 66.63200002387183,
+        "frames": [
+          {
+            "offset": 0,
+            "easing": "ease-in-out",
+            "composite": "auto",
+            "opacity": "1",
+            "computedOffset": 0
+          },
+          {
+            "offset": 0.5,
+            "easing": "ease-in-out",
+            "composite": "auto",
+            "opacity": "0.3",
+            "computedOffset": 0.5
+          },
+          {
+            "offset": 1,
+            "easing": "ease-in-out",
+            "composite": "auto",
+            "opacity": "1",
+            "computedOffset": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "reduced motion disables every active animation but retains readable status",
+      "pass": true,
+      "detail": [
+        {
+          "animation": "none",
+          "display": "block",
+          "opacity": "1"
+        },
+        {
+          "animation": "none",
+          "display": "block",
+          "opacity": "1"
+        }
+      ]
+    },
+    {
+      "name": "Undo ignores status-only decoration",
+      "pass": true
+    },
+    {
+      "name": "Redo restores user content without activity schema",
+      "pass": true
+    },
+    {
+      "name": "retain real old owner callback for delayed delivery",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-a",
+      "pass": true
+    },
+    {
+      "name": "live card remains parked only in A editor while B editable",
+      "pass": true
+    },
+    {
+      "name": "filtered owner hides badge without changing recording phase",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-a",
+      "pass": true
+    },
+    {
+      "name": "220px long search title badge neither overlaps nor exceeds row",
+      "pass": true,
+      "detail": {
+        "row": {
+          "x": 238,
+          "y": 103,
+          "width": 199,
+          "height": 75,
+          "top": 103,
+          "right": 437,
+          "bottom": 178,
+          "left": 238
+        },
+        "title": {
+          "x": 263,
+          "y": 114,
+          "width": 103,
+          "height": 18,
+          "top": 114,
+          "right": 366,
+          "bottom": 132,
+          "left": 263
+        },
+        "badge": {
+          "x": 372,
+          "y": 115,
+          "width": 40,
+          "height": 16,
+          "top": 115,
+          "right": 412,
+          "bottom": 131,
+          "left": 372
+        },
+        "highlight": true
+      }
+    },
+    {
+      "name": "badge does not intercept actual row context menu",
+      "pass": true
+    },
+    {
+      "name": "gallery badge remains within owner row and separate from title",
+      "pass": true,
+      "detail": {
+        "row": {
+          "x": 244,
+          "y": 100,
+          "width": 184,
+          "height": 214,
+          "top": 100,
+          "right": 428,
+          "bottom": 314,
+          "left": 244
+        },
+        "title": {
+          "x": 244,
+          "y": 248,
+          "width": 138,
+          "height": 32,
+          "top": 248,
+          "right": 382,
+          "bottom": 280,
+          "left": 244
+        },
+        "badge": {
+          "x": 388,
+          "y": 256,
+          "width": 40,
+          "height": 16,
+          "top": 256,
+          "right": 428,
+          "bottom": 272,
+          "left": 388
+        }
+      }
+    },
+    {
+      "name": "paused removes list capture and live motion immediately",
+      "pass": true
+    },
+    {
+      "name": "unique visible badge belongs to note-a",
+      "pass": true
+    },
+    {
+      "name": "actual checkmark finalizes and clears state after repeated click",
+      "pass": true
+    },
+    {
+      "name": "A finish preserves B saved edit",
+      "pass": true
+    },
+    {
+      "name": "DOM checkmark cumulative pause/resume full WAV and nonzero tail decode for owner note-a",
+      "pass": false
+    }
+  ],
+  "observations": [
+    {
+      "label": "DOM checkmark cumulative pause/resume",
+      "bytes": 289370,
+      "attachmentId": "fac19e51-1c10-47cf-9b6d-70668a9f2591",
+      "owner": "note-a",
+      "decoded": {
+        "duration": 6.027625,
+        "frames": 289326,
+        "peak": 0.1250038594007492,
+        "tail": 0.1250038594007492
+      },
+      "refs": [
+        "fac19e51-1c10-47cf-9b6d-70668a9f2591"
+      ]
+    }
+  ],
+  "pageErrors": [],
+  "failure": {
+    "message": "DOM checkmark cumulative pause/resume full WAV and nonzero tail decode for owner note-a",
+    "stack": "AssertionError [ERR_ASSERTION]: DOM checkmark cumulative pause/resume full WAV and nonzero tail decode for owner note-a\n    at check (file:///private/tmp/apple-notes-recording-indicator78/docs/verification/recording-indicator78-independent/independent.mjs:8:90)\n    at decode (file:///private/tmp/apple-notes-recording-indicator78/docs/verification/recording-indicator78-independent/independent.mjs:21:786)\n    at async file:///private/tmp/apple-notes-recording-indicator78/docs/verification/recording-indicator78-independent/independent.mjs:39:567"
+  },
+  "completeWallMs": 9464
+}

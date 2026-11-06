@@ -50,7 +50,7 @@ import { SaveRevisions } from "./save-revisions";
 import { SidebarPreference } from "./sidebar-preference";
 import { secureId } from "./secure-id";
 import { invoke } from "@tauri-apps/api/core";
-import { validRecordingAction, type RecordingViewState } from "./recording-coordinator";
+import { validRecordingAction, type RecordingPhase, type RecordingViewState } from "./recording-coordinator";
 import DesktopRecordingPanel, {
   type DesktopRecordingPanelHandle,
 } from "./DesktopRecordingPanel";
@@ -564,6 +564,18 @@ function App() {
   const waitRecordingEditorCommit = useEditorCommit();
   const recordingPanel = useRef<RecordingPanelHandle | null>(null);
   const [, updateRecordingOwner] = useState(0);
+  const [recordingIndicator, setRecordingIndicator] = useState<{
+    owner: string;
+    phase: RecordingPhase;
+  } | null>(null);
+  const recordingIndicatorRef = useRef(recordingIndicator);
+  const projectRecordingIndicator = (value: typeof recordingIndicator) => {
+    const previous = recordingIndicatorRef.current;
+    if (previous?.owner === value?.owner && previous?.phase === value?.phase)
+      return;
+    recordingIndicatorRef.current = value;
+    setRecordingIndicator(value);
+  };
   const resumeDocumentAdmission = useRef<(id: string) => void>(() => {});
   const recordingLifecycle = useRef({
     active: (): boolean => false,
@@ -3310,6 +3322,7 @@ function App() {
     local.card?.dispose();
     for (const controller of ticket.editorCommits || []) controller.abort();
     recordingTicket.current = null;
+    projectRecordingIndicator(null);
     updateRecordingOwner((value) => value + 1);
   };
   const registerDesktopRecording = (ticket: RecordingTicket): Promise<void> => {
@@ -3432,6 +3445,7 @@ function App() {
       if (ticket && ids.includes(ticket.batch.target.noteId)) {
         if (ticket.desktop) {
           ticket.batch.target.invalidated = true;
+          projectRecordingIndicator(null);
           for (const controller of ticket.editorCommits || [])
             controller.abort();
           ticket.local?.card?.dispose();
@@ -3442,6 +3456,7 @@ function App() {
       const ticket = recordingTicket.current;
       if (ticket) {
         ticket.detached = true;
+        projectRecordingIndicator(null);
         sealRecording(ticket);
       }
     },
@@ -3451,6 +3466,8 @@ function App() {
     ticket: RecordingTicket,
     state: RecordingViewState,
   ) => {
+    // Old timers must never revive a completed or superseded owner's indicator.
+    if (recordingTicket.current !== ticket || ticket.detached) return;
     if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1")
       debugRecordingState.current = state;
     if (
@@ -3458,8 +3475,14 @@ function App() {
       !ticket.accepting ||
       state.recordedAt === undefined ||
       ticket.batch.target.invalidated
-    )
+    ) {
+      projectRecordingIndicator(null);
       return;
+    }
+    projectRecordingIndicator({
+      owner: ticket.batch.target.noteId,
+      phase: state.hasError ? "error" : state.phase,
+    });
     try {
       ticket.local.card ??= mountRecordingCard({
         editor: ticket.batch.target.editor,
@@ -5574,12 +5597,25 @@ function App() {
                         </div>
                       )}
                       <div className="note-row-content">
+                        <div className="note-row-title">
                         <strong>
                           {n.pinned && (
                             <Pin className="pin-marker" size={13} />
                           )}
                           {searchListText(n.title, highlightQuery)}
                         </strong>
+                          {!mobile &&
+                            recordingIndicator?.phase === "recording" &&
+                            recordingIndicator.owner === n.id && (
+                              <span
+                                className="recording-note-badge recording-active"
+                                data-recording-owner={n.id}
+                              >
+                                <span className="recording-activity-dot" aria-hidden="true" />
+                                录音中
+                              </span>
+                            )}
+                        </div>
                         <div className="note-snippet">
                           <span className="note-time">
                             {group === "今天"

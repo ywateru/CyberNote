@@ -3,12 +3,15 @@ import { Plugin, PluginKey, type SelectionBookmark } from "@tiptap/pm/state";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
 import { recordingDate } from "./recording-metadata";
 import { recordingTime } from "./recording-clock";
+import type { RecordingViewState } from "./recording-coordinator";
 
 export type RecordingCardTarget = {
   editor: Editor;
   bookmark: SelectionBookmark;
 };
 export type RecordingCardState = {
+  phase: RecordingViewState["phase"];
+  hasError: boolean;
   recordedAt: number;
   elapsed: number;
   paused: boolean;
@@ -39,7 +42,14 @@ export function mountRecordingCard({ editor, bookmark }: RecordingCardTarget) {
   title.textContent = "新录音";
   const date = document.createElement("small");
   const duration = document.createElement("small");
-  metadata.append(title, date, duration);
+  const activity = document.createElement("small");
+  activity.className = "live-recording-status";
+  const dot = document.createElement("span");
+  dot.className = "recording-activity-dot";
+  dot.setAttribute("aria-hidden", "true");
+  const activityText = document.createElement("span");
+  activity.append(dot, activityText);
+  metadata.append(title, activity, date, duration);
   const stop = document.createElement("button");
   stop.type = "button";
   stop.className = "live-recording-stop";
@@ -100,6 +110,16 @@ export function mountRecordingCard({ editor, bookmark }: RecordingCardTarget) {
       date.textContent = recordingDate(state.recordedAt);
       duration.textContent = recordingTime(state.elapsed, false);
       card.title = state.notice;
+      const active = state.phase === "recording" && !state.hasError;
+      card.dataset.recordingPhase = state.hasError ? "error" : state.phase;
+      activity.classList.toggle("recording-active", active);
+      activityText.textContent = active
+        ? "录音中"
+        : state.hasError || state.phase === "retry" || state.phase === "error"
+          ? "录音保存待重试"
+          : state.phase === "paused"
+            ? "已暂停"
+            : "正在保存录音…";
       toggle.textContent = state.paused ? "继续" : "暂停";
       toggle.setAttribute("aria-label", state.paused ? "继续录音" : "暂停录音");
       toggle.disabled = !state.canToggle;
