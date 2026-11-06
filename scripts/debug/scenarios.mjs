@@ -1,4 +1,3 @@
-import { runQuickHome } from './quick-home.mjs';
 import { runStorageOverview, runStorageBackupAvailability } from './storage-overview.mjs';
 import { runStorageNavigation } from './storage-navigation.mjs';
 import { runPreferences } from './preferences.mjs';
@@ -24,9 +23,7 @@ export async function runGroups(runtime, names, output) {
     const command = async (id, args = {}) => { exercised.set(id, (exercised.get(id) || 0) + 1); const result = await api(page, id, args); await idle(page); return result.result; };
     const selected = async () => { const s = await state(page); return s.workspace.notes.find((note) => note.id === s.selection.noteId); };
     try {
-      if (name === 'quick-home' && runtime.mobile) {
-        await runQuickHome(runtime,{command,check,output});
-      } else if (name === 'preferences') {
+      if (name === 'preferences') {
         await runPreferences(runtime,{command,check,output});
       } else if (name === 'storage-overview') {
         await runStorageOverview(runtime,{command,check,output});
@@ -56,8 +53,6 @@ export async function runGroups(runtime, names, output) {
         await runStorageNavigation(runtime,{command,check,output});
         await runtime.reset();
         await runPreferences(runtime,{command,check,output});
-        await runtime.reset();
-        await runQuickHome(runtime,{command,check,output});
       } else if (name === 'contract') {
         const falseStarted = performance.now(); let waitError;
         let falseCalls = 0;

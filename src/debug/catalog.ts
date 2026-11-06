@@ -38,8 +38,6 @@ add(
 add("app", "app.flush", "Await actual document save queue ACK");
 add("app", "app.refresh", "Reload through trusted application bridge");
 add("app", "app.back", "Application Back including overlay dismissal");
-add("app", "app.folders", "Open secondary folders page on mobile");
-add("editor", "editor.done", "Flush editing and hide mobile keyboard through actual Done handler");
 add("app", "app.dismissError", "Dismiss application error banner");
 add("navigation", "folder.select", "Navigate physical or smart folder", {
   id: s(true),

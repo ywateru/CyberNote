@@ -40,8 +40,6 @@ export type DebugCommandArguments = {
       | "app.flush"
       | "app.refresh"
       | "app.back"
-      | "app.folders"
-      | "editor.done"
       | "app.dismissError"
       | "note.create"
       | "note.delete"

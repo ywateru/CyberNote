@@ -122,7 +122,6 @@ import {
   Search,
   X,
   MoreHorizontal,
-  Plus,
   SquarePen,
   FolderPlus,
   PanelLeft,
@@ -416,7 +415,6 @@ function SearchEditorHost({
   return (
     <div
       className="editor-scroll"
-      data-mobile-editor-note={note.id}
       hidden={!active}
       inert={!active}
       aria-hidden={!active || undefined}
@@ -442,17 +440,16 @@ function App() {
   const debugPending = useRef(new Set<Promise<unknown>>());
   const debugRecordingState = useRef<RecordingViewState | null>(null);
   const separate = new URLSearchParams(location.search).get("note");
-  const initialMobile = useRef(window.innerWidth < 700 && !separate).current;
   const [ws, setWs] = useState<Workspace>(empty);
   const wsRef = useRef(ws);
   wsRef.current = ws;
   const [loading, setLoading] = useState(true);
   const [workspaceLoaded, setWorkspaceLoaded] = useState(false);
   const [error, setError] = useState("");
-  const [folderId, setFolderId] = useState(initialMobile ? "all" : "default");
+  const [folderId, setFolderId] = useState("default");
   const [baseNoteId, setNoteId] = useState<string | null>(null);
   const [searchNoteId, setSearchNoteId] = useState<string | null>(null);
-  const [page, setPage] = useState<"folders" | "notes" | "editor">(initialMobile ? "notes" : "folders");
+  const [page, setPage] = useState<"folders" | "notes" | "editor">("folders");
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
   const [filter, setFilter] = useState("");
@@ -486,17 +483,6 @@ function App() {
   const [editors, setEditors] = useState<ReadonlyMap<string, Editor>>(
     new Map(),
   );
-  const mobileNavigation = useRef(0);
-  const createFlight = useRef<Promise<void> | null>(null);
-  const [creatingNote, setCreatingNote] = useState(false);
-  const [creationError, setCreationError] = useState("");
-  const createReceipt = useRef<{ id: string; source: string } | null>(null);
-  const createFocus = useRef<{ id: string; navigation: number } | null>(null);
-  const [mobileCreatedEditor, setMobileCreatedEditor] = useState<string | null>(null);
-  const cancelCreateFocus = useCallback(() => {
-    mobileNavigation.current++;
-    createFocus.current = null;
-  }, []);
   const tagCompositions = useRef(new Map<string, TagComposition>());
   const tagCompositionTarget = useRef<{
     noteId: string;
@@ -691,8 +677,7 @@ function App() {
     pos?: number;
   } | null>(null);
   const [record, setRecord] = useState(false);
-  const [mobile, setMobile] = useState(!!initialMobile);
-  const mobileMode = useRef(!!initialMobile);
+  const [mobile, setMobile] = useState(window.innerWidth < 700 && !separate);
   const paperOptions = mobile ? mobilePaperOptions : desktopPaperOptions;
   const queues = useRef(new Map<string, Promise<SaveOutcome>>());
   const revisions = useRef(new SaveRevisions());
@@ -762,9 +747,7 @@ function App() {
     !accessGate.state?.operationId &&
     listed.length === 0;
   const projectedNoteId =
-    mobile && page === "editor" && mobileCreatedEditor === baseNoteId
-      ? baseNoteId
-      : !contentSearch && smartFolder
+    !contentSearch && smartFolder
       ? baseNoteId && folderMembers.has(baseNoteId)
         ? baseNoteId
         : (currentProjection?.firstId ?? null)
@@ -857,19 +840,9 @@ function App() {
     smartFolder && noteId
       ? { folderId, noteId, navigation: tagNavigation }
       : null;
-  const mobileCreationSelected =
-    mobile &&
-    page === "editor" &&
-    mobileCreatedEditor === noteId &&
-    !!noteId &&
-    !!accessGate.state?.notes[noteId]?.authorized &&
-    !current?.deletedAt;
   const selected = ws.notes.find(
     (n) =>
-      n.id ===
-      (desktopSearch && !listed.length && !mobileCreationSelected
-        ? null
-        : contextNote || noteId),
+      n.id === (desktopSearch && !listed.length ? null : contextNote || noteId),
   );
   const editor = noteId ? editors.get(noteId) || null : null;
   useLayoutEffect(() => {
@@ -1052,8 +1025,8 @@ function App() {
     return true;
   }, []);
   const restoreSelection = useCallback(
-    (data: Workspace, initial = false) => {
-      const restoredFolder = initial && initialMobile ? "all" : String(data.settings.selectedFolder || "default");
+    (data: Workspace) => {
+      const restoredFolder = String(data.settings.selectedFolder || "default");
       setFolderId(
         restoredFolder === "all" ||
           data.folders.some((f) => f.id === restoredFolder)
@@ -1062,14 +1035,12 @@ function App() {
       );
       const selectedId = separate || String(data.settings.selectedNote || "");
       setNoteId(
-        initial && initialMobile
-          ? null
-          : data.notes.some((n) => n.id === selectedId) ? selectedId : null,
+        data.notes.some((n) => n.id === selectedId) ? selectedId : null,
       );
       if (separate && data.notes.some((n) => n.id === selectedId))
         setPage("editor");
     },
-    [separate, initialMobile],
+    [separate],
   );
   metadataRefreshRef.current = (force = true) => {
     metadataRefreshAgain.current ||= force;
@@ -1162,10 +1133,7 @@ function App() {
   }, [hydrate, fail, separate]);
   useEffect(() => {
     const resize = () => {
-      const nextMobile = window.innerWidth < 700 && !separate;
-      if (!!nextMobile !== mobileMode.current) cancelCreateFocus();
-      mobileMode.current = !!nextMobile;
-      setMobile(!!nextMobile);
+      setMobile(window.innerWidth < 700 && !separate);
       viewportHeight.current = Math.max(
         viewportHeight.current,
         window.innerHeight,
@@ -1498,12 +1466,6 @@ function App() {
     if (native)
       getCurrentWindow()
         .onCloseRequested(async (event) => {
-          if (createFlight.current) {
-            event.preventDefault();
-            cancelCreateFocus();
-            fail(Error("正在创建备忘录，请完成后重试关闭。"));
-            return;
-          }
           if (
             pendingDocs.current.size ||
             (ownsSidebarPreference && sidebarPreference.needsConfirmation) ||
@@ -1622,7 +1584,6 @@ function App() {
         const held = { id: payload.id, editors: new Map<Editor, boolean>() };
         quitState.current = held;
         try {
-          if (createFlight.current) {cancelCreateFocus();throw Error("正在创建备忘录，退出已取消；请完成后重试。");}
           if (
             [...editorsRef.current.values()].some(
               (instance) => !instance.isDestroyed && instance.view.composing,
@@ -1795,7 +1756,7 @@ function App() {
         }
         if (!initializedSelection.current) {
           initializedSelection.current = true;
-          restoreSelection(data, true);
+          restoreSelection(data);
         }
         blockedNotes.current = new Set(data.access?.suspended || []);
         setAccessSuspended([...blockedNotes.current]);
@@ -1926,21 +1887,6 @@ function App() {
     if (show) api?.show();
     else api?.hide();
   };
-  useLayoutEffect(() => {
-    const intent = createFocus.current;
-    if (!intent) return;
-    if (!mobile || intent.navigation !== mobileNavigation.current || page !== "editor" || modal || menu || folderForm || quitPending) {
-      createFocus.current = null;
-      return;
-    }
-    const instance = editors.get(intent.id);
-    if (noteId !== intent.id || !instance || instance.isDestroyed || !instance.isEditable || nativeEditorOwners.current.get(instance) !== intent.id || !instance.view.dom.isConnected || !instance.view.dom.getClientRects().length || synchronizingRef.current || accessGate.state?.operationId || accessGate.state?.suspended.includes(intent.id) || !accessGate.state?.notes[intent.id]?.authorized) return;
-    createFocus.current = null;
-    instance.view.dispatch(instance.state.tr.setSelection(Selection.atEnd(instance.state.doc)));
-    instance.view.focus();
-    keyboard(true);
-    setEditing(true);
-  });
   const closeFormat = (restoreKeyboard = false) => {
     const target = formatTarget.current;
     setMenu(null);
@@ -2071,8 +2017,6 @@ function App() {
     }
   }, [noteId]);
   const chooseFolder = (id: string) => {
-    cancelCreateFocus();
-    setMobileCreatedEditor(null);
     clearTagComposition();
     setTagFilter(undefined);
     setGalleryEditor(false);
@@ -2094,8 +2038,6 @@ function App() {
     updateSettings({ selectedFolder: id, selectedNote: first || "" });
   };
   const chooseTag = (name: string | null) => {
-    cancelCreateFocus();
-    setMobileCreatedEditor(null);
     clearTagComposition();
     setTagFilter(name);
     setFilter("");
@@ -2105,8 +2047,6 @@ function App() {
     setMenu(null);
   };
   const chooseNote = (n: Note) => {
-    cancelCreateFocus();
-    setMobileCreatedEditor(null);
     clearTagComposition();
     if (!mobile && view === "gallery") setGalleryEditor(true);
     if (contentSearch) setSearchNoteId(n.id);
@@ -2119,11 +2059,7 @@ function App() {
     if (!contentSearch) updateSettings({ selectedNote: n.id });
   };
   const createNote = useCallback(
-    (validate?: () => void): Promise<void> => {
-      if (mobile && createFlight.current) return createFlight.current;
-      const source = folderId, navigation = mobileNavigation.current;
-      if (mobile) { createFocus.current = null; setCreatingNote(true); setCreationError(""); }
-      const work = (async () => {
+    async (validate?: () => void) => {
       try {
         if (quitState.current) throw Error("正在完成保存并退出，请稍候。");
         await flush();
@@ -2134,29 +2070,25 @@ function App() {
         )
           ? folderId
           : "default";
-        const retained = mobile && createReceipt.current?.source === source ? createReceipt.current : null;
-        const created = retained ? null : await action<Note & Pick<Workspace, "access">>({ type: "createNote", folderId: fid });
-        const createdId = retained?.id ?? created?.receipt?.createdId ?? created?.value?.id;
+        const created = await action<Note & Pick<Workspace, "access">>({
+          type: "createNote",
+          folderId: fid,
+        });
+        const createdId = created.receipt?.createdId ?? created.value?.id;
         if (!createdId) throw Error("后端未提供新建收据");
-        if (mobile) createReceipt.current = {id: createdId, source};
-        if (created?.maintenanceError) fail(created.maintenanceError);
+        if (created.maintenanceError) fail(created.maintenanceError);
         // Keep the successful unique ID even if its snapshot is stale. Never
         // issue create again; only authoritative data can activate the editor.
         const data = await metadataRefreshRef.current();
         const n = data?.notes.find((note) => note.id === createdId);
         if (!n || !accessGate.state?.notes[createdId]?.authorized) {
           setNotice("备忘录已经创建，列表同步后可查看");
-          if (mobile) setCreationError("备忘录已创建，点击＋重试打开");
           return;
         }
-        if (mobile && createReceipt.current?.id === createdId) createReceipt.current = null;
-        if (mobile && navigation !== mobileNavigation.current) return;
         revisions.current.confirmed(n.id, n.revision);
         clearTagComposition();
         setTagFilter(undefined);
-        setFolderId(mobile ? source : fid);
-        if (mobile) setMobileCreatedEditor(n.id);
-        setSearchNoteId(null);
+        setFolderId(fid);
         setFilter("");
         setNoteId(n.id);
         setPage("editor");
@@ -2165,41 +2097,18 @@ function App() {
         setQuery("");
         setSearching(false);
         setEditing(true);
-        updateSettings({ selectedFolder: mobile ? source : fid, selectedNote: n.id });
-        if (mobile) createFocus.current = {id:n.id,navigation};
-        else setTimeout(
+        updateSettings({ selectedFolder: fid, selectedNote: n.id });
+        setTimeout(
           () => document.querySelector<HTMLElement>(".tiptap")?.focus(),
           100,
         );
       } catch (e) {
-        if (mobile) setCreationError(errText(e));
         fail(e);
       }
-      })();
-      if (mobile) {
-        createFlight.current = work;
-        void work.finally(() => { if (createFlight.current === work) {createFlight.current = null;setCreatingNote(false);} });
-      }
-      return work;
     },
-    [fail, flush, folderId, updateSettings, clearTagComposition, mobile],
+    [fail, flush, folderId, updateSettings, clearTagComposition],
   );
   const newNote = useCallback(() => createNote(), [createNote]);
-  const openFolders = () => {
-    cancelCreateFocus();
-    setSearching(false);
-    setQuery("");
-    setFilter("");
-    setTagFilter(undefined);
-    setPage("folders");
-  };
-  const finishEditing = async () => {
-    cancelCreateFocus();
-    await flush();
-    editor?.commands.blur();
-    keyboard(false);
-    setEditing(false);
-  };
   const saveFolderDraft = async (draft: FolderDraft, committedId?: string) => {
     let id = committedId;
     if (!id) {
@@ -2232,7 +2141,6 @@ function App() {
     return { id, complete: true };
   };
   const openModal = (type: string, value = "") => {
-    cancelCreateFocus();
     if (type === "settings" || type === "data") {
       if (modal !== "preferences") preferencesTrigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       setPreferencesTab(type === "data" ? "data" : "settings");
@@ -2283,18 +2191,10 @@ function App() {
     setMenu(null);
   };
   const back = () => {
-    cancelCreateFocus();
     setMenu(null);
     setEditing(false);
     setShowFind(false);
-    if (mobile) {
-      editor?.commands.blur();
-      keyboard(false);
-      if (page === "editor") {setPage("notes");setMobileCreatedEditor(null);}
-      else chooseFolder("all");
-      void flush().catch(fail);
-    }
-    else if (view === "gallery" && galleryEditor) setGalleryEditor(false);
+    if (!mobile && view === "gallery" && galleryEditor) setGalleryEditor(false);
     else if (separate && native) getCurrentWindow().close();
     else if (page === "editor") setPage("notes");
     else {
@@ -2326,11 +2226,8 @@ function App() {
       editor.commands.blur();
       keyboard(false);
       setEditing(false);
-    } else if (mobile ? page !== "notes" || folderId !== "all" : page !== "folders") back();
+    } else if (page !== "folders") back();
     else {
-      cancelCreateFocus();
-      if (mobile && createFlight.current) {setNotice("正在创建备忘录，请稍候");return;}
-      if (pickerTargets.current.size || attachmentBatches.current.size) {fail(Error("附件操作尚未完成，请稍候再退出。"));return;}
       flush()
         .then(() => {
           if (!pendingDocs.current.size) void exit(0);
@@ -3179,11 +3076,10 @@ function App() {
       <input
         ref={searchInput}
         aria-label="搜索备忘录"
-        placeholder={mobile ? "搜索笔记" : "搜索"}
+        placeholder="搜索"
         value={query}
-        onFocus={() => {cancelCreateFocus();setSearching(true);}}
+        onFocus={() => setSearching(true)}
         onChange={(e) => {
-          cancelCreateFocus();
           setQuery(e.target.value);
           setFilter((value) => (value === "tags" ? value : ""));
         }}
@@ -3192,6 +3088,8 @@ function App() {
         <button aria-label="清除搜索" onClick={() => setQuery("")}>
           <X size={14} />
         </button>
+      ) : mobile ? (
+        <Mic size={15} />
       ) : null}
     </div>
   );
@@ -3811,7 +3709,6 @@ function App() {
     >
       {mobile && bottom ? (
         <>
-          <button className="format-button" aria-label="格式" onClick={openFormat}>格式</button>
           <IconButton
             label="核对清单"
             onClick={() => editor?.chain().focus().toggleTaskList().run()}
@@ -3826,6 +3723,9 @@ function App() {
           </IconButton>
           <IconButton label="绘画" onClick={() => setDraw({ strokes: [] })}>
             <PenTool />
+          </IconButton>
+          <IconButton label="新建备忘录" onClick={newNote}>
+            <SquarePen />
           </IconButton>
         </>
       ) : (
@@ -4884,7 +4784,6 @@ function App() {
         },
         busy:
           loading ||
-          creatingNote ||
           archiveBusy ||
           attachmentExportPending() ||
           !!dataManagementHandle.current?.inspect().busy ||
@@ -4917,7 +4816,6 @@ function App() {
         ocr: ocrState,
         settings,
         preferences: { open: modal === "preferences", tab: preferencesTab },
-        creation: { pending: creatingNote, receipt: createReceipt.current?.id || null, source: createReceipt.current?.source || null, error: creationError, focusTarget: createFocus.current?.id || null },
         folderForm: !!folderForm,
       }),
       handlers: {
@@ -4925,8 +4823,6 @@ function App() {
         "app.flush": () => flush(),
         "app.refresh": () => refresh(),
         "app.back": () => androidBack.current(),
-        "app.folders": () => {if(!mobile)throw Error("文件夹页面仅用于手机导航");openFolders();},
-        "editor.done": () => finishEditing(),
         "app.dismissError": () => setError(""),
         "settings.open": () => openModal("settings"),
         "settings.tab": ({ tab }) => {
@@ -5132,7 +5028,6 @@ function App() {
         },
         "search.set": ({ query: value }) => {
           assert();
-          cancelCreateFocus();
           setQuery(value as string);
           setSearching(true);
           setFilter((f) => (f === "tags" ? f : ""));
@@ -5164,7 +5059,6 @@ function App() {
         },
         "menu.open": ({ menu: value }) => {
           assert();
-          cancelCreateFocus();
           if (["format", "media", "table"].includes(String(value))) assert(true);
           if (value === "table" && !editor?.isActive("table"))
             throw Object.assign(Error("当前选区不在表格中"), {
@@ -5510,7 +5404,6 @@ function App() {
           </div>
         )}
         <div className="mobile-folder-nav">
-          {mobile && <button aria-label="返回全部笔记" onClick={() => chooseFolder("all")}><ChevronLeft />笔记</button>}
           <button onClick={() => setMenu(menu === "app" ? null : "app")}>
             编辑
           </button>
@@ -5620,7 +5513,6 @@ function App() {
           )}
           <IconButton
             label={mobile ? "新建备忘录" : "设置"}
-            disabled={mobile && creatingNote}
             onClick={
               mobile ? newNote : () => openModal("settings")
             }
@@ -5640,7 +5532,7 @@ function App() {
         />
       )}
       <section
-        className={`notes-pane ${mobile || view === "gallery" ? "gallery-pane" : ""}`}
+        className={`notes-pane ${view === "gallery" ? "gallery-pane" : ""}`}
       >
         {!nativeTop && (
           <header
@@ -5649,11 +5541,16 @@ function App() {
           >
             {mobile ? (
               <>
-                {folderId !== "all" ? <button className="back-button" aria-label="返回全部笔记" onClick={() => chooseFolder("all")}><ChevronLeft />笔记</button> : <span />}
-                <div className="mobile-home-actions">
-                  <IconButton label="文件夹" onClick={openFolders}><Folder /></IconButton>
-                  <IconButton label="设置" className="mobile-home-settings" onClick={() => openModal("settings")}><SettingsIcon /></IconButton>
-                </div>
+                <button className="back-button" onClick={back}>
+                  <ChevronLeft />
+                  文件夹
+                </button>
+                <IconButton
+                  label="显示选项"
+                  onClick={() => setMenu(menu === "view" ? null : "view")}
+                >
+                  <MoreHorizontal />
+                </IconButton>
               </>
             ) : (
               <>
@@ -5682,7 +5579,7 @@ function App() {
         {mobile && (
           <>
             <h1 className="notes-large-title">
-              {filter ? "搜索结果" : folderId === "all" ? "笔记" : folderLabel}
+              {filter ? "搜索结果" : folderLabel}
             </h1>
             <div className="mobile-list-search">
               {searchBox}
@@ -5702,7 +5599,7 @@ function App() {
           </>
         )}
         <div
-          className={`notes-scroll ${mobile ? "mobile-gallery" : view === "gallery" ? "gallery" : ""}`}
+          className={`notes-scroll ${view === "gallery" ? "gallery" : ""}`}
           onClick={() => setSwiped(null)}
         >
           {loading ? (
@@ -5711,7 +5608,7 @@ function App() {
             <div className="search-zero-section">备忘录</div>
           ) : listed.length === 0 ? (
             <div className="empty-state">
-              {query || filter ? "未找到备忘录" : mobile ? "点击＋，记下第一条笔记" : "无备忘录"}
+              {query || filter ? "未找到备忘录" : "无备忘录"}
             </div>
           ) : (
             listed.map((n, index) => {
@@ -5734,10 +5631,10 @@ function App() {
               return (
                 <div
                   key={n.id}
-                  className={`note-entry ${!mobile && view === "gallery" ? "gallery-entry" : ""}`}
+                  className={`note-entry ${view === "gallery" ? "gallery-entry" : ""}`}
                 >
                   {(index === 0 || groupName(listed[index - 1]) !== group) &&
-                    group && !mobile && <div className="date-section">{group}</div>}
+                    group && <div className="date-section">{group}</div>}
                   <div
                     className={`note-row-wrap ${swiped === n.id ? "swiped" : ""}`}
                   >
@@ -5830,11 +5727,6 @@ function App() {
                       }}
                       onTouchEnd={stopLong}
                     >
-                      {mobile ? <div className="mobile-note-card">
-                        <strong>{n.pinned && <Pin size={13} />}{n.title}</strong>
-                        <p>{n.locked ? <><Lock size={14} />已锁定</> : previewText}</p>
-                        <div className="mobile-card-date"><time dateTime={new Date(n.updatedAt).toISOString()}>{new Date(n.updatedAt).toLocaleDateString("zh-CN",{month:"long",day:"numeric"})}</time>{recordingIndicator?.phase === "recording" && recordingIndicator.owner === n.id && <Mic size={14} aria-label="正在录音" />}</div>
-                      </div> : <>
                       {view === "gallery" && (
                         <div className="gallery-preview">
                           <strong>
@@ -5910,7 +5802,6 @@ function App() {
                           </span>
                         )}
                       </div>
-                      </>}
                     </button>
                   </div>
                 </div>
@@ -5918,12 +5809,12 @@ function App() {
             })
           )}
         </div>
-        {mobile ? <button type="button" className="mobile-add-note" aria-label="新建备忘录" aria-busy={creatingNote} onClick={newNote} disabled={creatingNote || loading || !workspaceLoaded}><Plus aria-hidden="true" /></button> : <div className="notes-footer">
+        <div className="notes-footer">
           <span>{listed.length}个备忘录</span>
           <IconButton label="新建备忘录" onClick={newNote}>
             <SquarePen />
           </IconButton>
-        </div>}
+        </div>
       </section>
       {!mobile && !separate && (
         <ResizeHandle
@@ -5967,8 +5858,9 @@ function App() {
           >
             {mobile ? (
               <>
-                <button className="back-button" aria-label="返回笔记" onClick={back}>
+                <button className="back-button" onClick={back}>
                   <ChevronLeft />
+                  {searching ? "搜索" : folderLabel}
                 </button>
                 <div className="mobile-header-actions">
                   {editing && (
@@ -5989,6 +5881,9 @@ function App() {
                       </IconButton>
                     </>
                   )}
+                  <IconButton label="共享" onClick={shareNote}>
+                    <Share />
+                  </IconButton>
                   <IconButton
                     label="更多"
                     onClick={() => {
@@ -5998,15 +5893,15 @@ function App() {
                   >
                     <MoreHorizontal />
                   </IconButton>
-                  {current && (
+                  {editing && (
                     <button
-                      className="mobile-editor-done icon-button"
-                      aria-label="完成编辑"
+                      className="text-button"
                       onClick={() => {
-                        void finishEditing().catch(fail);
+                        editor?.commands.blur();
+                        setEditing(false);
                       }}
                     >
-                      <Check />
+                      完成
                     </button>
                   )}
                 </div>
@@ -6197,7 +6092,6 @@ function App() {
       {imagePreviewOpen && imagePreview && <ImagePreview key={imagePreview.session} request={imagePreview} onClose={() => setImagePreview(value => value === imagePreview ? null : value)} />}
       {modal === "preferences" && (
         <Preferences
-          mobile={mobile}
           tab={preferencesTab}
           onTab={setPreferencesTab}
           onClose={() => setModal(null)}

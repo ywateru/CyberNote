@@ -18,7 +18,6 @@ export default function Preferences({
   onCloseLocks,
   returnFocus,
   data,
-  mobile,
 }: {
   tab: PreferencesTab;
   onTab: (tab: PreferencesTab) => void;
@@ -28,7 +27,6 @@ export default function Preferences({
   onCloseLocks: () => Promise<unknown>;
   returnFocus: HTMLElement | null;
   data: ReactNode;
-  mobile: boolean;
 }) {
   const root = useRef<HTMLElement>(null),
     close = useRef<HTMLButtonElement>(null);
@@ -90,7 +88,7 @@ export default function Preferences({
       const candidates = [
         returnFocus,
         ...document.querySelectorAll<HTMLElement>(
-          '.mobile-home-settings,.folder-footer [aria-label="设置"],.notes-header [aria-label="显示选项"],.folder-footer [aria-label="新建备忘录"]',
+          '.folder-footer [aria-label="设置"],.notes-header [aria-label="显示选项"],.folder-footer [aria-label="新建备忘录"]',
         ),
       ];
       candidates
@@ -218,9 +216,9 @@ export default function Preferences({
                 </select>
               </label>
               <label className="preferences-row">
-                <span>{mobile ? "桌面显示方式：" : "显示方式："}</span>
+                <span>显示方式：</span>
                 <select
-                  aria-label={mobile ? "桌面显示方式" : "显示方式"}
+                  aria-label="显示方式"
                   value={settings.view || "list"}
                   onChange={(event) =>
                     void onSettings({
@@ -242,7 +240,7 @@ export default function Preferences({
                       void onSettings({ groupDates: event.target.checked })
                     }
                   />
-                  {mobile ? "桌面按日期分组" : "按日期分组"}
+                  按日期分组
                 </label>
               </div>
             </div>

@@ -16,7 +16,6 @@ const usage = `Notes debug v1 (isolated synthetic data, no installed app is open
   pnpm debug group <${groupNames.join('|')}>
   pnpm debug all
   pnpm debug group attachments --mobile
-  pnpm debug group quick-home --mobile
   pnpm debug check-production --production dist
   pnpm debug compare baseline.json current.json
   pnpm debug compare-shot baseline.png current.png
@@ -56,7 +55,7 @@ try {
   else if (mode === 'compare') { if (args.length !== 2) throw Error('compare needs two snapshot paths'); console.log(bounded(compareSnapshots(JSON.parse(await readFile(args[0], 'utf8')), JSON.parse(await readFile(args[1], 'utf8'))))); }
   else {
     const allowed = ['list', 'execute', 'script', 'snapshot', 'group', 'all', 'check-production', 'compare-shot']; if (!allowed.includes(mode)) throw Error('Unknown CLI mode ' + mode);
-    if (options.mobile && (mode === 'all' || mode === 'group' && !['notes', 'recording', 'attachments', 'data-management', 'image-preview', 'storage-overview', 'preferences', 'quick-home'].includes(args[0]))) throw Object.assign(Error('Automated mobile browser coverage is groups notes, recording, attachments, data-management, image-preview, storage-overview, preferences and quick-home only. The complete suite is desktop-scoped; execute/script/snapshot remain available with --mobile.'), { code: 'UNSUPPORTED' });
+    if (options.mobile && (mode === 'all' || mode === 'group' && !['notes', 'recording', 'attachments', 'data-management', 'image-preview', 'storage-overview', 'preferences'].includes(args[0]))) throw Object.assign(Error('Automated mobile browser coverage is groups notes, recording, attachments, data-management, image-preview, storage-overview and preferences only. The complete suite is desktop-scoped; execute/script/snapshot remain available with --mobile.'), { code: 'UNSUPPORTED' });
     if (mode === 'check-production' && !options.production) throw Error('check-production requires --production pointing to a normal frontend build');
     sourceInputsAtStart = await sourceFingerprint(process.cwd()); runtime = await openRuntime(options); const page = runtime.page; const output = options.out ? resolve(options.out) : runtime.directory; await mkdir(output, { recursive: true });
     let result;
@@ -79,7 +78,7 @@ try {
       }
       if (!terminal) await idle(page, options.timeout); result = { steps: results, ...(terminal ? { completion: terminal } : {}), state: await state(page) };
     } else if (mode === 'snapshot') { const snap = await snapshot(page, { selector: options.selector || '.app' }); await saveJSON(resolve(output, 'snapshot.json'), snap); await page.screenshot({ path: resolve(output, 'screenshot.png') }); result = { snapshot: resolve(output, 'snapshot.json'), screenshot: resolve(output, 'screenshot.png') }; }
-    else if (mode === 'all' || mode === 'group') { const names = mode === 'all' ? groupNames : [args[0]]; if (names.some((name) => !groupNames.includes(name) && !(options.mobile && ['attachments','quick-home'].includes(name)))) throw Error('Unknown scenario group'); result = await runGroups(runtime, names, output); }
+    else if (mode === 'all' || mode === 'group') { const names = mode === 'all' ? groupNames : [args[0]]; if (names.some((name) => !groupNames.includes(name) && !(options.mobile && name === 'attachments'))) throw Error('Unknown scenario group'); result = await runGroups(runtime, names, output); }
     else if (mode === 'compare-shot') { if (args.length !== 2) throw Error('compare-shot needs two PNG paths'); result = await compareScreenshots(page, args[0], args[1]); }
     else if (mode === 'check-production') { const bundle = await productionMarkers(resolve(runtime.root, options.production)); const absent = await page.evaluate(() => !('__NOTES_DEBUG__' in window)); if (!absent) throw Error('Production debug API is present'); await page.goto(runtime.origin + '/?notesDebug=1&VITE_NOTES_DEBUG=1'); await page.waitForSelector('.app'); if (!await page.evaluate(() => !('__NOTES_DEBUG__' in window))) throw Error('Production URL restored debug API'); result = { productionAPIAbsent: true, urlCannotEnable: true, bundle, platformMockInjectedByRunnerOnly: true }; }
     const sourceInputs = await sourceFingerprint(runtime.root); const summary = { version: 1, mode, sourceHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: runtime.root, encoding: 'utf8' }).trim(), sourceInputs, sourceInputsAtStart, sourceInputsChanged: sourceInputs.sha256 !== sourceInputsAtStart.sha256, ...runtime.metadata, elapsedMs: Math.round(performance.now() - started), result, pageErrors: runtime.errors };

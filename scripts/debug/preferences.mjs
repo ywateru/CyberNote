@@ -23,7 +23,8 @@ export async function runPreferences(runtime, { command, check, output }) {
   if (runtime.mobile) {
     await command("note.select", { id: "note-a" });
     await command("app.back");
-    await page.locator(".mobile-home-settings").click();
+    await page.locator('.notes-header [aria-label="显示选项"]').click();
+    await page.getByRole("button", { name: "设置", exact: true }).click();
   } else {
     check(
       "Footer replaces only its more control with the actual settings gear",
@@ -57,18 +58,14 @@ export async function runPreferences(runtime, { command, check, output }) {
   for (const [label, value] of [
     ["外观", "dark"],
     ["排序方式", "created"],
-    [runtime.mobile ? "桌面显示方式" : "显示方式", "gallery"],
+    ["显示方式", "gallery"],
   ]) {
     await page
       .getByRole("combobox", { name: label, exact: true })
       .selectOption(value);
     await idle(page);
   }
-  await page
-    .getByRole("checkbox", {
-      name: runtime.mobile ? "桌面按日期分组" : "按日期分组",
-    })
-    .uncheck();
+  await page.getByRole("checkbox", { name: "按日期分组" }).uncheck();
   await idle(page);
   check(
     "Actual settings controls persist existing fields through the real settings handler",
@@ -90,17 +87,10 @@ export async function runPreferences(runtime, { command, check, output }) {
       (await page
         .getByRole("combobox", { name: "排序方式", exact: true })
         .inputValue()) === "created" &&
-      !(await page
-        .getByRole("checkbox", {
-          name: runtime.mobile ? "桌面按日期分组" : "按日期分组",
-        })
-        .isChecked()),
+      !(await page.getByRole("checkbox", { name: "按日期分组" }).isChecked()),
   );
   await page
-    .getByRole("combobox", {
-      name: runtime.mobile ? "桌面显示方式" : "显示方式",
-      exact: true,
-    })
+    .getByRole("combobox", { name: "显示方式", exact: true })
     .selectOption("list");
   await idle(page);
   await page
