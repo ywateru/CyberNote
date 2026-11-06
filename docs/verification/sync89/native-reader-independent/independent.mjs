@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';import vm from 'node:vm';import {execFileSync} from 'node:child_process';
+import {validateDiagnostics,readNativeDiagnostics,abortReasons} from '/private/tmp/apple-notes-sync87-native/scripts/debug/sync87-native/diagnostics89.mjs';
+const good={version:1,commits:0,aborts:1,latestAbortReason:'timeout',abortReasons:Object.fromEntries(abortReasons.map(k=>[k,k==='timeout'?1:0])),activePhase:null};let checks=0;
+const refused=e=>{assert.equal(e.message,'native diagnostics refused');assert.equal(e.cause,undefined);assert.equal(e.actual,undefined);assert(!JSON.stringify({message:e.message,...e}).includes('SECRET'));return true};
+for(const v of [{...good,version:'SECRET_VERSION'},{...good,SECRET_KEY:'payload'}, {...good,commits:Number.MAX_SAFE_INTEGER+1},Object.defineProperty({...good},'version',{get(){throw Error('SECRET_ACCESSOR')}})]){assert.throws(()=>validateDiagnostics(v),refused);checks++}
+assert.deepEqual(validateDiagnostics(good),good);checks++;
+let calls=[];const context=vm.createContext({window:{__TAURI_INTERNALS__:{invoke:async(name,args)=>{calls.push({name,args});if(name==='load_workspace')return {access:{sessionId:'SECRET_RUNTIME_TOKEN',epoch:7}};if(name==='sync_diagnostics'){assert.deepEqual(JSON.parse(JSON.stringify(args)),{expected:{sessionId:'SECRET_RUNTIME_TOKEN',epoch:7}});return good}throw Error('unexpectedcommand')}}}});
+const result=await readNativeDiagnostics({read:expression=>vm.runInContext(expression,context)});assert.deepEqual(result,good);assert.deepEqual(calls.map(x=>x.name),['load_workspace','sync_diagnostics']);assert(!JSON.stringify(result).includes('SECRET'));checks++;
+await assert.rejects(readNativeDiagnostics({read:async()=>{throw Error('SECRET_IPC')}}),refused);checks++;
+const frozen=execFileSync('git',['show','f349cda1:scripts/debug/sync87-native/diagnostics89.mjs'],{cwd:'/private/tmp/apple-notes-sync87-native'}).toString();const original=await import('data:text/javascript;base64,'+Buffer.from(frozen).toString('base64'));
+let oldLeaks=0;for(const v of [{...good,version:'SECRET_VERSION'},{...good,SECRET_KEY:'payload'}]){try{original.validateDiagnostics(v)}catch(e){assert(JSON.stringify({message:e.message,actual:e.actual}).includes('SECRET'));oldLeaks++}}
+console.log(JSON.stringify({checks,originalCounterexamplesLeak:oldLeaks,source:'198b3dfe',scope:'host only fake guardedclient and synthetic token; no actual IPC/CDP/device'}));

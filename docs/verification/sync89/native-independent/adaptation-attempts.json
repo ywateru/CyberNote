@@ -1,0 +1,33 @@
+{
+  "attempt01": {
+    "command": [
+      "python3",
+      "audit-android-attempt01.py",
+      "ROOT/docs/verification/sync89/android-build/result.json",
+      "run01"
+    ],
+    "exitCode": 1,
+    "failure": "KeyError frontendFiles at new footer; build manifest has distFiles; original Android core checks completed"
+  },
+  "attempt02": {
+    "command": [
+      "python3",
+      "audit-android-attempt02.py",
+      "ROOT/docs/verification/sync89/android-build/result.json",
+      "run02"
+    ],
+    "exitCode": 1,
+    "failure": "new footer compared in-memory HTML attrs tuples against prior JSON attrs lists; exact asset bytes/hash matched; normalized metadata only"
+  },
+  "attempt03": {
+    "command": [
+      "python3",
+      "audit-android.py",
+      "ROOT/docs/verification/sync89/android-build/result.json",
+      "run03"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 4.052375
+  },
+  "scope": "same artifact/source/accepted auditengine; no product changes; originals preserved"
+}
