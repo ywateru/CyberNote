@@ -1,0 +1,37 @@
+{
+  "status": "P2_FINDINGS",
+  "frozenAuthor": "a264945f",
+  "originalFixtureSha256": "82c5b91c32d3a8657028c03ea020df323f69c52a218d783b45fb8c0ea366bde3",
+  "originalHiddenInputsPreserved": true,
+  "results": [
+    {
+      "name": "Original hidden-text input rejected before save",
+      "pass": true
+    },
+    {
+      "name": "Original hidden-media input rejected before save",
+      "pass": true
+    },
+    {
+      "name": "Visible exact-owner full-text stage remains positive",
+      "pass": true
+    },
+    {
+      "name": "Visible exact-owner original-media stage remains positive",
+      "pass": true
+    },
+    {
+      "name": "Owner attachment title control decode and blob bytes are bound to expected editor",
+      "pass": true
+    },
+    {
+      "name": "Different bytes in second native read must not become accepted DOM baseline",
+      "pass": false,
+      "error": "Missing expected rejection."
+    }
+  ],
+  "hostOnly": true,
+  "adbCalls": 0,
+  "deviceActions": 0,
+  "syntheticOutputsOnly": true
+}
