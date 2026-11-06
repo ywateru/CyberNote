@@ -1,0 +1,10 @@
+# Android20: finite original apply-error diagnostic package
+
+Root READY approved main6433d576499d7daa089f9f585755a25aa864ba3b after source69e3f160 independent PASS. Build snapshot HEAD0c5a9a7555ddc80bed1ca943bda5a2bb296b3245 advanced by root documentation while preparation ran. The complete321-product-file preparation comparison is byte-identical to approved6433, and result.json before/after snapshots are equal. Compared with Android19 only Session synchronization.rs and adapter.rs single test version assertion differ; frontend file snapshot is exactly Android19. The build task's phrase delta-vs18 is superseded by this actual delta-vs19 comparison.
+
+Accepted Android19 driver copied with only sync89→sync90 output/tag and Android19→Android20 label adaptations. Fresh nonce-specific Gradle init recorded in result.json forces offline/workers2; it was removed afterward. Prior generated APK moved to the new artifact scope, source output absence verified before build; existing versioned artifacts untouched. Driver naturally0, Android build naturally0/24.146s, signature check naturally0/.765s. Exact commands/env/321input hashes/original logs/copied source driver retained. Shared native Cargo target exclusive and released afterward. No package source edits, Mac build, device/install/runtime/microphone/userdata action.
+
+APK `artifacts/sync90/备忘录-Android20.apk`,237378855B,SHA256 `e16423edae823a0a9789f6813b709d391abadffc8b4ef1e6f0ffc48d691de3e5`.
+Native entry `lib/arm64-v8a/libnotes_clone_lib.so`,212089448B,SHA256 `2313408de64c010426177eec81acaca32dc882871d7dd25676a413db087e8a5b`.
+
+This debug package refines only the already guarded readonly native diagnostic to version2 fixed error categories; original errors and sync behavior remain unchanged. SQLite categories recognize bounded known text shapes and do not reveal raw messages. Independent package audit/root receipt required before sole operator same-userdata upgrade. Actual cause/business fix and full reverse-apply acceptance remain incomplete. Original19 failure/paired Store/immutable11 preserved.

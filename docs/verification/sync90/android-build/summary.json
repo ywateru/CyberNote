@@ -1,0 +1,46 @@
+{
+  "status": "pass",
+  "head": "0c5a9a7555ddc80bed1ca943bda5a2bb296b3245",
+  "apk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync90/备忘录-Android20.apk",
+    "bytes": 237378855,
+    "sha256": "e16423edae823a0a9789f6813b709d391abadffc8b4ef1e6f0ffc48d691de3e5"
+  },
+  "library": {
+    "entry": "lib/arm64-v8a/libnotes_clone_lib.so",
+    "bytes": 212089448,
+    "sha256": "2313408de64c010426177eec81acaca32dc882871d7dd25676a413db087e8a5b"
+  },
+  "inputCount": 321,
+  "inputUnchanged": true,
+  "deltaVsAndroid19": [
+    "src-tauri/src/session/synchronization.rs",
+    "src-tauri/src/sync/adapter.rs"
+  ],
+  "frontendExactAndroid19": true,
+  "commands": [
+    {
+      "name": "android-build",
+      "command": [
+        "pnpm",
+        "android:build",
+        "--debug"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 24.146
+    },
+    {
+      "name": "apk-signature",
+      "command": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/apksigner",
+        "verify",
+        "--verbose",
+        "--print-certs",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync90/备忘录-Android20.apk"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.765
+    }
+  ],
+  "scopedInitRemoved": true
+}
