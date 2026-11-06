@@ -83,6 +83,14 @@ pub(super) fn note_payload(value: &Value) -> Result<(Note, Vec<WireAttachment>)>
     if let Some(sealed) = &note.sealed {
         fields(sealed, &["salt", "nonce", "ciphertext"])?;
     }
+    // Raw locked wire has one canonical empty body, emitted by lockNote.
+    // Text extraction is insufficient: drawing strokes and other node attrs
+    // can carry unencrypted content while doc_text still returns an empty string.
+    if note.locked
+        && (note.document != empty_doc() || !note.plain_text.is_empty() || note.sealed.is_none())
+    {
+        return Err(invalid("锁定同步笔记必须仅含空正文和密文"));
+    }
     let mut seen = HashSet::new();
     let mut attachments = Vec::new();
     for a in &payload.attachments {

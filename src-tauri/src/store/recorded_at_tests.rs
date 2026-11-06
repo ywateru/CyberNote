@@ -4,8 +4,12 @@ use std::collections::BTreeMap;
 const START: u64 = 1_793_743_199_123;
 const AUDIO: &[u8] = b"synthetic-audio-bytes-only";
 fn setup() -> (tempfile::TempDir, Store, String, AttachmentOwner) {
+    setup_in(None)
+}
+fn setup_in(subdirectory: Option<&str>) -> (tempfile::TempDir, Store, String, AttachmentOwner) {
     let dir = tempfile::tempdir().unwrap();
-    let mut store = Store::open(dir.path()).unwrap();
+    let root = subdirectory.map_or_else(|| dir.path().to_path_buf(), |name| dir.path().join(name));
+    let mut store = Store::open(root).unwrap();
     let note = store.action(json!({"type":"createNote"})).unwrap()["id"]
         .as_str()
         .unwrap()
@@ -204,7 +208,7 @@ fn recorded_at_old_unknown_and_invalid_persisted_values_are_not_rewritten() {
 
 #[test]
 fn recorded_at_archive_v2_twice_remaps_ids_and_preserves_date_and_bytes() {
-    let (dir, mut source, note, owner) = setup();
+    let (dir, mut source, note, owner) = setup_in(Some("data"));
     let a = put(&mut source, &note, &owner, &id(), Some(MAX_RECORDED_AT))["attachment"].clone();
     save(&mut source, &note, &a);
     let path = dir.path().join("v2.notesbackup");
@@ -241,7 +245,7 @@ fn recorded_at_archive_v2_twice_remaps_ids_and_preserves_date_and_bytes() {
 
 #[test]
 fn recorded_at_invalid_archives_reject_atomically_and_v1_stays_unknown() {
-    let (dir, mut source, note, owner) = setup();
+    let (dir, mut source, note, owner) = setup_in(Some("data"));
     let a = put(&mut source, &note, &owner, &id(), Some(START))["attachment"].clone();
     save(&mut source, &note, &a);
     let path = dir.path().join("source.notesbackup");

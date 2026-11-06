@@ -8,7 +8,7 @@ Run from the repository root:
 CARGO_TARGET_DIR=/private/tmp/apple-notes-sync84-target cargo test --offline --locked --manifest-path scripts/sync84/Cargo.toml synchronization --no-fail-fast
 ```
 
-The 29 selected tests include one child-process entry point used by the real SIGKILL test; there are 28 substantive scenarios. Other production tests are compiled but filtered out. The test root suppresses dead-code warnings because it deliberately imports full production modules without the product command surface.
+The 30 selected tests include one child-process entry point used by the real SIGKILL test; there are 29 substantive scenarios. The command above filters other production tests; omit `synchronization --no-fail-fast` to run the complete Store/Session suite. The lean build script points existing compile-time fixture lookup at the real `src-tauri` directory. The test root suppresses dead-code warnings because it deliberately imports full production modules without the product command surface.
 
 Store opt-in APIs are `sync_enable(workspace)` and `sync_enable_with_device(workspace, prepared_device_id)`. The latter adopts the transport-prepared identity atomically after authentication. Existing identities cannot drift. Neither Store::open nor transport identity preparation enables the extension.
 

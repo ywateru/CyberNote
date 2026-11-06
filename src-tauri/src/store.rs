@@ -1233,7 +1233,7 @@ mod tests {
     #[test]
     fn archive_attachments_and_cycle_guards() {
         let t = tempfile::tempdir().unwrap();
-        let mut s = Store::open(t.path()).unwrap();
+        let mut s = Store::open(t.path().join("data")).unwrap();
         let f = s
             .action(json!({"type":"createFolder","name":"工作"}))
             .unwrap();

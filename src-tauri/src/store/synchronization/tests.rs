@@ -1174,3 +1174,49 @@ fn known_version_with_missing_blob_cannot_ack_durable() {
     assert!(b.sync_receive(vec![wire]).unwrap().durable);
     assert_eq!(b.note(&nid).unwrap().revision, revision);
 }
+
+#[test]
+fn locked_wire_accepts_canonical_local_bootstrap_and_rejects_nonempty_node_content() {
+    let root = tempfile::tempdir().unwrap();
+    let mut a = Store::open(root.path()).unwrap();
+    let nid = create(&mut a, "public\nsealed body84");
+    a.action(json!({"type":"lockNote","id":nid,"password":"locked-wire84-password"}))
+        .unwrap();
+    // A note locked before sync opt-in must bootstrap using its real raw sealed
+    // row. Required-blob discovery and receipt accept the same canonical body.
+    let workspace = a.sync_enable(None).unwrap().workspace_id;
+    let wire = local_note_wire(&mut a, &nid);
+    assert_eq!(
+        wire.payload.as_ref().unwrap()["note"]["document"],
+        empty_doc()
+    );
+    assert!(a.sync_required_blobs(&wire).unwrap().is_empty());
+    let target = tempfile::tempdir().unwrap();
+    let mut b = Store::open(target.path()).unwrap();
+    b.sync_enable(Some(&workspace)).unwrap();
+    assert!(b.sync_receive(vec![wire.clone()]).unwrap().durable);
+    b.sync_apply_pending().unwrap();
+    assert!(b.note(&nid).unwrap().locked);
+    assert_eq!(b.note(&nid).unwrap().document, empty_doc());
+    let drawing = json!({"type":"doc","content":[{"type":"drawing","attrs":{"strokes":[{"color":"#112233","points":[[10,10],[80,70],[140,20]],"tool":"pen","width":2.5}]}}]});
+    let documents = [
+        drawing,
+        json!({"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"plaintext"}]}]}),
+        json!({"type":"doc","content":[{"type":"horizontalRule"}]}),
+        json!({"type":"doc","content":[{"type":"attachment","attrs":{"id":"hidden-media84","kind":"image","name":"private.png"}}]}),
+    ];
+    for document in documents {
+        let mut bad = wire.clone();
+        bad.payload.as_mut().unwrap()["note"]["document"] = document;
+        bad.vector.insert(id(), 1);
+        bad = bad.seal();
+        let before = b.generation(&b.db).unwrap();
+        assert_eq!(
+            b.sync_required_blobs(&bad).unwrap_err().code,
+            "sync_invalid"
+        );
+        assert_eq!(b.sync_receive(vec![bad]).unwrap_err().code, "sync_invalid");
+        assert_eq!(b.generation(&b.db).unwrap(), before);
+        assert!(b.inbox().unwrap().is_empty());
+    }
+}
