@@ -2,7 +2,15 @@
 
 状态：**PASS / 冻结源码独立定向复核通过，无blocking**。2026-11-06复核产品 `d73e1f30a04ccf578f7df64b2a2b873a18c3d64d`、作者证据 `b74f60d9895d624eeaed1cbad51caa18771ad272`。规格为主线 `docs/ui/android-quick-home.md`，包括来源scope/owner、800断点、手机设置桌面label、same-source receipt恢复、亮黄按钮/隐藏后层操作与冷启noteId为空且不预读媒体的补充。独立未修改产品。
 
-## 组合失败后的最小runner修复独审
+## 组合第二次失败后的手机入口独审
+
+**PASS / 两处局部入口复核通过；最终完整mobile attachments尚待根恢复。** 根attempt02的desktop storage-overview已通过，mobile attachments在前序storage布局矩阵结束于1280px后调用preferences入口，等待 `.mobile-home-settings` 超时。global runtime.reset只重置数据/页面，不恢复viewport；runtime.mobile描述设备边界，不能代表当下响应式布局。原件保存在主线 `docs/verification/mobile-home8283/integration/attempt02/`。
+
+修复 `ec52b69eb5bc636b84704bdc31f1eb250eb3a51d` 仅在preferences手机入口增加4行、quick-home入口增加2行，明确先 `setViewportSize(runtime.viewport)` 再reset。独立核对78src、index.html与global runtime.mjs共80项与d73相同，未改global reset或任何产品源码。
+
+独立最小驱动对两个真实run函数各自构造1280污染→global reset，先证明仍为desktop，再仅执行到首个原业务断言并通过专用sentinel停止，避免整组重跑。实际入口均恢复精确390×844；preferences真实gear/共享settings tab及关闭后gear焦点通过；quick-home冷启all/null/无隐藏editor、真实＋仅一次创建及确切新editor focus通过。**14项自然exit0，完整外层7.535949625秒**，页面错误为空，126项指纹前后均为 `1a7374f011f8d8e89134b6068e4b8e21615a8ea12d2b437999ba7f20fbef4e94`。原HTML、自然进程、前后指纹、逐文件身份及驱动见 [viewport-entry](../../verification/quick-home83-independent/viewport-entry/README.md)。当前仍不宣称完整组合交付通过，根只补最终完整mobile attachments，其他已过组按精确相同产品/相应runner输入映射。
+
+## 组合第一次失败后的最小runner修复独审
 
 **PASS / 定向修复复核通过；组合尚待根恢复，完整交付未宣布通过。** 根首轮82+83组合在 `storage-overview.mjs:596` 的原正向Tab断言失败；原始失败保存在主线 `docs/verification/mobile-home8283/integration/attempt01/`。自然复现trace第二轮实际落other/all，其最后focus栈来自 `DataManagement.back()` 的下一帧来源按钮恢复，说明旧helper仅等待总览DOM挂载便紧接键盘断言，存在导航焦点尚未完成的竞态。
 

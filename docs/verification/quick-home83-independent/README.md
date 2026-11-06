@@ -14,3 +14,6 @@
 
 
 2026-11-06追加：根首轮组合的旧storage-overview正向Tab断言失败后，已对仅8行runner时序修复 `1ad73a08` 独立复核。定向11项自然exit0、完整6.0548605秒，产品78src+index全部与d73逐字节一致，当前126项指纹c04c48d4…aa5029b前后不变。详见 `focus-return/README.md`。初次22PASS仍是其准确冻结输入结果；组合尚待根恢复，不作为完整交付通过。
+
+
+2026-11-06再次追加：根attempt02在1280px布局矩阵后进入手机preferences时因缺少真实mobile gear超时。对ec52b69e的两处局部入口viewport→reset恢复独审14项自然exit0、完整7.535949625秒，78src+index+global runtime共80项仍与d73相同；详见 `viewport-entry/README.md`。最终完整mobile attachments待根恢复，本证据不代替完整组合交付通过。
