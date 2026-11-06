@@ -67,7 +67,7 @@ async function nativeStep(label,operation){
   assert(/^[a-z0-9-]+$/.test(label));const start=performance.now();
   await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'start',time:new Date().toISOString()})+'\n');
   try{const value=await operation();await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'pass',wallSeconds:(performance.now()-start)/1000})+'\n');return value;}
-  catch(error){await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'fail',wallSeconds:(performance.now()-start)/1000})+'\n');throw error;}
+  catch(error){const safe=['read-only page evaluation failed','app WebView rectangle absent','different WebView hosts','different WebView rectangles','foreign WebView host','invalid WebView rectangle','unbalanced native XML'];const reason=safe.includes(error.message)?error.message:(error.stdout?'guard-command-failed':'unclassified-fixed-step-failure');await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'fail',reason,wallSeconds:(performance.now()-start)/1000})+'\n');throw error;}
 }
 async function persistedNote(c,id,expected=0){
   const end=Date.now()+15000;
