@@ -1,5 +1,6 @@
 /** Actual-device scenarios. Nothing runs until explicitly called with receipts. */
 import assert from 'node:assert/strict';
+import { isDeepStrictEqual } from 'node:util';
 import { createHash } from 'node:crypto';
 import { readFile,writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -11,24 +12,51 @@ export async function assertNativeOriginal(client,id,file) {
   assert.equal(bytes.length,file.bytes);assert.equal(hash(bytes),file.sha256);
   return{id,bytes:bytes.length,sha256:file.sha256,source:'actual-native-read_attachment'};
 }
-export async function roundtrip({client,peer,state,output,saveState}) {
+export const mobileInputText=marker=>marker+'\nAndroid真实输入与保存';
+export const desktopInputText=marker=>marker+' desktop real Session input';
+// Capture the actual sending Store after all attachment document commits. Keep
+// its complete JSON, including attachment nodes/attributes, rather than guessing
+// an editor serialization or accepting only a marker in a received text field.
+export function captureExpectedNote(workspace,id,plainText) {
+  const note=workspace.notes.find(n=>n.id===id);
+  assert(note,'sending note missing');assert.equal(note.plainText,plainText,'sending note must contain complete intended text');
+  assert(note.document?.type==='doc'&&Array.isArray(note.document.content)&&note.document.content.length>0,'sending document missing');
+  return structuredClone({id,plainText:note.plainText,document:note.document});
+}
+export function noteReplicaMatches(workspace,expected) {
+  const note=workspace.notes.find(n=>n.id===expected.id);
+  return !!note&&note.plainText===expected.plainText&&isDeepStrictEqual(note.document,expected.document);
+}
+export async function waitForNoteReplica(readWorkspace,expected,files,label,timeoutMs=40000) {
+  assert(Number.isInteger(timeoutMs)&&timeoutMs>=1&&timeoutMs<=40000,'bounded convergence timeout required');
+  return eventually(async()=>{
+    const workspace=await readWorkspace();
+    if(!noteReplicaMatches(workspace,expected)||!files.every(f=>workspace.attachments.some(a=>a.noteId===expected.id&&a.displayName===f.name)))return false;
+    return structuredClone(workspace.notes.find(n=>n.id===expected.id));
+  },label+' complete document/plainText and media',timeoutMs);
+}
+const textProof=note=>({id:note.id,documentSha256:hash(JSON.stringify(note.document)),plainTextSha256:hash(note.plainText),completeDocumentAndPlainTextVerified:true});
+export async function roundtrip({client,peer,state,output,saveState,convergenceTimeoutMs=40000}) {
   const mobile=state.notes.at(-1);assert(mobile,'create synthetic mobile note first');
   const mobileFiles=state.files.filter(f=>/\.(png|wav)$/.test(f.name));
-  await eventually(async()=>{const w=await peer.workspace();return w.notes.some(n=>n.id===mobile.id)&&mobileFiles.every(f=>w.attachments.some(a=>a.noteId===mobile.id&&a.displayName===f.name));},'mobile note and PNG/WAV at desktop');
+  const mobileExpected=captureExpectedNote(await client.workspace(),mobile.id,mobileInputText(mobile.marker));
+  const receivedMobile=await waitForNoteReplica(()=>peer.workspace(),mobileExpected,mobileFiles,'mobile to desktop',convergenceTimeoutMs);
   const fromMobile=[];
   for(const file of mobileFiles){const w=await peer.workspace(),attachment=w.attachments.find(a=>a.noteId===mobile.id&&a.displayName===file.name);fromMobile.push(await peer.verifyOriginal(attachment.id,file,'from-mobile'));}
-  const marker='SYNC87-DESKTOP-'+state.runId,id=await peer.create(marker+' desktop real Session input');
+  const marker='SYNC87-DESKTOP-'+state.runId,id=await peer.create(desktopInputText(marker));
   const attachmentIds=[];
   for(const file of state.desktopFiles)attachmentIds.push(await peer.addMedia(id,file));
-  await eventually(async()=>{const w=await client.workspace();return w.notes.some(n=>n.id===id)&&attachmentIds.every(a=>w.attachments.some(x=>x.id===a));},'desktop note and PNG/WAV at native Store');
+  const desktopExpected=captureExpectedNote(await peer.workspace(),id,desktopInputText(marker));
+  const receivedDesktop=await waitForNoteReplica(()=>client.workspace(),desktopExpected,state.desktopFiles,'desktop to mobile',convergenceTimeoutMs);
+  const receivedAttachments=(await client.workspace()).attachments;assert(attachmentIds.every(id=>receivedAttachments.some(a=>a.id===id)),'desktop original attachment identity missing');
   const fromDesktop=[];
   for(let i=0;i<state.desktopFiles.length;i++)fromDesktop.push(await assertNativeOriginal(client,attachmentIds[i],state.desktopFiles[i]));
-  await openNote(client,id);await client.wait('document.querySelector(".tiptap")?.innerText.includes('+JSON.stringify(marker)+')','actual desktop note visible');
+  await openNote(client,id);await client.wait('document.querySelector(".tiptap")?.innerText.includes('+JSON.stringify(desktopExpected.plainText)+')','complete desktop text visible');
   await client.wait('[...document.querySelectorAll(".tiptap img")].some(x=>x.complete&&x.naturalWidth>0)','synced image decode');
   await client.wait('[...document.querySelectorAll(".tiptap audio")].some(x=>Number.isFinite(x.duration)&&x.duration>0)','synced synthetic audio metadata');
   const originalExport=await saveImageOriginal(client,state,output,2,state.desktopFiles.find(f=>f.name.endsWith('.png')));
   state.desktopNote={id,marker,attachmentIds};await saveState(state);
-  const result={mobileNoteId:mobile.id,desktopNoteId:id,fromMobile,fromDesktop,originalExport,desktopScope:'actual React/Tiptap desktop App DOM with real Rust Session/Store/network; browser OS/media boundaries simulated'};
+  const result={mobileNoteId:mobile.id,desktopNoteId:id,fromMobile,fromDesktop,text:{mobileToDesktop:textProof(receivedMobile),desktopToMobile:textProof(receivedDesktop)},originalExport,desktopScope:'actual React/Tiptap desktop App DOM with real Rust Session/Store/network; browser OS/media boundaries simulated'};
   await writeFile(join(output,'roundtrip.json'),JSON.stringify(result,null,2)+'\n');return result;
 }
 export async function backgroundRoundtrip({client,closeClient,getClient,peer,state,output,receipt}) {

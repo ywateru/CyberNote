@@ -65,6 +65,7 @@ python3 scripts/debug/sync87-native/check_guards.py
 node scripts/debug/sync87-native/check-client.mjs
 node scripts/debug/sync87-native/check-input.mjs
 node scripts/debug/sync87-native/check-scenarios.mjs
+node scripts/debug/sync87-native/check-roundtrip-text.mjs
 node scripts/debug/sync87-native/run.mjs --mode prepare --output /private/tmp/notes-sync87-native-new-run
 ```
 
@@ -146,7 +147,16 @@ This candidate dependency has not yet passed build10 actual DOM acceptance.
 The peer advertises the Android emulator's10.0.2.2 host alias on a selected local
 service port. No VPN, tunnel or user route is changed. Invitation is held in
 memory while actual mobile settings buttons pair. Mobile-created text/media are
-observed through the real desktop Session; original read, export and separate
+observed through the real desktop Session. Before any next stage, roundtrip
+captures the sending Store's complete document/plainText after attachment commits,
+checks mobile marker plus full Chinese body or full desktop intended input, then
+waits for exact receiving document/plainText equality (including attachment nodes)
+plus expected media names. IDs, prefixes and media bytes alone cannot satisfy it.
+The receiving desktop/mobile full-body proofs are recorded as hashes; mobile DOM
+must expose the full desktop text. Missing/wrong/truncated/plain-only/doc-only
+body faults and document/attachment structure changes are checked by the actual
+roundtrip host-stub runner before its next stage. Those explicit stubs are never
+native or network proof. Original read, export and separate
 managed-file SHA256 are checked. Desktop creates text through actual App/Tiptap commands and PNG/WAV through
 actual FileChooser/FileReader/attachment/document handlers backed by real Rust.
 The desktop provider itself is the browser synthetic boundary. Mobile validates native original reads,
