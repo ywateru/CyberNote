@@ -51,7 +51,7 @@ export class DesktopPeer {
     assert(/^\/private\/tmp\/notes-sync87-native-[a-z0-9-]+$/.test(output));assert(/^[0-9a-f]{10}$/.test(runId));
     const reviewed=await reviewedPeer(receiptPath),root=join(output,'desktop-peer');await mkdir(root,{mode:0o700});
     const self=new DesktopPeer();Object.assign(self,{reviewed,root,output,runId,closed:false,started:performance.now()});
-    self.frontendRoot=fileURLToPath(new URL('../../../',import.meta.url));
+    self.frontendRoot=resolve(fileURLToPath(new URL('../../../',import.meta.url)));
     self.domDependencies=await verifyDOMDependencies(self.frontendRoot);
     self.frontendBefore=await sourceFingerprint(self.frontendRoot);
     try{
